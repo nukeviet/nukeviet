@@ -27,7 +27,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		else
 		{
-			$content = nv_nl2br( filter_text_textarea( 'content', '', NV_ALLOWED_HTML_TAGS ) );
+			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
 			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `content`=" . $db->dbescape( $content ) . ", `status`=" . $active . " WHERE `cid`=" . $cid );
@@ -67,15 +67,19 @@ $row['status'] = ( $row['status'] ) ? "checked=\"checked\"" : "";
 $xtpl = new XTemplate( "comment_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'CID', $cid );
 $xtpl->assign( 'ROW', $row );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

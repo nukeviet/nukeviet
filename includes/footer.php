@@ -7,14 +7,13 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' )) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 unset( $lang_global, $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
 global $db, $nv_Request;
 
-$contents = ob_get_contents( );
-ob_end_clean( );
+$contents = ob_get_contents();
+ob_end_clean();
 $contents = $db->unfixdb( $contents );
 $contents = nv_url_rewrite( $contents );
 if( ! defined( 'NV_IS_AJAX' ) )
@@ -22,10 +21,10 @@ if( ! defined( 'NV_IS_AJAX' ) )
 	$contents = nv_change_buffer( $contents );
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage( ) ) . ' / ' . number_format( (array_sum( explode( " ", microtime( ) ) ) - NV_START_TIME), 3, '.', '' ), $contents );
+		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage() ) . ' / ' . number_format( ( array_sum( explode( " ", microtime() ) ) - NV_START_TIME ), 3, '.', '' ), $contents );
 	}
 }
-$db->sql_close( );
+$db->sql_close();
 
 //Nen trang
 if( defined( 'NV_IS_GZIP' ) )
@@ -34,7 +33,7 @@ if( defined( 'NV_IS_GZIP' ) )
 
 	if( ! empty( $http_accept_encoding ) )
 	{
-		$compress_list = array( );
+		$compress_list = array();
 		$compress_list['deflate'] = 'gzdeflate';
 		$compress_list['gzip'] = 'gzencode';
 		$compress_list['x-gzip'] = 'gzencode';
@@ -60,5 +59,6 @@ if( defined( 'NV_IS_GZIP' ) )
 }
 
 echo $contents;
-exit( );
+exit();
+
 ?>

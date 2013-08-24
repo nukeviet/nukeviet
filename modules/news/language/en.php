@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Body text';
 $lang_module['search_author'] = 'Author';
 $lang_module['content_keywords'] = 'Keywords';
 $lang_module['save_temp'] = 'Submit';
+$lang_module['save_draft'] = 'Save Draft';
 $lang_module['save_content'] = 'Published';
 $lang_module['captcha'] = 'Captcha';
 $lang_module['error_cat'] = 'Error: Select Category for article, please.';

@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -131,6 +131,7 @@ $lang_module['content_bodytext'] = 'Nội dung chi tiết';
 $lang_module['search_author'] = 'Tác giả bài viết';
 $lang_module['content_keywords'] = 'Từ khóa dành cho máy chủ tìm kiếm';
 $lang_module['save_temp'] = 'Gửi bài viết đến quản trị site';
+$lang_module['save_draft'] = 'Lưu nháp';
 $lang_module['save_content'] = 'Đăng bài viết';
 $lang_module['captcha'] = 'Mã chống spam';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chủ đề';

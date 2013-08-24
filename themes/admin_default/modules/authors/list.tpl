@@ -10,27 +10,27 @@
 			<td>{LANG.adminip_funcs}</td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
 		<tr>
-			<td><img class="refresh" alt="{OPTION_LEV}" title="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> <a href="{DATA.link}"><b>{DATA.login}</b></a></td>
+			<td><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}"><b>{DATA.login}</b></a></td>
 			<td>{DATA.email}</td>
 			<td>{DATA.lev}</td>
 			<td>{DATA.position}</td>
 			<td>{DATA.is_suspend}</td>
 			<td>
-				<!-- BEGIN: edit -->
-				<span class="edit_icon"><a href="{EDIT_HREF}">{EDIT_NAME}</a></span>
-				<!-- END: edit -->
-				<!-- BEGIN: suspend -->
-				&nbsp;-&nbsp;<span class="edit_icon"><a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a></span>
-				<!-- END: suspend -->
-				<!-- BEGIN: del -->
-				&nbsp;-&nbsp;<span class="delete_icon"><a href="{DEL_HREF}">{DEL_NAME}</a></span>
-				<!-- END: del -->
+			<!-- BEGIN: edit -->
+			<a class="edit_icon" href="{EDIT_HREF}">{EDIT_NAME}</a>
+			<!-- END: edit -->
+			<!-- BEGIN: suspend -->
+			&nbsp;-&nbsp;<a class="edit_icon" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+			<!-- END: suspend -->
+			<!-- BEGIN: del -->
+			&nbsp;-&nbsp;<a class="delete_icon" href="{DEL_HREF}">{DEL_NAME}</a>
+			<!-- END: del -->
 			</td>
 		</tr>
-	</tbody>		
 	<!-- END: loop -->
+	</tbody>
 </table>
 <!-- END: main -->

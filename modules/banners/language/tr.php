@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -17,7 +17,7 @@ $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main_title'] = 'List advertising block';
-$lang_module['main_page_info'] = 'Advertising help to increase traffic to your website. If you are interested in this utility, We give you some folowing  advertising block';
+$lang_module['main_page_info'] = 'Advertising help to increase traffic to your website. If you are interested in this utility, We give you some folowing advertising block';
 $lang_module['title'] = 'Title';
 $lang_module['blang'] = 'language';
 $lang_module['size'] = 'Size';

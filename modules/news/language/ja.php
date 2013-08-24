@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language 日本語
+ * @Createdate Apr 15, 2011, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = '詳細内容';
 $lang_module['search_author'] = '記事作者';
 $lang_module['content_keywords'] = 'キーワード';
 $lang_module['save_temp'] = 'サイト管理へ記事を送ります。';
+$lang_module['save_draft'] = '下書きを保存';
 $lang_module['save_content'] = '記事を投稿';
 $lang_module['captcha'] = 'Captcha';
 $lang_module['error_cat'] = 'エラー：この記事はカテゴリを選択しません。';

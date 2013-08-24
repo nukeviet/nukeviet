@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language 日本語
+ * @Createdate Apr 15, 2011, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -103,12 +103,7 @@ $lang_module['pass_old'] = '古いパスワード';
 $lang_module['pass_new'] = '新しいパスワード';
 $lang_module['pass_new_re'] = 'パスワードを再入力';
 $lang_module['change_pass_ok'] = 'パスワードが更新されました。';
-$lang_module['lostpass_subject_email'] = 'パスワード復元の案内';
-$lang_module['lostpass_active_info'] = '%1$sようこそ、<br /><br />%2$sウェブサイトでのログインパスワードの更新を申し込みました。パスワードを更新するために、以下のリンクをアクセスしてください。<br /><br />URL:%3$s<br /><br />以下の情報を記入してください。<br /><br />アカウント名：%4$s<br />メールアドレス： %5$s<br />これは%2$sサイトからの自動送信のメールです。このメールの内容が分からなければ、削除できます。<br /><br />サイト管理';
 $lang_module['lostpass_content_mess'] = '%1$sメールアドレスに送信しました。 <br /><br />以下の通りにアカウントを有効化してください。';
-$lang_module['lostpass_send_subject_ok'] = 'パスワードが更新されました。';
-$lang_module['lostpass_send_account_ok'] = '%1$sようこそ<br /><br />%2$sウェブサイトでのログインパスワードが更新されました。あなたのアカウントにアクセスするために、アカウントの情報を送ります。<br /><br />URL: %3$s<br />ログイン：%4$s<br />パスワード： %5$s<br /><br />これは%2$sサイトからの自動送信のメールです。このメールの内容が分からなければ、削除できます。<br /><br />サイト管理';
-$lang_module['lostpass_send_pass'] = 'あなたのパスワードを更新できました。%sメールアドレスに送信されました。';
 $lang_module['lostpass_active_error_link'] = 'エラー：link lostpass';
 $lang_module['changepass_title'] = 'パスワードを更新';
 $lang_module['logout_title'] = 'ログアウト';

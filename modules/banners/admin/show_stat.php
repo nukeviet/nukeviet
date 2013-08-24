@@ -15,7 +15,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -35,7 +35,7 @@ $data_month = $nv_Request->get_int( 'month', 'get' );
 if( $nv_Request->isset_request( 'month', 'get' ) and preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 {
 	$get_month = $nv_Request->get_int( 'month', 'get' );
-	
+
 	if( $get_month < $current_month )
 	{
 		if( $current_year != $publ_year )
@@ -49,14 +49,12 @@ if( $nv_Request->isset_request( 'month', 'get' ) and preg_match( "/^[0-9]{1,2}$/
 	}
 }
 
-$table = NV_BANNERS_CLICK_GLOBALTABLE;
-
 $time = mktime( 0, 0, 0, $data_month, 15, $current_year );
 $day_max = ( $data_month == $current_month ) ? $current_day : date( "t", $time );
 $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $publ_day : 1;
 $maxday = mktime( 24, 60, 60, $data_month, $day_max, $current_year );
 $minday = mktime( 0, 0, 0, $data_month, $day_min, $current_year );
-$sum = $db->sql_numrows( $db->sql_query( "SELECT * FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . "" ) );
+$sum = $db->sql_numrows( $db->sql_query( "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . "" ) );
 
 $cts = array();
 
@@ -65,11 +63,11 @@ $ext = in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'country'
 if( $ext == 'country' )
 {
 
-	$sql = "SELECT `click_country`  FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_country` DESC";
+	$sql = "SELECT `click_country` FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_country` DESC";
 
 	$result = $db->sql_query( $sql );
 	$unknown = 0;
-	
+
 	if( ! empty( $result ) )
 	{
 		$result = $db->sql_query( $sql );
@@ -111,7 +109,7 @@ if( $ext == 'country' )
 elseif( $ext == 'browse' )
 {
 
-	$sql = "SELECT `click_browse_name` FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_country` DESC";
+	$sql = "SELECT `click_browse_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_country` DESC";
 
 	$result = $db->sql_query( $sql );
 	$bd = array();
@@ -150,10 +148,10 @@ elseif( $ext == 'browse' )
 }
 elseif( $ext == 'os' )
 {
-	$sql = "SELECT `click_os_name` FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_os_name` DESC";
+	$sql = "SELECT `click_os_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_os_name` DESC";
 	$result = $db->sql_query( $sql );
 	$bd = array();
-	
+
 	if( ! empty( $result ) )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -167,7 +165,7 @@ elseif( $ext == 'os' )
 	foreach( $bd as $shortname => $click_count )
 	{
 		$os_key = $os_name = $shortname;
-		
+
 		if( preg_match( "/^Robot\:/", $os_name ) )
 		{
 			$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
@@ -187,9 +185,9 @@ elseif( $ext == 'os' )
 			$unknown += $click_count;
 		}
 	}
-	
+
 	if( ! empty( $robots ) ) $cts = array_merge( $cts, $robots );
-	
+
 	if( ! empty( $unknown ) )
 	{
 		$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unspecified','statistic',0);";
@@ -202,10 +200,10 @@ elseif( $ext == 'os' )
 }
 else
 {
-	$sql = "SELECT `click_time`  FROM `" . $table . "` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_time` DESC";
+	$sql = "SELECT `click_time` FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $id . " AND `click_time`>=" . $minday . " AND `click_time`<=" . $maxday . " ORDER BY `click_time` DESC";
 	$result = $db->sql_query( $sql );
 	$bd = array();
-	
+
 	if( ! empty( $result ) )
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -229,8 +227,8 @@ else
 
 $contents = call_user_func( "nv_show_stat_theme", array( $caption, $sum, $cts ) );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

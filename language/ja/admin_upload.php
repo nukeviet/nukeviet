@@ -97,4 +97,17 @@ $lang_module['logowith'] = 'ロゴの幅';
 $lang_module['logosize3'] = 'オリジナルのロゴのサイズを使用してください。ロゴの最大サイズ';
 $lang_module['fileimage'] = '画像';
 
+$lang_module['uploadconfig'] = 'アップロードの設定';
+$lang_module['uploadconfig_ban_ext'] = '禁止する拡張子';
+$lang_module['uploadconfig_ban_mime'] = '禁止するMIME';
+$lang_module['uploadconfig_types'] = '許可するファイルの種類';
+$lang_module['sys_max_size'] = 'あなたのサーバへアップロードできる最大のサイズ';
+$lang_module['nv_max_size'] = 'アップロードファイルの最大のサイズ';
+$lang_module['upload_checking_mode'] = 'アップロードファイルの確認モード';
+$lang_module['strong_mode'] = '強';
+$lang_module['mild_mode'] = '中';
+$lang_module['lite_mode'] = '弱';
+$lang_module['none_mode'] = 'なし';
+$lang_module['upload_checking_note'] = '利用しているサーバは、ファイルの種類を確認する機能をサポートしていません。「強」を選択すると、ファイルをアップロードできない可能性もあります。';
+
 ?>

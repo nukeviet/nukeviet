@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hak
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Süper';
-$lang_module['level2'] = 'Gelen Yönetici';
-$lang_module['level3'] = 'Modül Yönetimi';
 $lang_module['is_suspend0'] = 'Aktif';
 $lang_module['is_suspend1'] = 'Askıya &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; neden &ldquo;%3$s&rdquo;';
 $lang_module['last_login0'] = 'Asla';

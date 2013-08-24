@@ -26,10 +26,8 @@ class FloodBlocker
 {
 	const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
 	const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
-
 	public $is_blocker;
 	public $time_blocker;
-
 	private $logs_path;
 	private $ip_addr;
 	private $rules = array(
@@ -37,7 +35,7 @@ class FloodBlocker
 		60 => 30, // rule 2 - maximum 30 requests in 60 secs
 		300 => 50, // rule 3 - maximum 50 requests in 300 secs
 		3600 => 200 // rule 4 - maximum 200 requests in 3600 secs
-			);
+	);
 
 	/**
 	 * FloodBlocker::__construct()
@@ -53,25 +51,25 @@ class FloodBlocker
 		if( substr( $logs_path, -1 ) != '/' ) $logs_path .= '/';
 
 		if( empty( $ip ) ) $ip = $_SERVER['REMOTE_ADDR'];
-		if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip))
+		if( preg_match( '#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip ) )
 		{
 			$ip2long = ip2long( $ip );
 		}
 		else
 		{
-            if (substr_count($ip, '::'))
-            {
-                $ip = str_replace('::', str_repeat(':0000', 8 - substr_count($ip, ':')) . ':', $ip);
-            }
-            $ip = explode(':', $ip);
-            $r_ip = '';
-            foreach ($ip as $v)
-            {
-                $r_ip .= str_pad(base_convert($v, 16, 2), 16, 0, STR_PAD_LEFT);
-            }
-            $ip2long = base_convert($r_ip, 2, 10);			
+			if( substr_count( $ip, '::' ) )
+			{
+				$ip = str_replace( '::', str_repeat( ':0000', 8 - substr_count( $ip, ':' ) ) . ':', $ip );
+			}
+			$ip = explode( ':', $ip );
+			$r_ip = '';
+			foreach( $ip as $v )
+			{
+				$r_ip .= str_pad( base_convert( $v, 16, 2 ), 16, 0, STR_PAD_LEFT );
+			}
+			$ip2long = base_convert( $r_ip, 2, 10 );
 		}
-		if( $ip2long == -1 || $ip2long === false ) trigger_error( FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR );
+		if( $ip2long == - 1 || $ip2long === false ) trigger_error( FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR );
 
 		$this->logs_path = $logs_path;
 		$this->ip_addr = $ip2long;
@@ -114,7 +112,7 @@ class FloodBlocker
 
 			if( $info[$interval]['count'] > $limit )
 			{
-				$this->time_blocker = 1 + ( NV_CURRENTTIME - $info[$interval]['time'] - $interval ) * -1;
+				$this->time_blocker = 1 + ( NV_CURRENTTIME - $info[$interval]['time'] - $interval ) * - 1;
 				$this->is_blocker = true;
 			}
 		}

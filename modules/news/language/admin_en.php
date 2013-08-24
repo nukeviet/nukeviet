@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -27,11 +27,16 @@ $lang_module['move'] = 'Move';
 $lang_module['save_temp'] = 'Draft save';
 $lang_module['publtime'] = 'Publish';
 $lang_module['exptime'] = 'Make expired';
+$lang_module['status_action_0'] = 'Switch to wait for approval';
+$lang_module['declined'] = 'Reject posts';
+$lang_module['re_published'] = 'Re published';
 $lang_module['status'] = 'Status';
 $lang_module['status_0'] = 'Waitting';
 $lang_module['status_1'] = 'Published';
 $lang_module['status_2'] = 'Still waitting';
 $lang_module['status_3'] = 'Expired';
+$lang_module['status_4'] = 'Draft';
+$lang_module['status_5'] = 'Reject';
 $lang_module['errorsave'] = 'Error: Update content fail, please check your article alias';
 $lang_module['saveok'] = 'Update succesfully';
 $lang_module['clickgotomodule'] = 'Click here to management posts.';
@@ -138,6 +143,7 @@ $lang_module['content_main'] = 'Back to management';
 $lang_module['redircet_title'] = 'Action well done';
 $lang_module['content_archive'] = 'Save after expire date';
 $lang_module['showhometext'] = 'Show hometext on view content';
+$lang_module['show_no_image'] = 'Display image No-Image if post has no illustrations';
 $lang_module['imgposition'] = 'Article image';
 $lang_module['imgposition_0'] = 'Not show';
 $lang_module['imgposition_1'] = 'To be shown based on modules configuration';

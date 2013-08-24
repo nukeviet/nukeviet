@@ -7,17 +7,20 @@
  * @Createdate 04/05/2010
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
-$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 1 );
-$usactive = (int)$nv_Request->get_bool( 'usactive', 'post,get', $usactive_old );
+$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 3 );
+$usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
 if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
 }
-$sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . $usactive;
+$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . ( $usactive % 2 );
+if( $usactive > 1 )
+{
+	$sql .= " AND `idsite`=" . $global_config['idsite'];
+}
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
 
@@ -44,28 +47,21 @@ $methods = array(
 	)
 );
 
-$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ($nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '');
-$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ($nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '');
+$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
+$methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array(
-	'userid',
-	'username',
-	'full_name',
-	'email',
-	'regdate'
-);
+$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
-if( $ordertype != "ASC" )
-	$ordertype = "DESC";
-$method = ( ! empty( $method ) and isset( $methods[$method] )) ? $method : '';
+if( $ordertype != "ASC" ) $ordertype = "DESC";
+$method = ( ! empty( $method ) and isset( $methods[$method] ) ) ? $method : '';
 
 if( ! empty( $methodvalue ) )
 {
 	if( empty( $method ) )
 	{
 		$key_methods = array_keys( $methods );
-		$array_like = array( );
+		$array_like = array();
 		foreach( $key_methods as $method_i )
 		{
 			$array_like[] = "`" . $method_i . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
@@ -96,68 +92,66 @@ $query2 = $db->sql_query( $sql2 );
 $result = $db->sql_query( "SELECT FOUND_ROWS()" );
 list( $all_page ) = $db->sql_fetchrow( $result );
 
-$users_list = array( );
-$admin_in = array( );
-$is_edit = (in_array( 'edit', $allow_func )) ? true : false;
-$is_delete = (in_array( 'del', $allow_func )) ? true : false;
-$is_setactive = (in_array( 'setactive', $allow_func )) ? true : false;
+$users_list = array();
+$admin_in = array();
+$is_edit = ( in_array( 'edit', $allow_func ) ) ? true : false;
+$is_delete = ( in_array( 'del', $allow_func ) ) ? true : false;
+$is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
 while( $row = $db->sql_fetchrow( $query2 ) )
 {
-	$users_list[$row['userid']] = array( //
-		'userid' => ( int )$row['userid'], //
-		'username' => ( string )$row['username'], //
-		'full_name' => ( string )$row['full_name'], //
-		'email' => ( string )$row['email'], //
-		'regdate' => date( "d/m/Y H:i", $row['regdate'] ), //
-		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "", //
-		'disabled' => ($is_setactive) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"", //
-		'is_edit' => $is_edit, //
-		'is_delete' => $is_delete, //
-		'level' => $lang_module['level0'], //
-		'is_admin' => false //
+	$users_list[$row['userid']] = array(
+		'userid' => ( int )$row['userid'],
+		'username' => ( string )$row['username'],
+		'full_name' => ( string )$row['full_name'],
+		'email' => ( string )$row['email'],
+		'regdate' => date( "d/m/Y H:i", $row['regdate'] ),
+		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "",
+		'disabled' => ( $is_setactive ) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"",
+		'is_edit' => $is_edit,
+		'is_delete' => $is_delete,
+		'level' => $lang_module['level0'],
+		'is_admin' => false
 	);
+	if( $global_config['idsite'] > 0 AND $row['idsite'] != $global_config['idsite'] )
+	{
+		$users_list[$row['userid']]['is_edit'] = false;
+		$users_list[$row['userid']]['is_delete'] = false;
+	}
 	$admin_in[] = $row['userid'];
 }
 
-if( $admin_in )
+if( ! empty( $admin_in ) )
 {
 	$admin_in = implode( ",", $admin_in );
 	$sql = "SELECT `admin_id`, `lev` FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` IN (" . $admin_in . ")";
 	$query = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $query ) )
 	{
-		$is_my = ($admin_info['admin_id'] == $row['admin_id']) ? true : false;
-		$superadmin = ($row['lev'] == 1 or $row['lev'] == 2) ? true : false;
-
 		$users_list[$row['admin_id']]['is_delete'] = false;
 		if( $row['lev'] == 1 )
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level1'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level1'];
 			$users_list[$row['admin_id']]['img'] = 'admin1';
 		}
 		elseif( $row['lev'] == 2 )
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level2'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level2'];
 			$users_list[$row['admin_id']]['img'] = 'admin2';
 		}
 		else
 		{
-			$users_list[$row['admin_id']]['level'] = $lang_module['level3'];
+			$users_list[$row['admin_id']]['level'] = $lang_global['level3'];
 			$users_list[$row['admin_id']]['img'] = 'admin3';
 		}
 
 		$users_list[$row['admin_id']]['is_admin'] = true;
-		if( $is_edit )
+		if( $users_list[$row['admin_id']]['is_edit'] )
 		{
 			if( defined( 'NV_IS_GODADMIN' ) )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
-			elseif( defined( 'NV_IS_SPADMIN' ) and ($is_my or ! $superadmin) )
-			{
-				$users_list[$row['admin_id']]['is_edit'] = true;
-			}
-			elseif( $is_my )
+			elseif( defined( 'NV_IS_SPADMIN' ) and ! ( $row['lev'] == 1 or $row['lev'] == 2 ) )
 			{
 				$users_list[$row['admin_id']]['is_edit'] = true;
 			}
@@ -166,16 +160,21 @@ if( $admin_in )
 				$users_list[$row['admin_id']]['is_edit'] = false;
 			}
 		}
-		if( ! ($users_list[$row['admin_id']]['is_edit'] AND ! $is_my) )
+		if( ! $users_list[$row['admin_id']]['is_edit'] )
 		{
 			$users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
 		}
+	}
+	if( isset( $users_list[$admin_info['admin_id']] ) )
+	{
+		$users_list[$admin_info['admin_id']]['disabled'] = " disabled=\"disabled\"";
+		$users_list[$admin_info['admin_id']]['is_edit'] = true;
 	}
 }
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$head_tds = array( );
+$head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=userid&amp;sorttype=ASC";
 $head_tds['username']['title'] = $lang_module['account'];
@@ -203,7 +202,9 @@ foreach( $orders as $order )
 
 $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php" );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
 $xtpl->assign( 'SEARCH_VALUE', $methodvalue );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
@@ -218,11 +219,12 @@ foreach( $methods as $m )
 	$xtpl->assign( 'METHODS', $m );
 	$xtpl->parse( 'main.method' );
 }
-for( $i = 1; $i >= 0; $i-- )
+$_bg = ( defined( "NV_CONFIG_DIR" ) ) ? 3 : 1;
+for( $i = $_bg; $i >= 0; $i-- )
 {
 	$m = array(
 		'key' => $i,
-		'selected' => ($i == $usactive) ? 'selected="seelected"' : '',
+		'selected' => ( $i == $usactive ) ? 'selected="selected"' : '',
 		'value' => $lang_module['usactive_' . $i]
 	);
 	$xtpl->assign( 'USACTIVE', $m );
@@ -267,10 +269,16 @@ if( ! empty( $generate_page ) )
 	$xtpl->parse( 'main.generate_page' );
 }
 
+if( defined( 'NV_IS_GODADMIN' ) )
+{
+	$xtpl->parse( 'main.exportfile' );
+}
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include (NV_ROOTDIR . "/includes/header.php");
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . "/includes/footer.php");
+include ( NV_ROOTDIR . '/includes/footer.php' );
+
 ?>

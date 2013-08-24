@@ -21,21 +21,21 @@ function nv_error_info()
 	if( ! defined( 'NV_IS_ADMIN' ) ) return;
 	if( empty( $error_info ) ) return;
 
-	$errortype = array( //
-		E_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_PARSE => array( $lang_global['error_error'], "bad.png" ), //
-		E_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
-		E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ), //
-		E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ), //
-		E_STRICT => array( $lang_global['error_notice'], "comment.png" ), //
-		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ), //
-		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ), //
+	$errortype = array(
+		E_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_PARSE => array( $lang_global['error_error'], "bad.png" ),
+		E_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
+		E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ),
+		E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
+		E_STRICT => array( $lang_global['error_notice'], "comment.png" ),
+		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ),
+		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ),
 		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" )
 	);
 
@@ -62,7 +62,7 @@ function nv_error_info()
 
 	$xtpl = new XTemplate( "error_info.tpl", $tpl_path );
 	$xtpl->assign( 'TPL_E_CAPTION', $lang_global['error_info_caption'] );
-	
+
 	$a = 0;
 	foreach( $error_info as $key => $value )
 	{
@@ -75,7 +75,7 @@ function nv_error_info()
 		$xtpl->parse( 'error_info.error_item' );
 		++$a;
 	}
-	
+
 	$xtpl->parse( 'error_info' );
 	return $xtpl->text( 'error_info' );
 }
@@ -86,14 +86,18 @@ function nv_error_info()
  * @param string $page_title
  * @param mixed $info_title
  * @param mixed $info_content
+ * @param string $admin_link
+ * @param string $admin_title
+ * @param string $site_link
+ * @param string $site_title
  * @return
  */
-function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink = 0 )
+function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
 	global $lang_global, $global_config;
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
-	
+
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
 	{
 		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
@@ -118,29 +122,50 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 	$xtpl = new XTemplate( "info_die.tpl", $tpl_path );
-
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
-	$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
-	$xtpl->assign( 'WIDTH', $size[0] );
-	$xtpl->assign( 'HEIGHT', $size[1] );
+	if( isset( $size[1] ) )
+	{
+		if( $size[0] > 490 )
+		{
+			$size[1] = ceil( 490 * $size[1] / $size[0] );
+			$size[0] = 490;
+		}
+		$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
+		$xtpl->assign( 'WIDTH', $size[0] );
+		$xtpl->assign( 'HEIGHT', $size[1] );
+		if( isset( $size['mime'] ) AND $size['mime'] == 'application/x-shockwave-flash' )
+		{
+			$xtpl->parse( 'main.swf' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.image' );
+		}
+	}
 	$xtpl->assign( 'INFO_TITLE', $info_title );
 	$xtpl->assign( 'INFO_CONTENT', $info_content );
-	$xtpl->assign( 'GO_HOMEPAGE', $lang_global['go_homepage'] );
 
-	if( defined( 'NV_IS_ADMIN' ) )
+	if( defined( 'NV_IS_ADMIN' ) AND ! empty( $admin_link ) )
 	{
-		$xtpl->assign( 'ADMIN_LINK', NV_BASE_SITEURL . NV_ADMINDIR . "/index.php" );
-		$xtpl->assign( 'GO_ADMINPAGE', $lang_global['admin_page'] );
+		$xtpl->assign( 'ADMIN_LINK', $admin_link );
+		$xtpl->assign( 'GO_ADMINPAGE', empty( $admin_title ) ? $lang_global['admin_page'] : $admin_title );
 		$xtpl->parse( 'main.adminlink' );
+	}
+	if( ! empty( $site_link ) )
+	{
+		$xtpl->assign( 'SITE_LINK', $site_link );
+		$xtpl->assign( 'GO_SITEPAGE', empty( $site_title ) ? $lang_global['go_homepage'] : $site_title );
+		$xtpl->parse( 'main.sitelink' );
 	}
 
 	$xtpl->parse( 'main' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	$global_config['mudim_active'] = 0;
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	$xtpl->out( 'main' );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	die();
 }
 
@@ -153,14 +178,20 @@ function nv_info_die( $page_title = "", $info_title, $info_content, $adminlink =
  */
 function nv_xmlOutput( $content, $lastModified )
 {
-	$tidy_options = array( //
-		'input-xml' => true, //
-		'output-xml' => true, //
-		'indent' => true, //
-		'indent-cdata' => true, //
-		'wrap' => false //
-	);
-	$content = ( string )nv_valid_html( $content, $tidy_options, 'utf8' );
+	if( class_exists( 'tidy' ) )
+	{
+		$tidy_options = array(
+			'input-xml' => true,
+			'output-xml' => true,
+			'indent' => true,
+			'indent-cdata' => true,
+			'wrap' => false
+		);
+		$tidy = new tidy();
+		$tidy->parseString( $content, $tidy_options, 'utf8' );
+		$tidy->cleanRepair();
+		$content = ( string )$tidy;
+	}
 
 	@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
 	@Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
@@ -178,7 +209,7 @@ function nv_xmlOutput( $content, $lastModified )
 	@Header( "Pragma: no-cache" );
 
 	$encoding = "none";
-	
+
 	if( nv_function_exists( 'gzencode' ) )
 	{
 		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
@@ -188,7 +219,7 @@ function nv_xmlOutput( $content, $lastModified )
 			if( ! strstr( $_SERVER['HTTP_USER_AGENT'], 'Opera' ) && preg_match( '/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches ) )
 			{
 				$version = floatval( $matches[1] );
-				
+
 				if( $version < 6 || ( $version == 6 && ! strstr( $_SERVER['HTTP_USER_AGENT'], 'EV1' ) ) ) $encoding = 'none';
 			}
 		}
@@ -253,7 +284,7 @@ function nv_rss_generate( $channel, $items )
 	{
 		foreach( $items as $item )
 		{
-			if( ! empty( $item['title'] ) and ! empty( $item['link'] ) and ! empty( $item['description'] ) )
+			if( ! empty( $item['title'] ) and ! empty( $item['link'] ) )
 			{
 				$item['title'] = nv_htmlspecialchars( $item['title'] );
 
@@ -407,7 +438,7 @@ function nv_xmlSitemapIndex_generate()
 	{
 		foreach( $global_config['allow_sitelangs'] as $lang )
 		{
-			$sql = "SELECT m.title FROM  `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
+			$sql = "SELECT m.title FROM `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
 			$result = $db->sql_query( $sql );
 			while( list( $modname ) = $db->sql_fetchrow( $result, 1 ) )
 			{
@@ -420,7 +451,7 @@ function nv_xmlSitemapIndex_generate()
 	else
 	{
 		$site_mods = nv_site_mods();
-	
+
 		foreach( $site_mods as $modname => $values )
 		{
 			if( isset( $values['funcs'] ) and isset( $values['funcs']['Sitemap'] ) )

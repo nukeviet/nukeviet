@@ -9,11 +9,12 @@
 
 if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 
 if( $id )
 {
-	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache"; // Cache tung giao dien
+	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
+	// Cache tung giao dien
 
 	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
@@ -75,8 +76,8 @@ else
 	$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

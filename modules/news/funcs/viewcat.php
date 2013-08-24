@@ -9,8 +9,8 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$cache_file = "";
-$contents = "";
+$cache_file = '';
+$contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
 $set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == "viewcat_main_" ) ? true : false;
@@ -34,18 +34,23 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 $page_title = ( ! empty( $global_array_cat[$catid]['titlesite'] ) ) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
 $description = $global_array_cat[$catid]['description'];
+if( ! empty($global_array_cat[$catid]['image']))
+{
+	$meta_ogp['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $global_array_cat[$catid]['image'];
+}
 
 if( empty( $contents ) )
 {
 	$array_catpage = array();
 	$array_cat_other = array();
 	$base_url = $global_array_cat[$catid]['link'];
+	$show_no_image  = $module_config[$module_name]['show_no_image'];
 
 	if( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_view_page )
 	{
 		$st_links = 2 * $st_links;
 		$order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -54,23 +59,25 @@ if( empty( $contents ) )
 		$end_publtime = 0;
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( nv_is_url( $item['homeimgfile'] ) )
-			{
-				$item['imghome'] = $item['homeimgfile'];
-			}
-			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $show_no_image ) //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
 			else
 			{
-				$item['imghome'] = "";
+				$item['imghome'] = '';
 			}
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -102,7 +109,7 @@ if( empty( $contents ) )
 	{
 		$array_catcontent = array();
 		$array_subcatpage = array();
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -110,23 +117,25 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( nv_is_url( $item['homeimgfile'] ) )
-			{
-				$item['imghome'] = $item['homeimgfile'];
-			}
-			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $show_no_image ) //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
 			else
 			{
-				$item['imghome'] = "";
+				$item['imghome'] = '';
 			}
 
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -136,7 +145,7 @@ if( empty( $contents ) )
 
 		$array_cat_other = array();
 
-		if( $global_array_cat[$catid]['subcatid'] != "" )
+		if( $global_array_cat[$catid]['subcatid'] != '' )
 		{
 			$key = 0;
 			$array_catid = explode( ",", $global_array_cat[$catid]['subcatid'] );
@@ -144,28 +153,30 @@ if( empty( $contents ) )
 			foreach( $array_catid as $catid_i )
 			{
 				$array_cat_other[$key] = $global_array_cat[$catid_i];
-				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
+				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
 				$result = $db->sql_query( $sql );
 
 				while( $item = $db->sql_fetch_assoc( $result ) )
 				{
-					$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-					if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+					if( $item['homeimgthumb'] == 1 ) //image thumb
 					{
-						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 					}
-					elseif( nv_is_url( $item['homeimgfile'] ) )
-					{
-						$item['imghome'] = $item['homeimgfile'];
-					}
-					elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+					elseif( $item['homeimgthumb'] == 2 ) //image file
 					{
 						$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 					}
+					elseif( $item['homeimgthumb'] == 3 ) //image url
+					{
+						$item['imghome'] = $item['homeimgfile'];
+					}
+					elseif( $show_no_image ) //no image
+					{
+						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+					}
 					else
 					{
-						$item['imghome'] = "";
+						$item['imghome'] = '';
 					}
 
 					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
@@ -187,30 +198,31 @@ if( empty( $contents ) )
 	{
 		// Cac bai viet phan dau
 		$array_catcontent = array();
-		$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( nv_is_url( $item['homeimgfile'] ) )
-			{
-				$item['imghome'] = $item['homeimgfile'];
-			}
-			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $show_no_image ) //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
 			else
 			{
-				$item['imghome'] = "";
+				$item['imghome'] = '';
 			}
-
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catcontent[] = $item;
 		}
@@ -224,30 +236,31 @@ if( empty( $contents ) )
 		foreach( $array_catid as $catid_i )
 		{
 			$array_cat_other[$key] = $global_array_cat[$catid_i];
-			$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
+			$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
 			$result = $db->sql_query( $sql );
 
 			while( $item = $db->sql_fetch_assoc( $result ) )
 			{
-				$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-				if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+				if( $item['homeimgthumb'] == 1 ) //image thumb
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 				}
-				elseif( nv_is_url( $item['homeimgfile'] ) )
-				{
-					$item['imghome'] = $item['homeimgfile'];
-				}
-				elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+				elseif( $item['homeimgthumb'] == 2 ) //image file
 				{
 					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 				}
+				elseif( $item['homeimgthumb'] == 3 ) //image url
+				{
+					$item['imghome'] = $item['homeimgfile'];
+				}
+				elseif( $show_no_image ) //no image
+				{
+					$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				}
 				else
 				{
-					$item['imghome'] = "";
+					$item['imghome'] = '';
 				}
-
 				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 				$array_cat_other[$key]['content'][] = $item;
 			}
@@ -262,7 +275,7 @@ if( empty( $contents ) )
 	elseif( $viewcat == "viewcat_grid_new" or $viewcat == "viewcat_grid_old" )
 	{
 		$order_by = ( $viewcat == "viewcat_grid_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -270,25 +283,26 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-			if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			elseif( nv_is_url( $item['homeimgfile'] ) )
-			{
-				$item['imghome'] = $item['homeimgfile'];
-			}
-			elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
 				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 			}
-			else
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( $show_no_image ) //no image
 			{
 				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 			}
-
+			else
+			{
+				$item['imghome'] = '';
+			}
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
@@ -300,7 +314,7 @@ if( empty( $contents ) )
 	elseif( $viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old" ) // Xem theo tieu de
 	{
 		$order_by = ( $viewcat == "viewcat_list_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -308,7 +322,7 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['imghome'] = "";
+			$item['imghome'] = '';
 			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
 			$array_catpage[] = $item;
 		}
@@ -318,7 +332,7 @@ if( empty( $contents ) )
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, ( $page - 1 ) * $per_page, $generate_page );
 	}
 
-	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
+	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
 		nv_set_cache( $cache_file, $contents );
 	}
@@ -330,8 +344,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

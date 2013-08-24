@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -44,6 +44,7 @@ $lang_module['deletefolder'] = 'Xóa folder';
 $lang_module['createfolder'] = 'Tạo folder';
 $lang_module['rename_newname'] = 'Tên mới';
 $lang_module['rename_noname'] = 'Bạn chưa đặt tên mới cho file';
+$lang_module['rename_error_folder'] = 'Lỗi: Hệ thống không đổi tên được thư mục';
 $lang_module['rename_nonamefolder'] = 'Bạn chưa đặt tên mới cho thư mục hoặc tên thư mục không đúng quy chuẩn';
 $lang_module['preview'] = 'Xem chi tiết';
 $lang_module['movefolder'] = 'Chuyển đến thư mục';
@@ -84,6 +85,8 @@ $lang_module['errorNotRenameFile'] = 'Lỗi: Vì một lý do nào đó hệ th�
 $lang_module['nopreview'] = 'Không hỗ trợ xem trước loại tệp tin này.';
 $lang_module['errorNewSize'] = 'Bạn chỉ có thể tạo ảnh mới với chiều rộng: 10 - %d px, chiều cao: 10 - %d px';
 $lang_module['maxSizeSize'] = 'Kích cỡ tối đa: %dx%dpx';
+
+$lang_module['configlogo'] = 'Cấu hình chèn logo';
 $lang_module['addlogo'] = 'Thêm Logo';
 $lang_module['addlogosave'] = 'Lưu thay đổi';
 $lang_module['notlogo'] = 'Lỗi: Hệ thống không tìm thấy file Logo';
@@ -96,5 +99,40 @@ $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
 $lang_module['logowith'] = 'Chiều rộng của logo bằng';
 $lang_module['logosize3'] = 'Sử dụng nguyên kích thước logo, Kích thước tối đa của logo bằng';
 $lang_module['fileimage'] = 'ảnh';
+
+$lang_module['uploadconfig'] = 'Cấu hình upload';
+$lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';
+$lang_module['uploadconfig_ban_mime'] = 'Loại mime bị cấm';
+$lang_module['uploadconfig_types'] = 'Loại files cho phép';
+$lang_module['sys_max_size'] = 'Server của bạn chỉ cho phép tải file có dung lượng tối đa';
+$lang_module['nv_max_size'] = 'Dung lượng tối đa của file tải lên';
+$lang_module['nv_max_width_height'] = 'Kích thước tối đa của file tải lên';
+$lang_module['nv_auto_resize'] = 'Tự động resize ảnh nếu kích thước lớn hơn kích thước tối đa';
+$lang_module['upload_checking_mode'] = 'Kiểu kiểm tra file tải lên';
+$lang_module['strong_mode'] = 'Mạnh';
+$lang_module['mild_mode'] = 'Vừa phải';
+$lang_module['lite_mode'] = 'Yếu';
+$lang_module['none_mode'] = 'Không';
+$lang_module['upload_checking_note'] = 'Máy chủ của bạn không hỗ trợ một số hàm xác định loại file. Nếu chọn "Mạnh", bạn sẽ không thể upload file lên host';
+
+$lang_module['thumbconfig'] = 'Cấu hình ảnh thumbnail';
+$lang_module['thumb_width_height'] = 'Kích thước thumbnail của hình ảnh';
+$lang_module['thumb_note'] = 'Hình ảnh thumbnail sẽ được dùng tại các vị trí dùng ảnh nhỏ, kích thước này sẽ không thay đổi các file đã có';
+$lang_module['thumb_type'] = 'resize theo phương án';
+$lang_module['thumb_type_1'] = 'resize ảnh theo chiều rộng';
+$lang_module['thumb_type_2'] = 'resize ảnh theo chiều cao';
+$lang_module['thumb_type_3'] = 'resize ảnh theo hai chiều';
+$lang_module['thumb_type_4'] = 'resize và crop ảnh theo kích thước';
+$lang_module['thumb_quality'] = 'Chất lượng hình ảnh resize';
+$lang_module['thumb_dir'] = 'Thư mục';
+$lang_module['thumb_dir_default'] = 'Cấu hình mặc định';
+
+$lang_module['search'] = 'Tìm kiếm';
+$lang_module['order0'] = 'Sắp xếp theo ngày mới';
+$lang_module['order1'] = 'Sắp xếp theo ngày cũ';
+$lang_module['order2'] = 'Sắp xếp theo tên file';
+
+$lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
+$lang_module['searchkey'] = 'Từ khóa tìm kiếm';
 
 ?>

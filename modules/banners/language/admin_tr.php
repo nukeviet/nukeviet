@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -115,7 +115,7 @@ $lang_module['unknown'] = 'bilinmeyen';
 $lang_module['show_list_stat1'] = 'Amount click in %1$s year %2$s';
 $lang_module['show_list_stat2'] = 'Amount click in &ldquo;<strong>%1$s</strong>&rdquo; %2$s year %3$s';
 $lang_module['show_list_stat3'] = 'Amount click from country &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
-$lang_module['show_list_stat4'] = 'Amount click from browser  &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
+$lang_module['show_list_stat4'] = 'Amount click from browser &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
 $lang_module['show_list_stat5'] = 'Amount click from OS &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
 $lang_module['click_date'] = 'Tarih';
 $lang_module['click_ip'] = 'IP';
@@ -130,5 +130,11 @@ $lang_module['file_del_confirm'] = 'Silmek istiyormusunuz?';
 $lang_module['delfile_success'] = 'Silindi!';
 $lang_module['delfile_error'] = 'Silme Hatası';
 $lang_module['weight'] = 'Pozisyon';
+
+$lang_module['target'] = 'Hedef';
+$lang_module['target_blank'] = 'Yeni Pencere (_blank)';
+$lang_module['target_top'] = 'Enüst Pencere (_top)';
+$lang_module['target_self'] = 'Aynı Pencere (_self)';
+$lang_module['target_parent'] = 'Ana Pencere (_parent)';
 
 ?>

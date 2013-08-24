@@ -1,10 +1,14 @@
 <!-- BEGIN: main -->
-<table summary="{CONTENTS.caption}" class="tab1">
+<table class="tab1">
 	<caption>{CONTENTS.caption}</caption>
-	<!-- BEGIN: nv_banner_weight --><col style="white-space:nowrap" /><!-- END: nv_banner_weight -->
-	<col span="5" style="white-space:nowrap" />
-	<col style="width:50px;white-space:nowrap" />
-	<col style="width:200px;white-space:nowrap" />
+	<!-- BEGIN: nv_banner_weight -->
+	<col style="white-space:nowrap" />
+	<!-- END: nv_banner_weight -->
+	<colgroup>
+		<col span="5">
+		<col class="w50">
+		<col class="w200">
+	</colgroup>
 	<thead>
 		<tr>
 			<!-- BEGIN: thead -->
@@ -12,45 +16,47 @@
 			<!-- END: thead -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
-			<!-- BEGIN: nv_banner_weight --><td>{ROW.weight}</td><!-- END: nv_banner_weight -->
+			<!-- BEGIN: nv_banner_weight -->
+			<td>{ROW.weight}</td>
+			<!-- END: nv_banner_weight -->
 			<td>{ROW.title}</td>
 			<td><a href="{ROW.pid.0}">{ROW.pid.1}</a></td>
-			<!-- BEGIN: t1 --><td><a href="{ROW.clid.0}">{ROW.clid.1}</a></td><!-- END: t1 -->
-			<!-- BEGIN: t2 --><td></td><!-- END: t2 -->
+			<!-- BEGIN: t1 -->
+			<td><a href="{ROW.clid.0}">{ROW.clid.1}</a></td>
+			<!-- END: t1 -->
+			<!-- BEGIN: t2 -->
+			<td>&nbsp;</td>
+			<!-- END: t2 -->
 			<td>{ROW.publ_date}</td>
 			<td>{ROW.exp_date}</td>
 			<td class="center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
-			<td>
-				<span class="search_icon"><a href="{ROW.view}">{CONTENTS.view}</a></span> |
-				<span class="edit_icon"><a href="{ROW.edit}">{CONTENTS.edit}</a></span> |
-				<span class="delete_icon"><a class="delfile" href="{ROW.delfile}">{CONTENTS.del}</a></span>
-			</td>
+			<td><a class="search_icon" href="{ROW.view}">{CONTENTS.view}</a> &nbsp; <a class="edit_icon" href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; <a class="delete_icon" class="delfile" href="{ROW.delfile}">{CONTENTS.del}</a></td>
 		</tr>
-		</tbody>
-	<!-- END: loop -->
+		<!-- END: loop -->
+	</tbody>
 </table>
 <script type="text/javascript">
-//<![CDATA[
-$(function(){
-	$('a[class=delfile]').click(function(event){
-		event.preventDefault();
-		if (confirm('{LANG.file_del_confirm}')){
-			var href= $(this).attr('href');
-			$.ajax({	
-				type: 'POST',
-				url: href,
-				data:'',
-				success: function(data){
-					alert(data);
-					window.location='index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banners_list';
-				}
-			});
-		}
+	//<![CDATA[
+	$(function() {
+		$('a[class=delfile]').click(function(event) {
+			event.preventDefault();
+			if (confirm('{LANG.file_del_confirm}')) {
+				var href = $(this).attr('href');
+				$.ajax({
+					type : 'POST',
+					url : href,
+					data : '',
+					success : function(data) {
+						alert(data);
+						window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=banners_list';
+					}
+				});
+			}
+		});
 	});
-});
-//]]>
+	//]]>
 </script>
 <!-- END: main -->

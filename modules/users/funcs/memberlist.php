@@ -29,17 +29,17 @@ else
 	$array_mod_title[] = array(
 		'catid' => 0,
 		'title' => $lang_module['listusers'],
-		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op,
-		);
+		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op
+	);
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
-		$md5 = "";
+		$md5 = '';
 		unset( $matches );
 		if( preg_match( "/^(.*)\-([a-z0-9]{32})$/", $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
 		{
-			$result = $db->sql_query( "SELECT * FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` = " . $db->dbescape( $md5 ) );
+			$result = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` = " . $db->dbescape( $md5 ) );
 			if( $db->sql_numrows( $result ) > 0 )
 			{
 				$item = $db->sql_fetch_assoc( $result );
@@ -53,8 +53,8 @@ else
 				$array_mod_title[] = array(
 					'catid' => 0,
 					'title' => $item['username'],
-					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . change_alias( $item['username'] ) . "-" . $item['md5username'],
-					);
+					'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "/" . change_alias( $item['username'] ) . "-" . $item['md5username']
+				);
 
 				$contents = nv_memberslist_detail_theme( $item );
 			}
@@ -66,9 +66,9 @@ else
 			}
 		}
 
-		include ( NV_ROOTDIR . "/includes/header.php" );
+		include ( NV_ROOTDIR . '/includes/header.php' );
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . "/includes/footer.php" );
+		include ( NV_ROOTDIR . '/includes/footer.php' );
 		exit();
 	} //danh sach thanh vien
 	else
@@ -78,10 +78,7 @@ else
 		$page = $nv_Request->get_int( 'page', 'get', 0 );
 
 		// Kiem tra du lieu hop chuan
-		if( ( ! empty( $orderby ) and ! in_array( $orderby, array(
-			'username',
-			'gender',
-			'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
+		if( ( ! empty( $orderby ) and ! in_array( $orderby, array( 'username', 'gender', 'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 			exit();
@@ -93,9 +90,8 @@ else
 		$array_order = array(
 			"username" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=username&sortby=" . $sortby,
 			"gender" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=gender&sortby=" . $sortby,
-			"regdate" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=regdate&sortby=" . $sortby,
-
-			);
+			"regdate" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&orderby=regdate&sortby=" . $sortby
+		);
 
 		foreach( $array_order as $key => $link )
 		{
@@ -110,7 +106,7 @@ else
 			}
 		}
 
-		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `regdate` FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `regdate` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -163,8 +159,8 @@ else
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -14,7 +14,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -39,8 +39,8 @@ $contents['act'] = array( "nv_pl_chang_act2(" . $id . ");", $lang_module['change
 
 $contents = call_user_func( "nv_info_pl_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

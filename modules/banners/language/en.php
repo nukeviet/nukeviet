@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -17,7 +17,7 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main_title'] = 'List advertising block';
-$lang_module['main_page_info'] = 'Advertising help to increase traffic to your website. If you are interested in this utility, We give you some folowing  advertising block';
+$lang_module['main_page_info'] = 'Advertising help to increase traffic to your website. If you are interested in this utility, We give you some folowing advertising block';
 $lang_module['title'] = 'Title';
 $lang_module['blang'] = 'language';
 $lang_module['size'] = 'Size';

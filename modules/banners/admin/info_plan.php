@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT `title` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT `title` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -38,8 +38,8 @@ $contents['aj'] = array( "nv_plan_info(" . $id . ", 'plan_info');", "nv_show_ban
 $contents = call_user_func( "nv_info_plan_theme", $contents );
 $set_active_op = "plans_list";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

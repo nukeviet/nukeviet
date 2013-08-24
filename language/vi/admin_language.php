@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -53,6 +53,7 @@ $lang_module['nv_setting_type_2'] = 'Chỉ cập nhật các giá trị đã có
 $lang_module['nv_setting_save'] = 'Cập nhật cấu hình thành công';
 $lang_module['nv_lang_show'] = 'Quản lý hiển thị ngôn ngữ';
 $lang_module['nv_lang_name'] = 'Tên ngôn ngữ';
+$lang_module['nv_lang_native_name'] = 'Ngôn ngữ bản địa';
 $lang_module['nv_lang_sl'] = ' Có thể chọn';
 $lang_module['nv_lang_sladm'] = 'Hiển thị trong admin';
 $lang_module['nv_lang_slsite'] = 'Hiển thị ngoài site';

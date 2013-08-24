@@ -15,6 +15,7 @@ if( empty( $catid ) ) $catid = 0;
 
 if( ! nv_function_exists( 'nv_weblink_category' ) )
 {
+
 	function nv_weblink_category()
 	{
 		global $global_array_cat, $module_file, $module_info;
@@ -27,7 +28,7 @@ if( ! nv_function_exists( 'nv_weblink_category' ) )
 		if( ! empty( $global_array_cat ) )
 		{
 			$title_length = 20;
-			$html = "";
+			$html = '';
 
 			foreach( $global_array_cat as $cat )
 			{

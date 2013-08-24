@@ -1,19 +1,19 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: edit -->
 <form action="{FORM_ACTION}" method="post">
-<input name="save" type="hidden" value="1" />
-<table class="tab1">
-	<tbody>
-		<tr>
-			<td>{DATA}</td>
-		</tr>
-	</tbody>
-	<tfoot>
-		<tr>
-			<td class="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
-		</tr>
-	</tfoot>
-</table>
+	<input name="save" type="hidden" value="1" />
+	<table class="tab1">
+		<tbody>
+			<tr>
+				<td>{DATA}</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td class="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+			</tr>
+		</tfoot>
+	</table>
 </form>
 <!-- END: edit -->
 <!-- BEGIN: data -->

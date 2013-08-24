@@ -17,14 +17,14 @@ $submit = $nv_Request->get_string( 'submit', 'post' );
 
 if( ! empty( $submit ) )
 {
-	$question = filter_text_input( 'question', 'post', '', 1 );
-	$link = filter_text_input( 'link', 'post', '', 1 );
+	$question = $nv_Request->get_title( 'question', 'post', '', 1 );
+	$link = $nv_Request->get_title( 'link', 'post', '', 1 );
 	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post' );
 	$groups_view = implode( ',', $groups_view );
 
-	$publ_date = filter_text_input( 'publ_date', 'post', '' );
-	$exp_date = filter_text_input( 'exp_date', 'post', '' );
+	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
+	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
 	$maxoption = $nv_Request->get_int( 'maxoption', 'post', 1 );
 
 	$array_answervote = $nv_Request->get_array( 'answervote', 'post' );
@@ -59,7 +59,7 @@ if( ! empty( $submit ) )
 	foreach( $array_answervote as $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			++$number_answer;
 		}
@@ -67,7 +67,7 @@ if( ! empty( $submit ) )
 	foreach( $answervotenews as $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			++$number_answer;
 		}
@@ -85,7 +85,7 @@ if( ! empty( $submit ) )
 	if( ! empty( $question ) and $number_answer > 1 )
 	{
 		$error = $lang_module['voting_error'];
-		
+
 		if( empty( $vid ) )
 		{
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` (`vid`, `question`, `link`, `acceptcm`, `admin_id`, `who_view`, `groups_view`, `publ_time`, `exp_time`, `act`) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
@@ -98,7 +98,7 @@ if( ! empty( $submit ) )
 			foreach( $array_answervote as $id => $title )
 			{
 				$title = nv_htmlspecialchars( strip_tags( $title ) );
-				if( $title != "" )
+				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
 					$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `title` = " . $db->dbescape( $title ) . ", `url` = " . $db->dbescape( $url ) . " WHERE `id` ='" . intval( $id ) . "' AND `vid` =" . $vid . "" );
@@ -113,7 +113,7 @@ if( ! empty( $submit ) )
 			foreach( $answervotenews as $key => $title )
 			{
 				$title = nv_htmlspecialchars( strip_tags( $title ) );
-				if( $title != "" )
+				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $urlvotenews[$key] ) );
 
@@ -143,7 +143,7 @@ if( ! empty( $submit ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
-				$error = "";
+				$error = '';
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
 				die();
 			}
@@ -157,7 +157,7 @@ if( ! empty( $submit ) )
 	foreach( $answervotenews as $key => $title )
 	{
 		$title = trim( strip_tags( $title ) );
-		if( $title != "" )
+		if( $title != '' )
 		{
 			$array_answervote[] = $title;
 			$array_urlvote[] = $urlvotenews[$key];
@@ -203,14 +203,14 @@ $my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.u
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
 
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
-$my_head .= "<script type=\"text/javascript\">\$(document).ready(function(){\$(\"#votingcontent\").validate();});</script>";
+$my_footer .= "<script type=\"text/javascript\">\$(document).ready(function(){\$(\"#votingcontent\").validate();});</script>";
 
 $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -220,7 +220,7 @@ $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE
 $rowvote['link'] = nv_htmlspecialchars( $rowvote['link'] );
 $xtpl->assign( 'DATA', $rowvote );
 
-if( $error != "" )
+if( $error != '' )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
@@ -237,7 +237,11 @@ $emonth = $eday = $eyear = $emin = $ehour = 0;
 $who_view = $rowvote['who_view'];
 foreach( $array_who_view as $k => $w )
 {
-	$xtpl->assign( 'WHO_VIEW', array( "key" => $k, "title" => $w, "selected" => $who_view == $k ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'WHO_VIEW', array(
+		"key" => $k,
+		"title" => $w,
+		"selected" => $who_view == $k ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.who_view' );
 }
 
@@ -246,7 +250,11 @@ $xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? "visibility:visible;display:
 $groups_view = explode( ',', $rowvote['groups_view'] );
 foreach( $groups_list as $group_id => $grtl )
 {
-	$xtpl->assign( 'GROUPS_VIEW', array( "key" => $group_id, "title" => $grtl, "checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "" ) );
+	$xtpl->assign( 'GROUPS_VIEW', array(
+		"key" => $group_id,
+		"title" => $grtl,
+		"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
+	) );
 	$xtpl->parse( 'main.groups_view' );
 }
 
@@ -256,14 +264,22 @@ list( $phour, $pmin ) = explode( "|", $tdate );
 
 // Thoi gian dang
 $xtpl->assign( 'PUBL_DATE', $publ_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'PHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $phour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $phour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.phour' );
 }
 for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'PMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $pmin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $pmin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.pmin' );
 }
 
@@ -277,49 +293,50 @@ if( $rowvote['exp_time'] > 0 )
 else
 {
 	$emin = $ehour = 0;
-	$exp_date = "";
+	$exp_date = '';
 }
 $xtpl->assign( 'EXP_DATE', $exp_date );
-for( $i = 0; $i <= 23; ++ $i )
+for( $i = 0; $i <= 23; ++$i )
 {
-	$xtpl->assign( 'EHOUR', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $ehour ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EHOUR', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $ehour ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.ehour' );
 }
-for( $i = 0; $i < 60; ++ $i )
+for( $i = 0; $i < 60; ++$i )
 {
-	$xtpl->assign( 'EMIN', array( "key" => $i, "title" => str_pad( $i, 2, "0", STR_PAD_LEFT ), "selected" => $i == $emin ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'EMIN', array(
+		"key" => $i,
+		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		"selected" => $i == $emin ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.emin' );
 }
 
 $items = 0;
-$j = 0;
 foreach( $array_answervote as $id => $title )
 {
-	++ $j;
-	
 	$xtpl->assign( 'ITEM', array(
-		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
-		"stt" => ++ $items,
+		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
-		"link" => nv_htmlspecialchars( $array_urlvote[$id] ),
+		"link" => nv_htmlspecialchars( $array_urlvote[$id] )
 	) );
-	
+
 	$xtpl->parse( 'main.item' );
 }
 
-++ $j;
-$class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
-$xtpl->assign( 'NEW_CLASS', $class );
-$xtpl->assign( 'NEW_ITEM', ++ $items );
+$xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-if( $vid ) $op = ''; 
+if( $vid ) $op = '';
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

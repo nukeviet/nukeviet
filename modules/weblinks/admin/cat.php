@@ -10,13 +10,21 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['categories'];
-$error = "";
+$error = '';
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $pid = $nv_Request->get_int( 'pid', 'get', 0 );
 
-$data_content = array( 'catid' => $catid, 'parentid_old' => 0, 'parentid' => $pid, 'title' => '', 'alias' => '', 'description' => '', 'keywords' => '' );
-	
+$data_content = array(
+	'catid' => $catid,
+	'parentid_old' => 0,
+	'parentid' => $pid,
+	'title' => '',
+	'alias' => '',
+	'description' => '',
+	'keywords' => ''
+);
+
 // Get array catid
 $querysubcat = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid`, `weight` ASC" );
 $array_cat = array();
@@ -38,12 +46,12 @@ if( ! empty( $savecat ) )
 	$data_content['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
 	$data_content['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data_content['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-	$data_content['title'] = filter_text_input( 'title', 'post', "", 1, 100 );
-	$data_content['catimage'] = filter_text_input( 'catimage', 'post' );
-	$data_content['keywords'] = filter_text_input( 'keywords', 'post' );
-	$data_content['alias'] = filter_text_input( 'alias', 'post', '', 1, 100 );
-	$data_content['description'] = filter_text_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
-	$data_content['alias'] = ( $data_content['alias'] == "" ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
+	$data_content['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 100 );
+	$data_content['catimage'] = $nv_Request->get_title( 'catimage', 'post' );
+	$data_content['keywords'] = $nv_Request->get_title( 'keywords', 'post' );
+	$data_content['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 100 );
+	$data_content['description'] = $nv_Request->get_textarea( 'description', '', NV_ALLOWED_HTML_TAGS );
+	$data_content['alias'] = ( $data_content['alias'] == '' ) ? change_alias( $data_content['title'] ) : change_alias( $data_content['alias'] );
 
 	if( empty( $data_content['title'] ) )
 	{
@@ -55,9 +63,9 @@ if( ! empty( $savecat ) )
 		{
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $data_content['parentid'] ) . "" ) );
 			$weight = intval( $weight ) + 1;
-			
+
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `catimage`, `alias`, `description`, `weight`, `inhome`, `numlinks`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $data_content['parentid'] ) . ", " . $db->dbescape( $data_content['title'] ) . ", " . $db->dbescape( $data_content['catimage'] ) . " , " . $db->dbescape( $data_content['alias'] ) . ", " . $db->dbescape( $data_content['description'] ) . ", " . $db->dbescape( $weight ) . ", '1', '3', " . $db->dbescape( $data_content['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
-			
+
 			$idnew = $db->sql_query_insert_id( $sql );
 
 			if( $idnew > 0 )
@@ -88,7 +96,7 @@ if( ! empty( $savecat ) )
 			}
 			else
 			{
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $data_content['catid'] . "";
+				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $data_content['parentid'] ) . ", `title`=" . $db->dbescape( $data_content['title'] ) . ", `catimage` =  " . $db->dbescape( $data_content['catimage'] ) . ", `alias` =  " . $db->dbescape( $data_content['alias'] ) . ", `description`=" . $db->dbescape( $data_content['description'] ) . ", `keywords`= " . $db->dbescape( $data_content['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $data_content['catid'] . "";
 				$db->sql_query( $sql );
 
 				if( $db->sql_affectedrows() > 0 )
@@ -140,7 +148,9 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data_content );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'module_name', $module_name );
 $xtpl->assign( 'PATH', NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'catid', $data_content['catid'] );
@@ -150,29 +160,29 @@ if( ! empty( $array_cat ) )
 {
 	foreach( $array_cat as $cat )
 	{
-		$xtitle = "";
-		
+		$xtitle = '';
+
 		if( $cat['catid'] != $data_content['catid'] )
 		{
 			if( $cat['parentid'] != 0 ) $xtitle = getlevel( $cat['parentid'], $array_cat );
 			$cat['xtitle'] = $xtitle . $cat['title'];
-			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? "selected=\"selected\"" : "";
+			$cat['sl'] = ( $cat['catid'] == $data_content['parentid'] ) ? ' selected="selected"' : '';
 			$xtpl->assign( 'CAT', $cat );
 			$xtpl->parse( 'main.loopcat' );
 		}
-		
+
 		if( $cat['parentid'] == $data_content['parentid'] )
 		{
-			$cat['link_add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;pid=" . $cat['catid'] . "";
-			$cat['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;catid=" . $cat['catid'] . "";
+			$cat['link_add'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;pid=" . $cat['catid'] . "";
+			$cat['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $cat['catid'] . "";
 			$cat['weight_select'] = drawselect_number( "change", 1, $numcat, $cat['weight'], "nv_chang_cat(this,'" . $cat['catid'] . "','weight');" );
 			$cat['inhome_select'] = drawselect_yesno( $select_name = "slinhome", $cat['inhome'], $lang_module['weblink_no'], $lang_module['weblink_yes'], "nv_chang_cat(this,'" . $cat['catid'] . "','inhome');" );
 			$xtpl->assign( 'ROW', $cat );
 			$xtpl->parse( 'main.data.loop' );
 		}
 	}
-	
-	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&pid=" . $data_content['parentid'] . "" );
+
+	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;pid=" . $data_content['parentid'] . "" );
 	if( $numcat > 0 ) $xtpl->parse( 'main.data' );
 }
 
@@ -190,8 +200,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

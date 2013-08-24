@@ -15,13 +15,13 @@ $sql = "SELECT `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHER
 $result = $db->sql_query( $sql );
 $row = $db->sql_fetchrow( $result );
 
-if( $row['url'] != "" )
+if( $row['url'] != '' )
 {
 	if( ! preg_match( "/http:\/\//i", $row['url'] ) )
 	{
 		$url = "http://" . $url;
 	}
-	
+
 	if( isset( $_COOKIE['timeout'] ) and $_COOKIE['timeout'] == $id )
 	{
 		$contents .= sprintf( $lang_module['notimeout'], $timeout );
@@ -31,13 +31,13 @@ if( $row['url'] != "" )
 		setcookie( 'timeout', $id, time() + $timeout * 60 );
 		$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET `hits_total`=`hits_total`+1 WHERE id='" . $id . "'" );
 	}
-	
+
 	Header( "Location: " . $row['url'] );
 	exit();
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

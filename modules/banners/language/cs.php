@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language česky
+ * @Createdate Aug 01, 2010, 02:40:00 PM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -60,12 +60,12 @@ $lang_module['addads_block_lang_en'] = 'Angličtina';
 $lang_module['addads_block_lang_ru'] = 'Ruské';
 $lang_module['addads_block_lang_zz'] = 'Ostatní';
 $lang_module['title_empty'] = 'Titul nesmí byt prázdný';
-$lang_module['plan_not_selected'] = 'jste nebyl vybrano  block reklama';
+$lang_module['plan_not_selected'] = 'jste nebyl vybrano block reklama';
 $lang_module['click_url_invalid'] = 'URL Při kliknutí na reklamy není platný';
 $lang_module['file_upload_empty'] = 'Reklamní obrázek není stále přístupný';
-$lang_module['upload_blocked'] = 'Nahrávání obrázků a flash není povoleno, nemůžete přidat nové reklamy.  Nastavte povolení pro nahrávání obrázků a flash.';
+$lang_module['upload_blocked'] = 'Nahrávání obrázků a flash není povoleno, nemůžete přidat nové reklamy. Nastavte povolení pro nahrávání obrázků a flash.';
 $lang_module['addads_require_login'] = 'Tyto funkce jsou pouze pro registrové';
-$lang_module['addads_success'] = 'Úspěšně přidáno.  Vaši požadavku zkontrolujeme a nejbližší době vás budeme kontaktovat.';
+$lang_module['addads_success'] = 'Úspěšně přidáno. Vaši požadavku zkontrolujeme a nejbližší době vás budeme kontaktovat.';
 $lang_module['stats_views'] = 'statistiky reklama';
 $lang_module['stats_views_country'] = 'Podle země';
 $lang_module['stats_views_month'] = 'Měsíc';

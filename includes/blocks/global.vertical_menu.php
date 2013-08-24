@@ -11,12 +11,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 global $nv_vertical_menu;
 
-$content = "";
+$content = '';
 
 if( ! empty( $nv_vertical_menu ) )
 {
 	$content .= "<div id=\"ver_menu\">\n";
-	
+
 	foreach( $nv_vertical_menu as $menu )
 	{
 		$content .= ( $menu[2] ) ? "<a href=\"" . $menu[1] . "\" class=\"current\">" . $menu[0] . "</a>\n" : "<a href=\"" . $menu[1] . "\">" . $menu[0] . "</a>\n";
@@ -28,7 +28,7 @@ if( ! empty( $nv_vertical_menu ) )
 			}
 		}
 	}
-	
+
 	$content .= "</div>\n";
 }
 

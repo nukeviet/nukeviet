@@ -21,7 +21,6 @@ if( ! defined( 'NV_BUFFER_CLASS' ) ) define( 'NV_BUFFER_CLASS', true );
 class NVbuffer
 {
 	var $position = 0;
-	
 	var $varname = null;
 
 	/**
@@ -52,7 +51,7 @@ class NVbuffer
 	{
 		$ret = substr( $GLOBALS[$this->varname], $this->position, $count );
 		$this->position += strlen( $ret );
-		
+
 		return $ret;
 	}
 
@@ -65,12 +64,12 @@ class NVbuffer
 	function stream_write( $data )
 	{
 		if( ! isset( $GLOBALS[$this->varname] ) ) $GLOBALS[$this->varname] = '';
-			
+
 		$left = substr( $GLOBALS[$this->varname], 0, $this->position );
 		$right = substr( $GLOBALS[$this->varname], $this->position + strlen( $data ) );
 		$GLOBALS[$this->varname] = $left . $data . $right;
 		$this->position += strlen( $data );
-		
+
 		return strlen( $data );
 	}
 
@@ -115,7 +114,7 @@ class NVbuffer
 				{
 					return false;
 				}
-				
+
 				break;
 
 			case SEEK_CUR:
@@ -128,7 +127,7 @@ class NVbuffer
 				{
 					return false;
 				}
-				
+
 				break;
 
 			case SEEK_END:
@@ -141,7 +140,7 @@ class NVbuffer
 				{
 					return false;
 				}
-				
+
 				break;
 
 			default:
@@ -163,12 +162,12 @@ class NVbuffer
 		{
 			$url = parse_url( $path );
 			$varname = $url["host"];
-			
+
 			if( ! isset( $GLOBALS[$varname] ) )
 			{
 				$GLOBALS[$varname] = '';
 			}
-			
+
 			return true;
 		}
 		return false;

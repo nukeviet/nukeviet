@@ -11,9 +11,9 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['categories'];
 
-$error = $admins = "";
+$error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $who_view, $groups_view ) = array( 0, 0, "", "", "", "", "", 0, "" );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $who_view, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', 0, '', '', 0 );
 
 $groups_list = nv_groups_list();
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
@@ -22,20 +22,32 @@ if( ! empty( $savecat ) )
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
 	$parentid_old = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$titlesite = filter_text_input( 'titlesite', 'post', '', 1 );
-	$keywords = filter_text_input( 'keywords', 'post', '', 1 );
-	$alias = filter_text_input( 'alias', 'post', '' );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$titlesite = $nv_Request->get_title( 'titlesite', 'post', '', 1 );
+	$keywords = $nv_Request->get_title( 'keywords', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
-	$alias = ( $alias == "" ) ? change_alias( $title ) : change_alias( $alias );
+	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
+	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
 	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
-	$groups_view = "";
+	$groups_view = '';
 
 	$groups = $nv_Request->get_typed_array( 'groups_view', 'post', 'int', array() );
 	$groups = array_intersect( $groups, array_keys( $groups_list ) );
 	$groups_view = implode( ",", $groups );
+
+	$image = $nv_Request->get_string( 'image', 'post', '' );
+	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	{
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+		$image = substr( $image, $lu );
+	}
+	else
+	{
+		$image = '';
+	}
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
@@ -46,15 +58,14 @@ if( ! empty( $savecat ) )
 		}
 	}
 
-	if( $catid == 0 and $title != "" )
+	if( $catid == 0 and $title != '' )
 	{
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
 		$weight = intval( $weight ) + 1;
 		$viewcat = "viewcat_page_new";
-		$subcatid = "";
+		$subcatid = '';
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `titlesite`, `alias`, `description`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `keywords`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`)
-         VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $titlesite ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
+		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `titlesite`, `alias`, `description`, `image`, `viewdescription`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `keywords`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`) VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $titlesite ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '" . $viewdescription . "', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
 
 		$newcatid = ( int )$db->sql_query_insert_id( $sql );
 		if( $newcatid > 0 )
@@ -62,12 +73,12 @@ if( ! empty( $savecat ) )
 			$db->sql_freeresult();
 			nv_create_table_rows( $newcatid );
 			nv_fix_cat_order();
-			
+
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
 				$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
 			}
-			
+
 			nv_del_moduleCache( $module_name );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid'] );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
@@ -78,27 +89,26 @@ if( ! empty( $savecat ) )
 			$error = $lang_module['errorsave'];
 		}
 	}
-	elseif( $catid > 0 and $title != "" )
+	elseif( $catid > 0 and $title != '' )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `catid` =" . $catid;
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`=" . $db->dbescape( $image ) . ", `viewdescription`=" . $db->dbescape( $viewdescription ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $catid;
 		$db->sql_query( $sql );
-		
 		if( $db->sql_affectedrows() > 0 )
 		{
 			$db->sql_freeresult();
-			
+
 			if( $parentid != $parentid_old )
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
 				$weight = intval( $weight ) + 1;
-				
+
 				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $catid );
 				$db->sql_query( $sql );
-				
+
 				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid'] );
 			}
-			
+
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
 			die();
@@ -125,6 +135,8 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	$titlesite = $global_array_cat[$catid]['titlesite'];
 	$alias = $global_array_cat[$catid]['alias'];
 	$description = $global_array_cat[$catid]['description'];
+	$viewdescription = $global_array_cat[$catid]['viewdescription'];
+	$image = $global_array_cat[$catid]['image'];
 	$keywords = $global_array_cat[$catid]['keywords'];
 	$who_view = $global_array_cat[$catid]['who_view'];
 	$groups_view = $global_array_cat[$catid]['groups_view'];
@@ -158,7 +170,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	$lev_i = $array_value['lev'];
 	if( defined( 'NV_IS_ADMIN_MODULE' ) or ( isset( $array_cat_admin[$admin_id][$catid_i] ) and $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 ) )
 	{
-		$xtitle_i = "";
+		$xtitle_i = '';
 		if( $lev_i > 0 )
 		{
 			$xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
@@ -209,6 +221,9 @@ if( ! empty( $array_cat_list ) )
 	}
 }
 
+$lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+
 $xtpl = new XTemplate( "cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -224,9 +239,26 @@ $xtpl->assign( 'titlesite', $titlesite );
 $xtpl->assign( 'alias', $alias );
 $xtpl->assign( 'parentid', $parentid );
 $xtpl->assign( 'keywords', $keywords );
-$xtpl->assign( 'description', $description );
+$xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 
 $xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $image ) )
+{
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $image;
+}
+$xtpl->assign( 'image', $image );
+
+for( $i = 0; $i <= 2; $i++ )
+{
+	$data = array(
+		"value" => $i,
+		"selected" => ( $viewdescription == $i ) ? " checked=\"checked\"" : "",
+		"title" => $lang_module['viewdescription_' . $i]
+	);
+	$xtpl->assign( 'VIEWDESCRIPTION', $data );
+	$xtpl->parse( 'main.content.viewdescription' );
+}
 
 if( ! empty( $error ) )
 {
@@ -267,8 +299,8 @@ if( ! empty( $array_cat_list ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

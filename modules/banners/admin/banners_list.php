@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['banners_list'];
 
-$sql = "SELECT `id`,`full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$sql = "SELECT `id`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
 $clients = array();
@@ -20,7 +20,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$clients[$row['id']] = $row['full_name'];
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang`, `title` ASC";
+$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
 $result = $db->sql_query( $sql );
 
 $plans = array();
@@ -31,7 +31,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 $contents = array();
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE ";
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE ";
 if( in_array( $nv_Request->get_int( 'act', 'get' ), array( 2, 3, 4 ) ) )
 {
 	$sql .= "`act`=" . $nv_Request->get_int( 'act', 'get' );
@@ -67,12 +67,12 @@ $contents['rows'] = array();
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$client = ! empty( $row['clid'] ) ? $clients[$row['clid']] : "";
-	
+
 	$contents['rows'][$row['id']]['title'] = $row['title'];
 	$contents['rows'][$row['id']]['pid'] = array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']] );
 	$contents['rows'][$row['id']]['clid'] = ! empty( $client ) ? array( NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_client&amp;id=" . $row['clid'], $client ) : array();
-	$contents['rows'][$row['id']]['publ_date'] = date( "d-m-Y", $row['publ_time'] );
-	$contents['rows'][$row['id']]['exp_date'] = ! empty( $row['exp_time'] ) ? date( "d-m-Y", $row['exp_time'] ) : $lang_module['unlimited'];
+	$contents['rows'][$row['id']]['publ_date'] = date( "d/m/Y", $row['publ_time'] );
+	$contents['rows'][$row['id']]['exp_date'] = ! empty( $row['exp_time'] ) ? date( "d/m/Y", $row['exp_time'] ) : $lang_module['unlimited'];
 	$contents['rows'][$row['id']]['act'] = array( 'act_' . $row['id'], $row['act'], "nv_b_chang_act(" . $row['id'] . ",'act_" . $row['id'] . "');" );
 	$contents['rows'][$row['id']]['view'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_banner&amp;id=" . $row['id'];
 	$contents['rows'][$row['id']]['edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_banner&amp;id=" . $row['id'];
@@ -81,8 +81,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 $content = call_user_func( "nv_b_list_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

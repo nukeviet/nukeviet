@@ -17,27 +17,25 @@ if( empty( $id ) ) die( 'Stop!!!' );
 
 nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_plan', "planid " . $id, $admin_info['userid'] );
 
-$sql = "SELECT `act` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT `act` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
 
 $banners_id = array();
-$sql = "SELECT `id`,`file_name`,`file_name_tmp` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `pid`=" . $id;
+$sql = "SELECT `id`, `file_name`, `imageforswf` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid`=" . $id;
 $result = $db->sql_query( $sql );
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	if( ! empty( $row['file_name'] ) and is_file( NV_ROOTDIR . '/' . $row['file_name'] ) )
+	if( ! empty( $row['file_name'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] ) )
 	{
-		@nv_deletefile( NV_ROOTDIR . '/' . $row['file_name'] );
+		@nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] );
 	}
-
-	if( ! empty( $row['file_name_tmp'] ) and is_file( NV_ROOTDIR . '/' . $row['file_name_tmp'] ) )
+	if( ! empty( $row['imageforswf'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] ) )
 	{
-		@nv_deletefile( NV_ROOTDIR . '/' . $row['file_name_tmp'] );
+		@nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] );
 	}
-	
 	$banners_id[] = $row['id'];
 }
 
@@ -45,40 +43,29 @@ if( ! empty( $banners_id ) )
 {
 	$banners_id = implode( ",", $banners_id );
 
-	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . NV_BANNERS_CLICK_GLOBALTABLE . "\_%'" );
-	
-	while( $item = $db->sql_fetch_assoc( $result ) )
-	{
-		$sql = "DELETE FROM `" . $item['Name'] . "` WHERE `bid` IN (" . $banners_id . ")";
-		$db->sql_query( $sql );
-
-		$db->sql_query( "REPAIR TABLE " . $item['Name'] );
-		$db->sql_query( "OPTIMIZE TABLE " . $item['Name'] );
-	}
-
-	$sql = "DELETE FROM `" . NV_BANNERS_CLICK_GLOBALTABLE . "` WHERE `bid` IN (" . $banners_id . ")";
+	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid` IN (" . $banners_id . ")";
 	$db->sql_query( $sql );
 
-	$db->sql_query( "REPAIR TABLE " . NV_BANNERS_CLICK_GLOBALTABLE );
-	$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_CLICK_GLOBALTABLE );
+	$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_click`" );
+	$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_click`" );
 
-	$sql = "DELETE FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `pid` = " . $id;
+	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid` = " . $id;
 	$db->sql_query( $sql );
 
-	$db->sql_query( "REPAIR TABLE " . NV_BANNERS_ROWS_GLOBALTABLE );
-	$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_ROWS_GLOBALTABLE );
+	$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_rows`" );
+	$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_rows`" );
 }
 
-$sql = "DELETE FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id` = " . $id;
+$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id` = " . $id;
 $db->sql_query( $sql );
 
-$db->sql_query( "REPAIR TABLE " . NV_BANNERS_PLANS_GLOBALTABLE );
-$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_PLANS_GLOBALTABLE );
+$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_plans`" );
+$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_plans`" );
 
 nv_CreateXML_bannerPlan();
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo "OK|plans_list|plans_list";
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

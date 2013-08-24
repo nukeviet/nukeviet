@@ -30,7 +30,7 @@
 			<!-- BEGIN: queries -->
 			<div class="clearfix {DATA.class}">
 				<p>
-					<span class="first"><img alt="{DATA.imgalt}" title="{DATA.imgalt}" src="{DATA.imgsrc}" height="16" width="16"></span>
+					<span class="first"><img alt="{DATA.imgalt}" src="{DATA.imgsrc}" height="16" width="16" /></span>
 					<span class="second">{DATA.queries}</span>
 				</p>
 			</div>
@@ -39,14 +39,14 @@
 	</div>
 </div>
 <script type="text/javascript">
-function nv_show_queries(){
-	Shadowbox.open({
-		content : $("div#div_queries").html(),
-		player : 'html',
-		height : 400,
-		width : 960
-	});
-}
+	function nv_show_queries() {
+		Shadowbox.open({
+			content : $("div#div_queries").html(),
+			player : 'html',
+			height : 400,
+			width : 960
+		});
+	}
 </script>
 <!-- END: is_spadadmin3 -->
 <!-- END: main -->

@@ -68,6 +68,7 @@ $lang_module['save_download'] = 'Dosyayı indirmek için buraya tıklayın.';
 $lang_module['dump_autobackup'] = 'Otomatik yedekleme etkinleştirin';
 $lang_module['dump_backup_ext'] = 'Dosya uzantısı';
 $lang_module['dump_backup_day'] = 'Dosya numaraları';
+$lang_module['dump_interval'] = 'Repeat following jobs';
 $lang_module['file_backup'] = 'Veri yedekleme';
 $lang_module['file_nb'] = 'Numara';
 $lang_module['file_name'] = 'Dosya adı';

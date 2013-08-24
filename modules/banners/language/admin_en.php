@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -74,7 +74,7 @@ $lang_module['info_plan_caption'] = 'Block advertising\'s information &ldquo;<st
 $lang_module['plan_not_selected'] = 'You don\'t select block\'s advertising';
 $lang_module['click_url_invalid'] = 'Invalid url';
 $lang_module['file_upload_empty'] = 'Invalid advertising image';
-$lang_module['upload_blocked'] = 'System have been reject  to upload image and flash file, So you can\'t advertise. Please check your configuration system or the types of file are not allow to upload';
+$lang_module['upload_blocked'] = 'System have been reject to upload image and flash file, So you can\'t advertise. Please check your configuration system or the types of file are not allow to upload';
 $lang_module['add_banner_info'] = 'T add advertising, Please declare fully the box below';
 $lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Image file for advertising (%s)';
@@ -115,7 +115,7 @@ $lang_module['unknown'] = 'unknown';
 $lang_module['show_list_stat1'] = 'Amount click in %1$s year %2$s';
 $lang_module['show_list_stat2'] = 'Amount click in &ldquo;<strong>%1$s</strong>&rdquo; %2$s year %3$s';
 $lang_module['show_list_stat3'] = 'Amount click from country &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
-$lang_module['show_list_stat4'] = 'Amount click from browser  &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
+$lang_module['show_list_stat4'] = 'Amount click from browser &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
 $lang_module['show_list_stat5'] = 'Amount click from OS &ldquo;<strong>%1$s</strong>&rdquo; in %2$s year %3$s';
 $lang_module['click_date'] = 'Date';
 $lang_module['click_ip'] = 'IP';
@@ -130,5 +130,11 @@ $lang_module['file_del_confirm'] = 'Do you want delete?';
 $lang_module['delfile_success'] = 'Delete ok!';
 $lang_module['delfile_error'] = 'Delete error';
 $lang_module['weight'] = 'Position';
+
+$lang_module['target'] = 'Target';
+$lang_module['target_blank'] = 'New Window (_blank)';
+$lang_module['target_top'] = 'Topmost Window (_top)';
+$lang_module['target_self'] = 'Same Window (_self)';
+$lang_module['target_parent'] = 'Parent Window (_parent)';
 
 ?>

@@ -1,2 +1,3 @@
 <!-- BEGIN: mainblock -->
-{BLOCK_CONTENT}<!-- END: mainblock -->
+{BLOCK_CONTENT}
+<!-- END: mainblock -->

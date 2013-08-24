@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Jun 06, 2011, 12:55:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Jun 06, 2011, 12:55:00 PM
+ */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
@@ -53,7 +53,8 @@ $lang_module['turnon'] = 'Nên bật';
 $lang_module['is_support'] = 'Nên hỗ trợ';
 $lang_module['supports_rewrite'] = 'Hỗ trợ rewrite';
 $lang_module['opendir_support'] = 'PHP hỗ trợ opendir';
-$lang_module['gd_support'] = 'PHP hỗ trợ thư viên xử lý ảnh GD';
+$lang_module['gd_support'] = 'PHP hỗ trợ thư viện xử lý ảnh GD';
+$lang_module['mcrypt_support'] = 'PHP hỗ trợ thư viện mã hóa mcrypt';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
 $lang_module['dir_noexit'] = 'Không tồn tại';
@@ -130,6 +131,8 @@ $lang_module['your_question_empty'] = 'Bạn chưa khai báo câu hỏi bảo m�
 $lang_module['answer_empty'] = 'Bạn chưa nhập câu Trả lời cho câu hỏi bảo mật';
 $lang_module['question_note'] = 'Hệ thống sẽ hỏi bạn câu hỏi bảo mật trong trường hợp bạn cần khôi phục mật khẩu khi bạn bị quên. Vì vậy hãy chọn câu hỏi mà nó có thể giúp bạn nhớ chính xác câu trả lời.';
 $lang_module['answer_question_note'] = 'Bạn hãy nhớ câu trả lời này để trả lời hệ thống.';
+$lang_module['lang_multi'] = 'Website đa ngôn ngữ';
+$lang_module['lang_multi_note'] = 'Nếu bạn có kế hoặch xây dựng site đa ngôn ngữ, bạn nên chọn tính năng này ';
 $lang_module['s2_winhost_info'] = 'Bạn đang sử dụng window hosting, chức năng CHMOD sẽ không hoạt động.';
 $lang_module['s2_winhost_info1'] = 'Các kết quả kiểm tra là';
 $lang_module['s2_winhost_info2'] = 'tuy nhiên bạn hãy chắc chắn các thư mục được liệt kê bên trên và thư mục con của nó được cấp quyền ghi file trước khi chuyển sang <strong>Bước kế tiếp</strong>, nếu không hệ thống có thể sẽ không hoạt động được';

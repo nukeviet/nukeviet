@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -121,9 +121,6 @@ $lang_module['is_user_forum'] = 'Récupérer les utilisateurs de forum';
 $lang_module['search_page_title'] = 'Résultats de recherche';
 $lang_module['click_to_view'] = 'Cliquer pour voir';
 $lang_module['level0'] = 'Utilisateur';
-$lang_module['level1'] = 'Administrateur suprême';
-$lang_module['level2'] = 'Administrateur général';
-$lang_module['level3'] = 'Administrateur de module';
 $lang_module['admin_add'] = 'Ajouter un Administrateur';
 $lang_module['nv_admin_add'] = 'Ajouter un groupe';
 $lang_module['nv_admin_edit'] = 'Modifier le groupe';
@@ -161,7 +158,7 @@ $lang_module['pagetitle'] = 'Obtenir ID d\'utilisateur';
 $lang_module['pagetitle1'] = 'Rechercher ID d\'utilisateur';
 $lang_module['search'] = 'Chercher utilisateur';
 $lang_module['reset'] = 'Répéter';
-$lang_module['waiting'] = 'Entrez les informations et appuyez sur le bouton de rechercher utilisateur  pour effectuer';
+$lang_module['waiting'] = 'Entrez les informations et appuyez sur le bouton de rechercher utilisateur pour effectuer';
 $lang_module['from'] = 'De';
 $lang_module['to'] = 'à';
 $lang_module['select'] = 'Sélectionner';
@@ -170,10 +167,8 @@ $lang_module['enter_key'] = 'Rentrez les informations pour trouver un utilisateu
 $lang_module['username'] = 'Nom d\'utilisateur';
 $lang_module['full_name'] = 'Nom et prénom';
 $lang_module['regdate'] = 'Date d\'inscription';
-$lang_module['yim'] = 'Compte Yahoo';
 $lang_module['last_login'] = 'Dernière session';
 $lang_module['last_idlogin'] = 'IP de la dernière session';
-$lang_module['web'] = 'Site Web';
 $lang_module['select_gender'] = 'Sélectionnez votre sexe';
 $lang_module['select_gender_male'] = 'Masculin';
 $lang_module['select_gender_female'] = 'Féminin';

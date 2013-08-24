@@ -79,7 +79,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 
 			if( ! empty( $data_save ) )
 			{
-				$s_ud = "";
+				$s_ud = '';
 				foreach( $data_save as $key => $value )
 				{
 					$s_ud .= "`" . $key . "` = '" . $value . "', ";

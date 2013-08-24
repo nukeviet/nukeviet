@@ -11,22 +11,22 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
 
 /**
  * nv_get_rss_link()
- * 
+ *
  * @return
  */
 function nv_get_rss_link()
 {
 	global $db, $module_data, $global_config, $imgmid, $imgmid2, $iconrss, $site_mods;
-	$contentrss = "";
+	$contentrss = '';
 
-	foreach( $site_mods as $mod_name => $row )
+	foreach( $site_mods as $mod_name => $mod_info )
 	{
-		if( $row['rss'] == 1 and isset( $row['funcs']['rss'] ) and file_exists( NV_ROOTDIR . "/modules/" . $row['module_file'] . "/rssdata.php" ) )
+		if( $mod_info['rss'] == 1 and isset( $mod_info['alias']['rss'] ) and file_exists( NV_ROOTDIR . "/modules/" . $mod_info['module_file'] . "/rssdata.php" ) )
 		{
-			$mod_data = $row['module_data'];
-			$mod_file = $row['module_file'];
+			$mod_data = $mod_info['module_data'];
+			$mod_file = $mod_info['module_file'];
 
-			$contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=rss\">" . $iconrss . " <strong> " . $row['custom_title'] . "</strong></a><br />";
+			$contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\">" . $iconrss . " <strong> " . $mod_info['custom_title'] . "</strong></a><br />";
 
 			$rssarray = array();
 			include ( NV_ROOTDIR . "/modules/" . $mod_file . "/rssdata.php" );
@@ -44,14 +44,13 @@ function nv_get_rss_link()
 				}
 			}
 		}
-
 	}
 	return $contentrss;
 }
 
 /**
  * nv_get_sub_rss_link()
- * 
+ *
  * @param mixed $rssarray
  * @param mixed $id
  * @param mixed $image
@@ -78,14 +77,14 @@ function nv_get_sub_rss_link( $rssarray, $id, $image )
 
 $page_title = $module_info['custom_title'];
 
-$array = "";
+$array = '';
 $content_file = NV_ROOTDIR . "/" . NV_DATADIR . "/" . NV_LANG_DATA . "_" . $module_data . "Content.txt";
 if( file_exists( $content_file ) ) $array = file_get_contents( $content_file );
 
 $contents = nv_rss_main_theme( $array );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

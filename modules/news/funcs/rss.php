@@ -17,13 +17,13 @@ $items = array();
 
 $channel['title'] = $module_info['custom_title'];
 $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$channel['description'] = !empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
+$channel['description'] = ! empty( $module_info['description'] ) ? $module_info['description'] : $global_config['site_description'];
 
 $catid = 0;
 if( isset( $array_op[1] ) )
 {
 	$alias_cat_url = $array_op[1];
-	$cattitle = "";
+	$cattitle = '';
 	foreach( $global_array_cat as $catid_i => $array_cat_i )
 	{
 		if( $alias_cat_url == $array_cat_i['alias'] )
@@ -45,52 +45,40 @@ else
 {
 	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 30";
 }
-
 if( $module_info['rss'] )
 {
 	$result = $db->sql_query( $sql );
 	while( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 	{
-		if( ! empty( $catid ) ) $catid_i = $catid;
+		//if( ! empty( $catid ) ) $catid_i = $catid;//cai nay tao ra nhieu link cho 1 bài viet, rat khong tot cho seo
 		$catalias = $global_array_cat[$catid_i]['alias'];
 
-		if( ! empty( $homeimgthumb ) )
+		if( $homeimgthumb == 1 ) // image thumb
 		{
-			$array_img = explode( "|", $homeimgthumb );
+			$rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		else
+		elseif( $homeimgthumb == 2 ) // image file
 		{
-			$array_img = array( "", "" );
+			$rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
-		{
-			$rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
-		}
-		elseif( nv_is_url( $homeimgfile ) )
+		elseif( $homeimgthumb == 3 ) // image url
 		{
 			$rimages = $homeimgfile;
 		}
-		elseif( $homeimgfile != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $homeimgfile ) )
+		else // no image
 		{
-			$rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
-		}
-		else
-		{
-			$rimages = "";
+			$rimages = '';
 		}
 		$rimages = ( ! empty( $rimages ) ) ? "<img src=\"" . $rimages . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
 
-		$items[] = array( //
-			'title' => $title, //
+		$items[] = array(
+			'title' => $title,
 			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
-			'guid' => $module_name . '_' . $id, //
-			'description' => $rimages . $hometext, //
-			'pubdate' => $publtime //
-				);
+			'guid' => $module_name . '_' . $id,
+			'description' => $rimages . $hometext,
+			'pubdate' => $publtime );
 	}
 }
-
 nv_rss_generate( $channel, $items );
 die();
 

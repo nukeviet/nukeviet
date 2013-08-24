@@ -85,4 +85,17 @@ $lang_module['nopreview'] = 'Dosya önizleme desteklemiyor.';
 $lang_module['errorNewSize'] = 'Yeniden boyutlandır: 10 to %d px, height: 10 to %d px';
 $lang_module['maxSizeSize'] = 'Maksimum boyut: %dx%dpx';
 
+$lang_module['uploadconfig'] = 'Yükleme ayarları';
+$lang_module['uploadconfig_ban_ext'] = 'Yasakla Uzantıları';
+$lang_module['uploadconfig_ban_mime'] = 'Forbid Mimies';
+$lang_module['uploadconfig_types'] = 'Dosya tipleri';
+$lang_module['sys_max_size'] = 'Yükleyebileceğiniz dosya boyutu';
+$lang_module['nv_max_size'] = 'Max. Yükleme';
+$lang_module['upload_checking_mode'] = 'Kontrol Modu Yükle';
+$lang_module['strong_mode'] = 'Güçlü';
+$lang_module['mild_mode'] = 'Hafif';
+$lang_module['lite_mode'] = 'Zayıf';
+$lang_module['none_mode'] = 'Hiçbiri';
+$lang_module['upload_checking_note'] = 'Your server does not support some functions defined file types. If you chose "Strong", you will not be able to upload files to your host';
+
 ?>

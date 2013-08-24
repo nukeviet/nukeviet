@@ -13,14 +13,14 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_ref_expired_del()
- * 
+ *
  * @return
  */
 function cron_ref_expired_del()
 {
 	$result = true;
 	$log_path = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs';
-	
+
 	if( $dh = opendir( $log_path ) )
 	{
 		$log_start = mktime( 0, 0, 0, date( "n", NV_CURRENTTIME ), 1, date( "Y", NV_CURRENTTIME ) );
@@ -39,11 +39,11 @@ function cron_ref_expired_del()
 				}
 			}
 		}
-		
+
 		closedir( $dh );
 		clearstatcache();
 	}
-	
+
 	return $result;
 }
 

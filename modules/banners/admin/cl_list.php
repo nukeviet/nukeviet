@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` ORDER BY `login` ASC";
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
 $result = $db->sql_query( $sql );
 
 $contents = array();
@@ -36,8 +36,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$contents['rows'][$row['id']]['del'] = "nv_cl_del(" . $row['id'] . ");";
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_cl_list_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

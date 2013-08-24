@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language 日本語
+ * @Createdate Apr 15, 2011, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -27,11 +27,16 @@ $lang_module['move'] = '移動';
 $lang_module['save_temp'] = '下書き保存';
 $lang_module['publtime'] = '投稿';
 $lang_module['exptime'] = '期限切れにする。';
+$lang_module['status_action_0'] = '承認のために待機するようにスイッチ';
+$lang_module['declined'] = '投稿を拒否';
+$lang_module['re_published'] = '再公表';
 $lang_module['status'] = 'ステータス';
 $lang_module['status_0'] = '承認を待ている。';
 $lang_module['status_1'] = '出版';
 $lang_module['status_2'] = '時間設定投稿';
 $lang_module['status_3'] = '期限切れになりました。';
+$lang_module['status_4'] = 'ドラフト';
+$lang_module['status_5'] = '拒絶する';
 $lang_module['errorsave'] = 'エラー：システムはコンテンツが更新できません。記事タイトルが存在している可能性があるので再確認ください。';
 $lang_module['saveok'] = '記事更新は成功された。';
 $lang_module['clickgotomodule'] = '管理職に移動するためにここをクリックしてください。';

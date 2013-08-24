@@ -11,29 +11,8 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_ABOUT', true );
 
-$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . NV_CACHE_PREFIX . ".cache"; // Cache dung tai tat ca cac giao dien
-
-if( ( $cache = nv_get_cache( $cache_file ) ) != false )
-{
-	$abouts = unserialize( $cache );
-}
-else
-{
-	$abouts = array();
-
-	$sql = $db->sql_query( "SELECT `id`,`title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY `weight` ASC" );
-	while( $row = $db->sql_fetchrow( $sql ) )
-	{
-		$abouts[$row['alias']] = array( //
-			'id' => $row['id'], //
-			'title' => $row['title'], //
-			'alias' => $row['alias'] //
-		);
-	}
-
-	$cache = serialize( $abouts );
-	nv_set_cache( $cache_file, $cache );
-}
+$sql = "SELECT `id`,`title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY `weight` ASC";
+$abouts = nv_db_cache( $sql, 'alias', $module_name );
 
 $id = 0;
 $ab_links = array();

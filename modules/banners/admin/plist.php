@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` ORDER BY `blang` ASC";
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang` ASC";
 $result = $db->sql_query( $sql );
 
 $contents = array();
@@ -35,8 +35,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$contents['rows'][$row['id']]['del'] = "nv_pl_del(" . $row['id'] . ");";
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_plist_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

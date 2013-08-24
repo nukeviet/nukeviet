@@ -22,44 +22,18 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array( array(
-				'Link',
-				'Unlink',
-				'Image',
-				'Table',
-				'Font',
-				'FontSize',
-				'RemoveFormat' ), array(
-				'Bold',
-				'Italic',
-				'Underline',
-				'StrikeThrough',
-				'-',
-				'Subscript',
-				'Superscript',
-				'-',
-				'JustifyLeft',
-				'JustifyCenter',
-				'JustifyRight',
-				'JustifyBlock',
-				'OrderedList',
-				'UnorderedList',
-				'-',
-				'Outdent',
-				'Indent',
-				'TextColor',
-				'BGColor',
-				'Source' ) );
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
 		$CKEditor->config['skin'] = 'kama';
 		$CKEditor->config['entities'] = false;
-		//$CKEditor->config['enterMode'] = 2;
+		// $CKEditor->config['enterMode'] = 2;
 		$CKEditor->config['language'] = NV_LANG_INTERFACE;
 		$CKEditor->config['toolbar'] = $editortoolbar;
-		// Path to CKEditor directory, ideally instead of relative dir, use an absolute path:
-		//   $CKEditor->basePath = '/ckeditor/'
+		// Path to CKEditor directory, ideally instead of relative dir, use an
+		// absolute path:
+		// $CKEditor->basePath = '/ckeditor/'
 		// If not set, CKEditor will try to detect the correct path.
 		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
@@ -76,13 +50,12 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
-
 }
 
 $page_title = $lang_module['content'];
 $key_words = $module_info['keywords'];
 
-//check user post content
+// check user post content
 $array_post_config = array();
 $sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
 $result = $db->sql_query( $sql );
@@ -92,7 +65,8 @@ while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, 
 		"addcontent" => $addcontent,
 		"postcontent" => $postcontent,
 		"editcontent" => $editcontent,
-		"delcontent" => $delcontent );
+		"delcontent" => $delcontent
+	);
 }
 
 if( isset( $array_post_config[0][0] ) )
@@ -105,7 +79,8 @@ else
 		"addcontent" => 0,
 		"postcontent" => 0,
 		"editcontent" => 0,
-		"delcontent" => 0 );
+		"delcontent" => 0
+	);
 }
 
 if( defined( 'NV_IS_USER' ) and isset( $array_post_config[1] ) )
@@ -166,7 +141,7 @@ if( $array_post_user['postcontent'] )
 {
 	$array_post_user['addcontent'] = 1;
 }
-//check user post content
+// check user post content
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
@@ -196,24 +171,24 @@ if( ! $array_post_user['addcontent'] )
 	$xtpl->parse( 'mainrefresh' );
 	$contents = $xtpl->text( 'mainrefresh' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
 if( $nv_Request->isset_request( 'get_alias', 'post' ) )
 {
-	$title = filter_text_input( 'get_alias', 'post', '' );
+	$title = $nv_Request->get_title( 'get_alias', 'post', '' );
 	$alias = change_alias( $title );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $alias;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 
 $contentid = $nv_Request->get_int( 'contentid', 'get,post', 0 );
-$fcheckss = filter_text_input( 'checkss', 'get,post', '' );
+$fcheckss = $nv_Request->get_title( 'checkss', 'get,post', '' );
 $checkss = md5( $contentid . $client_info['session_id'] . $global_config['sitekey'] );
 
 if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $checkss )
@@ -260,12 +235,14 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	$array_mod_title[] = array(
 		'catid' => 0,
 		'title' => $lang_module['add_content'],
-		'link' => $base_url );
+		'link' => $base_url
+	);
 
 	$array_imgposition = array(
 		0 => $lang_module['imgposition_0'],
 		1 => $lang_module['imgposition_1'],
-		2 => $lang_module['imgposition_2'] );
+		2 => $lang_module['imgposition_2']
+	);
 
 	$rowcontent = array(
 		"id" => "",
@@ -300,7 +277,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		"hitscm" => 0,
 		"total_rating" => 0,
 		"click_rating" => 0,
-		"keywords" => "" );
+		"keywords" => ""
+	);
 
 	$array_catid_module = array();
 	$sql = "SELECT catid, title, lev FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
@@ -311,7 +289,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_catid_module[] = array(
 			"catid" => $catid_i,
 			"title" => $title_i,
-			"lev" => $lev_i );
+			"lev" => $lev_i
+		);
 	}
 
 	$sql = "SELECT topicid, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC";
@@ -324,111 +303,51 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$array_topic_module[$topicid_i] = $title_i;
 	}
 
-	$error = "";
+	$error = '';
 
 	if( $nv_Request->isset_request( 'contentid', 'post' ) )
 	{
 		$rowcontent['id'] = $contentid;
-		$fcode = filter_text_input( 'fcode', 'post', '' );
+		$fcode = $nv_Request->get_title( 'fcode', 'post', '' );
 		$catids = array_unique( $nv_Request->get_typed_array( 'catids', 'post', 'int', array() ) );
 
 		$rowcontent['listcatid'] = implode( ",", $catids );
 		$rowcontent['topicid'] = $nv_Request->get_int( 'topicid', 'post', 0 );
-		$rowcontent['author'] = filter_text_input( 'author', 'post', '', 1 );
+		$rowcontent['author'] = $nv_Request->get_title( 'author', 'post', '', 1 );
 
-		$rowcontent['title'] = filter_text_input( 'title', 'post', '', 1 );
-		$alias = filter_text_input( 'alias', 'post', '' );
-		$rowcontent['alias'] = ( $alias == "" ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+		$rowcontent['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
+		$alias = $nv_Request->get_title( 'alias', 'post', '' );
+		$rowcontent['alias'] = ( $alias == '' ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
-		$rowcontent['hometext'] = filter_text_input( 'hometext', 'post', '' );
+		$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
 
-		$rowcontent['homeimgfile'] = filter_text_input( 'homeimgfile', 'post', '' );
-		$rowcontent['homeimgalt'] = filter_text_input( 'homeimgalt', 'post', '', 1 );
+		$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimgfile', 'post', '' );
+		$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
 		$rowcontent['imgposition'] = $nv_Request->get_int( 'imgposition', 'post', 0 );
-		$rowcontent['sourcetext'] = filter_text_input( 'sourcetext', 'post', '' );
+		$rowcontent['sourcetext'] = $nv_Request->get_title( 'sourcetext', 'post', '' );
 
 		// Xu ly anh minh hoa
-		$rowcontent['homeimgthumb'] = "";
+		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-		}
-		elseif( ! nv_is_url( $rowcontent['homeimgfile'] ) )
-		{
-			$rowcontent['homeimgfile'] = "";
-		}
-
-		$check_thumb = false;
-
-		if( $rowcontent['id'] > 0 )
-		{
-			if( $rowcontent['homeimgfile'] != $rowcontent_old['homeimgfile'] )
+			if( file_exists( NV_ROOTDIR . "/" . NV_FILES_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'] ) )
 			{
-				$check_thumb = true;
-
-				if( $rowcontent_old['homeimgthumb'] != "" and $rowcontent_old['homeimgthumb'] != "|" )
-				{
-					$rowcontent['homeimgthumb'] = "";
-					$homeimgthumb_arr = explode( "|", $rowcontent_old['homeimgthumb'] );
-
-					foreach( $homeimgthumb_arr as $homeimgthumb_i )
-					{
-						if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i ) )
-						{
-							nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgthumb_i );
-						}
-					}
-				}
+				$rowcontent['homeimgthumb'] = 1;
 			}
 			else
 			{
-				$rowcontent['homeimgthumb'] = $rowcontent_old['homeimgfile'];
+				$rowcontent['homeimgthumb'] = 2;
 			}
 		}
-		elseif( ! empty( $rowcontent['homeimgfile'] ) )
+		elseif( nv_is_url( $rowcontent['homeimgfile'] ) )
 		{
-			$check_thumb = true;
+			$rowcontent['homeimgthumb'] = 3;
 		}
-
-		$homeimgfile = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $rowcontent['homeimgfile'];
-
-		if( $check_thumb and file_exists( $homeimgfile ) )
+		else
 		{
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
-
-			$basename = basename( $homeimgfile );
-			$image = new image( $homeimgfile, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-
-			$thumb_basename = $basename;
-
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
-			{
-				$thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-
-			$image->resizeXY( $module_config[$module_name]['homewidth'], $module_config[$module_name]['homeheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/thumb', $thumb_basename );
-			$image_info = $image->create_Image_info;
-			$thumb_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$block_basename = $basename;
-
-			$i = 1;
-			while( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block/' . $block_basename ) )
-			{
-				$block_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				++$i;
-			}
-			$image->resizeXY( $module_config[$module_name]['blockwidth'], $module_config[$module_name]['blockheight'] );
-			$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/block', $block_basename );
-			$image_info = $image->create_Image_info;
-			$block_name = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/', '', $image_info['src'] );
-
-			$image->close();
-			$rowcontent['homeimgthumb'] = $thumb_name . "|" . $block_name;
+			$rowcontent['homeimgfile'] = '';
 		}
 
 		if( ! array_key_exists( $rowcontent['imgposition'], $array_imgposition ) )
@@ -443,7 +362,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$bodyhtml = $nv_Request->get_string( 'bodyhtml', 'post', '' );
 		$rowcontent['bodyhtml'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodyhtml, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodyhtml ) ), '<br />' );
 
-		$rowcontent['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
+		$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 
 		if( empty( $rowcontent['title'] ) )
 		{
@@ -453,7 +372,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		{
 			$error = $lang_module['error_cat'];
 		}
-		elseif( trim( strip_tags( $rowcontent['bodyhtml'] ) ) == "" )
+		elseif( trim( strip_tags( $rowcontent['bodyhtml'] ) ) == '' )
 		{
 			$error = $lang_module['error_bodytext'];
 		}
@@ -463,8 +382,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		}
 		else
 		{
-			$rowcontent['status'] = ( $array_post_user['postcontent'] and $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
-
+			if( ( $array_post_user['postcontent'] ) && $nv_Request->isset_request( 'status1', 'post' ) ) $rowcontent['status'] = 1;
+			elseif( $nv_Request->isset_request( 'status0', 'post' ) ) $rowcontent['status'] = 0;
+			elseif( $nv_Request->isset_request( 'status4', 'post' ) ) $rowcontent['status'] = 4;
 			$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
 			$rowcontent['bodytext'] = nv_news_get_bodytext( $rowcontent['bodyhtml'] );
 
@@ -482,7 +402,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					{
 						list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources`" ) );
 						$weight = intval( $weight ) + 1;
-						$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
+						$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 						$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
 					}
 				}
@@ -490,8 +410,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			if( $rowcontent['id'] == 0 )
 			{
 				$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows`
-						(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords`) VALUES 
-		                (NULL, 
+						(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`) VALUES
+		                (NULL,
 		                " . intval( $rowcontent['catid'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
 		                " . intval( $rowcontent['topicid'] ) . ",
@@ -502,7 +422,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		                " . intval( $rowcontent['edittime'] ) . ",
 		                " . intval( $rowcontent['status'] ) . ",
 		                " . intval( $rowcontent['publtime'] ) . ",
-		                " . intval( $rowcontent['exptime'] ) . ", 
+		                " . intval( $rowcontent['exptime'] ) . ",
 		                " . intval( $rowcontent['archive'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['title'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['alias'] ) . ",
@@ -510,14 +430,13 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		                " . $db->dbescape_string( $rowcontent['homeimgfile'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['homeimgalt'] ) . ",
 		                " . $db->dbescape_string( $rowcontent['homeimgthumb'] ) . ",
-		                " . intval( $rowcontent['inhome'] ) . ",  
-		                " . intval( $rowcontent['allowed_comm'] ) . ",  
-		                " . intval( $rowcontent['allowed_rating'] ) . ",  
-		                " . intval( $rowcontent['hitstotal'] ) . ",  
-		                " . intval( $rowcontent['hitscm'] ) . ",  
-		                " . intval( $rowcontent['total_rating'] ) . ",  
-		                " . intval( $rowcontent['click_rating'] ) . ",  
-		                " . $db->dbescape_string( $rowcontent['keywords'] ) . ")";
+		                " . intval( $rowcontent['inhome'] ) . ",
+		                " . intval( $rowcontent['allowed_comm'] ) . ",
+		                " . intval( $rowcontent['allowed_rating'] ) . ",
+		                " . intval( $rowcontent['hitstotal'] ) . ",
+		                " . intval( $rowcontent['hitscm'] ) . ",
+		                " . intval( $rowcontent['total_rating'] ) . ",
+		                " . intval( $rowcontent['click_rating'] ) . ")";
 
 				$rowcontent['id'] = $db->sql_query_insert_id( $query );
 				if( $rowcontent['id'] > 0 )
@@ -530,14 +449,14 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					$tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 );
 					$db->sql_query( "CREATE TABLE IF NOT EXISTS `" . $tbhtml . "` (`id` int(11) unsigned NOT NULL, `bodyhtml` longtext NOT NULL, `sourcetext` varchar(255) NOT NULL default '', `imgposition` tinyint(1) NOT NULL default '1', `copyright` tinyint(1) NOT NULL default '0', `allowed_send` tinyint(1) NOT NULL default '0', `allowed_print` tinyint(1) NOT NULL default '0', `allowed_save` tinyint(1) NOT NULL default '0', PRIMARY KEY  (`id`)) ENGINE=MyISAM" );
 					$db->sql_query( "INSERT INTO `" . $tbhtml . "` VALUES (
-							" . $rowcontent['id'] . ", 
-							" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ", 
+							" . $rowcontent['id'] . ",
+							" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
 			                " . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
 							" . intval( $rowcontent['imgposition'] ) . ",
-			                " . intval( $rowcontent['copyright'] ) . ",  
-			                " . intval( $rowcontent['allowed_send'] ) . ",  
-			                " . intval( $rowcontent['allowed_print'] ) . ",  
-			                " . intval( $rowcontent['allowed_save'] ) . "					
+			                " . intval( $rowcontent['copyright'] ) . ",
+			                " . intval( $rowcontent['allowed_send'] ) . ",
+			                " . intval( $rowcontent['allowed_print'] ) . ",
+			                " . intval( $rowcontent['allowed_save'] ) . "
 						)" );
 
 					$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` VALUES (" . $rowcontent['id'] . ", " . $db->dbescape_string( $rowcontent['bodytext'] ) . ")" );
@@ -559,27 +478,26 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					$rowcontent['status'] = 1;
 				}
 
-				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET 
-                           `catid`=" . intval( $rowcontent['catid'] ) . ", 
-					       `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ", 
-                           `topicid`=" . intval( $rowcontent['topicid'] ) . ", 
-                           `author`=" . $db->dbescape_string( $rowcontent['author'] ) . ", 
-                           `sourceid`=" . intval( $rowcontent['sourceid'] ) . ", 
-                           `status`=" . intval( $rowcontent['status'] ) . ", 
-                           `publtime`=" . intval( $rowcontent['publtime'] ) . ", 
-                           `exptime`=" . intval( $rowcontent['exptime'] ) . ", 
-                           `archive`=" . intval( $rowcontent['archive'] ) . ", 
-                           `title`=" . $db->dbescape_string( $rowcontent['title'] ) . ", 
-                           `alias`=" . $db->dbescape_string( $rowcontent['alias'] ) . ", 
-                           `hometext`=" . $db->dbescape_string( $rowcontent['hometext'] ) . ", 
+				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
+                           `catid`=" . intval( $rowcontent['catid'] ) . ",
+					       `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
+                           `topicid`=" . intval( $rowcontent['topicid'] ) . ",
+                           `author`=" . $db->dbescape_string( $rowcontent['author'] ) . ",
+                           `sourceid`=" . intval( $rowcontent['sourceid'] ) . ",
+                           `status`=" . intval( $rowcontent['status'] ) . ",
+                           `publtime`=" . intval( $rowcontent['publtime'] ) . ",
+                           `exptime`=" . intval( $rowcontent['exptime'] ) . ",
+                           `archive`=" . intval( $rowcontent['archive'] ) . ",
+                           `title`=" . $db->dbescape_string( $rowcontent['title'] ) . ",
+                           `alias`=" . $db->dbescape_string( $rowcontent['alias'] ) . ",
+                           `hometext`=" . $db->dbescape_string( $rowcontent['hometext'] ) . ",
                            `homeimgfile`=" . $db->dbescape_string( $rowcontent['homeimgfile'] ) . ",
                            `homeimgalt`=" . $db->dbescape_string( $rowcontent['homeimgalt'] ) . ",
                            `homeimgthumb`=" . $db->dbescape_string( $rowcontent['homeimgthumb'] ) . ",
-                           `inhome`=" . intval( $rowcontent['inhome'] ) . ", 
-                           `allowed_comm`=" . intval( $rowcontent['allowed_comm'] ) . ", 
-                           `allowed_rating`=" . intval( $rowcontent['allowed_rating'] ) . ", 
-                           `keywords`=" . $db->dbescape_string( $rowcontent['keywords'] ) . ", 
-                           `edittime`=UNIX_TIMESTAMP( ) 
+                           `inhome`=" . intval( $rowcontent['inhome'] ) . ",
+                           `allowed_comm`=" . intval( $rowcontent['allowed_comm'] ) . ",
+                           `allowed_rating`=" . intval( $rowcontent['allowed_rating'] ) . ",
+                           `edittime`=UNIX_TIMESTAMP()
                         WHERE `id` =" . $rowcontent['id'];
 
 				$db->sql_query( $query );
@@ -600,13 +518,13 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 						$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $rowcontent['id'] . "" );
 					}
 
-					$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . "` SET 
-							`bodyhtml`=" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ", 
-							`imgposition`=" . intval( $rowcontent['imgposition'] ) . ", 
-	                        `sourcetext`=" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",  
-	                        `copyright`=" . intval( $rowcontent['copyright'] ) . ", 
-	                        `allowed_send`=" . intval( $rowcontent['allowed_send'] ) . ", 
-	                        `allowed_print`=" . intval( $rowcontent['allowed_print'] ) . ", 
+					$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . "` SET
+							`bodyhtml`=" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
+							`imgposition`=" . intval( $rowcontent['imgposition'] ) . ",
+	                        `sourcetext`=" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
+	                        `copyright`=" . intval( $rowcontent['copyright'] ) . ",
+	                        `allowed_send`=" . intval( $rowcontent['allowed_send'] ) . ",
+	                        `allowed_print`=" . intval( $rowcontent['allowed_print'] ) . ",
 	                        `allowed_save`=" . intval( $rowcontent['allowed_save'] ) . "
 							WHERE `id` =" . $rowcontent['id'] );
 
@@ -667,9 +585,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				$xtpl->parse( 'mainrefresh' );
 				$contents = $xtpl->text( 'mainrefresh' );
 
-				include ( NV_ROOTDIR . "/includes/header.php" );
+				include ( NV_ROOTDIR . '/includes/header.php' );
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . "/includes/footer.php" );
+				include ( NV_ROOTDIR . '/includes/footer.php' );
 				exit();
 			}
 		}
@@ -735,7 +653,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 	foreach( $array_catid_module as $value )
 	{
-		$xtitle_i = "";
+		$xtitle_i = '';
 
 		if( $value['lev'] > 0 )
 		{
@@ -807,7 +725,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	}
 
 	$array_catpage = array();
-	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `admin_id`= " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -815,23 +733,21 @@ elseif( defined( 'NV_IS_USER' ) )
 
 	while( $item = $db->sql_fetchrow( $result ) )
 	{
-		$array_img = ( ! empty( $item['homeimgthumb'] ) ) ? explode( "|", $item['homeimgthumb'] ) : $array_img = array( "", "" );
-
-		if( $array_img[0] != "" and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+		if( $item['homeimgthumb'] == 1 ) // image thumb
 		{
-			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		elseif( nv_is_url( $item['homeimgfile'] ) )
-		{
-			$item['imghome'] = $item['homeimgfile'];
-		}
-		elseif( $item['homeimgfile'] != "" and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $item['homeimgfile'] ) )
+		elseif( $item['homeimgthumb'] == 2 ) // image file
 		{
 			$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
 		}
-		else
+		elseif( $item['homeimgthumb'] == 3 ) // image url
 		{
-			$item['imghome'] = "";
+			$item['imghome'] = $item['homeimgfile'];
+		}
+		else // no image
+		{
+			$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 		}
 
 		$item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
@@ -850,7 +766,7 @@ elseif( defined( 'NV_IS_USER' ) )
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
-		$array_row_i['publtime'] = nv_date( 'd-m-Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		$id = $array_row_i['id'];
 		$array_link_content = array();
@@ -871,7 +787,7 @@ elseif( defined( 'NV_IS_USER' ) )
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
-		if( $array_row_i['imghome'] != "" )
+		if( $array_row_i['imghome'] != '' )
 		{
 			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
@@ -926,8 +842,8 @@ elseif( $array_post_user['addcontent'] )
 	die();
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

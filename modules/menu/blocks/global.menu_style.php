@@ -11,9 +11,10 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_menu_site' ) )
 {
+
 	/**
 	 * nv_block_config_menu()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -21,7 +22,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	 */
 	function nv_block_config_menu( $module, $data_block, $lang_block )
 	{
-		$html = "";
+		$html = '';
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['menu'] . "</td>";
 		$html .= "	<td><select name=\"menuid\">\n";
@@ -79,7 +80,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 	/**
 	 * nv_block_config_menu_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -99,7 +100,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 	/**
 	 * nv_bmenu_check_currit()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param integer $type
 	 * @return
@@ -110,7 +111,8 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 		$url = nv_unhtmlspecialchars( $url );
 
-		if( $client_info['selfurl'] == $url ) return true; // Chinh xac tuyet doi
+		if( $client_info['selfurl'] == $url ) return true;
+		// Chinh xac tuyet doi
 
 		$_curr_url = NV_BASE_SITEURL . str_replace( $global_config['site_url'] . '/', '', $client_info['selfurl'] );
 		$_url = nv_url_rewrite( $url, true );
@@ -124,7 +126,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
 		}
-		elseif( $type == 1 ) //
+		elseif( $type == 1 )
 		{
 			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
@@ -139,7 +141,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 	/**
 	 * nv_bmenu_active_menu()
-	 * 
+	 *
 	 * @param mixed $cat
 	 * @return
 	 */
@@ -168,7 +170,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Ham xu ly chinh cho block
 	/**
 	 * nv_menu_site()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -194,15 +196,15 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 
 				$list_cats[$row['id']] = array(
-					'id' => $row['id'], //
-					'parentid' => $row['parentid'], //
-					'subcats' => $row['subitem'], //
-					'title' => nv_clean60( $row['title'], $block_config['title_length'] ), //
-					'target' => $row['target'], //
-					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'], //
-					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ), //
-					'html_class' => $row['css'], //
-					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] ), //
+					'id' => $row['id'],
+					'parentid' => $row['parentid'],
+					'subcats' => $row['subitem'],
+					'title' => nv_clean60( $row['title'], $block_config['title_length'] ),
+					'target' => $row['target'],
+					'note' => ( $block_config['is_viewdes'] and $row['note'] ) ? $row['note'] : $row['title'],
+					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
+					'html_class' => $row['css'],
+					'current' => nv_bmenu_check_currit( $row['link'], ( int )$row['active_type'] )
 				);
 			}
 		}
@@ -249,7 +251,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Kieu chung: I, II, III, IV, VI
 	/**
 	 * nv_style_type()
-	 * 
+	 *
 	 * @param mixed $style
 	 * @param mixed $list_cats
 	 * @param mixed $block_config
@@ -296,7 +298,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Kieu V:: Top Menu Bar
 	/**
 	 * nv_style_type5()
-	 * 
+	 *
 	 * @param mixed $list_cats
 	 * @param mixed $block_config
 	 * @return
@@ -335,7 +337,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 				else
 				{
-					$xtpl->assign( 'rel', "" );
+					$xtpl->assign( 'rel', '' );
 				}
 				$xtpl->parse( 'main.loopcat1' );
 			}
@@ -368,7 +370,6 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 
 							$xtpl->parse( 'main.cat2.loopcat2' );
 						}
-
 					}
 					$xtpl->parse( 'main.cat2' );
 				}
@@ -382,7 +383,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Kieu VII:: Pro_dropdown
 	/**
 	 * nv_style_type7()
-	 * 
+	 *
 	 * @param mixed $list_cats
 	 * @param mixed $block_config
 	 * @return
@@ -460,7 +461,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Kieu VIII:: Vertical 2 level
 	/**
 	 * nv_style_type8()
-	 * 
+	 *
 	 * @param mixed $list_cats
 	 * @param mixed $block_config
 	 * @return
@@ -519,7 +520,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	// Hien thi menu con
 	/**
 	 * nv_sub_menu()
-	 * 
+	 *
 	 * @param mixed $style
 	 * @param mixed $list_cats
 	 * @param mixed $list_sub
@@ -555,7 +556,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				{
 					if( $style == 'pro_dropdown' )
 					{
-						if( $list_cats[$catid]['subcats'] != "" )
+						if( $list_cats[$catid]['subcats'] != '' )
 						{
 							$xtpl->assign( 'cla', 'class="fly"' );
 						}
@@ -588,7 +589,6 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			return $xtpl->text( 'tree' );
 		}
 	}
-
 }
 
 if( defined( 'NV_SYSTEM' ) )

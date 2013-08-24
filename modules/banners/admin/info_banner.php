@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT *  FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -29,12 +29,12 @@ if( $numrows != 1 )
 
 $row = $db->sql_fetchrow( $result );
 
-list( $ptitle, $plang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`, `blang` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE id=" . $row['pid'] ) );
+list( $ptitle, $plang ) = $db->sql_fetchrow( $db->sql_query( "SELECT `title`, `blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE id=" . $row['pid'] ) );
 
 $ptitle = $ptitle . " (" . ( ! empty( $plang ) ? $language_array[$plang]['name'] : $lang_module['blang_all'] ) . ")";
 $ptitle = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'] . "\">" . $ptitle . "</a>";
 
-list( $cl_full_name, $cl_login ) = $db->sql_fetchrow( $db->sql_query( "SELECT `full_name`, `login` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE id=" . $row['clid'] ) );
+list( $cl_full_name, $cl_login ) = $db->sql_fetchrow( $db->sql_query( "SELECT `full_name`, `login` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE id=" . $row['clid'] ) );
 
 if( ! empty( $cl_full_name ) )
 {
@@ -57,9 +57,15 @@ $contents['rows'][] = array( $lang_module['title'], $row['title'] );
 $contents['rows'][] = array( $lang_module['in_plan'], $ptitle );
 $contents['rows'][] = array( $lang_module['of_client'], $cl_full_name );
 $contents['rows'][] = array( $lang_module['file_name'], "<a href=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] . "\" rel=\"shadowbox;height=" . $row['height'] . ";width=" . $row['width'] . "\">" . $lang_module['click_show_img'] . "</a>" );
+if( ! empty( $row['imageforswf'] ) )
+{
+	$contents['rows'][] = array( $lang_module['imageforswf'], "<a href=\"" . NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'] . "\" rel=\"shadowbox;height=" . $row['height'] . ";width=" . $row['width'] . "\">" . $lang_module['click_show_img'] . "</a>" );
+}
 $contents['rows'][] = array( $lang_module['img_info1'], $img_info );
 $contents['rows'][] = array( $lang_module['file_alt'], $row['file_alt'] );
 $contents['rows'][] = array( $lang_module['click_url'], $click_url );
+$contents['rows'][] = array( $lang_module['target'], $targets[$row['target']] );
+
 $contents['rows'][] = array( $lang_module['add_date'], date( "d/m/Y H:i", $row['add_time'] ) );
 $contents['rows'][] = array( $lang_module['publ_date'], date( "d/m/Y H:i", $row['publ_time'] ) );
 $contents['rows'][] = array( $lang_module['exp_date'], ( ! empty( $row['exp_time'] ) ? date( "d/m/Y H:i", $row['exp_time'] ) : $lang_module['unlimited'] ) );
@@ -94,12 +100,12 @@ $page_title = $lang_module['info_banner_title'];
 
 $my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_head .= "<script type=\"text/javascript\">\n";
-$my_head .= "Shadowbox.init();\n";
-$my_head .= "</script>\n";
+$my_footer = "<script type=\"text/javascript\">\n";
+$my_footer .= "Shadowbox.init();\n";
+$my_footer .= "</script>\n";
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

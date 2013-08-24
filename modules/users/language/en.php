@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language English
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -103,19 +103,14 @@ $lang_module['pass_old'] = 'Old password';
 $lang_module['pass_new'] = 'New password';
 $lang_module['pass_new_re'] = 'Repeat password';
 $lang_module['change_pass_ok'] = 'Password changed';
-$lang_module['lostpass_subject_email'] = 'Guide to restore passwords';
-$lang_module['lostpass_active_info'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: %3$s<br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />Email: %5$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
 $lang_module['lostpass_content_mess'] = 'An email sent to %1$s, <br /><br /> please follow istruction to activate';
-$lang_module['lostpass_send_subject_ok'] = 'Your password has been changed';
-$lang_module['lostpass_send_account_ok'] = 'Hello %1$s,<br /><br />Your password on the website %2$s has been changed. We send you new information to access the profiles of your account:<br /><br />URL: %3$s<br />Login: %4$s<br />Password: %5$s<br /><br />This is an automatic message sent to your email. If you do not understand what was written above, just delete this message.<br /><br />Administrator';
-$lang_module['lostpass_send_pass'] = 'Your password has been changed and send to emal %s';
 $lang_module['lostpass_active_error_link'] = 'error link lostpass';
 $lang_module['changepass_title'] = 'Change password';
 $lang_module['logout_title'] = 'Logout';
 $lang_module['edit_info_title'] = 'Edit';
 $lang_module['img_size_title'] = 'Image size';
 $lang_module['email_active'] = 'Activation information for changing email';
-$lang_module['email_active_info'] = 'Hi %1$s,<br /><br />You are changed email address of account %2$s, system require that you have to confirm the new email address  account. To confirm, you click to link below:<br /><br />URL: %3$s<br /><br />The confirmation is just valid untill %4$s<br /><br />This letter is automatically to sent your email-box from website  %5$s. If you do not understand about the contents of this letter, simply please delete it.<br /><br /><br /><br />website administrator';
+$lang_module['email_active_info'] = 'Hi %1$s,<br /><br />You are changed email address of account %2$s, system require that you have to confirm the new email address account. To confirm, you click to link below:<br /><br />URL: %3$s<br /><br />The confirmation is just valid untill %4$s<br /><br />This letter is automatically to sent your email-box from website %5$s. If you do not understand about the contents of this letter, simply please delete it.<br /><br /><br /><br />website administrator';
 $lang_module['email_active_mes'] = 'Your account has been updating. Email adress has changed, system require that you have to confirm the new email. A key to confirm has sent to your new email which is provided by you. Please check your email to know information. Notice: You have to logout your account before you confirm the new email';
 $lang_module['email_active_error_mail'] = 'Your account updated. But system did not send email to confirm your new email. Please contact to website administrator to receive help.';
 $lang_module['st_login'] = 'Regular login';
@@ -124,7 +119,7 @@ $lang_module['admin_login'] = 'Login by admin account';
 $lang_module['openid_login'] = 'OpenID login';
 $lang_module['openid_login2'] = 'Login using other OpenID';
 $lang_module['openid_note1'] = 'To logging in by this OpenID, you must link it with your exists account. Please declare your login information (require only one time)';
-$lang_module['openid_note2'] = 'It\'s the first time you login with this OpenID. To login, you can choose one of  those plans';
+$lang_module['openid_note2'] = 'It\'s the first time you login with this OpenID. To login, you can choose one of those plans';
 $lang_module['openid_note3'] = 'Register a new account and link this OpenID';
 $lang_module['openid_note4'] = 'Login with account create automatic by system';
 $lang_module['openid_note5'] = 'Login with your exists account';

@@ -62,8 +62,8 @@ else
 	die( 'NO_' . $id );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

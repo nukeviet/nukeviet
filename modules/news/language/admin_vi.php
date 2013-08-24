@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -27,11 +27,16 @@ $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu bài viết không đăng';
 $lang_module['publtime'] = 'Đăng bài viết';
 $lang_module['exptime'] = 'Cho hết hạn bài viết';
+$lang_module['status_action_0'] = 'Chuyển sang chờ duyệt';
+$lang_module['declined'] = 'Từ chối bài viết';
+$lang_module['re_published'] = 'Đăng lại bài viết';
 $lang_module['status'] = 'Trạng thái';
 $lang_module['status_0'] = 'Chờ duyệt';
 $lang_module['status_1'] = 'Xuất bản';
 $lang_module['status_2'] = 'Hẹn giờ đăng';
 $lang_module['status_3'] = 'Hết hạn';
+$lang_module['status_4'] = 'Lưu tạm';
+$lang_module['status_5'] = 'Từ chối';
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại liên kết tĩnh tiêu đề bài viết có thể bị trùng';
 $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
@@ -42,7 +47,13 @@ $lang_module['weight'] = 'vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
 $lang_module['numlinks'] = 'Số liên kết';
+
 $lang_module['description'] = 'Miêu tả';
+$lang_module['viewdescription'] = 'Hiển thị miêu tả khi xem chủ đề';
+$lang_module['viewdescription_0'] = 'Không hiển thị ';
+$lang_module['viewdescription_1'] = 'Hiển thị tại trang số 1 của chủ đề';
+$lang_module['viewdescription_2'] = 'Hiển thị ở tất cả các trang của chủ đề';
+
 $lang_module['keywords'] = 'Từ khóa';
 $lang_module['content_list'] = 'Danh sách bài viết';
 $lang_module['content_add'] = 'Thêm bài viết';
@@ -143,6 +154,7 @@ $lang_module['content_checkcat'] = 'Chủ đề chính cho bài viết';
 $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho bài viết.';
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
+$lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
@@ -229,26 +241,13 @@ $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
-$lang_module['rpc'] = "Dịch vụ PING";
-$lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";
-$lang_module['rpc_error_timeout'] = "Vui lòng đợi %s nữa để tiếp tục Ping";
-$lang_module['rpc_error_titleEmpty'] = "Vui lòng khai báo tên của URL cần Ping";
-$lang_module['rpc_error_urlEmpty'] = "Vui lòng khai báo đúng URL cần Ping";
-$lang_module['rpc_error_rsschannelEmpty'] = "Vui lòng khai báo đúng kênh RSS của URL này";
-$lang_module['rpc_error_serviceEmpty'] = "Dịch vụ chưa khả dụng. Vui lòng thông báo đến Ban quản trị website";
-$lang_module['rpc_error_unknown'] = "Lỗi không xác định";
-$lang_module['rpc_flerror0'] = "PING thành công";
-$lang_module['rpc_flerror1'] = "Lỗi";
-$lang_module['rpc_ftitle'] = "PING là một tiện ích miễn phí giúp bạn nhanh chóng tạo chỉ mục cho các trang tin của mình trên các máy chủ tìm kiếm lớn.";
-$lang_module['rpc_webtitle'] = "Tiêu đề trang tin";
-$lang_module['rpc_weblink'] = "URL của trang tin";
-$lang_module['rpc_rsslink'] = "Kênh RSS của trang tin";
-$lang_module['rpc_submit'] = "PING !";
-$lang_module['rpc_linkname'] = "Máy chủ";
-$lang_module['rpc_reruslt'] = "Kết quả";
-$lang_module['rpc_message'] = "Thông tin";
-$lang_module['rpc_ping'] = "PING  khi cập nhận dữ liệu";
-$lang_module['rpc_ping_page'] = "PING  bài viết";
-$lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
+$lang_module['tags'] = 'Quản lý Tags';
+$lang_module['add_tags'] = 'Thêm Tags';
+$lang_module['edit_tags']= 'Sửa Tags';
+$lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
+
+$lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
+$lang_module['googleplus_1'] = 'Không sử dụng';
+$lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
 
 ?>

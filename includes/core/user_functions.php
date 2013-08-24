@@ -9,114 +9,18 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-/**
- * nv_site_mods()
- *
- * @return
- */
-function nv_site_mods()
-{
-	global $admin_info, $user_info, $global_config, $db;
+//Open Graph protocol
+$meta_ogp = array(
+	'title' => '',
+	'type' => '',
+	'description' => '',
+	'site_name' => '',
+	'image' => '',
+	'url' => ''
+);
 
-	if( defined( "NV_IS_USER" ) )
-	{
-		$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups', 'memberlist' );
-		if( ! defined( "NV_IS_ADMIN" ) )
-		{
-			$user_ops[] = 'logout';
-		}
-	}
-	else
-	{
-		$user_ops = array( 'main', 'login', 'register', 'lostpass', 'memberlist' );
-		if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
-		{
-			$user_ops[] = 'lostactivelink';
-			$user_ops[] = 'active';
-		}
-	}
-
-	$sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
-	$list = nv_db_cache( $sql, '', 'modules' );
-
-	if( empty( $list ) ) return array();
-
-	$site_mods = array();
-	foreach( $list as $row )
-	{
-		$allowed = false;
-		$is_modadmin = false;
-		$m_title = $db->unfixdb( $row['title'] );
-		$groups_view = ( string )$row['groups_view'];
-		
-		if( isset( $site_mods[$m_title] ) )
-		{
-			$allowed = true;
-			$is_modadmin = $site_mods[$m_title]['is_modadmin'];
-		}
-		elseif( defined( 'NV_IS_SPADMIN' ) )
-		{
-			$allowed = true;
-			$is_modadmin = true;
-		}
-		elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
-		{
-			$allowed = true;
-			$is_modadmin = true;
-		}
-		elseif( $m_title == $global_config['site_home_module'] )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "0" )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "1" and defined( 'NV_IS_USER' ) )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "2" and defined( 'NV_IS_ADMIN' ) )
-		{
-			$allowed = true;
-		}
-		elseif( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
-		{
-			$allowed = true;
-		}
-
-		if( $allowed )
-		{
-			if( ! isset( $site_mods[$m_title] ) )
-			{
-				$site_mods[$m_title]['module_file'] = $db->unfixdb( $row['module_file'] );
-				$site_mods[$m_title]['module_data'] = $db->unfixdb( $row['module_data'] );
-				$site_mods[$m_title]['custom_title'] = $row['custom_title'];
-				$site_mods[$m_title]['admin_file'] = $row['admin_file'];
-				$site_mods[$m_title]['theme'] = $db->unfixdb( $row['theme'] );
-				$site_mods[$m_title]['mobile'] = $row['mobile'];
-                $site_mods[$m_title]['description'] = $row['description'];
-				$site_mods[$m_title]['keywords'] = $row['keywords'];
-				$site_mods[$m_title]['groups_view'] = $row['groups_view'];
-				$site_mods[$m_title]['in_menu'] = $row['in_menu'];
-				$site_mods[$m_title]['submenu'] = $row['submenu'];
-				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
-				$site_mods[$m_title]['rss'] = $row['rss'];
-			}
-			
-			$func_name = $db->unfixdb( $row['func_name'] );
-			if( ! empty( $func_name ) and ( ( $m_title != "users" ) or ( $m_title == "users" and in_array( $func_name, $user_ops ) ) ) )
-			{
-				$site_mods[$m_title]['funcs'][$func_name]['func_id'] = $row['func_id'];
-				$site_mods[$m_title]['funcs'][$func_name]['show_func'] = $row['show_func'];
-				$site_mods[$m_title]['funcs'][$func_name]['func_custom_name'] = $row['func_custom_name'];
-				$site_mods[$m_title]['funcs'][$func_name]['in_submenu'] = $row['in_submenu'];
-			}
-		}
-	}
-
-	return $site_mods;
-}
+//tài khoản Google+
+$id_profile_googleplus = 0;
 
 /**
  * nv_create_submenu()
@@ -134,11 +38,7 @@ function nv_create_submenu()
 			$func_custom_name = trim( ! empty( $values['func_custom_name'] ) ? $values['func_custom_name'] : $key );
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . ( $key != "main" ? "&amp;" . NV_OP_VARIABLE . "=" . $key : "" );
 			$act = $key == $op ? 1 : 0;
-			$nv_vertical_menu[] = array(
-				$func_custom_name,
-				$link,
-				$act 
-			);
+			$nv_vertical_menu[] = array( $func_custom_name, $link, $act );
 		}
 	}
 }
@@ -173,11 +73,11 @@ function nv_blocks_content( $sitecontent )
 
 	$_posAllowed = array();
 
-	foreach ( $themeConfig['positions']['position'] as $_pos )
+	foreach( $themeConfig['positions']['position'] as $_pos )
 	{
 		$_pos = trim( ( string )$_pos['tag'] );
 		unset( $matches );
-		if ( preg_match( "/^\[([^\]]+)\]$/is", $_pos, $matches ) ) $_posAllowed[] = $matches[1];
+		if( preg_match( "/^\[([^\]]+)\]$/is", $_pos, $matches ) ) $_posAllowed[] = $matches[1];
 	}
 
 	if( empty( $_posAllowed ) ) return $sitecontent;
@@ -204,26 +104,25 @@ function nv_blocks_content( $sitecontent )
 		$cache = array();
 
 		$in = array();
-		$sql = "SELECT * FROM  `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
+		$sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight";
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
 			$row['title'] = $db->unfixdb( $row['title'] );
-			
+
 			if( $row['title'] == $module_name and $row['show_func'] )
 			{
 				$in[] = $row['func_id'];
 			}
 		}
 
-		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1 
-		    INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2 
-		    ON t1.bid = t2.bid 
-		    WHERE t2.func_id IN (" . implode( ",", $in ) . ") 
-		    AND t1.theme ='" . $global_config['module_theme'] . "' 
-		    AND t1.active=1 
-		    ORDER BY t2.weight ASC" 
-		);
+		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1
+			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2
+			 ON t1.bid = t2.bid
+			 WHERE t2.func_id IN (" . implode( ",", $in ) . ")
+			 AND t1.theme ='" . $global_config['module_theme'] . "'
+			 AND t1.active=1
+			 ORDER BY t2.weight ASC" );
 
 		while( $_row = $db->sql_fetch_assoc( $_result ) )
 		{
@@ -231,7 +130,7 @@ function nv_blocks_content( $sitecontent )
 			$_row['file_name'] = $db->unfixdb( $_row['file_name'] );
 			$_row['template'] = $db->unfixdb( $_row['template'] );
 			$_row['position'] = $db->unfixdb( $_row['position'] );
-		
+
 			// Cau hinh block
 			$block_config = ( ! empty( $_row['config'] ) ) ? unserialize( $_row['config'] ) : array();
 			$block_config['bid'] = $_row['bid'];
@@ -253,7 +152,7 @@ function nv_blocks_content( $sitecontent )
 				'exp_time' => $_row['exp_time'],
 				'groups_view' => $_row['groups_view'],
 				'all_func' => $_row['all_func'],
-				'block_config' => $block_config 
+				'block_config' => $block_config
 			);
 		}
 
@@ -283,7 +182,7 @@ function nv_blocks_content( $sitecontent )
 			{
 				$block_config = $_row['block_config'];
 				$blockTitle = $_row['blockTitle'];
-				$content = "";
+				$content = '';
 
 				if( $_row['module'] == "global" and file_exists( NV_ROOTDIR . "/includes/blocks/" . $_row['file_name'] ) )
 				{
@@ -300,7 +199,7 @@ function nv_blocks_content( $sitecontent )
 					$xtpl = null;
 					$_row['template'] = empty( $_row['template'] ) ? "default" : $_row['template'];
 					$_template = 'default';
-					
+
 					if( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout/block." . $_row['template'] . ".tpl" ) )
 					{
 						$xtpl = new XTemplate( "block." . $_row['template'] . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['theme'] . "/layout" );
@@ -326,7 +225,7 @@ function nv_blocks_content( $sitecontent )
 						$xtpl->assign( 'BLOCK_CONTENT', $content );
 						$xtpl->assign( 'TEMPLATE', $_template );
 						$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-						
+
 						$xtpl->parse( 'mainblock' );
 						$content = $xtpl->text( 'mainblock' );
 					}
@@ -338,13 +237,13 @@ function nv_blocks_content( $sitecontent )
 					if( defined( 'NV_IS_DRAG_BLOCK' ) )
 					{
 						$content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
-                        <p>
-                        <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
-                            <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
-                        </p>
-                        ' . $content . '</div>';
+							 <p>
+							 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . 'images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
+							 </p>
+							 ' . $content . '</div>';
 					}
 
 					$_posReal[$_row['position']] .= $content;
@@ -382,52 +281,69 @@ function nv_blocks_content( $sitecontent )
  */
 function nv_html_meta_tags()
 {
-	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
+	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp, $id_profile_googleplus;
 
-	$return = "";
+	$return = '';
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
 
-	if( $home )
+	if ( empty( $site_description ) )
+    {
+        $ds = array();
+        if ( ! empty( $page_title ) ) $ds[] = $page_title;
+        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+        $ds[] = $module_info['custom_title'];
+        $ds[] = $client_info['selfurl'];
+        $site_description = implode( " - ", $ds );
+    }
+	elseif ( $site_description == 'no' )
 	{
-		$return .= "<meta name=\"description\" content=\"" . strip_tags( $global_config['site_description'] ) . "\" />\n";
+		$site_description = '';
 	}
-	else
-	{
-		if( ! empty( $description ) )
-		{
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( $description ) . "\" />\n";
-		}
-        elseif( ! empty( $module_info['description'] ) )
-        {
-            $return .= "<meta name=\"description\" content=\"" . strip_tags( $module_info['description'] ) . "\" />\n";
-        }
-		else
-		{
-			$ds = array();
-			if( ! empty( $page_title ) ) $ds[] = $page_title;
-			if( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
-			$ds[] = $module_info['custom_title'];
-			$ds[] = $client_info['selfurl'];
-			$return .= "<meta name=\"description\" content=\"" . strip_tags( implode( " - ", $ds ) ) . "\" />\n";
 
-		}
+	if ( ! empty( $site_description ) )
+	{
+		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
 	}
 
 	$kw = array();
-	if( ! empty( $key_words ) ) $kw[] = $key_words;
-	if( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
-	if( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
+	if( ! empty( $key_words ) )
+	{
+		if ( $key_words != 'no' )
+		{
+			$kw[] = $key_words;
+		}
+	}
+	elseif( ! empty( $module_info['keywords'] ) )
+	{
+		$kw[] = $module_info['keywords'];
+	}
+
+	if( $home AND ! empty( $global_config['site_keywords'] ) )
+	{
+		$kw[] = $global_config['site_keywords'];
+	}
+
 	if( ! empty( $kw ) )
 	{
 		$kw = array_unique( $kw );
-		$kw = implode( ",", $kw );
-		$kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ",", "," ), $kw );
-		$key_words = nv_strtolower( strip_tags( $kw ) );
+		$key_words = implode( ",", $kw );
+		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
+		$key_words = nv_strtolower( strip_tags( $key_words ) );
 		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
+		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\" />\n";
 	}
 
 	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
 
-	$file_metatags = NV_ROOTDIR . "/" . NV_DATADIR . "/metatags.xml";
+	if( $global_config['idsite'] AND file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
+	{
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml';
+	}
+	else
+	{
+		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/metatags.xml';
+	}
+
 	if( file_exists( $file_metatags ) )
 	{
 		$mt = file_get_contents( $file_metatags );
@@ -437,17 +353,18 @@ function nv_html_meta_tags()
 		$patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
 		$patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
 		$mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
-		$mt = preg_replace( "/\{(.*)\}/", "", $mt );
+		$mt = preg_replace( '/\{(.*)\}/', '', $mt );
 		$mt = simplexml_load_string( $mt );
 		$mt = nv_object2array( $mt );
-		
+
 		if( $mt['meta_item'] )
 		{
 			if( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
-			else  $metatags[] = $mt['meta_item'];
+			else
+				$metatags[] = $mt['meta_item'];
 			foreach( $metatags as $meta )
 			{
-				if( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string ) $meta['content'] ) )
+				if( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
 					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
 				}
@@ -470,6 +387,36 @@ function nv_html_meta_tags()
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
 	}
 
+	//Open Graph protocol http://ogp.me
+	if( $global_config['metaTagsOgp'] )
+	{
+		if( empty( $meta_ogp['title'] ) ) $meta_ogp['title'] = $page_title;
+		if( empty( $meta_ogp['description'] ) ) $meta_ogp['description'] = $site_description;
+		if( empty( $meta_ogp['type'] ) ) $meta_ogp['type'] = 'WebPage';
+		if( empty( $meta_ogp['url'] ) ) $meta_ogp['url'] = $canonicalUrl;
+		$meta_ogp['site_name'] = $global_config['site_name'];
+		foreach( $meta_ogp as $key => $value )
+		{
+			if( ! empty( $value ) )
+			{
+				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\" />\n";
+			}
+		}
+	}
+	//tài khoản Google+
+	if( $id_profile_googleplus == 0 )
+	{
+		$id_profile_googleplus = $module_info['gid'];
+	}
+	if( $id_profile_googleplus > 0 )
+	{
+		$dbgoogleplus = nv_db_cache( 'SELECT `gid`, `idprofile` FROM `' . $db_config['prefix'] . '_googleplus`', 'gid', 'seotools' );
+		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
+		{
+			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />\n";
+		}
+	}
+
 	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
 	return $return;
 }
@@ -483,44 +430,20 @@ function nv_html_page_title()
 {
 	global $home, $module_info, $op, $global_config, $page_title;
 
-	$replace = array(
-		"\\",
-		"/",
-		":",
-		"*",
-		"?",
-		"\"",
-		"<",
-		">",
-		"|" 
-	);
-	
+	$replace = array( "\\", "/", ":", "*", "?", "\"", "<", ">", "|" );
+
 	if( $home )
 	{
-		return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $global_config['site_name'] ) ) ) . "</title>\n";
+		return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $global_config['site_name'] ) ) ) . "</title>\n";
 	}
 	else
 	{
 		if( ! isset( $global_config['pageTitleMode'] ) or empty( $global_config['pageTitleMode'] ) ) $global_config['pageTitleMode'] = "pagetitle " . NV_TITLEBAR_DEFIS . " sitename";
 
-		if( empty( $page_title ) and ! preg_match( "/(funcname|modulename|sitename)/i", $global_config['pageTitleMode'] ) ) return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $module_info['funcs'][$op]['func_custom_name'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] ) ) ) . "</title>\n";
+		if( empty( $page_title ) and ! preg_match( "/(funcname|modulename|sitename)/i", $global_config['pageTitleMode'] ) ) return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $module_info['funcs'][$op]['func_custom_name'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] ) ) ) . "</title>\n";
 
-		$_title = preg_replace(
-			array(
-				"/pagetitle/i",
-				"/funcname/i",
-				"/modulename/i",
-				"/sitename/i" 
-			),
-			array(
-				$page_title,
-				$module_info['funcs'][$op]['func_custom_name'],
-				$module_info['custom_title'],
-				$global_config['site_name']
-			), 
-			$global_config['pageTitleMode']
-		);
-		return "<title>" . nv_htmlspecialchars( str_replace( $replace, "", strip_tags( $_title ) ) ) . "</title>\n";
+		$_title = preg_replace( array( "/pagetitle/i", "/funcname/i", "/modulename/i", "/sitename/i" ), array( $page_title, $module_info['funcs'][$op]['func_custom_name'], $module_info['custom_title'], $global_config['site_name'] ), $global_config['pageTitleMode'] );
+		return "<title>" . nv_htmlspecialchars( str_replace( $replace, '', strip_tags( $_title ) ) ) . "</title>\n";
 	}
 }
 
@@ -550,7 +473,7 @@ function nv_html_site_rss()
 {
 	global $rss;
 
-	$return = "";
+	$return = '';
 	if( ! empty( $rss ) )
 	{
 		foreach( $rss as $rss_item )
@@ -601,7 +524,7 @@ function nv_html_site_js()
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
 		$return .= '<script type="text/javascript">
-        			//<![CDATA[
+ 			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {
 						$("a.delblock").click(function(){
@@ -627,17 +550,17 @@ function nv_html_site_js()
 							var bid = $(this).attr("name");
 							var tag = $(this).attr("id");
 							Shadowbox.open(
-						      {
-						         content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
-						         player : "html",
-						         height : 450,
-						         width : 780
-						      }
-						      );
-	            		});
+							{
+								content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
+								player : "html",
+								height : 450,
+								width : 780
+							}
+						 );
+	 		});
 
-	            		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
-	            		var post_order = false;
+	 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
+	 		var post_order = false;
 						$(".column").sortable({
 							connectWith: \'.column\',
 							opacity: 0.8,
@@ -648,7 +571,7 @@ function nv_html_site_js()
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
+					 					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");
@@ -660,7 +583,7 @@ function nv_html_site_js()
 									var order = $(this).sortable("serialize");
 									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
-					    					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
+					 					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 										}
 										else{
 											alert("' . $lang_global['blocks_saved_error'] . '");
@@ -717,7 +640,8 @@ function nv_admin_menu()
 				"class" => ( $key % 2 ) ? " highlight" : " normal",
 				"imgsrc" => ( $field[1] ) ? NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/good.png" : NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/bad.png",
 				"imgalt" => ( $field[1] ) ? $lang_global['ok'] : $lang_global['fail'],
-				"queries" => nv_htmlspecialchars( $field[0] ) );
+				"queries" => nv_htmlspecialchars( $field[0] )
+			);
 			$xtpl->assign( 'DATA', $data );
 			$xtpl->parse( 'main.is_spadadmin3.queries' );
 		}
@@ -744,9 +668,9 @@ function nv_admin_menu()
  */
 function nv_groups_list_pub()
 {
-	global $db;
+	global $db, $db_config, $global_config;
 
-	$query = "SELECT `group_id`, `title`, `exp_time`, `public` FROM `" . NV_GROUPS_GLOBALTABLE . "` WHERE `act`=1 ORDER BY `weight`";
+	$query = "SELECT `group_id`, `title`, `exp_time`, `public` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE `act`=1 AND (`idsite` = " . $global_config['idsite'] . " OR (`idsite` =0 AND `siteus` = 1)) ORDER BY `idsite`, `weight`";
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -767,7 +691,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$sql = "UPDATE `" . NV_GROUPS_GLOBALTABLE . "` SET `act`='0' WHERE `group_id` IN (" . implode( ",", $reload ) . ")";
+		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `act`='0' WHERE `group_id` IN (" . implode( ",", $reload ) . ")";
 		$db->sql_query( $sql );
 		nv_del_moduleCache( 'users' );
 	}

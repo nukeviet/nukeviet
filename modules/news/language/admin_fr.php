@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -27,11 +27,16 @@ $lang_module['move'] = 'Déplacer';
 $lang_module['save_temp'] = 'Sauver sans publier';
 $lang_module['publtime'] = 'Publier';
 $lang_module['exptime'] = 'Expirer l\'article';
+$lang_module['status_action_0'] = 'Mettez à attendre l\'approbation';
+$lang_module['declined'] = 'Rejeter les messages';
+$lang_module['re_published'] = 're publié';
 $lang_module['status'] = 'Status';
 $lang_module['status_0'] = 'Suspens';
 $lang_module['status_1'] = 'Publié';
 $lang_module['status_2'] = 'Horaire';
 $lang_module['status_3'] = 'Expiré';
+$lang_module['status_4'] = 'Avant-projet';
+$lang_module['status_5'] = 'Rejeter';
 $lang_module['errorsave'] = 'Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l\'alias a été utilisé';
 $lang_module['saveok'] = 'Mise à jour réussie';
 $lang_module['clickgotomodule'] = 'Cliquez ici pour aller à la gestion des articles';

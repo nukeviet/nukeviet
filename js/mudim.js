@@ -816,6 +816,7 @@ CHIM.HTMLEditor.GetCurrentWord = function(target) {
 // Function: CHIM.HTMLEditor.Process
 //----------------------------------------------------------------------------
 CHIM.HTMLEditor.Process = function(target, l) {
+	var sel = window.getSelection();
 	var range = CHIM.HTMLEditor.GetRange(target);
 	if (typeof(range)=='undefined') {
 		return;
@@ -836,6 +837,8 @@ CHIM.HTMLEditor.Process = function(target, l) {
 	if (l<b.length) {offset++;}
 	range.setEnd(container, offset);
 	range.setStart(container, offset);
+	sel.removeAllRanges();
+	sel.addRange(range);	
 };
 //----------------------------------------------------------------------------
 // Function: CHIM.Freeze

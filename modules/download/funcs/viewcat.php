@@ -9,13 +9,13 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-$contents = "";
+$contents = '';
 if( empty( $list_cats ) )
 {
 	$page_title = $module_info['custom_title'];
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo nv_site_theme( '' );
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -69,9 +69,6 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
 	}
 
-	$img = NV_UPLOADS_DIR . $row['fileimage'];
-	$imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-
 	$array[$row['id']] = array(
 		'id' => ( int )$row['id'], //
 		'title' => $row['title'], //
@@ -80,7 +77,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		'uploadtime' => $uploadtime, //
 		'author_name' => $row['author_name'], //
 		'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-		'fileimage' => $imageinfo, //
+		'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 		'view_hits' => ( int )$row['view_hits'], //
 		'download_hits' => ( int )$row['download_hits'], //
 		'more_link' => $more_link, //
@@ -116,9 +113,6 @@ if( ! empty( $subcats ) )
 		{
 			$uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
 
-			$img = NV_UPLOADS_DIR . $row['fileimage'];
-			$imageinfo = nv_ImageInfo( NV_ROOTDIR . '/' . $img, 300, true, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb' );
-
 			$array_item[] = array( //
 				'id' => ( int )$row['id'], //
 				'title' => $row['title'], //
@@ -126,7 +120,7 @@ if( ! empty( $subcats ) )
 				'uploadtime' => $uploadtime, //
 				'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
 				'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-				'fileimage' => $imageinfo, //
+				'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
 				'view_hits' => ( int )$row['view_hits'], //
 				'download_hits' => ( int )$row['download_hits'], //
 				'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'],
@@ -156,8 +150,8 @@ if( empty( $all_page ) and empty( $subs ) )
 
 $contents = theme_viewcat_download( $array, $download_config, $subs, $generate_page );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

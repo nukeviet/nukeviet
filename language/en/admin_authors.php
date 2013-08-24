@@ -16,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Super';
-$lang_module['level2'] = 'General administrator';
-$lang_module['level3'] = 'Module administrator';
 $lang_module['is_suspend0'] = 'Active';
 $lang_module['is_suspend1'] = 'Suspend &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; reason &ldquo;%3$s&rdquo;';
 $lang_module['last_login0'] = 'Never';

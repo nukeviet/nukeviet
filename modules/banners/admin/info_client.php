@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -37,8 +37,8 @@ $contents['aj'] = array( "nv_client_info(" . $id . ", 'client_info');", "nv_show
 
 $contents = call_user_func( "nv_info_client_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

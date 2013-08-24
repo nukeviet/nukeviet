@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
 <p class="acenter">
-    <strong>{INFO}</strong>
+	<strong>{INFO}</strong>
 </p>
 <!-- END: main -->

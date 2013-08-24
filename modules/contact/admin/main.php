@@ -25,7 +25,7 @@ if( ! empty( $contact_allowed['view'] ) )
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-	
+
 	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $sql . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
@@ -35,7 +35,7 @@ if( ! empty( $contact_allowed['view'] ) )
 	if( $all_page )
 	{
 		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;t=2" );
-	
+
 		$a = 0;
 		$currday = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
 
@@ -44,41 +44,40 @@ if( ! empty( $contact_allowed['view'] ) )
 			$image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
 			$status = "New";
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
-			
+
 			if( $row['is_read'] == 1 )
 			{
 				$image = array( NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 );
 				$status = $lang_module['tt1_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
-			
+
 			if( $row['is_reply'] )
 			{
 				$image = array( NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 );
 				$status = $lang_module['tt2_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
-			
+
 			$onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
-			
+
 			$xtpl->assign( 'ROW', array(
-				'class' => ( ++ $a % 2 ) ? " class=\"second\"" : "",  //
-				'id' => $row['id'],  //
-				'sender_name' => $row['sender_name'],  //
-				'path' => $contact_allowed['view'][$row['cid']],  //
-				'title' => nv_clean60( $row['title'], 60 ),  //
-				'time' => $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m/Y", $row['send_time'] ),  //
-				'style' => $style,  //
-				'onclick' => $onclick,  //
-				'status' => $status,  //
-				'image' => $image,  //
+				'id' => $row['id'],
+				'sender_name' => $row['sender_name'],
+				'path' => $contact_allowed['view'][$row['cid']],
+				'title' => nv_clean60( $row['title'], 60 ),
+				'time' => $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m/Y", $row['send_time'] ),
+				'style' => $style,
+				'onclick' => $onclick,
+				'status' => $status,
+				'image' => $image
 			) );
-			
+
 			$xtpl->parse( 'main.data.row' );
 		}
 
 		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
-		
+
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
@@ -87,7 +86,7 @@ if( ! empty( $contact_allowed['view'] ) )
 	}
 }
 
-if( empty( $all_page ) ) 
+if( empty( $all_page ) )
 {
 	$xtpl->parse( 'main.empty' );
 }
@@ -99,8 +98,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

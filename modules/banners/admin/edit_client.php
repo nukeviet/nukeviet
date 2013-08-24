@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -29,7 +29,7 @@ if( $numrows != 1 )
 
 $row = $db->sql_fetchrow( $result );
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -51,7 +51,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if( $website == "http://" ) $website = "";
+	if( $website == "http://" ) $website = '';
 
 	if( ! empty( $check_login ) )
 	{
@@ -66,7 +66,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( ! empty( $pass ) and ! empty( $check_pass ) )
 	{
 		$error = $check_pass;
-		$pass = $re_pass = "";
+		$pass = $re_pass = '';
 	}
 	elseif( ! empty( $pass ) and empty( $re_pass ) )
 	{
@@ -75,7 +75,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( ! empty( $pass ) and $pass != $re_pass )
 	{
 		$error = sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass );
-		$pass = $re_pass = "";
+		$pass = $re_pass = '';
 	}
 	elseif( empty( $full_name ) )
 	{
@@ -89,12 +89,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`!=" . $id . " AND `login`=" . $db->dbescape( $login ) ) ) > 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`!=" . $id . " AND `login`=" . $db->dbescape( $login ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = $row['login'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` WHERE `id`!=" . $id . " AND `email`=" . $db->dbescape( $email ) ) ) > 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`!=" . $id . " AND `email`=" . $db->dbescape( $email ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = $row['email'];
@@ -103,9 +103,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
 
-		$sql = "UPDATE `" . NV_BANNERS_CLIENTS_GLOBALTABLE . "` SET `login`=" . $db->dbescape( $login ) . ", `pass`=" . $db->dbescape( $pass ) . ", `full_name`=" . $db->dbescape( $full_name ) . ", 
-        `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ", `location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ", 
-        `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ", `mobile`=" . $db->dbescape( $mobile ) . ", `uploadtype`=" . $db->dbescape( $uploadtype ) . " WHERE `id`=" . $id;
+		$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET `login`=" . $db->dbescape( $login ) . ", `pass`=" . $db->dbescape( $pass ) . ", `full_name`=" . $db->dbescape( $full_name ) . ",
+ `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ", `location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ",
+ `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ", `mobile`=" . $db->dbescape( $mobile ) . ", `uploadtype`=" . $db->dbescape( $uploadtype ) . " WHERE `id`=" . $id;
 		$db->sql_query( $sql );
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', "clientid " . $id, $admin_info['userid'] );
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_client&id=" . $id );
@@ -115,7 +115,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 else
 {
 	$login = $row['login'];
-	$pass = $re_pass = "";
+	$pass = $re_pass = '';
 	$full_name = $row['full_name'];
 	$email = $row['email'];
 	$website = $row['website'];
@@ -130,7 +130,7 @@ else
 	$flashcheck = ( in_array( 'flash', $uploadtype ) ) ? 'checked=checked' : '';
 }
 
-if( $website == "" ) $website = "http://";
+if( $website == '' ) $website = "http://";
 
 $info = ( ! empty( $error ) ) ? $error : $lang_module['edit_client_info'];
 $is_error = ( ! empty( $error ) ) ? 1 : 0;
@@ -157,8 +157,8 @@ $contents = call_user_func( "nv_edit_client_theme", $contents );
 
 $page_title = $lang_module['edit_client'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

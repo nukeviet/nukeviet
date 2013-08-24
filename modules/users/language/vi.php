@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -104,12 +104,9 @@ $lang_module['pass_old'] = 'Mật khẩu cũ';
 $lang_module['pass_new'] = 'Mật khẩu mới';
 $lang_module['pass_new_re'] = 'Nhập lại mật khẩu mới';
 $lang_module['change_pass_ok'] = 'Thay đổi mật khẩu thành công';
-$lang_module['lostpass_subject_email'] = 'Hướng dẫn khôi phục mật khẩu';
-$lang_module['lostpass_active_info'] = 'Xin chào %1$s,<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập của mình tại website %2$s. Để thay đổi mật khẩu, bạn cần truy cập theo link dưới đây:<br /><br />URL: %3$s<br /><br />Các thông tin cần khai báo:<br /><br />Tên tài khoản: %4$s<br />Email: %5$s<br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['lostpass_email_subject'] = 'Hướng dẫn khôi phục mật khẩu tại website %s';
+$lang_module['lostpass_email_content'] = 'Xin chào %1$s,<br /><br />Bạn vừa gửi đề nghị thay đổi mật khẩu đăng nhập của mình tại website %2$s. Để thay đổi mật khẩu, bạn cần truy cập theo link dưới đây:<br /><br />URL: %3$s<br /><br />Dưới đây là thông tin đăng nhập mới:<br /><br />Tên tài khoản: %4$s<br />Mật khẩu: %5$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['lostpass_content_mess'] = 'Chúng tôi đã gửi đến e-mail %1$s thông tin,<br /><br /> bạn hãy hàm theo hướng dẫn để kích hoạt tài khoản';
-$lang_module['lostpass_send_subject_ok'] = 'Mật khẩu của bạn đã được thay đổi';
-$lang_module['lostpass_send_account_ok'] = 'Xin chào %1$s,<br /><br />Mật khẩu truy cập của bạn tại website %2$s đã được thay đổi. Dưới đây là thông tin đăng nhập mới:<br /><br />URL: %3$s<br />Tên tài khoản: %4$s<br />Mật khẩu: %5$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['lostpass_send_pass'] = 'Mật khẩu của bạn đã được thay đổi và được gửi qua email %s';
 $lang_module['lostpass_active_error_link'] = 'Lỗi, link kích hoạt không đúng';
 $lang_module['changepass_title'] = 'Đổi mật khẩu';
 $lang_module['logout_title'] = 'Thoát';
@@ -208,5 +205,10 @@ $lang_module['listusers_sort_by_regdate'] = 'ngày tham gia';
 $lang_module['listusers_order_DESC'] = 'giảm dần';
 $lang_module['listusers_order_ASC'] = 'tăng dần';
 $lang_module['notuser'] = 'Không tồn tại thành viên nào theo lựa chọn này !';
+
+$lang_module['field_match_type_error'] = '%s không đúng quy tắc';
+$lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
+$lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
+$lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 
 ?>

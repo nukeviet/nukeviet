@@ -7,10 +7,9 @@
  * @Createdate 26/5/2011, 23:28
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$area = filter_text_input( 'area', 'get', '' );
+$area = $nv_Request->get_title( 'area', 'get', '' );
 if( empty( $area ) )
 {
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
@@ -30,81 +29,77 @@ $xtpl->assign( 'MODULE_FILE', $module_file );
 $xtpl->assign( 'AREA', $area );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&area=" . $area . "&filtersql=" . $filtersql );
 
-$array = array( );
+$array = array();
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;area=" . $area . "&amp;submit=1";
 
 if( $nv_Request->isset_request( 'submit', 'get' ) )
 {
-	$array_user = array( );
-	$generate_page = "";
+	$array_user = array();
+	$generate_page = '';
 
-	$orderid = filter_text_input( 'orderid', 'get', '' );
-	$orderusername = filter_text_input( 'orderusername', 'get', '' );
-	$orderemail = filter_text_input( 'orderemail', 'get', '' );
-	$orderregdate = filter_text_input( 'orderregdate', 'get', '' );
+	$orderid = $nv_Request->get_title( 'orderid', 'get', '' );
+	$orderusername = $nv_Request->get_title( 'orderusername', 'get', '' );
+	$orderemail = $nv_Request->get_title( 'orderemail', 'get', '' );
+	$orderregdate = $nv_Request->get_title( 'orderregdate', 'get', '' );
 
-	if( $orderid != "DESC" and $orderid != "" )
-		$orderid = "ASC";
-	if( $orderusername != "DESC" and $orderusername != "" )
-		$orderusername = "ASC";
-	if( $orderemail != "DESC" and $orderemail != "" )
-		$orderemail = "ASC";
-	if( $orderregdate != "DESC" and $orderregdate != "" )
-		$orderregdate = "ASC";
+	if( $orderid != "DESC" and $orderid != '' ) $orderid = "ASC";
+	if( $orderusername != "DESC" and $orderusername != '' ) $orderusername = "ASC";
+	if( $orderemail != "DESC" and $orderemail != '' ) $orderemail = "ASC";
+	if( $orderregdate != "DESC" and $orderregdate != '' ) $orderregdate = "ASC";
 
-	$array['username'] = filter_text_input( 'username', 'get', '' );
-	$array['full_name'] = filter_text_input( 'full_name', 'get', '' );
-	$array['email'] = filter_text_input( 'email', 'get', '' );
-	$array['sig'] = filter_text_input( 'sig', 'get', '' );
+	$array['username'] = $nv_Request->get_title( 'username', 'get', '' );
+	$array['full_name'] = $nv_Request->get_title( 'full_name', 'get', '' );
+	$array['email'] = $nv_Request->get_title( 'email', 'get', '' );
+	$array['sig'] = $nv_Request->get_title( 'sig', 'get', '' );
 
-	$array['regdatefrom'] = filter_text_input( 'regdatefrom', 'get', '' );
-	$array['regdateto'] = filter_text_input( 'regdateto', 'get', '' );
+	$array['regdatefrom'] = $nv_Request->get_title( 'regdatefrom', 'get', '' );
+	$array['regdateto'] = $nv_Request->get_title( 'regdateto', 'get', '' );
 
-	$array['last_loginfrom'] = filter_text_input( 'last_loginfrom', 'get', '' );
-	$array['last_loginto'] = filter_text_input( 'last_loginto', 'get', '' );
+	$array['last_loginfrom'] = $nv_Request->get_title( 'last_loginfrom', 'get', '' );
+	$array['last_loginto'] = $nv_Request->get_title( 'last_loginto', 'get', '' );
 
-	$array['last_ip'] = filter_text_input( 'last_ip', 'get', '' );
+	$array['last_ip'] = $nv_Request->get_title( 'last_ip', 'get', '' );
 
-	$array['gender'] = filter_text_input( 'gender', 'get', '' );
+	$array['gender'] = $nv_Request->get_title( 'gender', 'get', '' );
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['regdatefrom'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['regdatefrom'], $m ) )
 	{
 		$array['regdatefrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
-		$array['regdatefrom1'] = "";
+		$array['regdatefrom1'] = '';
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['regdateto'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['regdateto'], $m ) )
 	{
 		$array['regdateto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
-		$array['regdateto1'] = "";
+		$array['regdateto1'] = '';
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['last_loginfrom'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['last_loginfrom'], $m ) )
 	{
 		$array['last_loginfrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
-		$array['last_loginfrom1'] = "";
+		$array['last_loginfrom1'] = '';
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $array['last_loginto'], $m ) )
+	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array['last_loginto'], $m ) )
 	{
 		$array['last_loginto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
-		$array['last_loginto1'] = "";
+		$array['last_loginto1'] = '';
 	}
 
-	$sql = "FROM `" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=0";
+	$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=0";
 
 	$is_null = true;
 	foreach( $array as $check )
@@ -156,30 +151,30 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 		if( ! empty( $array['regdatefrom1'] ) )
 		{
-			$base_url .= "&amp;regdatefrom=" . rawurlencode( nv_date( "d.m.Y", $array['regdatefrom1'] ) );
+			$base_url .= "&amp;regdatefrom=" . rawurlencode( nv_date( "d/m/Y", $array['regdatefrom1'] ) );
 			$sql .= " AND ( regdate >= " . $array['regdatefrom1'] . " )";
 		}
 
 		if( ! empty( $array['regdateto1'] ) )
 		{
-			$base_url .= "&amp;regdateto=" . rawurlencode( nv_date( "d.m.Y", $array['regdateto1'] ) );
+			$base_url .= "&amp;regdateto=" . rawurlencode( nv_date( "d/m/Y", $array['regdateto1'] ) );
 			$sql .= " AND ( regdate <= " . $array['regdateto1'] . " )";
 		}
 
 		if( ! empty( $array['last_loginfrom1'] ) )
 		{
-			$base_url .= "&amp;last_loginfrom=" . rawurlencode( nv_date( "d.m.Y", $array['last_loginfrom1'] ) );
+			$base_url .= "&amp;last_loginfrom=" . rawurlencode( nv_date( "d/m/Y", $array['last_loginfrom1'] ) );
 			$sql .= " AND ( last_login >= " . $array['last_loginfrom1'] . " )";
 		}
 
 		if( ! empty( $array['last_loginto1'] ) )
 		{
-			$base_url .= "&amp;last_loginto=" . rawurlencode( nv_date( "d.m.Y", $array['last_loginto1'] ) );
+			$base_url .= "&amp;last_loginto=" . rawurlencode( nv_date( "d/m/Y", $array['last_loginto1'] ) );
 			$sql .= " AND ( last_login <= " . $array['last_loginto1'] . " )";
 		}
 		if( ! empty( $filtersql ) )
 		{
-			list( $data_str ) = $db->sql_fetchrow( $db->sql_query( "SELECT AES_DECRYPT('" . mysql_real_escape_string( nv_base64_decode( $filtersql ) ) . "', '" . md5( $global_config['sitekey'] . $client_info['session_id'] ) . "')" ) );
+			$data_str = $crypt->aes_decrypt( nv_base64_decode( $filtersql ), md5( $global_config['sitekey'] . $client_info['session_id'] ) );
 			if( ! empty( $data_str ) )
 			{
 				$sql .= " AND " . $data_str;
@@ -187,25 +182,13 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		}
 
 		// Order data
-		$orderida = array(
-			"url" => ($orderid == "ASC") ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", //
-			"class" => ($orderid == "") ? "nooder" : strtolower( $orderid ) //
-		);
+		$orderida = array( "url" => ( $orderid == "ASC" ) ? $base_url . "&amp;orderid=DESC" : $base_url . "&amp;orderid=ASC", "class" => ( $orderid == '' ) ? "nooder" : strtolower( $orderid ) );
 
-		$orderusernamea = array(
-			"url" => ($orderusername == "ASC") ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC",
-			"class" => ($orderusername == "") ? "nooder" : strtolower( $orderusername ) //
-		);
+		$orderusernamea = array( "url" => ( $orderusername == "ASC" ) ? $base_url . "&amp;orderusername=DESC" : $base_url . "&amp;orderusername=ASC", "class" => ( $orderusername == '' ) ? "nooder" : strtolower( $orderusername ) );
 
-		$orderemaila = array(
-			"url" => ($orderemail == "ASC") ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", //
-			"class" => ($orderemail == "") ? "nooder" : strtolower( $orderemail ) //
-		);
+		$orderemaila = array( "url" => ( $orderemail == "ASC" ) ? $base_url . "&amp;orderemail=DESC" : $base_url . "&amp;orderemail=ASC", "class" => ( $orderemail == '' ) ? "nooder" : strtolower( $orderemail ) );
 
-		$orderregdatea = array(
-			"url" => ($orderregdate == "ASC") ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", //
-			"class" => ($orderregdate == "") ? "nooder" : strtolower( $orderregdate ) //
-		);
+		$orderregdatea = array( "url" => ( $orderregdate == "ASC" ) ? $base_url . "&amp;orderregdate=DESC" : $base_url . "&amp;orderregdate=ASC", "class" => ( $orderregdate == '' ) ? "nooder" : strtolower( $orderregdate ) );
 
 		// SQL data
 		if( ! empty( $orderid ) )
@@ -241,10 +224,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		while( $row = $db->sql_fetchrow( $query2 ) )
 		{
 			$array_user[$row['userid']] = array(
-				"userid" => $row['userid'], //
-				"username" => $row['username'], //
-				"email" => $row['email'], //
-				"regdate" => nv_date( "d/m/Y H:i", $row['regdate'] ) //
+				"userid" => $row['userid'],
+				"username" => $row['username'],
+				"email" => $row['email'],
+				"regdate" => nv_date( "d/m/Y H:i", $row['regdate'] )
 			);
 		}
 
@@ -258,13 +241,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$xtpl->assign( 'ODER_EMAIL', $orderemaila );
 		$xtpl->assign( 'ODER_REGDATE', $orderregdatea );
 
-		$a = 0;
 		foreach( $array_user as $row )
 		{
-			$xtpl->assign( 'CLASS', ($a % 2 == 1) ? " class=\"second\"" : "" );
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'resultdata.data.row' );
-			++$a;
 		}
 
 		if( ! empty( $generate_page ) )
@@ -286,21 +266,21 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 else
 {
 	$gender = isset( $array['gender'] ) ? $array['gender'] : "";
-	$array['gender'] = array( );
+	$array['gender'] = array();
 	$array['gender'][] = array(
-		"key" => "", //
-		"title" => $lang_module['select_gender'], //
-		"selected" => ("" == $gender) ? " selected=\"selected\"" : "" //
+		"key" => "",
+		"title" => $lang_module['select_gender'],
+		"selected" => ( "" == $gender ) ? " selected=\"selected\"" : ""
 	);
 	$array['gender'][] = array(
-		"key" => "M", //
-		"title" => $lang_module['select_gender_male'], //
-		"selected" => ("M" == $gender) ? " selected=\"selected\"" : "" //
+		"key" => "M",
+		"title" => $lang_module['select_gender_male'],
+		"selected" => ( "M" == $gender ) ? " selected=\"selected\"" : ""
 	);
 	$array['gender'][] = array(
-		"key" => "F", //
-		"title" => $lang_module['select_gender_female'], //
-		"selected" => ("F" == $gender) ? " selected=\"selected\"" : "" //
+		"key" => "F",
+		"title" => $lang_module['select_gender_female'],
+		"selected" => ( "F" == $gender ) ? " selected=\"selected\"" : ""
 	);
 
 	foreach( $array['gender'] as $gender )
@@ -313,8 +293,9 @@ else
 	$contents = $xtpl->text( 'main' );
 }
 
-include (NV_ROOTDIR . "/includes/header.php");
-echo $contents;
-include (NV_ROOTDIR . "/includes/footer.php");
-exit( );
+include ( NV_ROOTDIR . '/includes/header.php' );
+echo nv_admin_theme( $contents, 0 );
+include ( NV_ROOTDIR . '/includes/footer.php' );
+exit();
+
 ?>

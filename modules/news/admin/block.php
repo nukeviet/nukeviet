@@ -78,7 +78,7 @@ $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
-if( $listid == "" )
+if( $listid == '' )
 {
 	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
 }
@@ -91,26 +91,27 @@ else
 $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {
-	$a = 0;
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
-	{		
+	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
 			"title" => $title,
-			"id" => $id,
+			"id" => $id
 		) );
-		
+
 		$xtpl->parse( 'main.news.loop' );
-		++ $a;
 	}
 
 	foreach( $array_block as $xbid => $blockname )
 	{
-		$xtpl->assign( 'BID', array( "key" => $xbid, "title" => $blockname, "selected" => $xbid == $bid ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'BID', array(
+			"key" => $xbid,
+			"title" => $blockname,
+			"selected" => $xbid == $bid ? " selected=\"selected\"" : ""
+		) );
 		$xtpl->parse( 'main.news.bid' );
 	}
-	
+
 	$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 	$xtpl->parse( 'main.news' );
 }
@@ -118,8 +119,9 @@ if( $db->sql_numrows( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+$op = 'groups';
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

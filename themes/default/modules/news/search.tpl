@@ -18,10 +18,8 @@
 			<table cellspacing="0" cellpadding="3">
 				<tr>
 					<td class="cltxt"> {LANG.key_title} : </td>
-					<td>
-					<input type="text" name="q" value="{KEY}" class="intxt" id="key"/>
-					</td>
-					<td align="right"></td>
+					<td><input type="text" name="q" value="{KEY}" class="intxt" id="key"/></td>
+					<td align="right">&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="cltxt"> {LANG.type_title} : </td>
@@ -32,7 +30,7 @@
 						<option value="2" {CHECK2}>{LANG.find_author} </option>
 						<option value="3" {CHECK3}>{LANG.find_resource} </option>
 					</select></td>
-					<td></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="cltxt"> {LANG.search_cat} : </td>
@@ -42,45 +40,37 @@
 						<option value="{SEARCH_CAT.catid}" {SEARCH_CAT.select}>{SEARCH_CAT.title}</option>
 						<!-- END: search_cat -->
 					</select></td>
-					<td></td>
+					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="cltxt"> {LANG.finter_title} : </td>
-					<td>
-					<input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-					{LANG.to_date}
-					<input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" />
-					</td>
+					<td><input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/> {LANG.to_date} <input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" /></td>
 					<td class="cltxt"><img src="{NV_BASE_SITEURL}images/refresh.png" onclick="remove_text()" style="cursor:pointer"/></td>
 				</tr>
 				<tr>
-					<td class="cltxt"></td>
-					<td>
-					<input type="submit" value="{LANG.search_title}"/>
-					</td>
-					<td align="right"></td>
+					<td class="cltxt">&nbsp;</td>
+					<td><input type="submit" value="{LANG.search_title}"/></td>
+					<td align="right">&nbsp;</td>
 				</tr>
-
 			</table>
 		</div>
 	</div>
 </form>
+
 <script type="text/javascript">
-    $(document).ready(function()
-    {
-	    $(".datepicker").datepicker(
-	    {
-	        showOn : "both",
-	        dateFormat : "dd/mm/yy",
-	        changeMonth : true,
-	        changeYear : true,
-	        showOtherMonths : true,
-	        buttonImage : nv_siteroot + "images/calendar.gif",
-	        buttonImageOnly : true
-	    }); 		
+	$(document).ready(function() {
+		$(".datepicker").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
 	});
 </script>
-        
+
 <!-- END: main -->
 <!-- BEGIN: results -->
 <div class="result-frame">
@@ -111,7 +101,8 @@
 		<div class="result-source">
 			{LANG.source_title} : <span>{SOURCE}</span>
 		</div>
-		<!-- END: result --><!-- BEGIN: pages_result -->
+		<!-- END: result -->
+		<!-- BEGIN: pages_result -->
 		<div class="cl-viewpages">
 			{VIEW_PAGES}
 		</div>
@@ -133,21 +124,13 @@
 			<table width="100%">
 				<tr>
 					<td align="center" width="100px"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></td>
-					<td align="left">
-					<input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" />
-					</td>
-					<td>
-					<input type="submit" name="sa" value="{LANG.search_title}" id="sbb">
-					</td>
+					<td align="left"><input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" /></td>
+					<td><input type="submit" name="sa" value="{LANG.search_title}" id="sbb"></td>
 				</tr>
 			</table>
 			<table width="100%">
 				<tr>
-					<td>
-					<input type="radio" name="sitesearch" value="" checked id="ss0" />
-					{LANG.search_on_internet}
-					<input type="radio" name="sitesearch" value="{MY_DOMAIN}" />
-					{LANG.search_on_nuke} {MY_DOMAIN}
+					<td><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet} <input type="radio" name="sitesearch" value="{MY_DOMAIN}" /> {LANG.search_on_nuke} {MY_DOMAIN}
 				</tr>
 			</table>
 		</form>

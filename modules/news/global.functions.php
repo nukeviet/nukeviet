@@ -17,7 +17,7 @@ if( $timecheckstatus > 0 and $timecheckstatus < NV_CURRENTTIME )
 
 /**
  * nv_set_status_module()
- * 
+ *
  * @return
  */
 function nv_set_status_module()
@@ -70,8 +70,8 @@ function nv_set_status_module()
 	// Tim kiem thoi gian chay lan ke tiep
 	list( $time_publtime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(publtime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=2 AND `publtime` > " . NV_CURRENTTIME ) );
 	list( $time_exptime ) = $db->sql_fetchrow( $db->sql_query( "SELECT min(exptime) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `exptime` > " . NV_CURRENTTIME ) );
-	
-	$timecheckstatus = min( $time_publtime, $time_exptime ); 
+
+	$timecheckstatus = min( $time_publtime, $time_exptime );
 	if( ! $timecheckstatus ) $timecheckstatus = max( $time_publtime, $time_exptime );
 
 	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
@@ -84,17 +84,17 @@ function nv_set_status_module()
 
 /**
  * nv_comment_module()
- * 
+ *
  * @param mixed $id
  * @param mixed $page
  * @return
  */
 function nv_comment_module( $id, $page )
 {
-	global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment;
+	global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment, $db_config;
 	$comment_array = array();
 	$per_page = $per_page_comment;
-	$sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` as a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as b ON a.userid =b.userid  WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` as a LEFT JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` as b ON a.userid =b.userid WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
 	$comment = $db->sql_query( $sql );
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -125,7 +125,7 @@ function nv_comment_module( $id, $page )
 
 /**
  * nv_del_content_module()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -133,11 +133,11 @@ function nv_del_content_module( $id )
 {
 	global $db, $module_name, $module_data, $title, $lang_module;
 	$content_del = "NO_" . $id;
-	$title = "";
+	$title = '';
 	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `listcatid`, `title`, `homeimgfile`, `homeimgthumb` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . intval( $id ) . "" ) );
 	if( $id > 0 )
 	{
-		if( $homeimgthumb != "" and $homeimgthumb != "|" )
+		if( $homeimgthumb != '' and $homeimgthumb != "|" )
 		{
 			$homeimgthumb_arr = explode( "|", $homeimgthumb );
 			foreach( $homeimgthumb_arr as $file )
@@ -183,6 +183,9 @@ function nv_del_content_module( $id )
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` WHERE `id` = " . $id );
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id` = " . $id );
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `id` = " . $id );
+
+			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_tags` SET `numnews` = `numnews`-1 WHERE `tid` IN (SELECT `tid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `id`=" . $id . ")" );
+			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `id` = " . $id );
 			$content_del = "OK_" . $id;
 		}
 		else
@@ -195,7 +198,7 @@ function nv_del_content_module( $id )
 
 /**
  * nv_archive_content_module()
- * 
+ *
  * @param mixed $id
  * @param mixed $listcatid
  * @return
@@ -217,33 +220,33 @@ function nv_archive_content_module( $id, $listcatid )
 
 /**
  * nv_link_edit_page()
- * 
+ *
  * @param mixed $id
  * @return
  */
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<span class=\"edit_icon\"><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></span>";
+	$link = "<a class=\"edit_icon\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
 	return $link;
 }
 
 /**
  * nv_link_delete_page()
- * 
+ *
  * @param mixed $id
  * @return
  */
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<span class=\"delete_icon\"><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a></span>";
+	$link = "<a class=\"delete_icon\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
 	return $link;
 }
 
 /**
  * nv_news_get_bodytext()
- * 
+ *
  * @param mixed $bodytext
  * @return
  */
@@ -254,7 +257,7 @@ function nv_news_get_bodytext( $bodytext )
 	{
 		foreach( $match[0] as $key => $_m )
 		{
-			$textimg = "";
+			$textimg = '';
 			if( strpos( $match[1][$key], 'data:image/png;base64' ) === false )
 			{
 				$textimg = " " . $match[1][$key];

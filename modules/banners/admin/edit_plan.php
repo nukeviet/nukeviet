@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$query = "SELECT * FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . $id;
+$query = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
 $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 
@@ -28,7 +28,7 @@ $row = $db->sql_fetchrow( $result );
 $forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
 $forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
 
-$error = "";
+$error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -57,9 +57,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		list( $blang_old, $form_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `blang`, `form` FROM `" . NV_BANNERS_PLANS_GLOBALTABLE . "` WHERE `id`=" . intval( $id ) . "" ) );
+		list( $blang_old, $form_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `blang`, `form` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . intval( $id ) . "" ) );
 
-		$sql = "UPDATE `" . NV_BANNERS_PLANS_GLOBALTABLE . "` SET `blang`=" . $db->dbescape( $blang ) . ", `title`=" . $db->dbescape( $title ) . ", `description`=" . $db->dbescape( $description ) . ", `form`=" . $db->dbescape( $form ) . ", `width`=" . $width . ", `height`=" . $height . " WHERE `id`=" . $id;
+		$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_plans` SET `blang`=" . $db->dbescape( $blang ) . ", `title`=" . $db->dbescape( $title ) . ", `description`=" . $db->dbescape( $description ) . ", `form`=" . $db->dbescape( $form ) . ", `width`=" . $width . ", `height`=" . $height . " WHERE `id`=" . $id;
 		$db->sql_query( $sql );
 
 		if( $form_old != $form or $blang_old != $blang )
@@ -98,7 +98,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['edit_plan'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_plan&id=" . $id;
+$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_plan&amp;id=" . $id;
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
 $contents['form'] = array( $lang_module['form'], 'form', $forms, $form );
@@ -113,8 +113,8 @@ $contents = call_user_func( "nv_edit_plan_theme", $contents );
 
 $page_title = $lang_module['edit_plan'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

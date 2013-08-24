@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language česky
+ * @Createdate Aug 01, 2010, 02:40:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -121,9 +121,6 @@ $lang_module['is_user_forum'] = 'Použijte fóra uživatelů';
 $lang_module['search_page_title'] = 'Výsledek';
 $lang_module['click_to_view'] = 'Klikněte pro zobrazení';
 $lang_module['level0'] = 'Uživatel';
-$lang_module['level1'] = 'Super Administrator';
-$lang_module['level2'] = 'Obecný Administrator';
-$lang_module['level3'] = 'Správce oblasti';
 $lang_module['admin_add'] = 'Zvolit na admin';
 $lang_module['nv_admin_add'] = 'Přidat skupinu';
 $lang_module['nv_admin_edit'] = 'Upravit skupinu';
@@ -140,7 +137,7 @@ $lang_module['error_title_exists'] = 'Jméno skupiny "%s" již existuje';
 $lang_module['users_in_group_caption'] = 'Seznam členů ve skupině "%s" (%d skupina)';
 $lang_module['error_group_not_found'] = 'Chyba: Nelze nalézt skupinu';
 $lang_module['error_users_not_found'] = 'Skupina, které nejsou členy';
-$lang_module['error_not_groups'] = 'Neexistují žádné skupiny mají být stanoveny. Klikněte <a href="%s" /> zde  k vytvoření skupiny';
+$lang_module['error_not_groups'] = 'Neexistují žádné skupiny mají být stanoveny. Klikněte <a href="%s" /> zde k vytvoření skupiny';
 $lang_module['add_users'] = 'Členské "%s"';
 $lang_module['form_search_label0'] = 'Vyhledávání členů';
 $lang_module['form_search_label1'] = 'Klíčové slovo (Null = všechny členské)';
@@ -170,10 +167,8 @@ $lang_module['enter_key'] = 'zadejte slovo';
 $lang_module['username'] = 'uživatel';
 $lang_module['full_name'] = 'Přímení a jméno';
 $lang_module['regdate'] = 'Datum registrace';
-$lang_module['yim'] = 'Yahoo učet';
 $lang_module['last_login'] = 'Poslední příhlášit';
 $lang_module['last_idlogin'] = 'IP poslední příhlášit';
-$lang_module['web'] = 'Website';
 $lang_module['select_gender'] = 'Vyberte pohlaví';
 $lang_module['select_gender_male'] = 'Muže';
 $lang_module['select_gender_female'] = 'Ženy';

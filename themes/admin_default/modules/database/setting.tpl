@@ -1,15 +1,16 @@
 <!-- BEGIN: main -->
-<form action="" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<table class="tab1 fixtab">
-		<tbody class="second">
+		<tfoot>
 			<tr>
-				<td style="width:200px"><strong>{LANG.dump_autobackup}</strong></td>
-				<td>
-				<input type="checkbox" value="1" name="dump_autobackup" {DATA.dump_autobackup} />
-				</td>
+				<td colspan="2"><input type="submit" name="submit" value="{LANG.submit}"/></td>
 			</tr>
-		</tbody>
+		</tfoot>
 		<tbody>
+			<tr>
+				<td class="w200"><strong>{LANG.dump_autobackup}</strong></td>
+				<td><input type="checkbox" value="1" name="dump_autobackup" {DATA.dump_autobackup} /></td>
+			</tr>
 			<tr>
 				<td><strong>{LANG.dump_backup_ext}</strong></td>
 				<td>
@@ -19,8 +20,15 @@
 					<!-- END: dump_backup_ext -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
+			<tr>
+				<td><strong>{LANG.dump_interval}</strong></td>
+				<td>
+				<select name="dump_interval">
+					<!-- BEGIN: dump_interval -->
+					<option value="{BACKUPDAYVALUE}" {BACKUPDAYSELECTED}>{BACKUPDAYVALUE}</option>
+					<!-- END: dump_interval -->
+				</select> ({GLANG.day})</td>
+			</tr>
 			<tr>
 				<td><strong>{LANG.dump_backup_day}</strong></td>
 				<td>
@@ -28,16 +36,9 @@
 					<!-- BEGIN: dump_backup_day -->
 					<option value="{BACKUPDAYVALUE}" {BACKUPDAYSELECTED}>{BACKUPDAYVALUE}</option>
 					<!-- END: dump_backup_day -->
-				</select></td>
+				</select> ({GLANG.day})</td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2">
-				<input type="submit" name="submit" value="{LANG.submit}"/>
-				</td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <!-- END: main -->

@@ -26,25 +26,25 @@ if( $mod == "weight" and $new_vid > 0 )
 
 	$sql = "SELECT `topicid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`!=" . $topicid . " ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
-	
+
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		++ $weight;
+		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `weight`=" . $weight . " WHERE `topicid`=" . intval( $row['topicid'] );
 		$db->sql_query( $sql );
 	}
-	
+
 	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `weight`=" . $new_vid . " WHERE `topicid`=" . intval( $topicid );
 	$db->sql_query( $sql );
-	
+
 	$content = "OK_" . $topicid;
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $content;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

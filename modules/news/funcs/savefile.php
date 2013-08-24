@@ -17,7 +17,7 @@ function nv_src_href_callback( $matches )
 	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
 	{
 		if( preg_match( "/^\//", $matches[2] ) ) $_url = NV_MY_DOMAIN;
-		else  $_url = NV_MY_DOMAIN . "/";
+		else $_url = NV_MY_DOMAIN . "/";
 		$matches[2] = $_url . $matches[2];
 	}
 	return $matches[1] . "=\"" . $matches[2] . "\"";
@@ -57,7 +57,7 @@ if( $id > 0 and $catid > 0 )
 			list( $sourcetext ) = $db->sql_fetchrow( $result );
 			unset( $sql, $result );
 
-			$canonicalUrl = NV_MY_DOMAIN.nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id, true);
+			$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id, true );
 			$link = "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n";
 
 			$meta_tags = nv_html_meta_tags();
@@ -79,29 +79,28 @@ if( $id > 0 and $catid > 0 )
 				"link" => $link,
 				"contact" => $global_config['site_email'],
 				"author" => $content['author'],
-				"source" => $sourcetext );
+				"source" => $sourcetext
+			);
 
 			if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 			{
-				$src = $alt = $note = "";
+				$src = $alt = $note = '';
 				$width = $height = 0;
-				$array_img = explode( "|", $content['homeimgthumb'] );
-				if( ! empty( $array_img[0] ) and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0] ) )
+				if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
 				{
-					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $array_img[0];
+					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
 					$width = $module_config[$module_name]['homewidth'];
 				}
-				elseif( nv_is_url( $content['homeimgfile'] ) )
+				elseif( $content['homeimgthumb'] == 3 )
 				{
 					$src = $content['homeimgfile'];
 					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
-				else
-					if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
-					{
-						$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
-						$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
-					}
+				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
+				{
+					$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
+				}
 				$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
 
 				$result['image'] = array(
@@ -109,14 +108,15 @@ if( $id > 0 and $catid > 0 )
 					"width" => $width,
 					"alt" => $alt,
 					"note" => $content['homeimgalt'],
-					"position" => $content['imgposition'] );
+					"position" => $content['imgposition']
+				);
 			}
 			$contents = call_user_func( "news_print", $result );
 			header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
-			include ( NV_ROOTDIR . "/includes/header.php" );
+			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", $contents );
-			include ( NV_ROOTDIR . "/includes/footer.php" );
+			include ( NV_ROOTDIR . '/includes/footer.php' );
 		}
 	}
 }

@@ -3,12 +3,12 @@
 /**
 * @Project NUKEVIET 3.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2013 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
+* @Createdate Aug 03, 2013, 02:39:46 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
 $lang_translator['createdate'] = '14/06/2011/03:30';
@@ -16,17 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2011 Nukevietdestek.com tüm hak
 $lang_translator['info'] = 'Dil Sevimsiz tarafından tercüme edildi';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['metaTagsConfig'] = 'Meta-Tags Config';
-$lang_module['metaTagsGroupName'] = 'Group type';
-$lang_module['metaTagsGroupValue'] = 'Group Name';
-$lang_module['metaTagsNote'] = 'The Meta-Tags: "%s" is determined automatically';
-$lang_module['metaTagsVar'] = 'Accept the following variables';
-$lang_module['metaTagsContent'] = 'Content';
-$lang_module['googleAnalyticsSetDomainName_title'] = 'Domain properties when declared with Google Analytics';
-$lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';
-$lang_module['googleAnalyticsSetDomainName_1'] = 'One domain with multiple subdomains';
-$lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
-$lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detaylar</a>)';
 $lang_module['global_config'] = 'Sistem ayarları';
 $lang_module['site_config'] = 'Site ayarları';
 $lang_module['lang_site_config'] = 'Ayar yapılan %s dili:';
@@ -82,15 +71,12 @@ $lang_module['site_keywords'] = 'Anahtar Kelimeler';
 $lang_module['site_logo'] = 'Site Logosu';
 $lang_module['site_email'] = 'Sitenin email adresi';
 $lang_module['error_send_email'] = 'Hata mesajları';
-$lang_module['site_phone'] = 'Sitenin telefon numarası';
 $lang_module['lang_multi'] = 'Çoklu Dili etkinleştir';
 $lang_module['site_lang'] = 'Varsayılan dil';
 $lang_module['site_timezone'] = 'Sitenin saat dilimi';
 $lang_module['date_pattern'] = 'Tarih görüntüleme biçimi';
 $lang_module['time_pattern'] = 'Zaman görüntüleme formatı';
-$lang_module['online_upd'] = 'Çevrimiçi kullanıcılara izleme etkinleştirin';
 $lang_module['gzip_method'] = 'Gzip etkinleştirin';
-$lang_module['statistic'] = 'Istatistik etkinleştirin';
 $lang_module['proxy_blocker'] = 'Blok vekil';
 $lang_module['proxy_blocker_0'] = 'Kontrol etmeyin';
 $lang_module['proxy_blocker_1'] = 'Düşük';
@@ -108,7 +94,6 @@ $lang_module['banip_timeendban'] = 'Ban bitiş saati';
 $lang_module['banip_funcs'] = 'Özellik';
 $lang_module['banip_checkall'] = 'Hepsini işaretle';
 $lang_module['banip_uncheckall'] = 'Tüm işaretini kaldırın';
-$lang_module['banip_add'] = 'Yeni ekle';
 $lang_module['banip_address'] = 'Adres';
 $lang_module['banip_begintime'] = 'Başlangıç zamanı';
 $lang_module['banip_endtime'] = 'Bitiş zamanı';
@@ -130,18 +115,6 @@ $lang_module['banip_delete'] = 'Sil';
 $lang_module['banip_error_ip'] = 'Please enter ip address want to ban';
 $lang_module['banip_error_area'] = 'Please select an area';
 $lang_module['banip_error_validip'] = 'Error: Please enter a valid Ip address';
-$lang_module['uploadconfig'] = 'Yükleme ayarları';
-$lang_module['uploadconfig_ban_ext'] = 'Yasakla Uzantıları';
-$lang_module['uploadconfig_ban_mime'] = 'Forbid Mimies';
-$lang_module['uploadconfig_types'] = 'Dosya tipleri';
-$lang_module['sys_max_size'] = 'Yükleyebileceğiniz dosya boyutu';
-$lang_module['nv_max_size'] = 'Max. Yükleme';
-$lang_module['upload_checking_mode'] = 'Kontrol Modu Yükle';
-$lang_module['strong_mode'] = 'Güçlü';
-$lang_module['mild_mode'] = 'Hafif';
-$lang_module['lite_mode'] = 'Zayıf';
-$lang_module['none_mode'] = 'Hiçbiri';
-$lang_module['upload_checking_note'] = 'Your server does not support some functions defined file types. If you chose "Strong", you will not be able to upload files to your host';
 $lang_module['nv_admin_add'] = 'İş Ekle';
 $lang_module['nv_admin_edit'] = 'İş Düzenle';
 $lang_module['nv_admin_del'] = 'İş Sil';

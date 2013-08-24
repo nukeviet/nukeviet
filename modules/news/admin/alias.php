@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$title = filter_text_input( 'title', 'post', '' );
+$title = $nv_Request->get_title( 'title', 'post', '' );
 $alias = change_alias( $title );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
@@ -55,8 +55,8 @@ elseif( $mod == "blockcat" )
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $alias;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

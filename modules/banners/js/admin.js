@@ -1,4 +1,4 @@
-/* *
+/**
  * @Project NUKEVIET 3.x
  * @Author  VINADES ( contact@vinades.vn )
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
@@ -257,7 +257,7 @@ function nv_chang_weight_banners(containerid, clid, pid, act, id) {
 		if (pid != 0)
 			request_query += '&pid=' + pid;
 	}
-	
+
 	request_query += '&act=' + act;
 	request_query += '&id=' + id;
 	request_query += '&weight=' + weight;

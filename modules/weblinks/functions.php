@@ -15,7 +15,7 @@ require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php"
 
 /**
  * adminlink()
- * 
+ *
  * @param mixed $id
  * @return
  */
@@ -29,7 +29,7 @@ function adminlink( $id )
 
 $catid = 0;
 $parentid = 0;
-$set_viewcat = "";
+$set_viewcat = '';
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $array_mod_title = array();
 $global_array_cat = array();
@@ -38,9 +38,9 @@ global $weblinks_config;
 // Xac dinh RSS
 if( $module_info['rss'] )
 {
-	$rss[] = array( //
-		'title' => $module_info['custom_title'], //
-		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+	$rss[] = array(
+		'title' => $module_info['custom_title'],
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
 	);
 }
 
@@ -59,12 +59,12 @@ $result = $db->sql_query( $sql );
 while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alias_i, $keywords_i ) = $db->sql_fetchrow( $result ) )
 {
 	$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_i;
-	
+
 	$sql1 = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `catid` = $catid_i";
 	$result1 = $db->sql_query( $sql1 );
-	
+
 	list( $count_link ) = $db->sql_fetchrow( $result1 );
-	
+
 	$global_array_cat[$catid_i] = array(
 		"catid" => $catid_i,
 		"parentid" => $parentid_i,
@@ -76,7 +76,7 @@ while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alia
 		"catimage" => $catimage_i,
 		"count_link" => $count_link
 	);
-	
+
 	if( $alias_cat_url == $alias_i )
 	{
 		$catid = $catid_i;
@@ -86,9 +86,9 @@ while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alia
 	//Xac dinh RSS
 	if( $module_info['rss'] )
 	{
-		$rss[] = array( //
-			'title' => $module_info['custom_title'] . ' - ' . $title_i, //
-			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_i //
+		$rss[] = array(
+			'title' => $module_info['custom_title'] . ' - ' . $title_i,
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $alias_i
 		);
 	}
 }
@@ -128,8 +128,8 @@ if( ! empty( $array_op ) )
 		{
 			$array_page = explode( "-", $array_op[1] );
 			$id = intval( end( $array_page ) );
-			$alias_url = str_replace( "-" . $id . "", "", $array_op[1] );
-			if( $id > 0 and $alias_url != "" )
+			$alias_url = str_replace( '-' . $id, '', $array_op[1] );
+			if( $id > 0 and $alias_url != '' )
 			{
 				$op = "detail";
 			}

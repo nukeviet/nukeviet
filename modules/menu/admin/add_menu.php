@@ -10,13 +10,13 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Default variable
-$error = "";
+$error = '';
 $post['id'] = $post['parentid'] = $post['active_type'] = 0;
-$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = $post['css'] = "";
+$post['type_menu'] = $post['target'] = $post['who_view'] = $post['module_name'] = $post['css'] = '';
 $post['groups_view'] = array();
 $arr_item = array();
 $sp = '&nbsp;&nbsp;&nbsp;';
-$sp_title = "";
+$sp_title = '';
 
 //
 $post['mid'] = $nv_Request->get_int( 'mid', 'get', 0 );
@@ -25,10 +25,7 @@ $post['parentid'] = $nv_Request->get_int( 'parentid', 'get', 0 );
 
 // System groups user
 $groups_list = nv_groups_list();
-$array_who = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'] );
+$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if( ! empty( $groups_list ) )
 {
 	$array_who[] = $lang_global['who_view3'];
@@ -49,14 +46,14 @@ if( $post['mid'] != 0 )
 	$result = $db->sql_query( $sql );
 
 	$arr_item[0] = array(
-		'key' => 0, //
-		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
-			);
+		'key' => 0,
+		'title' => $lang_module['cat0'],
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : ""
+	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sp_title = "";
+		$sp_title = '';
 		if( $row['lev'] > 0 )
 		{
 			for( $i = 1; $i <= $row['lev']; ++$i )
@@ -66,10 +63,10 @@ if( $post['mid'] != 0 )
 		}
 
 		$arr_item[$row['id']] = array(
-			'key' => $row['id'], //
-			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
-				);
+			'key' => $row['id'],
+			'title' => $sp_title . $row['title'],
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""
+		);
 	}
 }
 
@@ -80,7 +77,7 @@ foreach( $list as $key => $title )
 	$list_module[] = array(
 		"key" => $key,
 		"title" => $title['module_data'],
-		"selected" => ( $key == $post['module_name'] ) ? " selected=\"selected\"" : "",
+		"selected" => ( $key == $post['module_name'] ) ? " selected=\"selected\"" : ""
 	);
 }
 
@@ -90,7 +87,7 @@ foreach( $type_target as $key => $target )
 	$list_target[] = array(
 		"key" => $key,
 		"title" => $target,
-		"selected" => ( $key == $post['target'] ) ? " selected=\"selected\"" : "",
+		"selected" => ( $key == $post['target'] ) ? " selected=\"selected\"" : ""
 	);
 }
 
@@ -99,9 +96,9 @@ $array['who_view'] = array();
 foreach( $array_who as $key => $who )
 {
 	$array['who_view'][] = array(
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 	);
 }
 
@@ -114,17 +111,17 @@ if( ! empty( $groups_list ) )
 		if( ! empty( $groups_view ) )
 		{
 			$array['groups_view'][] = array(
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 		else
 		{
 			$array['groups_view'][] = array(
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => "" //
+				'key' => $key,
+				'title' => $title,
+				'checked' => ""
 			);
 		}
 	}
@@ -144,15 +141,15 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$post['id'] = $nv_Request->get_int( 'id', 'post', 0 );
 	$post['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$post['mid'] = $nv_Request->get_int( 'item_menu', 'post', 0 );
-	$post['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$post['link'] = filter_text_input( 'link', 'post', '', 1, 255 );
-	$post['note'] = filter_text_input( 'note', 'post', '', 1, 255 );
-	$post['module_name'] = filter_text_input( 'module_name', 'post', '', 1, 255 );
-	$post['op'] = filter_text_input( 'op', 'post', '', 1, 255 );
+	$post['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$post['link'] = $nv_Request->get_string( 'link', 'post', '', 1, 255 );
+	$post['note'] = nv_substr( $nv_Request->get_title( 'note', 'post', '', 1 ), 0, 255 );
+	$post['module_name'] = nv_substr( $nv_Request->get_title( 'module_name', 'post', '', 1 ), 0, 255 );
+	$post['op'] = nv_substr( $nv_Request->get_title( 'op', 'post', '', 1 ), 0, 255 );
 	$post['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
 	$post['target'] = $nv_Request->get_int( 'target', 'post', 0 );
 	$post['active_type'] = $nv_Request->get_int( 'active_type', 'post', 0 );
-	$post['css'] = filter_text_input( 'css', 'post', '', 1, 255 );
+	$post['css'] = nv_substr( $nv_Request->get_title( 'css', 'post', '', 1 ), 0, 255 );
 
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
 	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
@@ -175,24 +172,23 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		{
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid`=" . intval( $post['mid'] ) . " AND `parentid`=" . intval( $post['parentid'] . " AND `mid`=" . $post['mid'] ) ) );
 			$weight = intval( $weight ) + 1;
-
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
-				NULL, 
-				" . intval( $post['parentid'] ) . ", 
-				" . intval( $post['mid'] ) . ", 
-				" . $db->dbescape( $post['title'] ) . ", 
-				" . $db->dbescape( $post['link'] ) . ", 
-				" . $db->dbescape( $post['note'] ) . ", 
-				" . intval( $weight ) . ", 
-				0, 0, '', 
-				" . intval( $post['who_view'] ) . ", 
-				" . $db->dbescape( $post['groups_view'] ) . ", 
-				" . $db->dbescape( $post['module_name'] ) . ", 
-				" . $db->dbescape( $post['op'] ) . ", 
-				" . intval( $post['target'] ) . ", 
-				" . $db->dbescape( $post['css'] ) . ", 
-				" . intval( $post['active_type'] ) . ", 
-				1 
+				NULL,
+				" . intval( $post['parentid'] ) . ",
+				" . intval( $post['mid'] ) . ",
+				" . $db->dbescape( $post['title'] ) . ",
+				" . $db->dbescape( $post['link'] ) . ",
+				" . $db->dbescape( $post['note'] ) . ",
+				" . intval( $weight ) . ",
+				0, 0, '',
+				" . intval( $post['who_view'] ) . ",
+				" . $db->dbescape( $post['groups_view'] ) . ",
+				" . $db->dbescape( $post['module_name'] ) . ",
+				" . $db->dbescape( $post['op'] ) . ",
+				" . intval( $post['target'] ) . ",
+				" . $db->dbescape( $post['css'] ) . ",
+				" . intval( $post['active_type'] ) . ",
+				1
 			)";
 
 			if( $db->sql_query_insert_id( $sql ) )
@@ -247,17 +243,17 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		else
 		{
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
-				`parentid`=" . intval( $post['parentid'] ) . ", 
+				`parentid`=" . intval( $post['parentid'] ) . ",
 				`mid`=" . intval( $post['mid'] ) . ",
 				`title`=" . $db->dbescape( $post['title'] ) . ",
 				`link`=" . $db->dbescape( $post['link'] ) . ",
 				`note`=" . $db->dbescape( $post['note'] ) . ",
 				`who_view`=" . intval( $post['who_view'] ) . " ,
 				`groups_view`=" . $db->dbescape( $post['groups_view'] ) . ",
-				`module_name`=" . $db->dbescape( $post['module_name'] ) . ",	
+				`module_name`=" . $db->dbescape( $post['module_name'] ) . ",
 				`op`=" . $db->dbescape( $post['op'] ) . ",
 				`target`=" . intval( $post['target'] ) . ",
-				`css`=" . $db->dbescape( $post['css'] ) . ", 
+				`css`=" . $db->dbescape( $post['css'] ) . ",
 				`active_type`=" . intval( $post['active_type'] ) . "
 			WHERE `id`=" . intval( $post['id'] );
 
@@ -358,21 +354,21 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$row['sub'] = sizeof( array_filter( explode( ',', $row['subitem'] ) ) );
 
 	$arr_table[$row['id']] = array(
-		'id' => $row['id'], //
-		'mid' => $row['mid'], //
-		'nu' => $nu, //
-		'sub' => $row['sub'], //
-		'parentid' => $row['parentid'], //
-		'link' => nv_htmlspecialchars( $row['link'] ), //
-		'weight' => $row['weight'], //
-		'title' => $row['title'], //
-		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'], //
-		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'] . "#edit", //
-		'name_block' => $arr_menu[$row['mid']]['title'] //
+		'id' => $row['id'],
+		'mid' => $row['mid'],
+		'nu' => $nu,
+		'sub' => $row['sub'],
+		'parentid' => $row['parentid'],
+		'link' => nv_htmlspecialchars( $row['link'] ),
+		'weight' => $row['weight'],
+		'title' => $row['title'],
+		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'],
+		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'] . "#edit",
+		'name_block' => $arr_menu[$row['mid']]['title']
 	);
 }
 
-$link_title = "";
+$link_title = '';
 if( $post['parentid'] != 0 )
 {
 	$sql = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $post['parentid'];
@@ -383,15 +379,13 @@ if( $post['parentid'] != 0 )
 
 $xtpl = new XTemplate( "add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=" . $post['mid'] ) . "&parentid=" . $post['parentid'];
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] ) . "&amp;parentid=" . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
 
 if( ! empty( $arr_table ) )
 {
-	$a = 0;
 	foreach( $arr_table as $rows )
 	{
-		$rows['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'ROW', $rows );
 
 		for( $i = 1; $i <= $num; ++$i )
@@ -426,14 +420,14 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 	$result = $db->sql_query( $sql );
 
 	$arr_item[0] = array(
-		'key' => 0, //
-		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
+		'key' => 0,
+		'title' => $lang_module['cat0'],
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : ""
 	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sp_title = "";
+		$sp_title = '';
 		if( $row['lev'] > 0 )
 		{
 			for( $i = 1; $i <= $row['lev']; ++$i )
@@ -442,9 +436,9 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 			}
 		}
 		$arr_item[$row['id']] = array(
-			'key' => $row['id'], //
-			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
+			'key' => $row['id'],
+			'title' => $sp_title . $row['title'],
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -456,9 +450,9 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 
 	$contents = $xtpl->text( 'main.cat' );
 
-	include ( NV_ROOTDIR . "/includes/header.php" );
+	include ( NV_ROOTDIR . '/includes/header.php' );
 	echo $contents;
-	include ( NV_ROOTDIR . "/includes/footer.php" );
+	include ( NV_ROOTDIR . '/includes/footer.php' );
 	exit();
 }
 
@@ -502,7 +496,7 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 
 if( $post['id'] != 0 )
 {
-	if( $post['op'] != "" )
+	if( $post['op'] != '' )
 	{
 		$arr_cat = array();
 
@@ -516,12 +510,12 @@ if( $post['id'] != 0 )
 				while( $row = $db->sql_fetchrow( $result ) )
 				{
 					$arr_cat[$row['id']] = array(
-						'module' => $post['module_name'], //
-						'id' => $row['id'], //
-						'title' => $row['title'], //
-						'alias' => $row['alias'], //
-						'module' => $post['module_name'], //
-						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+						'module' => $post['module_name'],
+						'id' => $row['id'],
+						'title' => $row['title'],
+						'alias' => $row['alias'],
+						'module' => $post['module_name'],
+						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""
 					);
 				}
 			}
@@ -533,11 +527,11 @@ if( $post['id'] != 0 )
 			while( $row = $db->sql_fetchrow( $result ) )
 			{
 				$arr_cat[$row['catid']] = array(
-					'module' => $post['module_name'], //
-					'key' => $row['catid'], //
-					'title' => $row['title'], //
-					'alias' => $row['alias'], //
-					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+					'module' => $post['module_name'],
+					'key' => $row['catid'],
+					'title' => $row['title'],
+					'alias' => $row['alias'],
+					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""
 				);
 			}
 		}
@@ -623,7 +617,7 @@ if( ! empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-if( $link_title != "" )
+if( $link_title != '' )
 {
 	$xtpl->assign( 'link_title', $link_title );
 	$xtpl->parse( 'main.title' );
@@ -635,9 +629,9 @@ $xtpl->assign( 'link_menu', $link_menu );
 for( $i = 0; $i <= 2; ++$i )
 {
 	$xtpl->assign( 'ACTIVE_TYPE', array(
-		'key' => $i, //
-		'title' => $lang_module['add_type_active_' . $i], //
-		'selected' => $post['active_type'] == $i ? ' selected="selected"' : '' //
+		'key' => $i,
+		'title' => $lang_module['add_type_active_' . $i],
+		'selected' => $post['active_type'] == $i ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.active_type' );
 }
@@ -647,8 +641,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['add_item'];
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

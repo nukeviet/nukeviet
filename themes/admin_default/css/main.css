@@ -1,0 +1,835 @@
+/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+ Base styles: opinionated defaults
+ ========================================================================== */
+
+html, button, input, select, textarea {
+	color: #222;
+}
+
+body {
+	font-size: 1em;
+	line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+::selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+	vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+	resize: vertical;
+}
+
+/* ==========================================================================
+ Chrome Frame prompt
+ ========================================================================== */
+.chromeframe {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	z-index: 9999;
+	background: #ffff00;
+	color: #000;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center;
+}
+
+/* ==========================================================================
+ NukeViet's custom styles
+ ========================================================================== */
+
+html {
+	background: #F0F0F0 url('../images/light_alu.png'); /* 1 */
+}
+
+body {
+	font: 12px/18px Arial, Tahoma, Verdana, sans-serif;
+}
+
+a {
+	color: #336699;
+	text-decoration: none
+}
+
+a:focus, a:hover {
+	color: #000
+}
+
+a.link {
+	font-weight: 700;
+	text-decoration: underline !important
+}
+
+a.link:hover {
+	text-decoration: none !important
+}
+
+.left {
+	text-align: left
+}
+
+.center {
+	text-align: center
+}
+
+.right {
+	text-align: right
+}
+
+.top {
+	vertical-align: top;
+}
+
+.w20 {
+	width: 20px
+}
+
+.w50 {
+	width: 50px
+}
+
+.w100 {
+	width: 100px
+}
+
+.w150 {
+	width: 150px
+}
+
+.w200 {
+	width: 200px
+}
+
+.w250 {
+	width: 250px
+}
+
+.w300 {
+	width: 300px
+}
+
+.w350 {
+	width: 350px
+}
+
+.w400 {
+	width: 400px
+}
+
+.w500 {
+	width: 500px
+}
+
+input.txt-full, select.txt-full, textarea.txt-full {
+	width: 98%
+}
+
+input.txt-half, select.txt-half, textarea.txt-half {
+	width: 49%
+}
+
+sup.required {
+	color: #F00
+}
+
+#wrapper {
+	min-width: 800px;
+	max-width: 1366px;
+	margin: 0 auto;
+}
+
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF;
+}
+
+.red {
+	color: red
+}
+
+/* Header
+ -----------------------------------------------------------------------------*/
+#header {
+	height: 52px;
+	background: #000;
+}
+
+#header div.lang {
+	display: inline;
+	text-align: center;
+	float: right;
+	padding: 12px 5px;
+	color: #FFFFFF
+}
+
+#header div.lang select {
+	border: 1px solid #5B5B5B;
+	padding: 2px;
+	background: #FFFFFF
+}
+
+#header div.logo {
+	display: inline;
+	padding: 0 0 0 10px;
+	width: 250px;
+	height: 50px;
+	top: 0;
+	left: 0
+}
+
+#header div.logout {
+	height: 27px;
+	float: right;
+	padding: 10px;
+	text-align: right
+}
+
+#header .bthome {
+	background: #262626;
+	border: 1px solid #2E2E2E;
+	line-height: 24px;
+	padding: 0px 10px;
+	display: inline-block;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 11px
+}
+
+#header .bthome:hover {
+	background: #454545;
+	color: #FFFFFF
+}
+
+#header .exit {
+	background: url('../images/exit.png') no-repeat center left;
+	display: inline-block;
+	height: 100%;
+	padding-left: 20px
+}
+
+/* Middle
+ -----------------------------------------------------------------------------*/
+#middle {
+	margin-left: 200px;
+	height: 1%;
+	position: relative;
+	background-color: #F2F2F2;
+}
+
+#middle:after {
+	content: '';
+	clear: both;
+	display: table;
+}
+
+#container {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+	margin-right: -100%;
+	background-color: #fff;
+}
+
+#contentmod {
+	border: 5px solid #F2F2F2;
+	padding: 0 5px
+}
+
+#top_message {
+	background: #d7d7d7 url('../images/top_message_bg.jpg') repeat-x left top;
+	height: 28px
+}
+
+#top_message div.clock {
+	float: left;
+}
+
+#top_message div.clock label {
+	display: inline-block;
+	font: bold 11px/27px Arial, Verdana, sans-serif;
+	line-height: 27px;
+	padding: 0 0 0 10px
+}
+
+#top_message div.clock label span {
+	display: inline-block;
+	font: bold 11px/27px Arial, Verdana, sans-serif;
+	line-height: 27px;
+	padding: 0 10px 0 0
+}
+
+#top_message div.clock_container {
+	float: right;
+	margin-right: 5px;
+	white-space: nowrap
+}
+
+#top_message div.info {
+	float: left;
+	font: normal 11px/27px Tahoma, Verdana, sans-serif;
+	line-height: 24px;
+	margin-left: 5px
+}
+
+#info_tab {
+	background-color: #F2F2F2;
+	font: bold 11px/22px Arial, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+}
+
+#info_tab span.small {
+	background: url(../images/small.png) no-repeat center;
+	width: 20px;
+	float: left;
+	cursor: pointer
+}
+
+#info_tab span.lage {
+	background: url(../images/lage.png) no-repeat center;
+	width: 20px;
+	float: left;
+	cursor: pointer
+}
+
+#info_tab .cell_left {
+	font-size: 14px;
+	color: #993300;
+	float: left;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#info_tab .cell_right {
+	float: right;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+/* left_menu
+ -----------------------------------------------------------------------------*/
+#left_menu {
+	float: left;
+	width: 200px;
+	position: relative;
+	left: -200px;
+}
+
+/* Footer
+ -----------------------------------------------------------------------------*/
+#footer {
+	height: 50px;
+	border-top: 3px solid #FF6600;
+}
+
+#footer div.copyright {
+	color: #4b4b4b;
+	font: normal 11px/15px Arial, Verdana, sans-serif;
+	margin: 7px 10px 7px 10px;
+	padding: 0;
+	float: left
+}
+
+#footer div.imgstat {
+	margin: 13px 10px 5px 0px;
+	padding: 0;
+	text-align: right;
+	width: 100px;
+	float: right
+}
+
+/* Table tab1
+ -----------------------------------------------------------------------------*/
+table.tab1 {
+	background: #FFF;
+	border: 1px solid #DADADA;
+	border-collapse: separate;
+	border-spacing: 1px;
+	caption-side: top;
+	empty-cells: show;
+	margin: 4px 0;
+	width: 100%
+}
+
+table.tab1 caption {
+	background: url('../images/arrows/arrow4_red.gif') no-repeat left center;
+	font: bold 13px/27px Tahoma, Verdana, sans-serif;
+	text-align: left;
+	text-indent: 12px
+}
+
+table.tab1 tbody tr:nth-child(odd) {
+	background-color: #fcfcfc
+}
+
+table.tab1 tbody tr:nth-child(even) {
+	background-color: #F7F7F7
+}
+
+table.tab1 tbody tr:hover {
+	background-color: #E5E5E5
+}
+
+table.tab1 tbody tr td.good {
+	background: url('../images/icons/good.png') no-repeat left center;
+}
+
+table.tab1 tbody tr td.bad {
+	background: url('../images/icons/bad.png') no-repeat left center;
+}
+
+table.tab1 td, table.tab1 th {
+	padding: 7px 5px;
+}
+
+table.tab1 td a, table.tab1 th a {
+	color: #333;
+	text-decoration: underline
+}
+
+table.tab1 tfoot {
+	background: #CCC;
+	font: bold 11px Tahoma, Verdana, sans-serif
+}
+
+table.tab1 th {
+	background: #CCC;
+	font-weight: normal;
+	text-align: left
+}
+
+table.tab1 thead {
+	background: #999999;
+	font: bold 11px/18px Tahoma, Verdana, sans-serif;
+	white-space: nowrap
+}
+
+table.tab2 td, table.tab2 tr, table.tab2 tbody {
+	margin: 2;
+	padding: 2
+}
+
+/* icon */
+.default_icon {
+	background: url('../images/icons/default.png') no-repeat left center;
+	padding-left: 15px
+}
+
+.add_icon {
+	background: url('../images/icons/add.png') no-repeat left center;
+	padding-left: 15px
+}
+
+.edit_icon {
+	background: url('../images/icons/edit.png') no-repeat left center;
+	padding-left: 15px
+}
+
+.delete_icon {
+	background: url('../images/icons/delete.png') no-repeat left center;
+	padding-left: 15px
+}
+
+.search_icon {
+	background: url('../images/icons/search.png') no-repeat left center;
+	padding-left: 15px
+}
+
+/* blockquote */
+div.quote {
+	background: #F0F0F0;
+	border-bottom: 1px solid #E6E6E6;
+	border-top: 1px solid #E6E6E6;
+	margin: 10px 0px 10px 0px;
+	padding: 4px 10px 4px 10px;
+	position: relative
+}
+
+div.quote blockquote {
+	background: #F0F0F0 url('../images/top-quote.gif') no-repeat left top;
+	color: #333;
+	font: 12px Arial, Helvetica, sans-serif;
+	margin: 2px;
+	padding: 3px;
+	text-indent: 23px
+}
+
+div.quote blockquote span {
+	background: transparent url('../images/bottom-quote.gif') no-repeat bottom right;
+	display: inline-block;
+	width: 97%
+}
+
+a.button1 {
+	background: url('../images/button_bg.gif') no-repeat right top;
+	color: #333;
+	cursor: pointer;
+	display: block;
+	float: left;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	margin-left: 2px;
+	padding-right: 10px;
+	text-decoration: none;
+	text-align: center
+}
+
+a.button1 span {
+	background: url('../images/button_bg.gif') no-repeat left -20px;
+	cursor: pointer;
+	display: block;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 10px;
+	text-decoration: none;
+	float: left
+}
+
+a.button1 span span {
+	background: url('../images/button_bg.gif') repeat-x left -40px;
+	cursor: pointer;
+	display: block;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 0px;
+	text-decoration: none;
+	float: left
+}
+
+a.button1:hover {
+	background: url('../images/button_bg.gif') no-repeat right -60px;
+	color: #000;
+	cursor: pointer
+}
+
+a.button1:hover span {
+	background: url('../images/button_bg.gif') no-repeat left -80px;
+	color: #000;
+	cursor: pointer
+}
+
+a.button1:hover span span {
+	background: url('../images/button_bg.gif') repeat-x left -100px;
+	color: #000;
+	cursor: pointer
+}
+
+a.button2 {
+	background: url('../images/button_bg.gif') no-repeat right -120px;
+	color: #333;
+	cursor: pointer;
+	display: block;
+	float: left;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	margin-left: 2px;
+	outline: none;
+	padding-right: 10px;
+	text-decoration: none;
+	text-align: center
+}
+
+a.button2 span {
+	background: url('../images/button_bg.gif') no-repeat left -140px;
+	cursor: pointer;
+	display: block;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 10px;
+	text-decoration: none;
+	float: left
+}
+
+a.button2 span span {
+	background: url('../images/button_bg.gif') repeat-x left -160px;
+	cursor: pointer;
+	display: block;
+	font: normal 11px/20px Tahoma, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 0px;
+	text-decoration: none;
+	float: left
+}
+
+a.button2:hover {
+	background: url('../images/button_bg.gif') no-repeat right top;
+	color: #000;
+	cursor: pointer
+}
+
+a.button2:hover span {
+	background: url('../images/button_bg.gif') no-repeat left -20px;
+	color: #000;
+	cursor: pointer
+}
+
+a.button2:hover span span {
+	background: url('../images/button_bg.gif') repeat-x left -40px;
+	color: #000;
+	cursor: pointer
+}
+
+.generate_page {
+	font-size: 10px;
+	font-weight: 700;
+	margin: 10px;
+	text-align: center
+}
+
+.generate_page strong {
+	background-color: #fbfbfb;
+	border: 1px solid #666;
+	color: #000;
+	padding: 4px 6px
+}
+
+.generate_page a {
+	background-color: #ebebeb;
+	border: 1px solid #c8c8c8;
+	color: #000;
+	padding: 4px 6px;
+	text-decoration: none
+}
+
+.generate_page a:hover {
+	background-color: #e0e0e0;
+	color: red
+}
+
+/* Other
+ -----------------------------------------------------------------------------*/
+
+.ui-datepicker-trigger {
+	margin-left: 5px
+}
+
+/* ==========================================================================
+ Helper classes
+ ========================================================================== */
+
+/*
+ * Image replacement
+ */
+
+.ir {
+	background-color: transparent;
+	border: 0;
+	overflow: hidden;
+	/* IE 6/7 fallback */
+	*text-indent: -9999px;
+}
+
+.ir:before {
+	content: "";
+	display: block;
+	width: 0;
+	height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+	display: none !important;
+	visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+	visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before, .clearfix:after {
+	content: " "; /* 1 */
+	display: table; /* 2 */
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+	*zoom: 1;
+}
+
+/* ==========================================================================
+ Print styles.
+ Inlined to avoid required HTTP connection: h5bp.com/r
+ ========================================================================== */
+
+@media print {
+	* {
+		background: transparent !important;
+		color: #000 !important; /* Black prints faster: h5bp.com/s */
+		box-shadow: none !important;
+		text-shadow: none !important;
+	}
+
+	a, a:visited {
+		text-decoration: underline;
+	}
+
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+
+	/*
+	 * Don't show links for images, or javascript/internal links
+	 */
+
+	.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+		content: "";
+	}
+
+	pre, blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
+
+	thead {
+		display: table-header-group; /* h5bp.com/t */
+	}
+
+	tr, img {
+		page-break-inside: avoid;
+	}
+
+	img {
+		max-width: 100% !important;
+	}
+
+	@page {
+		margin: 0.5cm;
+	}
+
+	p, h2, h3 {
+		orphans: 3;
+		widows: 3;
+	}
+
+	h2, h3 {
+		page-break-after: avoid;
+	}
+}

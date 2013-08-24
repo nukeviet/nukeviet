@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_auto_sendmail_error_log()
- * 
+ *
  * @return
  */
 function cron_auto_sendmail_error_log()

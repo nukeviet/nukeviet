@@ -12,9 +12,9 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $difftimeout = 360;
 $id = $nv_Request->get_int( 'id', 'post', 0 );
-$content = filter_text_input( 'content', 'post', '', 1 );
-$code = filter_text_input( 'code', 'post', '' );
-$checkss = filter_text_input( 'checkss', 'post' );
+$content = $nv_Request->get_title( 'content', 'post', '', 1 );
+$code = $nv_Request->get_title( 'code', 'post', '' );
+$checkss = $nv_Request->get_title( 'checkss', 'post' );
 $status = $module_config[$module_name]['auto_postcomm'];
 if( defined( 'NV_IS_USER' ) )
 {
@@ -32,13 +32,13 @@ elseif( defined( 'NV_IS_ADMIN' ) )
 else
 {
 	$userid = 0;
-	$name = filter_text_input( 'name', 'post', '', 1 );
-	$email = filter_text_input( 'email', 'post', '' );
+	$name = $nv_Request->get_title( 'name', 'post', '', 1 );
+	$email = $nv_Request->get_title( 'email', 'post', '' );
 }
 
-$contents = "";
+$contents = '';
 
-if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != "" and nv_check_valid_email( $email ) == "" and $code != "" and $content != "" )
+if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != '' and nv_check_valid_email( $email ) == '' and $code != "" and $content != "" )
 {
 	$timeout = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'cookie', 0 );
 	if( ! nv_capcha_txt( $code ) )
@@ -96,8 +96,8 @@ else
 	$contents = "ERR_" . $lang_module['comment_unsuccess'];
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -130,6 +130,7 @@ $lang_module['content_bodytext'] = 'Body text';
 $lang_module['search_author'] = 'Yazar';
 $lang_module['content_keywords'] = 'Anahtar kelimeler';
 $lang_module['save_temp'] = 'Gönder';
+$lang_module['save_draft'] = 'Taslak kaydet';
 $lang_module['save_content'] = 'Yayınlandı';
 $lang_module['captcha'] = 'Güvenlik';
 $lang_module['error_cat'] = 'Error: Select Category for article, please.';

@@ -52,8 +52,8 @@ if( ! defined( 'NV_CLIENT_TIMEZONE_NAME' ) and isset( $_COOKIE[$global_config['c
 	}
 	else
 	{
-		$sd = floor( $matches2[2] >= 0 ? $matches2[2] / 60 : -$matches2[2] / 60 );
-	
+		$sd = floor( $matches2[2] >= 0 ? $matches2[2] / 60 : - $matches2[2] / 60 );
+
 		define( 'NV_CLIENT_TIMEZONE_NAME', ( $matches2[2] >= 0 ? "+" : "-" ) . str_pad( $sd, 2, '0', STR_PAD_LEFT ) . ":00" );
 		define( 'NV_CLIENT_TIMEZONE_OFFSET', floor( $matches2[3] / 60 ) * 3600 );
 	}
@@ -71,8 +71,7 @@ $site_timezone = ( $global_config['site_timezone'] == "byCountry" ) ? $countries
 
 if( $site_timezone == '' )
 {
-	$site_timezone = defined( 'NV_CLIENT_TIMEZONE_NAME' ) ? NV_CLIENT_TIMEZONE_NAME : $global_config['statistics_timezone'];
-
+	$site_timezone = defined( 'NV_CLIENT_TIMEZONE_NAME' ) ? NV_CLIENT_TIMEZONE_NAME : ( ( isset( $global_config['statistics_timezone'] ) ? $global_config['statistics_timezone'] : '' ) );
 	if( $site_timezone == '' )
 	{
 		$site_timezone = 'Asia/Saigon';

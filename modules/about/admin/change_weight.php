@@ -28,7 +28,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 {
 	++$weight;
 	if( $weight == $new_weight ) ++$weight;
-	
+
 	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
 	$db->sql_query( $sql );
 }
@@ -38,8 +38,8 @@ $db->sql_query( $sql );
 
 nv_del_moduleCache( $module_name );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo 'OK_' . $id;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -27,11 +27,16 @@ $lang_module['move'] = 'Taşı';
 $lang_module['save_temp'] = 'Taslak';
 $lang_module['publtime'] = 'Yayınla';
 $lang_module['exptime'] = 'Make expired';
+$lang_module['status_action_0'] = 'Onay için bekleyebilir geçiş';
+$lang_module['declined'] = 'Mesajları Reddet';
+$lang_module['re_published'] = 'Yeniden yayımlandı';
 $lang_module['status'] = 'Durum';
 $lang_module['status_0'] = 'Bekleyin';
 $lang_module['status_1'] = 'Yayınlandı';
 $lang_module['status_2'] = 'Still waitting';
 $lang_module['status_3'] = 'Süresi doldu';
+$lang_module['status_4'] = 'Taslak';
+$lang_module['status_5'] = 'Reddetmek';
 $lang_module['errorsave'] = 'Hata:Güncelleme başarısız, Yazınızın başlığını kontrol ediniz';
 $lang_module['saveok'] = 'Güncelleştirme başarılı';
 $lang_module['clickgotomodule'] = 'Yönetim mesaj için buraya tıklayın.';

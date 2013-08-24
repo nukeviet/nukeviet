@@ -8,8 +8,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -17,9 +16,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['level1'] = 'Tối cao';
-$lang_module['level2'] = 'Điều hành chung';
-$lang_module['level3'] = 'Quản lý module';
 $lang_module['is_suspend0'] = 'Hoạt động';
 $lang_module['is_suspend1'] = 'Bị đình chỉ vào &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; với lý do &ldquo;%3$s&rdquo;';
 $lang_module['is_suspend2'] = 'Bị đình chỉ';
@@ -149,4 +145,9 @@ $lang_module['action_account'] = 'Tài khoản thành viên';
 $lang_module['action_account_nochange'] = 'Dữ nguyên tài khoản thành viên';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
 $lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
+$lang_module['module_admin'] = 'Quyền hạn module hệ thống';
+$lang_module['number'] = 'STT';
+$lang_module['module'] = 'Tên module';
+$lang_module['custom_title'] = 'Tiêu đề';
+
 ?>

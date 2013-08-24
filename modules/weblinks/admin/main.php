@@ -29,22 +29,19 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` ORDER BY `id` DESC LIMIT $page,$per_page";
 $result = $db->sql_query( $sql );
 
-$a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 		"id" => $row['id'],
 		"title" => $row['title'],
 		"url" => $row['url'],
 		"hits_total" => $row['hits_total'],
 		"status" => $row['status'] == 1 ? $lang_module['weblink_yes'] : $lang_module['weblink_no'],
 		"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'],
-		"url_delete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_link&amp;id=" . $row['id'],
+		"url_delete" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_link&amp;id=" . $row['id']
 	) );
-	
+
 	$xtpl->parse( 'main.loop' );
-	++ $a;
 }
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
@@ -57,8 +54,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

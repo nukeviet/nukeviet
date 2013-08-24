@@ -24,7 +24,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats" );
 	$xtpl->parse( 'main.management' );
 
-	$sql = "SELECT `id`,`title` FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE act='1' AND clid=" . $banner_client_info['id'] . " ORDER BY `id` ASC";
+	$sql = "SELECT `id`,`title` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE act='1' AND clid=" . $banner_client_info['id'] . " ORDER BY `id` ASC";
 	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -32,13 +32,13 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		$xtpl->assign( 'ads', $row );
 		$xtpl->parse( 'main.ads' );
 	}
-	
+
 	for( $i = 1; $i <= 12; ++$i )
 	{
 		$xtpl->assign( 'month', $i );
 		$xtpl->parse( 'main.month' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents .= $xtpl->text( 'main' );
 }
@@ -47,8 +47,8 @@ else
 	$contents = '';
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -121,9 +121,6 @@ $lang_module['is_user_forum'] = 'Forum Kullanıcılarını kullan';
 $lang_module['search_page_title'] = 'Sonuç';
 $lang_module['click_to_view'] = 'Click to view';
 $lang_module['level0'] = 'Kullanıcı';
-$lang_module['level1'] = 'Süper Yönetici';
-$lang_module['level2'] = 'Genel Yönetici';
-$lang_module['level3'] = 'Alan Yönetimi';
 $lang_module['admin_add'] = 'Set to admin';
 $lang_module['nv_admin_add'] = 'Grup ekle';
 $lang_module['nv_admin_edit'] = 'Grup düzenle';
@@ -141,7 +138,7 @@ $lang_module['users_in_group_caption'] = 'Gruplarda kullanıcı listesi &ldquo;%
 $lang_module['error_group_not_found'] = 'Hata: grup bulamıyor';
 $lang_module['error_users_not_found'] = 'Grup kullanıcısı yok';
 $lang_module['error_not_groups'] = 'Şu anda kullanıcı grubunuz yok grup oluşturmak için <a href="%s">Burayı</a> tıklayınız';
-$lang_module['add_users'] = 'Kullanıcı  &ldquo;%s&rdquo;';
+$lang_module['add_users'] = 'Kullanıcı &ldquo;%s&rdquo;';
 $lang_module['form_search_label0'] = 'Kullanıcılarda arama';
 $lang_module['form_search_label1'] = 'Anahtar kelime (Boş = tüm kullanıcı)';
 $lang_module['form_search_select0'] = 'İsim';

@@ -13,7 +13,7 @@ $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 
 if( empty( $bid ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_ROWS_GLOBALTABLE . "` WHERE `id`=" . $bid;
+$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $bid;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
@@ -32,7 +32,7 @@ $data_month = $current_month;
 if( preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 {
 	$post_month = $nv_Request->get_int( 'month', 'get' );
-	
+
 	if( $post_month < $current_month )
 	{
 		if( $current_year != $publ_year )
@@ -46,18 +46,16 @@ if( preg_match( "/^[0-9]{1,2}$/", $nv_Request->get_int( 'month', 'get' ) ) )
 	}
 }
 
-$table = NV_BANNERS_CLICK_GLOBALTABLE;
-
 $time = mktime( 0, 0, 0, $data_month, 15, $current_year );
 $day_max = ( $data_month == $current_month ) ? $current_day : date( "t", $time );
 $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $publ_day : 1;
 
-$sql = "SELECT COUNT(*) FROM `" . $table . "` WHERE `bid`=" . $bid . "";
+$sql = "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid`=" . $bid . "";
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=show_list_stat&amp;bid=" . $bid . "&amp;month=" . $data_month;
 $caption = sprintf( $lang_module['show_list_stat1'], nv_monthname( $data_month ), $current_year );
 
-$data_ext = $data_val = "";
+$data_ext = $data_val = '';
 
 if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'country', 'browse', 'os' ) ) )
 {
@@ -123,12 +121,12 @@ $sql = preg_replace( "/COUNT\(\*\)/", "*", $sql );
 $result = $db->sql_query( $sql );
 
 $contents = array();
-$replacement = "";
+$replacement = '';
 
 $a = 0;
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$contents['rows'][$a][] = nv_date( "d-m-Y H:i", $row['click_time'] );
+	$contents['rows'][$a][] = nv_date( "d/m/Y H:i", $row['click_time'] );
 	$contents['rows'][$a][] = $row['click_ip'];
 	$contents['rows'][$a][] = isset( $countries[$row['click_country']] ) ? $countries[$row['click_country']][1] : $row['click_country'];
 	$contents['rows'][$a][] = $row['click_browse_name'];
@@ -152,8 +150,8 @@ $contents['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, 
 
 $contents = call_user_func( "nv_show_list_stat_theme", $contents );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo $contents;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

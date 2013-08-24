@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 /**
  * cron_auto_del_error_log()
- * 
+ *
  * @return
  */
 function cron_auto_del_error_log()
@@ -104,7 +104,7 @@ function cron_auto_del_error_log()
 		}
 		closedir( $dh );
 	}
-	
+
 	clearstatcache();
 	return $result;
 }

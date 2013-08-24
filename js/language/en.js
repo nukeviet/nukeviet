@@ -9,14 +9,13 @@ var nv_aryDayName = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thurs
 var nv_aryDayNS = nv_aryDayNS = new Array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
 var nv_aryMonth = nv_aryMonth = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 var nv_aryMS = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-var nv_admlogout_confirm = new Array('Are you sure to logout from administrator account?','The entire login information has been deleted. You have been logout Administrator account successfully');
-var nv_is_del_confirm = new Array('Are you sure to delete? If you accept,all data will be deleted. You could not restore them','Delete succesfully','Delete data faile for some unknown reason');
-var nv_is_change_act_confirm = new Array('Are you sure to \'change\'?','Be \'Change\' successfully',' \'Change\' fail');
-var nv_is_empty_confirm = new Array('Are you sure to  be \'empty\'?','Be \'empty\' succesful','Be \'empty\' fail for some unknown reason');
-var nv_is_recreate_confirm = new Array('Are you sure to \'repair\'?','Be \'Repair\' succesfully','\'Repair\' fail for some unknown reason');
-var nv_is_add_user_confirm = new Array('Are you sure to add new member into group?','\'Add\' new member into group successfully',' \'Add \' fail for some unknown reason');
-var nv_is_exclude_user_confirm = new Array('Are you sure to exclude this member?','\'Exclude\' member successfully',' \'Exclude\  member fail for some unknown reason');
-
+var nv_admlogout_confirm = new Array('Are you sure to logout from administrator account?', 'The entire login information has been deleted. You have been logout Administrator account successfully');
+var nv_is_del_confirm = new Array('Are you sure to delete? If you accept,all data will be deleted. You could not restore them', 'Delete succesfully', 'Delete data faile for some unknown reason');
+var nv_is_change_act_confirm = new Array('Are you sure to \'change\'?', 'Be \'Change\' successfully', ' \'Change\' fail');
+var nv_is_empty_confirm = new Array('Are you sure to  be \'empty\'?', 'Be \'empty\' succesful', 'Be \'empty\' fail for some unknown reason');
+var nv_is_recreate_confirm = new Array('Are you sure to \'repair\'?', 'Be \'Repair\' succesfully', '\'Repair\' fail for some unknown reason');
+var nv_is_add_user_confirm = new Array('Are you sure to add new member into group?', '\'Add\' new member into group successfully', ' \'Add \' fail for some unknown reason');
+var nv_is_exclude_user_confirm = new Array('Are you sure to exclude this member?', '\'Exclude\' member successfully', ' \'Exclude\  member fail for some unknown reason');
 
 var nv_formatString = "dd.mm.yyyy";
 var nv_gotoString = "Go To Current Month";
@@ -28,7 +27,6 @@ var nv_scrollRightMessage = "Click to scroll to next month. Hold mouse button to
 var nv_selectMonthMessage = "Click to select a month.";
 var nv_selectYearMessage = "Click to select a year.";
 var nv_selectDateMessage = "Select [date] as date.";
-
 
 var nv_loadingText = "Loading...";
 var nv_loadingTitle = "Click to cancel";
@@ -63,4 +61,4 @@ NVJL.error404 = "Not Found. The URI requested is invalid or the resource request
 NVJL.error406 = "Not Acceptable. Client browser does not accept the MIME type of the requested page.";
 NVJL.error500 = "Internal server error. You see this error message for a wide variety of server-side errors.";
 NVJL.error502 = "Bad Gateway. Web server received an invalid response while acting as a gateway or proxy. You receive this error message when you try to run a CGI script that does not return a valid set of HTTP headers.";
-NVJL.error503 = "Service Unavailable.";
+NVJL.error503 = "Service Unavailable."; 

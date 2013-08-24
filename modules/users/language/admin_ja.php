@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language 日本語
+ * @Createdate Apr 15, 2011, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -121,9 +121,6 @@ $lang_module['is_user_forum'] = 'フォーラムの会員を利用します。';
 $lang_module['search_page_title'] = '検索結果';
 $lang_module['click_to_view'] = 'クリックで表示';
 $lang_module['level0'] = 'ユーザー';
-$lang_module['level1'] = '特権管理者';
-$lang_module['level2'] = '一般管理者';
-$lang_module['level3'] = '部分管理';
 $lang_module['admin_add'] = '管理者を追加';
 $lang_module['nv_admin_add'] = 'グループを追加';
 $lang_module['nv_admin_edit'] = 'グループを編集';
@@ -170,10 +167,8 @@ $lang_module['enter_key'] = 'メンバーを見つけるために、情報を入
 $lang_module['username'] = 'ユーザー名';
 $lang_module['full_name'] = 'フルネーム';
 $lang_module['regdate'] = '登録日';
-$lang_module['yim'] = 'ヤフーアカウント';
 $lang_module['last_login'] = '最後登録';
 $lang_module['last_idlogin'] = '最後登録のIP';
-$lang_module['web'] = 'ウェブサイト';
 $lang_module['select_gender'] = '性別を選んでください。';
 $lang_module['select_gender_male'] = '男';
 $lang_module['select_gender_female'] = '女';

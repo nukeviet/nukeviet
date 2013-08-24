@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Türkçe
+ * @Createdate Oct 25, 2012, 03:11:41 PM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -103,12 +103,7 @@ $lang_module['pass_old'] = 'Eski şifre';
 $lang_module['pass_new'] = 'Yeni şifre';
 $lang_module['pass_new_re'] = 'Tekrar yeni şifreniz';
 $lang_module['change_pass_ok'] = 'Şifre değiştirildi';
-$lang_module['lostpass_subject_email'] = 'Guide to restore passwords';
-$lang_module['lostpass_active_info'] = 'Hello% 1 $ s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL:%3$s<br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />Email: %5$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administration site';
 $lang_module['lostpass_content_mess'] = 'An email sent to %1$s, <br /><br /> please follow istruction to activate';
-$lang_module['lostpass_send_subject_ok'] = 'Şifreniz Değiştirildi';
-$lang_module['lostpass_send_account_ok'] = 'Hello %1$s,<br /><br />Your password on the website %2$s has been changed. We send you new information to access the profiles of your account:<br /><br />URL: %3$s<br />Login: %4$s<br />Password: %5$s<br /><br />This is an automatic message sent to your email. If you do not understand what was written above, just delete this message.<br /><br />Administrator';
-$lang_module['lostpass_send_pass'] = 'Şifreniz değiştirildi ve email adresinize gönderildi';
 $lang_module['lostpass_active_error_link'] = 'error link lostpass';
 $lang_module['changepass_title'] = 'Şifreni Değiştir';
 $lang_module['logout_title'] = 'Çıkış';
@@ -124,7 +119,7 @@ $lang_module['admin_login'] = 'Yönetici hesabı ile giriş';
 $lang_module['openid_login'] = 'OpenID giriş';
 $lang_module['openid_login2'] = 'Diğer OpenID ile Giriş';
 $lang_module['openid_note1'] = 'To logging in by this OpenID, you must link it with your exists account. Please declare your login information (require only one time)';
-$lang_module['openid_note2'] = 'It\'s the first time you login with this OpenID. To login, you can choose one of  those plans';
+$lang_module['openid_note2'] = 'It\'s the first time you login with this OpenID. To login, you can choose one of those plans';
 $lang_module['openid_note3'] = 'Register a new account and link this OpenID';
 $lang_module['openid_note4'] = 'Login with account create automatic by system';
 $lang_module['openid_note5'] = 'Login with your exists account';
@@ -170,7 +165,7 @@ $lang_module['changequestion_step1'] = 'Gizli sorunuzu değiştirmek için, şif
 $lang_module['changequestion_step2'] = 'Gizli sorusu seç yada kendin oluştur';
 $lang_module['changequestion_submit1'] = 'Onaylayın';
 $lang_module['changequestion_submit2'] = 'Değiştirin';
-$lang_module['editinfo_error'] = 'except %s because it  not valid';
+$lang_module['editinfo_error'] = 'except %s because it not valid';
 $lang_module['editinfo_ok'] = 'Updated';
 $lang_module['question2'] = 'Gizli Sorunu Değiştir';
 $lang_module['current_mode'] = 'Geçerli giriş';

@@ -36,13 +36,11 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 
 	$sql = "SELECT `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` LIMIT $page,$per_page";
 	$result = $db->sql_query( $sql );
-	
-	$i = 0;
+
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$xtpl->assign( 'CLASS', $i ++ % 2 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'URL', $row['url'] );
-		
+
 		if( $check->check_curl( $row['url'] ) )
 		{
 			$xtpl->parse( 'main.check.loop.ok' );
@@ -51,17 +49,17 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 		{
 			$xtpl->parse( 'main.check.loop.error' );
 		}
-		
+
 		$xtpl->parse( 'main.check.loop' );
 	}
-	
+
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 	if( ! empty( $generate_page ) )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.check.generate_page' );
 	}
-	
+
 	$xtpl->parse( 'main.check' );
 }
 else
@@ -73,8 +71,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

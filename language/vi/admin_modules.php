@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 03:22:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @Createdate Mar 04, 2010, 03:22:00 PM
+ */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -43,6 +43,7 @@ $lang_module['keywords'] = 'Từ khóa tìm kiếm';
 $lang_module['keywords_info'] = 'Phân cách bởi dấu phẩy';
 $lang_module['funcs_list'] = 'Danh sách các function thuộc module &ldquo;%s&rdquo;';
 $lang_module['funcs_title'] = 'Function';
+$lang_module['funcs_alias'] = 'Alias';
 $lang_module['funcs_custom_title'] = 'Tên gọi';
 $lang_module['funcs_layout'] = 'Sử dụng layout';
 $lang_module['funcs_in_submenu'] = 'Menu';
@@ -56,6 +57,7 @@ $lang_module['vmodule_file'] = 'Module gốc';
 $lang_module['vmodule_note'] = 'Ghi chú';
 $lang_module['vmodule_select'] = 'Chọn module';
 $lang_module['vmodule_blockquote'] = 'Ghi chú: Tên module mới chỉ gồm các chữ cái, số và dấu gạch ngang.';
+$lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ thống.';
 $lang_module['autoinstall'] = 'Cài đặt và đóng gói tự động';
 $lang_module['autoinstall_method'] = 'Lựa chọn tiến trình';
 $lang_module['autoinstall_method_none'] = 'Hãy lựa chọn: ';
@@ -96,6 +98,7 @@ $lang_module['autoinstall_package_processing'] = ' xin chờ quá trình thực 
 $lang_module['delete_module_info1'] = 'Module này hiện đang tồn tại trên ngôn ngữ <strong>%s</strong>, hãy xóa module trên các ngôn ngữ đó để có thể xóa module gốc';
 $lang_module['delete_module_info2'] = 'Có %d module ảo được tạo ra từ module này, hãy xóa chúng trước khi xóa module gốc';
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
+$lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
 $lang_module['description'] = 'Mô tả';
 
 ?>

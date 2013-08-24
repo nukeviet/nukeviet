@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
  * _substr()
- * 
+ *
  * @param mixed $str
  * @param mixed $length
  * @param integer $minword

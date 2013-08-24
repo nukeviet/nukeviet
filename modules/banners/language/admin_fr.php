@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -60,7 +60,7 @@ $lang_module['banners_list'] = 'Bannière';
 $lang_module['title'] = 'Titre';
 $lang_module['title_empty'] = 'Manque de titre';
 $lang_module['size_incorrect'] = 'Tailles minimales sont de 50x50px';
-$lang_module['add_plan_info'] = 'Remplissez les informations aux champs ci-dessous  pour créer un nouveau block';
+$lang_module['add_plan_info'] = 'Remplissez les informations aux champs ci-dessous pour créer un nouveau block';
 $lang_module['edit_plan_info'] = 'Les champs avec * sont obligatoirement déclarés';
 $lang_module['width'] = 'Largeur';
 $lang_module['height'] = 'Hauteur';
@@ -103,7 +103,7 @@ $lang_module['hits_total'] = 'Total clics';
 $lang_module['please_select_month'] = 'Consulter les statistiques détaillés';
 $lang_module['info_stat_caption'] = 'Statistiques détaillés';
 $lang_module['select'] = 'Cliquez pour voir';
-$lang_module['info_stat_byday_caption'] = 'Totaux clics Par date de  %1$s l\'année %2$s';
+$lang_module['info_stat_byday_caption'] = 'Totaux clics Par date de %1$s l\'année %2$s';
 $lang_module['info_stat_bycountry_caption'] = 'Totaux clics Par Location de %1$s l\'année %2$s';
 $lang_module['info_stat_bybrowse_caption'] = 'Totaux clics Par Navigateur de %1$s l\'année %2$s';
 $lang_module['info_stat_byos_caption'] = 'Totaux clics Par Système d\'exploitation %1$s l\'année %2$s';
@@ -130,5 +130,11 @@ $lang_module['file_del_confirm'] = 'Êtes-vous sûr de vouloir supprimer?';
 $lang_module['delfile_success'] = 'Suppression réussie!';
 $lang_module['delfile_error'] = 'Suppression échouée';
 $lang_module['weight'] = 'Position';
+
+$lang_module['target'] = 'Cible (Target)';
+$lang_module['target_blank'] = 'Nouvelle fenêtre (_blank)';
+$lang_module['target_top'] = 'Fenêtre supérieure (_top)';
+$lang_module['target_self'] = 'Même fenêtre (_self)';
+$lang_module['target_parent'] = 'Fenêtre parent (_parent)';
 
 ?>

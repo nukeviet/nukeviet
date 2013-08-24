@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
-*/
+ * @Project NUKEVIET 3.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Language česky
+ * @Createdate Aug 01, 2010, 02:40:00 PM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -27,11 +27,16 @@ $lang_module['move'] = 'Přesunout';
 $lang_module['save_temp'] = 'Uložit články bez publikovat';
 $lang_module['publtime'] = 'Publikovat';
 $lang_module['exptime'] = 'Pro vypršela příspěvky';
+$lang_module['status_action_0'] = 'Přepnout čekat na schválení';
+$lang_module['declined'] = 'odmítnout příspěvky';
+$lang_module['re_published'] = 'znovu zveřejněna';
 $lang_module['status'] = 'Postavení';
 $lang_module['status_0'] = 'Počkat';
 $lang_module['status_1'] = 'Publikováno';
 $lang_module['status_2'] = 'Plánované publikovat';
 $lang_module['status_3'] = 'Uplynula';
+$lang_module['status_4'] = 'návrh';
+$lang_module['status_5'] = 'odmítnout';
 $lang_module['errorsave'] = 'Chyba: Aktualizovat chyb obsah , zkontrolovat svůj článek tituly mohou být shodné';
 $lang_module['saveok'] = 'aktualizovat úspěšně';
 $lang_module['clickgotomodule'] = 'Klikněte zde pro zpět na správce článků.';

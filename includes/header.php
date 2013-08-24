@@ -12,7 +12,7 @@ if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_M
 global $global_config, $sys_info, $client_info, $lang_global, $nv_Request;
 
 //Nen trang
-if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'output_handler' ) == "" )
+if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'output_handler' ) == '' )
 {
 	if( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
 	{
@@ -47,6 +47,11 @@ else
 if( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
 {
 	@Header( "X-Robots-Tag: index,archive,follow,noodp", true );
+}
+
+if( strpos( NV_USER_AGENT, 'MSIE' ) !== false )
+{
+	@header( 'X-UA-Compatible: IE=edge,chrome=1' );
 }
 
 ob_start();

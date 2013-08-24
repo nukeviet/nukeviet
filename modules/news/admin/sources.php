@@ -11,29 +11,29 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['sources'];
 
-list( $sourceid, $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
+list( $sourceid, $title, $link, $logo, $error ) = array( 0, '', 'http://', '', '' );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
 if( ! empty( $savecat ) )
 {
 	$sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
-	$title = filter_text_input( 'title', 'post', '', 1 );
-	$link = strtolower( filter_text_input( 'link', 'post', '' ) );
+	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
+	$link = strtolower( $nv_Request->get_title( 'link', 'post', '' ) );
 
 	$url_info = @parse_url( $link );
 	if( isset( $url_info['scheme'] ) and isset( $url_info['host'] ) )
 	{
-		$link = $url_info['scheme'] . "://" . $url_info['host'];
+		$link = $url_info['scheme'] . '://' . $url_info['host'];
 	}
 	else
 	{
-		$link = "";
+		$link = '';
 	}
 
 	list( $logo_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT logo FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` =" . $sourceid . "" ) );
 
-	$logo = filter_text_input( 'logo', 'post', '' );
+	$logo = $nv_Request->get_title( 'logo', 'post', '' );
 	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" );
@@ -55,7 +55,7 @@ if( ! empty( $savecat ) )
 	{
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources`" ) );
 		$weight = intval( $weight ) + 1;
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP( ), UNIX_TIMESTAMP( ))";
+		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_sources` (`sourceid`, `title`, `link`, `logo`, `weight`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
@@ -70,7 +70,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `sourceid` =" . $sourceid;
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $sourceid;
 		$db->sql_query( $sql );
 		if( $db->sql_affectedrows() > 0 )
 		{
@@ -129,8 +129,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

@@ -9,10 +9,6 @@
 
 if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['refererbymonth'];
-$key_words = $module_info['keywords'];
-$mod_title = $lang_module['refererbymonth'];
-
 $host = $nv_Request->get_string( 'host', 'get', '' );
 
 if( ! isset( $host ) or ! preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $host ) )
@@ -33,12 +29,15 @@ if( empty( $numrows ) )
 
 list( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 ) = $db->sql_fetchrow( $result );
 
-$contents = "";
-
+$contents = '';
 $current_month_num = date( 'n', NV_CURRENTTIME );
 
+$page_title = sprintf( $lang_module['refererbymonth2'], $host, date( 'Y', NV_CURRENTTIME ) );
+$key_words = $module_info['keywords'];
+$mod_title = $lang_module['refererbymonth'];
+
 $cts = array();
-$cts['caption'] = sprintf( $lang_module['refererbymonth2'], $host, date( 'Y', NV_CURRENTTIME ) );
+$cts['caption'] = $page_title;
 $cts['rows'] = array();
 $cts['rows']['Jan'] = array( 'fullname' => $lang_global['january'], 'count' => $month01 );
 $cts['rows']['Feb'] = array( 'fullname' => $lang_global['february'], 'count' => $month02 );
@@ -72,13 +71,13 @@ if( $total )
 {
 	$cts['current_month'] = date( 'M', NV_CURRENTTIME );
 	$cts['max'] = max( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 );
-	$cts['total'] = array( $lang_global['total'], $total );
+	$cts['total'] = array( $lang_global['total'], number_format( $total ) );
 }
 
 $contents = call_user_func( "referer" );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>
