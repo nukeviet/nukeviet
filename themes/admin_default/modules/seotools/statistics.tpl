@@ -28,8 +28,17 @@
 				<td>
 				<select name="googleAnalyticsSetDomainName">
 					<!-- BEGIN: googleAnalyticsSetDomainName -->
-					<option value="{GOOGLEANALYTICSSETDOMAINNAME_VALUE}"{GOOGLEANALYTICSSETDOMAINNAME_SELECTED}>{GOOGLEANALYTICSSETDOMAINNAME_TITLE}</option>
+					<option value="{GOOGLEANALYTICSSETDOMAINNAME_VALUE}" {GOOGLEANALYTICSSETDOMAINNAME_SELECTED}>{GOOGLEANALYTICSSETDOMAINNAME_TITLE}</option>
 					<!-- END: googleAnalyticsSetDomainName -->
+				</select></td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.googleAnalyticsMethod}</strong></td>
+				<td>
+				<select name="googleAnalyticsMethod">
+					<!-- BEGIN: googleAnalyticsMethod -->
+					<option value="{GOOGLEANALYTICSMETHOD_VALUE}" {GOOGLEANALYTICSMETHOD_SELECTED}>{GOOGLEANALYTICSMETHOD_TITLE}</option>
+					<!-- END: googleAnalyticsMethod -->
 				</select></td>
 			</tr>
 		</tbody>

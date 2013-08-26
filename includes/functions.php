@@ -1658,22 +1658,32 @@ function nv_change_buffer( $buffer )
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
-		$dp = '';
-		if( $global_config['googleAnalyticsSetDomainName'] == 1 )
-		{
-			$dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
-		}
-		elseif( $global_config['googleAnalyticsSetDomainName'] == 2 )
-		{
-			$dp .= "_gaq.push([\"_setDomainName\",\"none\"]);_gaq.push([\"_setAllowLinker\",true]);";
-		}
-
 		$googleAnalytics = "<script type=\"text/javascript\">\r\n";
 		$googleAnalytics .= "//<![CDATA[\r\n";
-		$googleAnalytics .= "var _gaq=_gaq||[];_gaq.push([\"_setAccount\",\"" . $global_config['googleAnalyticsID'] . "\"]);" . $dp . "_gaq.push([\"_trackPageview\"]);(function(){var a=document.createElement(\"script\");a.type=\"text/javascript\";a.async=true;a.src=(\"https:\"==document.location.protocol?\"https://ssl\":\"http://www\")+\".google-analytics.com/ga.js\";var b=document.getElementsByTagName(\"script\")[0];b.parentNode.insertBefore(a,b)})();\r\n";
+		if( $global_config['googleAnalyticsMethod'] == 'universal' )
+		{
+			$googleAnalytics .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\r\n";
+			$googleAnalytics .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\r\n";
+			$googleAnalytics .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\r\n";
+			$googleAnalytics .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');\r\n";
+			$googleAnalytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');\r\n";
+			$googleAnalytics .= "ga('send', 'pageview');\r\n";
+		}
+		else
+		{
+			$dp = '';
+			if( $global_config['googleAnalyticsSetDomainName'] == 1 )
+			{
+				$dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
+			}
+			elseif( $global_config['googleAnalyticsSetDomainName'] == 2 )
+			{
+				$dp .= "_gaq.push([\"_setDomainName\",\"none\"]);_gaq.push([\"_setAllowLinker\",true]);";
+			}
+			$googleAnalytics .= "var _gaq=_gaq||[];_gaq.push([\"_setAccount\",\"" . $global_config['googleAnalyticsID'] . "\"]);" . $dp . "_gaq.push([\"_trackPageview\"]);(function(){var a=document.createElement(\"script\");a.type=\"text/javascript\";a.async=true;a.src=(\"https:\"==document.location.protocol?\"https://ssl\":\"http://www\")+\".google-analytics.com/ga.js\";var b=document.getElementsByTagName(\"script\")[0];b.parentNode.insertBefore(a,b)})();\r\n";
+		}
 		$googleAnalytics .= "//]]>\r\n";
 		$googleAnalytics .= "</script>\r\n";
-
 		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
 	}
 

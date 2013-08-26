@@ -10,6 +10,7 @@
 if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
 $timezone_array = array_keys( $nv_parse_ini_timezone );
+$googleAnalyticsMethod = array( 'classic' => 'Classic Analytics', 'universal' => 'Universal Analytics' );
 
 $array_config_global = array();
 
@@ -34,6 +35,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	if( ! preg_match( '/^UA-\d{4,}-\d+$/', $array_config_global['googleAnalyticsID'] ) ) $array_config_global['googleAnalyticsID'] = '';
 
 	$array_config_global['googleAnalyticsSetDomainName'] = $nv_Request->get_int( 'googleAnalyticsSetDomainName', 'post' );
+	$array_config_global['googleAnalyticsMethod'] = $nv_Request->get_title( 'googleAnalyticsMethod', 'post', '', 1 );
+	if( ! isset( $googleAnalyticsMethod[$array_config_global['googleAnalyticsMethod']] ) )
+	{
+		$googleAnalyticsMethod['googleAnalyticsMethod'] = 'classic';
+	}
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
@@ -76,10 +82,15 @@ for( $i = 0; $i < 3; ++$i )
 	$xtpl->assign( 'GOOGLEANALYTICSSETDOMAINNAME_TITLE', $lang_module['googleAnalyticsSetDomainName_' . $i] );
 	$xtpl->parse( 'main.googleAnalyticsSetDomainName' );
 }
-
+foreach( $googleAnalyticsMethod as $key => $title )
+{
+	$xtpl->assign( 'GOOGLEANALYTICSMETHOD_SELECTED', ( $global_config['googleAnalyticsMethod'] == $key ) ? ' selected="selected"' : '' );
+	$xtpl->assign( 'GOOGLEANALYTICSMETHOD_VALUE', $key );
+	$xtpl->assign( 'GOOGLEANALYTICSMETHOD_TITLE', $title );
+	$xtpl->parse( 'main.googleAnalyticsMethod' );
+}
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
 include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_admin_theme( $content );
 include ( NV_ROOTDIR . '/includes/footer.php' );
