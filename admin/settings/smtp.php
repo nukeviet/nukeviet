@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 	$array_config['smtp_password'] = nv_base64_encode( $crypt->aes_encrypt( $smtp_password ) );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', " . $db->dbescape( $config_value ) . ", " . $db->dbescape( $config_name ) . ")" );
+		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
 	}
 	nv_del_moduleCache( 'settings' );
 
