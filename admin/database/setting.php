@@ -50,6 +50,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 $array_config_global['dump_autobackup'] = ( $global_config['dump_autobackup'] ) ? ' checked="checked"' : '';
 
 $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'DATA', $array_config_global );

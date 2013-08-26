@@ -1,7 +1,6 @@
 <!-- BEGIN: main -->
-<table summary="CAPTION}" class="tab1">
+<table class="tab1">
 	<caption> {CAPTION} </caption>
-	<col span="1" valign="top" />
 	<thead>
 		<tr>
 			<td> {THEAD0} </td>
@@ -9,8 +8,8 @@
 			<td> {THEAD2} </td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td> {KEY} </td>
 			<!-- BEGIN: if -->
@@ -22,7 +21,7 @@
 			<th> {VALUE1} </th>
 			<!-- END: else -->
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: main -->

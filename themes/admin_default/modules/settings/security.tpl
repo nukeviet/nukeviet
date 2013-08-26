@@ -8,31 +8,26 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
-<form action="" method="post" id="frm">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<table class="tab1">
 		<caption> {LANG.security} </caption>
 		<colgroup>
-			<col style="width: 350px;" />
+			<col style="width: 40%" />
+			<col style="width: 60%" />
 		</colgroup>
 		<tbody>
 			<tr>
 				<td><strong>{LANG.is_flood_blocker}</strong></td>
 				<td><input type="checkbox" value="1" name="is_flood_blocker" {IS_FLOOD_BLOCKER} /></td>
 			</tr>
-		</tbody>
-		<tbody  class="second">
 			<tr>
 				<td><strong>{LANG.max_requests_60}</strong></td>
 				<td><input type="text" value="{MAX_REQUESTS_60}" name="max_requests_60" style="width: 50px; text-align: right" class="required digits"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.max_requests_300}</strong></td>
 				<td><input type="text" value="{MAX_REQUESTS_300}" name="max_requests_300" style="width: 50px; text-align: right" class="required digits"/></td>
 			</tr>
-		</tbody>
-		<tbody  class="second">
 			<tr>
 				<td><strong>{LANG.proxy_blocker}</strong></td>
 				<td>
@@ -42,20 +37,14 @@
 					<!-- END: proxy_blocker -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.str_referer_blocker}</strong></td>
 				<td><input type="checkbox" value="1" name="str_referer_blocker" {REFERER_BLOCKER} /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.nv_anti_iframe}</strong></td>
 				<td><input type="checkbox" value="1" name="nv_anti_iframe" {ANTI_IFRAME} /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.nv_allowed_html_tags}</strong></td>
 				<td><textarea name="nv_allowed_html_tags" style="width: 550px; height: 60px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
@@ -65,7 +54,8 @@
 	<table class="tab1">
 		<caption> {LANG.captcha} </caption>
 		<colgroup>
-			<col style="width: 350px;" />
+			<col style="width: 40%" />
+			<col style="width: 60%" />
 		</colgroup>
 		<tbody>
 			<tr>
@@ -77,8 +67,6 @@
 					<!-- END: opcaptcha -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.captcha_type}</strong></td>
 				<td>
@@ -88,8 +76,6 @@
 					<!-- END: captcha_type -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.captcha_num}</strong></td>
 				<td>
@@ -99,8 +85,6 @@
 					<!-- END: nv_gfx_num -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.captcha_size}</strong></td>
 				<td><input class="digits" style="width:30px; text-align: right" type="text" value="{NV_GFX_WIDTH}" name="nv_gfx_width" maxlength="3"/> x <input class="digits" style="width:30px; text-align: right" type="text" value="{NV_GFX_HEIGHT}" name="nv_gfx_height" maxlength="3"/></td>
@@ -108,7 +92,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="2" align="center"><input type="submit" name="submitcaptcha" value="{LANG.submit}" style="width: 100px;"/></td>
+				<td colspan="2" class="center"><input type="submit" name="submitcaptcha" value="{LANG.submit}" style="width: 100px;"/></td>
 			</tr>
 		</tfoot>
 	</table>
@@ -116,7 +100,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#frm').validate();
-	}); 
+	});
 </script>
 <!-- BEGIN: listip -->
 <table class="tab1">
@@ -131,55 +115,55 @@
 			<td>{LANG.banip_funcs}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td class="center">{ROW.dbip}</td>
 			<td class="center">{ROW.dbmask}</td>
 			<td class="center">{ROW.dbarea}</td>
 			<td class="center">{ROW.dbbegintime}</td>
 			<td class="center">{ROW.dbendtime}</td>
-			<td class="center"><span class="edit_icon"> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> </span> - <span class="delete_icon"> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a> </span></td>
+			<td class="center"><a class="edit_icon edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> - <a class="delete_icon deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: listip -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {ERROR} </blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: manual_save -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {MESSAGE} </blockquote>
 </div>
-<div class="clear"></div>
 <div class="codecontent">
 	{CODE}
 </div>
 <!-- END: manual_save -->
 <form action="{NV_BASE_ADMINURL}index.php" method="post" id="banip">
-	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
-	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
+	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="cid" value="{DATA.cid}" />
 	<table class="tab1">
-		<col width="200"/>
-		<tbody class="second">
+		<caption>{BANIP_TITLE}</caption>
+		<colgroup>
+			<col style="width: 40%" />
+			<col style="width: 60%" />
+		</colgroup>
+		<tfoot>
 			<tr>
-				<td colspan="2"><strong>{BANIP_TITLE}</strong></td>
+				<td colspan="2" class="center"><input type="submit" value="{LANG.banip_confirm}" name="submit"/></td>
 			</tr>
-		</tbody>
+		</tfoot>
 		<tbody>
 			<tr>
 				<td>{LANG.banip_address} (<span style="color:red">*</span>)
 				<br/>
 				(xxx.xxx.xxx.xxx)</td>
-				<td><input type="text" name="ip" value="{DATA.ip}" style="width:200px"/></td>
+				<td><input class="w200" type="text" name="ip" value="{DATA.ip}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.banip_mask}</td>
 				<td>
@@ -190,8 +174,6 @@
 					<option value="1"{DATA.selected1}>{MASK_TEXT_ARRAY.1}</option>
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.banip_area}</td>
 				<td>
@@ -202,28 +184,17 @@
 					<option value="3"{DATA.selected_area_3}>{BANIP_AREA_ARRAY.3}</option>
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.banip_begintime}</td>
-				<td><input type="text" name="begintime" class="datepicker" value="{DATA.begintime}" style="width:150px"/></td>
+				<td><input type="text" name="begintime" class="w150 datepicker" value="{DATA.begintime}"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.banip_endtime}</td>
-				<td><input type="text" name="endtime" class="datepicker" value="{DATA.endtime}" style="width:150px"/></td>
+				<td><input type="text" name="endtime" class="w150 datepicker" value="{DATA.endtime}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
-				<td>{LANG.banip_notice}</td>
-				<td><textarea cols="" rows="7" name="notice" style="width:250px;height:100px">{DATA.notice}</textarea></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td colspan="2" class="center"><input type="submit" value="{LANG.banip_confirm}" name="submit"/></td>
+				<td class="top">{LANG.banip_notice}</td>
+				<td><textarea cols="70" rows="5" name="notice" style="width:550px;height:100px">{DATA.notice}</textarea></td>
 			</tr>
 		</tbody>
 	</table>

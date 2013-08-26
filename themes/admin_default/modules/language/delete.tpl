@@ -8,13 +8,13 @@
 <meta http-equiv="Refresh" content="1;URL={URL}" />
 <!-- BEGIN: info -->
 <table class="tab1">
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{NAME}</td>
-		<tr>
+		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: info -->
 <!-- END: main -->

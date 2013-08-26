@@ -1,27 +1,32 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
 	var cat = '{LANG.cat}';
-	var caton = '{LANG.caton}'; 
+	var caton = '{LANG.caton}';
 </script>
 <strong><a href="{link_menu}">{LANG.menu}</a></strong>
 <!-- BEGIN: title -->
->> <strong><a href="{link_title}">{LANG.back}</strong></a>
+>> <strong><a href="{link_title}">{LANG.back}</a></strong>
 <!-- END: title -->
 <!-- BEGIN: table -->
 <table class="tab1">
+	<colgroup>
+		<col class="w50">
+		<col span="3">
+		<col class="w100">
+	</colgroup>
 	<thead>
-		<tr align="center">
-			<td style="width:40px"><strong>{LANG.number}</strong></td>
+		<tr class="center">
+			<td><strong>{LANG.number}</strong></td>
 			<td><strong>{LANG.title}</strong></td>
 			<td><strong>{LANG.link}</strong></td>
 			<td><strong>{LANG.name_block}</strong></td>
-			<td style="width:100px"><strong>{LANG.action}</strong></td>
+			<td><strong>{LANG.action}</strong></td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop1 -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop1 -->
 		<tr>
-			<td align="center">
+			<td class="center">
 			<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');">
 				<!-- BEGIN: weight -->
 				<option value="{stt}" {select}>{stt}</option>
@@ -34,27 +39,36 @@
 			</td>
 			<td>{ROW.link}</td>
 			<td>{ROW.name_block}</td>
-			<td align="center"><span class="edit_icon"><a href="{ROW.edit_url}">{LANG.edit}</a></span>&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon" href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></td>
 		</tr>
+		<!-- END: loop1 -->
 	</tbody>
-	<!-- END: loop1 -->
 </table>
 <!-- END: table -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form id="edit" action="{FORM_ACTION}" method="post">
 	<input type="hidden" name="id" value="{DATA.id}">
 	<input type="hidden" name="mid" value="{DATA.mid}">
 	<input type="hidden" name="pa" value="{DATA.parentid}">
 	<table class="tab1">
+		<colgroup>
+			<col class="w150" />
+			<col class="w300" />
+			<col />
+		</colgroup>
+		<tfoot>
+			<tr>
+				<td colspan="3" class="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr>
-				<td style="width:150px"><strong>{LANG.name_block}</strong></td>
-				<td style="width:300px">
+				<td><strong>{LANG.name_block}</strong></td>
+				<td>
 				<select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');">
 					<!-- BEGIN: loop -->
 					<option value="{key}" {select}>{val}</option>
@@ -62,20 +76,16 @@
 				</select></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.cats}</strong></td>
 				<td>
 				<select name="parentid" id="parentid">
 					<!-- BEGIN: cat -->
-					<option value="{cat.key}"{selected}>{cat.title}</option>
+					<option value="{cat.key}" {selected}>{cat.title}</option>
 					<!-- END: cat -->
 				</select></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.chomodule}</strong></td>
 				<td>
@@ -96,29 +106,21 @@
 				</span></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.title}</strong></td>
 				<td><input type="text" name="title" id="title" class="txt-full" value="{DATA.title}"/></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.link}</strong></td>
 				<td><input type="text" name="link" class="txt-full" value="{DATA.link}" id="link"/></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.note}</strong></td>
 				<td><input type="text" name="note" class="txt-full" value="{DATA.note}"/></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td style="vertical-align:top"><strong> {LANG.who_view}</strong></td>
 				<td>
@@ -138,8 +140,6 @@
 				</td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.target}</strong></td>
 				<td>
@@ -150,8 +150,6 @@
 				</select></td>
 				<td>&nbsp;</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.add_type_active}</strong></td>
 				<td>
@@ -162,19 +160,12 @@
 				</select></td>
 				<td>{LANG.add_type_active_note}</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.add_type_css}</strong></td>
 				<td><input class="txt-full" type="text" name="css" value="{DATA.css}"/></td>
 				<td>{LANG.add_type_css_info}</td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="3" align="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
 	</table>
 	<br/>
 </form>

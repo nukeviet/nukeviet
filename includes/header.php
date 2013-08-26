@@ -49,6 +49,11 @@ if( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
 	@Header( "X-Robots-Tag: index,archive,follow,noodp", true );
 }
 
+if( strpos( NV_USER_AGENT, 'MSIE' ) !== false )
+{
+	@header( 'X-UA-Compatible: IE=edge,chrome=1' );
+}
+
 ob_start();
 
 ?>

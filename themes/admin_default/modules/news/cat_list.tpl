@@ -6,28 +6,21 @@
 <!-- END: cat_title -->
 <!-- BEGIN: data -->
 <table class="tab1">
-	<colgroup>
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-	</colgroup>
+	<col span="6" style="white-space: nowrap;" />
 	<thead>
 		<tr>
-			<td align="center">{LANG.weight}</td>
+			<td class="center">{LANG.weight}</td>
 			<td>{LANG.name}</td>
-			<td align="center">{LANG.inhome}</td>
+			<td class="center">{LANG.inhome}</td>
 			<td>{LANG.viewcat_page}</td>
-			<td align="center">{LANG.numlinks}</td>
+			<td class="center">{LANG.numlinks}</td>
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
-			<td align="center">
+			<td class="center">
 			<!-- BEGIN: stt -->
 			{STT}
 			<!-- END: stt -->
@@ -39,12 +32,12 @@
 			</select>
 			<!-- END: weight -->
 			</td>
-			<td nowrap="nowrap"><a href="{ROW.link}"><strong>{ROW.title}</strong>
+			<td><a href="{ROW.link}"><strong>{ROW.title}</strong>
 			<!-- BEGIN: numsubcat -->
-			<span style="color:#FF0101;">({NUMSUBCAT})</span>
+			<span class="red">({NUMSUBCAT})</span>
 			<!-- END: numsubcat -->
 			</a></td>
-			<td align="center">
+			<td class="center">
 			<!-- BEGIN: disabled_inhome -->
 			{INHOME}
 			<!-- END: disabled_inhome -->
@@ -56,7 +49,7 @@
 			</select>
 			<!-- END: inhome -->
 			</td>
-			<td align="left">
+			<td class="left">
 			<!-- BEGIN: disabled_viewcat -->
 			{VIEWCAT}
 			<!-- END: disabled_viewcat -->
@@ -68,7 +61,7 @@
 			</select>
 			<!-- END: viewcat -->
 			</td>
-			<td align="center">
+			<td class="center">
 			<!-- BEGIN: title_numlinks -->
 			{NUMLINKS}
 			<!-- END: title_numlinks -->
@@ -80,10 +73,10 @@
 			</select>
 			<!-- END: numlinks -->
 			</td>
-			<td nowrap="nowrap" align="center">{ROW.adminfuncs}</td>
+			<td class="center">{ROW.adminfuncs}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: data -->
 <!-- END: main -->

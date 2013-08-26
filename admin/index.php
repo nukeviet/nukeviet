@@ -63,7 +63,7 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 $module_name = strtolower( $nv_Request->get_title( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
 if( ! empty( $module_name ) )
 {
-	$include_functions = $include_file = $lang_file = $mod_theme_file = '';
+	$include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
 	$module_data = $module_file = $module_name;
 
 	$op = $nv_Request->get_title( NV_OP_VARIABLE, 'post,get', 'main' );
@@ -96,6 +96,7 @@ if( ! empty( $module_name ) )
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
 		$include_functions = NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php";
+		$include_menu = NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php";
 		$include_file = NV_ROOTDIR . "/modules/" . $module_file . "/admin/" . $op . ".php";
 
 		//Ket noi ngon ngu cua module
@@ -119,6 +120,7 @@ if( ! empty( $module_name ) )
 		{
 			$module_file = $module_name;
 			$include_functions = NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $module_file . "/functions.php";
+			$include_menu = NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $module_file . "/admin.menu.php";
 			$include_file = NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $module_file . "/" . $op . ".php";
 
 			// Ket noi voi file ngon ngu cua module
@@ -169,6 +171,12 @@ if( ! empty( $module_name ) )
 		}
 
 		$allow_func = array();
+		//Ket noi menu cua module
+		if( file_exists( $include_menu ) )
+		{
+			require ( $include_menu );
+		}
+		
 		require ( $include_functions );
 		if( in_array( $op, $allow_func ) )
 		{

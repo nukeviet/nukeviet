@@ -97,7 +97,6 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			foreach( $info['filelist'] as $file )
 			{
 				$xtpl->assign( 'FILE', $file );
-				$xtpl->assign( 'CLASS', ( $i % 2 == 0 ) ? " class=\"second\"" : "" );
 				$xtpl->parse( 'info.fileinfo.file.loop' );
 				++$i;
 			}

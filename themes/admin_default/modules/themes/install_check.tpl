@@ -11,13 +11,13 @@
 </table>
 <div style="overflow:auto;max-height:300px;width:100%">
 	<table class="tab1 fixtab">
-		<!-- BEGIN: loop -->
-		<tbody {CLASS}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
 				<td style="color:red"> {FILE} </td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 </div>
 <table class="tab1 fixtab">
@@ -87,13 +87,13 @@
 			<td class="center requie">{LANG.autoinstall_theme_permission_folder}</td>
 		</tr>
 	</tbody>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td class="requie">{FOLDER}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: error_create_folder -->
 <!-- BEGIN: error_move_folder -->
@@ -103,13 +103,13 @@
 			<td class="center requie">{LANG.autoinstall_theme_error_movefile}</td>
 		</tr>
 	</tbody>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td class="requie">{FOLDER}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: error_move_folder -->
 <!-- BEGIN: complete -->

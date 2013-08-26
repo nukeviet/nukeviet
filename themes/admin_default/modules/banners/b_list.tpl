@@ -1,12 +1,14 @@
 <!-- BEGIN: main -->
-<table summary="{CONTENTS.caption}" class="tab1">
+<table class="tab1">
 	<caption>{CONTENTS.caption}</caption>
 	<!-- BEGIN: nv_banner_weight -->
 	<col style="white-space:nowrap" />
 	<!-- END: nv_banner_weight -->
-	<col span="5" style="white-space:nowrap" />
-	<col style="width:50px;white-space:nowrap" />
-	<col style="width:200px;white-space:nowrap" />
+	<colgroup>
+		<col span="5">
+		<col class="w50">
+		<col class="w200">
+	</colgroup>
 	<thead>
 		<tr>
 			<!-- BEGIN: thead -->
@@ -14,8 +16,8 @@
 			<!-- END: thead -->
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<!-- BEGIN: nv_banner_weight -->
 			<td>{ROW.weight}</td>
@@ -31,10 +33,10 @@
 			<td>{ROW.publ_date}</td>
 			<td>{ROW.exp_date}</td>
 			<td class="center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
-			<td><span class="search_icon"><a href="{ROW.view}">{CONTENTS.view}</a></span> | <span class="edit_icon"><a href="{ROW.edit}">{CONTENTS.edit}</a></span> | <span class="delete_icon"><a class="delfile" href="{ROW.delfile}">{CONTENTS.del}</a></span></td>
+			<td><a class="search_icon" href="{ROW.view}">{CONTENTS.view}</a> &nbsp; <a class="edit_icon" href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; <a class="delete_icon" class="delfile" href="{ROW.delfile}">{CONTENTS.del}</a></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <script type="text/javascript">
 	//<![CDATA[

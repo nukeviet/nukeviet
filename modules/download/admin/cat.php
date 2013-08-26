@@ -736,8 +736,6 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
 	}
 
-	$class = ( $a % 2 ) ? " class=\"second\"" : "";
-
 	$list[$row['id']] = array(
 		'id' => ( int )$row['id'],
 		'title' => $row['title'],
@@ -745,8 +743,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		'numsub' => $numsub,
 		'parentid' => $parentid,
 		'weight' => $weight,
-		'status' => $row['status'] ? " checked=\"checked\"" : "",
-		'class' => $class
+		'status' => $row['status'] ? " checked=\"checked\"" : ""
 	);
 
 	++$a;

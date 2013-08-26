@@ -64,7 +64,6 @@ $result = $db->sql_query( "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "_module`
 $numrows = $db->sql_numrows( $result );
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	$row['class'] = ( $a++ % 2 == 0 ) ? ' class="second"' : '';
 	for( $i = 1; $i <= $numrows; $i++ )
 	{
 		$xtpl->assign( 'WEIGHT', array( 'key' => $i, 'selected' => ( $i == $row['weight'] ) ? ' selected="selected"' : '' ) );

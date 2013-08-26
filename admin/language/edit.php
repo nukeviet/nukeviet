@@ -117,7 +117,6 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 			if( $lang_key != "langtype" )
 			{
 				$xtpl->assign( 'ARRAY_TRANSLATOR', array(
-					'class' => ( ++$i % 2 ) ? " class=\"second\"" : "",
 					'lang_key' => $lang_key,
 					'value' => nv_htmlspecialchars( $lang_value )
 				) );
@@ -128,7 +127,7 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 
 		for( $a = 1; $a <= 2; ++$a )
 		{
-			$xtpl->assign( 'ARRAY_BODY', array( 'class' => ( ++$i % 2 ) ? " class=\"second\"" : "", 'key' => $a ) );
+			$xtpl->assign( 'ARRAY_BODY', $a );
 
 			$xtpl->parse( 'main.array_body' );
 		}
@@ -139,7 +138,6 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 		while( list( $id, $lang_key, $lang_value ) = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ARRAY_DATA', array(
-				'class' => ( ++$i % 2 ) ? " class=\"second\"" : "",
 				'key' => $a++,
 				'lang_key' => $lang_key,
 				'value' => nv_htmlspecialchars( $lang_value ),

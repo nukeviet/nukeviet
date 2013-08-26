@@ -21,7 +21,6 @@ $array['alias'] = '';
 $array['image'] = '';
 $array['description'] = '';
 $array['keywords'] = '';
-$array['thumbnail'] = '';
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -47,47 +46,6 @@ if( ! empty( $savecat ) )
 		$array['image'] = '';
 	}
 
-	$check_thumb = false;
-	if( $array['topicid'] > 0 )
-	{
-		list( $image, $thumbnail ) = $db->sql_fetchrow( $db->sql_query( "SELECT `image`, `thumbnail` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . $array['topicid'] ) );
-		if( $array['image'] != $image )
-		{
-			$check_thumb = true;
-			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail ) )
-			{
-				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail );
-			}
-		}
-		else
-		{
-			$array['thumbnail'] = $thumbnail;
-		}
-	}
-	elseif( ! empty( $array['image'] ) )
-	{
-		$check_thumb = true;
-	}
-	if( $check_thumb and is_file( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" . $array['image'] ) )
-	{
-		require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
-
-		$basename = basename( $array['image'] );
-		$image = new image( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" . $array['image'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-
-		$thumb_basename = $basename;
-		$i = 1;
-		while( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $thumb_basename ) )
-		{
-			$thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-			++$i;
-		}
-		$image->resizeXY( $module_config[$module_name]['homewidth'], $module_config[$module_name]['homeheight'] );
-		$image->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics', $thumb_basename );
-		$image_info = $image->create_Image_info;
-		$array['thumbnail'] = str_replace( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/', '', $image_info['src'] );
-	}
-
 	$array['alias'] = ( $array['alias'] == '' ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 
 	if( empty( $array['title'] ) )
@@ -99,7 +57,7 @@ if( ! empty( $savecat ) )
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics`" ) );
 		$weight = intval( $weight ) + 1;
 
-		$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_topics` (`topicid`, `title`, `alias`, `description`, `image`, `thumbnail`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $array['thumbnail'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+		$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_topics` (`topicid`, `title`, `alias`, `description`, `image`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 
 		if( $db->sql_query_insert_id( $query ) )
 		{
@@ -115,7 +73,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` =  " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` =  " . $db->dbescape( $array['image'] ) . ", `thumbnail`=" . $db->dbescape( $array['thumbnail'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
+		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` =  " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` =  " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
 		$db->sql_query( $query );
 		if( $db->sql_affectedrows() > 0 )
 		{

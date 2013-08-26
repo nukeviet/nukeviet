@@ -38,9 +38,9 @@ global $weblinks_config;
 // Xac dinh RSS
 if( $module_info['rss'] )
 {
-	$rss[] = array( //
-		'title' => $module_info['custom_title'], //
-		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+	$rss[] = array(
+		'title' => $module_info['custom_title'],
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
 	);
 }
 
@@ -86,9 +86,9 @@ while( list( $catid_i, $parentid_i, $title_i, $description_i, $catimage_i, $alia
 	//Xac dinh RSS
 	if( $module_info['rss'] )
 	{
-		$rss[] = array( //
-			'title' => $module_info['custom_title'] . ' - ' . $title_i, //
-			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $alias_i //
+		$rss[] = array(
+			'title' => $module_info['custom_title'] . ' - ' . $title_i,
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $alias_i
 		);
 	}
 }

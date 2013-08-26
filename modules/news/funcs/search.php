@@ -80,7 +80,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	if( $check_num == 1 )
 	{
 		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id =  tb2.id ) ";
-		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
+		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
 	}
 	elseif( $check_num == 2 )
 	{
@@ -93,7 +93,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	else
 	{
 		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id =  tb2.id )";
-		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb1.keywords LIKE '%" . $dbkey . "%' ";
+		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
 
@@ -147,7 +147,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		}
 		else
 		{
-			$img_src = '';				
+			$img_src = '';
 		}
 		$array_content[] = array(
 			'id' => $id,
@@ -171,10 +171,15 @@ if( empty( $key ) )
 }
 else
 {
-	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'];
+	if( $pages > 1)
+	{
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+	}
+	$page_title .=' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 
-$key_words = $module_info['keywords'];
+$key_words = $description = 'no';
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 include ( NV_ROOTDIR . '/includes/header.php' );

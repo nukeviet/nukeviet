@@ -4,30 +4,32 @@
 	<table class="tab1">
 		<thead>
 			<tr>
-				<td style="width:20px;"></td>
+				<td class="w20">&nbsp;</td>
 				<td>{LANG.name}</td>
-				<td style="width:80px;"></td>
+				<td class="w100">&nbsp;</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: loop -->
-		<tbody {ROW.class}>
-			<tr>
-				<td><input type="checkbox" name="newsid" value="{ROW.id}"/></td>
-				<td align="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-				<td align="center">{ROW.delete}</td>
-			</tr>
-		</tbody>
-		<!-- END: loop -->
 		<tfoot>
 			<tr>
-				<td colspan="3"><span> <a name="checkall" id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a>&nbsp;&nbsp; <a name="uncheckall" id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span><span class="delete_icon"> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a> </span></td>
+				<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <a class="delete_icon" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 			</tr>
 		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td><input type="checkbox" name="newsid" value="{ROW.id}"/></td>
+				<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+				<td class="center">{ROW.delete}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
 	</table>
 	<!-- END: data -->
 	<!-- BEGIN: empty -->
-	<div class="quote" style="width:98%">
-		<blockquote><span>{LANG.topic_nonews}</span></blockquote>
+	<div class="quote">
+		<blockquote>
+			<span>{LANG.topic_nonews}</span>
+		</blockquote>
 	</div>
 	<!-- END: empty -->
 </div>
@@ -42,7 +44,7 @@
 			$(this).removeAttr('checked');
 		});
 	});
-	$('a.delete').click(function() {
+	$('a.delete_icon').click(function() {
 		var list = [];
 		$('input[name=newsid]:checked').each(function() {
 			list.push($(this).val());
@@ -63,6 +65,6 @@
 			});
 		}
 		return false;
-	}); 
+	});
 </script>
 <!-- END: main -->

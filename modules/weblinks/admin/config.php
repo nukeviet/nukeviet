@@ -59,6 +59,11 @@ $data_content['byhit'] = ( $data_content['sortoption'] == 'byhit' ) ? ' checked'
 $data_content['ck_showlinkimage'] = ( $data_content['showlinkimage'] == 1 ) ? ' checked' : '';
 
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data_content );
 

@@ -1,9 +1,8 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form id="votingcontent" method="post" action="{FORM_ACTION}">
 	<table class="tab1">
@@ -11,7 +10,7 @@
 			<tr>
 				<td>{LANG.voting_allowcm}</td>
 				<td>
-				<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
+				<select class="w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
 					<!-- BEGIN: who_view -->
 					<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
 					<!-- END: who_view -->
@@ -20,7 +19,6 @@
 				<div id="groups_list" style="{SHOW_GROUPS_LIST}">
 					{GLANG.groups_view}:
 					<table style="margin-bottom:8px;width:250px;">
-						<col valign="top" width="150px" />
 						<tr>
 							<td>
 							<!-- BEGIN: groups_view -->
@@ -32,8 +30,6 @@
 					</table>
 				</div></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.voting_time}</td>
 				<td><input name="publ_date" id="publ_date" value="{PUBL_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
@@ -48,8 +44,6 @@
 					<!-- END: pmin -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.voting_timeout}</td>
 				<td><input name="exp_date" id="exp_date" value="{EXP_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
@@ -64,20 +58,14 @@
 					<!-- END: emin -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.voting_maxoption}</td>
 				<td><input type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt required" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.voting_question}</td>
 				<td><input type="text" name="question" size="60" value="{DATA.question}" class="txt required" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.voting_link}</td>
 				<td><input type="text" name="link" size="60" value="{DATA.link}" class="txt" /></td>
@@ -92,40 +80,47 @@
 				<td>{LANG.voting_link}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: item -->
-		<tbody {ITEM.class}>
+		<tbody>
+			<!-- BEGIN: item -->
 			<tr>
 				<td style="text-align:right">{LANG.voting_question_num} {ITEM.stt}</td>
-				<td><input type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" style="width:300px" /></td>
-				<td><input type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]" style="width:350px"/></td>
+				<td><input class="w300" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" /></td>
+				<td><input  class="w350"type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
 			</tr>
-		</tbody>
-		<!-- END: item -->
-		<tbody {NEW_CLASS}>
+			<!-- END: item -->
 			<tr>
 				<td style="text-align:right">{LANG.voting_question_num} {NEW_ITEM}</td>
-				<td><input type="text" value="" name="answervotenews[]" style="width:300px" /></td>
-				<td><input type="text" value="" name="urlvotenews[]" style="width:350px" /></td>
+				<td><input class="w300" type="text" value="" name="answervotenews[]" /></td>
+				<td><input class="w350" type="text" value="" name="urlvotenews[]"/></td>
 			</tr>
 		</tbody>
 	</table>
 	<br />
 	<div style="text-align:center">
-		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_additem('{LANG.voting_question_num}');" />
+		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" />
 		<input type="submit" name="submit" value="{LANG.voting_confirm}" />
 	</div>
 </form>
 <script type="text/javascript">
-var items = {NEW_ITEM_NUM}
-};
-$("#publ_date,#exp_date").datepicker({
-showOn : "both",
-dateFormat : "dd/mm/yy",
-changeMonth : true,
-changeYear : true,
-showOtherMonths : true,
-buttonImage : nv_siteroot + "images/calendar.gif",
-buttonImageOnly : true
-});
+	var items = '{NEW_ITEM_NUM}';
+	$("#publ_date,#exp_date").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true
+	});
+
+	function nv_vote_add_item(mess) {
+		items++;
+		var newitem = "<tr>";
+		newitem += "	<td class=\"right\">" + mess + " " + items + "</td>";
+		newitem += "	<td><input class=\"w300\" type=\"text\" value=\"\" name=\"answervotenews[]\"></td>";
+		newitem += "	<td><input class=\"w350\" type=\"text\" value=\"\" name=\"urlvotenews[]\"></td>";
+		newitem += "	</tr>";
+		$("#items").append(newitem);
+	}
 </script>
 <!-- END: main -->

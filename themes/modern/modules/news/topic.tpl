@@ -1,15 +1,13 @@
 <!-- BEGIN: main -->
-<div class="cat-nav" style="border:1px solid #ccc;padding:4px;">
-	<a href="{TOPPIC_LINK}" class="current-cat" title="{TOPPIC_TITLE}">{TOPPIC_TITLE}</a>
-</div>
 <!-- BEGIN: topicdescription -->
-<div style="border:1px solid #ccc;border-top:none;padding:4px;">
-	{TOPPIC_DESCRIPTION}
+<div class="listz-news clearfix m-bottom">
+	<h1>{TOPPIC_TITLE}</h1>
+	<!-- BEGIN: image -->
+	<img class="s-border fl left" alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+	<!-- END: image -->
+	<h2>{TOPPIC_DESCRIPTION}</h2>
 </div>
 <!-- END: topicdescription -->
-<div class="clear">
-	&nbsp;
-</div>
 <!-- BEGIN: topic -->
 <div class="box-border-shadow m-bottom listz-news">
 	<div class="content-box">

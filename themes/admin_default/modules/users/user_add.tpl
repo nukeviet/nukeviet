@@ -1,18 +1,19 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: is_forum -->
-<div class="quote" style="width:780px;">
-	<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
+<div class="quote">
+	<blockquote class="error">
+		<span>{LANG.modforum}</span>
+	</blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
-		</p></blockquote>
+		</p>
+	</blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
@@ -29,51 +30,37 @@
 			<tr>
 				<td> {LANG.account} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" value="{DATA.username}" name="username" id="username_iavim" style="width:300px" /></td>
+				<td><input class="w300 required" value="{DATA.username}" name="username" id="username_iavim" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.email} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt email required" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" /></td>
+				<td><input class="w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.password} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required password" type="password" style="width: 150px" id="pass_iavim" name="password1" value="{DATA.password1}" /></td>
+				<td><input class="w150 required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.repassword} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required password" type="password" style="width: 150px" name="password2" value="{DATA.password2}" /></td>
+				<td><input class="w150 required password" type="password" name="password2" value="{DATA.password2}" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.question} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" type="text" value="{DATA.question}" name="question" style="width:300px" /></td>
+				<td><input class="w300 required" type="text" value="{DATA.question}" name="question" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.answer} </td>
 				<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" type="text" value="{DATA.answer}" name="answer" style="width:300px" /></td>
+				<td><input class="w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.name} </td>
-				<td><input class="txt" type="text" value="{DATA.full_name}" name="full_name" style="width:300px" /></td>
+				<td><input class="w300" type="text" value="{DATA.full_name}" name="full_name" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td colspan="2"> {LANG.gender} </td>
 				<td>
@@ -83,33 +70,23 @@
 					<!-- END: gender -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.avata} </td>
 				<td><input type="file" name='photo' /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td colspan="2"> {LANG.birthday} </td>
 				<td><input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.show_email} </td>
 				<td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td style="vertical-align:top" colspan="2"> {LANG.sig} </td>
-				<td><textarea name="sig" cols="70" rows="5" style="width:300px">{DATA.sig}</textarea></td>
+				<td><textarea class="w300" name="sig" cols="70" rows="5">{DATA.sig}</textarea></td>
 			</tr>
-		</tbody>
-		<!-- BEGIN: group -->
-		<tbody>
+			<!-- BEGIN: group -->
 			<tr>
 				<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 				<td>
@@ -122,18 +99,18 @@
 					<!-- END: list -->
 				</ul></td>
 			</tr>
+			<!-- END: group -->
 		</tbody>
-		<!-- END: group -->
 	</table>
 	<!-- BEGIN: field -->
 	<table class="tab1">
 		<caption> {LANG.fields} </caption>
 		<colgroup>
-			<col style="width:300px"/>
-			<col style="width:10px"/>
+			<col class="w300"/>
+			<col class="w20"/>
 		</colgroup>
-		<!-- BEGIN: loop -->
-		<tbody {FIELD.tbodyclass}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
 				<td><b>{FIELD.title}</b>
 				<br>
@@ -145,10 +122,10 @@
 				</td>
 				<td>
 				<!-- BEGIN: textbox -->
-				<input class="txt {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:300px"/>
+				<input class="w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 				<!-- END: textbox -->
 				<!-- BEGIN: date -->
-				<input class="txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+				<input class="w100 datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
 				<!-- END: date -->
 				<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 				<!-- END: textarea -->
@@ -177,11 +154,11 @@
 				<!-- END: multiselect -->
 				</td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 	<!-- END: field -->
-	<div style="text-align: center">
+	<div class="center">
 		<input type="submit" name="confirm" value="{LANG.member_add}" />
 	</div>
 </form>

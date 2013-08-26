@@ -56,6 +56,7 @@ function nv_create_table_sys( $lang )
 	  `act` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	  `admins` varchar(255) NOT NULL,
 	  `rss` tinyint(4) NOT NULL default '1',
+	  `gid` MEDIUMINT(8) NOT NULL default '0',
 	  PRIMARY KEY (`title`)
 	) ENGINE=MyISAM";
 
@@ -91,6 +92,7 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
 	  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `func_name` varchar(55) NOT NULL,
+	  `alias` varchar(55) NOT NULL DEFAULT '',	  
 	  `func_custom_name` varchar(255) NOT NULL,
 	  `in_module` varchar(55) NOT NULL,
 	  `show_func` tinyint(4) NOT NULL DEFAULT '0',
@@ -98,7 +100,8 @@ function nv_create_table_sys( $lang )
 	  `subweight` smallint(2) unsigned NOT NULL DEFAULT '1',
 	  `setting` varchar(255) NOT NULL DEFAULT '',
 	  PRIMARY KEY (`func_id`),
-	  UNIQUE KEY `func_name` (`func_name`,`in_module`)
+	  UNIQUE KEY `func_name` (`func_name`,`in_module`),
+	  UNIQUE KEY `alias` (`alias`,`in_module`)
 	) ENGINE=MyISAM";
 
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_searchkeys` (
@@ -138,17 +141,17 @@ function nv_create_table_sys( $lang )
       UNIQUE KEY `func_id` (`func_id`,`layout`,`theme`)
     ) ENGINE=MyISAM";
 
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
-		('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '',0),
-		('news', 'news', 'news', 'News',  '',1270400000, 1, 1, '', '', '', '', '0', 1, 2, 1, 1, '',1),
-		('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 1, 5, 1, 1, '',0),
-		('contact', 'contact', 'contact', 'Contact',  '',1275351337, 1, 1, '', '', '', '', '0', 1, 6, 1, 1, '',0),
-		('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '0', 1, 7, 1, 1, '',0),
-		('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '0', 0, 8, 1, 1, '',0),
-		('banners', 'banners', 'banners', 'Banners',  '',1270400000,  1,1, '', '', '', '', '0', 0, 9, 1, 1, '',0),
-		('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 0, 10, 1, 1, '',0),
-		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 0, 9, 1, 1, '', 0),
-		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '',0)";
+    	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`, `gid`) VALUES
+		('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '', 0, 0),
+		('news', 'news', 'news', 'News',  '',1270400000, 1, 1, '', '', '', '', '0', 1, 2, 1, 1, '', 1, 0),
+		('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 1, 5, 1, 1, '', 0, 0),
+		('contact', 'contact', 'contact', 'Contact',  '',1275351337, 1, 1, '', '', '', '', '0', 1, 6, 1, 1, '', 0, 0),
+		('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '0', 1, 7, 1, 1, '', 0, 0),
+		('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '0', 0, 8, 1, 1, '', 0, 0),
+		('banners', 'banners', 'banners', 'Banners',  '',1270400000,  1,1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
+		('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 0, 10, 1, 1, '', 0, 0),
+		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
+		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x'),
@@ -163,6 +166,7 @@ function nv_create_table_sys( $lang )
 		('" . $lang . "', 'global', 'autologosize2', '40'),
 		('" . $lang . "', 'global', 'autologosize3', '30'),
 		('" . $lang . "', 'global', 'autologomod', ''),
+		('" . $lang . "', 'global', 'metaTagsOgp', '1'),
         ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
 
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_language` (`lang`, `setup`) VALUES('" . $lang . "', 1)";

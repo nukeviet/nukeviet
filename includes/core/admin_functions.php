@@ -10,53 +10,6 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
- * nv_db_mods()
- *
- * @return
- */
-function nv_site_mods()
-{
-	global $db, $admin_info;
-	$site_mods = array();
-	$sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-	$list = nv_db_cache( $sql, '', 'modules' );
-	foreach( $list as $row )
-	{
-		$allowed = false;
-		if( defined( 'NV_IS_SPADMIN' ) )
-		{
-			$allowed = true;
-		}
-		elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
-		{
-			$allowed = true;
-		}
-		if( $allowed )
-		{
-			$row['title'] = $db->unfixdb( $row['title'] );
-
-			$site_mods[$row['title']] = array(
-				'module_file' => $db->unfixdb( $row['module_file'] ),
-				'module_data' => $db->unfixdb( $row['module_data'] ),
-				'custom_title' => empty( $row['admin_title'] ) ? $row['custom_title'] : $row['admin_title'],
-				'main_file' => $row['main_file'],
-				'admin_file' => $row['admin_file'],
-				'theme' => $db->unfixdb( $row['theme'] ),
-				'keywords' => $row['keywords'],
-				'groups_view' => $row['groups_view'],
-				'in_menu' => intval( $row['in_menu'] ),
-				'submenu' => intval( $row['submenu'] ),
-				'act' => intval( $row['act'] ),
-				'admins' => $row['admins'],
-				'rss' => $row['rss']
-			);
-		}
-	}
-
-	return $site_mods;
-}
-
-/**
  * nv_groups_list()
  *
  * @return
@@ -324,10 +277,6 @@ function nv_save_file_config_global()
 			require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
 		}
 	}
-	elseif( empty( $config_variable['lang_multi'] ) and $config_variable['rewrite_optional'] )
-	{
-		require ( NV_ROOTDIR . "/includes/rewrite_language.php" );
-	}
 
 	$content_config .= "\n";
 
@@ -568,6 +517,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 		$rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
+		$rewrite_rule .= "RewriteRule (.*)tag\/(.*)$ index.php\n";
 		$rewrite_rule .= "</IfModule>\n\n";
 		$rewrite_rule .= "#nukeviet_rewrite_end\n";
 		$rewrite_rule .= "##################################################################################\n\n";

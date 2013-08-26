@@ -1,8 +1,15 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: check -->
 <table class="tab1">
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
+	<!-- BEGIN: generate_page -->
+	<tfoot>
+		<tr>
+			<td>{GENERATE_PAGE}</td>
+		</tr>
+	</tfoot>
+	<!-- END: generate_page -->
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>
 			<!-- BEGIN: ok -->
@@ -13,22 +20,14 @@
 			<!-- END: error -->
 			</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
-	<!-- BEGIN: generate_page -->
-	<tfoot>
-		<tr>
-			<td>{GENERATE_PAGE}</td>
-		</tr>
-	</tfoot>
-	<!-- END: generate_page -->
 </table>
 <!-- END: check -->
 <!-- BEGIN: form -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.weblink_check_notice}</span></blockquote>
 </div>
-<div class="clear"></div>
 <table class="tab1">
 	<tbody>
 		<tr>

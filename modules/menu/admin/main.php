@@ -189,10 +189,8 @@ else
 {
 	if( ! empty( $array ) )
 	{
-		$i = 0;
 		foreach( $array as $row )
 		{
-			$row['class'] = ( ++$i % 2 == 0 ) ? ' class="second"' : '';
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'first.table.loop1' );
 		}

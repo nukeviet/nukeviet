@@ -88,6 +88,10 @@ if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 	$array_config_global['authors_detail_main'] = $nv_Request->get_int( 'authors_detail_main', 'post' );
 	$array_config_global['adminrelogin_max'] = $nv_Request->get_int( 'adminrelogin_max', 'post' );
 	$array_config_global['admin_check_pass_time'] = 60 * $nv_Request->get_int( 'admin_check_pass_time', 'post' );
+	if( $array_config_global['admin_check_pass_time'] < 120 )
+	{
+		$array_config_global['admin_check_pass_time'] = 120;
+	}
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
@@ -280,7 +284,6 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'keyname' => $keyname,
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['adminip_nolimit'],
@@ -328,7 +331,6 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'keyname' => $keyname,
 			'mask_text_array' => $mask_text_array[$dbmask],
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',

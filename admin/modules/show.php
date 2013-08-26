@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
  */
 function nv_show_funcs()
 {
-	global $db, $lang_module, $global_config, $site_mods, $nv_Request;
+	global $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
 
 	$mod = $nv_Request->get_title( 'mod', 'get', '' );
 
@@ -31,8 +31,8 @@ function nv_show_funcs()
 	$row = $db->sql_fetchrow( $result );
 
 	$custom_title = $row['custom_title'];
-	$module_file = $db->unfixdb( $row['module_file'] );
-	$admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/main.php" ) ) ? 1 : 0;
+	$mod_file = $db->unfixdb( $row['module_file'] );
+	$admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $mod_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $mod_file . "/admin/main.php" ) ) ? 1 : 0;
 
 	$is_delCache = false;
 
@@ -43,7 +43,7 @@ function nv_show_funcs()
 		$is_delCache = true;
 	}
 
-	$local_funcs = nv_scandir( NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file'] );
+	$local_funcs = nv_scandir( NV_ROOTDIR . '/modules/' . $mod_file . '/funcs', $global_config['check_op_file'] );
 
 	if( ! empty( $local_funcs ) )
 	{
@@ -52,7 +52,7 @@ function nv_show_funcs()
 	}
 
 	$module_version = array();
-	$version_file = NV_ROOTDIR . "/modules/" . $module_file . "/version.php";
+	$version_file = NV_ROOTDIR . "/modules/" . $mod_file . "/version.php";
 
 	if( file_exists( $version_file ) )
 	{
@@ -64,13 +64,13 @@ function nv_show_funcs()
 	{
 		$timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
 		$module_version = array(
-			"name" => $mod, //
-			"modfuncs" => "main", //
-			"is_sysmod" => 0, //
-			"virtual" => 0, //
-			"version" => "3.0.01", //
-			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT', //
-			"author" => "", //
+			"name" => $mod,
+			"modfuncs" => "main",
+			"is_sysmod" => 0,
+			"virtual" => 0,
+			"version" => "3.0.01",
+			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
+			"author" => "",
 			"note" => ""
 		);
 	}
@@ -101,6 +101,7 @@ function nv_show_funcs()
 		$data_funcs[$func]['func_id'] = $row['func_id'];
 		$data_funcs[$func]['layout'] = empty( $row['layout'] ) ? '' : $row['layout'];
 		$data_funcs[$func]['show_func'] = $row['show_func'];
+		$data_funcs[$func]['alias'] = $row['alias'];
 		$data_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
 		$data_funcs[$func]['in_submenu'] = $row['in_submenu'];
 		$data_funcs[$func]['subweight'] = $row['subweight'];
@@ -157,7 +158,7 @@ function nv_show_funcs()
 		foreach( $array_keys as $func )
 		{
 			$show_func = in_array( $func, $modfuncs ) ? 1 : 0;
-			$sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, '')";
+			$sql = "INSERT INTO `" . NV_MODFUNCS_TABLE . "` (`func_id`, `func_name`, `alias`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES (NULL, " . $db->dbescape( $func ) . ", " . $db->dbescape( $func ) . ", " . $db->dbescape( ucfirst( $func ) ) . ", " . $db->dbescape( $mod ) . ", " . $show_func . ", 0, 0, '')";
 			$func_id = $db->sql_query_insert_id( $sql );
 			if( $show_func )
 			{
@@ -187,6 +188,7 @@ function nv_show_funcs()
 			$act_funcs[$func]['func_id'] = $row['func_id'];
 			$act_funcs[$func]['layout'] = empty( $row['layout'] ) ? "" : $row['layout'];
 			$act_funcs[$func]['show_func'] = $row['show_func'];
+			$act_funcs[$func]['alias'] = $row['alias'];
 			$act_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
 			$act_funcs[$func]['in_submenu'] = $row['in_submenu'];
 			$act_funcs[$func]['subweight'] = $row['subweight'];
@@ -201,28 +203,54 @@ function nv_show_funcs()
 		nv_del_moduleCache( 'themes' );
 	}
 
-	$contents = array();
-	$contents['caption'] = sprintf( $lang_module['funcs_list'], $custom_title );
-	$contents['thead'] = array( $lang_module['funcs_subweight'], $lang_module['funcs_in_submenu'], $lang_module['funcs_title'], $lang_module['custom_title'], $lang_module['funcs_layout'] );
-	$contents['weight_list'] = $weight_list;
+	$fun_change_alias = (isset( $module_version['virtual'] )) ? explode( ',', $module_version['change_alias'] ) : array( );
+	if( empty( $fun_change_alias ) )
+	{
+		$module_version['virtual'] = 0;
+	}
 
+	$xtpl = new XTemplate( "aj_show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
 	foreach( $act_funcs as $funcs => $values )
 	{
 		if( $values['show_func'] )
 		{
-			$func_id = $values['func_id'];
-			$contents['rows'][$func_id]['weight'] = array( $values['subweight'], "nv_chang_func_weight(" . $func_id . ");" );
+			$values['func_name'] = $funcs;
+			$values['in_submenu_checked'] = ( $values['in_submenu'] ) ? "checked=\"checked\" " : "";
+			$values['disabled'] = ( in_array( $funcs, $arr_in_submenu ) ) ? "" : " disabled";
+			$xtpl->assign( 'ROW', $values );
 
-			$contents['rows'][$func_id]['name'] = array( $funcs, $values['func_custom_name'], "nv_change_custom_name(" . $values['func_id'] . ",'action');" );
+			foreach( $weight_list as $new_weight )
+			{
+				$xtpl->assign( 'WEIGHT', array(
+					'key' => $new_weight,
+					'selected' => $new_weight == $values['subweight'] ? " selected=\"selected\"" : ""
+				) );
+				$xtpl->parse( 'main.loop.weight' );
+			}
 
-			$contents['rows'][$func_id]['layout'] = array( $values['layout'], "nv_chang_func_layout(" . $func_id . ");" );
-			$contents['rows'][$func_id]['in_submenu'] = array( $values['in_submenu'], "nv_chang_func_in_submenu(" . $func_id . ");" );
-			$contents['rows'][$func_id]['disabled'] = ( in_array( $funcs, $arr_in_submenu ) ) ? "" : " disabled";
+			if( $module_version['virtual'] )
+			{
+				if( $funcs != 'main' AND in_array( $funcs, $fun_change_alias ) )
+				{
+					$xtpl->parse( 'main.loop.change_alias' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.loop.show_alias' );
+				}
+			}
+			$xtpl->parse( 'main.loop' );
 		}
 	}
+	if( $module_version['virtual'] )
+	{
+		$xtpl->parse( 'main.change_alias_head' );
+	}
+	$xtpl->parse( 'main' );
 
 	include ( NV_ROOTDIR . '/includes/header.php' );
-	echo aj_show_funcs_theme( $contents );
+	echo $xtpl->text( 'main' );
 	include ( NV_ROOTDIR . '/includes/footer.php' );
 }
 

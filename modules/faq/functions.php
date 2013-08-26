@@ -60,14 +60,14 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 	{
 		if( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 		{
-			$list[$row['id']] = array( //
-				'id' => ( int )$row['id'], //
-				'title' => $row['title'], //
-				'alias' => $row['alias'], //
-				'description' => $row['description'], //
-				'parentid' => ( int )$row['parentid'], //
-				'subcats' => array(), //
-				'keywords' => $row['keywords'] //
+			$list[$row['id']] = array(
+				'id' => ( int )$row['id'],
+				'title' => $row['title'],
+				'alias' => $row['alias'],
+				'description' => $row['description'],
+				'parentid' => ( int )$row['parentid'],
+				'subcats' => array(),
+				'keywords' => $row['keywords']
 			);
 		}
 	}
@@ -184,9 +184,9 @@ $nv_vertical_menu = array();
 //Xac dinh RSS
 if( $module_info['rss'] )
 {
-	$rss[] = array( //
-		'title' => $module_info['custom_title'], //
-		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+	$rss[] = array(
+		'title' => $module_info['custom_title'],
+		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
 	);
 }
 
@@ -212,9 +212,9 @@ foreach( $list_cats as $c )
 	}
 	if( $module_info['rss'] )
 	{
-		$rss[] = array( //
-			'title' => $module_info['custom_title'] . ' - ' . $c['title'], //
-			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias'] //
+		$rss[] = array(
+			'title' => $module_info['custom_title'] . ' - ' . $c['title'],
+			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $c['alias']
 		);
 	}
 }

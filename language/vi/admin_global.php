@@ -8,7 +8,8 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -27,6 +28,7 @@ $lang_global['mod_siteinfo'] = 'Thông tin';
 $lang_global['mod_language'] = 'Ngôn ngữ';
 $lang_global['mod_upload'] = 'Quản lý File';
 $lang_global['mod_webtools'] = 'Công cụ web';
+$lang_global['mod_seotools'] = 'Công cụ SEO';
 $lang_global['mod_subsite'] = 'Quản lý site con';
 $lang_global['go_clientsector'] = 'Trang chủ site';
 $lang_global['go_clientmod'] = 'Xem ngoài site';
@@ -76,5 +78,13 @@ $lang_global['error_upload_forbidden'] = 'Lỗi: Thư mục chứa file tải l�
 $lang_global['error_upload_writable'] = 'Lỗi: Thư mục %s không cho phép chứa file tải lên. Có thể bạn cần CHMOD lại thư mục này ở dạng 0777';
 $lang_global['error_upload_urlfile'] = 'Lỗi: URL mà bạn đưa ra không đúng';
 $lang_global['error_upload_url_notfound'] = 'Lỗi: Không thể tải file từ URL mà bạn đưa ra';
+
+$lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
+$lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
+$lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
+$lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
+
+$lang_global['length_characters'] = 'Số ký tự';
+$lang_global['length_suggest_max'] = 'Nên nhập tối đa %s ký tự';
 
 ?>

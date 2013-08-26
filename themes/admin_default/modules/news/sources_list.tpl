@@ -8,10 +8,10 @@
 			<td style="width:120px;"></td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
-			<td align="center">
+			<td class="center">
 			<select id="id_weight_{ROW.sourceid}" onchange="nv_chang_sources('{ROW.sourceid}','weight');">
 				<!-- BEGIN: weight -->
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
@@ -19,10 +19,10 @@
 			</select></td>
 			<td>{ROW.title}</td>
 			<td>{ROW.link}</td>
-			<td align="center"><span class="edit_icon"><a href="{ROW.url_edit}">{GLANG.edit}</a></span> &nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon" href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- BEGIN: generate_page -->
 <table class="tab1">

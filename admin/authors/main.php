@@ -238,7 +238,6 @@ if( ! empty( $admins ) )
 			{
 				if( ! empty( $value[1] ) )
 				{
-					$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 					$xtpl->assign( 'VALUE0', $value[0] );
 					$xtpl->assign( 'VALUE1', $value[1] );
 					++$a;
@@ -283,7 +282,6 @@ if( ! empty( $admins ) )
 			$data_row['is_suspend'] = ( $values['options']['is_suspend'][2] ) ? $lang_module['is_suspend2'] : $lang_module['is_suspend0'];
 
 			$xtpl->assign( 'DATA', $data_row );
-			$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 
 			if( ! empty( $values['thead']['chg_is_suspend'] ) )
 			{

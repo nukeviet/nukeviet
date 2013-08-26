@@ -31,6 +31,7 @@ if( $popup )
 	$xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
 	$xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
 	$xtpl->assign( "MODULE_NAME", $module_name );
+	$xtpl->assign( "NV_LANG_INTERFACE", NV_LANG_INTERFACE );
 	$xtpl->assign( "LANG", $lang_module );
 	$xtpl->assign( "NV_MAX_WIDTH", NV_MAX_WIDTH );
 	$xtpl->assign( "NV_MAX_HEIGHT", NV_MAX_HEIGHT );
@@ -58,19 +59,18 @@ if( $popup )
 	{
 		$global_config['mudim_active'] = 0;
 	}
+	$head_site = 0;
 }
 else
 {
-	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&popup=1&nomudim=1" );
+	$xtpl->assign( "IFRAME_SRC", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;popup=1&amp;nomudim=1" );
 	$xtpl->parse( 'uploadPage' );
 	$contents = $xtpl->text( 'uploadPage' );
-	$contents = nv_admin_theme( $contents );
-	$my_meta = "\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\" />";
-	$contents = preg_replace( '/(<head>)/i', "\\1" . $my_meta, $contents, 1 );
+	$head_site = 1;
 }
 
 include ( NV_ROOTDIR . '/includes/header.php' );
-echo $contents;
+echo nv_admin_theme( $contents, $head_site );
 include ( NV_ROOTDIR . '/includes/footer.php' );
 
 ?>

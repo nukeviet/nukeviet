@@ -203,14 +203,14 @@ $my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.u
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
 
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
-$my_head .= "<script type=\"text/javascript\">\$(document).ready(function(){\$(\"#votingcontent\").validate();});</script>";
+$my_footer .= "<script type=\"text/javascript\">\$(document).ready(function(){\$(\"#votingcontent\").validate();});</script>";
 
 $xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -316,13 +316,9 @@ for( $i = 0; $i < 60; ++$i )
 }
 
 $items = 0;
-$j = 0;
 foreach( $array_answervote as $id => $title )
 {
-	++$j;
-
 	$xtpl->assign( 'ITEM', array(
-		"class" => ( $j % 2 == 0 ) ? " class=\"second\"" : "",
 		"stt" => ++$items,
 		"id" => $id,
 		"title" => $title,
@@ -332,9 +328,6 @@ foreach( $array_answervote as $id => $title )
 	$xtpl->parse( 'main.item' );
 }
 
-++$j;
-$class = ( $j % 2 == 0 ) ? " class=\"second additem\"" : " class=\"additem\"";
-$xtpl->assign( 'NEW_CLASS', $class );
 $xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
 

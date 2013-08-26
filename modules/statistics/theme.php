@@ -81,7 +81,7 @@ function allreferers()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -133,7 +133,7 @@ function allbots()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -185,7 +185,7 @@ function allos()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -237,7 +237,7 @@ function allbrowsers()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -253,7 +253,7 @@ function allbrowsers()
 					$value[0] = number_format( $value[0] );
 				}
 				$xtpl->assign( 'VALUE', $value );
-				
+
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -290,7 +290,7 @@ function allcountries()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -329,7 +329,7 @@ function allcountries()
  */
 function main()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
+	global $module_info, $global_config, $module_name, $module_file, $db, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
 
 	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
 
@@ -377,7 +377,7 @@ function main()
 		{
 			$contents .= $m['count'] . "<br />";
 			$proc = ceil( ( $m['count'] / $ctsm['max'] ) * 100 );
-			$m['count'] = number_format($m['count']);
+			$m['count'] = number_format( $m['count'] );
 			$xtpl->assign( 'M', $m );
 			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
@@ -532,7 +532,7 @@ function main()
 	$a = 0;
 	foreach( $ctsc['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -554,10 +554,9 @@ function main()
 
 	if( $ctsc['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allcountries" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allcountries'] );
 		$xtpl->parse( 'main.ct.ot' );
 	}
 
@@ -570,7 +569,7 @@ function main()
 	$a = 0;
 	foreach( $ctsb['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -591,11 +590,9 @@ function main()
 
 	if( $ctsb['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allbrowsers" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allbrowsers'] );
 		$xtpl->parse( 'main.br.ot' );
 	}
 
@@ -608,7 +605,7 @@ function main()
 	$a = 0;
 	foreach( $ctso['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
@@ -630,11 +627,10 @@ function main()
 
 	if( $ctso['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allos" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allos'] );
 		$xtpl->parse( 'main.os.ot' );
 	}
 

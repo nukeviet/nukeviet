@@ -1,7 +1,7 @@
 <!-- BEGIN: empty -->
 <br />
 <br />
-<p align="center">
+<p class="center">
 	<strong>{LANG.nv_lang_error_exit}</strong>
 </p>
 <meta http-equiv="Refresh" content="3;URL={URL}" />
@@ -9,7 +9,7 @@
 <!-- BEGIN: copyok -->
 <br />
 <br />
-<p align="center">
+<p class="center">
 	<strong>{LANG.nv_lang_copyok}</strong>
 </p>
 <meta http-equiv="Refresh" content="3;URL={URL}" />
@@ -20,9 +20,14 @@
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="checksess" value="{CHECKSESS}" />
 	<table class="tab1">
+		<tfoot>
+			<tr>
+				<td colspan="2" class="center"><input type="submit" value="{LANG.nv_admin_submit}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr>
-				<td style="width:200px">
+				<td class="w200">
 				<select name="newslang">
 					<option value="">{LANG.nv_admin_sl1}</option>
 					<!-- BEGIN: newslang -->
@@ -41,11 +46,6 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2" class="center"><input type="submit" value="{LANG.nv_admin_submit}" /></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <!-- END: main -->

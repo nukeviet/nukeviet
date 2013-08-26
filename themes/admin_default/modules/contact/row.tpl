@@ -1,39 +1,31 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form method="post" action="{FORM_ACTION}">
 	<input name="save" type="hidden" value="1" />
 	<table class="tab1">
-		<col width="150px" />
+		<col class="w150"/>
+		<col />
 		<tbody>
 			<tr>
 				<td><strong>{LANG.part_row_title}</strong></td>
-				<td><input class="txt-half" type="text" name="full_name" value="{DATA.full_name}"/></td>
+				<td><input class="w150" type="text" name="full_name" value="{DATA.full_name}"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{GLANG.phonenumber}</strong></td>
-				<td><input class="txt-half" type="text" name="phone" value="{DATA.phone}"/></td>
+				<td><input class="w150" type="text" name="phone" value="{DATA.phone}"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>Fax</strong></td>
-				<td><input class="txt-half" type="text" name="fax" value="{DATA.fax}"/></td>
+				<td><input class="w150" type="text" name="fax" value="{DATA.fax}"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{GLANG.email}</strong></td>
-				<td><input class="txt-half" type="text" name="email" value="{DATA.email}"/></td>
+				<td><input class="w150" type="text" name="email" value="{DATA.email}"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2">
 				<p>
@@ -54,8 +46,8 @@
 				<td>{LANG.admin_send2mail_title}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: admin -->
-		<tbody {ADMIN.class}>
+		<tbody>
+			<!-- BEGIN: admin -->
 			<tr>
 				<td>{ADMIN.login}</td>
 				<td>{ADMIN.fullname}</td>
@@ -64,8 +56,8 @@
 				<td class="center"><input type="checkbox" name="reply_level[]" value="{ADMIN.admid}"{ADMIN.reply_level}{ADMIN.disabled} /></td>
 				<td class="center"><input type="checkbox" name="obt_level[]" value="{ADMIN.admid}"{ADMIN.obt_level} /></td>
 			</tr>
+			<!-- END: admin -->
 		</tbody>
-		<!-- END: admin -->
 	</table>
 	<table class="tab1">
 		<tr>

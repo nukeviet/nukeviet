@@ -12,8 +12,8 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 if( ! defined( 'SHADOWBOX' ) )
 {
 	$my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
+	$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_footer .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 	define( 'SHADOWBOX', true );
 }
 
@@ -122,7 +122,6 @@ $result = $db->sql_query( $sql );
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'bid' => $row['bid'],
 		'title' => $row['title'],
 		'module' => $row['module'],

@@ -47,7 +47,7 @@ class optimezer
 		'output-encoding' => 'utf8', //Bang ma dich
 		'output-xhtml' => true, // Chuan xhtml
 		'drop-empty-paras' => true, // Xoa cac tags p rong
-		'drop-proprietary-attributes' => true, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
+		'drop-proprietary-attributes' => false, // Xoa tat ca nhung attributes dac thu cua microsoft (vi du: tu word)
 		'word-2000' => true, //Xoa tat ca nhung ma cua word khong phu hop voi chuan html
 		'enclose-block-text' => true, // Tat ca cac block-text duoc dong bang tag p
 		'enclose-text' => true, // Tat ca cac text nam trong khu vuc body nhung khong nam trong bat ky mot tag nao khac se duoc cho vao <p>text</p>
@@ -131,9 +131,9 @@ class optimezer
 			$this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
 		}
 
-		$this->_meta['http-equiv'] = $this->_meta['name'] = array();
+		$this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = array();
 		$this->_meta['charset'] = "";
-		
+
 		if( $this->opt_css_file )
 		{
 			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
@@ -165,7 +165,11 @@ class optimezer
 						{
 							$this->_meta['charset'] = $combine['charset'];
 						}
-						
+						else
+						{
+							$this->_meta['other'][] = array( $matches2[1], $matches2[2] );
+						}
+
 					}
 				}
 				elseif( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
@@ -211,6 +215,14 @@ class optimezer
 		}
 
 		$meta = array();
+		if( ! empty( $this->_meta['name'] ) )
+		{
+			foreach( $this->_meta['name'] as $value => $content )
+			{
+				$meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
+			}
+		}
+
 		if ( ! empty( $this->_meta['charset'] ) )
 		{
 			$meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
@@ -222,12 +234,11 @@ class optimezer
 				$meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
 			}
 		}
-
-		if( ! empty( $this->_meta['name'] ) )
+		if( ! empty( $this->_meta['other'] ) )
 		{
-			foreach( $this->_meta['name'] as $value => $content )
+			foreach( $this->_meta['other'] as $row )
 			{
-				$meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
+				$meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
 			}
 		}
 
@@ -258,11 +269,7 @@ class optimezer
 			}
 		}
 
-		if ( $this->_tidySupport )
-		{
-			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
-			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
-		}
+		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
 		$head = "<head>" . $this->eol . $this->_title . $this->eol;
 		if( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
@@ -272,21 +279,20 @@ class optimezer
 		if( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
 		$head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
 		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
-		$this->_content = preg_replace( '/<head>/i', $head, $this->_content, 1 );
+		$this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
 
-		if( $this->_tidySupport )
+		if ( $this->_tidySupport )
 		{
-			$tidy = new tidy();
-			$tidy->parseString( $this->_content, $this->tidy_options, 'utf8' );
-			$tidy->cleanRepair();
-			return $tidy;
+			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
+			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
 		}
+
 		return $this->_content;
 	}
 
 	/**
      * optimezer::tidy5()
-     * 
+     *
      * @param mixed $string
      * @return
      */
@@ -303,8 +309,8 @@ class optimezer
         }
 
         $this->tidy_options['doctype'] = 'omit';
-        $this->tidy_options['output-html'] = true;
-        $this->tidy_options['output-xhtml'] = false;
+        //$this->tidy_options['output-html'] = true;
+        //$this->tidy_options['output-xhtml'] = false;
         $this->tidy_options['drop-proprietary-attributes'] = false;
         $this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
 

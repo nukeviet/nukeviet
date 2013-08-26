@@ -88,7 +88,6 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', ( ++$i % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
@@ -118,7 +117,6 @@ if( ! empty( $info ) or ! empty( $pending_info ) )
 		{
 			foreach( $if['field'] as $field )
 			{
-				$xtpl->assign( 'CLASS', ( ++$i % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'KEY', $field['key'] );
 				$xtpl->assign( 'VALUE', $field['value'] );
 				$xtpl->assign( 'MODULE', $if['caption'] );
@@ -182,7 +180,6 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 	foreach( $field as $key => $value )
 	{
-		$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $value['key'] );
 		$xtpl->assign( 'VALUE', $value['value'] );
 		$xtpl->parse( 'main.version.loop' );

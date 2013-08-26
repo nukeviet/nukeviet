@@ -1,14 +1,19 @@
 <!-- BEGIN: empty -->
-<div align="center">
+<div class="center">
 	<b>{LANG.nv_lang_error_exit}</b>
 </div>
 <meta http-equiv="Refresh" content="3;URL={URL}" />
 <!-- END: empty -->
 <!-- BEGIN: main -->
 <form action="{NV_BASE_ADMINURL}index.php" method="get">
-	<input type="hidden" name="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
-	<input type="hidden" name="{NV_OP_VARIABLE}"value="{OP}" />
+	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 	<table class="tab1">
+		<tfoot>
+			<tr>
+				<td colspan="2" class="center"><input type="hidden" name ="submit" value="1" /><input type="submit" value="{LANG.nv_admin_submit}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr>
 				<td class="aright">{LANG.nv_lang_data}:</td>
@@ -20,8 +25,6 @@
 					<!-- END: language -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td class="aright">{LANG.nv_lang_data_source}:</td>
 				<td>
@@ -32,8 +35,6 @@
 					<!-- END: language_source -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td class="aright"> {LANG.nv_lang_area}:</td>
 				<td>
@@ -44,8 +45,6 @@
 					<!-- END: language_area -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td class="aright">{LANG.nv_check_type}:</td>
 				<td>
@@ -56,23 +55,18 @@
 				</select></td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="2" class="center"><input type="hidden" name ="submit" value="1" /><input type="submit" value="{LANG.nv_admin_submit}" /></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <!-- BEGIN: nodata -->
-<center>
+<div class="center">
 	<br />
 	<b>{LANG.nv_lang_check_no_data}</b>
-</center>
+</div>
 <!-- END: nodata -->
 <!-- BEGIN: data -->
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
-	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
-	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
+	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="submit" value="1" />
 	<input type="hidden" name ="typelang" value="{DATA.typelang}" />
 	<input type="hidden" name ="sourcelang" value="{DATA.sourcelang}" />
@@ -82,8 +76,9 @@
 	<!-- BEGIN: lang -->
 	<table class="tab1">
 		<caption>{CAPTION}</caption>
-		<col width="40" />
-		<col width="200" />
+		<col class="w50"/>
+		<col class="w200"/>
+		<col/>
 		<thead>
 			<tr>
 				<td>{LANG.nv_lang_nb}</td>
@@ -91,21 +86,22 @@
 				<td>{LANG.nv_lang_value}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: loop -->
-		<tbody {ROW.class}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
-				<td align="center">{ROW.stt}</td>
-				<td align="right">{ROW.lang_key}</td>
-				<td align="left"><input type="text" value="{ROW.datalang}" name="pozlang[{ROW.id}]" size="90" />
+				<td class="center">{ROW.stt}</td>
+				<td class="right">{ROW.lang_key}</td>
+				<td class="left"><input type="text" value="{ROW.datalang}" name="pozlang[{ROW.id}]" size="90" />
 				<br />
 				{ROW.sourcelang} </td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 	<!-- END: lang -->
-	<center><input type="submit" value="{LANG.nv_admin_edit_save}" />
-	</center>
+	<div class="center">
+		<input type="submit" value="{LANG.nv_admin_edit_save}" />
+	</div>
 </form>
 <!-- END: data -->
 <!-- END: main -->

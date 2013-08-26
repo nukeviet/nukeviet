@@ -9,10 +9,6 @@
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$page_title = $module_info['custom_title'];
-$key_words = $module_info['keywords'];
-$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
-
 $array_modul = LoadModulesSearch();
 $is_search = false;
 $search = array(
@@ -90,6 +86,18 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 }
 
 $contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
+
+$page_title = $module_info['custom_title'];
+if( ! empty( $search['key'] ) )
+{
+	$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];
+	if( $search['page'] > 1 )
+	{
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $search['page'];
+	}
+}
+$key_words = $description = 'no';
+$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 include ( NV_ROOTDIR . '/includes/header.php' );
 echo nv_site_theme( $contents );

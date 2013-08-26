@@ -6,15 +6,16 @@
 	<!-- BEGIN: urlcap -->
 	<caption>{CAPTION} <a href="{URL}" id="checkchmod" title="{LANG.checkchmod}">({LANG.checkchmod})</a><span id="wait"></span></caption>
 	<!-- END: urlcap -->
-	<col span="2" valign="top" width="50%" />
+	<col style="width: 50%" />
+	<col style="width: 50%" />
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
 		<tr>
 			<td>{KEY}</td>
 			<td>{VALUE}</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	</tbody>
 </table>
 <!-- END: main -->
 <!-- BEGIN: js -->

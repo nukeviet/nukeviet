@@ -9,49 +9,18 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main' );
-if( defined( 'NV_IS_GODADMIN' ) )
+if( $admin_info['level'] == 1 )
 {
-	$submenu['system_info'] = $lang_module['site_configs_info'];
-
-	if( nv_function_exists( 'phpinfo' ) )
-	{
-		$submenu['php_info_configuration'] = $lang_module['configuration_php'];
-		$submenu['php_info_modules'] = $lang_module['extensions'];
-		$submenu['php_info_environment'] = $lang_module['environment_php'];
-		$submenu['php_info_variables'] = $lang_module['variables_php'];
-
-		$allow_func[] = 'php_info_configuration';
-		$allow_func[] = 'php_info_modules';
-		$allow_func[] = 'php_info_environment';
-		$allow_func[] = 'php_info_variables';
-	}
-
-	$allow_func[] = 'system_info';
-	$allow_func[] = 'checkchmod';
+	$allow_func[] = 'logs_del';
 }
 
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$allow_func[] = 'logs';
-	$submenu['logs'] = $lang_module['logs_title'];
-}
+$menu_top = array(
+	"title" => $module_name,
+	"module_file" => "",
+	"custom_title" => $lang_global['mod_siteinfo']
+);
 
-if( $module_name == "siteinfo" )
-{
-	if( $admin_info['level'] == 1 )
-	{
-		$allow_func[] = 'logs_del';
-	}
-
-	$menu_top = array(
-		"title" => $module_name,
-		"module_file" => "",
-		"custom_title" => $lang_global['mod_siteinfo']
-	);
-
-	define( 'NV_IS_FILE_SITEINFO', true );
-}
+define( 'NV_IS_FILE_SITEINFO', true );
 
 /**
  * nv_siteinfo_getlang()

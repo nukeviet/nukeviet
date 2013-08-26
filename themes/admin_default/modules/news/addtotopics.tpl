@@ -1,23 +1,19 @@
 <!-- BEGIN: main -->
 <div id="add">
 	<table class="tab1">
+		<colgroup>
+			<col class="w50"/>
+			<col>
+		</colgroup>
 		<thead>
 			<tr>
 				<td>&nbsp;</td>
 				<td>{LANG.name}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: loop -->
-		<tbody {ROW.class}>
-			<tr>
-				<td align="center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
-				<td>{ROW.title}</td>
-			</tr>
-		</tbody>
-		<!-- END: loop -->
 		<tfoot>
-			<tr align="left">
-				<td align="center" style="width:50px"><input name="checkall" type="checkbox"/></td>
+			<tr>
+				<td class="center"><input name="checkall" type="checkbox"/></td>
 				<td>
 				<select name="topicsid">
 					<!-- BEGIN: topicsid -->
@@ -26,6 +22,14 @@
 				</select><input name="update" type="button" value="{LANG.save}" /></td>
 			</tr>
 		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
+				<td>{ROW.title}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
 	</table>
 </div>
 <script type="text/javascript">

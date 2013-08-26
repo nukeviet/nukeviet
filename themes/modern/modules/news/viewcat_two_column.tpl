@@ -1,4 +1,13 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: viewdescription -->
+<div class="listz-news clearfix m-bottom">
+	<h1>{CONTENT.title}</h1>
+	<!-- BEGIN: image -->
+	<img class="s-border fl left" alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+	<!-- END: image -->
+	<h2>{CONTENT.description}</h2>
+</div>
+<!-- END: viewdescription -->
 <!-- BEGIN: catcontent -->
 <div class="box-border-shadow m-bottom t-news">
 	<!-- BEGIN: content -->

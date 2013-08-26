@@ -177,10 +177,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$array['who_view'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_view'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		$array['who_view'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -190,10 +190,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_view'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+			$array['groups_view'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -384,10 +384,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array['who_view'] = array();
 	foreach( $array_who as $key => $who )
 	{
-		$array['who_view'][] = array( //
-			'key' => $key, //
-			'title' => $who, //
-			'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		$array['who_view'][] = array(
+			'key' => $key,
+			'title' => $who,
+			'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -397,10 +397,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		foreach( $groups_list as $key => $title )
 		{
-			$array['groups_view'][] = array( //
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+			$array['groups_view'][] = array(
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 	}
@@ -565,7 +565,6 @@ else
 }
 
 $list = array();
-$a = 0;
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
@@ -587,20 +586,15 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
 	}
 
-	$class = ( $a % 2 ) ? " class=\"second\"" : "";
-
-	$list[$row['id']] = array( //
-		'id' => ( int )$row['id'], //
-		'title' => $row['title'], //
-		'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'], //
-		'numsub' => $numsub, //
-		'parentid' => $parentid, //
-		'weight' => $weight, //
-		'status' => $row['status'] ? " checked=\"checked\"" : "", //
-		'class' => $class //
+	$list[$row['id']] = array(
+		'id' => ( int )$row['id'],
+		'title' => $row['title'],
+		'titlelink' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;catid=" . $row['id'],
+		'numsub' => $numsub,
+		'parentid' => $parentid,
+		'weight' => $weight,
+		'status' => $row['status'] ? " checked=\"checked\"" : ""
 	);
-
-	++$a;
 }
 
 $xtpl = new XTemplate( "cat_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );

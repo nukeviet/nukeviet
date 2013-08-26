@@ -52,7 +52,6 @@ if( file_exists( $filename ) )
 		foreach( $errorfile as $i => $file )
 		{
 			$xtpl->assign( 'FILE', $file );
-			$xtpl->assign( 'CLASS', $i % 2 ? ' class="second"' : '' );
 			$xtpl->parse( 'exists.loop' );
 		}
 
@@ -190,7 +189,6 @@ if( file_exists( $filename ) )
 				foreach( $error_create_folder as $i => $folder )
 				{
 					$xtpl->assign( 'FOLDER', $folder );
-					$xtpl->assign( 'CLASS', $i % 2 ? ' class="second"' : '' );
 					$xtpl->parse( 'error_create_folder.loop' );
 				}
 
@@ -258,7 +256,6 @@ if( file_exists( $filename ) )
 					foreach( $error_move_folder as $i => $folder )
 					{
 						$xtpl->assign( 'FOLDER', $folder );
-						$xtpl->assign( 'CLASS', $i % 2 ? ' class="second"' : '' );
 						$xtpl->parse( 'error_move_folder.loop' );
 					}
 

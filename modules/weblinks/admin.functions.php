@@ -9,11 +9,6 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['content'] = $lang_module['weblink_add_link'];
-$submenu['cat'] = $lang_module['weblink_catlist'];
-$submenu['brokenlink'] = $lang_module['weblink_link_broken'];
-$submenu['config'] = $lang_module['weblink_config'];
-
 $allow_func = array( 'main', 'cat', 'change_cat', 'del_cat', 'content', 'del_link', 'config', 'multidel', 'checklink', 'brokenlink', 'delbroken' );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -57,7 +52,7 @@ function drawselect_number( $select_name = '', $number_start = 0, $number_end = 
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	for( $i = $number_start; $i <= $number_end; ++$i )
 	{
-		$select = ( $i == $number_curent ) ? "selected=\"selected\"" : "";
+		$select = ( $i == $number_curent ) ? " selected=\"selected\"" : "";
 		$html .= "<option value=\"" . $i . "\"" . $select . ">" . $i . "</option>";
 	}
 	$html .= "</select>";
@@ -97,8 +92,8 @@ function getlevel( $pid, $array_cat, $numxtitle = 5, $xkey = "&nbsp;" )
 function drawselect_yesno( $select_name = '', $curent = 1, $lang_no = '', $lang_yes = '', $func_onchange = '' )
 {
 	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
-	$select_yes = ( $curent == 1 ) ? "selected=\"selected\"" : "";
-	$select_no = ( $curent == 0 ) ? "selected=\"selected\"" : "";
+	$select_yes = ( $curent == 1 ) ? " selected=\"selected\"" : "";
+	$select_no = ( $curent == 0 ) ? " selected=\"selected\"" : "";
 	$html .= "<option value=\"0\"" . $select_no . ">" . $lang_no . "</option>";
 	$html .= "<option value=\"1\"" . $select_yes . ">" . $lang_yes . "</option>";
 	$html .= "</select>";

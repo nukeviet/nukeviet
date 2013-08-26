@@ -37,10 +37,8 @@ if( $nv_Request->isset_request( 'ok', 'cookie' ) )
 	$sql = "SELECT `url` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` LIMIT $page,$per_page";
 	$result = $db->sql_query( $sql );
 
-	$i = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$xtpl->assign( 'CLASS', $i++ % 2 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'URL', $row['url'] );
 
 		if( $check->check_curl( $row['url'] ) )

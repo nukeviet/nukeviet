@@ -9,138 +9,18 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-/**
- * nv_site_mods()
- *
- * @return
- */
-function nv_site_mods()
-{
-	global $admin_info, $user_info, $global_config, $db;
+//Open Graph protocol
+$meta_ogp = array(
+	'title' => '',
+	'type' => '',
+	'description' => '',
+	'site_name' => '',
+	'image' => '',
+	'url' => ''
+);
 
-	$cache_file = NV_LANG_DATA . "_modules_sitemods_" . NV_CACHE_PREFIX . ".cache";
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
-	{
-		$site_mods = unserialize( $cache );
-	}
-	else
-	{
-		$site_mods = array();
-		$result = $db->sql_query( "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
-		while( $row = $db->sql_fetch_assoc( $result ) )
-		{
-			$m_title = $db->unfixdb( $row['title'] );
-			if( ! isset( $site_mods[$m_title] ) )
-			{
-				$site_mods[$m_title] = array(
-					'module_file' => $db->unfixdb( $row['module_file'] ),
-					'module_data' => $db->unfixdb( $row['module_data'] ),
-					'custom_title' => $row['custom_title'],
-					'admin_file' => $row['admin_file'],
-					'theme' => $db->unfixdb( $row['theme'] ),
-					'mobile' => $row['mobile'],
-					'description' => $row['description'],
-					'keywords' => $row['keywords'],
-					'groups_view' => $row['groups_view'],
-					'in_menu' => $row['in_menu'],
-					'submenu' => $row['submenu'],
-					'is_modadmin' => false,
-					'rss' => $row['rss'],
-					'funcs' => array()
-				);
-			}
-			$site_mods[$m_title]['funcs'][$db->unfixdb( $row['func_name'] )] = array(
-				'func_id' => $row['func_id'],
-				'show_func' => $row['show_func'],
-				'func_custom_name' => $row['func_custom_name'],
-				'in_submenu' => $row['in_submenu']
-			);
-		}
-		$cache = serialize( $site_mods );
-		nv_set_cache( $cache_file, $cache );
-		unset( $cache, $result );
-	}
-
-	foreach( $site_mods as $m_title => $row )
-	{
-		$allowed = false;
-		$is_modadmin = false;
-		$groups_view = ( string )$row['groups_view'];
-
-		if( defined( 'NV_IS_SPADMIN' ) )
-		{
-			$allowed = true;
-			$is_modadmin = true;
-		}
-		elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
-		{
-			$allowed = true;
-			$is_modadmin = true;
-		}
-		elseif( $m_title == $global_config['site_home_module'] )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "0" )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "1" and defined( 'NV_IS_USER' ) )
-		{
-			$allowed = true;
-		}
-		elseif( $groups_view == "2" and defined( 'NV_IS_ADMIN' ) )
-		{
-			$allowed = true;
-		}
-		elseif( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
-		{
-			$allowed = true;
-		}
-
-		if( $allowed )
-		{
-			$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
-		}
-		else
-		{
-			unset( $site_mods[$m_title] );
-		}
-	}
-	if( isset( $site_mods['users'] ) )
-	{
-		if( defined( "NV_IS_USER" ) )
-		{
-			$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups' );
-			if( ! defined( "NV_IS_ADMIN" ) )
-			{
-				$user_ops[] = 'logout';
-			}
-		}
-		else
-		{
-			$user_ops = array( 'main', 'login', 'register', 'lostpass' );
-			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
-			{
-				$user_ops[] = 'lostactivelink';
-				$user_ops[] = 'active';
-			}
-		}
-		if( ( $global_config['whoviewuser'] == 2 and defined( "NV_IS_ADMIN" ) ) or ( $global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' ) ) or $global_config['whoviewuser'] == 0 )
-		{
-			$user_ops[] = 'memberlist';
-		}
-		$func_us = $site_mods['users']['funcs'];
-		foreach( $func_us as $func => $row )
-		{
-			if( ! in_array( $func, $user_ops ) )
-			{
-				unset( $site_mods['users']['funcs'][$func] );
-			}
-		}
-	}
-	return $site_mods;
-}
+//tài khoản Google+
+$id_profile_googleplus = 0;
 
 /**
  * nv_create_submenu()
@@ -401,11 +281,11 @@ function nv_blocks_content( $sitecontent )
  */
 function nv_html_meta_tags()
 {
-	global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
+	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp, $id_profile_googleplus;
 
 	$return = '';
-	
-	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+
 	if ( empty( $site_description ) )
     {
         $ds = array();
@@ -415,19 +295,42 @@ function nv_html_meta_tags()
         $ds[] = $client_info['selfurl'];
         $site_description = implode( " - ", $ds );
     }
-    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
+	elseif ( $site_description == 'no' )
+	{
+		$site_description = '';
+	}
+
+	if ( ! empty( $site_description ) )
+	{
+		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
+	}
 
 	$kw = array();
-	if( ! empty( $key_words ) ) $kw[] = $key_words;
-	if( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
-	if( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
+	if( ! empty( $key_words ) )
+	{
+		if ( $key_words != 'no' )
+		{
+			$kw[] = $key_words;
+		}
+	}
+	elseif( ! empty( $module_info['keywords'] ) )
+	{
+		$kw[] = $module_info['keywords'];
+	}
+
+	if( $home AND ! empty( $global_config['site_keywords'] ) )
+	{
+		$kw[] = $global_config['site_keywords'];
+	}
+
 	if( ! empty( $kw ) )
 	{
 		$kw = array_unique( $kw );
-		$kw = implode( ",", $kw );
-		$kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $kw );
-		$key_words = nv_strtolower( strip_tags( $kw ) );
+		$key_words = implode( ",", $kw );
+		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
+		$key_words = nv_strtolower( strip_tags( $key_words ) );
 		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
+		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\" />\n";
 	}
 
 	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
@@ -484,97 +387,38 @@ function nv_html_meta_tags()
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
 	}
 
+	//Open Graph protocol http://ogp.me
+	if( $global_config['metaTagsOgp'] )
+	{
+		if( empty( $meta_ogp['title'] ) ) $meta_ogp['title'] = $page_title;
+		if( empty( $meta_ogp['description'] ) ) $meta_ogp['description'] = $site_description;
+		if( empty( $meta_ogp['type'] ) ) $meta_ogp['type'] = 'WebPage';
+		if( empty( $meta_ogp['url'] ) ) $meta_ogp['url'] = $canonicalUrl;
+		$meta_ogp['site_name'] = $global_config['site_name'];
+		foreach( $meta_ogp as $key => $value )
+		{
+			if( ! empty( $value ) )
+			{
+				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\" />\n";
+			}
+		}
+	}
+	//tài khoản Google+
+	if( $id_profile_googleplus == 0 )
+	{
+		$id_profile_googleplus = $module_info['gid'];
+	}
+	if( $id_profile_googleplus > 0 )
+	{
+		$dbgoogleplus = nv_db_cache( 'SELECT `gid`, `idprofile` FROM `' . $db_config['prefix'] . '_googleplus`', 'gid', 'seotools' );
+		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
+		{
+			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />\n";
+		}
+	}
+
 	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
 	return $return;
-}
-
-/**
- * nv_html5_meta_tags()
- *
- * @return
- */
-function nv_html5_meta_tags()
-{
-    global $global_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl;
-
-    $return = '';
-
-    $site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
-    if ( empty( $site_description ) )
-    {
-        $ds = array();
-        if ( ! empty( $page_title ) ) $ds[] = $page_title;
-        if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
-        $ds[] = $module_info['custom_title'];
-        $ds[] = $client_info['selfurl'];
-        $site_description = implode( " - ", $ds );
-    }
-    $return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\">\n";
-
-    $kw = array();
-    if ( ! empty( $key_words ) ) $kw[] = $key_words;
-    if ( ! empty( $module_info['keywords'] ) ) $kw[] = $module_info['keywords'];
-    if ( ! empty( $global_config['site_keywords'] ) ) $kw[] = $global_config['site_keywords'];
-    if ( ! empty( $kw ) )
-    {
-        $kw = array_unique( $kw );
-        $kw = implode( ",", $kw );
-        $kw = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ",", "," ), $kw );
-        $key_words = nv_strtolower( strip_tags( $kw ) );
-        $return .= "<meta name=\"keywords\" content=\"" . $key_words . "\">\n";
-    }
-
-    $return .= "<meta charset=\"" . $global_config['site_charset'] . "\">\n";
-
-    if ( $global_config['idsite'] and file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
-    {
-        $mt = file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' );
-        $patters = array();
-        $patters['/\{CONTENT\-LANGUAGE\}/'] = $lang_global['Content_Language'];
-        $patters['/\{LANGUAGE\}/'] = $lang_global['LanguageName'];
-        $patters['/\{SITE\_NAME\}/'] = $global_config['site_name'];
-        $patters['/\{SITE\_EMAIL\}/'] = $global_config['site_email'];
-        $mt = preg_replace( array_keys( $patters ), array_values( $patters ), $mt );
-        $mt = preg_replace( '/\{(.*)\}/', '', $mt );
-        $mt = simplexml_load_string( $mt );
-        $mt = nv_object2array( $mt );
-
-        if ( $mt['meta_item'] )
-        {
-            if ( isset( $mt['meta_item'][0] ) ) $metatags = $mt['meta_item'];
-            else  $metatags[] = $mt['meta_item'];
-            foreach ( $metatags as $meta )
-            {
-                if ( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
-                {
-                    $return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\">\n";
-                }
-            }
-        }
-    }
-    else
-    {
-        $return .= "<meta name=\"robots\" content=\"index,archive,follow,noodp\">\n";
-        $return .= "<meta name=\"googlebot\" content=\"index,archive,follow,noodp\">\n";
-        $return .= "<meta name=\"author\" content=\"" . $global_config['site_name'] . "\">\n";
-    }
-
-    $return .= "<meta name=\"generator\" content=\"NukeViet v3.x\">\n";
-    if ( defined( 'NV_IS_ADMIN' ) )
-    {
-        $return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\">\n";
-    }
-
-    if ( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
-
-    if ( substr( $canonicalUrl, 0, 4 ) != "http" )
-    {
-        if ( substr( $canonicalUrl, 0, 1 ) != "/" ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-        $canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
-    }
-
-    $return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\">";
-    return $return;
 }
 
 /**

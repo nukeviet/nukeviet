@@ -5,23 +5,23 @@
 			<td style="width:60px;">{LANG.weight}</td>
 			<td>{LANG.name}</td>
 			<td>{LANG.description}</td>
-			<td align="center" style="width:120px;"></td>
+			<td class="center" style="width:120px;">&nbsp;</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
-			<td align="center">
+			<td class="center">
 			<select id="id_weight_{ROW.topicid}" onchange="nv_chang_topic('{ROW.topicid}','weight');">
 				<!-- BEGIN: weight -->
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 				<!-- END: weight -->
 			</select></td>
-			<td><a href="{ROW.link}">{ROW.title}</a>{ROW.numnews}</td>
+			<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 			<td>{ROW.description}</td>
-			<td align="center"><span class="edit_icon"><a href="{ROW.url_edit}">{GLANG.edit}</a></span> &nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon" href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: main -->

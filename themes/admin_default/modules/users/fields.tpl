@@ -2,7 +2,7 @@
 <!-- BEGIN: data -->
 <table class="tab1">
 	<thead>
-		<tr align="center">
+		<tr class="center">
 			<td style="width:60px;">{LANG.weight}</td>
 			<td>{LANG.field_id}</td>
 			<td>{LANG.field_title}</td>
@@ -13,10 +13,10 @@
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
-			<td align="center">
+			<td class="center">
 			<select id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
 				<!-- BEGIN: weight -->
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
@@ -25,13 +25,13 @@
 			<td>{ROW.field}</td>
 			<td>{ROW.field_lang}</td>
 			<td>{ROW.field_type} </td>
-			<td align="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></td>
-			<td align="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
-			<td align="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
-			<td><span class="edit_icon"><a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a></span> &nbsp;-&nbsp; <span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a></span></td>
+			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></td>
+			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
+			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
+			<td><a class="edit_icon" href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;-&nbsp; <a class="delete_icon" href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: data -->
 <!-- BEGIN: load -->
@@ -45,72 +45,55 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
 		</p></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post" id="ffields">
 	<table class="tab1">
 		<caption> {CAPTIONFORM} </caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col />
 		</colgroup>
-		<!-- BEGIN: field -->
 		<tbody>
+			<!-- BEGIN: field -->
 			<tr>
 				<td>{LANG.field_id}:</td>
-				<td><input style="width:100px" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</td>
+				<td><input class="w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</td>
 			</tr>
-		</tbody>
-		<!-- END: field -->
-		<tbody class="second">
+			<!-- END: field -->
 			<tr>
 				<td>{LANG.field_title}</td>
-				<td><input class="required"  style="width:350px" type="text" value="{DATAFORM.title}" name="title"></td>
+				<td><input class="w350 required" type="text" value="{DATAFORM.title}" name="title"></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.field_description}:</td>
-				<td valign="center"><textarea style="width:350px" cols="60" rows="3" name="description" style="overflow: hidden;">{DATAFORM.description}</textarea></td>
+				<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;">{DATAFORM.description}</textarea></td>
 			</tr>
-		</tbody>
-
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_required}</td>
 				<td><input name="required" value="1" type="checkbox" {DATAFORM.required}> {LANG.field_required_note}</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.field_show_register}</td>
 				<td><input name="show_register" value="1" type="checkbox" {DATAFORM.show_register}></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_user_editable}</td>
 				<td><input name="user_editable" value="1" type="checkbox" {DATAFORM.user_editable}/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.field_user_editable_once}</td>
 				<td><input class="" name="user_editable_once" value="1" type="checkbox" {DATAFORM.user_editable_once}></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_show_profile}</td>
 				<td><input name="show_profile" value="1" type="checkbox" {DATAFORM.show_profile}></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.field_type}:</td>
 				<td>
@@ -125,15 +108,11 @@
 				<!-- END: field_type -->
 				{FIELD_TYPE_TEXT} </td>
 			</tr>
-		</tbody>
-		<tbody  class="second" id="classfields" {DATAFORM.classdisabled}>
-			<tr>
+			<tr id="classfields" {DATAFORM.classdisabled}>
 				<td>{LANG.field_class}</td>
-				<td><input class="validalphanumeric" style="width:300px" type="text" value="{DATAFORM.class}" name="class" maxlength="50"></td>
+				<td><input class="w300 validalphanumeric" type="text" value="{DATAFORM.class}" name="class" maxlength="50"></td>
 			</tr>
-		</tbody>
-		<tbody class="second" id="editorfields" {DATAFORM.editordisabled}>
-			<tr>
+			<tr id="editorfields" {DATAFORM.editordisabled}>
 				<td>{LANG.field_size}</td>
 				<td>width: <input style="width:50px" type="text" value="{DATAFORM.editor_width}" name="editor_width" maxlength="5"> height: <input style="width:50px" type="text" value="{DATAFORM.editor_height}" name="editor_height" maxlength="5"></td>
 			</tr>
@@ -142,7 +121,8 @@
 	<table class="tab1" id="textfields" {DATAFORM.display_textfields}>
 		<caption>{LANG.field_options_text}</caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col />
 		</colgroup>
 		<tbody>
 			<tr>
@@ -159,17 +139,13 @@
 					<!-- END: match_type -->
 				</ul></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_default_value}:</td>
-				<td><input maxlength="255" style="width:300px" type="text" value="{DATAFORM.default_value}" name="default_value"></td>
+				<td><input class="w300" maxlength="255" type="text" value="{DATAFORM.default_value}" name="default_value"></td>
 			</tr>
-		</tbody>
-		<tbody id="max_length">
-			<tr>
+			<tr id="max_length">
 				<td>{LANG.field_min_length}:</td>
-				<td><input class="number" style="width:100px" type="text" value="{DATAFORM.min_length}" name="min_length"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="number" style="width:100px" type="text" value="{DATAFORM.max_length}" name="max_length"></td>
+				<td><input class="w100 number"type="text" value="{DATAFORM.min_length}" name="min_length"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="w100 number" type="text" value="{DATAFORM.max_length}" name="max_length"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -177,24 +153,21 @@
 	<table class="tab1" id="numberfields" {DATAFORM.display_numberfields}>
 		<caption>{LANG.field_options_number}</caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col />
 		</colgroup>
 		<tbody>
 			<tr>
 				<td>{LANG.field_number_type}:</td>
 				<td><input type="radio" value="1" name="number_type" {DATAFORM.number_type_1}>{LANG.field_integer} <input type="radio" value="2" name="number_type" {DATAFORM.number_type_2}> {LANG.field_real} </td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_default_value}:</td>
-				<td><input class="required number" maxlength="255" style="width:300px" type="text" value="{DATAFORM.default_value_number}" name="default_value_number"></td>
+				<td><input class="w300 required number" maxlength="255" type="text" value="{DATAFORM.default_value_number}" name="default_value_number"></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.field_min_length}:</td>
-				<td><input class="required number" class="number" style="width:100px" type="text" value="{DATAFORM.min_number}" name="min_number_length" maxlength="11"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="required number" class="number" style="width:100px" type="text" value="{DATAFORM.max_number}" name="max_number_length" maxlength="11"></td>
+				<td><input class="w100 required number" type="text" value="{DATAFORM.min_number}" name="min_number_length" maxlength="11"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="w100 required number" type="text" value="{DATAFORM.max_number}" name="max_number_length" maxlength="11"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -202,111 +175,108 @@
 	<table class="tab1" id="datefields" {DATAFORM.display_datefields}>
 		<caption>{LANG.field_options_date}</caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col />
 		</colgroup>
 		<tbody>
 			<tr>
 				<td>{LANG.field_default_value}:</td>
 				<td><label> <input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}> {LANG.field_current_date}</label><label> <input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}> {LANG.field_default_date}</label>&nbsp;<input class="date" style="width:80px" type="text" value="{DATAFORM.default_date}" name="default_date"></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.field_min_date}:</td>
-				<td><input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10" value="{DATAFORM.min_date}"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10" value="{DATAFORM.max_date}"></td>
+				<td><input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
 			</tr>
 		</tbody>
 	</table>
-    <table class="tab1" id="choicetypes" {DATAFORM.display_choicetypes} >
-        <tr>
-            <td style="width:150px">{LANG.field_choicetypes_title}</td>
-            <td>
-                <!-- BEGIN: choicetypes_add -->
-                <select name="choicetypes">
-                    <!-- BEGIN: choicetypes -->
-                    <option{CHOICE_TYPES.selected} value="{CHOICE_TYPES.key}">{CHOICE_TYPES.value}</option>
-                    <!-- END: choicetypes -->
-                </select>
-                <!-- END: choicetypes_add -->
-                <!-- BEGIN: choicetypes_add_hidden -->
-                {FIELD_TYPE_SQL}<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" />
-                <!-- END: choicetypes_add_hidden -->
-            </td>
-        </tr>
-    </table>
-    <table class="tab1" id="choicesql" {DATAFORM.display_choicesql} >
+	<table class="tab1" id="choicetypes" {DATAFORM.display_choicetypes} >
+		<colgroup>
+			<col class="w250" />
+			<col />
+		</colgroup>
+		<tr>
+			<td>{LANG.field_choicetypes_title}</td>
+			<td>
+			<!-- BEGIN: choicetypes_add -->
+			<select name="choicetypes">
+				<!-- BEGIN: choicetypes -->
+				<option {CHOICE_TYPES.selected} value="{CHOICE_TYPES.key}"> {CHOICE_TYPES.value}</option>
+				<!-- END: choicetypes -->
+			</select>
+			<!-- END: choicetypes_add -->
+			<!-- BEGIN: choicetypes_add_hidden -->
+			{FIELD_TYPE_SQL}<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" />
+			<!-- END: choicetypes_add_hidden -->
+			</td>
+		</tr>
+	</table>
+	<table class="tab1 center" id="choicesql" {DATAFORM.display_choicesql} >
 		<caption>{LANG.field_options_choicesql}</caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col span="2"/>
 		</colgroup>
 		<thead>
-			<tr align="center">
+			<tr>
 				<td>{LANG.field_options_choicesql_module}</td>
 				<td>{LANG.field_options_choicesql_table}</td>
 				<td>{LANG.field_options_choicesql_column}</td>
 			</tr>
 		</thead>
-		<tbody class="second">
-			<tr align="center">
-				<td>
-                    <span id="choicesql_module"></span>
-                </td>
-                <td>
-                    <span id="choicesql_table"></span>
-                </td>
-                <td>
-                    <span id="choicesql_column"></span>
-                </td>
+		<tbody>
+			<tr>
+				<td><span id="choicesql_module">&nbsp;</span></td>
+				<td><span id="choicesql_table">&nbsp;</span></td>
+				<td><span id="choicesql_column">&nbsp;</span></td>
 			</tr>
 		</tbody>
-	</table>      
-    <table class="tab1" id="choiceitems" {DATAFORM.display_choiceitems} >
+	</table>
+	<table class="tab1" id="choiceitems" {DATAFORM.display_choiceitems} >
 		<caption>{LANG.field_options_choice}</caption>
 		<colgroup>
-			<col style="width: 250px;" />
+			<col class="w250" />
+			<col span="3"/>
 		</colgroup>
 		<thead>
-			<tr align="center">
+			<tr class="center">
 				<td>{LANG.field_number}</td>
 				<td>{LANG.Value}</td>
 				<td>{LANG.field_text}</td>
 				<td>{LANG.field_default_value}</td>
 			</tr>
 		</thead>
-		<!-- BEGIN: loop_field_choice -->
-		<tbody {FIELD_CHOICES.class}>
-			<tr align="center">
-				<td>{FIELD_CHOICES.number}</td>
-				<td><input class="validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" style="width:100px" /></td>
-				<td><input type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" style="width:350px" /></td>
-				<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
-			</tr>
-		</tbody>
-		<!-- END: loop_field_choice -->
 		<tfoot>
 			<tr>
 				<td colspan="4" ><input style="margin-left: 50px;" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
 			</tr>
 		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop_field_choice -->
+			<tr class="center">
+				<td>{FIELD_CHOICES.number}</td>
+				<td><input class="w100 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" /></td>
+				<td><input class="w350" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
+				<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
+			</tr>
+			<!-- END: loop_field_choice -->
+		</tbody>
 	</table>
 	<div style="margin-left: 350px;">
 		<input type="hidden" value="{DATAFORM.fid}" name="fid">
 		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
-		<input style="width: 150px;" type="submit" value="{LANG.save}" name="submit">
+		<input class="w150" type="submit" value="{LANG.save}" name="submit">
 	</div>
 </form>
 <script type="text/javascript">
 	var items = '{FIELD_CHOICES_NUMBER}';
 	function nv_choice_fields_additem() {
 		items++;
-		var nclass = (items % 2 == 0) ? ' class="second"' : '';
-		var newitem = '<tbody' + nclass + '><tr align="center">';
+		var newitem = '<tr class="center">';
 		newitem += '	<td>' + items + '</td>';
-		newitem += '	<td><input class="validalphanumeric" type="text" value="" name="field_choice[' + items + ']" style="width:100px"></td>';
-		newitem += '	<td><input type="text" value="" name="field_choice_text[' + items + ']" style="width:350px"></td>';
+		newitem += '	<td><input class="w100 validalphanumeric" type="text" value="" name="field_choice[' + items + ']"></td>';
+		newitem += '	<td><input clas="w350" type="text" value="" name="field_choice_text[' + items + ']"></td>';
 		newitem += '	<td><input type="radio" value="' + items + '" name="default_value_choice"></td>';
 		newitem += '	</tr>';
-		newitem += '</tbody>';
 		$('#choiceitems').append(newitem);
 	}
 
@@ -401,7 +371,7 @@
 		$("#numberfields").hide();
 		$("#datefields").hide();
 		$("#choicetypes").hide();
-        $("#choiceitems").hide();
+		$("#choiceitems").hide();
 		$("#choicesql").hide();
 		$("#editorfields").hide();
 		if (field_type == 'textbox' || field_type == 'textarea' || field_type == 'editor') {
@@ -427,7 +397,7 @@
 			$("#textfields").hide();
 			$("#numberfields").hide();
 			$("#datefields").hide();
-            nv_users_check_choicetypes( "select[name=choicetypes]" );
+			nv_users_check_choicetypes("select[name=choicetypes]");
 		}
 	});
 	$("input[name=required],input[name=show_register]").click(function() {
@@ -457,8 +427,8 @@
 	$("input[name=current_date]").click(function() {
 		nv_load_current_date();
 	});
-    $("select[name=choicetypes]").change(function() {
-		nv_users_check_choicetypes( this )
+	$("select[name=choicetypes]").change(function() {
+		nv_users_check_choicetypes(this)
 	});
 	$(".datepicker").datepicker({
 		showOn : "both",
@@ -469,65 +439,65 @@
 		buttonImage : nv_siteroot + "images/calendar.gif",
 		buttonImageOnly : true
 	});
-    function nv_users_check_choicetypes( elemnet ){
-        var choicetypes_val = $(elemnet).val();
-        if( choicetypes_val == "field_choicetypes_text" )
-        {
-            $("#choiceitems").show();
+	function nv_users_check_choicetypes(elemnet) {
+		var choicetypes_val = $(elemnet).val();
+		if (choicetypes_val == "field_choicetypes_text") {
+			$("#choiceitems").show();
 			$("#choicesql").hide();
-        }else{
-            $("#choiceitems").hide();
+		} else {
+			$("#choiceitems").hide();
 			$("#choicesql").show();
-            nv_load_sqlchoice( 'module', '' )
-        }
-    }
-    function nv_load_sqlchoice( choice_name_select, choice_seltected ){
-        var getval = "";
-        if( choice_name_select == "table" )
-        {
-            var choicesql_module = $("select[name=choicesql_module]").val();
-            var module_selected = ( choicesql_module == "" || choicesql_module == undefined )? '{SQL_DATA_CHOICE.0}' : choicesql_module; 
-            getval = "&module=" + module_selected;
-            $("#choicesql_column").html("");
-        }
-        else if( choice_name_select == "column" )
-        {
-            var choicesql_module = $("select[name=choicesql_module]").val();
-            var module_selected = ( choicesql_module == "" || choicesql_module == undefined )? '{SQL_DATA_CHOICE.0}' : choicesql_module;
-            var choicesql_table = $("select[name=choicesql_table]").val();
-            var table_selected = ( choicesql_table == "" || choicesql_table == undefined )? '{SQL_DATA_CHOICE.1}' : choicesql_table;
-            getval = "&module=" + module_selected + "&table=" + table_selected;
-        }
-        nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected + '&num=' + nv_randomPassword(8), 'choicesql_' + choice_name_select, '');
-    }
+			nv_load_sqlchoice('module', '')
+		}
+	}
+
+	function nv_load_sqlchoice(choice_name_select, choice_seltected) {
+		var getval = "";
+		if (choice_name_select == "table") {
+			var choicesql_module = $("select[name=choicesql_module]").val();
+			var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
+			getval = "&module=" + module_selected;
+			$("#choicesql_column").html("");
+		} else if (choice_name_select == "column") {
+			var choicesql_module = $("select[name=choicesql_module]").val();
+			var module_selected = (choicesql_module == "" || choicesql_module == undefined ) ? '{SQL_DATA_CHOICE.0}' : choicesql_module;
+			var choicesql_table = $("select[name=choicesql_table]").val();
+			var table_selected = (choicesql_table == "" || choicesql_table == undefined ) ? '{SQL_DATA_CHOICE.1}' : choicesql_table;
+			getval = "&module=" + module_selected + "&table=" + table_selected;
+		}
+		nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected + '&num=' + nv_randomPassword(8), 'choicesql_' + choice_name_select, '');
+	}
 </script>
 <!-- END: load -->
 <!-- BEGIN: nv_load_sqlchoice -->
 <script type="text/javascript">
-    nv_load_sqlchoice( 'module', '{SQL_DATA_CHOICE.0}' );
-    nv_load_sqlchoice( 'table', '{SQL_DATA_CHOICE.1}' );
-    nv_load_sqlchoice( 'column', '{SQL_DATA_CHOICE.2}|{SQL_DATA_CHOICE.3}' );
+	nv_load_sqlchoice('module', '{SQL_DATA_CHOICE.0}');
+	nv_load_sqlchoice('table', '{SQL_DATA_CHOICE.1}');
+	nv_load_sqlchoice('column', '{SQL_DATA_CHOICE.2}|{SQL_DATA_CHOICE.3}');
 </script>
 <!-- END: nv_load_sqlchoice -->
 <!-- END: main -->
 <!-- BEGIN: choicesql -->
 <select onchange="nv_load_sqlchoice( '{choicesql_next}', '' )" name="{choicesql_name}">
-    <!-- BEGIN: loop -->
-        <option{SQL.sl} value="{SQL.key}">{SQL.val}</option>
-    <!-- END: loop -->    
+	<!-- BEGIN: loop -->
+	<option{SQL.sl} value="{SQL.key}">
+		{SQL.val}</option>
+		<!-- END: loop -->
 </select>
 <!-- END: choicesql -->
 <!-- BEGIN: column -->
 {LANG.field_options_choicesql_key}:
 <select name="choicesql_column_key" id="choicesql_column_key">
-    <!-- BEGIN: loop1 -->
-        <option{SQL.sl_key} value="{SQL.key}">{SQL.val}</option>
-    <!-- END: loop1 -->    
+	<!-- BEGIN: loop1 -->
+	<option{SQL.sl_key} value="{SQL.key}">
+		{SQL.val}</option>
+		<!-- END: loop1 -->
 </select>
 {LANG.field_options_choicesql_val}:
 <select name="choicesql_column_val" id="choicesql_column_val">
-    <!-- BEGIN: loop2 -->
-        <option{SQL.sl_val} value="{SQL.key}">{SQL.val}</option>
-    <!-- END: loop2 -->    
+	<!-- BEGIN: loop2 -->
+	<option{SQL.sl_val} value="{SQL.key}">
+		{SQL.val}</option>
+		<!-- END: loop2 -->
 </select>
 <!-- END: column -->

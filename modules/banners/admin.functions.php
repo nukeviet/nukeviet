@@ -9,13 +9,6 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['client_list'] = $lang_module['client_list'];
-$submenu['add_client'] = $lang_module['add_client'];
-$submenu['plans_list'] = $lang_module['plans_list'];
-$submenu['add_plan'] = $lang_module['add_plan'];
-$submenu['banners_list'] = $lang_module['banners_list'];
-$submenu['add_banner'] = $lang_module['add_banner'];
-
 $allow_func = array( 'main', 'client_list', 'cl_list', 'add_client', 'edit_client', 'del_client', 'change_act_client', 'info_client', 'info_cl', 'plans_list', 'plist', 'change_act_plan', 'add_plan', 'edit_plan', 'del_plan', 'info_plan', 'info_pl', 'banners_list', 'add_banner', 'edit_banner', 'b_list', 'change_act_banner', 'info_banner', 'show_stat', 'show_list_stat', 'del_banner' );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -229,7 +222,6 @@ function nv_cl_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $cl_id => $values )
 		{
-			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
 
 			$xtpl->assign( 'ROW', $values );
@@ -275,8 +267,6 @@ function nv_info_cl_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
-
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.loop' );
 	}
@@ -451,7 +441,6 @@ function nv_plist_theme( $contents )
 	{
 		foreach( $contents['rows'] as $pl_id => $values )
 		{
-			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
 
 			$xtpl->assign( 'ROW', $values );
@@ -497,8 +486,6 @@ function nv_info_pl_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $key => $row )
 	{
-		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
-
 		$xtpl->assign( 'ROW', $row );
 
 		if( $key != 'description' )
@@ -691,7 +678,6 @@ function nv_b_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $b_id => $values )
 		{
-			$values['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 			$values['delfile'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id;
 			$values['checked'] = $values['act'][1] == '1' ? " checked=\"checked\"" : "";
 
@@ -739,8 +725,6 @@ function nv_info_b_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
-
 		$xtpl->assign( 'ROW1', $row );
 		$xtpl->parse( 'main.loop1' );
 	}
@@ -783,8 +767,6 @@ function nv_show_stat_theme( $contents )
 		$a = 0;
 		foreach( $contents[2] as $key => $value )
 		{
-			$value['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
-
 			$xtpl->assign( 'KEY', $key );
 			$xtpl->assign( 'ROW', $value );
 
@@ -835,7 +817,6 @@ function nv_show_list_stat_theme( $contents )
 	$a = 0;
 	foreach( $contents['rows'] as $row )
 	{
-		$row['class'] = ( $a++ % 2 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'ROW', $row );
 
 		foreach( $row as $r )

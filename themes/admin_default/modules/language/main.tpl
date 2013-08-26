@@ -10,7 +10,7 @@
 <!-- BEGIN: contents_setup -->
 <br />
 <br />
-<div align="center">
+<div class="center">
 	<b>{LANG.nv_data_setup_ok}</b>
 </div>
 <meta http-equiv="Refresh" content="5;URL={URL}" />
@@ -25,8 +25,8 @@
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{ROW.keylang}</td>
 			<td>{ROW.name}</td>
@@ -43,21 +43,20 @@
 			</td>
 			<td>
 			<!-- BEGIN: setup_delete -->
-			<span class="delete_icon"><a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a></span>
+			<a class="delete_icon" onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
 			<!-- END: setup_delete -->
 			<!-- BEGIN: setup_note -->
 			{LANG.nv_setup}
 			<!-- END: setup_note -->
 			<!-- BEGIN: setup_new -->
-			<span class="default_icon"><a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a></span>
+			<a class="default_icon" href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
 			<!-- END: setup_new -->
 			</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.nv_data_note}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: main -->

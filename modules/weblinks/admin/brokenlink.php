@@ -29,11 +29,9 @@ if( $numcat > 0 )
 {
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delbroken" );
 
-	$a = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 			"id" => $row['id'],
 			"title" => $row['title'],
 			"url" => $row['url'],
@@ -42,7 +40,6 @@ if( $numcat > 0 )
 		) );
 
 		$xtpl->parse( 'main.data.loop' );
-		++$a;
 	}
 
 	$xtpl->parse( 'main.data' );

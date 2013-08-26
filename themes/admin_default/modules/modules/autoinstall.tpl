@@ -1,19 +1,18 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div style="width: 98%;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{GLANG.error_zlib_support}</span>
 		</p></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: ok -->
 <div id="step1">
 	<table class="tab1">
-		<tbody class="second">
+		<tbody>
 			<tr>
-				<td align="right"><strong>{LANG.autoinstall_method}: </strong></td>
+				<td class="right"><strong>{LANG.autoinstall_method}: </strong></td>
 				<td>
 				<select name="installtype">
 					<option value="0">{LANG.autoinstall_method_none}</option>
@@ -21,10 +20,8 @@
 					<option value="install_package">{LANG.autoinstall_method_packet}</option>
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
-				<td colspan="2" align="center"><input name="method" type="button" value="{LANG.autoinstall_continue}" /></td>
+				<td colspan="2" class="center"><input name="method" type="button" value="{LANG.autoinstall_continue}" /></td>
 			</tr>
 		</tbody>
 	</table>
@@ -43,7 +40,7 @@
 				return false;
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: ok -->
 <!-- END: main -->

@@ -176,9 +176,9 @@ if( $op == "main" )
 		//Xac dinh menu, RSS
 		if( $module_info['rss'] )
 		{
-			$rss[] = array( //
-				'title' => $module_info['custom_title'], //
-				'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss" //
+			$rss[] = array(
+				'title' => $module_info['custom_title'],
+				'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
 			);
 		}
 
@@ -205,8 +205,8 @@ if( $op == "main" )
 			if( $module_info['rss'] )
 			{
 				$rss[] = array(
-					'title' => $module_info['custom_title'] . ' - ' . $c['title'], //
-					'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias'] //
+					'title' => $module_info['custom_title'] . ' - ' . $c['title'],
+					'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $c['alias']
 				);
 			}
 		}

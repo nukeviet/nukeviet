@@ -1677,9 +1677,7 @@ function nv_change_buffer( $buffer )
 		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
 	}
 
-	$body_replace = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\">
-						<img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" />
-					</div>";
+	$body_replace = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>\n";
 
 	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
 	{
@@ -1687,8 +1685,8 @@ function nv_change_buffer( $buffer )
 				var mudim_showPanel = " . ( ( $global_config['mudim_showpanel'] ) ? "true" : "false" ) . ";
 				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
 				var mudim_method = " . $global_config['mudim_method'] . ";
-			</script>";
-		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>";
+			</script>\n";
+		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>\n";
 	}
 	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . "\\1", $buffer, 1 );
 
@@ -1739,6 +1737,170 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 	}
 
 	return false;
+}
+
+/**
+ * nv_site_mods()
+ *
+ * @return
+ */
+function nv_site_mods()
+{
+	global $admin_info, $user_info, $admin_info, $global_config, $db;
+
+	$cache_file = NV_LANG_DATA . "_modules_sitemods_" . NV_CACHE_PREFIX . ".cache";
+	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	{
+		$site_mods = unserialize( $cache );
+	}
+	else
+	{
+		$site_mods = array();
+		$result = $db->sql_query( "SELECT * FROM `" . NV_MODULES_TABLE . "` AS m LEFT JOIN `" . NV_MODFUNCS_TABLE . "` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight" );
+		while( $row = $db->sql_fetch_assoc( $result ) )
+		{
+			$m_title = $db->unfixdb( $row['title'] );
+			$f_name = $db->unfixdb( $row['func_name'] );
+			$f_alias = $db->unfixdb( $row['alias'] );
+			if( ! isset( $site_mods[$m_title] ) )
+			{
+				$site_mods[$m_title] = array(
+					'module_file' => $db->unfixdb( $row['module_file'] ),
+					'module_data' => $db->unfixdb( $row['module_data'] ),
+					'custom_title' => $row['custom_title'],
+					'admin_file' => $row['admin_file'],
+					'theme' => $db->unfixdb( $row['theme'] ),
+					'mobile' => $row['mobile'],
+					'description' => $row['description'],
+					'keywords' => $row['keywords'],
+					'groups_view' => $row['groups_view'],
+					'in_menu' => $row['in_menu'],
+					'submenu' => $row['submenu'],
+					'is_modadmin' => false,
+					'admins' => $row['admins'],
+					'rss' => $row['rss'],
+					'gid' => $row['gid'],
+					'funcs' => array()
+				);
+			}
+			$site_mods[$m_title]['funcs'][$f_alias] = array(
+				'func_id' => $row['func_id'],
+				'func_name' => $f_name,
+				'show_func' => $row['show_func'],
+				'func_custom_name' => $row['func_custom_name'],
+				'in_submenu' => $row['in_submenu']
+			);
+			$site_mods[$m_title]['alias'][$f_name] = $f_alias;
+		}
+		$cache = serialize( $site_mods );
+		nv_set_cache( $cache_file, $cache );
+		unset( $cache, $result );
+	}
+
+	if( defined( 'NV_SYSTEM' ) )
+	{
+		foreach( $site_mods as $m_title => $row )
+		{
+			$allowed = false;
+			$is_modadmin = false;
+			$groups_view = ( string )$row['groups_view'];
+
+			if( defined( 'NV_IS_SPADMIN' ) )
+			{
+				$allowed = true;
+				$is_modadmin = true;
+			}
+			elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
+			{
+				$allowed = true;
+				$is_modadmin = true;
+			}
+			elseif( $m_title == $global_config['site_home_module'] )
+			{
+				$allowed = true;
+			}
+			elseif( $groups_view == "0" )
+			{
+				$allowed = true;
+			}
+			elseif( $groups_view == "1" and defined( 'NV_IS_USER' ) )
+			{
+				$allowed = true;
+			}
+			elseif( $groups_view == "2" and defined( 'NV_IS_ADMIN' ) )
+			{
+				$allowed = true;
+			}
+			elseif( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
+			{
+				$allowed = true;
+			}
+
+			if( $allowed )
+			{
+				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
+			}
+			else
+			{
+				unset( $site_mods[$m_title] );
+			}
+		}
+		if( isset( $site_mods['users'] ) )
+		{
+			if( defined( "NV_IS_USER" ) )
+			{
+				$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups' );
+				if( ! defined( "NV_IS_ADMIN" ) )
+				{
+					$user_ops[] = 'logout';
+				}
+			}
+			else
+			{
+				$user_ops = array( 'main', 'login', 'register', 'lostpass' );
+				if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1 )
+				{
+					$user_ops[] = 'lostactivelink';
+					$user_ops[] = 'active';
+				}
+			}
+			if( ( $global_config['whoviewuser'] == 2 and defined( "NV_IS_ADMIN" ) ) or ( $global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' ) ) or $global_config['whoviewuser'] == 0 )
+			{
+				$user_ops[] = 'memberlist';
+			}
+			$func_us = $site_mods['users']['funcs'];
+			foreach( $func_us as $func => $row )
+			{
+				if( ! in_array( $func, $user_ops ) )
+				{
+					unset( $site_mods['users']['funcs'][$func] );
+				}
+			}
+		}
+	}
+	elseif( defined( 'NV_ADMIN' ) )
+	{
+		foreach( $site_mods as $m_title => $row )
+		{
+			if( defined( 'NV_IS_SPADMIN' ) )
+			{
+				$allowed = true;
+			}
+			elseif( ! empty( $row['admins'] ) and in_array( $admin_info['admin_id'], explode( ",", $row['admins'] ) ) )
+			{
+				$allowed = true;
+			}
+			else
+			{
+				unset( $site_mods[$m_title] );
+			}
+		}
+	}
+	else
+	{
+		return;
+	}
+	return $site_mods;
 }
 
 ?>

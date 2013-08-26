@@ -242,7 +242,6 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 			if( ! $name ) continue;
 
 			$xtpl->assign( 'NAME', $name );
-			$xtpl->assign( 'CLASS', ++$i % 2 ? ' class="second"' : '' );
 			$xtpl->parse( 'main.loop' );
 		}
 

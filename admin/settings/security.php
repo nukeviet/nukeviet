@@ -327,14 +327,13 @@ if( $db->sql_numrows( $result ) )
 	while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ++$i % 2 ? ' class="second"' : '',
 			'dbip' => $dbip,
 			'dbmask' => $mask_text_array[$dbmask],
 			'dbarea' => $banip_area_array[$dbarea],
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['banip_nolimit'],
-			'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $dbid,
-			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&del=1&id=" . $dbid
+			'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $dbid,
+			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;del=1&amp;id=" . $dbid
 		) );
 
 		$xtpl->parse( 'main.listip.loop' );

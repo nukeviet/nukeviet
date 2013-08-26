@@ -94,8 +94,7 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
-		'stt' => $a,
+		'stt' => ++$a,
 		'module' => $module,
 		'langsitename' => $langsitename,
 		'author' => $array_translator['author'],

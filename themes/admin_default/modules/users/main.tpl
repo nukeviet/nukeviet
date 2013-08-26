@@ -1,10 +1,11 @@
 <!-- BEGIN: main -->
 <div id="users">
 	<!-- BEGIN: is_forum -->
-	<div class="quote" style="width:780px;">
-		<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
+	<div class="quote">
+		<blockquote class="error">
+			<span>{LANG.modforum}</span>
+		</blockquote>
 	</div>
-	<div class="clear"></div>
 	<!-- END: is_forum -->
 	<div style="padding-top:10px;">
 		<form action="{FORM_ACTION}" method="get">
@@ -35,12 +36,24 @@
 				<!-- BEGIN: head_td -->
 				<td><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></td>
 				<!-- END: head_td -->
-				<td style="text-align: center"><strong>{LANG.memberlist_active}</strong></td>
+				<td class="center"><strong>{LANG.memberlist_active}</strong></td>
 				<td><strong>{LANG.funcs}</strong></td>
 			</tr>
 		</thead>
-		<!-- BEGIN: xusers -->
-		<tbody {CONTENT_TD.class}>
+		<tfoot>
+			<tr>
+				<td colspan="7">
+				<!-- BEGIN: exportfile -->
+				<input type="button" value="{LANG.export}" name="data_export"/>
+				<!-- END: exportfile -->
+				<!-- BEGIN: generate_page -->
+				{GENERATE_PAGE}
+				<!-- END: generate_page -->
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!-- BEGIN: xusers -->
 			<tr>
 				<td> {CONTENT_TD.userid} </td>
 				<td>
@@ -51,30 +64,18 @@
 				<td> {CONTENT_TD.full_name} </td>
 				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 				<td> {CONTENT_TD.regdate} </td>
-				<td style="text-align: center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
+				<td class="center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
 				<td style="white-space: nowrap">
 				<!-- BEGIN: edit -->
-				&nbsp;&nbsp;<span class="edit_icon"><a href="{EDIT_URL}">{LANG.memberlist_edit}</a></span>
+				&nbsp;&nbsp;<a class="edit_icon" href="{EDIT_URL}">{LANG.memberlist_edit}</a>
 				<!-- END: edit -->
 				<!-- BEGIN: del -->
-				&nbsp;&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a></span>
+				&nbsp;&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 				<!-- END: del -->
 				</td>
 			</tr>
+			<!-- END: xusers -->
 		</tbody>
-		<!-- END: xusers -->
-		<tfoot>
-			<tr>
-				<td colspan="8">
-				<!-- BEGIN: exportfile -->
-				<input type="button" value="{LANG.export}" name="data_export"/>
-				<!-- END: exportfile -->
-				<!-- BEGIN: generate_page -->
-				{GENERATE_PAGE}
-				<!-- END: generate_page -->
-				</td>
-			</tr>
-		</tfoot>
 	</table>
 </div>
 <script type="text/javascript">
@@ -99,10 +100,11 @@
 		});
 	}
 
+
 	$("input[name=data_export]").click(function() {
 		$("input[name=data_export]").attr("disabled", "disabled");
 		$('#users').html('<center>{LANG.export_note}<br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></center>');
 		nv_data_export(1);
-	}); 
+	});
 </script>
 <!-- END: main -->

@@ -8,7 +8,6 @@
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
 // Ten cac table cua CSDL dung chung cho he thong
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
@@ -66,10 +65,11 @@ $sql_create_table[] = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "_module`
 	(3, 'settings', 'mod_settings', 3, 1, 1, 0, ''),
 	(4, 'database', 'mod_database', 4, 1, 0, 0, ''),
 	(5, 'webtools', 'mod_webtools', 5, 1, 0, 0, ''),
-	(6, 'language', 'mod_language', 6, 1, 1, 0, ''),
-	(7, 'modules', 'mod_modules', 7, 1, 1, 0, ''),
-	(8, 'themes', 'mod_themes', 8, 1, 1, 0, ''),
-	(9, 'upload', 'mod_upload', 9, 1, 1, 1, '')";
+	(6, 'seotools', 'mod_seotools', 6, 1, 0, 0, ''),
+	(7, 'language', 'mod_language', 7, 1, 1, 0, ''),
+	(8, 'modules', 'mod_modules', 8, 1, 1, 0, ''),
+	(9, 'themes', 'mod_themes', 9, 1, 1, 0, ''),
+	(10, 'upload', 'mod_upload', 10, 1, 1, 1, '')";
 
 $sql_create_table[] = "CREATE TABLE `" . NV_USERS_GLOBALTABLE . "_config` (
 	`config` varchar(100) NOT NULL,
@@ -435,6 +435,18 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_upload_file` (
 	KEY `type` (`type`)
 ) ENGINE=MyISAM";
 
+$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_googleplus` (
+	`gid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	`title` varchar(255) NOT NULL DEFAULT '',
+	`idprofile` varchar(25) NOT NULL DEFAULT '',
+	`weight` mediumint(8) unsigned NOT NULL DEFAULT '0',
+	`add_time` int(11) unsigned NOT NULL DEFAULT '0',
+	`edit_time` int(11) unsigned NOT NULL DEFAULT '0',
+	PRIMARY KEY (`gid`),
+	UNIQUE KEY `idprofile` (`idprofile`)
+) ENGINE=MyISAM";
+
+
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
 	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),
 	('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
@@ -442,7 +454,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`confi
 
 $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
 	('sys', 'site', 'closed_site', '0'),
-	('sys', 'site', 'admin_theme', 'admin_full'),
+	('sys', 'site', 'admin_theme', 'admin_default'),
 	('sys', 'site', 'date_pattern', 'l, d/m/Y'),
 	('sys', 'site', 'time_pattern', 'H:i'),
 	('sys', 'site', 'online_upd', '1'),

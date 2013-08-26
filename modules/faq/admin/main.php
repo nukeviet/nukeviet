@@ -7,7 +7,8 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 /**
  * nv_FixWeight()
@@ -44,7 +45,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			if( $numrows != 1 )
 			{
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-				exit();
+				exit( );
 			}
 
 			define( 'IS_EDIT', true );
@@ -55,7 +56,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		else
 		{
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-			exit();
+			exit( );
 		}
 	}
 	else
@@ -64,14 +65,18 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		$page_title = $lang_module['faq_addfaq'];
 	}
 
-	$groups_list = nv_groups_list();
-	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
+	$groups_list = nv_groups_list( );
+	$array_who = array(
+		$lang_global['who_view0'],
+		$lang_global['who_view1'],
+		$lang_global['who_view2']
+	);
 	if( ! empty( $groups_list ) )
 	{
 		$array_who[] = $lang_global['who_view3'];
 	}
 
-	$array = array();
+	$array = array( );
 	$is_error = false;
 	$error = '';
 
@@ -163,7 +168,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					}
 
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-					exit();
+					exit( );
 				}
 			}
 			elseif( defined( 'IS_ADD' ) )
@@ -194,7 +199,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					nv_update_keywords( $array['catid'] );
 
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-					exit();
+					exit( );
 				}
 			}
 		}
@@ -215,10 +220,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		}
 	}
 
-	if( ! empty( $array['answer'] ) ) $array['answer'] = nv_htmlspecialchars( $array['answer'] );
-	if( ! empty( $array['question'] ) ) $array['question'] = nv_htmlspecialchars( $array['question'] );
+	if( ! empty( $array['answer'] ) )
+		$array['answer'] = nv_htmlspecialchars( $array['answer'] );
+	if( ! empty( $array['question'] ) )
+		$array['question'] = nv_htmlspecialchars( $array['question'] );
 
-	$listcats = array();
+	$listcats = array( );
 	$listcats[0] = array(
 		'id' => 0, //
 		'name' => $lang_module['nocat'], //
@@ -228,12 +235,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	if( empty( $listcats ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
-		exit();
+		exit( );
 	}
 
 	if( defined( 'NV_EDITOR' ) )
 	{
-		require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+		require_once (NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php');
 	}
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
@@ -274,26 +281,29 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include (NV_ROOTDIR . '/includes/header.php');
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
-	exit();
+	include (NV_ROOTDIR . '/includes/footer.php');
+	exit( );
 }
 
 //change weight
 if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) )
+		die( 'Wrong URL' );
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 	$new = $nv_Request->get_int( 'new', 'post', 0 );
 
-	if( empty( $id ) ) die( "NO" );
+	if( empty( $id ) )
+		die( "NO" );
 
 	$query = "SELECT `catid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
-	if( $numrows != 1 ) die( 'NO' );
+	if( $numrows != 1 )
+		die( 'NO' );
 	list( $catid ) = $db->sql_fetchrow( $result );
 
 	$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`!=" . $id . " AND `catid`=" . $catid . " ORDER BY `weight` ASC";
@@ -302,7 +312,8 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		if( $weight == $new ) ++$weight;
+		if( $weight == $new )
+			++$weight;
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
 		$db->sql_query( $sql );
 	}
@@ -314,16 +325,19 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 //Kich hoat - dinh chi
 if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) )
+		die( 'Wrong URL' );
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	if( empty( $id ) ) die( "NO" );
+	if( empty( $id ) )
+		die( "NO" );
 
 	$query = "SELECT `catid`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
-	if( $numrows != 1 ) die( 'NO' );
+	if( $numrows != 1 )
+		die( 'NO' );
 
 	list( $catid, $status ) = $db->sql_fetchrow( $result );
 	$status = $status ? 0 : 1;
@@ -339,7 +353,8 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 //Xoa
 if( $nv_Request->isset_request( 'del', 'post' ) )
 {
-	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+	if( ! defined( 'NV_IS_AJAX' ) )
+		die( 'Wrong URL' );
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
@@ -368,7 +383,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 }
 
 //List faq
-$listcats = array();
+$listcats = array( );
 $listcats[0] = array(
 	'id' => 0, //
 	'name' => $lang_module['nocat'], //
@@ -379,7 +394,7 @@ $listcats = $listcats + nv_listcats( 0 );
 if( empty( $listcats ) )
 {
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
-	exit();
+	exit( );
 }
 
 $page_title = $lang_module['faq_manager'];
@@ -396,7 +411,7 @@ if( $nv_Request->isset_request( "catid", "get" ) )
 	if( ! $catid or ! isset( $listcats[$catid] ) )
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-		exit();
+		exit( );
 	}
 
 	$caption = sprintf( $lang_module['faq_list_by_cat'], $listcats[$catid]['title'] );
@@ -423,19 +438,19 @@ if( ! $all_page )
 	if( defined( 'NV_IS_CAT' ) )
 	{
 		$contents = '';
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include (NV_ROOTDIR . '/includes/header.php');
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
-		exit();
+		include (NV_ROOTDIR . '/includes/footer.php');
+		exit( );
 	}
 	else
 	{
 		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&add=1" );
-		exit();
+		exit( );
 	}
 }
 
-$array = array();
+$array = array( );
 
 while( $row = $db->sql_fetchrow( $query ) )
 {
@@ -449,12 +464,12 @@ while( $row = $db->sql_fetchrow( $query ) )
 
 	if( defined( 'NV_IS_CAT' ) )
 	{
-		$weight = array();
+		$weight = array( );
 		for( $i = 1; $i <= $all_page; ++$i )
 		{
 			$weight[$i]['title'] = $i;
 			$weight[$i]['pos'] = $i;
-			$weight[$i]['selected'] = ( $i == $row['weight'] ) ? " selected=\"selected\"" : "";
+			$weight[$i]['selected'] = ($i == $row['weight']) ? " selected=\"selected\"" : "";
 		}
 
 		$array[$row['id']]['weight'] = $weight;
@@ -471,15 +486,19 @@ $xtpl->assign( 'ADD_NEW_FAQ', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE
 
 if( defined( 'NV_IS_CAT' ) )
 {
+	$xtpl->parse( 'main.is_cat0' );
 	$xtpl->parse( 'main.is_cat1' );
+	$colspan = 5;
+}
+else
+{
+	$colspan = 4;
 }
 
 if( ! empty( $array ) )
 {
-	$a = 0;
 	foreach( $array as $row )
 	{
-		$xtpl->assign( 'CLASS', $a % 2 == 1 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'ROW', $row );
 
 		if( defined( 'NV_IS_CAT' ) )
@@ -494,12 +513,12 @@ if( ! empty( $array ) )
 
 		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['id'] );
 		$xtpl->parse( 'main.row' );
-		++$a;
 	}
 }
 
 if( ! empty( $generate_page ) )
 {
+	$xtpl->assign( 'COLSPAN', $colspan );
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	$xtpl->parse( 'main.generate_page' );
 }
@@ -507,8 +526,7 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include (NV_ROOTDIR . '/includes/header.php');
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
+include (NV_ROOTDIR . '/includes/footer.php');
 ?>

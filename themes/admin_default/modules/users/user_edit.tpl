@@ -1,18 +1,16 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: is_forum -->
-<div class="quote" style="width:780px;">
+<div class="quote">
 	<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
 		</p></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
@@ -26,44 +24,35 @@
 <form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
 	<table class="tab1">
 		<colgroup>
-			<col style="width:300px"/>
-			<col style="width:10px"/>
+			<col class="w300"/>
+			<col class="w20"/>
+			<col />
 		</colgroup>
 		<tbody>
 			<tr>
 				<td> {LANG.account} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" value="{DATA.username}" name="username" id="username_iavim" style="width:300px" /></td>
+				<td><input class="w300 required" value="{DATA.username}" name="username" id="username_iavim"  /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.email} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt email required" value="{DATA.email}" name="email" id="email_iavim" style="width:300px" /></td>
+				<td><input class="w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.question} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" type="text" value="{DATA.question}" name="question" style="width:300px" /></td>
+				<td><input class="w300 required" type="text" value="{DATA.question}" name="question" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.answer} </td>
 				<td> (<span style="color:#FF0000">*</span>) </td>
-				<td><input class="txt required" type="text" value="{DATA.answer}" name="answer" style="width:300px" /></td>
+				<td><input class="w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.name} </td>
-				<td><input class="txt" type="text" value="{DATA.full_name}" name="full_name" style="width:300px" /></td>
+				<td><input class="w300" type="text" value="{DATA.full_name}" name="full_name"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td colspan="2"> {LANG.gender} </td>
 				<td>
@@ -73,8 +62,6 @@
 					<!-- END: gender -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.avata} </td>
 				<td>
@@ -89,27 +76,19 @@
 				<!-- END: photo -->
 				<input type="file" name='photo' /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td colspan="2"> {LANG.birthday} </td>
 				<td><input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"> {LANG.show_email} </td>
 				<td><input type="checkbox" name="view_mail" value="1"{DATA.view_mail} /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td style="vertical-align:top" colspan="2"> {LANG.sig} </td>
 				<td><textarea name="sig" cols="70" rows="5" style="width:300px">{DATA.sig}</textarea></td>
 			</tr>
-		</tbody>
-		<!-- BEGIN: group -->
-		<tbody>
+			<!-- BEGIN: group -->
 			<tr>
 				<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 				<td>
@@ -122,18 +101,19 @@
 					<!-- END: list -->
 				</ul></td>
 			</tr>
+			<!-- END: group -->
 		</tbody>
-		<!-- END: group -->
 	</table>
 	<!-- BEGIN: field -->
 	<table class="tab1">
 		<caption> {LANG.fields} </caption>
 		<colgroup>
-			<col style="width:300px"/>
-			<col style="width:10px"/>
+			<col class="w300"/>
+			<col class="w20"/>
+			<col />
 		</colgroup>
-		<!-- BEGIN: loop -->
-		<tbody {FIELD.tbodyclass}>
+		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
 				<td><b>{FIELD.title}</b>
 				<br>
@@ -145,7 +125,7 @@
 				</td>
 				<td>
 				<!-- BEGIN: textbox -->
-				<input class="txt {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:300px"/>
+				<input class="w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
 				<!-- END: textbox -->
 				<!-- BEGIN: date -->
 				<input class="txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
@@ -177,31 +157,30 @@
 				<!-- END: multiselect -->
 				</td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
-		<!-- END: loop -->
 	</table>
 	<!-- END: field -->
 	<!-- BEGIN: changepass -->
 	<table class="tab1">
 		<caption> {LANG.edit_password_note} </caption>
 		<colgroup>
-			<col style="width:310px"/>
+			<col style="width:325px"/>
+			<col />
 		</colgroup>
 		<tbody>
 			<tr>
 				<td> {LANG.password} </td>
-				<td><input class="txt" type="password" style="width: 150px" name="password1" autocomplete="off" value="{DATA.password1}" /></td>
+				<td><input class="w150" type="password" name="password1" autocomplete="off" value="{DATA.password1}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.repassword} </td>
-				<td><input class="txt" type="password" style="width: 150px" name="password2" autocomplete="off" value="{DATA.password2}" /></td>
+				<td><input class="w150" type="password" name="password2" autocomplete="off" value="{DATA.password2}" /></td>
 			</tr>
 		</tbody>
 	</table>
 	<!-- END: changepass -->
-	<div style="text-align: center">
+	<div class="center">
 		<input type="submit" name="confirm" value="{LANG.edit_title}" />
 	</div>
 </form>

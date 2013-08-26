@@ -1,34 +1,27 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div style="width: 98%" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
 		</p></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
 	<table class="tab1">
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td> {LANG.category_cat_name} </td>
-				<td><input class="txt" value="{DATA.title}" name="title" id="title" style="width:300px" maxlength="100" /></td>
+				<td><input class="w300" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.alias} </td>
-				<td><input class="txt" value="{DATA.alias}" name="alias" id="alias" style="width:300px" maxlength="100" /></td>
+				<td><input class="w300" value="{DATA.alias}" name="alias" id="alias" maxlength="100" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.description} </td>
-				<td><input class="txt" type="text" value="{DATA.description}" name="description" style="width:300px" maxlength="255" /></td>
+				<td><input class="w300" type="text" value="{DATA.description}" name="description" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.category_cat_parent} </td>
 				<td>
@@ -38,8 +31,6 @@
 					<!-- END: parentid -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td style="vertical-align:top"> {LANG.who_view} </td>
 				<td>
@@ -59,8 +50,6 @@
 				<!-- END: group_view_empty -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td style="vertical-align:top"> {LANG.who_download} </td>
 				<td>
@@ -80,8 +69,6 @@
 				<!-- END: group_download_empty -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" /></td>
 			</tr>

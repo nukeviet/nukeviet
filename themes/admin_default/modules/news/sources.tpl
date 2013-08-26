@@ -5,34 +5,36 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote" style="width:780px;">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
+<div class="quote">
+	<blockquote class="error">
+		<span>{ERROR}</span>
+	</blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php" method="post">
-	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
-	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
+	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="sourceid" value="{sourceid}" />
 	<input name="savecat" type="hidden" value="1" />
 	<table class="tab1">
 		<caption>{LANG.add_sources}</caption>
+		<tfoot>
+			<tr>
+				<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr>
-				<td align="right"><strong>{LANG.name}: </strong></td>
-				<td><input style="width: 650px" name="title" type="text" value="{title}" maxlength="255" /></td>
+				<td class="right"><strong>{LANG.name}: </strong></td>
+				<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
-				<td align="right"><strong>{LANG.link}: </strong></td>
-				<td><input style="width: 650px" name="link" type="text" value="{link}" maxlength="255" /></td>
+				<td class="right"><strong>{LANG.link}: </strong></td>
+				<td><input class="w500" name="link" type="text" value="{link}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
-				<td align="right"><strong>{LANG.source_logo}: </strong></td>
-				<td><input style="width:500px" type="text" name="logo" id="logo" value="{logo}"/><input style="width:100px" type="button" value="{GLANG.browse_image}" name="selectimg"/>
+				<td class="right"><strong>{LANG.source_logo}: </strong></td>
+				<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/><input class="w100" type="button" value="{GLANG.browse_image}" name="selectimg"/>
 				<!-- BEGIN: logo -->
 				<br />
 				<img src="{logo}"/></td>
@@ -40,11 +42,6 @@
 				</td>
 			</tr>
 		</tbody>
-		<tfoot>
-			<tr>
-				<td align="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
 	</table>
 	<br />
 </form>

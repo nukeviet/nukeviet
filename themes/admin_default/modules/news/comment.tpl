@@ -1,36 +1,36 @@
 <!-- BEGIN: main -->
 <table class="tab1">
 	<thead>
-		<tr align="center">
+		<tr class="center">
 			<td>&nbsp;</td>
 			<td>{LANG.comment_email}</td>
 			<td>{LANG.comment_content}</td>
 			<td>{LANG.comment_topic}</td>
 			<td>{LANG.comment_status}</td>
-			<td style="width:100px;">{LANG.comment_funcs}</td>
+			<td class="w100">{LANG.comment_funcs}</td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tfoot>
 		<tr>
-			<td align="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
-			<td>{ROW.email}</td>
-			<td>{ROW.content}</td>
-			<td align="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-			<td align="center">{ROW.status}</td>
-			<td align="center"><span class="edit_icon"> <a class="edit" href="{ROW.linkedit}">{LANG.comment_edit}</a> </span> - <span class="delete_icon"> <a class="deleteone" href="{ROW.linkdelete}">{LANG.comment_delete}</a> </span></td>
-		</tr>
-	</tbody>
-	<!-- END: loop -->
-	<tbody>
-		<tr class="tfoot_box">
-			<td colspan="3"><span><a name="checkall" id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;<a name="uncheckall" id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span><span class="edit_icon"><a class="disable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_disable}</a> </span> - <span class="add_icon"><a class="enable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_enable}</a> </span> - <span class="delete_icon"><a class="delete" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=del_comment">{LANG.comment_delete}</a> </span></td>
-			<td colspan="3" align="center">
+			<td colspan="3"><span><a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;<a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span><a class="edit_icon disable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_disable}</a> - <a class="add_icon enable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_enable}</a> - <a class="delete_icon delete" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=del_comment">{LANG.comment_delete}</a></td>
+			<td colspan="3" class="center">
 			<!-- BEGIN: generate_page -->
 			{GENERATE_PAGE}
 			<!-- END: generate_page -->
 			</td>
 		</tr>
+	</tfoot>
+	<tbody>
+		<!-- BEGIN: loop -->
+		<tr>
+			<td class="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
+			<td>{ROW.email}</td>
+			<td>{ROW.content}</td>
+			<td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+			<td class="center">{ROW.status}</td>
+			<td class="center"><a class="edit_icon" href="{ROW.linkedit}">{LANG.comment_edit}</a> - <a class="delete_icon" href="{ROW.linkdelete}">{LANG.comment_delete}</a></td>
+		</tr>
+		<!-- END: loop -->
 	</tbody>
 </table>
 <script type="text/javascript">

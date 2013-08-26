@@ -12,10 +12,9 @@
 </script>
 <div id="users">
 	<!-- BEGIN: is_forum -->
-	<div class="quote" style="width:780px;">
+	<div class="quote">
 		<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
 	</div>
-	<div class="clear"></div>
 	<!-- END: is_forum -->
 	<div style="padding-top:10px;">
 		<form action="{FORM_ACTION}" method="post" onsubmit="nv_check_form(this);return false;">
@@ -43,23 +42,25 @@
 				<td><strong>{LANG.funcs}</strong></td>
 			</tr>
 		</thead>
-		<!-- BEGIN: xusers -->
+		<!-- BEGIN: generate_page -->
+		<tfoot>
+			<tr>
+				<td colspan="8"> {GENERATE_PAGE} </td>
+			</tr>
+		</tfoot>
+		<!-- END: generate_page -->
 		<tbody>
+			<!-- BEGIN: xusers -->
 			<tr>
 				<td> {CONTENT_TD.userid} </td>
 				<td> {CONTENT_TD.username} </td>
 				<td> {CONTENT_TD.full_name} </td>
 				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 				<td> {CONTENT_TD.regdate} </td>
-				<td> &nbsp;&nbsp;<span class="edit_icon"><a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a></span> &nbsp;&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a></span></td>
+				<td> &nbsp;&nbsp;<a class="edit_icon" href="{ACTIVATE_URL}">{LANG.awaiting_active}</a>&nbsp;&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a></td>
 			</tr>
+			<!-- END: xusers -->
 		</tbody>
-		<!-- END: xusers -->
-		<!-- BEGIN: generate_page -->
-		<tr class="footer">
-			<td colspan="8"> {GENERATE_PAGE} </td>
-		</tr>
-		<!-- END: generate_page -->
 	</table>
 </div>
 <!-- END: main -->

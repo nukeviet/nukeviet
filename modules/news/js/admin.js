@@ -350,7 +350,7 @@ function findValue(li) {
 
 	if (!!li.extra)
 		var sValue = li.extra[0];
-	
+
 else
 		var sValue = li.selectValue;
 	return sValue;

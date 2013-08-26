@@ -43,6 +43,7 @@ $lang_module['keywords'] = 'Từ khóa tìm kiếm';
 $lang_module['keywords_info'] = 'Phân cách bởi dấu phẩy';
 $lang_module['funcs_list'] = 'Danh sách các function thuộc module &ldquo;%s&rdquo;';
 $lang_module['funcs_title'] = 'Function';
+$lang_module['funcs_alias'] = 'Alias';
 $lang_module['funcs_custom_title'] = 'Tên gọi';
 $lang_module['funcs_layout'] = 'Sử dụng layout';
 $lang_module['funcs_in_submenu'] = 'Menu';
@@ -97,6 +98,7 @@ $lang_module['autoinstall_package_processing'] = ' xin chờ quá trình thực 
 $lang_module['delete_module_info1'] = 'Module này hiện đang tồn tại trên ngôn ngữ <strong>%s</strong>, hãy xóa module trên các ngôn ngữ đó để có thể xóa module gốc';
 $lang_module['delete_module_info2'] = 'Có %d module ảo được tạo ra từ module này, hãy xóa chúng trước khi xóa module gốc';
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
+$lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
 $lang_module['description'] = 'Mô tả';
 
 ?>

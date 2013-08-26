@@ -266,7 +266,6 @@ $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'login' => $values['login'],
 		'fullname' => $values['fullname'],
 		'email' => $values['email'],

@@ -1,16 +1,16 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"> {ERROR} </blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
-<form action="" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<table class="tab1">
-		<col style="width: 250px;" />
+		<col class="w250" />
+		<col />
 		<tfoot>
 			<tr>
-				<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/></td>
+				<td colspan="2" class="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -18,26 +18,18 @@
 				<td><strong>{LANG.sitename}</strong></td>
 				<td><input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.description}</strong></td>
 				<td><input type="text" name="site_description" value="{VALUE.description}" style="width: 450px"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.site_keywords}</strong></td>
 				<td><input type="text" name="site_keywords" value="{VALUE.site_keywords}" style="width: 450px"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.site_logo}</strong></td>
-				<td><input type="text" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="width: 350px"/><input style="width:100px" type="button" value="{LANG.browse_image}" name="selectimg"/></td>
+				<td><input type="text" class="w350" name="site_logo" id="site_logo" value="{VALUE.site_logo}" /><input class="w100" type="button" value="{LANG.browse_image}" name="selectimg"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.theme}</strong></td>
 				<td>
@@ -47,8 +39,6 @@
 					<!-- END: site_theme -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.default_module}</strong></td>
 				<td>
@@ -58,14 +48,10 @@
 					<!-- END: module -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.allow_switch_mobi_des}</strong></td>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.disable_content}</strong></td>
 				<td> {DISABLE_SITE_CONTENT} </td>

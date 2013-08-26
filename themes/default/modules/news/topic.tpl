@@ -1,10 +1,15 @@
 <!-- BEGIN: main -->
-<div style="background:#F2F2F2;border : 1px solid #ccc; padding:5px">
-	<a style="font-size:13px;" title="{TOPPIC_TITLE}" href="{TOPPIC_LINK}"><strong>{TOPPIC_TITLE}</strong></a>
-</div>
 <!-- BEGIN: topicdescription -->
-<div style="background:#fff; padding:8px; border-bottom : 1px solid #ccc;">
-	{TOPPIC_DESCRIPTION}
+<div id="news_detail">
+	<h1>{TOPPIC_TITLE}</h1>
+	<div class="news_column">
+		<div class="items clearfix">
+			<!-- BEGIN: image -->
+			<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+			<!-- END: image -->
+			<h2> {TOPPIC_DESCRIPTION} </h2>
+		</div>
+	</div>
 </div>
 <!-- END: topicdescription -->
 <!-- BEGIN: topic -->

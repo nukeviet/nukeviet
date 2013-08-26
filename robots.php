@@ -18,6 +18,7 @@ if( file_exists( $cache_file ) )
 	$createTime = filemtime( $cache_file );
 	include $cache_file;
 	$robots_data = unserialize( $cache );
+	$robots_other = unserialize( $cache_other );
 }
 else
 {
@@ -37,6 +38,8 @@ else
 	$robots_data['/' . NV_SESSION_SAVE_PATH . '/'] = 0;
 	$robots_data['/tmp/'] = 0;
 	$robots_data['/web.config'] = 0;
+
+	$robots_other = array();
 }
 
 $host = ( isset( $_GET['action'] ) and ! empty( $_GET['action'] ) ) ? $_GET['action'] : $_SERVER['HTTP_HOST'];
@@ -68,6 +71,13 @@ $base_siteurl .= '/';
 $contents = array();
 $contents[] = "User-agent: *";
 foreach( $robots_data as $key => $value )
+{
+	if( $value == 0 )
+	{
+		$contents[] = "Disallow: " . $key;
+	}
+}
+foreach( $robots_other as $key => $value )
 {
 	if( $value == 0 )
 	{

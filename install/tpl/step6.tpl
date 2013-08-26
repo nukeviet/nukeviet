@@ -83,7 +83,14 @@
 			<td>{LANG.answer_question_note}</td>
 		</tr>
 		<tr>
-			<th class="spec"></th>
+			<th scope="row" class="specalt"> {LANG.lang_multi}</th>
+			<td class="alt">
+			<input type="checkbox" value="1" name="lang_multi" {CHECK_LANG_MULTI}/>
+			</td>
+			<td class="alt">{LANG.lang_multi_note}</td>
+		</tr>
+		<tr>
+			<th class="spec">&nbsp;</th>
 			<td class="spec" colspan="2">
 			<input class="button" type="submit" value="{LANG.refesh}" />
 			</td>

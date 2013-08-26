@@ -1,12 +1,12 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
 <div id="edit"></div>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
 <table class="tab1">
-	<tbody class="second">
+	<tbody>
 		<tr>
 			<!-- BEGIN: loop -->
 			<!-- BEGIN: active -->
@@ -43,7 +43,6 @@
 			<!-- BEGIN: endtr -->
 			</td>
 		</tr>
-		&nbsp;
 		<tr>
 			<!-- END: endtr -->
 			<!-- BEGIN: endtd -->

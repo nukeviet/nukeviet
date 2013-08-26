@@ -1,11 +1,10 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: complete -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{LANG.setup_updated_layout}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: complete -->
-<form method="post" action="" name="setuplayout">
+<form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" name="setuplayout">
 	<table class="tab2">
 		<tr>
 			<!-- BEGIN: loop -->
@@ -22,7 +21,6 @@
 			<!-- BEGIN: endtr -->
 			</td>
 		</tr>
-		&nbsp;
 		<tr>
 			<!-- END: endtr -->
 			<!-- BEGIN: endtd -->

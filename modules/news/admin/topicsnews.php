@@ -38,19 +38,16 @@ $xtpl->assign( 'TOPICID', $topicid );
 
 if( $db->sql_numrows( $result ) )
 {
-	$a = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
-		$row['class'] = ( $a % 2 ) ? " class=\"second\"" : "";
 		$row['delete'] = nv_link_edit_page( $row['id'] );
 
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.data.loop' );
-		++$a;
 	}
 
-	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=topicdelnews" );
+	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topicdelnews" );
 	$xtpl->parse( 'main.data' );
 }
 else

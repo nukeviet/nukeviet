@@ -32,8 +32,8 @@ if( $global_config['idsite'] )
 if( ! defined( 'SHADOWBOX' ) )
 {
 	$my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
+	$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_footer .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
 	define( 'SHADOWBOX', true );
 }
 
@@ -99,7 +99,6 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 			'bid' => $row['bid'],
 			'title' => $row['title'],
 			'module' => $row['module'],

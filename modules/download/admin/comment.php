@@ -358,7 +358,6 @@ if( ! empty( $array ) )
 	$a = 0;
 	foreach( $array as $row )
 	{
-		$xtpl->assign( 'CLASS', $a % 2 == 0 ? " class=\"second\"" : "" );
 		$xtpl->assign( 'ROW', $row );
 
 		foreach( $row['st'] as $st )

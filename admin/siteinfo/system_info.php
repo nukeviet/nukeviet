@@ -92,7 +92,6 @@ foreach( $info as $key => $if )
 
 	foreach( $if['field'] as $key => $field )
 	{
-		$xtpl->assign( 'CLASS', ( $key % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $field['key'] );
 		$xtpl->assign( 'VALUE', $field['value'] );
 		$xtpl->parse( 'main.loop' );

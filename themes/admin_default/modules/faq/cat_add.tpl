@@ -1,28 +1,23 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
+<div class="quote">
 	<blockquote class="error">
 		<p>
 			<span>{ERROR}</span>
 		</p></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
 				<td> {LANG.faq_category_cat_name} </td>
-				<td><input class="txt" value="{DATA.title}" name="title" id="title" style="width:300px" maxlength="100" /></td>
+				<td><input class="w300" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td> {LANG.faq_description} </td>
-				<td><input class="txt" type="text" value="{DATA.description}" name="description" style="width:300px" maxlength="255" /></td>
+				<td><input class="w300" type="text" value="{DATA.description}" name="description" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td> {LANG.faq_category_cat_parent} </td>
 				<td>
@@ -32,8 +27,6 @@
 					<!-- END: parentid -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td style="vertical-align:top"> {LANG.faq_who_view} </td>
 				<td>
@@ -53,8 +46,6 @@
 				<!-- END: group_view_empty -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td colspan="2"><input type="submit" name="submit" value="{LANG.faq_cat_save}" /></td>
 			</tr>

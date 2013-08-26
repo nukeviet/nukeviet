@@ -30,7 +30,7 @@
 			<!-- BEGIN: queries -->
 			<div class="clearfix {DATA.class}">
 				<p>
-					<span class="first"><img alt="{DATA.imgalt}" src="{DATA.imgsrc}" height="16" width="16"></span>
+					<span class="first"><img alt="{DATA.imgalt}" src="{DATA.imgsrc}" height="16" width="16" /></span>
 					<span class="second">{DATA.queries}</span>
 				</p>
 			</div>

@@ -127,7 +127,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_data = $module_info['module_data'];
 		$include_file = NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php";
 
-		if( file_exists( $include_file ) and filesize( $include_file ) != 0 )
+		if( file_exists( $include_file )  )
 		{
 			// Tuy chon kieu giao dien
 			if( $nv_Request->isset_request( 'nv' . NV_LANG_DATA . 'themever', 'get' ) )
@@ -156,6 +156,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$array_op = explode( "/", $op );
 				$op = ( isset( $module_info['funcs'][$array_op[0]] ) ) ? $array_op[0] : 'main';
 			}
+			$op_file = $op;
 
 			// Xac dinh quyen dieu hanh module
 			if( $module_info['is_modadmin'] )
@@ -283,6 +284,9 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				require ( NV_ROOTDIR . "/modules/" . $module_file . "/functions.php" );
 			}
 
+			// Xac dinh op file
+			$op_file = $module_info['funcs'][$op]['func_name'];
+
 			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" ) )
 			{
 				require ( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "/theme.php" );
@@ -298,13 +302,13 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			}
 
 			// Ket noi voi cac op cua module de thuc hien
-			if( $is_mobile and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op . ".php" ) )
+			if( $is_mobile and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op_file . ".php" ) )
 			{
-				require ( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op . ".php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/mobile/" . $op_file . ".php" );
 			}
 			else
 			{
-				require ( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op . ".php" );
+				require ( NV_ROOTDIR . "/modules/" . $module_file . "/funcs/" . $op_file . ".php" );
 			}
 			exit();
 		}

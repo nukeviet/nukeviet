@@ -216,8 +216,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			foreach( $array_lang_file as $id => $row )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$i % 2 ) ? " class=\"second\"" : "",
-					'stt' => $i,
+					'stt' => ++$i,
 					'lang_key' => $row['lang_key'],
 					'datalang' => nv_htmlspecialchars( $row['datalang'] ),
 					'id' => $id,

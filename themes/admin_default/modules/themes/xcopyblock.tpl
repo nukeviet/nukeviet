@@ -1,13 +1,17 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">{LANG.xcopyblock_notice}</span></blockquote>
 </div>
-<div class="clear"></div>
 <form name="copy_block" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
-		<tbody class="second">
+		<tfoot>
 			<tr>
-				<td align="center" colspan="2"><strong>{LANG.xcopyblock} {LANG.xcopyblock_from}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
+				<td class="center"><input name="continue" type="button" value="{LANG.xcopyblock_process}" /></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr>
+				<td class="center"><strong>{LANG.xcopyblock} {LANG.xcopyblock_from}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
 				<select name="theme1">
 					<option value="0">{LANG.autoinstall_method_theme_none}</option>
 					<!-- BEGIN: theme_from -->
@@ -21,15 +25,11 @@
 					<!-- END: theme_to -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
-				<td colspan="2" class="center"><p id="loadposition" style="color:red;font-weight:bold"></p></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.xcopyblock_process}" /></td>
+				<td class="center">
+				<p id="loadposition" style="color:red;font-weight:bold">
+					&nbsp;
+				</p></td>
 			</tr>
 		</tbody>
 	</table>

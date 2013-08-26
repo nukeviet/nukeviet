@@ -21,29 +21,27 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
-	var htmlload = '<tr><td align="center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
+	var htmlload = '<tr><td class="center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
 	//]]>
 </script>
 <!-- END: head -->
 <!-- BEGIN: main -->
 <!-- BEGIN: block_group_notice -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">{LANG.block_group_notice}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: block_group_notice -->
 <!-- BEGIN: error -->
 <div id="edit"></div>
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span id="message">{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
-<div style="clear:both"></div>
 <form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;selectthemes={SELECTTHEMES}&amp;blockredirect={BLOCKREDIRECT}">
-	<table class="tab1" style="width:100%">
+	<table class="tab1">
 		<col style="width:160px;white-space:nowrap" />
 		<col style="width:600px;white-space:nowrap" />
-		<tbody class="second">
+		<tbody>
 			<tr>
 				<td>{LANG.block_type}:</td>
 				<td>
@@ -68,16 +66,12 @@
 		<tbody>
 			<tr>
 				<td>{LANG.block_title}:</td>
-				<td><input name="title" type="text" value="{ROW.title}" style="width:300px"/></td>
+				<td><input class="w300" name="title" type="text" value="{ROW.title}"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.block_link}:</td>
-				<td><input name="link" type="text" value="{ROW.link}" style="width:500px"/></td>
+				<td><input class="w500" name="link" type="text" value="{ROW.link}"/></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.block_tpl}:</td>
 				<td>
@@ -88,8 +82,6 @@
 					<!-- END: template -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.block_pos}:</td>
 				<td>
@@ -99,32 +91,24 @@
 					<!-- END: position -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.block_exp_time}:</td>
 				<td class="exp_time"><input name="exp_time" id="exp_time" value="{ROW.exp_time}" style="width: 90px" maxlength="10" type="text" /> (dd/mm/yyyy) </td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{LANG.block_active}:</td>
 				<td><input type="checkbox" name="active" value="1"{ROW.block_active}/> {LANG.block_yes}</td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{LANG.block_group}:</td>
 				<td>
-				<select name="who_view" style="width:250px" id="who_view" onchange="nv_sh('who_view','groups_list')">
+				<select class="w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
 					<!-- BEGIN: who_view -->
 					<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
 					<!-- END: who_view -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody id="groups_list" style="{SHOW_GROUPS_LIST}">
-			<tr>
+			<tr id="groups_list" style="{SHOW_GROUPS_LIST}">
 				<td>{GLANG.groups_view}:</td>
 				<td>
 				<!-- BEGIN: groups_list -->
@@ -133,16 +117,12 @@
 				<!-- END: groups_list -->
 				</td>
 			</tr>
-		</tbody>
-		<!-- BEGIN: edit -->
-		<tbody>
+			<!-- BEGIN: edit -->
 			<tr>
 				<td>{LANG.block_groupbl}:</td>
 				<td><span style="color:red;font-weight:bold">{ROW.bid}</span> &nbsp;&nbsp;&nbsp; <label><input type="checkbox" value="1" name="leavegroup"/>{LANG.block_leavegroup} ({BLOCKS_NUM} {LANG.block_count})</label></td>
 			</tr>
-		</tbody>
-		<!-- END: edit -->
-		<tbody class="second">
+			<!-- END: edit -->
 			<tr>
 				<td>{LANG.add_block_module}:</td>
 				<td>
@@ -151,26 +131,24 @@
 				<!-- END: add_block_module -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody {SHOWS_ALL_FUNC} id="shows_all_func">
-			<tr>
+			<tr {SHOWS_ALL_FUNC} id="shows_all_func">
 				<td style="vertical-align:top"> {LANG.block_function}:
 				<br />
 				<br />
 				<label><input type="button" name="checkmod" value="{LANG.block_check}" style="margin-bottom:5px"/></label></td>
 				<td>
 				<div class="list-funcs">
-					<table border="0" cellpadding="3" cellspacing="3">
-						<!-- BEGIN: loopfuncs -->
-						<tbody class="funclist" id="idmodule_{M_TITLE}">
-							<tr id="wrapmod{M_TITLE}">
-								<td style="font-weight:bold" nowrap="nowrap"><input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> {M_CUSTOM_TITLE} </td>
+					<table class="tab1">
+						<tbody>
+							<!-- BEGIN: loopfuncs -->
+							<tr class="funclist" id="idmodule_{M_TITLE}">
+								<td style="font-weight:bold; white-space:nowrap"><input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> {M_CUSTOM_TITLE} </td>
 								<!-- BEGIN: fuc -->
-								<td nowrap="nowrap"><label><input type="checkbox"{SELECTED} name="func_id[]" value="{FUNCID}" /> {FUNCNAME}</label></td>
+								<td style="white-space:nowrap"><label><input type="checkbox"{SELECTED} name="func_id[]" value="{FUNCID}" /> {FUNCNAME}</label></td>
 								<!-- END: fuc -->
 							</tr>
+							<!-- END: loopfuncs -->
 						</tbody>
-						<!-- END: loopfuncs -->
 					</table>
 				</div></td>
 			</tr>
@@ -185,13 +163,13 @@
 <!-- BEGIN: hidefunclist -->
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("tbody.funclist").css({
+		$("tr.funclist").css({
 			"display" : "none"
 		});
-		$("tbody#idmodule_{HIDEFUNCLIST}").css({
+		$("#idmodule_{HIDEFUNCLIST}").css({
 			"display" : "block"
 		});
-	}); 
+	});
 </script>
 <!-- END: hidefunclist -->
 
@@ -205,7 +183,7 @@
 		} else {
 			$("#block_config").hide();
 		}
-	}); 
+	});
 </script>
 <!-- END: load_block_config -->
 
@@ -240,7 +218,7 @@
 			var file_name = $("select[name=file_name]").val();
 			var type = $("select[name=module]").val();
 			if (file_name.substring(0, 7) == "global.") {
-				$("tbody.funclist").css({
+				$("tr.funclist").css({
 					"display" : ""
 				});
 				$("#labelmoduletype1").css({
@@ -250,10 +228,10 @@
 				$("#labelmoduletype1").css({
 					"display" : "none"
 				});
-				$("tbody.funclist").css({
+				$("tr.funclist").css({
 					"display" : "none"
 				});
-				$("tbody#idmodule_" + type).css({
+				$("#idmodule_" + type).css({
 					"display" : "block"
 				});
 				var $radios = $("input:radio[name=all_func]");
@@ -361,7 +339,7 @@
 				}
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->

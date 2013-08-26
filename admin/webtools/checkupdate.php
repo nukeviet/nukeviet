@@ -154,7 +154,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
 				}
 
-				$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'MODNAME', $modname );
 				$xtpl->assign( 'MODINFO', $info );
 
@@ -214,7 +213,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
 				}
 
-				$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 				$xtpl->assign( 'MODNAME', $modname );
 				$xtpl->assign( 'MODINFO', $values['message'] );
 				$xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );

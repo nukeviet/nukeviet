@@ -3,7 +3,7 @@
 	<tbody>
 		<tr>
 			<td>
-			<form id="filter-form" method="get" action="">
+			<form id="filter-form" method="get" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
 				<input style="width:120px" type="text" name="q" value="{DATA_SEARCH.q}" onfocus="if(this.value == '{LANG.filter_enterkey}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{LANG.filter_enterkey}';}"/>
 				{LANG.filter_from}
 				<input class="text" value="{DATA_SEARCH.from}" type="text" id="from" name="from" readonly="readonly" style="width:80px" />
@@ -64,45 +64,49 @@
 	}); 
 </script>
 <table class="tab1">
+	<colgroup>
+		<col style="width: 35px"/>
+		<col style="width: 60px"/>
+		<col span="6" />
+	</colgroup>
 	<thead>
 		<tr>
-			<td width="30" align="center"><input type="checkbox" name="all" id="check_all"/></td>
-			<td width="30" align="center"><a href="{DATA_ORDER.lang.data.url}" title="{DATA_ORDER.lang.data.title}" class="{DATA_ORDER.lang.data.class}">{LANG.log_lang}</a></td>
+			<td><input type="checkbox" name="all" id="check_all"/></td>
+			<td class="center"><a href="{DATA_ORDER.lang.data.url}" title="{DATA_ORDER.lang.data.title}" class="{DATA_ORDER.lang.data.class}">{LANG.log_lang}</a></td>
 			<td><a href="{DATA_ORDER.module.data.url}" title="{DATA_ORDER.module.data.title}" class="{DATA_ORDER.module.data.class}">{LANG.log_module_name}</a></td>
 			<td> {LANG.log_name_key} </td>
 			<td> {LANG.log_note} </td>
 			<td> {LANG.log_username} </td>
 			<td><a href="{DATA_ORDER.time.data.url}" title="{DATA_ORDER.user.data.title}" class="{DATA_ORDER.time.data.class}">{LANG.log_time}</a></td>
 			<!-- BEGIN: head_delete -->
-			<td align="center"> {LANG.log_feature} </td>
+			<td class="center"> {LANG.log_feature} </td>
 			<!-- END: head_delete -->
 		</tr>
 	</thead>
-	<!-- BEGIN: row -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: row -->
 		<tr>
-			<td align="center"><input type="checkbox" name="all" class="list" value="{DATA.id}"/></td>
-			<td width="30" align="center"> {DATA.lang} </td>
+			<td><input type="checkbox" name="all" class="list" value="{DATA.id}"/></td>
+			<td class="center"> {DATA.lang} </td>
 			<td> {DATA.module_name} </td>
 			<td> {DATA.name_key} </td>
 			<td> {DATA.note_action} </td>
 			<td> {DATA.username} </td>
 			<td> {DATA.time} </td>
 			<!-- BEGIN: delete -->
-			<td width="100" align="center"><span class="delete_icon"> <a href="{DEL_URL}" class = "delete">{GLANG.delete}</a> </span></td>
+			<td class="center"><a href="{DEL_URL}" class = "delete_icon">{GLANG.delete}</a></td>
 			<!-- END: delete -->
 		</tr>
+		<!-- END: row -->
 	</tbody>
-	<!-- END: row -->
 	<tfoot>
 		<tr>
 			<td colspan="8">
 			<!-- BEGIN: foot_delete -->
-			<input type="button" value="{GLANG.delete}" id="delall" /> 
-			<input type="button" value="{LANG.log_empty}" id="logempty" style="margin-right: 50px;" />
+			<input type="button" value="{GLANG.delete}" id="delall" /><input type="button" value="{LANG.log_empty}" id="logempty" style="margin-right: 50px;" />
 			<!-- END: foot_delete -->
 			<!-- BEGIN: generate_page -->
-			{GENERATE_PAGE}
+			<div class="generate_page">{GENERATE_PAGE}</div>
 			<!-- END: generate_page -->
 			</td>
 		</tr>
@@ -153,10 +157,9 @@
 					data : '',
 					success : function(data) {
 						var s = data.split('_');
-						if (s[0] == 'OK'){
+						if (s[0] == 'OK') {
 							window.location = '{BACK_URL}';
-						}
-						else{
+						} else {
 							alert(s[1]);
 						}
 					}

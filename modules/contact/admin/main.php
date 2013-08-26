@@ -62,16 +62,15 @@ if( ! empty( $contact_allowed['view'] ) )
 			$onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
 
 			$xtpl->assign( 'ROW', array(
-				'class' => ( ++$a % 2 ) ? " class=\"second\"" : "", //
-				'id' => $row['id'], //
-				'sender_name' => $row['sender_name'], //
-				'path' => $contact_allowed['view'][$row['cid']], //
-				'title' => nv_clean60( $row['title'], 60 ), //
-				'time' => $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m/Y", $row['send_time'] ), //
-				'style' => $style, //
-				'onclick' => $onclick, //
-				'status' => $status, //
-				'image' => $image //
+				'id' => $row['id'],
+				'sender_name' => $row['sender_name'],
+				'path' => $contact_allowed['view'][$row['cid']],
+				'title' => nv_clean60( $row['title'], 60 ),
+				'time' => $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m/Y", $row['send_time'] ),
+				'style' => $style,
+				'onclick' => $onclick,
+				'status' => $status,
+				'image' => $image
 			) );
 
 			$xtpl->parse( 'main.data.row' );

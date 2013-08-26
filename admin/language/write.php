@@ -306,7 +306,6 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 			$i = 0;
 			foreach( $array_filename as $name )
 			{
-				$xtpl->assign( 'CLASS', ++$i % 2 ? ' class="second"' : '' );
 				$xtpl->assign( 'NAME', $name );
 				$xtpl->parse( 'main.write_allfile_complete.loop' );
 			}

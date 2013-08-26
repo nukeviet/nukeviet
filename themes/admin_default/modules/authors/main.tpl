@@ -1,11 +1,12 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: loop -->
-<table id="aid{ID}" summary="{CAPTION}" class="tab1">
-	<col span="2" valign="top" width="50%" />
+<table id="aid{ID}" class="tab1">
+	<caption>{CAPTION}</caption>
+	<col span="2" style="width: 50%"/>
 	<thead>
 		<tr>
 			<td colspan="2">
-			<div style="position:absolute;right:10px">
+			<div style="position:absolute;right:20px">
 				<!-- BEGIN: edit -->
 				<a class="button1" href="{EDIT_HREF}"><span><span>{EDIT_NAME}</span></span></a>
 				<!-- END: edit -->
@@ -18,14 +19,14 @@
 			</div><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION} </td>
 		</tr>
 	</thead>
-	<!-- BEGIN: option_loop -->
-	<tbody {CLASS}>
+	<tbody>
+		<!-- BEGIN: option_loop -->
 		<tr>
 			<td>{VALUE0}</td>
 			<td>{VALUE1}</td>
 		</tr>
+		<!-- END: option_loop -->
 	</tbody>
-	<!-- END: option_loop -->
 </table>
 <!-- END: loop -->
 <!-- END: main -->

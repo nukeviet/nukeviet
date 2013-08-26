@@ -53,11 +53,9 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 if( $db->sql_numrows( $result ) )
 {
-	$a = 0;
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a++ % 2 ) ? " class=\"second\"" : "",
 			"id" => $id,
 			"title" => $title,
 			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : ""

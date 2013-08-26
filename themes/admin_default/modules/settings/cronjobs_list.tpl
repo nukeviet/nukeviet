@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<table summary="{DATA.caption}" class="tab1">
-	<col span="2" valign="top" width="50%" />
+<table class="tab1">
+	<col span="2" style="width: 50%" />
 	<thead>
 		<tr>
 			<td colspan="2">
@@ -17,13 +17,13 @@
 			</div> {DATA.caption} </td>
 		</tr>
 	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>{ROW.key}</td>
 			<td>{ROW.value}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <!-- END: main -->

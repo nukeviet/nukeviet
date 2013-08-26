@@ -46,9 +46,9 @@ if( $post['mid'] != 0 )
 	$result = $db->sql_query( $sql );
 
 	$arr_item[0] = array(
-		'key' => 0, //
-		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
+		'key' => 0,
+		'title' => $lang_module['cat0'],
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : ""
 	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -63,9 +63,9 @@ if( $post['mid'] != 0 )
 		}
 
 		$arr_item[$row['id']] = array(
-			'key' => $row['id'], //
-			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
+			'key' => $row['id'],
+			'title' => $sp_title . $row['title'],
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""
 		);
 	}
 }
@@ -96,9 +96,9 @@ $array['who_view'] = array();
 foreach( $array_who as $key => $who )
 {
 	$array['who_view'][] = array(
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_view ? " selected=\"selected\"" : ""
 	);
 }
 
@@ -111,17 +111,17 @@ if( ! empty( $groups_list ) )
 		if( ! empty( $groups_view ) )
 		{
 			$array['groups_view'][] = array(
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+				'key' => $key,
+				'title' => $title,
+				'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : ""
 			);
 		}
 		else
 		{
 			$array['groups_view'][] = array(
-				'key' => $key, //
-				'title' => $title, //
-				'checked' => "" //
+				'key' => $key,
+				'title' => $title,
+				'checked' => ""
 			);
 		}
 	}
@@ -354,17 +354,17 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$row['sub'] = sizeof( array_filter( explode( ',', $row['subitem'] ) ) );
 
 	$arr_table[$row['id']] = array(
-		'id' => $row['id'], //
-		'mid' => $row['mid'], //
-		'nu' => $nu, //
-		'sub' => $row['sub'], //
-		'parentid' => $row['parentid'], //
-		'link' => nv_htmlspecialchars( $row['link'] ), //
-		'weight' => $row['weight'], //
-		'title' => $row['title'], //
-		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'], //
-		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'] . "#edit", //
-		'name_block' => $arr_menu[$row['mid']]['title'] //
+		'id' => $row['id'],
+		'mid' => $row['mid'],
+		'nu' => $nu,
+		'sub' => $row['sub'],
+		'parentid' => $row['parentid'],
+		'link' => nv_htmlspecialchars( $row['link'] ),
+		'weight' => $row['weight'],
+		'title' => $row['title'],
+		'url_title' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=" . $row['id'],
+		'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;id=" . $row['id'] . "#edit",
+		'name_block' => $arr_menu[$row['mid']]['title']
 	);
 }
 
@@ -379,15 +379,13 @@ if( $post['parentid'] != 0 )
 
 $xtpl = new XTemplate( "add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&mid=" . $post['mid'] ) . "&parentid=" . $post['parentid'];
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] ) . "&amp;parentid=" . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
 
 if( ! empty( $arr_table ) )
 {
-	$a = 0;
 	foreach( $arr_table as $rows )
 	{
-		$rows['class'] = ( ++$a % 2 == 0 ) ? ' class="second"' : '';
 		$xtpl->assign( 'ROW', $rows );
 
 		for( $i = 1; $i <= $num; ++$i )
@@ -422,9 +420,9 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 	$result = $db->sql_query( $sql );
 
 	$arr_item[0] = array(
-		'key' => 0, //
-		'title' => $lang_module['cat0'], //
-		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : "" //
+		'key' => 0,
+		'title' => $lang_module['cat0'],
+		'selected' => ( $post['parentid'] == 0 ) ? " selected=\"selected\"" : ""
 	);
 
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -438,9 +436,9 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 			}
 		}
 		$arr_item[$row['id']] = array(
-			'key' => $row['id'], //
-			'title' => $sp_title . $row['title'], //
-			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : "" //
+			'key' => $row['id'],
+			'title' => $sp_title . $row['title'],
+			"selected" => ( $post['parentid'] == $row['parentid'] ) ? " selected=\"selected\"" : ""
 		);
 	}
 
@@ -512,12 +510,12 @@ if( $post['id'] != 0 )
 				while( $row = $db->sql_fetchrow( $result ) )
 				{
 					$arr_cat[$row['id']] = array(
-						'module' => $post['module_name'], //
-						'id' => $row['id'], //
-						'title' => $row['title'], //
-						'alias' => $row['alias'], //
-						'module' => $post['module_name'], //
-						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+						'module' => $post['module_name'],
+						'id' => $row['id'],
+						'title' => $row['title'],
+						'alias' => $row['alias'],
+						'module' => $post['module_name'],
+						"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""
 					);
 				}
 			}
@@ -529,11 +527,11 @@ if( $post['id'] != 0 )
 			while( $row = $db->sql_fetchrow( $result ) )
 			{
 				$arr_cat[$row['catid']] = array(
-					'module' => $post['module_name'], //
-					'key' => $row['catid'], //
-					'title' => $row['title'], //
-					'alias' => $row['alias'], //
-					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : "" //
+					'module' => $post['module_name'],
+					'key' => $row['catid'],
+					'title' => $row['title'],
+					'alias' => $row['alias'],
+					"selected" => ( $row['alias'] == $post['op'] ) ? " selected=\"selected\"" : ""
 				);
 			}
 		}
@@ -631,9 +629,9 @@ $xtpl->assign( 'link_menu', $link_menu );
 for( $i = 0; $i <= 2; ++$i )
 {
 	$xtpl->assign( 'ACTIVE_TYPE', array(
-		'key' => $i, //
-		'title' => $lang_module['add_type_active_' . $i], //
-		'selected' => $post['active_type'] == $i ? ' selected="selected"' : '' //
+		'key' => $i,
+		'title' => $lang_module['add_type_active_' . $i],
+		'selected' => $post['active_type'] == $i ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.active_type' );
 }

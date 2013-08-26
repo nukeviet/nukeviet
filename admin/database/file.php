@@ -52,7 +52,6 @@ for( $index = $count; $index >= 0; --$index )
 	$link_delete = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delfile&amp;filename=" . $file . "&amp;checkss=" . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 == 0 ) ? "" : " class=\"second\"",
 		'stt' => $a,
 		'name' => $mc[2] . "." . $mc[3],
 		'filesize' => nv_convertfromBytes( $value['filesize'] ),

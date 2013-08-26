@@ -1,14 +1,12 @@
 <!-- BEGIN: upload_blocked -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{CONTENTS.upload_blocked}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: upload_blocked -->
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote {CLASS}><span>{CONTENTS.info}</span></blockquote>
 </div>
-<div class="clear"></div>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
@@ -21,17 +19,16 @@
 
 <form id="frm" method="post" enctype="multipart/form-data" action="{CONTENTS.action}">
 	<input type="hidden" value="1" name="save" id="save" />
-	<table summary="{CONTENTS.info}" class="tab1">
-		<col style="width:250px;white-space:nowrap" />
-		<col valign="top" width="10px" />
-		<tbody class="second">
+	<table class="tab1">
+		<col class="w250" />
+		<col class="w50" />
+		<col />
+		<tbody>
 			<tr>
 				<td>{CONTENTS.title.0}:</td>
 				<td><sup class="required">&lowast;</sup></td>
-				<td><input name="{CONTENTS.title.1}" class="required" type="text" value="{CONTENTS.title.2}" style="width:300px" maxlength="{CONTENTS.title.3}" /></td>
+				<td><input name="{CONTENTS.title.1}" class="w300 required" type="text" value="{CONTENTS.title.2}" maxlength="{CONTENTS.title.3}" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{CONTENTS.plan.0}:</td>
 				<td><sup class="required">&lowast;</sup></td>
@@ -42,8 +39,6 @@
 					<!-- END: plan -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.client.0}:</td>
 				<td>&nbsp;</td>
@@ -55,8 +50,6 @@
 					<!-- END: client -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{CONTENTS.file_name.0}:</td>
 				<td>&nbsp;</td>
@@ -66,8 +59,6 @@
 				<!-- END: imageforswf1 -->
 				</td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.upload.0}:</td>
 				<td>&nbsp;</td>
@@ -80,22 +71,16 @@
 				<td><input name="{CONTENTS.upload.3}" type="file" /></td>
 			</tr>
 			<!-- END: imageforswf2 -->
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{CONTENTS.file_alt.0}:</td>
 				<td>&nbsp;</td>
-				<td><input name="{CONTENTS.file_alt.1}" type="text" value="{CONTENTS.file_alt.2}" style="width:300px" maxlength="{CONTENTS.file_alt.3}" /></td>
+				<td><input class="w300" name="{CONTENTS.file_alt.1}" type="text" value="{CONTENTS.file_alt.2}" maxlength="{CONTENTS.file_alt.3}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.click_url.0}:</td>
 				<td>&nbsp;</td>
-				<td><input class="url" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" style="width:300px" maxlength="{CONTENTS.click_url.3}" /></td>
+				<td><input class="w300 url" name="{CONTENTS.click_url.1}" type="text" value="{CONTENTS.click_url.2}" maxlength="{CONTENTS.click_url.3}" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{CONTENTS.target.0}:</td>
 				<td>&nbsp;</td>
@@ -106,19 +91,15 @@
 					<!-- END: target -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td>{CONTENTS.publ_date.0}:</td>
 				<td>&nbsp;</td>
-				<td><input name="{CONTENTS.publ_date.1}" class="datepicker" type="text" value="{CONTENTS.publ_date.2}" style="width:100px" maxlength="{CONTENTS.publ_date.3}" readonly="readonly" /></td>
+				<td><input name="{CONTENTS.publ_date.1}" class="w100 datepicker" type="text" value="{CONTENTS.publ_date.2}" maxlength="{CONTENTS.publ_date.3}" readonly="readonly" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td>{CONTENTS.exp_date.0}:</td>
 				<td>&nbsp;</td>
-				<td><input name="{CONTENTS.exp_date.1}" class="datepicker" type="text" value="{CONTENTS.exp_date.2}" style="width:100px" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
+				<td><input name="{CONTENTS.exp_date.1}" class="w100 datepicker" type="text" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
 			</tr>
 		</tbody>
 	</table>
@@ -138,6 +119,6 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

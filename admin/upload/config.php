@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	die();
 }
 
-$page_title = $lang_global['configlogo'];
+$page_title = $lang_module['configlogo'];
 
 if( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 {
@@ -104,7 +104,6 @@ foreach( $site_mods as $mod => $value )
 		if( $a % 3 == 0 )
 		{
 			$xtpl->parse( 'main.loop1' );
-			$xtpl->assign( 'CLASS', ' class="second"' );
 		}
 	}
 }

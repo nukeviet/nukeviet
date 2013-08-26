@@ -28,11 +28,11 @@
 	</thead>
 	<tfoot>
 		<tr class="aright">
-			<td colspan="7"><span class="add_icon"><a class="block_content" href="javascript:void(0);">{LANG.block_add}</a></span>&nbsp;&nbsp; <span class="delete_icon"><a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a></span><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a name="checkall" id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a name="uncheckall" id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+			<td colspan="7"><a class="add_icon block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <a class="delete_icon" class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
 		</tr>
 	</tfoot>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td>
 			<select class="order" title="{ROW.bid}">
@@ -49,11 +49,11 @@
 			<td>{ROW.title}</td>
 			<td>{ROW.module} {ROW.file_name}</td>
 			<td class="center">{ROW.active}</td>
-			<td class="center"><span class="edit_icon"><a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a></span> &nbsp;-&nbsp;<span class="delete_icon"><a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></span></td>
+			<td class="center"><a class="edit_icon block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
 			<td class="center"><label><input type="checkbox" name="idlist" value="{ROW.bid}"/></label></td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <script type="text/javascript">
 	//<![CDATA[

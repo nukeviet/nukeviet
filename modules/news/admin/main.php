@@ -249,7 +249,6 @@ while( $i <= 1000 )
 	$search_per_page[] = array( "page" => $i, "selected" => ( $i == $per_page ) ? " selected=\"selected\"" : "" );
 	$i = $i + 5;
 }
-$a = 0;
 $order2 = ( $order == "asc" ) ? "desc" : "asc";
 $base_url_id = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=id&amp;order=" . $order2 . "&amp;page=" . $page;
 $base_url_name = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=title&amp;order=" . $order2 . "&amp;page=" . $page;
@@ -266,7 +265,6 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 {
 	$publtime = nv_date( "H:i d/m/y", $publtime );
 	$title = nv_clean60( $title );
-	$class = ( $a % 2 == 0 ) ? "" : " class=\"second\"";
 	if( $catid > 0 )
 	{
 		$catid_i = $catid;
@@ -328,7 +326,6 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
 	$data[] = array(
-		"class" => $class,
 		"id" => $id,
 		"link" => $link,
 		"title" => $title,
@@ -337,7 +334,6 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		"username" => $username,
 		"feature" => implode( "&nbsp;-&nbsp;", $admin_funcs )
 	);
-	++$a;
 }
 $array_list_action = array(
 	'delete' => $lang_global['delete'],

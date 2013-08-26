@@ -63,8 +63,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
-	$array_config_site['date_pattern'] = nv_substr( $nv_Request->get_title( 'date_pattern', 'post', '', 0, $preg_replace ), 0, 255);
-	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255);
+	$array_config_site['date_pattern'] = nv_substr( $nv_Request->get_title( 'date_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
+	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
 
 	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
 	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
@@ -116,7 +116,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$array_config_global['rewrite_optional'] = $nv_Request->get_int( 'rewrite_optional', 'post', 0 );
 			$array_config_global['lang_geo'] = 0;
-			$array_config_global['rewrite_op_mod'] = ( $nv_Request->get_int( 'rewrite_op_mod', 'post' ) ) ? $global_config['site_home_module'] : '';
+			$array_config_global['rewrite_op_mod'] = $nv_Request->get_title( 'rewrite_op_mod', 'post' );
+			if( ! isset( $site_mods[$array_config_global['rewrite_op_mod']] ) OR $array_config_global['rewrite_optional'] ==0 )
+			{
+				$array_config_global['rewrite_op_mod'] = '';
+			}
 		}
 		else
 		{
@@ -167,11 +171,15 @@ $optActive_Modes = array(
 	'2' => $lang_module['optActive_site'],
 	'3' => $lang_module['optActive_admin']
 );
-$lang_module['rewrite_op_mod'] = sprintf( $lang_module['rewrite_op_mod'], $global_config['site_home_module'] );
 
 $xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) );
 
 if( defined( 'NV_IS_GODADMIN' ) )
@@ -191,10 +199,18 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
-	if( $lang_multi == 0 )
+	if( $array_config_global['is_url_rewrite'] AND $lang_multi == 0 )
 	{
 		$xtpl->assign( 'CHECKED2', ( $array_config_global['rewrite_optional'] == 1 ) ? ' checked ' : '' );
-		$xtpl->assign( 'CHECKED3', ( $array_config_global['rewrite_op_mod'] ) ? ' checked ' : '' );
+
+		foreach( $site_mods as $mod => $row )
+		{
+			$xtpl->assign( 'MODE_VALUE', $mod );
+			$xtpl->assign( 'MODE_SELECTED', ( $mod == $array_config_global['rewrite_op_mod'] ) ? "selected='selected'" : "" );
+			$xtpl->assign( 'MODE_NAME', $row['custom_title'] );
+			$xtpl->parse( 'main.system.rewrite_optional.rewrite_op_mod' );
+		}
+
 		$xtpl->parse( 'main.system.rewrite_optional' );
 	}
 	if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )

@@ -1,14 +1,14 @@
 <!-- BEGIN: main -->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote><span>{LANG.import_note}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- BEGIN: read -->
 <br />
 {LANG.read_note}
 <table id="table_field_read" class="tab1">
 	<colgroup>
 		<col style="width: 35px" />
+		<col span="2" />
 	</colgroup>
 	<thead>
 		<tr>
@@ -23,16 +23,16 @@
 			value="{LANG.read_submit}" /></td>
 		</tr>
 	</tfoot>
-	<!-- BEGIN: loop -->
-	<tbody class="{DATA.class}">
+	<tbody>
+		<!-- BEGIN: loop -->
 		<tr>
 			<td><input type="checkbox" name="readfiledata[]"
 			value="{DATA.file_name_base64}"></td>
 			<td>{DATA.file_name}</td>
 			<td>{DATA.file_size}</td>
 		</tr>
+		<!-- END: loop -->
 	</tbody>
-	<!-- END: loop -->
 </table>
 <script type="text/javascript">
 	//<![CDATA[
@@ -70,6 +70,7 @@
 			}
 		});
 	}
+
 
 	$("input[name=submitfiledata]").click(function() {
 		var listfile = '';

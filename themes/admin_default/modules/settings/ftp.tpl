@@ -5,40 +5,33 @@
 <!-- END: no_support-->
 <!-- BEGIN: main-->
 <!-- BEGIN: error-->
-<div class="quote" style="width:98%">
+<div class="quote">
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
-<div class="clear"></div>
 <!-- END: error -->
-<form action="" method="post" id="form_edit_ftp">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_ftp">
 	<table class="tab1">
+		<tfoot>
+			<tr>
+				<td colspan="2" style="padding-left: 200px;"><input type="submit" value="{LANG.submit}"/></td>
+			</tr>
+		</tfoot>
 		<tbody>
 			<tr>
 				<td><strong>{LANG.server}</strong></td>
-				<td><input type="text" name="ftp_server" value="{VALUE.ftp_server}" style="width: 250px"/><span>{LANG.port}</span><input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
+				<td><input class="w250" type="text" name="ftp_server" value="{VALUE.ftp_server}" /><span>{LANG.port}</span><input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.username}</strong></td>
-				<td><input type="text" name="ftp_user_name" id="ftp_user_name_iavim" value="{VALUE.ftp_user_name}" style="width: 250px;"/></td>
+				<td><input class="w250" type="text" name="ftp_user_name" id="ftp_user_name_iavim" value="{VALUE.ftp_user_name}" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td><strong>{LANG.password}</strong></td>
-				<td><input type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" style="width: 250px"/></td>
+				<td><input class="w250" type="password" name="ftp_user_pass" id="ftp_user_pass_iavim" value="{VALUE.ftp_user_pass}" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td><strong>{LANG.ftp_path}</strong></td>
-				<td><input type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" style="width: 250px;"/><input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td colspan="2" style="text-align: center;"><input type="submit" value="{LANG.submit}" style="padding: 2px 10px;"/></td>
+				<td><input class="w250" type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" /><input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
 			</tr>
 		</tbody>
 	</table>
@@ -77,7 +70,6 @@
 				}
 			});
 		});
-	}); 
+	});
 </script>
-
 <!-- END: main -->
