@@ -68,7 +68,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 			$end_publtime = $item['publtime'];
 		}
@@ -86,7 +86,7 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_cat_other[] = $item;
 		}
 
@@ -131,7 +131,7 @@ if( empty( $contents ) )
 					}
 
 
-					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'];
+					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 					$array_cat[$key]['content'][] = $item;
 				}
 
@@ -179,7 +179,7 @@ if( empty( $contents ) )
 						$item['imghome'] = '';
 					}
 
-					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'];
+					$item['link'] = $array_cat_i['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 					$array_catpage[$key]['content'][] = $item;
 				}
 			}
@@ -222,7 +222,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 
@@ -243,7 +243,7 @@ if( empty( $contents ) )
 		{
 			$item['imghome'] = '';
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 

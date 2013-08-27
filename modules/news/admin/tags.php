@@ -174,7 +174,7 @@ if( $tid > 0 )
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
-$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
 $xtpl = new XTemplate( "tags.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

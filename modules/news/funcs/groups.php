@@ -68,7 +68,7 @@ if( isset( $array_op[1] ) )
 
 			$end_weight = $item['weight'];
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array[] = $item;
 		}
 
@@ -80,7 +80,7 @@ if( isset( $array_op[1] ) )
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array_other[] = $item;
 		}
 

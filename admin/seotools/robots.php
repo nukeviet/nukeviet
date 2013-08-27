@@ -47,7 +47,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$check_rewrite_file = nv_check_rewrite_file( );
 
 	$redirect = false;
-	if( ! $check_rewrite_file )
+	if( empty( $global_config['check_rewrite_file'] ) )
 	{
 		$rbcontents = array( );
 		$rbcontents[] = "User-agent: *";
@@ -60,14 +60,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 
-		if( $global_config['is_url_rewrite'] )
-		{
-			$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php/SitemapIndex" . $global_config['rewrite_endurl'];
-		}
-		else
-		{
-			$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php?" . NV_NAME_VARIABLE . "=SitemapIndex";
-		}
+		$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php/SitemapIndex" . $global_config['rewrite_endurl'];
+
 		$rbcontents = implode( "\n", $rbcontents );
 
 		if( is_writable( NV_ROOTDIR . "/robots.txt" ) )

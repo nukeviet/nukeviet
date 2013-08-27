@@ -12,49 +12,6 @@ define( 'NV_SYSTEM', true );
 
 require ( str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php' );
 
-// Check request url when active rewrite
-if( $global_config['is_url_rewrite'] )
-{
-	if( $global_config['check_rewrite_file'] and preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" ) . "(.*)/i", $_SERVER['REQUEST_URI'], $m ) )
-	{
-		Header( "Location: " . NV_BASE_SITEURL . $m[1] );
-		die();
-	}
-	elseif( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" ) . "/i", $_SERVER['REQUEST_URI'] ) )
-	{
-		$url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
-		{
-			Header( "Location: " . $url_rewrite );
-			die();
-		}
-	}
-	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
-	{
-		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
-		Header( "Location: " . $url_rewrite );
-		die();
-	}
-	elseif( $global_config['rewrite_optional'] && preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "/i", $_SERVER['REQUEST_URI'] ) )
-	{
-		$url_rewrite = preg_replace( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php/" . NV_LANG_DATA . "/" ) . "(.*)$/", NV_BASE_SITEURL . "\\1", $_SERVER['REQUEST_URI'] );
-		Header( "Location: " . $url_rewrite );
-		die();
-	}
-}
-elseif( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
-{
-	if( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) . "/i", $_SERVER['REQUEST_URI'] ) )
-	{
-		$url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-		if( $url_rewrite != $_SERVER['REQUEST_URI'] )
-		{
-			Header( "Location: " . $url_rewrite );
-			die();
-		}
-	}
-}
-
 require ( NV_ROOTDIR . "/includes/core/user_functions.php" );
 
 // Google Sitemap

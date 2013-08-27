@@ -263,19 +263,15 @@ function nv_save_file_config_global()
 
 	$rewrite = array();
 	$global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
-	$global_config['is_url_rewrite'] = $config_variable['is_url_rewrite'];
 	$global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
 
-	if( $config_variable['is_url_rewrite'] )
+	if( $config_variable['check_rewrite_file'] )
 	{
-		if( $config_variable['check_rewrite_file'] )
-		{
-			require ( NV_ROOTDIR . "/includes/rewrite.php" );
-		}
-		else
-		{
-			require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
-		}
+		require ( NV_ROOTDIR . "/includes/rewrite.php" );
+	}
+	else
+	{
+		require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
 	}
 
 	$content_config .= "\n";

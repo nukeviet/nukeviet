@@ -41,7 +41,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 			{
 				$cache = unserialize( $cache );
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'];
+				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'] . $global_config['rewrite_exturl'];
 				$title = $cache['page_title'];
 				$bodytext = strip_tags( $cache['bodytext'] );
 
@@ -57,7 +57,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 			{
 				if( ( $row = $db->sql_fetchrow( $query ) ) !== false )
 				{
-					$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'];
+					$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'] . $global_config['rewrite_exturl'];
 					$title = $row['title'];
 					$bodytext = strip_tags( $row['bodytext'] );
 					$bodytext = nv_clean60( $bodytext, 300 );

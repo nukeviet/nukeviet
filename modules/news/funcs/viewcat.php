@@ -80,7 +80,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 			$end_publtime = $item['publtime'];
 		}
@@ -98,7 +98,7 @@ if( empty( $contents ) )
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_cat_other[] = $item;
 		}
 
@@ -138,7 +138,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catcontent[] = $item;
 		}
 		unset( $sql, $result );
@@ -179,7 +179,7 @@ if( empty( $contents ) )
 						$item['imghome'] = '';
 					}
 
-					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 					$array_cat_other[$key]['content'][] = $item;
 				}
 
@@ -223,7 +223,7 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catcontent[] = $item;
 		}
 		unset( $sql, $result );
@@ -261,7 +261,7 @@ if( empty( $contents ) )
 				{
 					$item['imghome'] = '';
 				}
-				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 				$array_cat_other[$key]['content'][] = $item;
 			}
 
@@ -303,7 +303,7 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 
@@ -323,7 +323,7 @@ if( empty( $contents ) )
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
 			$item['imghome'] = '';
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 

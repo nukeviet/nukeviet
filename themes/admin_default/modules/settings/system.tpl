@@ -61,10 +61,6 @@
 				<td><input type="checkbox" value="1" name="lang_geo" {CHECKED_LANG_GEO} /> ( <a href="{CONFIG_LANG_GEO}">{LANG.lang_geo_config}</a> ) </td>
 			</tr>
 			<!-- END: lang_multi -->
-			<tr>
-				<td><strong>{LANG.rewrite}</strong></td>
-				<td><input type="checkbox" value="1" name="is_url_rewrite" {CHECKED1} /></td>
-			</tr>
 			<!-- BEGIN: rewrite_optional -->
 			<tr>
 				<td><strong>{LANG.rewrite_optional}</strong></td>
@@ -126,6 +122,6 @@
 <script type="text/javascript">
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
-	}); 
+	});
 </script>
 <!-- END: main -->

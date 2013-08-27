@@ -24,22 +24,22 @@ if( ! empty( $abouts ) )
 	if( ! empty( $alias ) and isset( $abouts[$alias] ) )
 	{
 		$id = $abouts[$alias]['id'];
-		$nv_vertical_menu[] = array( $abouts[$alias]['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $abouts[$alias]['alias'], 1 );
+		$nv_vertical_menu[] = array( $abouts[$alias]['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $abouts[$alias]['alias'] . $global_config['rewrite_exturl'], 1 );
 		unset( $abouts[$alias] );
 	}
 	else
 	{
 		$about = array_shift( $abouts );
 		$id = $about['id'];
-		$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'], 1 );
+		$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'] . $global_config['rewrite_exturl'], 1 );
 	}
 
 	if( ! empty( $abouts ) )
 	{
 		foreach( $abouts as $about )
 		{
-			$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'], 0 );
-			$ab_links[] = array( "title" => $about['title'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'] );
+			$nv_vertical_menu[] = array( $about['title'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'] . $global_config['rewrite_exturl'], 0 );
+			$ab_links[] = array( "title" => $about['title'], "link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $about['alias'] . $global_config['rewrite_exturl'] );
 		}
 	}
 }

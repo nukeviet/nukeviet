@@ -395,7 +395,7 @@ function nv_xmlSitemap_generate( $url )
 			$publdate = date( 'c', $values['publtime'] );
 
 			$row = $xml->addChild( 'url' );
-			$row->addChild( 'loc', "'" . $values['link'] . "'" );
+			$row->addChild( 'loc', "'" . nv_url_rewrite( $values['link'], true ) . "'" );
 			$row->addChild( 'lastmod', $publdate );
 			$row->addChild( 'changefreq', 'daily' );
 			$row->addChild( 'priority', '0.8' );
@@ -466,25 +466,18 @@ function nv_xmlSitemapIndex_generate()
 
 	$contents = $xml->asXML();
 
-	if( $sys_info['supports_rewrite'] and $global_config['is_url_rewrite'] )
+	if( $global_config['check_rewrite_file'] )
 	{
-		if( $global_config['check_rewrite_file'] )
-		{
-			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
-			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
-		}
-		elseif( $global_config['rewrite_optional'] )
-		{
-			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
-		}
-		else
-		{
-			$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\1/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
-		}
+		$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "Sitemap-\\1.xml", $contents );
+		$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "Sitemap-\\1.\\2.xml", $contents );
 	}
-	elseif( empty( $global_config['lang_multi'] ) and $global_config['rewrite_optional'] )
+	elseif( $global_config['rewrite_optional'] )
 	{
-		$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php?" . NV_NAME_VARIABLE . "=\\2&amp;" . NV_OP_VARIABLE . "=Sitemap", $contents );
+		$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
+	}
+	else
+	{
+		$contents = preg_replace( "/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=Sitemap/", "index.php/\\1/\\2/Sitemap" . $global_config['rewrite_endurl'], $contents );
 	}
 
 	nv_xmlOutput( $contents, $lastModified );

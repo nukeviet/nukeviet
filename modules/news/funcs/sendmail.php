@@ -53,7 +53,7 @@ if( $id > 0 and $catid > 0 )
 			$to_mail = $content = '';
 			if( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
 			{
-				$link = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id, true );
+				$link = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'], true );
 				$link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
 				$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
@@ -104,7 +104,7 @@ if( $id > 0 and $catid > 0 )
 				"to_mail" => $to_mail,
 				"content" => $content,
 				"result" => $result,
-				"action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id //
+				"action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'] //
 			);
 			$contents = sendmail_themme( $sendmail );
 			include ( NV_ROOTDIR . '/includes/header.php' );

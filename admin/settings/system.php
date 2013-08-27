@@ -104,7 +104,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
-		$array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
 
 		$site_lang = $nv_Request->get_title( 'site_lang', 'post', '', 1 );
 		if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
@@ -137,11 +136,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
 		}
 
-		$nv_rewrite_change = ( $global_config['is_url_rewrite'] != $array_config_global['is_url_rewrite'] or $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] ) ? true : false;
-
 		nv_save_file_config_global();
 
-		if( $nv_rewrite_change )
+		if( $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] )
 		{
 			$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
 			$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
@@ -196,10 +193,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 
-	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
-	if( $array_config_global['is_url_rewrite'] AND $lang_multi == 0 )
+	if( $lang_multi == 0 )
 	{
 		$xtpl->assign( 'CHECKED2', ( $array_config_global['rewrite_optional'] == 1 ) ? ' checked ' : '' );
 

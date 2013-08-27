@@ -493,7 +493,6 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'global', 'allow_sitelangs', '" . NV_LANG_DATA . "'),
 	('sys', 'global', 'allow_adminlangs', '" . implode( ",", $languageslist ) . "'),
 	('sys', 'global', 'read_type', '0'),
-	('sys', 'global', 'is_url_rewrite', '" . $global_config['is_url_rewrite'] . "'),
 	('sys', 'global', 'rewrite_optional', '" . $global_config['rewrite_optional'] . "'),
 	('sys', 'global', 'rewrite_endurl', '" . $global_config['rewrite_endurl'] . "'),
 	('sys', 'global', 'rewrite_exturl', '" . $global_config['rewrite_exturl'] . "'),

@@ -58,7 +58,7 @@ if( $topicid > 0 )
 
 		$end_publtime = $item['publtime'];
 
-		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 		$topic_array[] = $item;
 	}
 	$db->sql_freeresult( $query );
@@ -69,7 +69,7 @@ if( $topicid > 0 )
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{
-		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 		$topic_other_array[] = $item;
 	}
 

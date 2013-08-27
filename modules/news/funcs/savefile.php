@@ -57,7 +57,7 @@ if( $id > 0 and $catid > 0 )
 			list( $sourcetext ) = $db->sql_fetchrow( $result );
 			unset( $sql, $result );
 
-			$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id, true );
+			$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . $global_config['rewrite_exturl'], true );
 			$link = "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n";
 
 			$meta_tags = nv_html_meta_tags();

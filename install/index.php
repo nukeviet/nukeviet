@@ -754,22 +754,15 @@ elseif( $step == 6 )
 					{
 						$contents = file_get_contents( NV_ROOTDIR . "/robots.txt" );
 
-						if( $global_config['is_url_rewrite'] )
-						{
-							$check_rewrite_file = nv_check_rewrite_file();
+						$check_rewrite_file = nv_check_rewrite_file();
 
-							if( $check_rewrite_file )
-							{
-								$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "Sitemap.xml";
-							}
-							else
-							{
-								$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php/SitemapIndex" . $global_config['rewrite_endurl'];
-							}
+						if( $check_rewrite_file )
+						{
+							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "Sitemap.xml";
 						}
 						else
 						{
-							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=SitemapIndex";
+							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php/SitemapIndex" . $global_config['rewrite_endurl'];
 						}
 
 						$contents = str_replace( 'Sitemap: http://yousite.com/?nv=SitemapIndex', $content_sitemap, $contents );

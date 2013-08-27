@@ -40,7 +40,7 @@ if( $db->sql_numrows( $result ) )
 {
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$row['delete'] = nv_link_edit_page( $row['id'] );
 
 		$xtpl->assign( 'ROW', $row );

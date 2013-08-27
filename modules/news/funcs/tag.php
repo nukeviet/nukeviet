@@ -80,7 +80,7 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 
 			$end_publtime = $item['publtime'];
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array[] = $item;
 		}
 		$db->sql_freeresult( $query );
@@ -91,7 +91,7 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array_other[] = $item;
 		}
 

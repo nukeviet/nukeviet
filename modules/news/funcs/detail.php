@@ -121,12 +121,12 @@ if( $allowed )
 	}
 	if( $catid != $news_contents['catid'] )
 	{
-		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$news_contents['catid']]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
+		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$news_contents['catid']]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 	}
 
-	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
-	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
-	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'], true );
+	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=savefile/" . $global_array_cat[$catid]['alias'] . "/" . $news_contents['alias'] . "-" . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 
 	$sql = "SELECT `title`, `link`, `logo` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $news_contents['sourceid'] . "'";
 	$result = $db->sql_query( $sql );
@@ -147,7 +147,7 @@ if( $allowed )
 	$related_new = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " ORDER BY `id` ASC LIMIT 0, " . $st_links . "" );
 	while( $row = $db->sql_fetch_assoc( $related_new ) )
 	{
-		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$related_new_array[] = array(
 			"title" => $row['title'],
 			"time" => nv_date( "d/m/Y", $row['publtime'] ),
@@ -163,7 +163,7 @@ if( $allowed )
 	$related = $db->sql_query( "SELECT `id`, `title`, `alias`,`publtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $publtime . " AND `publtime` < " . NV_CURRENTTIME . " ORDER BY `id` DESC LIMIT 0, " . $st_links . "" );
 	while( $row = $db->sql_fetch_assoc( $related ) )
 	{
-		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$related_array[] = array(
 			"title" => $row['title'],
 			"time" => nv_date( "d/m/Y", $row['publtime'] ),

@@ -324,7 +324,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	$admin_funcs = array();
 	if( $check_permission_edit ) $admin_funcs[] = nv_link_edit_page( $id );
 	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
-	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
+	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
 	$data[] = array(
 		"id" => $id,
 		"link" => $link,

@@ -754,7 +754,7 @@ elseif( defined( 'NV_IS_USER' ) )
 		$item['is_del_content'] = ( empty( $item['status'] ) or $array_post_user['delcontent'] ) ? 1 : 0;
 
 		$catid = $item['catid'];
-		$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+		$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 		$array_catpage[] = $item;
 	}
 

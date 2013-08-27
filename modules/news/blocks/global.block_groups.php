@@ -47,7 +47,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 
 	function nv_block_news_groups( $block_config )
 	{
-		global $module_array_cat, $module_info, $site_mods, $module_config;
+		global $module_array_cat, $module_info, $site_mods, $module_config, $global_config;
 		$module = $block_config['module'];
 		$show_no_image  = $module_config[$module]['show_no_image'];
 
@@ -68,7 +68,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			$xtpl = new XTemplate( "block_groups.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/news" );
 			foreach( $list as $l )
 			{
-				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$l['catid']]['alias'] . "/" . $l['alias'] . "-" . $l['id'];
+				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$l['catid']]['alias'] . "/" . $l['alias'] . "-" . $l['id'] . $global_config['rewrite_exturl'];
 				if( $l['homeimgthumb'] == 1 )
 				{
 					$l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $l['homeimgfile'];
@@ -87,7 +87,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				}
 				else
 				{
-					$l['thumb'] = '';				
+					$l['thumb'] = '';
 				}
 
 				$xtpl->assign( 'ROW', $l );

@@ -30,7 +30,6 @@ $global_config['idsite'] = 0;
 $global_config['site_timezone'] = 'byCountry';
 $global_config['statistics_timezone'] = '';
 $global_config['gzip_method'] = 1;
-$global_config['is_url_rewrite'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;

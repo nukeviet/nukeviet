@@ -53,7 +53,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 			$result = $db->sql_query( $sql );
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
+				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
 				if( $homeimgthumb == 1 ) //image thumb
 				{
 					$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
@@ -72,7 +72,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				}
 				else
 				{
-					$imgurl = '';				
+					$imgurl = '';
 				}
 				$array_block_news[] = array(
 					'id' => $id,
