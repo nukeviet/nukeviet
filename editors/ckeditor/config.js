@@ -6,6 +6,7 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
 	config.extraPlugins = 'autosave';
+	config.entities = false;
 	config.toolbar = [
 		{ name: 'clipboard', groups: [ 'autosave', 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace' ] },
