@@ -26,7 +26,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 
 		if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 		{
-			$html = nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
+			$html = nv_add_editor_js( ) . nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
 		}
 		else
 		{
