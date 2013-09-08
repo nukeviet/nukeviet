@@ -307,23 +307,6 @@ function nv_del_content_result(res) {
 	return false;
 }
 
-function create_keywords() {
-	var content = strip_tags(document.getElementById('keywords').value);
-	if (content != '') {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&content=' + encodeURIComponent(content), '', 'res_keywords');
-	}
-	return false;
-}
-
-function res_keywords(res) {
-	if (res != "n/a") {
-		document.getElementById('keywords').value = res;
-	} else {
-		document.getElementById('keywords').value = '';
-	}
-	return false;
-}
-
 //---------------------------------------
 function get_alias(mod, id) {
 	var title = strip_tags(document.getElementById('idtitle').value);
@@ -341,55 +324,3 @@ function res_get_alias(res) {
 	}
 	return false;
 }
-
-// autocomplete function
-
-function findValue(li) {
-	if (li == null)
-		return alert("No match!");
-
-	if (!!li.extra)
-		var sValue = li.extra[0];
-
-else
-		var sValue = li.selectValue;
-	return sValue;
-}
-
-function selectItem(li) {
-	sValue = findValue(li);
-}
-
-function formatItem(row) {
-	return row[0] + " (" + row[1] + ")";
-}
-
-// end autocomplete function
-
-// collapse Div
-$(document).ready(function() {
-
-	// hide message_body after the first one
-	$(".message_list .message_body:gt(1)").hide();
-
-	// hide message li after the 5th
-	$(".message_list li:gt(5)").hide();
-
-	// toggle message_body
-	$(".message_head").click(function() {
-		$(this).next(".message_body").slideToggle(500)
-		return false;
-	});
-
-	// collapse all messages
-	$(".collpase_all_message").click(function() {
-		$(".message_body").slideUp(500)
-		return false;
-	});
-
-	// Show all messages
-	$(".show_all_message").click(function() {
-		$(".message_body").slideDown(1000)
-		return false;
-	});
-});
