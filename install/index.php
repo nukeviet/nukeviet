@@ -598,6 +598,8 @@ elseif( $step == 6 )
 {
 	$nextstep = 0;
 	$array_data = array();
+	$array_data['lang_multi'] = (int) $nv_Request->get_bool( 'lang_multi', 'post');
+
 	$error = $site_name = $login = $email = $password = $re_password = '';
 
 	if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
@@ -622,7 +624,6 @@ elseif( $step == 6 )
 		$array_data['nv_login'] = $login;
 		$array_data['question'] = $question;
 		$array_data['answer_question'] = $answer_question;
-		$array_data['lang_multi'] = (int) $nv_Request->get_bool( 'lang_multi', 'post');
 
 		$global_config['site_email'] = $email;
 
