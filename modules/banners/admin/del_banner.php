@@ -35,7 +35,15 @@ if( $db->sql_numrows( $result ) )
 	nv_CreateXML_bannerPlan();
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_banner', "bannerid " . $id, $admin_info['userid'] );
-	echo $lang_module['delfile_success'];
+	if( defined( 'NV_IS_AJAX' ) )
+	{
+		 echo $lang_module['delfile_success'];
+	}
+	else
+	{
+		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=banners_list" );
+		die();
+	}
 }
 else
 {
