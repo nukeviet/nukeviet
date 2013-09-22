@@ -1,5 +1,5 @@
 .ddsmoothmenu {
-	font: bold 12px Verdana;
+	font: 12px Arial;
 	background: #414141; /*background of menu bar (default state)*/
 	width: 100%;
 }
@@ -68,7 +68,7 @@
 
 /* Sub level menu links style */
 .ddsmoothmenu ul li ul li a {
-	font: normal 13px Verdana;
+	font: normal 13px Arial;
 	min-width: 160px; /*width of sub menus*/
 	padding: 5px;
 	margin: 0;
@@ -128,7 +128,7 @@
 	padding: 0;
 	width: 100%; /* Main Menu Item widths */
 	list-style-type: none;
-	font: bold 12px Verdana;
+	font: bold 12px Arial;
 }
 
 .ddsmoothmenu-v ul li {
