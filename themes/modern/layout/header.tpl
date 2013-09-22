@@ -42,7 +42,7 @@
 			</div>
 			<div class="header">
 				<div class="logo">
-					<h1><a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" height="84" /> {THEME_LOGO_TITLE}</a></h1>
+					<a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" height="84" /> <strong>{THEME_LOGO_TITLE}</strong></a>
 				</div>
 				<div class="topadv">
 					[TOPADV]

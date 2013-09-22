@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="box-border">
 	<div class="page-header">
-		<h2>{CONTENT.title}</h2>
+		<h1>{CONTENT.title}</h1>
 		<span class="small">{LANG.add_time}: {CONTENT.add_time}</span>
 		<div class="clear"></div>
 	</div>

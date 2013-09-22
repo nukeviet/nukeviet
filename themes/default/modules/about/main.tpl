@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<h2 class="title_about" style="color: #0943ae;font-size:14px; margin-top:5px">{CONTENT.title}</h2>
+<h1 class="title_about" style="color: #0943ae;font-size:14px; margin-top:5px">{CONTENT.title}</h1>
 {CONTENT.bodytext}
 <!-- BEGIN: other -->
 <ul style="margin:10px;" >

@@ -33,7 +33,7 @@
 				</p>
 			</div>
 			<!-- END: imgthumb -->
-			{DETAIL.hometext}
+			<h2>{DETAIL.hometext}</h2>
 		</div>
 		<!-- BEGIN: imgfull -->
 		<div style="width:{DETAIL.image.width}px;margin:10px auto;">
