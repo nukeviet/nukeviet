@@ -393,6 +393,8 @@ function nv_filesListRefresh( $pathimg )
 					$info = nv_getFileInfo( $pathimg, $title );
 					$info['did'] = $did;
 					$info['title'] = $title;
+					$newalt = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $title );
+					$newalt = str_replace( '-', ' ', change_alias( $newalt ) );
 					if( isset( $results[$title] ) )
 					{
 						$info['userid'] = $results[$title]['userid'];
@@ -401,8 +403,8 @@ function nv_filesListRefresh( $pathimg )
 						{
 							//Cập nhật CSDL file thay đổi
 							$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`)
-								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`)
+								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', " . $db->dbescape( $newalt ) . ")" );
 						}
 						unset( $results[$title] );
 					}
@@ -411,8 +413,8 @@ function nv_filesListRefresh( $pathimg )
 						$info['userid'] = $admin_info['userid'];
 						// Thêm file mới
 						$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`)
-							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "')" );
+							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`)
+							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', " . $db->dbescape( $newalt ) . ")" );
 					}
 				}
 			}

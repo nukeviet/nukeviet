@@ -59,7 +59,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	{
 		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` AS t1 INNER JOIN `" . NV_UPLOAD_GLOBALTABLE . "_dir` AS t2 ON t1.`did` = t2.`did`";
 		$sql .= " WHERE (t2.`dirname` = '" . $path . "' OR t2.`dirname` LIKE '" . $path . "/%')";
-		$sql .= " AND t1.`title` LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$sql .= " AND (t1.`title` LIKE '%" . $db->dblikeescape( $q ) . "%' OR t1.`alt` LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		if( $type == "image" or $type == "flash" )
 		{
 			$sql .= " AND t1.`type`='" . $type . "'";

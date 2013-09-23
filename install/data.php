@@ -430,6 +430,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_upload_file` (
 	`mtime` int(11) NOT NULL DEFAULT '0',
 	`did` int(11) NOT NULL DEFAULT '0',
 	`title` varchar(255) NOT NULL DEFAULT '',
+	`alt` varchar(255) NOT NULL DEFAULT '',
 	UNIQUE KEY `did` (`did`,`title`),
 	KEY `userid` (`userid`),
 	KEY `type` (`type`)

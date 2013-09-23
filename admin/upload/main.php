@@ -18,6 +18,7 @@ $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'ge
 $type = $nv_Request->get_string( 'type', 'get' );
 $popup = $nv_Request->get_int( 'popup', 'get', 0 );
 $area = htmlspecialchars( trim( $nv_Request->get_string( 'area', 'get' ) ), ENT_QUOTES );
+$alt = htmlspecialchars( trim( $nv_Request->get_string( 'alt', 'get' ) ), ENT_QUOTES );
 
 if( empty( $currentpath ) ) $currentpath = NV_UPLOADS_DIR;
 if( $type != "image" and $type != "flash" ) $type = "file";
@@ -41,6 +42,7 @@ if( $popup )
 	$xtpl->assign( "PATH", $path );
 	$xtpl->assign( "TYPE", $type );
 	$xtpl->assign( "AREA", $area );
+	$xtpl->assign( "ALT", $alt );
 	$xtpl->assign( "FUNNUM", $nv_Request->get_int( 'CKEditorFuncNum', 'get', 0 ) );
 
 	$sfile = ( $type == 'file' ) ? ' selected="selected"' : '';
@@ -55,7 +57,7 @@ if( $popup )
 	$xtpl->parse( 'main.footer' );
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	if ( $nv_Request->isset_request('nomudim', 'get') )
+	if ( $nv_Request->isset_request( 'nomudim', 'get' ) )
 	{
 		$global_config['mudim_active'] = 0;
 	}

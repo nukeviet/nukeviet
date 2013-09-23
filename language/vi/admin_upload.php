@@ -99,6 +99,7 @@ $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
 $lang_module['logowith'] = 'Chiều rộng của logo bằng';
 $lang_module['logosize3'] = 'Sử dụng nguyên kích thước logo, Kích thước tối đa của logo bằng';
 $lang_module['fileimage'] = 'ảnh';
+$lang_module['altimage'] = 'Chú thích cho hình';
 
 $lang_module['uploadconfig'] = 'Cấu hình upload';
 $lang_module['uploadconfig_ban_ext'] = 'Phần mở rộng bị cấm';

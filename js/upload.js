@@ -7,29 +7,29 @@
 
 function nv_randomNum(a) {
 	for (var b = "", d = 0; d < a; d++) {
-		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62))
+		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
 	}
 	return b
 }
 
 function resize_byWidth(a, b, d) {
-	return Math.round(d / a * b)
+	return Math.round(d / a * b);
 }
 
 function resize_byHeight(a, b, d) {
-	return Math.round(d / b * a)
+	return Math.round(d / b * a);
 }
 
 function calSize(a, b, d, e) {
 	if (a > d) {
 		b = resize_byWidth(a, b, d);
-		a = d
+		a = d;
 	}
 	if (b > e) {
 		a = resize_byHeight(a, b, e);
 		b = e
 	}
-	return [a, b]
+	return [a, b];
 }
 
 function calSizeMax(a, b, d, e) {
@@ -37,9 +37,9 @@ function calSizeMax(a, b, d, e) {
 	d = resize_byWidth(a, b, d);
 	if (!(d <= e )) {
 		d = e;
-		g = resize_byHeight(a, b, e)
+		g = resize_byHeight(a, b, e);
 	}
-	return [g, d]
+	return [g, d];
 }
 
 function calSizeMin(a, b, d, e) {
@@ -47,35 +47,35 @@ function calSizeMin(a, b, d, e) {
 	d = resize_byWidth(a, b, d);
 	if (!(d >= e )) {
 		d = e;
-		g = resize_byHeight(a, b, e)
+		g = resize_byHeight(a, b, e);
 	}
-	return [g, d]
+	return [g, d];
 }
 
 function is_numeric(a) {
-	return ( typeof a === "number" || typeof a === "string" ) && a !== "" && !isNaN(a)
+	return ( typeof a === "number" || typeof a === "string" ) && a !== "" && !isNaN(a);
 }
 
 function checkNewSize() {
 	var a = $("input[name=newWidth]").val(), b = $("input[name=newHeight]").val(), d = [], e = $("input[name=origWidth]").val(), g = $("input[name=origHeight]").val(), h = calSizeMax(e, g, nv_max_width, nv_max_height);
 	e = calSizeMin(e, g, nv_min_width, nv_min_height);
 	if (a == "" || !is_numeric(a)) {
-		d = [LANG.errorEmptyX, "newWidth"]
+		d = [LANG.errorEmptyX, "newWidth"];
 	} else {
 		if (a > h[0]) {
-			d = [LANG.errorMaxX, "newWidth"]
+			d = [LANG.errorMaxX, "newWidth"];
 		} else {
 			if (a < e[0]) {
-				d = [LANG.errorMinX, "newWidth"]
+				d = [LANG.errorMinX, "newWidth"];
 			} else {
 				if (b == "" || !is_numeric(b)) {
-					d = [LANG.errorEmptyY, "newHeight"]
+					d = [LANG.errorEmptyY, "newHeight"];
 				} else {
 					if (b > h[1]) {
-						d = [LANG.errorMaxY, "newHeight"]
+						d = [LANG.errorMaxY, "newHeight"];
 					} else {
 						if (b < e[1]) {
-							d = [LANG.errorMinY, "newHeight"]
+							d = [LANG.errorMinY, "newHeight"];
 						}
 					}
 				}
@@ -86,36 +86,52 @@ function checkNewSize() {
 	if ( typeof d[0] != "undefined") {
 		$("div[title=createInfo]").prepend('<div class="red">' + d[0] + "</div>");
 		$("input[name='" + d[1] + "']").select();
-		return false
+		return false;
 	}
 	a = calSize(a, b, 360, 230);
 	$("img[name=myFile2]").width(a[0]).height(a[1]);
-	return true
+	return true;
 }
 
 function pathList(a, b) {
 	var d = [];
 	$("#foldertree").find("span").each(function() {
 		if ($(this).attr("title") == b || $(this).attr("title") != "" && $(this).is("." + a)) {
-			d[d.length] = $(this).attr("title")
+			d[d.length] = $(this).attr("title");
 		}
 	});
-	return d
+	return d;
 }
 
 function insertvaluetofield() {
 	var a = $("input[name=CKEditorFuncNum]").val(), b = $("input[name=area]").val();
 	var c = $("input[name=selFile]").val();
-	var e = $("img[alt='" + c + "']").attr("name").split("|");
+	var e = $("img[title='" + c + "']").attr("name").split("|");
 	f = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
 	d = nv_siteroot + f + "/" + c;
 	if (a > 0) {
-		window.opener.CKEDITOR.tools.callFunction(a, d, "");
-		window.close()
+		$("span#foldervalue").attr("title");
+		window.opener.CKEDITOR.tools.callFunction(a, d, function() {
+			// Get the reference to a dialog window.
+			var dialog = this.getDialog();
+			// Check if this is the Image dialog window.
+			if (dialog.getName() == 'image') {
+				// Get the reference to a text field that holds the "alt" attribute.
+				var element = dialog.getContentElement('info', 'txtAlt');
+				// Assign the new value.
+				if (element)
+					element.setValue($("img[title='" + c + "']").attr("alt"));
+			}
+		});
+		window.close();
 	}
 	if (b != "") {
 		$("#" + b, opener.document).val(d);
-		window.close()
+		b = $("input[name=alt]").val();
+		if (b != "") {
+			$("#" + b, opener.document).val($("img[title='" + c + "']").attr("alt"));
+		}
+		window.close();
 	}
 }
 
@@ -123,26 +139,26 @@ function nv_selFile(d) {
 	var a = $("input[name=CKEditorFuncNum]").val(), b = $("input[name=area]").val();
 	if (a > 0) {
 		window.opener.CKEDITOR.tools.callFunction(a, d, "");
-		window.close()
+		window.close();
 	}
 	if (b != "") {
 		$("#" + b, opener.document).val(d);
-		window.close()
+		window.close();
 	}
 }
 
 function download() {
 	var c = $("input[name=selFile]").val();
-	var e = $("img[alt='" + c + "']").attr("name").split("|");
+	var e = $("img[title='" + c + "']").attr("name").split("|");
 	p = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
-	$("iframe#Fdownload").attr("src", nv_module_url + "dlimg&path=" + p + "&img=" + c)
+	$("iframe#Fdownload").attr("src", nv_module_url + "dlimg&path=" + p + "&img=" + c);
 }
 
 function preview() {
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var d = $("img[alt='" + a + "']").attr("name").split("|");
+	var d = $("img[title='" + a + "']").attr("name").split("|");
 	b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
 	if (d[3] == "image" || d[2] == "swf") {
 		var g = calSize(d[0], d[1], 360, 230);
@@ -153,13 +169,14 @@ function preview() {
 			height : g[1]
 		}, {
 			version : 8
-		})
+		});
 	} else {
 		e += d[4] + "<br />";
 		b = $("div[title='" + a + "'] div").html();
-		$("div#fileView").html(b)
+		$("div#fileView").html(b);
 	}
 	e += LANG.pubdate + ": " + d[6];
+	$("#fileInfoAlt").html($("img[title='" + a + "']").attr("alt"));
 	$("#fileInfoDetail").html(e);
 	$("#fileInfoName").html(a);
 	$("div#imgpreview").dialog({
@@ -168,25 +185,25 @@ function preview() {
 		modal : true,
 		position : "center"
 	}).dialog("open").dblclick(function() {
-		$("div#imgpreview").dialog("close")
-	})
+		$("div#imgpreview").dialog("close");
+	});
 }
 
 function addlogo() {
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var c = $("img[alt='" + a + "']").attr("name").split("|");
+	var c = $("img[title='" + a + "']").attr("name").split("|");
 	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
 	var win = null;
 	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
 	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable'
+	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
 	win = window.open(nv_module_url + 'addlogo&path=' + b + "&file=" + a, 'addlogo', settings);
 }
 
 function create() {
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
-	var a = $("input[name=selFile]").val(), d = $("img[alt='" + a + "']").attr("name");
+	var a = $("input[name=selFile]").val(), d = $("img[title='" + a + "']").attr("name");
 	d = d.split("|");
 	if (d[3] == "image") {
 		b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
@@ -203,7 +220,7 @@ function create() {
 			width : 650,
 			modal : true,
 			position : "center"
-		}).dialog("open")
+		}).dialog("open");
 	}
 }
 
@@ -214,9 +231,9 @@ function move() {
 	var a = $("span#foldervalue").attr("title"), b = pathList("create_file", a), d, e, g = $("input[name=selFile]").val();
 	for (e in b ) {
 		d = a == b[e] ? ' selected="selected"' : "";
-		$("select[name=newPath]").append('<option value="' + b[e] + '"' + d + ">" + b[e] + "</option>")
+		$("select[name=newPath]").append('<option value="' + b[e] + '"' + d + ">" + b[e] + "</option>");
 	}
-	d = $("img[alt='" + g + "']").attr("name").split("|");
+	d = $("img[title='" + g + "']").attr("name").split("|");
 	a = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
 	$("div[title=pathFileName]").text(a + "/" + g);
 	$("div#filemove").dialog({
@@ -224,7 +241,7 @@ function move() {
 		width : 300,
 		modal : true,
 		position : "center"
-	}).dialog("open")
+	}).dialog("open");
 }
 
 function filerename() {
@@ -232,28 +249,29 @@ function filerename() {
 	$("input.dynamic").val("");
 	var a = $("input[name=selFile]").val();
 	$("div#filerenameOrigName").text(a);
-	a = a.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$2");
-	$("span[title=Ext]").text("." + a);
+	$("input[name=filerenameNewName]").val(a.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$1"));
+	$("span[title=Ext]").text("." + a.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$2"));
+	$("input[name=filerenameAlt]").val($("img[title='" + a + "']").attr("alt"));
 	$("div#filerename").dialog({
 		autoOpen : false,
-		width : 300,
+		width : 400,
 		modal : true,
 		position : "center"
-	}).dialog("open")
+	}).dialog("open");
 }
 
 function filedelete() {
 	var a = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-	var f = $("img[alt='" + a + "']").attr("name").split("|");
+	var f = $("img[title='" + a + "']").attr("name").split("|");
 	var b = (f[7] == "") ? $("span#foldervalue").attr("title") : f[7];
 	confirm(LANG.upload_delimg_confirm + " " + a + " ?") && $.ajax({
 		type : "POST",
 		url : nv_module_url + "delimg",
 		data : "path=" + b + "&file=" + a,
 		success : function() {
-			$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + d + e + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10))
+			$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + d + e + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
 		}
-	})
+	});
 }
 
 function fileMouseup(a) {
@@ -433,7 +451,7 @@ $("input[name=upload]").change(function() {
 });
 
 $("input[name=imgurl]").change(function() {
-	$(this).parent().next().next().css("display", "none").next().css("display", "none")
+	$(this).parent().next().next().css("display", "none").next().css("display", "none");
 });
 
 $("#confirm").click(function() {
@@ -455,9 +473,11 @@ $("#confirm").click(function() {
 				} else {
 					$("#cfile").html(k);
 				}
-				$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&order=0&imgfile=" + k);
+				$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&order=0&imgfile=" + k, function() {
+					filerename();
+				});
 			}
-		}, "html")
+		}, "html");
 	} else {
 		a = $("input[name=imgurl]").val();
 		d = $("input[name=currentFileUrl]").val();
@@ -647,7 +667,7 @@ $("input[name=newPathOK]").click(function() {
 				var h = g.split("_");
 				if (h[0] == "ERROR") {
 					alert(h[1]);
-					$("input[name=newPathOK]").removeAttr("disabled")
+					$("input[name=newPathOK]").removeAttr("disabled");
 				} else {
 					h = $("select[name=imgtype]").val();
 					var j = $("input[name=goNewPath]:checked").length, k = $("select[name=author]").val() == 1 ? "&author" : "";
@@ -657,13 +677,13 @@ $("input[name=newPathOK]").click(function() {
 					if (j == 1) {
 						j = $("span#path").attr("title");
 						$("#imgfolder").load(nv_module_url + "folderlist&path=" + j + "&currentpath=" + b + "&random=" + nv_randomNum(10));
-						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10))
+						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
 					} else {
-						$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10))
+						$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
 					}
 				}
 			}
-		})
+		});
 	}
 });
 
@@ -673,33 +693,34 @@ $("input[name=filerenameOK]").click(function() {
 	$("input[name=filerenameNewName]").val(d);
 	if (d == "") {
 		alert(LANG.rename_noname);
-		$("input[name=filerenameNewName]").focus()
+		$("input[name=filerenameNewName]").focus();
 	} else {
-		if (e[1] == d) {
-			$("div#filerename").dialog("close")
+		a = $("input[name=filerenameAlt]").val();
+		if (e[1] == d && a == $("img[title='" + b + "']").attr("alt")) {
+			$("div#filerename").dialog("close");
 		} else {
-			n = $("img[alt='" + b + "']").attr("name").split("|");
-			a = (n[7] == "") ? $("span#foldervalue").attr("title") : n[7];
+			n = $("img[title='" + b + "']").attr("name").split("|");
+			p = (n[7] == "") ? $("span#foldervalue").attr("title") : n[7];
 
 			$(this).attr("disabled", "disabled");
 			$.ajax({
 				type : "POST",
 				url : nv_module_url + "renameimg&num=" + nv_randomNum(10),
-				data : "path=" + a + "&file=" + b + "&newname=" + d,
+				data : "path=" + p + "&file=" + b + "&newname=" + d + "&newalt=" + a,
 				success : function(g) {
 					var h = g.split("_");
 					if (h[0] == "ERROR") {
 						alert(h[1]);
-						$("input[name=filerenameOK]").removeAttr("disabled")
+						$("input[name=filerenameOK]").removeAttr("disabled");
 					} else {
 						h = $("select[name=imgtype]").val();
 						var j = $("select[name=author]").val() == 1 ? "&author" : "";
 						$("input[name=filerenameOK]").removeAttr("disabled");
 						$("div#filerename").dialog("close");
-						$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + j + "&order=" + $("select[name=order]").val() + "&num=" + nv_randomNum(10))
+						$("#imglist").load(nv_module_url + "imglist&path=" + p + "&type=" + h + "&imgfile=" + g + j + "&order=" + $("select[name=order]").val() + "&num=" + nv_randomNum(10));
 					}
 				}
-			})
+			});
 		}
 	}
 });
@@ -710,5 +731,5 @@ $("img[name=myFile2]").dblclick(function() {
 	c = calSize(a, b, 360, 230);
 	$(this).width(c[0]).height(c[1]);
 	$("input[name=newHeight]").val(b);
-	$("input[name=newWidth]").val(a).select()
+	$("input[name=newWidth]").val(a).select();
 });

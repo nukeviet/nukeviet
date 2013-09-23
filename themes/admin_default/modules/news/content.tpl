@@ -67,7 +67,7 @@
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
-							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" /></td>
+							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:98%" /></td>
 						</tr>
 						<tr>
 							<td>{LANG.imgposition}</td>
@@ -86,7 +86,7 @@
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+							<td>							<textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
 						</tr>
 					</tbody>
 				</table></td>
@@ -111,7 +111,7 @@
 						<div class="message_body">
 							<p>
 								{LANG.content_tag_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a>
-							</p><textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
+							</p>							<textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
 						</div>
 					</li>
 					<li>
@@ -244,10 +244,11 @@
 	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
 	$("input[name=selectimg]").click(function() {
 		var area = "homeimg";
+		var alt = "homeimgalt";
 		var path = "{UPLOADS_DIR_USER}";
 		var currentpath = "{UPLOAD_CURRENT}";
 		var type = "image";
-		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	//]]>

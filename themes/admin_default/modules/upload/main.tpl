@@ -25,7 +25,6 @@
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.draggable.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.position.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.button.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
@@ -115,6 +114,7 @@
 <input type="hidden" name="selFile" value=""/>
 <input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
 <input type="hidden" name="area" value="{AREA}"/>
+<input type="hidden" name="alt" value="{ALT}"/>
 <div style="display:none" id="contextMenu"></div>
 <div style="display:none">
 	<iframe id="Fdownload" src="" width="0" height="0" frameborder="0"></iframe>
@@ -130,6 +130,7 @@
 
 <div id="errorInfo" style="display:none" title="{LANG.errorInfo}"></div>
 <div id="imgpreview" style="overflow:auto;display:none" title="{LANG.preview}">
+	<div style="text-align:center;font-size:12px;font-weight:800;margin-top:10px" id="fileInfoAlt" class="dynamic"></div>
 	<div style="text-align:center;margin-top:10px" id="fileView" class="dynamic"></div>
 	<div style="text-align:center;font-size:12px;font-weight:800;margin-top:10px" id="fileInfoName" class="dynamic"></div>
 	<div style="text-align:center;font-size:11px;margin-top:10px;margin-bottom:10px" id="fileInfoDetail" class="dynamic"></div>
@@ -189,6 +190,10 @@
 		<input style="width:150px;margin-left:5px" type="text" name="filerenameNewName" maxlength="255" class="dynamic" />
 		<span title="Ext">Ext</span>
 	</div>
+	<div style="margin-top:10px;margin-bottom:10px">
+		{LANG.altimage}:
+		<input style="width:235px;margin-left:5px" type="text" name="filerenameAlt" maxlength="255" class="dynamic" />
+	</div>
 	<input style="width:60px;" type="button" value="OK" name="filerenameOK" />
 </div>
 <script type="text/javascript">
@@ -230,6 +235,6 @@
 	$(function() {
 		$("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
 		$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
-	}); 
+	});
 </script>
 <!--  END: main  -->
