@@ -514,10 +514,17 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->assign( 'LANGSTAR', $news_contents['langstar'] );
 		$xtpl->assign( 'STRINGRATING', $news_contents['stringrating'] );
 		$xtpl->assign( 'NUMBERRATING', $news_contents['numberrating'] );
+		
 		if( $news_contents['disablerating'] == 1 )
 		{
 			$xtpl->parse( 'main.allowed_rating.disablerating' );
 		}
+		
+		if( $news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point'] )
+		{
+			$xtpl->parse( 'main.allowed_rating.data_rating' );
+		}
+		
 		$xtpl->parse( 'main.allowed_rating' );
 	}
 

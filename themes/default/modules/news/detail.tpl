@@ -76,6 +76,13 @@
 			<div id="stringrating">
 				{STRINGRATING}
 			</div>
+            <!-- BEGIN: data_rating -->
+            <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate"> 
+               {LANG.rating_average}:
+               <span itemprop="rating">{DETAIL.numberrating}</span> - 
+               <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count} 
+            </span>
+            <!-- END: data_rating -->           
 			<div style="padding: 5px;">
 				<input class="hover-star" type="radio" value="1" title="{LANGSTAR.verypoor}" /><input class="hover-star" type="radio" value="2" title="{LANGSTAR.poor}" /><input class="hover-star" type="radio" value="3" title="{LANGSTAR.ok}" /><input class="hover-star" type="radio" value="4" title="{LANGSTAR.good}" /><input class="hover-star" type="radio" value="5" title="{LANGSTAR.verygood}" /><span id="hover-test" style="margin: 0 0 0 20px;">{LANGSTAR.note}</span>
 			</div>

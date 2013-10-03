@@ -79,6 +79,15 @@
 				<td><input type="checkbox" value="1" name="emailcomm"{EMAILCOMM}/></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.allowed_rating_point}</strong></td>
+				<td>
+				<select name="allowed_rating_point">
+					<!-- BEGIN: allowed_rating_point -->
+					<option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
+					<!-- END: allowed_rating_point -->
+				</select></td>
+			</tr>            
+			<tr>
 				<td><strong>{LANG.structure_image_upload}</strong></td>
 				<td>
 				<select name="structure_upload">

@@ -551,6 +551,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			$xtpl->parse( 'main.allowed_rating.disablerating' );
 		}
+		
+		if( $news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point'] )
+		{
+			$xtpl->parse( 'main.allowed_rating.data_rating' );
+		}		
 
 		$xtpl->parse( 'main.allowed_rating' );
 	}

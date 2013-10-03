@@ -86,11 +86,18 @@
 		</p>
 	</div>
 	<!-- END: keywords -->
+	<!-- BEGIN: allowed_rating -->
 	<div class="oop fr">
 		<div class="header-oop icon-rating">
 			{LANG.rating}
 		</div>
-		<!-- BEGIN: allowed_rating -->
+        <!-- BEGIN: data_rating -->
+        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate"> 
+           {LANG.rating_average}:
+           <span itemprop="rating">{DETAIL.numberrating}</span> - 
+           <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count} 
+        </span>
+        <!-- END: data_rating -->       
 		<form id="form3B" action="">
 			<div class="clearfix">
 				<div id="stringrating" class="small">
@@ -136,8 +143,8 @@
 			sr = 2;
 		</script>
 		<!-- END: disablerating -->
-		<!-- END: allowed_rating -->
-	</div>
+        </div>
+    <!-- END: allowed_rating -->
 </div>
 <!-- BEGIN: topic -->
 <div class="other-news">

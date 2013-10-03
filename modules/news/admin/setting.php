@@ -25,8 +25,9 @@ if( ! empty( $savesetting ) )
 	$array_config['blockheight'] = $nv_Request->get_int( 'blockheight', 'post', 0 );
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
 
-	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
+	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
+	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
@@ -101,6 +102,17 @@ for( $i = 0; $i <= 20; ++$i )
 		"selected" => $i == $module_config[$module_name]['st_links'] ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.st_links' );
+}
+
+// Show points rating article on google
+for( $i = 0; $i <= 6; ++$i )
+{
+	$xtpl->assign( 'RATING_POINT', array(
+		"key" => $i,
+		"title" => ($i == 6) ? $lang_module['no_allowed_rating'] : $i,
+		"selected" => $i == $module_config[$module_name]['allowed_rating_point'] ? " selected=\"selected\"" : ""
+	) );
+	$xtpl->parse( 'main.allowed_rating_point' );
 }
 
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? " checked=\"checked\"" : "" );

@@ -227,8 +227,7 @@ if( $allowed )
 			$news_contents['disablerating'] = 0;
 		}
 		$news_contents['stringrating'] = sprintf( $lang_module['stringrating'], $news_contents['total_rating'], $news_contents['click_rating'] );
-		$news_contents['click_rating'] = ($news_contents['click_rating'] > 0) ? $news_contents['click_rating'] : 1;
-		$news_contents['numberrating'] = round( $news_contents['total_rating'] / $news_contents['click_rating'] ) - 1;
+		$news_contents['numberrating'] = ($news_contents['click_rating'] > 0) ? round( $news_contents['total_rating'] / $news_contents['click_rating'], 1 ) : 0;
 		$news_contents['langstar'] = array(
 			"note" => $lang_module['star_note'],
 			"verypoor" => $lang_module['star_verypoor'],
