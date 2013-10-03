@@ -51,14 +51,16 @@
 			</div>
 			[MENU_SITE]
 			<!-- BEGIN: mod_title -->
-			<div class="main">
-				<div class="breadcrumbs">
-					<a title="{LANG.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG.Home}" /></a>
-					<!-- BEGIN: breakcolumn -->
-					<span class="spector">&nbsp;</span>
-					<a class="highlight" href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a>
-					<!-- END: breakcolumn -->
-				</div>
+			<div class="main breadcrumbs">
+                <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <a title="{LANG.Home}" href="{NV_BASE_SITEURL}" itemprop="url"><span itemprop="title" class="home">{LANG.Home}</span></a>
+                </div>
+                <!-- BEGIN: breakcolumn -->
+                <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                › <a class="highlight" href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}" itemprop="url"><span itemprop="title">{BREAKCOLUMN.title}</span></a>
+                </div>
+                <!-- END: breakcolumn -->
+                <div class="clear"></div>
 			</div>
 			<!-- END: mod_title -->
 			<div class="main">

@@ -523,15 +523,22 @@ ul.list-tab li.ui-tabs-selected a {
 }
 
 .breadcrumbs {
+	height: 20px;
 	border-bottom: 1px solid #dadada;
-	padding: 5px 0
+	padding-bottom:: 5px
 }
 
-.breadcrumbs .spector {
-	background: url(../images/arrow-red.gif) 0 50% no-repeat;
-	display: inline-block;
-	margin: 0 2px;
-	width: 11px
+.breadcrumbs div {
+	float:left;
+	margin-right: 5px;
+}
+
+.breadcrumbs span.home {
+	display: block;
+	width: 16px;
+	height: 16px;
+	text-indent: -19999px;
+	background: url(../images/icons/home.png) no-repeat;	
 }
 
 .header-details {

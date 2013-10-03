@@ -210,16 +210,23 @@ div.box form.voting {
 	padding: 10px
 }
 
-h3.breakcolumn {
-	line-height: 27px;
-	border-bottom: 1px solid #ccc;
-	font-weight: normal
+.breadcrumbs {
+	height: 20px;
+	border-bottom: 1px solid #dadada;
+	padding-bottom:: 5px
 }
 
-h3.breakcolumn span.breakcolumn {
-	font-size: 14px;
-	font-weight: 700;
-	padding: 0 4px
+.breadcrumbs div {
+	float:left;
+	margin-right: 5px;
+}
+
+.breadcrumbs span.home {
+	display: block;
+	width: 16px;
+	height: 16px;
+	text-indent: -19999px;
+	background: url(../images/icons/home.png) no-repeat;	
 }
 
 .column, .span-1, .span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9, .span-10, .span-11, .span-12, .span-13, .span-14, .span-15, .span-16, .span-17, .span-18, .span-19, .span-20, .span-21, .span-22, .span-23, .span-24, .span-25 {
