@@ -468,6 +468,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'site', 'smtp_password', ''),
 	('sys', 'site', 'googleAnalyticsID', ''),
 	('sys', 'site', 'googleAnalyticsSetDomainName', '0'),
+	('sys', 'site', 'googleAnalyticsMethod', 'classic'),
 	('sys', 'site', 'searchEngineUniqueID', ''),
 	('sys', 'global', 'site_keywords', 'NukeViet, portal, mysql, php'),
 	('sys', 'global', 'site_phone', ''),
