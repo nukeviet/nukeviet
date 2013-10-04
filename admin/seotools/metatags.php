@@ -31,7 +31,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	foreach( $metaGroupsName as $key => $name )
 	{
-		if( $name == 'http-equiv' or $name == 'name' )
+		if( $name == 'http-equiv' or $name == 'name' or $name == 'property' )
 		{
 			$value = strtolower( trim( strip_tags( $metaGroupsValue[$key] ) ) );
 			$content = trim( strip_tags( $metaContents[$key] ) );
@@ -40,7 +40,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				'value' => $value,
 				'content' => $content
 			);
-			if( preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $value ) and ! in_array( $value, $ignore ) and preg_match( "/^([^\'\"]+)$/", $content ) and ! in_array( $newArray, $metatags['meta'] ) )
+			if( preg_match( "/^[a-zA-Z0-9\-\_\.\:]+$/", $value ) and ! in_array( $value, $ignore ) and preg_match( "/^([^\'\"]+)$/", $content ) and ! in_array( $newArray, $metatags['meta'] ) )
 			{
 				$metatags['meta'][] = $newArray;
 			}
@@ -95,6 +95,7 @@ if( ! empty( $metatags['meta'] ) )
 	{
 		$value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
 		$value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
+		$value['p_selected'] = $value['group'] == 'property' ? ' selected="selected"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
 	}

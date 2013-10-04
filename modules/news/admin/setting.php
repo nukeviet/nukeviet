@@ -29,7 +29,9 @@ if( ! empty( $savesetting ) )
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
+	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
+	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
 	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
@@ -117,7 +119,6 @@ for( $i = 0; $i <= 6; ++$i )
 
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? " checked=\"checked\"" : "" );
-$xtpl->assign( 'ACTIVECOMM', $module_config[$module_name]['activecomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'AUTO_POSTCOMM', $module_config[$module_name]['auto_postcomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'EMAILCOMM', $module_config[$module_name]['emailcomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'MODULE_LOGO', $module_logo );
@@ -131,6 +132,17 @@ while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
 		"selected" => $comm_i == $module_config[$module_name]['setcomm'] ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.setcomm' );
+}
+
+// Show points rating article on google
+for( $i = 0; $i <= 2; ++$i )
+{
+	$xtpl->assign( 'ACTIVECOMM', array(
+		"key" => $i,
+		"title" => $lang_module['activecomm_' . $i],
+		"selected" => $i == $module_config[$module_name]['activecomm'] ? " selected=\"selected\"" : ""
+	) );
+	$xtpl->parse( 'main.activecomm' );	
 }
 
 $array_structure_image = array();

@@ -38,7 +38,7 @@ else
 
 $contents = '';
 
-if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != '' and nv_check_valid_email( $email ) == '' and $code != "" and $content != "" )
+if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != '' and nv_check_valid_email( $email ) == '' and $code != "" and $content != "" )
 {
 	$timeout = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'cookie', 0 );
 	if( ! nv_capcha_txt( $code ) )

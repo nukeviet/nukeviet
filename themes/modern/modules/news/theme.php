@@ -497,7 +497,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable )
 {
-	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info;
+	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
 
 	if( ! defined( 'SHADOWBOX' ) )
 	{
@@ -522,6 +522,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
 	$xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
 	$xtpl->assign( 'DETAIL', $news_contents );
+	$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
 
 	if( $news_contents['allowed_send'] == 1 )
 	{
@@ -623,51 +624,57 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->parse( 'main.adminlink' );
 	}
 
-	$xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
-	$xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment.png" );
-	$xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment_add.png" );
-
-	if( $commentenable == 1 )
+	if( $module_config[$module_name]['activecomm'] == 1 )
 	{
-		if( defined( 'NV_IS_ADMIN' ) )
+		$xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
+		$xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment.png" );
+		$xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment_add.png" );
+		if( $commentenable == 1 )
 		{
-			$xtpl->assign( 'NAME', $admin_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $admin_info['email'] );
-			$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			if( defined( 'NV_IS_ADMIN' ) )
+			{
+				$xtpl->assign( 'NAME', $admin_info['full_name'] );
+				$xtpl->assign( 'EMAIL', $admin_info['email'] );
+				$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			}
+			elseif( defined( 'NV_IS_USER' ) )
+			{
+				$xtpl->assign( 'NAME', $user_info['full_name'] );
+				$xtpl->assign( 'EMAIL', $user_info['email'] );
+				$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			}
+			else
+			{
+				$xtpl->assign( 'NAME', $lang_module['comment_name'] );
+				$xtpl->assign( 'EMAIL', $lang_module['comment_email'] );
+				$xtpl->assign( 'DISABLED', '' );
+			}
+	
+			$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
+			$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
+			$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
+			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
+			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "index.php?scaptcha=captcha" );
+			$xtpl->parse( 'main.comment.form' );
 		}
-		elseif( defined( 'NV_IS_USER' ) )
+		elseif( $commentenable == 2 )
 		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $user_info['email'] );
-			$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
+			$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_login'] . "</a>" );
+			$xtpl->parse( 'main.comment.form_login' );
 		}
-		else
-		{
-			$xtpl->assign( 'NAME', $lang_module['comment_name'] );
-			$xtpl->assign( 'EMAIL', $lang_module['comment_email'] );
-			$xtpl->assign( 'DISABLED', '' );
-		}
-
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "index.php?scaptcha=captcha" );
-		$xtpl->parse( 'main.comment.form' );
+		$xtpl->parse( 'main.comment' );
 	}
-	elseif( $commentenable == 2 )
+	elseif( $module_config[$module_name]['activecomm'] == 2 AND $commentenable > 0 )
 	{
-		global $client_info;
-
-		$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
-		$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_login'] . "</a>" );
-		$xtpl->parse( 'main.comment.form_login' );
+		global $meta_property;
+		$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+		$xtpl->assign( 'FACEBOOKAPPID', $module_config[$module_name]['facebookappid'] );
+		$xtpl->parse( 'main.commentfacebook' );
 	}
-
-	$xtpl->parse( 'main.comment' );
 
 	if( ! empty( $related_new_array ) )
 	{

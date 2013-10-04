@@ -9,14 +9,14 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-//Open Graph protocol
-$meta_ogp = array(
-	'title' => '',
-	'type' => '',
-	'description' => '',
-	'site_name' => '',
-	'image' => '',
-	'url' => ''
+//Meta Property
+$meta_property = array(
+	'og:title' => '',
+	'og:type' => '',
+	'og:description' => '',
+	'og:site_name' => '',
+	'og:image' => '',
+	'og:url' => ''
 );
 
 //tài khoản Google+
@@ -281,7 +281,7 @@ function nv_blocks_content( $sitecontent )
  */
 function nv_html_meta_tags()
 {
-	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_ogp, $id_profile_googleplus;
+	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $id_profile_googleplus;
 
 	$return = '';
 	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
@@ -364,7 +364,7 @@ function nv_html_meta_tags()
 				$metatags[] = $mt['meta_item'];
 			foreach( $metatags as $meta )
 			{
-				if( ( $meta['group'] == "http-equiv" or $meta['group'] == "name" ) and preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
+				if( ( $meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match( "/^[a-zA-Z0-9\-\_\.\:]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
 					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
 				}
@@ -390,19 +390,31 @@ function nv_html_meta_tags()
 	//Open Graph protocol http://ogp.me
 	if( $global_config['metaTagsOgp'] )
 	{
-		if( empty( $meta_ogp['title'] ) ) $meta_ogp['title'] = $page_title;
-		if( empty( $meta_ogp['description'] ) ) $meta_ogp['description'] = $site_description;
-		if( empty( $meta_ogp['type'] ) ) $meta_ogp['type'] = 'WebPage';
-		if( empty( $meta_ogp['url'] ) ) $meta_ogp['url'] = $canonicalUrl;
-		$meta_ogp['site_name'] = $global_config['site_name'];
-		foreach( $meta_ogp as $key => $value )
+		if( empty( $meta_property['og:title'] ) ) $meta_property['og:title'] = $page_title;
+		if( empty( $meta_property['og:description'] ) ) $meta_property['og:description'] = $site_description;
+		if( empty( $meta_property['og:type'] ) ) $meta_property['og:type'] = 'WebPage';
+		if( empty( $meta_property['og:url'] ) ) $meta_property['og:url'] = $canonicalUrl;
+		$meta_property['og:site_name'] = $global_config['site_name'];
+		
+		foreach( $meta_property as $key => $value )
 		{
 			if( ! empty( $value ) )
 			{
-				$return .= "<meta property=\"og:" . $key . "\" content=\"" . $value . "\" />\n";
+				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
+			}
+		}		
+	}
+	else
+	{
+		foreach( $meta_property as $key => $value )
+		{
+			if( ! preg_match("/^og\:/", $key) AND ! empty( $value ) )
+			{
+				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
 			}
 		}
 	}
+	
 	//tài khoản Google+
 	if( $id_profile_googleplus == 0 )
 	{

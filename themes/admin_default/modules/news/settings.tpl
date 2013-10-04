@@ -59,8 +59,19 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.activecomm}</strong></td>
-				<td><input type="checkbox" value="1" name="activecomm"{ACTIVECOMM}/></td>
+				<td>
+                	<select name="activecomm">
+                        <!-- BEGIN: activecomm -->
+                        <option value="{ACTIVECOMM.key}"{ACTIVECOMM.selected}>{ACTIVECOMM.title}</option>
+                        <!-- END: activecomm -->
+                    </select>
+            	</td>
 			</tr>
+			<tr>
+				<td><strong>{LANG.facebookAppID}</strong></td>
+				<td><input class="w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/>{LANG.facebookAppIDNote}</td>
+			</tr>            
+            
 			<tr>
 				<td><strong>{LANG.setting_auto_postcomm}</strong></td>
 				<td><input type="checkbox" value="1" name="auto_postcomm"{AUTO_POSTCOMM}/></td>
@@ -68,11 +79,12 @@
 			<tr>
 				<td><strong>{LANG.setting_setcomm}</strong></td>
 				<td>
-				<select name="setcomm">
-					<!-- BEGIN: setcomm -->
-					<option value="{SETCOMM.key}"{SETCOMM.selected}>{SETCOMM.title}</option>
-					<!-- END: setcomm -->
-				</select></td>
+                    <select name="setcomm">
+                        <!-- BEGIN: setcomm -->
+                        <option value="{SETCOMM.key}"{SETCOMM.selected}>{SETCOMM.title}</option>
+                        <!-- END: setcomm -->
+                    </select>
+                </td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.emailcomm}</strong></td>

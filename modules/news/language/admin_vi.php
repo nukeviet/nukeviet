@@ -167,6 +167,11 @@ $lang_module['error_del_content'] = 'Lỗi: Hệ thống không xóa hết đư�
 $lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';
 $lang_module['comment'] = 'Quản lý bình luận';
 $lang_module['activecomm'] = 'Kích hoạt chức năng bình luận của module';
+$lang_module['activecomm_0'] = 'Không kích hoạt';
+$lang_module['activecomm_1'] = 'Sử dụng chức năng bình luận của hệ thống';
+$lang_module['activecomm_2'] = 'Sử dụng chức năng bình luận của facebook';
+$lang_module['facebookAppID'] = 'Facebook App ID';
+$lang_module['facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
 $lang_module['emailcomm'] = 'Hiển thị email của người đăng bình luận';
 $lang_module['comment_edit'] = 'Sửa';
 $lang_module['comment_edit_title'] = 'Sửa bình luận';

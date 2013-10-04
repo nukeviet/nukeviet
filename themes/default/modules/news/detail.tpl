@@ -176,6 +176,19 @@
 		</div>
 	</div>
 	<!-- END: comment -->
+    <!-- BEGIN: commentfacebook -->
+        <div id="fb-root"></div>
+        <script type="text/javascript">
+            (function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={FACEBOOKAPPID}";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="510"></div>
+    <!-- END: commentfacebook -->
 
 	<!-- BEGIN: topic -->
 	<p>

@@ -97,7 +97,7 @@ if( $allowed )
 				if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
 				{
 					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-					$meta_ogp['image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
+					$meta_property['og:image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
 				}
 				$news_contents['image'] = array(
 					"src" => $src,
@@ -197,11 +197,14 @@ if( $allowed )
 
 	// Check: comment
 	$commentenable = 0;
-
-	if( $news_contents['allowed_comm'] and $module_config[$module_name]['activecomm'] )
+	$news_contents['comment'] = '';
+	if( $news_contents['allowed_comm'] )
 	{
-		$comment_array = nv_comment_module( $news_contents['id'], 0 );
-		$news_contents['comment'] = comment_theme( $comment_array );
+		if( $module_config[$module_name]['activecomm'] == 1 )
+		{
+			$comment_array = nv_comment_module( $news_contents['id'], 0 );
+			$news_contents['comment'] = comment_theme( $comment_array );
+		}
 		if( $news_contents['allowed_comm'] == 1 or ($news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' )) )
 		{
 			$commentenable = 1;
@@ -211,10 +214,7 @@ if( $allowed )
 			$commentenable = 2;
 		}
 	}
-	else
-	{
-		$news_contents['comment'] = '';
-	}
+
 	if( $news_contents['allowed_rating'] )
 	{
 		$time_set_rating = $nv_Request->get_int( $module_name . '_' . $op . '_' . $news_contents['id'], 'cookie', 0 );
