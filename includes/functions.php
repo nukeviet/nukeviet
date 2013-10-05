@@ -1246,7 +1246,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 	if( ! is_array( $base_url ) )
 	{
-		$amp = preg_match( "/\?/", $base_url ) ? "&amp;" : "?";
+		$amp = preg_match( "/\?/", $base_url ) ? '&amp;' : '?';
 		$amp .= "page=";
 	}
 	else
@@ -1359,7 +1359,7 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 	if( $total_pages < 2 ) return '';
 
 	$title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
-	$page_string = ( $on_page == 1 ) ? "<strong>1</strong> " : "<a title=\"" . $title . " 1\" href=\"" . $base_url . "\">1</a> ";
+	$page_string = ( $on_page == 1 ) ? '<strong>1</strong> ' : '<a rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a> ';
 
 	if( $total_pages > 10 )
 	{
@@ -1367,43 +1367,65 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 
 		for( $i = 2; $i <= $init_page_max; ++$i )
 		{
-			$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
-
-			if( $i < $init_page_max ) $page_string .= " ";
+			if( $i == $on_page )
+			{
+				$page_string .= '<strong>' . $i . '</strong>';
+			}
+			else
+			{
+				$rel = ( $i > $on_page ) ? 'next' : 'prev';
+				$page_string .= '<a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a>';
+			}
+			if( $i < $init_page_max ) $page_string .= ' ';
 		}
 
 		if( $total_pages > 3 )
 		{
 			if( $on_page > 1 && $on_page < $total_pages )
 			{
-				$page_string .= ( $on_page > 5 ) ? " ... " : " ";
+				$page_string .= ( $on_page > 5 ) ? ' ... ' : ' ';
 				$init_page_min = ( $on_page > 4 ) ? $on_page : 5;
 				$init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
 
 				for( $i = $init_page_min - 1; $i < $init_page_max + 2; ++$i )
 				{
-					$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
-
+					if( $i == $on_page )
+					{
+						$page_string .= '<strong>' . $i . '</strong>';
+					}
+					else
+					{
+						$rel = ( $i > $on_page ) ? 'next' : 'prev';
+						$page_string .= '<a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a>';
+					}
 					if( $i < $init_page_max + 1 )
 					{
-						$page_string .= " ";
+						$page_string .= ' ';
 					}
 				}
 
-				$page_string .= ( $on_page < $total_pages - 4 ) ? " ... " : " ";
+				$page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : ' ';
 			}
 			else
 			{
-				$page_string .= " ... ";
+				$page_string .= ' ... ';
 			}
 
 			for( $i = $total_pages - 2; $i < $total_pages + 1; ++$i )
 			{
-				$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
+				if( $i == $on_page )
+				{
+					$page_string .= '<strong>' . $i . '</strong>';
+				}
+				else
+				{
+					$rel = ( $i > $on_page ) ? 'next' : 'prev';
+					$page_string .= '<a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a>';
+				}
 
 				if( $i < $total_pages )
 				{
-					$page_string .= " ";
+					$page_string .= ' ';
 				}
 			}
 		}
@@ -1412,11 +1434,18 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 	{
 		for( $i = 2; $i < $total_pages + 1; ++$i )
 		{
-			$page_string .= ( $i == $on_page ) ? "<strong>" . $i . "</strong>" : "<a title=\"" . $title . " " . $i . "\" href=\"" . $base_url . "/page-" . $i . "\">" . $i . "</a>";
-
+			if( $i == $on_page )
+			{
+				$page_string .= '<strong>' . $i . '</strong>';
+			}
+			else
+			{
+				$rel = ( $i > $on_page ) ? 'next' : 'prev';
+				$page_string .= '<a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a>';
+			}
 			if( $i < $total_pages )
 			{
-				$page_string .= " ";
+				$page_string .= ' ';
 			}
 		}
 	}
@@ -1425,12 +1454,12 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 	{
 		if( $on_page > 1 )
 		{
-			$page_string = "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ( $on_page - 1 ) . "\" href=\"" . $base_url . "/page-" . ( $on_page - 1 ) . "\">" . $lang_global['pageprev'] . "</a></span>&nbsp;&nbsp;" . $page_string;
+			$page_string = '&nbsp;&nbsp;<span><a rel="prev" title="' . $title . ' ' . ( $on_page - 1 ) . '" href="' . $base_url . '/page-' . ( $on_page - 1 ) . '">' . $lang_global['pageprev'] . '</a></span>&nbsp;&nbsp;' . $page_string;
 		}
 
 		if( $on_page < $total_pages )
 		{
-			$page_string .= "&nbsp;&nbsp;<span><a title=\"" . $title . " " . ( $on_page + 1 ) . "\" href=\"" . $base_url . "/page-" . ( $on_page + 1 ) . "\">" . $lang_global['pagenext'] . "</a></span>";
+			$page_string .= '&nbsp;&nbsp;<span><a rel="next" title="' . $title . ' ' . ( $on_page + 1 ) . '" href="' . $base_url . '/page-' . ( $on_page + 1 ) . '">' . $lang_global['pagenext'] . '</a></span>';
 		}
 	}
 
