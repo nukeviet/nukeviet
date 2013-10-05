@@ -34,6 +34,7 @@ if( ! empty( $savesetting ) )
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
+	$array_config['socialbutton'] = $nv_Request->get_int( 'socialbutton', 'post', 0 );
 	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
@@ -118,9 +119,11 @@ for( $i = 0; $i <= 6; ++$i )
 }
 
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'AUTO_POSTCOMM', $module_config[$module_name]['auto_postcomm'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'EMAILCOMM', $module_config[$module_name]['emailcomm'] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? " checked=\"checked\"" : "" );
 $xtpl->assign( 'MODULE_LOGO', $module_logo );
 
 // Thao luan mac dinh khi tao bai viet moi

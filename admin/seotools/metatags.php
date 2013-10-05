@@ -33,7 +33,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		if( $name == 'http-equiv' or $name == 'name' or $name == 'property' )
 		{
-			$value = strtolower( trim( strip_tags( $metaGroupsValue[$key] ) ) );
+			$value = trim( strip_tags( $metaGroupsValue[$key] ) );
 			$content = trim( strip_tags( $metaContents[$key] ) );
 			$newArray = array(
 				'group' => $name,

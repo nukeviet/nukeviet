@@ -165,6 +165,7 @@ $lang_module['addtoblock'] = 'Thêm bài viết vào nhóm tin';
 $lang_module['delete_from_block'] = 'Xóa bài viết khỏi nhóm tin';
 $lang_module['error_del_content'] = 'Lỗi: Hệ thống không xóa hết được các bài viết, vui lòng thử lại';
 $lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';
+$lang_module['socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
 $lang_module['comment'] = 'Quản lý bình luận';
 $lang_module['activecomm'] = 'Kích hoạt chức năng bình luận của module';
 $lang_module['activecomm_0'] = 'Không kích hoạt';

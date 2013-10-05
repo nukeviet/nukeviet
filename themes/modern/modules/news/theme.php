@@ -623,6 +623,19 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
+	
+	if( $module_config[$module_name]['socialbutton'] OR ( $module_config[$module_name]['activecomm'] == 2 AND $commentenable > 0 ) )
+	{
+		global $meta_property;
+		$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+		$xtpl->assign( 'FACEBOOKAPPID', $module_config[$module_name]['facebookappid'] );
+		$xtpl->parse( 'main.facebookjssdk' );
+	}
+	
+	if( $module_config[$module_name]['socialbutton'] )
+	{
+		$xtpl->parse( 'main.socialbutton' );
+	}
 
 	if( $module_config[$module_name]['activecomm'] == 1 )
 	{
@@ -670,9 +683,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	}
 	elseif( $module_config[$module_name]['activecomm'] == 2 AND $commentenable > 0 )
 	{
-		global $meta_property;
-		$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
-		$xtpl->assign( 'FACEBOOKAPPID', $module_config[$module_name]['facebookappid'] );
 		$xtpl->parse( 'main.commentfacebook' );
 	}
 

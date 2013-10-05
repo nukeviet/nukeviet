@@ -52,11 +52,15 @@
 				<td><strong>{LANG.show_no_image}</strong></td>
 				<td><input type="checkbox" value="1" name="show_no_image"{SHOW_NO_IMAGE}/></td>
 			</tr>
-
 			<tr>
 				<td><strong>{LANG.showhometext}</strong></td>
 				<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 			</tr>
+            
+			<tr>
+				<td><strong>{LANG.socialbutton}</strong></td>
+				<td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
+			</tr>            
 			<tr>
 				<td><strong>{LANG.activecomm}</strong></td>
 				<td>
