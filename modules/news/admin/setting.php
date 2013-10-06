@@ -28,7 +28,6 @@ if( ! empty( $savesetting ) )
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
-	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
