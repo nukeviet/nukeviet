@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) )
 
 function nv_src_href_callback( $matches )
 {
-	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
+	if( ! empty( $matches[2] ) and ! preg_match( "/^http\:\/\//", $matches[2] ) and ! preg_match( "/^https\:\/\//", $matches[2] ) and ! preg_match( "/^mailto\:/", $matches[2] ) and ! preg_match( "/^tel\:/", $matches[2] ) and ! preg_match( "/^javascript/", $matches[2] ) )
 	{
 		if( preg_match( "/^\//", $matches[2] ) ) $_url = NV_MY_DOMAIN;
 		else $_url = NV_MY_DOMAIN . "/";
@@ -114,6 +114,8 @@ if( $id > 0 and $catid > 0 )
 			$contents = call_user_func( "news_print", $result );
 			header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
+
+			$global_config['mudim_active'] = 0;
 			include ( NV_ROOTDIR . '/includes/header.php' );
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", $contents );
 			include ( NV_ROOTDIR . '/includes/footer.php' );
