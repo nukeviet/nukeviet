@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 /**
  * redict_link()
- * 
+ *
  * @param mixed $lang_view
  * @param mixed $lang_back
  * @param mixed $nv_redirect
@@ -33,7 +33,7 @@ function redict_link( $lang_view, $lang_back, $nv_redirect )
 
 /**
  * draw_option_select_number()
- * 
+ *
  * @param integer $select
  * @param integer $begin
  * @param integer $end
@@ -46,31 +46,32 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
 	for( $i = $begin; $i < $end; $i = $i + $step )
 	{
 		if( $i == $select ) $html .= "<option value=\"" . $i . "\" selected=\"selected\">" . $i . "</option>";
-		else  $html .= "<option value=\"" . $i . "\">" . $i . "</option>";
+		else
+			$html .= "<option value=\"" . $i . "\">" . $i . "</option>";
 	}
 	return $html;
 }
 
 /**
  * view_home_group()
- * 
+ *
  * @param mixed $data_content
  * @param string $html_pages
  * @return
  */
-function view_home_group( $data_content, $html_pages = "" )
+function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 {
 	global $module_info, $lang_module, $module_file, $pro_config;
-	
+
 	$xtpl = new XTemplate( "main_procate.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	$num_view = $pro_config['per_row'];
-	
+
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-	
+
 	if( ! empty( $data_content ) )
 	{
 		foreach( $data_content as $data_row )
@@ -93,7 +94,7 @@ function view_home_group( $data_content, $html_pages = "" )
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
 					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
-					
+
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -118,9 +119,9 @@ function view_home_group( $data_content, $html_pages = "" )
 							$xtpl->parse( 'main.catalogs.items.contact' );
 						}
 					}
-					
+
 					$pwidth = ( int )( 100 / $num_view );
-					
+
 					if( $i % $pro_config['per_row'] == 0 )
 					{
 						$xtpl->parse( 'main.catalogs.items.break' );
@@ -131,9 +132,9 @@ function view_home_group( $data_content, $html_pages = "" )
 					{
 						$pwidth = ( int )( 100 / $num_view );
 					}
-					
+
 					$xtpl->assign( 'pwidth', $pwidth );
-					
+
 					if( $pro_config['active_order'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -147,7 +148,7 @@ function view_home_group( $data_content, $html_pages = "" )
 					{
 						$xtpl->parse( 'main.catalogs.items.product_code' );
 					}
-					
+
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
@@ -161,33 +162,33 @@ function view_home_group( $data_content, $html_pages = "" )
 			}
 		}
 	}
-	
+
 	if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.tooltip_js' );
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 /**
  * view_home_cat()
- * 
+ *
  * @param mixed $data_content
  * @param string $html_pages
  * @return
  */
-function view_home_cat( $data_content, $html_pages = "" )
+function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 {
 	global $module_info, $lang_module, $module_file, $pro_config;
-	
+
 	$xtpl = new XTemplate( "main_procate.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	$num_view = $pro_config['per_row'];
-	
+
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-	
+
 	if( ! empty( $data_content ) )
 	{
 		foreach( $data_content as $data_row )
@@ -210,7 +211,7 @@ function view_home_cat( $data_content, $html_pages = "" )
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
 					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
-					
+
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -235,9 +236,9 @@ function view_home_cat( $data_content, $html_pages = "" )
 							$xtpl->parse( 'main.catalogs.items.contact' );
 						}
 					}
-					
+
 					$pwidth = ( int )( 100 / $num_view );
-					
+
 					if( $i % $pro_config['per_row'] == 0 )
 					{
 						$xtpl->parse( 'main.catalogs.items.break' );
@@ -248,9 +249,9 @@ function view_home_cat( $data_content, $html_pages = "" )
 					{
 						$pwidth = ( int )( 100 / $num_view );
 					}
-					
+
 					$xtpl->assign( 'pwidth', $pwidth );
-					
+
 					if( $pro_config['active_order'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -264,7 +265,7 @@ function view_home_cat( $data_content, $html_pages = "" )
 					{
 						$xtpl->parse( 'main.catalogs.items.product_code' );
 					}
-					
+
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
@@ -278,33 +279,47 @@ function view_home_cat( $data_content, $html_pages = "" )
 			}
 		}
 	}
-	
+
 	if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.tooltip_js' );
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 /**
  * view_home_all()
- * 
+ *
  * @param mixed $data_content
  * @param string $html_pages
  * @return
  */
-function view_home_all( $data_content, $html_pages = "" )
+function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $pro_config;
-	
+	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays;
+
 	$xtpl = new XTemplate( "main_product.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	$num_view = $pro_config['per_row'];
-	
+
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-	
+	if( ( ! isset( $op ) OR $op != 'detail' ) && $pro_config['show_displays'] == 1 )
+	{
+
+		foreach( $array_displays as $k => $array_displays_i )
+		{
+			$se = '';
+			$xtpl->assign( 'value', $array_displays_i );
+			$xtpl->assign( 'key', $k );
+			$se = ( $sort == $k ) ? 'selected="selected"' : '';
+			$xtpl->assign( 'se', $se );
+			$xtpl->parse( 'main.displays.sorts' );
+		}
+		$xtpl->parse( 'main.displays' );
+	}
+
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
@@ -369,7 +384,7 @@ function view_home_all( $data_content, $html_pages = "" )
 			{
 				$xtpl->parse( 'main.items.product_code' );
 			}
-			
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
@@ -392,7 +407,7 @@ function view_home_all( $data_content, $html_pages = "" )
 
 /**
  * view_search_all()
- * 
+ *
  * @param mixed $data_content
  * @param string $html_pages
  * @return
@@ -400,14 +415,14 @@ function view_home_all( $data_content, $html_pages = "" )
 function view_search_all( $data_content, $html_pages = "" )
 {
 	global $module_info, $lang_module, $module_file, $pro_config;
-	
+
 	$xtpl = new XTemplate( "search_all.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 	$num_view = $pro_config['per_row'];
-	
+
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
@@ -465,13 +480,13 @@ function view_search_all( $data_content, $html_pages = "" )
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.items.tooltip' );
-			
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
-			
+
 			$xtpl->parse( 'main.items' );
 			$i++;
 		}
@@ -488,15 +503,15 @@ function view_search_all( $data_content, $html_pages = "" )
 
 /**
  * viewcat_page_gird()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $pages
  * @return
  */
-function viewcat_page_gird( $data_content, $pages )
+function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays;
+
 	$xtpl = new XTemplate( "view_gird.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'module_name', $module_file );
@@ -509,9 +524,37 @@ function viewcat_page_gird( $data_content, $pages )
 	$xtpl->assign( 'catid', $data_content['id'] );
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
-	
+
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-	
+
+	if( $pro_config['show_compare'] == 1 )
+	{
+		if( isset( $_SESSION['array_id'] ) )
+		{
+			$array_id = $_SESSION['array_id'];
+			$array_id = unserialize( $array_id );
+		}
+		else
+		{
+			$array_id = array();
+		}
+	}
+
+	if( $pro_config['show_displays'] == 1 )
+	{
+
+		foreach( $array_displays as $k => $array_displays_i )
+		{
+			$se = '';
+			$xtpl->assign( 'value', $array_displays_i );
+			$xtpl->assign( 'key', $k );
+			$se = ( $sort == $k ) ? 'selected="selected"' : '';
+			$xtpl->assign( 'se', $se );
+			$xtpl->parse( 'main.displays.sorts' );
+		}
+		$xtpl->parse( 'main.displays' );
+	}
+
 	if( ! empty( $data_content['data'] ) )
 	{
 		$i = 1;
@@ -577,13 +620,23 @@ function viewcat_page_gird( $data_content, $pages )
 			{
 				$xtpl->parse( 'main.grid_rows.product_code' );
 			}
-			
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.grid_rows.adminlink' );
 			}
-			
+
+			if( ! empty( $array_id ) )
+			{
+				$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+				$xtpl->assign( 'ch', $ch );
+			}
+			if( $pro_config['show_compare'] == 1 )
+			{
+				$xtpl->parse( 'main.grid_rows.compare' );
+			}
+
 			$xtpl->parse( 'main.grid_rows' );
 			$i++;
 		}
@@ -597,15 +650,15 @@ function viewcat_page_gird( $data_content, $pages )
 
 /**
  * viewcat_page_list()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $pages
  * @return
  */
-function viewcat_page_list( $data_content, $pages )
+function viewcat_page_list( $data_content, $pages, $sort )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays;
+
 	$xtpl = new XTemplate( "view_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'module_name', $module_file );
@@ -619,6 +672,33 @@ function viewcat_page_list( $data_content, $pages )
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setcart" );
 
+	if( $pro_config['show_compare'] == 1 )
+	{
+		if( isset( $_SESSION['array_id'] ) )
+		{
+			$array_id = $_SESSION['array_id'];
+			$array_id = unserialize( $array_id );
+		}
+		else
+		{
+			$array_id = array();
+		}
+	}
+	if( $pro_config['show_displays'] == 1 )
+	{
+
+		foreach( $array_displays as $k => $array_displays_i )
+		{
+			$se = '';
+			$xtpl->assign( 'value', $array_displays_i );
+			$xtpl->assign( 'key', $k );
+			$se = ( $sort == $k ) ? 'selected="selected"' : '';
+			$xtpl->assign( 'se', $se );
+			$xtpl->parse( 'main.displays.sorts' );
+		}
+		$xtpl->parse( 'main.displays' );
+	}
+
 	$xtpl->assign( 'count', $data_content['count'] );
 	if( ! empty( $data_content['data'] ) )
 	{
@@ -631,7 +711,7 @@ function viewcat_page_list( $data_content, $pages )
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
-			
+
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -672,26 +752,36 @@ function viewcat_page_list( $data_content, $pages )
 			{
 				$xtpl->parse( 'main.row.product_code' );
 			}
-			
+
+			if( ! empty( $array_id ) )
+			{
+				$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+				$xtpl->assign( 'ch', $ch );
+			}
+			if( $pro_config['show_compare'] == 1 )
+			{
+				$xtpl->parse( 'main.row.compare' );
+			}
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.row.adminlink' );
 			}
-			
+
 			$xtpl->parse( 'main.row' );
 		}
 	}
 	$xtpl->assign( 'pages', $pages );
 	$xtpl->assign( 'LINK_LOAD', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=loadcart" );
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 /**
  * detail_product()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_unit
  * @param mixed $allow_comment
@@ -703,7 +793,7 @@ function viewcat_page_list( $data_content, $pages )
 function detail_product( $data_content, $data_unit, $allow_comment, $data_others, $data_shop, $array_other_view )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config;
-	
+
 	if( ! defined( 'SHADOWBOX' ) )
 	{
 		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
@@ -711,15 +801,15 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
 		define( 'SHADOWBOX', true );
 	}
-	
+
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 	$link2 = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
-	
+
 	$xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	if( ! empty( $data_content ) )
 	{
 		$xtpl->assign( 'proid', $data_content['id'] );
@@ -772,7 +862,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		{
 			$xtpl->assign( 'class_money', 'money' );
 		}
-		
+
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 		$xtpl->assign( 'address', $data_content[NV_LANG_DATA . '_address'] );
 		$xtpl->assign( 'product_number', $data_content['product_number'] );
@@ -816,12 +906,12 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 			$xtpl->parse( 'main.product_code' );
 		}
 	}
-	
+
 	if( $allow_comment != 0 )
 	{
 		$xtpl->parse( 'main.comment_tab' );
 	}
-	
+
 	$xtpl->assign( 'COMMENTCONTENT', $data_content['comment'] );
 	if( $pro_config['comment'] == "1" )
 	{
@@ -863,7 +953,8 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 	if( $pro_config['active_price'] == '1' )
 	{
 		if( $data_content['showprice'] == '1' ) $xtpl->parse( 'main.price' );
-		else  $xtpl->parse( 'main.contact' );
+		else
+			$xtpl->parse( 'main.contact' );
 	}
 	if( $pro_config['active_order'] == '1' )
 	{
@@ -872,7 +963,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 			$xtpl->parse( 'main.order' );
 		}
 	}
-	
+
 	if( ! empty( $data_content['allowed_rating'] ) )
 	{
 		$xtpl->parse( 'main.allowed_rating' );
@@ -885,7 +976,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		$xtpl->parse( 'main.allowed_print_js' );
 	}
 	if( ! empty( $data_content['allowed_save'] ) ) $xtpl->parse( 'main.allowed_save' );
-	
+
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
 		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_content['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_content['id'] ) );
@@ -898,7 +989,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 
 /**
  * print_product()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_unit
  * @param mixed $page_title
@@ -907,7 +998,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 function print_product( $data_content, $data_unit, $page_title )
 {
 	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config;
-	
+
 	$xtpl = new XTemplate( "print_pro.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -947,7 +1038,7 @@ function print_product( $data_content, $data_unit, $page_title )
 
 /**
  * cart_product()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $array_error_number
  * @return
@@ -955,7 +1046,7 @@ function print_product( $data_content, $data_unit, $page_title )
 function cart_product( $data_content, $array_error_number )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+
 	$xtpl = new XTemplate( "cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -971,23 +1062,23 @@ function cart_product( $data_content, $array_error_number )
 			$xtpl->assign( 'title_pro', $data_row['title'] );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
-			
+
 			$note = str_replace( "|", ", ", $data_row['note'] );
 			$xtpl->assign( 'note', nv_clean60( $note, 50 ) );
-			
+
 			$price_product_discounts = $data_row['product_price'] - ( $data_row['product_price'] * ( $data_row['product_discounts'] / 100 ) );
 			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_row['money_unit'], $pro_config['money_unit'] );
-			
+
 			$xtpl->assign( 'product_price', FormatNumber( $price_product_discounts, 0, "", "" ) );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
-		
+
 			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 			$xtpl->assign( 'bg', $bg );
-			
+
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
-			
+
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + ( double )( $price_product_discounts ) * ( int )( $data_row['num'] );
 			$i++;
@@ -1008,20 +1099,20 @@ function cart_product( $data_content, $array_error_number )
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart" );
 	$xtpl->assign( 'LINK_PRODUCTS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "" );
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
-	
+
 	if( $pro_config['active_price'] == '1' )
 	{
 		$xtpl->parse( 'main.price1' );
 		$xtpl->parse( 'main.price3' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 /**
  * uers_order()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_order
  * @param mixed $error
@@ -1030,7 +1121,7 @@ function cart_product( $data_content, $array_error_number )
 function uers_order( $data_content, $data_order, $error )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+
 	$xtpl = new XTemplate( "order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -1065,7 +1156,7 @@ function uers_order( $data_content, $data_order, $error )
 	$xtpl->assign( 'DATA', $data_order );
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart" );
-	
+
 	if( $pro_config['active_price'] == '1' )
 	{
 		$xtpl->parse( 'main.price1' );
@@ -1078,7 +1169,7 @@ function uers_order( $data_content, $data_order, $error )
 
 /**
  * payment()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_pro
  * @param mixed $url_checkout
@@ -1094,7 +1185,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
-	
+
 	$i = 0;
 	foreach( $data_pro as $pdata )
 	{
@@ -1105,12 +1196,12 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 		$xtpl->assign( 'product_note', $pdata['product_note'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 		$xtpl->assign( 'pro_no', $i + 1 );
-		
+
 		$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
 		$xtpl->assign( 'bg', $bg );
-		
+
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
-		
+
 		$xtpl->parse( 'main.loop' );
 		$i++;
 	}
@@ -1147,7 +1238,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 
 /**
  * print_pay()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_pro
  * @return
@@ -1155,14 +1246,14 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 function print_pay( $data_content, $data_pro )
 {
 	global $module_info, $lang_module, $module_file, $pro_config;
-	
+
 	$xtpl = new XTemplate( "print.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
-	
+
 	$i = 0;
 	foreach( $data_pro as $pdata )
 	{
@@ -1207,7 +1298,7 @@ function print_pay( $data_content, $data_pro )
 	{
 		$payment = $lang_module['history_payment_no'];
 	}
-	elseif( $data_content['transaction_status'] == -1 )
+	elseif( $data_content['transaction_status'] == - 1 )
 	{
 		$payment = $lang_module['history_payment_wait'];
 	}
@@ -1228,7 +1319,7 @@ function print_pay( $data_content, $data_pro )
 
 /**
  * history_order()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $link_check_order
  * @return
@@ -1236,7 +1327,7 @@ function print_pay( $data_content, $data_pro )
 function history_order( $data_content, $link_check_order )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+
 	$xtpl = new XTemplate( "history_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$i = 0;
@@ -1250,7 +1341,7 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'unit_total', $data_row['unit_total'] );
 		$xtpl->assign( 'note', $data_row['order_note'] );
 		$xtpl->assign( 'URL_DEL_BACK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history" );
-		if( intval( $data_row['transaction_status'] ) == -1 )
+		if( intval( $data_row['transaction_status'] ) == - 1 )
 		{
 			$xtpl->assign( 'text_no_remove', "" );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
@@ -1263,12 +1354,12 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'link', $data_row['link'] );
 
 		/* transaction_status: Trang thai giao dich:
-		0 - Giao dich moi tao
-		1 - Chua thanh toan; 
-		2 - Da thanh toan, dang bi tam giu; 
-		3 - Giao dich bi huy; 
-		4 - Giao dich da hoan thanh thanh cong (truong hop thanh toan ngay hoac thanh toan tam giu nhung nguoi mua da phe chuan)
-		*/
+		 0 - Giao dich moi tao
+		 1 - Chua thanh toan;
+		 2 - Da thanh toan, dang bi tam giu;
+		 3 - Giao dich bi huy;
+		 4 - Giao dich da hoan thanh thanh cong (truong hop thanh toan ngay hoac thanh toan tam giu nhung nguoi mua da phe chuan)
+		 */
 		if( $data_row['transaction_status'] == 4 )
 		{
 			$history_payment = $lang_module['history_payment_yes'];
@@ -1289,7 +1380,7 @@ function history_order( $data_content, $link_check_order )
 		{
 			$history_payment = $lang_module['history_payment_no'];
 		}
-		elseif( $data_row['transaction_status'] == -1 )
+		elseif( $data_row['transaction_status'] == - 1 )
 		{
 			$history_payment = $lang_module['history_payment_wait'];
 		}
@@ -1317,7 +1408,7 @@ function history_order( $data_content, $link_check_order )
 
 /**
  * search_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $check_num
  * @param mixed $date_array
@@ -1327,9 +1418,9 @@ function history_order( $data_content, $link_check_order )
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
 	global $module_name, $module_info, $module_file, $lang_module, $module_name;
-	
+
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	
+
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
@@ -1350,7 +1441,8 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	for( $i = 0; $i <= 3; $i++ )
 	{
 		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
-		else  $xtpl->assign( 'CHECK' . $i, "" );
+		else
+			$xtpl->assign( 'CHECK' . $i, "" );
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -1358,7 +1450,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 
 /**
  * search_result_theme()
- * 
+ *
  * @param mixed $key
  * @param mixed $numRecord
  * @param mixed $per_pages
@@ -1371,7 +1463,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
 	global $module_file, $module_info, $lang_module, $global_array_cat;
-	
+
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -1386,14 +1478,14 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		{
 			$catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
 			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
-			
+
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
 			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
 
 			$xtpl->assign( 'IMG_SRC', $value['homeimgthumb'] );
 			$xtpl->parse( 'results.result.result_img' );
-			
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $value['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $value['id'] ) );
@@ -1409,7 +1501,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$xtpl->assign( 'INMOD', $lang_module['search_modul_title'] );
 		$xtpl->parse( 'results.noneresult' );
 	}
-	if( $numRecord > $per_pages ) // show pages
+	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );
@@ -1426,7 +1518,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 
 /**
  * post_product()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_cata
  * @param mixed $data_unit
@@ -1437,16 +1529,16 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 function post_product( $data_content, $data_cata, $data_unit, $error, $lang_submit )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $my_head;
-	
+
 	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-	
+
 	$xtpl = new XTemplate( "post.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 	{
 		$editor = nv_aleditor( 'bodytext', '98%', '150px', $data_content['bodytext'] );
@@ -1455,10 +1547,10 @@ function post_product( $data_content, $data_cata, $data_unit, $error, $lang_subm
 	{
 		$editor = "<textarea style=\"width:99%\" rows=\"8\" name=\"bodytext\" id=\"bodytext\">" . $data_content['bodytext'] . "</textarea>";
 	}
-	
+
 	$xtpl->assign( 'NV_EDITOR', $editor );
 	$xtpl->assign( 'DATA', $data_content );
-	
+
 	if( $data_content['homeimgthumb'] != "" )
 	{
 		$array_img = explode( "|", $data_content['homeimgthumb'] );
@@ -1473,7 +1565,7 @@ function post_product( $data_content, $data_cata, $data_unit, $error, $lang_subm
 		$xtpl->assign( 'img_pro', $array_img[0] );
 		$xtpl->parse( 'main.imgpro' );
 	}
-	
+
 	if( ! empty( $data_cata ) )
 	{
 		foreach( $data_cata as $dcat )
@@ -1486,9 +1578,9 @@ function post_product( $data_content, $data_cata, $data_unit, $error, $lang_subm
 			$xtpl->parse( 'main.loop_cata' );
 		}
 	}
-	
+
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
-	
+
 	if( ! empty( $data_unit ) )
 	{
 		foreach( $data_unit as $dunit )
@@ -1499,7 +1591,7 @@ function post_product( $data_content, $data_cata, $data_unit, $error, $lang_subm
 			$xtpl->parse( 'main.loop_product_unit' );
 		}
 	}
-	
+
 	if( ! empty( $money_config ) )
 	{
 		foreach( $money_config as $code => $info )
@@ -1509,22 +1601,22 @@ function post_product( $data_content, $data_cata, $data_unit, $error, $lang_subm
 			$xtpl->parse( 'main.money_unit' );
 		}
 	}
-	
+
 	if( $error != "" )
 	{
 		$xtpl->assign( 'info', $error );
 		$xtpl->parse( 'main.error' );
 	}
-	
+
 	$xtpl->assign( 'lang_submit', $lang_submit );
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 /**
  * users_profile()
- * 
+ *
  * @return
  */
 function users_profile()
@@ -1555,7 +1647,7 @@ function users_profile()
 
 /**
  * my_product()
- * 
+ *
  * @param mixed $data_pro
  * @param mixed $pages_pro
  * @param mixed $page
@@ -1564,7 +1656,7 @@ function users_profile()
 function my_product( $data_pro, $pages_pro, $page, $per_page )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-	
+
 	$xtpl = new XTemplate( "my_product.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -1609,13 +1701,13 @@ function my_product( $data_pro, $pages_pro, $page, $per_page )
 
 /**
  * user_get()
- * 
+ *
  * @param mixed $user_info
  * @return
  */
 /**
  * user_get()
- * 
+ *
  * @param mixed $user_info
  * @return
  */
@@ -1641,7 +1733,7 @@ function user_get( $user_info )
 
 /**
  * email_new_order()
- * 
+ *
  * @param mixed $data_content
  * @param mixed $data_pro
  * @return
@@ -1649,7 +1741,7 @@ function user_get( $user_info )
 function email_new_order( $data_content, $data_pro )
 {
 	global $module_info, $lang_module, $module_file, $pro_config, $global_config;
-	
+
 	$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
@@ -1657,7 +1749,7 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'SITE_DOMAIN', $global_config['site_url'] );
-	
+
 	$i = 0;
 	foreach( $data_pro as $pdata )
 	{
@@ -1670,17 +1762,17 @@ function email_new_order( $data_content, $data_pro )
 
 		$bg = ( $i % 2 == 0 ) ? " style=\"background:#f3f3f3;\"" : "";
 		$xtpl->assign( 'bg', $bg );
-		
+
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
 		$xtpl->parse( 'main.loop' );
 		$i++;
 	}
-	
+
 	if( ! empty( $data_content['order_note'] ) )
 	{
 		$xtpl->parse( 'main.order_note' );
 	}
-	
+
 	$xtpl->assign( 'order_total', FormatNumber( $data_content['order_total'], 2, '.', ',' ) );
 	$xtpl->assign( 'unit', $data_content['unit_total'] );
 
@@ -1696,17 +1788,17 @@ function email_new_order( $data_content, $data_pro )
 
 /**
  * comment_theme()
- * 
+ *
  * @param mixed $comment_array
  * @return
  */
 function comment_theme( $comment_array )
 {
 	global $module_info, $module_name, $module_file, $module_config, $lang_module;
-	
+
 	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	
+
 	$k = 0;
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{

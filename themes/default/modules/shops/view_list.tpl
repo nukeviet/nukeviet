@@ -1,5 +1,16 @@
 <!-- BEGIN: main -->
 <div id="category" style="padding:3px;">
+	<!-- BEGIN: displays -->
+	<div style=" margin-top: 3px;float: right">
+	 {LANG.displays_product}
+	<select name="sort" id="sort" onchange="nv_chang_price();">
+		<!-- BEGIN: sorts -->
+		 <option value="{key}" {se}> {value}</option>
+		<!-- END: sorts -->
+	</select>
+	</div>
+	<!-- END: displays -->
+	<div class="clear"></div>
   <h2 class="page_title">{CAT_NAME}</h2>
     <!-- BEGIN: row -->
     <div class="list_rows clearfix">
@@ -24,15 +35,24 @@
                 <!-- END: contact -->
                 {intro}
             </span>
+             <!-- BEGIN: compare -->
+				<br />
+				<span class="compare">
+					<input type="checkbox" value="{id}"{ch}  onclick="nv_compare({id});" id="compare_{id}"/>
+					<input type="button" value="{LANG.compare}" name="compare" class="bsss" onclick="nv_compare_result();"/>
+				</span>
+			<!-- END: compare -->
         </p>
+
+
 		<div class="fr" style="margin-bottom:5px; width:140px" align="right">
 			<!-- BEGIN: adminlink -->{ADMINLINK}<!-- END: adminlink -->
         	<!-- BEGIN: order -->
             <a href="javascript:void(0)" id="{id}" title="{title_pro}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
             <!-- END: order -->
-            <a href="{link_pro}" title="{title_pro}" class="pro_detail">{LANG.detail_product}</a>  
+            <a href="{link_pro}" title="{title_pro}" class="pro_detail">{LANG.detail_product}</a>
 		</div>
-    </div> 
+    </div>
     <!-- END: row -->
     <div class="pages">
 		{pages}

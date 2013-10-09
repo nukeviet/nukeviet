@@ -341,5 +341,10 @@ $lang_module['noneprice'] = 'Giá đến phải lớn hơn từ';
 $lang_module['search_adv'] = 'Tìm kiếm nâng cao';
 $lang_module['money_thousand'] = 'nghìn';
 $lang_module['money_million'] = 'triệu';
-
+$lang_module['displays_new'] = 'Mới cập nhật';
+$lang_module['displays_price_asc'] = 'Giá tăng dần';
+$lang_module['displays_price_desc'] = 'Giá giảm dần';
+$lang_module['displays_product'] = 'Sắp xếp theo: ';
+$lang_module['compare'] = 'So sánh';
+$lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 ?>

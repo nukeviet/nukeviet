@@ -181,7 +181,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
 	$rowcontent['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
-	$rowcontent['product_price'] = $nv_Request->get_int( 'product_price', 'post', 0 );
+	$rowcontent['product_price'] = $nv_Request->get_string( 'product_price', 'post', "" );
+	$rowcontent['product_price']  = str_replace( ',', '', $rowcontent['product_price']  );
 	$rowcontent['product_discounts'] = $nv_Request->get_int( 'product_discounts', 'post', 0 );
 	$rowcontent['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
 	$rowcontent['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );

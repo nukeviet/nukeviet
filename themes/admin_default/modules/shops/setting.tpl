@@ -77,6 +77,24 @@
 			<td><input type="checkbox" value="1" name="comment_auto" {ck_comment_auto}/></td>
 		</tr>
 	</tbody>
+	
+	
+	
+	<tbody>
+        <tr>
+            <td><strong>{LANG.setting_compare}</strong></td>
+            <td><input type="checkbox" value="1" name="show_compare" {ck_compare} /></td>
+        </tr>
+    </tbody>
+	<tbody class="second">
+		<tr>
+			<td><strong>{LANG.setting_displays}</strong></td>
+			<td><input type="checkbox" value="1" name="show_displays" {ck_displays}/></td>
+		</tr>
+	</tbody>
+	
+	
+	
 	<tbody>
 		<tr>
 			<td><strong>{LANG.setting_setcomm}</strong></td>

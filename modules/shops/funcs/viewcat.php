@@ -21,7 +21,10 @@ $description = $global_array_cat[$catid]['description'];
 
 $contents = "";
 $cache_file = "";
-
+$nv_Request->get_int('sorts', 'session', 0);
+$sorts = $nv_Request->get_int('sort', 'post', 0);
+$sorts_old = $nv_Request->get_int('sorts', 'session', 0);
+$sorts = $nv_Request->get_int('sorts', 'post', $sorts_old);
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
@@ -38,7 +41,20 @@ if( empty( $contents ) )
 	$count = 0;
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
+	$orderby = "";
+    if ($sorts == 0)
+    {
+        $orderby = " ORDER BY `id` DESC ";
 
+    }
+    elseif ($sorts == 1)
+    {
+        $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
+    }
+    else
+    {
+        $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
+    }
 	if ( $global_array_cat[$catid]['viewcat'] == "view_home_cat" and $global_array_cat[$catid]['numsubcat'] > 0 )
 	{
 		$data_content = array();
@@ -51,7 +67,7 @@ if( empty( $contents ) )
 			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid_i );
 
-			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
+			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ".$orderby." LIMIT 0," . $array_info_i['numlinks'];
 			$result = $db->sql_query( $sql );
 
 			$data_pro = array();
@@ -110,7 +126,7 @@ if( empty( $contents ) )
 			exit();
 		}
 
-		$contents = call_user_func( 'view_home_cat', $data_content );
+		$contents = call_user_func( 'view_home_cat', $data_content,$sorts );
 	}
 	else
 	{
@@ -125,7 +141,7 @@ if( empty( $contents ) )
 			$array_cat = GetCatidInParent( $catid );
 			$sql .= " `listcatid` IN (" . implode( ",", $array_cat ) . ")";
 		}
-		$sql .= " AND `status`=1 ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
+		$sql .= " AND `status`=1 ".$orderby." LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
 		$result = $db->sql_query( $sql );
 
 		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
@@ -141,7 +157,7 @@ if( empty( $contents ) )
 			exit();
 		}
 
-		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages );
+		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages,$sorts );
 	}
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )

@@ -61,6 +61,8 @@ if( $savesetting == 1 )
 	$data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
 	$data['active_tooltip'] = $nv_Request->get_int( 'active_tooltip', 'post', 0 );
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
+	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
+	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
 
 	if ( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
 	{
@@ -184,6 +186,12 @@ $xtpl->assign( 'ck_active_tooltip', $check );
 
 $check = ! empty( $data['show_product_code'] ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_show_product_code', $check );
+
+$check = ( $data['show_compare'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_compare', $check );
+
+$check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_displays', $check );
 
 // Binh luan
 foreach ( $data['who_comment'] as $who )

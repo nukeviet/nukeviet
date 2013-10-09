@@ -22,7 +22,7 @@
 	height:156px;
 }
 #products .items .items_content .content_price {
-	height:35px;
+	height:15px;
 }
 .money {
 	color:#CC3300;
@@ -586,7 +586,7 @@ div.TabView div.Pages div.Page {
 
 
 /* SEARCH */
-.search{ 
+.search{
 	border:1px solid #ebebeb;
 	padding:5px;
 	margin-bottom:5px;
@@ -644,7 +644,7 @@ div.TabView div.Pages div.Page {
 	background:#1d1d1d;
 	display:none;
 	padding:10px;
-	position:absolute;	
+	position:absolute;
 	z-index:3000;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -714,4 +714,14 @@ div.TabView div.Pages div.Page {
 }
 img.calendar{
 	vertical-align:middle;
+}
+.bsss {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: medium none;
+    color: #5C5C5C;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.compare{
+	margin-bottom: 10px;
 }

@@ -21,6 +21,8 @@ $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
 $alias_group_url = isset( $array_op[1] ) ? $array_op[1] : "";
 $groupid = 0;
 
+$array_displays= array('0' => $lang_module['displays_new'], '1' => $lang_module['displays_price_asc'],'2'=> $lang_module['displays_price_desc']);
+
 // Categories
 $global_array_cat = array();
 $sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";

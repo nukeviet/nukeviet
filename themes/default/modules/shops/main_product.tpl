@@ -1,5 +1,17 @@
 <!-- BEGIN: main -->
 <div id="products" class="clearfix">
+	<!-- BEGIN: displays -->
+	<div style=" margin-top: 3px;float: right">
+	 {LANG.displays_product}
+	<select name="sort" id="sort" onchange="nv_chang_price();">
+		<!-- BEGIN: sorts -->
+		 <option value="{key}" {se}> {value}</option>
+		<!-- END: sorts -->
+	</select>
+	</div>
+	<!-- END: displays -->
+	<div class="clear"></div>
+	
 	<!-- BEGIN: items -->
 	<div class="items" style="width:{pwidth}%">
 		<div class="items_content">

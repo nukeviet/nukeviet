@@ -12,8 +12,21 @@ if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
+$nv_Request->get_int('sorts', 'session', 0);
+$sorts = $nv_Request->get_int('sort', 'post', 0);
+$sorts_old = $nv_Request->get_int('sorts', 'session', 0);
+$sorts = $nv_Request->get_int('sorts', 'post', $sorts_old);
+
 $contents = "";
 $cache_file = "";
+
+if ($nv_Request->isset_request('changesprice', 'post'))
+{
+    $sorts = $nv_Request->get_int('sort', 'post', 0);
+    $nv_Request->set_Session('sorts', $sorts, NV_LIVE_SESSION_TIME);
+    nv_del_moduleCache($module_name);
+    die("OK");
+}
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
@@ -29,10 +42,23 @@ if( empty( $contents ) )
 	$data_content = array();
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 	$html_pages = "";
+	$orderby = "";
+    if ($sorts == 0)
+    {
+        $orderby = " ORDER BY `id` DESC ";
 
+    }
+    elseif ($sorts == 1)
+    {
+        $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
+    }
+    else
+    {
+        $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
+    }
 	if( $pro_config['home_view'] == "view_home_all" )
-	{
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
+	{		
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `status`=1  " . $orderby . " LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
 
 		$result = $db->sql_query( $sql );
 		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
@@ -242,7 +268,7 @@ if( empty( $contents ) )
 		exit();
 	}
 
-	$contents = call_user_func( $pro_config['home_view'], $data_content, $html_pages );
+	$contents = call_user_func( $pro_config['home_view'], $data_content, $html_pages ,$sorts);
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != "" and $cache_file != "" )
 	{
