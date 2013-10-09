@@ -40,8 +40,6 @@ function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = 
 		}
 	}
 
-	$val = nv_unhtmlspecialchars( $val );
-
 	$return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
 	$return .= "<script type=\"text/javascript\">
 		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {width: '" . $width . "',height: '" . $height . "',";
