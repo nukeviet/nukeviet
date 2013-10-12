@@ -226,7 +226,7 @@ function create() {
 
 function move() {
 	$("div.dynamic").text("");
-	$("input.dynamic").attr("checked", false);
+	$("input.dynamic").prop("checked", false);
 	$("select[name=newPath]").html("");
 	var a = $("span#foldervalue").attr("title"), b = pathList("create_file", a), d, e, g = $("input[name=selFile]").val();
 	for (e in b ) {

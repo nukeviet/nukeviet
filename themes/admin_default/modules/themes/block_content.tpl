@@ -235,7 +235,7 @@
 					"display" : "block"
 				});
 				var $radios = $("input:radio[name=all_func]");
-				$radios.filter("[value=0]").attr("checked", true);
+				$radios.filter("[value=0]").prop("checked", true);
 				$("#shows_all_func").show();
 			}
 			var blok_file_name = "";
@@ -274,37 +274,32 @@
 			var lv = $("input[name='leavegroup']:checked").val();
 			if (lv == "1") {
 				var $radios = $("input:radio[name=all_func]");
-				$radios.filter("[value=0]").attr("checked", true);
+				$radios.filter("[value=0]").prop("checked", true);
 				$("#shows_all_func").show();
 			}
 		});
 		$("input[name=checkmod]").toggle(function() {
-			$("input.checkmodule").attr("checked", "checked");
+			$("input.checkmodule").prop("checked", true);
 			$("input[name='func_id[]']:checkbox").each(function() {
-				$("input[name='func_id[]']:visible").attr("checked", "checked");
+				$("input[name='func_id[]']:visible").prop("checked", true);
 			});
 		}, function() {
-			$("input.checkmodule").removeAttr("checked");
+			$("input.checkmodule").prop("checked", false);
 			$("input[name='func_id[]']:checkbox").each(function() {
-				$("input[name='func_id[]']:visible").removeAttr("checked");
+				$("input[name='func_id[]']:visible").prop("checked", false);
 			});
 		});
 		$("input[name='func_id[]']:checkbox").change(function() {
 			var numfuc = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox").length;
 			var fuccheck = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox:checked").length;
 			if (fuccheck != numfuc) {
-				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").removeAttr("checked");
+				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", false);
 			} else if (numfuc == fuccheck) {
-				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").attr("checked", "checked");
+				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", true);
 			}
 		});
 		$("input.checkmodule").change(function() {
-			$(this).attr('value')
-			if ($(this).attr('checked')) {
-				$("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").attr("checked", "checked");
-			} else {
-				$("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").removeAttr("checked");
-			}
+			$("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").prop("checked", $(this).prop('checked'));
 		});
 		$("select[name=who_view]").change(function() {
 			var groups = $("select[name=who_view]").val();

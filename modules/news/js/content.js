@@ -52,7 +52,7 @@ $(document).ready(function() {
 			} else {
 				$("#catright_" + $(this).val()).hide();
 				if ($(this).val() == catid) {
-					$radios_catid.filter("[value=" + catid + "]").attr("checked", false);
+					$radios_catid.filter("[value=" + catid + "]").prop("checked", false);
 				}
 			}
 		});

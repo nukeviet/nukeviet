@@ -402,7 +402,7 @@
 	});
 	$("input[name=required],input[name=show_register]").click(function() {
 		if ($("input[name='required']:checked").val() == 1) {
-			$("input[name=show_register]").attr("checked", true);
+			$("input[name=show_register]").prop("checked", true);
 		}
 	});
 	$("input[name=match_type]").click(function() {

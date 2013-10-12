@@ -158,7 +158,8 @@
 			success : function(a) {
 				a = a.split("|");
 				$("#pageContent input, #pageContent select").removeAttr("disabled");
-				a[0] == "ERROR" && (a[1] == "1" ? $(b).attr("checked", "checked") : $(b).removeAttr("checked"))
+				a[0] == "ERROR" && (a[1] == "1" ? $(b).prop("checked", true) : $(b).prop("checked", false));
+
 			}
 		});
 		return false
