@@ -120,6 +120,7 @@ function nv_save_file_config_global()
 	$content_config .= "\n";
 
 	$config_variable = array();
+	$allowed_html_tags = '';
 	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND (`module`='global' OR `module`='define') ORDER BY `config_name` ASC";
 	$result = $db->sql_query( $sql );
 	while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result, 1 ) )
@@ -133,6 +134,10 @@ function nv_save_file_config_global()
 			else
 			{
 				$content_config .= "define('" . strtoupper( $c_config_name ) . "', '" . $c_config_value . "');\n";
+			}
+			if( $c_config_name == 'nv_allowed_html_tags' )
+			{
+				$allowed_html_tags = $c_config_value;
 			}
 		}
 		else
@@ -222,11 +227,11 @@ function nv_save_file_config_global()
 		}
 	}
 	$content_config .= "\$global_config['array_theme_type']=" . nv_var_export( array_filter( array_map( 'trim', explode( ',', NV_THEME_TYPE ) ) ) ) . ";\n";
+
 	//allowed_html_tags
-	$global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
-	if( ! empty( $global_config['allowed_html_tags'] ) )
+	if( ! empty( $allowed_html_tags ) )
 	{
-		$allowed_html_tags = "'" . implode( "','", $global_config['allowed_html_tags'] ) . "'";
+		$allowed_html_tags = "'" . implode( "','", array_map( 'trim', explode( ',', $allowed_html_tags ) ) ) . "'";
 	}
 	else
 	{
