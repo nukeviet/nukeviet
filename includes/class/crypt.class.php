@@ -74,15 +74,7 @@ class nv_Crypt
 	 */
 	public function validate( $data, $hash )
 	{
-		if( strlen( $hash ) == 32 )
-		{
-			$new_hash = md5( $data );
-		}
-		else
-		{
-			$new_hash = $this->hash( $data );
-		}
-		if( $new_hash == $hash )
+		if( $this->hash( $data ) == $hash )
 		{
 			return true;
 		}
