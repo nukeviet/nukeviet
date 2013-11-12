@@ -13,6 +13,8 @@ if( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) and ! defined( 'NV_WYSI
 	exit();
 }
 
+error_reporting( 0 );
+
 define( 'NV_MAINFILE', true );
 
 //Khong cho xac dinh tu do cac variables
