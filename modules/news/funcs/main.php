@@ -15,6 +15,14 @@ $key_words = $module_info['keywords'];
 $contents = '';
 $cache_file = '';
 
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
+$base_url_rewrite = nv_url_rewrite( $base_url, true );
+$request_uri = $_SERVER['REQUEST_URI'];
+if( ! ($request_uri == NV_BASE_SITEURL OR $request_uri == $base_url_rewrite OR $request_uri == $base_url_rewrite . "/page-" . $page ) )
+{
+	$redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . $base_url_rewrite . "\" />";
+	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
+}
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
@@ -30,8 +38,6 @@ if( empty( $contents ) )
 	$show_no_image  = $module_config[$module_name]['show_no_image'];
 	$array_catpage = array();
 	$array_cat_other = array();
-	$st_links = $st_links;
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
 
 	if( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" )
 	{
