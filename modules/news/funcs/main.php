@@ -15,7 +15,7 @@ $key_words = $module_info['keywords'];
 $contents = '';
 $cache_file = '';
 
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $base_url_rewrite = nv_url_rewrite( $base_url, true );
 $request_uri = $_SERVER['REQUEST_URI'];
 if( ! ($request_uri == NV_BASE_SITEURL OR $request_uri == $base_url_rewrite OR $request_uri == $base_url_rewrite . "/page-" . $page ) )
