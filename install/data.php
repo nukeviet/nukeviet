@@ -450,6 +450,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_googleplus` (
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
 	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),
+	('password_simple', '000000, 1234, 2000, 12345, 111111, 123123, 123456, 654321, 696969, 1234567, 12345678, 123456789, 1234567890, aaaaaa, abc123, abc123@, abc@123, adobe1, adobe123, azerty, baseball, dragon, football, harley, iloveyou, jennifer, jordan, letmein, macromedia, master, michael, monkey, mustang, password, photoshop, pussy, qwerty, shadow, superman', " . NV_CURRENTTIME . "),
 	('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
 	('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 

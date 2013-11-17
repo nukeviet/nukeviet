@@ -465,7 +465,7 @@ function nv_check_valid_login( $login, $max, $min )
  */
 function nv_check_valid_pass( $pass, $max, $min )
 {
-	global $lang_global, $global_config;
+	global $lang_global, $global_config, $db_config, $db;
 
 	$pass = trim( strip_tags( $pass ) );
 
@@ -501,6 +501,13 @@ function nv_check_valid_pass( $pass, $max, $min )
 		{
 			return $lang_global['upass_type_' . $type];
 		}
+	}
+	
+	list ( $password_simple ) = $db->sql_fetchrow ( $db->sql_query ( "SELECT `content` FROM `" . $db_config ['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='password_simple'" ) );
+	$password_simple = explode ( '|', $password_simple );
+	if( in_array ( $pass, $password_simple ) ) 
+	{
+		return $lang_global ['upass_type_simple'];
 	}
 	return '';
 }
