@@ -40,6 +40,7 @@ var nv_error_email = "Erreur: Vous n'avez pas entré votre e-mail ou l'e-mail n'
 var nv_error_seccode = "Erreur: Vous n'avez pas entré le code de sécurité ou le code n'est pas correct. Code de sécurité est une série de [num] caractères affichées en image.";
 var nv_login_failed = "Erreur: Le système n'accepte pas votre compte. Essayez de nouveau.";
 var nv_content_failed = "Erreur: Le système n'accepte pas les infos. Essayez de nouveau.";
+var nv_rangelength = "Merci d'entrer une valeur entre {0} et {1} caractères.";
 
 //contact
 var nv_fullname = "Nom complet entré n'est pas valide.";

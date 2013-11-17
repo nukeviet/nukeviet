@@ -52,7 +52,6 @@
 				</div>
 				<form action="{NV_BASE_SITEURL}" method="get" class="search fr" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 					<fieldset>
-						<input type="hidden" id="topmenu_search_checkss" value="{CHECKSS}" />
 						<input class="txt" type="text" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" />
 						<input class="submit" type="button" value="Go" name="topmenu_search_submit" id="topmenu_search_submit" onclick="{THEME_SEARCH_SUBMIT_ONCLICK}"/>
 					</fieldset>

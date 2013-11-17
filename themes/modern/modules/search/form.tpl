@@ -26,7 +26,7 @@
 					<option value="{MOD.value}"{MOD.selected}>{MOD.custom_title}</option>
 					<!-- END: select_option -->
 				</select>
-				<input type="submit" id="search_submit" value="{LANG.search_title}" />&nbsp; <a href="advSearch" class="advSearch">{LANG.search_title_adv}</a>
+				<input type="submit" id="search_submit" value="{LANG.search_title}" />&nbsp; <a href="#" class="advSearch">{LANG.search_title_adv}</a>
 			</div>
 			<!-- BEGIN: search_engine_unique_ID -->
 			<div class="clearfix rows">
