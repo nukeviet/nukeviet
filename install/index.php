@@ -604,6 +604,15 @@ elseif( $step == 6 )
 
 	if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 	{
+		$db_config['dbsystem'] = $db_config['dbname'];
+		define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
+		
+		$db = new sql_db( $db_config );
+		if( ! empty( $db->error ) )
+		{
+			$error = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
+		}
+		
 		$site_name = $nv_Request->get_title( 'site_name', 'post', '', 1 );
 		$login = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, NV_UNICKMAX );
 		$email = $nv_Request->get_title( 'nv_email', 'post', '' );
@@ -627,13 +636,7 @@ elseif( $step == 6 )
 
 		$global_config['site_email'] = $email;
 
-		$db = new sql_db( $db_config );
-
-		if( ! empty( $db->error ) )
-		{
-			$error = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
-		}
-		elseif( empty( $site_name ) )
+		if( empty( $site_name ) )
 		{
 			$error = $lang_module['err_sitename'];
 		}
@@ -665,7 +668,7 @@ elseif( $step == 6 )
 		{
 			$error = $lang_module['answer_empty'];
 		}
-		else
+		elseif( empty( $error ))
 		{
 			$password = $crypt->hash( $password );
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
