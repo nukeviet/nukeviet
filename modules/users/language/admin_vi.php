@@ -77,6 +77,7 @@ $lang_module['active_all'] = 'Không cần kích hoạt';
 $lang_module['active_email'] = 'Kích hoạt qua email';
 $lang_module['deny_email'] = 'Các từ cấm sử dụng trong email thành viên';
 $lang_module['deny_name'] = 'Các từ cấm sử dụng trong tài khoản thành viên';
+$lang_module['password_simple'] = 'Các từ cấm sử dụng các mật khẩu đơn giản';
 $lang_module['memberlist_active'] = 'Hoạt động';
 $lang_module['memberlist_unactive'] = 'Hoạt động';
 $lang_module['memberlist_error_method'] = 'Hãy chọn phương thức để tìm kiếm !';

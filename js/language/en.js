@@ -40,6 +40,7 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
+var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
 
 //contact
 var nv_fullname = "Full name entered is not valid.";
@@ -61,4 +62,4 @@ NVJL.error404 = "Not Found. The URI requested is invalid or the resource request
 NVJL.error406 = "Not Acceptable. Client browser does not accept the MIME type of the requested page.";
 NVJL.error500 = "Internal server error. You see this error message for a wide variety of server-side errors.";
 NVJL.error502 = "Bad Gateway. Web server received an invalid response while acting as a gateway or proxy. You receive this error message when you try to run a CGI script that does not return a valid set of HTTP headers.";
-NVJL.error503 = "Service Unavailable."; 
+NVJL.error503 = "Service Unavailable.";

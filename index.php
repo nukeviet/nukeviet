@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -84,7 +83,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_data = $module_info['module_data'];
 		$include_file = NV_ROOTDIR . "/modules/" . $module_file . "/funcs/main.php";
 
-		if( file_exists( $include_file )  )
+		if( file_exists( $include_file ) )
 		{
 			// Tuy chon kieu giao dien
 			if( $nv_Request->isset_request( 'nv' . NV_LANG_DATA . 'themever', 'get' ) )
@@ -304,6 +303,5 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 }
 
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-
 
 ?>

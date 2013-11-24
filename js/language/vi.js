@@ -40,6 +40,7 @@ var nv_error_email = "Lỗi: Bạn chưa khai báo địa chỉ hộp thư đi�
 var nv_error_seccode = "Lỗi: Bạn chưa khai báo mã chống spam hoặc khai báo không đúng. Mã chống spam phải là một dãy số có chiều dài là [num] ký tự được thể hiện trong hình bên";
 var nv_login_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận tài khoản của bạn. Hãy thử khai báo lại lần nữa";
 var nv_content_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận thông tin của bạn. Hãy thử khai báo lại lần nữa";
+var nv_rangelength = "Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự.";
 
 //contact
 var nv_fullname = "Họ tên nhập không hợp lệ.";
@@ -61,4 +62,4 @@ NVJL.error404 = "Không tìm thấy tập tin yêu cầu. Có thể do URL khôn
 NVJL.error406 = "Không được chấp nhận. Trình duyệt không chấp nhận kiểu MIME của tập tin được yêu cầu.";
 NVJL.error500 = "Lỗi từ phía máy chủ nội bộ.";
 NVJL.error502 = "Web server nhận được phản hồi không hợp lệ trong khi hoạt động như một gateway hoặc proxy. Bạn nhận được thông báo lỗi khi cố gắng chạy một kịch bản CGI.";
-NVJL.error503 = "Dịch vụ không khả dụng."; 
+NVJL.error503 = "Dịch vụ không khả dụng.";

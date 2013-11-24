@@ -81,8 +81,8 @@ function nv_show_tables()
 	foreach( $tables as $key => $values )
 	{
 		$table_name = substr( $key, strlen( $db_config['prefix'] ) + 1 );
-		$table_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;tab=" . $key . "\">" . $table_name . "</a>";
-		eval( "\$contents['rows'][\$key] = array('" . $table_name . "','" . implode( "','", $values ) . "');" );
+		array_unshift($values, '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;tab=' . $key . '">' . $table_name . '</a>');
+		$contents['rows'][$key] = $values;
 	}
 
 	$contents['third'] = sprintf( $lang_module['third'], $db_tables_count, $db_size, $db_totalfree );

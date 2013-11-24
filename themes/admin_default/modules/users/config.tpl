@@ -186,6 +186,10 @@
 				<td>{LANG.deny_name}</td>
 				<td><textarea name="deny_name" rows="7" cols="70">{DATA.deny_name}</textarea></td>
 			</tr>
+			<tr>
+				<td>{LANG.password_simple}</td>
+				<td><textarea name="password_simple" rows="7" cols="70">{DATA.password_simple}</textarea></td>
+			</tr>
 		</tbody>
 	</table>
 </form>

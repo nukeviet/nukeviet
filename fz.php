@@ -144,7 +144,6 @@ function nv_fomat_file_php( $filename )
 		$is_double_arrow = array();
 		// Array co xuong hang hay khong
 
-
 		$total_tokend = sizeof( $array_tokend );
 
 		foreach( $array_tokend as $key => $tokend )
@@ -203,13 +202,7 @@ function nv_fomat_file_php( $filename )
 			{
 				if( empty( $is_double_arrow[$is_in_array] ) and $tokend->type == T_WHITESPACE )
 				{
-					$tokend->contents = str_replace( array(
-						"\n",
-						"\t"
-					), array(
-						" ",
-						""
-					), $tokend->contents );
+					$tokend->contents = str_replace( array( "\n", "\t" ), array( " ", "" ), $tokend->contents );
 				}
 
 				// Xoa dau , cuoi cung cua array
@@ -255,7 +248,7 @@ function nv_fomat_file_php( $filename )
 			}
 		}
 
-		// Loại bỏ khoảng trắng ( )
+		// Loại bỏ khoảng trắng ()
 		$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 		$output_data = preg_replace( "/[ ]+/", " ", $output_data );
 
