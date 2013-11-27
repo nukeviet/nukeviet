@@ -102,17 +102,17 @@
 
 <script type="text/javascript">
 	$("#titlelength").html($("#idtitle").val().length);
-	$("#idtitle").keypress(function() {
+	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);
 	});
 
 	$("#titlesitelength").html($("#titlesite").val().length);
-	$("#titlesite").keypress(function() {
+	$("#titlesite").bind("keyup paste", function() {
 		$("#titlesitelength").html($(this).val().length);
 	});
 
 	$("#descriptionlength").html($("#description").val().length);
-	$("#description").keypress(function() {
+	$("#description").bind("keyup paste", function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
 	$("input[name=selectimg]").click(function() {
