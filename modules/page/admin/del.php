@@ -18,7 +18,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 ) die( 'NO_' . $id );
 
-nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete about', "ID:  " . $id, $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete', "ID:  " . $id, $admin_info['userid'] );
 
 $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` = " . $id;
 $db->sql_query( $sql );

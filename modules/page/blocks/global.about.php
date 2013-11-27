@@ -9,15 +9,15 @@
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-if( ! nv_function_exists( 'nv_message_about' ) )
+if( ! nv_function_exists( 'nv_message_page' ) )
 {
 
 	/**
-	 * nv_message_about()
+	 * nv_message_page()
 	 *
 	 * @return
 	 */
-	function nv_message_about( $block_config )
+	function nv_message_page( $block_config )
 	{
 		global $global_config, $site_mods, $db, $module_name;
 		$module = $block_config['module'];
@@ -41,7 +41,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 			{
 				$cache = unserialize( $cache );
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=about&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'] . $global_config['rewrite_exturl'];
+				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'] . $global_config['rewrite_exturl'];
 				$title = $cache['page_title'];
 				$bodytext = strip_tags( $cache['bodytext'] );
 
@@ -69,11 +69,11 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 
 		if( $is_show )
 		{
-			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/about/block.about.tpl" ) )
+			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/page/block.about.tpl" ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/about/block.about.tpl" ) )
+			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/page/block.about.tpl" ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
@@ -82,7 +82,7 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 				$block_theme = "default";
 			}
 
-			$xtpl = new XTemplate( "block.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/about" );
+			$xtpl = new XTemplate( "block.about.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/page" );
 			$xtpl->assign( 'LINK', $link );
 			$xtpl->assign( 'TITLE', $title );
 			$xtpl->assign( 'BODYTEXT', $bodytext );
@@ -95,6 +95,6 @@ if( ! nv_function_exists( 'nv_message_about' ) )
 	}
 }
 
-$content = nv_message_about( $block_config );
+$content = nv_message_page( $block_config );
 
 ?>

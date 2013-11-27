@@ -8,9 +8,9 @@
 	</colgroup>
 	<thead>
 		<tr class="center">
-			<td>{LANG.aabout3}</td>
-			<td>{LANG.aabout2}</td>
-			<td>{LANG.aabout4}</td>
+			<td>{LANG.order}</td>
+			<td>{LANG.title}</td>
+			<td>{LANG.status}</td>
 			<td>{LANG.feature}</td>
 		</tr>
 	</thead>

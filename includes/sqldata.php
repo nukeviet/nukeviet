@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,page' );
 
 function nv_delete_table_sys( $lang )
 {
@@ -92,7 +92,7 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` (
 	  `func_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	  `func_name` varchar(55) NOT NULL,
-	  `alias` varchar(55) NOT NULL DEFAULT '',	  
+	  `alias` varchar(55) NOT NULL DEFAULT '',
 	  `func_custom_name` varchar(255) NOT NULL,
 	  `in_module` varchar(55) NOT NULL,
 	  `show_func` tinyint(4) NOT NULL DEFAULT '0',
@@ -142,7 +142,7 @@ function nv_create_table_sys( $lang )
     ) ENGINE=MyISAM";
 
     	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`, `gid`) VALUES
-		('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '', 0, 0),
+		('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '', 0, 0),
 		('news', 'news', 'news', 'News',  '',1270400000, 1, 1, '', '', '', '', '0', 1, 2, 1, 1, '', 1, 0),
 		('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 1, 5, 1, 1, '', 0, 0),
 		('contact', 'contact', 'contact', 'Contact',  '',1275351337, 1, 1, '', '', '', '', '0', 1, 6, 1, 1, '', 0, 0),
@@ -151,7 +151,8 @@ function nv_create_table_sys( $lang )
 		('banners', 'banners', 'banners', 'Banners',  '',1270400000,  1,1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
 		('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 0, 10, 1, 1, '', 0, 0),
 		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
-		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
+		('rss', 'rss', 'rss', 'Rss', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0),
+		('page', 'page', 'page', 'page', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES
         ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x'),

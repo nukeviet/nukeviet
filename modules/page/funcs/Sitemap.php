@@ -7,7 +7,7 @@
  * @Createdate 4/12/2010, 1:27
  */
 
-if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $url = array();
 $cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_Sitemap_" . NV_CACHE_PREFIX . ".cache";

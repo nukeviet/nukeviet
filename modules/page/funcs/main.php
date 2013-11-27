@@ -7,7 +7,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $contents = '';
 
@@ -33,7 +33,7 @@ if( $id )
 
 		$row['add_time'] = nv_date( "H:i T l, d/m/Y", $row['add_time'] );
 		$row['edit_time'] = nv_date( "H:i T l, d/m/Y", $row['edit_time'] );
-		$contents = $cache['contents'] = nv_about_main( $row, $ab_links );
+		$contents = $cache['contents'] = nv_page_main( $row, $ab_links );
 		$cache['bodytext'] = strip_tags( $row['bodytext'] );
 		$cache['bodytext'] = nv_clean60( $cache['bodytext'], 300 );
 

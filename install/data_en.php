@@ -28,7 +28,7 @@ $sql_create_table = array();
 
 $sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modules`";
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`, `gid`) VALUES
-('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0, 0),
+('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0, 0),
 ('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 2, 1, 1, '', 1, 0),
 ('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 3, 1, 1, '', 0, 0),
 ('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 4, 1, 1, '', 0, 0),

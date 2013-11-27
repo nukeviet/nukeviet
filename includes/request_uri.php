@@ -19,10 +19,16 @@ if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/
 if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
 
 $base_siteurl .= "/";
+$base_siteurl_quote = nv_preg_quote( $base_siteurl );
 
-$request_uri = preg_replace( "/(" . nv_preg_quote( $base_siteurl ) . ")index\.php\//", "\\1", $_SERVER['REQUEST_URI'] );
+$request_uri = preg_replace( "/(" . $base_siteurl_quote . ")index\.php\//", "\\1", $_SERVER['REQUEST_URI'] );
 
-if( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
+if( preg_match( "/^" . $base_siteurl_quote . "([a-z0-9\-]+)" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "$/i", $request_uri, $matches ) )
+{
+	$_GET[NV_NAME_VARIABLE] = 'page';
+	$_GET[NV_OP_VARIABLE] = $matches[1];
+}
+elseif( preg_match( "/^" . $base_siteurl_quote . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . ")$/i", $request_uri, $matches ) )
 {
 	if( $matches[2] == $global_config['rewrite_exturl'] ) define( 'NV_REWRITE_EXTURL', true );
 
@@ -70,25 +76,25 @@ elseif( isset( $_GET[NV_OP_VARIABLE] ) )
 }
 else
 {
-	if( preg_match( "/^(" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "))\?(.*)$/i", $request_uri, $matches ) )
+	if( preg_match( "/^(" . $base_siteurl_quote . "([a-z0-9\-\_\.\/]+)(" . nv_preg_quote( $global_config['rewrite_endurl'] ) . "|" . nv_preg_quote( $global_config['rewrite_exturl'] ) . "))\?(.*)$/i", $request_uri, $matches ) )
 	{
 		header( 'HTTP/1.1 301 Moved Permanently' );
 		Header( "Location: " . $matches[1] );
 		die();
 	}
-	elseif( ! empty( $global_config['rewrite_op_mod'] ) AND preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
+	elseif( ! empty( $global_config['rewrite_op_mod'] ) AND preg_match( "/^" . $base_siteurl_quote . "tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
 	{
 		$_GET[NV_NAME_VARIABLE] = $global_config['rewrite_op_mod'];
 		$_GET[NV_OP_VARIABLE] = 'tag';
 		$_GET['alias'] = urldecode( $matches[1] );
 	}
-	elseif( $global_config['rewrite_optional'] AND preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z0-9\-]+)\/tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
+	elseif( $global_config['rewrite_optional'] AND preg_match( "/^" . $base_siteurl_quote . "([a-z0-9\-]+)\/tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
 	{
 		$_GET[NV_NAME_VARIABLE] = $matches[1];
 		$_GET[NV_OP_VARIABLE] = 'tag';
 		$_GET['alias'] = urldecode( $matches[2] );
 	}
-	elseif( preg_match( "/^" . nv_preg_quote( $base_siteurl ) . "([a-z]{2}+)\/([a-z0-9\-]+)\/tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
+	elseif( preg_match( "/^" . $base_siteurl_quote . "([a-z]{2}+)\/([a-z0-9\-]+)\/tag\/([^\"\?\&]+)$/i", $request_uri, $matches ) )
 	{
 		$_GET[NV_LANG_VARIABLE] = $matches[1];
 		$_GET[NV_NAME_VARIABLE] = $matches[2];

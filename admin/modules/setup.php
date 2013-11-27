@@ -274,9 +274,9 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		$note = $module_version['note'];
 		$author = $module_version['author'];
 		$module_data = preg_replace( '/(\W+)/i', '_', $module_name_i );
-		
+
 		// Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
-		$module_version['virtual'] = ( $module_version['virtual']==1 ) ? 1 : 0; 
+		$module_version['virtual'] = ( $module_version['virtual']==1 ) ? 1 : 0;
 
 		$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $module_name_i ) . ", " . $db->dbescape( $module_version['is_sysmod'] ) . ", " . $db->dbescape( $module_version['virtual'] ) . ", " . $db->dbescape( $module_name_i ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
 	}
@@ -295,7 +295,8 @@ if( $check_addnews_modules )
 }
 
 // Lay danh sach cac module co trong ngon ngu
-$modules_for_lang = array();
+$modules_for_title = array();
+$modules_for_file = array();
 
 $sql = "SELECT * FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 $result = $db->sql_query( $sql );
@@ -303,12 +304,14 @@ $result = $db->sql_query( $sql );
 while( $row = $db->sql_fetchrow( $result ) )
 {
 	$row['title'] = $db->unfixdb( $row['title'] );
+	$row['module_file'] = $db->unfixdb( $row['module_file'] );
 
-	$modules_for_lang[$row['title']] = $row;
+	$modules_for_title[$row['title']] = $row;
+	$modules_for_file[$row['module_file']] = $row;
 }
 
 // Kiem tra module moi
-$news_modules_for_lang = array_diff_key( $modules_data, $modules_for_lang );
+$news_modules_for_file = array_diff_key( $modules_data, $modules_for_file );
 
 $array_modules = $array_virtual_modules = $mod_virtual = array();
 
@@ -321,7 +324,7 @@ foreach( $modules_data as $row )
 			continue;
 		}
 
-		if( array_key_exists( $row['title'], $news_modules_for_lang ) )
+		if( array_key_exists( $row['title'], $news_modules_for_file ) )
 		{
 			$mod = array();
 			$mod['title'] = $row['title'];
@@ -332,7 +335,14 @@ foreach( $modules_data as $row )
 			$mod['addtime'] = nv_date( "H:i:s d/m/Y", $row['addtime'] );
 			$mod['author'] = $row['author'];
 			$mod['note'] = $row['note'];
-			$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
+			if( array_key_exists( $row['title'], $modules_for_title ) )
+			{
+				$url = 'javascript:void(0);';
+			}
+			else
+			{
+				$url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;setmodule=" . $row['title'] . "&amp;checkss=" . md5( "setmodule" . $row['title'] . session_id() . $global_config['sitekey'] );
+			}
 			$mod['setup'] = "<span class=\"default_icon\"><a href=\"" . $url . "\">" . $lang_module['setup'] . "</a></span>";
 			$mod['delete'] = '';
 			if( defined( "NV_IS_GODADMIN" ) AND ! in_array( $row['module_file'], $module_virtual_setup ) )

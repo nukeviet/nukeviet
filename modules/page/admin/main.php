@@ -13,7 +13,7 @@ $xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['mod
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-$page_title = $lang_module['aabout0'];
+$page_title = $lang_module['list'];
 $array = array();
 
 $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
@@ -26,7 +26,7 @@ if( $num < 1 )
 	die();
 }
 
-$array_status = array( $lang_module['aabout6'], $lang_module['aabout5'] );
+$array_status = array( $lang_module['inactive'], $lang_module['active'] );
 
 $i = 0;
 while( $row = $db->sql_fetchrow( $result ) )

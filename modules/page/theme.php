@@ -7,16 +7,16 @@
  * @Createdate Jul 11, 2010  8:43:46 PM
  */
 
-if( ! defined( 'NV_IS_MOD_ABOUT' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 /**
- * nv_about_main()
+ * nv_page_main()
  *
  * @param mixed $row
  * @param mixed $ab_links
  * @return
  */
-function nv_about_main( $row, $ab_links )
+function nv_page_main( $row, $ab_links )
 {
 	global $module_file, $lang_module, $module_info;
 
