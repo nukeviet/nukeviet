@@ -81,7 +81,6 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 else
 {
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
-
 	$theme_list = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 	foreach( $theme_list as $themes_i )
 	{
@@ -92,13 +91,26 @@ else
 		}
 	}
 
-	$sql = "SELECT `module_file`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
+	$sql = "SELECT `title`, `module_file`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
 	$result = $db->sql_query( $sql );
-
+	$array_module_seup = array();
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$xtpl->assign( 'MODULE', array( 'module_file' => $row['module_file'], 'custom_title' => $row['custom_title'] ) );
-		$xtpl->parse( 'main.module' );
+		if ( $row['module_file'] == $row['module_file'] )
+		{
+			$xtpl->assign( 'MODULE', array( 'module_file' => $row['module_file'], 'custom_title' => $row['custom_title'] ) );
+			$xtpl->parse( 'main.module' );
+			$array_module_seup[] = $row['module_file'];
+		}
+	}
+	$modules_list = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
+	foreach( $modules_list as $module_i )
+	{
+		if ( ! in_array( $module_i, $array_module_seup ) )
+		{
+			$xtpl->assign( 'MODULE', array( 'module_file' => $module_i, 'custom_title' => $module_i ) );
+			$xtpl->parse( 'main.module' );
+		}
 	}
 
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
