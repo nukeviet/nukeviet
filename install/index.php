@@ -482,7 +482,6 @@ elseif( $step == 5 )
 
 					$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` ORDER BY `weight` ASC";
 					$result = $db->sql_query( $sql );
-
 					while( $row = $db->sql_fetchrow( $result ) )
 					{
 						$setmodule = $row['title'];
@@ -498,8 +497,7 @@ elseif( $step == 5 )
 						}
 						else
 						{
-							$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`=" . $db->dbescape( $setmodule );
-							$db->sql_query( $sql );
+							$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`=" . $db->dbescape( $setmodule ) );
 						}
 					}
 
