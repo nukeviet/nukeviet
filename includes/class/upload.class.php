@@ -10,10 +10,11 @@
 if( defined( 'NV_CLASS_UPLOAD_PHP' ) ) return;
 define( 'NV_CLASS_UPLOAD_PHP', true );
 
-define( "NV_MIME_INI_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/ini/mime.ini' ) );
-define( "NV_LOOKUP_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/utf8/lookup.php' ) );
+if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
+
+define( "NV_MIME_INI_FILE", NV_ROOTDIR . '/includes/ini/mime.ini' );
 if( ! defined( 'NV_TEMP_DIR' ) ) define( 'NV_TEMP_DIR', 'tmp' );
-define( "NV_TEMP_REAL_DIR", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/../.." ) . '/' . NV_TEMP_DIR ) );
+define( "NV_TEMP_REAL_DIR", NV_ROOTDIR . '/' . NV_TEMP_DIR );
 if( ! defined( 'NV_TEMPNAM_PREFIX' ) ) define( 'NV_TEMPNAM_PREFIX', 'nv_' );
 
 if( ! defined( 'UPLOAD_CHECKING_MODE' ) ) define( 'UPLOAD_CHECKING_MODE', 'strong' );
@@ -653,9 +654,19 @@ class upload
      */
 	private function string_to_filename( $word )
 	{
-		$utf8_lookup = false;
-		include ( NV_LOOKUP_FILE );
-		$word = strtr( $word, $utf8_lookup['romanize'] );
+		if( defined( 'NV_LANG_DATA' ) AND file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
+		{
+			include ( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' );
+			$word = strtr( $word, $utf8_lookup_lang );
+		}
+
+		if( file_exists( NV_ROOTDIR . '/includes/utf8/lookup.php' ) )
+		{
+			$utf8_lookup = false;
+			include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+			$word = strtr( $word, $utf8_lookup['romanize'] );
+		}
+
 		$word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
 		$word = preg_replace( '/^\W+|\W+$/', '', $word );
 		$word = preg_replace( '/[ ]+/', '-', $word );

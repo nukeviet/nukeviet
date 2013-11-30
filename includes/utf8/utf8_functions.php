@@ -243,8 +243,13 @@ function nv_trim( $str, $charlist = false )
  */
 function nv_EncString( $string )
 {
-	include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+	if( file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
+	{
+		include ( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' );
+		$string = strtr( $string, $utf8_lookup_lang );
+	}
 
+	include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
 	return strtr( $string, $utf8_lookup['romanize'] );
 }
 
