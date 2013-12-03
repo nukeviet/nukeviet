@@ -286,7 +286,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$groups_view = ( string )$row['groups_view'];
 				if( ! defined( 'NV_IS_USER' ) and $groups_view == 1 )
 				{
-					// login users
+					// Login users
 					Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
 					die();
 				}
