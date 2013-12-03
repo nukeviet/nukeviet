@@ -17,18 +17,18 @@ error_reporting( 0 );
 
 define( 'NV_MAINFILE', true );
 
-//Thoi gian bat dau phien lam viec
+// Thoi gian bat dau phien lam viec
 define( 'NV_START_TIME', array_sum( explode( " ", microtime() ) ) );
 
-//Khong cho xac dinh tu do cac variables
+// Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
-//Xac dinh thu muc goc cua site
+// Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
 
-//Ket noi voi cac file constants, config
+// Ket noi voi cac file constants, config
 require ( NV_ROOTDIR . "/includes/constants.php" );
 if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
 {
@@ -54,26 +54,26 @@ else
 }
 require ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php" );
 
-//Xac dinh IP cua client
+// Xac dinh IP cua client
 require ( NV_ROOTDIR . '/includes/class/ips.class.php' );
 $ips = new ips();
 $client_info['ip'] = $ips->remote_ip;
 if( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' );
-//Neu khong co IP
+// Neu khong co IP
 //define( 'NV_SERVER_IP', $ips->server_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 define( 'NV_CLIENT_IP', $client_info['ip'] );
 
-//Xac dinh Quoc gia
+// Xac dinh Quoc gia
 require ( NV_ROOTDIR . '/includes/countries.php' );
 $client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
 
-//Mui gio
+// Mui gio
 require ( NV_ROOTDIR . '/includes/timezone.php' );
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
-//Ket noi voi class Error_handler
+// Ket noi voi class Error_handler
 require ( NV_ROOTDIR . '/includes/class/error.class.php' );
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
@@ -83,7 +83,7 @@ if( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_a
 	trigger_error( "Error! Language variables is empty!", 256 );
 }
 
-//Ket noi voi cac file cau hinh, function va template
+// Ket noi voi cac file cau hinh, function va template
 require ( NV_ROOTDIR . "/includes/ini.php" );
 require ( NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php' );
 require ( NV_ROOTDIR . '/includes/utf8/utf8_functions.php' );
@@ -93,10 +93,10 @@ require ( NV_ROOTDIR . '/includes/functions.php' );
 require ( NV_ROOTDIR . '/includes/core/theme_functions.php' );
 require ( NV_ROOTDIR . "/includes/class/xtemplate.class.php" );
 
-//IP Ban
+// IP Ban
 if( nv_is_banIp( $client_info['ip'] ) ) trigger_error( "Hi and Good-bye!!!", 256 );
 
-//Chan proxy
+// Chan proxy
 if( $global_config['proxy_blocker'] != 0 )
 {
 	$client_info['is_proxy'] = $ips->nv_check_proxy();
@@ -111,7 +111,7 @@ if( defined( 'NV_SYSTEM' ) )
 	require ( NV_ROOTDIR . '/includes/request_uri.php' );
 }
 
-//Ket noi voi class xu ly request
+// Ket noi voi class xu ly request
 require ( NV_ROOTDIR . '/includes/class/request.class.php' );
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
