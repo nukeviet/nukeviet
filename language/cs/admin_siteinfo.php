@@ -122,7 +122,7 @@ $lang_module['log_cronjob_add'] = 'Přídat cronjob';
 $lang_module['log_cronjob_del'] = 'Smazat cronjob';
 $lang_module['log_cronjob_edit'] = 'Editovat cronjob';
 $lang_module['log_add_theme'] = 'Přídat';
-$lang_module['log_del_theme'] = 'Smazat  templet';
+$lang_module['log_del_theme'] = 'Smazat templet';
 $lang_module['log_edit_theme'] = 'Editovat templet';
 $lang_module['log_intall_theme'] = 'Instalace templet';
 $lang_module['log_setlayout_theme'] = 'Natstavení dispozice';
@@ -147,6 +147,6 @@ $lang_module['filter_err_submit'] = 'Vyberte si alespoň podmínky';
 $lang_module['filter_check_log'] = 'Přístupu %s chyba';
 $lang_module['filter_lang_asc'] = 'vzestupně';
 $lang_module['filter_lang_desc'] = 'klesající';
-$lang_module['filter_order_by'] = 'Řadit podle  %s  pořadí';
+$lang_module['filter_order_by'] = 'Řadit podle %s pořadí';
 
 ?>

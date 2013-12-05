@@ -105,7 +105,7 @@ foreach( $array_field_config as $row_f )
 		}
 		elseif( $row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor' )
 		{
-			$allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
+			$allowed_html_tags = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
 			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
 			$value = strip_tags( $value, $allowed_html_tags );
 			$value = nv_nl2br( $value, '<br />' );

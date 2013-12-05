@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @Project  NUKEVIET V3
+ * @Project NUKEVIET V3
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate  03-05-2010
+ * @Createdate 03-05-2010
  */
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );

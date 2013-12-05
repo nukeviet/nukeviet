@@ -24,12 +24,12 @@ function cron_auto_check_version()
 
 	if( ! empty( $admin_cookie ) and $global_config['autocheckupdate'] )
 	{
-		require ( NV_ROOTDIR . "/includes/core/admin_access.php" );
-		require ( NV_ROOTDIR . "/includes/core/is_admin.php" );
+		require NV_ROOTDIR . '/includes/core/admin_access.php';
+		require NV_ROOTDIR . '/includes/core/is_admin.php';
 
 		if( defined( 'NV_IS_GODADMIN' ) )
 		{
-			include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+			include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 			nv_geVersion( $global_config['autoupdatetime'] * 3600 );
 		}
 	}

@@ -14,7 +14,7 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 $alias = change_alias( $title );
 
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` !=" . $id . " AND `alias` =  " . $db->dbescape( $alias ) . "" ) );
+list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` !=" . $id . " AND `alias` = " . $db->dbescape( $alias ) . "" ) );
 
 if( intval( $number ) > 0 )
 {
@@ -33,8 +33,8 @@ if( intval( $number ) > 0 )
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $alias;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -110,8 +110,8 @@ $lang_module['admin_repass'] = 'Zadejte heslo';
 $lang_module['admin_repass_note'] = 'Zopakujte heslo. To se musí shodovat s heslem výše!';
 $lang_module['success'] = 'Nastavení úspěšně!';
 $lang_module['congratulations'] = 'Vítejte! Nukeviet nastavení úspěšně. Přihlášení na admin nebo na vaší stránce.';
-$lang_module['notesupport'] = 'Veškerá technická podpora, prosím, kontaktujte <a href="http://nukeviet.vn" target="_blank" /> <b  /> forum Nukeviet.VN  .';
-$lang_module['noteuploads'] = '<b  /> Poznámka:  Prosím <b  /> CHMOD obrázky a to je sub složky  v webroot o 777, aby soubory mohou být nahrát na hostitele.';
+$lang_module['notesupport'] = 'Veškerá technická podpora, prosím, kontaktujte <a href="http://nukeviet.vn" target="_blank" /> <b /> forum Nukeviet.VN .';
+$lang_module['noteuploads'] = '<b /> Poznámka: Prosím <b /> CHMOD obrázky a to je sub složky v webroot o 777, aby soubory mohou být nahrát na hostitele.';
 $lang_module['thanks'] = 'Děkuj!';
 $lang_module['gohome'] = 'Přejít na domovskou stránku';
 $lang_module['goadmin'] = 'Přejít na admin stránku';
@@ -124,6 +124,6 @@ $lang_module['answer_question'] = 'Vaše odpověď';
 $lang_module['your_question_empty'] = 'Prázdný dotaz';
 $lang_module['answer_empty'] = 'Prázdná odpověď';
 $lang_module['question_note'] = 'Chcete náhradní otazky a odpovědi , kdybyste zapoměli heslo';
-$lang_module['answer_question_note'] = 'Vzpomínáte si na odpověď pro  odpověď systému.';
+$lang_module['answer_question_note'] = 'Vzpomínáte si na odpověď pro odpověď systému.';
 
 ?>

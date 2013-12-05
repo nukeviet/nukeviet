@@ -16,7 +16,7 @@ $contents = "NO_" . $id;
 
 if( $listid != '' and md5( $global_config['sitekey'] . session_id() ) == $checkss )
 {
-	$del_array = array_map( "intval", explode( ",", $listid ) );
+	$del_array = array_map( "intval", explode( ',', $listid ) );
 }
 elseif( md5( $id . session_id() ) == $checkss )
 {
@@ -24,7 +24,7 @@ elseif( md5( $id . session_id() ) == $checkss )
 }
 if( ! empty( $del_array ) )
 {
-	$sql = "SELECT `id`, `listcatid`, `admin_id`, `title`, `alias`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ",", $del_array ) . ")";
+	$sql = "SELECT `id`, `listcatid`, `admin_id`, `title`, `alias`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ',', $del_array ) . ")";
 	$result = $db->sql_query( $sql );
 	$del_array = $no_del_array = array();
 	$artitle = array();
@@ -37,7 +37,7 @@ if( ! empty( $del_array ) )
 		}
 		else
 		{
-			$arr_catid = explode( ",", $listcatid );
+			$arr_catid = explode( ',', $listcatid );
 			$check_del = 0;
 			foreach( $arr_catid as $catid_i )
 			{
@@ -93,8 +93,8 @@ if( ! empty( $del_array ) )
 	nv_set_status_module();
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

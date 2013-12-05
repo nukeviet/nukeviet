@@ -69,15 +69,15 @@ $array_autologosize = array(
 	'autologosize3' => $global_config['autologosize3']
 );
 
-$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
-$xtpl->assign( "ADMIN_THEME", $global_config['module_theme'] );
-$xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
-$xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
-$xtpl->assign( "MODULE_NAME", $module_name );
-$xtpl->assign( "LANG", $lang_module );
-$xtpl->assign( "OP", $op );
-$xtpl->assign( "AUTOLOGOSIZE", $array_autologosize );
+$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'AUTOLOGOSIZE', $array_autologosize );
 
 $a = 0;
 $xtpl->assign( 'CLASS', '' );
@@ -119,8 +119,8 @@ $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

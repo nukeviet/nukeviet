@@ -13,7 +13,7 @@ $host = $nv_Request->get_string( 'host', 'get', '' );
 
 if( ! isset( $host ) or ! preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/", $host ) )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -23,7 +23,7 @@ $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -76,8 +76,8 @@ if( $total )
 
 $contents = call_user_func( "referer" );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

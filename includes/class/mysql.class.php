@@ -94,7 +94,7 @@ class sql_db
 				{
 					if( $this->create_db )
 					{
-						@mysql_query( "CREATE DATABASE " . $this->dbname . "", $this->db_connect_id );
+						@mysql_query( 'CREATE DATABASE ' . $this->dbname, $this->db_connect_id );
 						$dbselect = @mysql_select_db( $this->dbname, $this->db_connect_id );
 					}
 					if( ! $dbselect )
@@ -117,14 +117,13 @@ class sql_db
 	{
 		if( $this->db_connect_id )
 		{
-			preg_match( "/^(\d+)\.(\d+)\.(\d+)/", mysql_get_server_info(), $m );
+			preg_match( '/^(\d+)\.(\d+)\.(\d+)/', mysql_get_server_info(), $m );
 			$this->sql_version = ( $m[1] . '.' . $m[2] . '.' . $m[3] );
 			if( version_compare( $this->sql_version, '5.0.2', '>=' ) )
 			{
 				@mysql_query( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'", $this->db_connect_id );
 
-				$result = @mysql_query( 'SELECT @@session.time_zone AS `time_zone`, @@session.character_set_database AS `character_set_database`,
- @@session.collation_database AS `collation_database`, @@session.sql_mode AS `sql_mode`', $this->db_connect_id );
+				$result = @mysql_query( 'SELECT @@session.time_zone AS `time_zone`, @@session.character_set_database AS `character_set_database`, @@session.collation_database AS `collation_database`, @@session.sql_mode AS `sql_mode`', $this->db_connect_id );
 				$row = @mysql_fetch_assoc( $result );
 				@mysql_free_result( $result );
 
@@ -132,11 +131,10 @@ class sql_db
 				$this->db_charset = $row['character_set_database'];
 				$this->db_collation = $row['collation_database'];
 
-				if( strcasecmp( $this->db_charset, "utf8" ) != 0 or strcasecmp( $this->db_collation, $this->db_set_collation ) != 0 )
+				if( strcasecmp( $this->db_charset, 'utf8' ) != 0 or strcasecmp( $this->db_collation, $this->db_set_collation ) != 0 )
 				{
 					@mysql_query( "ALTER DATABASE `" . $this->dbname . "` DEFAULT CHARACTER SET `utf8` COLLATE `" . $this->db_set_collation . "`", $this->db_connect_id );
-					$result = @mysql_query( 'SELECT @@session.character_set_database AS `character_set_database`,
- @@session.collation_database AS `collation_database`', $this->db_connect_id );
+					$result = @mysql_query( 'SELECT @@session.character_set_database AS `character_set_database`, @@session.collation_database AS `collation_database`', $this->db_connect_id );
 					$row = @mysql_fetch_assoc( $result );
 					@mysql_free_result( $result );
 
@@ -157,7 +155,7 @@ class sql_db
 			}
 			else
 			{
-				trigger_error( "NukeViet requires MySQL 5.0.2 or newer", 256 );
+				trigger_error( 'NukeViet requires MySQL 5.0.2 or newer', 256 );
 			}
 		}
 	}
@@ -245,7 +243,7 @@ class sql_db
  */
 	public function sql_query_insert_id( $query = '' )
 	{
-		if( empty( $query ) or ! preg_match( "/^INSERT\s/is", $query ) )
+		if( empty( $query ) or ! preg_match( '/^INSERT\s/is', $query ) )
 		{
 			return false;
 		}

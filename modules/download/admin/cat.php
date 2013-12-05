@@ -59,7 +59,7 @@ function nv_del_cat( $catid )
 
 	if( ! empty( $ids ) )
 	{
-		$ids = implode( ",", $ids );
+		$ids = implode( ',', $ids );
 		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `fid` IN (" . $ids . ")";
 		$db->sql_query( $sql );
 
@@ -166,17 +166,17 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			++$new_weight;
 
 			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_categories` VALUES (
-            NULL,
-            " . $array['parentid'] . ",
-            " . $db->dbescape( $array['title'] ) . ",
-            " . $db->dbescape( $array['alias'] ) . ",
-            " . $db->dbescape( $array['description'] ) . ",
-            " . $array['who_view'] . ",
-            " . $db->dbescape( $array['groups_view'] ) . ",
-            " . $array['who_download'] . ",
-            " . $db->dbescape( $array['groups_download'] ) . ",
-            " . $new_weight . ",
-            1)";
+ NULL,
+ " . $array['parentid'] . ",
+ " . $db->dbescape( $array['title'] ) . ",
+ " . $db->dbescape( $array['alias'] ) . ",
+ " . $db->dbescape( $array['description'] ) . ",
+ " . $array['who_view'] . ",
+ " . $db->dbescape( $array['groups_view'] ) . ",
+ " . $array['who_download'] . ",
+ " . $db->dbescape( $array['groups_download'] ) . ",
+ " . $new_weight . ",
+ 1)";
 
 			$catid = $db->sql_query_insert_id( $sql );
 
@@ -190,7 +190,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addcat_titlebox'], $array['title'], $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 				exit();
 			}
 		}
@@ -266,8 +266,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		}
 	}
 
-	$xtpl = new XTemplate( "cat_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;add=1" );
+	$xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;add=1' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array );
 
@@ -318,9 +318,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 
 	exit();
 }
@@ -334,7 +334,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( empty( $catid ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 		exit();
 	}
 
@@ -344,7 +344,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( $numcat != 1 )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 		exit();
 	}
 
@@ -428,16 +428,16 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET
-            `parentid`=" . $array['parentid'] . ",
-            `title`=" . $db->dbescape( $array['title'] ) . ",
-            `alias`=" . $db->dbescape( $array['alias'] ) . ",
-            `description`=" . $db->dbescape( $array['description'] ) . ",
-            `who_view`=" . $array['who_view'] . ",
-            `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
-            `who_download`=" . $array['who_download'] . ",
-            `groups_download`=" . $db->dbescape( $array['groups_download'] ) . ",
-            `weight`=" . $new_weight . "
-            WHERE `id`=" . $catid;
+ `parentid`=" . $array['parentid'] . ",
+ `title`=" . $db->dbescape( $array['title'] ) . ",
+ `alias`=" . $db->dbescape( $array['alias'] ) . ",
+ `description`=" . $db->dbescape( $array['description'] ) . ",
+ `who_view`=" . $array['who_view'] . ",
+ `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
+ `who_download`=" . $array['who_download'] . ",
+ `groups_download`=" . $db->dbescape( $array['groups_download'] ) . ",
+ `weight`=" . $new_weight . "
+ WHERE `id`=" . $catid;
 			$result = $db->sql_query( $sql );
 
 			if( ! $result )
@@ -455,7 +455,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				nv_del_moduleCache( $module_name );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editcat_cat'], $array['title'], $admin_info['userid'] );
 
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 				exit();
 			}
 		}
@@ -467,9 +467,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['alias'] = $row['alias'];
 		$array['description'] = $row['description'];
 		$array['who_view'] = ( int )$row['who_view'];
-		$array['groups_view'] = ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array();
+		$array['groups_view'] = ! empty( $row['groups_view'] ) ? explode( ',', $row['groups_view'] ) : array();
 		$array['who_download'] = ( int )$row['who_download'];
-		$array['groups_download'] = ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array();
+		$array['groups_download'] = ! empty( $row['groups_download'] ) ? explode( ',', $row['groups_download'] ) : array();
 	}
 
 	$listcats = array(
@@ -531,8 +531,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 	}
 
-	$xtpl = new XTemplate( "cat_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;catid=" . $catid );
+	$xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;edit=1&amp;catid=' . $catid );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array );
 
@@ -583,9 +583,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 
 	exit();
 }
@@ -690,11 +690,11 @@ if( ! $num )
 {
 	if( $pid )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 	}
 	else
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	}
 	exit();
 }
@@ -749,8 +749,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 	++$a;
 }
 
-$xtpl = new XTemplate( "cat_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( 'ADD_NEW_CAT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;add=1" );
+$xtpl = new XTemplate( 'cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'ADD_NEW_CAT', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;add=1' );
 $xtpl->assign( 'TABLE_CAPTION', $caption );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'LANG', $lang_module );
@@ -765,15 +765,15 @@ foreach( $list as $row )
 		$xtpl->parse( 'main.row.weight' );
 	}
 
-	$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;edit=1&amp;catid=" . $row['id'] );
+	$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;edit=1&amp;catid=' . $row['id'] );
 	$xtpl->parse( 'main.row' );
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

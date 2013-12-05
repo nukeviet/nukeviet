@@ -13,17 +13,17 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
-$set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == "viewcat_main_" ) ? true : false;
+$set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == 'viewcat_main_' ) ? true : false;
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	if( $set_view_page )
 	{
-		$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_page_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_page_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
 	}
 	else
 	{
-		$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
 	}
 	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
@@ -44,16 +44,16 @@ if( empty( $contents ) )
 	$array_catpage = array();
 	$array_cat_other = array();
 	$base_url = $global_array_cat[$catid]['link'];
-	$show_no_image  = $module_config[$module_name]['show_no_image'];
+	$show_no_image = $module_config[$module_name]['show_no_image'];
 
-	if( $viewcat == "viewcat_page_new" or $viewcat == "viewcat_page_old" or $set_view_page )
+	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' or $set_view_page )
 	{
 		$st_links = 2 * $st_links;
-		$order_by = ( $viewcat == "viewcat_page_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
 		$result = $db->sql_query( $sql );
 
-		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 		$end_publtime = 0;
@@ -80,39 +80,39 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 			$end_publtime = $item['publtime'];
 		}
 
-		if( $viewcat == "viewcat_page_new" )
+		if( $viewcat == 'viewcat_page_new' )
 		{
-			$sql = "SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` < " . $end_publtime . " " . $order_by . " LIMIT 0," . $st_links;
+			$sql = 'SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 AND `publtime` < ' . $end_publtime . ' ' . $order_by . ' LIMIT 0,' . $st_links;
 		}
 		else
 		{
-			$sql = "SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 AND `publtime` > " . $end_publtime . "  " . $order_by . " LIMIT 0," . $st_links;
+			$sql = 'SELECT `id`, `listcatid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 AND `publtime` > ' . $end_publtime . ' ' . $order_by . ' LIMIT 0,' . $st_links;
 		}
 
 		$result = $db->sql_query( $sql );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_cat_other[] = $item;
 		}
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 		$contents = viewcat_page_new( $array_catpage, $array_cat_other, $generate_page );
 	}
-	elseif( $viewcat == "viewcat_main_left" or $viewcat == "viewcat_main_right" or $viewcat == "viewcat_main_bottom" )
+	elseif( $viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom' )
 	{
 		$array_catcontent = array();
 		$array_subcatpage = array();
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `id` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 ORDER BY `id` DESC LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
 		$result = $db->sql_query( $sql );
 
-		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
@@ -138,7 +138,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catcontent[] = $item;
 		}
 		unset( $sql, $result );
@@ -148,12 +148,12 @@ if( empty( $contents ) )
 		if( $global_array_cat[$catid]['subcatid'] != '' )
 		{
 			$key = 0;
-			$array_catid = explode( ",", $global_array_cat[$catid]['subcatid'] );
+			$array_catid = explode( ',', $global_array_cat[$catid]['subcatid'] );
 
 			foreach( $array_catid as $catid_i )
 			{
 				$array_cat_other[$key] = $global_array_cat[$catid_i];
-				$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
+				$sql = 'SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , ' . $global_array_cat[$catid_i]['numlinks'];
 				$result = $db->sql_query( $sql );
 
 				while( $item = $db->sql_fetch_assoc( $result ) )
@@ -179,7 +179,7 @@ if( empty( $contents ) )
 						$item['imghome'] = '';
 					}
 
-					$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+					$item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 					$array_cat_other[$key]['content'][] = $item;
 				}
 
@@ -192,13 +192,13 @@ if( empty( $contents ) )
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 		$contents = viewcat_top( $array_catcontent, $generate_page );
-		$contents .= call_user_func( "viewsubcat_main", $viewcat, $array_cat_other );
+		$contents .= call_user_func( 'viewsubcat_main', $viewcat, $array_cat_other );
 	}
-	elseif( $viewcat == "viewcat_two_column" )
+	elseif( $viewcat == 'viewcat_two_column' )
 	{
 		// Cac bai viet phan dau
 		$array_catcontent = array();
-		$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$sql = 'SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
 		$result = $db->sql_query( $sql );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
@@ -223,7 +223,7 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catcontent[] = $item;
 		}
 		unset( $sql, $result );
@@ -231,12 +231,12 @@ if( empty( $contents ) )
 
 		// cac bai viet cua cac chu de con
 		$key = 0;
-		$array_catid = explode( ",", $global_array_cat[$catid]['subcatid'] );
+		$array_catid = explode( ',', $global_array_cat[$catid]['subcatid'] );
 
 		foreach( $array_catid as $catid_i )
 		{
 			$array_cat_other[$key] = $global_array_cat[$catid_i];
-			$sql = "SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , " . $global_array_cat[$catid_i]['numlinks'];
+			$sql = 'SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 0 , ' . $global_array_cat[$catid_i]['numlinks'];
 			$result = $db->sql_query( $sql );
 
 			while( $item = $db->sql_fetch_assoc( $result ) )
@@ -261,7 +261,7 @@ if( empty( $contents ) )
 				{
 					$item['imghome'] = '';
 				}
-				$item['link'] = $global_array_cat[$catid_i]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+				$item['link'] = $global_array_cat[$catid_i]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 				$array_cat_other[$key]['content'][] = $item;
 			}
 
@@ -272,13 +272,13 @@ if( empty( $contents ) )
 		//Het cac bai viet cua cac chu de con
 		$contents = call_user_func( $viewcat, $array_catcontent, $array_cat_other );
 	}
-	elseif( $viewcat == "viewcat_grid_new" or $viewcat == "viewcat_grid_old" )
+	elseif( $viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old' )
 	{
-		$order_by = ( $viewcat == "viewcat_grid_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
 		$result = $db->sql_query( $sql );
 
-		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
@@ -303,31 +303,31 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 
-		$viewcat = "viewcat_grid_new";
+		$viewcat = 'viewcat_grid_new';
 		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, $generate_page );
 	}
-	elseif( $viewcat == "viewcat_list_new" or $viewcat == "viewcat_list_old" ) // Xem theo tieu de
+	elseif( $viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old' ) // Xem theo tieu de
 	{
-		$order_by = ( $viewcat == "viewcat_list_new" ) ? "ORDER BY `publtime` DESC" : "ORDER BY `publtime` ASC";
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 " . $order_by . " LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
+		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `status`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
 		$result = $db->sql_query( $sql );
 
-		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
 			$item['imghome'] = '';
-			$item['link'] = $global_array_cat[$catid]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
 
-		$viewcat = "viewcat_list_new";
+		$viewcat = 'viewcat_list_new';
 		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, ( $page - 1 ) * $per_page, $generate_page );
 	}
@@ -344,8 +344,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

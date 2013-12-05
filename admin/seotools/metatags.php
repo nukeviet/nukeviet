@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( ! empty( $metatags['meta'] ) )
 	{
-		include ( NV_ROOTDIR . '/includes/class/array2xml.class.php' );
+		include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 		$array2XML = new Array2XML();
 		$array2XML->saveXML( $metatags, 'metatags', $file_metatags, $global_config['site_charset'] );
 	}
@@ -112,12 +112,12 @@ for( $i = 0; $i < 3; ++$i )
 	$xtpl->assign( 'DATA', $data );
 	$xtpl->parse( 'main.loop' );
 }
-$xtpl->assign( 'METATAGSOGPCHECKED', ( $global_config['metaTagsOgp'] )  ? ' checked="checked" ' : '' );
+$xtpl->assign( 'METATAGSOGPCHECKED', ( $global_config['metaTagsOgp'] ) ? ' checked="checked" ' : '' );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

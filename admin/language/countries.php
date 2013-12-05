@@ -45,15 +45,15 @@ if( $nv_Request->isset_request( 'countries', 'post' ) == 1 )
 	$content_config .= "\n";
 	$content_config .= "?>";
 
-	file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_geo.php", $content_config, LOCK_EX );
+	file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php', $content_config, LOCK_EX );
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();
 }
 
-include ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_geo.php" );
+include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
 
-$xtpl = new XTemplate( "countries.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
@@ -83,8 +83,8 @@ foreach( $countries as $key => $value )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -13,7 +13,7 @@ function nv_site_theme( $contents )
 {
 	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_file, $module_data, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info;
 
-	if( ! file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/layout." . $module_info['layout_funcs'][$op_file] . ".tpl" ) )
+	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' ) )
 	{
 		nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
 	}
@@ -54,7 +54,7 @@ function nv_site_theme( $contents )
 		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/tab_info.css\" />\n";
 	}
 
-	$xtpl = new XTemplate( "layout." . $module_info['layout_funcs'][$op_file] . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/layout/" );
+	$xtpl = new XTemplate( 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' );
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -62,20 +62,20 @@ function nv_site_theme( $contents )
 	$xtpl->assign( 'THEME_SITE_JS', $js );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
-	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
-	$xtpl->assign( 'MODULE_CONTENT', $contents . "&nbsp;" );
+	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+	$xtpl->assign( 'MODULE_CONTENT', $contents . '&nbsp;' );
 
 	$xtpl->assign( 'THEME_NOJS', $lang_global['nojs'] );
 	$xtpl->assign( 'THEME_LOGO_TITLE', $global_config['site_name'] );
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
-	$xtpl->assign( 'THEME_DIGCLOCK_TEXT', nv_date( "H:i T l, d/m/Y", NV_CURRENTTIME ) );
-	$xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss" );
+	$xtpl->assign( 'THEME_DIGCLOCK_TEXT', nv_date( 'H:i T l, d/m/Y', NV_CURRENTTIME ) );
+	$xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss' );
 
 	$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
-	$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+	$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', ' . NV_MIN_SEARCH_LENGTH . ', ' . NV_MAX_SEARCH_LENGTH . ');" );
 
 	$xtpl->assign( 'THEME_SITE_NAME', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
-	$xtpl->assign( 'THEME_CONTACT_EMAIL', $lang_global['email'] . ": " . nv_EncodeEmail( $global_config['site_email'] ) );
+	$xtpl->assign( 'THEME_CONTACT_EMAIL', $lang_global['email'] . ': ' . nv_EncodeEmail( $global_config['site_email'] ) );
 
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 
@@ -87,7 +87,7 @@ function nv_site_theme( $contents )
 		{
 			$langname = $language_array[$lang_i]['name'];
 			$xtpl->assign( 'LANGSITENAME', $langname );
-			$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
+			$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
 			$xtpl->assign( 'SELECTED', ( NV_LANG_DATA == $lang_i ) ? ' selected' : '' );
 			$xtpl->parse( 'main.language.langitem' );
 		}
@@ -194,7 +194,7 @@ function nv_site_theme( $contents )
 
 		foreach( $global_config['array_theme_type'] as $i => $theme_type )
 		{
-			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;nv" . NV_LANG_DATA . "themever=" . $theme_type . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
+			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
 			$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $i] );
 			$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $i] ) );
 

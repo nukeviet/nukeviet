@@ -150,8 +150,8 @@ $contents['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, 
 
 $contents = call_user_func( "nv_show_list_stat_theme", $contents );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

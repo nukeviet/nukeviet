@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
- * @Createdate Jan 10, 2011  6:04:30 PM
+ * @Createdate Jan 10, 2011 6:04:30 PM
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -18,7 +18,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 
 		if( defined( 'NV_EDITOR' ) )
 		{
-			require ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+			require NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 		}
 
 		$htmlcontent = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_block['htmlcontent'] ) : nv_br2nl( $data_block['htmlcontent'] );
@@ -26,7 +26,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 
 		if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 		{
-			$html = nv_add_editor_js( ) . nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
+			$html = nv_add_editor_js() . nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
 		}
 		else
 		{

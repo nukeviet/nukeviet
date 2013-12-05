@@ -21,17 +21,17 @@ function nv_sitemapPing( $module, $link )
 	global $sys_info, $lang_module;
 
 	$md5 = md5( $link . $module . NV_LANG_DATA );
-	$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/sitemapPing_" . $md5 . ".cache";
+	$cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/sitemapPing_' . $md5 . '.cache';
 
 	if( file_exists( $cacheFile ) and filemtime( $cacheFile ) > ( NV_CURRENTTIME - 3600 ) ) return $lang_module['pleasePingAgain'];
 
 	if( $sys_info['supports_rewrite'] )
 	{
-		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . "Sitemap-" . NV_LANG_DATA . "." . $module . ".xml";
+		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap-' . NV_LANG_DATA . '.' . $module . '.xml';
 	}
 	else
 	{
-		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=Sitemap";
+		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=Sitemap';
 	}
 
 	$link = $link . urlencode( $myUrl );
@@ -96,7 +96,7 @@ function nv_sitemapPing( $module, $link )
 	return $result ? $lang_module['pingOK'] : $lang_module['PingNotSupported'];
 }
 
-$file_searchEngines = NV_ROOTDIR . "/" . NV_DATADIR . "/search_engine_ping.xml";
+$file_searchEngines = NV_ROOTDIR . '/' . NV_DATADIR . '/search_engine_ping.xml';
 $searchEngine = $module = '';
 $searchEngines = array();
 $searchEngines['searchEngine'] = array();
@@ -109,10 +109,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$sitemapFiles[$row['name']] = $row['title'];
 }
 
-$xtpl = new XTemplate( "sitemap.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'ACTION_FORM', NV_BASE_ADMINURL. "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$op);
+$xtpl->assign( 'ACTION_FORM', NV_BASE_ADMINURL. 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '='.$op);
 
 if( $nv_Request->isset_request( 'submit', 'post' ) AND empty( $global_config['idsite'] ) )
 {
@@ -140,7 +140,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) AND empty( $global_config['id
 
 	if( ! empty( $searchEngines['searchEngine'] ) )
 	{
-		include ( NV_ROOTDIR . '/includes/class/array2xml.class.php' );
+		include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 		$array2XML = new Array2XML();
 		$array2XML->saveXML( $searchEngines, 'searchEngines', $file_searchEngines, $global_config['site_charset'] );
 	}
@@ -195,7 +195,7 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 		{
 			if( $value['active'] )
 			{
-				$value['selected'] = $value['name'] == $searchEngine ? " selected=\"selected\"" : "";
+				$value['selected'] = $value['name'] == $searchEngine ? ' selected="selected"' : '';
 				$xtpl->assign( 'ENGINE', $value );
 				$xtpl->parse( 'main.is_ping.Engine' );
 			}
@@ -205,7 +205,7 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 		{
 			$xtpl->assign( 'MODULE_NAME', $name );
 			$xtpl->assign( 'MODULE_TITLE', $title );
-			$xtpl->assign( 'MODULE_SELECTED', ( $name == $module ? " selected=\"selected\"" : "" ) );
+			$xtpl->assign( 'MODULE_SELECTED', ( $name == $module ? ' selected="selected"' : '' ) );
 			$xtpl->parse( 'main.is_ping.Module' );
 		}
 
@@ -220,7 +220,7 @@ if( ! empty( $searchEngines['searchEngine'] ) )
 
 	foreach( $searchEngines['searchEngine'] as $value )
 	{
-		$value['selected'] = $value['active'] ? " selected=\"selected\"" : "";
+		$value['selected'] = $value['active'] ? ' selected="selected"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.searchEngineList.loop' );
 	}
@@ -245,8 +245,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['sitemapPing'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

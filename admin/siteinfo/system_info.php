@@ -72,7 +72,7 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 	);
 }
 
-$xtpl = new XTemplate( "system_info.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'system_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 
@@ -82,7 +82,7 @@ foreach( $info as $key => $if )
 
 	if( $key == 'chmod' )
 	{
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=siteinfo&amp;" . NV_OP_VARIABLE . "=checkchmod" );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=checkchmod' );
 		$xtpl->parse( 'main.urlcap' );
 	}
 	else
@@ -108,8 +108,8 @@ if( $js )
 	$contents .= $xtpl->text( 'js' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

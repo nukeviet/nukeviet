@@ -26,7 +26,7 @@ if( $submit )
 
 	if( ! empty( $array_config['site_keywords'] ) )
 	{
-		$site_keywords = array_map( "trim", explode( ",", $array_config['site_keywords'] ) );
+		$site_keywords = array_map( "trim", explode( ',', $array_config['site_keywords'] ) );
 		$array_config['site_keywords'] = array();
 
 		if( ! empty( $site_keywords ) )
@@ -137,10 +137,10 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$module_array[] = $row;
 }
 
-if( defined( 'NV_EDITOR' ) ) require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 $lang_module['browse_image'] = $lang_global['browse_image'];
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
@@ -189,8 +189,8 @@ if( $errormess != '' )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

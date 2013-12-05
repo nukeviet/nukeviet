@@ -9,14 +9,14 @@
 
 if( ! defined( 'NV_IS_MOD_FORUM' ) ) die( 'Stop!!!' );
 
-if( is_dir( NV_ROOTDIR . "/" . DIR_FORUM ) )
+if( is_dir( NV_ROOTDIR . '/' . DIR_FORUM ) )
 {
-	Header( "Location: " . $global_config['site_url'] . "/" . DIR_FORUM . "/index.php" );
+	Header( 'Location: ' . $global_config['site_url'] . '/' . DIR_FORUM . '/index.php' );
 	exit();
 }
 else
 {
-	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users" );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users' );
 	exit();
 }
 

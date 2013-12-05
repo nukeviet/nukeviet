@@ -17,7 +17,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 {
 	if( ! empty( $list_cats ) )
 	{
-		$in = implode( ",", array_keys( $list_cats ) );
+		$in = implode( ',', array_keys( $list_cats ) );
 
 		$id = $nv_Request->get_int( 'id', 'post', 0 );
 		$data = $error = array();
@@ -134,7 +134,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 {
 	if( ! empty( $list_cats ) )
 	{
-		$in = implode( ",", array_keys( $list_cats ) );
+		$in = implode( ',', array_keys( $list_cats ) );
 
 		$id = $nv_Request->get_int( 'list_comment', 'get', 0 );
 
@@ -247,7 +247,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 				{
 					$in = array_keys( $users );
 					$in = array_unique( $in );
-					$in = implode( ",", $in );
+					$in = implode( ',', $in );
 
 					$query = "SELECT `view_mail`, `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $in . ")";
 					$result = $db->sql_query( $query );
@@ -275,7 +275,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 				{
 					$in = array_keys( $admins );
 					$in = array_unique( $in );
-					$in = implode( ",", $in );
+					$in = implode( ',', $in );
 
 					$query = "SELECT `userid` AS admin_id, `username` AS admin_login, `full_name` AS admin_name FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN (" . $in . ")";
 					$result = $db->sql_query( $query );

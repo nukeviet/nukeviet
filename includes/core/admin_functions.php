@@ -156,8 +156,8 @@ function nv_save_file_config_global()
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
 		$openid_servers = array();
-		$key_openid_servers = explode( ",", $config_variable['openid_servers'] );
-		require ( NV_ROOTDIR . '/includes/openid.php' );
+		$key_openid_servers = explode( ',', $config_variable['openid_servers'] );
+		require NV_ROOTDIR . '/includes/openid.php';
 		$openid_servers = array_intersect_key( $openid_servers, array_flip( $key_openid_servers ) );
 		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
 	}
@@ -201,7 +201,7 @@ function nv_save_file_config_global()
 		{
 			if( ! empty( $c_config_value ) )
 			{
-				$c_config_value = "'" . implode( "','", array_map( "trim", explode( ",", $c_config_value ) ) ) . "'";
+				$c_config_value = "'" . implode( "','", array_map( "trim", explode( ',', $c_config_value ) ) ) . "'";
 			}
 			else
 			{
@@ -272,11 +272,11 @@ function nv_save_file_config_global()
 
 	if( $config_variable['check_rewrite_file'] )
 	{
-		require ( NV_ROOTDIR . "/includes/rewrite.php" );
+		require NV_ROOTDIR . '/includes/rewrite.php';
 	}
 	else
 	{
-		require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
+		require NV_ROOTDIR . '/includes/rewrite_index.php';
 	}
 
 	$content_config .= "\n";
@@ -347,7 +347,7 @@ function nv_geVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 		$getContent = new UrlGetContents( $global_config, 6 );
 
 		$nv_sites = array( //
@@ -658,7 +658,7 @@ function nv_getModVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 		$getContent = new UrlGetContents( $global_config, 6 );
 
 		$nv_sites = array( //

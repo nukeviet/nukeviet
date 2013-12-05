@@ -20,19 +20,19 @@ function LoadModulesSearch()
 {
 	global $site_mods, $global_config;
 
-	$pathmodule = NV_ROOTDIR . "/modules";
+	$pathmodule = NV_ROOTDIR . '/modules';
 	$folder = nv_scandir( $pathmodule, $global_config['check_module'] );
 	$arrayfolder = array();
 	foreach( $site_mods as $mod => $arr_mod )
 	{
-		$pathserch = $pathmodule . "/" . $arr_mod['module_file'] . "/search.php";
+		$pathserch = $pathmodule . '/' . $arr_mod['module_file'] . '/search.php';
 		if( file_exists( $pathserch ) )
 		{
 			$arrayfolder[$mod] = array(
-				"module_name" => $mod,
-				"module_file" => $arr_mod['module_file'],
-				"module_data" => $arr_mod['module_data'],
-				"custom_title" => $arr_mod['custom_title']
+				'module_name' => $mod,
+				'module_file' => $arr_mod['module_file'],
+				'module_data' => $arr_mod['module_data'],
+				'custom_title' => $arr_mod['custom_title']
 			);
 		}
 	}
@@ -49,19 +49,19 @@ function LoadModulesSearch()
 function nv_substr_clean( $string, $mode = 'lr' )
 {
 	$strlen = nv_strlen( $string );
-	$pos_bg = nv_strpos( $string, " " ) + 1;
-	$pos_en = nv_strrpos( $string, " " );
+	$pos_bg = nv_strpos( $string, ' ' ) + 1;
+	$pos_en = nv_strrpos( $string, ' ' );
 	if( $mode == 'l' )
 	{
-		$string = "..." . nv_substr( $string, $pos_bg, $strlen - $pos_bg );
+		$string = '...' . nv_substr( $string, $pos_bg, $strlen - $pos_bg );
 	}
 	elseif( $mode == 'r' )
 	{
-		$string = nv_substr( $string, 0, $strlen - $pos_en ) . "...";
+		$string = nv_substr( $string, 0, $strlen - $pos_en ) . '...';
 	}
 	elseif( $mode == 'lr' )
 	{
-		$string = "..." . nv_substr( $string, $pos_bg, $pos_en - $pos_bg ) . "...";
+		$string = '...' . nv_substr( $string, $pos_bg, $pos_en - $pos_bg ) . '...';
 	}
 
 	return $string;
@@ -79,7 +79,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 	global $db;
 
 	$str = nv_br2nl( $str );
-	$str = nv_nl2br( $str, " " );
+	$str = nv_nl2br( $str, ' ' );
 	$str = nv_unhtmlspecialchars( strip_tags( trim( $str ) ) );
 	$str = $db->unfixdb( $str );
 
@@ -91,15 +91,15 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 	}
 	else
 	{
-		$keyword .= " " . nv_EncString( $keyword );
-		$array_keyword = explode( " ", $keyword );
+		$keyword .= ' ' . nv_EncString( $keyword );
+		$array_keyword = explode( ' ', $keyword );
 		$array_keyword = array_unique( $array_keyword );
 	}
 
 	foreach( $array_keyword as $k )
 	{
 		unset( $matches );
-		if( preg_match( "/^(.*?)" . preg_quote( $k ) . "/uis", $str, $matches ) )
+		if( preg_match( '/^(.*?)' . preg_quote( $k ) . '/uis', $str, $matches ) )
 		{
 			$strlen = nv_strlen( $str );
 			$kstrlen = nv_strlen( $k );
@@ -140,11 +140,11 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 	$pattern = array();
 	foreach( $array_keyword as $k )
 	{
-		$pattern[] = "/(" . preg_quote( $k ) . ")/uis";
+		$pattern[] = '/(' . preg_quote( $k ) . ')/uis';
 	}
 
-	$str = preg_replace( $pattern, "{\\1}", $str );
-	$str = str_replace( array( "{", "}" ), array( "<span class=\"keyword\">", "</span>" ), $str );
+	$str = preg_replace( $pattern, '{\\1}', $str );
+	$str = str_replace( array( '{', '}' ), array( '<span class="keyword">', '</span>' ), $str );
 
 	return $str;
 }

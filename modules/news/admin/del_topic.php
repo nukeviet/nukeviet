@@ -24,7 +24,7 @@ if( $topicid > 0 )
 	{
 		while( $row = $db->sql_fetchrow( $query ) )
 		{
-			$arr_catid = explode( ",", $row['listcatid'] );
+			$arr_catid = explode( ',', $row['listcatid'] );
 			foreach( $arr_catid as $catid_i )
 			{
 				$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `topicid` = '0' WHERE `id` =" . $row['id'] );
@@ -50,7 +50,7 @@ if( $topicid > 0 )
 			nv_fix_topic();
 			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail ) )
 			{
-				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail );
+				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $thumbnail );
 			}
 			$contents = "OK_" . $topicid;
 		}
@@ -58,8 +58,8 @@ if( $topicid > 0 )
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

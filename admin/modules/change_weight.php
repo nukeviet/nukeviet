@@ -43,8 +43,8 @@ nv_del_moduleCache( 'modules' );
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module "' . $mod . '"', $weight . " -> " . $new_weight, $admin_info['userid'] );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

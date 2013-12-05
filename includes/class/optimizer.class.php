@@ -291,43 +291,43 @@ class optimezer
 	}
 
 	/**
-     * optimezer::tidy5()
-     *
-     * @param mixed $string
-     * @return
-     */
-    private function tidy5( $string )
-    {
-        $menu = array();
-        if ( strpos( $string, '<menu' ) !== false )
-        {
-            $menu = array(
-                '<menu' => '<menutidy',
-                '</menu' => '</menutidy',
-                );
-            $string = str_replace( array_keys( $menu ), $menu, $string );
-        }
+ * optimezer::tidy5()
+ *
+ * @param mixed $string
+ * @return
+ */
+ private function tidy5( $string )
+ {
+ $menu = array();
+ if ( strpos( $string, '<menu' ) !== false )
+ {
+ $menu = array(
+ '<menu' => '<menutidy',
+ '</menu' => '</menutidy',
+ );
+ $string = str_replace( array_keys( $menu ), $menu, $string );
+ }
 
-        $this->tidy_options['doctype'] = 'omit';
-        //$this->tidy_options['output-html'] = true;
-        //$this->tidy_options['output-xhtml'] = false;
-        $this->tidy_options['drop-proprietary-attributes'] = false;
-        $this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
+ $this->tidy_options['doctype'] = 'omit';
+ //$this->tidy_options['output-html'] = true;
+ //$this->tidy_options['output-xhtml'] = false;
+ $this->tidy_options['drop-proprietary-attributes'] = false;
+ $this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
 
-        $string = tidy_repair_string( $string, $this->tidy_options, 'utf8' );
+ $string = tidy_repair_string( $string, $this->tidy_options, 'utf8' );
 
-        if ( empty( $string ) !== true )
-        {
-            if ( ! empty( $menu ) )
-            {
-                $string = str_replace( $menu, array_keys( $menu ), $string );
-            }
+ if ( empty( $string ) !== true )
+ {
+ if ( ! empty( $menu ) )
+ {
+ $string = str_replace( $menu, array_keys( $menu ), $string );
+ }
 
-            return "<!DOCTYPE html>\n" . $string;
-        }
+ return "<!DOCTYPE html>\n" . $string;
+ }
 
-        return false;
-    }
+ return false;
+ }
 
 	/**
 	 * optimezer::conditionCallback()

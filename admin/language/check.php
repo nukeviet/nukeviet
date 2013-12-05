@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_check'];
 
-$xtpl = new XTemplate( "check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -30,14 +30,14 @@ while( $row = $db->sql_fetch_assoc( $result ) )
 
 if( empty( $array_lang_exit ) )
 {
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 $lang_array_file = array();
@@ -45,7 +45,7 @@ $lang_array_file = array();
 $lang_array_file_temp = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
 foreach( $lang_array_file_temp as $value )
 {
-	if( file_exists( NV_ROOTDIR . "/language/" . $value . "/global.php" ) )
+	if( file_exists( NV_ROOTDIR . '/language/' . $value . '/global.php' ) )
 	{
 		$lang_array_file[] = $value;
 	}
@@ -242,8 +242,8 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -21,42 +21,42 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 	global $db, $global_config, $include_lang, $lang_module;
 
 	$include_lang = '';
-	$modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
+	$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
-	if( $module == "global" and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/", $admin_file, $m ) )
+	if( $module == 'global' and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/", $admin_file, $m ) )
 	{
-		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $admin_file;
+		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $admin_file;
 		$admin_file = 'block.global.' . $m[1];
 	}
 	elseif( preg_match( "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/", $admin_file, $m ) )
 	{
-		$include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/" . $admin_file;
+		$include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file;
 		$admin_file = 'block.' . $m[1] . '.' . $m[2];
 	}
-	elseif( $module == "global" and $admin_file == 1 )
+	elseif( $module == 'global' and $admin_file == 1 )
 	{
-		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/admin_" . $module . ".php";
+		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/admin_' . $module . '.php';
 	}
-	elseif( $module == "global" and $admin_file == 0 )
+	elseif( $module == 'global' and $admin_file == 0 )
 	{
-		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $module . ".php";
+		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
 	}
 	elseif( $module == "install" and $admin_file == 0 )
 	{
-		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/" . $module . ".php";
+		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
 	}
 	elseif( in_array( $module, $modules_exit ) and $admin_file == 1 )
 	{
-		$include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/admin_" . $dirlang . ".php";
+		$include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/admin_' . $dirlang . '.php';
 	}
 	elseif( in_array( $module, $modules_exit ) and $admin_file == 0 )
 	{
-		$include_lang = NV_ROOTDIR . "/modules/" . $module . "/language/" . $dirlang . ".php";
+		$include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
 	}
-	elseif( file_exists( NV_ROOTDIR . "/language/" . $dirlang . "/admin_" . $module . ".php" ) )
+	elseif( file_exists( NV_ROOTDIR . '/language/' . $dirlang . '/admin_' . $module . '.php' ) )
 	{
 		$admin_file = 1;
-		$include_lang = NV_ROOTDIR . "/language/" . $dirlang . "/admin_" . $module . ".php";
+		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/admin_' . $module . '.php';
 	}
 
 	if( $include_lang != '' and file_exists( $include_lang ) )
@@ -67,7 +67,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		$lang_block = array();
 		$lang_translator = array();
 
-		include ( $include_lang );
+		include $include_lang;
 		list( $idfile, $langtype ) = $db->sql_fetchrow( $db->sql_query( "SELECT idfile, langtype FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `module` =" . $db->dbescape( $module ) . " AND `admin_file`=" . $db->dbescape( $admin_file ) ) );
 
 		if( intval( $idfile ) == 0 )
@@ -188,7 +188,7 @@ $page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . session_id() ) )
 {
-	if( ! empty( $dirlang ) and is_dir( NV_ROOTDIR . "/language/" . $dirlang ) )
+	if( ! empty( $dirlang ) and is_dir( NV_ROOTDIR . '/language/' . $dirlang ) )
 	{
 		$array_filename = array();
 
@@ -200,7 +200,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		nv_admin_read_lang( $dirlang, "global", 1 );
 
 		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-		$dirs = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
+		$dirs = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
 
 		foreach( $dirs as $module )
 		{
@@ -208,13 +208,13 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		}
 
-		$dirs = nv_scandir( NV_ROOTDIR . "/language/" . $dirlang, "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
+		$dirs = nv_scandir( NV_ROOTDIR . '/language/' . $dirlang, "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
 		foreach( $dirs as $file_i )
 		{
 			nv_admin_read_lang( $dirlang, 'global', $file_i );
 		}
 
-		$dirs = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
+		$dirs = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 		foreach( $dirs as $module )
 		{
 			nv_admin_read_lang( $dirlang, $module, 0 );
@@ -223,7 +223,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 			nv_admin_read_lang( $dirlang, $module, 1 );
 			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 
-			$blocks = nv_scandir( NV_ROOTDIR . "/modules/" . $module . "/language/", "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
 			foreach( $blocks as $file_i )
 			{
 				nv_admin_read_lang( $dirlang, $module, $file_i );
@@ -232,10 +232,10 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 
 		$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
 
-		$xtpl = new XTemplate( "read.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'GLANG', $lang_global );
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=interface" );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface' );
 
 		foreach( $array_filename as $name )
 		{
@@ -248,12 +248,12 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 
-Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 
 ?>

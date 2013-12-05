@@ -15,7 +15,7 @@ $mod = $nv_Request->get_title( 'mod', 'get' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -24,7 +24,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 $row = $db->sql_fetch_assoc( $result );
@@ -92,7 +92,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 	if( ! empty( $keywords ) )
 	{
-		$keywords = explode( ",", $keywords );
+		$keywords = explode( ',', $keywords );
 		$keywords = array_map( "trim", $keywords );
 		$keywords = implode( ", ", $keywords );
 	}
@@ -108,7 +108,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		if( $who_view == 3 )
 		{
 			$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
-			$groups_view = ! empty( $groups_view ) ? implode( ",", array_map( "intval", $groups_view ) ) : "";
+			$groups_view = ! empty( $groups_view ) ? implode( ',', array_map( "intval", $groups_view ) ) : "";
 		}
 		else
 		{
@@ -131,7 +131,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' );
 			$layoutdefault = ( string )$xml->layoutdefault;
 
-			if( ! empty( $layoutdefault ) and file_exists( NV_ROOTDIR . "/themes/" . $_theme . "/layout/layout." . $layoutdefault . ".tpl" ) )
+			if( ! empty( $layoutdefault ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/layout/layout.' . $layoutdefault . '.tpl' ) )
 			{
 				$array_layoutdefault[$_theme] = $layoutdefault;
 			}
@@ -180,7 +180,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_delete_all_cache();
 			nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['edit'], $mod ), '', $admin_info['userid'] );
 
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 			exit();
 		}
 		else
@@ -214,14 +214,14 @@ if( $row['groups_view'] == "0" or $row['groups_view'] == "1" or $row['groups_vie
 }
 else
 {
-	$groups_view = array_map( "intval", explode( ",", $row['groups_view'] ) );
+	$groups_view = array_map( "intval", explode( ',', $row['groups_view'] ) );
 }
 
 if( empty( $custom_title ) ) $custom_title = $mod;
 
 $page_title = sprintf( $lang_module['edit'], $mod );
 
-if( file_exists( NV_ROOTDIR . "/modules/" . $db->unfixdb( $row['module_file'] ) . "/funcs/rss.php" ) )
+if( file_exists( NV_ROOTDIR . '/modules/' . $db->unfixdb( $row['module_file'] ) . "/funcs/rss.php" ) )
 {
 	$data['rss'] = array( $lang_module['activate_rss'], $rss );
 }
@@ -242,7 +242,7 @@ if( $mod != $global_config['site_home_module'] )
 }
 $data['submit'] = $lang_global['submit'];
 
-$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
@@ -254,7 +254,7 @@ if( ! empty( $data['error'] ) )
 
 foreach( $data['theme'][2] as $tm )
 {
-	$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $data['theme'][3] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $data['theme'][3] ? ' selected=\'selected\'' : '' ) );
 	$xtpl->parse( 'main.theme' );
 }
 
@@ -262,7 +262,7 @@ if( ! empty( $data['mobile'][2] ) )
 {
 	foreach( $data['mobile'][2] as $tm )
 	{
-		$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected=\'selected\'' : '' ) );
 		$xtpl->parse( 'main.mobile.loop' );
 	}
 
@@ -275,13 +275,13 @@ if( isset( $data['who_view'] ) )
 	{
 		$xtpl->assign( 'WHO_VIEW', array(
 			'key' => $k,
-			'selected' => $k == $data['who_view'][2] ? " selected=\"selected\"" : "",
+			'selected' => $k == $data['who_view'][2] ? ' selected=\'selected\'' : '',
 			'title' => $w
 		) );
 		$xtpl->parse( 'main.who_view.loop' );
 	}
 
-	$xtpl->assign( 'DISPLAY', $data['who_view'][2] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+	$xtpl->assign( 'DISPLAY', $data['who_view'][2] == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
 
 	foreach( $data['groups_view'][1] as $group_id => $grtl )
 	{
@@ -308,8 +308,8 @@ if( isset( $data['rss'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -43,13 +43,13 @@ class image
 	var $is_createWorkingImage = false;
 
 	/**
-     * image::image()
-     *
-     * @param mixed $filename
-     * @param integer $gmaxX
-     * @param integer $gmaxY
-     * @return
-     */
+ * image::image()
+ *
+ * @param mixed $filename
+ * @param integer $gmaxX
+ * @param integer $gmaxY
+ * @return
+ */
 	function image( $filename, $gmaxX = 0, $gmaxY = 0 )
 	{
 		if( preg_match( "/(http|https|ftp):\/\//i", $filename ) )
@@ -72,11 +72,11 @@ class image
 	}
 
 	/**
-     * image::is_image()
-     *
-     * @param mixed $img
-     * @return
-     */
+ * image::is_image()
+ *
+ * @param mixed $img
+ * @return
+ */
 	function is_image( $img )
 	{
 		$typeflag = array();
@@ -115,10 +115,10 @@ class image
 	}
 
 	/**
-     * image::set_memory_limit()
-     *
-     * @return
-     */
+ * image::set_memory_limit()
+ *
+ * @return
+ */
 	function set_memory_limit()
 	{
 		$mb = Pow( 1024, 2 );
@@ -147,10 +147,10 @@ class image
 	}
 
 	/**
-     * image::get_createImage()
-     *
-     * @return
-     */
+ * image::get_createImage()
+ *
+ * @return
+ */
 	function get_createImage()
 	{
 		switch( $this->fileinfo['type'] )
@@ -178,11 +178,11 @@ class image
 	}
 
 	/**
-     * image::set_tempnam()
-     *
-     * @param mixed $filename
-     * @return
-     */
+ * image::set_tempnam()
+ *
+ * @param mixed $filename
+ * @return
+ */
 	function set_tempnam( $filename )
 	{
 		$tmpfname = tempnam( NV_ROOTDIR . "/tmp", "tmp" );
@@ -198,10 +198,10 @@ class image
 	}
 
 	/**
-     * image::check_file()
-     *
-     * @return
-     */
+ * image::check_file()
+ *
+ * @return
+ */
 	function check_file()
 	{
 		if( $this->fileinfo == array() ) return ERROR_IMAGE1;
@@ -213,12 +213,12 @@ class image
 	}
 
 	/**
-     * image::resizeXY()
-     *
-     * @param integer $maxX
-     * @param integer $maxY
-     * @return
-     */
+ * image::resizeXY()
+ *
+ * @param integer $maxX
+ * @param integer $maxY
+ * @return
+ */
 	function resizeXY( $maxX = 0, $maxY = 0 )
 	{
 		if( empty( $this->error ) )
@@ -298,11 +298,11 @@ class image
 	}
 
 	/**
-     * image::resizePercent()
-     *
-     * @param integer $percent
-     * @return
-     */
+ * image::resizePercent()
+ *
+ * @param integer $percent
+ * @return
+ */
 	function resizePercent( $percent = 0 )
 	{
 		if( empty( $this->error ) )
@@ -382,14 +382,14 @@ class image
 	}
 
 	/**
-     * image::cropFromLeft()
-     *
-     * @param mixed $leftX
-     * @param mixed $leftY
-     * @param mixed $newwidth
-     * @param mixed $newheight
-     * @return
-     */
+ * image::cropFromLeft()
+ *
+ * @param mixed $leftX
+ * @param mixed $leftY
+ * @param mixed $newwidth
+ * @param mixed $newheight
+ * @return
+ */
 	function cropFromLeft( $leftX, $leftY, $newwidth, $newheight )
 	{
 		if( empty( $this->error ) )
@@ -450,12 +450,12 @@ class image
 	}
 
 	/**
-     * image::cropFromCenter()
-     *
-     * @param mixed $newwidth
-     * @param mixed $newheight
-     * @return
-     */
+ * image::cropFromCenter()
+ *
+ * @param mixed $newwidth
+ * @param mixed $newheight
+ * @return
+ */
 	function cropFromCenter( $newwidth, $newheight )
 	{
 		if( empty( $this->error ) )
@@ -514,15 +514,15 @@ class image
 	}
 
 	/**
-     * image::addstring()
-     *
-     * @param mixed $string
-     * @param string $align
-     * @param string $valign
-     * @param string $font
-     * @param integer $fsize
-     * @return
-     */
+ * image::addstring()
+ *
+ * @param mixed $string
+ * @param string $align
+ * @param string $valign
+ * @param string $font
+ * @param integer $fsize
+ * @return
+ */
 	function addstring( $string, $align = 'right', $valign = 'bottom', $font = '', $fsize = 2 )
 	{
 		if( empty( $this->error ) )
@@ -574,13 +574,13 @@ class image
 	}
 
 	/**
-     * image::addlogo()
-     *
-     * @param mixed $logo
-     * @param string $align
-     * @param string $valign
-     * @return
-     */
+ * image::addlogo()
+ *
+ * @param mixed $logo
+ * @param string $align
+ * @param string $valign
+ * @return
+ */
 	function addlogo( $logo, $align = 'right', $valign = 'bottom', $config_logo = array() )
 	{
 		if( empty( $this->error ) )
@@ -669,11 +669,11 @@ class image
 	}
 
 	/**
-     * image::rotate()
-     *
-     * @param mixed $direction
-     * @return
-     */
+ * image::rotate()
+ *
+ * @param mixed $direction
+ * @return
+ */
 	function rotate( $direction )
 	{
 		if( empty( $this->error ) )
@@ -699,10 +699,10 @@ class image
 	}
 
 	/**
-     * image::reflection()
-     *
-     * @return
-     */
+ * image::reflection()
+ *
+ * @return
+ */
 	function reflection()
 	{
 		if( empty( $this->error ) )
@@ -739,11 +739,11 @@ class image
 	}
 
 	/**
-     * image::show()
-     *
-     * @param integer $quality
-     * @return
-     */
+ * image::show()
+ *
+ * @param integer $quality
+ * @return
+ */
 	function show( $quality = 100 )
 	{
 		if( empty( $this->error ) )
@@ -778,13 +778,13 @@ class image
 	}
 
 	/**
-     * image::save()
-     *
-     * @param mixed $path
-     * @param string $newname
-     * @param integer $quality
-     * @return
-     */
+ * image::save()
+ *
+ * @param mixed $path
+ * @param string $newname
+ * @param integer $quality
+ * @return
+ */
 	function save( $path, $newname = '', $quality = 100 )
 	{
 		if( empty( $this->error ) )
@@ -839,10 +839,10 @@ class image
 	}
 
 	/**
-     * image::Destroy()
-     *
-     * @return
-     */
+ * image::Destroy()
+ *
+ * @return
+ */
 	function Destroy()
 	{
 		if( is_resource( $this->logoimg ) ) @ImageDestroy( $this->logoimg );
@@ -851,10 +851,10 @@ class image
 	}
 
 	/**
-     * image::close()
-     *
-     * @return
-     */
+ * image::close()
+ *
+ * @return
+ */
 	function close()
 	{
 		if( is_resource( $this->logoimg ) ) @ImageDestroy( $this->logoimg );

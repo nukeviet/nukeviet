@@ -40,7 +40,7 @@ if( defined( 'NV_IS_GZIP' ) )
 		$compress_list['compress'] = 'gzcompress';
 		$compress_list['x-compress'] = 'gzcompress';
 
-		$http_accept_encoding = explode( ",", str_replace( ' ', '', $http_accept_encoding ) );
+		$http_accept_encoding = explode( ',', str_replace( ' ', '', $http_accept_encoding ) );
 
 		foreach( $http_accept_encoding as $enc )
 		{

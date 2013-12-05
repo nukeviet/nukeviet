@@ -11,9 +11,9 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['configuration_php'];
 
-require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
+require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
-$xtpl = new XTemplate( "configuration_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'configuration_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 $array = phpinfo_array( 4, 1 );
 $caption = $lang_module['configuration_php'];
@@ -51,8 +51,8 @@ if( ! empty( $array['PHP Core'] ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

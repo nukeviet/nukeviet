@@ -45,7 +45,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $numrows != 1 ) die( 'NO_' . $id );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', "aboutid  " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', "aboutid " . $id, $admin_info['userid'] );
 
 	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu` WHERE `id` = " . $id;
 	$db->sql_query( $query );
@@ -85,7 +85,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			exit();
 		}
 		else
@@ -97,13 +97,13 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET
 			`title`=" . $db->dbescape( $arr_menu['title'] ) . ",
-			`description` =  " . $db->dbescape( $arr_menu['description'] ) . "
+			`description` = " . $db->dbescape( $arr_menu['description'] ) . "
 		WHERE `id` =" . $arr_menu['id'];
 
 		if( $db->sql_query( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			exit();
 		}
 		else
@@ -147,7 +147,7 @@ else
 		$b = 0;
 		if( $row['menu_item'] != '' )
 		{
-			$arr_item = explode( ",", $row['menu_item'] );
+			$arr_item = explode( ',', $row['menu_item'] );
 			foreach( $arr_item as $key => $val )
 			{
 				$arr_items[] = $arr_menu_item[$val];
@@ -176,9 +176,9 @@ else
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'ADD_NEW', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;add=1" );
+$xtpl->assign( 'ADD_NEW', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1' );
 
 if( $error2 != '' )
 {
@@ -213,7 +213,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 {
 	$page_title = ( ! $arr['id'] ) ? $lang_module['add_menu'] : $lang_module['edit_menu'];
 
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	if( ! empty( $error ) )
@@ -234,8 +234,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

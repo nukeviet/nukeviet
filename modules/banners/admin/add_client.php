@@ -92,7 +92,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		if( $id )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid " . $id, $admin_info['userid'] );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=client_list" );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=client_list' );
 			die();
 		}
 	}
@@ -139,8 +139,8 @@ $contents .= "<script type=\"text/javascript\">
 
 $page_title = $lang_module['add_client'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

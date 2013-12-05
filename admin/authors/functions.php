@@ -29,11 +29,11 @@ function nv_admin_add_result( $result )
 	global $module_name, $lang_global, $lang_module, $page_title, $global_config;
 	if( ! defined( 'NV_IS_GODADMIN' ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 	//parse content
-	$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+	$xtpl = new XTemplate( 'add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
 
 	$lev = ( $result['lev'] == 2 ) ? $lang_global['level2'] : $lang_global['level3'];
 	$contents = array();
@@ -76,9 +76,9 @@ function nv_admin_add_result( $result )
 	$xtpl->parse( 'add_result' );
 	$contents = $xtpl->text( 'add_result' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 /**
@@ -90,7 +90,7 @@ function nv_admin_add_result( $result )
 function nv_admin_edit_result( $result )
 {
 	global $lang_module, $lang_global, $page_title, $module_name, $global_config;
-	$xtpl = new XTemplate( "edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+	$xtpl = new XTemplate( 'edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
 	$contents = array();
 	$contents['title'] = sprintf( $lang_module['nv_admin_edit_result_title'], $result['login'] );
 
@@ -130,9 +130,9 @@ function nv_admin_edit_result( $result )
 	$xtpl->parse( 'edit_resuilt' );
 	$contents = $xtpl->text( 'edit_resuilt' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 /**
@@ -146,9 +146,9 @@ function nv_check_add_admin()
 
 	if( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
 	{
-		$xtpl = new XTemplate( "badd.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/authors" );
+		$xtpl = new XTemplate( 'badd.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
 		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add" );
+		$xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

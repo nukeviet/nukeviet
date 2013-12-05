@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $page_title = $module_info['custom_title'];
@@ -20,7 +20,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( ! $id )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -29,7 +29,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -39,11 +39,11 @@ $contact_allowed = nv_getAllowed();
 
 if( ! isset( $contact_allowed['view'][$row['cid']] ) or ! isset( $contact_allowed['reply'][$row['cid']] ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
-$xtpl = new XTemplate( "reply.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'reply.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -74,14 +74,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		$from = array( $admin_name, $from );
 
-		$subject = "Re: " . $row['title'];
+		$subject = 'Re: ' . $row['title'];
 
 		if( nv_sendmail( $from, $row['sender_email'], $subject, $mess_content ) )
 		{
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_send` SET `is_reply`=1, `reply_content`=" . $db->dbescape( $mess_content ) . ", `reply_time`=" . NV_CURRENTTIME . ", `reply_aid`=" . $admin_info['admin_id'] . " WHERE `id`=" . $id;
 			$db->sql_query( $sql );
 
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=view&id=" . $id );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id );
 			die();
 		}
 		else
@@ -120,7 +120,7 @@ else
 	$mess_content = "<textarea style=\"width:99%\" name=\"mess_content\" id=\"mess_content\" cols=\"20\" rows=\"8\">" . $mess_content . "</textarea>";
 }
 
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id );
 $xtpl->assign( 'MESS_CONTENT', $mess_content );
 
 if( ! empty( $error ) )
@@ -132,8 +132,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

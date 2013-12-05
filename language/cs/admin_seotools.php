@@ -8,7 +8,7 @@
 * @Createdate Aug 03, 2013, 02:38:33 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
@@ -20,7 +20,7 @@ $lang_module['metaTagsConfig'] = 'Meta-Tags Config';
 $lang_module['sitemapPing'] = 'Sitemap Ping';
 $lang_module['searchEngine'] = 'Server vyhledávání';
 $lang_module['searchEngineConfig'] = 'Management Server Hledání';
-$lang_module['searchEngineName'] = 'Název  server hledání';
+$lang_module['searchEngineName'] = 'Název server hledání';
 $lang_module['searchEngineActive'] = 'Aktivovat';
 $lang_module['searchEngineSelect'] = 'Vyberte server';
 $lang_module['sitemapModule'] = 'Vyberte module';
@@ -29,8 +29,8 @@ $lang_module['sitemapSend'] = 'poslat';
 $lang_module['PingNotSupported'] = 'PING není podporován';
 $lang_module['pleasePingAgain'] = 'Právě jste se to poslal. Prosím ještě chvíli počkat';
 $lang_module['searchEngineValue'] = 'odkaz PING';
-$lang_module['searchEngineFailed'] = 'Nepodařilo odkaz  ping';
-$lang_module['pingOK'] = 'pingOK.  Pokračování proběhne za 60 minut.';
+$lang_module['searchEngineFailed'] = 'Nepodařilo odkaz ping';
+$lang_module['pingOK'] = 'pingOK. Pokračování proběhne za 60 minut.';
 $lang_module['siteDiagnostic'] = 'Diagnostika site.';
 $lang_module['EngineInfo'] = 'Informace z vyhledávacího serveru';
 $lang_module['diagnosticDate'] = 'aktulizovat';

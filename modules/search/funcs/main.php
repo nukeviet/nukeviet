@@ -73,7 +73,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 			$logic = $search['logic'] ? "AND" : "OR";
 
 			$result_array = array();
-			include ( NV_ROOTDIR . "/modules/" . $m_values['module_file'] . "/search.php" );
+			include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/search.php' ;
 
 			if( ! empty( $all_page ) and ! empty( $result_array ) )
 			{
@@ -99,8 +99,8 @@ if( ! empty( $search['key'] ) )
 $key_words = $description = 'no';
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

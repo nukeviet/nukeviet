@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 		$allcat = '';
 	}
 	$dbkey = $db->dblikeescape( $key );
-	$sql .= "WHERE (`title` LIKE '%" . $dbkey . "%' OR `description` LIKE '%" . $dbkey . "%' OR `introtext` LIKE '%" . $dbkey . "%') " . $allcat . " AND  `status`='1'";
+	$sql .= "WHERE (`title` LIKE '%" . $dbkey . "%' OR `description` LIKE '%" . $dbkey . "%' OR `introtext` LIKE '%" . $dbkey . "%') " . $allcat . " AND `status`='1'";
 }
 else
 {
@@ -120,8 +120,8 @@ else
 
 $key_words = $description = 'no';
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

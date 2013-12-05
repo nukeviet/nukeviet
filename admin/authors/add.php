@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! ( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -20,14 +20,14 @@ if( $nv_Request->get_int( 'result', 'get', 0 ) )
 	$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 	if( $checksess != md5( $global_config['sitekey'] . session_id() ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 
 	$session_files = $nv_Request->get_string( 'nv_admin_profile', 'session', '' );
 	if( empty( $session_files ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 
@@ -76,9 +76,9 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 			if( ! empty( $mod ) and in_array( $mod, $modules ) )
 			{
 				$site_mods_admins = ( ( ! empty( $site_mods[$mod]['admins'] ) ) ? $site_mods[$mod]['admins'] . "," : "" ) . $userid;
-				$site_mods_admins = explode( ",", $site_mods_admins );
+				$site_mods_admins = explode( ',', $site_mods_admins );
 				$site_mods_admins = array_unique( $site_mods_admins );
-				$site_mods_admins = implode( ",", $site_mods_admins );
+				$site_mods_admins = implode( ',', $site_mods_admins );
 				$titles[$i] = $db->dbescape( $mod );
 				$mds[$i] = $site_mods[$mod]['custom_title'];
 				$update .= "WHEN `title` = " . $titles[$i] . " THEN " . $db->dbescape( $site_mods_admins ) . " ";
@@ -87,14 +87,14 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 		if( ! empty( $titles ) )
 		{
-			$update .= "END WHERE `title` IN (" . implode( ",", $titles ) . ")";
+			$update .= "END WHERE `title` IN (" . implode( ',', $titles ) . ")";
 			$db->sql_query( $update );
 			nv_del_moduleCache( 'modules' );
 		}
 	}
 
 	$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
-	$files_level = ( ! empty( $allow_files_type ) ? implode( ",", $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
+	$files_level = ( ! empty( $allow_files_type ) ? implode( ',', $allow_files_type ) : "" ) . "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
 
 	$sql = "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES (
 		" . $userid . ",
@@ -192,11 +192,11 @@ $contents['submit'] = $lang_module['nv_admin_add'];
 $filtersql = " `userid` NOT IN (SELECT `admin_id` FROM `" . NV_AUTHORS_GLOBALTABLE . "`)";
 
 // Parse content
-$xtpl = new XTemplate( "add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-$xtpl->assign( 'RESULT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add&result=1&checksess=" . md5( $global_config['sitekey'] . session_id() ) );
+$xtpl->assign( 'RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . md5( $global_config['sitekey'] . session_id() ) );
 $xtpl->assign( 'FILTERSQL', nv_base64_encode( $crypt->aes_encrypt( $filtersql, md5( $global_config['sitekey'] . $client_info['session_id'] ) ) ) );
 $xtpl->assign( 'ACTION', $contents['action'] );
 
@@ -206,7 +206,7 @@ if( isset( $contents['editor'] ) )
 	$xtpl->assign( 'EDITOR3', $contents['editor'][3] );
 	foreach( $contents['editor'][1] as $edt )
 	{
-		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? " selected=\"selected\"" : "" );
+		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? ' selected=\'selected\'' : '' );
 		$xtpl->assign( 'EDITOR', $edt );
 		$xtpl->parse( 'add.editor.loop' );
 	}
@@ -226,23 +226,23 @@ if( isset( $contents['allow_files_type'] ) )
 }
 
 $xtpl->assign( 'ALLOW_MODIFY_FILES0', $contents['allow_modify_files'][0] );
-$xtpl->assign( 'MODIFY_CHECKED', $contents['allow_modify_files'][1] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'MODIFY_CHECKED', $contents['allow_modify_files'][1] ? ' checked="checked"' : '' );
 
 $xtpl->assign( 'ALLOW_CREATE_SUBDIRECTORIES0', $contents['allow_create_subdirectories'][0] );
-$xtpl->assign( 'CREATE_CHECKED', $contents['allow_create_subdirectories'][1] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'CREATE_CHECKED', $contents['allow_create_subdirectories'][1] ? ' checked="checked"' : '' );
 
 $xtpl->assign( 'ALLOW_MODIFY_SUBDIRECTORIES', $contents['allow_modify_subdirectories'][0] );
-$xtpl->assign( 'ALLOW_MODIFY_SUBDIRECTORIES_CHECKED', $contents['allow_modify_subdirectories'][1] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'ALLOW_MODIFY_SUBDIRECTORIES_CHECKED', $contents['allow_modify_subdirectories'][1] ? ' checked="checked"' : '' );
 
 $xtpl->assign( 'LEV0', $contents['lev'][0] );
 $xtpl->assign( 'LEV2', $contents['lev'][2] );
 $xtpl->assign( 'LEV3', $contents['lev'][3] );
-$xtpl->assign( 'LEV2_CHECKED', $contents['lev'][1] == 2 ? " checked=\"checked\"" : "" );
-$xtpl->assign( 'LEV3_CHECKED', $contents['lev'][1] == 3 ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'LEV2_CHECKED', $contents['lev'][1] == 2 ? ' checked="checked"' : '' );
+$xtpl->assign( 'LEV3_CHECKED', $contents['lev'][1] == 3 ? ' checked="checked"' : '' );
 $xtpl->assign( 'MODS0', $contents['mods'][0] );
-$xtpl->assign( 'STYLE_MODS', $contents['lev'][1] == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+$xtpl->assign( 'STYLE_MODS', $contents['lev'][1] == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
 
-$xtpl->assign( 'USERID', $userid ? $userid : "" );
+$xtpl->assign( 'USERID', $userid ? $userid : '' );
 
 if( defined( "NV_IS_GODADMIN" ) )
 {
@@ -265,8 +265,8 @@ $xtpl->assign( 'SUBMIT', $contents['submit'] );
 $xtpl->parse( 'add' );
 $contents = $xtpl->text( 'add' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

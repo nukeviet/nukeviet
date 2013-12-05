@@ -134,8 +134,8 @@ function nv_check_path_upload( $path )
 	$path = rtrim( $path, "/" );
 	if( empty( $path ) ) return "";
 
-	$path = NV_ROOTDIR . "/" . $path;
-	if( ( $path = realpath( $path ) ) === false ) return "";
+	$path = NV_ROOTDIR . '/' . $path;
+	if( ( $path = realpath( $path ) ) === false ) return '';
 
 	$path = str_replace( "\\", "/", $path );
 	$path = str_replace( NV_ROOTDIR . '/', '', $path );
@@ -161,7 +161,7 @@ function nv_check_path_upload( $path )
 		}
 	}
 
-	if( $result === false ) return "";
+	if( $result === false ) return '';
 	return $path;
 }
 
@@ -230,7 +230,7 @@ function nv_get_viewImage( $fileName )
 					}
 				}
 			}
-			include_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+			include_once NV_ROOTDIR . '/includes/class/image.class.php' ;
 			$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			if( $thumb_config['thumb_type'] == 4 )
 			{
@@ -374,7 +374,7 @@ function nv_filesListRefresh( $pathimg )
 	global $array_hidefolders, $admin_info, $db_config, $module_data, $db, $array_dirname;
 	$results = array();
 	$did = $array_dirname[$pathimg];
-	if( is_dir( NV_ROOTDIR . "/" . $pathimg ) )
+	if( is_dir( NV_ROOTDIR . '/' . $pathimg ) )
 	{
 		$result = $db->sql_query( "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did );
 		while( $row = $db->sql_fetch_assoc( $result ) )
@@ -382,7 +382,7 @@ function nv_filesListRefresh( $pathimg )
 			$results[$row['title']] = $row;
 		}
 
-		if( $dh = opendir( NV_ROOTDIR . "/" . $pathimg ) )
+		if( $dh = opendir( NV_ROOTDIR . '/' . $pathimg ) )
 		{
 			while( ( $title = readdir( $dh ) ) !== false )
 			{

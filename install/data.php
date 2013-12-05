@@ -494,7 +494,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'global', 'useactivate', '2'),
 	('sys', 'global', 'allowmailchange', '1'),
 	('sys', 'global', 'allow_sitelangs', '" . NV_LANG_DATA . "'),
-	('sys', 'global', 'allow_adminlangs', '" . implode( ",", $languageslist ) . "'),
+	('sys', 'global', 'allow_adminlangs', '" . implode( ',', $languageslist ) . "'),
 	('sys', 'global', 'read_type', '0'),
 	('sys', 'global', 'rewrite_optional', '" . $global_config['rewrite_optional'] . "'),
 	('sys', 'global', 'rewrite_endurl', '" . $global_config['rewrite_endurl'] . "'),

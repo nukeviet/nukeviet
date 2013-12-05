@@ -19,7 +19,7 @@ function nv_banner_theme_main( $contents )
 {
 	global $global_config, $module_name, $module_info, $module_file, $lang_module;
 
-	$xtpl = new XTemplate( "home.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	if( ! empty( $contents['rows'] ) )
@@ -72,7 +72,7 @@ function logininfo_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
 
-	$xtpl = new XTemplate( "logininfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'logininfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CLIENT_LOGIN_INFO', $contents['client_info'] );
 	$xtpl->assign( 'LOGIN_LANG', $contents['login'] );
 	$xtpl->assign( 'LOGIN_INPUT_NAME', $contents['login_input_name'] );
@@ -110,7 +110,7 @@ function clientinfo_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
 
-	$xtpl = new XTemplate( "clientinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'clientinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTAINERID', $contents['containerid'] );
 	$xtpl->assign( 'AJ', $contents['aj'] );
 	$xtpl->parse( 'clientinfo' );
@@ -129,7 +129,7 @@ function clinfo_theme( $contents, $manament )
 {
 	global $global_config, $module_name, $module_file, $module_info, $lang_module;
 
-	$xtpl = new XTemplate( "clinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'clinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
@@ -171,7 +171,7 @@ function clinfo_theme( $contents, $manament )
 function cledit_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
-	$xtpl = new XTemplate( "cledit.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cledit.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	foreach( $contents['rows'] as $row )
 	{

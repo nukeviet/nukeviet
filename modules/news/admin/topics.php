@@ -63,7 +63,7 @@ if( ! empty( $savecat ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
 			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
 		else
@@ -73,13 +73,13 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` =  " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` =  " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
+		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` = " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` = " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
 		$db->sql_query( $query );
 		if( $db->sql_affectedrows() > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
 			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
 		else
@@ -93,7 +93,7 @@ if( ! empty( $savecat ) )
 $array['topicid'] = $nv_Request->get_int( 'topicid', 'get', 0 );
 if( $array['topicid'] > 0 )
 {
-	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `alias`, `image`, `description`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` where `topicid`=" . $array['topicid'] . "" ) );
+	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `alias`, `image`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` where `topicid`=" . $array['topicid'] . "" ) );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 
@@ -102,7 +102,7 @@ if( is_file( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . "/" . $module_name . "/topics/"
 	$array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" . $array['image'];
 }
 
-$xtpl = new XTemplate( "topics.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'topics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -127,8 +127,8 @@ if( empty( $array['alias'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

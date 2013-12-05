@@ -64,7 +64,7 @@ function cron_dump_autobackup()
 
 			$contents['type'] = "all";
 
-			include ( NV_ROOTDIR . "/includes/core/dump.php" );
+			include NV_ROOTDIR . '/includes/core/dump.php' ;
 
 			if( ! nv_dump_save( $contents ) )
 			{

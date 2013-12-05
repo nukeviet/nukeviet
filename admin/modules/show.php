@@ -32,7 +32,7 @@ function nv_show_funcs()
 
 	$custom_title = $row['custom_title'];
 	$mod_file = $db->unfixdb( $row['module_file'] );
-	$admin_file = ( file_exists( NV_ROOTDIR . "/modules/" . $mod_file . "/admin.functions.php" ) and file_exists( NV_ROOTDIR . "/modules/" . $mod_file . "/admin/main.php" ) ) ? 1 : 0;
+	$admin_file = ( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/admin.functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/admin/main.php' ) ) ? 1 : 0;
 
 	$is_delCache = false;
 
@@ -52,12 +52,12 @@ function nv_show_funcs()
 	}
 
 	$module_version = array();
-	$version_file = NV_ROOTDIR . "/modules/" . $mod_file . "/version.php";
+	$version_file = NV_ROOTDIR . '/modules/' . $mod_file . '/version.php';
 
 	if( file_exists( $version_file ) )
 	{
 		$module_name = $mod;
-		require_once ( $version_file );
+		require_once $version_file;
 	}
 
 	if( empty( $module_version ) )
@@ -65,19 +65,19 @@ function nv_show_funcs()
 		$timestamp = NV_CURRENTTIME - date( 'Z', NV_CURRENTTIME );
 		$module_version = array(
 			"name" => $mod,
-			"modfuncs" => "main",
+			"modfuncs" => 'main',
 			"is_sysmod" => 0,
 			"virtual" => 0,
-			"version" => "3.0.01",
+			"version" => '3.0.01',
 			"date" => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
-			"author" => "",
-			"note" => ""
+			"author" => '',
+			"note" => ''
 		);
 	}
 
 	$module_version['submenu'] = isset( $module_version['submenu'] ) ? trim( $module_version['submenu'] ) : "";
-	$modfuncs = array_map( "trim", explode( ",", $module_version['modfuncs'] ) );
-	$arr_in_submenu = array_map( "trim", explode( ",", $module_version['submenu'] ) );
+	$modfuncs = array_map( "trim", explode( ',', $module_version['modfuncs'] ) );
+	$arr_in_submenu = array_map( "trim", explode( ',', $module_version['submenu'] ) );
 
 	$data_funcs = array();
 	$weight_list = array();
@@ -203,13 +203,13 @@ function nv_show_funcs()
 		nv_del_moduleCache( 'themes' );
 	}
 
-	$fun_change_alias = (isset( $module_version['virtual'] )) ? explode( ',', $module_version['change_alias'] ) : array( );
+	$fun_change_alias = (isset( $module_version['virtual'] )) ? explode( ',', $module_version['change_alias'] ) : array();
 	if( empty( $fun_change_alias ) )
 	{
 		$module_version['virtual'] = 0;
 	}
 
-	$xtpl = new XTemplate( "aj_show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'aj_show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	foreach( $act_funcs as $funcs => $values )
 	{
@@ -224,7 +224,7 @@ function nv_show_funcs()
 			{
 				$xtpl->assign( 'WEIGHT', array(
 					'key' => $new_weight,
-					'selected' => $new_weight == $values['subweight'] ? " selected=\"selected\"" : ""
+					'selected' => $new_weight == $values['subweight'] ? ' selected=\'selected\'' : ''
 				) );
 				$xtpl->parse( 'main.loop.weight' );
 			}
@@ -249,9 +249,9 @@ function nv_show_funcs()
 	}
 	$xtpl->parse( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $xtpl->text( 'main' );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 if( $nv_Request->isset_request( 'aj', 'get' ) )
@@ -267,7 +267,7 @@ $mod = $nv_Request->get_title( 'mod', 'get', '' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -276,7 +276,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -294,8 +294,8 @@ $contents['ajax'][1] = $nv_Request->isset_request( 'func_id,pos', 'get' ) ? "nv_
 
 $contents = show_funcs_theme( $contents );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

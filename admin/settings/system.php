@@ -25,7 +25,7 @@ $closed_site_Modes[3] = $lang_module['closed_site_3'];
 $allow_sitelangs = array();
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
-	if( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
+	if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
 	{
 		$allow_sitelangs[] = $lang_i;
 	}
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( ! empty( $my_domains ) )
 		{
-			$my_domains = array_map( "trim", explode( ",", $my_domains ) );
+			$my_domains = array_map( "trim", explode( ',', $my_domains ) );
 			foreach( $my_domains as $dm )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
@@ -99,7 +99,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 		$array_config_global['my_domains'] = array_unique( $array_config_global['my_domains'] );
-		$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
+		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
 
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
@@ -169,7 +169,7 @@ $optActive_Modes = array(
 	'3' => $lang_module['optActive_admin']
 );
 
-$xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -232,8 +232,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$xtpl->parse( 'main.system.optActive' );
 	}
 
-	$xtpl->assign( 'TIMEZONEOP', "byCountry" );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == "byCountry" ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONEOP', 'byCountry' );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == 'byCountry' ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $lang_module['timezoneByCountry'] );
 	$xtpl->parse( 'main.system.opsite_timezone' );
 
@@ -257,7 +257,7 @@ if( $errormess != '' )
 foreach( $adminThemes as $name )
 {
 	$xtpl->assign( 'THEME_NAME', $name );
-	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected=\'selected\'' : '' ) );
 	$xtpl->parse( 'main.admin_theme' );
 }
 
@@ -265,15 +265,15 @@ foreach( $closed_site_Modes as $value => $name )
 {
 	$xtpl->assign( 'MODE_VALUE', $value );
 	$xtpl->assign( 'MODE_NAME', $name );
-	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected=\'selected\'' : '' ) );
 	$xtpl->parse( 'main.closed_site_mode' );
 }
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

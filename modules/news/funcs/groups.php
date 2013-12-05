@@ -37,7 +37,7 @@ if( isset( $array_op[1] ) )
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
-		$item_array = array( );
+		$item_array = array();
 		$end_weight = 0;
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
@@ -75,7 +75,7 @@ if( isset( $array_op[1] ) )
 		$db->sql_freeresult( $query );
 		unset( $query, $row );
 
-		$item_array_other = array( );
+		$item_array_other = array();
 		$query = $db->sql_query( "SELECT t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t2.weight > " . $end_weight . " ORDER BY t2.weight ASC LIMIT 0," . $st_links . "" );
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
@@ -96,7 +96,7 @@ if( isset( $array_op[1] ) )
 }
 else
 {
-	$array_cat = array( );
+	$array_cat = array();
 	$key = 0;
 
 	$query_cat = $db->sql_query( "SELECT `bid`, `number`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC" );
@@ -158,7 +158,7 @@ else
 	$key_words = $module_info['keywords'];
 }
 
-include (NV_ROOTDIR . '/includes/header.php');
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . '/includes/footer.php');
+include NV_ROOTDIR . '/includes/footer.php';
 ?>

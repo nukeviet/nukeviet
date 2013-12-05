@@ -54,7 +54,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 		if( ! empty( $a_l ) )
 		{
-			$a_l = implode( ",", $a_l );
+			$a_l = implode( ',', $a_l );
 
 			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
 			$result = $db->sql_query( $sql );
@@ -183,9 +183,9 @@ if( ! empty( $array_rows ) )
 			$url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
 			$contents .= call_user_func( "sendcontact", $url );
 
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_site_theme( $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
 	}
@@ -218,8 +218,8 @@ $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 $contents = call_user_func( "main_theme", $array_content, $array_rows, $base_url, $checkss );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

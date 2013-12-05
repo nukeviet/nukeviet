@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['checkupdate'];
 $contents = '';
 
-$xtpl = new XTemplate( "checkupdate.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'checkupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'LANG', $lang_module );
@@ -37,7 +37,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 		clearstatcache();
 		$sysUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
-		$xtpl->assign( 'SYSUPDDATE', nv_date( "d/m/Y H:i", $sysUpdDate ) );
+		$xtpl->assign( 'SYSUPDDATE', nv_date( 'd/m/Y H:i', $sysUpdDate ) );
 
 		$xtpl->parse( 'sysUpd' );
 		echo $xtpl->text( 'sysUpd' );
@@ -174,7 +174,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				++$a;
 			}
 
-			$xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );
+			$xtpl->assign( 'MODUPDDATE', nv_date( 'd/m/Y H:i', $modUpdDate ) );
 
 			if( ! empty( $newModules ) )
 			{
@@ -215,7 +215,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 				$xtpl->assign( 'MODNAME', $modname );
 				$xtpl->assign( 'MODINFO', $values['message'] );
-				$xtpl->assign( 'MODUPDDATE', nv_date( "d/m/Y H:i", $modUpdDate ) );
+				$xtpl->assign( 'MODUPDDATE', nv_date( 'd/m/Y H:i', $modUpdDate ) );
 
 				foreach( $tooltip as $t )
 				{
@@ -236,8 +236,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -17,7 +17,7 @@ if( empty( $tables ) )
 }
 else
 {
-	$tables = explode( ",", $tables );
+	$tables = explode( ',', $tables );
 }
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'], '', $admin_info['userid'] );
@@ -44,8 +44,8 @@ $totalfree = ! empty( $totalfree ) ? nv_convertfromBytes( $totalfree ) : 0;
 
 $content = sprintf( $lang_module['optimize_result'], implode( ", ", $tabs ), $totalfree );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $content;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
