@@ -79,7 +79,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( $check_num == 1 )
 	{
-		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id =  tb2.id ) ";
+		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id = tb2.id ) ";
 		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
 	}
 	elseif( $check_num == 2 )
@@ -92,7 +92,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	}
 	else
 	{
-		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id =  tb2.id )";
+		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id = tb2.id )";
 		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
@@ -125,7 +125,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
-	$show_no_image  = $module_config[$module_name]['show_no_image'];
+	$show_no_image = $module_config[$module_name]['show_no_image'];
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
 	{
@@ -182,8 +182,8 @@ else
 $key_words = $description = 'no';
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

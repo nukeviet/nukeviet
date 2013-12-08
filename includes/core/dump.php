@@ -147,7 +147,7 @@ function nv_dump_save( $params )
 		return false;
 	}
 	$path_dump = '';
-	if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/dump.tpl" ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/dump.tpl' ) )
 	{
 		$path_dump = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/dump.tpl";
 	}

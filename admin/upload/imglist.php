@@ -91,8 +91,8 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 
 	if( $all_page )
 	{
-		$xtpl = new XTemplate( "listimg.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-		$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
+		$xtpl = new XTemplate( 'listimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 		while( $file = $db->sql_fetch_assoc( $result ) )
 		{
@@ -112,13 +112,13 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$file['sel'] = ( $selectfile == $file['title'] ) ? " imgsel" : "";
 			$file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
 
-			$xtpl->assign( "IMG", $file );
+			$xtpl->assign( 'IMG', $file );
 			$xtpl->parse( 'main.loopimg' );
 		}
 
 		if( ! empty( $selectfile ) )
 		{
-			$xtpl->assign( "NV_CURRENTTIME", NV_CURRENTTIME );
+			$xtpl->assign( 'NV_CURRENTTIME', NV_CURRENTTIME );
 			$xtpl->parse( 'main.imgsel' );
 		}
 		if( $all_page > $per_page )
@@ -130,9 +130,9 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 

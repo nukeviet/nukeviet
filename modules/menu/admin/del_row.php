@@ -21,7 +21,7 @@ $sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WH
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 ) die( 'NO_' . $id );
-nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', "Item ID  " . $id, $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', "Item ID " . $id, $admin_info['userid'] );
 
 $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id . " AND `parentid`=" . $parentid;
 $db->sql_query( $sql );
@@ -39,7 +39,7 @@ if( $db->sql_affectedrows() > 0 )
 	{
 		$arr_block[] = $row['id'];
 	}
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode( ",", $arr_block ) . "' WHERE `id`=" . $mid;
+	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode( ',', $arr_block ) . "' WHERE `id`=" . $mid;
 	$db->sql_query( $sql );
 
 	// Cap nhat cho menu cha
@@ -62,8 +62,8 @@ else
 	die( 'NO_' . $id );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

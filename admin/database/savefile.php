@@ -39,22 +39,22 @@ $contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
 $file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
 $file_name = md5( $client_info['session_id'] ) . "_backupdata_" . date( "Y-m-d-H-i", time() ) . "." . $file_ext;
 
-$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+$log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if( $global_config['idsite'] )
 {
 	$log_dir .= "/" . $global_config['site_dir'];
 }
-$contents['filename'] = $log_dir . "/" . $file_name;
+$contents['filename'] = $log_dir . '/' . $file_name;
 
-include ( NV_ROOTDIR . "/includes/core/dump.php" );
+include NV_ROOTDIR . '/includes/core/dump.php' ;
 $result = nv_dump_save( $contents );
 
-$xtpl = new XTemplate( "save.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'save.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
 if( empty( $result ) )
 {
-	$xtpl->assign( 'ERROR', sprintf( $lang_module['save_error'], NV_LOGS_DIR . "/dump_backup" ) );
+	$xtpl->assign( 'ERROR', sprintf( $lang_module['save_error'], NV_LOGS_DIR . '/dump_backup' ) );
 	$xtpl->parse( 'main.error' );
 }
 else
@@ -62,7 +62,7 @@ else
 	$file = explode( "_", $file_name );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savefile'], "File name: " . end( $file ), $admin_info['userid'] );
 
-	$xtpl->assign( 'LINK_DOWN', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file_name . "&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) );
+	$xtpl->assign( 'LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) );
 
 	$xtpl->parse( 'main.result' );
 }
@@ -72,8 +72,8 @@ $page_title = $lang_module['save_data'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

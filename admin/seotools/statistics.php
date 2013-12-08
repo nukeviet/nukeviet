@@ -58,7 +58,7 @@ $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checke
 $array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
 
-$xtpl = new XTemplate( "statistics.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -91,8 +91,8 @@ foreach( $googleAnalyticsMethod as $key => $title )
 }
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

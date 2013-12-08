@@ -59,7 +59,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['openid_mode'] = $nv_Request->get_int( 'openid_mode', 'post', 0 );
 	$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 	$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
-	$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ",", $array_config['openid_servers'] ) : "";
+	$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : "";
 	$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 
 	// Cau hinh cho facebook
@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( ! empty( $array_config['deny_email'] ) )
 	{
-		$array_config['deny_email'] = valid_name_config( explode( ",", $array_config['deny_email'] ) );
+		$array_config['deny_email'] = valid_name_config( explode( ',', $array_config['deny_email'] ) );
 		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
 	}
 
@@ -85,7 +85,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
 	{
-		$array_config['deny_name'] = valid_name_config( explode( ",", $array_config['deny_name'] ) );
+		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
 	}
 	$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET `content`=" . $db->dbescape( $array_config['deny_name'] ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `config`='deny_name'" );
@@ -93,7 +93,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
 	if( ! empty( $array_config['password_simple'] ) )
 	{
-		$array_config['password_simple'] = array_map( 'trim', explode( ",", $array_config['password_simple'] ) );
+		$array_config['password_simple'] = array_map( 'trim', explode( ',', $array_config['password_simple'] ) );
 		$array_config['password_simple'] = array_unique( $array_config['password_simple'] );
 		asort($array_config['password_simple']);
 		$array_config['password_simple'] = implode( "|", $array_config['password_simple'] );
@@ -112,7 +112,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid'] );
 	nv_save_file_config_global();
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	die();
 }
 else
@@ -130,7 +130,7 @@ $array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? " c
 $servers = $array_config['openid_servers'];
 
 $openid_servers = array();
-include ( NV_ROOTDIR . '/includes/openid.php' );
+include NV_ROOTDIR . '/includes/openid.php' ;
 $array_config['openid_servers'] = array();
 if( ! empty( $openid_servers ) )
 {
@@ -163,8 +163,8 @@ $array_whoview = array(
 
 $ignorefolders = array( "", ".", "..", "index.html", ".htaccess" );
 
-$xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
+$xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 if( ! in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
@@ -311,8 +311,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['config'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

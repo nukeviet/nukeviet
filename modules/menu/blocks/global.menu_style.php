@@ -117,7 +117,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$_curr_url = NV_BASE_SITEURL . str_replace( $global_config['site_url'] . '/', '', $client_info['selfurl'] );
 		$_url = nv_url_rewrite( $url, true );
 
-		if( $home and ( $_url == nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . "index.php" or $_url == NV_BASE_SITEURL ) )
+		if( $home and ( $_url == nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . "index.php" or $_url == NV_BASE_SITEURL ) )
 		{
 			return true;
 		}
@@ -261,7 +261,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	{
 		global $module_info;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/" . $style . ".tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/' . $style . '.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -270,7 +270,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( $style . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( $style . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -307,7 +307,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	{
 		global $module_info;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/top_menu_bar.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/top_menu_bar.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -316,7 +316,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "top_menu_bar.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( 'top_menu_bar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -392,7 +392,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	{
 		global $module_info;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/pro_dropdown.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/pro_dropdown.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -401,7 +401,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "pro_dropdown.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( 'pro_dropdown.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -470,7 +470,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	{
 		global $module_info;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/ver_2_level.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/ver_2_level.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -479,7 +479,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "ver_2_level.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( 'ver_2_level.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -530,7 +530,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	{
 		global $module_info;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/menu/" . $style . ".tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/' . $style . '.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -539,7 +539,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( $style . ".tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( $style . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 
 		if( empty( $list_sub ) )
 		{
@@ -547,7 +547,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		}
 		else
 		{
-			$list = explode( ",", $list_sub );
+			$list = explode( ',', $list_sub );
 
 			foreach( $list_cats as $cat )
 			{

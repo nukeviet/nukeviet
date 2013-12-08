@@ -89,9 +89,9 @@ function nv_show_tables()
 
 	$contents = call_user_func( "nv_show_tables_theme", $contents );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 function nv_highlight_string( $tab, $type = "sql" )
@@ -127,16 +127,16 @@ function nv_show_tab()
 
 	if( empty( $item ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 
 	if( in_array( $nv_Request->get_title( 'show_highlight', 'post' ), array( 'php', 'sql' ) ) )
 	{
 		$content = nv_highlight_string( $tab, $nv_Request->get_title( 'show_highlight', 'post' ) );
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $content;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 
 	$tablename = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
@@ -175,16 +175,16 @@ function nv_show_tab()
 
 	$page_title = sprintf( $lang_module['nv_show_tab'], $tablename );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 function main_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'CAPTION', $contents['captions']['database_info'] );
 
@@ -207,7 +207,7 @@ function nv_show_tables_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "tables.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'tables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'ACTION', $contents['action'] );
 	$xtpl->assign( 'CAPTIONS', $contents['captions']['tables_info'] );
@@ -274,7 +274,7 @@ function nv_show_tab_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "tabs.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'tabs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'CAPTION', $contents['table']['caption'] );
 

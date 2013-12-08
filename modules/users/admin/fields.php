@@ -48,12 +48,12 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 	$choice = $nv_Request->get_string( 'choice', 'post', '' );
 	$choice_seltected = $nv_Request->get_string( 'choice_seltected', 'post', '' );
 
-	$xtpl = new XTemplate( "fields.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	if( $choice == "module" )
 	{
-		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 		$xtpl->parse( 'choicesql.loop' );
 		foreach( $site_mods as $module )
@@ -75,7 +75,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$result = $db->sql_query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" );
 		$num_table = intval( $db->sql_numrows( $result ) );
 		$array_table_module = array();
-		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 
 		if( $num_table > 0 )
@@ -102,7 +102,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$result = $db->sql_query( "SHOW COLUMNS FROM " . $table );
 		$num_table = intval( $db->sql_numrows( $result ) );
 		$array_table_module = array();
-		$xtpl->assign( 'choicesql_name', "choicesql_" . $choice );
+		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 		if( $num_table > 0 )
 		{
@@ -123,9 +123,9 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$contents = $xtpl->text( 'column' );
 	}
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 //ADD
@@ -411,7 +411,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		if( $save )
 		{
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&rand=" . nv_genpass() );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 			die();
 		}
 	}
@@ -457,8 +457,8 @@ $array_field_type = array(
 
 $array_choice_type = array( "field_choicetypes_sql" => $lang_module['field_choicetypes_sql'], "field_choicetypes_text" => $lang_module['field_choicetypes_text'] );
 
-$xtpl = new XTemplate( "fields.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
+$xtpl = new XTemplate( 'fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -480,9 +480,9 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 		{
 			$language = unserialize( $row['language'] );
 			$xtpl->assign( 'ROW', array(
-				"fid" => $row['fid'],
-				"field" => $row['field'],
-				"field_lang" => ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : '',
+				'fid' => $row['fid'],
+				'field' => $row['field'],
+				'field_lang' => ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : '',
 				"field_type" => $array_field_type[$row['field_type']],
 				"required" => ( $row['required'] ) ? ' checked="checked"' : '',
 				"show_register" => ( $row['show_register'] ) ? ' checked="checked"' : '',
@@ -492,9 +492,9 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 			for( $i = 1; $i <= $num; ++$i )
 			{
 				$xtpl->assign( 'WEIGHT', array(
-					"key" => $i,
-					"title" => $i,
-					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
+					'key' => $i,
+					'title' => $i,
+					'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
 				) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
@@ -617,7 +617,7 @@ else
 			foreach( $field_choices as $key => $value )
 			{
 				$xtpl->assign( 'FIELD_CHOICES', array(
-					"checked" => ( $number == $dataform['default_value'] ) ? ' checked="checked"' : '',
+					'checked' => ( $number == $dataform['default_value'] ) ? ' checked="checked"' : '',
 					"number" => $number++,
 					"key" => $key,
 					"value" => $value
@@ -626,9 +626,9 @@ else
 			}
 		}
 		$xtpl->assign( 'FIELD_CHOICES', array(
-			"number" => $number,
-			"key" => '',
-			"value" => ''
+			'number' => $number,
+			'key' => '',
+			'value' => ''
 		) );
 		$xtpl->parse( 'main.load.loop_field_choice' );
 		$xtpl->assign( 'FIELD_CHOICES_NUMBER', $number );
@@ -658,9 +658,9 @@ else
 		foreach( $array_field_type as $key => $value )
 		{
 			$xtpl->assign( 'FIELD_TYPE', array(
-				"key" => $key,
-				"value" => $value,
-				"checked" => ( $dataform['field_type'] == $key ) ? ' checked="checked"' : ''
+				'key' => $key,
+				'value' => $value,
+				'checked' => ( $dataform['field_type'] == $key ) ? ' checked="checked"' : ''
 			) );
 			$xtpl->parse( 'main.load.field_type.loop' );
 		}
@@ -669,9 +669,9 @@ else
 		foreach( $array_choice_type as $key => $value )
 		{
 			$xtpl->assign( 'CHOICE_TYPES', array(
-				"key" => $key,
-				"value" => $value,
-				"selected" => ( $dataform['match_type'] == $key ) ? ' selected="selected"' : ''
+				'key' => $key,
+				'value' => $value,
+				'selected' => ( $dataform['match_type'] == $key ) ? ' selected="selected"' : ''
 			) );
 			$xtpl->parse( 'main.load.choicetypes_add.choicetypes' );
 		}
@@ -682,12 +682,12 @@ else
 		$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
 		if( ( ! empty( $dataform['sql_choices'] ) ) )
 		{
-			$xtpl->assign( 'choicetypes_add_hidden', "field_choicetypes_sql" );
+			$xtpl->assign( 'choicetypes_add_hidden', 'field_choicetypes_sql' );
 			$xtpl->assign( 'FIELD_TYPE_SQL', $array_choice_type['field_choicetypes_sql'] );
 		}
 		else
 		{
-			$xtpl->assign( 'choicetypes_add_hidden', "field_choicetypes_text" );
+			$xtpl->assign( 'choicetypes_add_hidden', 'field_choicetypes_text' );
 			$xtpl->assign( 'FIELD_TYPE_SQL', $array_choice_type['field_choicetypes_text'] );
 		}
 		$xtpl->parse( 'main.load.choicetypes_add_hidden' );
@@ -705,9 +705,9 @@ else
 	foreach( $array_match_type as $key => $value )
 	{
 		$xtpl->assign( 'MATCH_TYPE', array(
-			"key" => $key,
-			"value" => $value,
-			"match_value" => ( $key == 'regex' ) ? $dataform['match_regex'] : $dataform['func_callback'],
+			'key' => $key,
+			'value' => $value,
+			'match_value' => ( $key == 'regex' ) ? $dataform['match_regex'] : $dataform['func_callback'],
 			"checked" => ( $dataform['match_type'] == $key ) ? ' checked="checked"' : '',
 			"match_disabled" => ( $dataform['match_type'] != $key ) ? ' disabled="disabled"' : ''
 		) );
@@ -732,8 +732,8 @@ else
 	$page_title = $lang_module['fields'];
 	$contents = nv_admin_theme( $contents );
 }
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

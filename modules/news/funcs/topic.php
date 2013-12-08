@@ -27,7 +27,7 @@ if( $topicid > 0 )
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
 
-	$topic_array = array( );
+	$topic_array = array();
 	$end_publtime = 0;
 	$show_no_image = $module_config[$module_name]['show_no_image'];
 
@@ -64,7 +64,7 @@ if( $topicid > 0 )
 	$db->sql_freeresult( $query );
 	unset( $query, $row );
 
-	$topic_other_array = array( );
+	$topic_other_array = array();
 	$query = $db->sql_query( "SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = " . $topicid . " AND `publtime` < " . $end_publtime . " ORDER BY `publtime` DESC LIMIT 0," . $st_links . "" );
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
@@ -92,11 +92,11 @@ if( $topicid > 0 )
 }
 else
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	exit( );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+	exit();
 }
 
-include (NV_ROOTDIR . '/includes/header.php');
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include (NV_ROOTDIR . '/includes/footer.php');
+include NV_ROOTDIR . '/includes/footer.php';
 ?>

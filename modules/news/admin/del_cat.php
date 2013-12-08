@@ -55,7 +55,7 @@ if( $catid > 0 )
 							$array_cat_list[$catid_i] = $xtitle_i;
 						}
 
-						$xtpl = new XTemplate( "del_cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+						$xtpl = new XTemplate( 'del_cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 						$xtpl->assign( 'LANG', $lang_module );
 						$xtpl->assign( 'GLANG', $lang_global );
 						$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -70,7 +70,7 @@ if( $catid > 0 )
 
 						while( list( $catid_i, $title_i ) = each( $array_cat_list ) )
 						{
-							$xtpl->assign( 'CATIDNEWS', array( "key" => $catid_i, "title" => $title_i ) );
+							$xtpl->assign( 'CATIDNEWS', array( 'key' => $catid_i, 'title' => $title_i ) );
 							$xtpl->parse( 'main.catidnews' );
 						}
 
@@ -90,7 +90,7 @@ if( $catid > 0 )
 							}
 							else
 							{
-								$arr_catid_old = explode( ",", $row['listcatid'] );
+								$arr_catid_old = explode( ',', $row['listcatid'] );
 								$arr_catid_i = array( $catid );
 								$arr_catid_news = array_diff( $arr_catid_old, $arr_catid_i );
 								if( $catid == $row['catid'] )
@@ -99,9 +99,9 @@ if( $catid > 0 )
 								}
 								foreach( $arr_catid_news as $catid_i )
 								{
-									$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ",", $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
+									$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ',', $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
 								}
-								$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ",", $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
+								$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ',', $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
 							}
 						}
 						$db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
@@ -110,12 +110,12 @@ if( $catid > 0 )
 
 						nv_fix_cat_order();
 						nv_del_moduleCache( $module_name );
-						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid . "" );
+						Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid . '' );
 						die();
 					}
 					elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid )
 					{
-						list( $catidnews, $newstitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat`  WHERE `catid` =" . $catidnews ) );
+						list( $catidnews, $newstitle ) = $db->sql_fetchrow( $db->sql_query( "SELECT `catid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid` =" . $catidnews ) );
 						if( $catidnews > 0 )
 						{
 							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['move'], $title . ' --> ' . $newstitle, $admin_info['userid'] );
@@ -123,7 +123,7 @@ if( $catid > 0 )
 							$sql = $db->sql_query( "SELECT `id`, `catid`, `listcatid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
 							while( $row = $db->sql_fetchrow( $sql ) )
 							{
-								$arr_catid_old = explode( ",", $row['listcatid'] );
+								$arr_catid_old = explode( ',', $row['listcatid'] );
 								$arr_catid_i = array( $catid );
 								$arr_catid_news = array_diff( $arr_catid_old, $arr_catid_i );
 								if( ! in_array( $catidnews, $arr_catid_news ) )
@@ -137,9 +137,9 @@ if( $catid > 0 )
 								}
 								foreach( $arr_catid_news as $catid_i )
 								{
-									$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ",", $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
+									$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ',', $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
 								}
-								$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ",", $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
+								$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `catid`=" . $row['catid'] . ", `listcatid` = '" . implode( ',', $arr_catid_news ) . "' WHERE `id` =" . $row['id'] );
 							}
 							$db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
 							$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `catid`=" . $catid );
@@ -147,7 +147,7 @@ if( $catid > 0 )
 
 							nv_fix_cat_order();
 							nv_del_moduleCache( $module_name );
-							Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid . "" );
+							Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid . '' );
 							die();
 						}
 					}
@@ -188,13 +188,13 @@ if( $catid > 0 )
 
 if( defined( 'NV_IS_AJAX' ) )
 {
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 	die();
 }
 

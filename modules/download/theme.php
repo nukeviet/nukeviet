@@ -21,11 +21,11 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 function theme_main_download( $array_cats, $list_cats, $download_config )
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file, $my_head;
-	$xtpl = new XTemplate( "main_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
+	$xtpl = new XTemplate( 'main_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/download/" );
-	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
+	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/download/' );
+	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 	foreach( $array_cats as $cat )
 	{
 		if( empty( $cat['parentid'] ) )
@@ -84,15 +84,15 @@ function theme_viewcat_download( $array, $download_config, $subs, $generate_page
 {
 	global $global_config, $lang_module, $lang_global, $module_info, $module_name, $module_file;
 
-	$xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
+	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/download/" );
-	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" );
+	$xtpl->assign( 'IMG_FOLDER', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/download/' );
+	$xtpl->assign( 'MODULELINK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 
 	if( $download_config['is_addfile_allow'] )
 	{
-		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
 	#view cat
@@ -196,46 +196,46 @@ function view_file( $row, $download_config )
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
-            $('#commentForm').validate({
-                submitHandler: function() { nv_send_comment(); },
-                rules: {
-                    comment_uname: {
-                    required: true,
-                    rangelength: [3, 60]
-                    },
-                    
-                    comment_uemail: {
-                    required: true,
-                    email: true
-                    },
-                    
-                    comment_subject: {
-                    required: true,
-                    rangelength: [3, 200]
-                    },
-                    
-                    comment_content: {
-                    required: true,
-                    rangelength: [3, 1000]
-                    },
-                    
-                    comment_seccode: {
-                    required: true,
-                    minlength: " . NV_GFX_NUM . "
-                    }
-                }
+ $('#commentForm').validate({
+ submitHandler: function() { nv_send_comment(); },
+ rules: {
+ comment_uname: {
+ required: true,
+ rangelength: [3, 60]
+ },
+ 
+ comment_uemail: {
+ required: true,
+ email: true
+ },
+ 
+ comment_subject: {
+ required: true,
+ rangelength: [3, 200]
+ },
+ 
+ comment_content: {
+ required: true,
+ rangelength: [3, 1000]
+ },
+ 
+ comment_seccode: {
+ required: true,
+ minlength: " . NV_GFX_NUM . "
+ }
+ }
 			});
-          });";
-	$my_head .= "  </script>\n";
+ });";
+	$my_head .= " </script>\n";
 
-	$xtpl = new XTemplate( "viewfile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
+	$xtpl = new XTemplate( 'viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'ROW', $row );
 
 	if( $download_config['is_addfile_allow'] )
 	{
-		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+		$xtpl->assign( 'UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
 		$xtpl->parse( 'main.is_addfile_allow' );
 	}
 
@@ -312,7 +312,7 @@ function view_file( $row, $download_config )
 	{
 		if( $row['is_comment_allow'] )
 		{
-			$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getcomment" );
+			$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getcomment' );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 			$xtpl->assign( 'CAPTCHA_MAXLENGTH', NV_GFX_NUM );
 
@@ -337,12 +337,12 @@ function show_comment( $array, $generate_page )
 	global $module_info, $module_name, $module_file, $lang_module, $lang_global, $global_config;
 	if( ! empty( $array ) )
 	{
-		$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
+		$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'GLANG', $lang_global );
 		foreach( $array as $row )
 		{
-			if( ! empty( $row['photo'] ) && file_exists( NV_ROOTDIR . "/" . $row['photo'] ) )
+			if( ! empty( $row['photo'] ) && file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
 			{
 				$row['photo'] = NV_BASE_SITEURL . $row['photo'];
 			}
@@ -392,68 +392,68 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\">\n";
 	$my_head .= "$(document).ready(function(){
-            $('#uploadForm').validate({
-                rules: {
-                    upload_title: {
-                    required: true,
-                    rangelength: [3, 255]
-                    },
-                    
-                    upload_author_name: {
-                    rangelength: [3, 100]
-                    },
-                    
-                    upload_author_email: {
-                    email: true
-                    },
-                    
-                    upload_author_url: {
-                    url: true
-                    },
-                    
-                    upload_fileupload: {
-                    accept: '" . implode( "|", $download_config['upload_filetype'] ) . "'
-                    },
-                    
-                    upload_filesize: {
-                    number: true
-                    },
-                    
-                    upload_fileimage: {
-                    accept: 'jpg|gif|png'
-                    },
-                    
-                    upload_introtext: {
-                    maxlength: 500
-                    },
-                    
-                    upload_description: {
-                    maxlength: 5000
-                    },
-                    
-                    upload_user_name: {
-                    required: true,
-                    rangelength: [3, 60]
-                    },
-                    
-                    upload_seccode: {
-                    required: true,
-                    minlength: 6
-                    }
-                }
+ $('#uploadForm').validate({
+ rules: {
+ upload_title: {
+ required: true,
+ rangelength: [3, 255]
+ },
+ 
+ upload_author_name: {
+ rangelength: [3, 100]
+ },
+ 
+ upload_author_email: {
+ email: true
+ },
+ 
+ upload_author_url: {
+ url: true
+ },
+ 
+ upload_fileupload: {
+ accept: '" . implode( "|", $download_config['upload_filetype'] ) . "'
+ },
+ 
+ upload_filesize: {
+ number: true
+ },
+ 
+ upload_fileimage: {
+ accept: 'jpg|gif|png'
+ },
+ 
+ upload_introtext: {
+ maxlength: 500
+ },
+ 
+ upload_description: {
+ maxlength: 5000
+ },
+ 
+ upload_user_name: {
+ required: true,
+ rangelength: [3, 60]
+ },
+ 
+ upload_seccode: {
+ required: true,
+ minlength: 6
+ }
+ }
 			});
-          });";
-	$my_head .= "  </script>\n";
+ });";
+	$my_head .= " </script>\n";
 
-	$xtpl = new XTemplate( "upload.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . "/" );
+	$xtpl = new XTemplate( 'upload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
-	$xtpl->assign( 'DOWNLOAD', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
+	$xtpl->assign( 'DOWNLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 	$xtpl->assign( 'UPLOAD', $array );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=upload" );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=upload' );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CAPTCHA_MAXLENGTH', NV_GFX_NUM );
-	$xtpl->assign( 'EXT_ALLOWED', implode( ", ", $download_config['upload_filetype'] ) );
+	$xtpl->assign( 'EXT_ALLOWED', implode( ', ', $download_config['upload_filetype'] ) );
 
 	if( ! empty( $error ) )
 	{

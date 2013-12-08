@@ -48,8 +48,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $run_file ) and preg_match( "/^([a-zA-Z0-9\-\_\.]+)\.php$/", $run_file ) and file_exists( NV_ROOTDIR . '/includes/cronjobs/' . $run_file ) )
 		{
-			if( ! defined( 'NV_IS_CRON' ) ) define( "NV_IS_CRON", true );
-			require_once ( NV_ROOTDIR . '/includes/cronjobs/' . $run_file );
+			if( ! defined( 'NV_IS_CRON' ) ) define( 'NV_IS_CRON', true );
+			require_once NV_ROOTDIR . '/includes/cronjobs/' . $run_file;
 		}
 
 		if( ! nv_function_exists( $run_func ) )
@@ -60,9 +60,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			if( ! empty( $params ) )
 			{
-				$params = explode( ",", $params );
+				$params = explode( ',', $params );
 				$params = array_map( "trim", $params );
-				$params = implode( ",", $params );
+				$params = implode( ',', $params );
 			}
 
 			$sql = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `" . NV_LANG_INTERFACE . "_cron_name`) VALUES (
@@ -83,7 +83,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 					$db->sql_query( $sql );
 				}
 
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cronjobs" );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
 				die();
 			}
 		}
@@ -122,8 +122,8 @@ $contents = call_user_func( "nv_admin_add_theme", $contents );
 $page_title = $lang_global['mod_cronjobs'] . " -> " . $lang_module['nv_admin_add'];
 $set_active_op = "cronjobs";
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

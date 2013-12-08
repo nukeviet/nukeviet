@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['bots_config'];
 $errormess = '';
 
-$file_bots = NV_ROOTDIR . "/" . NV_DATADIR . "/bots.config";
+$file_bots = NV_ROOTDIR . '/' . NV_DATADIR . '/bots.config';
 
 $submit = $nv_Request->get_string( 'submit', 'post' );
 $errormess = '';
@@ -47,13 +47,13 @@ if( $submit )
 
 $bots = ( file_exists( $file_bots ) and filesize( $file_bots ) != 0 ) ? unserialize( file_get_contents( $file_bots ) ) : array();
 
-if( empty( $bots ) and file_exists( NV_ROOTDIR . "/includes/bots.php" ) )
+if( empty( $bots ) and file_exists( NV_ROOTDIR . '/includes/bots.php' ) )
 {
-	include ( NV_ROOTDIR . "/includes/bots.php" );
+	include NV_ROOTDIR . '/includes/bots.php' ;
 }
 $a = 0;
 
-$xtpl = new XTemplate( "bots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'bots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
 foreach( $bots as $name => $values )
@@ -63,7 +63,7 @@ foreach( $bots as $name => $values )
 	$array_data['name'] = $name;
 	$array_data['agent'] = $values['agent'];
 	$array_data['ips'] = $values['ips'];
-	$array_data['checked'] = ( empty( $values['allowed'] ) ) ? "" : "checked=\"checked\"";
+	$array_data['checked'] = ( empty( $values['allowed'] ) ) ? '' : 'checked="checked"';
 
 	$xtpl->assign( 'DATA', $array_data );
 	$xtpl->parse( 'main.loop' );
@@ -90,8 +90,8 @@ if( $errormess != '' )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

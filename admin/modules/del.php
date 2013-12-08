@@ -29,7 +29,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			$lang = NV_LANG_DATA;
 			$sql_drop_module = array();
 
-			require_once ( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' );
+			require_once NV_ROOTDIR . '/modules/' . $module_file . '/action.php';
 
 			if( ! empty( $sql_drop_module ) )
 			{
@@ -130,8 +130,8 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 
 nv_fix_module_weight();
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

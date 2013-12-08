@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) )
 	die( 'Stop!!!' );
 
 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=pagetitle' );
-exit( );
+exit();
 
 $sql = "SELECT `id`, `idfile`, `lang_key`, `lang_vi`, `update_vi`, `lang_en`, `update_en`, `lang_fr`, `update_fr`, `lang_cs`, `update_cs`,
  `lang_tr`, `update_tr`, `lang_ja`, `update_ja` FROM `nv3_language` WHERE `lang_vi`='' AND (`idfile`=9 OR `idfile`=13)";

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_SPADMIN' ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -19,7 +19,7 @@ $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 
 if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 $sql = "SELECT * FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id`=" . intval( $admin_id );
@@ -27,7 +27,7 @@ $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -35,7 +35,7 @@ $row = $db->sql_fetchrow( $result );
 
 if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -147,7 +147,7 @@ if( $allow_change )
 
 					$mess = nv_nl2br( $mess, "<br />" );
 
-					$xtpl = new XTemplate( "message.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system" );
+					$xtpl = new XTemplate( 'message.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system' );
 					$xtpl->assign( 'SITE_CHARSET', $global_config['site_charset'] );
 					$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 					$xtpl->assign( 'SITE_SLOGAN', $global_config['site_description'] );
@@ -173,7 +173,7 @@ if( $allow_change )
 					}
 				}
 			}
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=suspend&id=" . $id );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=suspend&id=' . $id );
 		}
 	}
 	else
@@ -245,7 +245,7 @@ else
 $page_title = sprintf( $lang_module['nv_admin_chg_suspend'], $row_user['username'] );
 
 // Parse content
-$xtpl = new XTemplate( "suspend.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'suspend.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'SUSPEND_INFO', $contents['suspend_info'][0] );
 
 if( empty( $contents['suspend_info'][1] ) )
@@ -286,12 +286,12 @@ if( ! empty( $contents['change_suspend'] ) )
 	}
 
 	$xtpl->assign( 'SENDMAIL', $contents['change_suspend']['sendmail'][0] );
-	$xtpl->assign( 'CHECKED', $contents['change_suspend']['sendmail'][1] ? " checked=\"checked\"" : "" );
+	$xtpl->assign( 'CHECKED', $contents['change_suspend']['sendmail'][1] ? ' checked="checked"' : '' );
 
 	if( ! empty( $contents['change_suspend']['clean_history'] ) )
 	{
 		$xtpl->assign( 'CLEAN_HISTORY', $contents['change_suspend']['clean_history'][0] );
-		$xtpl->assign( 'CHECKED1', $contents['change_suspend']['clean_history'][1] ? " checked=\"checked\"" : "" );
+		$xtpl->assign( 'CHECKED1', $contents['change_suspend']['clean_history'][1] ? ' checked="checked"' : '' );
 		$xtpl->parse( 'suspend.change_suspend.clean_history' );
 	}
 
@@ -302,8 +302,8 @@ if( ! empty( $contents['change_suspend'] ) )
 $xtpl->parse( 'suspend' );
 $contents = $xtpl->text( 'suspend' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -30,7 +30,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 
 	if( ! class_exists( 'UrlGetContents' ) )
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 	}
 
 	$getContent = new UrlGetContents( $global_config );

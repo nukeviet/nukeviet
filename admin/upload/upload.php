@@ -46,7 +46,7 @@ else
 		$allow_files_type = array();
 	}
 
-	require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+	require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 
 	if( $global_config['nv_auto_resize'] )
 	{
@@ -75,7 +75,7 @@ else
 	{
 		if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 		{
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+			require_once NV_ROOTDIR . '/includes/class/image.class.php';
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
@@ -109,8 +109,8 @@ else
 			{
 				$autologomod = explode( ',', $global_config['autologomod'] );
 				$dir = str_replace( "\\", "/", $path );
-				$dir = rtrim( $dir, "/" );
-				$arr_dir = explode( "/", $dir );
+				$dir = rtrim( $dir, '/' );
+				$arr_dir = explode( '/', $dir );
 
 				if( $global_config['autologomod'] == 'all' or ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod ) ) )
 				{
@@ -164,7 +164,7 @@ else
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
 
-						require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+						require_once NV_ROOTDIR . '/includes/class/image.class.php';
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $upload_logo, '', '', $config_logo );
 						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
@@ -193,7 +193,7 @@ if( empty( $error ) )
 		(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`) VALUES
 		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', " . $db->dbescape( $newalt ) . ")" );
 	}
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . "/" . $upload_info['basename'], $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid'] );
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";

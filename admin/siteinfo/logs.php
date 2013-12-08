@@ -50,7 +50,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	{
 		nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['filter_check_log'], $op ), $admin_info['username'] . " - " . $admin_info['userid'], 0 );
 
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		exit();
 	}
 
@@ -198,7 +198,7 @@ $data_users = array();
 $data_users[0] = "system";
 if( ! empty( $array_userid ) )
 {
-	$array_userid = implode( ",", $array_userid );
+	$array_userid = implode( ',', $array_userid );
 	$sql = "SELECT userid, username FROM `" . $db_config['prefix'] . "_users` WHERE userid IN (" . $array_userid . ")";
 
 	$result_users = $db->sql_query( $sql );
@@ -269,7 +269,7 @@ foreach( $list_user as $user )
 
 $logs_del = in_array( 'logs_del', $allow_func ) ? true : false;
 
-$xtpl = new XTemplate( "logs.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'logs.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -277,9 +277,9 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'checksess', md5( "siteinfo_" . session_id() . "_" . $admin_info['userid'] ) );
-$xtpl->assign( 'URL_DEL', $base_url . "&amp;" . NV_OP_VARIABLE . "=logs_del" );
-$xtpl->assign( 'URL_CANCEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
+$xtpl->assign( 'checksess', md5( 'siteinfo_' . session_id() . "_" . $admin_info['userid'] ) );
+$xtpl->assign( 'URL_DEL', $base_url . '&amp;' . NV_OP_VARIABLE . '=logs_del' );
+$xtpl->assign( 'URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'DISABLE', $disabled );
 $xtpl->assign( 'DATA_SEARCH', $data_search );
 $xtpl->assign( 'DATA_ORDER', $order );
@@ -318,7 +318,7 @@ foreach( $data as $data_i )
 	$xtpl->assign( 'DATA', $data_i );
 	if( $logs_del )
 	{
-		$xtpl->assign( 'DEL_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=log&amp;" . NV_OP_VARIABLE . "=logs_del&amp;id=" . $data_i['id'] );
+		$xtpl->assign( 'DEL_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=log&amp;' . NV_OP_VARIABLE . '=logs_del&amp;id=' . $data_i['id'] );
 		$xtpl->parse( 'main.row.delete' );
 	}
 	$xtpl->parse( 'main.row' );
@@ -340,8 +340,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

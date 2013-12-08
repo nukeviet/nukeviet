@@ -22,7 +22,7 @@ function main_theme( $array_content, $select_options, $base_url, $checkss )
 {
 	global $module_file, $lang_global, $lang_module, $module_info;
 
-	$xtpl = new XTemplate( "form.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENT', $array_content );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'ACTION_FILE', $base_url );
@@ -31,7 +31,7 @@ function main_theme( $array_content, $select_options, $base_url, $checkss )
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
 	$xtpl->assign( 'NV_GFX_NUM', NV_GFX_NUM );
 
 	if( ! empty( $array_content['error'] ) )
@@ -80,7 +80,7 @@ function sendcontact( $url )
 {
 	global $module_file, $module_info, $lang_module;
 
-	$xtpl = new XTemplate( "sendcontact.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$lang_module['urlrefresh'] = nv_url_rewrite( $url, true );
 

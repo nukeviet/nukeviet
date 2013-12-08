@@ -18,8 +18,8 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 	$contents = nv_setup_data_module( NV_LANG_DATA, $modname );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

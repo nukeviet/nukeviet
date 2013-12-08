@@ -138,13 +138,13 @@ if( ! empty( $submit ) )
 			{
 				$act = 1;
 			}
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape( $question ) . ", `link`=" . $db->dbescape( $link ) . ", `acceptcm` =  " . $maxoption . ", `admin_id` =  " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape( $groups_view ) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . ", `act`=" . $act . " WHERE `vid` =" . $vid . "";
+			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `question`=" . $db->dbescape( $question ) . ", `link`=" . $db->dbescape( $link ) . ", `acceptcm` = " . $maxoption . ", `admin_id` = " . $admin_info['admin_id'] . ", `who_view`=" . $who_view . ", `groups_view` = " . $db->dbescape( $groups_view ) . ", `publ_time`=" . $begindate . ", `exp_time`=" . $enddate . ", `act`=" . $act . " WHERE `vid` =" . $vid . "";
 			if( $db->sql_query( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 				$error = '';
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '' );
 				die();
 			}
 		}
@@ -212,10 +212,10 @@ $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/
 
 $my_footer .= "<script type=\"text/javascript\">\$(document).ready(function(){\$(\"#votingcontent\").validate();});</script>";
 
-$xtpl = new XTemplate( "content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;vid=" . $vid );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;vid=' . $vid );
 
 $rowvote['link'] = nv_htmlspecialchars( $rowvote['link'] );
 $xtpl->assign( 'DATA', $rowvote );
@@ -238,22 +238,22 @@ $who_view = $rowvote['who_view'];
 foreach( $array_who_view as $k => $w )
 {
 	$xtpl->assign( 'WHO_VIEW', array(
-		"key" => $k,
-		"title" => $w,
-		"selected" => $who_view == $k ? " selected=\"selected\"" : ""
+		'key' => $k,
+		'title' => $w,
+		'selected' => $who_view == $k ? ' selected=\'selected\'' : ''
 	) );
 	$xtpl->parse( 'main.who_view' );
 }
 
-$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
 
 $groups_view = explode( ',', $rowvote['groups_view'] );
 foreach( $groups_list as $group_id => $grtl )
 {
 	$xtpl->assign( 'GROUPS_VIEW', array(
-		"key" => $group_id,
-		"title" => $grtl,
-		"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
+		'key' => $group_id,
+		'title' => $grtl,
+		'checked' => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
 	) );
 	$xtpl->parse( 'main.groups_view' );
 }
@@ -267,8 +267,8 @@ $xtpl->assign( 'PUBL_DATE', $publ_date );
 for( $i = 0; $i <= 23; ++$i )
 {
 	$xtpl->assign( 'PHOUR', array(
-		"key" => $i,
-		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		'key' => $i,
+		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
 		"selected" => $i == $phour ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.phour' );
@@ -276,8 +276,8 @@ for( $i = 0; $i <= 23; ++$i )
 for( $i = 0; $i < 60; ++$i )
 {
 	$xtpl->assign( 'PMIN', array(
-		"key" => $i,
-		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		'key' => $i,
+		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
 		"selected" => $i == $pmin ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.pmin' );
@@ -299,8 +299,8 @@ $xtpl->assign( 'EXP_DATE', $exp_date );
 for( $i = 0; $i <= 23; ++$i )
 {
 	$xtpl->assign( 'EHOUR', array(
-		"key" => $i,
-		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		'key' => $i,
+		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
 		"selected" => $i == $ehour ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.ehour' );
@@ -308,8 +308,8 @@ for( $i = 0; $i <= 23; ++$i )
 for( $i = 0; $i < 60; ++$i )
 {
 	$xtpl->assign( 'EMIN', array(
-		"key" => $i,
-		"title" => str_pad( $i, 2, "0", STR_PAD_LEFT ),
+		'key' => $i,
+		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
 		"selected" => $i == $emin ? " selected=\"selected\"" : ""
 	) );
 	$xtpl->parse( 'main.emin' );
@@ -319,10 +319,10 @@ $items = 0;
 foreach( $array_answervote as $id => $title )
 {
 	$xtpl->assign( 'ITEM', array(
-		"stt" => ++$items,
-		"id" => $id,
-		"title" => $title,
-		"link" => nv_htmlspecialchars( $array_urlvote[$id] )
+		'stt' => ++$items,
+		'id' => $id,
+		'title' => $title,
+		'link' => nv_htmlspecialchars( $array_urlvote[$id] )
 	) );
 
 	$xtpl->parse( 'main.item' );
@@ -335,8 +335,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 if( $vid ) $op = '';
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

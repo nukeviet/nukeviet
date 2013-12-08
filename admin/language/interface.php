@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
-$xtpl = new XTemplate( "interface.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'interface.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -50,14 +50,14 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) == 0 )
 {
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $dirlang . "&checksess=" . md5( "readallfile" . session_id() ) );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -99,7 +99,7 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 		'langsitename' => $langsitename,
 		'author' => $array_translator['author'],
 		'createdate' => $array_translator['createdate'],
-		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ),
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() ),
 		'url_export' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() )
 	) );
 	if( in_array( 'write', $allow_func ) )
@@ -112,8 +112,8 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

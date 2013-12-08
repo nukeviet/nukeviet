@@ -42,16 +42,16 @@ if( ! empty( $list_cats ) )
 		$channel['description'] = $list_cats[$catid]['description'];
 
 		$sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " 
-        AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
+ FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " 
+ AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
 	}
 	else
 	{
 		$in = array_keys( $list_cats );
-		$in = implode( ",", $in );
+		$in = implode( ',', $in );
 		$sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
-        AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
+ FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
+ AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
 	}
 	if( $module_info['rss'] )
 	{

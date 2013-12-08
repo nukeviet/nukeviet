@@ -11,13 +11,13 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_USER' ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' );
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' ;
 	exit();
 }
 
@@ -42,7 +42,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 			$contents = $lang_module['change_pass_ok'];
 		}
 	}
-	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 }
 else
 {
@@ -102,11 +102,11 @@ else
 						$nv_Request->unset_request( 'lostpass_seccode', 'session' );
 
 						$contents = user_info_exit( $info );
-						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass", true ) . "\" />";
+						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass', true ) . "\" />";
 
-						include ( NV_ROOTDIR . '/includes/header.php' );
+						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
-						include ( NV_ROOTDIR . '/includes/footer.php' );
+						include NV_ROOTDIR . '/includes/footer.php';
 						exit();
 					}
 					if( $global_config['allowquestion'] == 0 )
@@ -151,11 +151,11 @@ else
 							}
 
 							$contents = user_info_exit( $info );
-							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
-							include ( NV_ROOTDIR . '/includes/header.php' );
+							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
-							include ( NV_ROOTDIR . '/includes/footer.php' );
+							include NV_ROOTDIR . '/includes/footer.php';
 							exit();
 						}
 						else
@@ -192,8 +192,8 @@ else
 	$contents = user_lostpass( $data, $question );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

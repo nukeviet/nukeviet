@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $user_info = array();
 
-if( defined( "NV_IS_ADMIN" ) )
+if( defined( 'NV_IS_ADMIN' ) )
 {
 	$user_info = $admin_info;
 
@@ -19,13 +19,13 @@ if( defined( "NV_IS_ADMIN" ) )
 }
 elseif( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/is_user.php' );
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/is_user.php';
 
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
-		$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
+		$query = 'SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
 			`view_mail`, `remember`, `in_groups`, `last_login` AS `current_login`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_openid`, `password`
-			FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . intval( $user_info['userid'] ) . " AND `active`=1 LIMIT 1";
+			FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid` = ' . intval( $user_info['userid'] ) . ' AND `active`=1 LIMIT 1';
 		$result = $db->sql_query( $query );
 
 		if( $db->sql_numrows( $result ) == 1 )
@@ -63,12 +63,12 @@ else
 
 			if( isset( $user['userid'] ) and is_numeric( $user['userid'] ) and $user['userid'] > 0 )
 			{
-				if( isset( $user['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $user['checknum'] ) )
+				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $user['checknum'] ) )
 				{
-					$query = "SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
+					$query = 'SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
 						`view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`,
 						`last_openid` AS `current_openid`, `password`, `question`, `answer`
-						FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` = " . $user['userid'] . " AND `active`=1 LIMIT 1";
+						FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid` = ' . $user['userid'] . ' AND `active`=1 LIMIT 1';
 					$result = $db->sql_query( $query );
 
 					if( $db->sql_numrows( $result ) == 1 )
@@ -96,7 +96,7 @@ else
 
 							if( ! empty( $user_info['current_openid'] ) )
 							{
-								$query = "SELECT `openid`, `email` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `opid`=" . $db->dbescape( $user_info['current_openid'] ) . " LIMIT 1";
+								$query = 'SELECT `openid`, `email` FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '_openid` WHERE `opid`=' . $db->dbescape( $user_info['current_openid'] ) . ' LIMIT 1';
 								$result = $db->sql_query( $query );
 
 								if( $db->sql_numrows( $result ) != 1 )

@@ -40,7 +40,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 if( ! empty( $banners_id ) )
 {
-	$banners_id = implode( ",", $banners_id );
+	$banners_id = implode( ',', $banners_id );
 
 	$query = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid` IN (" . $banners_id . ")";
 	$db->sql_query( $query );
@@ -63,8 +63,8 @@ $db->sql_query( $query );
 $db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_clients`" );
 $db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_clients`" );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo "OK|client_list|client_list";
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -25,7 +25,7 @@ if( $db->sql_numrows( $result ) )
 }
 else
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=blockcat" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blockcat' );
 }
 
 $cookie_bid = $nv_Request->get_int( 'int_bid', 'cookie', 0 );
@@ -56,7 +56,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&bid=" . $bid );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&bid=' . $bid );
 	die();
 }
 
@@ -66,7 +66,7 @@ foreach( $array_block as $xbid => $blockname )
 	$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $xbid] = $blockname;
 }
 
-$xtpl = new XTemplate( "block.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -84,8 +84,8 @@ if( $listid == '' )
 }
 else
 {
-	$id_array = array_map( "intval", explode( ",", $listid ) );
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `publtime` DESC";
+	$id_array = array_map( "intval", explode( ',', $listid ) );
+	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` IN (" . implode( ',', $id_array ) . ") ORDER BY `publtime` DESC";
 }
 
 $result = $db->sql_query( $sql );
@@ -94,7 +94,7 @@ if( $db->sql_numrows( $result ) )
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
+			'checked' => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
 			"title" => $title,
 			"id" => $id
 		) );
@@ -105,9 +105,9 @@ if( $db->sql_numrows( $result ) )
 	foreach( $array_block as $xbid => $blockname )
 	{
 		$xtpl->assign( 'BID', array(
-			"key" => $xbid,
-			"title" => $blockname,
-			"selected" => $xbid == $bid ? " selected=\"selected\"" : ""
+			'key' => $xbid,
+			'title' => $blockname,
+			'selected' => $xbid == $bid ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.news.bid' );
 	}
@@ -120,8 +120,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $op = 'groups';
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

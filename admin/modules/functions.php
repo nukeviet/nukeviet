@@ -159,17 +159,17 @@ function nv_setup_data_module( $lang, $module_name )
 		$module_theme = $db->unfixdb( $module_theme );
 
 		$module_version = array();
-		$version_file = NV_ROOTDIR . "/modules/" . $module_file . "/version.php";
+		$version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
 
 		if( file_exists( $version_file ) )
 		{
-			include ( $version_file );
+			include $version_file;
 		}
 
-		$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( "trim", explode( ",", $module_version['modfuncs'] ) ) : array();
+		$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( 'trim', explode( ',', $module_version['modfuncs'] ) ) : array();
 		// Xoa du lieu tai bang _config
 
-		$sql = "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`=" . $db->dbescape( $lang ) . " AND `module`=" . $db->dbescape( $module_name );
+		$sql = 'DELETE FROM `' . NV_CONFIG_GLOBALTABLE . '` WHERE `lang`=' . $db->dbescape( $lang ) . ' AND `module`=' . $db->dbescape( $module_name );
 		$db->sql_query( $sql );
 
 		nv_delete_all_cache();
@@ -178,7 +178,7 @@ function nv_setup_data_module( $lang, $module_name )
 		{
 			$sql_recreate_module = array();
 
-			include ( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' );
+			include NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ;
 
 			if( ! empty( $sql_create_module ) )
 			{
@@ -202,10 +202,10 @@ function nv_setup_data_module( $lang, $module_name )
 			$layout_array = nv_scandir( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/layout', $global_config['check_op_layout'] );
 			if( ! empty( $layout_array ) )
 			{
-				$layout_array = preg_replace( $global_config['check_op_layout'], "\\1", $layout_array );
+				$layout_array = preg_replace( $global_config['check_op_layout'], '\\1', $layout_array );
 			}
 
-			$selectthemes = "default";
+			$selectthemes = 'default';
 			if( ! empty( $module_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $module_theme . '/config.ini' ) )
 			{
 				$selectthemes = $module_theme;
@@ -230,9 +230,9 @@ function nv_setup_data_module( $lang, $module_name )
 					for( $j = 0, $count2 = sizeof( $layout_funcs ); $j < $count2; ++$j )
 					{
 						$mo_funcs = ( string )$layout_funcs[$j];
-						$mo_funcs = explode( ":", $mo_funcs );
+						$mo_funcs = explode( ':', $mo_funcs );
 						$m = $mo_funcs[0];
-						$arr_f = explode( ",", $mo_funcs[1] );
+						$arr_f = explode( ',', $mo_funcs[1] );
 						foreach( $arr_f as $f )
 						{
 							$array_layout_func_default[$m][$f] = $layout_name;
@@ -243,14 +243,14 @@ function nv_setup_data_module( $lang, $module_name )
 			// end get default layout
 
 			$arr_func_id_old = array();
-			$sql = "SELECT `func_id`, `func_name` FROM `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` WHERE `in_module`=" . $db->dbescape( $module_name );
+			$sql = 'SELECT `func_id`, `func_name` FROM `' . $db_config['prefix'] . '_' . $lang . '_modfuncs` WHERE `in_module`=' . $db->dbescape( $module_name );
 			$result = $db->sql_query( $sql );
 			while( $row = $db->sql_fetchrow( $result ) )
 			{
 				$arr_func_id_old[$db->unfixdb( $row['func_name'] )] = $row['func_id'];
 			}
 
-			$new_funcs = preg_replace( $global_config['check_op_file'], "\\1", $new_funcs );
+			$new_funcs = preg_replace( $global_config['check_op_file'], '\\1', $new_funcs );
 			$new_funcs = array_flip( $new_funcs );
 			$array_keys = array_keys( $new_funcs );
 
@@ -262,7 +262,7 @@ function nv_setup_data_module( $lang, $module_name )
 				if( isset( $arr_func_id_old[$func] ) and isset( $arr_func_id_old[$func] ) > 0 )
 				{
 					$arr_func_id[$func] = $arr_func_id_old[$func];
-					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `show_func`= " . $show_func . ", `subweight`='0' WHERE `func_id`=" . $arr_func_id[$func] . "" );
+					$db->sql_query( 'UPDATE `' . $db_config['prefix'] . '_' . $lang . '_modfuncs` SET `show_func`= ' . $show_func . ', `subweight`=0 WHERE `func_id`=' . $arr_func_id[$func] );
 				}
 				else
 				{
@@ -280,7 +280,7 @@ function nv_setup_data_module( $lang, $module_name )
 					$arr_show_func[] = $func_id;
 					$show_func = 1;
 					++$subweight;
-					$sql = "UPDATE `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` SET `subweight`=" . $subweight . ", show_func=" . $show_func . " WHERE `func_id`=" . $db->dbescape( $func_id );
+					$sql = 'UPDATE `' . $db_config['prefix'] . '_' . $lang . '_modfuncs` SET `subweight`=' . $subweight . ', show_func=' . $show_func . ' WHERE `func_id`=' . $db->dbescape( $func_id );
 					$db->sql_query( $sql );
 				}
 			}
@@ -288,7 +288,7 @@ function nv_setup_data_module( $lang, $module_name )
 		else
 		{
 			// Xoa du lieu tai bang _modfuncs
-			$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang . "_modfuncs` WHERE `in_module`=" . $db->dbescape( $module_name );
+			$sql = 'DELETE FROM `' . $db_config['prefix'] . '_' . $lang . '_modfuncs` WHERE `in_module`=' . $db->dbescape( $module_name );
 			$db->sql_query( $sql );
 		}
 
@@ -297,7 +297,7 @@ function nv_setup_data_module( $lang, $module_name )
 			foreach( $module_version['uploads_dir'] as $path )
 			{
 				$cp = '';
-				$arr_p = explode( "/", $path );
+				$arr_p = explode( '/', $path );
 
 				foreach( $arr_p as $p )
 				{
@@ -323,7 +323,7 @@ function nv_setup_data_module( $lang, $module_name )
 			foreach( $module_version['files_dir'] as $path )
 			{
 				$cp = '';
-				$arr_p = explode( "/", $path );
+				$arr_p = explode( '/', $path );
 
 				foreach( $arr_p as $p )
 				{
@@ -356,7 +356,7 @@ function main_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CONTENT', $contents );
 
@@ -378,7 +378,7 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CAPTION', $contents['caption'] );
 
 	if( ! empty( $act_modules ) )
@@ -395,14 +395,14 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
-				'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
+				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
+				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
 				$xtpl->parse( 'main.act_modules.loop.weight' );
 			}
 
@@ -428,14 +428,14 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
-				'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
+				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
+				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
 				$xtpl->parse( 'main.deact_modules.loop.weight' );
 			}
 
@@ -461,14 +461,14 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? " checked=\"checked\"" : "",
-				'submenu_checked' => $values['submenu'][0] ? " checked=\"checked\"" : "",
-				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? " disabled=\"disabled\"" : ""
+				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
+				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
+				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? " selected=\"selected\"" : "" ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
 				$xtpl->parse( 'main.bad_modules.loop.weight' );
 			}
 
@@ -494,7 +494,7 @@ function show_funcs_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "show_funcs_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'show_funcs_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CONTENT', $contents );
 
@@ -524,7 +524,7 @@ function change_custom_name_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "change_custom_name_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'change_custom_name_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENT', $contents );
 
 	$xtpl->parse( 'main' );
@@ -544,7 +544,7 @@ function setup_modules( $array_head, $array_modules, $array_virtual_head, $array
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "setup_modules.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'setup_modules.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'CAPTION', $array_head['caption'] );
 

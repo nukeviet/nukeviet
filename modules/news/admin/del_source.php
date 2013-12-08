@@ -20,7 +20,7 @@ if( $sourceid > 0 )
 	$query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" );
 	while( $row = $db->sql_fetchrow( $query ) )
 	{
-		$arr_catid = explode( ",", $row['listcatid'] );
+		$arr_catid = explode( ',', $row['listcatid'] );
 		foreach( $arr_catid as $catid_i )
 		{
 			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `sourceid` = '0' WHERE `id` =" . $row['id'] );
@@ -34,8 +34,8 @@ if( $sourceid > 0 )
 	$contents = "OK_" . $sourceid;
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

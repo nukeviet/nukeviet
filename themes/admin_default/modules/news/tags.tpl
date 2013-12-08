@@ -51,12 +51,12 @@
 </form>
 <script type="text/javascript">
 	$("#aliaslength").html($("#idalias").val().length);
-	$("#idalias").keypress(function() {
+	$("#idalias").bind("keyup paste", function() {
 		$("#aliaslength").html($(this).val().length);
 	});
 
 	$("#descriptionlength").html($("#description").val().length);
-	$("#description").keypress(function() {
+	$("#description").bind("keyup paste", function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
 

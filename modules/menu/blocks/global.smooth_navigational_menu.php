@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
- * @Createdate Jan 17, 2011  11:34:27 AM
+ * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -98,11 +98,11 @@ if( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
 	{
 		global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/smooth_navigational_menu.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/menu/smooth_navigational_menu.tpl" ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/smooth_navigational_menu.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -111,12 +111,12 @@ if( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "smooth_navigational_menu.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/menu" );
+		$xtpl = new XTemplate( 'smooth_navigational_menu.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
-		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
-		$xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss" );
+		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+		$xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss' );
 
 		foreach( $site_mods as $modname => $modvalues )
 		{

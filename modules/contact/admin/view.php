@@ -13,7 +13,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( ! $id )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -22,7 +22,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -32,7 +32,7 @@ $contact_allowed = nv_getAllowed();
 
 if( ! isset( $contact_allowed['view'][$row['cid']] ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -47,7 +47,7 @@ if( ! $is_read )
 
 $page_title = $module_info['custom_title'];
 
-$xtpl = new XTemplate( "view.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -74,7 +74,7 @@ if( ! empty( $row['sender_phone'] ) ) $xtpl->parse( 'main.sender_phone' );
 
 if( isset( $contact_allowed['reply'][$row['cid']] ) )
 {
-	$xtpl->assign( 'URL_REPLY', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=reply&amp;id=" . $row['id'] );
+	$xtpl->assign( 'URL_REPLY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=reply&amp;id=' . $row['id'] );
 
 	$xtpl->parse( 'main.reply' );
 }
@@ -104,8 +104,8 @@ if( $row['is_reply'] and ! empty( $row['reply_content'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

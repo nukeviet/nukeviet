@@ -83,7 +83,7 @@ elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) !== false )
 	{
 		$sys_info['supports_rewrite'] = "rewrite_mode_iis";
 	}
-	elseif( isset( $_SERVER['HTTP_X_REWRITE_URL'] )  )
+	elseif( isset( $_SERVER['HTTP_X_REWRITE_URL'] ) )
 	{
 			$sys_info['supports_rewrite'] = "rewrite_mode_apache";
 	}

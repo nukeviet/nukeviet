@@ -8,11 +8,11 @@
  */
 
 define( 'NV_ADMIN', true );
-require_once ( 'mainfile.php' );
+require_once 'mainfile.php';
 
-$file_config_temp = NV_TEMP_DIR . "/config_" . md5( $global_config['sitekey'] ) . ".php";
+$file_config_temp = NV_TEMP_DIR . '/config_' . md5( $global_config['sitekey'] ) . '.php';
 
-$dirs = nv_scandir( NV_ROOTDIR . "/language", "/^([a-z]{2})/" );
+$dirs = nv_scandir( NV_ROOTDIR . '/language', '/^([a-z]{2})/' );
 
 $languageslist = array();
 
@@ -24,17 +24,17 @@ foreach( $dirs as $file )
 	}
 }
 
-require_once ( NV_ROOTDIR . "/modules/users/language/" . NV_LANG_DATA . ".php" );
-require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/global.php" );
-require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/install.php" );
-require_once ( NV_ROOTDIR . "/install/template.php" );
-require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+require_once NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/global.php';
+require_once NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/install.php';
+require_once NV_ROOTDIR . '/install/template.php';
+require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
-	require_once ( NV_ROOTDIR . '/' . $file_config_temp );
+	require_once NV_ROOTDIR . '/' . $file_config_temp;
 	//Bat dau phien lam viec cua MySQL
-	require_once ( NV_ROOTDIR . '/includes/class/mysql.class.php' );
+	require_once NV_ROOTDIR . '/includes/class/mysql.class.php';
 	$db_config['new_link'] = NV_MYSQL_NEW_LINK;
 	$db_config['persistency'] = NV_MYSQL_PERSISTENCY;
 	$db_config['collation'] = NV_MYSQL_COLLATION;
@@ -47,27 +47,27 @@ $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
 
 if( $step <= 0 or $step > 7 )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1' );
 	exit();
 }
 
 if( $step > $maxstep and $step > 2 )
 {
 	$step = $maxstep;
-	Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 	exit();
 }
 
-if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) and $step < 7 )
+if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) and $step < 7 )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "index.php" );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php' );
 	exit();
 }
 if( empty( $sys_info['supports_rewrite'] ) )
 {
 	if( isset( $_COOKIE['supports_rewrite'] ) and $_COOKIE['supports_rewrite'] == md5( $global_config['sitekey'] ) )
 	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
+		$sys_info['supports_rewrite'] = 'rewrite_mode_apache';
 	}
 }
 if( $step == 1 )
@@ -96,8 +96,8 @@ elseif( $step == 2 )
 			die( 'ERROR|' . $lang_module['ftp_error_empty'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
+		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
+		if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
 
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -108,7 +108,7 @@ elseif( $step == 2 )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
@@ -127,26 +127,26 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_DATADIR, NV_DATADIR . "/ip_files" );
+	$array_dir = array( NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR, NV_DATADIR . '/ip_files' );
 
 	// Them vao cac file trong thu muc data va file cau hinh tam
-	$array_file_data = nv_scandir( NV_ROOTDIR . "/" . NV_DATADIR, "/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/" );
+	$array_file_data = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, '/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/' );
 	foreach( $array_file_data as $file_i )
 	{
-		$array_dir[] = NV_DATADIR . "/" . $file_i;
+		$array_dir[] = NV_DATADIR . '/' . $file_i;
 	}
 	$array_dir[] = $file_config_temp;
 
 	// Them vao file .htaccess va web.config
 	if( ! empty( $sys_info['supports_rewrite'] ) )
 	{
-		if( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
+		if( $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 		{
-			$array_dir[] = ".htaccess";
+			$array_dir[] = '.htaccess';
 		}
 		else
 		{
-			$array_dir[] = "web.config";
+			$array_dir[] = 'web.config';
 		}
 	}
 
@@ -185,9 +185,9 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR );
 
-				$list_files = ftp_nlist( $conn_id, "." );
+				$list_files = ftp_nlist( $conn_id, '.' );
 
 				$a = 0;
 				foreach( $list_files as $filename )
@@ -291,7 +291,7 @@ elseif( $step == 2 )
 		$i = 0;
 		for( $ip_file = 0; $ip_file <= 255; $ip_file++ )
 		{
-			if( file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $ip_file . ".php", "<?php\n\n\$ranges = array();\n\n?>", LOCK_EX ) )
+			if( file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array();\n\n?>", LOCK_EX ) )
 			{
 				++$i;
 			}
@@ -300,7 +300,7 @@ elseif( $step == 2 )
 		if( $i != 256 )
 		{
 			$nextstep = 0;
-			$array_dir_check[NV_DATADIR . "/ip_files"] = sprintf( $lang_module['dir_not_writable_ip_files'], NV_DATADIR . "/ip_files" );
+			$array_dir_check[NV_DATADIR . '/ip_files'] = sprintf( $lang_module['dir_not_writable_ip_files'], NV_DATADIR . '/ip_files' );
 		}
 	}
 
@@ -320,13 +320,13 @@ elseif( $step == 3 )
 	}
 	$title = $lang_module['license'];
 
-	if( file_exists( NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html" ) )
+	if( file_exists( NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html' ) )
 	{
-		$license = file_get_contents( NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html" );
+		$license = file_get_contents( NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html' );
 	}
 	else
 	{
-		$license = file_get_contents( NV_ROOTDIR . "/install/licenses.html" );
+		$license = file_get_contents( NV_ROOTDIR . '/install/licenses.html' );
 	}
 
 	$contents = nv_step_3( $license );
@@ -416,7 +416,7 @@ elseif( $step == 5 )
 				{
 					while( $item = $db->sql_fetch_assoc( $result ) )
 					{
-						$db->sql_query( "DROP TABLE `" . $item['Name'] . "`" );
+						$db->sql_query( 'DROP TABLE `' . $item['Name'] . '`' );
 					}
 					$num_table = 0;
 				}
@@ -435,7 +435,7 @@ elseif( $step == 5 )
 				$sql_create_table = array();
 
 				//cai dat du lieu cho he thong
-				require_once ( NV_ROOTDIR . "/install/data.php" );
+				require_once NV_ROOTDIR . '/install/data.php';
 
 				foreach( $sql_create_table as $query )
 				{
@@ -453,20 +453,19 @@ elseif( $step == 5 )
 				{
 					define( 'NV_IS_MODADMIN', true );
 
-					$module_name = "modules";
+					$module_name = 'modules';
 					$lang_module['modules'] = '';
 					$lang_module['vmodule_add'] = '';
 					$lang_module['autoinstall'] = '';
 					$lang_global['mod_modules'] = '';
 
-					require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/functions.php" );
+					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
 
 					$module_name = '';
 
-					require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
+					require_once NV_ROOTDIR . '/includes/sqldata.php';
 
-					$modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-					$modules_exit[] = 'global';
+					$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
 					//cai dat du lieu cho ngon ngu
 					$sql_create_table = nv_create_table_sys( NV_LANG_DATA );
@@ -481,9 +480,8 @@ elseif( $step == 5 )
 						}
 					}
 
-					$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` ORDER BY `weight` ASC";
+					$sql = 'SELECT * FROM `' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules` ORDER BY `weight` ASC';
 					$result = $db->sql_query( $sql );
-
 					while( $row = $db->sql_fetchrow( $result ) )
 					{
 						$setmodule = $row['title'];
@@ -492,15 +490,14 @@ elseif( $step == 5 )
 						{
 							$sm = nv_setup_data_module( NV_LANG_DATA, $setmodule );
 
-							if( $sm != "OK_" . $setmodule )
+							if( $sm != 'OK_' . $setmodule )
 							{
-								die( "error set module: " . $setmodule );
+								die( 'error set module: ' . $setmodule );
 							}
 						}
 						else
 						{
-							$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`=" . $db->dbescape( $setmodule );
-							$db->sql_query( $sql );
+							$db->sql_query( 'DELETE FROM `' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules` WHERE `title`=' . $db->dbescape( $setmodule ) );
 						}
 					}
 
@@ -508,12 +505,12 @@ elseif( $step == 5 )
 					$filesavedata = NV_LANG_DATA;
 					$lang_data = NV_LANG_DATA;
 
-					if( ! file_exists( NV_ROOTDIR . "/install/data_" . $lang_data . ".php" ) )
+					if( ! file_exists( NV_ROOTDIR . '/install/data_' . $lang_data . '.php' ) )
 					{
-						$filesavedata = "en";
+						$filesavedata = 'en';
 					}
 
-					include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
+					include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
 
 					foreach( $sql_create_table as $query )
 					{
@@ -526,32 +523,32 @@ elseif( $step == 5 )
 						}
 					}
 
-					//xoa du lieu tai bang nv3_vi_blocks
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` WHERE `bid` in (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_blocks_groups
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_modthemes
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_modfuncs
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
 					//xoa du lieu tai bang nv3_vi_modules
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `module_file` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
 					$db->sql_query( $sql );
 
 					//xoa du lieu tai bang nv3_setup_modules
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+					$db->sql_query( $sql );
+
+					//xoa du lieu tai bang nv3_vi_blocks
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` WHERE `bid` in (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN (SELECT `title` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules`))";
+					$db->sql_query( $sql );
+
+					//xoa du lieu tai bang nv3_vi_blocks_groups
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN (SELECT `title` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules`)";
+					$db->sql_query( $sql );
+
+					//xoa du lieu tai bang nv3_vi_modthemes
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN (SELECT `title` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules`))";
+					$db->sql_query( $sql );
+
+					//xoa du lieu tai bang nv3_vi_modfuncs
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN (SELECT `title` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules`)";
 					$db->sql_query( $sql );
 
 					//xoa du lieu tai bang nv3_config
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
+					$sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module`!='global' AND `module` NOT IN (SELECT `title` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules`)";
 					$db->sql_query( $sql );
 
 					$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`='news'";
@@ -571,7 +568,7 @@ elseif( $step == 5 )
 
 						while( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
 						{
-							$arr_catid = explode( ",", $listcatid );
+							$arr_catid = explode( ',', $listcatid );
 							foreach( $arr_catid as $catid )
 							{
 								$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
@@ -584,7 +581,7 @@ elseif( $step == 5 )
 					++$step;
 					$nv_Request->set_Session( 'maxstep', $step );
 
-					Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}
 			}
@@ -606,13 +603,13 @@ elseif( $step == 6 )
 	{
 		$db_config['dbsystem'] = $db_config['dbname'];
 		define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
-		
+
 		$db = new sql_db( $db_config );
 		if( ! empty( $db->error ) )
 		{
 			$error = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
 		}
-		
+
 		$site_name = $nv_Request->get_title( 'site_name', 'post', '', 1 );
 		$login = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, NV_UNICKMAX );
 		$email = $nv_Request->get_title( 'nv_email', 'post', '' );
@@ -752,39 +749,39 @@ elseif( $step == 6 )
 
 					nv_save_file_config();
 
-					@rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );
+					@rename( NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME );
 
-					if( is_writable( NV_ROOTDIR . "/robots.txt" ) )
+					if( is_writable( NV_ROOTDIR . '/robots.txt' ) )
 					{
-						$contents = file_get_contents( NV_ROOTDIR . "/robots.txt" );
+						$contents = file_get_contents( NV_ROOTDIR . '/robots.txt' );
 
 						$check_rewrite_file = nv_check_rewrite_file();
 
 						if( $check_rewrite_file )
 						{
-							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "Sitemap.xml";
+							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap.xml';
 						}
 						else
 						{
-							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php/SitemapIndex" . $global_config['rewrite_endurl'];
+							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
 						}
 
 						$contents = str_replace( 'Sitemap: http://yousite.com/?nv=SitemapIndex', $content_sitemap, $contents );
 
-						file_put_contents( NV_ROOTDIR . "/robots.txt", $contents, LOCK_EX );
+						file_put_contents( NV_ROOTDIR . '/robots.txt', $contents, LOCK_EX );
 					}
 
-					Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}
 				else
 				{
-					$error = sprintf( $lang_module['file_not_writable'], NV_DATADIR . "/config_global.php" );
+					$error = sprintf( $lang_module['file_not_writable'], NV_DATADIR . '/config_global.php' );
 				}
 			}
 			else
 			{
-				$error = "Error add Administrator";
+				$error = 'Error add Administrator';
 			}
 		}
 	}
@@ -797,7 +794,7 @@ elseif( $step == 7 )
 {
 	$finish = 0;
 
-	if( file_exists( NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME ) )
 	{
 		$ftp_check_login = 0;
 		$ftp_server_array = array( 'ftp_check_login' => 0 );
@@ -828,18 +825,18 @@ elseif( $step == 7 )
 
 		if( $ftp_check_login == 1 )
 		{
-			ftp_rename( $conn_id, NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME, NV_CONFIG_FILENAME );
+			ftp_rename( $conn_id, NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_CONFIG_FILENAME );
 			nv_chmod_dir( $conn_id, NV_UPLOADS_DIR, true );
 			ftp_chmod( $conn_id, 0644, NV_CONFIG_FILENAME );
 			ftp_close( $conn_id );
 		}
 		else
 		{
-			@rename( NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME, NV_ROOTDIR . "/" . NV_CONFIG_FILENAME );
+			@rename( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_ROOTDIR . '/' . NV_CONFIG_FILENAME );
 		}
 	}
 
-	if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) )
 	{
 		$finish = 1;
 	}
@@ -860,16 +857,16 @@ function nv_save_file_config()
 
 	if( is_writable( NV_ROOTDIR . '/' . $file_config_temp ) or is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) )
 	{
-		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == "nv3" ) ? "nv3c_" . nv_genpass( 5 ) : $global_config['cookie_prefix'];
-		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == "nv3" ) ? "nv3s_" . nv_genpass( 6 ) : $global_config['session_prefix'];
-		$global_config['site_email'] = ( ! isset( $global_config['site_email'] ) ) ? "" : $global_config['site_email'];
+		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == 'nv3' ) ? 'nv3c_' . nv_genpass( 5 ) : $global_config['cookie_prefix'];
+		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == 'nv3' ) ? 'nv3s_' . nv_genpass( 6 ) : $global_config['session_prefix'];
+		$global_config['site_email'] = ( ! isset( $global_config['site_email'] ) ) ? '' : $global_config['site_email'];
 
-		$db_config['dbhost'] = ( ! isset( $db_config['dbhost'] ) ) ? "localhost" : $db_config['dbhost'];
-		$db_config['dbport'] = ( ! isset( $db_config['dbport'] ) ) ? "" : $db_config['dbport'];
-		$db_config['dbname'] = ( ! isset( $db_config['dbname'] ) ) ? "" : $db_config['dbname'];
-		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? "" : $db_config['dbuname'];
-		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? "" : $db_config['dbpass'];
-		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? "nv3" : $db_config['prefix'];
+		$db_config['dbhost'] = ( ! isset( $db_config['dbhost'] ) ) ? 'localhost' : $db_config['dbhost'];
+		$db_config['dbport'] = ( ! isset( $db_config['dbport'] ) ) ? '' : $db_config['dbport'];
+		$db_config['dbname'] = ( ! isset( $db_config['dbname'] ) ) ? '' : $db_config['dbname'];
+		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? '' : $db_config['dbuname'];
+		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
+		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv3' : $db_config['prefix'];
 
 		$content = '';
 		$content .= "<?php\n\n";

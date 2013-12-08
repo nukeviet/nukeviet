@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['theme_manager'];
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -120,7 +120,7 @@ foreach( $theme_list as $value )
 
 if( ! empty( $errorconfig ) )
 {
-	$xtpl->assign( 'ERROR', implode( "<br />", $errorconfig ) );
+	$xtpl->assign( 'ERROR', implode( '<br />', $errorconfig ) );
 	$xtpl->parse( 'main.error' );
 }
 
@@ -134,8 +134,8 @@ $xtpl->assign( 'OP', $op );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

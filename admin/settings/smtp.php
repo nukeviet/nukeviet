@@ -44,9 +44,9 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 
 	if( $array_config['smtp_ssl'] == 1 AND $array_config['mailer_mode'] == 'smtp' )
 	{
-		require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
+		require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 		$array_phpmod = phpinfo_array( 8, 1 );
-		if( ! empty( $array_phpmod ) and ! array_key_exists( "openssl", $array_phpmod ) )
+		if( ! empty( $array_phpmod ) and ! array_key_exists( 'openssl', $array_phpmod ) )
 		{
 			$errormess = $lang_module['smtp_error_openssl'];
 		}
@@ -67,7 +67,7 @@ $array_config['mailer_mode_sendmail'] = ( $array_config['mailer_mode'] == 'sendm
 $array_config['mailer_mode_phpmail'] = ( $array_config['mailer_mode'] == '' ) ? ' checked="checked"' : '';
 $array_config['mailer_mode_smtpt_show'] = ( $array_config['mailer_mode'] == 'smtp' ) ? '' : ' style="display: none" ';
 
-$xtpl = new XTemplate( "smtp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'smtp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -96,8 +96,8 @@ if( $errormess != '' )
 $xtpl->parse( 'smtp' );
 $contents = $xtpl->text( 'smtp' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

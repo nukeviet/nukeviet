@@ -22,51 +22,51 @@ function nv_error_info()
 	if( empty( $error_info ) ) return;
 
 	$errortype = array(
-		E_ERROR => array( $lang_global['error_error'], "bad.png" ),
-		E_WARNING => array( $lang_global['error_warning'], "warning.png" ),
-		E_PARSE => array( $lang_global['error_error'], "bad.png" ),
-		E_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
-		E_CORE_ERROR => array( $lang_global['error_error'], "bad.png" ),
-		E_CORE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
-		E_COMPILE_ERROR => array( $lang_global['error_error'], "bad.png" ),
-		E_COMPILE_WARNING => array( $lang_global['error_warning'], "warning.png" ),
-		E_USER_ERROR => array( $lang_global['error_error'], "bad.png" ),
-		E_USER_WARNING => array( $lang_global['error_warning'], "warning.png" ),
-		E_USER_NOTICE => array( $lang_global['error_notice'], "comment.png" ),
-		E_STRICT => array( $lang_global['error_notice'], "comment.png" ),
-		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], "bad.png" ),
-		E_DEPRECATED => array( $lang_global['error_notice'], "comment.png" ),
-		E_USER_DEPRECATED => array( $lang_global['error_warning'], "warning.png" )
+		E_ERROR => array( $lang_global['error_error'], 'bad.png' ),
+		E_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
+		E_PARSE => array( $lang_global['error_error'], 'bad.png' ),
+		E_NOTICE => array( $lang_global['error_notice'], 'comment.png' ),
+		E_CORE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
+		E_CORE_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
+		E_COMPILE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
+		E_COMPILE_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
+		E_USER_ERROR => array( $lang_global['error_error'], 'bad.png' ),
+		E_USER_WARNING => array( $lang_global['error_warning'], 'warning.png' ),
+		E_USER_NOTICE => array( $lang_global['error_notice'], 'comment.png' ),
+		E_STRICT => array( $lang_global['error_notice'], 'comment.png' ),
+		E_RECOVERABLE_ERROR => array( $lang_global['error_error'], 'bad.png' ),
+		E_DEPRECATED => array( $lang_global['error_notice'], 'comment.png' ),
+		E_USER_DEPRECATED => array( $lang_global['error_warning'], 'warning.png' )
 	);
 
-	if( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/error_info.tpl" ) )
+	if( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/error_info.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
-		$image_path = NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/images/icons/";
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
+		$image_path = NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/images/icons/';
 	}
 	elseif( defined( 'NV_ADMIN' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/admin_default/system";
-		$image_path = NV_BASE_SITEURL . "themes/admin_default/images/";
+		$tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
+		$image_path = NV_BASE_SITEURL . 'themes/admin_default/images/';
 	}
-	elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/error_info.tpl" ) )
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/error_info.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system";
-		$image_path = NV_BASE_SITEURL . "themes/" . $global_config['site_theme'] . "/images/icons/";
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+		$image_path = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/icons/';
 	}
 	else
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/default/system";
-		$image_path = NV_BASE_SITEURL . "themes/default/images/icons/";
+		$tpl_path = NV_ROOTDIR . '/themes/default/system';
+		$image_path = NV_BASE_SITEURL . 'themes/default/images/icons/';
 	}
 
-	$xtpl = new XTemplate( "error_info.tpl", $tpl_path );
+	$xtpl = new XTemplate( 'error_info.tpl', $tpl_path );
 	$xtpl->assign( 'TPL_E_CAPTION', $lang_global['error_info_caption'] );
 
 	$a = 0;
 	foreach( $error_info as $key => $value )
 	{
-		$xtpl->assign( 'TPL_E_CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
+		$xtpl->assign( 'TPL_E_CLASS', ( $a % 2 ) ? ' class="second"' : '' );
 		$xtpl->assign( 'TPL_E_ALT', $errortype[$value['errno']][0] );
 		$xtpl->assign( 'TPL_E_SRC', $image_path . $errortype[$value['errno']][1] );
 		$xtpl->assign( 'TPL_E_ERRNO', $errortype[$value['errno']][0] );
@@ -98,30 +98,30 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
 
-	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/info_die.tpl" ) )
+	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
 	}
-	elseif( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . "/themes/admin_default/system/info_die.tpl" ) )
+	elseif( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/admin_default/system";
+		$tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
 	}
-	elseif( isset( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system/info_die.tpl" ) )
+	elseif( isset( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system";
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
 	}
-	elseif( isset( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/info_die.tpl" ) )
+	elseif( isset( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl' ) )
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system";
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
 	}
 	else
 	{
-		$tpl_path = NV_ROOTDIR . "/themes/default/system";
+		$tpl_path = NV_ROOTDIR . '/themes/default/system';
 	}
 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
-	$xtpl = new XTemplate( "info_die.tpl", $tpl_path );
+	$xtpl = new XTemplate( 'info_die.tpl', $tpl_path );
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
@@ -163,9 +163,9 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->parse( 'main' );
 
 	$global_config['mudim_active'] = 0;
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	die();
 }
 
@@ -193,22 +193,22 @@ function nv_xmlOutput( $content, $lastModified )
 		$content = ( string )$tidy;
 	}
 
-	@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
-	@Header( "Expires: " . gmdate( "D, d M Y H:i:s", $lastModified ) . " GMT" );
-	@Header( "Content-Type: text/xml; charset=utf-8" );
+	@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $lastModified ) . ' GMT' );
+	@Header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', $lastModified ) . ' GMT' );
+	@Header( 'Content-Type: text/xml; charset=utf-8' );
 
 	if( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
 	{
-		@Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+		@Header( 'Cache-Control: no-cache, pre-check=0, post-check=0' );
 	}
 	else
 	{
-		@Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+		@Header( 'Cache-Control: private, pre-check=0, post-check=0, max-age=0' );
 	}
 
-	@Header( "Pragma: no-cache" );
+	@Header( 'Pragma: no-cache' );
 
-	$encoding = "none";
+	$encoding = 'none';
 
 	if( nv_function_exists( 'gzencode' ) )
 	{
@@ -225,10 +225,10 @@ function nv_xmlOutput( $content, $lastModified )
 		}
 	}
 
-	if( $encoding != "none" )
+	if( $encoding != 'none' )
 	{
 		$content = gzencode( $content, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
-		header( "Content-Encoding: " . $encoding );
+		header( 'Content-Encoding: ' . $encoding );
 		header( 'Vary: Accept-Encoding' );
 	}
 
@@ -247,32 +247,32 @@ function nv_rss_generate( $channel, $items )
 {
 	global $db, $global_config, $client_info;
 
-	$xtpl = new XTemplate( "rss.tpl", NV_ROOTDIR . "/themes/default/layout/" );
-	$xtpl->assign( 'CSSPATH', NV_BASE_SITEURL . "themes/default/css/rss.xsl" );
+	$xtpl = new XTemplate( 'rss.tpl', NV_ROOTDIR . '/themes/default/layout/' );
+	$xtpl->assign( 'CSSPATH', NV_BASE_SITEURL . 'themes/default/css/rss.xsl' );
 	//Chi co tac dung voi IE6 va Chrome
 
 	$channel['title'] = nv_htmlspecialchars( $channel['title'] );
 	$channel['atomlink'] = str_replace( '&', '&amp;', $client_info['selfurl'] );
 	$channel['lang'] = $global_config['site_lang'];
 	$channel['copyright'] = $global_config['site_name'];
-	$channel['docs'] = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=rss", true );
+	$channel['docs'] = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true );
 	$channel['generator'] = 'Nukeviet Version 3.X';
 
-	if( preg_match( "/^" . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . "(.+)$/", $channel['link'], $matches ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . '(.+)$/', $channel['link'], $matches ) )
 	{
 		$channel['link'] = $matches[1];
 	}
-	elseif( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL ) . "(.+)$/", $channel['link'], $matches ) )
+	elseif( preg_match( '/^' . nv_preg_quote( NV_BASE_SITEURL ) . '(.+)$/', $channel['link'], $matches ) )
 	{
 		$channel['link'] = $matches[1];
 	}
 	$channel['link'] = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . $channel['link'], true );
 
-	if( preg_match( "/^" . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . "(.+)$/", $channel['atomlink'], $matches ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . '(.+)$/', $channel['atomlink'], $matches ) )
 	{
 		$channel['atomlink'] = $matches[1];
 	}
-	elseif( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL ) . "(.+)$/", $channel['atomlink'], $matches ) )
+	elseif( preg_match( '/^' . nv_preg_quote( NV_BASE_SITEURL ) . '(.+)$/', $channel['atomlink'], $matches ) )
 	{
 		$channel['atomlink'] = $matches[1];
 	}
@@ -292,14 +292,14 @@ function nv_rss_generate( $channel, $items )
 				{
 					$item['pubdate'] = intval( $item['pubdate'] );
 					$channel['pubDate'] = max( $channel['pubDate'], $item['pubdate'] );
-					$item['pubdate'] = gmdate( "D, j M Y H:m:s", $item['pubdate'] ) . ' GMT';
+					$item['pubdate'] = gmdate( 'D, j M Y H:m:s', $item['pubdate'] ) . ' GMT';
 				}
 
-				if( preg_match( "/^" . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . "(.+)$/", $item['link'], $matches ) )
+				if( preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . '(.+)$/', $item['link'], $matches ) )
 				{
 					$item['link'] = $matches[1];
 				}
-				elseif( preg_match( "/^" . nv_preg_quote( NV_BASE_SITEURL ) . "(.+)$/", $item['link'], $matches ) )
+				elseif( preg_match( '/^' . nv_preg_quote( NV_BASE_SITEURL ) . '(.+)$/', $item['link'], $matches ) )
 				{
 					$item['link'] = $matches[1];
 				}
@@ -327,7 +327,7 @@ function nv_rss_generate( $channel, $items )
 	if( ! empty( $channel['pubDate'] ) )
 	{
 		$lastModified = $channel['pubDate'];
-		$channel['pubDate'] = gmdate( "D, j M Y H:m:s", $channel['pubDate'] ) . ' GMT';
+		$channel['pubDate'] = gmdate( 'D, j M Y H:m:s', $channel['pubDate'] ) . ' GMT';
 	}
 
 	$xtpl->assign( 'CHANNEL', $channel );

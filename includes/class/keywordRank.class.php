@@ -29,7 +29,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 
 	if( ! class_exists( 'UrlGetContents' ) )
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 	}
 
 	$getContent = new UrlGetContents( $global_config );
@@ -62,11 +62,11 @@ class keywordRank
 );
 
 	/**
-     * keywordRank::__construct()
-     *
-     * @param mixed $_pattern
-     * @return
-     */
+ * keywordRank::__construct()
+ *
+ * @param mixed $_pattern
+ * @return
+ */
 	function __construct( $_pattern = array() )
 	{
 		if( isset( $_pattern['googleByDomain'] ) ) $this->$pattern['googleByDomain'] = $_pattern['googleByDomain'];
@@ -76,10 +76,10 @@ class keywordRank
 	}
 
 	/**
-     * keywordRank::getInfoFromGoogle()
-     *
-     * @return
-     */
+ * keywordRank::getInfoFromGoogle()
+ *
+ * @return
+ */
 	private function getInfoFromGoogle()
 	{
 		global $getContent;
@@ -156,15 +156,15 @@ class keywordRank
 	}
 
 	/**
-     * keywordRank::process()
-     *
-     * @param mixed $_keyword
-     * @param mixed $_lang
-     * @param mixed $_accuracy
-     * @param string $from
-     * @param string $domain
-     * @return
-     */
+ * keywordRank::process()
+ *
+ * @param mixed $_keyword
+ * @param mixed $_lang
+ * @param mixed $_accuracy
+ * @param string $from
+ * @param string $domain
+ * @return
+ */
 	public function process( $_keyword, $_lang, $_accuracy, $from = '', $domain = '' )
 	{
 		$this->keyword = $_keyword;

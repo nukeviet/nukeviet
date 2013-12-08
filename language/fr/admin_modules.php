@@ -95,7 +95,7 @@ $lang_module['delete_module_info1'] = 'Ce module existe sur la langue <strong>%s
 $lang_module['delete_module_info2'] = 'Il y a %d modules virtuels basés sur ce module, il faut les supprimer d\'abord';
 $lang_module['admin_title'] = 'Titre de la section d\'administration';
 $lang_module['change_func_name'] = 'Changer le nom de la fonction "%s" de module "%s"';
-$lang_module['edit_error_update_theme'] = 'La mise a jour a détecté que le thème  %s est invalide ou erroné, merci de vérifier';
+$lang_module['edit_error_update_theme'] = 'La mise a jour a détecté que le thème %s est invalide ou erroné, merci de vérifier';
 $lang_module['description'] = 'Description';
 
 ?>

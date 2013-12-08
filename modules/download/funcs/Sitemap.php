@@ -21,7 +21,7 @@ else
 {
 	$list_cats = nv_list_cats();
 	$in = array_keys( $list_cats );
-	$in = implode( ",", $in );
+	$in = implode( ',', $in );
 
 	$sql = "SELECT `catid`, `alias`, `uploadtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 1000";
 	$result = $db->sql_query( $sql );

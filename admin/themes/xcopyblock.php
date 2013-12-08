@@ -14,7 +14,7 @@ $page_title = $lang_module['xcopyblock'];
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'cookie', '' );
 $op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
 
-$xtpl = new XTemplate( "xcopyblock.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'xcopyblock.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -38,7 +38,7 @@ while( list( $theme ) = $db->sql_fetchrow( $result ) )
 		$xtpl->assign( 'THEME_FROM', $theme );
 		$xtpl->parse( 'main.theme_from' );
 
-		$xtpl->assign( 'THEME_TO', array( 'key' => $theme, 'selected' => ( $selectthemes == $theme and $selectthemes != "default" ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'THEME_TO', array( 'key' => $theme, 'selected' => ( $selectthemes == $theme and $selectthemes != 'default' ) ? " selected=\"selected\"" : "" ) );
 		$xtpl->parse( 'main.theme_to' );
 	}
 }
@@ -46,8 +46,8 @@ while( list( $theme ) = $db->sql_fetchrow( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -21,7 +21,7 @@ function nv_get_rss_link()
 
 	foreach( $site_mods as $mod_name => $mod_info )
 	{
-		if( $mod_info['rss'] == 1 and isset( $mod_info['alias']['rss'] ) and file_exists( NV_ROOTDIR . "/modules/" . $mod_info['module_file'] . "/rssdata.php" ) )
+		if( $mod_info['rss'] == 1 and isset( $mod_info['alias']['rss'] ) and file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/rssdata.php' ) )
 		{
 			$mod_data = $mod_info['module_data'];
 			$mod_file = $mod_info['module_file'];
@@ -29,7 +29,7 @@ function nv_get_rss_link()
 			$contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\">" . $iconrss . " <strong> " . $mod_info['custom_title'] . "</strong></a><br />";
 
 			$rssarray = array();
-			include ( NV_ROOTDIR . "/modules/" . $mod_file . "/rssdata.php" );
+			include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
 			foreach( $rssarray as $key => $value )
 			{
 				$parentid = ( isset( $value['parentid'] ) ) ? $value['parentid'] : 0;
@@ -83,8 +83,8 @@ if( file_exists( $content_file ) ) $array = file_get_contents( $content_file );
 
 $contents = nv_rss_main_theme( $array );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

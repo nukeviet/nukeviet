@@ -15,7 +15,7 @@ if( ! isset( $Diagnostic ) or ! is_object( $Diagnostic ) )
 {
 	if( ! class_exists( 'Diagnostic' ) )
 	{
-		include ( NV_ROOTDIR . "/includes/class/Diagnostic.class.php" );
+		include NV_ROOTDIR . '/includes/class/Diagnostic.class.php' ;
 	}
 
 	$Diagnostic = new Diagnostic();

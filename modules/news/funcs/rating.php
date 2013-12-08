@@ -33,7 +33,7 @@ if( $id > 0 and in_array( $point, $array_point ) and $checkss == md5( $id . $cli
 	{
 		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET total_rating=total_rating+" . $point . ", click_rating=click_rating+1 WHERE `id`=" . $id;
 		$db->sql_query( $query );
-		$array_catid = explode( ",", $row['listcatid'] );
+		$array_catid = explode( ',', $row['listcatid'] );
 		foreach( $array_catid as $catid_i )
 		{
 			$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET total_rating=total_rating+" . $point . ", click_rating=click_rating+1 WHERE `id`=" . $id;

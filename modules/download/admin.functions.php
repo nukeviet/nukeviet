@@ -36,7 +36,7 @@ function get_allow_exts()
 				{
 					if( ! in_array( $e, $global_config['forbid_extensions'] ) and ! in_array( $m, $global_config['forbid_mimes'] ) )
 					{
-						$exts[$e] = is_array( $m ) ? implode( ", ", $m ) : $m;
+						$exts[$e] = is_array( $m ) ? implode( ', ', $m ) : $m;
 					}
 				}
 			}
@@ -62,7 +62,7 @@ function nv_setcats( $list2, $id, $list, $m = 0, $num = 0 )
 	$defis = '';
 	for( $i = 0; $i < $num; ++$i )
 	{
-		$defis .= "--";
+		$defis .= '--';
 	}
 
 	if( isset( $list[$id] ) )
@@ -72,7 +72,7 @@ function nv_setcats( $list2, $id, $list, $m = 0, $num = 0 )
 			if( $value['id'] != $m )
 			{
 				$list2[$value['id']] = $value;
-				$list2[$value['id']]['name'] = "|" . $defis . "&gt; " . $list2[$value['id']]['name'];
+				$list2[$value['id']]['name'] = '|' . $defis . '&gt; ' . $list2[$value['id']]['name'];
 				if( isset( $list[$value['id']] ) )
 				{
 					$list2 = nv_setcats( $list2, $value['id'], $list, $m, $num );
@@ -94,25 +94,25 @@ function nv_listcats( $parentid, $m = 0 )
 {
 	global $db, $module_data;
 
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` ORDER BY `parentid`,`weight` ASC";
+	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_categories` ORDER BY `parentid`, `weight` ASC';
 	$result = $db->sql_query( $sql );
 	$list = array();
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$list[$row['parentid']][] = array( //
-			'id' => ( int )$row['id'], //
-			'parentid' => ( int )$row['parentid'], //
-			'title' => $row['title'], //
-			'alias' => $row['alias'], //
-			'description' => $row['description'], //
-			'who_view' => ( int )$row['who_view'], //
-			'groups_view' => ! empty( $row['groups_view'] ) ? explode( ",", $row['groups_view'] ) : array(), //
-			'who_download' => ( int )$row['who_download'], //
-			'groups_download' => ! empty( $row['groups_download'] ) ? explode( ",", $row['groups_download'] ) : array(), //
-			'weight' => ( int )$row['weight'], //
-			'status' => $row['status'], //
-			'name' => $row['title'], //
-			'selected' => $parentid == $row['id'] ? " selected=\"selected\"" : "" //
+		$list[$row['parentid']][] = array(
+			'id' => ( int )$row['id'],
+			'parentid' => ( int )$row['parentid'],
+			'title' => $row['title'],
+			'alias' => $row['alias'],
+			'description' => $row['description'],
+			'who_view' => ( int )$row['who_view'],
+			'groups_view' => ! empty( $row['groups_view'] ) ? explode( ',', $row['groups_view'] ) : array(),
+			'who_download' => ( int )$row['who_download'],
+			'groups_download' => ! empty( $row['groups_download'] ) ? explode( ',', $row['groups_download'] ) : array(),
+			'weight' => ( int )$row['weight'],
+			'status' => $row['status'],
+			'name' => $row['title'],
+			'selected' => $parentid == $row['id'] ? ' selected="selected"': ''
 		);
 	}
 
@@ -158,9 +158,9 @@ if( $nv_Request->isset_request( 'check', 'post' ) )
 	else
 	{
 		$url = trim( $url );
-		$url = nv_nl2br( $url, "<br />" );
-		$url = explode( "<br />", $url );
-		$url = array_map( "trim", $url );
+		$url = nv_nl2br( $url, '<br />' );
+		$url = explode( '<br />', $url );
+		$url = array_map( 'trim', $url );
 		foreach( $url as $l )
 		{
 			if( ! empty( $l ) )
@@ -183,7 +183,7 @@ if( $nv_Request->isset_request( 'fdownload', 'get' ) )
 		$file = substr( $file, strlen( NV_BASE_SITEURL ) );
 		$file = NV_ROOTDIR . '/' . $file;
 
-		require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+		require_once NV_ROOTDIR . '/includes/class/download.class.php';
 
 		$download = new download( $file, NV_UPLOADS_REAL_DIR );
 

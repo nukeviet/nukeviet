@@ -37,7 +37,7 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
 }
 
 $_user = array();
@@ -107,7 +107,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$query_field = array( '`userid`' => 0 );
 		if( ! empty( $array_field_config ) )
 		{
-			require ( NV_ROOTDIR . "/modules/users/fields.check.php" );
+			require NV_ROOTDIR . '/modules/users/fields.check.php';
 		}
 
 		if( empty( $error ) )
@@ -163,7 +163,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid " . $userid, $admin_info['userid'] );
 				if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
 				{
-					require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+					require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
 
 					$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
 					$upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_name, false );
@@ -189,7 +189,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					}
 				}
 
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 				exit();
 			}
 			$error = $lang_module['edit_add_error'];
@@ -239,10 +239,10 @@ if( ! empty( $groups_list ) )
 	}
 }
 
-$xtpl = new XTemplate( "user_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'user_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $_user );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=user_add" );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_add' );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
@@ -354,8 +354,8 @@ else
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
-							"key" => $key,
-							"selected" => ( $key == $row['value'] ) ? ' selected="selected"' : '',
+							'key' => $key,
+							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.select.loop' );
@@ -368,9 +368,9 @@ else
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
-							"id" => $row['fid'] . '_' . $number++,
-							"key" => $key,
-							"checked" => ( $key == $row['value'] ) ? ' checked="checked"' : '',
+							'id' => $row['fid'] . '_' . $number++,
+							'key' => $key,
+							'checked' => ( $key == $row['value'] ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.radio' );
@@ -383,9 +383,9 @@ else
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
-							"id" => $row['fid'] . '_' . $number++,
-							"key" => $key,
-							"checked" => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
+							'id' => $row['fid'] . '_' . $number++,
+							'key' => $key,
+							'checked' => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.checkbox' );
@@ -396,8 +396,8 @@ else
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
-							"key" => $key,
-							"selected" => ( $key == $row['value'] ) ? ' selected="selected"' : '',
+							'key' => $key,
+							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
 							"value" => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.multiselect.loop' );
@@ -415,8 +415,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

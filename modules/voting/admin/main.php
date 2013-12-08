@@ -16,7 +16,7 @@ $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) )
 {
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
@@ -27,12 +27,12 @@ if( $db->sql_numrows( $result ) )
 		$totalvote = $db->sql_fetchrow( $result1 );
 
 		$xtpl->assign( 'ROW', array(
-			"status" => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
-			"vid" => $row['vid'],
-			"question" => $row['question'],
-			"totalvote" => $totalvote[0],
-			"url_edit" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;vid=" . $row['vid'],
-			"checksess" => md5( $row['vid'] . session_id() )
+			'status' => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],
+			'vid' => $row['vid'],
+			'question' => $row['question'],
+			'totalvote' => $totalvote[0],
+			'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;vid=' . $row['vid'],
+			'checksess' => md5( $row['vid'] . session_id() )
 		) );
 
 		$xtpl->parse( 'main.loop' );
@@ -41,13 +41,13 @@ if( $db->sql_numrows( $result ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=content' );
 	die();
 }
 

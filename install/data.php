@@ -450,7 +450,7 @@ $sql_create_table[] = "CREATE TABLE `" . $db_config['prefix'] . "_googleplus` (
 
 $sql_create_table[] = "INSERT INTO `" . NV_USERS_GLOBALTABLE . "_config` (`config`, `content`, `edit_time`) VALUES
 	('access_admin', 'a:6:{s:12:\"access_addus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:\"access_waiting\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_editus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:\"access_delus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_passus\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:\"access_groups\";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}', 1352873462),
-	('password_simple', '000000, 1234, 2000, 12345, 111111, 123123, 123456, 654321, 696969, 1234567, 12345678, 123456789, 1234567890, aaaaaa, abc123, abc123@, abc@123, adobe1, adobe123, azerty, baseball, dragon, football, harley, iloveyou, jennifer, jordan, letmein, macromedia, master, michael, monkey, mustang, password, photoshop, pussy, qwerty, shadow, superman', " . NV_CURRENTTIME . "),
+	('password_simple', '000000|1234|2000|12345|111111|123123|123456|654321|696969|1234567|12345678|123456789|1234567890|aaaaaa|abc123|abc123@|abc@123|adobe1|adobe123|azerty|baseball|dragon|football|harley|iloveyou|jennifer|jordan|letmein|macromedia|master|michael|monkey|mustang|password|photoshop|pussy|qwerty|shadow|superman', " . NV_CURRENTTIME . "),
 	('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . "),
 	('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 
@@ -494,7 +494,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `mod
 	('sys', 'global', 'useactivate', '2'),
 	('sys', 'global', 'allowmailchange', '1'),
 	('sys', 'global', 'allow_sitelangs', '" . NV_LANG_DATA . "'),
-	('sys', 'global', 'allow_adminlangs', '" . implode( ",", $languageslist ) . "'),
+	('sys', 'global', 'allow_adminlangs', '" . implode( ',', $languageslist ) . "'),
 	('sys', 'global', 'read_type', '0'),
 	('sys', 'global', 'rewrite_optional', '" . $global_config['rewrite_optional'] . "'),
 	('sys', 'global', 'rewrite_endurl', '" . $global_config['rewrite_endurl'] . "'),
@@ -560,7 +560,7 @@ $sql_create_table[] = "INSERT INTO `" . NV_CRONJOBS_GLOBALTABLE . "` (`id`, `sta
 	(NULL, " . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES
-	('about', 0, 1, 'about', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+	('about', 0, 0, 'page', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 	('banners', 1, 0, 'banners', 'banners', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 	('contact', 0, 1, 'contact', 'contact', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 	('news', 0, 1, 'news', 'news', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
@@ -573,7 +573,8 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` 
 	('statistics', 0, 0, 'statistics', 'statistics', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 	('faq', 0, 1, 'faq', 'faq', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
 	('menu', 0, 1, 'menu', 'menu', '3.1.00 1273225635', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
-	('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
+	('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),
+	('page', 1, 1, 'page', 'page', '3.5.00 1385567707', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_banners_plans` VALUES
 	(1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1),

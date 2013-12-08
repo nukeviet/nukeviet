@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $array_site_cat_module = array();
 if( $global_config['idsite'] )
 {
-	$result = $db->sql_query( "SELECT module FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
+	$result = $db->sql_query( 'SELECT module FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] );
 	$row = $db->sql_fetch_assoc( $result );
 	if( ! empty( $row['module'] ) )
 	{
@@ -21,15 +21,15 @@ if( $global_config['idsite'] )
 }
 
 $title = $note = $modfile = $error = '';
-$modules_site = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . "addmodule" ) )
+$modules_site = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
+if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodule' ) )
 {
 	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
 	$modfile = $nv_Request->get_title( 'module_file', 'post', '', 1 );
 	$note = $nv_Request->get_title( 'note', 'post', '', 1 );
 	$title = strtolower( change_alias( $title ) );
 
-	$modules_admin = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
+	$modules_admin = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
 	$error = $lang_module['vmodule_exit'];
 
 	if( ! empty( $title ) and ! empty( $modfile ) and ! in_array( $title, $modules_site ) and ! in_array( $title, $modules_admin ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $modfile ) )
@@ -44,19 +44,18 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . "addmodul
 			if( $ok )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' "' . $module_data . '"', '', $admin_info['userid'] );
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup&setmodule=" . $title . "&checkss=" . md5( $title . session_id() . $global_config['sitekey'] ) );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5( $title . session_id() . $global_config['sitekey'] ) );
 				die();
 			}
 		}
 	}
 }
 
-$sql = "SELECT `title` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `virtual`='1' ORDER BY `addtime` ASC";
+$sql = 'SELECT `title` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `virtual`=1 ORDER BY `addtime` ASC';
 $result = $db->sql_query( $sql );
 
 $page_title = $lang_module['vmodule_add'];
 
-$xtpl = new XTemplate( "vmodule.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 
 if( $error )
 {
@@ -70,7 +69,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'CHECKSS', md5( session_id() . "addmodule" ) );
+$xtpl->assign( 'CHECKSS', md5( session_id() . 'addmodule' ) );
 
 $xtpl->assign( 'TITLE', $title );
 $xtpl->assign( 'NOTE', $note );
@@ -85,7 +84,7 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 		{
 			continue;
 		}
-		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'MODFILE', array( 'key' => $modfile_i, 'selected' => ( $modfile_i == $modfile ) ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.modfile' );
 	}
 }
@@ -93,8 +92,8 @@ while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -59,7 +59,7 @@ function nv_save_file_admin_config()
 	$content_config .= $content_config_user . "\n";
 	$content_config .= "?>";
 
-	return file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php", $content_config, LOCK_EX );
+	return file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX );
 }
 
 $delid = $nv_Request->get_int( 'delid', 'get' );
@@ -237,7 +237,7 @@ else
 $cid = $nv_Request->get_int( 'id', 'get,post' );
 $uid = $nv_Request->get_int( 'uid', 'get,post' );
 
-$xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -263,10 +263,10 @@ for( $i = 2; $i < 11; $i++ )
 }
 
 $xtpl->assign( 'DATA', array(
-	'admfirewall' => $global_config['admfirewall'] ? " checked=\"checked\"" : "",
-	'block_admin_ip' => $global_config['block_admin_ip'] ? " checked=\"checked\"" : "",
-	'authors_detail_main' => $global_config['authors_detail_main'] ? " checked=\"checked\"" : "",
-	'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? " checked=\"checked\"" : ""
+	'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',
+	'block_admin_ip' => $global_config['block_admin_ip'] ? ' checked="checked"' : '',
+	'authors_detail_main' => $global_config['authors_detail_main'] ? ' checked="checked"' : '',
+	'spadmin_add_admin' => $global_config['spadmin_add_admin'] ? ' checked="checked"' : ''
 ) );
 
 if( ! empty( $error ) )
@@ -369,8 +369,8 @@ $page_title = $lang_module['config'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

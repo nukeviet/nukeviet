@@ -19,7 +19,7 @@ $my_head .= "		$(\"#tabs_top\").tabs();\n";
 $my_head .= "	});\n";
 $my_head .= "	</script>\n";
 
-$xtpl = new XTemplate( "block_newsright.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block_newsright.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 

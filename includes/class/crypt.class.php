@@ -59,7 +59,7 @@ class nv_Crypt
 		if( ! $is_salt ) return $digest;
 
 		$mhast = constant( 'MHASH_' . strtoupper( $this->_func ) );
-		$salt = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyz0123456789" ), 0, 8 );
+		$salt = substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 8 );
 		$salt = mhash_keygen_s2k( $mhast, $digest, substr( pack( 'h*', md5( $salt ) ), 0, 8 ), 4 );
 		$hash = strtr( base64_encode( mhash( $mhast, $digest . $salt ) . $salt ), '+/=', '-_,' );
 		return $hash;

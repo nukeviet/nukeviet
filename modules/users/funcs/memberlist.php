@@ -15,12 +15,12 @@ $mod_title = $lang_module['listusers'];
 
 if( $global_config['whoviewuser'] == 2 and ! defined( "NV_IS_ADMIN" ) )
 {
-	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	user_info_exit_redirect( $lang_module['allow_admin'], $nv_redirect );
 }
 elseif( $global_config['whoviewuser'] == 1 and ! defined( 'NV_IS_USER' ) )
 {
-	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
+	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	user_info_exit_redirect( $lang_module['allow_user'], $nv_redirect );
 }
 else
@@ -46,7 +46,7 @@ else
 				if( change_alias( $item['username'] ) != $matches[1] )
 				{
 					// Chuyen ve trang module ngay khong can thong bao
-					Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 					exit();
 				}
 				// Them vao tieu de
@@ -61,14 +61,14 @@ else
 			else
 			{
 				// Chuyen ve trang module ngay khong can thong bao
-				Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+				Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 				exit();
 			}
 		}
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	} //danh sach thanh vien
 	else
@@ -80,7 +80,7 @@ else
 		// Kiem tra du lieu hop chuan
 		if( ( ! empty( $orderby ) and ! in_array( $orderby, array( 'username', 'gender', 'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
 		{
-			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			exit();
 		}
 
@@ -115,7 +115,7 @@ else
 
 		while( $item = $db->sql_fetch_assoc( $result ) )
 		{
-			if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . "/" . $item['photo'] ) )
+			if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 			{
 				$item['photo'] = NV_BASE_SITEURL . $item['photo'];
 			}
@@ -134,7 +134,7 @@ else
 		// Khong cho dat trang tuy tien
 		if( empty( $users_array ) and $page > 0 )
 		{
-			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			exit();
 		}
 
@@ -159,8 +159,8 @@ else
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

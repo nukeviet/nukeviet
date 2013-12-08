@@ -36,7 +36,7 @@ if( $post['id'] != 0 )
 	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `mid` = " . $post['mid'] . " AND `id`=" . $post['id'] . " ORDER BY `id`";
 	$result = $db->sql_query( $sql );
 	$post = $db->sql_fetchrow( $result );
-	$post['groups_view'] = explode( ",", $post['groups_view'] );
+	$post['groups_view'] = explode( ',', $post['groups_view'] );
 	$post['link'] = nv_htmlspecialchars( $post['link'] );
 }
 
@@ -136,7 +136,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$gr = array();
 
 	$gr = $nv_Request->get_typed_array( 'groups_view', 'post', '' );
-	$post['groups_view'] = implode( ",", $gr );
+	$post['groups_view'] = implode( ',', $gr );
 
 	$post['id'] = $nv_Request->get_int( 'id', 'post', 0 );
 	$post['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -206,7 +206,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 					$arr_block[] = $row['id'];
 				}
 
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ",", $arr_block ) . "' WHERE `id`=" . $post['mid'];
+				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ',', $arr_block ) . "' WHERE `id`=" . $post['mid'];
 				$db->sql_query( $sql );
 
 				if( $post['parentid'] != 0 )
@@ -220,12 +220,12 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ",", $arr_item_menu ) . "' WHERE `mid`= " . $post['mid'] . " AND `id`=" . $post['parentid'];
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ',', $arr_item_menu ) . "' WHERE `mid`= " . $post['mid'] . " AND `id`=" . $post['parentid'];
 					$db->sql_query( $sql );
 				}
 
 				nv_del_moduleCache( $module_name );
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=" . $post['mid'] . "&parentid=" . $post['parentid'] );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
 				exit();
 			}
 			else
@@ -282,7 +282,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_block[] = $row['id'];
 					}
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode( ",", $arr_block ) . "' WHERE `id`=" . $post['mid'];
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`= '" . implode( ',', $arr_block ) . "' WHERE `id`=" . $post['mid'];
 					$db->sql_query( $sql );
 
 					$arr_block = array();
@@ -293,7 +293,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_block[] = $row['id'];
 					}
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ",", $arr_block ) . "' WHERE `id`=" . $mid_old;
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET `menu_item`='" . implode( ',', $arr_block ) . "' WHERE `id`=" . $mid_old;
 					$db->sql_query( $sql );
 				}
 
@@ -307,7 +307,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`='" . implode( ",", $arr_item_menu ) . "' WHERE `mid`=" . $post['mid'] . " AND `id`=" . $post['parentid'];
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`='" . implode( ',', $arr_item_menu ) . "' WHERE `mid`=" . $post['mid'] . " AND `id`=" . $post['parentid'];
 					$db->sql_query( $sql );
 				}
 
@@ -321,12 +321,12 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_item_menu[] = $row['id'];
 					}
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ",", $arr_item_menu ) . "' WHERE `mid`=" . $mid_old . " AND `id`=" . $pa_old;
+					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `subitem`= '" . implode( ',', $arr_item_menu ) . "' WHERE `mid`=" . $mid_old . " AND `id`=" . $pa_old;
 					$db->sql_query( $sql );
 				}
 
 				nv_del_moduleCache( $module_name );
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&mid=" . $post['mid'] . "&parentid=" . $post['parentid'] );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
 				exit();
 			}
 			else
@@ -377,9 +377,9 @@ if( $post['parentid'] != 0 )
 	$link_title = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] . "&amp;parentid=0";
 }
 
-$xtpl = new XTemplate( "add_menu.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'add_menu.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $post['mid'] ) . "&amp;parentid=" . $post['parentid'];
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] ) . "&amp;parentid=" . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
 
 if( ! empty( $arr_table ) )
@@ -450,9 +450,9 @@ if( $nv_Request->isset_request( 'item', 'post' ) )
 
 	$contents = $xtpl->text( 'main.cat' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -471,7 +471,7 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 	if( file_exists( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' ) )
 	{
 		$arr_cat = array();
-		include ( NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' );
+		include NV_ROOTDIR . '/modules/' . $module_f . '/menu.php' ;
 
 		if( ! empty( $arr_cat ) )
 		{
@@ -482,14 +482,14 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 			}
 		}
 
-		$xtpl->assign( 'link', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module );
+		$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module );
 		$xtpl->parse( 'main.link' );
 
 		$contents = $xtpl->text( 'main.link' );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 	die( '&nbsp;' );
 }
@@ -641,8 +641,8 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['add_item'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

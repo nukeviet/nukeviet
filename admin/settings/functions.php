@@ -47,7 +47,7 @@ function nv_admin_add_theme( $contents )
 {
 	global $global_config, $module_file, $my_head, $my_footer;
 
-	$xtpl = new XTemplate( "cronjobs_add.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cronjobs_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
 	$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
@@ -63,19 +63,19 @@ function nv_admin_add_theme( $contents )
 
 	foreach( $contents['run_file'][2] as $run )
 	{
-		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected=\'selected\'' : '' ) );
 		$xtpl->parse( 'main.run_file' );
 	}
 
 	for( $i = 0; $i < 24; ++$i )
 	{
-		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected=\'selected\'' : '' ) );
 		$xtpl->parse( 'main.hour' );
 	}
 
 	for( $i = 0; $i < 60; ++$i )
 	{
-		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected=\'selected\'' : '' ) );
 		$xtpl->parse( 'main.min' );
 	}
 
@@ -97,7 +97,7 @@ function main_theme( $contents )
 
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "cronjobs_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cronjobs_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	foreach( $contents as $id => $values )
 	{

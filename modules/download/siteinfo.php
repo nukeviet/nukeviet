@@ -56,7 +56,7 @@ if( $number > 0 )
 	);
 }
 
-//  So bao cao loi duoc gui toi
+// So bao cao loi duoc gui toi
 list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) as number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_report`" ) );
 if( $number > 0 )
 {

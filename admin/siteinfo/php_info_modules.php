@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['extensions_php'];
 
-require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
+require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
 $array = phpinfo_array( 8, 1 );
 unset( $array['Apache Environment']['HTTP_COOKIE'] );
@@ -20,7 +20,7 @@ unset( $array['HTTP Headers Information']['Set-Cookie'] );
 
 if( ! empty( $array ) )
 {
-	$xtpl = new XTemplate( "extensions_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'extensions_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 	$thead = array( $lang_module['directive'], $lang_module['local_value'], $lang_module['master_value'] );
 
@@ -57,8 +57,8 @@ if( ! empty( $array ) )
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

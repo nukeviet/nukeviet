@@ -12,13 +12,13 @@ if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 $filename = $nv_Request->get_title( 'filename', 'get', '' );
 $checkss = $nv_Request->get_title( 'checkss', 'get', '' );
 
-$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+$log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if( $global_config['idsite'] )
 {
 	$log_dir .= "/" . $global_config['site_dir'];
 }
 
-$path_filename = $log_dir . "/" . $filename;
+$path_filename = $log_dir . '/' . $filename;
 
 if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
 {
@@ -35,9 +35,9 @@ else
 {
 	$contents = 'File not exist !';
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

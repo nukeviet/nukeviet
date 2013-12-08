@@ -14,7 +14,7 @@ if( $js )
 {
 	nv_insert_logs( NV_LANG_DATA, "login", "[" . $admin_info['username'] . "] " . strtolower( $lang_global['admin_logout_title'] ), " Client IP:" . NV_CLIENT_IP, 0 );
 	$nv_Request->unset_request( 'admin,online', 'session' );
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	die( "1" );
 }
 

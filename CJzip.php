@@ -19,7 +19,7 @@
 class CJzip
 {
 	private $is_gzip = false;
-	private $getName = "file";
+	private $getName = 'file';
 	private $file = array();
 	private $maxAge = 2592000;
 	private $encoding = 'none';
@@ -44,12 +44,12 @@ class CJzip
 
 		if( extension_loaded( 'zlib' ) and ini_get( 'output_handler' ) == '' )
 		{
-			if( strtolower( ini_get( 'zlib.output_compression' ) ) == "on" or ini_get( 'zlib.output_compression' ) == 1 )
+			if( strtolower( ini_get( 'zlib.output_compression' ) ) == 'on' or ini_get( 'zlib.output_compression' ) == 1 )
 			{
-				$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+				$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
 				if( extension_loaded( 'suhosin' ) )
 				{
-					$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+					$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 				}
 
 				$ini_set_support = ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) ) ? true : false;
@@ -68,16 +68,16 @@ class CJzip
 		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 		if( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
 		if( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
-		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( '/[\/]+$/', '', $base_siteurl );
 		if( ! empty( $base_siteurl ) )
 		{
-			$base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-			$base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '/^[\/]*(.*)$/', '/\\1', $base_siteurl );
+			$base_siteurl = preg_replace( '#/index\.php(.*)$#', '', $base_siteurl );
 		}
 		$this->base_siteurl = $base_siteurl . '/';
 
 		$filename = $_GET[$this->getName];
-		if( preg_match( "/^\//", $filename ) ) $filename = preg_replace( '#^' . $this->base_siteurl . '#', '', $filename );
+		if( preg_match( '/^\//', $filename ) ) $filename = preg_replace( '#^' . $this->base_siteurl . '#', '', $filename );
 
 		$this->file['path'] = $this->siteRoot . '/' . $filename;
 		$this->file['lastmod'] = @filemtime( $this->file['path'] );
@@ -87,7 +87,7 @@ class CJzip
 		}
 
 		unset( $matches );
-		preg_match( "/(.*?)\.(css|js)$/", $this->file['path'], $matches );
+		preg_match( '/(.*?)\.(css|js)$/', $this->file['path'], $matches );
 		if( ! $matches )
 		{
 			$this->browseInfo( 403 );
@@ -95,7 +95,7 @@ class CJzip
 
 		$this->file['ext'] = $matches[2];
 		$this->file['contenttype'] = ( $this->file['ext'] == 'css' ) ? 'css' : 'javascript';
-		if( preg_match( "/\.opt$/", $matches[1] ) )
+		if( preg_match( '/\.opt$/', $matches[1] ) )
 		{
 			$this->isOptimized = true;
 		}
@@ -104,14 +104,14 @@ class CJzip
 		if( isset( $_GET['r'] ) )
 		{
 			$this->root = true;
-			$this->file['md5file'] = md5( $this->file['path'] . "_root" );
+			$this->file['md5file'] = md5( $this->file['path'] . '_root' );
 		}
 		else
 		{
 			$this->file['md5file'] = md5( $this->file['path'] );
 		}
 
-		$this->cssImgNewPath = str_replace( '\\', '/', dirname( $filename ) ) . "/";
+		$this->cssImgNewPath = str_replace( '\\', '/', dirname( $filename ) ) . '/';
 	}
 
 	/**
@@ -125,15 +125,15 @@ class CJzip
 		switch( $num )
 		{
 			case 304:
-				$info = "HTTP/1.1 304 Not Modified";
+				$info = 'HTTP/1.1 304 Not Modified';
 				break;
 
 			case 403:
-				$info = "HTTP/1.1 403 Forbidden";
+				$info = 'HTTP/1.1 403 Forbidden';
 				break;
 
 			default:
-				$info = "HTTP/1.1 404 Not Found";
+				$info = 'HTTP/1.1 404 Not Found';
 		}
 		header( $info );
 		header( 'Content-Length: 0' );
@@ -183,16 +183,16 @@ class CJzip
 	 */
 	private function loadData()
 	{
-		$disable_functions = ( ( $disable_functions = ini_get( "disable_functions" ) ) != '' and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
+		$disable_functions = ( ( $disable_functions = ini_get( 'disable_functions' ) ) != '' and $disable_functions != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", $disable_functions ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 		}
 		if( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) )
 		{
 			if( ( integer )ini_get( 'memory_limit' ) < 64 )
 			{
-				ini_set( "memory_limit", "64M" );
+				ini_set( 'memory_limit', '64M' );
 			}
 		}
 		$data = file_get_contents( $this->file['path'] );
@@ -204,20 +204,20 @@ class CJzip
 
 		if( $this->file['contenttype'] == 'css' and $this->root == true )
 		{
-			$data = preg_replace_callback( "/url\(([^\)]+)\)/", array( $this, 'changeCssURL' ), $data );
+			$data = preg_replace_callback( '/url\(([^\)]+)\)/', array( $this, 'changeCssURL' ), $data );
 		}
 
 		if( $this->encoding != 'none' )
 		{
 			$data = gzencode( $data, 6, $this->encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE );
-			header( "Content-Encoding: " . $this->encoding );
+			header( 'Content-Encoding: ' . $this->encoding );
 			header( 'Vary: Accept-Encoding' );
 		}
 
-		header( "Content-Type: text/" . $this->file['contenttype'] . "; charset=utf-8" );
+		header( 'Content-Type: text/' . $this->file['contenttype'] . '; charset=utf-8' );
 		header( 'Cache-Control: public; max-age=' . $this->maxAge );
-		header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $this->file['lastmod'] ) . " GMT" );
-		header( "expires: " . gmdate( "D, d M Y H:i:s", $this->currenttime + $this->maxAge ) . " GMT" );
+		header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $this->file['lastmod'] ) . ' GMT' );
+		header( 'expires: ' . gmdate( 'D, d M Y H:i:s', $this->currenttime + $this->maxAge ) . ' GMT' );
 
 		echo $data;
 		exit();
@@ -291,7 +291,7 @@ class CJzip
 	 */
 	private function changeCssURL( $matches )
 	{
-		if( preg_match( "/^(http(s?)|ftp\:\/\/)/", $matches[1] ) )
+		if( preg_match( '/^(http(s?)|ftp\:\/\/)/', $matches[1] ) )
 		{
 			$url = $matches[1];
 		}
@@ -303,7 +303,7 @@ class CJzip
 				$url = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $url );
 			}
 		}
-		return "url(" . $url . ")";
+		return 'url(' . $url . ')';
 	}
 
 	/**
@@ -358,7 +358,7 @@ class CJzip
 	public function loadFile()
 	{
 		$hash = $this->file['lastmod'] . '-' . $this->file['md5file'];
-		header( "Etag: \"" . $hash . "\"" );
+		header( 'Etag: "' . $hash . '"' );
 
 		if( $this->is_notModified( $hash ) ) $this->browseInfo( 304 );
 

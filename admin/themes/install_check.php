@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $filename = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 
-$xtpl = new XTemplate( "install_check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'install_check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -58,9 +58,9 @@ if( file_exists( $filename ) )
 		$xtpl->parse( 'exists' );
 		$contents = $xtpl->text( 'exists' );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 	else
@@ -195,9 +195,9 @@ if( file_exists( $filename ) )
 				$xtpl->parse( 'error_create_folder' );
 				$contents = $xtpl->text( 'error_create_folder' );
 
-				include ( NV_ROOTDIR . '/includes/header.php' );
+				include NV_ROOTDIR . '/includes/header.php';
 				echo $contents;
-				include ( NV_ROOTDIR . '/includes/footer.php' );
+				include NV_ROOTDIR . '/includes/footer.php';
 				exit();
 			}
 			else
@@ -243,9 +243,9 @@ if( file_exists( $filename ) )
 					$xtpl->parse( 'complete' );
 					$contents = $xtpl->text( 'complete' );
 
-					include ( NV_ROOTDIR . '/includes/header.php' );
+					include NV_ROOTDIR . '/includes/header.php';
 					echo $contents;
-					include ( NV_ROOTDIR . '/includes/footer.php' );
+					include NV_ROOTDIR . '/includes/footer.php';
 					exit();
 				}
 				else
@@ -262,9 +262,9 @@ if( file_exists( $filename ) )
 					$xtpl->parse( 'error_move_folder' );
 					$contents = $xtpl->text( 'error_move_folder' );
 
-					include ( NV_ROOTDIR . '/includes/header.php' );
+					include NV_ROOTDIR . '/includes/header.php';
 					echo $contents;
-					include ( NV_ROOTDIR . '/includes/footer.php' );
+					include NV_ROOTDIR . '/includes/footer.php';
 					exit();
 				}
 			}
@@ -275,9 +275,9 @@ if( file_exists( $filename ) )
 			$xtpl->parse( 'nounzip' );
 			$contents = $xtpl->text( 'nounzip' );
 
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo $contents;
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
 	}

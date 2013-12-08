@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $module_info['custom_title'];
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -19,7 +19,7 @@ $contact_allowed = nv_getAllowed();
 
 if( ! empty( $contact_allowed['view'] ) )
 {
-	$in = implode( ",", array_keys( $contact_allowed['view'] ) );
+	$in = implode( ',', array_keys( $contact_allowed['view'] ) );
 	$sql = "`" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` IN (" . $in . ")";
 
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
@@ -34,7 +34,7 @@ if( ! empty( $contact_allowed['view'] ) )
 
 	if( $all_page )
 	{
-		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del&amp;t=2" );
+		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2' );
 
 		$a = 0;
 		$currday = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
@@ -98,8 +98,8 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

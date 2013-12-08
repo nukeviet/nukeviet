@@ -143,7 +143,7 @@ if( $nv_Request->isset_request( 'changemod', 'post' ) )
 	nv_del_moduleCache( 'modules' );
 	die( "OK" );
 }
-$xtpl = new XTemplate( "googleplus.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'googleplus.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -183,17 +183,17 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	foreach( $array_googleplus as $gid => $row )
 	{
 		$xtpl->assign( 'ROW', array(
-			"gid" => $row['gid'],
-			"idprofile" => $row['idprofile'],
-			"title" => $row['title']
+			'gid' => $row['gid'],
+			'idprofile' => $row['idprofile'],
+			'title' => $row['title']
 		) );
 
 		for( $i = 1; $i <= $numgoogleplus; ++$i )
 		{
 			$xtpl->assign( 'WEIGHT', array(
-				"key" => $i,
-				"title" => $i,
-				"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
+				'key' => $i,
+				'title' => $i,
+				'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
 			) );
 			$xtpl->parse( 'main.googleplus.weight' );
 		}
@@ -211,8 +211,8 @@ else
 	$contents = nv_admin_theme( $contents );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
