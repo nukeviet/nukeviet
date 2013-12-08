@@ -459,6 +459,7 @@ elseif( $step == 5 )
 					$lang_module['autoinstall'] = '';
 					$lang_global['mod_modules'] = '';
 
+					define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
 					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
 
 					$module_name = '';

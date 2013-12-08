@@ -460,7 +460,7 @@ class Diagnostic
 			$domain = $this->myDomain;
 		}
 
-		$domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^www\./e' ), array( '', '' ), $domain );
+		$domain = preg_replace( array( '/^[a-z]+\:\/\//i', '/^www\./i' ), array( '', '' ), $domain );
 
 		$this->currentDomain = $domain;
 		$this->currentCache = NV_ROOTDIR . '/' . NV_DATADIR . '/diagnostic-' . $this->currentDomain . '.xml';
