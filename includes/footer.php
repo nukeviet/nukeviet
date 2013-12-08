@@ -21,7 +21,7 @@ if( ! defined( 'NV_IS_AJAX' ) )
 	$contents = nv_change_buffer( $contents );
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage() ) . ' / ' . number_format( ( array_sum( explode( " ", microtime() ) ) - NV_START_TIME ), 3, '.', '' ), $contents );
+		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage() ) . ' / ' . number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ), $contents );
 	}
 }
 $db->sql_close();
