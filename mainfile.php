@@ -18,7 +18,7 @@ error_reporting( 0 );
 define( 'NV_MAINFILE', true );
 
 // Thoi gian bat dau phien lam viec
-define( 'NV_START_TIME', array_sum( explode( ' ', microtime() ) ) );
+define( 'NV_START_TIME', microtime( true ) );
 
 // Khong cho xac dinh tu do cac variables
 $db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array();
