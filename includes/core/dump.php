@@ -159,7 +159,7 @@ function nv_dump_save( $params )
 	$template = explode( "@@@", file_get_contents( $path_dump ) );
 
 	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/" );
-	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->sql_version, PHP_VERSION, $db->dbname );
+	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->sql_version(), PHP_VERSION, $db->dbname );
 
 	if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[0] ) ) )
 	{
@@ -204,7 +204,7 @@ function nv_dump_save( $params )
 			$result = $db->sql_query( "SHOW COLUMNS FROM `" . $table['name'] . "`" );
 			while( $col = $db->sql_fetchrow( $result ) )
 			{
-				$columns[$col['Field']] = preg_match( "/^(\w*int|year)/", $col[1] ) ? 'int' : 'txt';
+				$columns[$col['field']] = preg_match( "/^(\w*int|year)/", $col[1] ) ? 'int' : 'txt';
 			}
 			$db->sql_freeresult( $result );
 
@@ -219,7 +219,7 @@ function nv_dump_save( $params )
 					$row2 = array();
 					foreach( $columns as $key => $kt )
 					{
-						$row2[] = isset( $row[$key] ) ? ( ( $kt == 'int' ) ? $row[$key] : "'" . mysql_real_escape_string( $row[$key] ) . "'" ) : "NULL";
+						$row2[] = isset( $row[$key] ) ? ( ( $kt == 'int' ) ? $row[$key] : "'" . addslashes( $row[$key] ) . "'" ) : "NULL";
 					}
 					$row2 = NV_EOL . "(" . implode( ", ", $row2 ) . ")";
 

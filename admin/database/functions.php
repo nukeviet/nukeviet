@@ -39,19 +39,19 @@ function nv_show_tables()
 
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
-		$tables_size = floatval( $item['Data_length'] ) + floatval( $item['Index_length'] );
+		$tables_size = floatval( $item['data_length'] ) + floatval( $item['index_length'] );
 
-		$tables[$item['Name']]['table_size'] = nv_convertfromBytes( $tables_size );
-		$tables[$item['Name']]['table_max_size'] = ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 0;
-		$tables[$item['Name']]['table_datafree'] = ! empty( $item['Data_free'] ) ? nv_convertfromBytes( floatval( $item['Data_free'] ) ) : 0;
-		$tables[$item['Name']]['table_numrow'] = intval( $item['Rows'] );
-		$tables[$item['Name']]['table_charset'] = ( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "";
-		$tables[$item['Name']]['table_type'] = ( isset( $item['Engine'] ) ) ? $item['Engine'] : $item['Type'];
-		$tables[$item['Name']]['table_auto_increment'] = ( isset( $item['Auto_increment'] ) ) ? intval( $item['Auto_increment'] ) : "n/a";
-		$tables[$item['Name']]['table_create_time'] = ! empty( $item['Create_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['Create_time'] ) ) : "n/a";
-		$tables[$item['Name']]['table_update_time'] = ! empty( $item['Update_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['Update_time'] ) ) : "n/a";
+		$tables[$item['name']]['table_size'] = nv_convertfromBytes( $tables_size );
+		$tables[$item['name']]['table_max_size'] = ! empty( $item['max_data_length'] ) ? nv_convertfromBytes( floatval( $item['max_data_length'] ) ) : 0;
+		$tables[$item['name']]['table_datafree'] = ! empty( $item['data_free'] ) ? nv_convertfromBytes( floatval( $item['data_free'] ) ) : 0;
+		$tables[$item['name']]['table_numrow'] = intval( $item['rows'] );
+		$tables[$item['name']]['table_charset'] = ( ! empty( $item['collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['collation'], $m ) ) ? $m[1] : "";
+		$tables[$item['name']]['table_type'] = ( isset( $item['engine'] ) ) ? $item['engine'] : $item['type'];
+		$tables[$item['name']]['table_auto_increment'] = ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : "n/a";
+		$tables[$item['name']]['table_create_time'] = ! empty( $item['create_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['create_time'] ) ) : "n/a";
+		$tables[$item['name']]['table_update_time'] = ! empty( $item['update_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['update_time'] ) ) : "n/a";
 		$db_size += $tables_size;
-		$db_totalfree += floatval( $item['Data_free'] );
+		$db_totalfree += floatval( $item['data_free'] );
 		++$db_tables_count;
 	}
 
@@ -139,21 +139,21 @@ function nv_show_tab()
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
 
-	$tablename = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
+	$tablename = substr( $item['name'], strlen( $db_config['prefix'] ) + 1 );
 	$contents = array();
 	$contents['table']['caption'] = sprintf( $lang_module['table_caption'], $tablename );
 	$contents['table']['info']['name'] = array( $lang_module['table_name'], $tablename );
-	$contents['table']['info']['engine'] = array( $lang_module['table_type'], ( ( isset( $item['Engine'] ) ) ? $item['Engine'] : $item['Type'] ) );
-	$contents['table']['info']['row_format'] = array( $lang_module['row_format'], $item['Row_format'] );
-	$contents['table']['info']['data_length'] = array( $lang_module['table_size'], nv_convertfromBytes( intval( $item['Data_length'] ) + intval( $item['Index_length'] ) ) );
-	$contents['table']['info']['max_data_length'] = array( $lang_module['table_max_size'], ( ! empty( $item['Max_data_length'] ) ? nv_convertfromBytes( floatval( $item['Max_data_length'] ) ) : 'n/a' ) );
-	$contents['table']['info']['data_free'] = array( $lang_module['table_datafree'], ( ! empty( $item['Data_free'] ) ? nv_convertfromBytes( intval( $item['Data_free'] ) ) : 0 ) );
-	$contents['table']['info']['rows'] = array( $lang_module['table_numrow'], $item['Rows'] );
-	$contents['table']['info']['auto_increment'] = array( $lang_module['table_auto_increment'], ( ( isset( $item['Auto_increment'] ) ) ? intval( $item['Auto_increment'] ) : "n/a" ) );
-	$contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], ( ! empty( $item['Create_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Create_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], ( ! empty( $item['Update_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Update_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], ( ! empty( $item['Check_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['Check_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['collation'] = array( $lang_module['table_charset'], ( ( ! empty( $item['Collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "" ) );
+	$contents['table']['info']['engine'] = array( $lang_module['table_type'], ( ( isset( $item['engine'] ) ) ? $item['engine'] : $item['type'] ) );
+	$contents['table']['info']['row_format'] = array( $lang_module['row_format'], $item['row_format'] );
+	$contents['table']['info']['data_length'] = array( $lang_module['table_size'], nv_convertfromBytes( intval( $item['data_length'] ) + intval( $item['index_length'] ) ) );
+	$contents['table']['info']['max_data_length'] = array( $lang_module['table_max_size'], ( ! empty( $item['max_data_length'] ) ? nv_convertfromBytes( floatval( $item['max_data_length'] ) ) : 'n/a' ) );
+	$contents['table']['info']['data_free'] = array( $lang_module['table_datafree'], ( ! empty( $item['data_free'] ) ? nv_convertfromBytes( intval( $item['data_free'] ) ) : 0 ) );
+	$contents['table']['info']['rows'] = array( $lang_module['table_numrow'], $item['rows'] );
+	$contents['table']['info']['auto_increment'] = array( $lang_module['table_auto_increment'], ( ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : "n/a" ) );
+	$contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], ( ! empty( $item['create_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['create_time'] ) ) : "n/a" ) );
+	$contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], ( ! empty( $item['update_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['update_time'] ) ) : "n/a" ) );
+	$contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], ( ! empty( $item['check_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['check_time'] ) ) : "n/a" ) );
+	$contents['table']['info']['collation'] = array( $lang_module['table_charset'], ( ( ! empty( $item['collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['collation'], $m ) ) ? $m[1] : "" ) );
 
 	$contents['table']['show'] = nv_highlight_string( $tab, "php" );
 	$contents['table']['show_lang'] = array( $lang_module['php_code'], $lang_module['sql_code'] );

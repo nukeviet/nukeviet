@@ -17,12 +17,12 @@ $xtpl = new XTemplate( 'edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get_string( 'savedata', 'post' ) == md5( session_id() ) )
+$dirlang = $nv_Request->get_title( 'dirlang', 'post, get', '' );
+if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) and $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get_string( 'savedata', 'post' ) == md5( session_id() ) )
 {
 	$numberfile = 0;
 
 	$idfile = $nv_Request->get_int( 'idfile', 'post', 0 );
-	$dirlang = $nv_Request->get_title( 'dirlang', 'post', '' );
 
 	$lang_translator = $nv_Request->get_array( 'pozauthor', 'post', array() );
 	$lang_translator_save = array();
@@ -37,9 +37,12 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 
 	$author = var_export( $lang_translator_save, true );
 
-	$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "`='" . $author . "' WHERE `idfile`=" . $idfile . "" );
+	$db->prepare( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "`= :author WHERE `idfile`= :idfile" );
+	$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+	$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+	$sth->execute();
 
-	list( $module ) = $db->sql_fetchrow( $db->sql_query( "SELECT `module` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `idfile` ='" . $idfile . "'" ) );
+	list( $module ) = $db->sql_fetchrow( $db->sql_query( "SELECT `module` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` WHERE `idfile` = " . $idfile ) );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_edit'] . ' -> ' . $language_array[$dirlang]['name'], $module . " : idfile = " . $idfile, $admin_info['userid'] );
 
@@ -49,9 +52,11 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	{
 		foreach( $pozlang as $id => $lang_value )
 		{
-			$id = intval( $id );
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
-			$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $dirlang . "`='" . mysql_real_escape_string( $lang_value ) . "' WHERE `id`='" . $id . "'" );
+			$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '` SET `lang_' . $typelang . '`= :lang_value WHERE `id`= :id' );
+			$sth->bindParam( ':id', $id, PDO::PARAM_INT );
+			$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
 	}
 
@@ -68,8 +73,11 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 		{
 			$lang_value = nv_nl2br( $lang_value );
 			$lang_value = str_replace( '<br />', '<br />', $lang_value );
-			$sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`) VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "')";
-			$db->sql_query( $sql );
+
+			$sth = $db->prepare( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`) VALUES (NULL, '" . $idfile . "', :lang_key, :lang_value)" );
+			$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
+			$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+			$sth->execute( );
 		}
 	}
 
@@ -77,7 +85,6 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 	die();
 }
 
-$dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['name'];
 
 if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get_string( 'checksess', 'get' ) == md5( $nv_Request->get_int( 'idfile', 'get' ) . session_id() ) )

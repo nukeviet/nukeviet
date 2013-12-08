@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * @Project NUKEVIET 3.x
  * @Author VuThao (vuthao27@gmail.com)
@@ -14,8 +15,10 @@ class sql_db extends pdo
 {
 	public $connect = 0;
 	public $query_strs = array();
-
-	private $query_result = false;
+	public $server = '';
+	public $dbname = '';
+	public $user = '';
+	public $dbtype = '';
 
 	function __construct( $config )
 	{
@@ -37,7 +40,7 @@ class sql_db extends pdo
 		}
 		else
 		{
-			return false;
+			trigger_error( $config['dbtype'] . ' is not supported', 256 );
 		}
 
 		$driver_options = array(
@@ -47,6 +50,10 @@ class sql_db extends pdo
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 		);
 
+		$this->server = $config['dbhost'];
+		$this->dbtype = $config['dbtype'];
+		$this->dbname = $config['dbname'];
+		$this->user = $config['dbuname'];
 		try
 		{
 			parent::__construct( $dsn . ';charset=utf8', $config['dbuname'], $config['dbpass'], $driver_options );
@@ -69,9 +76,35 @@ class sql_db extends pdo
 		$query = preg_replace( '/union/', 'UNI0N', $query );
 		try
 		{
-			$this->query_result = $this->query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $this->query_result ? true : false ) );
-			return $this->query_result;
+			$result = $this->query( $query );
+			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
+			return $result;
+		}
+		catch( PDOException $e )
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * sql_db::sql_version()
+	 *
+	 * @return
+	 */
+	public function sql_version()
+	{
+		try
+		{
+			if ( $this->dbtype = 'mysql' )
+			{
+				$rs = $this->query( 'SELECT VERSION()' );
+				return $rs->fetchColumn( );
+			}
+			elseif ( $this->dbtype = 'oci' )
+			{
+				$rs = $this->query( 'select version from product_component_version' );
+				return $rs->fetchColumn( );
+			}
 		}
 		catch( PDOException $e )
 		{

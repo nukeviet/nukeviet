@@ -23,12 +23,12 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 	$include_lang = '';
 	$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
-	if( $module == 'global' and preg_match( "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/", $admin_file, $m ) )
+	if( $module == 'global' and preg_match( '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/', $admin_file, $m ) )
 	{
 		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $admin_file;
 		$admin_file = 'block.global.' . $m[1];
 	}
-	elseif( preg_match( "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/", $admin_file, $m ) )
+	elseif( preg_match( '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/', $admin_file, $m ) )
 	{
 		$include_lang = NV_ROOTDIR . '/modules/' . $module . '/language/' . $admin_file;
 		$admin_file = 'block.' . $m[1] . '.' . $m[2];
@@ -41,7 +41,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 	{
 		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
 	}
-	elseif( $module == "install" and $admin_file == 0 )
+	elseif( $module == 'install' and $admin_file == 0 )
 	{
 		$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
 	}
@@ -82,10 +82,17 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$lang_translator_save['langtype'] = $langtype;
 
 			$author = var_export( $lang_translator_save, true );
-
-			$idfile = $db->sql_query_insert_id( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "_file` (`idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlang . "`) VALUES (NULL, " . $db->dbescape( $module ) . ", " . $db->dbescape( $admin_file ) . ", " . $db->dbescape( $langtype ) . ", '" . mysql_real_escape_string( $author ) . "')" );
-
-			if( ! $idfile )
+			try
+			{
+				$sth = $db->prepare( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "_file` (`module`, `admin_file`, `langtype`, `author_" . $dirlang . "`) VALUES (:module, :admin_file, :langtype, :author)" );
+				$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+				$sth->bindParam( ':admin_file', $admin_file, PDO::PARAM_STR );
+				$sth->bindParam( ':langtype', $langtype, PDO::PARAM_STR );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth->execute();
+				$idfile = $db->lastInsertId();
+			}
+			catch (PDOException $e)
 			{
 				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], "Error insert file: " . $filelang );
 			}
@@ -104,8 +111,10 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 			$author = var_export( $lang_translator_save, true );
 
-			$sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $dirlang . "` = '" . mysql_real_escape_string( $author ) . "' WHERE `idfile` = '" . $idfile . "'";
-			$db->sql_query( $sql );
+			$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '_file` SET `lang_' . $dirlang . '`= :$author WHERE `idfile`= :idfile' );
+			$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+			$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+			$sth->execute( );
 		}
 
 		$temp_lang = array();
@@ -129,9 +138,9 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			if( substr( $row['Field'], 0, 7 ) == "author_" and $row['Field'] != "author_" . $dirlang )
+			if( substr( $row['field'], 0, 7 ) == "author_" and $row['field'] != "author_" . $dirlang )
 			{
-				$array_lang_key[] = str_replace( "author_", "lang_", $row['Field'] );
+				$array_lang_key[] = str_replace( "author_", "lang_", $row['field'] );
 				$array_lang_value[] = '';
 			}
 		}
@@ -153,38 +162,52 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$check_type_update = false;
 			$lang_key = trim( $lang_key );
 			$lang_value = nv_nl2br( $lang_value );
-			$lang_value = preg_replace( '/<br\s*\/>/', '<br />', $lang_value );
-			$lang_value = preg_replace( '/<\/\s*br\s*>/', '<br />', $lang_value );
+			$lang_value = preg_replace( "/<br\s*\/>/", '<br />', $lang_value );
+			$lang_value = preg_replace( "/<\/\s*br\s*>/", '<br />', $lang_value );
 
 			if( $read_type == 0 or $read_type == 1 )
 			{
-				$sql = "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`id`, `idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (NULL, '" . $idfile . "', '" . mysql_real_escape_string( $lang_key ) . "', '" . mysql_real_escape_string( $lang_value ) . "', UNIX_TIMESTAMP() " . $string_lang_value . ")";
-
-				if( ! $db->sql_query_insert_id( $sql ) and $read_type == 0 )
+				try
 				{
-					$check_type_update = true;
+					$sth = $db->prepare( "INSERT INTO `" . NV_LANGUAGE_GLOBALTABLE . "` (`idfile`, `lang_key`, `lang_" . $dirlang . "`, `update_" . $dirlang . "` " . $string_lang_key . ") VALUES (:idfile, :lang_key, :lang_value, UNIX_TIMESTAMP(), :string_lang_value )" );
+					$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+					$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
+					$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+					$sth->bindParam( ':string_lang_value', $string_lang_value, PDO::PARAM_STR );
+					$sth->execute();
+					$id = $db->lastInsertId();
+				}
+				catch (PDOException $e)
+				{
+					if(  $read_type == 0 )
+					{
+						$check_type_update = true;
+					}
 				}
 			}
 
 			if( $read_type == 2 or $check_type_update )
 			{
-				$sql = "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $dirlang . "` = '" . mysql_real_escape_string( $lang_value ) . "', `update_" . $dirlang . "` = UNIX_TIMESTAMP() WHERE `idfile` = '" . $idfile . "' AND `lang_key` = '" . mysql_real_escape_string( $lang_key ) . "' LIMIT 1";
-				$db->sql_query( $sql );
+				$sth = $db->prepare( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $dirlang . "` = :lang_value, `update_" . $dirlang . "` = UNIX_TIMESTAMP() WHERE `idfile` = :idfile AND `lang_key` = :lang_key");
+				$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+				$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
+				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+				$sth->execute();
 			}
 		}
 
 		$lang_module = $lang_module_temp;
-		return "";
+		return '';
 	}
 	else
 	{
 		$include_lang = '';
-		return $lang_module['nv_error_exit_module'] . " : " . $module;
+		return $lang_module['nv_error_exit_module'] . ' : ' . $module;
 	}
 }
 
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
-$page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . session_id() ) )
 {
@@ -193,11 +216,11 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 		$array_filename = array();
 
 		nv_admin_add_field_lang( $dirlang );
-		nv_admin_read_lang( $dirlang, "global", 0 );
-		nv_admin_read_lang( $dirlang, "install", 0 );
+		nv_admin_read_lang( $dirlang, 'global', 0 );
+		nv_admin_read_lang( $dirlang, 'install', 0 );
 
 		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-		nv_admin_read_lang( $dirlang, "global", 1 );
+		nv_admin_read_lang( $dirlang, 'global', 1 );
 
 		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		$dirs = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
@@ -208,7 +231,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 		}
 
-		$dirs = nv_scandir( NV_ROOTDIR . '/language/' . $dirlang, "/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/" );
+		$dirs = nv_scandir( NV_ROOTDIR . '/language/' . $dirlang, '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/' );
 		foreach( $dirs as $file_i )
 		{
 			nv_admin_read_lang( $dirlang, 'global', $file_i );
@@ -223,7 +246,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "readallfile" . sessio
 			nv_admin_read_lang( $dirlang, $module, 1 );
 			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
 
-			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/' );
 			foreach( $blocks as $file_i )
 			{
 				nv_admin_read_lang( $dirlang, $module, $file_i );

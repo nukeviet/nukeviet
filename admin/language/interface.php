@@ -19,9 +19,9 @@ $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_fi
 
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == "author_" )
 	{
-		$array_lang_exit[] .= trim( substr( $row['Field'], 7, 2 ) );
+		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
 }
 
