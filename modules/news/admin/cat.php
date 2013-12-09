@@ -70,7 +70,6 @@ if( ! empty( $savecat ) )
 		$newcatid = ( int )$db->sql_query_insert_id( $sql );
 		if( $newcatid > 0 )
 		{
-			$db->sql_freeresult();
 			nv_create_table_rows( $newcatid );
 			nv_fix_cat_order();
 
@@ -92,11 +91,8 @@ if( ! empty( $savecat ) )
 	elseif( $catid > 0 and $title != '' )
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`=" . $db->dbescape( $image ) . ", `viewdescription`=" . $db->dbescape( $viewdescription ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $catid;
-		$db->sql_query( $sql );
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_freeresult();
-
 			if( $parentid != $parentid_old )
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
@@ -117,7 +113,6 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 	else
 	{

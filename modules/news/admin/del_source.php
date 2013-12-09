@@ -17,8 +17,8 @@ list( $sourceid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid
 if( $sourceid > 0 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', $title, $admin_info['userid'] );
-	$query = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" );
-	while( $row = $db->sql_fetchrow( $query ) )
+	$result = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `sourceid` = '" . $sourceid . "'" );
+	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$arr_catid = explode( ',', $row['listcatid'] );
 		foreach( $arr_catid as $catid_i )
@@ -27,7 +27,7 @@ if( $sourceid > 0 )
 		}
 		$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `sourceid` = '0' WHERE `id` =" . $row['id'] );
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 	$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid . "" );
 	nv_fix_source();
 	nv_del_moduleCache( $module_name );

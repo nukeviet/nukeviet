@@ -34,10 +34,7 @@ if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
 	require_once NV_ROOTDIR . '/' . $file_config_temp;
 	//Bat dau phien lam viec cua MySQL
-	require_once NV_ROOTDIR . '/includes/class/mysql.class.php';
-	$db_config['new_link'] = NV_MYSQL_NEW_LINK;
-	$db_config['persistency'] = NV_MYSQL_PERSISTENCY;
-	$db_config['collation'] = NV_MYSQL_COLLATION;
+	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 }
 
 $contents = '';
@@ -399,9 +396,9 @@ elseif( $step == 5 )
 
 		$db = new sql_db( $db_config );
 
-		if( ! empty( $db->error ) )
+		if( empty( $db->connect ) )
 		{
-			$db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
+			$db_config['error'] = 'Could not connect to data server';
 		}
 		else
 		{
@@ -416,7 +413,7 @@ elseif( $step == 5 )
 				{
 					while( $item = $db->sql_fetch_assoc( $result ) )
 					{
-						$db->sql_query( 'DROP TABLE `' . $item['Name'] . '`' );
+						$db->sql_query( 'DROP TABLE `' . $item['name'] . '`' );
 					}
 					$num_table = 0;
 				}
@@ -563,7 +560,7 @@ elseif( $step == 5 )
 						{
 							nv_create_table_news( $catid_i );
 						}
-						$db->sql_freeresult();
+						$db->sql_freeresult( $result );
 
 						$result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
 
@@ -576,7 +573,7 @@ elseif( $step == 5 )
 							}
 						}
 
-						$db->sql_freeresult();
+						$db->sql_freeresult( $result );
 					}
 
 					++$step;
@@ -869,18 +866,23 @@ function nv_save_file_config()
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
 		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv3' : $db_config['prefix'];
 
+		$persistent = ( $db_config['persistent'] ) ? 'true' : 'false';
+
 		$content = '';
 		$content .= "<?php\n\n";
 		$content .= NV_FILEHEAD . "\n\n";
 		$content .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
 		$content .= "{\n";
-		$content .= " die( 'Stop!!!' );\n";
+		$content .= "\tdie( 'Stop!!!' );\n";
 		$content .= "}\n\n";
 		$content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
 		$content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";
 		$content .= "\$db_config['dbname'] = '" . $db_config['dbname'] . "';\n";
 		$content .= "\$db_config['dbuname'] = '" . $db_config['dbuname'] . "';\n";
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
+		$content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";
+		$content .= "\$db_config['collation'] = '" . $db_config['collation'] . "';\n";
+		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
 		$content .= "\$global_config['idsite'] = 0;\n";

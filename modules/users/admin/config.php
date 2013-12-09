@@ -151,7 +151,8 @@ while( list( $config, $content ) = $db->sql_fetchrow( $result ) )
 	$content = array_map( 'trim', explode( '|', $content ) );
 	$array_config[$config] = implode( ', ', $content );
 }
-$db->sql_freeresult();
+$db->sql_freeresult( $result );
+
 $array_registertype = array(
 	0 => $lang_module['active_not_allow'],
 	1 => $lang_module['active_all'],

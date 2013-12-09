@@ -95,17 +95,6 @@ define( 'NV_SITEWORDS_MIN_3WORDS_LENGTH', 0 );
 define( 'NV_SITEWORDS_MIN_3WORDS_PHRASE_OCCUR', 0 );
 define( 'NV_SITEWORDS_MAX_STRLEN', 300 );
 
-//Mac dinh, neu cac thong so khong thay doi, MySQL khong ket noi moi
-//ma quay lai voi ket noi cu. Neu NEW_LINK = true se khien MySql luon ket noi moi
-define( 'NV_MYSQL_NEW_LINK', false );
-
-//Neu true: Ket noi thuong xuyen
-//false: Ket noi khi can
-define( 'NV_MYSQL_PERSISTENCY', false );
-
-// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
-define( 'NV_MYSQL_COLLATION', 'utf8_general_ci' );
-
 // Thiet lap cho get,post,cookie,session,request,env,server
 define( 'NV_ALLOW_REQUEST_MODS', 'get,post,cookie,session,request,env,server' );
 define( 'NV_REQUEST_DEFAULT_MODE', 'request' );

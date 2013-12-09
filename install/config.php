@@ -10,10 +10,15 @@
 if( ! defined( 'NV_MAINFILE' ) ) die();
 
 $db_config['dbhost'] = "localhost";
+$db_config['dbtype'] = 'mysql';
 $db_config['dbport'] = '';
 $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
+$db_config['persistent'] = false;
+$db_config['collation'] = 'utf8_general_ci';
+// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
+
 $db_config['prefix'] = 'nv3';
 $db_config['prefix_user'] = 'nv3';
 

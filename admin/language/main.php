@@ -216,7 +216,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 						{
 							nv_create_table_news( $catid_i );
 						}
-						$db->sql_freeresult();
+						$db->sql_freeresult( $result );
 
 						$result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
 						while( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
@@ -227,7 +227,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 								$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
 							}
 						}
-						$db->sql_freeresult();
+						$db->sql_freeresult( $result );
 					}
 				}
 			}

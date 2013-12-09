@@ -83,7 +83,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 	{
 		$array_cat_order[] = $row['catid'];
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 	$weight = 0;
 	if( $parentid > 0 )
 	{
@@ -157,7 +157,7 @@ function nv_fix_topic()
 		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_topics` SET `weight`=' . $weight . ' WHERE `topicid`=' . intval( $row['topicid'] );
 		$db->sql_query( $sql );
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 }
 
 /**
@@ -177,7 +177,7 @@ function nv_fix_block_cat()
 		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_block_cat` SET `weight`=' . $weight . ' WHERE `bid`=' . intval( $row['bid'] );
 		$db->sql_query( $sql );
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 }
 
 /**
@@ -197,7 +197,7 @@ function nv_fix_source()
 		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_sources` SET `weight`=' . $weight . ' WHERE `sourceid`=' . intval( $row['sourceid'] );
 		$db->sql_query( $sql );
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 }
 
 /**
@@ -227,9 +227,9 @@ function nv_news_fix_block( $bid, $repairtable = true )
 			{
 				$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block` WHERE `bid`=' . $bid . ' AND `id`=' . intval( $row['id'] );
 			}
-			$db->sql_query( $sql );
+			$db->exec( $sql );
 		}
-		$db->sql_freeresult();
+		$db->sql_freeresult( $result );
 		if( $repairtable )
 		{
 			$db->sql_query( 'REPAIR TABLE `' . NV_PREFIXLANG . '_' . $module_data . '_block`' );
@@ -439,7 +439,7 @@ function nv_show_cat_list( $parentid = 0 )
 	{
 		$contents = "&nbsp;";
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
@@ -500,7 +500,7 @@ function nv_show_topics_list()
 	{
 		$contents = '&nbsp;';
 	}
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 	return $contents;
 }
 
@@ -582,7 +582,7 @@ function nv_show_block_cat_list()
 		$contents = '&nbsp;';
 	}
 
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 	return $contents;
 }
 
@@ -629,6 +629,7 @@ function nv_show_sources_list()
 
 			$xtpl->parse( 'main.loop' );
 		}
+		$db->sql_freeresult( $result );
 
 		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 		if( ! empty( $generate_page ) )
@@ -644,8 +645,6 @@ function nv_show_sources_list()
 	{
 		$contents = '&nbsp;';
 	}
-
-	$db->sql_freeresult();
 
 	return $contents;
 }
@@ -697,11 +696,11 @@ function nv_show_block_list( $bid )
 
 			$xtpl->parse( 'main.loop' );
 		}
+		$db->sql_freeresult( $result );
 
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 
-		$db->sql_freeresult();
 	}
 	else
 	{

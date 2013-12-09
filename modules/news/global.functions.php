@@ -155,25 +155,19 @@ function nv_del_content_module( $id )
 			$catid_i = intval( $catid_i );
 			if( $catid_i > 0 )
 			{
-				$query = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` WHERE `id`=' . $id;
-				$db->sql_query( $query );
-				if( ! $db->sql_affectedrows() )
+				$_sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` WHERE `id`=' . $id;
+				if( ! $db->exec( $_sql ) )
 				{
 					++$number_no_del;
 				}
-				$db->sql_freeresult();
 			}
 		}
 		if( $number_no_del == 0 )
 		{
-			$query = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . $id;
-			$db->sql_query( $query );
-			if( ! $db->sql_affectedrows() )
+			$_sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . $id;
+			if( ! $db->exec( $_sql ) )
 			{
-				{
-					++$number_no_del;
-				}
-				$db->sql_freeresult();
+				++$number_no_del;
 			}
 		}
 		$number_no_del = 0;

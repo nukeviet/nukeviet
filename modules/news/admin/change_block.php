@@ -50,7 +50,7 @@ if( $bid > 0 )
 					$db->sql_query( $sql );
 				}
 
-				$db->sql_freeresult();
+				$db->sql_freeresult( $result );
 				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
 				$db->sql_query( $sql );
 

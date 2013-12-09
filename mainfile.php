@@ -306,10 +306,6 @@ $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global
 
 // Bat dau phien lam viec cua MySQL
 require NV_ROOTDIR . '/includes/class/db.class.php';
-$db_config['new_link'] = NV_MYSQL_NEW_LINK;
-$db_config['persistency'] = NV_MYSQL_PERSISTENCY;
-$db_config['collation'] = NV_MYSQL_COLLATION;
-
 $db = new sql_db( $db_config );
 if( empty( $db->connect ) )
 {

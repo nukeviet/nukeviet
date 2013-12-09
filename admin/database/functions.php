@@ -121,7 +121,7 @@ function nv_show_tab()
 
 	$tab = $nv_Request->get_title( 'tab', 'get' );
 
-	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`=" . $db->dbescape( $tab ) );
+	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`=" . $db->dbescape( $tab ) );
 	$item = $db->sql_fetch_assoc( $result );
 	$db->sql_freeresult( $result );
 
@@ -165,8 +165,8 @@ function nv_show_tab()
 	$result = $db->sql_query( "SHOW COLUMNS FROM `" . $tab . "`" );
 	while( $row = $db->sql_fetch_assoc( $result ) )
 	{
-		$row['Null'] = ( $row['Null'] == "NO" ) ? "NOT NULL" : "NULL";
-		$row['Key'] = empty( $row['Key'] ) ? "" : ( $row['Key'] == 'PRI' ? "PRIMARY KEY" : ( $row['Key'] == 'UNI' ? "UNIQUE KEY" : "KEY" ) );
+		$row['Null'] = ( $row['null'] == "NO" ) ? "NOT NULL" : "NULL";
+		$row['Key'] = empty( $row['key'] ) ? "" : ( $row['key'] == 'PRI' ? "PRIMARY KEY" : ( $row['key'] == 'UNI' ? "UNIQUE KEY" : "KEY" ) );
 		$contents['table']['row']['detail'][] = $row;
 	}
 	$db->sql_freeresult( $result );

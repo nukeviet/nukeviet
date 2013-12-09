@@ -83,9 +83,9 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 			$xtpl->parse( 'choicesql.loop' );
 			while( $item = $db->sql_fetch_assoc( $result ) )
 			{
-				$_temp_choice['sl'] = ( $choice_seltected == $item['Name'] ) ? " selected='selected'" : "";
-				$_temp_choice['key'] = $item['Name'];
-				$_temp_choice['val'] = $item['Name'];
+				$_temp_choice['sl'] = ( $choice_seltected == $item['name'] ) ? " selected='selected'" : "";
+				$_temp_choice['key'] = $item['name'];
+				$_temp_choice['val'] = $item['name'];
 				$xtpl->assign( 'SQL', $_temp_choice );
 				$xtpl->parse( 'choicesql.loop' );
 				unset( $_temp_choice );

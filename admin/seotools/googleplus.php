@@ -23,11 +23,8 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	{
 		die( "NO" );
 	}
-	$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET
-		`title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . "
-		WHERE `gid`=" . $gid;
-	$db->sql_query( $sql );
-	if( ! $db->sql_affectedrows() )
+	$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `gid`=" . $gid;
+	if( ! $db->exec( $sql ) )
 	{
 		die( "NO" );
 	}
@@ -106,10 +103,8 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		nv_del_moduleCache( 'modules' );
 
 		$query = "DELETE FROM `" . $db_config['prefix'] . "_googleplus` WHERE `gid`=" . $gid;
-		if( $db->sql_query( $query ) )
+		if( $db->exec( $query ) )
 		{
-			$db->sql_freeresult();
-
 			// fix weight question
 			$sql = "SELECT `gid` FROM `" . $db_config['prefix'] . "_googleplus` ORDER BY `weight` ASC";
 			$result = $db->sql_query( $sql );
@@ -120,7 +115,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `weight`=" . $weight . " WHERE `gid`=" . $row['gid'];
 				$db->sql_query( $sql );
 			}
-			$db->sql_freeresult();
+			$db->sql_freeresult( $result );
 			nv_del_moduleCache( 'seotools' );
 			die( "OK" );
 		}

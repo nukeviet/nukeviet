@@ -46,6 +46,7 @@ class sql_db extends pdo
 		$driver_options = array(
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_EMULATE_PREPARES => false,
+			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::ATTR_CASE => PDO::CASE_LOWER,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 		);

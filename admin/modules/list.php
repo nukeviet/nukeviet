@@ -114,7 +114,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$deact_modules[$row['title']] = $mod;
 	}
 }
-$db->sql_freeresult();
+$db->sql_freeresult( $result );
 if( $is_delCache )
 {
 	nv_del_moduleCache( 'modules' );

@@ -122,16 +122,16 @@ function nv_dump_save( $params )
 	while( $item = $db->sql_fetch_assoc( $result ) )
 	{
 		unset( $m );
-		if( in_array( $item['Name'], $params['tables'] ) )
+		if( in_array( $item['name'], $params['tables'] ) )
 		{
-			$tables[$a]['name'] = $item['Name'];
-			$tables[$a]['size'] = intval( $item['Data_length'] ) + intval( $item['Index_length'] );
-			$tables[$a]['limit'] = 1 + round( 1048576 / ( $item['Avg_row_length'] + 1 ) );
-			$tables[$a]['numrow'] = $item['Rows'];
-			$tables[$a]['charset'] = ( preg_match( "/^([a-z0-9]+)_/i", $item['Collation'], $m ) ) ? $m[1] : "";
-			$tables[$a]['type'] = isset( $item['Engine'] ) ? $item['Engine'] : $item['Type'];
+			$tables[$a]['name'] = $item['name'];
+			$tables[$a]['size'] = intval( $item['data_length'] ) + intval( $item['index_length'] );
+			$tables[$a]['limit'] = 1 + round( 1048576 / ( $item['avg_row_length'] + 1 ) );
+			$tables[$a]['numrow'] = $item['rows'];
+			$tables[$a]['charset'] = ( preg_match( "/^([a-z0-9]+)_/i", $item['collation'], $m ) ) ? $m[1] : "";
+			$tables[$a]['type'] = isset( $item['engine'] ) ? $item['engine'] : $item['t'];
 			++$a;
-			$dbsize += intval( $item['Data_length'] ) + intval( $item['Index_length'] );
+			$dbsize += intval( $item['data_length'] ) + intval( $item['index_length'] );
 		}
 	}
 	$db->sql_freeresult( $result );
