@@ -388,32 +388,32 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			{
 				$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows`
 						(`id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `inhome`, `allowed_comm`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`) VALUES
-		 (NULL,
-		 " . intval( $rowcontent['catid'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
-		 " . intval( $rowcontent['topicid'] ) . ",
-		 " . intval( $rowcontent['admin_id'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['author'] ) . ",
-		 " . intval( $rowcontent['sourceid'] ) . ",
-		 " . intval( $rowcontent['addtime'] ) . ",
-		 " . intval( $rowcontent['edittime'] ) . ",
-		 " . intval( $rowcontent['status'] ) . ",
-		 " . intval( $rowcontent['publtime'] ) . ",
-		 " . intval( $rowcontent['exptime'] ) . ",
-		 " . intval( $rowcontent['archive'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['title'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['alias'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['hometext'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['homeimgfile'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['homeimgalt'] ) . ",
-		 " . $db->dbescape_string( $rowcontent['homeimgthumb'] ) . ",
-		 " . intval( $rowcontent['inhome'] ) . ",
-		 " . intval( $rowcontent['allowed_comm'] ) . ",
-		 " . intval( $rowcontent['allowed_rating'] ) . ",
-		 " . intval( $rowcontent['hitstotal'] ) . ",
-		 " . intval( $rowcontent['hitscm'] ) . ",
-		 " . intval( $rowcontent['total_rating'] ) . ",
-		 " . intval( $rowcontent['click_rating'] ) . ")";
+						 (NULL,
+						 " . intval( $rowcontent['catid'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
+						 " . intval( $rowcontent['topicid'] ) . ",
+						 " . intval( $rowcontent['admin_id'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['author'] ) . ",
+						 " . intval( $rowcontent['sourceid'] ) . ",
+						 " . intval( $rowcontent['addtime'] ) . ",
+						 " . intval( $rowcontent['edittime'] ) . ",
+						 " . intval( $rowcontent['status'] ) . ",
+						 " . intval( $rowcontent['publtime'] ) . ",
+						 " . intval( $rowcontent['exptime'] ) . ",
+						 " . intval( $rowcontent['archive'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['title'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['alias'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['hometext'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['homeimgfile'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['homeimgalt'] ) . ",
+						 " . $db->dbescape_string( $rowcontent['homeimgthumb'] ) . ",
+						 " . intval( $rowcontent['inhome'] ) . ",
+						 " . intval( $rowcontent['allowed_comm'] ) . ",
+						 " . intval( $rowcontent['allowed_rating'] ) . ",
+						 " . intval( $rowcontent['hitstotal'] ) . ",
+						 " . intval( $rowcontent['hitscm'] ) . ",
+						 " . intval( $rowcontent['total_rating'] ) . ",
+						 " . intval( $rowcontent['click_rating'] ) . ")";
 
 				$rowcontent['id'] = $db->sql_query_insert_id( $query );
 				if( $rowcontent['id'] > 0 )
@@ -445,8 +445,6 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				{
 					$error = $lang_module['errorsave'];
 				}
-
-				$db->sql_freeresult();
 			}
 			else
 			{
@@ -455,7 +453,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					$rowcontent['status'] = 1;
 				}
 
-				$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
+				$_sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
 						 `catid`=" . intval( $rowcontent['catid'] ) . ",
 						 `listcatid`=" . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
 						 `topicid`=" . intval( $rowcontent['topicid'] ) . ",
@@ -477,9 +475,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 						 `edittime`=UNIX_TIMESTAMP()
 						WHERE `id` =" . $rowcontent['id'];
 
-				$db->sql_query( $query );
-
-				if( $db->sql_affectedrows() > 0 )
+				if( $db->exec( $_sql ) )
 				{
 					$array_cat_old = explode( ',', $rowcontent_old['listcatid'] );
 

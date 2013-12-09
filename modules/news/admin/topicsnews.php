@@ -55,7 +55,7 @@ else
 	$xtpl->parse( 'main.empty' );
 }
 
-$db->sql_freeresult();
+$db->sql_freeresult( $result );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

@@ -62,7 +62,7 @@ function nv_admin_add_field_lang( $dirlang )
 
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			if( $row['Field'] == "author_" . $dirlang )
+			if( $row['field'] == "author_" . $dirlang )
 			{
 				$add_field = false;
 				break;

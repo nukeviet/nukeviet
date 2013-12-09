@@ -18,7 +18,7 @@ $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $arr['id'] != 0 )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu` WHERE `id`=" . $arr['id'];
+	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_menu` WHERE `id`=' . $arr['id'];
 	$result = $db->sql_query( $sql );
 	$arr = $db->sql_fetchrow( $result );
 
@@ -39,18 +39,16 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( empty( $id ) ) die( 'NO_' . $id );
 
-	$query = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu` WHERE `id`=" . $id;
+	$query = 'SELECT `title` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_menu` WHERE `id`=' . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 
 	if( $numrows != 1 ) die( 'NO_' . $id );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', "aboutid " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', 'aboutid ' . $id, $admin_info['userid'] );
 
-	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu` WHERE `id` = " . $id;
-	$db->sql_query( $query );
-
-	if( $db->sql_affectedrows() > 0 )
+	$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_menu` WHERE `id` = ' . $id;
+	if( $db->exec( $sql )  )
 	{
 		nv_del_moduleCache( $module_name );
 	}
@@ -95,10 +93,10 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_menu` SET
-			`title`=" . $db->dbescape( $arr_menu['title'] ) . ",
-			`description` = " . $db->dbescape( $arr_menu['description'] ) . "
-		WHERE `id` =" . $arr_menu['id'];
+		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_menu` SET
+			`title`=' . $db->dbescape( $arr_menu['title'] ) . ',
+			`description` = ' . $db->dbescape( $arr_menu['description'] ) . '
+		WHERE `id` =' . $arr_menu['id'];
 
 		if( $db->sql_query( $sql ) )
 		{
@@ -114,10 +112,10 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 }
 
 // List menu
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_menu`";
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+$sql = 'FROM `' . NV_PREFIXLANG . '_' . $module_data . '_menu`';
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 
-$sql1 = "SELECT COUNT(*) " . $sql;
+$sql1 = 'SELECT COUNT(*) ' . $sql;
 $result1 = $db->sql_query( $sql1 );
 list( $all_page ) = $db->sql_fetchrow( $result1 );
 
@@ -129,12 +127,12 @@ if( ! $all_page )
 }
 else
 {
-	$sql .= " ORDER BY `id` DESC";
+	$sql .= ' ORDER BY `id` DESC';
 
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 20;
 
-	$sql2 = "SELECT * " . $sql . " LIMIT " . $page . ", " . $per_page;
+	$sql2 = 'SELECT * ' . $sql . ' LIMIT ' . $page . ', ' . $per_page;
 	$query2 = $db->sql_query( $sql2 );
 
 	$array = array();
@@ -153,7 +151,7 @@ else
 				$arr_items[] = $arr_menu_item[$val];
 				$b = $b + 1;
 			}
-			$item = implode( "&nbsp;&nbsp; ", $arr_items );
+			$item = implode( '&nbsp;&nbsp; ', $arr_items );
 		}
 		else
 		{
@@ -162,14 +160,14 @@ else
 
 		++$a;
 		$array[$row['id']] = array(
-			'id' => ( int )$row['id'], //
+			'id' => ( int )$row['id'],
 			'nb' => ( int )$a,
-			'title' => $row['title'], //
-			'menu_item' => $item, //
-			'num' => $b, //
-			'link_view' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_menu&amp;mid=" . $row['id'], //
-			'edit_url' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;add=1&amp;id=" . $row['id'], //
-			'description' => $row['description'] //
+			'title' => $row['title'],
+			'menu_item' => $item,
+			'num' => $b,
+			'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $row['id'],
+			'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1&amp;id=' . $row['id'],
+			'description' => $row['description']
 		);
 	}
 

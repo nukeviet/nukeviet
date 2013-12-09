@@ -50,7 +50,6 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
@@ -62,12 +61,9 @@ if( ! empty( $savecat ) )
 	else
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
-		$db->sql_query( $sql );
-
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
@@ -75,7 +71,6 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 

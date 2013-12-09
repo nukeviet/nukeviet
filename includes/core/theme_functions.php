@@ -462,7 +462,7 @@ function nv_xmlSitemapIndex_generate()
 			}
 		}
 	}
-	$db->sql_close();
+	$db = null;
 
 	$contents = $xml->asXML();
 

@@ -163,10 +163,9 @@ if( $catid > 0 )
 			if( $delallcheckss == md5( $catid . session_id() ) )
 			{
 				$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE catid=" . $catid;
-				if( $db->sql_query( $sql ) )
+				if( $db->exec( $sql ) )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid'] );
-					$db->sql_freeresult();
 					nv_fix_cat_order();
 					$db->sql_query( "DROP TABLE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "`" );
 					$contents = "OK_" . $parentid;

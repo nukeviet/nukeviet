@@ -28,14 +28,14 @@ $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\
 
 while( $item = $db->sql_fetch_assoc( $result ) )
 {
-	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
+	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['name'], $tables ) ) )
 	{
-		$totalfree += $item['Data_free'];
-		$tabs[] = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
-		$db->sql_query( "LOCK TABLE " . $item['Name'] . " WRITE" );
-		$db->sql_query( "REPAIR TABLE " . $item['Name'] );
-		$db->sql_query( "OPTIMIZE TABLE " . $item['Name'] );
-		$db->sql_query( "UNLOCK TABLE " . $item['Name'] );
+		$totalfree += $item['data_free'];
+		$tabs[] = substr( $item['name'], strlen( $db_config['prefix'] ) + 1 );
+		$db->sql_query( "LOCK TABLE " . $item['name'] . " WRITE" );
+		$db->sql_query( "REPAIR TABLE " . $item['name'] );
+		$db->sql_query( "OPTIMIZE TABLE " . $item['name'] );
+		$db->sql_query( "UNLOCK TABLE " . $item['name'] );
 	}
 }
 $db->sql_freeresult( $result );

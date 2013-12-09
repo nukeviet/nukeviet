@@ -62,7 +62,6 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $query ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
@@ -73,12 +72,10 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` = " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` = " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
-		$db->sql_query( $query );
-		if( $db->sql_affectedrows() > 0 )
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` = " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` = " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
+		if( $db->exec( $sql ) > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
@@ -86,7 +83,6 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 

@@ -56,10 +56,9 @@ if( $checknum == $row['checknum'] )
 
 		$userid_change_email = intval( substr( $row['username'], 20 ) );
 		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `email`=" . $db->dbescape_string( $row['email'] ) . " WHERE `userid`=" . $userid_change_email;
-		$db->sql_query( $sql );
-		if( $db->sql_affectedrows() )
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_query( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
+			$db->exec( "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `userid`=" . $db->dbescape( $userid ) );
 			$check_update_user = true;
 		}
 	}

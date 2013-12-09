@@ -22,9 +22,9 @@ $result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_fi
 $add_field = true;
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == "author_" )
 	{
-		$array_lang_exit[] .= trim( substr( $row['Field'], 7, 2 ) );
+		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
 }
 
@@ -69,16 +69,17 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 {
 	$pozlang = $nv_Request->get_array( 'pozlang', 'post', array() );
 
-	if( ! empty( $pozlang ) )
+	if( ! empty( $pozlang ) AND isset( $language_array[$typelang] ) )
 	{
 		foreach( $pozlang as $id => $lang_value )
 		{
-			$id = intval( $id );
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
-
 			if( ! empty( $lang_value ) )
 			{
-				$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $typelang . "`='" . mysql_real_escape_string( $lang_value ) . "' WHERE `id`='" . $id . "'" );
+				$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '` SET `lang_' . $typelang . '`= :lang_value WHERE `id`= :id' );
+				$sth->bindParam( ':id', $id, PDO::PARAM_INT );
+				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+				$sth->execute();
 			}
 		}
 	}

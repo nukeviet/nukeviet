@@ -113,7 +113,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 					 `bodytext`=" . $db->dbescape( $row['bodytext'] ) . ", `keywords`=" . $db->dbescape( $row['keywords'] ) . ",
 					 `socialbutton`=" . $row['socialbutton'] . ", `activecomm`=" . $row['activecomm'] . ", `facebookappid`=" . $db->dbescape( $row['facebookappid'] ) . ",
 					 `layout_func`=" . $db->dbescape( $row['layout_func'] ) . ", `gid`=" . $row['gid'] . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
-			$db->sql_query( $sql );
 			$publtime = $row['add_time'];
 		}
 		else
@@ -127,13 +126,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 					NULL, " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
 					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
 					" . $db->dbescape( $row['layout_func'] ) . "," . $row['gid'] . ", " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
-			$id = $db->sql_query_insert_id( $sql );
 			$publtime = NV_CURRENTTIME;
 		}
 
-		nv_del_moduleCache( $module_name );
-
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
 			if( $id )
 			{
@@ -144,6 +140,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
 			}
 
+			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
 			die();
 		}

@@ -305,16 +305,11 @@ $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
 
 // Bat dau phien lam viec cua MySQL
-require NV_ROOTDIR . '/includes/class/mysql.class.php';
-$db_config['new_link'] = NV_MYSQL_NEW_LINK;
-$db_config['persistency'] = NV_MYSQL_PERSISTENCY;
-$db_config['collation'] = NV_MYSQL_COLLATION;
+require NV_ROOTDIR . '/includes/class/db.class.php';
 $db = new sql_db( $db_config );
-if( ! empty( $db->error ) )
+if( empty( $db->connect ) )
 {
-	$die = ! empty( $db->error['user_message'] ) ? $db->error['user_message'] : $db->error['message'];
-	$die .= ! empty( $db->error['code'] ) ? ' (Code: ' . $db->error['code'] . ')' : '';
-	trigger_error( $die, 256 );
+	trigger_error( 'Sorry! Could not connect to data server', 256 );
 }
 unset( $db_config['dbpass'] );
 

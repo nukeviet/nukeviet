@@ -26,8 +26,7 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET
 		`title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . "
 		WHERE `qid`=" . $qid . " AND `lang`='" . NV_LANG_DATA . "'";
-	$db->sql_query( $sql );
-	if( ! $db->sql_affectedrows() )
+	if( ! $db->exec( $sql ) )
 	{
 		die( "NO" );
 	}
@@ -99,10 +98,9 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $qid )
 	{
-		$query = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `qid`=" . $qid;
-		if( $db->sql_query( $query ) )
+		$sql = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `qid`=" . $qid;
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_freeresult();
 
 			// fix weight question
 			$sql = "SELECT `qid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
@@ -114,7 +112,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
 				$db->sql_query( $sql );
 			}
-			$db->sql_freeresult();
+			$db->sql_freeresult( $result );
 			die( "OK" );
 		}
 	}

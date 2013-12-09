@@ -69,10 +69,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
 	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
 	foreach( $array_config_site as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
+
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$array_config_global = array();
@@ -131,9 +135,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
 		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
+		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 		foreach( $array_config_global as $config_name => $config_value )
 		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
 
 		nv_save_file_config_global();

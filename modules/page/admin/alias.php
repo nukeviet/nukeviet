@@ -18,12 +18,12 @@ list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . 
 
 if( intval( $number ) > 0 )
 {
-	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`='" . NV_PREFIXLANG . "_" . $module_data . "'" );
+	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`='" . NV_PREFIXLANG . "_" . $module_data . "'" );
 	$item = $db->sql_fetch_assoc( $result );
 	$db->sql_freeresult( $result );
-	if( isset( $item['Auto_increment'] ) )
+	if( isset( $item['auto_increment'] ) )
 	{
-		$alias = $alias . "-" . $item['Auto_increment'];
+		$alias = $alias . "-" . $item['auto_increment'];
 	}
 	else
 	{

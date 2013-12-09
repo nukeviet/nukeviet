@@ -128,9 +128,12 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_global['max_requests_60'] = $nv_Request->get_int( 'max_requests_60', 'post' );
 	$array_config_global['max_requests_300'] = $nv_Request->get_int( 'max_requests_300', 'post' );
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	$array_config_define = array();
@@ -151,9 +154,13 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 		}
 	}
 	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
+
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	nv_save_file_config_global();

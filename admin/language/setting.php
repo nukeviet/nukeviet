@@ -112,9 +112,9 @@ $lang_array_data_exit = array();
 
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == "author_" )
 	{
-		$lang_array_data_exit[] = substr( $row['Field'], 7, 2 );
+		$lang_array_data_exit[] = substr( $row['field'], 7, 2 );
 	}
 }
 

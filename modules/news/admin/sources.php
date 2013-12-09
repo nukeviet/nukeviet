@@ -59,7 +59,6 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
@@ -71,11 +70,9 @@ if( ! empty( $savecat ) )
 	else
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` = " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $sourceid;
-		$db->sql_query( $sql );
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );
-			$db->sql_freeresult();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
@@ -83,7 +80,6 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 

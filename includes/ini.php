@@ -67,12 +67,6 @@ if( PHP_VERSION < 5.2 )
 	trigger_error( 'You are running an unsupported PHP version. Please upgrade to PHP 5.2 or higher before trying to install Nukeviet Portal', 256 );
 }
 
-//Neu he thong khong ho tro MySQL se bao loi
-if( ! ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) )
-{
-	trigger_error( 'MySQL is not supported', 256 );
-}
-
 //Neu he thong khong ho tro opendir se bao loi
 if( ! ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) )
 {

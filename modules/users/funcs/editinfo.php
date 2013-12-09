@@ -41,7 +41,7 @@ function nv_check_username_change( $login )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
 	$result = $db->sql_query( $sql );
 	list( $deny_name ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
@@ -70,7 +70,7 @@ function nv_check_email_change( $email )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
 	$result = $db->sql_query( $sql );
 	list( $deny_email ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
 

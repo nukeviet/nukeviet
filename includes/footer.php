@@ -24,7 +24,7 @@ if( ! defined( 'NV_IS_AJAX' ) )
 		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage() ) . ' / ' . number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ), $contents );
 	}
 }
-$db->sql_close();
+$db = null;
 
 //Nen trang
 if( defined( 'NV_IS_GZIP' ) )

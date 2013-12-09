@@ -43,9 +43,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_define['nv_upassmin'] = $nv_Request->get_int( 'nv_upassmin', 'post', 5 );
 	$array_config_define['nv_upassmax'] = $nv_Request->get_int( 'nv_upassmax', 'post', 255 );
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	$array_config['nv_upass_type'] = $nv_Request->get_int( 'nv_upass_type', 'post', 0 );
@@ -148,7 +151,8 @@ while( list( $config, $content ) = $db->sql_fetchrow( $result ) )
 	$content = array_map( 'trim', explode( '|', $content ) );
 	$array_config[$config] = implode( ', ', $content );
 }
-$db->sql_freeresult();
+$db->sql_freeresult( $result );
+
 $array_registertype = array(
 	0 => $lang_module['active_not_allow'],
 	1 => $lang_module['active_all'],

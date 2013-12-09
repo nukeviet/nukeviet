@@ -21,12 +21,12 @@ $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows )
 {
-	$mode = "edit";
+	$mode = 'edit';
 	$row = $db->sql_fetchrow( $result );
 }
 else
 {
-	$mode = "add";
+	$mode = 'add';
 	$row = array( 'content' => '' );
 }
 
@@ -43,7 +43,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	else
 	{
 		$content = nv_editor_nl2br( $content );
-		if( $mode == "edit" )
+		if( $mode == 'edit' )
 		{
 			$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET
 				`content`=" . $db->dbescape( $content ) . ",
@@ -56,9 +56,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				'siteterms_" . NV_LANG_DATA . "', " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ")";
 		}
 
-		$db->sql_query( $query );
-
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $query ) > 0 )
 		{
 			$error = $lang_module['saveok'];
 		}
@@ -88,7 +86,7 @@ if( ! empty( $error ) )
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-	$data = nv_aleditor( "content", '100%', '300px', $content );
+	$data = nv_aleditor( 'content', '100%', '300px', $content );
 }
 else
 {

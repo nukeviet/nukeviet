@@ -59,7 +59,7 @@ function nv_check_username_reg( $login )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
 	$result = $db->sql_query( $sql );
 	list( $deny_name ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
 
@@ -89,7 +89,7 @@ function nv_check_email_reg( $email )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
 	$result = $db->sql_query( $sql );
 	list( $deny_email ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
 
@@ -296,7 +296,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='siteterms_" . NV_LANG_DATA . "'";
 	$result = $db->sql_query( $sql );
 	list( $siteterms ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	$contents = openid_register( $gfx_chk, $array_register, $siteterms, $data_questions );
 
@@ -587,7 +587,7 @@ $array_register['agreecheck'] = $array_register['agreecheck'] ? " checked=\"chec
 $sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='siteterms_" . NV_LANG_DATA . "'";
 $result = $db->sql_query( $sql );
 list( $siteterms ) = $db->sql_fetchrow( $result );
-$db->sql_freeresult();
+$db->sql_freeresult( $result );
 
 $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_questions, $array_field_config, $custom_fields );
 

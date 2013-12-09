@@ -538,7 +538,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$error[] = $lang_module['errorsave'];
 			}
-			$db->sql_freeresult();
 		}
 		else
 		{
@@ -578,9 +577,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					 `edittime`=UNIX_TIMESTAMP()
 				WHERE `id` =" . $rowcontent['id'];
 
-			$db->sql_query( $sql );
-
-			if( $db->sql_affectedrows() > 0 )
+			if( $db->exec( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid'] );
 
@@ -618,7 +615,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$error[] = $lang_module['errorsave'];
 			}
-			$db->sql_freeresult();
 		}
 		nv_set_status_module();
 		if( empty( $error ) )

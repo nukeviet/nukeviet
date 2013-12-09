@@ -44,9 +44,8 @@ if( $topicid > 0 )
 	if( $check_del_topicid )
 	{
 		$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . $topicid;
-		if( $db->sql_query( $query ) )
+		if( $db->exec( $query ) )
 		{
-			$db->sql_freeresult();
 			nv_fix_topic();
 			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/topics/" . $thumbnail ) )
 			{
