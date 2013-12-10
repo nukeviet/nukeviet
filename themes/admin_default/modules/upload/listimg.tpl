@@ -2,7 +2,7 @@
 <!-- BEGIN: loopimg -->
 <div class="imgcontent{IMG.sel}" title="{IMG.title}">
 	<div style="width:100px;height:96px;display:table-cell; vertical-align:middle;">
-		<img class="previewimg" alt="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
+		<img class="previewimg" alt="{IMG.alt}" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
 	</div>
 	<div class="imgInfo">
 		{IMG.name}

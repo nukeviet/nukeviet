@@ -23,7 +23,7 @@ if( $nv_Request->isset_request( 'id', 'get' ) )
 
 	if( $numrows != 1 )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 }
@@ -61,7 +61,7 @@ if( $numrows )
 			$array_mod = array();
 			foreach( $list_modules as $row_mod )
 			{
-				if( ! empty( $row_mod['admins'] ) and in_array( $row['admin_id'], explode( ",", $row_mod['admins'] ) ) )
+				if( ! empty( $row_mod['admins'] ) and in_array( $row['admin_id'], explode( ',', $row_mod['admins'] ) ) )
 				{
 					$array_mod[] = $row_mod['custom_title'];
 				}
@@ -164,7 +164,7 @@ if( $numrows )
 		else
 		{
 			list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( "|", $row['files_level'] );
-			$allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array();
+			$allow_files_type = ! empty( $allow_files_type ) ? explode( ',', $allow_files_type ) : array();
 			$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 		}
 
@@ -202,7 +202,7 @@ if( ! empty( $admins ) )
 {
 	if( $global_config['authors_detail_main'] or $numrows == 1 )
 	{
-		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		foreach( $admins as $id => $values )
 		{
 			$xtpl->assign( 'ID', $id );
@@ -249,7 +249,7 @@ if( ! empty( $admins ) )
 	}
 	else
 	{
-		$xtpl = new XTemplate( "list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 
 		$a = 0;
@@ -299,8 +299,8 @@ if( ! empty( $admins ) )
 	$contents = nv_check_add_admin() . $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

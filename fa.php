@@ -36,7 +36,7 @@ function nv_fomat_dir( $dirname, $all = false )
 	$dh = opendir( NV_ROOTDIR . '/' . $dirname );
 	if( $dh )
 	{
-		while( ($file = readdir( $dh )) !== false )
+		while( ( $file = readdir( $dh ) ) !== false )
 		{
 			if( preg_match( '/^([a-zA-Z0-9\-\_\/\.]+)\.php$/', $file ) )
 			{
@@ -86,7 +86,7 @@ function nv_fomat_dir( $dirname, $all = false )
 function nv_fomat_file_php( $filename )
 {
 	// ap dung cho Aptana Studio 3
-	$array_file_not_fomat = array( );
+	$array_file_not_fomat = array();
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/idna_convert.class.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/openid.class.php';
 	$array_file_not_fomat[] = NV_ROOTDIR . '/includes/class/pclzip.class.php';
@@ -128,7 +128,7 @@ function nv_fomat_file_php( $filename )
 
 		//Thêm khoảng cách vào sau và trước dấu mở ngoặc đơn
 		$raw_tokens = token_get_all( $output_data );
-		$array_tokend = array( );
+		$array_tokend = array();
 		foreach( $raw_tokens as $rawToken )
 		{
 			$array_tokend[] = new Token( $rawToken );
@@ -159,7 +159,7 @@ function nv_fomat_file_php( $filename )
 		//Xử lý mảng
 		$raw_tokens = token_get_all( $output_data );
 
-		$array_tokend = array( );
+		$array_tokend = array();
 		foreach( $raw_tokens as $rawToken )
 		{
 			$array_tokend[] = new Token( $rawToken );
@@ -171,11 +171,11 @@ function nv_fomat_file_php( $filename )
 		// Thut dau dong dong hien tai
 		$is_in_array = 0;
 		// Trong array - array cap thu bao nhieu
-		$num_open_parentheses = array( );
+		$num_open_parentheses = array();
 		// Dem so dau (
-		$num_close_parentheses = array( );
+		$num_close_parentheses = array();
 		// Dem so dau )
-		$is_double_arrow = array( );
+		$is_double_arrow = array();
 		// Array co xuong hang hay khong
 
 		$total_tokend = sizeof( $array_tokend );
@@ -211,12 +211,10 @@ function nv_fomat_file_php( $filename )
 				while( $j < $total_tokend )
 				{
 					$j++;
-					if( $array_tokend[$j]->contents == "(" )
-						$_num_open_parentheses++;
-					if( $array_tokend[$j]->contents == ")" )
-						$_num_close_parentheses++;
+					if( $array_tokend[$j]->contents == "(" ) $_num_open_parentheses++;
+					if( $array_tokend[$j]->contents == ")" ) $_num_close_parentheses++;
 
-					if( $array_tokend[$j]->type == T_DOUBLE_ARROW or $array_tokend[$j]->type == T_ARRAY or ($array_tokend[$j]->type == T_COMMENT and $array_tokend[$j - 2]->contents == ",") )
+					if( $array_tokend[$j]->type == T_DOUBLE_ARROW or $array_tokend[$j]->type == T_ARRAY or ( $array_tokend[$j]->type == T_COMMENT and $array_tokend[$j - 2]->contents == "," ) )
 					{
 						$is_double_arrow[$is_in_array]++;
 					}
@@ -238,17 +236,11 @@ function nv_fomat_file_php( $filename )
 			{
 				if( empty( $is_double_arrow[$is_in_array] ) and $tokend->type == T_WHITESPACE )
 				{
-					$tokend->contents = str_replace( array(
-						"\n",
-						"\t"
-					), array(
-						" ",
-						""
-					), $tokend->contents );
+					$tokend->contents = str_replace( array( "\n", "\t" ), array( " ", "" ), $tokend->contents );
 				}
 
 				// Xoa dau , cuoi cung cua array
-				if( $key == ($key_close_array - 2) and $tokend->contents == "," and $tokend->type == - 1 )
+				if( $key == ( $key_close_array - 2 ) and $tokend->contents == "," and $tokend->type == - 1 )
 				{
 					$tokend->contents = '';
 				}
@@ -262,10 +254,8 @@ function nv_fomat_file_php( $filename )
 				}
 
 				// Dong mo array
-				if( $tokend->contents == "(" )
-					$num_open_parentheses[$is_in_array]++;
-				if( $tokend->contents == ")" )
-					$num_close_parentheses[$is_in_array]++;
+				if( $tokend->contents == "(" ) $num_open_parentheses[$is_in_array]++;
+				if( $tokend->contents == ")" ) $num_close_parentheses[$is_in_array]++;
 
 				if( $num_open_parentheses[$is_in_array] > 0 and $num_open_parentheses[$is_in_array] == $num_close_parentheses[$is_in_array] )
 				{
@@ -292,7 +282,7 @@ function nv_fomat_file_php( $filename )
 			}
 		}
 
-		// Loại bỏ khoảng trắng ( )
+		// Loại bỏ khoảng trắng ()
 		$output_data = preg_replace( '/\([\s]+\)/', '()', $output_data );
 		$output_data = preg_replace( "/[ ]+/", " ", $output_data );
 
@@ -328,15 +318,15 @@ function nv_fomat_file_tpl( $filename )
 	$contentssave = str_replace( '<li{', '<li {', $contentssave );
 	$contentssave = str_replace( '<blockquote{CLASS}>', '<blockquote {CLASS}>', $contentssave );
 
-	$dom = new DOMDocument( );
+	$dom = new DOMDocument();
 	$dom->loadHTML( $contentssave );
 	$dom->preserveWhiteSpace = false;
 	$Tagname = $dom->getElementsByTagname( 'script' );
 	foreach( $Tagname as $child )
 	{
-		$tmp_dom = new DOMDocument( );
+		$tmp_dom = new DOMDocument();
 		$tmp_dom->appendChild( $tmp_dom->importNode( $child, true ) );
-		$html = trim( $tmp_dom->saveHTML( ) );
+		$html = trim( $tmp_dom->saveHTML() );
 		if( preg_match( '/\<\!\-\-\s*BEGIN:\s*([a-zA-Z0-9\-\_]+)\s*\-\-\>/', $html, $m ) )
 		{
 			print_r( "Xtemplate: " . $m[1] . " trong JS file: " . $filename );
@@ -396,7 +386,7 @@ elseif( preg_match( "/^([a-zA-Z0-9\-\_\/\.]+)\.js$/", $filename ) )
 		echo $filename . '<br>';
 	}
 }
-elseif( (preg_match( "/^([a-zA-Z0-9\-\_\/]+)$/", $filename ) or $filename == '') and is_dir( NV_ROOTDIR . '/' . $filename ) )
+elseif( ( preg_match( "/^([a-zA-Z0-9\-\_\/]+)$/", $filename ) or $filename == '' ) and is_dir( NV_ROOTDIR . '/' . $filename ) )
 {
 	$all = isset( $_GET['all'] ) ? intval( $_GET['all'] ) : 0;
 	nv_fomat_dir( $filename, $all );
@@ -405,4 +395,5 @@ else
 {
 	die( $filename );
 }
+
 ?>

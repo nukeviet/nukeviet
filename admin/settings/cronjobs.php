@@ -16,7 +16,7 @@ $result = $db->sql_query( $sql );
 
 if( ! $db->sql_numrows( $result ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_add" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add' );
 	die();
 }
 
@@ -30,7 +30,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$contents[$row['id']]['disable'] = array( ( ( empty( $row['is_sys'] ) or empty( $row['act'] ) ) ? 1 : 0 ), ( $row['act'] ? $lang_global['disable'] : $lang_global['activate'] ), NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cronjobs_act&amp;id=" . $row['id'] );
 	$contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];
 	$contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
-	$contents[$row['id']]['detail'][$lang_module['params']] = ! empty( $row['params'] ) ? implode( ", ", explode( ",", $row['params'] ) ) : "";
+	$contents[$row['id']]['detail'][$lang_module['params']] = ! empty( $row['params'] ) ? implode( ", ", explode( ',', $row['params'] ) ) : "";
 	$contents[$row['id']]['detail'][$lang_module['start_time']] = nv_date( "l, d/m/Y H:i", $row['start_time'] );
 	$contents[$row['id']]['detail'][$lang_module['interval']] = nv_convertfromSec( $row['interval'] * 60 );
 	$contents[$row['id']]['detail'][$lang_module['is_del']] = ! empty( $row['del'] ) ? $lang_module['isdel'] : $lang_module['notdel'];
@@ -63,8 +63,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 $contents = call_user_func( "main_theme", $contents );
 $page_title = $lang_global['mod_cronjobs'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

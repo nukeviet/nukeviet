@@ -60,7 +60,7 @@ function nv_save_file_banip()
 
 	if( ! $content_config_site and ! $content_config_admin )
 	{
-		nv_deletefile( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php" );
+		nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php' );
 		return true;
 	}
 
@@ -75,7 +75,7 @@ function nv_save_file_banip()
 	$content_config .= "\n";
 	$content_config .= "?>";
 
-	$write = file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/banip.php", $content_config, LOCK_EX );
+	$write = file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php', $content_config, LOCK_EX );
 
 	if( $write === false ) return $content_config;
 
@@ -128,9 +128,12 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_global['max_requests_60'] = $nv_Request->get_int( 'max_requests_60', 'post' );
 	$array_config_global['max_requests_300'] = $nv_Request->get_int( 'max_requests_300', 'post' );
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	$array_config_define = array();
@@ -151,9 +154,13 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 		}
 	}
 	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
+
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	nv_save_file_config_global();
@@ -164,7 +171,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	}
 }
 
-$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -239,7 +246,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		if( $save !== true )
 		{
 			$xtpl->assign( 'MESSAGE', sprintf( $lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR ) );
-			$xtpl->assign( 'CODE', str_replace( array( "\n", "\t" ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars( $save ) ) );
+			$xtpl->assign( 'CODE', str_replace( array( '\n', '\t' ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars( $save ) ) );
 			$xtpl->parse( 'main.manual_save' );
 		}
 		else
@@ -308,10 +315,10 @@ $xtpl->assign( 'NV_GFX_HEIGHT', NV_GFX_HEIGHT );
 $xtpl->assign( 'NV_ALLOWED_HTML_TAGS', NV_ALLOWED_HTML_TAGS );
 
 $mask_text_array = array();
-$mask_text_array[0] = "255.255.255.255";
-$mask_text_array[3] = "255.255.255.xxx";
-$mask_text_array[2] = "255.255.xxx.xxx";
-$mask_text_array[1] = "255.xxx.xxx.xxx";
+$mask_text_array[0] = '255.255.255.255';
+$mask_text_array[3] = '255.255.255.xxx';
+$mask_text_array[2] = '255.255.xxx.xxx';
+$mask_text_array[1] = '255.xxx.xxx.xxx';
 
 $banip_area_array = array();
 $banip_area_array[0] = $lang_module['banip_area_select'];
@@ -332,8 +339,8 @@ if( $db->sql_numrows( $result ) )
 			'dbarea' => $banip_area_array[$dbarea],
 			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
 			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['banip_nolimit'],
-			'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $dbid,
-			'url_delete' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;del=1&amp;id=" . $dbid
+			'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid,
+			'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;del=1&amp;id=' . $dbid
 		) );
 
 		$xtpl->parse( 'main.listip.loop' );
@@ -370,8 +377,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['security'];
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

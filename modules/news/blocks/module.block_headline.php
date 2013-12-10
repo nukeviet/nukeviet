@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
  */
 function nv_block_headline()
 {
-	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat;
+	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
 
 	$array_bid_content = array();
 
@@ -49,7 +49,7 @@ function nv_block_headline()
 			$array_content = array();
 			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $db->sql_fetchrow( $result ) )
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id;
+				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
 				$array_content[] = array(
 					'title' => $title,
 					'link' => $link,
@@ -63,7 +63,7 @@ function nv_block_headline()
 		nv_set_cache( $cache_file, $cache );
 	}
 
-	$xtpl = new XTemplate( "block_headline.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'PIX_IMG', NV_BASE_SITEURL . 'images/pix.gif' );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );

@@ -10,10 +10,15 @@
 if( ! defined( 'NV_MAINFILE' ) ) die();
 
 $db_config['dbhost'] = "localhost";
+$db_config['dbtype'] = 'mysql';
 $db_config['dbport'] = '';
 $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
+$db_config['persistent'] = false;
+$db_config['collation'] = 'utf8_general_ci';
+// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
+
 $db_config['prefix'] = 'nv3';
 $db_config['prefix_user'] = 'nv3';
 
@@ -30,7 +35,6 @@ $global_config['idsite'] = 0;
 $global_config['site_timezone'] = 'byCountry';
 $global_config['statistics_timezone'] = '';
 $global_config['gzip_method'] = 1;
-$global_config['is_url_rewrite'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;
@@ -68,7 +72,7 @@ define( 'NV_UNICKMIN', 4 );
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );

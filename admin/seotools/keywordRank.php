@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['keywordRank'];
 $contents = '';
 
-$xtpl = new XTemplate( "keywordRank.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'keywordRank.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -59,7 +59,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				{
 					if( ! class_exists( 'keywordRank' ) )
 					{
-						include ( NV_ROOTDIR . "/includes/class/keywordRank.class.php" );
+						include NV_ROOTDIR . '/includes/class/keywordRank.class.php' ;
 					}
 
 					$keywordRank = new keywordRank();
@@ -148,8 +148,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

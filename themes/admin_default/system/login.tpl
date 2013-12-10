@@ -92,6 +92,7 @@
 								<!-- END: captcha -->
 							</ul>
 							<div id="smb">
+								<input type="hidden" name="checkss" value="{CHECKSS}" />
 								<input class="submitform" type="submit" value="{N_SUBMIT}" />
 							</div>
 						</form>

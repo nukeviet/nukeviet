@@ -21,7 +21,7 @@ function main_theme( $is_search, $search, $array_modul )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
-	$xtpl = new XTemplate( "form.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
 	$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
@@ -54,7 +54,7 @@ function main_theme( $is_search, $search, $array_modul )
 	{
 		if( $search['is_error'] )
 		{
-			$xtpl->assign( 'SEARCH_RESULT', "<span class=\"red\">" . $search['errorInfo'] . "</span>" );
+			$xtpl->assign( 'SEARCH_RESULT', '<span class=\'red\'>' . $search['errorInfo'] . '</span>' );
 		}
 		else
 		{
@@ -81,7 +81,7 @@ function main_theme( $is_search, $search, $array_modul )
 function result_theme( $result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $all_page )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
-	$xtpl = new XTemplate( "result.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'SEARCH_RESULT_NUM', $all_page );
 	$xtpl->assign( 'MODULE_CUSTOM_TITLE', $mod_custom_title );

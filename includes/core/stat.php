@@ -17,9 +17,9 @@ function nv_stat_update()
 
 	if( NV_SITE_TIMEZONE_NAME == $global_config['statistics_timezone'] )
 	{
-		$last_year = date( "Y", $last_update );
-		$last_month = date( "M", $last_update );
-		$last_day = date( "d", $last_update );
+		$last_year = date( 'Y', $last_update );
+		$last_month = date( 'M', $last_update );
+		$last_day = date( 'd', $last_update );
 
 		$current_year = date( 'Y', NV_CURRENTTIME );
 		$current_month = date( 'M', NV_CURRENTTIME );
@@ -30,9 +30,9 @@ function nv_stat_update()
 	else
 	{
 		date_default_timezone_set( $global_config['statistics_timezone'] );
-		$last_year = date( "Y", $last_update );
-		$last_month = date( "M", $last_update );
-		$last_day = date( "d", $last_update );
+		$last_year = date( 'Y', $last_update );
+		$last_month = date( 'M', $last_update );
+		$last_day = date( 'd', $last_update );
 
 		$current_year = date( 'Y', NV_CURRENTTIME );
 		$current_month = date( 'M', NV_CURRENTTIME );
@@ -61,16 +61,16 @@ function nv_stat_update()
 	$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] ) ) ? $client_info['bot_info']['name'] : "Not_bot";
 	$browser = ( $client_info['is_mobile'] ) ? "Mobile" : $client_info['browser']['key'];
 
-	$query = "UPDATE `" . NV_COUNTER_TABLE . "` SET `c_count`= c_count + 1, `last_update`=" . NV_CURRENTTIME . " WHERE 
-	(`c_type`='total' AND `c_val`='hits') OR 
-	(`c_type`='year' AND `c_val`='" . $current_year . "') OR 
-	(`c_type`='month' AND `c_val`='" . $current_month . "') OR 
-	(`c_type`='day' AND `c_val`='" . $current_day . "') OR 
-	(`c_type`='dayofweek' AND `c_val`='" . $current_week . "') OR 
-	(`c_type`='hour' AND `c_val`='" . $current_hour . "') OR 
-	(`c_type`='bot' AND `c_val`=" . $db->dbescape( $bot_name ) . ") OR 
-	(`c_type`='browser' AND `c_val`=" . $db->dbescape( $browser ) . ") OR 
-	(`c_type`='os' AND `c_val`=" . $db->dbescape( $client_info['client_os']['key'] ) . ") OR 
+	$query = "UPDATE `" . NV_COUNTER_TABLE . "` SET `c_count`= c_count + 1, `last_update`=" . NV_CURRENTTIME . " WHERE
+	(`c_type`='total' AND `c_val`='hits') OR
+	(`c_type`='year' AND `c_val`='" . $current_year . "') OR
+	(`c_type`='month' AND `c_val`='" . $current_month . "') OR
+	(`c_type`='day' AND `c_val`='" . $current_day . "') OR
+	(`c_type`='dayofweek' AND `c_val`='" . $current_week . "') OR
+	(`c_type`='hour' AND `c_val`='" . $current_hour . "') OR
+	(`c_type`='bot' AND `c_val`=" . $db->dbescape( $bot_name ) . ") OR
+	(`c_type`='browser' AND `c_val`=" . $db->dbescape( $browser ) . ") OR
+	(`c_type`='os' AND `c_val`=" . $db->dbescape( $client_info['client_os']['key'] ) . ") OR
 	(`c_type`='country' AND `c_val`=" . $db->dbescape( $client_info['country'] ) . ")";
 	$db->sql_query( $query );
 

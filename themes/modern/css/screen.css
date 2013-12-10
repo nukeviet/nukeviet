@@ -165,7 +165,7 @@ a.rss {
 	height: 84px
 }
 
-.logo h1 {
+.logo strong {
 	color: #414f5b;
 	font-size: 28px;
 	font-weight: normal;
@@ -523,15 +523,22 @@ ul.list-tab li.ui-tabs-selected a {
 }
 
 .breadcrumbs {
+	height: 20px;
 	border-bottom: 1px solid #dadada;
-	padding: 5px 0
+	padding-bottom:: 5px
 }
 
-.breadcrumbs .spector {
-	background: url(../images/arrow-red.gif) 0 50% no-repeat;
-	display: inline-block;
-	margin: 0 2px;
-	width: 11px
+.breadcrumbs div {
+	float:left;
+	margin-right: 5px;
+}
+
+.breadcrumbs span.home {
+	display: block;
+	width: 16px;
+	height: 16px;
+	text-indent: -19999px;
+	background: url(../images/icons/home.png) no-repeat;	
 }
 
 .header-details {
@@ -583,6 +590,11 @@ ul.list-tab li.ui-tabs-selected a {
 .short-desc em {
 	font-size: 11px;
 	font-weight: normal
+}
+
+.short-desc h2 {
+	font-size: 13px;
+	font-weight: 700
 }
 
 .source {
@@ -717,6 +729,12 @@ ul.list-tab li.ui-tabs-selected a {
 
 .page-header {
 	padding: 8px 10px 6px
+}
+
+.page-header h1 {
+	font-size: 2em;
+	font-weight: bold;
+	margin-bottom: 0
 }
 
 .page-header h2 {

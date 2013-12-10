@@ -26,7 +26,7 @@ $lang_module['upload_file_created'] = 'Soubor byl úspěšně vytvořen';
 $lang_module['upload_file_maxsize'] = 'Soubor překračují povolený limit';
 $lang_module['upload_file_error_movefile'] = 'Chyba nelze vytvořit soubor, zkontrolovat adresář chmod';
 $lang_module['upload_file_error_invalidurl'] = 'Neplatná cesta souboru';
-$lang_module['upload_error_browser_ie6'] = 'Chyba : Systém nepodporuje IE6.  Aktualizujte novou verzi nebo používejte  Mozilla Firefox, Safari, Opera, Chrome .';
+$lang_module['upload_error_browser_ie6'] = 'Chyba : Systém nepodporuje IE6. Aktualizujte novou verzi nebo používejte Mozilla Firefox, Safari, Opera, Chrome .';
 $lang_module['upload_empty_path'] = 'Upozornění : musíte si vybrat složku pro tyto soubory.';
 $lang_module['upload_size'] = 'Velikost';
 $lang_module['upload_width'] = 'Šířka';
@@ -74,7 +74,7 @@ $lang_module['errorMaxX'] = 'Chyba: šířka je větší než povolené';
 $lang_module['errorMinY'] = 'Chyba: výška méně než povolené';
 $lang_module['errorMaxY'] = 'Chyba: výška větší, než povolené';
 $lang_module['errorEmptyX'] = 'Chyba: neznámý šířka';
-$lang_module['errorEmptyY'] = 'Chyba:  neznámý výška';
+$lang_module['errorEmptyY'] = 'Chyba: neznámý výška';
 $lang_module['clickSize'] = 'dvojnásobek bude původní velikosti';
 $lang_module['goNewPath'] = 'Přístup do nové složky';
 $lang_module['mirrorFile'] = 'Uložit kopii ve starém složka';
@@ -96,6 +96,6 @@ $lang_module['strong_mode'] = 'Silný';
 $lang_module['mild_mode'] = 'normání';
 $lang_module['lite_mode'] = 'Slabý';
 $lang_module['none_mode'] = 'Nemá';
-$lang_module['upload_checking_note'] = 'Server nepodporuje tento format.  Budete-li pokračovat, soubor nebude nahrán';
+$lang_module['upload_checking_note'] = 'Server nepodporuje tento format. Budete-li pokračovat, soubor nebude nahrán';
 
 ?>

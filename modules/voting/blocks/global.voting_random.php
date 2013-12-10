@@ -26,8 +26,8 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 		if( ! isset( $site_mods['voting'] ) ) return "";
 
 		$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time`
-        FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "`
-        WHERE `act`=1";
+ FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "`
+ WHERE `act`=1";
 
 		$list = nv_db_cache( $sql, 'vid', 'voting' );
 
@@ -52,7 +52,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 
 		if( ! empty( $is_update ) )
 		{
-			$is_update = implode( ",", $is_update );
+			$is_update = implode( ',', $is_update );
 
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "` SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
 			$db->sql_query( $sql );
@@ -67,19 +67,19 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			$current_voting = $allowed[$rand];
 
 			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows`
-            WHERE `vid` = " . $current_voting['vid'] . "  ORDER BY `id` ASC";
+ WHERE `vid` = " . $current_voting['vid'] . " ORDER BY `id` ASC";
 
 			$list = nv_db_cache( $sql, '', 'voting' );
 
 			if( empty( $list ) ) return "";
 
-			include ( NV_ROOTDIR . "/modules/" . $site_mods['voting']['module_file'] . "/language/" . NV_LANG_INTERFACE . ".php" );
+			include NV_ROOTDIR . '/modules/' . $site_mods['voting']['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
 
-			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl' ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $site_mods['voting']['module_file'] . "/global.voting.tpl" ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $site_mods['voting']['module_file'] . '/global.voting.tpl' ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
@@ -110,7 +110,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 				"langsubmit" => $lang_module['voting_hits'] //
 			);
 
-			$xtpl = new XTemplate( "global.voting.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $site_mods['voting']['module_file'] );
+			$xtpl = new XTemplate( 'global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file'] );
 			$xtpl->assign( 'VOTING', $voting_array );
 			foreach( $list as $row )
 			{

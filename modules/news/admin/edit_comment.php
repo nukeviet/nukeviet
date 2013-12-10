@@ -34,7 +34,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat
-		$array_catid = explode( ",", $listcatid );
+		$array_catid = explode( ',', $listcatid );
 		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
 		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
 		$db->sql_query( $query );
@@ -64,7 +64,7 @@ $row['content'] = nv_htmlspecialchars( nv_br2nl( $row['content'] ) );
 
 $row['status'] = ( $row['status'] ) ? "checked=\"checked\"" : "";
 
-$xtpl = new XTemplate( "comment_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'comment_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -78,8 +78,8 @@ $xtpl->assign( 'ROW', $row );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

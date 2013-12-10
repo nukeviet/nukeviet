@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
-$xtpl = new XTemplate( "siteDiagnostic.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'siteDiagnostic.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'LANG', $lang_module );
@@ -40,7 +40,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		{
 			if( ! class_exists( 'UrlGetContents' ) )
 			{
-				include ( NV_ROOTDIR . "/includes/class/Diagnostic.class.php" );
+				include NV_ROOTDIR . '/includes/class/Diagnostic.class.php' ;
 			}
 
 			$Diagnostic = new Diagnostic();
@@ -138,8 +138,8 @@ $page_title = $lang_module['siteDiagnostic'];
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

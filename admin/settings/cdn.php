@@ -35,12 +35,12 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 			{
 				if( $dircont[$i] != '.' and $dircont[$i] != '..' )
 				{
-					$current_file = $thisdir . "/" . $dircont[$i];
+					$current_file = $thisdir . '/' . $dircont[$i];
 					if( is_file( $current_file ) )
 					{
 						if( preg_match( '/\.js$/', $dircont[$i] ) )
 						{
-							$filename = $thisdir . "/" . $dircont[$i];
+							$filename = $thisdir . '/' . $dircont[$i];
 							$allowzip[] = $filename;
 							$filename = dirname( $filename ) . '/index.html';
 							if( ! in_array( $filename, $allowzip ) )
@@ -53,7 +53,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 						}
 						elseif( preg_match( '/\.css/', $dircont[$i] ) )
 						{
-							$filename = $thisdir . "/" . $dircont[$i];
+							$filename = $thisdir . '/' . $dircont[$i];
 							$allowzip[] = $filename;
 							$css = file_get_contents( $filename );
 							$filename = dirname( $filename ) . '/index.html';
@@ -89,7 +89,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 										}
 										else
 										{
-											$error[$thisdir . "/" . $dircont[$i]][] = $fimg . ' ---- ' . $filename;
+											$error[$thisdir . '/' . $dircont[$i]][] = $fimg . ' ---- ' . $filename;
 										}
 									}
 								}
@@ -115,24 +115,24 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 		$zip->add( NV_ROOTDIR . '/themes/index.html', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
 
 		//Download file
-		require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-		$download = new download( $file_src, NV_ROOTDIR . "/" . NV_TEMP_DIR, 'js_css_cdn_' . date( 'Ymd' ) . '.zip' );
+		require_once NV_ROOTDIR . '/includes/class/download.class.php';
+		$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'js_css_cdn_' . date( 'Ymd' ) . '.zip' );
 		$download->download_file();
 		exit();
 	}
 	else
 	{
-		$page_title = "File not exit";
-		$contents = "<br>";
+		$page_title = 'File not exit';
+		$contents = '<br>';
 		foreach( $error as $key => $value )
 		{
 			$value = array_unique( $value );
 			asort( $value );
-			$contents .= "<b>" . $key . " </b><br>&nbsp;&nbsp;&nbsp;&nbsp; " . implode( "<br>&nbsp;&nbsp;&nbsp;&nbsp;", $value ) . "<br><br>";
+			$contents .= '<b>' . $key . ' </b><br>&nbsp;&nbsp;&nbsp;&nbsp; ' . implode( '<br>&nbsp;&nbsp;&nbsp;&nbsp;', $value ) . '<br><br>';
 		}
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 

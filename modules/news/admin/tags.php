@@ -34,7 +34,7 @@ function nv_show_tags_list( $q = '' )
 
 	if( $num > 0 )
 	{
-		$xtpl = new XTemplate( "tags_lists.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'GLANG', $lang_global );
 
@@ -58,8 +58,8 @@ function nv_show_tags_list( $q = '' )
 	{
 		$contents = "&nbsp;";
 	}
+	$db->sql_freeresult( $result );
 
-	$db->sql_freeresult( );
 	return $contents;
 }
 
@@ -71,17 +71,17 @@ if( $nv_Request->isset_request( 'del_tid', 'get' ) )
 		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `tid`=" . $tid );
 		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid );
 	}
-	include (NV_ROOTDIR . '/includes/header.php');
-	echo nv_show_tags_list( );
-	include (NV_ROOTDIR . '/includes/footer.php');
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_show_tags_list();
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 elseif( $nv_Request->isset_request( 'q', 'get' ) )
 {
 	$q = $nv_Request->get_title( 'q', 'get', '' );
 
-	include (NV_ROOTDIR . '/includes/header.php');
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_show_tags_list( $q );
-	include (NV_ROOTDIR . '/includes/footer.php');
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $error = '';
@@ -137,9 +137,8 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'add_tags', $alias, $admin_info['userid'] );
-			$db->sql_freeresult( );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-			die( );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			die();
 		}
 		else
 		{
@@ -148,35 +147,31 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_tags` SET `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . " WHERE `tid` =" . $tid;
-		$db->sql_query( $sql );
-
-		if( $db->sql_affectedrows( ) > 0 )
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_tags` SET `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . " WHERE `tid` =" . $tid;
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'edit_tags', $alias, $admin_info['userid'] );
-			$db->sql_freeresult( );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-			die( );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			die();
 		}
 		else
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult( );
 	}
 }
 
 $tid = $nv_Request->get_int( 'tid', 'get', 0 );
 if( $tid > 0 )
 {
-	list( $tid, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `tid`, `alias`, `description`, `image`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` where `tid`=" . $tid ) );
+	list( $tid, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `tid`, `alias`, `description`, `image`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` where `tid`=" . $tid ) );
 	$lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
-$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
-$xtpl = new XTemplate( "tags.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'tags.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -184,7 +179,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-$xtpl->assign( 'TAGS_LIST', nv_show_tags_list( ) );
+$xtpl->assign( 'TAGS_LIST', nv_show_tags_list() );
 
 $xtpl->assign( 'tid', $tid );
 $xtpl->assign( 'alias', $alias );
@@ -209,7 +204,7 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['tags'];
 
-include (NV_ROOTDIR . '/includes/header.php');
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . '/includes/footer.php');
+include NV_ROOTDIR . '/includes/footer.php';
 ?>

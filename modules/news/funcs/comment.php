@@ -15,14 +15,14 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 
-if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) )
+if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) )
 {
 	$comment_array = nv_comment_module( $id, $page );
 	$contents = comment_theme( $comment_array );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

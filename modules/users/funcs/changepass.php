@@ -11,12 +11,12 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/changepass.php' );
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/changepass.php' ;
 	exit();
 }
 elseif( ! defined( 'NV_IS_USER' ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 $sql = "SELECT `password` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
@@ -62,11 +62,11 @@ if( $checkss == $array_data['checkss'] )
 		$db->sql_query( $sql );
 
 		$contents = user_info_exit( $lang_module['change_pass_ok'] );
-		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 
@@ -75,8 +75,8 @@ if( $checkss == $array_data['checkss'] )
 
 $contents = user_changepass( $array_data );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -68,11 +68,11 @@ function viewdirtree( $dir, $currentpath )
 
 			$content2 = viewdirtree( $_dir, $currentpath );
 
-			$xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-			$xtpl->assign( "DIRTREE", $tree );
+			$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+			$xtpl->assign( 'DIRTREE', $tree );
 			if( ! empty( $content2 ) )
 			{
-				$xtpl->assign( "TREE_CONTENT", $content2 );
+				$xtpl->assign( 'TREE_CONTENT', $content2 );
 				$xtpl->parse( 'tree.tree_content' );
 			}
 			$xtpl->parse( 'tree' );
@@ -105,34 +105,34 @@ $data['titlepath'] = empty( $path ) ? NV_BASE_SITEURL : $path;
 
 $content = viewdirtree( $path, $currentpath );
 
-$xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "DATA", $data );
-$xtpl->assign( "PATH", $path );
-$xtpl->assign( "CURRENTPATH", $currentpath );
+$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'DATA', $data );
+$xtpl->assign( 'PATH', $path );
+$xtpl->assign( 'CURRENTPATH', $currentpath );
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $currentpath );
-$xtpl->assign( "VIEW_DIR", ( isset( $check_allow_upload_dir['view_dir'] ) and $check_allow_upload_dir['view_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "CREATE_DIR", ( isset( $check_allow_upload_dir['create_dir'] ) and $check_allow_upload_dir['create_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "RENAME_DIR", ( isset( $check_allow_upload_dir['rename_dir'] ) and $check_allow_upload_dir['rename_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "DELETE_DIR", ( isset( $check_allow_upload_dir['delete_dir'] ) and $check_allow_upload_dir['delete_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "UPLOAD_FILE", ( isset( $check_allow_upload_dir['upload_file'] ) and $check_allow_upload_dir['upload_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "CREATE_FILE", ( isset( $check_allow_upload_dir['create_file'] ) and $check_allow_upload_dir['create_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "RENAME_FILE", ( isset( $check_allow_upload_dir['rename_file'] ) and $check_allow_upload_dir['rename_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "DELETE_FILE", ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "MOVE_FILE", ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'VIEW_DIR', ( isset( $check_allow_upload_dir['view_dir'] ) and $check_allow_upload_dir['view_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'CREATE_DIR', ( isset( $check_allow_upload_dir['create_dir'] ) and $check_allow_upload_dir['create_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'RENAME_DIR', ( isset( $check_allow_upload_dir['rename_dir'] ) and $check_allow_upload_dir['rename_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'DELETE_DIR', ( isset( $check_allow_upload_dir['delete_dir'] ) and $check_allow_upload_dir['delete_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'UPLOAD_FILE', ( isset( $check_allow_upload_dir['upload_file'] ) and $check_allow_upload_dir['upload_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'CREATE_FILE', ( isset( $check_allow_upload_dir['create_file'] ) and $check_allow_upload_dir['create_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'RENAME_FILE', ( isset( $check_allow_upload_dir['rename_file'] ) and $check_allow_upload_dir['rename_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'DELETE_FILE', ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'MOVE_FILE', ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
 
 if( ! empty( $content ) )
 {
-	$xtpl->assign( "CONTENT", $content );
+	$xtpl->assign( 'CONTENT', $content );
 	$xtpl->parse( 'main.main_content' );
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 exit();
 
 ?>

@@ -21,7 +21,7 @@ if( $number > 0 )
 //So bai viet thanh vien gui toi
 if( ! empty( $site_mods[$mod]['admins'] ) )
 {
-	$admins_module = explode( ",", $site_mods[$mod]['admins'] );
+	$admins_module = explode( ',', $site_mods[$mod]['admins'] );
 }
 else
 {
@@ -32,7 +32,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 {
 	$admins_module[] = $row['admin_id'];
 }
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `admin_id` NOT IN (" . implode( ",", $admins_module ) . ") " ) );
+list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS number FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `admin_id` NOT IN (" . implode( ',', $admins_module ) . ") " ) );
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_users_send'], 'value' => $number );

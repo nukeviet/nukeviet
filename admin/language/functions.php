@@ -37,7 +37,7 @@ if( empty( $global_config['idsite'] ) )
 }
 define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
 
-$allowed_html_tags = array_map( "trim", explode( ",", ALLOWED_HTML_LANG ) );
+$allowed_html_tags = array_map( "trim", explode( ',', ALLOWED_HTML_LANG ) );
 $allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
 
 define( 'NV_ALLOWED_HTML_LANG', $allowed_html_tags );
@@ -62,7 +62,7 @@ function nv_admin_add_field_lang( $dirlang )
 
 		while( $row = $db->sql_fetch_assoc( $result ) )
 		{
-			if( $row['Field'] == "author_" . $dirlang )
+			if( $row['field'] == "author_" . $dirlang )
 			{
 				$add_field = false;
 				break;

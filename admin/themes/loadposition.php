@@ -45,7 +45,7 @@ if( $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/co
 	$diffarray = array_diff( $position1, $position2 );
 	$diffarray = array_diff( $position1, $diffarray );
 
-	$xtpl = new XTemplate( "loadposition.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'loadposition.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
@@ -62,9 +62,9 @@ if( $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/co
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

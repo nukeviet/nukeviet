@@ -13,7 +13,7 @@ function nv_read_data_from_excel( $file_name )
 {
 	global $global_config, $db, $client_info, $module_file, $module_data, $module_name, $lang_module, $modConfigs;
 
-	require_once ( NV_ROOTDIR . "/includes/class/PHPExcel.php" );
+	require_once NV_ROOTDIR . '/includes/class/PHPExcel.php' ;
 
 	$objPHPExcel = PHPExcel_IOFactory::load( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . "/" . $module_name . "/" . $file_name );
 	$objWorksheet = $objPHPExcel->getActiveSheet();
@@ -83,12 +83,12 @@ function nv_read_data_from_excel( $file_name )
 $step = $nv_Request->get_int( 'step', 'get,post', 1 );
 if( $step == 1 )
 {
-	if( file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
+	if( file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 	{
 		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
 
-		$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
+		$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -118,9 +118,9 @@ if( $step == 1 )
 
 	$page_title = $lang_module['import'];
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 elseif( $step == 2 )
 {

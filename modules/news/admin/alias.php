@@ -21,11 +21,11 @@ if( $mod == "cat" )
 	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $tab . "` WHERE `catid`!=" . $id . " AND `alias`=" . $db->dbescape( $alias ) ) );
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`=" . $db->dbescape( $tab ) );
+		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`=" . $db->dbescape( $tab ) );
 		$item = $db->sql_fetch_assoc( $result );
 		$db->sql_freeresult( $result );
 
-		$alias .= "-" . $item['Auto_increment'];
+		$alias .= "-" . $item['auto_increment'];
 	}
 }
 elseif( $mod == "topics" )
@@ -34,11 +34,11 @@ elseif( $mod == "topics" )
 	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $tab . "` WHERE `topicid`!=" . $id . " AND `alias`=" . $db->dbescape( $alias ) ) );
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`=" . $db->dbescape( $tab ) );
+		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`=" . $db->dbescape( $tab ) );
 		$item = $db->sql_fetch_assoc( $result );
 		$db->sql_freeresult( $result );
 
-		$alias .= "-" . $item['Auto_increment'];
+		$alias .= "-" . $item['auto_increment'];
 	}
 }
 elseif( $mod == "blockcat" )
@@ -47,16 +47,16 @@ elseif( $mod == "blockcat" )
 	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $tab . "` WHERE `bid`!=" . $id . " AND `alias`=" . $db->dbescape( $alias ) ) );
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`=" . $db->dbescape( $tab ) );
+		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`=" . $db->dbescape( $tab ) );
 		$item = $db->sql_fetch_assoc( $result );
 		$db->sql_freeresult( $result );
 
-		$alias .= "-" . $item['Auto_increment'];
+		$alias .= "-" . $item['auto_increment'];
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $alias;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['autoinstall_method_packet'];
 
-$xtpl = new XTemplate( "install_package.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'install_package.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 {
@@ -33,7 +33,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				$allowfolder[] = NV_ROOTDIR . '/js/admin_' . $modulename . '.js';
 			}
 
-			$langs_admin = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}$/" );
+			$langs_admin = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
 			foreach( $langs_admin as $langi )
 			{
 				if( file_exists( NV_ROOTDIR . '/language/' . $langi . '/admin_' . $modulename . '.php' ) )
@@ -47,7 +47,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$theme_package = '';
 		if( is_dir( NV_ROOTDIR . '/themes/default/modules/' . $modulename ) )
 		{
-			$theme_package = "default";
+			$theme_package = 'default';
 		}
 		elseif( is_dir( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $modulename ) )
 		{
@@ -101,9 +101,9 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$filesize = @filesize( $file_src );
 		$file_name = basename( $file_src );
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], "packet " . basename( $modulename ), $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], 'packet ' . basename( $modulename ), $admin_info['userid'] );
 
-		$linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_module_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
+		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv3_module_' . $modulename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
 
 		$xtpl->assign( 'LINKGETFILE', $linkgetfile );
 		$xtpl->assign( 'MODULENAME', $modulename );
@@ -113,9 +113,9 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$contents = $xtpl->text( 'package_complete' );
 	}
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
@@ -130,7 +130,7 @@ else
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', $op );
 
-	$sql = "SELECT `module_file` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title`=`module_file` ORDER BY `title` ASC";
+	$sql = 'SELECT `module_file` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`=`module_file` ORDER BY `title` ASC';
 	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -139,7 +139,7 @@ else
 		$xtpl->parse( 'main.module_file' );
 	}
 
-	$modules_admin = nv_scandir( NV_ROOTDIR . "/" . NV_ADMINDIR, $global_config['check_module'] );
+	$modules_admin = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
 	foreach( $modules_admin as $module )
 	{
 		$xtpl->assign( 'MODULE_FILE', $module );
@@ -148,9 +148,9 @@ else
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

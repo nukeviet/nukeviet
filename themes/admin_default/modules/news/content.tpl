@@ -67,7 +67,7 @@
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
-							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" /></td>
+							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:98%" /></td>
 						</tr>
 						<tr>
 							<td>{LANG.imgposition}</td>
@@ -86,7 +86,7 @@
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+							<td>							<textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
 						</tr>
 					</tbody>
 				</table></td>
@@ -106,12 +106,12 @@
 					<!-- END:block_cat -->
 					<li>
 						<p class="message_head">
-							<cite>{LANG.content_keywords}:</cite>
+							<cite>{LANG.content_tag}:</cite>
 						</p>
 						<div class="message_body">
 							<p>
-								{LANG.content_keywords_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a>
-							</p><textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
+								{LANG.content_tag_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a>
+							</p>							<textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
 						</div>
 					</li>
 					<li>
@@ -241,99 +241,19 @@
 </form>
 <script type="text/javascript">
 	//<![CDATA[
-
-	$("#titlelength").html($("#idtitle").val().length);
-	$("#idtitle").keypress(function() {
-		$("#titlelength").html($(this).val().length);
-	});
-
-	$("#descriptionlength").html($("#description").val().length);
-	$("#description").keypress(function() {
-		$("#descriptionlength").html($(this).val().length);
-	});
-
-	$("input[name='catids[]']").click(function() {
-		var catid = $("input:radio[name=catid]:checked").val();
-		var $radios_catid = $("input:radio[name=catid]");
-		var catids = [];
-		$("input[name='catids[]']").each(function() {
-			if ($(this).prop('checked')) {
-				$("#catright_" + $(this).val()).show();
-				catids.push($(this).val());
-			} else {
-				$("#catright_" + $(this).val()).hide();
-				if ($(this).val() == catid) {
-					$radios_catid.filter("[value=" + catid + "]").attr("checked", false);
-				}
-			}
-		});
-
-		if (catids.length > 1) {
-			for ( i = 0; i < catids.length; i++) {
-				$("#catright_" + catids[i]).show();
-			};
-			catid = parseInt($("input:radio[name=catid]:checked").val() + "");
-			if (!catid) {
-				alert("{LANG.content_checkcatmsg}");
-			}
-		}
-	});
+	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
 	$("input[name=selectimg]").click(function() {
 		var area = "homeimg";
+		var alt = "homeimgalt";
 		var path = "{UPLOADS_DIR_USER}";
 		var currentpath = "{UPLOAD_CURRENT}";
 		var type = "image";
-		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
-	});
-	$(document).ready(function() {
-		$("#publ_date,#exp_date").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-
-		var cachetopic = {};
-		$("#AjaxTopicText").autocomplete({
-			minLength : 2,
-			delay : 500,
-			source : function(request, response) {
-				var term = request.term;
-				if ( term in cachetopic) {
-					response(cachetopic[term]);
-					return;
-				}
-				$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=topicajax", request, function(data, status, xhr) {
-					cachetopic[term] = data;
-					response(data);
-				});
-			}
-		});
-
-		var cachesource = {};
-		$("#AjaxSourceText").autocomplete({
-			minLength : 2,
-			delay : 500,
-			source : function(request, response) {
-				var term = request.term;
-				if ( term in cachesource) {
-					response(cachesource[term]);
-					return;
-				}
-				$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", request, function(data, status, xhr) {
-					cachesource[term] = data;
-					response(data);
-				});
-			}
-		});
-
 	});
 	//]]>
 </script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/news/js/content.js"></script>
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 	//<![CDATA[

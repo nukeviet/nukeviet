@@ -46,15 +46,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		$id = $db->sql_query_insert_id( $sql );
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_plan', "planid " . $id, $admin_info['userid'] );
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=info_plan&id=" . $id );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid'] );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
 		die();
 	}
 }
 else
 {
 	$blang = $title = $description = '';
-	$form = "sequential";
+	$form = 'sequential';
 	$width = $height = 50;
 }
 
@@ -72,7 +72,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_plan'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_plan";
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
 $contents['form'] = array( $lang_module['form'], 'form', $forms, $form );
@@ -81,14 +81,14 @@ $contents['width'] = array( $lang_module['width'], 'width', $width, 4 );
 $contents['height'] = array( $lang_module['height'], 'height', $height, 4 );
 $contents['description'] = array( $lang_module['description'], 'description', $description, '99%', '300px', defined( 'NV_EDITOR' ) ? true : false );
 
-if( defined( 'NV_EDITOR' ) ) @require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
 $contents = nv_add_plan_theme( $contents );
 
 $page_title = $lang_module['add_plan'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

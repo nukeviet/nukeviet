@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x 
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate  2/3/2012, 19:53
+ * @Createdate 2/3/2012, 19:53
  */
 
 if( ! defined( 'NV_BUFFER_CLASS' ) ) define( 'NV_BUFFER_CLASS', true );

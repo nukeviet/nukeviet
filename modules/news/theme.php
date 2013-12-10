@@ -20,7 +20,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $page;
-	$xtpl = new XTemplate( "viewcat_grid.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ! empty( $catid ) )
@@ -45,7 +45,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 		if( $array_row_i['imghome'] != '' )
@@ -79,7 +79,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat;
-	$xtpl = new XTemplate( "viewcat_list.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ($global_array_cat[$catid]['viewdescription'] AND $page == 0) OR $global_array_cat[$catid]['viewdescription'] == 2 )
@@ -102,7 +102,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 		if( $array_row_i['imghome'] != '' )
@@ -134,7 +134,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
-	$xtpl = new XTemplate( "viewcat_page.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ($global_array_cat[$catid]['viewdescription'] AND $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
@@ -155,7 +155,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 		if( $array_row_i['imghome'] != '' )
@@ -173,7 +173,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		$xtpl->assign( 'ORTHERNEWS', $lang_module['other'] );
 		foreach( $array_cat_other as $array_row_i )
 		{
-			$array_row_i['publtime'] = nv_date( "d/m/Y", $array_row_i['publtime'] );
+			$array_row_i['publtime'] = nv_date( 'd/m/Y', $array_row_i['publtime'] );
 			$xtpl->assign( 'RELATED', $array_row_i );
 			$xtpl->parse( 'main.related.loop' );
 		}
@@ -198,7 +198,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 function viewcat_top( $array_catcontent, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
-	$xtpl = new XTemplate( "viewcat_top.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
 	if( ($global_array_cat[$catid]['viewdescription'] AND $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
@@ -228,7 +228,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 				}
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_catcontent_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_catcontent_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.adminlink' );
 				}
 				$xtpl->parse( 'main.catcontent' );
@@ -259,7 +259,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 function viewsubcat_main( $viewcat, $array_cat )
 {
 	global $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
-	$xtpl = new XTemplate( $viewcat . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	// Hien thi cac chu de con
 	foreach( $array_cat as $key => $array_row_i )
@@ -271,7 +271,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			if( $array_row_i['subcatid'] != '' )
 			{
 				$exl = 0;
-				$arrsubcat_s = explode( ",", $array_row_i['subcatid'] );
+				$arrsubcat_s = explode( ',', $array_row_i['subcatid'] );
 				foreach( $arrsubcat_s as $subcatid_i )
 				{
 					if( $global_array_cat[$subcatid_i]['inhome'] == 1 )
@@ -313,7 +313,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 					}
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
-						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_row_i['id'] ) );
 						$xtpl->parse( 'main.listcat.adminlink' );
 					}
 				}
@@ -324,11 +324,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 				}
 				if( $a > 1 )
 				{
-					if( $viewcat == "viewcat_main_right" )
+					if( $viewcat == 'viewcat_main_right' )
 					{
 						$xtpl->assign( 'BORDER', 'border_r ' );
 					}
-					elseif( $viewcat == "viewcat_main_left" )
+					elseif( $viewcat == 'viewcat_main_left' )
 					{
 						$xtpl->assign( 'BORDER', 'border_l ' );
 					}
@@ -366,7 +366,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 function viewcat_two_column( $array_content, $array_catpage )
 {
 	global $module_name, $module_file, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
-	$xtpl = new XTemplate( "viewcat_two_column.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
@@ -397,7 +397,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 				}
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_content_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.content.adminlink' );
 				}
 				$xtpl->parse( 'main.catcontent.content' );
@@ -436,7 +436,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			}
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $array_content_i['id'] ) );
 				$xtpl->parse( 'main.loopcat.content.adminlink' );
 			}
 			$xtpl->parse( 'main.loopcat.content' );
@@ -473,11 +473,11 @@ function viewcat_two_column( $array_content, $array_catpage )
  */
 function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable )
 {
-	global $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info;
+	global $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
-	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
-	$my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
+	$my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
+	$my_head .= "<link href=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\"/>\n";
 
 	if( ! defined( 'SHADOWBOX' ) )
 	{
@@ -487,12 +487,13 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		define( 'SHADOWBOX', true );
 	}
 
-	$xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$news_contents['addtime'] = nv_date( "d/m/Y h:i:s", $news_contents['addtime'] );
+	$news_contents['addtime'] = nv_date( 'd/m/Y h:i:s', $news_contents['addtime'] );
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
 	$xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
 	$xtpl->assign( 'DETAIL', $news_contents );
+	$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
 
 	if( $news_contents['allowed_send'] == 1 )
 	{
@@ -514,11 +515,31 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->assign( 'LANGSTAR', $news_contents['langstar'] );
 		$xtpl->assign( 'STRINGRATING', $news_contents['stringrating'] );
 		$xtpl->assign( 'NUMBERRATING', $news_contents['numberrating'] );
+
 		if( $news_contents['disablerating'] == 1 )
 		{
 			$xtpl->parse( 'main.allowed_rating.disablerating' );
 		}
+
+		if( $news_contents['numberrating'] >= $module_config[$module_name]['allowed_rating_point'] )
+		{
+			$xtpl->parse( 'main.allowed_rating.data_rating' );
+		}
+
 		$xtpl->parse( 'main.allowed_rating' );
+	}
+
+	if( $module_config[$module_name]['socialbutton'] OR ( $module_config[$module_name]['activecomm'] == 2 AND $commentenable > 0 ) )
+	{
+		global $meta_property;
+		$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+		$xtpl->assign( 'FACEBOOKAPPID', $module_config[$module_name]['facebookappid'] );
+		$xtpl->parse( 'main.facebookjssdk' );
+	}
+
+	if( $module_config[$module_name]['socialbutton'] )
+	{
+		$xtpl->parse( 'main.socialbutton' );
 	}
 
 	if( $news_contents['showhometext'] )
@@ -564,7 +585,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		foreach( $array_keyword as $i => $value )
 		{
 			$xtpl->assign( 'KEYWORD', $value['keyword'] );
-			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=tag/" . urlencode( $value['alias'] ) );
+			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode( $value['alias'] ) );
 			$xtpl->assign( 'SLASH', ($t == $i) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
@@ -573,52 +594,58 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $news_contents['id'] ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
-	$xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
-	$xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment.png" );
-	$xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/comment_add.png" );
-	if( $commentenable == 1 )
+	if( $module_config[$module_name]['activecomm'] == 1 )
 	{
-		if( defined( 'NV_IS_ADMIN' ) )
+		$xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
+		$xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/comment.png' );
+		$xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/comment_add.png' );
+		if( $commentenable == 1 )
 		{
-			$xtpl->assign( 'NAME', $admin_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $admin_info['email'] );
-			$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			if( defined( 'NV_IS_ADMIN' ) )
+			{
+				$xtpl->assign( 'NAME', $admin_info['full_name'] );
+				$xtpl->assign( 'EMAIL', $admin_info['email'] );
+				$xtpl->assign( 'DISABLED', ' disabled=\'disabled\'' );
+			}
+			elseif( defined( 'NV_IS_USER' ) )
+			{
+				$xtpl->assign( 'NAME', $user_info['full_name'] );
+				$xtpl->assign( 'EMAIL', $user_info['email'] );
+				$xtpl->assign( 'DISABLED', ' disabled=\'disabled\'' );
+			}
+			else
+			{
+				$xtpl->assign( 'NAME', '' );
+				$xtpl->assign( 'EMAIL', '' );
+				$xtpl->assign( 'DISABLED', '' );
+			}
+			$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
+			$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
+			$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
+			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
+			$xtpl->parse( 'main.comment.form' );
 		}
-		elseif( defined( 'NV_IS_USER' ) )
+		elseif( $commentenable == 2 )
 		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $user_info['email'] );
-			$xtpl->assign( 'DISABLED', " disabled=\"disabled\"" );
+			$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
+			$xtpl->assign( 'COMMENT_LOGIN', '<a title=\'' . $lang_global['loginsubmit'] . '\' href=\'' . $link_login . '\'>' . $lang_module['comment_login'] . '</a>' );
+			$xtpl->parse( 'main.comment.form_login' );
 		}
-		else
-		{
-			$xtpl->assign( 'NAME', '' );
-			$xtpl->assign( 'EMAIL', '' );
-			$xtpl->assign( 'DISABLED', '' );
-		}
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . "index.php?scaptcha=captcha" );
-		$xtpl->parse( 'main.comment.form' );
-	}
-	elseif( $commentenable == 2 )
-	{
-		global $client_info;
-		$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
-		$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_login'] . "</a>" );
-		$xtpl->parse( 'main.comment.form_login' );
-	}
 
-	$xtpl->parse( 'main.comment' );
+		$xtpl->parse( 'main.comment' );
+	}
+	elseif( $module_config[$module_name]['activecomm'] == 2 AND $commentenable > 0 )
+	{
+		$xtpl->parse( 'main.commentfacebook' );
+	}
 
 	if( ! empty( $related_new_array ) )
 	{
@@ -662,7 +689,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 function no_permission( $func_who_view )
 {
 	global $module_info, $module_file, $lang_module;
-	$xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	if( $func_who_view == 1 )
 	{
 		$no_permission = $lang_module['member_view'];
@@ -691,7 +718,7 @@ function no_permission( $func_who_view )
 function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image )
 {
 	global $module_info, $module_name, $module_file, $topicalias, $module_config;
-	$xtpl = new XTemplate( "topic.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'TOPPIC_TITLE', $page_title );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	if( ! empty( $description ) )
@@ -709,15 +736,15 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 		foreach( $topic_array as $topic_array_i )
 		{
 			$xtpl->assign( 'TOPIC', $topic_array_i );
-			$xtpl->assign( 'TIME', date( "H:i", $topic_array_i['publtime'] ) );
-			$xtpl->assign( 'DATE', date( "d/m/Y", $topic_array_i['publtime'] ) );
+			$xtpl->assign( 'TIME', date( 'H:i', $topic_array_i['publtime'] ) );
+			$xtpl->assign( 'DATE', date( 'd/m/Y', $topic_array_i['publtime'] ) );
 			if( ! empty( $topic_array_i['src'] ) )
 			{
 				$xtpl->parse( 'main.topic.homethumb' );
 			}
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $topic_array_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );
 			}
 
@@ -751,12 +778,12 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 function comment_theme( $comment_array )
 {
 	global $module_info, $module_name, $module_file, $module_config;
-	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$k = 0;
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{
-		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
-		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
+		$comment_array_i['post_time'] = nv_date( 'd/m/Y H:i', $comment_array_i['post_time'] );
+		$comment_array_i['bg'] = ( $k % 2 ) ? ' bg' : '';
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 		if( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
 		{
@@ -787,13 +814,13 @@ function sendmail_themme( $sendmail )
 	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
 	$script .= "<script type=\"text/javascript\">\n";
-	$script .= "          $(document).ready(function(){\n";
-	$script .= "            $(\"#sendmailForm\").validate();\n";
-	$script .= "          });\n";
+	$script .= " $(document).ready(function(){\n";
+	$script .= " $(\"#sendmailForm\").validate();\n";
+	$script .= " });\n";
 	$script .= "</script>\n";
 
 	$sendmail['script'] = $script;
-	$xtpl = new XTemplate( "sendmail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'SENDMAIL', $sendmail );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -801,7 +828,7 @@ function sendmail_themme( $sendmail )
 	if( $global_config['gfx_chk'] > 0 )
 	{
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . "images/refresh.png" );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
@@ -830,7 +857,7 @@ function sendmail_themme( $sendmail )
 function news_print( $result )
 {
 	global $module_info, $module_file, $lang_module;
-	$xtpl = new XTemplate( "print.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENT', $result );
 	$xtpl->assign( 'LANG', $lang_module );
 	if( ! empty( $result['image']['width'] ) )
@@ -884,8 +911,8 @@ function news_print( $result )
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
 	global $module_name, $module_info, $module_file, $lang_module, $module_name;
-	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$base_url_site = NV_BASE_SITEURL . "?";
+	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$base_url_site = NV_BASE_SITEURL . '?';
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
@@ -904,7 +931,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	}
 	for( $i = 0; $i <= 3; ++$i )
 	{
-		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, "selected=\"selected\"" );
+		if( $check_num == $i ) $xtpl->assign( 'CHECK' . $i, 'selected=\'selected\'' );
 		else $xtpl->assign( 'CHECK' . $i, '' );
 	}
 	$xtpl->parse( 'main' );
@@ -926,7 +953,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
 	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config;
-	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'KEY', $key );
@@ -939,11 +966,11 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		foreach( $array_content as $value )
 		{
 			$catid_i = $value['catid'];
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
+			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . '-' . $value['id'];
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
-			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
-			$xtpl->assign( 'AUTHOR', date( 'd/m/Y', $value['publtime'] ) . " - " . BoldKeywordInStr( $value['author'], $key ) );
+			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . '...' );
+			$xtpl->assign( 'AUTHOR', date( 'd/m/Y', $value['publtime'] ) . ' - ' . BoldKeywordInStr( $value['author'], $key ) );
 			$xtpl->assign( 'SOURCE', BoldKeywordInStr( GetSourceNews( $value['sourceid'] ), $key ) );
 			if( ! empty( $value['homeimgfile'] ) )
 			{

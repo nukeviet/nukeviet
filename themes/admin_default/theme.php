@@ -13,25 +13,25 @@ function nv_get_submenu( $mod )
 {
 	global $lang_global, $module_name, $global_config;
 
-	$submenu = array( );
+	$submenu = array();
 
-	if( $mod != $module_name and file_exists( NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/admin.menu.php" ) )
+	if( $mod != $module_name and file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php' ) )
 	{
 		//ket noi voi file ngon ngu cua module
-		if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php" ) )
+		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
 		{
-			include (NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/admin_" . $mod . ".php");
+			include NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php" ) )
+		elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php' ) )
 		{
-			include (NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/admin_" . $mod . ".php");
+			include NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . "/language/en/admin_" . $mod . ".php" ) )
+		elseif( file_exists( NV_ROOTDIR . '/language/en/admin_' . $mod . '.php' ) )
 		{
-			include (NV_ROOTDIR . "/language/en/admin_" . $mod . ".php");
+			include NV_ROOTDIR . '/language/en/admin_' . $mod . '.php';
 		}
 
-		include (NV_ROOTDIR . "/" . NV_ADMINDIR . "/" . $mod . "/admin.menu.php");
+		include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
 		unset( $lang_module );
 	}
 
@@ -42,29 +42,29 @@ function nv_get_submenu_mod( $module_name )
 {
 	global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config;
 
-	$submenu = array( );
+	$submenu = array();
 	if( isset( $site_mods[$module_name] ) )
 	{
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
-		if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php" ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php' ) )
 		{
 			//ket noi voi file ngon ngu cua module
-			if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php' ) )
 			{
-				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_INTERFACE . ".php");
+				include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_INTERFACE . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php" ) )
+			elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php' ) )
 			{
-				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_" . NV_LANG_DATA . ".php");
+				include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php" ) )
+			elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php' ) )
 			{
-				include (NV_ROOTDIR . "/modules/" . $module_file . "/language/admin_en.php");
+				include NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_en.php';
 			}
-	
-			include (NV_ROOTDIR . "/modules/" . $module_file . "/admin.menu.php");
+
+			include NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
 			unset( $lang_module );
 		}
 	}
@@ -81,7 +81,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$file_name_tpl = "main.tpl";
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/" . $file_name_tpl ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/' . $file_name_tpl ) )
 		{
 			$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
 		}
@@ -95,7 +95,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$file_name_tpl = "content.tpl";
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system/" . $file_name_tpl ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/' . $file_name_tpl ) )
 		{
 			$dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
 		}
@@ -107,11 +107,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	}
 
 	$global_config['site_name'] = empty( $global_config['site_name'] ) ? NV_SERVER_NAME : $global_config['site_name'];
-	
+
 	$xtpl = new XTemplate( $file_name_tpl, $dir_template );
-	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . " [" . $global_config['site_email'] . "] " );
+	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ' );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . " " . NV_TITLEBAR_DEFIS . " " . $lang_global['admin_page'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['custom_title'] . "" );
+	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] . '' );
+	$xtpl->assign( 'SITE_DESCRIPTION', $global_config['site_description'] );
 	$xtpl->assign( 'NV_CHECK_PASS_MSTIME', (intval( $global_config['admin_check_pass_time'] ) - 62) * 1000 );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
@@ -120,14 +121,14 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 
-	if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/css/" . $module_file . ".css" ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' ) )
 	{
-		$xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . "themes/" . $global_config['admin_theme'] . "/css/" . $module_file . ".css" );
+		$xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' );
 		$xtpl->parse( 'main.css_module' );
 	}
-	elseif( file_exists( NV_ROOTDIR . "/themes/admin_default/css/" . $module_file . ".css" ) )
+	elseif( file_exists( NV_ROOTDIR . '/themes/admin_default/css/' . $module_file . '.css' ) )
 	{
-		$xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . "themes/admin_default/css/" . $module_file . ".css" );
+		$xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . 'themes/admin_default/css/' . $module_file . '.css' );
 		$xtpl->parse( 'main.css_module' );
 	}
 
@@ -136,23 +137,23 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'NV_SITE_TIMEZONE_OFFSET', round( NV_SITE_TIMEZONE_OFFSET / 3600 ) );
-	$xtpl->assign( 'NV_CURRENTTIME', nv_date( "T", NV_CURRENTTIME ) );
+	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
-	if( file_exists( NV_ROOTDIR . "/js/admin_" . $module_file . ".js" ) )
+	if( file_exists( NV_ROOTDIR . '/js/admin_' . $module_file . '.js' ) )
 	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . "js/admin_" . $module_file . ".js" );
+		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'js/admin_' . $module_file . '.js' );
 		$xtpl->parse( 'main.module_js' );
 	}
-	elseif( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/js/admin.js" ) )
+	elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/admin.js' ) )
 	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . "modules/" . $module_file . "/js/admin.js" );
+		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'modules/' . $module_file . '/js/admin.js' );
 		$xtpl->parse( 'main.module_js' );
 	}
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
 	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js( ) );
+		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
 		$xtpl->parse( 'main.nv_add_editor_js' );
 	}
 
@@ -160,7 +161,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );
 		$lang_site = ( ! empty( $site_mods )) ? NV_LANG_DATA : $global_config['site_lang'];
-		$xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_site );
+		$xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_site );
 		$xtpl->assign( 'NV_LOGOUT', $lang_global['logout'] );
 
 		if( ! empty( $array_lang_admin ) )
@@ -171,7 +172,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				$xtpl->assign( 'SELECTED', ($lang_i == NV_LANG_DATA) ? " selected=\"selected\"" : "" );
 				$xtpl->assign( 'LANGVALUE', $lang_name );
-				$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang_i );
+				$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
 				$xtpl->parse( 'main.langdata.option' );
 			}
 
@@ -192,7 +193,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 				{
 					foreach( $array_submenu as $mop => $submenu_i )
 					{
-						$xtpl->assign( 'SUBMENULINK', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m . "&amp;" . NV_OP_VARIABLE . "=" . $mop );
+						$xtpl->assign( 'SUBMENULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $mop );
 						$xtpl->assign( 'SUBMENUTITLE', $submenu_i );
 						$xtpl->parse( 'main.top_menu_loop.submenu.submenu_loop' );
 					}
@@ -205,7 +206,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		}
 
 		$xtpl->parse( 'main.top_menu' );
-		$xtpl->assign( 'NV_DIGCLOCK', nv_date( "H:i T l, d/m/Y", NV_CURRENTTIME ) );
+		$xtpl->assign( 'NV_DIGCLOCK', nv_date( 'H:i T l, d/m/Y', NV_CURRENTTIME ) );
 
 		if( $admin_info['current_login'] >= NV_CURRENTTIME - 60 )
 		{
@@ -292,7 +293,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.empty_page_title' );
 	}
 
-	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info( ) );
+	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
 	$xtpl->assign( 'NV_COPYRIGHT', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
@@ -302,10 +303,10 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
 	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
 	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
-	
+
 	if( defined( 'CKEDITOR' ) )
 	{
-		$xtpl->parse( 'main.ckeditor' );		
+		$xtpl->parse( 'main.ckeditor' );
 	}
 
 	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )

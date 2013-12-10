@@ -7,11 +7,17 @@
 	</div>
 	<div class="span-19 last">
 		<!-- BEGIN: mod_title -->
-		<h3 class="breakcolumn"><a title="{LANG.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG.Home}" /></a>
-		<!-- BEGIN: breakcolumn -->
-		<span class="breakcolumn">&raquo;</span><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a>
-		<!-- END: breakcolumn -->
-		</h3>
+        <div class="breadcrumbs">
+            <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                <a title="{LANG.Home}" href="{NV_BASE_SITEURL}" itemprop="url"><span itemprop="title" class="home">{LANG.Home}</span></a>
+            </div>
+            <!-- BEGIN: breakcolumn -->
+            <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                › <a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}" itemprop="url"><span itemprop="title">{BREAKCOLUMN.title}</span></a>
+            </div>
+            <!-- END: breakcolumn -->
+            <div class="clear"></div>
+        </div>
 		<!-- END: mod_title -->
 		[TOP]
 		{MODULE_CONTENT}

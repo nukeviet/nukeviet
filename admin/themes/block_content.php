@@ -48,7 +48,7 @@ if( $row['bid'] > 0 )
 	}
 }
 
-$xtpl = new XTemplate( "block_content.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -83,15 +83,15 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$path_file_php = NV_ROOTDIR . '/includes/blocks/' . $file_name;
 			$path_file_ini = NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
 
-			if( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/block." . $file_name ) )
+			if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name ) )
 			{
 				$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/block." . $file_name;
 			}
-			elseif( file_exists( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/block." . $file_name ) )
+			elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name ) )
 			{
 				$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/block." . $file_name;
 			}
-			elseif( file_exists( NV_ROOTDIR . "/language/en/block." . $file_name ) )
+			elseif( file_exists( NV_ROOTDIR . '/language/en/block.' . $file_name ) )
 			{
 				$path_file_lang = NV_ROOTDIR . "/language/en/block." . $file_name;
 			}
@@ -153,7 +153,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	if( $who_view == 3 )
 	{
 		$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
-		$row['groups_view'] = ! empty( $groups_view ) ? implode( ",", array_map( "intval", $groups_view ) ) : "";
+		$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', array_map( "intval", $groups_view ) ) : "";
 	}
 	else
 	{
@@ -195,7 +195,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			if( ! empty( $submit_function ) )
 			{
 				// Neu ton tai function de xay dung cau truc cau hinh block
-				include_once ( $path_file_php );
+				include_once $path_file_php;
 
 				if( nv_function_exists( $submit_function ) )
 				{
@@ -283,7 +283,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			if( ! empty( $row['leavegroup'] ) )
 			{
 				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET all_func='0' WHERE `bid`=" . $row['bid'] );
-				$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . " AND `func_id` in (" . implode( ",", $array_funcid ) . ")" );
+				$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . " AND `func_id` in (" . implode( ',', $array_funcid ) . ")" );
 
 				// Cap nhat lai thu tu cho nhom cu
 				$func_id_old = $weight = 0;
@@ -313,25 +313,50 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				list( $maxweight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme =" . $db->dbescape( $selectthemes ) . " AND `position`=" . $db->dbescape( $row['position'] ) ) );
 				$row['weight'] = intval( $maxweight ) + 1;
 
-				$row['bid'] = $db->sql_query_insert_id( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( NULL, " . $db->dbescape( $selectthemes ) . ", " . $db->dbescape( $row['module'] ) . ", '" . mysql_real_escape_string( $row['file_name'] ) . "', " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['link'] ) . ", " . $db->dbescape( $row['template'] ) . ", " . $db->dbescape( $row['position'] ) . ", '" . $row['exp_time'] . "', '" . $row['active'] . "', " . $db->dbescape( $row['groups_view'] ) . ", '" . $row['all_func'] . "', '" . $row['weight'] . "', '" . mysql_real_escape_string( $row['config'] ) . "' )" );
+				$sth = $db->prepare( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )" );
+				$sth->bindParam( ':selectthemes', $selectthemes, PDO::PARAM_STR );
+				$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
+				$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
+				$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+				$sth->bindParam( ':link', $row['link'], PDO::PARAM_STR );
+				$sth->bindParam( ':template', $row['template'], PDO::PARAM_STR );
+				$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
+				$sth->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
+				$sth->bindParam( ':config', $row['config'], PDO::PARAM_STR );
+				$sth->execute();
+				$row['bid'] = $db->lastInsertId();
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid'] );
 			}
 			else
 			{
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET
-					`module`=" . $db->dbescape( $row['module'] ) . ",
-					`file_name`='" . mysql_real_escape_string( $row['file_name'] ) . "',
-					`title`=" . $db->dbescape( $row['title'] ) . ",
-					`link`=" . $db->dbescape( $row['link'] ) . ",
-					`template`=" . $db->dbescape( $row['template'] ) . ",
-					`position`=" . $db->dbescape( $row['position'] ) . ",
-					`exp_time`=" . $row['exp_time'] . ",
-					`active`=" . $row['active'] . ",
-					`groups_view`=" . $db->dbescape( $row['groups_view'] ) . ",
-					`all_func`=" . $row['all_func'] . ",
-					`config`='" . mysql_real_escape_string( $row['config'] ) . "'
-					WHERE `bid` =" . $row['bid'] );
+				$sth = $db->prepare( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET
+					`module`=:module,
+					`file_name`=:file_name,
+					`title`=:title,
+					`link`=:link,
+					`template`=:template,
+					`position`=:position,
+					`exp_time`=:exp_time,
+					`active`=:active,
+					`groups_view`=:groups_view,
+					`all_func`=:all_func,
+					`config`=:config
+					WHERE `bid` = :bid" );
+
+				$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
+				$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
+				$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+				$sth->bindParam( ':link', $row['link'], PDO::PARAM_STR );
+				$sth->bindParam( ':template', $row['template'], PDO::PARAM_STR );
+				$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
+				$sth->bindParam( ':exp_time', $row['exp_time'], PDO::PARAM_STR );
+				$sth->bindParam( ':active', $row['active'], PDO::PARAM_STR );
+				$sth->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
+				$sth->bindParam( ':all_func', $row['all_func'], PDO::PARAM_STR );
+				$sth->bindParam( ':config', $row['config'], PDO::PARAM_STR );
+				$sth->bindParam( ':bid', $row['bid'], PDO::PARAM_STR );
+				$sth->execute();
 
 				if( isset( $site_mods[$module] ) )
 				{
@@ -355,7 +380,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				if( ! empty( $array_funcid_old ) )
 				{
-					$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . " AND `func_id` in (" . implode( ",", $array_funcid_old ) . ")" );
+					$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $row['bid'] . " AND `func_id` in (" . implode( ',', $array_funcid_old ) . ")" );
 				}
 				foreach( $array_funcid as $func_id )
 				{
@@ -381,9 +406,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 
-				include ( NV_ROOTDIR . '/includes/header.php' );
+				include NV_ROOTDIR . '/includes/header.php';
 				echo $contents;
-				include ( NV_ROOTDIR . '/includes/footer.php' );
+				include NV_ROOTDIR . '/includes/footer.php';
 				die();
 			}
 		}
@@ -406,7 +431,7 @@ if( empty( $row['groups_view'] ) or $row['groups_view'] == "1" or $row['groups_v
 }
 else
 {
-	$groups_view = array_map( "intval", explode( ",", $row['groups_view'] ) );
+	$groups_view = array_map( "intval", explode( ',', $row['groups_view'] ) );
 }
 
 $sql = "SELECT `func_id`, `func_custom_name`, `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func`='1' ORDER BY `in_module` ASC, `subweight` ASC";
@@ -494,7 +519,7 @@ foreach( $array_who_view as $k => $w )
 	$xtpl->parse( 'main.who_view' );
 }
 
-$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? "visibility:visible;display:table-row-group" : "visibility:hidden;display:none" );
+$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? 'visibility:visible;display:table-row-group' : 'visibility:hidden;display:none' );
 
 $groups_list = nv_groups_list();
 
@@ -622,8 +647,8 @@ $contents = $xtpl->text( 'main' );
 $xtpl->parse( 'head' );
 $my_head = $xtpl->text( 'head' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents, 0 );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

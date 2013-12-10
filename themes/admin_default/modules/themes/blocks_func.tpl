@@ -124,12 +124,12 @@
 		});
 		$("#checkall").click(function() {
 			$("input[name=idlist]:checkbox").each(function() {
-				$(this).attr("checked", "checked");
+				$(this).prop("checked", true);
 			});
 		});
 		$("#uncheckall").click(function() {
 			$("input[name=idlist]:checkbox").each(function() {
-				$(this).removeAttr("checked");
+				$(this).prop("checked", false);
 			});
 		});
 		$("select[name=listpos]").change(function() {

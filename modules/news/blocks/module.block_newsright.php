@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-global $module_data, $module_name, $module_file, $global_array_cat, $lang_module, $my_head;
+global $module_data, $module_name, $module_file, $global_array_cat, $lang_module, $my_head, $global_config;
 
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
@@ -19,7 +19,7 @@ $my_head .= "		$(\"#tabs_top\").tabs();\n";
 $my_head .= "	});\n";
 $my_head .= "	</script>\n";
 
-$xtpl = new XTemplate( "block_newsright.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block_newsright.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 
@@ -30,7 +30,7 @@ if( $db->sql_numrows( $result ) )
 	$i = 1;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$row['catname'] = $global_array_cat[$row['catid']]['title'];
 		$xtpl->assign( 'topviews', $row );
 		$xtpl->parse( 'main.topviews.loop' );
@@ -46,7 +46,7 @@ if( $db->sql_numrows( $result ) )
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		list( $catid, $alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT catid, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE id=" . $row['id'] . "" ) );
-		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $row['id'];
+		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$row['catname'] = $global_array_cat[$catid]['title'];
 		$row['content'] = nv_clean60( $row['content'], 100 );
 		$xtpl->assign( 'topcomment', $row );

@@ -35,9 +35,9 @@ $contents = array();
 $contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
 $contents['type'] = ( $type != "str" ) ? "all" : "str";
 $contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
-$contents['filename'] = tempnam( NV_ROOTDIR . "/" . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
+$contents['filename'] = tempnam( NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
 
-include ( NV_ROOTDIR . "/includes/core/dump.php" );
+include NV_ROOTDIR . '/includes/core/dump.php' ;
 
 $result = nv_dump_save( $contents );
 if( ! empty( $result ) )
@@ -53,8 +53,8 @@ if( ! empty( $result ) )
 	}
 
 	//Download file
-	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-	$download = new download( $result[0], NV_ROOTDIR . "/" . NV_TEMP_DIR, basename( $contents['fname'] ) );
+	require_once NV_ROOTDIR . '/includes/class/download.class.php';
+	$download = new download( $result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename( $contents['fname'] ) );
 	$download->download_file();
 	exit();
 }

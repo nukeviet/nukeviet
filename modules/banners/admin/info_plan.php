@@ -13,7 +13,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -23,7 +23,7 @@ $numrows = $db->sql_numrows( $result );
 
 if( $numrows != 1 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -38,8 +38,8 @@ $contents['aj'] = array( "nv_plan_info(" . $id . ", 'plan_info');", "nv_show_ban
 $contents = call_user_func( "nv_info_plan_theme", $contents );
 $set_active_op = "plans_list";
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

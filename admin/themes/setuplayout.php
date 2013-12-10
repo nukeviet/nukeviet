@@ -79,7 +79,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 				$mo_funcs = ( string )$layout_funcs[$j];
 				$mo_funcs = explode( ":", $mo_funcs );
 				$m = $mo_funcs[0];
-				$arr_f = explode( ",", $mo_funcs[1] );
+				$arr_f = explode( ',', $mo_funcs[1] );
 
 				foreach( $arr_f as $f )
 				{
@@ -91,7 +91,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 	$page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
 
-	$xtpl = new XTemplate( "setuplayout.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'setuplayout.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
@@ -232,8 +232,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

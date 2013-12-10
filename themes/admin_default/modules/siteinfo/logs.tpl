@@ -61,7 +61,7 @@
 				alert('{LANG.filter_err_submit}');
 			}
 		});
-	}); 
+	});
 </script>
 <table class="tab1">
 	<colgroup>
@@ -116,12 +116,10 @@
 	//<![CDATA[
 	$(function() {
 		$("#check_all").click(function() {
-			if ($("#check_all").attr("checked")) {
-				$('input.list').attr("checked", "checked");
-				//checked
+			if ($("#check_all").prop("checked")) {
+				$('input.list').prop("checked", true);
 			} else {
-				$('input.list').removeAttr("checked");
-				//checked
+				$('input.list').prop("checked", false);
 			}
 		});
 		$('#delall').click(function() {

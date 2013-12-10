@@ -25,7 +25,7 @@ $closed_site_Modes[3] = $lang_module['closed_site_3'];
 $allow_sitelangs = array();
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
-	if( file_exists( NV_ROOTDIR . "/language/" . $lang_i . "/global.php" ) )
+	if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
 	{
 		$allow_sitelangs[] = $lang_i;
 	}
@@ -69,10 +69,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
 	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
 	foreach( $array_config_site as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
+
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$array_config_global = array();
@@ -86,7 +90,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( ! empty( $my_domains ) )
 		{
-			$my_domains = array_map( "trim", explode( ",", $my_domains ) );
+			$my_domains = array_map( "trim", explode( ',', $my_domains ) );
 			foreach( $my_domains as $dm )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
@@ -99,12 +103,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 		$array_config_global['my_domains'] = array_unique( $array_config_global['my_domains'] );
-		$array_config_global['my_domains'] = implode( ",", $array_config_global['my_domains'] );
+		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
 
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
-		$array_config_global['is_url_rewrite'] = $nv_Request->get_int( 'is_url_rewrite', 'post', 0 );
 
 		$site_lang = $nv_Request->get_title( 'site_lang', 'post', '', 1 );
 		if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
@@ -132,16 +135,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
 		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
+		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 		foreach( $array_config_global as $config_name => $config_value )
 		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
-
-		$nv_rewrite_change = ( $global_config['is_url_rewrite'] != $array_config_global['is_url_rewrite'] or $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] ) ? true : false;
 
 		nv_save_file_config_global();
 
-		if( $nv_rewrite_change )
+		if( $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] )
 		{
 			$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
 			$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
@@ -172,7 +176,7 @@ $optActive_Modes = array(
 	'3' => $lang_module['optActive_admin']
 );
 
-$xtpl = new XTemplate( "system.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -196,10 +200,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 
-	$xtpl->assign( 'CHECKED1', ( $array_config_global['is_url_rewrite'] == 1 ) ? ' checked ' : '' );
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
-	if( $array_config_global['is_url_rewrite'] AND $lang_multi == 0 )
+	if( $lang_multi == 0 )
 	{
 		$xtpl->assign( 'CHECKED2', ( $array_config_global['rewrite_optional'] == 1 ) ? ' checked ' : '' );
 
@@ -236,8 +239,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$xtpl->parse( 'main.system.optActive' );
 	}
 
-	$xtpl->assign( 'TIMEZONEOP', "byCountry" );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == "byCountry" ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONEOP', 'byCountry' );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $array_config_global['site_timezone'] == 'byCountry' ) ? "selected='selected'" : "" );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $lang_module['timezoneByCountry'] );
 	$xtpl->parse( 'main.system.opsite_timezone' );
 
@@ -261,7 +264,7 @@ if( $errormess != '' )
 foreach( $adminThemes as $name )
 {
 	$xtpl->assign( 'THEME_NAME', $name );
-	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected=\'selected\'' : '' ) );
 	$xtpl->parse( 'main.admin_theme' );
 }
 
@@ -269,15 +272,15 @@ foreach( $closed_site_Modes as $value => $name )
 {
 	$xtpl->assign( 'MODE_VALUE', $value );
 	$xtpl->assign( 'MODE_NAME', $name );
-	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected=\'selected\'' : '' ) );
 	$xtpl->parse( 'main.closed_site_mode' );
 }
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

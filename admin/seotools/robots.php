@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) )
 	die( 'Stop!!!' );
 
-$xtpl = new XTemplate( "robots.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -26,7 +26,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$robots_data = $nv_Request->get_array( 'filename', 'post' );
 	$fileother = $nv_Request->get_array( 'fileother', 'post' );
 	$optionother = $nv_Request->get_array( 'optionother', 'post' );
-	$robots_other = array( );
+	$robots_other = array();
 	foreach( $fileother as $key => $value )
 	{
 		if( ! empty( $value ) )
@@ -44,12 +44,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	file_put_contents( $cache_file, $content_config, LOCK_EX );
 
-	$check_rewrite_file = nv_check_rewrite_file( );
+	$check_rewrite_file = nv_check_rewrite_file();
 
 	$redirect = false;
-	if( ! $check_rewrite_file )
+	if( empty( $global_config['check_rewrite_file'] ) )
 	{
-		$rbcontents = array( );
+		$rbcontents = array();
 		$rbcontents[] = "User-agent: *";
 
 		foreach( $robots_data as $key => $value )
@@ -60,14 +60,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 
-		if( $global_config['is_url_rewrite'] )
-		{
-			$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php/SitemapIndex" . $global_config['rewrite_endurl'];
-		}
-		else
-		{
-			$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php?" . NV_NAME_VARIABLE . "=SitemapIndex";
-		}
+		$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php/SitemapIndex" . $global_config['rewrite_endurl'];
+
 		$rbcontents = implode( "\n", $rbcontents );
 
 		if( is_writable( NV_ROOTDIR . "/robots.txt" ) )
@@ -79,8 +73,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$xtpl->assign( 'TITLE', $lang_module['robots_error_writable'] );
 			$xtpl->assign( 'CONTENT', str_replace( array(
-				"\n",
-				"\t"
+				'\n',
+				'\t'
 			), array(
 				"<br />",
 				"&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -91,13 +85,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( $redirect )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-		exit( );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		exit();
 	}
 }
 
-$robots_data = array( );
-$robots_other = array( );
+$robots_data = array();
+$robots_other = array();
 if( file_exists( $cache_file ) )
 {
 	include $cache_file;
@@ -124,7 +118,7 @@ $robots_other[''] = 0;
 
 $files = scandir( NV_ROOTDIR, true );
 sort( $files );
-$contents = array( );
+$contents = array();
 $contents[] = "User-agent: *";
 $number = 0;
 foreach( $files as $file )
@@ -186,7 +180,7 @@ $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['robots'];
 
-include (NV_ROOTDIR . '/includes/header.php');
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include (NV_ROOTDIR . '/includes/footer.php');
+include NV_ROOTDIR . '/includes/footer.php';
 ?>

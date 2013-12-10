@@ -8,7 +8,7 @@
 * @Createdate Aug 03, 2013, 02:39:46 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Nukevietdestek.com (destek@nukevietdestek.com)';
 $lang_translator['createdate'] = '14/06/2011/03:30';
@@ -126,7 +126,7 @@ $lang_module['nv_admin_edit_title'] = 'To edit job, you need to declare fully th
 $lang_module['cron_name'] = 'Job name';
 $lang_module['file_none'] = 'Not conected';
 $lang_module['run_file'] = 'Conected file';
-$lang_module['run_file_info'] = 'Executable file is  contained in the directory &ldquo;<strong>includes/cronjobs/</strong>&rdquo;';
+$lang_module['run_file_info'] = 'Executable file is contained in the directory &ldquo;<strong>includes/cronjobs/</strong>&rdquo;';
 $lang_module['run_func'] = 'Conect function';
 $lang_module['run_func_info'] = 'Function must be beginning with &ldquo;<strong>cron_</strong>&rdquo;';
 $lang_module['params'] = 'Parametre';

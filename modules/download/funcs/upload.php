@@ -15,7 +15,7 @@ $download_config = nv_mod_down_config();
 
 if( ! $download_config['is_addfile_allow'] )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
 
@@ -23,7 +23,7 @@ $list_cats = nv_list_cats( false, false );
 
 if( empty( $list_cats ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
 
@@ -32,13 +32,13 @@ $error = '';
 
 if( $nv_Request->isset_request( 'addfile', 'post' ) )
 {
-	require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+	require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 
 	$addfile = $nv_Request->get_string( 'addfile', 'post', '' );
 
 	if( empty( $addfile ) or $addfile != md5( $client_info['session_id'] ) )
 	{
-		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 		exit();
 	}
 
@@ -69,16 +69,16 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 	{
 		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
 		{
-			$array['author_url'] = "http://" . $array['author_url'];
+			$array['author_url'] = 'http://' . $array['author_url'];
 		}
 	}
 
 	if( ! empty( $array['linkdirect'] ) )
 	{
 		$linkdirect = $array['linkdirect'];
-		$linkdirect = nv_nl2br( $linkdirect, "<br />" );
-		$linkdirect = explode( "<br />", $linkdirect );
-		$linkdirect = array_map( "trim", $linkdirect );
+		$linkdirect = nv_nl2br( $linkdirect, '<br />' );
+		$linkdirect = explode( '<br />', $linkdirect );
+		$linkdirect = array_map( 'trim', $linkdirect );
 		$linkdirect = array_unique( $linkdirect );
 
 		$array['linkdirect'] = array();
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 		{
 			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $link ) )
 			{
-				$link = "http://" . $link;
+				$link = 'http://' . $link;
 			}
 
 			if( nv_is_url( $link ) )
@@ -95,18 +95,18 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 			}
 		}
 
-		$array['linkdirect'] = ! empty( $array['linkdirect'] ) ? implode( "\n", $array['linkdirect'] ) : "";
+		$array['linkdirect'] = ! empty( $array['linkdirect'] ) ? implode( "\n", $array['linkdirect'] ) : '';
 	}
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $alias );
+	$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `alias`=' . $db->dbescape( $alias );
 	$result = $db->sql_query( $sql );
 	list( $is_exists ) = $db->sql_fetchrow( $result );
 
 	if( ! $is_exists )
 	{
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `title`=" . $db->dbescape( $array['title'] );
+		$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `title`=' . $db->dbescape( $array['title'] );
 		$result = $db->sql_query( $sql );
 		list( $is_exists ) = $db->sql_fetchrow( $result );
 	}
@@ -248,23 +248,23 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], '<br />' );
 
 				$sql = 'INSERT INTO `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` VALUES (
-                NULL,
-                ' . $array['catid'] . ',
-                ' . $db->dbescape( $array['title'] ) . ',
-                ' . $db->dbescape( $array['description'] ) . ',
-                ' . $db->dbescape( $array['introtext'] ) . ',
-                ' . NV_CURRENTTIME . ',
-                ' . $array['user_id'] . ',
-                ' . $db->dbescape( $array['user_name'] ) . ',
-                ' . $db->dbescape( $array['author_name'] ) . ',
-                ' . $db->dbescape( $array['author_email'] ) . ',
-                ' . $db->dbescape( $array['author_url'] ) . ',
-                ' . $db->dbescape( $fileupload ) . ',
-                ' . $db->dbescape( $array['linkdirect'] ) . ',
-                ' . $db->dbescape( $array['version'] ) . ',
-                ' . $array['filesize'] . ',
-                ' . $db->dbescape( $fileimage ) . ',
-                ' . $db->dbescape( $array['copyright'] ) . ')';
+ NULL,
+ ' . $array['catid'] . ',
+ ' . $db->dbescape( $array['title'] ) . ',
+ ' . $db->dbescape( $array['description'] ) . ',
+ ' . $db->dbescape( $array['introtext'] ) . ',
+ ' . NV_CURRENTTIME . ',
+ ' . $array['user_id'] . ',
+ ' . $db->dbescape( $array['user_name'] ) . ',
+ ' . $db->dbescape( $array['author_name'] ) . ',
+ ' . $db->dbescape( $array['author_email'] ) . ',
+ ' . $db->dbescape( $array['author_url'] ) . ',
+ ' . $db->dbescape( $fileupload ) . ',
+ ' . $db->dbescape( $array['linkdirect'] ) . ',
+ ' . $db->dbescape( $array['version'] ) . ',
+ ' . $array['filesize'] . ',
+ ' . $db->dbescape( $fileimage ) . ',
+ ' . $db->dbescape( $array['copyright'] ) . ')';
 
 				if( ! $db->sql_query_insert_id( $sql ) )
 				{
@@ -274,14 +274,14 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				else
 				{
 					$contents = "<div class=\"info_exit\">" . $lang_module['file_upload_ok'] . "</div>";
-					$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+					$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
 					$user_post = defined( "NV_IS_USER" ) ? " | " . $user_info['username'] : "";
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_files_log'], $array['title'] . " | " . $client_info['ip'] . $user_post, 0 );
 
-					include ( NV_ROOTDIR . '/includes/header.php' );
+					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_site_theme( $contents );
-					include ( NV_ROOTDIR . '/includes/footer.php' );
+					include NV_ROOTDIR . '/includes/footer.php';
 					exit();
 				}
 			}
@@ -307,14 +307,14 @@ if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( 
 $array['disabled'] = '';
 if( defined( 'NV_IS_USER' ) )
 {
-	$array['disabled'] = " disabled=\"disabled\"";
+	$array['disabled'] = ' disabled="disabled"';
 }
 $array['addfile'] = md5( $client_info['session_id'] );
 
 $contents = theme_upload( $array, $list_cats, $download_config, $error );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

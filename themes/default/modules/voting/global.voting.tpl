@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <form class="voting" action="">
-	<h2>{VOTING.question}</h2>
+	<h3>{VOTING.question}</h3>
 	<fieldset>
 		<!-- BEGIN: resultn -->
 		<p>

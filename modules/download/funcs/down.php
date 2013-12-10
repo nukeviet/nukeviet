@@ -32,7 +32,7 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 		die( 'Wrong URL' );
 	}
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `download_hits`=download_hits+1 WHERE `id`=" . intval( $session_files['linkdirect'][$code]['id'] );
+	$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '` SET `download_hits`=download_hits+1 WHERE `id`=' . intval( $session_files['linkdirect'][$code]['id'] );
 	$db->sql_query( $sql );
 
 	$content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -71,10 +71,10 @@ if( ! isset( $session_files['fileupload'][$file]['id'] ) )
 	die( 'Wrong URL' );
 }
 
-$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `download_hits`=download_hits+1 WHERE `id`=" . intval( $session_files['fileupload'][$file]['id'] );
+$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '` SET `download_hits`=download_hits+1 WHERE `id`=' . intval( $session_files['fileupload'][$file]['id'] );
 $db->sql_query( $sql );
 
-$upload_dir = "files";
+$upload_dir = 'files';
 $is_zip = false;
 $is_resume = false;
 $max_speed = 0;
@@ -126,7 +126,7 @@ if( $is_zip )
 			@nv_deletefile( $tem_file );
 		}
 
-		require_once ( NV_ROOTDIR . '/includes/class/pclzip.class.php' );
+		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
 		$zip = new PclZip( $tem_file );
 
@@ -134,9 +134,9 @@ if( $is_zip )
 
 		if( isset( $global_config['site_logo'] ) and ! empty( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
 		{
-			$paths = explode( "/", $global_config['site_logo'] );
+			$paths = explode( '/', $global_config['site_logo'] );
 			array_pop( $paths );
-			$paths = implode( "/", $paths );
+			$paths = implode( '/', $paths );
 			$zip->add( NV_ROOTDIR . '/' . $global_config['site_logo'], PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/' . $paths );
 		}
 
@@ -154,7 +154,7 @@ if( $is_zip )
 	}
 }
 
-require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+require_once NV_ROOTDIR . '/includes/class/download.class.php';
 
 $download = new download( $file_src, $directory, $file_basename, $is_resume, $max_speed );
 if( $is_zip )

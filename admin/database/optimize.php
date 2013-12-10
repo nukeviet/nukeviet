@@ -17,7 +17,7 @@ if( empty( $tables ) )
 }
 else
 {
-	$tables = explode( ",", $tables );
+	$tables = explode( ',', $tables );
 }
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['optimize'], '', $admin_info['userid'] );
@@ -28,14 +28,14 @@ $result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\
 
 while( $item = $db->sql_fetch_assoc( $result ) )
 {
-	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['Name'], $tables ) ) )
+	if( empty( $tables ) or ( ! empty( $tables ) and in_array( $item['name'], $tables ) ) )
 	{
-		$totalfree += $item['Data_free'];
-		$tabs[] = substr( $item['Name'], strlen( $db_config['prefix'] ) + 1 );
-		$db->sql_query( "LOCK TABLE " . $item['Name'] . " WRITE" );
-		$db->sql_query( "REPAIR TABLE " . $item['Name'] );
-		$db->sql_query( "OPTIMIZE TABLE " . $item['Name'] );
-		$db->sql_query( "UNLOCK TABLE " . $item['Name'] );
+		$totalfree += $item['data_free'];
+		$tabs[] = substr( $item['name'], strlen( $db_config['prefix'] ) + 1 );
+		$db->sql_query( "LOCK TABLE " . $item['name'] . " WRITE" );
+		$db->sql_query( "REPAIR TABLE " . $item['name'] );
+		$db->sql_query( "OPTIMIZE TABLE " . $item['name'] );
+		$db->sql_query( "UNLOCK TABLE " . $item['name'] );
 	}
 }
 $db->sql_freeresult( $result );
@@ -44,8 +44,8 @@ $totalfree = ! empty( $totalfree ) ? nv_convertfromBytes( $totalfree ) : 0;
 
 $content = sprintf( $lang_module['optimize_result'], implode( ", ", $tabs ), $totalfree );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $content;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

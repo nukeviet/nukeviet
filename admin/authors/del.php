@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_SPADMIN' ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -19,7 +19,7 @@ $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 
 if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -28,7 +28,7 @@ $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -36,7 +36,7 @@ $row = $db->sql_fetchrow( $result );
 
 if( $row['lev'] == 1 or ( ! defined( "NV_IS_GODADMIN" ) and $row['lev'] == 2 ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -100,11 +100,11 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 				{
 					if( ! empty( $site_mods[$mod]['admins'] ) )
 					{
-						$admins = explode( ",", $site_mods[$mod]['admins'] );
+						$admins = explode( ',', $site_mods[$mod]['admins'] );
 						if( in_array( $admin_id, $admins ) )
 						{
 							$admins = array_diff( $admins, array( $admin_id ) );
-							$admins = implode( ",", $admins );
+							$admins = implode( ',', $admins );
 							$sql = "UPDATE `" . NV_MODULES_TABLE . "` SET `admins`=" . $db->dbescape( $admins ) . " WHERE `title`=" . $db->dbescape( $mod );
 							$db->sql_query( $sql );
 							$is_delCache = true;
@@ -166,7 +166,7 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 
 			$mess = nv_nl2br( $mess, "<br />" );
 
-			$xtpl = new XTemplate( "message.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/system" );
+			$xtpl = new XTemplate( 'message.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system' );
 
 			$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 			$xtpl->assign( 'SITE_SLOGAN', $global_config['site_description'] );
@@ -191,7 +191,7 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 				nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'] );
 			}
 		}
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 }
@@ -214,17 +214,17 @@ $contents['admin_password'] = array( $lang_global['admin_password'], $adminpass,
 $page_title = $lang_module['nv_admin_del'];
 
 // Parse content
-$xtpl = new XTemplate( "del.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'del.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 $class = $contents['is_error'] ? " class=\"error\"" : "";
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'CHECKSS', $checkss );
 
-$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 $xtpl->assign( 'TITLE', $contents['title'] );
 $xtpl->assign( 'ACTION', $contents['action'] );
-$xtpl->assign( 'CHECKED', $contents['sendmail'] ? " checked=\"checked\"" : "" );
+$xtpl->assign( 'CHECKED', $contents['sendmail'] ? ' checked="checked"' : '' );
 
 $xtpl->assign( 'REASON1', $contents['reason'][0] );
 $xtpl->assign( 'REASON2', $contents['reason'][1] );
@@ -243,8 +243,8 @@ foreach( $array_action_account as $key => $value )
 $xtpl->parse( 'del' );
 $contents = $xtpl->text( 'del' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

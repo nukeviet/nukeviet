@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] or ! defined( 'NV_OPENID_ALLOWED' ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 $page_title = $mod_title = $lang_module['openid_administrator'];
@@ -31,7 +31,7 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 			}
 		}
 	}
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 	die();
 }
 
@@ -42,7 +42,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 	{
 		if( $server == "facebook" )
 		{
-			include ( NV_ROOTDIR . "/modules/" . $module_file . "/facebook.auth.class.php" );
+			include NV_ROOTDIR . '/modules/' . $module_file . '/facebook.auth.class.php' ;
 			$FaceBookAuth = new FaceBookAuth( $global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid&server=" . $server );
 
 			$state = $nv_Request->get_string( 'state', 'get', '' );
@@ -58,7 +58,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 					if( $error )
 					{
 						$nv_Request->set_Session( 'openid_error', 1 );
-						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 						die();
 					}
 					else
@@ -68,7 +68,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						if( ! $data->verified )
 						{
 							$nv_Request->set_Session( 'openid_error', 2 );
-							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 							die();
 						}
 						else
@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 							if( empty( $openid ) or empty( $email ) )
 							{
 								$nv_Request->set_Session( 'openid_error', 3 );
-								header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+								header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 								die();
 							}
 
@@ -104,7 +104,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 							if( $count )
 							{
 								$nv_Request->set_Session( 'openid_error', 5 );
-								header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+								header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 								die();
 							}
 
@@ -121,7 +121,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								if( $count )
 								{
 									$nv_Request->set_Session( 'openid_error', 6 );
-									header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+									header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 									die();
 								}
 							}
@@ -131,14 +131,14 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 
-							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 							die();
 						}
 					}
 				}
 				else
 				{
-					Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 					die();
 				}
 			}
@@ -152,7 +152,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 		}
 		else
 		{
-			include_once ( NV_ROOTDIR . "/includes/class/openid.class.php" );
+			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
 			$openid_class = new LightOpenID();
 
 			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
@@ -162,13 +162,13 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 				if( $openid_mode == "cancel" )
 				{
 					$nv_Request->set_Session( 'openid_error', 1 );
-					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 					die();
 				}
 				elseif( ! $openid_class->validate() )
 				{
 					$nv_Request->set_Session( 'openid_error', 2 );
-					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 					die();
 				}
 				else
@@ -179,7 +179,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 					if( empty( $openid ) or empty( $email ) )
 					{
 						$nv_Request->set_Session( 'openid_error', 3 );
-						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 						die();
 					}
 
@@ -203,7 +203,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 					if( $count )
 					{
 						$nv_Request->set_Session( 'openid_error', 5 );
-						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+						header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 						die();
 					}
 
@@ -220,7 +220,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						if( $count )
 						{
 							$nv_Request->set_Session( 'openid_error', 6 );
-							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+							header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 							die();
 						}
 					}
@@ -230,7 +230,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 
-					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=openid", true ) );
+					header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 					die();
 				}
 			}
@@ -294,8 +294,8 @@ switch( $error )
 
 $contents = user_openid_administrator( $data );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

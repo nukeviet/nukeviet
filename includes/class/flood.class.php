@@ -16,7 +16,7 @@ if( ! defined( 'NV_LOGS_EXT' ) ) define( "NV_LOGS_EXT", "log" );
 /**
  * FloodBlocker
  * 
- * @package   
+ * @package 
  * @author NUKEVIET 3.0
  * @copyright VINADES
  * @version 2010

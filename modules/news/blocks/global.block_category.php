@@ -38,7 +38,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 	{
 		global $module_array_cat, $module_info, $lang_module;
 
-		$xtpl = new XTemplate( "block_category.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news" );
+		$xtpl = new XTemplate( 'block_category.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news' );
 
 		if( ! empty( $module_array_cat ) )
 		{
@@ -72,7 +72,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 		}
 		else
 		{
-			$list = explode( ",", $list_sub );
+			$list = explode( ',', $list_sub );
 			$html = "<ul>\n";
 			foreach( $list as $catid )
 			{

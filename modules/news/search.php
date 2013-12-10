@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @Project  NUKEVIET V3
+ * @Project NUKEVIET V3
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate  03-05-2010
+ * @Createdate 03-05-2010
  */
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.title, r.alias, r.catid, r.hometext, c.bodytext  
+$sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.title, r.alias, r.catid, r.hometext, c.bodytext 
 FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` as r 
 INNER JOIN `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_bodytext` as c ON (r.id=c.id) 
 WHERE (" . nv_like_logic( 'r.title', $dbkeyword, $logic ) . " 

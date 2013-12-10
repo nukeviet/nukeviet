@@ -1,4 +1,16 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: facebookjssdk -->
+<div id="fb-root"></div>
+<script type="text/javascript">
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={FACEBOOKAPPID}";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- END: facebookjssdk -->
 <div class="header-details">
 	<div class="action fr right">
 		<!-- BEGIN: allowed_send -->
@@ -21,7 +33,25 @@
 			<!-- END: post_name -->
 		</span>
 	</div>
-	<div class="clear"></div>
+    
+    <!-- BEGIN: socialbutton -->
+    <div style="margin-right: 50px;"  class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
+    
+    <div class="g-plusone" data-size="medium"></div>
+    <script type="text/javascript">
+      window.___gcfg = {lang: nv_sitelang};
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
+
+    <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
+	<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+ 	<!-- END: socialbutton -->
+    
+ 	<div class="clear"></div>
 </div>
 <!-- BEGIN: showhometext -->
 <div id="hometext" class="short-desc clearfix">
@@ -33,7 +63,7 @@
 		</p>
 	</div>
 	<!-- END: imgthumb -->
-	{DETAIL.hometext}
+	<h2>{DETAIL.hometext}</h2>
 	<!-- BEGIN: imgfull -->
 	<div style="width:{DETAIL.image.width}px;margin:10px auto;">
 		<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}"/>
@@ -86,11 +116,18 @@
 		</p>
 	</div>
 	<!-- END: keywords -->
+	<!-- BEGIN: allowed_rating -->
 	<div class="oop fr">
 		<div class="header-oop icon-rating">
 			{LANG.rating}
 		</div>
-		<!-- BEGIN: allowed_rating -->
+        <!-- BEGIN: data_rating -->
+        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate"> 
+           {LANG.rating_average}:
+           <span itemprop="rating">{DETAIL.numberrating}</span> - 
+           <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count} 
+        </span>
+        <!-- END: data_rating -->       
 		<form id="form3B" action="">
 			<div class="clearfix">
 				<div id="stringrating" class="small">
@@ -136,8 +173,8 @@
 			sr = 2;
 		</script>
 		<!-- END: disablerating -->
-		<!-- END: allowed_rating -->
-	</div>
+        </div>
+    <!-- END: allowed_rating -->
 </div>
 <!-- BEGIN: topic -->
 <div class="other-news">
@@ -218,6 +255,9 @@
 	</div>
 </div>
 <!-- END: comment -->
+<!-- BEGIN: commentfacebook -->
+    <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="620"></div>
+<!-- END: commentfacebook -->
 <!-- END: main -->
 
 <!-- BEGIN: no_permission -->

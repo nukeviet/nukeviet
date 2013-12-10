@@ -38,7 +38,7 @@ $array_cat_admin = nv_news_array_cat_admin( $module_data );
 
 if( ! empty( $module_info['admins'] ) )
 {
-	$module_admin = explode( ",", $module_info['admins'] );
+	$module_admin = explode( ',', $module_info['admins'] );
 	foreach( $module_admin as $userid_i )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
@@ -73,7 +73,7 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
 
 $submenu['cat'] = $lang_module['categories'];
 $submenu['content'] = $lang_module['content_add'];
@@ -113,7 +113,7 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'setting';
 }
 
-if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" ) )
+if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/admins.php' ) )
 {
 	$submenu['admins'] = $lang_module['admin'];
 	$allow_func[] = 'admins';

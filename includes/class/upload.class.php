@@ -10,10 +10,11 @@
 if( defined( 'NV_CLASS_UPLOAD_PHP' ) ) return;
 define( 'NV_CLASS_UPLOAD_PHP', true );
 
-define( "NV_MIME_INI_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/ini/mime.ini' ) );
-define( "NV_LOOKUP_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/utf8/lookup.php' ) );
+if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
+
+define( "NV_MIME_INI_FILE", NV_ROOTDIR . '/includes/ini/mime.ini' );
 if( ! defined( 'NV_TEMP_DIR' ) ) define( 'NV_TEMP_DIR', 'tmp' );
-define( "NV_TEMP_REAL_DIR", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/../.." ) . '/' . NV_TEMP_DIR ) );
+define( "NV_TEMP_REAL_DIR", NV_ROOTDIR . '/' . NV_TEMP_DIR );
 if( ! defined( 'NV_TEMPNAM_PREFIX' ) ) define( 'NV_TEMPNAM_PREFIX', 'nv_' );
 
 if( ! defined( 'UPLOAD_CHECKING_MODE' ) ) define( 'UPLOAD_CHECKING_MODE', 'strong' );
@@ -73,17 +74,17 @@ class upload
 	private $user_agent;
 
 	/**
-     * upload::__construct()
-     *
-     * @param mixed $allowed_filetypes
-     * @param mixed $forbid_extensions
-     * @param mixed $forbid_mimes
-     * @param integer $maxsize
-     * @param integer $maxwidth
-     * @param integer $maxheight
-     * @param string $magic_path
-     * @return
-     */
+ * upload::__construct()
+ *
+ * @param mixed $allowed_filetypes
+ * @param mixed $forbid_extensions
+ * @param mixed $forbid_mimes
+ * @param integer $maxsize
+ * @param integer $maxwidth
+ * @param integer $maxheight
+ * @param string $magic_path
+ * @return
+ */
 	public function __construct( $allowed_filetypes = array( 'any' ), $forbid_extensions = array( "php" ), $forbid_mimes = array(), $maxsize = 0, $maxwidth = 0, $maxheight = 0, $magic_path = '' )
 	{
 		if( ! is_array( $allowed_filetypes ) ) $allowed_filetypes = array( $allowed_filetypes );
@@ -138,33 +139,33 @@ class upload
 	}
 
 	/**
-     * upload::func_exists()
-     *
-     * @param mixed $funcName
-     * @return
-     */
+ * upload::func_exists()
+ *
+ * @param mixed $funcName
+ * @return
+ */
 	private function func_exists( $funcName )
 	{
 		return ( function_exists( $funcName ) and ! in_array( $funcName, $this->disable_functions ) );
 	}
 
 	/**
-     * upload::cl_exists()
-     *
-     * @param mixed $clName
-     * @return
-     */
+ * upload::cl_exists()
+ *
+ * @param mixed $clName
+ * @return
+ */
 	private function cl_exists( $clName )
 	{
 		return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
 	}
 
 	/**
-     * upload::getextension()
-     *
-     * @param mixed $filename
-     * @return
-     */
+ * upload::getextension()
+ *
+ * @param mixed $filename
+ * @return
+ */
 	private function getextension( $filename )
 	{
 		if( strpos( $filename, '.' ) === false ) return '';
@@ -174,13 +175,13 @@ class upload
 	}
 
 	/**
-     * upload::get_ini()
-     *
-     * @param mixed $allowed_filetypes
-     * @param mixed $forbid_extensions
-     * @param mixed $forbid_mimes
-     * @return
-     */
+ * upload::get_ini()
+ *
+ * @param mixed $allowed_filetypes
+ * @param mixed $forbid_extensions
+ * @param mixed $forbid_mimes
+ * @return
+ */
 	private function get_ini( $allowed_filetypes, $forbid_extensions, $forbid_mimes )
 	{
 		$all_ini = array();
@@ -258,32 +259,32 @@ class upload
 	}
 
 	/**
-     * upload::get_mime_from_iniFile()
-     *
-     * @return
-     */
+ * upload::get_mime_from_iniFile()
+ *
+ * @return
+ */
 	private function get_mime_from_iniFile()
 	{
 		return $this->config['allowed_files'][$this->file_extension][0];
 	}
 
 	/**
-     * upload::get_mime_from_userFile()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_from_userFile()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_from_userFile( $userfile )
 	{
 		return preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $userfile['type'] ) );
 	}
 
 	/**
-     * upload::get_mime_finfo()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_finfo()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_finfo( $userfile )
 	{
 		$mime = '';
@@ -342,11 +343,11 @@ class upload
 	}
 
 	/**
-     * upload::get_mime_exec()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_exec()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_exec( $userfile )
 	{
 		$mime = '';
@@ -379,11 +380,11 @@ class upload
 	}
 
 	/**
-     * upload::get_mime_content_type()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_content_type()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_content_type( $userfile )
 	{
 		$mime = '';
@@ -398,11 +399,11 @@ class upload
 	}
 
 	/**
-     * upload::get_mime_image()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_image()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_image( $userfile )
 	{
 		$mime = '';
@@ -431,11 +432,11 @@ class upload
 	}
 
 	/**
-     * upload::check_mime_from_ext()
-     *
-     * @param mixed $mime
-     * @return
-     */
+ * upload::check_mime_from_ext()
+ *
+ * @param mixed $mime
+ * @return
+ */
 	private function check_mime_from_ext( $mime )
 	{
 		if( ! empty( $mime ) and ! in_array( $mime, $this->config['allowed_files'][$this->file_extension] ) )
@@ -446,11 +447,11 @@ class upload
 	}
 
 	/**
-     * upload::mime_ign()
-     *
-     * @param mixed $mime
-     * @return
-     */
+ * upload::mime_ign()
+ *
+ * @param mixed $mime
+ * @return
+ */
 	private function mime_ign( $mime )
 	{
 		if( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
@@ -477,11 +478,11 @@ class upload
 	}
 
 	/**
-     * upload::get_mime_type()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::get_mime_type()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function get_mime_type( $userfile )
 	{
 		if( $this->config['upload_checking_mode'] != "strong" and $this->config['upload_checking_mode'] != "mild" and $this->config['upload_checking_mode'] != "lite" )
@@ -523,11 +524,11 @@ class upload
 	}
 
 	/**
-     * upload::verify_image()
-     *
-     * @param mixed $file
-     * @return
-     */
+ * upload::verify_image()
+ *
+ * @param mixed $file
+ * @return
+ */
 	private function verify_image( $file )
 	{
 		$file = preg_replace( '/\0/uis', '', $file );
@@ -547,11 +548,11 @@ class upload
 	}
 
 	/**
-     * upload::check_tmpfile()
-     *
-     * @param mixed $userfile
-     * @return
-     */
+ * upload::check_tmpfile()
+ *
+ * @param mixed $userfile
+ * @return
+ */
 	private function check_tmpfile( $userfile )
 	{
 		if( empty( $userfile ) ) return _ERROR_UPLOAD_NO_FILE;
@@ -625,11 +626,11 @@ class upload
 	}
 
 	/**
-     * upload::check_save_path()
-     *
-     * @param mixed $savepath
-     * @return
-     */
+ * upload::check_save_path()
+ *
+ * @param mixed $savepath
+ * @return
+ */
 	private function check_save_path( $savepath )
 	{
 		if( empty( $savepath ) or ! is_dir( $savepath ) ) return _ERROR_UPLOAD_FORBIDDEN;
@@ -646,16 +647,26 @@ class upload
 	}
 
 	/**
-     * upload::string_to_filename()
-     *
-     * @param mixed $word
-     * @return
-     */
+ * upload::string_to_filename()
+ *
+ * @param mixed $word
+ * @return
+ */
 	private function string_to_filename( $word )
 	{
-		$utf8_lookup = false;
-		include ( NV_LOOKUP_FILE );
-		$word = strtr( $word, $utf8_lookup['romanize'] );
+		if( defined( 'NV_LANG_DATA' ) AND file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
+		{
+			include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ;
+			$word = strtr( $word, $utf8_lookup_lang );
+		}
+
+		if( file_exists( NV_ROOTDIR . '/includes/utf8/lookup.php' ) )
+		{
+			$utf8_lookup = false;
+			include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
+			$word = strtr( $word, $utf8_lookup['romanize'] );
+		}
+
 		$word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
 		$word = preg_replace( '/^\W+|\W+$/', '', $word );
 		$word = preg_replace( '/[ ]+/', '-', $word );
@@ -663,13 +674,13 @@ class upload
 	}
 
 	/**
-     * upload::save_file()
-     *
-     * @param mixed $userfile
-     * @param mixed $savepath
-     * @param bool $replace_if_exists
-     * @return
-     */
+ * upload::save_file()
+ *
+ * @param mixed $userfile
+ * @param mixed $savepath
+ * @param bool $replace_if_exists
+ * @return
+ */
 	public function save_file( $userfile, $savepath, $replace_if_exists = true )
 	{
 		$this->file_extension = '';
@@ -741,11 +752,11 @@ class upload
 	}
 
 	/**
-     * upload::url_get_info()
-     *
-     * @param mixed $url
-     * @return
-     */
+ * upload::url_get_info()
+ *
+ * @param mixed $url
+ * @return
+ */
 	private function url_get_info( $url )
 	{
 		//URL: http://username:password@www.example.com:80/dir/page.php?foo=bar&foo2=bar2#bookmark
@@ -821,11 +832,11 @@ class upload
 	}
 
 	/**
-     * upload::check_url()
-     *
-     * @param integer $is_200
-     * @return
-     */
+ * upload::check_url()
+ *
+ * @param integer $is_200
+ * @return
+ */
 	private function check_url( $is_200 = 0 )
 	{
 		$allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
@@ -966,10 +977,10 @@ class upload
 	}
 
 	/**
-     * upload::check_allow_methods()
-     *
-     * @return
-     */
+ * upload::check_allow_methods()
+ *
+ * @return
+ */
 	private function check_allow_methods()
 	{
 		$allow_methods = array();
@@ -1000,11 +1011,11 @@ class upload
 	}
 
 	/**
-     * upload::check_mime()
-     *
-     * @param mixed $mime
-     * @return
-     */
+ * upload::check_mime()
+ *
+ * @param mixed $mime
+ * @return
+ */
 	private function check_mime( $mime )
 	{
 		$return = false;
@@ -1023,10 +1034,10 @@ class upload
 	}
 
 	/**
-     * upload::curl_Download()
-     *
-     * @return
-     */
+ * upload::curl_Download()
+ *
+ * @return
+ */
 	private function curl_Download()
 	{
 		$options = array( //
@@ -1060,10 +1071,10 @@ class upload
 	}
 
 	/**
-     * upload::fopen_Download()
-     *
-     * @return
-     */
+ * upload::fopen_Download()
+ *
+ * @return
+ */
 	private function fopen_Download()
 	{
 		if( ( $fp = fopen( $this->url_info['uri'], "rb" ) ) === false ) return false;
@@ -1089,10 +1100,10 @@ class upload
 	}
 
 	/**
-     * upload::file_get_contents_Download()
-     *
-     * @return
-     */
+ * upload::file_get_contents_Download()
+ *
+ * @return
+ */
 	private function file_get_contents_Download()
 	{
 		$content = file_get_contents( $this->url_info['uri'] );
@@ -1101,10 +1112,10 @@ class upload
 	}
 
 	/**
-     * upload::file_Download()
-     *
-     * @return
-     */
+ * upload::file_Download()
+ *
+ * @return
+ */
 	private function file_Download()
 	{
 		$lines = @file( $this->url_info['uri'] );
@@ -1128,13 +1139,13 @@ class upload
 	}
 
 	/**
-     * upload::save_urlfile()
-     *
-     * @param mixed $urlfile
-     * @param mixed $savepath
-     * @param bool $replace_if_exists
-     * @return
-     */
+ * upload::save_urlfile()
+ *
+ * @param mixed $urlfile
+ * @param mixed $savepath
+ * @param bool $replace_if_exists
+ * @return
+ */
 	public function save_urlfile( $urlfile, $savepath, $replace_if_exists = true )
 	{
 		$this->file_extension = '';

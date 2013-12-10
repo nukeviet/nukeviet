@@ -59,7 +59,7 @@ if( empty( $func_id ) or empty( $selectedmodule ) )
 
 $page_title = $lang_module['blocks_by_funcs'] . ': ' . $selectthemes;
 
-$xtpl = new XTemplate( "blocks_func.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'blocks_func.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -159,8 +159,8 @@ $set_active_op = 'blocks';
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

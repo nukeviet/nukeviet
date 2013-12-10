@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @Project  NUKEVIET V3
+ * @Project NUKEVIET V3
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate  05-05-2010
+ * @Createdate 05-05-2010
  */
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
@@ -42,7 +42,7 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 }
 
 $list_cats = nv_sdown_cats( $m_values['module_data'] );
-$in = implode( ",", array_keys( $list_cats ) );
+$in = implode( ',', array_keys( $list_cats ) );
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `alias`,`title`,`description`, `introtext`, `catid` 
 FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 

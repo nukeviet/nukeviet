@@ -31,16 +31,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	foreach( $metaGroupsName as $key => $name )
 	{
-		if( $name == 'http-equiv' or $name == 'name' )
+		if( $name == 'http-equiv' or $name == 'name' or $name == 'property' )
 		{
-			$value = strtolower( trim( strip_tags( $metaGroupsValue[$key] ) ) );
+			$value = trim( strip_tags( $metaGroupsValue[$key] ) );
 			$content = trim( strip_tags( $metaContents[$key] ) );
 			$newArray = array(
 				'group' => $name,
 				'value' => $value,
 				'content' => $content
 			);
-			if( preg_match( "/^[a-zA-Z0-9\-\_\.]+$/", $value ) and ! in_array( $value, $ignore ) and preg_match( "/^([^\'\"]+)$/", $content ) and ! in_array( $newArray, $metatags['meta'] ) )
+			if( preg_match( "/^[a-zA-Z0-9\-\_\.\:]+$/", $value ) and ! in_array( $value, $ignore ) and preg_match( "/^([^\'\"]+)$/", $content ) and ! in_array( $newArray, $metatags['meta'] ) )
 			{
 				$metatags['meta'][] = $newArray;
 			}
@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( ! empty( $metatags['meta'] ) )
 	{
-		include ( NV_ROOTDIR . '/includes/class/array2xml.class.php' );
+		include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 		$array2XML = new Array2XML();
 		$array2XML->saveXML( $metatags, 'metatags', $file_metatags, $global_config['site_charset'] );
 	}
@@ -95,6 +95,7 @@ if( ! empty( $metatags['meta'] ) )
 	{
 		$value['h_selected'] = $value['group'] == 'http-equiv' ? ' selected="selected"' : '';
 		$value['n_selected'] = $value['group'] == 'name' ? ' selected="selected"' : '';
+		$value['p_selected'] = $value['group'] == 'property' ? ' selected="selected"' : '';
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
 	}
@@ -111,12 +112,12 @@ for( $i = 0; $i < 3; ++$i )
 	$xtpl->assign( 'DATA', $data );
 	$xtpl->parse( 'main.loop' );
 }
-$xtpl->assign( 'METATAGSOGPCHECKED', ( $global_config['metaTagsOgp'] )  ? ' checked="checked" ' : '' );
+$xtpl->assign( 'METATAGSOGPCHECKED', ( $global_config['metaTagsOgp'] ) ? ' checked="checked" ' : '' );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

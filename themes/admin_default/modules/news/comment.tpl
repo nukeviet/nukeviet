@@ -37,12 +37,12 @@
 	//<![CDATA[
 	$("#checkall").click(function() {
 		$("input:checkbox").each(function() {
-			$(this).attr("checked", "checked");
+			$(this).prop("checked", true);
 		});
 	});
 	$("#uncheckall").click(function() {
 		$("input:checkbox").each(function() {
-			$(this).removeAttr("checked");
+			$(this).prop("checked", false);
 		});
 	});
 	$("a.enable").click(function() {

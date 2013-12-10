@@ -120,6 +120,7 @@ function nv_save_file_config_global()
 	$content_config .= "\n";
 
 	$config_variable = array();
+	$allowed_html_tags = '';
 	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND (`module`='global' OR `module`='define') ORDER BY `config_name` ASC";
 	$result = $db->sql_query( $sql );
 	while( list( $c_module, $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result, 1 ) )
@@ -133,6 +134,10 @@ function nv_save_file_config_global()
 			else
 			{
 				$content_config .= "define('" . strtoupper( $c_config_name ) . "', '" . $c_config_value . "');\n";
+			}
+			if( $c_config_name == 'nv_allowed_html_tags' )
+			{
+				$allowed_html_tags = $c_config_value;
 			}
 		}
 		else
@@ -151,8 +156,8 @@ function nv_save_file_config_global()
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
 		$openid_servers = array();
-		$key_openid_servers = explode( ",", $config_variable['openid_servers'] );
-		require ( NV_ROOTDIR . '/includes/openid.php' );
+		$key_openid_servers = explode( ',', $config_variable['openid_servers'] );
+		require NV_ROOTDIR . '/includes/openid.php';
 		$openid_servers = array_intersect_key( $openid_servers, array_flip( $key_openid_servers ) );
 		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
 	}
@@ -196,7 +201,7 @@ function nv_save_file_config_global()
 		{
 			if( ! empty( $c_config_value ) )
 			{
-				$c_config_value = "'" . implode( "','", array_map( "trim", explode( ",", $c_config_value ) ) ) . "'";
+				$c_config_value = "'" . implode( "','", array_map( "trim", explode( ',', $c_config_value ) ) ) . "'";
 			}
 			else
 			{
@@ -222,11 +227,11 @@ function nv_save_file_config_global()
 		}
 	}
 	$content_config .= "\$global_config['array_theme_type']=" . nv_var_export( array_filter( array_map( 'trim', explode( ',', NV_THEME_TYPE ) ) ) ) . ";\n";
+
 	//allowed_html_tags
-	$global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
-	if( ! empty( $global_config['allowed_html_tags'] ) )
+	if( ! empty( $allowed_html_tags ) )
 	{
-		$allowed_html_tags = "'" . implode( "','", $global_config['allowed_html_tags'] ) . "'";
+		$allowed_html_tags = "'" . implode( "','", array_map( 'trim', explode( ',', $allowed_html_tags ) ) ) . "'";
 	}
 	else
 	{
@@ -263,19 +268,15 @@ function nv_save_file_config_global()
 
 	$rewrite = array();
 	$global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
-	$global_config['is_url_rewrite'] = $config_variable['is_url_rewrite'];
 	$global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
 
-	if( $config_variable['is_url_rewrite'] )
+	if( $config_variable['check_rewrite_file'] )
 	{
-		if( $config_variable['check_rewrite_file'] )
-		{
-			require ( NV_ROOTDIR . "/includes/rewrite.php" );
-		}
-		else
-		{
-			require ( NV_ROOTDIR . "/includes/rewrite_index.php" );
-		}
+		require NV_ROOTDIR . '/includes/rewrite.php';
+	}
+	else
+	{
+		require NV_ROOTDIR . '/includes/rewrite_index.php';
 	}
 
 	$content_config .= "\n";
@@ -346,7 +347,7 @@ function nv_geVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 		$getContent = new UrlGetContents( $global_config, 6 );
 
 		$nv_sites = array( //
@@ -657,7 +658,7 @@ function nv_getModVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 		$getContent = new UrlGetContents( $global_config, 6 );
 
 		$nv_sites = array( //

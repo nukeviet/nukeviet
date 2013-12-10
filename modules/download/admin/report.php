@@ -134,16 +134,16 @@ if( ! $num )
 	$contents .= "</div>\n";
 	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
 $listcats = nv_listcats( 0 );
 if( empty( $listcats ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&add=1" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
 }
 
@@ -161,7 +161,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	);
 }
 
-$xtpl = new XTemplate( "report.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'report.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'TABLE_CAPTION', $page_title );
@@ -171,7 +171,7 @@ if( ! empty( $array ) )
 	foreach( $array as $row )
 	{
 		$xtpl->assign( 'ROW', $row );
-		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['id'] );
+		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] );
 		$xtpl->parse( 'main.row' );
 	}
 }
@@ -179,8 +179,8 @@ if( ! empty( $array ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

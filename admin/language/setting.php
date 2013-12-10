@@ -15,7 +15,7 @@ $page_title = $lang_module['nv_lang_setting'];
 
 $array_type = array( $lang_module['nv_setting_type_0'], $lang_module['nv_setting_type_1'], $lang_module['nv_setting_type_2'] );
 
-$xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -28,14 +28,14 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 	nv_save_file_config_global();
 
 	$xtpl->assign( 'INFO', $lang_module['nv_setting_save'] );
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting' );
 
 	$xtpl->parse( 'info' );
 	$contents = $xtpl->text( 'info' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -62,7 +62,7 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 
 	foreach( $allow_sitelangs_temp as $lang_temp )
 	{
-		if( file_exists( NV_ROOTDIR . "/language/" . $lang_temp . "/global.php" ) )
+		if( file_exists( NV_ROOTDIR . '/language/' . $lang_temp . '/global.php' ) )
 		{
 			$allow_sitelangs[] = $lang_temp;
 		}
@@ -73,7 +73,7 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 
 	foreach( $allow_sitelangs_temp as $lang_temp )
 	{
-		if( file_exists( NV_ROOTDIR . "/language/" . $lang_temp . "/global.php" ) )
+		if( file_exists( NV_ROOTDIR . '/language/' . $lang_temp . '/global.php' ) )
 		{
 			$allow_adminlangs[] = $lang_temp;
 		}
@@ -82,8 +82,8 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	$global_config['allow_sitelangs'] = $allow_sitelangs;
 	$global_config['allow_adminlangs'] = $allow_adminlangs;
 
-	$allow_sitelangs = implode( ",", $global_config['allow_sitelangs'] );
-	$allow_adminlangs = implode( ",", $global_config['allow_adminlangs'] );
+	$allow_sitelangs = implode( ',', $global_config['allow_sitelangs'] );
+	$allow_adminlangs = implode( ',', $global_config['allow_adminlangs'] );
 
 	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( $allow_sitelangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
 	$result = $db->sql_query( $query );
@@ -95,14 +95,14 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	nv_save_file_config_global();
 
 	$xtpl->assign( 'INFO', $lang_module['nv_setting_save'] );
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setting" );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting' );
 
 	$xtpl->parse( 'info' );
 	$contents = $xtpl->text( 'info' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -112,9 +112,9 @@ $lang_array_data_exit = array();
 
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == "author_" )
 	{
-		$lang_array_data_exit[] = substr( $row['Field'], 7, 2 );
+		$lang_array_data_exit[] = substr( $row['field'], 7, 2 );
 	}
 }
 
@@ -134,7 +134,7 @@ while( list( $key, $value ) = each( $language_array ) )
 	$arr_lang_func = array();
 	$check_lang_exit = false;
 
-	if( file_exists( NV_ROOTDIR . "/language/" . $key . "/global.php" ) )
+	if( file_exists( NV_ROOTDIR . '/language/' . $key . '/global.php' ) )
 	{
 		$check_lang_exit = true;
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id() ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
@@ -160,7 +160,7 @@ while( list( $key, $value ) = each( $language_array ) )
 		'key' => $key,
 		'language' => $value['language'],
 		'name' => $value['name'],
-		'arr_lang_func' => implode( " - ", $arr_lang_func ),
+		'arr_lang_func' => implode( ' - ', $arr_lang_func ),
 		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"',
 		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"'
 	) );
@@ -172,7 +172,7 @@ foreach( $array_type as $key => $value )
 {
 	$xtpl->assign( 'TYPE', array(
 		'key' => $key,
-		'checked' => $global_config['read_type'] == $key ? " checked=\"checked\"" : "",
+		'checked' => $global_config['read_type'] == $key ? ' checked="checked"' : '',
 		'title' => $value
 	) );
 
@@ -191,8 +191,8 @@ $xtpl->assign( 'CHECKSESSSETING', md5( session_id() . "seting" ) );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

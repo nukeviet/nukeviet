@@ -7,10 +7,9 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$alias = trim( $_GET['alias'] );
+$alias = $nv_Request->get_title( 'alias', 'get' );
 $array_op = explode( '/', $alias );
 $alias = $array_op[0];
 
@@ -45,11 +44,11 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 			'link' => $base_url
 		);
 
-		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `id` IN (SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid . ") ORDER BY `publtime` DESC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
+		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `id` IN (SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid . ") ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page );
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
 
-		$item_array = array( );
+		$item_array = array();
 		$end_publtime = 0;
 		$show_no_image = $module_config[$module_name]['show_no_image'];
 
@@ -80,18 +79,18 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 
 			$end_publtime = $item['publtime'];
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array[] = $item;
 		}
 		$db->sql_freeresult( $query );
 		unset( $query, $row );
 
-		$item_array_other = array( );
+		$item_array_other = array();
 		$query = $db->sql_query( "SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `id` IN (SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid . ") AND `publtime` < " . $end_publtime . " ORDER BY `publtime` DESC LIMIT 0," . $st_links . "" );
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array_other[] = $item;
 		}
 
@@ -109,12 +108,13 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 		{
 			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 		}
-		include (NV_ROOTDIR . '/includes/header.php');
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
-		include (NV_ROOTDIR . '/includes/footer.php');
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 
-$redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+$redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
+
 ?>

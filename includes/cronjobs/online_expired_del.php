@@ -19,12 +19,21 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 function cron_online_expired_del()
 {
 	global $db;
-	$_query = $db->sql_query( "SELECT `session_id` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` < " . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME) );
-	while( $row = $db->sql_fetch_assoc( $_query ) )
-	{
-		nv_deletefile( NV_ROOTDIR . "/" . NV_SESSION_SAVE_PATH . "/sess_" . $row['session_id'] );
-	}
 	$db->sql_query( "DELETE FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` < " . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME) );
+
+	$dir = NV_ROOTDIR . "/" . NV_SESSION_SAVE_PATH;
+	if( $dh = opendir( $dir ) )
+	{
+		$timedel = NV_CURRENTTIME - 86400;
+		while( ($file = readdir( $dh )) !== false )
+		{
+			if( preg_match( "/^sess\_([a-z0-9]+)$/", $file ) AND filemtime( $dir . '/' . $file ) < $timedel )
+			{
+				unlink( $dir . '/' . $file );
+			}
+		}
+		closedir( $dh );
+	}
 	return true;
 }
 

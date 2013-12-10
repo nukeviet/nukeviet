@@ -36,7 +36,7 @@ if( ! empty( $savecat ) )
 
 	$groups = $nv_Request->get_typed_array( 'groups_view', 'post', 'int', array() );
 	$groups = array_intersect( $groups, array_keys( $groups_list ) );
-	$groups_view = implode( ",", $groups );
+	$groups_view = implode( ',', $groups );
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
@@ -53,7 +53,7 @@ if( ! empty( $savecat ) )
 	{
 		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
 		{
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
 		}
 	}
@@ -70,7 +70,6 @@ if( ! empty( $savecat ) )
 		$newcatid = ( int )$db->sql_query_insert_id( $sql );
 		if( $newcatid > 0 )
 		{
-			$db->sql_freeresult();
 			nv_create_table_rows( $newcatid );
 			nv_fix_cat_order();
 
@@ -81,7 +80,7 @@ if( ! empty( $savecat ) )
 
 			nv_del_moduleCache( $module_name );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid'] );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
 		}
 		else
@@ -92,11 +91,8 @@ if( ! empty( $savecat ) )
 	elseif( $catid > 0 and $title != '' )
 	{
 		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`=" . $db->dbescape( $image ) . ", `viewdescription`=" . $db->dbescape( $viewdescription ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $catid;
-		$db->sql_query( $sql );
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_freeresult();
-
 			if( $parentid != $parentid_old )
 			{
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
@@ -110,14 +106,13 @@ if( ! empty( $savecat ) )
 			}
 
 			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
 		}
 		else
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 	else
 	{
@@ -145,7 +140,7 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	{
 		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
 		{
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $parentid );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
 		}
 	}
@@ -158,7 +153,7 @@ else
 	$caption = $lang_module['add_cat'];
 	$array_in_cat = array();
 }
-$groups_view = explode( ",", $groups_view );
+$groups_view = explode( ',', $groups_view );
 
 $array_cat_list = array();
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
@@ -222,9 +217,9 @@ if( ! empty( $array_cat_list ) )
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
-$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
-$xtpl = new XTemplate( "cat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -291,7 +286,7 @@ if( ! empty( $array_cat_list ) )
 		$xtpl->parse( 'main.content.groups_views' );
 	}
 
-	$xtpl->assign( 'hidediv', $who_view == 3 ? "visibility:visible;display:block;" : "visibility:hidden;display:none;" );
+	$xtpl->assign( 'hidediv', $who_view == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
 
 	$xtpl->parse( 'main.content' );
 }
@@ -299,8 +294,8 @@ if( ! empty( $array_cat_list ) )
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

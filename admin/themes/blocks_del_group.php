@@ -15,7 +15,7 @@ $array_bid = explode( ',', $list );
 $array_bid = array_map( "intval", $array_bid );
 
 $array_expression = array();
-$result = $db->sql_query( "SELECT `bid`, `theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid` in (" . implode( ",", $array_bid ) . ")" );
+$result = $db->sql_query( "SELECT `bid`, `theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid` in (" . implode( ',', $array_bid ) . ")" );
 
 while( list( $bid_i, $theme_i, $position_i ) = $db->sql_fetchrow( $result ) )
 {
@@ -28,8 +28,8 @@ if( ! empty( $array_expression ) )
 	{
 		foreach( $array_data_i as $position => $array_position )
 		{
-			$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid` in (" . implode( ",", $array_position ) . ")" );
-			$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` in (" . implode( ",", $array_position ) . ")" );
+			$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid` in (" . implode( ',', $array_position ) . ")" );
+			$db->sql_query( "DELETE FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid` in (" . implode( ',', $array_position ) . ")" );
 
 			$weight = 0;
 			$result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme_i . "' AND position='$position' ORDER BY weight ASC" );

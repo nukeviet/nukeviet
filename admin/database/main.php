@@ -22,9 +22,9 @@ if( $nv_Request->isset_request( 'tab', 'get' ) and preg_match( "/^(" . $db_confi
 }
 
 $database = array();
-$database['db_host_info'] = mysql_get_host_info();
-$database['db_sql_version'] = $db->sql_version;
-$database['db_proto_info'] = mysql_get_proto_info();
+//$database['db_host_info'] = mysql_get_host_info();
+$database['db_sql_version'] = $db->sql_version();
+//$database['db_proto_info'] = mysql_get_proto_info();
 $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;
@@ -50,8 +50,8 @@ $contents = call_user_func( "main_theme", $contents );
 
 $page_title = $lang_module['main'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

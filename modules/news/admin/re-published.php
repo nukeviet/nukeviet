@@ -12,15 +12,15 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 'checkss', 'get' ) == md5( $global_config['sitekey'] . session_id() ) )
 {
 	$listid = $nv_Request->get_string( 'listid', 'get' );
-	$id_array = array_map( "intval", explode( ",", $listid ) );
+	$id_array = array_map( "intval", explode( ',', $listid ) );
 
 	$publ_array = array();
 
-	$sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ",", $id_array ) . ")";
+	$sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ',', $id_array ) . ")";
 	$result = $db->sql_query( $sql );
 	while( list( $id, $listcatid, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
 	{
-		$arr_catid = explode( ",", $listcatid );
+		$arr_catid = explode( ',', $listcatid );
 
 		$check_permission = false;
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )
@@ -98,7 +98,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 	nv_set_status_module();
 }
 
-Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "" );
+Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '' );
 die();
 
 ?>

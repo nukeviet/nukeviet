@@ -52,15 +52,30 @@
 				<td><strong>{LANG.show_no_image}</strong></td>
 				<td><input type="checkbox" value="1" name="show_no_image"{SHOW_NO_IMAGE}/></td>
 			</tr>
-
 			<tr>
 				<td><strong>{LANG.showhometext}</strong></td>
 				<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 			</tr>
+            
+			<tr>
+				<td><strong>{LANG.socialbutton}</strong></td>
+				<td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
+			</tr>            
 			<tr>
 				<td><strong>{LANG.activecomm}</strong></td>
-				<td><input type="checkbox" value="1" name="activecomm"{ACTIVECOMM}/></td>
+				<td>
+                	<select name="activecomm">
+                        <!-- BEGIN: activecomm -->
+                        <option value="{ACTIVECOMM.key}"{ACTIVECOMM.selected}>{ACTIVECOMM.title}</option>
+                        <!-- END: activecomm -->
+                    </select>
+            	</td>
 			</tr>
+			<tr>
+				<td><strong>{LANG.facebookAppID}</strong></td>
+				<td><input class="w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/>{LANG.facebookAppIDNote}</td>
+			</tr>            
+            
 			<tr>
 				<td><strong>{LANG.setting_auto_postcomm}</strong></td>
 				<td><input type="checkbox" value="1" name="auto_postcomm"{AUTO_POSTCOMM}/></td>
@@ -68,16 +83,26 @@
 			<tr>
 				<td><strong>{LANG.setting_setcomm}</strong></td>
 				<td>
-				<select name="setcomm">
-					<!-- BEGIN: setcomm -->
-					<option value="{SETCOMM.key}"{SETCOMM.selected}>{SETCOMM.title}</option>
-					<!-- END: setcomm -->
-				</select></td>
+                    <select name="setcomm">
+                        <!-- BEGIN: setcomm -->
+                        <option value="{SETCOMM.key}"{SETCOMM.selected}>{SETCOMM.title}</option>
+                        <!-- END: setcomm -->
+                    </select>
+                </td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.emailcomm}</strong></td>
 				<td><input type="checkbox" value="1" name="emailcomm"{EMAILCOMM}/></td>
 			</tr>
+			<tr>
+				<td><strong>{LANG.allowed_rating_point}</strong></td>
+				<td>
+				<select name="allowed_rating_point">
+					<!-- BEGIN: allowed_rating_point -->
+					<option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
+					<!-- END: allowed_rating_point -->
+				</select></td>
+			</tr>            
 			<tr>
 				<td><strong>{LANG.structure_image_upload}</strong></td>
 				<td>

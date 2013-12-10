@@ -134,7 +134,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 	die();
 }
 
@@ -206,7 +206,7 @@ foreach( $array_who_upload as $key => $who )
 	);
 }
 
-$upload_filetype = ! empty( $array_config['upload_filetype'] ) ? explode( ",", $array_config['upload_filetype'] ) : array();
+$upload_filetype = ! empty( $array_config['upload_filetype'] ) ? explode( ',', $array_config['upload_filetype'] ) : array();
 $array_config['upload_filetype'] = array();
 if( ! empty( $array_exts ) )
 {
@@ -220,7 +220,7 @@ if( ! empty( $array_exts ) )
 	}
 }
 
-$groups_addfile = ! empty( $array_config['groups_addfile'] ) ? explode( ",", $array_config['groups_addfile'] ) : array();
+$groups_addfile = ! empty( $array_config['groups_addfile'] ) ? explode( ',', $array_config['groups_addfile'] ) : array();
 $array_config['groups_addfile'] = array();
 if( ! empty( $groups_list ) )
 {
@@ -234,7 +234,7 @@ if( ! empty( $groups_list ) )
 	}
 }
 
-$groups_upload = ! empty( $array_config['groups_upload'] ) ? explode( ",", $array_config['groups_upload'] ) : array();
+$groups_upload = ! empty( $array_config['groups_upload'] ) ? explode( ',', $array_config['groups_upload'] ) : array();
 $array_config['groups_upload'] = array();
 if( ! empty( $groups_list ) )
 {
@@ -248,7 +248,7 @@ if( ! empty( $groups_list ) )
 	}
 }
 
-$groups_autocomment = ! empty( $array_config['groups_autocomment'] ) ? explode( ",", $array_config['groups_autocomment'] ) : array();
+$groups_autocomment = ! empty( $array_config['groups_autocomment'] ) ? explode( ',', $array_config['groups_autocomment'] ) : array();
 $array_config['groups_autocomment'] = array();
 if( ! empty( $groups_list ) )
 {
@@ -262,8 +262,8 @@ if( ! empty( $groups_list ) )
 	}
 }
 
-$xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );
+$xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 $xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
@@ -325,8 +325,8 @@ if( ! empty( $array_config['groups_autocomment'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

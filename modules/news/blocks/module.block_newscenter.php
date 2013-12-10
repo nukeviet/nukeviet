@@ -11,20 +11,20 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module;
 
-$xtpl = new XTemplate( "block_newscenter.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'lang', $lang_module );
 
-$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , 4";
+$sql = 'SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , 4';
 $list = nv_db_cache( $sql, 'id', $module_name );
 
 $i = 1;
 foreach( $list as $row )
 {
-	$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 	$row['hometext'] = nv_clean60( strip_tags( $row['hometext'] ), 360 );
 	if( $i == 1 )
 	{
-		$image = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $row['homeimgfile'];
+		$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
 
 		if( $row['homeimgfile'] != '' and file_exists( $image ) )
 		{
@@ -37,17 +37,17 @@ foreach( $list as $row )
 			if( $imginfo['width'] > $width or $imginfo['height'] > $height )
 			{
 				$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', $module_name . '_' . $row['id'] . '_\1_' . $width . '-' . $height . '\2', $basename );
-				if( file_exists( NV_ROOTDIR . "/" . NV_TEMP_DIR . '/' . $basename ) )
+				if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) )
 				{
 					$row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
 				}
 				else
 				{
-					require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+					require_once NV_ROOTDIR . '/includes/class/image.class.php';
 					$_image = new image( $image, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 					$_image->resizeXY( $width, $height );
 					$_image->save( NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename );
-					if( file_exists( NV_ROOTDIR . "/" . NV_TEMP_DIR . '/' . $basename ) )
+					if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) )
 					{
 						$row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
 					}

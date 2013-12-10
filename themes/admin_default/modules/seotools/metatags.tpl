@@ -19,6 +19,7 @@
 				<td>
 				<select name="metaGroupsName[]">
 					<option value="name"{DATA.n_selected}>name</option>
+					<option value="property"{DATA.p_selected}>property</option>
 					<option value="http-equiv"{DATA.h_selected}>http-equiv</option>
 				</select></td>
 				<td><input class="w200" type="text" value="{DATA.value}" name="metaGroupsValue[]" /></td>

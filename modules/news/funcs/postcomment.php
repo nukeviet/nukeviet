@@ -38,7 +38,7 @@ else
 
 $contents = '';
 
-if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != '' and nv_check_valid_email( $email ) == '' and $code != "" and $content != "" )
+if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $name != '' and nv_check_valid_email( $email ) == '' and $code != "" and $content != "" )
 {
 	$timeout = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'cookie', 0 );
 	if( ! nv_capcha_txt( $code ) )
@@ -51,9 +51,9 @@ if( $module_config[$module_name]['activecomm'] and $id > 0 and $checkss == md5( 
 		$row = $db->sql_fetchrow( $query );
 		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 		{
-			$array_catid = explode( ",", $row['listcatid'] );
+			$array_catid = explode( ',', $row['listcatid'] );
 			$content = nv_nl2br( $content, '<br />' );
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `userid`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ",  " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
+			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `userid`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ", " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
 			$result = $db->sql_query( $sql );
 			if( $result )
 			{
@@ -96,8 +96,8 @@ else
 	$contents = "ERR_" . $lang_module['comment_unsuccess'];
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

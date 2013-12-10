@@ -8,7 +8,7 @@
 * @Createdate Aug 03, 2013, 02:37:28 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -80,7 +80,7 @@ $lang_module['metaTagsNote'] = 'The Meta-Tags: "%s" is determined automatically'
 $lang_module['metaTagsVar'] = 'Accept the following variables';
 $lang_module['metaTagsContent'] = 'Contenu';
 $lang_module['global_statistics'] = 'Config. de Statistiques';
-$lang_module['statistic'] = 'Activer  les statistiques';
+$lang_module['statistic'] = 'Activer les statistiques';
 $lang_module['statistics_timezone'] = 'Fuseau horaire pour les statistiques';
 $lang_module['googleAnalyticsSetDomainName_title'] = 'Domain properties when declared with Google Analytics';
 $lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';

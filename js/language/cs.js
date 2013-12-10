@@ -40,9 +40,10 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
+var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
 
 //contact
 var nv_fullname = "Full name entered is not valid.";
 var nv_title = "Title not valid.";
 var nv_content = "The content is not empty.";
-var nv_code = "Capcha not valid."; 
+var nv_code = "Capcha not valid.";

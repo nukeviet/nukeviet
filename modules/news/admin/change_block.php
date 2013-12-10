@@ -20,7 +20,7 @@ if( $bid > 0 )
 {
 	if( $del_list != '' )
 	{
-		$array_id = array_map( "intval", explode( ",", $del_list ) );
+		$array_id = array_map( "intval", explode( ',', $del_list ) );
 		foreach( $array_id as $id )
 		{
 			if( $id > 0 )
@@ -50,7 +50,7 @@ if( $bid > 0 )
 					$db->sql_query( $sql );
 				}
 
-				$db->sql_freeresult();
+				$db->sql_freeresult( $result );
 				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
 				$db->sql_query( $sql );
 
@@ -68,8 +68,8 @@ if( $bid > 0 )
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $content;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

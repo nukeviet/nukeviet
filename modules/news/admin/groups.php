@@ -50,8 +50,7 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid'] );
-			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -61,35 +60,31 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` =  " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
-		$db->sql_query( $sql );
-
-		if( $db->sql_affectedrows() > 0 )
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
-			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $bid > 0 )
 {
-	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `image`, `keywords`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
+	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `image`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
-$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 155 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
-$xtpl = new XTemplate( "groups.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'groups.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -126,8 +121,8 @@ if( empty( $alias ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
