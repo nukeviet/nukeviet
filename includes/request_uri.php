@@ -28,7 +28,7 @@ if( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $g
 	$_GET[NV_NAME_VARIABLE] = 'page';
 	$_GET[NV_OP_VARIABLE] = $matches[1];
 }
-elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/]+)(' . nv_preg_quote( $global_config['rewrite_endurl'] ) . '|' . nv_preg_quote( $global_config['rewrite_exturl'] ) . ')$/i', $request_uri, $matches ) )
+elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/\+]+)(' . nv_preg_quote( $global_config['rewrite_endurl'] ) . '|' . nv_preg_quote( $global_config['rewrite_exturl'] ) . ')$/i', $request_uri, $matches ) )
 {
 	if( $matches[2] == $global_config['rewrite_exturl'] ) define( 'NV_REWRITE_EXTURL', true );
 
