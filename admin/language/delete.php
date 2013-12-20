@@ -14,9 +14,9 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
-$page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
+$page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
 
-if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . session_id() ) )
+if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'deleteallfile' . session_id() ) )
 {
 	if( ! empty( $dirlang ) )
 	{
@@ -61,7 +61,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 				$array_filename[] = $arrcrt[1];
 			}
 
-			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/' );
 
 			foreach( $blocks as $file_i )
 			{
@@ -90,9 +90,9 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 
 		if( $err == 0 )
 		{
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` DROP `author_" . $dirlang . "`" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `lang_" . $dirlang . "`" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `update_" . $dirlang . "`" );
+			$db->exec( 'ALTER TABLE `' . NV_LANGUAGE_GLOBALTABLE . '_file` DROP `author_' . $dirlang . '`' );
+			$db->exec( 'ALTER TABLE `' . NV_LANGUAGE_GLOBALTABLE . '` DROP `lang_' . $dirlang . '`' );
+			$db->exec( 'ALTER TABLE `' . NV_LANGUAGE_GLOBALTABLE . '` DROP `update_' . $dirlang . '`' );
 
 			$contents = $lang_module['nv_lang_deleteok'];
 		}

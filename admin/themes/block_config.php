@@ -30,15 +30,15 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 
 		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name ) )
 		{
-			$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_INTERFACE . "/block." . $file_name;
+			$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name;
 		}
 		elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name ) )
 		{
-			$path_file_lang = NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/block." . $file_name;
+			$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name;
 		}
 		elseif( file_exists( NV_ROOTDIR . '/language/en/block.' . $file_name ) )
 		{
-			$path_file_lang = NV_ROOTDIR . "/language/en/block." . $file_name;
+			$path_file_lang = NV_ROOTDIR . '/language/en/block.' . $file_name;
 		}
 	}
 	elseif( isset( $site_mods[$module] ) )
@@ -97,8 +97,7 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 
 					if( $bid > 0 )
 					{
-						$row_config = $db->sql_fetchrow( $db->sql_query( "SELECT `module`, `file_name`, `config` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `bid`=" . $bid ) );
-
+						$row_config = $db->exec( 'SELECT `module`, `file_name`, `config` FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `bid`=' . $bid )->fetch();
 						if( $row_config['file_name'] == $file_name and $row_config['module'] == $module )
 						{
 							$data_block = unserialize( $row_config['config'] );

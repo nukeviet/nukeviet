@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['upload_manager'];
 $contents = '';
 
-$path = ( defined( 'NV_IS_SPADMIN' ) ) ? "" : NV_UPLOADS_DIR;
+$path = ( defined( 'NV_IS_SPADMIN' ) ) ? '' : NV_UPLOADS_DIR;
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', $path ) );
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'get', $path ) );
 $type = $nv_Request->get_string( 'type', 'get' );
@@ -21,7 +21,7 @@ $area = htmlspecialchars( trim( $nv_Request->get_string( 'area', 'get' ) ), ENT_
 $alt = htmlspecialchars( trim( $nv_Request->get_string( 'alt', 'get' ) ), ENT_QUOTES );
 
 if( empty( $currentpath ) ) $currentpath = NV_UPLOADS_DIR;
-if( $type != "image" and $type != "flash" ) $type = "file";
+if( $type != 'image' and $type != 'flash' ) $type = 'file';
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 if( $popup )

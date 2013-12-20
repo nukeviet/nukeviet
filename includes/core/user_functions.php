@@ -108,15 +108,13 @@ function nv_blocks_content( $sitecontent )
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
-			$row['title'] = $db->unfixdb( $row['title'] );
-
 			if( $row['title'] == $module_name and $row['show_func'] )
 			{
 				$in[] = $row['func_id'];
 			}
 		}
 
-		$_result = $db->sql_query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1
+		$_result = $db->query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1
 			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2
 			 ON t1.bid = t2.bid
 			 WHERE t2.func_id IN (" . implode( ',', $in ) . ")
@@ -124,13 +122,8 @@ function nv_blocks_content( $sitecontent )
 			 AND t1.active=1
 			 ORDER BY t2.weight ASC" );
 
-		while( $_row = $db->sql_fetch_assoc( $_result ) )
+		while( $_row = $_result->fetch() )
 		{
-			$_row['module'] = $db->unfixdb( $_row['module'] );
-			$_row['file_name'] = $db->unfixdb( $_row['file_name'] );
-			$_row['template'] = $db->unfixdb( $_row['template'] );
-			$_row['position'] = $db->unfixdb( $_row['position'] );
-
 			// Cau hinh block
 			$block_config = ( ! empty( $_row['config'] ) ) ? unserialize( $_row['config'] ) : array();
 			$block_config['bid'] = $_row['bid'];
@@ -158,7 +151,7 @@ function nv_blocks_content( $sitecontent )
 
 		if( isset( $cache[$module_info['funcs'][$op]['func_id']] ) ) $blocks = $cache[$module_info['funcs'][$op]['func_id']];
 
-		$db->sql_freeresult( $_result );
+		$_result->closeCursor();
 		$cache = serialize( $cache );
 		nv_set_cache( $cache_file, $cache );
 
@@ -252,8 +245,7 @@ function nv_blocks_content( $sitecontent )
 		}
 		if( ! empty( $unact ) )
 		{
-			$sql = 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET `active`=0 WHERE `bid`IN (' . implode( ',', $unact ) . ') LIMIT ' . sizeof( $unact );
-			$db->sql_query( $sql );
+			$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET `active`=0 WHERE `bid` IN (' . implode( ',', $unact ) . ')' );
 			unlink( $cache_file );
 		}
 	}
@@ -284,16 +276,16 @@ function nv_html_meta_tags()
 	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $id_profile_googleplus;
 
 	$return = '';
-	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : "" ) );
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : '' ) );
 
 	if ( empty( $site_description ) )
  {
  $ds = array();
  if ( ! empty( $page_title ) ) $ds[] = $page_title;
- if ( $op != "main" ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+ if ( $op != 'main' ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
  $ds[] = $module_info['custom_title'];
  $ds[] = $client_info['selfurl'];
- $site_description = implode( " - ", $ds );
+ $site_description = implode( ' - ', $ds );
  }
 	elseif ( $site_description == 'no' )
 	{
@@ -364,7 +356,7 @@ function nv_html_meta_tags()
 				$metatags[] = $mt['meta_item'];
 			foreach( $metatags as $meta )
 			{
-				if( ( $meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match( "/^[a-zA-Z0-9\-\_\.\:]+$/", $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
+				if( ( $meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match( '/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
 					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
 				}
@@ -380,9 +372,9 @@ function nv_html_meta_tags()
 
 	if( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
 
-	if( substr( $canonicalUrl, 0, 4 ) != "http" )
+	if( substr( $canonicalUrl, 0, 4 ) != 'http' )
 	{
-		if( substr( $canonicalUrl, 0, 1 ) != "/" ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
+		if( substr( $canonicalUrl, 0, 1 ) != '/' ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
 
 		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
 	}
@@ -408,7 +400,7 @@ function nv_html_meta_tags()
 	{
 		foreach( $meta_property as $key => $value )
 		{
-			if( ! preg_match("/^og\:/", $key) AND ! empty( $value ) )
+			if( ! preg_match('/^og\:/', $key) AND ! empty( $value ) )
 			{
 				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
 			}
@@ -473,7 +465,7 @@ function nv_html_css()
 		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
 	}
 
-	return "";
+	return '';
 }
 
 /**
@@ -621,7 +613,7 @@ function nv_admin_menu()
 {
 	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head;
 
-	$block_theme = "default";
+	$block_theme = 'default';
 
 	$xtpl = new XTemplate( 'admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system' );
 	$xtpl->assign( 'GLANG', $lang_global );
@@ -649,10 +641,10 @@ function nv_admin_menu()
 		foreach( $db->query_strs as $key => $field )
 		{
 			$data = array(
-				"class" => ( $key % 2 ) ? " highlight" : " normal",
-				"imgsrc" => ( $field[1] ) ? NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/good.png" : NV_BASE_SITEURL . "themes/" . $block_theme . "/images/icons/bad.png",
-				"imgalt" => ( $field[1] ) ? $lang_global['ok'] : $lang_global['fail'],
-				"queries" => nv_htmlspecialchars( $field[0] )
+				'class' => ( $key % 2 ) ? ' highlight' : ' normal',
+				'imgsrc' => ( $field[1] ) ? NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/good.png' : NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/bad.png',
+				'imgalt' => ( $field[1] ) ? $lang_global['ok'] : $lang_global['fail'],
+				'queries' => nv_htmlspecialchars( $field[0] )
 			);
 			$xtpl->assign( 'DATA', $data );
 			$xtpl->parse( 'main.is_spadadmin3.queries' );
@@ -682,7 +674,7 @@ function nv_groups_list_pub()
 {
 	global $db, $db_config, $global_config;
 
-	$query = "SELECT `group_id`, `title`, `exp_time`, `public` FROM `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` WHERE `act`=1 AND (`idsite` = " . $global_config['idsite'] . " OR (`idsite` =0 AND `siteus` = 1)) ORDER BY `idsite`, `weight`";
+	$query = 'SELECT `group_id`, `title`, `exp_time`, `public` FROM `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` WHERE `act`=1 AND (`idsite` = ' . $global_config['idsite'] . ' OR (`idsite` =0 AND `siteus` = 1)) ORDER BY `idsite`, `weight`';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -703,8 +695,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_GROUPS_GLOBALTABLE . "` SET `act`='0' WHERE `group_id` IN (" . implode( ',', $reload ) . ")";
-		$db->sql_query( $sql );
+		$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` SET `act`=0 WHERE `group_id` IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 

@@ -14,20 +14,16 @@ $res = false;
 
 if( ! empty( $id ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', "id " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', 'id ' . $id, $admin_info['userid'] );
 
-	$sql = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
-	$result = $db->sql_query( $sql );
-
-	if( $db->sql_numrows( $result ) == 1 )
+	$sql = 'SELECT `act` FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id`=' . $id . ' AND `is_sys`=0';
+	if( $db->query( $sql )->rowCount() )
 	{
-		$sql = "DELETE FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id` = " . $id;
-		$res = $db->sql_query( $sql );
+		$res = $db->exec( 'DELETE FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id` = ' . $id );
 
-		$db->sql_query( "LOCK TABLE " . NV_CRONJOBS_GLOBALTABLE . " WRITE" );
-		$db->sql_query( "REPAIR TABLE " . NV_CRONJOBS_GLOBALTABLE );
-		$db->sql_query( "OPTIMIZE TABLE " . NV_CRONJOBS_GLOBALTABLE );
-		$db->sql_query( "UNLOCK TABLE " . NV_CRONJOBS_GLOBALTABLE );
+		$db->exec( 'LOCK TABLE ' . NV_CRONJOBS_GLOBALTABLE . ' WRITE' );
+		$db->exec( 'OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE );
+		$db->exec( 'UNLOCK TABLE ' . NV_CRONJOBS_GLOBALTABLE );
 	}
 }
 

@@ -73,7 +73,7 @@ sort( $timezone_array );
 foreach( $timezone_array as $site_timezone_i )
 {
 	$xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 	$xtpl->parse( 'main.timezone' );
 }
@@ -94,6 +94,7 @@ foreach( $googleAnalyticsMethod as $key => $title )
 }
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
 include NV_ROOTDIR . '/includes/footer.php';

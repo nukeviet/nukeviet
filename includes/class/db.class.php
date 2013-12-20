@@ -1,12 +1,14 @@
 <?php
 
-
 /**
  * @Project NUKEVIET 3.x
  * @Author VuThao (vuthao27@gmail.com)
  * @Copyright (C) 2013 VuThao. All rights reserved
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
+
+if ( defined( 'NV_CLASS_SQL_DB_PHP' ) ) return;
+define( 'NV_CLASS_SQL_DB_PHP', true );
 
 /**
  * extends for PDO
@@ -58,6 +60,7 @@ class sql_db extends pdo
 		try
 		{
 			parent::__construct( $dsn . ';charset=utf8', $config['dbuname'], $config['dbpass'], $driver_options );
+			$this->exec( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
 			$this->connect = 1;
 		}
 		catch( PDOException $e )

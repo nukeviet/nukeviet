@@ -9,13 +9,13 @@
 
 if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
-$contents = "Error Access!!!";
+$contents = 'Error Access!!!';
 
 $checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 if( $checksess == md5( $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/install/update_data.php' ) )
 {
 	$contents = '';
-	$list_file_docs = nv_scandir( NV_ROOTDIR . '/install', "/^update_docs_([a-z]{2})\.html$/" );
+	$list_file_docs = nv_scandir( NV_ROOTDIR . '/install', '/^update_docs_([a-z]{2})\.html$/' );
 
 	// Xoa cac file docs
 	foreach( $list_file_docs as $docsfile )
@@ -46,7 +46,7 @@ if( $checksess == md5( $global_config['sitekey'] . session_id() ) and file_exist
 	}
 
 	// Xoa file log
-	$list_file_logs = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, "/^config_update_NVUD([A-Z0-9]+)\.php$/" );
+	$list_file_logs = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, '/^config_update_NVUD([A-Z0-9]+)\.php$/' );
 	foreach( $list_file_logs as $logsfile )
 	{
 		$check_del = nv_deletefile( NV_ROOTDIR . '/' . NV_DATADIR . '/' . $logsfile );

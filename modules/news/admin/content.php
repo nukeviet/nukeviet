@@ -582,7 +582,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid'] );
 
 				$ct_query = array();
-				$ct_query[] = ( int )$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . "` SET
+				$ct_query[] = $db->exec( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . "` SET
 					`bodyhtml`=" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
 					`sourcetext`=" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
 					`imgposition`=" . intval( $rowcontent['imgposition'] ) . ",
@@ -599,13 +599,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$array_cat_diff = array_diff( $array_cat_old, $array_cat_new );
 				foreach( $array_cat_diff as $catid )
 				{
-					$ct_query[] = ( int )$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `id` = ' . $rowcontent['id'] );
+					$ct_query[] = $db->exec( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` WHERE `id` = ' . $rowcontent['id'] );
 				}
 				foreach( $array_cat_new as $catid )
 				{
-					$ct_query[] = ( int )$db->sql_query( 'REPLACE INTO `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . $rowcontent['id'] );
+					$ct_query[] = $db->exec( 'REPLACE INTO `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . '` SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . $rowcontent['id'] );
 				}
-				$ct_query[] = ( int )$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_bodytext` SET `bodytext`=' . $db->dbescape_string( $rowcontent['bodytext'] ) . ' WHERE `id` =' . $rowcontent['id'] );
+				$ct_query[] = $db->exec( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_bodytext` SET `bodytext`=' . $db->dbescape_string( $rowcontent['bodytext'] ) . ' WHERE `id` =' . $rowcontent['id'] );
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
 					$error[] = $lang_module['errorsave'];
@@ -621,7 +621,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		{
 			foreach( $id_block_content as $bid_i )
 			{
-				$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
+				$db->exec( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
 			}
 			$id_block_content[] = 0;
 			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `id` = " . $rowcontent['id'] . " AND `bid` NOT IN (" . implode( ',', $id_block_content ) . ")" );

@@ -9,17 +9,16 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$cron_query = 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `act`=1 AND `start_time` <= ' . NV_CURRENTTIME . ' ORDER BY `is_sys` DESC';
-$cron_result = $db->sql_query( $cron_query );
+$cron_result = $db->query( 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `act`=1 AND `start_time` <= ' . NV_CURRENTTIME . ' ORDER BY `is_sys` DESC' );
 
-if( $db->sql_numrows( $cron_result ) )
+if( $cron_result->rowCount() )
 {
 	if( $sys_info['allowed_set_time_limit'] )
 	{
 		set_time_limit( 0 );
 	}
 
-	while( $cron_row = $db->sql_fetchrow( $cron_result ) )
+	while( $cron_row = $cron_result->fetch() )
 	{
 		$cron_allowed = false;
 		if( empty( $cron_row['interval'] ) )
@@ -45,8 +44,7 @@ if( $db->sql_numrows( $cron_result ) )
 			}
 			if( ! nv_function_exists( $cron_row['run_func'] ) )
 			{
-				$sql = 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=0 WHERE `id`=' . $cron_row['id'];
-				$db->sql_query( $sql );
+				$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=0 WHERE `id`=' . $cron_row['id'] );
 				continue;
 			}
 
@@ -62,25 +60,21 @@ if( $db->sql_numrows( $cron_result ) )
 			$result2 = call_user_func_array( $cron_row['run_func'], $params );
 			if( ! $result2 )
 			{
-				$sql = 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=0 WHERE `id`=' . $cron_row['id'];
-				$db->sql_query( $sql );
+				$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=0 WHERE `id`=' . $cron_row['id'] );
 			}
 			else
 			{
 				if( $cron_row['del'] )
 				{
-					$sql = 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id` = ' . $cron_row['id'];
-					$db->sql_query( $sql );
+					$db->exec( 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id` = ' . $cron_row['id'] );
 				}
 				elseif( empty( $cron_row['interval'] ) )
 				{
-					$sql = 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=1 WHERE `id`=' . $cron_row['id'];
-					$db->sql_query( $sql );
+					$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=0, `last_time`=' . NV_CURRENTTIME . ', `last_result`=1 WHERE `id`=' . $cron_row['id'] );
 				}
 				else
 				{
-					$sql = 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `last_time`=' . NV_CURRENTTIME . ', `last_result`=1 WHERE `id`=' . $cron_row['id'];
-					$db->sql_query( $sql );
+					$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_CRONJOBS_GLOBALTABLE . '` SET `last_time`=' . NV_CURRENTTIME . ', `last_result`=1 WHERE `id`=' . $cron_row['id'] );
 				}
 			}
 			unlink( $check_run_cronjobs );

@@ -10,7 +10,7 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $allow_func = array( 'main', 'smtp' );
-if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
+if( defined( 'NV_IS_GODADMIN' ) OR ( defined( 'NV_IS_SPADMIN' ) AND $global_config['idsite'] > 0 ) )
 {
 	$allow_func[] = 'system';
 }
@@ -28,9 +28,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 }
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_settings']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_settings']
 );
 
 unset( $page_title, $select_options );
@@ -79,7 +79,7 @@ function nv_admin_add_theme( $contents )
 		$xtpl->parse( 'main.min' );
 	}
 
-	$xtpl->assign( 'DELETE', ! empty( $contents['del'][1] ) ? " checked=\"checked\"" : "" );
+	$xtpl->assign( 'DELETE', ! empty( $contents['del'][1] ) ? ' checked="checked"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -93,7 +93,7 @@ function nv_admin_add_theme( $contents )
  */
 function main_theme( $contents )
 {
-	if( empty( $contents ) ) return "";
+	if( empty( $contents ) ) return '';
 
 	global $global_config, $module_file;
 

@@ -21,14 +21,15 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 
 	if( empty( $title ) )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
-	$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `gid`=" . $gid;
-	if( ! $db->exec( $sql ) )
+	$sth = $db->prepare( 'UPDATE `' . $db_config['prefix'] . '_googleplus` SET `title` = :title, `edit_time`=' . NV_CURRENTTIME . ' WHERE `gid`=' . $gid );
+	$sth->bindParam( ':title', $title, PDO::PARAM_STR );
+	if( ! $sth->execute() )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Them
@@ -41,21 +42,24 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 
 	if( empty( $title ) )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
 
-	$sql = "SELECT MAX(`weight`) FROM `" . $db_config['prefix'] . "_googleplus`";
-	list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
+	$weight = $db->query( 'SELECT MAX(`weight`) FROM `' . $db_config['prefix'] . '_googleplus`' )->fetchColumn();
 	$weight = intval( $weight ) + 1;
-	$query = "INSERT INTO `" . $db_config['prefix'] . "_googleplus`
-		(`gid`, `title`, `idprofile`, `weight`, `add_time`, `edit_time`) VALUES (
-		NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $idprofile ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-	if( ! $db->sql_query_insert_id( $query ) )
+	try
 	{
-		die( "NO" );
+		$sth = $db->prepare('INSERT INTO `' . $db_config['prefix'] . '_googleplus` (`title`, `idprofile`, `weight`, `add_time`, `edit_time`) VALUES ( :title, ' . $idprofile . ', ' . $weight . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ')');
+		$sth->bindParam( ':title', $title, PDO::PARAM_STR );
+		$sth->execute();
 	}
+	catch (PDOException $e)
+	{
+		die( 'NO' );
+	}
+
 	nv_del_moduleCache( 'seotools' );
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Chinh thu tu
@@ -66,26 +70,20 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	if( empty( $gid ) ) die( "NO" );
-
-	$query = "SELECT * FROM `" . $db_config['prefix'] . "_googleplus` WHERE `gid`=" . $gid;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$numrows = $db->query( 'SELECT * FROM `' . $db_config['prefix'] . '_googleplus` WHERE `gid`=' . $gid )->rowCount();
 	if( $numrows != 1 ) die( 'NO' );
 
-	$query = "SELECT `gid` FROM `" . $db_config['prefix'] . "_googleplus` WHERE `gid`!=" . $gid . " ORDER BY `weight` ASC";
-	$result = $db->sql_query( $query );
+	$query = 'SELECT `gid` FROM `' . $db_config['prefix'] . '_googleplus` WHERE `gid`!=' . $gid . ' ORDER BY `weight` ASC';
+	$result = $db->query( $query );
 	$weight = 0;
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `weight`=" . $weight . " WHERE `gid`=" . $row['gid'];
-		$db->sql_query( $sql );
+		$db->exec( 'UPDATE `' . $db_config['prefix'] . '_googleplus` SET `weight`=' . $weight . ' WHERE `gid`=' . $row['gid'] );
 	}
-	$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `weight`=" . $new_vid . " WHERE `gid`=" . $gid;
-	$db->sql_query( $sql );
-	die( "OK" );
+	$db->exec( 'UPDATE `' . $db_config['prefix'] . '_googleplus` SET `weight`=' . $new_vid . ' WHERE `gid`=' . $gid );
+	die( 'OK' );
 }
 
 // Xoa
@@ -95,32 +93,30 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 
-	list( $gid ) = $db->sql_fetchrow( $db->sql_query( "SELECT `gid` FROM `" . $db_config['prefix'] . "_googleplus` WHERE `gid`=" . $gid ) );
+	$gid = $db->query( 'SELECT `gid` FROM `' . $db_config['prefix'] . '_googleplus` WHERE `gid`=' . $gid )->fetchColumn();
 
 	if( $gid )
 	{
-		$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `gid`=0 WHERE `gid`='" . $gid . "'" );
+		$db->exec( 'UPDATE `' . NV_MODULES_TABLE . '` SET `gid`=0 WHERE `gid`=' . $gid );
 		nv_del_moduleCache( 'modules' );
 
-		$query = "DELETE FROM `" . $db_config['prefix'] . "_googleplus` WHERE `gid`=" . $gid;
+		$query = 'DELETE FROM `' . $db_config['prefix'] . '_googleplus` WHERE `gid`=' . $gid;
 		if( $db->exec( $query ) )
 		{
 			// fix weight question
-			$sql = "SELECT `gid` FROM `" . $db_config['prefix'] . "_googleplus` ORDER BY `weight` ASC";
-			$result = $db->sql_query( $sql );
+			$result = $db->query( 'SELECT `gid` FROM `' . $db_config['prefix'] . '_googleplus` ORDER BY `weight` ASC' );
 			$weight = 0;
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				++$weight;
-				$sql = "UPDATE `" . $db_config['prefix'] . "_googleplus` SET `weight`=" . $weight . " WHERE `gid`=" . $row['gid'];
-				$db->sql_query( $sql );
+				$db->exec( 'UPDATE `' . $db_config['prefix'] . '_googleplus` SET `weight`=' . $weight . ' WHERE `gid`=' . $row['gid'] );
 			}
-			$db->sql_freeresult( $result );
+			$result->closeCursor();
 			nv_del_moduleCache( 'seotools' );
-			die( "OK" );
+			die( 'OK' );
 		}
 	}
-	die( "NO" );
+	die( 'NO' );
 }
 
 // Change for module
@@ -130,13 +126,16 @@ if( $nv_Request->isset_request( 'changemod', 'post' ) )
 
 	$title = $nv_Request->get_title( 'changemod', 'post', 0 );
 
-	if( ! isset( $site_mods[$title] ) ) die( "NO" );
+	if( ! isset( $site_mods[$title] ) ) die( 'NO' );
 
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 
-	$db->sql_query( "UPDATE `" . NV_MODULES_TABLE . "` SET `gid`=" . $gid . " WHERE `title`='" . $title . "'" );
+	$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `gid`=' . $gid . ' WHERE `title`= :title' );
+	$sth->bindParam( ':title', $title, PDO::PARAM_STR );
+	$sth->execute();
+
 	nv_del_moduleCache( 'modules' );
-	die( "OK" );
+	die( 'OK' );
 }
 $xtpl = new XTemplate( 'googleplus.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -148,9 +147,8 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$array_googleplus = array();
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_googleplus` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
-	while( $row = $db->sql_fetch_assoc( $result ) )
+	$result = $db->query( 'SELECT * FROM `' . $db_config['prefix'] . '_googleplus` ORDER BY `weight` ASC' );
+	while( $row = $result->fetch() )
 	{
 		$array_googleplus[$row['gid']] = $row;
 	}
@@ -167,7 +165,7 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 
 			foreach( $array_googleplus as $gid => $grow )
 			{
-				$grow['selected'] = ( $gid == $row['gid'] ) ? " selected=\"selected\"" : "";
+				$grow['selected'] = ( $gid == $row['gid'] ) ? ' selected="selected"' : '';
 				$xtpl->assign( 'GOOGLEPLUS', $grow );
 				$xtpl->parse( 'main.module.loop.gid' );
 			}

@@ -363,13 +363,13 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 // Cap nhat Country moi
 if( ! empty( $newCountry ) )
 {
-	if( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+	if( $db->exec( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
 	{
 		$time_del = NV_CURRENTTIME - 604800;
-		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
-		$result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
+		$db->exec( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
+		$result = $db->query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
 		$array_ip_file = array();
-		while( $row = $db->sql_fetch_assoc( $result ) )
+		while( $row = $result->fetch() )
 		{
 			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
 		}

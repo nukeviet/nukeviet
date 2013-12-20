@@ -36,9 +36,13 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 {
 	$smtp_password = $array_config['smtp_password'];
 	$array_config['smtp_password'] = nv_base64_encode( $crypt->aes_encrypt( $smtp_password ) );
+
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 	nv_del_moduleCache( 'settings' );
 

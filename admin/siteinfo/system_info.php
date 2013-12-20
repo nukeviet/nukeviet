@@ -23,13 +23,13 @@ $info['website'] = array(
 		array( 'key' => $lang_module['site_cookie_domain'], 'value' => $global_config['cookie_domain'] ),
 		array( 'key' => $lang_module['site_cookie_path'], 'value' => $global_config['cookie_path'] ),
 		array( 'key' => $lang_module['site_session_path'], 'value' => $sys_info['sessionpath'] ),
-		array( 'key' => $lang_module['site_timezone'], 'value' => NV_SITE_TIMEZONE_NAME . ( NV_SITE_TIMEZONE_GMT_NAME != NV_SITE_TIMEZONE_NAME ? " (" . NV_SITE_TIMEZONE_GMT_NAME . ")" : "" ) )
+		array( 'key' => $lang_module['site_timezone'], 'value' => NV_SITE_TIMEZONE_NAME . ( NV_SITE_TIMEZONE_GMT_NAME != NV_SITE_TIMEZONE_NAME ? ' (' . NV_SITE_TIMEZONE_GMT_NAME . ')' : '' ) )
 	)
 );
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$global_config['version'] .= "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate\">" . $lang_module['checkversion'] . "</a>";
+	$global_config['version'] .= '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate">' . $lang_module['checkversion'] . '</a>';
 }
 
 $info['server'] = array(
@@ -58,16 +58,16 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 			array( 'key' => NV_CACHEDIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_CACHEDIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_UPLOADS_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_UPLOADS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_TEMP_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/data_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/data_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/dump_backup", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/error_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/error_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/error_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/error_logs/errors256", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/error_logs/errors256" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/error_logs/old", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/error_logs/old" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/error_logs/tmp", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/error_logs/tmp" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/ip_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/ip_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/ref_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/ref_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . "/voting_logs", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . "/voting_logs" ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_FILES_DIR . "/css", 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) )
+			array( 'key' => NV_LOGS_DIR . '/data_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/dump_backup', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/error_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/error_logs/errors256', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/errors256' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/error_logs/old', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/old' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/error_logs/tmp', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/tmp' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/ip_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/ref_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/voting_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_FILES_DIR . '/css', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) )
 		)
 	);
 }

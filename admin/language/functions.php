@@ -13,9 +13,9 @@ unset( $page_title, $select_options );
 $select_options = array();
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_language']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_language']
 );
 
 $allow_func = array( 'main' );
@@ -37,8 +37,8 @@ if( empty( $global_config['idsite'] ) )
 }
 define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
 
-$allowed_html_tags = array_map( "trim", explode( ',', ALLOWED_HTML_LANG ) );
-$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+$allowed_html_tags = array_map( 'trim', explode( ',', ALLOWED_HTML_LANG ) );
+$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
 
 define( 'NV_ALLOWED_HTML_LANG', $allowed_html_tags );
 define( 'NV_IS_FILE_LANG', true );
@@ -57,12 +57,12 @@ function nv_admin_add_field_lang( $dirlang )
 
 	if( isset( $language_array[$dirlang] ) and ! empty( $language_array[$dirlang] ) )
 	{
-		$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
 		$add_field = true;
 
-		while( $row = $db->sql_fetch_assoc( $result ) )
+		$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+		while( $row = $result->fetch() )
 		{
-			if( $row['field'] == "author_" . $dirlang )
+			if( $row['field'] == 'author_' . $dirlang )
 			{
 				$add_field = false;
 				break;
@@ -71,10 +71,10 @@ function nv_admin_add_field_lang( $dirlang )
 
 		if( $add_field == true )
 		{
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` ADD `author_" . $dirlang . "` VARCHAR( 255 ) NOT NULL DEFAULT ''" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` ADD `lang_" . $dirlang . "` VARCHAR( 255 ) NOT NULL DEFAULT '', ADD `update_" . $dirlang . "` INT( 11 ) NOT NULL DEFAULT '0'" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `author_" . $dirlang . "` `author_" . $dirlang . "` TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` CHANGE `lang_" . $dirlang . "` `lang_" . $dirlang . "` TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
+			$db->exec( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` ADD `author_" . $dirlang . "` VARCHAR( 255 ) NOT NULL DEFAULT ''" );
+			$db->exec( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` ADD `lang_" . $dirlang . "` VARCHAR( 255 ) NOT NULL DEFAULT '', ADD `update_" . $dirlang . "` INT( 11 ) NOT NULL DEFAULT '0'" );
+			$db->exec( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` CHANGE `author_" . $dirlang . "` `author_" . $dirlang . "` TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
+			$db->exec( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` CHANGE `lang_" . $dirlang . "` `lang_" . $dirlang . "` TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
 		}
 	}
 }

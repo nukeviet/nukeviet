@@ -28,13 +28,10 @@ function nv_online_upd()
 	{
 		$username = 'bot:' . $client_info['bot_info']['name'];
 	}
-	$query = 'REPLACE INTO `' . NV_SESSIONS_GLOBALTABLE . '` VALUES (
-		' . $db->dbescape( $client_info['session_id'] ) . ',
-		' . $userid . ',
-		' . $db->dbescape( $username ) . ',
-		' . NV_CURRENTTIME . '
-		)';
-	$db->sql_query( $query );
+	$sth = $db->prepare( 'REPLACE INTO `' . NV_SESSIONS_GLOBALTABLE . '` VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
+	$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
+	$sth->bindParam( ':username', $username, PDO::PARAM_STR );
+	$sth->execute();
 }
 
 nv_online_upd();

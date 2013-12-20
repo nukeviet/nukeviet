@@ -49,7 +49,6 @@ var CKBUILDER_CONFIG = {
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
 		'wysiwygarea' : 1,
-		'image' : 1,
 		'indentblock' : 1,
 		'indentlist' : 1,
 		'smiley' : 1,
@@ -84,17 +83,21 @@ var CKBUILDER_CONFIG = {
 		'richcombo' : 1,
 		'listblock' : 1,
 		'indent' : 1,
-		'youtube' : 1,
-		'eqneditor' : 1
+		'gg' : 1,
+		'lineutils' : 1,
+		'widget' : 1,
+		'image2' : 1,
+		'mathjax' : 1
 	},
 	languages : {
 		'ar' : 1,
+		'zh-cn' : 1,
 		'cs' : 1,
 		'de' : 1,
 		'fr' : 1,
 		'ja' : 1,
 		'ru' : 1,
 		'tr' : 1,
-		'vi' : 1,
+		'vi' : 1
 	}
 };

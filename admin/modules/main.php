@@ -17,10 +17,10 @@ if( sizeof( $site_mods ) < 1 )
 
 $page_title = $lang_module['main'];
 
-$contents['div_id'] = "list_mods";
-$contents['ajax'] = "nv_show_list_mods();";
+$contents['div_id'] = 'list_mods';
+$contents['ajax'] = 'nv_show_list_mods();';
 
-$contents = call_user_func( "main_theme", $contents );
+$contents = call_user_func( 'main_theme', $contents );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

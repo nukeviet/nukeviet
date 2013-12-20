@@ -46,7 +46,7 @@ for( $i = 1; $i <= 100; ++$i )
 {
 	$xtpl->assign( 'VALUE', $i );
 	$xtpl->assign( 'TEXT', $i );
-	$xtpl->assign( 'SELECTED', ( $i == $global_config['autoupdatetime'] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'SELECTED', ( $i == $global_config['autoupdatetime'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.updatetime' );
 }
 

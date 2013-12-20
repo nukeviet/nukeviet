@@ -15,16 +15,16 @@ $checkss = $nv_Request->get_title( 'checkss', 'get', '' );
 $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if( $global_config['idsite'] )
 {
-	$log_dir .= "/" . $global_config['site_dir'];
+	$log_dir .= '/' . $global_config['site_dir'];
 }
 
 $path_filename = $log_dir . '/' . $filename;
 
 if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
 {
-	$temp = explode( "_", $filename );
+	$temp = explode( '_', $filename );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . " " . strtolower( $lang_module['file_backup'] ), "File name: " . end( $temp ), $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . strtolower( $lang_module['file_backup'] ), 'File name: ' . end( $temp ), $admin_info['userid'] );
 
 	nv_deletefile( $path_filename );
 

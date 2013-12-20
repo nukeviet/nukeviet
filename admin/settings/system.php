@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $adminThemes = array( '' );
-$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
+$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . '/themes', $global_config['check_theme_admin'] ) );
 unset( $adminThemes[0] );
 
 $closed_site_Modes = array();
@@ -67,7 +67,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
 
 	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
-	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
+	if( preg_match( '/[^a-zA-Z0-9\:\-\_\.]/', $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
 
 	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
 	foreach( $array_config_site as $config_name => $config_value )
@@ -81,7 +81,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_global = array();
 		$site_timezone = $nv_Request->get_title( 'site_timezone', 'post', '', 0 );
-		if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
+		if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == 'byCountry' ) ) )
 		{
 			$array_config_global['site_timezone'] = $site_timezone;
 		}
@@ -90,7 +90,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( ! empty( $my_domains ) )
 		{
-			$my_domains = array_map( "trim", explode( ',', $my_domains ) );
+			$my_domains = array_map( 'trim', explode( ',', $my_domains ) );
 			foreach( $my_domains as $dm )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
@@ -188,10 +188,8 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global'";
-	$result = $db->sql_query( $sql );
-
-	while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global'" );
+	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
 		$array_config_global[$c_config_name] = $c_config_value;
 	}

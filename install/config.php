@@ -72,7 +72,7 @@ define( 'NV_UNICKMIN', 4 );
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );

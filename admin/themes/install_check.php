@@ -109,7 +109,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 				{
 					$cp = '';
-					$e = explode( "/", $array_file['filename'] );
+					$e = explode( '/', $array_file['filename'] );
 					foreach( $e as $p )
 					{
 						if( ! empty( $p ) and ! is_dir( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $cp . $p ) )
@@ -156,7 +156,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $dir_name ) )
 				{
 					$cp = '';
-					$e = explode( "/", $dir_name );
+					$e = explode( '/', $dir_name );
 
 					foreach( $e as $p )
 					{

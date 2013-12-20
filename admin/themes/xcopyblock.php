@@ -26,19 +26,17 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-$theme_list = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
+$theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
 
-$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
-$result = $db->sql_query( $sql );
-
-while( list( $theme ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0' );
+while( list( $theme ) = $db->fetch( 3 ) )
 {
 	if( in_array( $theme, $theme_list ) )
 	{
 		$xtpl->assign( 'THEME_FROM', $theme );
 		$xtpl->parse( 'main.theme_from' );
 
-		$xtpl->assign( 'THEME_TO', array( 'key' => $theme, 'selected' => ( $selectthemes == $theme and $selectthemes != 'default' ) ? " selected=\"selected\"" : "" ) );
+		$xtpl->assign( 'THEME_TO', array( 'key' => $theme, 'selected' => ( $selectthemes == $theme and $selectthemes != 'default' ) ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.theme_to' );
 	}
 }

@@ -21,9 +21,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 }
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_seotools']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_seotools']
 );
 
 define( 'NV_IS_FILE_SEOTOOLS', true );

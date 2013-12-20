@@ -10,7 +10,7 @@
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['file'] = $lang_module['file_backup'];
-if( defined( "NV_IS_GODADMIN" ) )
+if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['setting'] = $lang_global['mod_settings'];
 }
