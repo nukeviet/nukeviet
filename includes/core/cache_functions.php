@@ -131,17 +131,16 @@ function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
 	}
 	else
 	{
-		if( ( $result = $db->sql_query( $sql ) ) !== false )
+		if( ( $result = $db->query( $sql ) ) !== false )
 		{
 			$a = 0;
-			while( $row = $db->sql_fetch_assoc( $result ) )
+			while( $row = $result->fetch() )
 			{
 				$key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
 				$list[$key2] = $row;
 				++$a;
 			}
-
-			$db->sql_freeresult( $result );
+			$result->closeCursor();
 
 			$cache = serialize( $list );
 			nv_set_cache( $cache_file, $cache );

@@ -17,7 +17,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  */
 function nv_set_dir_class( $array )
 {
-	$class = array( "folder" );
+	$class = array( 'folder' );
 	$menu = false;
 	if( ! empty( $array ) )
 	{
@@ -30,8 +30,8 @@ function nv_set_dir_class( $array )
 		}
 	}
 
-	$class = implode( " ", $class );
-	if( $menu ) $class .= " menu";
+	$class = implode( ' ', $class );
+	if( $menu ) $class .= ' menu';
 	return $class;
 }
 
@@ -46,7 +46,7 @@ function viewdirtree( $dir, $currentpath )
 {
 	global $array_dirname, $global_config, $module_file;
 
-	$pattern = ! empty( $dir ) ? "/^(" . nv_preg_quote( $dir ) . ")\/([^\/]+)$/" : "/^([^\/]+)$/";
+	$pattern = ! empty( $dir ) ? '/^(' . nv_preg_quote( $dir ) . ')\/([^\/]+)$/' : '/^([^\/]+)$/';
 	$_dirlist = preg_grep( $pattern, array_keys( $array_dirname ) );
 
 	$content = '';
@@ -56,12 +56,12 @@ function viewdirtree( $dir, $currentpath )
 
 		if( ! empty( $check_allow_upload_dir ) )
 		{
-			$class_li = ( $_dir == $currentpath or strpos( $currentpath, $_dir . '/' ) !== false ) ? "open collapsable" : "expandable";
+			$class_li = ( $_dir == $currentpath or strpos( $currentpath, $_dir . '/' ) !== false ) ? 'open collapsable' : 'expandable';
 			$style_color = ( $_dir == $currentpath ) ? ' style="color:red"' : '';
 
 			$tree = array();
 			$tree['class1'] = $class_li;
-			$tree['class2'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename( $dir );
+			$tree['class2'] = nv_set_dir_class( $check_allow_upload_dir ) . ' pos' . nv_string_to_filename( $dir );
 			$tree['style'] = $style_color;
 			$tree['title'] = $_dir;
 			$tree['titlepath'] = basename( $_dir );
@@ -98,8 +98,8 @@ $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 're
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
 $data = array();
-$data['style'] = $path == $currentpath ? " style=\"color:red\"" : "";
-$data['class'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename( $path );
+$data['style'] = $path == $currentpath ? ' style="color:red"' : '';
+$data['class'] = nv_set_dir_class( $check_allow_upload_dir ) . ' pos' . nv_string_to_filename( $path );
 $data['title'] = $path;
 $data['titlepath'] = empty( $path ) ? NV_BASE_SITEURL : $path;
 

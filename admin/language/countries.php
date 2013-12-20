@@ -14,10 +14,9 @@ $page_title = $lang_module['countries'];
 $array_lang_setup = array();
 $array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
-$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
-$result = $db->sql_query( $sql );
-
-while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1';
+$result = $db->query( $sql );
+while( list( $lang_i ) = $result->fetch( 3 ) )
 {
 	if( in_array( $lang_i, $global_config['allow_sitelangs'] ) )
 	{

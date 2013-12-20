@@ -43,7 +43,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 
 				foreach( $list as $file_i )
 				{
-					if( $file_i['filename'] == $theme . "theme.php" or $file_i['filename'] == $theme . "config.ini" )
+					if( $file_i['filename'] == $theme . 'theme.php' or $file_i['filename'] == $theme . 'config.ini' )
 					{
 						++$check_number;
 					}

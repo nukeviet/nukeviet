@@ -162,11 +162,8 @@ function nv_admin_checkdata( $adm_session_value )
 		AND b.userid=a.admin_id
 		AND b.active=1
 		LIMIT 1';
-	$result = $db->sql_query( $query );
-	if( $db->sql_numrows( $result ) != 1 ) return array();
-
-	$admin_info = $db->sql_fetch_assoc( $result );
-	$db->sql_freeresult( $result );
+	$admin_info = $db->query( $query )->fetch();
+	if( empty( $admin_info ) ) return array();
 
 	if( strcasecmp( $array_admin['checknum'], $admin_info['check_num'] ) != 0 or 	//check_num
 		! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or 	//user_agent
@@ -188,8 +185,10 @@ function nv_admin_checkdata( $adm_session_value )
 		{
 			$update = implode( ',', $allow_files_type2 );
 			$update .= '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
-			$sql = 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `files_level` = ' . $db->dbescape( $update ) . ' WHERE `admin_id`=' . $array_admin['admin_id'] . ' LIMIT 1';
-			$db->sql_query( $sql );
+
+			$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `files_level` = :files_level WHERE `admin_id`=' . $array_admin['admin_id'] );
+			$sth->bindParam( ':files_level', $update, PDO::PARAM_STR );
+			$sth->execute();
 		}
 		$allow_files_type = $allow_files_type2;
 	}

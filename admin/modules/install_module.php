@@ -67,7 +67,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					}
 
 					$info['filefolder'][] = $list[$i]['filename'];
-					$info['filelist'][] = '[' . $j . "] " . $list[$i]['filename'] . " " . $bytes;
+					$info['filelist'][] = '[' . $j . '] ' . $list[$i]['filename'] . ' ' . $bytes;
 				}
 			}
 			else

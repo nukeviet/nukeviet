@@ -19,11 +19,11 @@ $xtpl = new XTemplate( 'setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . "seting" ) )
+if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 'seting' ) )
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
-	$sql = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'read_type'";
-	$result = $db->sql_query( $sql );
+
+	$db->exec( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'read_type'" );
 
 	nv_save_file_config_global();
 
@@ -39,7 +39,7 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 	exit();
 }
 
-if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "show" ) )
+if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . 'show' ) )
 {
 	$allow_sitelangs = $nv_Request->get_array( 'allow_sitelangs', 'post', array() );
 	$allow_adminlangs = $nv_Request->get_array( 'allow_adminlangs', 'post', array() );
@@ -85,11 +85,13 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	$allow_sitelangs = implode( ',', $global_config['allow_sitelangs'] );
 	$allow_adminlangs = implode( ',', $global_config['allow_adminlangs'] );
 
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( $allow_sitelangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'";
-	$result = $db->sql_query( $query );
+	$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = :allow_sitelangs WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'" );
+	$sth->bindParam( ':allow_sitelangs', $allow_sitelangs, PDO::PARAM_STR );
+	$sth->execute();
 
-	$query = "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape( $allow_adminlangs ) . " WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_adminlangs'";
-	$result = $db->sql_query( $query );
+	$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = :allow_adminlangs WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_adminlangs'" );
+	$sth->bindParam( ':allow_adminlangs', $allow_adminlangs, PDO::PARAM_STR );
+	$sth->execute();
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setting_save'], " allow sitelangs : " . $allow_sitelangs . ", allow adminlangs :" . $allow_adminlangs, $admin_info['userid'] );
 	nv_save_file_config_global();
@@ -106,23 +108,22 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . "s
 	exit();
 }
 
-$lang_array_exit = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
-$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
+$lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 $lang_array_data_exit = array();
 
-while( $row = $db->sql_fetch_assoc( $result ) )
+$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+while( $row = $result->fetch() )
 {
-	if( substr( $row['field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
 		$lang_array_data_exit[] = substr( $row['field'], 7, 2 );
 	}
 }
 
-$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
-$result = $db->sql_query( $sql );
 $array_lang_setup = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+while( $row = $result->fetch() )
 {
 	$array_lang_setup[] = trim( $row['lang'] );
 }
@@ -161,8 +162,8 @@ while( list( $key, $value ) = each( $language_array ) )
 		'language' => $value['language'],
 		'name' => $value['name'],
 		'arr_lang_func' => implode( ' - ', $arr_lang_func ),
-		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"',
-		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? " checked=\"checked\"" : "" ) : ' disabled="disabled"'
+		'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? ' checked="checked"' : '' ) : ' disabled="disabled"',
+		'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? ' checked="checked"' : '' ) : ' disabled="disabled"'
 	) );
 
 	$xtpl->parse( 'main.loop' );
@@ -185,8 +186,8 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'CHECKSESSSHOW', md5( session_id() . "show" ) );
-$xtpl->assign( 'CHECKSESSSETING', md5( session_id() . "seting" ) );
+$xtpl->assign( 'CHECKSESSSHOW', md5( session_id() . 'show' ) );
+$xtpl->assign( 'CHECKSESSSETING', md5( session_id() . 'seting' ) );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 $errormess = '';
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$preg_replace = array( 'pattern' => "/[^a-zA-Z0-9\_]/", 'replacement' => '' );
+	$preg_replace = array( 'pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '' );
 
 	$array_config_global = array();
 	$array_config_global['cookie_prefix'] = nv_substr( $nv_Request->get_title( 'cookie_prefix', 'post', '', 0, $preg_replace ), 0, 255);

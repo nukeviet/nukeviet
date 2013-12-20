@@ -11,71 +11,78 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $theme = $nv_Request->get_title( 'theme', 'post', '', 1 );
 
-if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != "default" )
+if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != 'default' )
 {
 	$check_exit_mod = false;
 	$lang_module_array = array();
 
 	$sql_theme = ( preg_match( $global_config['check_theme_mobile'], $theme ) ) ? 'mobile' : 'theme';
 
-	$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
-	$result = $db->sql_query( $sql );
-
-	while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` where setup = 1');
+	while( list( $lang_i ) = $result->fetch( 3 ) )
 	{
 		$module_array = array();
 
-		$sql = "SELECT title, custom_title FROM `" . $db_config['prefix'] . "_" . $lang_i . "_modules` WHERE `" . $sql_theme . "`=" . $db->dbescape_string( $theme ) . " ORDER BY `weight` ASC";
-		$result = $db->sql_query( $sql );
-		while( list( $title, $custom_title ) = $db->sql_fetchrow( $result ) )
+		$sth = $db->prepare( 'SELECT title, custom_title
+			FROM `' . $db_config['prefix'] . '_' . $lang_i . '_modules`
+			WHERE `' . $sql_theme . '` = :theme
+			ORDER BY `weight` ASC' );
+		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+		$sth->execute();
+		while( list( $title, $custom_title ) = $sth->fetch( 3 ) )
 		{
 			$module_array[] = $custom_title;
 		}
 
 		if( ! empty( $module_array ) )
 		{
-			$lang_module_array[] = $lang_i . ": " . implode( ", ", $module_array );
+			$lang_module_array[] = $lang_i . ': ' . implode( ', ', $module_array );
 		}
 	}
 
 	if( ! empty( $lang_module_array ) )
 	{
-		die( printf( $lang_module['theme_created_delete_module_theme'], implode( "; ", $lang_module_array ) ) );
+		die( printf( $lang_module['theme_created_delete_module_theme'], implode( '; ', $lang_module_array ) ) );
 	}
 	else
 	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', "theme " . $theme, $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $theme, $admin_info['userid'] );
 		$result = nv_deletefile( NV_ROOTDIR . '/themes/' . trim( $theme ), true );
 
 		if( ! empty( $result[0] ) )
 		{
-			$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where setup='1'";
-			$result = $db->sql_query( $sql );
-
-			while( list( $_lang ) = $db->sql_fetchrow( $result ) )
+			$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` where setup=1' );
+			while( list( $_lang ) = $result->fetch( 3 ) )
 			{
-				$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $_lang . "_modthemes` WHERE `theme` = " . $db->dbescape_string( $theme ) );
+				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_modthemes` WHERE `theme` = :theme' );
+				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+				$sth->execute();
 
-				$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight` WHERE `bid` IN (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups` WHERE `theme`=" . $db->dbescape_string( $theme ) . ")" );
-				$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups` WHERE `theme` = " . $db->dbescape_string( $theme ) );
+				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight` WHERE `bid` IN (SELECT `bid` FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WHERE `theme`= :theme)' );
+				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+				$sth->execute();
 
-				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes` WRITE" );
-				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes`" );
-				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_modthemes`" );
-				$db->sql_query( "UNLOCK TABLE" );
-
-				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight` WRITE" );
-				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight`" );
-				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_weight`" );
-				$db->sql_query( "UNLOCK TABLE" );
-
-				$db->sql_query( "LOCK TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups` WRITE" );
-				$db->sql_query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups`" );
-				$db->sql_query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $_lang . "_blocks_groups`" );
-				$db->sql_query( "UNLOCK TABLE" );
+				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WHERE `theme` = :theme' );
+				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+				$sth->execute();
 			}
-
 			nv_del_moduleCache( 'themes' );
+
+			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes` WRITE' );
+			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes`' );
+			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes`' );
+			$db->exec( 'UNLOCK TABLE' );
+
+			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight` WRITE' );
+			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight`' );
+			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight`' );
+			$db->exec( 'UNLOCK TABLE' );
+
+			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WRITE' );
+			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups`' );
+			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups`' );
+			$db->exec( 'UNLOCK TABLE' );
+
 			echo $lang_module['theme_created_delete_theme_success'];
 		}
 		else

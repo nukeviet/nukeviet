@@ -106,7 +106,7 @@ if( $allowed )
 					'position' => $news_contents['imgposition']
 				);
 			}
-			if( $alias_url == $db->unfixdb( $news_contents['alias'] ) )
+			if( $alias_url == $news_contents['alias'] )
 			{
 				$publtime = intval( $news_contents['publtime'] );
 			}

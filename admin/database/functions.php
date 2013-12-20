@@ -10,13 +10,13 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_database']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_database']
 );
 
 $allow_func = array( 'main', 'savefile', 'download', 'optimize', 'file', 'getfile', 'delfile' );
-if( defined( "NV_IS_GODADMIN" ) )
+if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$allow_func[] = 'setting';
 }
@@ -35,9 +35,9 @@ function nv_show_tables()
 	$db_tables_count = 0;
 
 	$tables = array();
-	$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 
-	while( $item = $db->sql_fetch_assoc( $result ) )
+	$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
+	while( $item = $result->fetch() )
 	{
 		$tables_size = floatval( $item['data_length'] ) + floatval( $item['index_length'] );
 
@@ -45,22 +45,22 @@ function nv_show_tables()
 		$tables[$item['name']]['table_max_size'] = ! empty( $item['max_data_length'] ) ? nv_convertfromBytes( floatval( $item['max_data_length'] ) ) : 0;
 		$tables[$item['name']]['table_datafree'] = ! empty( $item['data_free'] ) ? nv_convertfromBytes( floatval( $item['data_free'] ) ) : 0;
 		$tables[$item['name']]['table_numrow'] = intval( $item['rows'] );
-		$tables[$item['name']]['table_charset'] = ( ! empty( $item['collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['collation'], $m ) ) ? $m[1] : "";
+		$tables[$item['name']]['table_charset'] = ( ! empty( $item['collation'] ) && preg_match( '/^([a-z0-9]+)_/i', $item['collation'], $m ) ) ? $m[1] : '';
 		$tables[$item['name']]['table_type'] = ( isset( $item['engine'] ) ) ? $item['engine'] : $item['type'];
-		$tables[$item['name']]['table_auto_increment'] = ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : "n/a";
-		$tables[$item['name']]['table_create_time'] = ! empty( $item['create_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['create_time'] ) ) : "n/a";
-		$tables[$item['name']]['table_update_time'] = ! empty( $item['update_time'] ) ? strftime( "%H:%M %d/%m/%Y", strtotime( $item['update_time'] ) ) : "n/a";
+		$tables[$item['name']]['table_auto_increment'] = ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : 'n/a';
+		$tables[$item['name']]['table_create_time'] = ! empty( $item['create_time'] ) ? strftime( '%H:%M %d/%m/%Y', strtotime( $item['create_time'] ) ) : 'n/a';
+		$tables[$item['name']]['table_update_time'] = ! empty( $item['update_time'] ) ? strftime( '%H:%M %d/%m/%Y', strtotime( $item['update_time'] ) ) : 'n/a';
 		$db_size += $tables_size;
 		$db_totalfree += floatval( $item['data_free'] );
 		++$db_tables_count;
 	}
+	$result->closeCursor();
 
-	$db->sql_freeresult( $result );
 	$db_size = ! empty( $db_size ) ? nv_convertfromBytes( $db_size ) : 0;
 	$db_totalfree = ! empty( $db_totalfree ) ? nv_convertfromBytes( $db_totalfree ) : 0;
 
 	$contents = array();
-	$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 
 	$contents['op'] = array(
 		'download' => $lang_module['download'],
@@ -70,9 +70,9 @@ function nv_show_tables()
 
 	$contents['op_name'] = NV_OP_VARIABLE;
 	$contents['type'] = array( 'all' => $lang_module['download_all'], 'str' => $lang_module['download_str'] );
-	$contents['type_name'] = "type";
+	$contents['type_name'] = 'type';
 	$contents['ext'] = array( 'sql' => $lang_module['ext_sql'], 'gz' => $lang_module['ext_gz'] );
-	$contents['ext_name'] = "ext";
+	$contents['ext_name'] = 'ext';
 	$contents['submit'] = $lang_module['submit'];
 	$contents['captions']['tables_info'] = sprintf( $lang_module['tables_info'], $db->dbname );
 
@@ -87,27 +87,25 @@ function nv_show_tables()
 
 	$contents['third'] = sprintf( $lang_module['third'], $db_tables_count, $db_size, $db_totalfree );
 
-	$contents = call_user_func( "nv_show_tables_theme", $contents );
+	$contents = nv_show_tables_theme( $contents );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
 }
 
-function nv_highlight_string( $tab, $type = "sql" )
+function nv_highlight_string( $tab, $type = 'sql' )
 {
 	global $db;
 
-	$db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
-	$result = $db->sql_query( "SHOW CREATE TABLE `" . $tab . "`" );
-	$show = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
+	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$show = $db->query( 'SHOW CREATE TABLE `' . $tab . '`' )->fetchColumn( 1 );
+	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
 	$show = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
 
-	if( $type == "sql" )
+	if( $type == 'sql' )
 	{
-		return highlight_string( $show . ";", 1 );
+		return highlight_string( $show . ';', 1 );
 	}
 	else
 	{
@@ -121,9 +119,10 @@ function nv_show_tab()
 
 	$tab = $nv_Request->get_title( 'tab', 'get' );
 
-	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`=" . $db->dbescape( $tab ) );
-	$item = $db->sql_fetch_assoc( $result );
-	$db->sql_freeresult( $result );
+	$sth = $db->prepare( 'SHOW TABLE STATUS WHERE `name`= :tab' );
+	$sth->bindParam( ':tab', $tab, PDO::PARAM_STR );
+	$sth->execute();
+	$item = $sth->fetch();
 
 	if( empty( $item ) )
 	{
@@ -149,29 +148,29 @@ function nv_show_tab()
 	$contents['table']['info']['max_data_length'] = array( $lang_module['table_max_size'], ( ! empty( $item['max_data_length'] ) ? nv_convertfromBytes( floatval( $item['max_data_length'] ) ) : 'n/a' ) );
 	$contents['table']['info']['data_free'] = array( $lang_module['table_datafree'], ( ! empty( $item['data_free'] ) ? nv_convertfromBytes( intval( $item['data_free'] ) ) : 0 ) );
 	$contents['table']['info']['rows'] = array( $lang_module['table_numrow'], $item['rows'] );
-	$contents['table']['info']['auto_increment'] = array( $lang_module['table_auto_increment'], ( ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : "n/a" ) );
-	$contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], ( ! empty( $item['create_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['create_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], ( ! empty( $item['update_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['update_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], ( ! empty( $item['check_time'] ) ? strftime( "%H:%M:%S %d/%m/%Y", strtotime( $item['check_time'] ) ) : "n/a" ) );
-	$contents['table']['info']['collation'] = array( $lang_module['table_charset'], ( ( ! empty( $item['collation'] ) && preg_match( "/^([a-z0-9]+)_/i", $item['collation'], $m ) ) ? $m[1] : "" ) );
+	$contents['table']['info']['auto_increment'] = array( $lang_module['table_auto_increment'], ( ( isset( $item['auto_increment'] ) ) ? intval( $item['auto_increment'] ) : 'n/a' ) );
+	$contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], ( ! empty( $item['create_time'] ) ? strftime( '%H:%M:%S %d/%m/%Y', strtotime( $item['create_time'] ) ) : 'n/a' ) );
+	$contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], ( ! empty( $item['update_time'] ) ? strftime( '%H:%M:%S %d/%m/%Y', strtotime( $item['update_time'] ) ) : 'n/a' ) );
+	$contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], ( ! empty( $item['check_time'] ) ? strftime( '%H:%M:%S %d/%m/%Y', strtotime( $item['check_time'] ) ) : 'n/a' ) );
+	$contents['table']['info']['collation'] = array( $lang_module['table_charset'], ( ( ! empty( $item['collation'] ) && preg_match( '/^([a-z0-9]+)_/i', $item['collation'], $m ) ) ? $m[1] : '' ) );
 
-	$contents['table']['show'] = nv_highlight_string( $tab, "php" );
+	$contents['table']['show'] = nv_highlight_string( $tab, 'php' );
 	$contents['table']['show_lang'] = array( $lang_module['php_code'], $lang_module['sql_code'] );
 
 	$contents['table']['row']['caption'] = sprintf( $lang_module['table_row_caption'], $tablename );
 	$contents['table']['row']['columns'] = array( $lang_module['field_name'], $lang_module['field_type'], $lang_module['field_null'], $lang_module['field_key'], $lang_module['field_default'], $lang_module['field_extra'] );
 
 	$contents['table']['row']['detail'] = array();
-	$result = $db->sql_query( "SHOW COLUMNS FROM `" . $tab . "`" );
-	while( $row = $db->sql_fetch_assoc( $result ) )
+	$result = $db->query( 'SHOW COLUMNS FROM `' . $tab . '`' );
+	while( $row = $result->fetch() )
 	{
-		$row['Null'] = ( $row['null'] == "NO" ) ? "NOT NULL" : "NULL";
-		$row['Key'] = empty( $row['key'] ) ? "" : ( $row['key'] == 'PRI' ? "PRIMARY KEY" : ( $row['key'] == 'UNI' ? "UNIQUE KEY" : "KEY" ) );
+		$row['null'] = ( $row['null'] == 'NO' ) ? 'NOT NULL' : 'NULL';
+		$row['key'] = empty( $row['key'] ) ? '' : ( $row['key'] == 'PRI' ? 'PRIMARY KEY' : ( $row['key'] == 'UNI' ? 'UNIQUE KEY' : 'KEY' ) );
 		$contents['table']['row']['detail'][] = $row;
 	}
-	$db->sql_freeresult( $result );
+	$result->closeCursor();
 
-	$contents = call_user_func( "nv_show_tab_theme", $contents );
+	$contents = nv_show_tab_theme( $contents );
 
 	$page_title = sprintf( $lang_module['nv_show_tab'], $tablename );
 
@@ -251,7 +250,7 @@ function nv_show_tables_theme( $contents )
 	foreach( $contents['rows'] as $key => $values )
 	{
 		$xtpl->assign( 'ROW', array(
-			'tag' => ( empty( $values[3] ) ) ? "td" : "th",
+			'tag' => ( empty( $values[3] ) ) ? 'td' : 'th',
 			'key' => $key
 		) );
 

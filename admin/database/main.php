@@ -15,7 +15,7 @@ if( $nv_Request->get_bool( 'show_tabs', 'post' ) )
 	exit();
 }
 
-if( $nv_Request->isset_request( 'tab', 'get' ) and preg_match( "/^(" . $db_config['prefix'] . ")\_[a-zA-Z0-9\_\.\-]+$/", $nv_Request->get_title( 'tab', 'get' ) ) )
+if( $nv_Request->isset_request( 'tab', 'get' ) and preg_match( '/^(' . $db_config['prefix'] . ')\_[a-zA-Z0-9\_\.\-]+$/', $nv_Request->get_title( 'tab', 'get' ) ) )
 {
 	nv_show_tab();
 	exit();
@@ -29,9 +29,7 @@ $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;
 
-$result = $db->sql_query( 'SELECT @@session.time_zone AS `db_time_zone`, @@session.character_set_database AS `db_charset`, @@session.collation_database AS `db_collation`' );
-$row = $db->sql_fetch_assoc( $result );
-$db->sql_freeresult( $result );
+$row = $db->query( 'SELECT @@session.time_zone AS `db_time_zone`, @@session.character_set_database AS `db_charset`, @@session.collation_database AS `db_collation`' )->fetch();
 
 $database['db_charset'] = $row['db_charset'];
 $database['db_collation'] = $row['db_collation'];
@@ -46,7 +44,7 @@ foreach( $database as $key => $values )
 }
 unset( $database );
 
-$contents = call_user_func( "main_theme", $contents );
+$contents = main_theme( $contents );
 
 $page_title = $lang_module['main'];
 

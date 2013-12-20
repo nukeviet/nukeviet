@@ -14,7 +14,6 @@ global $db, $nv_Request;
 
 $contents = ob_get_contents();
 ob_end_clean();
-$contents = $db->unfixdb( $contents );
 $contents = nv_url_rewrite( $contents );
 if( ! defined( 'NV_IS_AJAX' ) )
 {

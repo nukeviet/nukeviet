@@ -56,7 +56,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array2XML->saveXML( $metatags, 'metatags', $file_metatags, $global_config['site_charset'] );
 	}
 	$metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', 'metaTagsOgp', '" . $metaTagsOgp . "')" );
+
+	$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', 'metaTagsOgp', '" . $metaTagsOgp . "')" );
 	nv_delete_all_cache( false );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();

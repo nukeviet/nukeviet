@@ -13,18 +13,16 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( ! empty( $id ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_atc', "id " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_atc', 'id ' . $id, $admin_info['userid'] );
 
-	$sql = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND (`is_sys`=0 OR `act`=0)";
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT `act` FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id`=' . $id . ' AND (`is_sys`=0 OR `act`=0)';
+	$row = $db->query( $sql )->fetch();
 
-	if( $db->sql_numrows( $result ) == 1 )
+	if( ! empty( $row ) )
 	{
-		$row = $db->sql_fetchrow( $result );
 		$act = intval( $row['act'] );
 		$new_act = ( ! empty( $act ) ) ? 0 : 1;
-		$sql = "UPDATE `" . NV_CRONJOBS_GLOBALTABLE . "` SET `act`=" . $new_act . " WHERE `id`=" . $id;
-		$db->sql_query( $sql );
+		$db->exec( 'UPDATE `' . NV_CRONJOBS_GLOBALTABLE . '` SET `act`=' . $new_act . ' WHERE `id`=' . $id );
 	}
 }
 

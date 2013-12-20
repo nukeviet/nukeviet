@@ -91,10 +91,9 @@ else
 		}
 	}
 
-	$sql = 'SELECT `title`, `module_file`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
-	$result = $db->sql_query( $sql );
+	$result = $db->query( 'SELECT `title`, `module_file`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
 	$array_module_seup = array();
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		if ( $row['module_file'] == $row['module_file'] )
 		{

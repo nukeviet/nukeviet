@@ -131,9 +131,8 @@ else
 	$xtpl->assign( 'OP', $op );
 
 	$sql = 'SELECT `module_file` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`=`module_file` ORDER BY `title` ASC';
-	$result = $db->sql_query( $sql );
-
-	while( $row = $db->sql_fetchrow( $result ) )
+	$result = $db->query( $sql );
+	while( $row = $result->fetch() )
 	{
 		$xtpl->assign( 'MODULE_FILE', $row['module_file'] );
 		$xtpl->parse( 'main.module_file' );

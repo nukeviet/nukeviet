@@ -21,10 +21,8 @@ function nv_save_file_banip()
 	$content_config_site = '';
 	$content_config_admin = '';
 
-	$sql = "SELECT `ip`, `mask`, `area`, `begintime`, `endtime` FROM `" . $db_config['prefix'] . "_banip`";
-	$result = $db->sql_query( $sql );
-
-	while( list( $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT `ip`, `mask`, `area`, `begintime`, `endtime` FROM `' . $db_config['prefix'] . '_banip`' );
+	while( list( $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 	{
 		$dbendtime = intval( $dbendtime );
 		$dbarea = intval( $dbarea );
@@ -34,16 +32,16 @@ function nv_save_file_banip()
 			switch( $dbmask )
 			{
 				case 3:
-					$ip_mask = "/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/";
+					$ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$/';
 					break;
 				case 2:
-					$ip_mask = "/\.[0-9]{1,3}.[0-9]{1,3}$/";
+					$ip_mask = '/\.[0-9]{1,3}.[0-9]{1,3}$/';
 					break;
 				case 1:
-					$ip_mask = "/\.[0-9]{1,3}$/";
+					$ip_mask = '/\.[0-9]{1,3}$/';
 					break;
 				default:
-					$ip_mask = "//";
+					$ip_mask = '//';
 			}
 
 			if( $dbarea == 1 or $dbarea == 3 )
@@ -148,14 +146,14 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	foreach( $variable as $value )
 	{
 		$value = trim( $value );
-		if( preg_match( "/^[a-z0-9]+$/", $value ) )
+		if( preg_match( '/^[a-z0-9]+$/', $value ) )
 		{
 			$nv_allowed_html_tags[] = $value;
 		}
 	}
 	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -189,7 +187,7 @@ $del = $nv_Request->get_int( 'del', 'get' );
 
 if( ! empty( $del ) and ! empty( $cid ) )
 {
-	$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_banip` WHERE id=" . $cid );
+	$db->exec( 'DELETE FROM `' . $db_config['prefix'] . '_banip` WHERE id=' . $cid );
 	nv_save_file_banip();
 }
 
@@ -210,7 +208,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$error[] = $lang_module['banip_error_area'];
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'begintime', 'post' ), $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'begintime', 'post' ), $m ) )
 	{
 		$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -219,7 +217,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$begintime = NV_CURRENTTIME;
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'endtime', 'post' ), $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'endtime', 'post' ), $m ) )
 	{
 		$endtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -234,11 +232,21 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		if( $cid > 0 )
 		{
-			$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_banip` SET `ip`=" . $db->dbescape( $ip ) . ", `mask`=" . $db->dbescape( $mask ) . ",`area`=" . $area . ",`begintime`=" . $begintime . ", `endtime`=" . $endtime . ", `notice`=" . $db->dbescape( $notice ) . " WHERE `id`=" . $cid . "" );
+			$sth = $db->prepare( 'UPDATE `' . $db_config['prefix'] . '_banip`
+				SET `ip`= :ip, `mask`= :mask,`area`=' . $area . ', `begintime`=' . $begintime . ', `endtime`=' . $endtime . ', `notice`= :notice
+				WHERE `id`=' . $cid );
+			$sth->bindParam( ':ip', $ip, PDO::PARAM_STR );
+			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
+			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
+			$sth->execute();
 		}
 		else
 		{
-			$db->sql_query( "REPLACE INTO `" . $db_config['prefix'] . "_banip` VALUES (NULL, " . $db->dbescape( $ip ) . "," . $db->dbescape( $mask ) . ",$area,$begintime, $endtime," . $db->dbescape( $notice ) . " )" );
+			$sth = $db->prepare( 'REPLACE INTO `' . $db_config['prefix'] . '_banip` VALUES (NULL, :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )' );
+			$sth->bindParam( ':ip', $ip, PDO::PARAM_STR );
+			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
+			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
+			$sth->execute();
 		}
 
 		$save = nv_save_file_banip();
@@ -293,9 +301,9 @@ foreach( $captcha_array as $gfx_chk_i => $gfx_chk_lang )
 foreach( $captcha_type_array as $captcha_type_i => $captcha_type_lang )
 {
 	$array = array(
-		"value" => $captcha_type_i,
-		"select" => ( $global_config['captcha_type'] == $captcha_type_i ) ? ' selected="selected"' : '',
-		"text" => $captcha_type_lang
+		'value' => $captcha_type_i,
+		'select' => ( $global_config['captcha_type'] == $captcha_type_i ) ? ' selected="selected"' : '',
+		'text' => $captcha_type_lang
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.captcha_type' );
@@ -303,9 +311,9 @@ foreach( $captcha_type_array as $captcha_type_i => $captcha_type_lang )
 for( $i = 2; $i < 10; $i++ )
 {
 	$array = array(
-		"value" => $i,
-		"select" => ( $i == NV_GFX_NUM ) ? ' selected="selected"' : '',
-		"text" => $i
+		'value' => $i,
+		'select' => ( $i == NV_GFX_NUM ) ? ' selected="selected"' : '',
+		'text' => $i
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_gfx_num' );
@@ -326,12 +334,12 @@ $banip_area_array[1] = $lang_module['banip_area_front'];
 $banip_area_array[2] = $lang_module['banip_area_admin'];
 $banip_area_array[3] = $lang_module['banip_area_both'];
 
-$sql = "SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime` FROM `" . $db_config['prefix'] . "_banip` ORDER BY `ip` DESC";
-$result = $db->sql_query( $sql );
+$sql = 'SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime` FROM `' . $db_config['prefix'] . '_banip` ORDER BY `ip` DESC';
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
-	while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $db->sql_fetchrow( $result ) )
+	while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
 			'dbip' => $dbip,
@@ -351,7 +359,7 @@ if( $db->sql_numrows( $result ) )
 
 if( ! empty( $cid ) )
 {
-	list( $id, $ip, $mask, $area, $begintime, $endtime, $notice ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime`, `notice` FROM `" . $db_config['prefix'] . "_banip` WHERE `id`=$cid" ) );
+	list( $id, $ip, $mask, $area, $begintime, $endtime, $notice ) = $db->query( 'SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime`, `notice` FROM `' . $db_config['prefix'] . '_banip` WHERE `id`=' . $cid )->fetch( 3 );
 	$lang_module['banip_add'] = $lang_module['banip_edit'];
 }
 

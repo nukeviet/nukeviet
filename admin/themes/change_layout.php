@@ -13,20 +13,24 @@ $func_id = $nv_Request->get_int( 'funcid', 'post' );
 $layout = $nv_Request->get_title( 'layout', 'post', '', 1 );
 $selectthemes_old = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site_theme'] );
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_old );
-$numfunc = $db->sql_numrows( $db->sql_query( "SELECT func_id FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`='" . $func_id . "' AND theme='" . $selectthemes . "'" ) );
 
-if( $numfunc )
+$sth = $db->prepare( 'SELECT func_id FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=' . $func_id . ' AND theme= :theme');
+$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+$sth->execute();
+$row = $sth->fetch();
+
+if( empty($row) )
 {
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_modthemes` SET `layout`=" . $db->dbescape( $layout ) . " WHERE `func_id`=" . $func_id;
+	$sth = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes` VALUES(' . $func_id . ', :layout, :theme)' );
+	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 }
 else
 {
-	$sql = "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` VALUES('$func_id'," . $db->dbescape( $layout ) . ", " . $db->dbescape( $selectthemes ) . ")";
+	$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout` = :layout WHERE `func_id`=' . $func_id );
 }
+$sth->bindParam( ':layout', $layout, PDO::PARAM_STR );
 
-$result = $db->sql_query( $sql );
-
-if( $result )
+if( $sth->execute() )
 {
 	echo $lang_module['setup_updated_layout'];
 }
