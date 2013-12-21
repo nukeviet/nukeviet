@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate 5-8-2010  1:13
+ * @Createdate 5-8-2010 1:13
  */
 
 /**
@@ -31,10 +31,10 @@ class UrlGetContents
 	private $disable_functions = array();
 
 	/**
-     * UrlGetContents::__construct()
-     *
-     * @return
-     */
+ * UrlGetContents::__construct()
+ *
+ * @return
+ */
 	function __construct( $global_config, $time_limit = 60 )
 	{
 		$this->user_agent = 'NUKEVIET CMS ' . $global_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $global_config['sitekey'] );
@@ -108,11 +108,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::check_url()
-     *
-     * @param integer $is_200
-     * @return
-     */
+ * UrlGetContents::check_url()
+ *
+ * @param integer $is_200
+ * @return
+ */
 	private function check_url( $is_200 = 0 )
 	{
 		$allow_url_fopen = ( ini_get( 'allow_url_fopen' ) == '1' || strtolower( ini_get( 'allow_url_fopen' ) ) == 'on' ) ? 1 : 0;
@@ -225,11 +225,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::generate_newUrl()
-     *
-     * @param mixed $url
-     * @return
-     */
+ * UrlGetContents::generate_newUrl()
+ *
+ * @param mixed $url
+ * @return
+ */
 	private function generate_newUrl( $url )
 	{
 		$m = trim( $url );
@@ -247,14 +247,14 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::curl_Get()
-     *
-     * @param mixed $url
-     * @param string $login
-     * @param string $password
-     * @param string $ref
-     * @return
-     */
+ * UrlGetContents::curl_Get()
+ *
+ * @param mixed $url
+ * @param string $login
+ * @param string $password
+ * @param string $ref
+ * @return
+ */
 	private function curl_Get()
 	{
 		$curlHandle = curl_init();
@@ -360,14 +360,14 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::fsockopen_Get()
-     *
-     * @param mixed $url
-     * @param string $login
-     * @param string $password
-     * @param string $ref
-     * @return
-     */
+ * UrlGetContents::fsockopen_Get()
+ *
+ * @param mixed $url
+ * @param string $login
+ * @param string $password
+ * @param string $ref
+ * @return
+ */
 	private function fsockopen_Get()
 	{
 		if( strtolower( $this->url_info['scheme'] ) == 'https' )
@@ -493,11 +493,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::fopen_Get()
-     *
-     * @param mixed $url
-     * @return
-     */
+ * UrlGetContents::fopen_Get()
+ *
+ * @param mixed $url
+ * @return
+ */
 	private function fopen_Get()
 	{
 		$ctx = stream_context_create( array(
@@ -525,11 +525,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::file_get_contents_Get()
-     *
-     * @param mixed $url
-     * @return
-     */
+ * UrlGetContents::file_get_contents_Get()
+ *
+ * @param mixed $url
+ * @return
+ */
 	private function file_get_contents_Get()
 	{
 		$ctx = stream_context_create( array(
@@ -545,11 +545,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::file_Get()
-     *
-     * @param mixed $url
-     * @return void
-     */
+ * UrlGetContents::file_Get()
+ *
+ * @param mixed $url
+ * @return void
+ */
 	private function file_Get()
 	{
 		$ctx = stream_context_create( array(
@@ -568,11 +568,11 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::url_get_info()
-     *
-     * @param mixed $url
-     * @return
-     */
+ * UrlGetContents::url_get_info()
+ *
+ * @param mixed $url
+ * @return
+ */
 	private function url_get_info( $url )
 	{
 		//URL: http://username:password@www.example.com:80/dir/page.php?foo=bar&foo2=bar2#bookmark
@@ -646,14 +646,14 @@ class UrlGetContents
 	}
 
 	/**
-     * UrlGetContents::get()
-     *
-     * @param mixed $url
-     * @param string $login
-     * @param string $password
-     * @param string $ref
-     * @return
-     */
+ * UrlGetContents::get()
+ *
+ * @param mixed $url
+ * @param string $login
+ * @param string $password
+ * @param string $ref
+ * @return
+ */
 	public function get( $url, $login = '', $password = '', $ref = '' )
 	{
 		$this->url_info = $this->url_get_info( $url );

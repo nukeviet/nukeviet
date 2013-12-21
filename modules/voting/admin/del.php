@@ -19,12 +19,9 @@ if( $vid > 0 and $checkss == md5( $vid . session_id() ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_vote', "votingid " . $vid, $admin_info['userid'] );
 	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `vid`=" . $vid;
-	if( $db->sql_query( $sql ) )
+	if( $db->exec( $sql ) )
 	{
-		$db->sql_freeresult();
-		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`=" . $vid;
-		$db->sql_query( $sql );
-
+		$db->exec( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`=" . $vid );
 		nv_del_moduleCache( $module_name );
 
 		$contents = "OK_" . $vid;
@@ -35,8 +32,8 @@ if( $vid > 0 and $checkss == md5( $vid . session_id() ) )
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

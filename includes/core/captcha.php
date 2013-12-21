@@ -54,7 +54,7 @@ else
 
 	$nv_Request->set_Session( 'random_num', $random_num );
 
-	$datekey = date( "F j" );
+	$datekey = date( 'F j' );
 	$rcode = strtoupper( md5( NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey ) );
 	$code = substr( $rcode, 2, NV_GFX_NUM );
 
@@ -83,7 +83,7 @@ else
 	$text_color = ImageColorAllocate( $image, $r, $g, $b );
 
 	$ff = mt_rand( 1, 15 );
-	$font = NV_ROOTDIR . "/includes/fonts/captcha/font" . $ff . ".ttf";
+	$font = NV_ROOTDIR . '/includes/fonts/captcha/font' . $ff . '.ttf';
 
 	if( file_exists( $font ) and nv_function_exists( 'imagettftext' ) )
 	{
@@ -94,10 +94,10 @@ else
 		ImageString( $image, 5, 20, 6, $code, $text_color );
 	}
 
-	Header( "Content-type: image/jpeg" );
-	header( "Cache-Control:" );
-	header( "Pragma:" );
-	header( "Set-Cookie:" );
+	Header( 'Content-type: image/jpeg' );
+	header( 'Cache-Control:' );
+	header( 'Pragma:' );
+	header( 'Set-Cookie:' );
 	imagejpeg( $image, null, 80 );
 	imagedestroy( $image );
 	die();

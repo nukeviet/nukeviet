@@ -23,38 +23,38 @@ elseif( ! is_array( $tables ) )
 }
 
 $tab_list = array();
-$result = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
 
-while( $item = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
+while( $item = $result->fetch( 3 ) )
 {
 	$tab_list[] = $item[0];
 }
-$db->sql_freeresult( $result );
+$result->closeCursor();
 
 $contents = array();
 $contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
-$contents['type'] = ( $type != "str" ) ? "all" : "str";
-$contents['savetype'] = ( $ext != "sql" ) ? "gz" : "sql";
-$contents['filename'] = tempnam( NV_ROOTDIR . "/" . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
+$contents['type'] = ( $type != 'str' ) ? 'all' : 'str';
+$contents['savetype'] = ( $ext != 'sql' ) ? 'gz' : 'sql';
+$contents['filename'] = tempnam( NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
 
-include ( NV_ROOTDIR . "/includes/core/dump.php" );
+include NV_ROOTDIR . '/includes/core/dump.php' ;
 
 $result = nv_dump_save( $contents );
 if( ! empty( $result ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], "File name: " . basename( $contents['filename'] ), $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename( $contents['filename'] ), $admin_info['userid'] );
 
-	$content['mime'] = ( $contents['savetype'] == "gz" ) ? 'application/x-gzip' : 'text/x-sql';
+	$content['mime'] = ( $contents['savetype'] == 'gz' ) ? 'application/x-gzip' : 'text/x-sql';
 	$contents['fname'] = $db->dbname . '.sql';
 
-	if( $contents['savetype'] == "gz" )
+	if( $contents['savetype'] == 'gz' )
 	{
 		$contents['fname'] .= '.gz';
 	}
 
 	//Download file
-	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-	$download = new download( $result[0], NV_ROOTDIR . "/" . NV_TEMP_DIR, basename( $contents['fname'] ) );
+	require_once NV_ROOTDIR . '/includes/class/download.class.php';
+	$download = new download( $result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename( $contents['fname'] ) );
 	$download->download_file();
 	exit();
 }

@@ -18,7 +18,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( ! $id )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment&status=1" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=1' );
 		exit();
 	}
 
@@ -27,7 +27,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment&status=1" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=1' );
 		exit();
 	}
 
@@ -81,7 +81,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			{
 				nv_del_moduleCache( $module_name );
 
-				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment&status=" . $row['status'] );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=' . $row['status'] );
 				exit();
 			}
 		}
@@ -96,8 +96,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( ! empty( $array['comment'] ) ) $array['comment'] = nv_htmlspecialchars( $array['comment'] );
 
-	$xtpl = new XTemplate( "comment_edit.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;id=" . $id );
+	$xtpl = new XTemplate( 'comment_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;edit=1&amp;id=' . $id );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array );
 
@@ -110,9 +110,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -195,7 +195,7 @@ if( $nv_Request->isset_request( "fid", "get" ) )
 	$fid = $nv_Request->get_int( 'fid', 'get', 0 );
 	if( ! $fid )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=comment&status=1" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=1' );
 		exit();
 	}
 
@@ -215,9 +215,9 @@ if( $nv_Request->isset_request( "fid", "get" ) )
 		$contents .= "</div>\n";
 		$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=1\" />";
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_admin_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 }
@@ -243,25 +243,25 @@ else
 			$contents .= "<strong>" . $lang_module['comment_empty' . $status] . "</strong>";
 			$contents .= "</div>\n";
 			$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=1\" />";
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
 		else
 		{
-			$xtpl = new XTemplate( "comment_empty.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+			$xtpl = new XTemplate( 'comment_empty.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 			$xtpl->assign( 'LANG', $lang_module );
-			$xtpl->assign( 'COMMENT_STATUS0_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=0" );
-			$xtpl->assign( 'COMMENT_STATUS1_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=1" );
-			$xtpl->assign( 'COMMENT_STATUS2_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=2" );
+			$xtpl->assign( 'COMMENT_STATUS0_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=0' );
+			$xtpl->assign( 'COMMENT_STATUS1_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=1' );
+			$xtpl->assign( 'COMMENT_STATUS2_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=2' );
 
 			$xtpl->parse( 'main' );
 			$contents = $xtpl->text( 'main' );
 
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
 	}
@@ -346,12 +346,12 @@ else
 
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'COMMENT_STATUS0_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=0" );
-$xtpl->assign( 'COMMENT_STATUS1_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=1" );
-$xtpl->assign( 'COMMENT_STATUS2_HREF', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;status=2" );
+$xtpl->assign( 'COMMENT_STATUS0_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=0' );
+$xtpl->assign( 'COMMENT_STATUS1_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=1' );
+$xtpl->assign( 'COMMENT_STATUS2_HREF', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=2' );
 
 if( ! empty( $array ) )
 {
@@ -385,8 +385,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

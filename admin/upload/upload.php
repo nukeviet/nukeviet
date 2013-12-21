@@ -29,11 +29,11 @@ else
 {
 	$type = $nv_Request->get_string( 'type', 'post,get' );
 
-	if( $type == "image" and in_array( 'images', $admin_info['allow_files_type'] ) )
+	if( $type == 'image' and in_array( 'images', $admin_info['allow_files_type'] ) )
 	{
 		$allow_files_type = array( 'images' );
 	}
-	elseif( $type == "flash" and in_array( 'flash', $admin_info['allow_files_type'] ) )
+	elseif( $type == 'flash' and in_array( 'flash', $admin_info['allow_files_type'] ) )
 	{
 		$allow_files_type = array( 'flash' );
 	}
@@ -46,7 +46,7 @@ else
 		$allow_files_type = array();
 	}
 
-	require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+	require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 
 	if( $global_config['nv_auto_resize'] )
 	{
@@ -75,7 +75,7 @@ else
 	{
 		if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 		{
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+			require_once NV_ROOTDIR . '/includes/class/image.class.php';
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
@@ -108,9 +108,9 @@ else
 			else
 			{
 				$autologomod = explode( ',', $global_config['autologomod'] );
-				$dir = str_replace( "\\", "/", $path );
-				$dir = rtrim( $dir, "/" );
-				$arr_dir = explode( "/", $dir );
+				$dir = str_replace( "\\", '/', $path );
+				$dir = rtrim( $dir, '/' );
+				$arr_dir = explode( '/', $dir );
 
 				if( $global_config['autologomod'] == 'all' or ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod ) ) )
 				{
@@ -164,7 +164,7 @@ else
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
 
-						require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+						require_once NV_ROOTDIR . '/includes/class/image.class.php';
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $upload_logo, '', '', $config_logo );
 						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
@@ -189,11 +189,14 @@ if( empty( $error ) )
 		$newalt = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $upload_info['basename'] );
 		$newalt = str_replace( '-', ' ', change_alias( $newalt ) );
 
-		$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
+		$sth = $db->prepare( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
 		(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`) VALUES
-		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', " . $db->dbescape( $newalt ) . ")" );
+		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)" );
+
+		$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
+		$sth->execute();
 	}
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . "/" . $upload_info['basename'], $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid'] );
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 global $db, $module_name, $module_data, $module_info, $module_file, $lang_module, $list_cats;
 
 $path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file;
-if( ! file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file . '/block_topdownload.tpl' ) )
+if( ! file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/block_topdownload.tpl' ) )
 {
 	$path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file;
 }

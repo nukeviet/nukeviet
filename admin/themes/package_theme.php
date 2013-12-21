@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['autoinstall_method_packet'];
 
-$xtpl = new XTemplate( "package_theme.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'package_theme.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -41,7 +41,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet'], 'file name : ' . $themename . '.zip', $admin_info['userid'] );
 
-		$linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_theme_" . $themename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
+		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv3_theme_' . $themename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
 
 		$xtpl->assign( 'LINKGETFILE', $linkgetfile );
 		$xtpl->assign( 'THEMENAME', $themename );
@@ -50,15 +50,15 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 		$xtpl->parse( 'complete' );
 		$contents = $xtpl->text( 'complete' );
 	}
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
 
-	$theme_list = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
+	$theme_list = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 
 	foreach( $theme_list as $themes_i )
 	{
@@ -79,9 +79,9 @@ else
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

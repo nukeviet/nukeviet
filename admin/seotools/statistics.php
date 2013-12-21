@@ -43,7 +43,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	nv_delete_all_cache( false );
@@ -58,7 +61,7 @@ $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checke
 $array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
 
-$xtpl = new XTemplate( "statistics.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -70,7 +73,7 @@ sort( $timezone_array );
 foreach( $timezone_array as $site_timezone_i )
 {
 	$xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 	$xtpl->parse( 'main.timezone' );
 }
@@ -91,8 +94,9 @@ foreach( $googleAnalyticsMethod as $key => $title )
 }
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-include ( NV_ROOTDIR . '/includes/header.php' );
+
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

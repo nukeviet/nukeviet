@@ -12,13 +12,13 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $module = $nv_Request->get_string( 'module', 'get', '' );
 $bid = $nv_Request->get_int( 'bid', 'get,post', 0 );
 
-list( $file ) = $db->sql_fetchrow( $db->sql_query( "SELECT file_name FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE bid=" . $bid . "" ) );
+$file = $db->query( 'SELECT file_name FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE bid=' . $bid )->fetchColumn();
 
 echo "<option value=\"\">" . $lang_module['block_select'] . "</option>\n";
 
 if( $module == 'global' )
 {
-	$block_file_list = nv_scandir( NV_ROOTDIR . "/includes/blocks", $global_config['check_block_global'] );
+	$block_file_list = nv_scandir( NV_ROOTDIR . '/includes/blocks', $global_config['check_block_global'] );
 
 	foreach( $block_file_list as $file_name )
 	{
@@ -32,16 +32,15 @@ if( $module == 'global' )
 }
 elseif( preg_match( $global_config['check_module'], $module ) )
 {
-	$sql = "SELECT `module_file` FROM `" . NV_MODULES_TABLE . "` WHERE `title`=" . $db->dbescape( $module );
-	$result = $db->sql_query( $sql );
-
-	if( $db->sql_numrows( $result ) )
+	$sth = $db->prepare( 'SELECT `module_file` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+	$sth->bindParam( ':title', $module, PDO::PARAM_STR );
+	$sth->execute();
+	$module_file = $sth->fetchColumn();
+	if( !empty( $module_file ) )
 	{
-		list( $module_file ) = $db->sql_fetchrow( $result );
-
-		if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . '/blocks' ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks' ) )
 		{
-			$block_file_list = nv_scandir( NV_ROOTDIR . "/modules/" . $module_file . '/blocks', $global_config['check_block_module'] );
+			$block_file_list = nv_scandir( NV_ROOTDIR . '/modules/' . $module_file . '/blocks', $global_config['check_block_module'] );
 
 			foreach( $block_file_list as $file_name )
 			{

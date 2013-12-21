@@ -16,11 +16,11 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 	{
 		global $global_config, $db, $lang_global;
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.counter.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.counter.tpl" ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -29,10 +29,10 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "global.counter.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+		$xtpl = new XTemplate( 'global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
 
 		$xtpl->assign( 'LANG', $lang_global );
-		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . "themes/" . $block_theme . "/" );
+		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/' );
 
 		$sql = "SELECT `c_type`, `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE (`c_type`='day' AND `c_val`='" . date( 'd', NV_CURRENTTIME ) . "') OR (`c_type`='month' AND `c_val`='" . date( 'M', NV_CURRENTTIME ) . "') OR (`c_type`='total' AND `c_val`='hits')";
 		$query = $db->sql_query( $sql );

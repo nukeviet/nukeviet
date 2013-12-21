@@ -35,9 +35,9 @@ function nv_getRPC( $url, $data )
 	$url_info['query'] = ( isset( $url_info['query'] ) and ! empty( $url_info['query'] ) ) ? '?' . $url_info['query'] : '';
 
 	$proxy = array();
-	if( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/proxies.php" ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php' ) )
 	{
-		include ( NV_ROOTDIR . "/" . NV_DATADIR . "/proxies.php" );
+		include NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php' ;
 		if( ! empty( $proxy ) )
 		{
 			$proxy = $proxy[rand( 0, count( $proxy ) - 1 )];

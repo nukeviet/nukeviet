@@ -18,33 +18,33 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$upload_blocked = '';
 	$file_allowed_ext = array();
 
-	if( preg_match( "/images/", $banner_client_info['uploadtype'] ) )
+	if( preg_match( '/images/', $banner_client_info['uploadtype'] ) )
 	{
-		$file_allowed_ext[] = "images";
+		$file_allowed_ext[] = 'images';
 	}
 
-	if( preg_match( "/flash/", $banner_client_info['uploadtype'] ) )
+	if( preg_match( '/flash/', $banner_client_info['uploadtype'] ) )
 	{
-		$file_allowed_ext[] = "flash";
+		$file_allowed_ext[] = 'flash';
 	}
 
 	if( empty( $file_allowed_ext ) )
 	{
 		$upload_blocked = $lang_module['upload_blocked'];
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $upload_blocked );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 
-	$xtpl = new XTemplate( "addads.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
-	$xtpl->assign( 'clientinfo_link', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo" );
-	$xtpl->assign( 'clientinfo_addads', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads" );
-	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats" );
+	$xtpl->assign( 'clientinfo_link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=clientinfo' );
+	$xtpl->assign( 'clientinfo_addads', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=addads' );
+	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=stats' );
 	$xtpl->parse( 'main.management' );
 
 	if( $nv_Request->isset_request( 'confirm', 'post' ) )
@@ -60,7 +60,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = '';
 		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = '';
-		if( $url == "http://" ) $url = '';
+		if( $url == 'http://' ) $url = '';
 
 		if( empty( $title ) )
 		{
@@ -74,13 +74,13 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		{
 			$error[] = $lang_module['click_url_invalid'];
 		}
-		elseif( ! isset( $_FILES["image"] ) )
+		elseif( ! isset( $_FILES['image'] ) )
 		{
 			$error[] = $lang_module['file_upload_empty'];
 		}
 		else
 		{
-			require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+			require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 			$upload = new upload( $file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['image']['tmp_name'] );
@@ -136,7 +136,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 			if( $id )
 			{
-				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . '">' );
+				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv='refresh' content='2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '">' );
 			}
 		}
 	}
@@ -162,8 +162,8 @@ else
 	$contents .= $lang_module['addads_require_login'];
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

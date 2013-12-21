@@ -13,30 +13,31 @@ $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-if( ! isset( $check_allow_upload_dir['delete_dir'] ) or $check_allow_upload_dir['delete_dir'] !== true ) die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['delete_dir'] ) or $check_allow_upload_dir['delete_dir'] !== true ) die( 'ERROR_' . $lang_module['notlevel'] );
 
-if( empty( $path ) or $path == NV_UPLOADS_DIR ) die( "ERROR_" . $lang_module['notlevel'] );
+if( empty( $path ) or $path == NV_UPLOADS_DIR ) die( 'ERROR_' . $lang_module['notlevel'] );
 
 $d = nv_deletefile( NV_ROOTDIR . '/' . $path, true );
 if( $d[0] )
 {
-	if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/([a-z0-9\-\_\/]+)$/i', $path, $m ) )
 	{
 		@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1], true );
 	}
-	$result = $db->sql_query( "SELECT `did` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `dirname`='" . $path . "' OR `dirname` LIKE '" . $path . "/%'" );
-	while( list( $did ) = $db->sql_fetchrow( $result, 1 ) )
+
+	$result = $db->query( "SELECT `did` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `dirname`='" . $path . "' OR `dirname` LIKE '" . $path . "/%'" );
+	while( list( $did ) = $result->fetch( 3 ) )
 	{
-		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did );
-		$db->sql_query( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `did` = " . $did );
+		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $did );
+		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` WHERE `did` = ' . $did );
 	}
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['deletefolder'], $path, $admin_info['userid'] );
-	echo "OK";
+	echo 'OK';
 }
 else
 {
-	die( "ERROR_" . $d[1] );
+	die( 'ERROR_' . $d[1] );
 }
 
 ?>

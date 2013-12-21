@@ -14,18 +14,18 @@ define( 'NV_IS_UPDATE', true );
 $realpath_mainfile = '';
 
 $temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
-$temp_path = "/../";
+$temp_path = '/../';
 for( $i = 0; $i < 10; ++$i )
 {
 	$realpath_mainfile = @realpath( $temp_dir . $temp_path . 'mainfile.php' );
 	if( ! empty( $realpath_mainfile ) ) break;
-	$temp_path .= "../";
+	$temp_path .= '../';
 }
 unset( $temp_dir, $temp_path );
 
 if( empty( $realpath_mainfile ) ) die();
 
-require ( $realpath_mainfile );
+require $realpath_mainfile;
 unset( $realpath_mainfile );
 
 // Kiem tra tu cach admin
@@ -41,7 +41,7 @@ if( ! file_exists( NV_ROOTDIR . '/install/update_data.php' ) )
 	Header( 'Location:' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA ) );
 	die();
 }
-require ( NV_ROOTDIR . '/install/update_data.php' );
+require NV_ROOTDIR . '/install/update_data.php';
 if( empty( $nv_update_config ) )
 {
 	Header( 'Location:' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA ) );
@@ -50,10 +50,10 @@ if( empty( $nv_update_config ) )
 
 // Ham cua admin
 define( 'NV_ADMIN', true );
-include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+include_once NV_ROOTDIR . '/includes/core/admin_functions.php' ;
 
 // Xac dinh ngon ngu cap nhat
-$dirs = nv_scandir( NV_ROOTDIR . "/language", "/^([a-z]{2})/" );
+$dirs = nv_scandir( NV_ROOTDIR . '/language', '/^([a-z]{2})/' );
 $languageslist = array();
 
 foreach( $dirs as $file )
@@ -70,11 +70,11 @@ $nv_update_config['allow_lang'] = $array_lang_update;
 $cookie_lang = $nv_Request->get_string( 'update_lang', 'cookie', '' );
 $update_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', '' );
 
-if( ! empty( $update_lang ) and ( in_array( $update_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . "/language/" . $update_lang . "/global.php" ) )
+if( ! empty( $update_lang ) and ( in_array( $update_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/language/' . $update_lang . '/global.php' ) )
 {
 	if( $update_lang != $cookie_lang ) $nv_Request->set_Cookie( 'update_lang', $update_lang, NV_LIVE_COOKIE_TIME );
 }
-elseif( preg_match( "/^[a-z]{2}$/", $cookie_lang ) and ( in_array( $cookie_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . "/language/" . $cookie_lang . "/global.php" ) )
+elseif( preg_match( '/^[a-z]{2}$/', $cookie_lang ) and ( in_array( $cookie_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/language/' . $cookie_lang . '/global.php' ) )
 {
 	$update_lang = $cookie_lang;
 }
@@ -94,9 +94,9 @@ define( 'NV_LANG_UPDATE', $update_lang );
 unset( $dirs, $languageslist, $file, $data_update_lang, $array_lang_update, $cookie_lang, $update_lang );
 if( NV_LANG_UPDATE != NV_LANG_DATA ) unset( $lang_module, $lang_global );
 
-require ( NV_ROOTDIR . "/language/" . NV_LANG_UPDATE . "/global.php" );
-require ( NV_ROOTDIR . "/language/" . NV_LANG_UPDATE . "/admin_global.php" );
-require ( NV_ROOTDIR . "/language/" . NV_LANG_UPDATE . "/install.php" );
+require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/global.php';
+require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/admin_global.php';
+require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/install.php';
 
 $lang_module = array_merge( $lang_module, $nv_update_config['lang'][NV_LANG_UPDATE] );
 unset( $nv_update_config['lang'] );
@@ -252,16 +252,16 @@ class NvUpdate
 		$content_config .= "\n\n";
 		$content_config .= "?>";
 
-		$return = file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_update_" . $this->config['packageID'] . ".php", $content_config, LOCK_EX );
+		$return = file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $this->config['packageID'] . '.php', $content_config, LOCK_EX );
 
 		if( $return === false )
 		{
 			$message = sprintf( $this->lang['update_error_log_data'], NV_DATADIR );
 			$contents = $this->call_error( $message );
 
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo $this->template( $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
 	}
@@ -288,7 +288,7 @@ class NvUpdate
 			$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
 
-			include_once ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+			include_once NV_ROOTDIR . '/includes/class/ftp.class.php' ;
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port );
 
 			if( empty( $ftp->error ) and $ftp->chdir( $ftp_path ) )
@@ -305,7 +305,7 @@ class NvUpdate
 		foreach( $files as $file_i )
 		{
 			$cp = '';
-			$e = explode( "/", $file_i );
+			$e = explode( '/', $file_i );
 			foreach( $e as $p )
 			{
 				if( ! empty( $p ) and is_dir( NV_ROOTDIR . '/install/update/' . $cp . $p ) and ! is_dir( NV_ROOTDIR . '/' . $cp . $p ) )
@@ -395,7 +395,7 @@ class NvUpdate
 	{
 		global $language_array;
 
-		$xtpl = new XTemplate( "updatetheme.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatetheme.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
 		$xtpl->assign( 'NV_LANG_UPDATE', NV_LANG_UPDATE );
@@ -466,7 +466,7 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "updatestep1.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep1.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'DATA', $array );
@@ -475,9 +475,9 @@ class NvUpdate
 		$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5( $global_config['sitekey'] . session_id() ) );
 		$xtpl->assign( 'URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo' );
 
-		$xtpl->assign( 'RELEASE_DATE', ! empty( $this->config['release_date'] ) ? nv_date( 'd/m/Y H:i:s', $this->config['release_date'] ) : "N/A" );
-		$xtpl->assign( 'ALLOW_OLD_VERSION', ! empty( $this->config['allow_old_version'] ) ? implode( ', ', $this->config['allow_old_version'] ) : "N/A" );
-		$xtpl->assign( 'UPDATE_AUTO_TYPE', isset( $this->config['update_auto_type'] ) ? $this->lang['update_auto_type_' . $this->config['update_auto_type']] : "N/A" );
+		$xtpl->assign( 'RELEASE_DATE', ! empty( $this->config['release_date'] ) ? nv_date( 'd/m/Y H:i:s', $this->config['release_date'] ) : 'N/A' );
+		$xtpl->assign( 'ALLOW_OLD_VERSION', ! empty( $this->config['allow_old_version'] ) ? implode( ', ', $this->config['allow_old_version'] ) : 'N/A' );
+		$xtpl->assign( 'UPDATE_AUTO_TYPE', isset( $this->config['update_auto_type'] ) ? $this->lang['update_auto_type_' . $this->config['update_auto_type']] : 'N/A' );
 
 		if( ! empty( $this->config['formodule'] ) and empty( $array['module_exist'] ) )
 		{
@@ -512,7 +512,7 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "updatestep2.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep2.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'DATA', $array );
@@ -530,7 +530,7 @@ class NvUpdate
 
 			if( $array['is_data_backup'] ) // Cho phep backup CSDL
 			{
-				$xtpl->assign( 'URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . "install/update.php?step=" . $this->config['step'] . "&amp;substep=" . $substep . "&amp;dump&amp;checksess=" . $checksess );
+				$xtpl->assign( 'URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep . '&amp;dump&amp;checksess=' . $checksess );
 				$xtpl->parse( 'main.step1.is_data_backup' );
 			}
 			else // Thong bao khong cho backup CSDL nua
@@ -546,7 +546,7 @@ class NvUpdate
 
 			if( $array['is_file_backup'] ) // Cho phep backup CODE
 			{
-				$xtpl->assign( 'URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . "install/update.php?step=" . $this->config['step'] . "&substep=" . $substep . "&amp;dumpfile&amp;checksess=" . $checksess );
+				$xtpl->assign( 'URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&substep=' . $substep . '&amp;dumpfile&amp;checksess=' . $checksess );
 				$xtpl->parse( 'main.step1.is_file_backup' );
 			}
 
@@ -578,7 +578,7 @@ class NvUpdate
 				{
 					foreach( $array['data_list'] as $w )
 					{
-						$w['title'] = isset( $this->lang[$w['langkey']] ) ? $this->lang[$w['langkey']] : "N/A";
+						$w['title'] = isset( $this->lang[$w['langkey']] ) ? $this->lang[$w['langkey']] : 'N/A';
 
 						$xtpl->assign( 'ROW', $w );
 						$xtpl->parse( 'main.step2.automatic.data.loop' );
@@ -668,7 +668,7 @@ class NvUpdate
 				}
 				elseif( $array['check_FTP'] )
 				{
-					$xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . "install/update.php?step=" . $this->config['step'] . "&amp;substep=" . $substep );
+					$xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep );
 
 					if( ! empty( $array['ftpdata']['error'] ) and $array['ftpdata']['show_ftp_error'] )
 					{
@@ -733,7 +733,7 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep3.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'DATA', $array );
@@ -765,7 +765,7 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "packageerror.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'packageerror.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -785,7 +785,7 @@ class NvUpdate
 	 */
 	public function version_info( $array )
 	{
-		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep3.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'DATA', $array );
@@ -812,7 +812,7 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep3.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -851,19 +851,19 @@ class NvUpdate
 	{
 		global $global_config;
 
-		$xtpl = new XTemplate( "updatestep3.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updatestep3.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'CONFIG', $this->config );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-		$lastest_version = "N/A";
+		$lastest_version = 'N/A';
 		if( ! isset( $onlineModules[$this->config['formodule']] ) )
 		{
 			$xtpl->parse( 'commodule.notcertified' );
 		}
 		else
 		{
-			$lastest_version = isset( $onlineModules[$this->config['formodule']]['version'] ) ? ( string )$onlineModules[$this->config['formodule']]['version'] : "N/A";
+			$lastest_version = isset( $onlineModules[$this->config['formodule']]['version'] ) ? ( string )$onlineModules[$this->config['formodule']]['version'] : 'N/A';
 
 			if( nv_version_compare( $lastest_version, $this->config['to_version'] ) > 0 )
 			{
@@ -911,15 +911,15 @@ class NvUpdate
 		foreach( $content as $key => $mess )
 		{
 			$st = empty( $status[$key] ) ? 'FAILURE' : 'SUCCESS';
-			$contents .= $time . '  |  ' . $client_info['ip'] . '  |  ' . $mess . '  |  ' . $st . "\n";
+			$contents .= $time . ' | ' . $client_info['ip'] . ' | ' . $mess . ' | ' . $st . "\n";
 		}
 
-		if( ! file_exists( NV_ROOTDIR . "/" . NV_LOGS_DIR . "/data_logs/" . $file_log ) )
+		if( ! file_exists( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log ) )
 		{
-			$contents = $this->lang['update_log_start'] . ':   ' . $time . "\n" . $contents;
+			$contents = $this->lang['update_log_start'] . ': ' . $time . "\n" . $contents;
 		}
 
-		file_put_contents( NV_ROOTDIR . "/" . NV_LOGS_DIR . "/data_logs/" . $file_log, $contents, FILE_APPEND );
+		file_put_contents( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file_log, $contents, FILE_APPEND );
 	}
 
 	/**
@@ -930,7 +930,7 @@ class NvUpdate
 	 */
 	public function call_error( $message )
 	{
-		$xtpl = new XTemplate( "updateerror.tpl", NV_ROOTDIR . "/install/tpl" );
+		$xtpl = new XTemplate( 'updateerror.tpl', NV_ROOTDIR . '/install/tpl' );
 		$xtpl->assign( 'LANG', $this->lang );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'MESSAGE', $message );
@@ -942,9 +942,9 @@ class NvUpdate
 
 // Load lai phien lam viec
 $nv_update_config['updatelog'] = array();
-if( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/config_update_" . $nv_update_config['packageID'] . ".php" ) )
+if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $nv_update_config['packageID'] . '.php' ) )
 {
-	include ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_update_" . $nv_update_config['packageID'] . ".php" );
+	include NV_ROOTDIR . '/' . NV_DATADIR . '/config_update_' . $nv_update_config['packageID'] . '.php' ;
 }
 
 // Buoc nang cap
@@ -989,9 +989,10 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 			if( $array['module_exist'] )
 			{
 				// Lay phien ban module
-				$sql = "SELECT `mod_version` FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `module_file`=" . $db->dbescape( $nv_update_config['formodule'] );
-				$result = $db->sql_query( $sql );
-				$row = $db->sql_fetchrow( $result );
+				$sth = $db->prepare( 'SELECT `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `module_file`= :module_file' );
+				$sth->bindParam( ':module_file', $nv_update_config['formodule'], PDO::PARAM_STR );
+				$sth->execute();
+				$row = $sth->fetch();
 
 				$v = '';
 				$d = 0;
@@ -1060,29 +1061,28 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 
 			$type = $nv_Request->get_title( 'type', 'get', '' );
 
-			$current_day = mktime( 0, 0, 0, date( "n", NV_CURRENTTIME ), date( "j", NV_CURRENTTIME ), date( "Y", NV_CURRENTTIME ) );
+			$current_day = mktime( 0, 0, 0, date( 'n', NV_CURRENTTIME ), date( 'j', NV_CURRENTTIME ), date( 'Y', NV_CURRENTTIME ) );
 
 			$contents = array();
-			$contents['savetype'] = ( $type == "sql" ) ? "sql" : "gz";
-			$file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
-			$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+			$contents['savetype'] = ( $type == 'sql' ) ? 'sql' : 'gz';
+			$file_ext = ( $contents['savetype'] == 'sql' ) ? 'sql' : 'sql.gz';
+			$log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-			$contents['filename'] = $log_dir . "/" . md5( nv_genpass( 10 ) . $client_info['session_id'] ) . "_" . $current_day . "." . $file_ext;
+			$contents['filename'] = $log_dir . '/' . md5( nv_genpass( 10 ) . $client_info['session_id'] ) . '_' . $current_day . '.' . $file_ext;
 
 			if( ! file_exists( $contents['filename'] ) )
 			{
 				$contents['tables'] = array();
-				$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
-
-				while( $item = $db->sql_fetchrow( $res ) )
+				$res = $db->query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
+				while( $item = $res->fetch( 3 ) )
 				{
 					$contents['tables'][] = $item[0];
 				}
-				$db->sql_freeresult( $res );
+				$res->closeCursor();
 
-				$contents['type'] = "all";
+				$contents['type'] = 'all';
 
-				include ( NV_ROOTDIR . "/includes/core/dump.php" );
+				include NV_ROOTDIR . '/includes/core/dump.php' ;
 
 				$dump = nv_dump_save( $contents );
 
@@ -1128,7 +1128,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				$NvUpdate->log( $nv_update_config, $lang_module['update_log_dump_file_down'], true );
 
 				//Download file
-				require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+				require_once NV_ROOTDIR . '/includes/class/download.class.php';
 
 				$download = new download( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date( 'Y_m_d' ) . '.zip' );
 				$download->download_file();
@@ -1298,7 +1298,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 		// Nang cap bang tay
 		if( $nv_update_config['update_auto_type'] == 0 )
 		{
-			$array['guide'] = "N/A";
+			$array['guide'] = 'N/A';
 
 			// Co file huong dan thi goi ra
 			if( file_exists( NV_ROOTDIR . '/install/update_docs_' . NV_LANG_UPDATE . '.html' ) )
@@ -1472,7 +1472,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 							if( $is_get_next == true )
 							{
 								$return['funcname'] = $k;
-								$v['title'] = isset( $lang_module[$v['langkey']] ) ? $lang_module[$v['langkey']] : "N/A";
+								$v['title'] = isset( $lang_module[$v['langkey']] ) ? $lang_module[$v['langkey']] : 'N/A';
 								$return['functitle'] = $v['title'];
 								break;
 							}
@@ -1485,7 +1485,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 						$return['url'] = $check_return['link'];
 						$return['funcname'] = $func;
 						$langkey = $nv_update_config['updatelog']['data_list'][$func]['langkey'];
-						$return['functitle'] = isset( $lang_module[$langkey] ) ? $lang_module[$langkey] : "N/A";
+						$return['functitle'] = isset( $lang_module[$langkey] ) ? $lang_module[$langkey] : 'N/A';
 						unset( $langkey );
 					}
 				}
@@ -1506,7 +1506,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 
 				// Ghi logs
 				$langkey = $nv_update_config['updatelog']['data_list'][$func]['langkey'];
-				$functitle = isset( $lang_module[$langkey] ) ? $lang_module[$langkey] : "N/A";
+				$functitle = isset( $lang_module[$langkey] ) ? $lang_module[$langkey] : 'N/A';
 				$log_message = $functitle . ( $check_return['message'] ? ( ' - ' . $check_return['message'] ) : '' );
 				$NvUpdate->log( $nv_update_config, $log_message, $check_return['status'] );
 
@@ -1531,7 +1531,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			foreach( $nv_update_config['updatelog']['data_list'] as $funcsname => $task )
 			{
 				// Xuat tieu de
-				$task['title'] = isset( $lang_module[$task['langkey']] ) ? $lang_module[$task['langkey']] : "N/A";
+				$task['title'] = isset( $lang_module[$task['langkey']] ) ? $lang_module[$task['langkey']] : 'N/A';
 
 				// Khoi tao ham tiep theo thuc hien
 				if( empty( $array['nextfunction'] ) )
@@ -1677,8 +1677,8 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				die( 'ERROR|' . $lang_module['ftp_error_empty'] );
 			}
 
-			if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-			if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
+			if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
+			if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
 
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -1689,7 +1689,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			}
 			else
 			{
-				$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 				$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
@@ -1813,7 +1813,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 					$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 					$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
 
-					include_once ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+					include_once NV_ROOTDIR . '/includes/class/ftp.class.php' ;
 					$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port );
 
 					if( ! empty( $ftp->error ) )
@@ -1843,11 +1843,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 						// Luu lai cau hinh FTP
 						foreach( $array_config as $config_name => $config_value )
 						{
-							$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
-							SET `config_value`=" . $db->dbescape_string( $config_value ) . "
-							WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
-							AND `lang` = 'sys' AND `module`='global'
-							LIMIT 1" );
+							$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= :config_value WHERE `config_name` = :config_name AND `lang` = 'sys' AND `module`='global'" );
+							$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+							$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+							$sth->execute();
 						}
 
 						nv_save_file_config_global();
@@ -1969,13 +1968,12 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 
 			$userModules = array();
 
-			$lang_query = $db->sql_query( "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
-			while( list( $lang ) = $db->sql_fetchrow( $lang_query ) )
+			$lang_query = $db->query( 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+			while( list( $lang ) = $lang_query->fetch( 3 ) )
 			{
-				$sql = "SELECT b.module_file, b.mod_version, b.author FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` AS a INNER JOIN `" . $db_config['prefix'] . "_setup_modules` AS b ON a.title=b.title  GROUP BY b.module_file ORDER BY b.module_file ASC";
-				$result = $db->sql_query( $sql );
-
-				while( $row = $db->sql_fetchrow( $result ) )
+				$sql = "SELECT b.module_file, b.mod_version, b.author FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` AS a INNER JOIN `" . $db_config['prefix'] . "_setup_modules` AS b ON a.title=b.title GROUP BY b.module_file ORDER BY b.module_file ASC";
+				$result = $db->query( $sql );
+				while( $row = $result->fetch() )
 				{
 					if( isset( $userModules[$row['module_file']] ) ) continue;
 
@@ -2024,8 +2022,8 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 	$contents = $NvUpdate->step3( $array );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $NvUpdate->template( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

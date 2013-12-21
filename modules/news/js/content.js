@@ -31,12 +31,12 @@ function extractLast(term) {
 }
 
 $("#titlelength").html($("#idtitle").val().length);
-$("#idtitle").keypress(function() {
+$("#idtitle").bind("keyup paste", function() {
 	$("#titlelength").html($(this).val().length);
 });
 
 $("#descriptionlength").html($("#description").val().length);
-$("#description").keypress(function() {
+$("#description").bind("keyup paste", function() {
 	$("#descriptionlength").html($(this).val().length);
 });
 

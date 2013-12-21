@@ -27,26 +27,26 @@ if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'ou
 	}
 }
 
-@Header( "Content-Type: text/html; charset=" . $global_config['site_charset'] );
-@Header( "Content-Language: " . $lang_global['Content_Language'] );
-@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", strtotime( "-1 day" ) ) . " GMT" );
-@Header( "Expires: " . gmdate( "D, d M Y H:i:s", NV_CURRENTTIME - 60 ) . " GMT" );
+@Header( 'Content-Type: text/html; charset=' . $global_config['site_charset'] );
+@Header( 'Content-Language: ' . $lang_global['Content_Language'] );
+@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', strtotime( '-1 day' ) ) . " GMT" );
+@Header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', NV_CURRENTTIME - 60 ) . " GMT" );
 
 $server_software = $nv_Request->get_string( 'SERVER_SOFTWARE', 'server', '' );
 if( strstr( $server_software, 'Apache/2' ) )
 {
-	@Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+	@Header( 'Cache-Control: no-cache, pre-check=0, post-check=0' );
 }
 else
 {
-	@Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+	@Header( 'Cache-Control: private, pre-check=0, post-check=0, max-age=0' );
 }
 
-@Header( "Pragma: no-cache" );
+@Header( 'Pragma: no-cache' );
 
 if( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
 {
-	@Header( "X-Robots-Tag: index,archive,follow,noodp", true );
+	@Header( 'X-Robots-Tag: index,archive,follow,noodp', true );
 }
 
 if( strpos( NV_USER_AGENT, 'MSIE' ) !== false )

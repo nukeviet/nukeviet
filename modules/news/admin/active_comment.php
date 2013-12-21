@@ -25,7 +25,7 @@ if( ! empty( $listcid ) )
 	}
 
 	// Xac dinh ID cac bai viet
-	$sql = "SELECT DISTINCT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid in (" . implode( ",", $cid_array ) . ")";
+	$sql = "SELECT DISTINCT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid in (" . implode( ',', $cid_array ) . ")";
 	$sql = $db->sql_query( $sql );
 	$array_id = array();
 	while( list( $id ) = $db->sql_fetchrow( $sql ) )
@@ -36,10 +36,10 @@ if( ! empty( $listcid ) )
 
 	// Xac dinh cac chu de bai viet
 	$array_listcatid = array();
-	$sql = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ",", $array_id ) . ")" );
+	$sql = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ',', $array_id ) . ")" );
 	while( list( $id, $listcatid ) = $db->sql_fetchrow( $sql ) )
 	{
-		$array_listcatid[$id] = explode( ",", $listcatid );
+		$array_listcatid[$id] = explode( ',', $listcatid );
 	}
 
 	foreach( $array_id as $id )

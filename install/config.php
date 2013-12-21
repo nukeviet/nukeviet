@@ -10,10 +10,15 @@
 if( ! defined( 'NV_MAINFILE' ) ) die();
 
 $db_config['dbhost'] = "localhost";
+$db_config['dbtype'] = 'mysql';
 $db_config['dbport'] = '';
 $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
+$db_config['persistent'] = false;
+$db_config['collation'] = 'utf8_general_ci';
+// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
+
 $db_config['prefix'] = 'nv3';
 $db_config['prefix_user'] = 'nv3';
 
@@ -67,7 +72,7 @@ define( 'NV_UNICKMIN', 4 );
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );

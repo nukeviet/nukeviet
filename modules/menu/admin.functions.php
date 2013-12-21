@@ -60,9 +60,9 @@ function nv_list_menu()
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$list[$row['id']] = array(
-			'id' => ( int )$row['id'], 
-			'title' => $row['title'], 
-			'description' => $row['description'] 
+			'id' => ( int )$row['id'],
+			'title' => $row['title'],
+			'description' => $row['description']
 		);
 	}
 
@@ -91,8 +91,7 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 	{
 		$array_cat_order[] = $row['id'];
 	}
-
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	$weight = 0;
 	if( $parentid > 0 )

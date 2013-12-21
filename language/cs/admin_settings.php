@@ -8,7 +8,7 @@
 * @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'http://datviet.cz';
 $lang_translator['createdate'] = '01/08/2010, 21:40';
@@ -107,7 +107,7 @@ $lang_module['banip_noarea'] = 'Neohodnuto';
 $lang_module['banip_del_success'] = 'Úspěšně smazán';
 $lang_module['banip_area_front'] = 'Mimo stranky';
 $lang_module['banip_area_admin'] = 'Admin';
-$lang_module['banip_area_both'] = 'Admin  a mimo stranky';
+$lang_module['banip_area_both'] = 'Admin a mimo stranky';
 $lang_module['banip_delete_confirm'] = 'Chcete-li smazat ip z zakazaného seznamu ?';
 $lang_module['banip_mask'] = 'Mask IP';
 $lang_module['banip_edit'] = 'Oprava';

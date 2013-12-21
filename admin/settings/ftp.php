@@ -13,7 +13,7 @@ $error = '';
 
 $page_title = $lang_module['ftp_config'];
 
-$xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -45,8 +45,8 @@ if( $sys_info['ftp_support'] )
 			die( 'ERROR|' . $lang_module['ftp_error_full'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
+		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
+		if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
 
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -57,7 +57,7 @@ if( $sys_info['ftp_support'] )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
@@ -87,7 +87,7 @@ if( $sys_info['ftp_support'] )
 			$ftp_user_pass = nv_unhtmlspecialchars( $array_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $array_config['ftp_path'] );
 
-			if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
+			if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
 
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -103,7 +103,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR );
 
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 
@@ -133,13 +133,13 @@ if( $sys_info['ftp_support'] )
 		}
 
 		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
+
+		$db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= :config_value WHERE `config_name` = :config_name AND `lang` = 'sys' AND `module`='global'" );
 		foreach( $array_config as $config_name => $config_value )
 		{
-			$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
-				SET `config_value`=" . $db->dbescape_string( $config_value ) . "
-				WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
-				AND `lang` = 'sys' AND `module`='global'
-				LIMIT 1" );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
 		if( empty( $error ) )
 		{
@@ -168,8 +168,8 @@ else
 	$contents = $xtpl->text( 'no_support' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

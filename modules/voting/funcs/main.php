@@ -16,7 +16,7 @@ if( empty( $vid ) )
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 
-	$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "`  WHERE `act`=1 ORDER BY `publ_time` DESC";
+	$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `act`=1 ORDER BY `publ_time` DESC";
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
 	$allowed = array();
@@ -38,9 +38,9 @@ if( empty( $vid ) )
 
 	if( ! empty( $is_update ) )
 	{
-		$is_update = implode( ",", $is_update );
+		$is_update = implode( ',', $is_update );
 
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "`  SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
 		$db->sql_query( $sql );
 
 		nv_del_moduleCache( $module_name );
@@ -48,7 +48,7 @@ if( empty( $vid ) )
 
 	if( ! empty( $allowed ) )
 	{
-		$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 		foreach( $allowed as $current_voting )
 		{
 			$action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
@@ -66,7 +66,7 @@ if( empty( $vid ) )
 
 			$xtpl->assign( 'VOTING', $voting_array );
 
-			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` WHERE `vid` = " . $current_voting['vid'] . "  ORDER BY `id` ASC";
+			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` WHERE `vid` = " . $current_voting['vid'] . " ORDER BY `id` ASC";
 			$list = nv_db_cache( $sql, '', $module_name );
 
 			foreach( $list as $row )
@@ -90,9 +90,9 @@ if( empty( $vid ) )
 		$contents = $xtpl->text( 'main.loop' );
 	}
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
@@ -147,7 +147,7 @@ else
 		}
 	}
 
-	$array_id = explode( ",", $lid );
+	$array_id = explode( ',', $lid );
 	$array_id = array_map( "intval", $array_id );
 	$array_id = array_diff( $array_id, array( 0 ) );
 	$count = sizeof( $array_id );
@@ -167,7 +167,7 @@ else
 		}
 		elseif( $count <= $acceptcm )
 		{
-			$in = implode( ",", $array_id );
+			$in = implode( ',', $array_id );
 			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitstotal` = hitstotal+1 WHERE `vid` ='" . $vid . "' AND `id` IN (" . $in . ")";
 			$db->sql_query( $sql );
 			file_put_contents( $dir . "/" . $logfile, '', LOCK_EX );
@@ -179,7 +179,7 @@ else
 		}
 	}
 
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid` = " . $vid . "  ORDER BY `id` ASC";
+	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid` = " . $vid . " ORDER BY `id` ASC";
 	$result = $db->sql_query( $sql );
 
 	$totalvote = 0;
@@ -191,7 +191,7 @@ else
 		$vrow[] = $row2;
 	}
 
-	$pubtime = nv_date( "l - d/m/Y  H:i", $row['publ_time'] );
+	$pubtime = nv_date( "l - d/m/Y H:i", $row['publ_time'] );
 	$lang = array(
 		"total" => $lang_module['voting_total'],
 		"counter" => $lang_module['voting_counter'],
@@ -207,9 +207,9 @@ else
 	);
 
 	$contents = voting_result( $voting );
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

@@ -59,8 +59,7 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
-			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
 		else
@@ -70,27 +69,24 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` =  " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $sourceid;
-		$db->sql_query( $sql );
-		if( $db->sql_affectedrows() > 0 )
+		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `title`=" . $db->dbescape( $title ) . ", `link` = " . $db->dbescape( $link ) . ", `logo`=" . $db->dbescape( $logo ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $sourceid;
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );
-			$db->sql_freeresult();
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "" );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
 			die();
 		}
 		else
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 
 $sourceid = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if( $sourceid > 0 )
 {
-	list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid`, `title`, `link`, `logo`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` where `sourceid`=" . $sourceid ) );
+	list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT `sourceid`, `title`, `link`, `logo` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` where `sourceid`=" . $sourceid ) );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 
@@ -99,7 +95,7 @@ if( ! empty( $logo ) )
 	$logo = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $logo;
 }
 
-$xtpl = new XTemplate( "sources.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'sources.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -129,8 +125,8 @@ if( ! empty( $error ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

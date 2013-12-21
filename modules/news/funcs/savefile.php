@@ -57,7 +57,7 @@ if( $id > 0 and $catid > 0 )
 			list( $sourcetext ) = $db->sql_fetchrow( $result );
 			unset( $sql, $result );
 
-			$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $content['alias'] . "-" . $id . $global_config['rewrite_exturl'], true );
+			$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );
 			$link = "<a href=\"" . $canonicalUrl . "\" title=\"" . $content['title'] . "\">" . $canonicalUrl . "</a>\n";
 
 			$meta_tags = nv_html_meta_tags();
@@ -71,7 +71,7 @@ if( $id > 0 and $catid > 0 )
 				"alias" => $content['alias'],
 				"image" => "",
 				"position" => $content['imgposition'],
-				"time" => nv_date( "l - d/m/Y  H:i", $content['publtime'] ),
+				"time" => nv_date( "l - d/m/Y H:i", $content['publtime'] ),
 				"hometext" => $content['hometext'],
 				"bodytext" => $content['bodytext'],
 				"copyright" => $content['copyright'],
@@ -116,9 +116,9 @@ if( $id > 0 and $catid > 0 )
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
 
 			$global_config['mudim_active'] = 0;
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 		}
 	}
 }

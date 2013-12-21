@@ -49,7 +49,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 	{
 		global $module_array_cat, $module_info, $site_mods, $module_config, $global_config;
 		$module = $block_config['module'];
-		$show_no_image  = $module_config[$module]['show_no_image'];
+		$show_no_image = $module_config[$module]['show_no_image'];
 
 		$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
 		$list = nv_db_cache( $sql, '', $module );
@@ -57,7 +57,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$i = 1;
 		if( ! empty( $list ) )
 		{
-			if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/news/block_groups.tpl" ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news/block_groups.tpl' ) )
 			{
 				$block_theme = $module_info['template'];
 			}
@@ -65,7 +65,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			{
 				$block_theme = "default";
 			}
-			$xtpl = new XTemplate( "block_groups.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/news" );
+			$xtpl = new XTemplate( 'block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news' );
 			foreach( $list as $l )
 			{
 				$l['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$l['catid']]['alias'] . "/" . $l['alias'] . "-" . $l['id'] . $global_config['rewrite_exturl'];

@@ -56,7 +56,7 @@ $lang_global['upass_type_1'] = 'Mật khẩu cần kết hợp số và chữ';
 $lang_global['upass_type_2'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có ký tự đặc biệt';
 $lang_global['upass_type_3'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA';
 $lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA, có ký tự đặc biệt';
-$lang_global['upass_type_simple'] = 'Mật khẩu sử dụng là mật khẩu dễ đoán, cần nhập mật khâu phức tạ hơn';
+$lang_global['upass_type_simple'] = 'Mật khẩu sử dụng là mật khẩu dễ đoán, cần nhập mật khâu phức tạp hơn';
 
 $lang_global['securitycodeincorrect'] = 'Mã chống spam không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên tài khoản hoặc Mật khẩu truy cập';

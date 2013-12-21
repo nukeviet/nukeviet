@@ -53,7 +53,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 	global $module_data, $module_name, $module_info;
 
 	$sql = "SELECT `id`,`title`,`alias`,`description`,`who_view`,`groups_view`,`who_download`,`groups_download`, `parentid`
-    FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
+ FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
 
 	$list = nv_db_cache( $sql, 'id' );
 
@@ -115,7 +115,7 @@ function nv_mod_down_config()
 		$download_config[$values['config_name']] = $values['config_value'];
 	}
 
-	$download_config['upload_filetype'] = ! empty( $download_config['upload_filetype'] ) ? explode( ",", $download_config['upload_filetype'] ) : array();
+	$download_config['upload_filetype'] = ! empty( $download_config['upload_filetype'] ) ? explode( ',', $download_config['upload_filetype'] ) : array();
 	if( ! empty( $download_config['upload_filetype'] ) ) $download_config['upload_filetype'] = array_map( "trim", $download_config['upload_filetype'] );
 
 	if( empty( $download_config['upload_filetype'] ) )

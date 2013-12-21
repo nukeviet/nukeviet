@@ -18,22 +18,22 @@ if( $id )
 
 	if( ! $db->sql_numrows( $result ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=list_row" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
 		die();
 	}
 
 	$frow = $db->sql_fetchrow( $result );
 
 	$page_title = $frow['full_name'];
-	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
+	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 }
 else
 {
 	$page_title = $lang_module['add_row_title'];
-	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-$xtpl = new XTemplate( "row.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'row.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
@@ -58,7 +58,7 @@ $error = '';
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
@@ -159,7 +159,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		nv_del_moduleCache( $module_name );
 
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=list_row" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
 		die();
 	}
 }
@@ -174,7 +174,7 @@ else
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
-		$admins_list = ! empty( $admins_list ) ? array_map( "trim", explode( ";", $admins_list ) ) : array();
+		$admins_list = ! empty( $admins_list ) ? array_map( 'trim', explode( ';', $admins_list ) ) : array();
 
 		$view_level = $reply_level = $obt_level = array();
 
@@ -247,7 +247,7 @@ if( ! empty( $error ) )
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-	$note = nv_aleditor( "note", '100%', '150px', $note );
+	$note = nv_aleditor( 'note', '100%', '150px', $note );
 }
 else
 {
@@ -282,8 +282,8 @@ foreach( $adms as $admid => $values )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

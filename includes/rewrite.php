@@ -11,6 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( $global_config['rewrite_optional'] )
 {
+	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=page\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\\1\\3" . $global_config['rewrite_exturl'] . "\"";
 	if( $global_config['rewrite_op_mod'] != '' )
 	{
 		$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=tag/([^\"]+)\"#"] = "\\1tag/\\3\"";

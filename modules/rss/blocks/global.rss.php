@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
- * @Createdate Jan 10, 2011  6:04:54 PM
+ * @Createdate Jan 10, 2011 6:04:54 PM
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -106,7 +106,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		global $global_config;
 		$array_data = array();
 		$cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
-		if( file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
+		if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
 		{
 			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 			{
@@ -115,10 +115,10 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		}
 		if( empty( $array_data ) )
 		{
-			include_once ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+			include_once NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 			$getContent = new UrlGetContents( $global_config );
 			$xml_source = $getContent->get( $url );
-			$allowed_html_tags = array_map( "trim", explode( ",", NV_ALLOWED_HTML_TAGS ) );
+			$allowed_html_tags = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
 			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
 			if( $xml = simplexml_load_string( $xml_source ) )
 			{
@@ -130,7 +130,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 						$array_data[$a]['title'] = strip_tags( $item->title );
 						$array_data[$a]['description'] = strip_tags( $item->description, $allowed_html_tags );
 						$array_data[$a]['link'] = strip_tags( $item->link );
-						$array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->pubDate ) );
+						$array_data[$a]['pubDate'] = nv_date( "l - d/m/Y H:i", strtotime( $item->pubDate ) );
 						++$a;
 					}
 				}
@@ -143,7 +143,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 						$array_data[$a]['title'] = strip_tags( $item->title );
 						$array_data[$a]['description'] = strip_tags( $item->content, $allowed_html_tags );
 						$array_data[$a]['link'] = strip_tags( $urlAtt['href'] );
-						$array_data[$a]['pubDate'] = nv_date( "l - d/m/Y  H:i", strtotime( $item->updated ) );
+						$array_data[$a]['pubDate'] = nv_date( "l - d/m/Y H:i", strtotime( $item->updated ) );
 						++$a;
 					}
 				}
@@ -163,11 +163,11 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 	function nv_block_global_rss( $block_config )
 	{
 		global $global_config;
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.rss.tpl" ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.rss.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.rss.tpl" ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.rss.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -177,7 +177,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		}
 
 		$a = 1;
-		$xtpl = new XTemplate( "global.rss.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+		$xtpl = new XTemplate( 'global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
 		$array_rrs = nv_get_rss( $block_config['url'] );
 		$title_length = isset( $block_config['title_length'] ) ? intval( $block_config['title_length'] ) : 0;
 		foreach( $array_rrs as $item )

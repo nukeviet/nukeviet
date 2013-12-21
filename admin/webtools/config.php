@@ -17,10 +17,14 @@ if( $submit )
 	$array_config_global['autocheckupdate'] = $nv_Request->get_int( 'autocheckupdate', 'post', 0 );
 	$array_config_global['autoupdatetime'] = $nv_Request->get_int( 'autoupdatetime', 'post', 24 );
 
+	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', '" . mysql_real_escape_string( $config_name ) . "', " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
+
 	nv_save_file_config_global();
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();
@@ -29,7 +33,7 @@ if( $submit )
 $page_title = $lang_module['config'];
 $lang_module['hour'] = $lang_global['hour'];
 
-$xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
@@ -42,15 +46,15 @@ for( $i = 1; $i <= 100; ++$i )
 {
 	$xtpl->assign( 'VALUE', $i );
 	$xtpl->assign( 'TEXT', $i );
-	$xtpl->assign( 'SELECTED', ( $i == $global_config['autoupdatetime'] ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'SELECTED', ( $i == $global_config['autoupdatetime'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.updatetime' );
 }
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

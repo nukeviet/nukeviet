@@ -36,7 +36,7 @@ if( ( $row = $db->sql_fetch_assoc( $result ) ) === false )
 
 if( ! nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 {
-	$redirect = "<meta http-equiv=\"Refresh\" content=\"4;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+	$redirect = "<meta http-equiv=\"Refresh\" content=\"4;URL=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 	nv_info_die( $lang_module['error_not_permission_title'], $lang_module['error_not_permission_title'], $lang_module['error_not_permission_content'] . $redirect );
 	exit();
 }
@@ -289,8 +289,8 @@ $description = $list_cats[$row['catid']]['description'];
 
 $contents = view_file( $row, $download_config );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

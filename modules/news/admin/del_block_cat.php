@@ -17,9 +17,8 @@ if( $bid > 0 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_blockcat', "block_catid " . $bid, $admin_info['userid'] );
 	$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`=" . $bid;
-	if( $db->sql_query( $query ) )
+	if( $db->exec( $query ) )
 	{
-		$db->sql_freeresult();
 		$query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid;
 		$db->sql_query( $query );
 		nv_fix_block_cat();
@@ -28,8 +27,8 @@ if( $bid > 0 )
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

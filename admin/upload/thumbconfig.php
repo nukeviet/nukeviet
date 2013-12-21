@@ -52,12 +52,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$quality = 90;
 		}
-		$db->sql_query( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET 
-			`thumb_type` = '" . $type . "', `thumb_width` = '" . $width . "', 
-			`thumb_height` = '" . $height . "', `thumb_quality` = '" . $quality . "' WHERE `did` = " . $did );
+		$db->exec( 'UPDATE `' . NV_UPLOAD_GLOBALTABLE . '_dir` SET
+			`thumb_type` = ' . $type . ', `thumb_width` = ' . $width . ',
+			`thumb_height` = ' . $height . ', `thumb_quality` = ' . $quality . '
+			WHERE `did` = ' . $did );
 	}
 }
-$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
@@ -65,13 +66,13 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 
-$sql = "SELECT * FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` ORDER BY `dirname` ASC";
-$result = $db->sql_query( $sql );
 $thumb_type = array();
 $i = 0;
-
 $lang_module['thumb_type_0'] = '';
-while( $data = $db->sql_fetch_assoc( $result ) )
+
+$sql = 'SELECT * FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` ORDER BY `dirname` ASC';
+$result = $db->query( $sql );
+while( $data = $result->fetch() )
 {
 	if( $data['did'] == 0 )
 	{
@@ -115,8 +116,8 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 $page_title = $lang_module['thumbconfig'];
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

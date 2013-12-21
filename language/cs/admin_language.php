@@ -76,8 +76,8 @@ $lang_module['nv_lang_data_source'] = 'Zobrazení s jazykem';
 $lang_module['nv_lang_checkallarea'] = 'Všechny oblasti';
 $lang_module['nv_lang_check_no_data'] = 'Nebyly nalezeny žádné výsledky dle Vašich požadavků';
 $lang_module['nv_check_type'] = 'Podmínky kontrolovat';
-$lang_module['nv_check_type_0'] = 'Kontrolovat Jazykové  nebyla přeložit';
-$lang_module['nv_check_type_1'] = 'Kontrolovat  stejným Jazykem';
+$lang_module['nv_check_type_0'] = 'Kontrolovat Jazykové nebyla přeložit';
+$lang_module['nv_check_type_1'] = 'Kontrolovat stejným Jazykem';
 $lang_module['nv_check_type_2'] = 'Vše kontrolovat';
 $lang_module['nv_lang_check_title'] = 'Zkontrolujte, zda jazyk není přeloženo';
 

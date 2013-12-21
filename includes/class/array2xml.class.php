@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Createdate  6/5/2010  2:18
+ * @Createdate 6/5/2010 2:18
  */
 
 /**
@@ -23,20 +23,20 @@ class Array2XML
 	private $xml;
 
 	/**
-     * Array2XML::__construct()
-     * 
-     * @return
-     */
+ * Array2XML::__construct()
+ * 
+ * @return
+ */
 	function __construct()
 	{
 	}
 
 	/**
-     * Array2XML::checkArray()
-     * 
-     * @param mixed $array
-     * @return
-     */
+ * Array2XML::checkArray()
+ * 
+ * @param mixed $array
+ * @return
+ */
 	private function checkArray( $array )
 	{
 		$return = ( is_array( $array ) and ! empty( $array ) ) ? true : false;
@@ -44,12 +44,12 @@ class Array2XML
 	}
 
 	/**
-     * Array2XML::setRootName()
-     * 
-     * @param mixed $array
-     * @param mixed $rootname
-     * @return
-     */
+ * Array2XML::setRootName()
+ * 
+ * @param mixed $array
+ * @param mixed $rootname
+ * @return
+ */
 	private function setRootName( $array, $rootname )
 	{
 		if( empty( $rootname ) )
@@ -76,13 +76,13 @@ class Array2XML
 	}
 
 	/**
-     * Array2XML::addArray()
-     * 
-     * @param mixed $array
-     * @param mixed $root
-     * @param mixed $lastname
-     * @return
-     */
+ * Array2XML::addArray()
+ * 
+ * @param mixed $array
+ * @param mixed $root
+ * @param mixed $lastname
+ * @return
+ */
 	private function addArray( $array, &$root, $lastname )
 	{
 		foreach( $array as $key => $val )
@@ -112,15 +112,15 @@ class Array2XML
 	}
 
 	/**
-     * Array2XML::createXML()
-     * 
-     * @param mixed $array
-     * @param mixed $rootname
-     * @param string $encoding
-     * @param bool $is_save
-     * @param string $file
-     * @return
-     */
+ * Array2XML::createXML()
+ * 
+ * @param mixed $array
+ * @param mixed $rootname
+ * @param string $encoding
+ * @param bool $is_save
+ * @param string $file
+ * @return
+ */
 	private function createXML( $array, $rootname, $encoding = 'utf-8', $is_save = false, $file = '' )
 	{
 		if( ! $this->checkArray( $array ) )
@@ -162,27 +162,27 @@ class Array2XML
 	}
 
 	/**
-     * Array2XML::saveXML()
-     * 
-     * @param mixed $array
-     * @param mixed $rootname
-     * @param mixed $file
-     * @param string $encoding
-     * @return
-     */
+ * Array2XML::saveXML()
+ * 
+ * @param mixed $array
+ * @param mixed $rootname
+ * @param mixed $file
+ * @param string $encoding
+ * @return
+ */
 	public function saveXML( $array, $rootname, $file, $encoding = '' )
 	{
 		return $this->createXML( $array, $rootname, $encoding, true, $file );
 	}
 
 	/**
-     * Array2XML::showXML()
-     * 
-     * @param mixed $array
-     * @param mixed $rootname
-     * @param string $encoding
-     * @return
-     */
+ * Array2XML::showXML()
+ * 
+ * @param mixed $array
+ * @param mixed $rootname
+ * @param string $encoding
+ * @return
+ */
 	public function showXML( $array, $rootname, $encoding = '' )
 	{
 		$content = $this->createXML( $array, $rootname, $encoding );
@@ -192,20 +192,20 @@ class Array2XML
 			return $content;
 		}
 
-		@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", strtotime( "-1 day" ) ) . " GMT" );
-		@Header( "Content-Type: text/xml; charset=" . $encoding );
+		@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', strtotime( '-1 day' ) ) . " GMT" );
+		@Header( 'Content-Type: text/xml; charset=' . $encoding );
 		if( ! empty( $_SERVER['SERVER_SOFTWARE'] ) and 		//
 strstr( $_SERVER['SERVER_SOFTWARE'], 'Apache/2' ) )
 		{
-			@Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+			@Header( 'Cache-Control: no-cache, pre-check=0, post-check=0' );
 		}
 		else
 		{
-			@Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+			@Header( 'Cache-Control: private, pre-check=0, post-check=0, max-age=0' );
 		}
-		@Header( "Expires: 0" );
-		@Header( "Pragma: no-cache" );
-		Header( "Content-Encoding: none" );
+		@Header( 'Expires: 0' );
+		@Header( 'Pragma: no-cache' );
+		Header( 'Content-Encoding: none' );
 		echo ( $content );
 		die();
 	}

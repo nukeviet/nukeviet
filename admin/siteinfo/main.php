@@ -25,17 +25,17 @@ function nv_get_lang_module( $mod )
 
 	if( isset( $site_mods[$mod] ) )
 	{
-		if( file_exists( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_" . NV_LANG_INTERFACE . ".php" ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php' ) )
 		{
-			include ( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_" . NV_LANG_INTERFACE . ".php" );
+			include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_INTERFACE . '.php' ;
 		}
-		elseif( file_exists( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_" . NV_LANG_DATA . ".php" ) )
+		elseif( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php' ) )
 		{
-			include ( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_" . NV_LANG_DATA . ".php" );
+			include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_' . NV_LANG_DATA . '.php' ;
 		}
-		elseif( file_exists( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_en.php" ) )
+		elseif( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php' ) )
 		{
-			include ( NV_ROOTDIR . "/modules/" . $site_mods[$mod]['module_file'] . "/language/admin_en.php" );
+			include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/language/admin_en.php' ;
 		}
 	}
 	return $lang_module;
@@ -46,12 +46,12 @@ $info = $pending_info = array();
 
 foreach( $site_mods as $mod => $value )
 {
-	if( file_exists( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" ) )
+	if( file_exists( NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php' ) )
 	{
 		$siteinfo = $pendinginfo = array();
 		$mod_data = $value['module_data'];
 
-		include ( NV_ROOTDIR . "/modules/" . $value['module_file'] . "/siteinfo.php" );
+		include NV_ROOTDIR . '/modules/' . $value['module_file'] . '/siteinfo.php' ;
 
 		if( ! empty( $siteinfo ) )
 		{
@@ -67,7 +67,7 @@ foreach( $site_mods as $mod => $value )
 	}
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
 // Kiem tra file nang cap tren he thong
@@ -143,7 +143,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 	$arr_mod = array_keys( $site_mods );
 	$module_name = $arr_mod[0];
 
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -166,16 +166,16 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$field[] = array(
 			'key' => $lang_module['version_news'], //
-			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d/m/Y H:i", strtotime( $new_version->date ) ) )
+			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( 'd/m/Y H:i', strtotime( $new_version->date ) ) )
 		);
 
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
 		{
-			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
 		}
 	}
 
-	$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+	$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
 	$xtpl->assign( 'CHECKVERSION', $lang_module['checkversion'] );
 
 	foreach( $field as $key => $value )
@@ -197,8 +197,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

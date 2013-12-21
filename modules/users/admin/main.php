@@ -122,7 +122,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 
 if( ! empty( $admin_in ) )
 {
-	$admin_in = implode( ",", $admin_in );
+	$admin_in = implode( ',', $admin_in );
 	$sql = "SELECT `admin_id`, `lev` FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` IN (" . $admin_in . ")";
 	$query = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $query ) )
@@ -200,12 +200,12 @@ foreach( $orders as $order )
 	}
 }
 
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php" );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php' );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
-$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 $xtpl->assign( 'SEARCH_VALUE', $methodvalue );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
@@ -251,7 +251,7 @@ foreach( $users_list as $u )
 	{
 		if( $u['is_edit'] )
 		{
-			$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $u['userid'] );
+			$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid'] );
 			$xtpl->parse( 'main.xusers.edit' );
 		}
 		if( $u['is_delete'] )
@@ -277,8 +277,8 @@ if( defined( 'NV_IS_GODADMIN' ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

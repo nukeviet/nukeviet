@@ -20,14 +20,14 @@ if( empty( $global_config['idsite'] ) )
 }
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_webtools']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_webtools']
 );
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$allow_func[] = "deleteupdate";
+	$allow_func[] = 'deleteupdate';
 }
 
 define( 'NV_IS_FILE_WEBTOOLS', true );

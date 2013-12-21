@@ -23,7 +23,7 @@ if( defined( 'NV_SYSTEM' ) )
 		{
 			$temp_lang_module = $lang_module;
 			$lang_module = array();
-			include ( NV_ROOTDIR . "/modules/" . $site_mods[$module]['module_file'] . "/language/" . NV_LANG_INTERFACE . ".php" );
+			include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
 			$lang_block_module = $lang_module;
 			$lang_module = $temp_lang_module;
 		}
@@ -35,7 +35,7 @@ if( defined( 'NV_SYSTEM' ) )
 		$cat = $nv_Request->get_int( 'cat', 'post' );
 
 		$path = NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'];
-		if( ! file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $site_mods[$module]['module_file'] . '/block_search.tpl' ) )
+		if( ! file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $site_mods[$module]['module_file'] . '/block_search.tpl' ) )
 		{
 			$path = NV_ROOTDIR . "/themes/default/modules/" . $site_mods[$module]['module_file'];
 		}

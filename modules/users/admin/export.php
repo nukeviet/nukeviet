@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $data_field = array();
 $step = $nv_Request->get_int( 'step', 'get,post', 1 );
 
-require_once ( NV_ROOTDIR . "/includes/class/PHPExcel.php" );
+require_once NV_ROOTDIR . '/includes/class/PHPExcel.php' ;
 
 if( extension_loaded( 'zip' ) )
 {
@@ -25,7 +25,7 @@ else
 	$writerType = 'Excel5';
 }
 
-if( $step == 1 and file_exists( NV_ROOTDIR . "/includes/class/PHPExcel.php" ) )
+if( $step == 1 and file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 {
 	$example = $nv_Request->get_int( 'example', 'get', 0 );
 
@@ -285,7 +285,7 @@ elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filen
 	$arry_file_zip = array();
 	foreach( $array_filename as $file_name )
 	{
-		if( ! empty( $file_name ) and file_exists( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "." . $excel_ext ) )
+		if( ! empty( $file_name ) and file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $file_name . '.' . $excel_ext ) )
 		{
 			$arry_file_zip[] = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $file_name . "." . $excel_ext;
 		}
@@ -305,7 +305,7 @@ elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filen
 	}
 
 	//Download file
-	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
+	require_once NV_ROOTDIR . '/includes/class/download.class.php' ;
 	$download = new download( $file_src, NV_ROOTDIR . "/" . NV_TEMP_DIR, basename( change_alias( $lang_module['export'] ) . ".zip" ) );
 	$download->download_file();
 	exit();
@@ -314,9 +314,9 @@ else
 {
 	$page_title = $lang_module['export_example'];
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $lang_module['required_phpexcel'] );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

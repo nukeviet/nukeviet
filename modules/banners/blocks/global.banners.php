@@ -111,11 +111,11 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 			}
 			unset( $xml, $array_banners );
 
-			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.banners.tpl" ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.banners.tpl" ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
@@ -124,7 +124,7 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 				$block_theme = "default";
 			}
 
-			$xtpl = new XTemplate( "global.banners.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+			$xtpl = new XTemplate( 'global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
 
 			foreach( $array_banners_content as $banners )
 			{

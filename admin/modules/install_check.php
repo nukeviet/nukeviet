@@ -99,7 +99,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 				{
 					$cp = '';
-					$e = explode( "/", $array_file['filename'] );
+					$e = explode( '/', $array_file['filename'] );
 
 					foreach( $e as $p )
 					{
@@ -145,7 +145,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $dir_name ) )
 				{
 					$cp = '';
-					$e = explode( "/", $dir_name );
+					$e = explode( '/', $dir_name );
 
 					foreach( $e as $p )
 					{
@@ -208,7 +208,7 @@ if( file_exists( $filename ) )
 			}
 		}
 
-		$xtpl = new XTemplate( "install_check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'install_check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'GLANG', $lang_global );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -260,16 +260,16 @@ if( file_exists( $filename ) )
 		}
 		else
 		{
-			$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=setup" );
+			$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup' );
 			$xtpl->parse( 'complete.ok' );
 		}
 
 		$xtpl->parse( 'complete' );
 		$contents = $xtpl->text( 'complete' );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo ( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 }
@@ -278,7 +278,7 @@ else
 	$error = $lang_module['autoinstall_module_error_uploadfile'];
 }
 
-$xtpl = new XTemplate( "install_check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'install_check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -326,8 +326,8 @@ if( ! empty( $info_error['errorfolder'] ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo ( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

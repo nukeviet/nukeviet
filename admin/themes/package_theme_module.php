@@ -20,16 +20,16 @@ $page_title = $lang_module['autoinstall_method_packet'];
  */
 function getDirectoryTree( $outerDir, $basepath )
 {
-	$dirs = array_diff( scandir( $outerDir ), array( ".", ".." ) );
+	$dirs = array_diff( scandir( $outerDir ), array( '.', '..' ) );
 	$dir_array = array();
 
 	foreach( $dirs as $d )
-		$dir_array[] = is_dir( $outerDir . "/" . $d ) ? getDirectoryTree( $outerDir . "/" . $d, $filters ) : $dir_array[] = $basepath . $d;
+		$dir_array[] = is_dir( $outerDir . '/' . $d ) ? getDirectoryTree( $outerDir . '/' . $d, $filters ) : $dir_array[] = $basepath . $d;
 
 	return $dir_array;
 }
 
-$xtpl = new XTemplate( "package_theme_module.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'package_theme_module.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -62,9 +62,9 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 		$filesize = filesize( $file_src );
 		$file_name = basename( $file_src );
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'], 'file name : ' . $themename . '_' . $modulename . ".zip", $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'], 'file name : ' . $themename . '_' . $modulename . '.zip', $admin_info['userid'] );
 
-		$linkgetfile = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getfile&amp;mod=nv3_theme_" . $themename . "_" . $modulename . ".zip&amp;checkss=" . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . "&amp;filename=" . $file_name;
+		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv3_theme_' . $themename . '_' . $modulename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
 
 		$xtpl->assign( 'LINKGETFILE', $linkgetfile );
 		$xtpl->assign( 'THEMENAME', $themename );
@@ -74,15 +74,14 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 		$xtpl->parse( 'complete' );
 		$contents = $xtpl->text( 'complete' );
 	}
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
-
-	$theme_list = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
+	$theme_list = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 	foreach( $theme_list as $themes_i )
 	{
 		if( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )
@@ -92,13 +91,25 @@ else
 		}
 	}
 
-	$sql = "SELECT `module_file`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
-
-	while( $row = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT `title`, `module_file`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+	$array_module_seup = array();
+	while( $row = $result->fetch() )
 	{
-		$xtpl->assign( 'MODULE', array( 'module_file' => $row['module_file'], 'custom_title' => $row['custom_title'] ) );
-		$xtpl->parse( 'main.module' );
+		if ( $row['module_file'] == $row['module_file'] )
+		{
+			$xtpl->assign( 'MODULE', array( 'module_file' => $row['module_file'], 'custom_title' => $row['custom_title'] ) );
+			$xtpl->parse( 'main.module' );
+			$array_module_seup[] = $row['module_file'];
+		}
+	}
+	$modules_list = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
+	foreach( $modules_list as $module_i )
+	{
+		if ( ! in_array( $module_i, $array_module_seup ) )
+		{
+			$xtpl->assign( 'MODULE', array( 'module_file' => $module_i, 'custom_title' => $module_i ) );
+			$xtpl->parse( 'main.module' );
+		}
 	}
 
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -111,9 +122,9 @@ else
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 ?>

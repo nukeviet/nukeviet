@@ -39,7 +39,7 @@ function nv_CreateXML_bannerPlan()
 		}
 	}
 
-	include ( NV_ROOTDIR . '/includes/class/array2xml.class.php' );
+	include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 
 	$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `act` = 1";
 	$result = $db->sql_query( $sql );
@@ -154,9 +154,9 @@ function nv_add_client_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "add_client.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'add_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -172,9 +172,9 @@ function nv_edit_client_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "edit_client.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'edit_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -190,7 +190,7 @@ function nv_client_list_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "client_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'client_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -208,7 +208,7 @@ function nv_cl_list_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "cl_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cl_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 
 	foreach( $contents['thead'] as $key => $thead )
@@ -243,7 +243,7 @@ function nv_info_client_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "info_client.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'info_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -261,7 +261,7 @@ function nv_info_cl_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "info_cl.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'info_cl.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 
 	$a = 0;
@@ -285,7 +285,7 @@ function nv_banners_client_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "banners_client.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'banners_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 
 	if( ! empty( $contents['info'] ) )
@@ -311,16 +311,16 @@ function nv_add_plan_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "add_plan.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
 		$xtpl->assign( 'BLANG', array(
 			'key' => $key,
 			'title' => $blang['name'],
-			'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : ""
+			'selected' => $key == $contents['blang'][4] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.blang' );
 	}
@@ -330,7 +330,7 @@ function nv_add_plan_theme( $contents )
 		$xtpl->assign( 'FORM', array(
 			'key' => $form,
 			'title' => $form,
-			'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : ""
+			'selected' => $form == $contents['form'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.form' );
 	}
@@ -360,16 +360,16 @@ function nv_edit_plan_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "edit_plan.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
 		$xtpl->assign( 'BLANG', array(
 			'key' => $key,
 			'title' => $blang['name'],
-			'selected' => $key == $contents['blang'][4] ? " selected=\"selected\"" : ""
+			'selected' => $key == $contents['blang'][4] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.blang' );
 	}
@@ -379,7 +379,7 @@ function nv_edit_plan_theme( $contents )
 		$xtpl->assign( 'FORM', array(
 			'key' => $form,
 			'title' => $form,
-			'selected' => $form == $contents['form'][3] ? " selected=\"selected\"" : ""
+			'selected' => $form == $contents['form'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.form' );
 	}
@@ -409,7 +409,7 @@ function nv_plans_list_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "plans_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'plans_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -427,7 +427,7 @@ function nv_plist_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "plist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'plist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 
 	foreach( $contents['thead'] as $key => $thead )
@@ -462,7 +462,7 @@ function nv_info_plan_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "info_plan.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'info_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -480,7 +480,7 @@ function nv_info_pl_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "info_pl.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'info_pl.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 
 	$a = 0;
@@ -519,7 +519,7 @@ function nv_add_banner_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "add_banner.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'add_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
@@ -530,14 +530,14 @@ function nv_add_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
 		$xtpl->assign( 'PLAN', array(
 			'key' => $pid,
 			'title' => $ptitle,
-			'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : ""
+			'selected' => $pid == $contents['plan'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.plan' );
 	}
@@ -547,7 +547,7 @@ function nv_add_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array(
 			'key' => $clid,
 			'title' => $clname,
-			'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : ""
+			'selected' => $clid == $contents['client'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.client' );
 	}
@@ -556,7 +556,7 @@ function nv_add_banner_theme( $contents )
 		$xtpl->assign( 'TARGET', array(
 			'key' => $target,
 			'title' => $ptitle,
-			'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : ""
+			'selected' => $target == $contents['target'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.target' );
 	}
@@ -574,7 +574,7 @@ function nv_edit_banner_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "edit_banner.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'edit_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
@@ -585,14 +585,14 @@ function nv_edit_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? " class=\"error\"" : "" );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
 		$xtpl->assign( 'PLAN', array(
 			'key' => $pid,
 			'title' => $ptitle,
-			'selected' => $pid == $contents['plan'][3] ? " selected=\"selected\"" : ""
+			'selected' => $pid == $contents['plan'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.plan' );
 	}
@@ -602,7 +602,7 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array(
 			'key' => $clid,
 			'title' => $clname,
-			'selected' => $clid == $contents['client'][3] ? " selected=\"selected\"" : ""
+			'selected' => $clid == $contents['client'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.client' );
 	}
@@ -612,7 +612,7 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'TARGET', array(
 			'key' => $target,
 			'title' => $ptitle,
-			'selected' => $target == $contents['target'][3] ? " selected=\"selected\"" : ""
+			'selected' => $target == $contents['target'][3] ? ' selected=\'selected\'' : ''
 		) );
 		$xtpl->parse( 'main.target' );
 	}
@@ -639,7 +639,7 @@ function nv_banners_list_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "banners_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'banners_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
@@ -657,7 +657,7 @@ function nv_b_list_theme( $contents )
 {
 	global $global_config, $module_file, $lang_module, $module_name;
 
-	$xtpl = new XTemplate( "b_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'b_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
@@ -712,7 +712,7 @@ function nv_info_b_theme( $contents )
 {
 	global $global_config, $module_file, $lang_module, $module_name;
 
-	$xtpl = new XTemplate( "info_b.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'info_b.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
@@ -757,7 +757,7 @@ function nv_show_stat_theme( $contents )
 {
 	global $global_config, $module_file, $lang_module, $module_name;
 
-	$xtpl = new XTemplate( "show_stat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'show_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
@@ -803,7 +803,7 @@ function nv_show_list_stat_theme( $contents )
 {
 	global $global_config, $module_file, $lang_module, $module_name;
 
-	$xtpl = new XTemplate( "show_list_stat.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'show_list_stat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
@@ -847,7 +847,7 @@ function nv_main_theme( $contents )
 {
 	global $global_config, $module_file;
 
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 

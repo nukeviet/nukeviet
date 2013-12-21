@@ -38,7 +38,7 @@ $array_cat_admin = nv_news_array_cat_admin( $module_data );
 
 if( ! empty( $module_info['admins'] ) )
 {
-	$module_admin = explode( ",", $module_info['admins'] );
+	$module_admin = explode( ',', $module_info['admins'] );
 	foreach( $module_admin as $userid_i )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
@@ -113,7 +113,7 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'setting';
 }
 
-if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/admin/admins.php" ) )
+if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/admins.php' ) )
 {
 	$submenu['admins'] = $lang_module['admin'];
 	$allow_func[] = 'admins';

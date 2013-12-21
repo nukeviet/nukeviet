@@ -20,10 +20,10 @@ function nv_admin_checkip()
 
 	if( $global_config['block_admin_ip'] )
 	{
-		if( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php" ) )
+		if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ) )
 		{
 			$array_adminip = array();
-			include ( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php" );
+			include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
 			if( empty( $array_adminip ) ) return true;
 
@@ -110,10 +110,10 @@ function nv_admin_checkfirewall()
 
 	if( $global_config['admfirewall'] )
 	{
-		if( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php" ) )
+		if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ) )
 		{
 			$adv_admins = array();
-			include ( NV_ROOTDIR . "/" . NV_DATADIR . "/admin_config.php" );
+			include NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php' ;
 
 			if( empty( $adv_admins ) ) return true;
 
@@ -148,25 +148,22 @@ function nv_admin_checkdata( $adm_session_value )
 	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 	$array_admin = unserialize( $adm_session_value );
 
-	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $array_admin['checknum'] ) ) return array();
+	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $array_admin['checknum'] ) ) return array();
 
-	$query = "SELECT a.admin_id AS `admin_id`, a.lev AS `lev`, a.position AS `position`, a.check_num AS `check_num`, a.last_agent AS `current_agent`,
+	$query = 'SELECT a.admin_id AS `admin_id`, a.lev AS `lev`, a.position AS `position`, a.check_num AS `check_num`, a.last_agent AS `current_agent`,
 		a.last_ip AS `current_ip`, a.last_login AS `current_login`, a.files_level AS `files_level`, a.editor AS `editor`, b.userid AS `userid`,
 		b.username AS `username`, b.email AS `email`, b.full_name AS `full_name`, b.view_mail AS `view_mail`, b.regdate AS `regdate`,
 		b.sig AS `sig`, b.gender AS `gender`, b.photo AS `photo`, b.birthday AS `birthday`, b.in_groups AS `in_groups`, b.last_openid AS `last_openid`,
 		b.password AS `password`, b.question AS `question`, b.answer AS `answer`
-		FROM `" . NV_AUTHORS_GLOBALTABLE . "` a, `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` b
-		WHERE a.admin_id = " . $array_admin['admin_id'] . "
+		FROM `' . NV_AUTHORS_GLOBALTABLE . '` a, `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` b
+		WHERE a.admin_id = ' . $array_admin['admin_id'] . '
 		AND a.lev!=0
 		AND a.is_suspend=0
 		AND b.userid=a.admin_id
 		AND b.active=1
-		LIMIT 1";
-	$result = $db->sql_query( $query );
-	if( $db->sql_numrows( $result ) != 1 ) return array();
-
-	$admin_info = $db->sql_fetch_assoc( $result );
-	$db->sql_freeresult( $result );
+		LIMIT 1';
+	$admin_info = $db->query( $query )->fetch();
+	if( empty( $admin_info ) ) return array();
 
 	if( strcasecmp( $array_admin['checknum'], $admin_info['check_num'] ) != 0 or 	//check_num
 		! isset( $array_admin['current_agent'] ) or empty( $array_admin['current_agent'] ) or strcasecmp( $array_admin['current_agent'], $admin_info['current_agent'] ) != 0 or 	//user_agent
@@ -181,15 +178,17 @@ function nv_admin_checkdata( $adm_session_value )
 	}
 	else
 	{
-		list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( "|", $admin_info['files_level'] );
-		$allow_files_type = ! empty( $allow_files_type ) ? explode( ",", $allow_files_type ) : array();
+		list( $allow_files_type, $allow_modify_files, $allow_create_subdirectories, $allow_modify_subdirectories ) = explode( '|', $admin_info['files_level'] );
+		$allow_files_type = ! empty( $allow_files_type ) ? explode( ',', $allow_files_type ) : array();
 		$allow_files_type2 = array_values( array_intersect( $allow_files_type, $global_config['file_allowed_ext'] ) );
 		if( $allow_files_type != $allow_files_type2 )
 		{
-			$update = implode( ",", $allow_files_type2 );
-			$update .= "|" . $allow_modify_files . "|" . $allow_create_subdirectories . "|" . $allow_modify_subdirectories;
-			$sql = "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "` SET `files_level` = " . $db->dbescape( $update ) . " WHERE `admin_id`=" . $array_admin['admin_id'] . " LIMIT 1";
-			$db->sql_query( $sql );
+			$update = implode( ',', $allow_files_type2 );
+			$update .= '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
+
+			$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `files_level` = :files_level WHERE `admin_id`=' . $array_admin['admin_id'] );
+			$sth->bindParam( ':files_level', $update, PDO::PARAM_STR );
+			$sth->execute();
 		}
 		$allow_files_type = $allow_files_type2;
 	}

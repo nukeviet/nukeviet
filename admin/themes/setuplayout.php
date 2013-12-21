@@ -11,19 +11,17 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $set_layout_site = false;
 $select_options = array();
-$theme_array = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
+$theme_array = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 
 if( $global_config['idsite'] )
 {
-	$result = $db->sql_query( "SELECT theme FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
-	$row = $db->sql_fetch_assoc( $result );
+	$row = $db->query( 'SELECT theme FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] )->fetch();
 	if( ! empty( $row['theme'] ) )
 	{
 		$array_site_cat_theme = explode( ',', $row['theme'] );
 
-		$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
-		$result = $db->sql_query( $sql );
-		while( list( $theme ) = $db->sql_fetchrow( $result ) )
+		$result = $db->query( 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0' );
+		while( list( $theme ) = $result->fetch( 3 ) )
 		{
 			$array_site_cat_theme[] = $theme;
 		}
@@ -35,7 +33,7 @@ foreach( $theme_array as $themes_i )
 {
 	if( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )
 	{
-		$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setuplayout&amp;selectthemes=" . $themes_i] = $themes_i;
+		$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setuplayout&amp;selectthemes=' . $themes_i] = $themes_i;
 	}
 }
 
@@ -44,7 +42,7 @@ $selectthemes = $nv_Request->get_string( 'selectthemes', 'get', $selectthemes_ol
 
 if( ! in_array( $selectthemes, $theme_array ) )
 {
-	$selectthemes = "default";
+	$selectthemes = 'default';
 }
 
 if( $selectthemes_old != $selectthemes )
@@ -56,7 +54,7 @@ $layout_array = nv_scandir( NV_ROOTDIR . '/themes/' . $selectthemes . '/layout',
 
 if( ! empty( $layout_array ) )
 {
-	$layout_array = preg_replace( $global_config['check_op_layout'], "\\1", $layout_array );
+	$layout_array = preg_replace( $global_config['check_op_layout'], '\\1', $layout_array );
 }
 $array_layout_func_default = array();
 
@@ -77,9 +75,9 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			for( $j = 0, $sizeof = sizeof( $layout_funcs ); $j < $sizeof; ++$j )
 			{
 				$mo_funcs = ( string )$layout_funcs[$j];
-				$mo_funcs = explode( ":", $mo_funcs );
+				$mo_funcs = explode( ':', $mo_funcs );
 				$m = $mo_funcs[0];
-				$arr_f = explode( ",", $mo_funcs[1] );
+				$arr_f = explode( ',', $mo_funcs[1] );
 
 				foreach( $arr_f as $f )
 				{
@@ -91,12 +89,12 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 	$page_title = $lang_module['setup_layout'] . ':' . $selectthemes;
 
-	$xtpl = new XTemplate( "setuplayout.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'setuplayout.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$xtpl->assign( 'OP', $op );	
+	$xtpl->assign( 'OP', $op );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
@@ -110,8 +108,11 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		{
 			if( in_array( $layout_name, $layout_array ) )
 			{
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_modthemes` SET `layout`=" . $db->dbescape_string( $layout_name ) . " WHERE `func_id`='" . intval( $func_id ) . "' AND `theme`=" . $db->dbescape_string( $selectthemes ) . "";
-				$db->sql_query( $sql );
+				$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`=:layout WHERE `func_id` = :func_id AND `theme`= :theme' );
+				$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
+				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
+				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+				$sth->execute();
 			}
 		}
 
@@ -121,30 +122,38 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	}
 
 	$array_layout_func_data = array();
-	$fnsql = "SELECT `func_id`, `layout` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `theme`='" . $selectthemes . "'";
-	$fnresult = $db->sql_query( $fnsql );
-
-	while( list( $func_id, $layout ) = $db->sql_fetchrow( $fnresult ) )
+	$sth = $db->prepare('SELECT `func_id`, `layout` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `theme`= :theme');
+	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+	$sth->execute();
+	while( list( $func_id, $layout ) = $sth->fetch( 3 ) )
 	{
 		$array_layout_func_data[$func_id] = $layout;
 	}
 
 	if( ! isset( $array_layout_func_data[0] ) )
 	{
-		$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('0'," . $db->dbescape( $layoutdefault ) . ", " . $db->dbescape( $selectthemes ) . ")" );
+		$sth = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes`
+			(`func_id`, `layout`, `theme`) VALUES
+			(0, :layout, :theme)' );
+		$sth->bindParam( ':layout', $layoutdefault, PDO::PARAM_STR );
+		$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+		$sth->execute();
+
 		$set_layout_site = true;
 	}
 	elseif( $array_layout_func_data[0] != $layoutdefault )
 	{
-		$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_modthemes` SET `layout`=" . $db->dbescape_string( $layoutdefault ) . " WHERE `func_id`='0' AND `theme`=" . $db->dbescape_string( $selectthemes ) . "" );
+		$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`= :layout WHERE `func_id`=0 AND `theme`= :theme' );
+		$sth->bindParam( ':layout', $layoutdefault, PDO::PARAM_STR );
+		$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+		$sth->execute();
+
 		$set_layout_site = true;
 	}
 
 	$array_layout_func = array();
-	$fnsql = "SELECT `func_id`, `func_name`, `func_custom_name`, `in_module` FROM `" . NV_MODFUNCS_TABLE . "` WHERE show_func='1' ORDER BY `subweight` ASC";
-	$fnresult = $db->sql_query( $fnsql );
-
-	while( list( $func_id, $func_name, $func_custom_name, $in_module ) = $db->sql_fetchrow( $fnresult ) )
+	$fnresult = $db->query( 'SELECT `func_id`, `func_name`, `func_custom_name`, `in_module` FROM `' . NV_MODFUNCS_TABLE . '` WHERE show_func=1 ORDER BY `subweight` ASC' );
+	while( list( $func_id, $func_name, $func_custom_name, $in_module ) = $fnresult->fetch( 3 ) )
 	{
 		if( isset( $array_layout_func_data[$func_id] ) and ! empty( $array_layout_func_data[$func_id] ) )
 		{
@@ -153,8 +162,12 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			if( ! in_array( $layout_name, $layout_array ) )
 			{
 				$layout_name = $layoutdefault;
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_modthemes` SET `layout`=" . $db->dbescape_string( $layout_name ) . " WHERE `func_id`='" . intval( $func_id ) . "' AND `theme`=" . $db->dbescape_string( $selectthemes ) . "";
-				$db->sql_query( $sql );
+
+				$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`= :layout WHERE `func_id`= :func_id AND `theme`= :theme' );
+				$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
+				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
+				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+				$sth->execute();
 
 				$set_layout_site = true;
 			}
@@ -162,8 +175,13 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		else
 		{
 			$layout_name = ( isset( $array_layout_func_default[$in_module][$func_name] ) ) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_modthemes` (`func_id`, `layout`, `theme`) VALUES ('" . $func_id . "'," . $db->dbescape( $layout_name ) . ", " . $db->dbescape( $selectthemes ) . ")";
-			$db->sql_query( $sql );
+			$sth = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes`
+			(`func_id`, `layout`, `theme`) VALUES
+			(:func_id, :layout, :theme)' );
+			$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
+			$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
+			$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+			$sth->execute();
 
 			$set_layout_site = true;
 		}
@@ -177,12 +195,11 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		nv_del_moduleCache( 'modules' );
 	}
 
-	$sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
-	$number_func = $db->sql_numrows( $result );
+	$result = $db->query( 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+	$number_func = $result->rowCount();
 
 	$i = 1;
-	while( list( $mod_name, $mod_name_title ) = $db->sql_fetchrow( $result ) )
+	while( list( $mod_name, $mod_name_title ) = $db->fetch( 3 ) )
 	{
 		if( isset( $array_layout_func[$mod_name] ) )
 		{
@@ -194,7 +211,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			{
 				foreach( $layout_array as $value )
 				{
-					$xtpl->assign( 'OPTION', array( 'key' => $value, 'selected' => ( $func_arr_val[2] == $value ) ? " selected=\"selected\"" : "" ) );
+					$xtpl->assign( 'OPTION', array( 'key' => $value, 'selected' => ( $func_arr_val[2] == $value ) ? ' selected="selected"' : '' ) );
 					$xtpl->parse( 'main.loop.func.option' );
 				}
 
@@ -232,8 +249,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

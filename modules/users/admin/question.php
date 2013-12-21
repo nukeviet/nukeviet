@@ -26,8 +26,7 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET
 		`title`=" . $db->dbescape( $title ) . ", `edit_time`=" . NV_CURRENTTIME . "
 		WHERE `qid`=" . $qid . " AND `lang`='" . NV_LANG_DATA . "'";
-	$db->sql_query( $sql );
-	if( ! $db->sql_affectedrows() )
+	if( ! $db->exec( $sql ) )
 	{
 		die( "NO" );
 	}
@@ -99,10 +98,9 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $qid )
 	{
-		$query = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `qid`=" . $qid;
-		if( $db->sql_query( $query ) )
+		$sql = "DELETE FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `qid`=" . $qid;
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_freeresult();
 
 			// fix weight question
 			$sql = "SELECT `qid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` WHERE `lang`='" . NV_LANG_DATA . "' ORDER BY `weight` ASC";
@@ -114,14 +112,14 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_question` SET `weight`=" . $weight . " WHERE `qid`=" . $row['qid'];
 				$db->sql_query( $sql );
 			}
-			$db->sql_freeresult();
+			$db->sql_freeresult( $result );
 			die( "OK" );
 		}
 	}
 	die( "NO" );
 }
 
-$xtpl = new XTemplate( "question.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'question.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
@@ -139,16 +137,16 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
-				"qid" => $row['qid'],
-				"title" => $row['title']
+				'qid' => $row['qid'],
+				'title' => $row['title']
 			) );
 
 			for( $i = 1; $i <= $num; ++$i )
 			{
 				$xtpl->assign( 'WEIGHT', array(
-					"key" => $i,
-					"title" => $i,
-					"selected" => $i == $row['weight'] ? " selected=\"selected\"" : ""
+					'key' => $i,
+					'title' => $i,
+					'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
 				) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
@@ -162,9 +160,9 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -172,8 +170,8 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->parse( 'load' );
 $contents = $xtpl->text( 'load' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

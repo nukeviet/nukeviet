@@ -11,13 +11,13 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php' );
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php' ;
 	exit();
 }
 
@@ -41,7 +41,7 @@ function nv_check_username_change( $login )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_name'";
 	$result = $db->sql_query( $sql );
 	list( $deny_name ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
@@ -70,7 +70,7 @@ function nv_check_email_change( $email )
 	$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='deny_email'";
 	$result = $db->sql_query( $sql );
 	list( $deny_email ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult();
+	$db->sql_freeresult( $result );
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
 
@@ -115,13 +115,13 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 }
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
 }
 elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
 {
 	define( 'NV_EDITOR', true );
 	define( 'NV_IS_CKEDITOR', true );
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ;
 
 	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
@@ -235,11 +235,11 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 				$db->sql_query( $sql );
 
 				$contents = user_info_exit( $lang_module['change_question_ok'] );
-				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
-				include ( NV_ROOTDIR . '/includes/header.php' );
+				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . '/includes/footer.php' );
+				include NV_ROOTDIR . '/includes/footer.php';
 				exit();
 			}
 		}
@@ -262,9 +262,9 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 
 	$contents = user_changequestion( $array_data );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 else
@@ -402,7 +402,7 @@ if( $checkss == $array_data['checkss'] )
 
 	if( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
 	{
-		require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+		require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
 
 		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'] );
 		$upload_info = $upload->save_file( $_FILES['avatar'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
@@ -421,7 +421,7 @@ if( $checkss == $array_data['checkss'] )
 			$basename = $upload_info['basename'];
 			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '\2', $basename );
 
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+			require_once NV_ROOTDIR . '/includes/class/image.class.php' ;
 
 			$_image = new image( $image, 80, 80 );
 			$_image->resizeXY( 80, 80 );
@@ -456,16 +456,16 @@ if( $checkss == $array_data['checkss'] )
 		$userid = $user_info['userid'];
 		$error = '';
 		$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
-		require ( NV_ROOTDIR . "/modules/users/fields.check.php" );
+		require NV_ROOTDIR . '/modules/users/fields.check.php';
 		if( empty( $error ) )
 		{
 			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . " WHERE `userid`=" . $user_info['userid'] );
 			$contents = user_info_exit( $info );
-			$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+			$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
-			include ( NV_ROOTDIR . '/includes/header.php' );
+			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_site_theme( $contents );
-			include ( NV_ROOTDIR . '/includes/footer.php' );
+			include NV_ROOTDIR . '/includes/footer.php';
 		}
 		else
 		{
@@ -476,11 +476,11 @@ if( $checkss == $array_data['checkss'] )
 	{
 		$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` SET " . implode( ', ', $query_field ) . " WHERE `userid`=" . $user_info['userid'] );
 		$contents = user_info_exit( $info );
-		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 else
@@ -512,8 +512,8 @@ $array_data['gender_array']['F'] = array(
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

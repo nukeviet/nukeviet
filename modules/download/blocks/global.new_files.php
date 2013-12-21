@@ -70,12 +70,12 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 		if( $list_cat )
 		{
-			$sql = "SELECT `id`, `catid`, `title`, `alias`, `updatetime` FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "` WHERE `status` AND `catid` IN(" . implode( ",", array_keys( $list_cat ) ) . ") ORDER BY `updatetime` DESC LIMIT 0 , " . $block_config['numrow'];
+			$sql = "SELECT `id`, `catid`, `title`, `alias`, `updatetime` FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "` WHERE `status` AND `catid` IN(" . implode( ',', array_keys( $list_cat ) ) . ") ORDER BY `updatetime` DESC LIMIT 0 , " . $block_config['numrow'];
 			$list = nv_db_cache( $sql, 'id', $module );
 
 			if( ! empty( $list ) )
 			{
-				if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $file . "/block_new_files.tpl" ) )
+				if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $file . '/block_new_files.tpl' ) )
 				{
 					$block_theme = $module_info['template'];
 				}
@@ -83,7 +83,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 				{
 					$block_theme = "default";
 				}
-				$xtpl = new XTemplate( "block_new_files.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $file );
+				$xtpl = new XTemplate( 'block_new_files.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $file );
 				$xtpl->assign( 'CONFIG', $block_config );
 
 				foreach( $list as $row )

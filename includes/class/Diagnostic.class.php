@@ -30,7 +30,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 
 	if( ! class_exists( 'UrlGetContents' ) )
 	{
-		include ( NV_ROOTDIR . "/includes/class/geturl.class.php" );
+		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
 	}
 
 	$getContent = new UrlGetContents( $global_config );
@@ -460,7 +460,7 @@ class Diagnostic
 			$domain = $this->myDomain;
 		}
 
-		$domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^www\./e' ), array( '', '' ), $domain );
+		$domain = preg_replace( array( '/^[a-z]+\:\/\//i', '/^www\./i' ), array( '', '' ), $domain );
 
 		$this->currentDomain = $domain;
 		$this->currentCache = NV_ROOTDIR . '/' . NV_DATADIR . '/diagnostic-' . $this->currentDomain . '.xml';

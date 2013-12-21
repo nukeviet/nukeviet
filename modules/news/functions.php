@@ -11,11 +11,11 @@ if( ! in_array( $op, array( 'viewcat', 'detail' ) ) )
 {
 	define( 'NV_IS_MOD_NEWS', true );
 }
-require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/global.functions.php" );
+require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 global $global_array_cat;
 $global_array_cat = array();
-$link_i = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=Other";
+$link_i = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=Other';
 $global_array_cat[0] = array(
 	'catid' => 0,
 	'parentid' => 0,
@@ -33,16 +33,15 @@ $global_array_cat[0] = array(
 );
 $catid = 0;
 $parentid = 0;
-$alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : "";
+$alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : '';
 $array_mod_title = array();
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
 $list = nv_db_cache( $sql, 'catid', $module_name );
 foreach( $list as $l )
 {
-	$l['alias'] = $db->unfixdb( $l['alias'] );
 	$global_array_cat[$l['catid']] = $l;
-	$global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+	$global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 	if( $alias_cat_url == $l['alias'] )
 	{
 		$catid = $l['catid'];
@@ -55,7 +54,7 @@ if( $module_info['rss'] )
 {
 	$rss[] = array(
 		'title' => $module_info['custom_title'],
-		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss']
+		'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss']
 	);
 }
 
@@ -70,7 +69,7 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 			$act = 1;
 			if( ! empty( $global_array_cat[$catid_i]['subcatid'] ) )
 			{
-				$array_catid = explode( ",", $global_array_cat[$catid_i]['subcatid'] );
+				$array_catid = explode( ',', $global_array_cat[$catid_i]['subcatid'] );
 				foreach( $array_catid as $sub_catid_i )
 				{
 					$array_sub_cat_i = $global_array_cat[$sub_catid_i];
@@ -91,7 +90,7 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 	{
 		$rss[] = array(
 			'title' => $module_info['custom_title'] . ' - ' . $array_cat_i['title'],
-			'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_cat_i['alias']
+			'src' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $array_cat_i['alias']
 		);
 	}
 }
@@ -104,27 +103,27 @@ $per_page_comment = 5;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
 $count_op = sizeof( $array_op );
-if( ! empty( $array_op ) and $op == "main" )
+if( ! empty( $array_op ) and $op == 'main' )
 {
 	if( $catid == 0 )
 	{
 		$contents = $lang_module['nocatpage'] . $array_op[0];
-		if( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == "page-" )
+		if( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == 'page-' )
 		{
 			$page = intval( substr( $array_op[1], 5 ) );
 		}
 		elseif( ! empty( $alias_cat_url ) )
 		{
-			$redirect = "<meta http-equiv=\"Refresh\" content=\"3;URL=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+			$redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 			nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
 		}
 	}
 	else
 	{
-		$op = "main";
-		if( $count_op == 1 or substr( $array_op[1], 0, 5 ) == "page-" )
+		$op = 'main';
+		if( $count_op == 1 or substr( $array_op[1], 0, 5 ) == 'page-' )
 		{
-			$op = "viewcat";
+			$op = 'viewcat';
 			if( $count_op > 1 )
 			{
 				$page = intval( substr( $array_op[1], 5 ) );
@@ -132,13 +131,13 @@ if( ! empty( $array_op ) and $op == "main" )
 		}
 		elseif( $count_op == 2 )
 		{
-			$array_page = explode( "-", $array_op[1] );
+			$array_page = explode( '-', $array_op[1] );
 			$id = intval( end( $array_page ) );
 			$number = strlen( $id ) + 1;
 			$alias_url = substr( $array_op[1], 0, -$number );
 			if( $id > 0 and $alias_url != '' )
 			{
-				$op = "detail";
+				$op = 'detail';
 			}
 		}
 		$parentid = $catid;

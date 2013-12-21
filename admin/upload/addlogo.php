@@ -14,7 +14,7 @@ $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
 if( ! isset( $check_allow_upload_dir['delete_file'] ) )
 {
-	die( "ERROR#" . $lang_module['notlevel'] );
+	die( 'ERROR#' . $lang_module['notlevel'] );
 }
 
 $file = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post,get' ) ), ENT_QUOTES );
@@ -22,7 +22,7 @@ $file = basename( $file );
 
 if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 {
-	die( "ERROR#" . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file );
+	die( 'ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file );
 }
 
 if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request( 'x', 'post' ) and $nv_Request->isset_request( 'y', 'post' ) )
@@ -41,7 +41,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	}
 	else
 	{
-		die( "ERROR#" . $lang_module['notlogo'] );
+		die( 'ERROR#' . $lang_module['notlogo'] );
 	}
 
 	$config_logo = array();
@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $config_logo['w'] > 0 and $config_logo['h'] > 0 )
 	{
-		require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+		require_once NV_ROOTDIR . '/includes/class/image.class.php';
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->addlogo( $upload_logo, '', '', $config_logo );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
@@ -68,16 +68,16 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 			$did = $array_dirname[$path];
 			$info = nv_getFileInfo( $path, $file );
 			$info['userid'] = $admin_info['userid'];
-			$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) VALUES 
+			$db->exec( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
+							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) VALUES
 							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
 		}
 
-		die( "OK#" . basename( $create_Image_info['src'] ) );
+		die( 'OK#' . basename( $create_Image_info['src'] ) );
 	}
 	else
 	{
-		die( "ERROR#" . $lang_module['notlevel'] );
+		die( 'ERROR#' . $lang_module['notlevel'] );
 	}
 }
 
@@ -133,20 +133,20 @@ $logosite = array(
 	'h' => $h
 );
 
-$xtpl = new XTemplate( "addlogo.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "LANG", $lang_module );
-$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
-$xtpl->assign( "NV_OP_URL", NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-$xtpl->assign( "IMG_PATH", $path );
-$xtpl->assign( "IMG_FILE", $file );
-$xtpl->assign( "IMG_MTIME", filemtime( NV_ROOTDIR . '/' . $path . '/' . $file ) );
-$xtpl->assign( "LOGOSITE", $logosite );
+$xtpl = new XTemplate( 'addlogo.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'NV_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+$xtpl->assign( 'IMG_PATH', $path );
+$xtpl->assign( 'IMG_FILE', $file );
+$xtpl->assign( 'IMG_MTIME', filemtime( NV_ROOTDIR . '/' . $path . '/' . $file ) );
+$xtpl->assign( 'LOGOSITE', $logosite );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

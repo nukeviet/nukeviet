@@ -96,7 +96,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 }
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $array_cat_view ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
 	die();
 }
 $array_search = array(
@@ -276,7 +276,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	}
 	else
 	{
-		$array_temp = explode( ",", $listcatid );
+		$array_temp = explode( ',', $listcatid );
 		$check_edit = $check_del = 0;
 		foreach( $array_temp as $catid_i )
 		{
@@ -355,7 +355,7 @@ while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 	$action[] = array( "value" => $catid_i, "title" => $title_i );
 }
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
-$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -407,8 +407,8 @@ if( ! empty( $generate_page ) )
 }
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
