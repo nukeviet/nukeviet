@@ -13,21 +13,19 @@ function nv_create_table_news( $catid )
 {
 	global $db, $db_config, $lang_data;
 
-	$db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
-	$result = $db->sql_query( "SHOW CREATE TABLE `" . $db_config['prefix'] . "_fr_news_rows`" );
-	$show = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
+	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$show = $db->query( 'SHOW CREATE TABLE `' . $db_config['prefix'] . '_fr_news_rows`' )->fetchColumn( 1 );
 
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
+	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
 	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . "_" . $lang_data . "_news_rows", $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid, $sql );
+	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
 
-	$db->sql_query( $sql );
+	$db->exec( $sql );
 }
 
 $sql_create_table = array();
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modules`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_modules`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`, `gid`) VALUES
 ('about', 'page', 'about', 'À propos', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0, 0),
 ('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 2, 1, 1, '', 1, 0),
@@ -41,7 +39,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 ('rss', 'rss', 'rss', 'Rss', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0, 0),
 ('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `alias`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES
 (1, 'Sitemap', 'Sitemap', 'Sitemap', 'about', 0, 0, 0, ''),
 (2, 'main', 'main', 'Main', 'about', 1, 0, 1, ''),
@@ -213,7 +211,7 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (50, 'left-body-right', 'default'),
 (50, 'body', 'mobile_nukeviet')";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
 (1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:\"title_length\";i:25;}'),
 (2, 'default', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
@@ -236,7 +234,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (19, 'default', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:231:\"<p class=\"footer\"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a></p>\";}'),
 (20, 'mobile_nukeviet', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '')";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
 (1, 5, 1),
 (1, 6, 1),
@@ -807,8 +805,8 @@ $disable_site_content = "Notre site est fermé temporairement pour la maintenanc
 $copyright = "Veuillez citer le lien vers l&#039;article original si vous le reproduisez sur un autre site. Merci.";
 $site_description = "NUKEVIET CMS 3.0 Developé par Vinades.,Jsc";
 
-$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $site_description ) . " WHERE `module` = 'global' AND `config_name` = 'site_description' AND `lang`='fr'";
-$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $disable_site_content ) . " WHERE `module` = 'global' AND `config_name` = 'disable_site_content' AND `lang`='fr'";
+$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->quote( $site_description ) . " WHERE `module` = 'global' AND `config_name` = 'site_description' AND `lang`='fr'";
+$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->quote( $disable_site_content ) . " WHERE `module` = 'global' AND `config_name` = 'disable_site_content' AND `lang`='fr'";
 
 $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Supprimer les anciens registres du status en ligne dans la base de données';
@@ -821,18 +819,18 @@ $array_cron_name['cron_ref_expired_del'] = 'Supprimer les referers expirés';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Mise à jour du site de diagnostic';
 $array_cron_name['cron_auto_check_version'] = 'Vérifier la version NukeViet';
 
-$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
-while( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( 'SELECT `id`, `run_func` FROM `' . $db_config['prefix'] . '_cronjobs` ORDER BY `id` ASC' );
+while( list( $id, $run_func ) = $result->fetch( 3 ) )
 {
 	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` = " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` = " . $db->quote( $cron_name ) . " WHERE `id`=" . $id;
 }
 $db->sql_freeresult( $result );
 
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = 'modern' WHERE `lang` = '" . $lang_data . "' AND `module` = 'global' AND `config_name` = 'site_theme'";
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='news'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='news'" );
+if( $result->rowCount() )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` VALUES
 		(1, 0, 'News', '', 'News', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '', '', 1280644983, 1280927178, 0, ''),
@@ -876,12 +874,12 @@ if( $db->sql_numrows( $result ) )
 		(1, 1, 'Nukeviet'),
 		(2, 1, 'NukeViet')";
 
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $copyright ) . " WHERE `module` = 'news' AND `config_name` = 'copyright' AND `lang`='fr'";
+	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->quote( $copyright ) . " WHERE `module` = 'news' AND `config_name` = 'copyright' AND `lang`='fr'";
 	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = 'news' WHERE `module` = 'global' AND `config_name` = 'site_home_module' AND `lang`='" . $lang_data . "'";
 }
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );
+if( $result->rowCount(  ) )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
 		(1, 'Qu&#039;est ce que NukeViet 3.0?', '', 1, 1, 0, '0', 1275318563, 0, 1)";
@@ -893,8 +891,8 @@ if( $db->sql_numrows( $result ) )
 		(4, 1, 'Toutes ces réponses','', 1)";
 }
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='about'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='about'" );
+if( $db->rowCount( $result ) )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_about` (`id`, `title`, `alias`, `image`, `imagealt`, `description`, `bodytext`, `keywords`, `socialbutton`, `activecomm`, `facebookappid`, `layout_func`, `gid`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`) VALUES
 		(1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '', '', '', '<p> NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke. Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.<br />  </p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>', '', 0, 0, '', '', 0, 1, 1, 1280634933, 1280634933, 1),

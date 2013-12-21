@@ -13,20 +13,18 @@ function nv_create_table_news( $catid )
 {
 	global $db, $db_config, $lang_data;
 
-	$db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
-	$result = $db->sql_query( "SHOW CREATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows`" );
-	$show = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
+	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$show = $db->query( 'SHOW CREATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_news_rows`' )->fetchColumn();
 
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
+	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
 	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . "_" . $lang_data . "_news_rows", $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid, $sql );
+	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
 
-	$db->sql_query( $sql );
+	$db->exec( $sql );
 }
 
 $sql_create_table = array();
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modules`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_modules`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`, `gid`) VALUES
 ('about', 'page', 'about', 'Giới thiệu', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0, 0),
 ('news', 'news', 'news', 'Tin Tức', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 2, 1, 1, '', 1, 0),
@@ -212,7 +210,7 @@ $sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data
 (53, 'body', 'modern'),
 (53, 'body', 'default')";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
 (1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:\"title_length\";i:25;}'),
 (2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
@@ -235,7 +233,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 (19, 'default', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:231:\"<p class=\"footer\"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a></p>\";}'),
 (20, 'mobile_nukeviet', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '')";
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight`";
+$sql_create_table[] = 'TRUNCATE TABLE `' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight`';
 $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
 (1, 5, 1),
 (1, 6, 1),
@@ -849,7 +847,7 @@ $sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data 
 $disable_site_content = "Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!";
 $copyright = "Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền";
 
-$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $disable_site_content ) . " WHERE `module` = 'global' AND `config_name` = 'disable_site_content' AND `lang`='vi'";
+$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->quote( $disable_site_content ) . " WHERE `module` = 'global' AND `config_name` = 'disable_site_content' AND `lang`='vi'";
 
 $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
@@ -862,18 +860,18 @@ $array_cron_name['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Cập nhật đánh giá site từ các máy chủ tìm kiếm';
 $array_cron_name['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
 
-$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
-while( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
+while( list( $id, $run_func ) = $result->fetch( 3 ) )
 {
 	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` = " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` = " . $db->quote( $cron_name ) . " WHERE `id`=" . $id;
 }
 $db->sql_freeresult( $result );
 
 $sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = 'modern' WHERE `lang` = 'vi' AND `module` = 'global' AND `config_name` = 'site_theme'";
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='news'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='news'" );
+if( $result->rowCount() )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` VALUES
 		(1, 0, 'Tin tức', '', 'Tin-tuc', '', '', 0, 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 1, 4, '', '', 1274986690, 1274986690, 0, ''),
@@ -1013,12 +1011,12 @@ if( $db->sql_numrows( $result ) )
 		(10, 32, 'mã nguồn mở'),
 		(10, 9, 'nukeviet')";
 
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->dbescape_string( $copyright ) . " WHERE `module` = 'news' AND `config_name` = 'copyright' AND `lang`='vi'";
+	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = " . $db->quote( $copyright ) . " WHERE `module` = 'news' AND `config_name` = 'copyright' AND `lang`='vi'";
 	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = 'news' WHERE `module` = 'global' AND `config_name` = 'site_home_module' AND `lang`='" . $lang_data . "'";
 }
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );
+if( $result->rowCount( ) )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
 		(2, 'Bạn biết gì về NukeViet 3?', '', 1, 1, 0, '0', 1275318563, 0, 1),
@@ -1036,8 +1034,8 @@ if( $db->sql_numrows( $result ) )
 		(13, 3, 'Tất cả các ý kiến trên','', 0)";
 }
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='about'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='about'" );
+if( $result->rowCount() )
 {
 	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_about` (`id`, `title`, `alias`, `image`, `imagealt`, `description`, `bodytext`, `keywords`, `socialbutton`, `activecomm`, `facebookappid`, `layout_func`, `gid`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`) VALUES
 		(1, 'Giới thiệu về NukeViet 3.0', 'Gioi-thieu-ve-NukeViet-3-0', '', '', '', '<p> NukeViet 3.0 là thế hệ CMS hoàn toàn mới do người Việt phát triển. Lần đầu tiên ở Việt Nam, một bộ nhân mã nguồn mở được đầu tư bài bản và chuyên nghiệp cả về tài chính, nhân lực và thời gian. Kết quả là 100% dòng code của NukeViet được viết mới hoàn toàn, NukeViet 3 sử dụng xHTML, CSS với Xtemplate và jquery cho phép vận dụng Ajax uyển chuyển cả trong công nghệ nhân.</p><p> Tận dụng các thành tựu mã nguồn mở có sẵn nhưng NukeViet 3 vẫn đảm bảo rằng từng dòng code là được code tay (NukeViet 3 không sử dụng bất cứ một nền tảng (framework) nào). Điều này có nghĩa là NukeViet 3 hoàn toàn không phụ thuộc vào bất cứ framework nào trong quá trình phát triển của mình; Bạn hoàn toàn có thể đọc hiểu để tự lập trình trên NukeViet 3 nếu bạn biết PHP và MySQL (đồng nghĩa với việc NukeViet 3 hoàn toàn mở và dễ nghiên cứu cho bất cứ ai muốn tìm hiểu về code của NukeViet).</p><p style=\"text-align: justify;\"> Bộ nhân NukeViet 3 ngoài việc thừa hưởng sự đơn giản vốn có của NukeViet nhưng không vì thế mà quên nâng cấp mình. Hệ thống NukeViet 3 hỗ trợ công nghệ đa nhân module. Chúng tôi gọi đó là công nghệ ảo hóa module. Công nghệ này cho phép người sử dụng có thể khởi tạo hàng ngàn module một cách tự động mà không cần động đến một dòng code. Các module được sinh ra từ công nghệ này gọi là module ảo. Module ảo là module được nhân bản từ một module bất kỳ của hệ thống nukeviet nếu module đó cho phép tạo module ảo.</p><p style=\"text-align: justify;\"> NukeViet 3 cũng hỗ trợ việc cài đặt từ động 100% các module, block, theme từ Admin Control Panel, người sử dụng có thể cài module mà không cần làm bất cứ thao tác phức tạp nào. NukeViet 3 còn cho phép bạn đóng gói module để chia sẻ cho người khác.</p><p style=\"text-align: justify;\"> NukeViet 3 đa ngôn ngữ 100% với 2 loại: đa ngôn ngữ giao diện và đa ngôn ngữ database. NukeViet 3 có tính năng&nbsp; cho phép người quản trị tự xây dựng ngôn ngữ mới cho site. Cho&nbsp; phép đóng gói file ngôn ngữ để chia sẻ cho cộng đồng... câu chuyện về nukeviet 3 sẽ còn dài vì một loạt các tính năng cao cấp vẫn đang được phát triển. Hãy sử dụng và phổ biến NukeViet 3 để tự mình tận hưởng những thành quả mới nhất từ công nghệ web mã nguồn mở. Cuối cùng NukeViet 3 là món của của <a href=\"http://vinades.vn\" target=\"_blank\">VINADES.,JSC</a> gửi tới cộng đồng để cảm ơn cộng đồng đã ủng hộ thời gian qua, bây giờ NukeViet 3 được đưa trở lại cộng đồng để cộng đồng tiếp tục nuôi nấng và chăm sóc NukeViet lớn mạnh hơn.</p><p style=\"text-align: justify;\"> Mọi ý kiến và yêu cầu trợ giúp về NukeViet 3 các bạn có thể gửi lên diễn đàn NukeViet tại địa chỉ: <a href=\"http://nukeviet.vn/phpbb/\" target=\"_blank\">http://nukeviet.vn/phpbb/</a>. Việc giúp đỡ hoàn toàn miễn phí và mọi góp ý của bạn đều được hoan nghênh.</p> <div style=\"text-align: center;\"> <object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" height=\"400\" width=\"480\"><param name=\"quality\" value=\"high\" /><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"movie\" value=\"" . NV_BASE_SITEURL . "images/jwplayer/player.swf\" /><param name=\"allowfullscreen\" value=\"true\" /><param name=\"allowscriptaccess\" value=\"always\" /><param name=\"flashvars\" value=\"file=http://www.youtube.com/watch?v=dG66RocXSeY&amp;autostart=true\" /><embed allowscriptaccess=\"always\" flashvars=\"file=http://www.youtube.com/watch?v=dG66RocXSeY&amp;autostart=true\" height=\"400\" quality=\"high\" src=\"" . NV_BASE_SITEURL . "images/jwplayer/player.swf\" width=\"480\"></embed></object><br /> Video clip Giới thiệu mã nguồn mở NukeViet trong bản tin Tiêu điểm của chương trình Xã hội thông tin<br /> (Đài truyền hình kỹ thuật số VTC) phát sóng lúc 20h chủ nhật, ngày 05-09-2010 trên VTC1</div>', '', 0, 0, '', '', 0, 1, 1, 1275320174, 1275320174, 1),

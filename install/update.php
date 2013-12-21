@@ -989,9 +989,10 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 			if( $array['module_exist'] )
 			{
 				// Lay phien ban module
-				$sql = 'SELECT `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `module_file`=' . $db->dbescape( $nv_update_config['formodule'] );
-				$result = $db->sql_query( $sql );
-				$row = $db->sql_fetchrow( $result );
+				$sth = $db->prepare( 'SELECT `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `module_file`= :module_file' );
+				$sth->bindParam( ':module_file', $nv_update_config['formodule'], PDO::PARAM_STR );
+				$sth->execute();
+				$row = $sth->fetch();
 
 				$v = '';
 				$d = 0;
@@ -1072,13 +1073,12 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			if( ! file_exists( $contents['filename'] ) )
 			{
 				$contents['tables'] = array();
-				$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
-
-				while( $item = $db->sql_fetchrow( $res ) )
+				$res = $db->query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
+				while( $item = $res->fetch( 3 ) )
 				{
 					$contents['tables'][] = $item[0];
 				}
-				$db->sql_freeresult( $res );
+				$res->closeCursor();
 
 				$contents['type'] = 'all';
 
@@ -1843,11 +1843,10 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 						// Luu lai cau hinh FTP
 						foreach( $array_config as $config_name => $config_value )
 						{
-							$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
-							SET `config_value`=" . $db->dbescape_string( $config_value ) . "
-							WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
-							AND `lang` = 'sys' AND `module`='global'
-							LIMIT 1" );
+							$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= :config_value WHERE `config_name` = :config_name AND `lang` = 'sys' AND `module`='global'" );
+							$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+							$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+							$sth->execute();
 						}
 
 						nv_save_file_config_global();
@@ -1969,13 +1968,12 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 
 			$userModules = array();
 
-			$lang_query = $db->sql_query( 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
-			while( list( $lang ) = $db->sql_fetchrow( $lang_query ) )
+			$lang_query = $db->query( 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+			while( list( $lang ) = $lang_query->fetch( 3 ) )
 			{
 				$sql = "SELECT b.module_file, b.mod_version, b.author FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` AS a INNER JOIN `" . $db_config['prefix'] . "_setup_modules` AS b ON a.title=b.title GROUP BY b.module_file ORDER BY b.module_file ASC";
-				$result = $db->sql_query( $sql );
-
-				while( $row = $db->sql_fetchrow( $result ) )
+				$result = $db->query( $sql );
+				while( $row = $result->fetch() )
 				{
 					if( isset( $userModules[$row['module_file']] ) ) continue;
 
