@@ -27,14 +27,23 @@ class sql_db extends pdo
 		$aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
 
 		$AvailableDrivers = PDO::getAvailableDrivers();
+		
+		$driver_options = array(
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_EMULATE_PREPARES => false,
+			PDO::ATTR_PERSISTENT => $config['persistent'],
+			PDO::ATTR_CASE => PDO::CASE_LOWER,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+		);
 
 		if( in_array( $config['dbtype'], $AvailableDrivers ) AND in_array( $config['dbtype'], $aray_type ) )
 		{
-			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'];
+			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
 		}
 		elseif( $config['dbtype'] == 'oci' )
 		{
-			$dsn = 'oci:dbname=//' . $config['dbhost'] . ':' . $config['dbport'] . '/' . $config['dbname'];
+			$dsn = 'oci:dbname=//' . $config['dbhost'] . ':' . $config['dbport'] . '/' . $config['dbname'] . ';charset=AL32UTF8';
+			$driver_options[PDO::ATTR_STRINGIFY_FETCHES] = true;
 		}
 		elseif( $config['dbtype'] == 'sqlite' )
 		{
@@ -45,21 +54,13 @@ class sql_db extends pdo
 			trigger_error( $config['dbtype'] . ' is not supported', 256 );
 		}
 
-		$driver_options = array(
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-			PDO::ATTR_EMULATE_PREPARES => false,
-			PDO::ATTR_PERSISTENT => $config['persistent'],
-			PDO::ATTR_CASE => PDO::CASE_LOWER,
-			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-		);
-
 		$this->server = $config['dbhost'];
 		$this->dbtype = $config['dbtype'];
 		$this->dbname = $config['dbname'];
 		$this->user = $config['dbuname'];
 		try
 		{
-			parent::__construct( $dsn . ';charset=utf8', $config['dbuname'], $config['dbpass'], $driver_options );
+			parent::__construct( $dsn , $config['dbuname'], $config['dbpass'], $driver_options );
 			$this->exec( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
 			$this->connect = 1;
 		}
@@ -106,7 +107,7 @@ class sql_db extends pdo
 			}
 			elseif ( $this->dbtype = 'oci' )
 			{
-				$rs = $this->query( 'select version from product_component_version' );
+				$rs = $this->query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
 				return $rs->fetchColumn( );
 			}
 		}
