@@ -63,19 +63,19 @@ function nv_admin_add_theme( $contents )
 
 	foreach( $contents['run_file'][2] as $run )
 	{
-		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.run_file' );
 	}
 
 	for( $i = 0; $i < 24; ++$i )
 	{
-		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.hour' );
 	}
 
 	for( $i = 0; $i < 60; ++$i )
 	{
-		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.min' );
 	}
 

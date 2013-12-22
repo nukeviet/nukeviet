@@ -186,7 +186,7 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 			$xtpl->assign( 'WEIGHT', array(
 				'key' => $i,
 				'title' => $i,
-				'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
+				'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
 			) );
 			$xtpl->parse( 'main.googleplus.weight' );
 		}

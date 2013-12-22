@@ -139,7 +139,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 		// absolute path:
 		// $CKEditor->basePath = '/ckeditor/'
 		// If not set, CKEditor will try to detect the correct path.
-		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
+		$CKEditor->basePath = NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
 		if( ! empty( $width ) )
 		{

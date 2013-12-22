@@ -458,7 +458,7 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ) );
 				$xtpl->parse( 'main.deact_modules.loop.weight' );
 			}
 
@@ -491,7 +491,7 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ) );
 				$xtpl->parse( 'main.bad_modules.loop.weight' );
 			}
 

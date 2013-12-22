@@ -267,7 +267,7 @@ if( ! empty( $data['error'] ) )
 
 foreach( $data['theme'][2] as $tm )
 {
-	$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $data['theme'][3] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'THEME', array( 'key' => $tm, 'selected' => $tm == $data['theme'][3] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.theme' );
 }
 
@@ -275,7 +275,7 @@ if( ! empty( $data['mobile'][2] ) )
 {
 	foreach( $data['mobile'][2] as $tm )
 	{
-		$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.mobile.loop' );
 	}
 
@@ -288,7 +288,7 @@ if( isset( $data['who_view'] ) )
 	{
 		$xtpl->assign( 'WHO_VIEW', array(
 			'key' => $k,
-			'selected' => $k == $data['who_view'][2] ? ' selected=\'selected\'' : '',
+			'selected' => $k == $data['who_view'][2] ? ' selected="selected"' : '',
 			'title' => $w
 		) );
 		$xtpl->parse( 'main.who_view.loop' );

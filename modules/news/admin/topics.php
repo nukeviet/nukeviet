@@ -62,7 +62,7 @@ if( ! empty( $savecat ) )
 		if( $db->sql_query_insert_id( $query ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -76,7 +76,7 @@ if( ! empty( $savecat ) )
 		if( $db->exec( $sql ) > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
