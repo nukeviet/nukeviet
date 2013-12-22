@@ -335,7 +335,7 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-$sql = "SELECT `lang`, `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' OR (`lang`='sys' AND `module`='site') ORDER BY `module` ASC";
+$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' OR (lang='sys' AND module='site') ORDER BY module ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )
 {
@@ -363,11 +363,11 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 // Cap nhat Country moi
 if( ! empty( $newCountry ) )
 {
-	if( $db->exec( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
 	{
 		$time_del = NV_CURRENTTIME - 604800;
-		$db->exec( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
-		$result = $db->query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
+		$db->exec( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
+		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
 		$array_ip_file = array();
 		while( $row = $result->fetch() )
 		{

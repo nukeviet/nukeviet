@@ -24,7 +24,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=stats' );
 	$xtpl->parse( 'main.management' );
 
-	$sql = "SELECT `id`,`title` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE act='1' AND clid=" . $banner_client_info['id'] . " ORDER BY `id` ASC";
+	$sql = "SELECT id,title FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act='1' AND clid=" . $banner_client_info['id'] . " ORDER BY id ASC";
 	$result = $db->sql_query( $sql );
 
 	while( $row = $db->sql_fetchrow( $result ) )

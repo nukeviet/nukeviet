@@ -19,12 +19,12 @@ $content = "NO_" . $topicid;
 
 if( $mod == "weight" and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`=" . $topicid;
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE topicid=" . $topicid;
 	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO_' . $topicid );
 
-	$sql = "SELECT `topicid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `topicid`!=" . $topicid . " ORDER BY `weight` ASC";
+	$sql = "SELECT topicid FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE topicid!=" . $topicid . " ORDER BY weight ASC";
 	$result = $db->sql_query( $sql );
 
 	$weight = 0;
@@ -32,11 +32,11 @@ if( $mod == "weight" and $new_vid > 0 )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `weight`=" . $weight . " WHERE `topicid`=" . intval( $row['topicid'] );
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET weight=" . $weight . " WHERE topicid=" . intval( $row['topicid'] );
 		$db->sql_query( $sql );
 	}
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `weight`=" . $new_vid . " WHERE `topicid`=" . intval( $topicid );
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET weight=" . $new_vid . " WHERE topicid=" . intval( $topicid );
 	$db->sql_query( $sql );
 
 	$content = "OK_" . $topicid;

@@ -133,11 +133,11 @@ if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 }
 if( $catid == 0 )
 {
-	$from = "`" . NV_PREFIXLANG . "_" . $module_data . "_rows` as r";
+	$from = "" . NV_PREFIXLANG . "_" . $module_data . "_rows as r";
 }
 else
 {
-	$from = "`" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` as r";
+	$from = "" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " as r";
 }
 $where = '';
 $page = $nv_Request->get_int( 'page', 'get', 0 );
@@ -146,7 +146,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
 {
 	if( $stype == "bodytext" )
 	{
-		$from .= " INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as c ON (r.id=c.id)";
+		$from .= " INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as c ON (r.id=c.id)";
 		$where = " WHERE c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'";
 	}
 	elseif( $stype == "author" or $stype == "title" )
@@ -161,7 +161,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
 		{
 			$qurl = $url_info['scheme'] . "://" . $url_info['host'];
 		}
-		$where = " WHERE r.\tsourceid IN (SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `title` like '%" . $db->dblikeescape( $q ) . "%' OR `link` like '%" . $db->dblikeescape( $qurl ) . "%')";
+		$where = " WHERE r.\tsourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db->dblikeescape( $q ) . "%' OR link like '%" . $db->dblikeescape( $qurl ) . "%')";
 	}
 	elseif( $stype == "admin_id" )
 	{
@@ -169,7 +169,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
 	}
 	elseif( ! empty( $q ) )
 	{
-		$from .= " INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as c ON (r.id=c.id)";
+		$from .= " INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as c ON (r.id=c.id)";
 		$arr_from = array();
 		foreach( $array_in_rows as $key => $val )
 		{
@@ -189,7 +189,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != "-" )
 		}
 	}
 }
-$from .= " LEFT JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` as u ON r.admin_id=u.userid";
+$from .= " LEFT JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " as u ON r.admin_id=u.userid";
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$from_catid = array();

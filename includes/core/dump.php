@@ -119,7 +119,7 @@ function nv_dump_save( $params )
 	$dbsize = 0;
 	$result = $db->query( 'SHOW TABLE STATUS' );
 	$a = 0;
-	while( $item = $result->fetch( $result ) )
+	while( $item = $result->fetch() )
 	{
 		unset( $m );
 		if( in_array( $item['name'], $params['tables'] ) )
@@ -171,7 +171,7 @@ function nv_dump_save( $params )
 	$a = 0;
 	foreach( $tables as $table )
 	{
-		$content = $db->query( 'SHOW CREATE TABLE `' . $table['name'] . '`' )->fetchColumn( 1 );
+		$content = $db->query( 'SHOW CREATE TABLE ' . $table['name'] . '' )->fetchColumn( 1 );
 		$content = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content );
 		$content = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content );
 
@@ -198,7 +198,7 @@ function nv_dump_save( $params )
 			}
 
 			$columns = array();
-			$result = $db->query( 'SHOW COLUMNS FROM `' . $table['name'] . '`' );
+			$result = $db->query( 'SHOW COLUMNS FROM ' . $table['name'] . '' );
 			while( $col = $result->fetch() )
 			{
 				$columns[$col['field']] = preg_match( '/^(\w*int|year)/', $col['type'] ) ? 'int' : 'txt';
@@ -210,7 +210,7 @@ function nv_dump_save( $params )
 			$a = 0;
 			for( $i = 0; $i < $maxi; ++$i )
 			{
-				$result = $db->query( 'SELECT * FROM `' . $table['name'] . '` LIMIT ' . $from . ', ' . $table['limit'] );
+				$result = $db->query( 'SELECT * FROM ' . $table['name'] . ' LIMIT ' . $from . ', ' . $table['limit'] );
 				while( $row = $result->fetch() )
 				{
 					$row2 = array();

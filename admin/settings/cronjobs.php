@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add'] = $lang_module['nv_admin_add'];
 
-$sql = 'SELECT * FROM `' . NV_CRONJOBS_GLOBALTABLE . '` ORDER BY `is_sys` DESC';
+$sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_sys DESC';
 $result = $db->query( $sql );
 
 if( ! $result->rowCount() )

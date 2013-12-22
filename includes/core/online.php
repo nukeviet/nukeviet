@@ -28,7 +28,7 @@ function nv_online_upd()
 	{
 		$username = 'bot:' . $client_info['bot_info']['name'];
 	}
-	$sth = $db->prepare( 'REPLACE INTO `' . NV_SESSIONS_GLOBALTABLE . '` VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
+	$sth = $db->prepare( 'REPLACE INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
 	$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
 	$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 	$sth->execute();

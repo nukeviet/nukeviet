@@ -13,7 +13,7 @@ $mod = $nv_Request->get_title( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( 'NO_' . $mod );
 
-$sth = $db->prepare( 'SELECT `submenu` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+$sth = $db->prepare( 'SELECT submenu FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();
@@ -23,7 +23,7 @@ if( empty( $row ) )
 }
 
 $submenu = $row['submenu'] ? 0 : 1;
-$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `submenu`=' . $submenu . ' WHERE `title`= :title');
+$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET submenu=' . $submenu . ' WHERE title= :title');
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 

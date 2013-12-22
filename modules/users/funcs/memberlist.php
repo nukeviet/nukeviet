@@ -39,7 +39,7 @@ else
 		if( preg_match( "/^(.*)\-([a-z0-9]{32})$/", $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
 		{
-			$result = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` = " . $db->dbescape( $md5 ) );
+			$result = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username = " . $db->dbescape( $md5 ) );
 			if( $db->sql_numrows( $result ) > 0 )
 			{
 				$item = $db->sql_fetch_assoc( $result );
@@ -106,7 +106,7 @@ else
 			}
 		}
 
-		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `md5username`, `full_name`, `photo`, `gender`, `regdate` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS userid, username, md5username, full_name, photo, gender, regdate FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE active=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );

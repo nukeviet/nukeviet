@@ -25,9 +25,9 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 
 		if( ! isset( $site_mods['voting'] ) ) return "";
 
-		$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time`
- FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "`
- WHERE `act`=1";
+		$sql = "SELECT vid, question, link, acceptcm, who_view, groups_view, publ_time, exp_time
+ FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "
+ WHERE act=1";
 
 		$list = nv_db_cache( $sql, 'vid', 'voting' );
 
@@ -54,7 +54,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 		{
 			$is_update = implode( ',', $is_update );
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "` SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " SET act=0 WHERE vid IN (" . $is_update . ")";
 			$db->sql_query( $sql );
 
 			nv_del_moduleCache( 'voting' );
@@ -66,8 +66,8 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			$rand = rand( 0, $a );
 			$current_voting = $allowed[$rand];
 
-			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows`
- WHERE `vid` = " . $current_voting['vid'] . " ORDER BY `id` ASC";
+			$sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows
+ WHERE vid = " . $current_voting['vid'] . " ORDER BY id ASC";
 
 			$list = nv_db_cache( $sql, '', 'voting' );
 

@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 		}
 
 		$userid = 0;
-		$row = $db->query( "SELECT `userid`, `username`, `password` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username` ='" . nv_md5safe( $nv_username ) . "'" )->fetch();
+		$row = $db->query( "SELECT userid, username, password FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'" )->fetch();
 		if( empty( $row ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] . ' ' . $lang_global['fail'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
@@ -91,7 +91,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 		$error = $lang_global['loginincorrect'];
 		if( $userid > 0 )
 		{
-			$row = $db->query( 'SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `' . NV_AUTHORS_GLOBALTABLE . '` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` AS t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $userid . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1' )->fetch();
+			$row = $db->query( 'SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM ' . NV_AUTHORS_GLOBALTABLE . ' AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' AS t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $userid . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1' )->fetch();
 			if( ! empty( $row ) )
 			{
 				$admin_lev = intval( $row['admin_lev'] );
@@ -124,7 +124,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 					);
 					$admin_serialize = serialize( $array_admin );
 
-					$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `check_num` = :check_num, `last_login` = ' . NV_CURRENTTIME . ', `last_ip` = :last_ip, `last_agent` = :last_agent WHERE `admin_id`=' . $admin_id );
+					$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET check_num = :check_num, last_login = ' . NV_CURRENTTIME . ', last_ip = :last_ip, last_agent = :last_agent WHERE admin_id=' . $admin_id );
 					$sth->bindParam( ':check_num', $checknum, PDO::PARAM_STR );
 					$sth->bindParam( ':last_ip', $client_info['ip'], PDO::PARAM_STR );
 					$sth->bindParam( ':last_agent', $agent, PDO::PARAM_STR );

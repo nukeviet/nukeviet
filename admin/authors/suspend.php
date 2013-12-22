@@ -23,7 +23,7 @@ if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 	die();
 }
 
-$sql = 'SELECT * FROM `' . NV_AUTHORS_GLOBALTABLE . '` WHERE `admin_id`=' . $admin_id;
+$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
@@ -37,7 +37,7 @@ if( $row['lev'] == 1 or ( ! defined( 'NV_IS_GODADMIN' ) and $row['lev'] == 2 ) )
 	die();
 }
 
-$row_user = $db->query( 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $admin_id )->fetch();
+$row_user = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id )->fetch();
 $susp_reason = array();
 $last_reason = array();
 
@@ -118,7 +118,7 @@ if( $allow_change )
 					);
 				}
 			}
-			$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `edittime`=' . NV_CURRENTTIME . ', `is_suspend`=' . $new_suspend . ', `susp_reason`= :susp_reason WHERE `admin_id`=' . $admin_id );
+			$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET edittime=' . NV_CURRENTTIME . ', is_suspend=' . $new_suspend . ', susp_reason= :susp_reason WHERE admin_id=' . $admin_id );
 			$sth->bindValue( ':susp_reason', serialize( $susp_reason ), PDO::PARAM_STR );
 			if( $sth->execute() )
 			{
@@ -218,7 +218,7 @@ else
 	$ads = array_unique( $ads );
 	$ads = "'" . implode( "','", $ads ) . "'";
 
-	$result2 = $db->query( 'SELECT `userid`, `username`, `full_name` FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid` IN (' . $ads . ')' );
+	$result2 = $db->query( 'SELECT userid, username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')' );
 
 	$ads = array();
 	while( $row2 = $result2->fetch() )

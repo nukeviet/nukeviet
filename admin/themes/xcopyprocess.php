@@ -20,25 +20,25 @@ if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_ex
 	foreach( $position as $pos )
 	{
 		// Begin drop all exist blocks behavior with theme 2 and position relative
-		$sth = $db->prepare( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid` IN (SELECT `bid` FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `theme` = :theme AND `position`= :position)' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid IN (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position)' );
 		$sth->bindParam( ':theme', $theme2, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos, PDO::PARAM_STR );
 		$sth->execute();
 
-		$sth = $db->prepare( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `theme` = :theme AND `position`= :position' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position' );
 		$sth->bindParam( ':theme', $theme2, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos, PDO::PARAM_STR );
 		$sth->execute();
 
 		// Get and insert block from theme 1
-		$sth = $db->prepare( 'SELECT * FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `theme` = :theme AND `position`= :position' );
+		$sth = $db->prepare( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position' );
 		$sth->bindParam( ':theme', $theme2, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos, PDO::PARAM_STR );
 		$sth->execute();
 		while( $row = $sth->fetch() )
 		{
-			$sth2 = $db->prepare( 'INSERT INTO `' . NV_BLOCKS_TABLE . '_groups`
-				(`theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
+			$sth2 = $db->prepare( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
+				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 				(:theme, :module, :file_name, :title, :link, :template, :position, :exp_time, :active, :groups_view, :all_func, :weight, :config )' );
 			$sth2->bindParam( ':theme', $theme2, PDO::PARAM_STR );
 			$sth2->bindParam( ':module', $row['module'], PDO::PARAM_STR );
@@ -56,16 +56,16 @@ if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_ex
 			$sth2->execute();
 			$bid = $db->lastInsertId();
 
-			$result_weight = $db->query( 'SELECT func_id, weight FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid` = ' . $row['bid'] );
+			$result_weight = $db->query( 'SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid'] );
 			while( list( $func_id, $weight ) = $result_weight->fetch( 3 ) )
 			{
-				$db->exec( 'INSERT INTO `' . NV_BLOCKS_TABLE . '_weight` (`bid`, `func_id`, `weight`) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
+				$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
 			}
 		}
 	}
 
-	$db->exec( 'OPTIMIZE TABLE `' . NV_BLOCKS_TABLE . '_groups`' );
-	$db->exec( 'OPTIMIZE TABLE `' . NV_BLOCKS_TABLE . '_weight`' );
+	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['xcopyblock'], $lang_module['xcopyblock_from'] . ' ' . $theme1 . ' ' . $lang_module['xcopyblock_to'] . ' ' . $theme2, $admin_info['userid'] );
 	nv_del_moduleCache( 'themes' );

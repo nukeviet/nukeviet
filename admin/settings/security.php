@@ -21,7 +21,7 @@ function nv_save_file_banip()
 	$content_config_site = '';
 	$content_config_admin = '';
 
-	$result = $db->query( 'SELECT `ip`, `mask`, `area`, `begintime`, `endtime` FROM `' . $db_config['prefix'] . '_banip`' );
+	$result = $db->query( 'SELECT ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_banip' );
 	while( list( $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 	{
 		$dbendtime = intval( $dbendtime );
@@ -126,7 +126,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_global['max_requests_60'] = $nv_Request->get_int( 'max_requests_60', 'post' );
 	$array_config_global['max_requests_300'] = $nv_Request->get_int( 'max_requests_300', 'post' );
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -153,7 +153,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	}
 	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -187,7 +187,7 @@ $del = $nv_Request->get_int( 'del', 'get' );
 
 if( ! empty( $del ) and ! empty( $cid ) )
 {
-	$db->exec( 'DELETE FROM `' . $db_config['prefix'] . '_banip` WHERE id=' . $cid );
+	$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid );
 	nv_save_file_banip();
 }
 
@@ -232,9 +232,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		if( $cid > 0 )
 		{
-			$sth = $db->prepare( 'UPDATE `' . $db_config['prefix'] . '_banip`
-				SET `ip`= :ip, `mask`= :mask,`area`=' . $area . ', `begintime`=' . $begintime . ', `endtime`=' . $endtime . ', `notice`= :notice
-				WHERE `id`=' . $cid );
+			$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_banip
+				SET ip= :ip, mask= :mask,area=' . $area . ', begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice
+				WHERE id=' . $cid );
 			$sth->bindParam( ':ip', $ip, PDO::PARAM_STR );
 			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
 			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
@@ -242,7 +242,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		else
 		{
-			$sth = $db->prepare( 'REPLACE INTO `' . $db_config['prefix'] . '_banip` VALUES (NULL, :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )' );
+			$sth = $db->prepare( 'REPLACE INTO ' . $db_config['prefix'] . '_banip VALUES (NULL, :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )' );
 			$sth->bindParam( ':ip', $ip, PDO::PARAM_STR );
 			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
 			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
@@ -334,7 +334,7 @@ $banip_area_array[1] = $lang_module['banip_area_front'];
 $banip_area_array[2] = $lang_module['banip_area_admin'];
 $banip_area_array[3] = $lang_module['banip_area_both'];
 
-$sql = 'SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime` FROM `' . $db_config['prefix'] . '_banip` ORDER BY `ip` DESC';
+$sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_banip ORDER BY ip DESC';
 $result = $db->query( $sql );
 
 if( $result->rowCount() )
@@ -359,7 +359,7 @@ if( $result->rowCount() )
 
 if( ! empty( $cid ) )
 {
-	list( $id, $ip, $mask, $area, $begintime, $endtime, $notice ) = $db->query( 'SELECT `id`, `ip`, `mask`, `area`, `begintime`, `endtime`, `notice` FROM `' . $db_config['prefix'] . '_banip` WHERE `id`=' . $cid )->fetch( 3 );
+	list( $id, $ip, $mask, $area, $begintime, $endtime, $notice ) = $db->query( 'SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid )->fetch( 3 );
 	$lang_module['banip_add'] = $lang_module['banip_edit'];
 }
 

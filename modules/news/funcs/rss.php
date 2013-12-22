@@ -39,11 +39,11 @@ if( ! empty( $catid ) )
 	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_cat_url;
 	$channel['description'] = $global_array_cat[$catid]['description'];
 
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 30";
+	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " WHERE status=1 ORDER BY publtime DESC LIMIT 30";
 }
 else
 {
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 30";
+	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND inhome='1' ORDER BY publtime DESC LIMIT 30";
 }
 if( $module_info['rss'] )
 {

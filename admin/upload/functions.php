@@ -376,7 +376,7 @@ function nv_filesListRefresh( $pathimg )
 	$did = $array_dirname[$pathimg];
 	if( is_dir( NV_ROOTDIR . '/' . $pathimg ) )
 	{
-		$result = $db->query( 'SELECT * FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $did );
+		$result = $db->query( 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
 		while( $row = $result->fetch() )
 		{
 			$results[$row['title']] = $row;
@@ -402,8 +402,8 @@ function nv_filesListRefresh( $pathimg )
 						if( ! empty( $dif ) )
 						{
 							//Cập nhật CSDL file thay đổi
-							$sth = $db->prepare( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-								(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`)
+							$sth = $db->prepare( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+								(name, ext, type, filesize, src, srcwidth, srcheight, size, userid, mtime, did, title, alt)
 								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)" );
 							$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 							$sth->execute();
@@ -414,8 +414,8 @@ function nv_filesListRefresh( $pathimg )
 					{
 						$info['userid'] = $admin_info['userid'];
 						// Thêm file mới
-						$sth = $db->prepare( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`)
+						$sth = $db->prepare( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+							(name, ext, type, filesize, src, srcwidth, srcheight, size, userid, mtime, did, title, alt)
 							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)" );
 						$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 						$sth->execute();
@@ -429,17 +429,17 @@ function nv_filesListRefresh( $pathimg )
 				// Xóa CSDL file không còn tồn tại
 				foreach( $results as $title => $value )
 				{
-					$db->exec( "DELETE FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did` = " . $did . " AND `title`='" . $title . "'" );
+					$db->exec( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'" );
 				}
 			}
-			$db->exec( 'UPDATE `' . NV_UPLOAD_GLOBALTABLE . '_dir` SET `time` = ' . NV_CURRENTTIME . ' WHERE `did` = ' . $did );
+			$db->exec( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did );
 		}
 	}
 	else
 	{
 		// Xóa CSDL thư mục không còn tồn tại
-		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $did );
-		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` WHERE `did` = ' . $did );
+		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 	}
 }
 
@@ -483,7 +483,7 @@ $array_thumb_config = array();
 $refresh = $nv_Request->isset_request( 'refresh', 'get' );
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get', NV_UPLOADS_DIR ) );
 
-$sql = 'SELECT * FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` ORDER BY `dirname` ASC';
+$sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
@@ -519,8 +519,8 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		// Xóa CSDL thư mục không còn tồn tại
 		$did = $array_dirname[$dirname];
-		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $did );
-		$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` WHERE `did` = ' . $did );
+		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 		unset( $array_dirname[$dirname] );
 	}
 	$result_new = array_diff( $real_dirlist, $dirlist );
@@ -528,7 +528,7 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		try
 		{
-			$db->exec( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')" );
+			$db->exec( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')" );
 			$array_dirname[$dirname] = $db->lastInsertId();
 		}
 		catch (PDOException $e)

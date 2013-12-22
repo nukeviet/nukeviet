@@ -13,7 +13,7 @@ $mod = $nv_Request->get_title( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( 'NO_' . $mod );
 
-$sth = $db->prepare( 'SELECT `act`, `in_menu` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+$sth = $db->prepare( 'SELECT act, in_menu FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();
@@ -41,7 +41,7 @@ if( $act == 0 and $mod == $global_config['site_home_module'] )
 	die( 'NO_' . $mod );
 }
 
-$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `in_menu`=' . $in_menu . ', `act`=' . $act . ' WHERE `title`= :title');
+$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET in_menu=' . $in_menu . ', act=' . $act . ' WHERE title= :title');
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 

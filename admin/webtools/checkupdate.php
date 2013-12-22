@@ -58,7 +58,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 		$userModules = array();
 
-		$result = $db->query( 'SELECT `module_file`, `mod_version`, `author` FROM `' . $db_config['prefix'] . '_setup_modules` GROUP BY `module_file` ORDER BY `module_file` ASC' );
+		$result = $db->query( 'SELECT module_file, mod_version, author FROM ' . $db_config['prefix'] . '_setup_modules GROUP BY module_file ORDER BY module_file ASC' );
 		while( list( $module_file, $mod_version, $author ) = $result->fetch( 3 ) )
 		{
 			$userModules[$module_file] = array();
@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
 				{
-					$sth = $db->prepare( 'UPDATE `' . $db_config['prefix'] . '_setup_modules` SET `mod_version`= :mod_version, `author`= :author WHERE `module_file`= :module_file' );
+					$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_setup_modules SET mod_version= :mod_version, author= :author WHERE module_file= :module_file' );
 					$sth->bindValue( ':mod_version', $v . ' ' . $onlineModules[$module_file]['pubtime'], PDO::PARAM_STR );
 					$sth->bindParam( ':author', $onlineModules[$module_file]['author'], PDO::PARAM_STR );
 					$sth->bindParam( ':module_file', $module_file, PDO::PARAM_STR );

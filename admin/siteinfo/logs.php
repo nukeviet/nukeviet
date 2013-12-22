@@ -29,7 +29,7 @@ $data = array();
 $array_userid = array();
 $disabled = ' disabled="disabled"';
 
-$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM `' . $db_config['prefix'] . '_logs` WHERE `id`!=0';
+$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . $db_config['prefix'] . '_logs WHERE id!=0';
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 // Search data
@@ -70,7 +70,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	if( ! empty( $data_search['q'] ) and $data_search['q'] != $lang_module['filter_enterkey'] )
 	{
 		$base_url .= '&amp;q=' . $data_search['q'];
-		$sql .= " AND ( `name_key` LIKE :keyword1 OR `note_action` LIKE :keyword2 )";
+		$sql .= " AND ( name_key LIKE :keyword1 OR note_action LIKE :keyword2 )";
 		$check_like = true;
 	}
 
@@ -79,7 +79,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['from'], $match ) )
 		{
 			$from = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
-			$sql .= ' AND `log_time` >= ' . $from;
+			$sql .= ' AND log_time >= ' . $from;
 			$base_url .= '&amp;from=' . $data_search['from'];
 		}
 	}
@@ -89,7 +89,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['to'], $match ) )
 		{
 			$to = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
-			$sql .= ' AND `log_time` <= ' . $to;
+			$sql .= ' AND log_time <= ' . $to;
 			$base_url .= '&amp;to=' . $data_search['to'];
 		}
 	}
@@ -98,14 +98,14 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	{
 		if( in_array( $data_search['lang'], array_keys( $language_array ) ) )
 		{
-			$sql .= ' AND `lang`=' . $db->quote( $data_search['lang'] );
+			$sql .= ' AND lang=' . $db->quote( $data_search['lang'] );
 			$base_url .= '&amp;lang=' . $data_search['lang'];
 		}
 	}
 
 	if( ! empty( $data_search['module'] ) )
 	{
-		$sql .= ' AND `module_name`=' . $db->quote( $data_search['module'] );
+		$sql .= ' AND module_name=' . $db->quote( $data_search['module'] );
 		$base_url .= '&amp;module=' . $data_search['module'];
 	}
 
@@ -113,7 +113,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	{
 		$user_tmp = ( $data_search['user'] == 'system' ) ? 0 : ( int )$data_search['user'];
 
-		$sql .= ' AND `userid`=' . $user_tmp;
+		$sql .= ' AND userid=' . $user_tmp;
 		$base_url .= '&amp;user=' . $data_search['user'];
 	}
 }
@@ -159,19 +159,19 @@ foreach( $order as $key => $check )
 
 if( $order['lang']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY `lang` ' . $order['lang']['order'];
+	$sql .= ' ORDER BY lang ' . $order['lang']['order'];
 }
 elseif( $order['module']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY `module_name` ' . $order['module']['order'];
+	$sql .= ' ORDER BY module_name ' . $order['module']['order'];
 }
 elseif( $order['time']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY `log_time` ' . $order['time']['order'];
+	$sql .= ' ORDER BY log_time ' . $order['time']['order'];
 }
 else
 {
-	$sql .= ' ORDER BY `id` DESC';
+	$sql .= ' ORDER BY id DESC';
 }
 
 $sql .= ' LIMIT ' . $page . ',' . $per_page;
@@ -207,7 +207,7 @@ $data_users = array();
 $data_users[0] = 'system';
 if( ! empty( $array_userid ) )
 {
-	$result_users = $db->query( 'SELECT userid, username FROM `' . $db_config['prefix'] . '_users` WHERE userid IN (' . implode( ',', $array_userid ) . ')' );
+	$result_users = $db->query( 'SELECT userid, username FROM ' . $db_config['prefix'] . '_users WHERE userid IN (' . implode( ',', $array_userid ) . ')' );
 	while( $data_i = $result_users->fetch() )
 	{
 		$data_users[$data_i['userid']] = $data_i['username'];

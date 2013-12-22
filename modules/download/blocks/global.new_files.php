@@ -56,7 +56,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 		$file = $site_mods[$module]['module_file'];
 
 		// Lay thong tin phan quyen
-		$sql = "SELECT `id`, `alias`, `who_view`, `groups_view` FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories` WHERE `status`=1";
+		$sql = "SELECT id, alias, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories WHERE status=1";
 		$_tmp = nv_db_cache( $sql, 'id', $module );
 		$list_cat = array();
 		if( $_tmp )
@@ -70,7 +70,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 		if( $list_cat )
 		{
-			$sql = "SELECT `id`, `catid`, `title`, `alias`, `updatetime` FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "` WHERE `status` AND `catid` IN(" . implode( ',', array_keys( $list_cat ) ) . ") ORDER BY `updatetime` DESC LIMIT 0 , " . $block_config['numrow'];
+			$sql = "SELECT id, catid, title, alias, updatetime FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . " WHERE status AND catid IN(" . implode( ',', array_keys( $list_cat ) ) . ") ORDER BY updatetime DESC LIMIT 0 , " . $block_config['numrow'];
 			$list = nv_db_cache( $sql, 'id', $module );
 
 			if( ! empty( $list ) )

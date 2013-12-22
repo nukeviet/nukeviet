@@ -39,7 +39,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 		if( $id and ( $point > 0 and $point < 6 ) )
 		{
-			$query = "SELECT `rating_detail` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id . " AND `catid` IN (" . $in . ") AND `status`=1";
+			$query = "SELECT rating_detail FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id . " AND catid IN (" . $in . ") AND status=1";
 			$result = $db->sql_query( $query );
 			$numrows = $db->sql_numrows( $result );
 
@@ -68,7 +68,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 					$rating_detail = $total . "|" . $click;
 
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `rating_detail`=" . $db->dbescape( $rating_detail ) . " WHERE `id`=" . $id;
+					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET rating_detail=" . $db->dbescape( $rating_detail ) . " WHERE id=" . $id;
 					$db->sql_query( $sql );
 				}
 
@@ -103,20 +103,20 @@ foreach( $list_cats as $value )
 		$catid_i = $value['id'];
 		if( empty( $value['subcats'] ) )
 		{
-			$in = "`catid`=" . $catid_i;
+			$in = "catid=" . $catid_i;
 		}
 		else
 		{
 			$in = $value['subcats'];
 			$in[] = $catid_i;
 			$in = implode( ',', $in );
-			$in = "`catid` IN (" . $in . ")";
+			$in = "catid IN (" . $in . ")";
 		}
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`,
-			`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits`
-			FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE " . $in . " AND `status`=1
-			ORDER BY `uploadtime` DESC LIMIT 0, " . $new_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, title, alias, introtext , uploadtime,
+			author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits
+			FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE " . $in . " AND status=1
+			ORDER BY uploadtime DESC LIMIT 0, " . $new_page;
 
 		$result = $db->sql_query( $sql );
 		$query = $db->sql_query( "SELECT FOUND_ROWS()" );

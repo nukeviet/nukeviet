@@ -67,8 +67,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			try
 			{
-				$sth = $db->prepare( 'INSERT INTO `' . NV_CRONJOBS_GLOBALTABLE . '`
-					(`start_time`, `interval`, `run_file`, `run_func`, `params`, `del`, `is_sys`, `act`, `last_time`, `last_result`, `' . NV_LANG_INTERFACE . '_cron_name`) VALUES
+				$sth = $db->prepare( 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . '
+					(start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name) VALUES
 					(' . $start_time . ', ' . $interval . ', :run_file, :run_func, :params, ' . $del . ', 0, 1, 0, 0, :cron_name)' );
 				$sth->bindParam( ':run_file', $run_file, PDO::PARAM_STR );
 				$sth->bindParam( ':run_func', $run_func, PDO::PARAM_STR );
@@ -87,11 +87,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_add', 'id ' . $id, $admin_info['userid'] );
 
-				$sql = "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` where `lang`!='" . NV_LANG_INTERFACE . "'";
+				$sql = "SELECT lang FROM " . $db_config['prefix'] . "_setup_language where lang!='" . NV_LANG_INTERFACE . "'";
 				$result = $db->query( $sql );
 				while( list( $lang_i ) = $result->fetch( 3 ) )
 				{
-					$sth = $db->prepare( 'UPDATE `' . NV_CRONJOBS_GLOBALTABLE . '` SET `' . $lang_i . '_cron_name`= :run_func WHERE `id`=' . $id );
+					$sth = $db->prepare( 'UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET ' . $lang_i . '_cron_name= :run_func WHERE id=' . $id );
 					$sth->bindParam( ':run_func', $run_func, PDO::PARAM_STR );
 					$sth->execute();
 				}

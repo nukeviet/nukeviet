@@ -42,10 +42,10 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $bid == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat`" ) );
+		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat" ) );
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `description`, `image`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, 0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (bid, adddefault, number, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (NULL, 0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 
 		if( $db->sql_query_insert_id( $sql ) )
 		{
@@ -60,7 +60,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title=" . $db->dbescape( $title ) . ", alias = " . $db->dbescape( $alias ) . ", description=" . $db->dbescape( $description ) . ", image= " . $db->dbescape( $image ) . ", keywords= " . $db->dbescape( $keywords ) . ", edit_time=UNIX_TIMESTAMP() WHERE bid =" . $bid;
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
@@ -77,7 +77,7 @@ if( ! empty( $savecat ) )
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $bid > 0 )
 {
-	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `image`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
+	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid . "" ) );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 

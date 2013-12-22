@@ -11,19 +11,19 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
-$sql_drop_module[] = "DROP TABLE IF EXISTS `" . $db_config['prefix'] . "_" . $lang . "_counter`";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_counter";
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "_counter` (
-	 `c_type` varchar(100) NOT NULL,
-	 `c_val` varchar(100) NOT NULL,
-	 `c_count` int(11) unsigned NOT NULL DEFAULT '0',
-	 `last_update` int(11) NOT NULL DEFAULT '0',
-	 UNIQUE KEY `c_type` (`c_type`,`c_val`)
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_counter (
+	 c_type varchar(100) NOT NULL,
+	 c_val varchar(100) NOT NULL,
+	 c_count int(11) unsigned NOT NULL DEFAULT '0',
+	 last_update int(11) NOT NULL DEFAULT '0',
+	 UNIQUE KEY c_type (c_type,c_val)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang . "_counter` (`c_type`, `c_val`, `c_count`, `last_update`) VALUES
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_counter (c_type, c_val, c_count, last_update) VALUES
  ('c_time', 'start', 0, 0),
  ('c_time', 'last', 0, 0),
  ('total', 'hits', 0, 0),

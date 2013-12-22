@@ -64,7 +64,7 @@ if( $submit )
 
 	$array_config['disable_site_content'] = nv_editor_nl2br( $array_config['disable_site_content'] );
 
-	$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= :config_value WHERE `config_name` = :config_name AND `lang` = '" . NV_LANG_DATA . "' AND `module`='global'" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'" );
 	foreach( $array_config as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -81,8 +81,8 @@ if( $submit )
 	}
 	else
 	{
-		$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "`
- 			WHERE `lang`='sys' OR `lang`='" . NV_LANG_DATA . "' ORDER BY `module` ASC";
+		$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . "
+ 			WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
 		$result = $db->query( $sql );
 
 		while( list( $c_module, $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
@@ -102,7 +102,7 @@ if( $submit )
 $theme_array = array();
 $theme_array_file = nv_scandir( NV_ROOTDIR . '/themes', $global_config['check_theme'] );
 
-$sql = 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0';
+$sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query( $sql );
 while( list( $theme ) = $result->fetch( 3 ) )
 {
@@ -137,7 +137,7 @@ $value_setting = array(
 
 $module_array = array();
 
-$sql = 'SELECT title, custom_title FROM `' . NV_MODULES_TABLE . '` WHERE `act`=1 ORDER BY `weight` ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' WHERE act=1 ORDER BY weight ASC';
 $module_array = $db->query( $sql )->fetchAll();
 
 if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

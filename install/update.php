@@ -989,7 +989,7 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 			if( $array['module_exist'] )
 			{
 				// Lay phien ban module
-				$sth = $db->prepare( 'SELECT `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `module_file`= :module_file' );
+				$sth = $db->prepare( 'SELECT mod_version FROM ' . $db_config['prefix'] . '_setup_modules WHERE module_file= :module_file' );
 				$sth->bindParam( ':module_file', $nv_update_config['formodule'], PDO::PARAM_STR );
 				$sth->execute();
 				$row = $sth->fetch();
@@ -1843,7 +1843,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 						// Luu lai cau hinh FTP
 						foreach( $array_config as $config_name => $config_value )
 						{
-							$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value`= :config_value WHERE `config_name` = :config_name AND `lang` = 'sys' AND `module`='global'" );
+							$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
 							$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
 							$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 							$sth->execute();
@@ -1968,10 +1968,10 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 
 			$userModules = array();
 
-			$lang_query = $db->query( 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+			$lang_query = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 			while( list( $lang ) = $lang_query->fetch( 3 ) )
 			{
-				$sql = "SELECT b.module_file, b.mod_version, b.author FROM `" . $db_config['prefix'] . "_" . $lang . "_modules` AS a INNER JOIN `" . $db_config['prefix'] . "_setup_modules` AS b ON a.title=b.title GROUP BY b.module_file ORDER BY b.module_file ASC";
+				$sql = "SELECT b.module_file, b.mod_version, b.author FROM " . $db_config['prefix'] . "_" . $lang . "_modules AS a INNER JOIN " . $db_config['prefix'] . "_setup_modules AS b ON a.title=b.title GROUP BY b.module_file ORDER BY b.module_file ASC";
 				$result = $db->query( $sql );
 				while( $row = $result->fetch() )
 				{

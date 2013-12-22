@@ -23,7 +23,7 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 
 	foreach( $listid as $value )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET topicid='$topicsid' WHERE id='$value'";
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET topicid='$topicsid' WHERE id='$value'";
 		$result = $db->sql_query( $sql );
 	}
 
@@ -37,12 +37,12 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 
 if( $listid == '' )
 {
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 ORDER BY `id` DESC LIMIT 0,20";
+	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 ORDER BY id DESC LIMIT 0,20";
 }
 else
 {
 	$id_array = array_map( "intval", explode( ',', $listid ) );
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `inhome`=1 AND `id` IN (" . implode( ',', $id_array ) . ") ORDER BY `id` DESC";
+	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY id DESC";
 }
 
 $result = $db->sql_query( $sql );
@@ -64,7 +64,7 @@ if( $db->sql_numrows( $result ) )
 		$xtpl->parse( 'main.loop' );
 	}
 
-	$result = $db->sql_query( "SELECT `topicid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` ORDER BY `weight` ASC" );
+	$result = $db->sql_query( "SELECT topicid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics ORDER BY weight ASC" );
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ) );

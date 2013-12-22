@@ -25,7 +25,7 @@ $n_dir = nv_mkdir( NV_ROOTDIR . '/' . $path, $newname );
 
 if( ! empty( $n_dir[0] ) )
 {
-	$sth = $db->prepare( 'INSERT INTO `' . NV_UPLOAD_GLOBALTABLE . '_dir` (`dirname`, `time`, `thumb_type`, `thumb_width`, `thumb_height`, `thumb_quality`) VALUES (:newpath, 0, 0, 0, 0, 0)' );
+	$sth = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:newpath, 0, 0, 0, 0, 0)' );
 	$sth->bindParam( ':newpath', $newpath, PDO::PARAM_STR );
 	$sth->execute();
 

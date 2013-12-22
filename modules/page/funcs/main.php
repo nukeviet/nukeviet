@@ -27,7 +27,7 @@ if( $id )
 	{
 		$cache = array();
 
-		$sql = "SELECT `id`,`title`,`alias`,`bodytext`,`keywords`,`add_time`,`edit_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 AND `id`=" . $id;
+		$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1 AND id=" . $id;
 		$query = $db->sql_query( $sql );
 		$row = $db->sql_fetchrow( $query );
 
@@ -58,7 +58,7 @@ if( $id )
 
 			$cache['keywords'] = $key_words;
 
-			$query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET `keywords`=" . $db->dbescape( $key_words ) . " WHERE `id` =" . $id;
+			$query = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . " SET keywords=" . $db->dbescape( $key_words ) . " WHERE id =" . $id;
 			$db->sql_query( $query );
 		}
 

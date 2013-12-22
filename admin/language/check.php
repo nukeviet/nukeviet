@@ -17,7 +17,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
 while( $row = $result->fetch() )
@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
 			if( ! empty( $lang_value ) )
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '` SET `lang_' . $typelang . '`= :lang_value WHERE `id`= :id' );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value WHERE id= :id' );
 				$sth->bindParam( ':id', $id, PDO::PARAM_INT );
 				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 				$sth->execute();
@@ -121,7 +121,7 @@ foreach( $language_array_source as $key )
 	}
 }
 
-$sql = 'SELECT `idfile`, `module`, `admin_file` FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file` ORDER BY `idfile` ASC';
+$sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query( $sql );
 while( list( $idfile_i, $module, $admin_file, ) = $result->fetch( 3 ) )
 {
@@ -166,25 +166,25 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	$array_where = array();
 	if( $idfile > 0 )
 	{
-		$array_where[] = '`idfile`=' . $idfile;
+		$array_where[] = 'idfile=' . $idfile;
 	}
 
 	if( $check_type == 0 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=''";
+		$array_where[] = "lang_" . $typelang . "=''";
 	}
 	elseif( $check_type == 1 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=`lang_" . $sourcelang . "`";
+		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang . "";
 	}
 
 	if( empty( $array_where ) )
 	{
-		$query = 'SELECT `id`, `idfile`, `lang_key`, `lang_' . $typelang . '` as datalang, `lang_' . $sourcelang . '` as sourcelang FROM `' . NV_LANGUAGE_GLOBALTABLE . '` ORDER BY `id` ASC';
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' ORDER BY id ASC';
 	}
 	else
 	{
-		$query = 'SELECT `id`, `idfile`, `lang_key`, `lang_' . $typelang . '` as datalang, `lang_' . $sourcelang . '` as sourcelang FROM `' . NV_LANGUAGE_GLOBALTABLE . '` WHERE ' . implode( ' AND ', $array_where ) . ' ORDER BY `id` ASC';
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE ' . implode( ' AND ', $array_where ) . ' ORDER BY id ASC';
 	}
 	$result = $db->query( $query );
 

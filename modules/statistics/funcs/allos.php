@@ -13,7 +13,7 @@ $page_title = $lang_module['os'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['os'];
 
-$sql = "SELECT COUNT(*), MAX(`c_count`) FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os' AND `c_count`!=0";
+$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->sql_query( $sql );
 list( $all_page, $max ) = $db->sql_fetchrow( $result );
 
@@ -23,7 +23,7 @@ if( $all_page )
 	$per_page = 50;
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allos'];
 
-	$sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT " . $page . "," . $per_page;
+	$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='os' AND c_count!=0 ORDER BY c_count DESC LIMIT " . $page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$os_list = array();

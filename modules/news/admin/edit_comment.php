@@ -15,7 +15,7 @@ $cid = $nv_Request->get_int( 'cid', 'get' );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', "id " . $cid, $admin_info['userid'] );
-	$sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_comments` b ON a.id=b.id WHERE b.cid='" . $cid . "'";
+	$sql = "SELECT a.id, a.title, a.listcatid, a.alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_comments b ON a.id=b.id WHERE b.cid='" . $cid . "'";
 
 	list( $id, $title, $listcatid, $alias ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
 	if( $id > 0 )
@@ -23,24 +23,24 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$delete = $nv_Request->get_int( 'delete', 'post', 0 );
 		if( $delete )
 		{
-			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `cid`=" . $cid );
+			$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid=" . $cid );
 		}
 		else
 		{
 			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
-			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `content`=" . $db->dbescape( $content ) . ", `status`=" . $active . " WHERE `cid`=" . $cid );
+			$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET content=" . $db->dbescape( $content ) . ", status=" . $active . " WHERE cid=" . $cid );
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat
 		$array_catid = explode( ',', $listcatid );
-		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
-		$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments where id= '" . $id . "' AND status=1" ) );
+		$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
 		$db->sql_query( $query );
 		foreach( $array_catid as $catid_i )
 		{
-			$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+			$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET hitscm=" . $numf . " WHERE id=" . $id;
 			$db->sql_query( $query );
 		}
 
@@ -50,7 +50,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid=" . $cid;
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid=" . $cid;
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) == 0 )

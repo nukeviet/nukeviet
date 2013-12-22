@@ -19,7 +19,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$html .= "<tr>";
 		$html .= "<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "<td><select name=\"config_blockid\">\n";
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, '', $module );
 		foreach( $list as $l )
 		{
@@ -51,7 +51,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$module = $block_config['module'];
 		$show_no_image = $module_config[$module]['show_no_image'];
 
-		$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
+		$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_rows as t1 INNER JOIN " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
 		$list = nv_db_cache( $sql, '', $module );
 
 		$i = 1;
@@ -115,7 +115,7 @@ if( defined( 'NV_SYSTEM' ) )
 		else
 		{
 			$module_array_cat = array();
-			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat` ORDER BY `order` ASC";
+			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY sort ASC";
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )
 			{

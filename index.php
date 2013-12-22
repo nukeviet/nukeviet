@@ -197,8 +197,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			else
 			{
 				$module_info['layout_funcs'] = array();
-				$sth = $db->prepare( 'SELECT f.func_name, t.layout FROM `' . NV_MODFUNCS_TABLE . '` AS f
-					INNER JOIN `' . NV_PREFIXLANG . '_modthemes` AS t ON f.func_id=t.func_id
+				$sth = $db->prepare( 'SELECT f.func_name, t.layout FROM ' . NV_MODFUNCS_TABLE . ' AS f
+					INNER JOIN ' . NV_PREFIXLANG . '_modthemes AS t ON f.func_id=t.func_id
 					WHERE f.in_module = :module AND t.theme= :theme' );
 				$sth->bindParam( ':module', $module_name, PDO::PARAM_STR );
 				$sth->bindParam( ':theme', $global_config['module_theme'], PDO::PARAM_STR );
@@ -274,7 +274,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		}
 		elseif( isset( $module_info['funcs']['main'] ) )
 		{
-			$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `act`=2 WHERE `title`= :title' );
+			$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title= :title' );
 			$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 
@@ -283,7 +283,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	}
 	else
 	{
-		$sql = 'SELECT * FROM `' . NV_MODFUNCS_TABLE . '` AS f, `' . NV_MODULES_TABLE . '` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight';
+		$sql = 'SELECT * FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight';
 		$list = nv_db_cache( $sql, '', 'modules' );
 
 		foreach( $list as $row )

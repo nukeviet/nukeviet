@@ -25,7 +25,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	$email_list = array();
 
-	$sql = "SELECT `email`, `admins` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` =" . $cid;
+	$sql = "SELECT email, admins FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id =" . $cid;
 	$result = $db->sql_query( $sql );
 	list( $email, $admins ) = $db->sql_fetchrow( $result );
 
@@ -56,7 +56,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		{
 			$a_l = implode( ',', $a_l );
 
-			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
+			$sql = "SELECT t2.email as admin_email FROM " . NV_AUTHORS_GLOBALTABLE . " AS t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
 			$result = $db->sql_query( $sql );
 
 			while( $row = $db->sql_fetchrow( $result ) )
@@ -83,7 +83,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 }
 
 //Danh sach cac bo phan
-$sql = "SELECT `id`, `full_name`, `phone`, `fax`, `email`, `note` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `act`=1";
+$sql = "SELECT id, full_name, phone, fax, email, note FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE act=1";
 $array_rows = nv_db_cache( $sql, 'id' );
 
 $page_title = $module_info['custom_title'];
@@ -160,7 +160,7 @@ if( ! empty( $array_rows ) )
 
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_send` VALUES
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send VALUES
 				(NULL , " . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ",
 				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ",
 				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";

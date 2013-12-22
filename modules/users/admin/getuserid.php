@@ -99,7 +99,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['last_loginto1'] = '';
 	}
 
-	$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`!=0";
+	$sql = "FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=0";
 
 	$is_null = true;
 	foreach( $array as $check )
@@ -146,7 +146,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		if( ! empty( $array['gender'] ) )
 		{
 			$base_url .= "&amp;gender=" . rawurlencode( $array['gender'] );
-			$sql .= " AND ( `gender` =" . $db->dbescape( $array['gender'] ) . " )";
+			$sql .= " AND ( gender =" . $db->dbescape( $array['gender'] ) . " )";
 		}
 
 		if( ! empty( $array['regdatefrom1'] ) )
@@ -194,28 +194,28 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		if( ! empty( $orderid ) )
 		{
 			$base_url .= "&amp;orderid=" . $orderid;
-			$sql .= " ORDER BY `userid` " . $orderid . "";
+			$sql .= " ORDER BY userid " . $orderid . "";
 		}
 		elseif( ! empty( $orderusername ) )
 		{
 			$base_url .= "&amp;orderusername=" . $orderusername;
-			$sql .= " ORDER BY `username` " . $orderusername . "";
+			$sql .= " ORDER BY username " . $orderusername . "";
 		}
 		elseif( ! empty( $orderemail ) )
 		{
 			$base_url .= "&amp;orderemail=" . $orderemail;
-			$sql .= " ORDER BY `email` " . $orderemail . "";
+			$sql .= " ORDER BY email " . $orderemail . "";
 		}
 		elseif( ! empty( $orderregdate ) )
 		{
 			$base_url .= "&amp;orderregdate=" . $orderregdate;
-			$sql .= " ORDER BY `regdate` " . $orderregdate . "";
+			$sql .= " ORDER BY regdate " . $orderregdate . "";
 		}
 
 		$page = $nv_Request->get_int( 'page', 'get', 0 );
 		$per_page = 10;
 
-		$sql2 = "SELECT SQL_CALC_FOUND_ROWS `userid`, `username`, `email`, `regdate` " . $sql . " LIMIT " . $page . ", " . $per_page;
+		$sql2 = "SELECT SQL_CALC_FOUND_ROWS userid, username, email, regdate " . $sql . " LIMIT " . $page . ", " . $per_page;
 		$query2 = $db->sql_query( $sql2 );
 
 		$result = $db->sql_query( "SELECT FOUND_ROWS()" );

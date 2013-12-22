@@ -33,57 +33,57 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	$check_like = false;
 	if( empty( $q ) )
 	{
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $array_dirname[$path];
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path];
 		if( $type == 'image' or $type == 'flash' )
 		{
-			$sql .= " AND `type`='" . $type . "'";
+			$sql .= " AND type='" . $type . "'";
 		}
 		if( $nv_Request->isset_request( 'author', 'get' ) )
 		{
-			$sql .= ' AND `userid`=' . $admin_info['userid'];
+			$sql .= ' AND userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
 		if( $order == 1 )
 		{
-			$sql .= ' ORDER BY `mtime` ASC';
+			$sql .= ' ORDER BY mtime ASC';
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= ' ORDER BY `title` ASC';
+			$sql .= ' ORDER BY title ASC';
 		}
 		else
 		{
-			$sql .= ' ORDER BY `mtime` DESC';
+			$sql .= ' ORDER BY mtime DESC';
 		}
 	}
 	else
 	{
 		$check_like = true;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` AS t1 INNER JOIN `" . NV_UPLOAD_GLOBALTABLE . "_dir` AS t2 ON t1.`did` = t2.`did`";
-		$sql .= " WHERE (t2.`dirname` = '" . $path . "' OR t2.`dirname` LIKE '" . $path . "/%')";
-		$sql .= " AND (t1.`title` LIKE :keyword1 OR t1.`alt` LIKE :keyword2)";
+		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_file AS t1 INNER JOIN " . NV_UPLOAD_GLOBALTABLE . "_dir AS t2 ON t1.did = t2.did";
+		$sql .= " WHERE (t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
+		$sql .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
 
 		if( $type == "image" or $type == "flash" )
 		{
-			$sql .= " AND t1.`type`='" . $type . "'";
+			$sql .= " AND t1.type='" . $type . "'";
 		}
 		if( $nv_Request->isset_request( 'author', 'get' ) )
 		{
-			$sql .= ' AND t1.`userid`=' . $admin_info['userid'];
+			$sql .= ' AND t1.userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
 		if( $order == 1 )
 		{
-			$sql .= ' ORDER BY t1.`mtime` ASC';
+			$sql .= ' ORDER BY t1.mtime ASC';
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= ' ORDER BY t1.`title` ASC';
+			$sql .= ' ORDER BY t1.title ASC';
 		}
 		else
 		{
-			$sql .= ' ORDER BY t1.`mtime` DESC';
+			$sql .= ' ORDER BY t1.mtime DESC';
 		}
 		$base_url .= '&amp;q=' . $q;
 	}

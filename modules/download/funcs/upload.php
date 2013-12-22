@@ -100,13 +100,13 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `alias`=' . $db->dbescape( $alias );
+	$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->dbescape( $alias );
 	$result = $db->sql_query( $sql );
 	list( $is_exists ) = $db->sql_fetchrow( $result );
 
 	if( ! $is_exists )
 	{
-		$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `title`=' . $db->dbescape( $array['title'] );
+		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->dbescape( $array['title'] );
 		$result = $db->sql_query( $sql );
 		list( $is_exists ) = $db->sql_fetchrow( $result );
 	}
@@ -247,7 +247,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], '<br />' );
 
-				$sql = 'INSERT INTO `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` VALUES (
+				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp VALUES (
  NULL,
  ' . $array['catid'] . ',
  ' . $db->dbescape( $array['title'] ) . ',

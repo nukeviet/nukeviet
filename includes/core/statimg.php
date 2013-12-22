@@ -11,7 +11,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( $global_config['online_upd'] )
 {
-	$online = $db->query( 'SELECT COUNT(*) FROM `' . NV_SESSIONS_GLOBALTABLE . '` WHERE `onl_time` >= ' . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME ) )->fetchColumn();
+	$online = $db->query( 'SELECT COUNT(*) FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME ) )->fetchColumn();
 	$online = str_pad( $online, 3, '0', STR_PAD_LEFT );
 }
 else
@@ -19,7 +19,7 @@ else
 	$online = 'Hits';
 }
 
-$hits = $db->query( "SELECT `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type` = 'total' AND `c_val`= 'hits'" )->fetchColumn();
+$hits = $db->query( "SELECT c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type = 'total' AND c_val= 'hits'" )->fetchColumn();
 
 $hits = str_pad( $hits, 8, '0', STR_PAD_LEFT );
 

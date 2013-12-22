@@ -14,7 +14,7 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 

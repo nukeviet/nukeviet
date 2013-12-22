@@ -29,7 +29,7 @@ $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;
 
-$row = $db->query( 'SELECT @@session.time_zone AS `db_time_zone`, @@session.character_set_database AS `db_charset`, @@session.collation_database AS `db_collation`' )->fetch();
+$row = $db->query( 'SELECT @@session.time_zone AS db_time_zone, @@session.character_set_database AS db_charset, @@session.collation_database AS db_collation' )->fetch();
 
 $database['db_charset'] = $row['db_charset'];
 $database['db_collation'] = $row['db_collation'];

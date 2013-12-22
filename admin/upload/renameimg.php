@@ -50,7 +50,7 @@ if( $file != $newname )
 	{
 		$info = nv_getFileInfo( $path, $newname );
 
-		$sth = $db->prepare( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `name` = '" . $info['name'] . "', `src` = '" . $info['src'] . "', `title` = '" . $newname . "', `alt` = :newalt WHERE `did` = " . $array_dirname[$path] . " AND `title` = '" . $file . "'" );
+		$sth = $db->prepare( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET name = '" . $info['name'] . "', src = '" . $info['src'] . "', title = '" . $newname . "', alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'" );
 		$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 		$sth->execute();
 	}
@@ -58,7 +58,7 @@ if( $file != $newname )
 }
 else
 {
-	$sth = $db->prepare( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `alt` = :newalt WHERE `did` = " . $array_dirname[$path] . " AND `title` = '" . $file . "'" );
+	$sth = $db->prepare( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET alt = :newalt WHERE did = " . $array_dirname[$path] . " AND title = '" . $file . "'" );
 	$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 	$sth->execute();
 

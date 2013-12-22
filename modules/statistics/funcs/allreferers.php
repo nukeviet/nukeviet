@@ -13,7 +13,7 @@ $page_title = $lang_module['referer'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['referer'];
 
-$sql = "SELECT COUNT(*), SUM(`total`), MAX(`total`) FROM `" . NV_REFSTAT_TABLE . "`";
+$sql = "SELECT COUNT(*), SUM(total), MAX(total) FROM " . NV_REFSTAT_TABLE . "";
 $result = $db->sql_query( $sql );
 list( $all_page, $total, $max ) = $db->sql_fetchrow( $result );
 
@@ -23,7 +23,7 @@ if( $all_page )
 	$per_page = 50;
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allreferers'];
 
-	$sql = "SELECT `host`,`total`, `last_update` FROM `" . NV_REFSTAT_TABLE . "` WHERE `total`!=0 ORDER BY `total` DESC LIMIT " . $page . "," . $per_page;
+	$sql = "SELECT host,total, last_update FROM " . NV_REFSTAT_TABLE . " WHERE total!=0 ORDER BY total DESC LIMIT " . $page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$host_list = array();

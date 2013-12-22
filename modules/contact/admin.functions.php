@@ -18,7 +18,7 @@ function nv_getAllowed()
 {
 	global $module_data, $db, $admin_info;
 
-	$sql = "SELECT `id`,`full_name`,`admins` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows`";
+	$sql = "SELECT id,full_name,admins FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows";
 	$result = $db->sql_query( $sql );
 
 	$contact_allowed = array(

@@ -15,12 +15,12 @@ $theme_array = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_
 
 if( $global_config['idsite'] )
 {
-	$row = $db->query( 'SELECT theme FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] )->fetch();
+	$row = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetch();
 	if( ! empty( $row['theme'] ) )
 	{
 		$array_site_cat_theme = explode( ',', $row['theme'] );
 
-		$result = $db->query( 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0' );
+		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
 		while( list( $theme ) = $result->fetch( 3 ) )
 		{
 			$array_site_cat_theme[] = $theme;
@@ -108,7 +108,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		{
 			if( in_array( $layout_name, $layout_array ) )
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`=:layout WHERE `func_id` = :func_id AND `theme`= :theme' );
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout=:layout WHERE func_id = :func_id AND theme= :theme' );
 				$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
 				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -122,7 +122,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	}
 
 	$array_layout_func_data = array();
-	$sth = $db->prepare('SELECT `func_id`, `layout` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `theme`= :theme');
+	$sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
 	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 	$sth->execute();
 	while( list( $func_id, $layout ) = $sth->fetch( 3 ) )
@@ -132,8 +132,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 	if( ! isset( $array_layout_func_data[0] ) )
 	{
-		$sth = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes`
-			(`func_id`, `layout`, `theme`) VALUES
+		$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes
+			(func_id, layout, theme) VALUES
 			(0, :layout, :theme)' );
 		$sth->bindParam( ':layout', $layoutdefault, PDO::PARAM_STR );
 		$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -143,7 +143,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	}
 	elseif( $array_layout_func_data[0] != $layoutdefault )
 	{
-		$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`= :layout WHERE `func_id`=0 AND `theme`= :theme' );
+		$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id=0 AND theme= :theme' );
 		$sth->bindParam( ':layout', $layoutdefault, PDO::PARAM_STR );
 		$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 		$sth->execute();
@@ -152,7 +152,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	}
 
 	$array_layout_func = array();
-	$fnresult = $db->query( 'SELECT `func_id`, `func_name`, `func_custom_name`, `in_module` FROM `' . NV_MODFUNCS_TABLE . '` WHERE show_func=1 ORDER BY `subweight` ASC' );
+	$fnresult = $db->query( 'SELECT func_id, func_name, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY subweight ASC' );
 	while( list( $func_id, $func_name, $func_custom_name, $in_module ) = $fnresult->fetch( 3 ) )
 	{
 		if( isset( $array_layout_func_data[$func_id] ) and ! empty( $array_layout_func_data[$func_id] ) )
@@ -163,7 +163,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			{
 				$layout_name = $layoutdefault;
 
-				$sth = $db->prepare( 'UPDATE `' . NV_PREFIXLANG . '_modthemes` SET `layout`= :layout WHERE `func_id`= :func_id AND `theme`= :theme' );
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id= :func_id AND theme= :theme' );
 				$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
 				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -175,8 +175,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		else
 		{
 			$layout_name = ( isset( $array_layout_func_default[$in_module][$func_name] ) ) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
-			$sth = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes`
-			(`func_id`, `layout`, `theme`) VALUES
+			$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes
+			(func_id, layout, theme) VALUES
 			(:func_id, :layout, :theme)' );
 			$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 			$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
@@ -195,7 +195,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		nv_del_moduleCache( 'modules' );
 	}
 
-	$result = $db->query( 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	$number_func = $result->rowCount();
 
 	$i = 1;

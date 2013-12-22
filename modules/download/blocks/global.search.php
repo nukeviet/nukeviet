@@ -28,7 +28,7 @@ if( defined( 'NV_SYSTEM' ) )
 			$lang_module = $temp_lang_module;
 		}
 
-		$sql = "SELECT id, title, alias, parentid FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories` WHERE parentid=0 ORDER BY weight";
+		$sql = "SELECT id, title, alias, parentid FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories WHERE parentid=0 ORDER BY weight";
 		$list = nv_db_cache( $sql, '', $module );
 
 		$key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );

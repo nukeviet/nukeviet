@@ -36,7 +36,7 @@ $parentid = 0;
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : '';
 $array_mod_title = array();
 
-$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $list = nv_db_cache( $sql, 'catid', $module_name );
 foreach( $list as $l )
 {

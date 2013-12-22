@@ -15,7 +15,7 @@ $contents = array();
 $contents['containerid'] = array();
 $contents['aj'] = array();
 
-list( $new ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=4" ) );
+list( $new ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=4" ) );
 
 if( $new > 0 )
 {
@@ -23,7 +23,7 @@ if( $new > 0 )
 	$contents['aj'][] = "nv_show_banners_list('new_list', 0, 0, 4);";
 }
 
-list( $deact ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=3" ) );
+list( $deact ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=3" ) );
 
 if( $deact > 0 )
 {
@@ -31,7 +31,7 @@ if( $deact > 0 )
 	$contents['aj'][] = "nv_show_banners_list('deact_list', 0, 0, 3);";
 }
 
-list( $exp ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=2" ) );
+list( $exp ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=2" ) );
 
 if( $exp > 0 )
 {

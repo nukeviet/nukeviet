@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $array_site_cat_module = array();
 if( $global_config['idsite'] )
 {
-	$_module = $db->query( 'SELECT module FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] )->fetchColumn();
+	$_module = $db->query( 'SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
 	if( ! empty( $_module ) )
 	{
 		$array_site_cat_module = explode( ',', $_module );
@@ -27,7 +27,7 @@ if( ! empty( $setmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
-		$sth = $db->prepare( 'SELECT `module_file`, `module_data` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`=:title');
+		$sth = $db->prepare( 'SELECT module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title=:title');
 		$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
 		if( $sth->rowCount())
@@ -39,7 +39,7 @@ if( ! empty( $setmodule ) )
 				die();
 			}
 
-			$weight = $db->query( 'SELECT MAX(weight) FROM `' . NV_MODULES_TABLE . '`' )->fetchColumn();
+			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_MODULES_TABLE . '' )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$module_version = array();
@@ -58,8 +58,8 @@ if( ! empty( $setmodule ) )
 
 			try
 			{
-				$sth = $db->prepare( "INSERT INTO `" . NV_MODULES_TABLE . "`
-					(`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
+				$sth = $db->prepare( "INSERT INTO " . NV_MODULES_TABLE . "
+					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss) VALUES
 					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)
 				" );
 				$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
@@ -99,10 +99,10 @@ if( defined( 'NV_IS_GODADMIN' ) AND ! empty( $delmodule ) )
 	{
 		$module_exit = array();
 
-		$result = $db->query( 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+		$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 		while( list( $lang_i ) = $result->fetch( 3 ) )
 		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM `' . $db_config['prefix'] . '_' . $lang_i . '_modules` WHERE `module_file`= :module_file' );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
 			$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
 			$sth->execute();
 			if( $sth->fetchColumn() )
@@ -113,7 +113,7 @@ if( defined( 'NV_IS_GODADMIN' ) AND ! empty( $delmodule ) )
 
 		if( empty( $module_exit ) )
 		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `module_file`= :module_file AND `title`!= :title' );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_modules WHERE module_file= :module_file AND title!= :title' );
 			$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
 			$sth->bindParam( ':title', $delmodule, PDO::PARAM_STR );
 			$sth->execute();
@@ -126,13 +126,13 @@ if( defined( 'NV_IS_GODADMIN' ) AND ! empty( $delmodule ) )
 		if( empty( $module_exit ) AND defined( 'NV_CONFIG_DIR' ) )
 		{
 			// kiem tra cac site con
-			$result = $db->query( 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` ORDER BY `domain` ASC' );
+			$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC' );
 			while( $row = $result->fetch() )
 			{
-				$result2 = $db->query( 'SELECT `lang` FROM `' . $row['dbsite'] . '`.`' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+				$result2 = $db->query( 'SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 				while( list( $lang_i ) = $result2->fetch( 3 ) )
 				{
-					$sth = $db->prepare( 'SELECT COUNT(*) FROM `' . $row['dbsite'] . '`.`' . $db_config['prefix'] . '_' . $lang_i . '_modules` WHERE `module_file`= :module_file' );
+					$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
 					$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
 					$sth->execute();
 					if( $sth->fetchColumn() )
@@ -204,7 +204,7 @@ $modules_data = array();
 $is_delCache = false;
 $module_virtual_setup = array();
 
-$result = $db->query( 'SELECT * FROM `' . $db_config['prefix'] . '_setup_modules` ORDER BY `addtime` ASC' );
+$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY addtime ASC' );
 while( $row = $result->fetch() )
 {
 	if( array_key_exists( $row['module_file'], $modules_exit ) )
@@ -218,11 +218,11 @@ while( $row = $result->fetch() )
 	}
 	else
 	{
-		$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`= :title' );
+		$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :title' );
 		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 		$sth->execute();
 
-		$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `act`=2 WHERE `title`=:title' );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title=:title' );
 		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 		$sth->execute();
 
@@ -288,8 +288,8 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		// Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
 		$module_version['virtual'] = ( $module_version['virtual']==1 ) ? 1 : 0;
 
-		$sth = $db->prepare( 'INSERT INTO `' . $db_config['prefix'] . '_setup_modules`
-			(`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`)	VALUES
+		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_modules
+			(title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note)	VALUES
 			( :title, ' . intval( $module_version['is_sysmod'] ) . ', ' . intval( $module_version['virtual'] ) . ', :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)'
 			);
 		$sth->bindParam( ':title', $module_name_i, PDO::PARAM_STR );
@@ -315,7 +315,7 @@ if( $check_addnews_modules )
 $modules_for_title = array();
 $modules_for_file = array();
 
-$result = $db->query( 'SELECT * FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 while( $row = $result->fetch() )
 {
 	$modules_for_title[$row['title']] = $row;

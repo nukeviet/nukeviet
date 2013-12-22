@@ -19,7 +19,7 @@ if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 	die();
 }
 
-$sth = $db->prepare( 'SELECT * FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title');
+$sth = $db->prepare( 'SELECT * FROM ' . NV_MODULES_TABLE . ' WHERE title= :title');
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();
@@ -53,7 +53,7 @@ foreach( $theme_array as $dir )
 $theme_list = $theme_mobile_list = $array_theme = array();
 
 // Chi nhung giao dien da duoc thiet lap layout moi duoc them
-$result = $db->query( 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0' );
+$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
 while( list( $theme ) = $result->fetch( 3 ) )
 {
 	if( in_array( $theme, $theme_site_array ) )
@@ -142,7 +142,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			foreach( $array_layoutdefault as $selectthemes => $layoutdefault )
 			{
 				$array_func_id = array();
-				$sth = $db->prepare( 'SELECT `func_id` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `theme`= :theme' );
+				$sth = $db->prepare( 'SELECT func_id FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme' );
 				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 				$sth->execute();
 				while( list( $func_id ) = $sth->fetch( 3 ) )
@@ -150,14 +150,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 					$array_func_id[] = $func_id;
 				}
 
-				$sth = $db->prepare( 'SELECT `func_id` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :in_module AND `show_func`=1 ORDER BY `subweight` ASC' );
+				$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
 				$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 				$sth->execute();
 				while( list( $func_id ) = $sth->fetch( 3 ) )
 				{
 					if( ! in_array( $func_id, $array_func_id ) )
 					{
-						$sth2 = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes` (`func_id`, `layout`, `theme`) VALUES (' . $func_id . ', :layout, :theme)' );
+						$sth2 = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (' . $func_id . ', :layout, :theme)' );
 						$sth2->bindParam( ':layout', $layoutdefault, PDO::PARAM_STR );
 						$sth2->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 						$sth2->execute();
@@ -165,7 +165,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 			}
 
-			$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `custom_title`=:custom_title, `admin_title`=:admin_title, `theme`= :theme, `mobile`= :mobile, `description`= :description, `keywords`= :keywords, `groups_view`= :groups_view, `act`=' . $act . ', `rss`=' . $rss . ' WHERE `title`= :title' );
+			$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET custom_title=:custom_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' WHERE title= :title' );
 			$sth->bindParam( ':custom_title', $custom_title, PDO::PARAM_STR );
 			$sth->bindParam( ':admin_title', $admin_title, PDO::PARAM_STR );
 			$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
@@ -179,12 +179,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$mod_name = change_alias( $nv_Request->get_title( 'mod_name', 'post' ) );
 			if( $mod_name != $mod AND preg_match( $global_config['check_module'], $mod_name ) )
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `title`= :mod_name  WHERE `title`= :mod' );
+				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET title= :mod_name  WHERE title= :mod' );
 				$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
 				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 				if( $sth->execute() )
 				{
-					$sth = $db->prepare( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `in_module`= :mod_name  WHERE `in_module`= :mod' );
+					$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_module= :mod_name  WHERE in_module= :mod' );
 					$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
 					$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 					$sth->execute();

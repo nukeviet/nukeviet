@@ -24,7 +24,7 @@ if( ! $id )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `id`=" . $id;
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id=" . $id;
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) != 1 )
@@ -50,7 +50,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $is_read = intval( $row['is_read'] );
 if( ! $is_read )
 {
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_send` SET `is_read`=1 WHERE `id`=" . $id;
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_send SET is_read=1 WHERE id=" . $id;
 	$result = $db->sql_query( $sql );
 	$is_read = 1;
 }
@@ -66,7 +66,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 	if( strip_tags( $mess_content ) != '' )
 	{
-		list( $from ) = $db->sql_fetchrow( $db->sql_query( "SELECT `email` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $row['cid'] ) );
+		list( $from ) = $db->sql_fetchrow( $db->sql_query( "SELECT email FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['cid'] ) );
 		if( nv_check_valid_email( $from ) != '' )
 		{
 			$from = $admin_info['email'];
@@ -78,7 +78,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( nv_sendmail( $from, $row['sender_email'], $subject, $mess_content ) )
 		{
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_send` SET `is_reply`=1, `reply_content`=" . $db->dbescape( $mess_content ) . ", `reply_time`=" . NV_CURRENTTIME . ", `reply_aid`=" . $admin_info['admin_id'] . " WHERE `id`=" . $id;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_send SET is_reply=1, reply_content=" . $db->dbescape( $mess_content ) . ", reply_time=" . NV_CURRENTTIME . ", reply_aid=" . $admin_info['admin_id'] . " WHERE id=" . $id;
 			$db->sql_query( $sql );
 
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id );

@@ -44,11 +44,11 @@ $func_id = $nv_Request->get_int( 'func', 'get', 0 );
 
 if( $func_id > 0 )
 {
-	$selectedmodule = $db->query( 'SELECT `in_module` FROM `' . NV_MODFUNCS_TABLE . '` WHERE func_id=' . $func_id )->fetchColumn();
+	$selectedmodule = $db->query( 'SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id )->fetchColumn();
 }
 elseif( ! empty( $selectedmodule ) )
 {
-	$sth = $db->prepare("SELECT func_id FROM `" . NV_MODFUNCS_TABLE . "` WHERE func_name='main' AND `in_module`= :module");
+	$sth = $db->prepare("SELECT func_id FROM " . NV_MODFUNCS_TABLE . " WHERE func_name='main' AND in_module= :module");
 	$sth->bindParam( ':module', $selectedmodule, PDO::PARAM_STR );
 	$sth->execute();
 	$func_id = $sth->fetchColumn();
@@ -74,7 +74,7 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-$sql = 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 {
@@ -87,10 +87,10 @@ while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 }
 
 $array_func_id = array();
-$sth = $db->prepare( 'SELECT `func_id`, `func_custom_name`
-	FROM `' . NV_MODFUNCS_TABLE . '`
-	WHERE in_module=:module AND `show_func`=1
-	ORDER BY `subweight` ASC' );
+$sth = $db->prepare( 'SELECT func_id, func_custom_name
+	FROM ' . NV_MODFUNCS_TABLE . '
+	WHERE in_module=:module AND show_func=1
+	ORDER BY subweight ASC' );
 $sth->bindParam( ':module', $selectedmodule, PDO::PARAM_STR );
 $sth->execute();
 
@@ -110,8 +110,8 @@ $a = 0;
 
 $blocks_positions = array();
 $sth = $db->prepare( 'SELECT t1.position, COUNT(*)
-	FROM `' . NV_BLOCKS_TABLE . '_groups` AS t1
-	INNER JOIN `' . NV_BLOCKS_TABLE . '_weight` AS t2 ON t1.bid = t2.bid
+	FROM ' . NV_BLOCKS_TABLE . '_groups AS t1
+	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS t2 ON t1.bid = t2.bid
 	WHERE t2.func_id=' . $func_id . ' AND t1.theme = :theme
 	GROUP BY t1.position' );
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -130,8 +130,8 @@ $positions = $content[0]->position;
 //object
 
 $sth = $db->prepare( 'SELECT t1.*, t2.func_id, t2.weight as bweight
-	FROM `' . NV_BLOCKS_TABLE . '_groups` AS t1
-	INNER JOIN `' . NV_BLOCKS_TABLE . '_weight` AS t2 ON t1.bid = t2.bid
+	FROM ' . NV_BLOCKS_TABLE . '_groups AS t1
+	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS t2 ON t1.bid = t2.bid
 	WHERE t2.func_id = ' . $func_id . ' AND t1.theme = :theme
 	ORDER BY t1.position ASC, t2.weight ASC' );
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );

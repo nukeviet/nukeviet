@@ -60,12 +60,12 @@ if( ! empty( $savecat ) )
 
 	if( $catid == 0 and $title != '' )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
+		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) ) );
 		$weight = intval( $weight ) + 1;
 		$viewcat = "viewcat_page_new";
 		$subcatid = '';
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_cat` (`catid`, `parentid`, `title`, `titlesite`, `alias`, `description`, `image`, `viewdescription`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `keywords`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`) VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $titlesite ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '" . $viewdescription . "', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, admins, add_time, edit_time, who_view, groups_view) VALUES (NULL, " . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $titlesite ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '" . $viewdescription . "', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
 
 		$newcatid = ( int )$db->sql_query_insert_id( $sql );
 		if( $newcatid > 0 )
@@ -75,7 +75,7 @@ if( ! empty( $savecat ) )
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
-				$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
+				$db->sql_query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
 			}
 
 			nv_del_moduleCache( $module_name );
@@ -90,15 +90,15 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `parentid`=" . $db->dbescape( $parentid ) . ", `title`=" . $db->dbescape( $title ) . ", `titlesite`=" . $db->dbescape( $titlesite ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`=" . $db->dbescape( $image ) . ", `viewdescription`=" . $db->dbescape( $viewdescription ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `who_view`=" . $db->dbescape( $who_view ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $catid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET parentid=" . $db->dbescape( $parentid ) . ", title=" . $db->dbescape( $title ) . ", titlesite=" . $db->dbescape( $titlesite ) . ", alias = " . $db->dbescape( $alias ) . ", description=" . $db->dbescape( $description ) . ", image=" . $db->dbescape( $image ) . ", viewdescription=" . $db->dbescape( $viewdescription ) . ", keywords= " . $db->dbescape( $keywords ) . ", who_view=" . $db->dbescape( $who_view ) . ", groups_view=" . $db->dbescape( $groups_view ) . ", edit_time=UNIX_TIMESTAMP() WHERE catid =" . $catid;
 		if( $db->exec( $sql ) )
 		{
 			if( $parentid != $parentid_old )
 			{
-				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . $db->dbescape( $parentid ) ) );
+				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) ) );
 				$weight = intval( $weight ) + 1;
 
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $catid );
+				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE catid=" . intval( $catid );
 				$db->sql_query( $sql );
 
 				nv_fix_cat_order();

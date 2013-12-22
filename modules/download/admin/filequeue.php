@@ -22,7 +22,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		exit();
 	}
 
-	$query = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `id`=' . $id;
+	$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -40,7 +40,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array_who[] = $lang_global['who_view3'];
 	}
 
-	$sql = "SELECT `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir'";
+	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->sql_query( $sql );
 	list( $upload_dir ) = $db->sql_fetchrow( $result );
 
@@ -214,7 +214,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['linkdirect'] = array_unique( $array['linkdirect'] );
 		}
 
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `title`=" . $db->dbescape( $array['title'] );
+		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE title=" . $db->dbescape( $array['title'] );
 		$result = $db->sql_query( $sql );
 		list( $is_exists ) = $db->sql_fetchrow( $result );
 
@@ -347,7 +347,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 			}
 
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " VALUES (
 				 NULL,
 				 " . $array['catid'] . ",
 				 " . $db->dbescape( $array['title'] ) . ",
@@ -409,7 +409,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 					}
 				}
 
-				$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+				$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
 				$db->sql_query( $sql );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
@@ -732,7 +732,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( 'NO' );
 	}
 
-	$query = "SELECT `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `id`=" . $id;
+	$query = "SELECT fileupload, fileimage FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -764,7 +764,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		}
 	}
 
-	$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `id`=' . $id;
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
 	$db->sql_query( $sql );
 
 	die( 'OK' );
@@ -775,7 +775,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 {
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-	$query = 'SELECT `fileupload`, `fileimage` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp`';
+	$query = 'SELECT fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( ! $numrows )
@@ -808,7 +808,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 		}
 	}
 
-	$sql = 'TRUNCATE TABLE `' . NV_PREFIXLANG . '_' . $module_data . '_tmp`';
+	$sql = 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 	$db->sql_query( $sql );
 
 	die( 'OK' );
@@ -817,7 +817,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 //List files
 $page_title = $lang_module['download_filequeue'];
 
-$sql = 'FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp`';
+$sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
 $result1 = $db->sql_query( $sql1 );
@@ -843,7 +843,7 @@ if( empty( $listcats ) )
 	exit();
 }
 
-$sql2 = 'SELECT * ' . $sql . ' ORDER BY `uploadtime` DESC';
+$sql2 = 'SELECT * ' . $sql . ' ORDER BY uploadtime DESC';
 $result2 = $db->sql_query( $sql2 );
 
 $array = array();

@@ -12,11 +12,11 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $bid = $nv_Request->get_int( 'bid', 'post' );
 $func_id = $nv_Request->get_int( 'func_id', 'post' );
 
-$row = $db->query( 'SELECT * FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `bid`=' . $bid )->fetch();
+$row = $db->query( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch();
 
 if( $func_id > 0 and isset( $row['bid'] ) )
 {
-	$sth = $db->prepare( 'SELECT MAX(weight) FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE theme = :theme' );
+	$sth = $db->prepare( 'SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme' );
 	$sth->bindParam( ':theme', $row['theme'], PDO::PARAM_STR );
 	$sth->execute();
 	$maxweight = $sth->fetchColumn();
@@ -25,8 +25,8 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 
 	try
 	{
-		$sth = $db->prepare( 'INSERT INTO `' . NV_BLOCKS_TABLE . '_groups`
-			(`theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
+		$sth = $db->prepare( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
+			(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 			( :theme, :module, :file_name, :title, :link, :template, :position, :exp_time, ' . $row['active'] . ', :groups_view, 0, ' . $row['weight'] . ', :config )' );
 		$sth->bindParam( ':theme', $row['theme'], PDO::PARAM_STR );
 		$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
@@ -41,11 +41,11 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 		$sth->execute();
 		$new_bid = $db->lastInsertId();
 
-		$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_weight` SET `bid`=' . $new_bid . ' WHERE `bid`=' . $bid . ' AND `func_id`=' . $func_id );
+		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
 
 		if( ! empty( $row['all_func'] ) )
 		{
-			$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET `all_func`=0 WHERE `bid`=' . $bid );
+			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid );
 		}
 
 		nv_del_moduleCache( 'themes' );
