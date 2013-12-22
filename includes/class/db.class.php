@@ -87,7 +87,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			trigger_error( $query . ' --- ' .$e->getMessage() );
 			return false;
 		}
 	}
@@ -102,7 +102,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			trigger_error( $query . ' --- ' .$e->getMessage() );
 			return false;
 		}
 	}
@@ -117,7 +117,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			trigger_error( $query . ' --- ' .$e->getMessage() );
 			return false;
 		}
 	}	

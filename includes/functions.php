@@ -1810,7 +1810,7 @@ function nv_site_mods()
 	else
 	{
 		$site_mods = array();
-		$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' AS m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
+		$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
 		while( $row = $result->fetch() )
 		{
 			$m_title = $row['title'];

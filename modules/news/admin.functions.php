@@ -671,7 +671,7 @@ function nv_show_block_list( $bid )
 
 	$global_array_cat[0] = array( 'alias' => 'Other' );
 
-	$sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows as t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
+	$sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 	if( $num > 0 )

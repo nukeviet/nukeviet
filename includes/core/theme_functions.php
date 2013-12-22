@@ -438,7 +438,7 @@ function nv_xmlSitemapIndex_generate()
 	{
 		foreach( $global_config['allow_sitelangs'] as $lang )
 		{
-			$sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules AS m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
+			$sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
 			$result = $db->query( $sql );
 			while( list( $modname ) = $result->fetch( 3 ) )
 			{

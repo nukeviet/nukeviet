@@ -79,7 +79,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( $check_num == 1 )
 	{
-		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as tb2 ON ( tb1.id = tb2.id ) ";
+		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext tb2 ON ( tb1.id = tb2.id ) ";
 		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
 	}
 	elseif( $check_num == 2 )
@@ -92,7 +92,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	}
 	else
 	{
-		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as tb2 ON ( tb1.id = tb2.id )";
+		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext tb2 ON ( tb1.id = tb2.id )";
 		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}

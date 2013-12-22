@@ -150,9 +150,9 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 			$query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
 				a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
 				c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail
-				FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments AS a
-				INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " AS b ON a.fid = b.id
-				LEFT JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " as c ON a.post_id =c.userid
+				FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments a
+				INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " b ON a.fid = b.id
+				LEFT JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " c ON a.post_id =c.userid
 				WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1
 				ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
 

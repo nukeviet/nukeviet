@@ -28,12 +28,13 @@ $database['db_sql_version'] = $db->sql_version();
 $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;
-
-$row = $db->query( 'SELECT @@session.time_zone AS db_time_zone, @@session.character_set_database AS db_charset, @@session.collation_database AS db_collation' )->fetch();
-
-$database['db_charset'] = $row['db_charset'];
-$database['db_collation'] = $row['db_collation'];
-$database['db_time_zone'] = $row['db_time_zone'];
+if( $db->dbtype == 'mysql' )
+{
+	$row = $db->query( 'SELECT @@session.time_zone AS db_time_zone, @@session.character_set_database AS db_charset, @@session.collation_database AS db_collation' )->fetch();
+	$database['db_charset'] = $row['db_charset'];
+	$database['db_collation'] = $row['db_collation'];
+	$database['db_time_zone'] = $row['db_time_zone'];
+}
 
 $contents = array();
 $contents['captions']['database_info'] = sprintf( $lang_module['database_info'], $database['db_dbname'] );
