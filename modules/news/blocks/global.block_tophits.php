@@ -48,7 +48,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
-		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_rows` WHERE `status`= 1 AND `publtime` BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY `hitstotal` DESC LIMIT 0 , " . $block_config['numrow'];
+		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 AND publtime BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY hitstotal DESC LIMIT 0 , " . $block_config['numrow'];
 		$result = $db->sql_query( $sql );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 		{
@@ -125,7 +125,7 @@ if( defined( 'NV_SYSTEM' ) )
 		else
 		{
 			$module_array_cat = array();
-			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM `" . NV_PREFIXLANG . "_" . $mod_data . "_cat` ORDER BY `order` ASC";
+			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat ORDER BY sort ASC";
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )
 			{

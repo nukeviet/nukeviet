@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['voting_list'];
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `vid` ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY vid ASC";
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) )
@@ -22,7 +22,7 @@ if( $db->sql_numrows( $result ) )
 
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		$sql1 = "SELECT SUM(hitstotal) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid`='" . $row['vid'] . "'";
+		$sql1 = "SELECT SUM(hitstotal) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid='" . $row['vid'] . "'";
 		$result1 = $db->sql_query( $sql1 );
 		$totalvote = $db->sql_fetchrow( $result1 );
 

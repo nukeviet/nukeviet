@@ -21,7 +21,7 @@ if( $nv_Request->isset_request( 'linkcheck', 'post' ) )
 		die( "BAD_" . $id );
 	}
 
-	$query = "SELECT `fileupload`, `linkdirect` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id`=" . $id;
+	$query = "SELECT fileupload, linkdirect FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -98,7 +98,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( "NO" );
 	}
 
-	$query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid`=" . $id;
+	$query = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -106,7 +106,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( "NO" );
 	}
 
-	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid`=" . $id;
+	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid=" . $id;
 	$db->sql_query( $sql );
 
 	die( "OK" );
@@ -115,7 +115,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 //All del
 if( $nv_Request->isset_request( 'alldel', 'post' ) )
 {
-	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report`";
+	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report";
 	$db->sql_query( $sql );
 
 	die( "OK" );
@@ -124,7 +124,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 //List
 $page_title = $lang_module['download_report'];
 
-$sql = "SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` b ON a.fid=b.id ORDER BY a.post_time DESC";
+$sql = "SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM " . NV_PREFIXLANG . "_" . $module_data . "_report a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " b ON a.fid=b.id ORDER BY a.post_time DESC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 if( ! $num )

@@ -17,8 +17,8 @@ if( ! isset( $host ) or ! preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/",
 	die();
 }
 
-$sql = "SELECT `month01`,`month02`,`month03`,`month04`,`month05`,`month06`,`month07`,`month08`,`month09`,`month10`,`month11`,`month12`
-FROM `" . NV_REFSTAT_TABLE . "` WHERE `host`=" . $db->dbescape( $host );
+$sql = "SELECT month01,month02,month03,month04,month05,month06,month07,month08,month09,month10,month11,month12
+FROM " . NV_REFSTAT_TABLE . " WHERE host=" . $db->dbescape( $host );
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( empty( $numrows ) )

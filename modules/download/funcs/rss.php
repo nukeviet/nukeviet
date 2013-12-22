@@ -41,17 +41,17 @@ if( ! empty( $list_cats ) )
 		$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $list_cats[$catid]['alias'];
 		$channel['description'] = $list_cats[$catid]['description'];
 
-		$sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
- FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid . " 
- AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
+		$sql = "SELECT id, catid, uploadtime, title, alias, introtext, fileimage 
+ FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid=" . $catid . " 
+ AND status=1 ORDER BY uploadtime DESC LIMIT 30";
 	}
 	else
 	{
 		$in = array_keys( $list_cats );
 		$in = implode( ',', $in );
-		$sql = "SELECT `id`, `catid`, `uploadtime`, `title`, `alias`, `introtext`, `fileimage` 
- FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") 
- AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 30";
+		$sql = "SELECT id, catid, uploadtime, title, alias, introtext, fileimage 
+ FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid IN (" . $in . ") 
+ AND status=1 ORDER BY uploadtime DESC LIMIT 30";
 	}
 	if( $module_info['rss'] )
 	{

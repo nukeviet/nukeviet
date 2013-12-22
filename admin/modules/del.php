@@ -14,7 +14,7 @@ $contents = 'NO_' . $modname;
 
 if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
 {
-	$sth = $db->prepare( 'SELECT is_sysmod, module_file, module_data FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`= :title' );
+	$sth = $db->prepare( 'SELECT is_sysmod, module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :title' );
 	$sth->bindParam( ':title', $modname, PDO::PARAM_STR );
 	$sth->execute();
 	list( $is_sysmod, $module_file, $module_data ) = $sth->fetch( 3 );
@@ -48,14 +48,14 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		// Xoa du lieu tai bang nv3_vi_blocks
-		$sth = $db->prepare( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid` in (SELECT `bid` FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `module`= :module)' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
 		{
 			die( 'NO_' . $modname );
 		}
 
-		$sth = $db->prepare( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `module`= :module' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
 		{
@@ -63,7 +63,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		nv_del_moduleCache( 'themes' );
-		$sth = $db->prepare( 'DELETE FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id` IN (SELECT `func_id` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :module)' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
 		{
@@ -71,7 +71,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		// Xoa du lieu tai bang nv3_vi_modfuncs
-		$sth = $db->prepare( 'DELETE FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :module' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
 		{
@@ -79,7 +79,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		// Xoa du lieu tai bang nv3_vi_modules
-		$sth = $db->prepare( 'DELETE FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :module' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
 		{
@@ -87,16 +87,16 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		}
 
 		// Xoa du lieu tai bang nv3_config
-		$sth = $db->prepare( "DELETE FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' AND `module`= :module" );
+		$sth = $db->prepare( "DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module" );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		$sth->execute();
 
 		$check_exit_mod = false;
 
-		$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` where setup=1' );
+		$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1' );
 		while( list( $lang_i ) = $result->fetch( 3 ) )
 		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM `' . $db_config['prefix'] . '_' . $lang_i . '_modules` WHERE `title`= :module' );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE title= :module' );
 			$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 			$sth->execute();
 
@@ -111,7 +111,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		{
 			if( $module_file != $modname )
 			{
-				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `title`= :module' );
+				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :module' );
 				$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 				$sth->execute();
 			}
@@ -119,14 +119,14 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . $modname, true );
 			nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $modname, true );
 
-			$sth = $db->prepare( 'SELECT `did` FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` WHERE `dirname`= :dirname OR `dirname` LIKE :dirnamelike' );
+			$sth = $db->prepare( 'SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname= :dirname OR dirname LIKE :dirnamelike' );
 			$sth->bindValue( ':dirname', NV_UPLOADS_DIR . '/' . $modname, PDO::PARAM_STR );
 			$sth->bindValue( ':dirnamelike', NV_UPLOADS_DIR . '/' . $modname . '/%', PDO::PARAM_STR );
 			$sth->execute();
 			while( list( $did ) = $sth->fetch( 3 ) )
 			{
-				$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_file` WHERE `did` = ' . $did );
-				$db->exec( 'DELETE FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` WHERE `did` = ' . $did );
+				$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+				$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 			}
 		}
 

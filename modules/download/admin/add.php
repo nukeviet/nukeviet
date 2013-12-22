@@ -136,13 +136,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $alias );
+	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->dbescape( $alias );
 	$result = $db->sql_query( $sql );
 	list( $is_exists ) = $db->sql_fetchrow( $result );
 
 	if( ! $is_exists )
 	{
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `title`=" . $db->dbescape( $array['title'] );
+		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->dbescape( $array['title'] );
 		$result = $db->sql_query( $sql );
 		list( $is_exists ) = $db->sql_fetchrow( $result );
 	}
@@ -204,7 +204,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 		$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " VALUES (
 			 NULL,
 			 " . $array['catid'] . ",
 			 " . $db->dbescape( $array['title'] ) . ",
@@ -390,7 +390,7 @@ else
 	$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 }
 
-$sql = "SELECT `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir'";
+$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 $result = $db->sql_query( $sql );
 list( $upload_dir ) = $db->sql_fetchrow( $result );
 

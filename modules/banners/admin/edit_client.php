@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 
@@ -89,12 +89,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`!=" . $id . " AND `login`=" . $db->dbescape( $login ) ) ) > 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $id . " AND login=" . $db->dbescape( $login ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = $row['login'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`!=" . $id . " AND `email`=" . $db->dbescape( $email ) ) ) > 0 )
+	elseif( $db->sql_numrows( $db->sql_query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $id . " AND email=" . $db->dbescape( $email ) ) ) > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = $row['email'];
@@ -103,9 +103,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
 
-		$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET `login`=" . $db->dbescape( $login ) . ", `pass`=" . $db->dbescape( $pass ) . ", `full_name`=" . $db->dbescape( $full_name ) . ",
- `email`=" . $db->dbescape( $email ) . ", `website`=" . $db->dbescape( $website ) . ", `location`=" . $db->dbescape( $location ) . ", `yim`=" . $db->dbescape( $yim ) . ",
- `phone`=" . $db->dbescape( $phone ) . ", `fax`=" . $db->dbescape( $fax ) . ", `mobile`=" . $db->dbescape( $mobile ) . ", `uploadtype`=" . $db->dbescape( $uploadtype ) . " WHERE `id`=" . $id;
+		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET login=" . $db->dbescape( $login ) . ", pass=" . $db->dbescape( $pass ) . ", full_name=" . $db->dbescape( $full_name ) . ",
+ email=" . $db->dbescape( $email ) . ", website=" . $db->dbescape( $website ) . ", location=" . $db->dbescape( $location ) . ", yim=" . $db->dbescape( $yim ) . ",
+ phone=" . $db->dbescape( $phone ) . ", fax=" . $db->dbescape( $fax ) . ", mobile=" . $db->dbescape( $mobile ) . ", uploadtype=" . $db->dbescape( $uploadtype ) . " WHERE id=" . $id;
 		$db->sql_query( $sql );
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', "clientid " . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );

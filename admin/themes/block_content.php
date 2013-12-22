@@ -36,7 +36,7 @@ $row['bid'] = $nv_Request->get_int( 'bid', 'get,post', 0 );
 
 if( $row['bid'] > 0 )
 {
-	$row = $db->query( 'SELECT * FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE bid=' . $row['bid'] )->fetch();
+	$row = $db->query( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'] )->fetch();
 
 	if( empty( $row ) )
 	{
@@ -257,7 +257,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		if( $all_func and preg_match( $global_config['check_block_global'], $row['file_name'] ) )
 		{
 			$array_funcid = array();
-			$func_result = $db->query( 'SELECT `func_id` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `show_func` = 1 ORDER BY `in_module` ASC, `subweight` ASC' );
+			$func_result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
 
 			while( list( $func_id_i ) = $func_result->fetch( 3 ) )
 			{
@@ -267,7 +267,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		elseif( ! empty( $row['module'] ) and isset( $site_mods[$row['module']] ) and ! preg_match( $global_config['check_block_global'], $row['file_name'] ) )
 		{
 			$array_funcid_module = array();
-			$sth = $db->prepare( 'SELECT `func_id` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `show_func` = 1 AND `in_module`= :in_module ORDER BY `in_module` ASC, `subweight` ASC' );
+			$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :in_module ORDER BY in_module ASC, subweight ASC' );
 			$sth->bindParam( ':in_module', $row['module'], PDO::PARAM_STR );
 			$sth->execute();
 			while( list( $func_id_i ) = $sth->fetch( 3 ) )
@@ -283,12 +283,12 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			// Tach va tao nhom moi
 			if( ! empty( $row['leavegroup'] ) )
 			{
-				$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET all_func= 0 WHERE `bid`=' . $row['bid'] );
-				$db->exec( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid`=' . $row['bid'] . ' AND `func_id` in (' . implode( ',', $array_funcid ) . ')' );
+				$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func= 0 WHERE bid=' . $row['bid'] );
+				$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] . ' AND func_id in (' . implode( ',', $array_funcid ) . ')' );
 
 				// Cap nhat lai thu tu cho nhom cu
 				$func_id_old = $weight = 0;
-				$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM `' . NV_BLOCKS_TABLE . '_weight` AS t1 INNER JOIN `' . NV_BLOCKS_TABLE . '_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC' );
+				$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC' );
 				$sth->bindParam( ':theme', $row_old['theme'], PDO::PARAM_STR );
 				$sth->bindParam( ':position', $row_old['position'], PDO::PARAM_STR );
 				$sth->execute();
@@ -304,7 +304,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						$func_id_old = $func_id_i;
 					}
 
-					$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_weight` SET `weight`=' . $weight . ' WHERE `bid`=' . $bid_i . ' AND `func_id`=' . $func_id_i );
+					$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 				}
 				unset( $func_id_old, $weight );
 
@@ -313,13 +313,13 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			if( empty( $row['bid'] ) )
 			{
-				$sth = $db->prepare( 'SELECT MAX(weight) FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE theme = :theme AND `position`= :position' );
+				$sth = $db->prepare( 'SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position' );
 				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 				$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
 				$sth->execute();
 				$row['weight'] = intval( $sth->fetchColumn() ) + 1;
 
-				$sth = $db->prepare( "INSERT INTO `" . NV_BLOCKS_TABLE . "_groups` (`theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )" );
+				$sth = $db->prepare( "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )" );
 				$sth->bindParam( ':selectthemes', $selectthemes, PDO::PARAM_STR );
 				$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
 				$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
@@ -336,19 +336,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 			else
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET
-					`module`=:module,
-					`file_name`=:file_name,
-					`title`=:title,
-					`link`=:link,
-					`template`=:template,
-					`position`=:position,
-					`exp_time`=:exp_time,
-					`active`=:active,
-					`groups_view`=:groups_view,
-					`all_func`=:all_func,
-					`config`=:config
-					WHERE `bid` = :bid' );
+				$sth = $db->prepare( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET
+					module=:module,
+					file_name=:file_name,
+					title=:title,
+					link=:link,
+					template=:template,
+					position=:position,
+					exp_time=:exp_time,
+					active=:active,
+					groups_view=:groups_view,
+					all_func=:all_func,
+					config=:config
+					WHERE bid = :bid' );
 
 				$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
 				$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
@@ -375,7 +375,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			if( ! empty( $row['bid'] ) )
 			{
 				$func_list = array();
-				$result_func = $db->query( 'SELECT func_id FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE bid=' . $row['bid'] );
+				$result_func = $db->query( 'SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] );
 
 				while( list( $func_inlist ) = $result_func->fetch( 3 ) )
 				{
@@ -386,20 +386,20 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				if( ! empty( $array_funcid_old ) )
 				{
-					$db->exec( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid`=' . $row['bid'] . ' AND `func_id` in (' . implode( ',', $array_funcid_old ) . ')' );
+					$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] . ' AND func_id in (' . implode( ',', $array_funcid_old ) . ')' );
 				}
 				foreach( $array_funcid as $func_id )
 				{
 					if( ! in_array( $func_id, $func_list ) )
 					{
-						$sth = $db->prepare( 'SELECT MAX(t1.weight) FROM `' . NV_BLOCKS_TABLE . '_weight` AS t1 INNER JOIN `' . NV_BLOCKS_TABLE . '_groups` AS t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position' );
+						$sth = $db->prepare( 'SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position' );
 						$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 						$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
 						$sth->execute();
 						$weight = $sth->fetchColumn;
 						$weight = intval( $weight ) + 1;
 
-						$db->exec( 'INSERT INTO `' . NV_BLOCKS_TABLE . '_weight` (`bid`, `func_id`, `weight`) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
+						$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
 					}
 				}
 
@@ -423,8 +423,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		}
 		elseif( ! empty( $row['bid'] ) )
 		{
-			$db->exec( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE `bid`=' . $row['bid'] );
-			$db->exec( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid`=' . $row['bid'] );
+			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'] );
+			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] );
 
 			nv_del_moduleCache( 'themes' );
 		}
@@ -443,7 +443,7 @@ else
 	$groups_view = array_map( 'intval', explode( ',', $row['groups_view'] ) );
 }
 
-$sql = 'SELECT `func_id`, `func_custom_name`, `in_module` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `show_func`=1 ORDER BY `in_module` ASC, `subweight` ASC';
+$sql = 'SELECT func_id, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY in_module ASC, subweight ASC';
 $func_result = $db->query( $sql );
 $aray_mod_func = array();
 while( list( $id_i, $func_custom_name_i, $in_module_i ) = $func_result->fetch( 3 ) )
@@ -465,7 +465,7 @@ $xtpl->assign( 'SELECTTHEMES', $selectthemes );
 $xtpl->assign( 'BLOCKREDIRECT', $blockredirect );
 $xtpl->assign( 'GLOBAL_SELECTED', ( $row['module'] == 'global' ) ? ' selected="selected"' : '' );
 
-$sql = 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 while( $row_i = $result->fetch() )
 {
@@ -542,7 +542,7 @@ foreach( $groups_list as $group_id => $grtl )
 
 if( $row['bid'] != 0 ) // Tach ra va tao nhom moi
 {
-	$blocks_num = $db->query( 'SELECT COUNT(*) FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid`=' . $row['bid'] )->fetchColumn();
+	$blocks_num = $db->query( 'SELECT COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] )->fetchColumn();
 	$xtpl->assign( 'BLOCKS_NUM', $blocks_num );
 
 	$xtpl->parse( 'main.edit' );
@@ -571,14 +571,14 @@ $func_list = array();
 
 if( $row['bid'] )
 {
-	$result_func = $db->query( 'SELECT func_id FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `bid`=' . $row['bid'] );
+	$result_func = $db->query( 'SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid'] );
 	while( list( $func_inlist ) = $result_func->fetch( 3 ) )
 	{
 		$func_list[] = $func_inlist;
 	}
 }
 
-$sql = 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
+$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 {

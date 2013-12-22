@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) )
 $topicalias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
 $page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-") ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-list( $topicid, $page_title, $topic_image, $description, $key_words ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `image`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
+list( $topicid, $page_title, $topic_image, $description, $key_words ) = $db->sql_fetchrow( $db->sql_query( "SELECT topicid, title, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE alias=" . $db->dbescape( $topicalias ) . "" ) );
 
 if( $topicid > 0 )
 {
@@ -23,7 +23,7 @@ if( $topicid > 0 )
 		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['topic'] . "/" . $topicalias
 	);
 
-	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $topicid . "' ORDER BY `publtime` DESC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
+	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND topicid = '" . $topicid . "' ORDER BY publtime DESC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
 
@@ -65,7 +65,7 @@ if( $topicid > 0 )
 	unset( $query, $row );
 
 	$topic_other_array = array();
-	$query = $db->sql_query( "SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = " . $topicid . " AND `publtime` < " . $end_publtime . " ORDER BY `publtime` DESC LIMIT 0," . $st_links . "" );
+	$query = $db->sql_query( "SELECT id, catid, addtime, edittime, publtime, title, alias, hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND topicid = " . $topicid . " AND publtime < " . $end_publtime . " ORDER BY publtime DESC LIMIT 0," . $st_links . "" );
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{

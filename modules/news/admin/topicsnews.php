@@ -21,14 +21,14 @@ if( ! $topicid )
 
 $global_array_cat = array();
 
-$sql = "SELECT `catid`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `order` ASC";
+$sql = "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY sort ASC";
 $result = $db->sql_query( $sql );
 while( list( $catid_i, $alias_i ) = $db->sql_fetchrow( $result ) )
 {
 	$global_array_cat[$catid_i] = array( "alias" => $alias_i );
 }
 
-$sql = "SELECT `id`, `catid`, `alias`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `topicid`='" . $topicid . "' ORDER BY `id` ASC";
+$sql = "SELECT id, catid, alias, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE topicid='" . $topicid . "' ORDER BY id ASC";
 $result = $db->sql_query( $sql );
 
 $xtpl = new XTemplate( 'topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );

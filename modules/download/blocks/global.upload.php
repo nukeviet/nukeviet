@@ -17,7 +17,7 @@ if( defined( 'NV_SYSTEM' ) )
 		function nv_mod_down_config( $module_data )
 		{
 			global $site_mods, $module_info;
-			$sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+			$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 			$list = nv_db_cache( $sql );
 			$download_config = array();
 			foreach( $list as $values )

@@ -16,7 +16,7 @@ if( nv_function_exists( 'curl_init' ) and nv_function_exists( 'curl_exec' ) )
 	{
 		$prcservice = $nv_Request->get_array( 'prcservice', 'post' );
 		$prcservice = implode( ',', $prcservice );
-		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', :module_name, 'prcservice', :prcservice)" );
+		$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', :module_name, 'prcservice', :prcservice)" );
 		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 		$sth->bindParam( ':prcservice', $prcservice, PDO::PARAM_STR );
 		$sth->execute();

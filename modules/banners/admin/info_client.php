@@ -17,7 +17,7 @@ if( empty( $id ) )
 	die();
 }
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
+$sql = "SELECT full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 

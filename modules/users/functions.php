@@ -43,14 +43,14 @@ function validUserLog( $array_user, $remember, $opid )
 
 	$user = nv_base64_encode( serialize( $user ) );
 
-	$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET 
-		`checknum` = " . $db->dbescape( $checknum ) . ", 
-		`last_login` = " . NV_CURRENTTIME . ", 
-		`last_ip` = " . $db->dbescape( $client_info['ip'] ) . ", 
-		`last_agent` = " . $db->dbescape( $client_info['agent'] ) . ", 
-		`last_openid` = " . $db->dbescape( $opid ) . ", 
-		`remember` = " . $remember . " 
-		WHERE `userid`=" . $array_user['userid'] );
+	$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET 
+		checknum = " . $db->dbescape( $checknum ) . ", 
+		last_login = " . NV_CURRENTTIME . ", 
+		last_ip = " . $db->dbescape( $client_info['ip'] ) . ", 
+		last_agent = " . $db->dbescape( $client_info['agent'] ) . ", 
+		last_openid = " . $db->dbescape( $opid ) . ", 
+		remember = " . $remember . " 
+		WHERE userid=" . $array_user['userid'] );
 
 	$live_cookie_time = ( $remember ) ? NV_LIVE_COOKIE_TIME : 0;
 

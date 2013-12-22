@@ -11,7 +11,7 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_PAGE', true );
 
-$sql = "SELECT `id`,`title`,`alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 ORDER BY `weight` ASC";
+$sql = "SELECT id,title,alias FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1 ORDER BY weight ASC";
 $pages = nv_db_cache( $sql, 'alias', $module_name );
 
 $id = 0;

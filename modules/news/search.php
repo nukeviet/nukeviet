@@ -10,8 +10,8 @@
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.title, r.alias, r.catid, r.hometext, c.bodytext 
-FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows` as r 
-INNER JOIN `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_bodytext` as c ON (r.id=c.id) 
+FROM " . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_rows as r 
+INNER JOIN " . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_bodytext as c ON (r.id=c.id) 
 WHERE (" . nv_like_logic( 'r.title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'r.hometext', $dbkeyword, $logic ) . ") 
 OR " . nv_like_logic( 'c.bodytext', $dbkeyword, $logic ) . " 
@@ -28,7 +28,7 @@ if( $all_page )
 	$array_cat_alias = array();
 	$array_cat_alias[0] = "other";
 
-	$sql_cat = "SELECT `catid`, `alias` FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_cat`";
+	$sql_cat = "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_cat";
 	$re_cat = $db->sql_query( $sql_cat );
 	while( list( $catid, $alias ) = $db->sql_fetchrow( $re_cat ) )
 	{

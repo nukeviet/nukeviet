@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 
-$query = 'SELECT * FROM `' . NV_AUTHORS_GLOBALTABLE . '` WHERE `admin_id`=' . $admin_id;
+$query = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
 $row = $db->query( $query )->fetch();
 
 if( empty( $row ) )
@@ -69,7 +69,7 @@ if( $row['lev'] == 3 )
 	}
 }
 
-$sql = 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $admin_id;
+$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query( $sql )->fetch();
 
 if( empty( $row['files_level'] ) )
@@ -127,7 +127,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 			foreach( $add_modules as $mod )
 			{
 				$admins = $site_mods[$mod]['admins'] . ( ! empty( $site_mods[$mod]['admins'] ) ? ',' : '' ) . $admin_id;
-				$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admins`= :admins WHERE `title`= :mod' );
+				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
 				$sth->bindParam( ':admins', $admins, PDO::PARAM_STR );
 				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 				$sth->execute();
@@ -140,7 +140,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 				$admins = ( ! empty( $site_mods[$del]['admins'] ) ) ? explode( ',', $site_mods[$del]['admins'] ) : array();
 				$admins = array_diff( $admins, array( $admin_id ) );
 				$admins = ( ! empty( $admins ) ) ? implode( ',', $admins ) : '';
-				$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admins`= :admins WHERE `title`= :mod' );
+				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
 				$sth->bindParam( ':admins', $admins, PDO::PARAM_STR );
 				$sth->bindParam( ':mod', $del, PDO::PARAM_STR );
 				$sth->execute();
@@ -155,7 +155,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 		$files_level = ( ! empty( $allow_files_type ) ? implode( ',', $allow_files_type ) : '' ) . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-		$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '` SET `editor` = :editor, `lev`=' . $lev . ', `files_level`= :files_level, `position`= :position WHERE `admin_id`=' . $admin_id );
+		$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET editor = :editor, lev=' . $lev . ', files_level= :files_level, position= :position WHERE admin_id=' . $admin_id );
 		$sth->bindParam( ':editor', $editor, PDO::PARAM_STR );
 		$sth->bindParam( ':files_level', $files_level, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $position, PDO::PARAM_STR );

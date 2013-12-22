@@ -13,7 +13,7 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $id )
 {
-	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`=' . $id;
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$result = $db->sql_query( $sql );
 
 	if( $db->sql_numrows( $result ) != 1 )
@@ -108,20 +108,20 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET
-					 `title`=" . $db->dbescape( $row['title'] ) . ", `alias` = " . $db->dbescape( $row['alias'] ) . ", `image`=" . $db->dbescape( $row['image'] ) . ", `imagealt`=" . $db->dbescape( $row['imagealt'] ) . ", `description`=" . $db->dbescape( $row['description'] ) . ",
-					 `bodytext`=" . $db->dbescape( $row['bodytext'] ) . ", `keywords`=" . $db->dbescape( $row['keywords'] ) . ",
-					 `socialbutton`=" . $row['socialbutton'] . ", `activecomm`=" . $row['activecomm'] . ", `facebookappid`=" . $db->dbescape( $row['facebookappid'] ) . ",
-					 `layout_func`=" . $db->dbescape( $row['layout_func'] ) . ", `gid`=" . $row['gid'] . ", `edit_time`=" . NV_CURRENTTIME . " WHERE `id` =" . $id;
+			$sql = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . " SET
+					 title=" . $db->dbescape( $row['title'] ) . ", alias = " . $db->dbescape( $row['alias'] ) . ", image=" . $db->dbescape( $row['image'] ) . ", imagealt=" . $db->dbescape( $row['imagealt'] ) . ", description=" . $db->dbescape( $row['description'] ) . ",
+					 bodytext=" . $db->dbescape( $row['bodytext'] ) . ", keywords=" . $db->dbescape( $row['keywords'] ) . ",
+					 socialbutton=" . $row['socialbutton'] . ", activecomm=" . $row['activecomm'] . ", facebookappid=" . $db->dbescape( $row['facebookappid'] ) . ",
+					 layout_func=" . $db->dbescape( $row['layout_func'] ) . ", gid=" . $row['gid'] . ", edit_time=" . NV_CURRENTTIME . " WHERE id =" . $id;
 			$publtime = $row['add_time'];
 		}
 		else
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "`" ) );
+			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "" ) );
 			$weight = intval( $weight ) + 1;
 
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "`
-					(`id`, `title`, `alias`, `image`, `imagealt`, `description`, `bodytext`, `keywords`, `socialbutton`, `activecomm`, `facebookappid`, `layout_func`, `gid`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`)
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
+					(id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status)
 				VALUES (
 					NULL, " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
 					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
@@ -200,7 +200,7 @@ foreach( $layout_array as $value )
 	$xtpl->assign( 'LAYOUT_FUNC', array( 'key' => $value, 'selected' => ( $row['layout_func'] == $value ) ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.layout_func' );
 }
-$sql = "SELECT * FROM `" . $db_config['prefix'] . "_googleplus` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
 $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {

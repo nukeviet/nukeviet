@@ -23,7 +23,7 @@ if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 	die();
 }
 
-$sql = 'SELECT * FROM `' . NV_AUTHORS_GLOBALTABLE . '` WHERE `admin_id`=' . $admin_id;
+$sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_id;
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
@@ -42,12 +42,12 @@ function nv_checkAdmpass( $adminpass )
 {
 	global $db, $admin_info, $crypt, $db_config;
 
-	$sql = 'SELECT `password` FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $admin_info['userid'];
+	$sql = 'SELECT password FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
 	$pass = $db->query( $sql )->fetchColumn();
 	return $crypt->validate( $adminpass, $pass );
 }
 
-$access_admin = $db->query( "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='access_admin'" )->fetchColumn();
+$access_admin = $db->query( "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" )->fetchColumn();
 $access_admin = unserialize( $access_admin );
 $level = $admin_info['level'];
 
@@ -62,7 +62,7 @@ if( isset( $access_admin['access_delus'][$level] ) and $access_admin['access_del
 	$array_action_account[2] = $lang_module['action_account_del'];
 }
 
-$sql = 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $admin_id;
+$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query( $sql )->fetch();
 
 $action_account = $nv_Request->get_int( 'action_account', 'post', 0 );
@@ -102,7 +102,7 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 							$admins = array_diff( $admins, array( $admin_id ) );
 							$admins = implode( ',', $admins );
 
-							$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admins`= :admins WHERE `title`= :mod' );
+							$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
 							$sth->bindParam( ':admins', $admins, PDO::PARAM_STR );
 							$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 							$sth->execute();
@@ -117,18 +117,18 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 				nv_del_moduleCache( 'modules' );
 			}
 		}
-		$db->exec( 'DELETE FROM `' . NV_AUTHORS_GLOBALTABLE . '` WHERE `admin_id` = ' . $admin_id );
+		$db->exec( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id );
 		if( $action_account == 1 )
 		{
-			$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` SET `active`=0 WHERE `userid`=' . $admin_id );
+			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id );
 		}
 		elseif( $action_account == 2 )
 		{
-			$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` SET `number` = `number`-1 WHERE `group_id` IN (SELECT `group_id` FROM `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '_users` WHERE `userid`=' . $admin_id . ')' );
-			$db->exec( 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '_users` WHERE `userid`=' . $admin_id );
-			$db->exec( 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '_openid` WHERE `userid`=' . $admin_id );
-			$db->exec( 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '_info` WHERE `userid`=' . $admin_id );
-			$db->exec( 'DELETE FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $admin_id );
+			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET number = number-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ')' );
+			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id );
+			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id );
+			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id );
+			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id );
 			if( ! empty( $row_user['photo'] ) and is_file( NV_ROOTDIR . '/' . $row_user['photo'] ) )
 			{
 				@nv_deletefile( NV_ROOTDIR . '/' . $row_user['photo'] );

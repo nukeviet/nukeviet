@@ -53,7 +53,7 @@ elseif( file_exists( NV_ROOTDIR . '/language/en/admin_global.php' ) )
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 $admin_mods = array();
-$result = $db->query( 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_AUTHORS_GLOBALTABLE . '_module` WHERE `act_' . $admin_info['level'] . '` = 1 ORDER BY `weight` ASC' );
+$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC' );
 while( $row = $result->fetch() )
 {
 	$row['custom_title'] = isset( $lang_global[$row['lang_key']] ) ? $lang_global[$row['lang_key']] : $row['module'];
@@ -75,7 +75,7 @@ if( ! empty( $module_name ) )
 	$site_mods = nv_site_mods();
 	if( empty( $site_mods ) and $module_name != 'language' )
 	{
-		$sql = "SELECT `setup` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang`='" . NV_LANG_DATA . "'";
+		$sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
 		$setup = $db->query( $sql )->fetchColumn();
 		if( empty( $setup ) )
 		{
@@ -202,7 +202,7 @@ if( ! empty( $module_name ) )
 	}
 	elseif( isset( $site_mods[$module_name] ) and $op == 'main' )
 	{
-		$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admin_file`=0 WHERE `title`= :module_name' );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name' );
 		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 		$sth->execute();
 

@@ -18,12 +18,12 @@ $content = "NO_" . $sourceid;
 
 if( $mod == "weight" and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid;
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid;
 	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO_' . $sourceid );
 
-	$sql = "SELECT `sourceid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid`!=" . $sourceid . " ORDER BY `weight` ASC";
+	$sql = "SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid!=" . $sourceid . " ORDER BY weight ASC";
 	$result = $db->sql_query( $sql );
 
 	$weight = 0;
@@ -31,11 +31,11 @@ if( $mod == "weight" and $new_vid > 0 )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `weight`=" . $weight . " WHERE `sourceid`=" . intval( $row['sourceid'] );
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET weight=" . $weight . " WHERE sourceid=" . intval( $row['sourceid'] );
 		$db->sql_query( $sql );
 	}
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_sources` SET `weight`=" . $new_vid . " WHERE `sourceid`=" . intval( $sourceid );
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET weight=" . $new_vid . " WHERE sourceid=" . intval( $sourceid );
 	$db->sql_query( $sql );
 
 	$content = "OK_" . $sourceid;

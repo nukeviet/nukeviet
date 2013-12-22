@@ -52,10 +52,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$quality = 90;
 		}
-		$db->exec( 'UPDATE `' . NV_UPLOAD_GLOBALTABLE . '_dir` SET
-			`thumb_type` = ' . $type . ', `thumb_width` = ' . $width . ',
-			`thumb_height` = ' . $height . ', `thumb_quality` = ' . $quality . '
-			WHERE `did` = ' . $did );
+		$db->exec( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
+			thumb_type = ' . $type . ', thumb_width = ' . $width . ',
+			thumb_height = ' . $height . ', thumb_quality = ' . $quality . '
+			WHERE did = ' . $did );
 	}
 }
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -70,7 +70,7 @@ $thumb_type = array();
 $i = 0;
 $lang_module['thumb_type_0'] = '';
 
-$sql = 'SELECT * FROM `' . NV_UPLOAD_GLOBALTABLE . '_dir` ORDER BY `dirname` ASC';
+$sql = 'SELECT * FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir ORDER BY dirname ASC';
 $result = $db->query( $sql );
 while( $data = $result->fetch() )
 {

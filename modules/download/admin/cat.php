@@ -19,13 +19,13 @@ function nv_FixWeightCat( $parentid = 0 )
 {
 	global $db, $module_data;
 
-	$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $parentid . " ORDER BY `weight` ASC";
+	$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $parentid . " ORDER BY weight ASC";
 	$result = $db->sql_query( $sql );
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'] );
+		$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET weight=" . $weight . " WHERE id=" . $row['id'] );
 	}
 }
 
@@ -39,11 +39,11 @@ function nv_del_cat( $catid )
 {
 	global $db, $module_data, $admin_info;
 
-	$sql = "SELECT `parentid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$sql = "SELECT parentid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$result = $db->sql_query( $sql );
 	list( $p, $title ) = $db->sql_fetchrow( $result );
 
-	$sql = "SELECT `id`, `fileupload`, `fileimage` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
+	$sql = "SELECT id, fileupload, fileimage FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid=" . $catid;
 	$result = $db->sql_query( $sql );
 
 	$ids = array();
@@ -60,24 +60,24 @@ function nv_del_cat( $catid )
 	if( ! empty( $ids ) )
 	{
 		$ids = implode( ',', $ids );
-		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `fid` IN (" . $ids . ")";
+		$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE fid IN (" . $ids . ")";
 		$db->sql_query( $sql );
 
-		$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_report` WHERE `fid` IN (" . $ids . ")";
+		$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid IN (" . $ids . ")";
 		$db->sql_query( $sql );
 	}
 
-	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $catid;
+	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid=" . $catid;
 	$db->sql_query( $sql );
 
-	$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $catid;
+	$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $catid;
 	$result = $db->sql_query( $sql );
 	while( list( $id ) = $db->sql_fetchrow( $result ) )
 	{
 		nv_del_cat( $id );
 	}
 
-	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$db->sql_query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_data, "Delete Category", $title, $admin_info['userid'] );
@@ -118,7 +118,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		{
 			if( ! empty( $array['parentid'] ) )
 			{
-				$sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $array['parentid'];
+				$sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $array['parentid'];
 				$result = $db->sql_query( $sql );
 				list( $count ) = $db->sql_fetchrow( $result );
 
@@ -131,7 +131,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `alias`=" . $db->dbescape( $array['alias'] );
+				$sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE alias=" . $db->dbescape( $array['alias'] );
 				$result = $db->sql_query( $sql );
 				list( $count ) = $db->sql_fetchrow( $result );
 
@@ -159,13 +159,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
-			$sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
+			$sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $array['parentid'];
 			$result = $db->sql_query( $sql );
 			list( $new_weight ) = $db->sql_fetchrow( $result );
 			$new_weight = ( int )$new_weight;
 			++$new_weight;
 
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_categories` VALUES (
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_categories VALUES (
  NULL,
  " . $array['parentid'] . ",
  " . $db->dbescape( $array['title'] ) . ",
@@ -338,7 +338,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		exit();
 	}
 
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$result = $db->sql_query( $sql );
 	$numcat = $db->sql_numrows( $result );
 
@@ -374,7 +374,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		{
 			if( ! empty( $array['parentid'] ) )
 			{
-				$sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $array['parentid'];
+				$sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $array['parentid'];
 				$result = $db->sql_query( $sql );
 				list( $count ) = $db->sql_fetchrow( $result );
 
@@ -387,7 +387,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = "SELECT COUNT(*) AS count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`!=" . $catid . " AND `alias`=" . $db->dbescape( $array['alias'] );
+				$sql = "SELECT COUNT(*) AS count FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id!=" . $catid . " AND alias=" . $db->dbescape( $array['alias'] );
 				$result = $db->sql_query( $sql );
 				list( $count ) = $db->sql_fetchrow( $result );
 				if( $count )
@@ -416,7 +416,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			if( $array['parentid'] != $row['parentid'] )
 			{
-				$sql = "SELECT MAX(weight) AS new_weight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $array['parentid'];
+				$sql = "SELECT MAX(weight) AS new_weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $array['parentid'];
 				$result = $db->sql_query( $sql );
 				list( $new_weight ) = $db->sql_fetchrow( $result );
 				$new_weight = ( int )$new_weight;
@@ -427,17 +427,17 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$new_weight = $row['weight'];
 			}
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET
- `parentid`=" . $array['parentid'] . ",
- `title`=" . $db->dbescape( $array['title'] ) . ",
- `alias`=" . $db->dbescape( $array['alias'] ) . ",
- `description`=" . $db->dbescape( $array['description'] ) . ",
- `who_view`=" . $array['who_view'] . ",
- `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
- `who_download`=" . $array['who_download'] . ",
- `groups_download`=" . $db->dbescape( $array['groups_download'] ) . ",
- `weight`=" . $new_weight . "
- WHERE `id`=" . $catid;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET
+ parentid=" . $array['parentid'] . ",
+ title=" . $db->dbescape( $array['title'] ) . ",
+ alias=" . $db->dbescape( $array['alias'] ) . ",
+ description=" . $db->dbescape( $array['description'] ) . ",
+ who_view=" . $array['who_view'] . ",
+ groups_view=" . $db->dbescape( $array['groups_view'] ) . ",
+ who_download=" . $array['who_download'] . ",
+ groups_download=" . $db->dbescape( $array['groups_download'] ) . ",
+ weight=" . $new_weight . "
+ WHERE id=" . $catid;
 			$result = $db->sql_query( $sql );
 
 			if( ! $result )
@@ -602,7 +602,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( "NO" );
 	}
 
-	$sql = "SELECT COUNT(*) AS count, `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$sql = "SELECT COUNT(*) AS count, parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$result = $db->sql_query( $sql );
 	list( $count, $parentid ) = $db->sql_fetchrow( $result );
 
@@ -628,23 +628,23 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 
 	if( empty( $catid ) ) die( "NO" );
 
-	$query = "SELECT `parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$query = "SELECT parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO' );
 	list( $parentid ) = $db->sql_fetchrow( $result );
 
-	$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`!=" . $catid . " AND `parentid`=" . $parentid . " ORDER BY `weight` ASC";
+	$query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id!=" . $catid . " AND parentid=" . $parentid . " ORDER BY weight ASC";
 	$result = $db->sql_query( $query );
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
 		if( $weight == $new ) ++$weight;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET weight=" . $weight . " WHERE id=" . $row['id'];
 		$db->sql_query( $sql );
 	}
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `weight`=" . $new . " WHERE `id`=" . $catid;
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET weight=" . $new . " WHERE id=" . $catid;
 	$db->sql_query( $sql );
 
 	nv_del_moduleCache( $module_name );
@@ -661,7 +661,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
 	if( empty( $catid ) ) die( "NO" );
 
-	$query = "SELECT `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $catid;
+	$query = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $catid;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO' );
@@ -669,7 +669,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	list( $status ) = $db->sql_fetchrow( $result );
 	$status = $status ? 0 : 1;
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_categories` SET `status`=" . $status . " WHERE `id`=" . $catid;
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET status=" . $status . " WHERE id=" . $catid;
 	$db->sql_query( $sql );
 
 	nv_del_moduleCache( $module_name );
@@ -682,7 +682,7 @@ $page_title = $lang_module['download_catmanager'];
 
 $pid = $nv_Request->get_int( 'pid', 'get', 0 );
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `parentid`=" . $pid . " ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $pid . " ORDER BY weight ASC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 
@@ -701,7 +701,7 @@ if( ! $num )
 
 if( $pid )
 {
-	$sql2 = "SELECT `title`,`parentid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `id`=" . $pid;
+	$sql2 = "SELECT title,parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE id=" . $pid;
 	$result2 = $db->sql_query( $sql2 );
 	list( $parentid, $parentid2 ) = $db->sql_fetchrow( $result2 );
 	$caption = sprintf( $lang_module['table_caption2'], $parentid );
@@ -718,7 +718,7 @@ $a = 0;
 
 while( $row = $db->sql_fetchrow( $result ) )
 {
-	$numsub = $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE parentid=" . $row['id'] ) );
+	$numsub = $db->sql_numrows( $db->sql_query( "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE parentid=" . $row['id'] ) );
 	if( $numsub )
 	{
 		$numsub = " (<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;pid=" . $row['id'] . "\">" . $numsub . " " . $lang_module['category_cat_sub'] . "</a>)";

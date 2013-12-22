@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $module = $nv_Request->get_string( 'module', 'get', '' );
 $bid = $nv_Request->get_int( 'bid', 'get,post', 0 );
 
-$file = $db->query( 'SELECT file_name FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE bid=' . $bid )->fetchColumn();
+$file = $db->query( 'SELECT file_name FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetchColumn();
 
 echo "<option value=\"\">" . $lang_module['block_select'] . "</option>\n";
 
@@ -32,7 +32,7 @@ if( $module == 'global' )
 }
 elseif( preg_match( $global_config['check_module'], $module ) )
 {
-	$sth = $db->prepare( 'SELECT `module_file` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+	$sth = $db->prepare( 'SELECT module_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 	$sth->bindParam( ':title', $module, PDO::PARAM_STR );
 	$sth->execute();
 	$module_file = $sth->fetchColumn();

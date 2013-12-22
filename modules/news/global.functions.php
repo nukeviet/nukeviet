@@ -38,7 +38,7 @@ function nv_set_status_module()
 	//status_3= "Het han";
 
 	// Dang cai bai cho kich hoat theo thoi gian
-	$query = $db->sql_query( 'SELECT `id`, `listcatid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`=2 AND `publtime` < ' . NV_CURRENTTIME . ' ORDER BY `publtime` ASC' );
+	$query = $db->sql_query( 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC' );
 	while( list( $id, $listcatid ) = $db->sql_fetchrow( $query ) )
 	{
 		$array_catid = explode( ',', $listcatid );
@@ -47,14 +47,14 @@ function nv_set_status_module()
 			$catid_i = intval( $catid_i );
 			if( $catid_i > 0 )
 			{
-				$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` SET `status`=1 WHERE `id`=' . $id );
+				$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=1 WHERE id=' . $id );
 			}
 		}
-		$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_rows` SET `status`=1 WHERE `id`=' . $id );
+		$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=1 WHERE id=' . $id );
 	}
 
 	// Ngung hieu luc cac bai da het han
-	$query = $db->sql_query( 'SELECT `id`, `listcatid`, `archive` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`=1 AND `exptime` > 0 AND `exptime` <= ' . NV_CURRENTTIME . ' ORDER BY `exptime` ASC' );
+	$query = $db->sql_query( 'SELECT id, listcatid, archive FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY exptime ASC' );
 	while( list( $id, $listcatid, $archive ) = $db->sql_fetchrow( $query ) )
 	{
 		if( intval( $archive ) == 0 )
@@ -68,13 +68,13 @@ function nv_set_status_module()
 	}
 
 	// Tim kiem thoi gian chay lan ke tiep
-	list( $time_publtime ) = $db->sql_fetchrow( $db->sql_query( 'SELECT min(publtime) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`=2 AND `publtime` > ' . NV_CURRENTTIME ) );
-	list( $time_exptime ) = $db->sql_fetchrow( $db->sql_query( 'SELECT min(exptime) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`=1 AND `exptime` > ' . NV_CURRENTTIME ) );
+	list( $time_publtime ) = $db->sql_fetchrow( $db->sql_query( 'SELECT min(publtime) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=2 AND publtime > ' . NV_CURRENTTIME ) );
+	list( $time_exptime ) = $db->sql_fetchrow( $db->sql_query( 'SELECT min(exptime) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND exptime > ' . NV_CURRENTTIME ) );
 
 	$timecheckstatus = min( $time_publtime, $time_exptime );
 	if( ! $timecheckstatus ) $timecheckstatus = max( $time_publtime, $time_exptime );
 
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
+	$db->sql_query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
 	nv_del_moduleCache( 'settings' );
 	nv_del_moduleCache( $module_name );
 
@@ -94,7 +94,7 @@ function nv_comment_module( $id, $page )
 	global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment, $db_config;
 	$comment_array = array();
 	$per_page = $per_page_comment;
-	$sql = 'SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `' . NV_PREFIXLANG . '_' . $module_data . '_comments` as a LEFT JOIN `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` as b ON a.userid =b.userid WHERE a.id= ' . $id . ' AND a.status=1 ORDER BY a.cid DESC LIMIT ' . $page . ',' . $per_page;
+	$sql = 'SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments as a LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' as b ON a.userid =b.userid WHERE a.id= ' . $id . ' AND a.status=1 ORDER BY a.cid DESC LIMIT ' . $page . ',' . $per_page;
 	$comment = $db->sql_query( $sql );
 	$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
 	list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -134,7 +134,7 @@ function nv_del_content_module( $id )
 	global $db, $module_name, $module_data, $title, $lang_module;
 	$content_del = 'NO_' . $id;
 	$title = '';
-	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( 'SELECT `id`, `listcatid`, `title`, `homeimgfile`, `homeimgthumb` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . intval( $id ) ) );
+	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $db->sql_query( 'SELECT id, listcatid, title, homeimgfile, homeimgthumb FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval( $id ) ) );
 	if( $id > 0 )
 	{
 		if( $homeimgthumb != '' and $homeimgthumb != '|' )
@@ -155,7 +155,7 @@ function nv_del_content_module( $id )
 			$catid_i = intval( $catid_i );
 			if( $catid_i > 0 )
 			{
-				$_sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` WHERE `id`=' . $id;
+				$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' WHERE id=' . $id;
 				if( ! $db->exec( $_sql ) )
 				{
 					++$number_no_del;
@@ -164,7 +164,7 @@ function nv_del_content_module( $id )
 		}
 		if( $number_no_del == 0 )
 		{
-			$_sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `id`=' . $id;
+			$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 			if( ! $db->exec( $_sql ) )
 			{
 				++$number_no_del;
@@ -173,13 +173,13 @@ function nv_del_content_module( $id )
 		$number_no_del = 0;
 		if( $number_no_del == 0 )
 		{
-			$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . '` WHERE `id` = ' . $id );
-			$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_bodytext` WHERE `id` = ' . $id );
-			$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_comments` WHERE `id` = ' . $id );
-			$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block` WHERE `id` = ' . $id );
+			$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' WHERE id = ' . $id );
+			$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id );
+			$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE id = ' . $id );
+			$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id );
 
-			$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_tags` SET `numnews` = `numnews`-1 WHERE `tid` IN (SELECT `tid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tags_id` WHERE `id`=' . $id . ')' );
-			$db->sql_query( 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tags_id` WHERE `id` = ' . $id );
+			$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')' );
+			$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id );
 			$content_del = 'OK_' . $id;
 		}
 		else
@@ -206,10 +206,10 @@ function nv_archive_content_module( $id, $listcatid )
 		$catid_i = intval( $catid_i );
 		if( $catid_i > 0 )
 		{
-			$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . '` SET `status`=3 WHERE `id`=' . $id );
+			$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status=3 WHERE id=' . $id );
 		}
 	}
-	$db->sql_query( 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_rows` SET `status`=3 WHERE `id`=' . $id );
+	$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status=3 WHERE id=' . $id );
 }
 
 /**

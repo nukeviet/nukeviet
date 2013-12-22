@@ -23,7 +23,7 @@ $xtpl = new XTemplate( 'block_newsright.tpl', NV_ROOTDIR . '/themes/' . $module_
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 
-$sql = "SELECT id, catid, publtime, exptime, title, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`= 1 ORDER BY `hitstotal` DESC LIMIT 0 , 5";
+$sql = "SELECT id, catid, publtime, exptime, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status= 1 ORDER BY hitstotal DESC LIMIT 0 , 5";
 $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {
@@ -38,14 +38,14 @@ if( $db->sql_numrows( $result ) )
 	$xtpl->parse( 'main.topviews' );
 }
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `status`= 1 ORDER BY `cid` DESC LIMIT 0 , 5";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE status= 1 ORDER BY cid DESC LIMIT 0 , 5";
 $result = $db->sql_query( $sql );
 if( $db->sql_numrows( $result ) )
 {
 	$i = 1;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
-		list( $catid, $alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT catid, alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE id=" . $row['id'] . "" ) );
+		list( $catid, $alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['id'] . "" ) );
 		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$row['catname'] = $global_array_cat[$catid]['title'];
 		$row['content'] = nv_clean60( $row['content'], 100 );

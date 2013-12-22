@@ -44,7 +44,7 @@ $description = $c['description'];
 $per_page = 15;
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias;
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $c['id'] . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid=" . $c['id'] . " AND status=1 ORDER BY uploadtime DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
 
 $result = $db->sql_query( $sql );
 $query = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -104,7 +104,7 @@ if( ! empty( $subcats ) )
 	foreach( $subcats as $sub )
 	{
 		$array_item = array();
-		$sql = "SELECT `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`, `author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid`=" . $sub . " AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 0, 3";
+		$sql = "SELECT id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE catid=" . $sub . " AND status=1 ORDER BY uploadtime DESC LIMIT 0, 3";
 		$result = $db->sql_query( $sql );
 
 		if( ! $db->sql_numrows( $result ) ) continue;

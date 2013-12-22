@@ -20,12 +20,12 @@ if( ! empty( $listcid ) )
 
 	foreach( $cid_array as $cid )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET status='" . $status . "' WHERE cid=" . $cid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET status='" . $status . "' WHERE cid=" . $cid;
 		$db->sql_query( $sql );
 	}
 
 	// Xac dinh ID cac bai viet
-	$sql = "SELECT DISTINCT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE cid in (" . implode( ',', $cid_array ) . ")";
+	$sql = "SELECT DISTINCT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid in (" . implode( ',', $cid_array ) . ")";
 	$sql = $db->sql_query( $sql );
 	$array_id = array();
 	while( list( $id ) = $db->sql_fetchrow( $sql ) )
@@ -36,7 +36,7 @@ if( ! empty( $listcid ) )
 
 	// Xac dinh cac chu de bai viet
 	$array_listcatid = array();
-	$sql = $db->sql_query( "SELECT id, listcatid FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` in (" . implode( ',', $array_id ) . ")" );
+	$sql = $db->sql_query( "SELECT id, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id in (" . implode( ',', $array_id ) . ")" );
 	while( list( $id, $listcatid ) = $db->sql_fetchrow( $sql ) )
 	{
 		$array_listcatid[$id] = explode( ',', $listcatid );
@@ -44,13 +44,13 @@ if( ! empty( $listcid ) )
 
 	foreach( $array_id as $id )
 	{
-		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments where id= '" . $id . "' AND status=1" ) );
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
 		$db->sql_query( $sql );
 		$array_catid = $array_listcatid[$id];
 		foreach( $array_catid as $catid_i )
 		{
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET hitscm=" . $numf . " WHERE id=" . $id;
 			$db->sql_query( $sql );
 		}
 	}

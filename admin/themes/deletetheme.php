@@ -18,15 +18,15 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 
 	$sql_theme = ( preg_match( $global_config['check_theme_mobile'], $theme ) ) ? 'mobile' : 'theme';
 
-	$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` where setup = 1');
+	$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
 	while( list( $lang_i ) = $result->fetch( 3 ) )
 	{
 		$module_array = array();
 
 		$sth = $db->prepare( 'SELECT title, custom_title
-			FROM `' . $db_config['prefix'] . '_' . $lang_i . '_modules`
-			WHERE `' . $sql_theme . '` = :theme
-			ORDER BY `weight` ASC' );
+			FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
+			WHERE ' . $sql_theme . ' = :theme
+			ORDER BY weight ASC' );
 		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 		$sth->execute();
 		while( list( $title, $custom_title ) = $sth->fetch( 3 ) )
@@ -51,36 +51,36 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 
 		if( ! empty( $result[0] ) )
 		{
-			$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` where setup=1' );
+			$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1' );
 			while( list( $_lang ) = $result->fetch( 3 ) )
 			{
-				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_modthemes` WHERE `theme` = :theme' );
+				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme' );
 				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 				$sth->execute();
 
-				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight` WHERE `bid` IN (SELECT `bid` FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WHERE `theme`= :theme)' );
+				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)' );
 				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 				$sth->execute();
 
-				$sth = $db->prepare( 'DELETE FROM `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WHERE `theme` = :theme' );
+				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme' );
 				$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 				$sth->execute();
 			}
 			nv_del_moduleCache( 'themes' );
 
-			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes` WRITE' );
-			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes`' );
-			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_modthemes`' );
+			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WRITE' );
+			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
+			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
 			$db->exec( 'UNLOCK TABLE' );
 
-			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight` WRITE' );
-			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight`' );
-			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight`' );
+			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WRITE' );
+			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
+			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
 			$db->exec( 'UNLOCK TABLE' );
 
-			$db->exec( 'LOCK TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups` WRITE' );
-			$db->exec( 'REPAIR TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups`' );
-			$db->exec( 'OPTIMIZE TABLE `' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups`' );
+			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WRITE' );
+			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
+			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
 			$db->exec( 'UNLOCK TABLE' );
 
 			echo $lang_module['theme_created_delete_theme_success'];

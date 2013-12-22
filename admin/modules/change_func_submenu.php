@@ -14,11 +14,11 @@ $content = 'ERR_' . $func_id;
 
 if( $func_id > 0 )
 {
-	$row = $db->query( 'SELECT `in_submenu` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `func_id`=' . $func_id )->fetch();
+	$row = $db->query( 'SELECT in_submenu FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $func_id )->fetch();
 	if( !empty( $row ) )
 	{
 		$in_submenu = $row['in_submenu'] ? 0 : 1;
-		$db->exec( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `in_submenu`=' . $in_submenu . ' WHERE `func_id`=' . $func_id );
+		$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu=' . $in_submenu . ' WHERE func_id=' . $func_id );
 		nv_del_moduleCache( 'modules' );
 		$content = 'OK_' . $func_id;
 	}

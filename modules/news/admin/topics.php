@@ -54,10 +54,10 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $array['topicid'] == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics`" ) );
+		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" ) );
 		$weight = intval( $weight ) + 1;
 
-		$query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_topics` (`topicid`, `title`, `alias`, `description`, `image`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, " . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+		$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (topicid, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
 
 		if( $db->sql_query_insert_id( $query ) )
 		{
@@ -72,7 +72,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_topics` SET `title`=" . $db->dbescape( $array['title'] ) . ", `alias` = " . $db->dbescape( $array['alias'] ) . ", `description`=" . $db->dbescape( $array['description'] ) . ", `image` = " . $db->dbescape( $array['image'] ) . ", `keywords`= " . $db->dbescape( $array['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `topicid` =" . $array['topicid'];
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET title=" . $db->dbescape( $array['title'] ) . ", alias = " . $db->dbescape( $array['alias'] ) . ", description=" . $db->dbescape( $array['description'] ) . ", image = " . $db->dbescape( $array['image'] ) . ", keywords= " . $db->dbescape( $array['keywords'] ) . ", edit_time=UNIX_TIMESTAMP() WHERE topicid =" . $array['topicid'];
 		if( $db->exec( $sql ) > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
@@ -89,7 +89,7 @@ if( ! empty( $savecat ) )
 $array['topicid'] = $nv_Request->get_int( 'topicid', 'get', 0 );
 if( $array['topicid'] > 0 )
 {
-	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `alias`, `image`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` where `topicid`=" . $array['topicid'] . "" ) );
+	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'] . "" ) );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 

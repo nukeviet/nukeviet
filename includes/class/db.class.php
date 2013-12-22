@@ -61,7 +61,7 @@ class sql_db extends pdo
 		try
 		{
 			parent::__construct( $dsn , $config['dbuname'], $config['dbpass'], $driver_options );
-			$this->exec( "SET SESSION `time_zone`='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
+			parent::exec( "SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
 			$this->connect = 1;
 		}
 		catch( PDOException $e )
@@ -81,15 +81,46 @@ class sql_db extends pdo
 		$query = preg_replace( '/union/', 'UNI0N', $query );
 		try
 		{
-			$result = $this->query( $query );
+			$result = parent::query( $query );
 			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
 			return $result;
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 	}
+
+	public function query( $query )
+	{
+		try
+		{
+			$result = parent::query( $query );
+			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
+			return $result;
+		}
+		catch( PDOException $e )
+		{
+			trigger_error( $e->getMessage() );
+			return false;
+		}
+	}
+	
+	public function exec( $query )
+	{
+		try
+		{
+			$result = parent::exec( $query );
+			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
+			return $result;
+		}
+		catch( PDOException $e )
+		{
+			trigger_error( $e->getMessage() );
+			return false;
+		}
+	}	
 
 	/**
 	 * sql_db::sql_version()
@@ -102,12 +133,12 @@ class sql_db extends pdo
 		{
 			if ( $this->dbtype = 'mysql' )
 			{
-				$rs = $this->query( 'SELECT VERSION()' );
+				$rs = parent::query( 'SELECT VERSION()' );
 				return $rs->fetchColumn( );
 			}
 			elseif ( $this->dbtype = 'oci' )
 			{
-				$rs = $this->query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
+				$rs = parent::query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
 				return $rs->fetchColumn( );
 			}
 		}
@@ -140,6 +171,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 	}
@@ -158,6 +190,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 	}
@@ -176,6 +209,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );			
 			return false;
 		}
 	}
@@ -194,6 +228,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );			
 			return false;
 		}
 	}
@@ -210,16 +245,18 @@ class sql_db extends pdo
 		{
 			if( preg_match( "/^INSERT\s/is", $query ) )
 			{
-				if( $this->exec( $query ) )
+				if( parent::exec( $query ) )
 				{
+					$this->query_strs[] = array( htmlspecialchars( $query ), true );
 					return $this->lastInsertId();
 				}
 			}
 		}
 		catch( PDOException $e )
 		{
-			return false;
+			trigger_error( $e->getMessage() );
 		}
+		$this->query_strs[] = array( htmlspecialchars( $query ), false );
 		return false;
 	}
 
@@ -237,6 +274,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 		return false;

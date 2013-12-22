@@ -16,10 +16,10 @@ if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
 }
-$sql = "FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `active`=" . ( $usactive % 2 );
+$sql = "FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE active=" . ( $usactive % 2 );
 if( $usactive > 1 )
 {
-	$sql .= " AND `idsite`=" . $global_config['idsite'];
+	$sql .= " AND idsite=" . $global_config['idsite'];
 }
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
@@ -64,13 +64,13 @@ if( ! empty( $methodvalue ) )
 		$array_like = array();
 		foreach( $key_methods as $method_i )
 		{
-			$array_like[] = "`" . $method_i . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+			$array_like[] = "" . $method_i . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
 		}
 		$sql .= " AND (" . implode( " OR ", $array_like ) . ")";
 	}
 	else
 	{
-		$sql .= " AND (`" . $method . "` LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
+		$sql .= " AND (" . $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
 		$methods[$method]['selected'] = " selected=\"selected\"";
 	}
 	$base_url .= "&amp;method=" . urlencode( $method ) . "&amp;value=" . urlencode( $methodvalue );
@@ -79,7 +79,7 @@ if( ! empty( $methodvalue ) )
 
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
-	$sql .= " ORDER BY `" . $orderby . "` " . $ordertype;
+	$sql .= " ORDER BY " . $orderby . " " . $ordertype;
 	$base_url .= "&amp;sortby=" . $orderby . "&amp;sorttype=" . $ordertype;
 }
 
@@ -123,7 +123,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 if( ! empty( $admin_in ) )
 {
 	$admin_in = implode( ',', $admin_in );
-	$sql = "SELECT `admin_id`, `lev` FROM `" . NV_AUTHORS_GLOBALTABLE . "` WHERE `admin_id` IN (" . $admin_in . ")";
+	$sql = "SELECT admin_id, lev FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id IN (" . $admin_in . ")";
 	$query = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $query ) )
 	{

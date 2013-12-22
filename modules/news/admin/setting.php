@@ -50,7 +50,7 @@ if( ! empty( $savesetting ) )
 
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
+		$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
 	}
 
 	nv_del_moduleCache( 'settings' );
@@ -213,7 +213,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			$editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
 			$delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
 			$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
+			$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE pid =" . $pid . " LIMIT 1" );
 		}
 
 		nv_del_moduleCache( 'settings' );
@@ -236,7 +236,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 	$array_post_member = array();
 	$array_post_data = array();
 
-	$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
+	$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY pid ASC";
 	$result = $db->sql_query( $sql );
 	while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
 	{
@@ -255,7 +255,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 		}
 		else
 		{
-			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` WHERE `pid` = " . $pid . " LIMIT 1" );
+			$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post WHERE pid = " . $pid . " LIMIT 1" );
 		}
 	}
 
@@ -277,7 +277,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			else
 			{
 				$addcontent = $postcontent = $editcontent = $delcontent = 0;
-				$pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
+				$pid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (pid,member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
 			}
 
 			$xtpl->assign( 'ROW', array(

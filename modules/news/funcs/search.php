@@ -15,7 +15,7 @@ function GetSourceNews( $sourceid )
 
 	if( $sourceid > 0 )
 	{
-		$sql = 'SELECT title FROM `' . NV_PREFIXLANG . '_' . $module_data . '_sources` WHERE sourceid = ' . $sourceid;
+		$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
 		$re = $db->sql_query( $sql );
 
 		if( list( $title ) = $db->sql_fetchrow( $re ) )
@@ -79,7 +79,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( $check_num == 1 )
 	{
-		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id = tb2.id ) ";
+		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as tb2 ON ( tb1.id = tb2.id ) ";
 		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
 	}
 	elseif( $check_num == 2 )
@@ -92,18 +92,18 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	}
 	else
 	{
-		$tbl_src = " LEFT JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_bodytext` as tb2 ON ( tb1.id = tb2.id )";
+		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext as tb2 ON ( tb1.id = tb2.id )";
 		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
 
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $to_date, $m ) )
 	{
-		$where .= " AND `publtime` >=" . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= " AND publtime >=" . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $from_date, $m ) )
 	{
-		$where .= " AND `publtime` <= " . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= " AND publtime <= " . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 
 	if( $catid > 0 )
@@ -116,7 +116,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	}
 
 	$sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid
-	FROM `" . $table_search . "` as tb1 " . $tbl_src . "
+	FROM " . $table_search . " as tb1 " . $tbl_src . "
 	WHERE tb1.status=1 " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
 
 	$result = $db->sql_query( $sql );

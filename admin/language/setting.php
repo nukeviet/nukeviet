@@ -23,7 +23,7 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
 
-	$db->exec( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = '" . $read_type . "' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'read_type'" );
+	$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'" );
 
 	nv_save_file_config_global();
 
@@ -85,11 +85,11 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . 's
 	$allow_sitelangs = implode( ',', $global_config['allow_sitelangs'] );
 	$allow_adminlangs = implode( ',', $global_config['allow_adminlangs'] );
 
-	$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = :allow_sitelangs WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_sitelangs'" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :allow_sitelangs WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'" );
 	$sth->bindParam( ':allow_sitelangs', $allow_sitelangs, PDO::PARAM_STR );
 	$sth->execute();
 
-	$sth = $db->prepare( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = :allow_adminlangs WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'allow_adminlangs'" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :allow_adminlangs WHERE lang='sys' AND module = 'global' AND config_name = 'allow_adminlangs'" );
 	$sth->bindParam( ':allow_adminlangs', $allow_adminlangs, PDO::PARAM_STR );
 	$sth->execute();
 
@@ -111,7 +111,7 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . 's
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 $lang_array_data_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
 while( $row = $result->fetch() )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
@@ -122,7 +122,7 @@ while( $row = $result->fetch() )
 
 $array_lang_setup = array();
 
-$result = $db->query( 'SELECT lang FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1' );
+$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 while( $row = $result->fetch() )
 {
 	$array_lang_setup[] = trim( $row['lang'] );

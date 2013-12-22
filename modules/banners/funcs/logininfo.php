@@ -29,7 +29,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( $global_config['gfx_chk'] and ! nv_capcha_txt( $seccode ) ) die( 'action' );
 	else
 	{
-		$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
+		$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login = " . $db->dbescape( $login ) . " AND act=1";
 		$result = $db->sql_query( $sql );
 		$numrows = $db->sql_numrows( $result );
 
@@ -52,7 +52,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$current_login = NV_CURRENTTIME;
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
-				$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET `check_num` = " . $db->dbescape( $checknum ) . ", `last_login` = " . $current_login . ", `last_ip` = " . $db->dbescape( $client_info['ip'] ) . ", `last_agent` = " . $db->dbescape( $agent ) . " WHERE `id`=" . $id;
+				$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET check_num = " . $db->dbescape( $checknum ) . ", last_login = " . $current_login . ", last_ip = " . $db->dbescape( $client_info['ip'] ) . ", last_agent = " . $db->dbescape( $agent ) . " WHERE id=" . $id;
 				if( ! $db->sql_query( $sql ) ) die( 'action' );
 				$client = array(
 					'login' => $login,

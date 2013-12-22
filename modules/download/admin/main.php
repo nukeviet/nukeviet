@@ -18,7 +18,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( $id )
 	{
-		$query = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`=' . $id;
+		$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 		$result = $db->sql_query( $query );
 		$numrows = $db->sql_numrows( $result );
 		if( $numrows != 1 )
@@ -162,13 +162,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		$alias = change_alias( $array['title'] );
 
-		$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`!=' . $id . ' AND `alias`=' . $db->dbescape( $alias );
+		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias=' . $db->dbescape( $alias );
 		$result = $db->sql_query( $sql );
 		list( $is_exists ) = $db->sql_fetchrow( $result );
 
 		if( ! $is_exists )
 		{
-			$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `title`=' . $db->dbescape( $array['title'] );
+			$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->dbescape( $array['title'] );
 			$result = $db->sql_query( $sql );
 			list( $is_exists ) = $db->sql_fetchrow( $result );
 		}
@@ -230,30 +230,30 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET
-				 `catid`=" . $array['catid'] . ",
-				 `title`=" . $db->dbescape( $array['title'] ) . ",
-				 `alias`=" . $db->dbescape( $alias ) . ",
-				 `description`=" . $db->dbescape( $array['description'] ) . ",
-				 `introtext`=" . $db->dbescape( $array['introtext'] ) . ",
-				 `updatetime`=" . NV_CURRENTTIME . ",
-				 `author_name`=" . $db->dbescape( $array['author_name'] ) . ",
-				 `author_email`=" . $db->dbescape( $array['author_email'] ) . ",
-				 `author_url`=" . $db->dbescape( $array['author_url'] ) . ",
-				 `fileupload`=" . $db->dbescape( $array['fileupload'] ) . ",
-				 `linkdirect`=" . $db->dbescape( $array['linkdirect'] ) . ",
-				 `version`=" . $db->dbescape( $array['version'] ) . ",
-				 `filesize`=" . $array['filesize'] . ",
-				 `fileimage`=" . $db->dbescape( $array['fileimage'] ) . ",
-				 `copyright`=" . $db->dbescape( $array['copyright'] ) . ",
-				 `comment_allow`=" . $array['comment_allow'] . ",
-				 `who_comment`=" . $array['who_comment'] . ",
-				 `groups_comment`=" . $db->dbescape( $array['groups_comment'] ) . ",
-				 `who_view`=" . $array['who_view'] . ",
-				 `groups_view`=" . $db->dbescape( $array['groups_view'] ) . ",
-				 `who_download`=" . $array['who_download'] . ",
-				 `groups_download`=" . $db->dbescape( $array['groups_download'] ) . "
-				 WHERE `id`=" . $id;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
+				 catid=" . $array['catid'] . ",
+				 title=" . $db->dbescape( $array['title'] ) . ",
+				 alias=" . $db->dbescape( $alias ) . ",
+				 description=" . $db->dbescape( $array['description'] ) . ",
+				 introtext=" . $db->dbescape( $array['introtext'] ) . ",
+				 updatetime=" . NV_CURRENTTIME . ",
+				 author_name=" . $db->dbescape( $array['author_name'] ) . ",
+				 author_email=" . $db->dbescape( $array['author_email'] ) . ",
+				 author_url=" . $db->dbescape( $array['author_url'] ) . ",
+				 fileupload=" . $db->dbescape( $array['fileupload'] ) . ",
+				 linkdirect=" . $db->dbescape( $array['linkdirect'] ) . ",
+				 version=" . $db->dbescape( $array['version'] ) . ",
+				 filesize=" . $array['filesize'] . ",
+				 fileimage=" . $db->dbescape( $array['fileimage'] ) . ",
+				 copyright=" . $db->dbescape( $array['copyright'] ) . ",
+				 comment_allow=" . $array['comment_allow'] . ",
+				 who_comment=" . $array['who_comment'] . ",
+				 groups_comment=" . $db->dbescape( $array['groups_comment'] ) . ",
+				 who_view=" . $array['who_view'] . ",
+				 groups_view=" . $db->dbescape( $array['groups_view'] ) . ",
+				 who_download=" . $array['who_download'] . ",
+				 groups_download=" . $db->dbescape( $array['groups_download'] ) . "
+				 WHERE id=" . $id;
 			$result = $db->sql_query( $sql );
 
 			if( ! $result )
@@ -265,7 +265,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			{
 				if( $report and $array['is_del_report'] )
 				{
-					$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_report` WHERE `fid`=' . $id;
+					$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
 					$db->sql_query( $sql );
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
@@ -448,7 +448,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 	}
 
-	$sql = "SELECT `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir'";
+	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->sql_query( $sql );
 	list( $upload_dir ) = $db->sql_fetchrow( $result );
 
@@ -562,7 +562,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
 	if( empty( $id ) ) die( 'NO' );
 
-	$query = 'SELECT `status` FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`=' . $id;
+	$query = 'SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO' );
@@ -570,7 +570,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	list( $status ) = $db->sql_fetchrow( $result );
 	$status = $status ? 0 : 1;
 
-	$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '` SET `status`=' . $status . ' WHERE `id`=' . $id;
+	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id;
 	$db->sql_query( $sql );
 	die( 'OK' );
 }
@@ -584,7 +584,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( ! $id ) die( 'NO' );
 
-	$query = 'SELECT `fileupload`, `fileimage`,`title` FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`=' . $id;
+	$query = 'SELECT fileupload, fileimage,title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO' );
@@ -596,20 +596,20 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	 * if(!empty($fileupload)) { $fileupload = explode('[NV]',$fileupload); foreach($fileupload as $file) { $file = substr($file,strlen(NV_BASE_SITEURL)); if ( ! empty( $file ) and file_exists( NV_ROOTDIR . '/' . $file ) ) { @nv_deletefile( NV_ROOTDIR . '/' . $file ); } } } $fileimage = substr($array['fileimage'],strlen(NV_BASE_SITEURL)); if ( ! empty( $fileimage ) and file_exists( NV_ROOTDIR . '/' . $fileimage ) ) { @nv_deletefile( NV_ROOTDIR . '/' . $fileimage ); }
 	 */
 
-	$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_comments` WHERE `fid`=' . $id;
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id;
 	$db->sql_query( $sql );
 
-	$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_report` WHERE `fid`=' . $id;
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
 	$db->sql_query( $sql );
 
-	$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `id`=' . $id;
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$db->sql_query( $sql );
 	nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid'] );
 	die( 'OK' );
 }
 
 // List file
-$sql = 'FROM `' . NV_PREFIXLANG . '_' . $module_data . '`';
+$sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '';
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $listcats = nv_listcats( 0 );
@@ -629,7 +629,7 @@ if( $nv_Request->isset_request( 'catid', 'get' ) )
 	}
 
 	$page_title = sprintf( $lang_module['file_list_by_cat'], $listcats[$catid]['title'] );
-	$sql .= ' WHERE `catid`=' . $catid;
+	$sql .= ' WHERE catid=' . $catid;
 	$base_url .= '&amp;catid=' . $catid;
 }
 else
@@ -655,7 +655,7 @@ if( ! $all_page )
 	}
 }
 
-$sql .= ' ORDER BY `uploadtime` DESC';
+$sql .= ' ORDER BY uploadtime DESC';
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;

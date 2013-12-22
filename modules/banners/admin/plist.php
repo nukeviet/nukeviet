@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang` ASC";
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang ASC";
 $result = $db->sql_query( $sql );
 
 $contents = array();

@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
-$sql = 'SELECT * FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id`=' . $id . ' AND `is_sys`=0';
+$sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
 $row = $db->query( $result )->fetch();
 
 if( ! empty( $row ) )
@@ -76,11 +76,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$params = implode( ',', $params );
 			}
 
-			$sth = $db->prepare( 'UPDATE `' . NV_CRONJOBS_GLOBALTABLE . '` SET
-				`start_time`=' . $start_time . ', `interval`=' . $interval . ', `run_file`= :run_file,
-				`run_func`= :run_func, `params`= :params, `del`=' . $del . ',
-				`' . NV_LANG_INTERFACE . '_cron_name`= :cron_name
-				WHERE `id`=' . $id );
+			$sth = $db->prepare( 'UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET
+				start_time=' . $start_time . ', interval=' . $interval . ', run_file= :run_file,
+				run_func= :run_func, params= :params, del=' . $del . ',
+				' . NV_LANG_INTERFACE . '_cron_name= :cron_name
+				WHERE id=' . $id );
 
 			$sth->bindParam( ':run_file', $run_file, PDO::PARAM_STR );
 			$sth->bindParam( ':run_func', $run_func, PDO::PARAM_STR );

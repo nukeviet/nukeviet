@@ -11,7 +11,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['banners_list'];
 
-$sql = "SELECT `id`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
+$sql = "SELECT id,full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
 $result = $db->sql_query( $sql );
 
 $clients = array();
@@ -20,7 +20,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	$clients[$row['id']] = $row['full_name'];
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
+$sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
 $result = $db->sql_query( $sql );
 
 $plans = array();
@@ -31,30 +31,30 @@ while( $row = $db->sql_fetchrow( $result ) )
 
 $contents = array();
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE ";
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE ";
 if( in_array( $nv_Request->get_int( 'act', 'get' ), array( 2, 3, 4 ) ) )
 {
-	$sql .= "`act`=" . $nv_Request->get_int( 'act', 'get' );
+	$sql .= "act=" . $nv_Request->get_int( 'act', 'get' );
 	$contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int( 'act', 'get' )];
 }
 else
 {
-	$sql .= "`act`=1";
+	$sql .= "act=1";
 	$contents['caption'] = $lang_module['banners_list1'];
 }
 
 if( $nv_Request->get_bool( 'clid', 'get' ) and isset( $clients[$nv_Request->get_int( 'clid', 'get' )] ) )
 {
-	$sql .= " AND `clid`=" . $nv_Request->get_int( 'clid', 'get' );
+	$sql .= " AND clid=" . $nv_Request->get_int( 'clid', 'get' );
 	$contents['caption'] .= " " . sprintf( $lang_module['banners_list_cl'], $clients[$nv_Request->get_int( 'clid', 'get' )] );
 }
 elseif( $nv_Request->get_bool( 'pid', 'get' ) and isset( $plans[$nv_Request->get_int( 'pid', 'get' )] ) )
 {
-	$sql .= " AND `pid`=" . $nv_Request->get_int( 'pid', 'get' );
+	$sql .= " AND pid=" . $nv_Request->get_int( 'pid', 'get' );
 	$contents['caption'] .= " " . sprintf( $lang_module['banners_list_pl'], $plans[$nv_Request->get_int( 'pid', 'get' )] );
 }
 
-$sql .= " ORDER BY `id` DESC";
+$sql .= " ORDER BY id DESC";
 
 $result = $db->sql_query( $sql );
 

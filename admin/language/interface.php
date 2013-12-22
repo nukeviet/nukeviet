@@ -15,7 +15,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 while( $row = $result->fetch() )
 {
@@ -45,7 +45,7 @@ if( $dirlang_old != $dirlang )
 	$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
 }
 
-$sql = 'SELECT `idfile`, `module`, `admin_file`, `langtype`, `author_' . $dirlang . '` FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file` ORDER BY `idfile` ASC';
+$sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
 $result = $db->query( $sql );
 
 if( empty( $result->rowCount() ) )

@@ -24,7 +24,7 @@ elseif( md5( $id . session_id() ) == $checkss )
 }
 if( ! empty( $del_array ) )
 {
-	$sql = "SELECT `id`, `listcatid`, `admin_id`, `title`, `alias`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ',', $del_array ) . ")";
+	$sql = "SELECT id, listcatid, admin_id, title, alias, status FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id IN (" . implode( ',', $del_array ) . ")";
 	$result = $db->sql_query( $sql );
 	$del_array = $no_del_array = array();
 	$artitle = array();

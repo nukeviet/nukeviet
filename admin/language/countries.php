@@ -14,7 +14,7 @@ $page_title = $lang_module['countries'];
 $array_lang_setup = array();
 $array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
-$sql = 'SELECT `lang` FROM `' . $db_config['prefix'] . '_setup_language` WHERE `setup`=1';
+$sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
 $result = $db->query( $sql );
 while( list( $lang_i ) = $result->fetch( 3 ) )
 {

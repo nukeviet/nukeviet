@@ -22,7 +22,7 @@ function nv_show_funcs()
 
 	if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die();
 
-	$sth = $db->prepare( 'SELECT `module_file`, `custom_title`, `admin_file` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :mod' );
+	$sth = $db->prepare( 'SELECT module_file, custom_title, admin_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :mod' );
 	$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 	$sth->execute();
 	$row = $sth->fetch();
@@ -37,7 +37,7 @@ function nv_show_funcs()
 
 	if( $admin_file != intval( $row['admin_file'] ) )
 	{
-		$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admin_file`=' . $admin_file . ' WHERE `title`= :title' );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=' . $admin_file . ' WHERE title= :title' );
 		$sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 		$sth->execute();
 
@@ -83,7 +83,7 @@ function nv_show_funcs()
 	$data_funcs = array();
 	$weight_list = array();
 
-	$sth = $db->prepare( 'SELECT * FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :in_module ORDER BY `subweight` ASC' );
+	$sth = $db->prepare( 'SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module ORDER BY subweight ASC' );
 	$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 	$sth->execute();
 
@@ -95,7 +95,7 @@ function nv_show_funcs()
 		if( $row['show_func'] != $show_func )
 		{
 			$row['show_func'] = $show_func;
-			$db->exec( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `show_func`=' . $show_func . ' WHERE `func_id`=' . $row['func_id'] );
+			$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id'] );
 			$is_delCache = true;
 		}
 
@@ -122,15 +122,15 @@ function nv_show_funcs()
 	{
 		foreach( $old_funcs as $func => $values )
 		{
-			$db->exec( 'DELETE FROM `' . NV_BLOCKS_TABLE . '_weight` WHERE `func_id` = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM `' . NV_MODFUNCS_TABLE . '` WHERE `func_id` = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id` = ' . $values['func_id'] );
+			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id'] );
+			$db->exec( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id'] );
+			$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id'] );
 			$is_delCache = true;
 		}
 
-		$db->exec( 'OPTIMIZE TABLE `' . NV_BLOCKS_TABLE . '_weight`' );
-		$db->exec( 'OPTIMIZE TABLE `' . NV_MODFUNCS_TABLE . '`' );
-		$db->exec( 'OPTIMIZE TABLE `' . NV_PREFIXLANG . '_modthemes`' );
+		$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+		$db->exec( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE . '' );
+		$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
 		$is_refresh = true;
 	}
 
@@ -153,11 +153,11 @@ function nv_show_funcs()
 
 		$array_keys = array_keys( $new_funcs );
 
-		$sth = $db->prepare( "INSERT INTO `" . NV_MODFUNCS_TABLE . "`
-			(`func_name`, `alias`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES
+		$sth = $db->prepare( "INSERT INTO " . NV_MODFUNCS_TABLE . "
+			(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
 			( :func_name, :alias, :func_custom_name, :in_module, :show_func, 0, 0, '')" );
 
-		$sth2 = $db->prepare( 'INSERT INTO `' . NV_PREFIXLANG . '_modthemes` (`func_id`, `layout`, `theme`) VALUES (:func_id, :layout, :theme)' );
+		$sth2 = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)' );
 
 		foreach( $array_keys as $func )
 		{
@@ -197,7 +197,7 @@ function nv_show_funcs()
 		$act_funcs = array();
 		$weight_list = array();
 
-		$sth = $db->prepare( 'SELECT * FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :in_module AND `show_func`=1 ORDER BY `subweight` ASC' );
+		$sth = $db->prepare( 'SELECT * FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
 		$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 		$sth->execute();
 		while( $row = $sth->fetch() )
@@ -290,7 +290,7 @@ if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 	die();
 }
 
-$sth = $db->prepare( 'SELECT `custom_title` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+$sth = $db->prepare( 'SELECT custom_title FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();

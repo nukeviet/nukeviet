@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 // Delete all log
 if( $nv_Request->get_title( 'logempty', 'post', '' ) == md5( 'siteinfo_' . session_id() . '_' . $admin_info['userid'] ) )
 {
-	if( $db->exec( 'TRUNCATE TABLE `' . $db_config['prefix'] . '_logs`' ) )
+	if( $db->exec( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_logs' ) )
 	{
 		nv_del_moduleCache( $module_name );
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['log_empty_log'], 'All', $admin_info['userid'] );
@@ -29,7 +29,7 @@ $contents = 'NO_' . $lang_module['log_del_error'];
 $number_del = 0;
 if( $id > 0 )
 {
-	if( $db->exec( 'DELETE FROM `' . $db_config['prefix'] . '_logs` WHERE `id`=' . $id ) )
+	if( $db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id ) )
 	{
 		$contents = 'OK_' . $lang_module['log_del_ok'];
 		++$number_del;
@@ -44,7 +44,7 @@ else
 	{
 		if( $id > 0 )
 		{
-			$db->exec( 'DELETE FROM `' . $db_config['prefix'] . '_logs` WHERE `id`=' . $id );
+			$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id );
 			++$number_del;
 		}
 	}

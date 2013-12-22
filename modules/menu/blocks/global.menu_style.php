@@ -27,7 +27,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$html .= "	<td>" . $lang_block['menu'] . "</td>";
 		$html .= "	<td><select name=\"menuid\">\n";
 
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module . "_menu` ORDER BY `id` DESC";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module . "_menu ORDER BY id DESC";
 		$list = nv_db_cache( $sql, 'id', $module );
 		foreach( $list as $l )
 		{
@@ -179,7 +179,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		global $db;
 
 		$list_cats = array();
-		$sql = "SELECT `id`, `parentid`, `title`, `link`, `note`, `subitem`, `who_view`, `groups_view`, `module_name`, `op`, `target`, `css`, `active_type` FROM `" . NV_PREFIXLANG . "_menu_rows` WHERE `status`=1 AND `mid` = " . $block_config['menuid'] . " ORDER BY `weight` ASC";
+		$sql = "SELECT id, parentid, title, link, note, subitem, who_view, groups_view, module_name, op, target, css, active_type FROM " . NV_PREFIXLANG . "_menu_rows WHERE status=1 AND mid = " . $block_config['menuid'] . " ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, '', 'menu' );
 
 		foreach( $list as $row )

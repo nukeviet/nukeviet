@@ -18,7 +18,7 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 
 		$html = "<select name=\"config_idplanbanner\">\n";
 		$html .= "<option value=\"\">" . $lang_block['idplanbanner'] . "</option>\n";
-		$query = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE (`blang`='" . NV_LANG_DATA . "' OR `blang`='') ORDER BY `title` ASC";
+		$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
 		$result = $db->sql_query( $query );
 
 		while( $row_bpn = $db->sql_fetchrow( $result ) )
