@@ -132,7 +132,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $tid == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (tid, numnews, alias, description, image, keywords) VALUES (NULL, 0, " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $keywords ) . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (0, " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $keywords ) . ")";
 
 		if( $db->sql_query_insert_id( $sql ) )
 		{

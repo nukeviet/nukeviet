@@ -347,8 +347,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 			}
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " VALUES (
-				 NULL,
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
 				 " . $array['catid'] . ",
 				 " . $db->dbescape( $array['title'] ) . ",
 				 " . $db->dbescape( $alias ) . ",

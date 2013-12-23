@@ -65,10 +65,9 @@ if( $checknum == $row['checknum'] )
 	elseif( ! defined( 'NV_IS_USER' ) and $global_config['allowuserreg'] == 2 )
 	{
 		$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
-					userid, username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+					username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					NULL,
 					" . $db->dbescape( $row['username'] ) . ",
 					" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ",
 					" . $db->dbescape( $row['password'] ) . ",

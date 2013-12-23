@@ -150,9 +150,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows VALUES (
-				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",
-				" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows 
+				(full_name, phone, fax, email, note, admins, act) VALUES 
+				(" . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",	" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
 		}

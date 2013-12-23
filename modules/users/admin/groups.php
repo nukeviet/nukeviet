@@ -369,8 +369,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'] ) );
 				$weight = intval( $weight ) + 1;
 				$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
-					(group_id, title, content, add_time, exp_time, public, weight, act, idsite, number, siteus)
-					VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
+					(title, content, add_time, exp_time, public, weight, act, idsite, number, siteus)
+					VALUES (" . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
 					" . $post['public'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
 				$ok = $post['id'] = $db->sql_query_insert_id( $query );
 			}

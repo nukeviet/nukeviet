@@ -379,7 +379,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					{
 						list( $weight ) = $db->sql_fetchrow( $db->sql_query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' ) );
 						$weight = intval( $weight ) + 1;
-						$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (sourceid, title, link, logo, weight, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+						$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 						$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
 					}
 				}
@@ -387,9 +387,8 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			if( $rowcontent['id'] == 0 )
 			{
 				$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-						(id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
-						 (NULL,
-						 " . intval( $rowcontent['catid'] ) . ",
+						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
+						 (" . intval( $rowcontent['catid'] ) . ",
 						 " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
 						 " . intval( $rowcontent['topicid'] ) . ",
 						 " . intval( $rowcontent['admin_id'] ) . ",
@@ -425,7 +424,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 					$tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 );
 					$db->sql_query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
-					$db->sql_query( "INSERT INTO " . $tbhtml . " VALUES (
+					$db->sql_query( "INSERT INTO " . $tbhtml . " (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
 							" . $rowcontent['id'] . ",
 							" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
 							" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
@@ -433,7 +432,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			 				" . intval( $rowcontent['copyright'] ) . ",
 			 				" . intval( $rowcontent['allowed_send'] ) . ",
 			 				" . intval( $rowcontent['allowed_print'] ) . ",
-			 				" . intval( $rowcontent['allowed_save'] ) . "
+			 				" . intval( $rowcontent['allowed_save'] ) . ", 0
 						)" );
 
 					$db->sql_query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->dbescape_string( $rowcontent['bodytext'] ) . ')' );

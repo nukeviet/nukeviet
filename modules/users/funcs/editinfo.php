@@ -356,8 +356,7 @@ if( $checkss == $array_data['checkss'] )
 			}
 			else
 			{
-				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg VALUES (
-					NULL,
+				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
 					" . $db->dbescape( $md5_username ) . ",
 					'',

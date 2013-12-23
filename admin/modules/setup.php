@@ -70,7 +70,7 @@ if( ! empty( $setmodule ) )
 			}
 			catch (PDOException $e)
 			{
-
+				trigger_error( $e->getMessage() );
 			}
 
 			nv_del_moduleCache( 'modules' );
@@ -78,7 +78,6 @@ if( ! empty( $setmodule ) )
 			if( $return == 'OK_' . $setmodule )
 			{
 				nv_setup_block_module( $setmodule );
-				nv_del_moduleCache( 'themes' );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid'] );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule );

@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (did, dirname, time) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
@@ -106,7 +106,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (did, dirname, time) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}

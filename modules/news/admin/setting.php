@@ -277,7 +277,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			else
 			{
 				$addcontent = $postcontent = $editcontent = $delcontent = 0;
-				$pid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (pid,member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
+				$pid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
 			}
 
 			$xtpl->assign( 'ROW', array(

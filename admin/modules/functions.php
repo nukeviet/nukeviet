@@ -94,7 +94,7 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 		$sth->bindParam( ':module', $mod, PDO::PARAM_STR );
 		$sth->execute();
 
-		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id in (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id in (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)' );
 		$sth->bindParam( ':module', $mod, PDO::PARAM_STR );
 		$sth->execute();
 	}

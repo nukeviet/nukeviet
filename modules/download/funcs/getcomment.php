@@ -88,8 +88,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 					}
 					$content = nv_nl2br( $content, "<br />" );
 
-					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments VALUES (
-						NULL,
+					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments (fid, subject, post_id, post_name, post_email, post_ip, post_time, comment, admin_reply, admin_id, status) VALUES (
 						" . $id . ",
 						" . $db->dbescape( $subject ) . ",
 						" . $post_id . ",

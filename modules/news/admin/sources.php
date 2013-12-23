@@ -55,7 +55,7 @@ if( ! empty( $savecat ) )
 	{
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" ) );
 		$weight = intval( $weight ) + 1;
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (sourceid, title, link, logo, weight, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 		if( $db->sql_query_insert_id( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );

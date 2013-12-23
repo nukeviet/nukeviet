@@ -247,24 +247,23 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], '<br />' );
 
-				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp VALUES (
- NULL,
- ' . $array['catid'] . ',
- ' . $db->dbescape( $array['title'] ) . ',
- ' . $db->dbescape( $array['description'] ) . ',
- ' . $db->dbescape( $array['introtext'] ) . ',
- ' . NV_CURRENTTIME . ',
- ' . $array['user_id'] . ',
- ' . $db->dbescape( $array['user_name'] ) . ',
- ' . $db->dbescape( $array['author_name'] ) . ',
- ' . $db->dbescape( $array['author_email'] ) . ',
- ' . $db->dbescape( $array['author_url'] ) . ',
- ' . $db->dbescape( $fileupload ) . ',
- ' . $db->dbescape( $array['linkdirect'] ) . ',
- ' . $db->dbescape( $array['version'] ) . ',
- ' . $array['filesize'] . ',
- ' . $db->dbescape( $fileimage ) . ',
- ' . $db->dbescape( $array['copyright'] ) . ')';
+				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (catid, title, description, introtext, uploadtime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, copyright) VALUES (
+					 ' . $array['catid'] . ',
+					 ' . $db->dbescape( $array['title'] ) . ',
+					 ' . $db->dbescape( $array['description'] ) . ',
+					 ' . $db->dbescape( $array['introtext'] ) . ',
+					 ' . NV_CURRENTTIME . ',
+					 ' . $array['user_id'] . ',
+					 ' . $db->dbescape( $array['user_name'] ) . ',
+					 ' . $db->dbescape( $array['author_name'] ) . ',
+					 ' . $db->dbescape( $array['author_email'] ) . ',
+					 ' . $db->dbescape( $array['author_url'] ) . ',
+					 ' . $db->dbescape( $fileupload ) . ',
+					 ' . $db->dbescape( $array['linkdirect'] ) . ',
+					 ' . $db->dbescape( $array['version'] ) . ',
+					 ' . $array['filesize'] . ',
+					 ' . $db->dbescape( $fileimage ) . ',
+					 ' . $db->dbescape( $array['copyright'] ) . ')';
 
 				if( ! $db->sql_query_insert_id( $sql ) )
 				{

@@ -546,16 +546,16 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 	('sys', 'define', 'nv_allowed_html_tags', '" . NV_ALLOWED_HTML_TAGS . "'),
 	('sys', 'define', 'dir_forum', '')";
 
-$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " (id, start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
-	(NULL, " . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 0, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
+	(" . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 0, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES
 	('about', 0, 0, 'page', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),

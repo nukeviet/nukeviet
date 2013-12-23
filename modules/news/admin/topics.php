@@ -57,7 +57,7 @@ if( ! empty( $savecat ) )
 		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" ) );
 		$weight = intval( $weight ) + 1;
 
-		$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (topicid, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (" . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
 		if( $db->sql_query_insert_id( $query ) )
 		{

@@ -178,7 +178,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 		}
 		else
 		{
-			$sth = $db->prepare( "REPLACE INTO " . NV_AUTHORS_GLOBALTABLE . "_config VALUES (NULL, :username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5( $password ) . "' )" );
+			$sth = $db->prepare( "REPLACE INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5( $password ) . "' )" );
 			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 			$sth->execute();
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . ' username: ' . $username, $admin_info['userid'] );
@@ -236,7 +236,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 		}
 		else
 		{
-			$sth = $db->prepare( 'REPLACE INTO ' . NV_AUTHORS_GLOBALTABLE . '_config VALUES (NULL, :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )' );
+			$sth = $db->prepare( 'REPLACE INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )' );
 			$sth->bindParam( ':keyname', $keyname, PDO::PARAM_STR );
 			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
 			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
