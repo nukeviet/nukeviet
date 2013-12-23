@@ -13,11 +13,11 @@ $select_options = array();
 $theme_array = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 if( $global_config['idsite'] )
 {
-	$row = $db->query( 'SELECT theme FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] )->fetch();
+	$row = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetch();
 	if( ! empty( $row['theme'] ) )
 	{
 		$array_site_cat_theme = explode( ',', $row['theme'] );
-		$result = $db->query( 'SELECT DISTINCT `theme` FROM `' . NV_PREFIXLANG . '_modthemes` WHERE `func_id`=0' );
+		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
 		while( list( $theme ) = $result->fetch( 3 ) )
 		{
 			$array_site_cat_theme[] = $theme;
@@ -69,7 +69,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 
-	$result = $db->query( 'SELECT `title`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'MODULE', array( 'key' => $m_title, 'title' => $m_custom_title ) );
@@ -83,7 +83,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$positions = $content[0]->position;
 
 	$blocks_positions = array();
-	$sth = $db->prepare( 'SELECT `position`, COUNT(*) FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE theme = :theme GROUP BY `position`' );
+	$sth = $db->prepare( 'SELECT position, COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme GROUP BY position' );
 	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 	$sth->execute();
 	while( list( $position, $numposition ) = $sth->fetch( 3 ) )
@@ -91,7 +91,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		$blocks_positions[$position] = $numposition;
 	}
 
-	$sth = $db->prepare( 'SELECT * FROM `' . NV_BLOCKS_TABLE . '_groups` WHERE theme = :theme ORDER BY `position` ASC, `weight` ASC' );
+	$sth = $db->prepare( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC' );
 	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 	$sth->execute();
 	while( $row = $sth->fetch() )
@@ -128,7 +128,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		}
 		else
 		{
-			$result_func = $db->query( 'SELECT a.func_id, a.in_module, a.func_custom_name FROM `' . NV_MODFUNCS_TABLE . '` AS a INNER JOIN `' . NV_BLOCKS_TABLE . '_weight` AS b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid'] );
+			$result_func = $db->query( 'SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' AS a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid'] );
 			while( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $result_func->fetch( 3 ) )
 			{
 				$xtpl->assign( 'FUNCID_INLIST', $funcid_inlist );

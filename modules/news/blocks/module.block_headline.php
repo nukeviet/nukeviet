@@ -29,7 +29,7 @@ function nv_block_headline()
 	else
 	{
 		$id = 0;
-		$sql = "SELECT `bid`, `title`, `number` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC LIMIT 0, 2";
+		$sql = "SELECT bid, title, number FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC LIMIT 0, 2";
 		$result = $db->sql_query( $sql );
 		while( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
 		{
@@ -44,7 +44,7 @@ function nv_block_headline()
 
 		foreach( $array_bid_content as $i => $array_bid )
 		{
-			$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` as t1 INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $array_bid['bid'] . " AND t1.status= 1 AND t1.inhome='1' ORDER BY t2.weight ASC LIMIT 0 , " . $array_bid['number'];
+			$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows as t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $array_bid['bid'] . " AND t1.status= 1 AND t1.inhome='1' ORDER BY t2.weight ASC LIMIT 0 , " . $array_bid['number'];
 			$result = $db->sql_query( $sql );
 			$array_content = array();
 			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $db->sql_fetchrow( $result ) )

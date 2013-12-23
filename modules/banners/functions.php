@@ -37,7 +37,7 @@ function nv_banner_client_checkdata( $cookie )
 		if( isset( $client['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $client['checknum'] ) )
 		{
 			$login = $client['login'];
-			$query = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `login` = " . $db->dbescape( $login ) . " AND `act`=1";
+			$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login = " . $db->dbescape( $login ) . " AND act=1";
 			$result = $db->sql_query( $query );
 
 			$numrows = $db->sql_numrows( $result );

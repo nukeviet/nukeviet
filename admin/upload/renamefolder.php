@@ -38,11 +38,11 @@ if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 		$dir_replace2 = NV_FILES_DIR . '/' . $m2[1] . '/';
 	}
 
-	$result = $db->query( "SELECT `did`, `dirname` FROM `" . NV_UPLOAD_GLOBALTABLE . "_dir` WHERE `dirname`='" . $path . "' OR `dirname` LIKE '" . $path . "/%'" );
+	$result = $db->query( "SELECT did, dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_dir WHERE dirname='" . $path . "' OR dirname LIKE '" . $path . "/%'" );
 	while( list( $did, $dirname ) = $result->fetch( 3 ) )
 	{
 		$dirname2 = str_replace( NV_ROOTDIR . '/' . $path, $newpath, NV_ROOTDIR . '/' . $dirname );
-		$result_file = $db->query( "SELECT `src`, `title` FROM `" . NV_UPLOAD_GLOBALTABLE . "_file` WHERE `did`=" . $did . " AND `type` = 'image'" );
+		$result_file = $db->query( "SELECT src, title FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did=" . $did . " AND type = 'image'" );
 		while( list( $src, $title ) = $result_file->fetch( 3 ) )
 		{
 			if( $action )
@@ -53,9 +53,9 @@ if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 			{
 				$src2 = preg_replace( '/^' . nv_preg_quote( $dirname ) . '/', $dirname2, $src );
 			}
-			$db->exec( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_file` SET `src` = '" . $src2 . "' WHERE `did` = " . $did . " AND `title`='" . $title . "'" );
+			$db->exec( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'" );
 		}
-		$db->exec( "UPDATE `" . NV_UPLOAD_GLOBALTABLE . "_dir` SET `dirname` = '" . $dirname2 . "' WHERE `did` = " . $did );
+		$db->exec( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did );
 	}
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . ' -> ' . $newpath, $admin_info['userid'] );
 	echo $newpath;

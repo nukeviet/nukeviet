@@ -22,7 +22,7 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 	{
 		global $db;
 
-		$sql = "SELECT `id`, `title`, `alias`, `who_view`, `groups_view` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1";
+		$sql = "SELECT id, title, alias, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE status=1";
 		$result = $db->sql_query( $sql );
 
 		$list = array();
@@ -44,9 +44,9 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 $list_cats = nv_sdown_cats( $m_values['module_data'] );
 $in = implode( ',', array_keys( $list_cats ) );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `alias`,`title`,`description`, `introtext`, `catid` 
-FROM `" . NV_PREFIXLANG . "_" . $m_values['module_data'] . "` 
-WHERE `catid` IN (" . $in . ") 
+$sql = "SELECT SQL_CALC_FOUND_ROWS alias,title,description, introtext, catid 
+FROM " . NV_PREFIXLANG . "_" . $m_values['module_data'] . " 
+WHERE catid IN (" . $in . ") 
 AND (" . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'description', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ") 

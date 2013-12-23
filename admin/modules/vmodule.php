@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $array_site_cat_module = array();
 if( $global_config['idsite'] )
 {
-	$_module = $db->query( 'SELECT module FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] )->fetchColumn();
+	$_module = $db->query( 'SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
 
 	if( ! empty( $_module ) )
 	{
@@ -42,7 +42,7 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 		{
 			try
 			{
-				$sth = $db->prepare( 'INSERT INTO `' . $db_config['prefix'] . '_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES ( :title, 0, 0, :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)' );
+				$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ( :title, 0, 0, :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)' );
 				$sth->bindParam( ':title', $title, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modfile, PDO::PARAM_STR );
 				$sth->bindParam( ':module_data', $module_data, PDO::PARAM_STR );
@@ -85,7 +85,7 @@ $xtpl->assign( 'CHECKSS', md5( session_id() . 'addmodule' ) );
 $xtpl->assign( 'TITLE', $title );
 $xtpl->assign( 'NOTE', $note );
 
-$sql = 'SELECT `title` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `virtual`=1 ORDER BY `addtime` ASC';
+$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_modules WHERE virtual=1 ORDER BY addtime ASC';
 $result = $db->query( $sql );
 while( list( $modfile_i ) = $result->fetch( 3 ) )
 {

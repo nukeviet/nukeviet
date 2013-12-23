@@ -47,25 +47,25 @@ if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == 
 	}
 	elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	{
-		$query = $db->sql_query( "SELECT listcatid, allowed_comm FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
+		$query = $db->sql_query( "SELECT listcatid, allowed_comm FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id . " AND status=1" );
 		$row = $db->sql_fetchrow( $query );
 		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 		{
 			$array_catid = explode( ',', $row['listcatid'] );
 			$content = nv_nl2br( $content, '<br />' );
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_comments` (`cid`, `id`, `content`, `post_time`, `userid`, `post_name`, `post_email`, `post_ip`, `status`) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ", " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments (cid, id, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (NULL, " . $id . "," . $db->dbescape( $content ) . ", UNIX_TIMESTAMP(), " . $userid . ", " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
 			$result = $db->sql_query( $sql );
 			if( $result )
 			{
 				$page = 0;
-				list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` where `id`= '" . $id . "' AND `status`=1" ) );
+				list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments where id= '" . $id . "' AND status=1" ) );
 				if( $status )
 				{
-					$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+					$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
 					$db->sql_query( $query );
 					foreach( $array_catid as $catid_i )
 					{
-						$query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . "` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+						$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET hitscm=" . $numf . " WHERE id=" . $id;
 						$db->sql_query( $query );
 					}
 				}

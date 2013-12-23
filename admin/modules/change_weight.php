@@ -14,7 +14,7 @@ $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
 
 if( empty( $mod ) or empty( $new_weight ) or ! preg_match( $global_config['check_module'], $mod ) ) die( 'NO_' . $mod );
 
-$sth = $db->prepare( 'SELECT `weight` FROM `' . NV_MODULES_TABLE . '` WHERE `title`= :title' );
+$sth = $db->prepare( 'SELECT weight FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();
@@ -23,7 +23,7 @@ if( empty( $row ) )
 	die( 'NO_' . $mod );
 }
 
-$sth = $db->prepare( 'SELECT `title` FROM `' . NV_MODULES_TABLE . '` WHERE `title` != :title ORDER BY `weight` ASC' );
+$sth = $db->prepare( 'SELECT title FROM ' . NV_MODULES_TABLE . ' WHERE title != :title ORDER BY weight ASC' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 
@@ -33,12 +33,12 @@ while( $row = $db->fetch() )
 	++$weight;
 	if( $weight == $new_weight ) ++$weight;
 
-	$sth2 = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `weight`=' . $weight . ' WHERE `title`= :title');
+	$sth2 = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $weight . ' WHERE title= :title');
 	$sth2->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 	$sth2->execute();
 }
 
-$sth2 = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `weight`=' . $new_weight . ' WHERE `title`= :title');
+$sth2 = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $new_weight . ' WHERE title= :title');
 $sth2->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth2->execute();
 

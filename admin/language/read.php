@@ -69,7 +69,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 		include $include_lang;
 
-		$sth = $db->prepare( 'SELECT idfile, langtype FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file` WHERE `module` = :module AND `admin_file`= :admin_file' );
+		$sth = $db->prepare( 'SELECT idfile, langtype FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE module = :module AND admin_file= :admin_file' );
 		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
 		$sth->bindParam( ':admin_file', $admin_file, PDO::PARAM_STR );
 		$sth->execute();
@@ -89,7 +89,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$author = var_export( $lang_translator_save, true );
 			try
 			{
-				$sth = $db->prepare( 'INSERT INTO `' . NV_LANGUAGE_GLOBALTABLE . '_file` (`module`, `admin_file`, `langtype`, `author_' . $dirlang . '`) VALUES (:module, :admin_file, :langtype, :author)' );
+				$sth = $db->prepare( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)' );
 				$sth->bindParam( ':module', $module, PDO::PARAM_STR );
 				$sth->bindParam( ':admin_file', $admin_file, PDO::PARAM_STR );
 				$sth->bindParam( ':langtype', $langtype, PDO::PARAM_STR );
@@ -116,7 +116,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 			$author = var_export( $lang_translator_save, true );
 
-			$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '_file` SET `lang_' . $dirlang . '`= :$author WHERE `idfile`= :idfile' );
+			$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET lang_' . $dirlang . '= :$author WHERE idfile= :idfile' );
 			$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
 			$sth->bindParam( ':author', $author, PDO::PARAM_STR );
 			$sth->execute( );
@@ -140,7 +140,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		$array_lang_key = array();
 		$array_lang_value = array();
 
-		$result = $db->query( 'SHOW COLUMNS FROM `' . NV_LANGUAGE_GLOBALTABLE . '_file`' );
+		$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
 		while( $row = $result->fetch() )
 		{
 			if( substr( $row['field'], 0, 7 ) == 'author_' and $row['field'] != 'author_' . $dirlang )
@@ -150,12 +150,12 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			}
 		}
 
-		$string_lang_key = implode( '`, `', $array_lang_key );
+		$string_lang_key = implode( ', ', $array_lang_key );
 		$string_lang_value = '';
 
 		if( $string_lang_key != '' )
 		{
-			$string_lang_key = ', `' . $string_lang_key . '`';
+			$string_lang_key = ', ' . $string_lang_key . '';
 			$string_lang_value = implode( "', '", $array_lang_value );
 			$string_lang_value = ", '" . $string_lang_value . "'";
 		}
@@ -174,7 +174,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			{
 				try
 				{
-					$sth = $db->prepare( 'INSERT INTO `' . NV_LANGUAGE_GLOBALTABLE . '` (`idfile`, `lang_key`, `lang_' . $dirlang . '`, `update_' . $dirlang . '` ' . $string_lang_key . ') VALUES (:idfile, :lang_key, :lang_value, ' . NV_CURRENTTIME . ', :string_lang_value )' );
+					$sth = $db->prepare( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ', update_' . $dirlang . ' ' . $string_lang_key . ') VALUES (:idfile, :lang_key, :lang_value, ' . NV_CURRENTTIME . ', :string_lang_value )' );
 					$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
 					$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
 					$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
@@ -193,7 +193,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 			if( $read_type == 2 or $check_type_update )
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '` SET `lang_' . $dirlang . '` = :lang_value, `update_' . $dirlang . '` = ' . NV_CURRENTTIME . ' WHERE `idfile` = :idfile AND `lang_key` = :lang_key');
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . ' = :lang_value, update_' . $dirlang . ' = ' . NV_CURRENTTIME . ' WHERE idfile = :idfile AND lang_key = :lang_key');
 				$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
 				$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
 				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );

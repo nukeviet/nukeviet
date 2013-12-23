@@ -14,11 +14,11 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 $alias = change_alias( $title );
 
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `id` !=" . $id . " AND `alias` = " . $db->dbescape( $alias ) . "" ) );
+list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id !=" . $id . " AND alias = " . $db->dbescape( $alias ) . "" ) );
 
 if( intval( $number ) > 0 )
 {
-	$result = $db->sql_query( "SHOW TABLE STATUS WHERE `name`='" . NV_PREFIXLANG . "_" . $module_data . "'" );
+	$result = $db->sql_query( "SHOW TABLE STATUS WHERE name='" . NV_PREFIXLANG . "_" . $module_data . "'" );
 	$item = $db->sql_fetch_assoc( $result );
 	$db->sql_freeresult( $result );
 	if( isset( $item['auto_increment'] ) )
@@ -27,7 +27,7 @@ if( intval( $number ) > 0 )
 	}
 	else
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "`" ) );
+		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "" ) );
 		$weight = intval( $weight ) + 1;
 		$alias = $alias . "-" . $weight;
 	}

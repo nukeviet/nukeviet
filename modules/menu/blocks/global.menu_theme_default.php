@@ -58,7 +58,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 
 					if( $modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks' )
 					{
-						$result2 = 'SELECT `title`, `alias` FROM `' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat` WHERE `parentid`=0 AND `inhome`=1 ORDER BY `weight` ASC LIMIT 0,10';
+						$result2 = 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat WHERE parentid=0 AND inhome=1 ORDER BY weight ASC LIMIT 0,10';
 						$list = nv_db_cache( $result2, '', $modname );
 						foreach( $list as $l )
 						{
@@ -67,7 +67,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 					}
 					if( $modvalues['module_file'] == 'shops' )
 					{
-						$result2 = 'SELECT ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias FROM `' . $db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs` WHERE `parentid`=0 AND `inhome`=1 ORDER BY `weight` ASC LIMIT 0,10';
+						$result2 = 'SELECT ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias FROM ' . $db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs WHERE parentid=0 AND inhome=1 ORDER BY weight ASC LIMIT 0,10';
 						$list = nv_db_cache( $result2, '', $modname );
 						foreach( $list as $l )
 						{
@@ -83,7 +83,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 					}
 					elseif( $modvalues['module_file'] == 'download' or $modvalues['module_file'] == 'faq' or $modvalues['module_file'] == 'saas' )
 					{
-						$result2 = 'SELECT `title`, `alias` FROM `' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories` WHERE `parentid`=0 AND `status`=1 ORDER BY `weight` ASC LIMIT 0,10';
+						$result2 = 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories WHERE parentid=0 AND status=1 ORDER BY weight ASC LIMIT 0,10';
 						$list = nv_db_cache( $result2, '', $modname );
 						foreach( $list as $l )
 						{

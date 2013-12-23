@@ -25,7 +25,7 @@ if( $bid > 0 )
 		{
 			if( $id > 0 )
 			{
-				$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . $id );
+				$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
 			}
 		}
 		nv_news_fix_block( $bid );
@@ -33,12 +33,12 @@ if( $bid > 0 )
 	}
 	elseif( $id > 0 )
 	{
-		list( $bid, $id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . intval( $bid ) . " AND `id`=" . intval( $id ) . "" ) );
+		list( $bid, $id ) = $db->sql_fetchrow( $db->sql_query( "SELECT bid, id FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . intval( $bid ) . " AND id=" . intval( $id ) . "" ) );
 		if( $bid > 0 and $id > 0 )
 		{
 			if( $mod == "weight" and $new_vid > 0 )
 			{
-				$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
+				$query = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id!=" . $id . " ORDER BY weight ASC";
 				$result = $db->sql_query( $query );
 
 				$weight = 0;
@@ -46,19 +46,19 @@ if( $bid > 0 )
 				{
 					++$weight;
 					if( $weight == $new_vid ) ++$weight;
-					$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $row['id'] );
+					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block SET weight=" . $weight . " WHERE bid=" . $bid . " AND id=" . intval( $row['id'] );
 					$db->sql_query( $sql );
 				}
 
 				$db->sql_freeresult( $result );
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
+				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block SET weight=" . $new_vid . " WHERE bid=" . $bid . " AND id=" . intval( $id );
 				$db->sql_query( $sql );
 
 				$content = "OK_" . $bid;
 			}
 			elseif( $mod == "delete" )
 			{
-				$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . intval( $id ) . "" );
+				$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) . "" );
 				$content = "OK_" . $bid;
 			}
 		}

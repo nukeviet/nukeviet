@@ -57,7 +57,7 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 global $global_array_cat;
 $global_array_cat = array();
-$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $result = $db->sql_query( $sql );
 while( $row = $db->sql_fetch_assoc( $result ) )
 {
@@ -76,7 +76,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 {
 	global $db, $module_data;
 
-	$sql = 'SELECT `catid`, `parentid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` WHERE `parentid`=' . $parentid . ' ORDER BY `weight` ASC';
+	$sql = 'SELECT catid, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$array_cat_order = array();
 	while( $row = $db->sql_fetchrow( $result ) )
@@ -97,23 +97,23 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 	{
 		++$order;
 		++$weight;
-		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_cat` SET `weight`=' . $weight . ', `order`=' . $order . ', `lev`=' . $lev . ' WHERE `catid`=' . intval( $catid_i );
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . intval( $catid_i );
 		$db->sql_query( $sql );
 		$order = nv_fix_cat_order( $catid_i, $order, $lev );
 	}
 	$numsubcat = $weight;
 	if( $parentid > 0 )
 	{
-		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_cat` SET `numsubcat`=' . $numsubcat;
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numsubcat=' . $numsubcat;
 		if( $numsubcat == 0 )
 		{
-			$sql .= ",`subcatid`='', `viewcat`='viewcat_page_new'";
+			$sql .= ",subcatid='', viewcat='viewcat_page_new'";
 		}
 		else
 		{
-			$sql .= ",`subcatid`='" . implode( ',', $array_cat_order ) . "'";
+			$sql .= ",subcatid='" . implode( ',', $array_cat_order ) . "'";
 		}
-		$sql .= ' WHERE `catid`=' . intval( $parentid );
+		$sql .= ' WHERE catid=' . intval( $parentid );
 		$db->sql_query( $sql );
 	}
 	return $order;
@@ -130,7 +130,7 @@ function nv_create_table_rows( $catid )
 {
 	global $db, $module_data;
 	$db->sql_query( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$result = $db->sql_query( 'SHOW CREATE TABLE `' . NV_PREFIXLANG . '_' . $module_data . '_rows`' );
+	$result = $db->sql_query( 'SHOW CREATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_rows' );
 	$show = $db->sql_fetchrow( $result );
 	$db->sql_freeresult( $result );
 	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
@@ -148,13 +148,13 @@ function nv_create_table_rows( $catid )
 function nv_fix_topic()
 {
 	global $db, $module_data;
-	$sql = 'SELECT `topicid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_topics` ORDER BY `weight` ASC';
+	$sql = 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_topics` SET `weight`=' . $weight . ' WHERE `topicid`=' . intval( $row['topicid'] );
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . intval( $row['topicid'] );
 		$db->sql_query( $sql );
 	}
 	$db->sql_freeresult( $result );
@@ -168,13 +168,13 @@ function nv_fix_topic()
 function nv_fix_block_cat()
 {
 	global $db, $module_data;
-	$sql = 'SELECT `bid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block_cat` ORDER BY `weight` ASC';
+	$sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 	$weight = 0;
 	$result = $db->sql_query( $sql );
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_block_cat` SET `weight`=' . $weight . ' WHERE `bid`=' . intval( $row['bid'] );
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . intval( $row['bid'] );
 		$db->sql_query( $sql );
 	}
 	$db->sql_freeresult( $result );
@@ -188,13 +188,13 @@ function nv_fix_block_cat()
 function nv_fix_source()
 {
 	global $db, $module_data;
-	$sql = 'SELECT `sourceid` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_sources` ORDER BY `weight` ASC';
+	$sql = 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$weight = 0;
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		++$weight;
-		$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_sources` SET `weight`=' . $weight . ' WHERE `sourceid`=' . intval( $row['sourceid'] );
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . intval( $row['sourceid'] );
 		$db->sql_query( $sql );
 	}
 	$db->sql_freeresult( $result );
@@ -213,7 +213,7 @@ function nv_news_fix_block( $bid, $repairtable = true )
 	$bid = intval( $bid );
 	if( $bid > 0 )
 	{
-		$sql = 'SELECT `id` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block` where `bid`=' . $bid . ' ORDER BY `weight` ASC';
+		$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $bid . ' ORDER BY weight ASC';
 		$result = $db->sql_query( $sql );
 		$weight = 0;
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -221,19 +221,19 @@ function nv_news_fix_block( $bid, $repairtable = true )
 			++$weight;
 			if( $weight <= 100 )
 			{
-				$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_block` SET `weight`=' . $weight . ' WHERE `bid`=' . $bid . ' AND `id`=' . intval( $row['id'] );
+				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . intval( $row['id'] );
 			}
 			else
 			{
-				$sql = 'DELETE FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block` WHERE `bid`=' . $bid . ' AND `id`=' . intval( $row['id'] );
+				$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . intval( $row['id'] );
 			}
 			$db->exec( $sql );
 		}
 		$db->sql_freeresult( $result );
 		if( $repairtable )
 		{
-			$db->sql_query( 'REPAIR TABLE `' . NV_PREFIXLANG . '_' . $module_data . '_block`' );
-			$db->sql_query( 'OPTIMIZE TABLE `' . NV_PREFIXLANG . '_' . $module_data . '_block`' );
+			$db->sql_query( 'REPAIR TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_block' );
+			$db->sql_query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_block' );
 		}
 	}
 }
@@ -297,7 +297,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$xtpl->parse( 'main.cat_title' );
 	}
 
-	$sql = 'SELECT `catid`, `parentid`, `title`, `weight`, `viewcat`, `numsubcat`, `inhome`, `numlinks` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` WHERE `parentid` = ' . $parentid . ' ORDER BY `weight` ASC';
+	$sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 
@@ -327,7 +327,7 @@ function nv_show_cat_list( $parentid = 0 )
 				if( ! array_key_exists( $viewcat, $array_viewcat ) )
 				{
 					$viewcat = 'viewcat_page_new';
-					$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '_cat` SET `viewcat`=' . $db->dbescape( $viewcat ) . ' WHERE `catid`=' . intval( $catid );
+					$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->dbescape( $viewcat ) . ' WHERE catid=' . intval( $catid );
 					$db->sql_query( $sql );
 				}
 
@@ -456,7 +456,7 @@ function nv_show_topics_list()
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file, $module_info;
 
-	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_topics` ORDER BY `weight` ASC';
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 
@@ -468,7 +468,7 @@ function nv_show_topics_list()
 	{
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` where `topicid`=' . $row['topicid'] ) );
+			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'] ) );
 
 			$xtpl->assign( 'ROW', array(
 				'topicid' => $row['topicid'],
@@ -513,7 +513,7 @@ function nv_show_block_cat_list()
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
-	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block_cat` ORDER BY `weight` ASC';
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 
@@ -530,7 +530,7 @@ function nv_show_block_cat_list()
 
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
-			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_block` where `bid`=' . $row['bid'] ) );
+			list( $numnews ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $row['bid'] ) );
 
 			$xtpl->assign( 'ROW', array(
 				'bid' => $row['bid'],
@@ -595,7 +595,7 @@ function nv_show_sources_list()
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
 
-	$num = $db->sql_numrows( $db->sql_query( 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_sources` ORDER BY `weight` ASC' ) );
+	$num = $db->sql_numrows( $db->sql_query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC' ) );
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
 	$all_page = ($num > 1) ? $num : 1;
 	$per_page = 15;
@@ -607,7 +607,7 @@ function nv_show_sources_list()
 
 	if( $num > 0 )
 	{
-		$result = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` ORDER BY `weight` LIMIT $page, $per_page" );
+		$result = $db->sql_query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources ORDER BY weight LIMIT $page, $per_page" );
 		while( $row = $db->sql_fetchrow( $result ) )
 		{
 			$xtpl->assign( 'ROW', array(
@@ -671,7 +671,7 @@ function nv_show_block_list( $bid )
 
 	$global_array_cat[0] = array( 'alias' => 'Other' );
 
-	$sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` as t1 INNER JOIN `' . NV_PREFIXLANG . '_' . $module_data . '_block` AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
+	$sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows as t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
 	if( $num > 0 )

@@ -22,7 +22,7 @@ if( ! preg_match( '/^([a-z0-9\-\_\.]+)$/i', $filealias ) )
 	exit();
 }
 
-$query = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `alias`=' . $db->dbescape( $filealias ) . ' AND `catid`=' . $catid . ' AND `status`=1';
+$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->dbescape( $filealias ) . ' AND catid=' . $catid . ' AND status=1';
 if( ( $result = $db->sql_query( $query ) ) === false )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
@@ -238,7 +238,7 @@ if( ! in_array( $row['id'], $dfile ) )
 	$dfile = serialize( $dfile );
 	$nv_Request->set_Session( 'dfile', $dfile );
 
-	$sql = 'UPDATE `' . NV_PREFIXLANG . '_' . $module_data . '` SET `view_hits`=view_hits+1 WHERE `id`=' . $row['id'];
+	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET view_hits=view_hits+1 WHERE id=' . $row['id'];
 	$db->sql_query( $sql );
 	++$row['view_hits'];
 }

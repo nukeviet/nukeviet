@@ -19,15 +19,15 @@ function nv_show_tags_list( $q = '' )
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags`";
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags";
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$sql .= " WHERE `keywords` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `alias` ASC";
+		$sql .= " WHERE keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY alias ASC";
 	}
 	else
 	{
-		$sql .= " ORDER BY `alias` ASC LIMIT 10";
+		$sql .= " ORDER BY alias ASC LIMIT 10";
 	}
 	$result = $db->sql_query( $sql );
 	$num = $db->sql_numrows( $result );
@@ -68,8 +68,8 @@ if( $nv_Request->isset_request( 'del_tid', 'get' ) )
 	$tid = $nv_Request->get_int( 'del_tid', 'get', 0 );
 	if( $tid )
 	{
-		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `tid`=" . $tid );
-		$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags_id` WHERE `tid`=" . $tid );
+		$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags WHERE tid=" . $tid );
+		$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags_id WHERE tid=" . $tid );
 	}
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_show_tags_list();
@@ -132,7 +132,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $tid == 0 )
 	{
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_tags` (`tid`, `numnews`, `alias`, `description`, `image`, `keywords`) VALUES (NULL, 0, " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $keywords ) . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (tid, numnews, alias, description, image, keywords) VALUES (NULL, 0, " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $keywords ) . ")";
 
 		if( $db->sql_query_insert_id( $sql ) )
 		{
@@ -147,7 +147,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_tags` SET `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . " WHERE `tid` =" . $tid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET alias = " . $db->dbescape( $alias ) . ", description=" . $db->dbescape( $description ) . ", image= " . $db->dbescape( $image ) . ", keywords= " . $db->dbescape( $keywords ) . " WHERE tid =" . $tid;
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'edit_tags', $alias, $admin_info['userid'] );
@@ -164,7 +164,7 @@ if( ! empty( $savecat ) )
 $tid = $nv_Request->get_int( 'tid', 'get', 0 );
 if( $tid > 0 )
 {
-	list( $tid, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `tid`, `alias`, `description`, `image`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` where `tid`=" . $tid ) );
+	list( $tid, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT tid, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags where tid=" . $tid ) );
 	$lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 

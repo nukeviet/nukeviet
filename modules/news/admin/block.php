@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['block'];
 $set_active_op = "blockcat";
 
-$sql = "SELECT `bid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
+$sql = "SELECT bid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC";
 $result = $db->sql_query( $sql );
 
 if( $db->sql_numrows( $result ) )
@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
+		$db->sql_query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid . "', '" . $id . "', '0')" );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
@@ -80,12 +80,12 @@ $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
 if( $listid == '' )
 {
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
+	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id NOT IN(SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . ") ORDER BY publtime DESC LIMIT 0,20";
 }
 else
 {
 	$id_array = array_map( "intval", explode( ',', $listid ) );
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` IN (" . implode( ',', $id_array ) . ") ORDER BY `publtime` DESC";
+	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY publtime DESC";
 }
 
 $result = $db->sql_query( $sql );

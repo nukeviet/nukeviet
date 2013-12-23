@@ -94,7 +94,7 @@ function nv_listcats( $parentid, $m = 0 )
 {
 	global $db, $module_data;
 
-	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_categories` ORDER BY `parentid`, `weight` ASC';
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY parentid, weight ASC';
 	$result = $db->sql_query( $sql );
 	$list = array();
 	while( $row = $db->sql_fetchrow( $result ) )

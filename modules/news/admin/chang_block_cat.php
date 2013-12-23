@@ -19,12 +19,12 @@ $content = "NO_" . $bid;
 
 if( $mod == "weight" and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`=" . $bid;
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE bid=" . $bid;
 	$result = $db->sql_query( $sql );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO_' . $topicid );
 
-	$sql = "SELECT `bid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` WHERE `bid`!=" . $bid . " ORDER BY `weight` ASC";
+	$sql = "SELECT bid FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE bid!=" . $bid . " ORDER BY weight ASC";
 	$result = $db->sql_query( $sql );
 
 	$weight = 0;
@@ -32,11 +32,11 @@ if( $mod == "weight" and $new_vid > 0 )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `weight`=" . $weight . " WHERE `bid`=" . intval( $row['bid'] );
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET weight=" . $weight . " WHERE bid=" . intval( $row['bid'] );
 		$db->sql_query( $sql );
 	}
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `weight`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET weight=" . $new_vid . " WHERE bid=" . intval( $bid );
 	$db->sql_query( $sql );
 
 	$content = "OK_" . $bid;
@@ -44,13 +44,13 @@ if( $mod == "weight" and $new_vid > 0 )
 elseif( $mod == "adddefault" and $bid > 0 )
 {
 	$new_vid = ( intval( $new_vid ) == 1 ) ? 1 : 0;
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `adddefault`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET adddefault=" . $new_vid . " WHERE bid=" . intval( $bid );
 	$db->sql_query( $sql );
 	$content = "OK_" . $bid;
 }
 elseif( $mod == "numlinks" and $new_vid >= 0 and $new_vid <= 50 )
 {
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `number`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET number=" . $new_vid . " WHERE bid=" . intval( $bid );
 	$db->sql_query( $sql );
 	$content = "OK_" . $bid;
 }

@@ -16,7 +16,7 @@ if( $nv_Request->isset_request( 'save', 'post' ) )
 {
 	$pageTitleMode = $nv_Request->get_title( 'pageTitleMode', 'post', '', 1);
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'pageTitleMode', :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'pageTitleMode', :config_value)" );
 	$sth->bindParam( ':config_value', $pageTitleMode, PDO::PARAM_STR, 255 );
 	$sth->execute();
 

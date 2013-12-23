@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
-$sql = "SELECT alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `alias` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `keywords` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `alias` ASC LIMIT 50";
+$sql = "SELECT alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags WHERE alias LIKE '%" . $db->dblikeescape( $q ) . "%' OR keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY alias ASC LIMIT 50";
 $result = $db->sql_query( $sql );
 
 $array_data = array();

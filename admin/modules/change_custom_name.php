@@ -13,7 +13,7 @@ if( ! $nv_Request->isset_request( 'id', 'post,get' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
-$sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,m.custom_title AS mod_custom_title FROM `' . NV_MODFUNCS_TABLE . '` AS f, `' . NV_MODULES_TABLE . '` AS m WHERE f.func_id=' . $id . ' AND f.in_module=m.title';
+$sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id=' . $id . ' AND f.in_module=m.title';
 $row = $db->query( $sql )->fetch();
 
 if( empty( $row ) ) die( 'NO_' . $id );
@@ -24,7 +24,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 	if( empty( $func_custom_name ) ) $func_custom_name = ucfirst( $row['func_name'] );
 
-	$sql = 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `func_custom_name`= :func_custom_name WHERE `func_id`=' . $id;
+	$sql = 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET func_custom_name= :func_custom_name WHERE func_id=' . $id;
 	$sth->bindParam( ':func_custom_name', $func_custom_name, PDO::PARAM_STR );
 	$sth->execute();
 

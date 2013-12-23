@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (did, dirname, time) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
@@ -106,7 +106,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (did, dirname, time) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
@@ -115,7 +115,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		if( $config_name != 'readme' )
 		{
-			$query = "REPLACE INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config` VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
+			$query = "REPLACE INTO " . NV_PREFIXLANG . "_" . $module_data . "_config VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
 			$db->sql_query( $query );
 		}
 	}
@@ -161,7 +161,7 @@ if( file_exists( $readme_file ) )
 	$array_config['readme'] = nv_htmlspecialchars( $array_config['readme'] );
 }
 
-$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+$sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->sql_query( $sql );
 while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
 {

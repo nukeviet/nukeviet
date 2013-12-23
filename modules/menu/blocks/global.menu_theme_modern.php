@@ -40,7 +40,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		$array_cat_menu = array();
 		if( $module_file == 'news' )
 		{
-			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
+			$sql = 'SELECT catid, parentid, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
@@ -50,7 +50,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		}
 		elseif( $module_file == 'shops' )
 		{
-			$sql = 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias AS alias FROM `' . $db_config['prefix'] . '_' . $module_data . '_catalogs` ORDER BY `order` ASC';
+			$sql = 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias AS alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
@@ -73,7 +73,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		}
 		elseif( $module_file == 'weblinks' )
 		{
-			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `parentid` ASC, `weight` ASC';
+			$sql = 'SELECT catid, parentid, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY parentid ASC, weight ASC';
 			$list = nv_db_cache( $sql, 'catid', $module_name );
 			foreach( $list as $l )
 			{
@@ -83,7 +83,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 		}
 		elseif( $module_file == 'download' or $module_file == 'faq' or $module_file == 'saas')
 		{
-			$sql = 'SELECT id, parentid, title, alias FROM `' . NV_PREFIXLANG . '_' . $module_data . '_categories` ORDER BY `weight` ASC';
+			$sql = 'SELECT id, parentid, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY weight ASC';
 			$list = nv_db_cache( $sql, 'id', $module_name );
 			foreach( $list as $l )
 			{
@@ -124,7 +124,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 
 		if( $module_name != 'news' and empty( $array_cat_menu ) )
 		{
-			$sql = 'SELECT catid, parentid, title, alias FROM `' . NV_PREFIXLANG . '_news_cat` ORDER BY `order` ASC';
+			$sql = 'SELECT catid, parentid, title, alias FROM ' . NV_PREFIXLANG . '_news_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', 'news' );
 
 			foreach( $list as $l )

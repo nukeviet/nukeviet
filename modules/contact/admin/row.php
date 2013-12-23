@@ -13,7 +13,7 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $id )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
 	$result = $db->sql_query( $sql );
 
 	if( ! $db->sql_numrows( $result ) )
@@ -39,7 +39,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
 $sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM
-	`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid
+	" . NV_AUTHORS_GLOBALTABLE . " AS t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " AS t2 ON t1.admin_id = t2.userid
 	WHERE t1.lev!=0 AND t1.is_suspend=0";
 $result = $db->sql_query( $sql );
 
@@ -139,16 +139,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
-				`full_name`=" . $db->dbescape( $full_name ) . ", `phone` = " . $db->dbescape( $phone ) . ",
-				`fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ",
-				`note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
+			$sql = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . "_rows SET
+				full_name=" . $db->dbescape( $full_name ) . ", phone = " . $db->dbescape( $phone ) . ",
+				fax=" . $db->dbescape( $fax ) . ", email=" . $db->dbescape( $email ) . ",
+				note=" . $db->dbescape( $note ) . ", admins=" . $db->dbescape( $admins_list ) . " WHERE id =" . $id;
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
 		}
 		else
 		{
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows VALUES (
 				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",
 				" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
 

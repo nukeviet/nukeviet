@@ -104,7 +104,7 @@ function nv_blocks_content( $sitecontent )
 		$cache = array();
 
 		$in = array();
-		$sql = 'SELECT * FROM `' . NV_MODULES_TABLE . '` AS m LEFT JOIN `' . NV_MODFUNCS_TABLE . '` AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight';
+		$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' AS m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight';
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
@@ -114,8 +114,8 @@ function nv_blocks_content( $sitecontent )
 			}
 		}
 
-		$_result = $db->query( "SELECT t1.*, t2.func_id FROM `" . NV_BLOCKS_TABLE . "_groups` AS t1
-			 INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS t2
+		$_result = $db->query( "SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups AS t1
+			 INNER JOIN " . NV_BLOCKS_TABLE . "_weight AS t2
 			 ON t1.bid = t2.bid
 			 WHERE t2.func_id IN (" . implode( ',', $in ) . ")
 			 AND t1.theme ='" . $global_config['module_theme'] . "'
@@ -245,7 +245,7 @@ function nv_blocks_content( $sitecontent )
 		}
 		if( ! empty( $unact ) )
 		{
-			$db->exec( 'UPDATE `' . NV_BLOCKS_TABLE . '_groups` SET `active`=0 WHERE `bid` IN (' . implode( ',', $unact ) . ')' );
+			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=0 WHERE bid IN (' . implode( ',', $unact ) . ')' );
 			unlink( $cache_file );
 		}
 	}
@@ -414,7 +414,7 @@ function nv_html_meta_tags()
 	}
 	if( $id_profile_googleplus > 0 )
 	{
-		$dbgoogleplus = nv_db_cache( 'SELECT `gid`, `idprofile` FROM `' . $db_config['prefix'] . '_googleplus`', 'gid', 'seotools' );
+		$dbgoogleplus = nv_db_cache( 'SELECT gid, idprofile FROM ' . $db_config['prefix'] . '_googleplus', 'gid', 'seotools' );
 		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
 		{
 			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />\n";
@@ -674,7 +674,7 @@ function nv_groups_list_pub()
 {
 	global $db, $db_config, $global_config;
 
-	$query = 'SELECT `group_id`, `title`, `exp_time`, `public` FROM `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` WHERE `act`=1 AND (`idsite` = ' . $global_config['idsite'] . ' OR (`idsite` =0 AND `siteus` = 1)) ORDER BY `idsite`, `weight`';
+	$query = 'SELECT group_id, title, exp_time, public FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -695,7 +695,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$db->exec( 'UPDATE `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` SET `act`=0 WHERE `group_id` IN (' . implode( ',', $reload ) . ')' );
+		$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 

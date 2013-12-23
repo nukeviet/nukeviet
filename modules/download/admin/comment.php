@@ -22,7 +22,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		exit();
 	}
 
-	$query = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id`=" . $id;
+	$query = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE id=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -64,12 +64,12 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$array['admin_id'] = $admin_info['admin_id'];
 			}
 
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET
-				`subject`=" . $db->dbescape( $array['subject'] ) . ",
-				`comment`=" . $db->dbescape( $array['comment'] ) . ",
-				`admin_reply`=" . $db->dbescape( $array['admin_reply'] ) . ",
-				`admin_id`=" . $array['admin_id'] . "
-				WHERE `id`=" . $id;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET
+				subject=" . $db->dbescape( $array['subject'] ) . ",
+				comment=" . $db->dbescape( $array['comment'] ) . ",
+				admin_reply=" . $db->dbescape( $array['admin_reply'] ) . ",
+				admin_id=" . $array['admin_id'] . "
+				WHERE id=" . $id;
 			$result = $db->sql_query( $sql );
 
 			if( ! $result )
@@ -128,7 +128,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( "NO" );
 	}
 
-	$query = "SELECT `fid` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id`=" . $id;
+	$query = "SELECT fid FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE id=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 )
@@ -137,10 +137,10 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	list( $fid ) = $db->sql_fetchrow( $result );
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `comment_hits`=comment_hits-1 WHERE `id`=" . $fid;
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET comment_hits=comment_hits-1 WHERE id=" . $fid;
 	$db->sql_query( $sql );
 
-	$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id`=" . $id;
+	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE id=" . $id;
 	$db->sql_query( $sql );
 
 	nv_del_moduleCache( $module_name );
@@ -156,7 +156,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
 	if( empty( $id ) ) die( "NO" );
 
-	$query = "SELECT `fid`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` WHERE `id`=" . $id;
+	$query = "SELECT fid, status FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE id=" . $id;
 	$result = $db->sql_query( $query );
 	$numrows = $db->sql_numrows( $result );
 	if( $numrows != 1 ) die( 'NO' );
@@ -165,21 +165,21 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	if( $status == 0 )
 	{
 		$status = 1;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `comment_hits`=comment_hits+1 WHERE `id`=" . $fid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET comment_hits=comment_hits+1 WHERE id=" . $fid;
 	}
 	elseif( $status == 1 )
 	{
 		$status = 2;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `comment_hits`=comment_hits-1 WHERE `id`=" . $fid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET comment_hits=comment_hits-1 WHERE id=" . $fid;
 	}
 	else
 	{
 		$status = 1;
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `comment_hits`=comment_hits+1 WHERE `id`=" . $fid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET comment_hits=comment_hits+1 WHERE id=" . $fid;
 	}
 	$db->sql_query( $sql );
 
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_comments` SET `status`=" . $status . " WHERE `id`=" . $id;
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET status=" . $status . " WHERE id=" . $id;
 	$db->sql_query( $sql );
 
 	nv_del_moduleCache( $module_name );
@@ -187,7 +187,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 }
 
 //List
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "` b ON a.fid=b.id";
+$sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " b ON a.fid=b.id";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment";
 
 if( $nv_Request->isset_request( "fid", "get" ) )
@@ -302,7 +302,7 @@ while( $row = $db->sql_fetchrow( $query2 ) )
 	$admin_id = $row['admin_id'];
 	if( $admin_id )
 	{
-		$sql = "SELECT `username`, `full_name` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $admin_id;
+		$sql = "SELECT username, full_name FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $admin_id;
 		$result = $db->sql_query( $sql );
 		$numrows = $db->sql_numrows( $result );
 		if( $numrows != 1 )

@@ -20,13 +20,13 @@ $contact_allowed = nv_getAllowed();
 if( ! empty( $contact_allowed['view'] ) )
 {
 	$in = implode( ',', array_keys( $contact_allowed['view'] ) );
-	$sql = "`" . NV_PREFIXLANG . "_" . $module_data . "_send` WHERE `cid` IN (" . $in . ")";
+	$sql = "" . NV_PREFIXLANG . "_" . $module_data . "_send WHERE cid IN (" . $in . ")";
 
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 
-	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $sql . " ORDER BY `id` DESC LIMIT " . $page . "," . $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $sql . " ORDER BY id DESC LIMIT " . $page . "," . $per_page;
 	$result = $db->sql_query( $sql );
 
 	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );

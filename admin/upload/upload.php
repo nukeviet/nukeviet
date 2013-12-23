@@ -189,8 +189,8 @@ if( empty( $error ) )
 		$newalt = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $upload_info['basename'] );
 		$newalt = str_replace( '-', ' ', change_alias( $newalt ) );
 
-		$sth = $db->prepare( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-		(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`, `alt`) VALUES
+		$sth = $db->prepare( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+		(name, ext, type, filesize, src, srcwidth, srcheight, size, userid, mtime, did, title, alt) VALUES
 		('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $upload_info['basename'] . "', :newalt)" );
 
 		$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );

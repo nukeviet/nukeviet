@@ -16,10 +16,10 @@ if( ! empty( $id ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', 'id ' . $id, $admin_info['userid'] );
 
-	$sql = 'SELECT `act` FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id`=' . $id . ' AND `is_sys`=0';
+	$sql = 'SELECT act FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
 	if( $db->query( $sql )->rowCount() )
 	{
-		$res = $db->exec( 'DELETE FROM `' . NV_CRONJOBS_GLOBALTABLE . '` WHERE `id` = ' . $id );
+		$res = $db->exec( 'DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $id );
 
 		$db->exec( 'LOCK TABLE ' . NV_CRONJOBS_GLOBALTABLE . ' WRITE' );
 		$db->exec( 'OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE );

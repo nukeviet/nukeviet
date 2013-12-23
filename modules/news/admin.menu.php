@@ -21,7 +21,7 @@ if( ! function_exists('nv_news_array_cat_admin') )
 		global $db;
 
 		$array_cat_admin = array();
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_admins` ORDER BY `userid` ASC";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins ORDER BY userid ASC";
 		$result = $db->sql_query( $sql );
 
 		while( $row = $db->sql_fetchrow( $result ) )
@@ -43,7 +43,7 @@ if( ! empty( $module_info['admins'] ) )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
 		{
-			$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
+			$db->sql_query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
 			$is_refresh = true;
 		}
 	}

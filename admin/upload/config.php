@@ -39,14 +39,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$autologomod = implode( ',', $autologomod );
 	}
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'upload_logo', :upload_logo)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'upload_logo', :upload_logo)" );
 	$sth->bindParam( ':upload_logo', $upload_logo, PDO::PARAM_STR );
 	$sth->execute();
 
-	$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize1', " . $autologosize1 . ")" );
-	$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize2', " . $autologosize2 . ")" );
-	$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize3', " . $autologosize3 . ")" );
-	$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologomod', '" . $autologomod . "')" );
+	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize1', " . $autologosize1 . ")" );
+	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize2', " . $autologosize2 . ")" );
+	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize3', " . $autologosize3 . ")" );
+	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologomod', '" . $autologomod . "')" );
 
 	nv_delete_all_cache();
 

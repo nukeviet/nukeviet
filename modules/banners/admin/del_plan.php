@@ -17,13 +17,13 @@ if( empty( $id ) ) die( 'Stop!!!' );
 
 nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_plan', "planid " . $id, $admin_info['userid'] );
 
-$sql = "SELECT `act` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . $id;
+$sql = "SELECT act FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . $id;
 $result = $db->sql_query( $sql );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
 
 $banners_id = array();
-$sql = "SELECT `id`, `file_name`, `imageforswf` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid`=" . $id;
+$sql = "SELECT id, file_name, imageforswf FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE pid=" . $id;
 $result = $db->sql_query( $sql );
 
 while( $row = $db->sql_fetchrow( $result ) )
@@ -43,24 +43,24 @@ if( ! empty( $banners_id ) )
 {
 	$banners_id = implode( ',', $banners_id );
 
-	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_click` WHERE `bid` IN (" . $banners_id . ")";
+	$sql = "DELETE FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid IN (" . $banners_id . ")";
 	$db->sql_query( $sql );
 
-	$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_click`" );
-	$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_click`" );
+	$db->sql_query( "REPAIR TABLE " . NV_BANNERS_GLOBALTABLE. "_click" );
+	$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_GLOBALTABLE. "_click" );
 
-	$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid` = " . $id;
+	$sql = "DELETE FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE pid = " . $id;
 	$db->sql_query( $sql );
 
-	$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_rows`" );
-	$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_rows`" );
+	$db->sql_query( "REPAIR TABLE " . NV_BANNERS_GLOBALTABLE. "_rows" );
+	$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_GLOBALTABLE. "_rows" );
 }
 
-$sql = "DELETE FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id` = " . $id;
+$sql = "DELETE FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id = " . $id;
 $db->sql_query( $sql );
 
-$db->sql_query( "REPAIR TABLE `" . NV_BANNERS_GLOBALTABLE. "_plans`" );
-$db->sql_query( "OPTIMIZE TABLE `" . NV_BANNERS_GLOBALTABLE. "_plans`" );
+$db->sql_query( "REPAIR TABLE " . NV_BANNERS_GLOBALTABLE. "_plans" );
+$db->sql_query( "OPTIMIZE TABLE " . NV_BANNERS_GLOBALTABLE. "_plans" );
 
 nv_CreateXML_bannerPlan();
 

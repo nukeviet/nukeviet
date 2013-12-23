@@ -17,7 +17,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 function nv_groups_list()
 {
 	global $db, $db_config, $global_config;
-	$query = 'SELECT `group_id`, `title`, `idsite` FROM `' . $db_config['dbsystem'] . '`.`' . NV_GROUPS_GLOBALTABLE . '` WHERE (`idsite` = ' . $global_config['idsite'] . ' OR (`idsite` =0 AND `siteus` = 1)) AND group_id > 3 ORDER BY `idsite`, `weight`';
+	$query = 'SELECT group_id, title, idsite FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) AND group_id > 3 ORDER BY idsite, weight';
 	$result = $db->query( $query );
 	$groups = array();
 	while( $row = $result->fetch() )
@@ -121,7 +121,7 @@ function nv_save_file_config_global()
 
 	$config_variable = array();
 	$allowed_html_tags = '';
-	$sql = "SELECT `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND (`module`='global' OR `module`='define') ORDER BY `config_name` ASC";
+	$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
 	$result = $db->query( $sql );
 	while( list( $c_module, $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{

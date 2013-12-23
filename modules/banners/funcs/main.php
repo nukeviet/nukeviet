@@ -13,7 +13,7 @@ $contents = array();
 $contents['info'] = $lang_module['main_page_info'];
 $contents['detail'] = $lang_global['detail'];
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `act`=1 ORDER BY `blang` ASC";
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE act=1 ORDER BY blang ASC";
 $result = $db->sql_query( $sql );
 $contents['rows'] = array();
 

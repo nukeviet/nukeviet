@@ -15,7 +15,7 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$query = "SELECT `act` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
+$query = "SELECT act FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
 $result = $db->sql_query( $query );
 $numrows = $db->sql_numrows( $result );
 if( $numrows != 1 ) die( 'Stop!!!' );
@@ -23,7 +23,7 @@ if( $numrows != 1 ) die( 'Stop!!!' );
 $row = $db->sql_fetchrow( $result );
 $act = $row['act'] ? 0 : 1;
 
-$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_clients` SET `act`=" . $act . " WHERE `id`=" . $id;
+$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET act=" . $act . " WHERE id=" . $id;
 $return = $db->sql_query( $sql );
 $return = $return ? "OK" : "NO";
 

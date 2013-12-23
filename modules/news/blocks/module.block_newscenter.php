@@ -14,7 +14,7 @@ global $module_data, $module_name, $module_file, $global_array_cat, $global_conf
 $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'lang', $lang_module );
 
-$sql = 'SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 ORDER BY `publtime` DESC LIMIT 0 , 4';
+$sql = 'SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status= 1 ORDER BY publtime DESC LIMIT 0 , 4';
 $list = nv_db_cache( $sql, 'id', $module_name );
 
 $i = 1;

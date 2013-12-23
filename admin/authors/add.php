@@ -51,11 +51,11 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 	if( ! $userid ) die( $lang_module['add_error_choose'] );
 
-	$sql = 'SELECT COUNT(*) FROM `' . NV_AUTHORS_GLOBALTABLE . '` WHERE `admin_id`=' . $userid;
+	$sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
 	$count = $db->query( $sql )->fetchColumn();
 	if( $count ) die( $lang_module['add_error_exist'] );
 
-	$sql = 'SELECT `userid`, `username`, `active` FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid`=' . $userid;
+	$sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 	list( $userid, $username, $active ) = $db->query( $result )->fetch( 3 );
 
 	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
@@ -66,7 +66,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$mds = array();
 	if( $lev == 3 and ! empty( $modules ) )
 	{
-		$update = 'UPDATE `' . NV_MODULES_TABLE . '` SET `admins`= CASE ';
+		$update = 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= CASE ';
 		$titles = array();
 		$array_keys = array_keys( $site_mods );
 		foreach( $array_keys as $i => $mod )
@@ -79,13 +79,13 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 				$site_mods_admins = implode( ',', $site_mods_admins );
 				$titles[$i] = $db->quote( $mod );
 				$mds[$i] = $site_mods[$mod]['custom_title'];
-				$update .= 'WHEN `title` = ' . $titles[$i] . ' THEN ' . $db->quote( $site_mods_admins ) . ' ';
+				$update .= 'WHEN title = ' . $titles[$i] . ' THEN ' . $db->quote( $site_mods_admins ) . ' ';
 			}
 		}
 
 		if( ! empty( $titles ) )
 		{
-			$update .= 'END WHERE `title` IN (' . implode( ',', $titles ) . ')';
+			$update .= 'END WHERE title IN (' . implode( ',', $titles ) . ')';
 			$db->exec( $update );
 			nv_del_moduleCache( 'modules' );
 		}
@@ -94,8 +94,8 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 	$files_level = ( ! empty( $allow_files_type ) ? implode( ',', $allow_files_type ) : '' ) . '|' . $allow_modify_files . '|' . $allow_create_subdirectories . '|' . $allow_modify_subdirectories;
 
-	$sth = $db->prepare( "INSERT INTO `" . NV_AUTHORS_GLOBALTABLE . "`
-		(`admin_id`, `editor`, `lev`, `files_level`, `position`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES
+	$sth = $db->prepare( "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "
+		(admin_id, editor, lev, files_level, position, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES
 		( " . $userid . ", :editor, " . $lev . ", :files_level, :position, 0,'', '', 0, '', ''	)" );
 	$sth->bindParam( ':editor', $editor, PDO::PARAM_STR );
 	$sth->bindParam( ':files_level', $files_level, PDO::PARAM_STR );
@@ -185,7 +185,7 @@ $contents['info'] = $lang_module['nv_admin_add_info'];
 $contents['submit'] = $lang_module['nv_admin_add'];
 
 //filtersql
-$filtersql = ' `userid` NOT IN (SELECT `admin_id` FROM `' . NV_AUTHORS_GLOBALTABLE . '`)';
+$filtersql = ' userid NOT IN (SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ')';
 
 // Parse content
 $xtpl = new XTemplate( 'add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );

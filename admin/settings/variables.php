@@ -20,7 +20,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_global['cookie_secure'] = ( int )$nv_Request->get_bool( 'cookie_secure', 'post', 0 );
 	$array_config_global['cookie_httponly'] = ( int )$nv_Request->get_bool( 'cookie_httponly', 'post', 0 );
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -32,7 +32,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_define['nv_live_cookie_time'] = 86400 * $nv_Request->get_int( 'nv_live_cookie_time', 'post', 1 );
 	$array_config_define['nv_live_session_time'] = 60 * $nv_Request->get_int( 'nv_gfx_width', 'post', 0 );
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'define', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', :config_name, :config_value)" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );

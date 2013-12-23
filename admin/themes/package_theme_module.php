@@ -91,7 +91,7 @@ else
 		}
 	}
 
-	$result = $db->query( 'SELECT `title`, `module_file`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC' );
+	$result = $db->query( 'SELECT title, module_file, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	$array_module_seup = array();
 	while( $row = $result->fetch() )
 	{

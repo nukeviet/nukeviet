@@ -19,7 +19,7 @@ function nv_save_file_admin_config()
 	global $db;
 	$content_config_ip = $content_config_user = '';
 
-	$sql = 'SELECT `keyname`, `mask`, `begintime`, `endtime`, `notice` FROM `' . NV_AUTHORS_GLOBALTABLE . '_config`';
+	$sql = 'SELECT keyname, mask, begintime, endtime, notice FROM ' . NV_AUTHORS_GLOBALTABLE . '_config';
 	$result = $db->query( $sql );
 	while( list( $keyname, $dbmask, $dbbegintime, $dbendtime, $dbnotice ) = $result->fetch( 3 ) )
 	{
@@ -65,10 +65,10 @@ function nv_save_file_admin_config()
 $delid = $nv_Request->get_int( 'delid', 'get' );
 if( ! empty( $delid ) )
 {
-	$sql = 'SELECT `keyname` FROM `' . NV_AUTHORS_GLOBALTABLE . '_config` WHERE id=' . $delid;
+	$sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
 	$keyname = $db->query( $sql )->fetchColumn();
 
-	$db->exec( 'DELETE FROM `' . NV_AUTHORS_GLOBALTABLE . '_config` WHERE id=' . $delid );
+	$db->exec( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid );
 	nv_save_file_admin_config();
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . ' ' . $lang_module['config'], ' keyname : ' . $keyname, $admin_info['userid'] );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -93,7 +93,7 @@ if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 		$array_config_global['admin_check_pass_time'] = 120;
 	}
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -162,7 +162,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 	{
 		if( $uid > 0 and $password != '' )
 		{
-			$sth = $db->prepare( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`= :username, `mask`='-1', `begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . ", `notice`='" . md5( $password ) . "' WHERE `id`=" . $uid );
+			$sth = $db->prepare( "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname= :username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . ", notice='" . md5( $password ) . "' WHERE id=" . $uid );
 			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 			$sth->execute();
 
@@ -170,7 +170,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 		}
 		elseif( $uid > 0 )
 		{
-			$sth = $db->prepare( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_config` SET `keyname`=:username, `mask`='-1', `begintime`=" . $begintime1 . ", `endtime`=" . $endtime1 . " WHERE `id`=" . $uid );
+			$sth = $db->prepare( "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_config SET keyname=:username, mask='-1', begintime=" . $begintime1 . ", endtime=" . $endtime1 . " WHERE id=" . $uid );
 			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 			$sth->execute();
 
@@ -178,7 +178,7 @@ if( $nv_Request->isset_request( 'submituser', 'post' ) )
 		}
 		else
 		{
-			$sth = $db->prepare( "REPLACE INTO `" . NV_AUTHORS_GLOBALTABLE . "_config` VALUES (NULL, :username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5( $password ) . "' )" );
+			$sth = $db->prepare( "REPLACE INTO " . NV_AUTHORS_GLOBALTABLE . "_config VALUES (NULL, :username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5( $password ) . "' )" );
 			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 			$sth->execute();
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . ' username: ' . $username, $admin_info['userid'] );
@@ -226,7 +226,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 	{
 		if( $cid > 0 )
 		{
-			$sth = $db->prepare( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '_config` SET `keyname`= :keyname, `mask`= :mask, `begintime`=' . $begintime . ', `endtime`=' . $endtime . ', `notice`= :notice WHERE `id`=' . $cid );
+			$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_config SET keyname= :keyname, mask= :mask, begintime=' . $begintime . ', endtime=' . $endtime . ', notice= :notice WHERE id=' . $cid );
 			$sth->bindParam( ':keyname', $keyname, PDO::PARAM_STR );
 			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
 			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
@@ -236,7 +236,7 @@ if( $nv_Request->isset_request( 'submitip', 'post' ) )
 		}
 		else
 		{
-			$sth = $db->prepare( 'REPLACE INTO `' . NV_AUTHORS_GLOBALTABLE . '_config` VALUES (NULL, :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )' );
+			$sth = $db->prepare( 'REPLACE INTO ' . NV_AUTHORS_GLOBALTABLE . '_config VALUES (NULL, :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )' );
 			$sth->bindParam( ':keyname', $keyname, PDO::PARAM_STR );
 			$sth->bindParam( ':mask', $mask, PDO::PARAM_STR );
 			$sth->bindParam( ':notice', $notice, PDO::PARAM_STR );
@@ -295,7 +295,7 @@ if( ! empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-$sql = "SELECT `id`, `keyname`, `begintime`, `endtime` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' ORDER BY `keyname` DESC";
+$sql = "SELECT id, keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query( $sql );
 if( $result->rowCount() )
 {
@@ -318,7 +318,7 @@ if( $result->rowCount() )
 
 if( ! empty( $uid ) )
 {
-	list( $username, $begintime1, $endtime1 ) = $db->query( "SELECT `keyname`, `begintime`, `endtime` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` = '-1' AND id=" . $uid )->fetch( 3 );
+	list( $username, $begintime1, $endtime1 ) = $db->query( "SELECT keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' AND id=" . $uid )->fetch( 3 );
 
 	$lang_module['username_add'] = $lang_module['username_edit'];
 	$password2 = $password = '';
@@ -341,7 +341,7 @@ $mask_text_array[3] = '255.255.255.xxx';
 $mask_text_array[2] = '255.255.xxx.xxx';
 $mask_text_array[1] = '255.xxx.xxx.xxx';
 
-$sql = "SELECT `id`, `keyname`, `mask`, `begintime`, `endtime` FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask`!='-1' ORDER BY `keyname` DESC";
+$sql = "SELECT id, keyname, mask, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask!='-1' ORDER BY keyname DESC";
 $result = $db->query( $sql );
 
 if( $result->rowCount() )
@@ -366,7 +366,7 @@ if( $result->rowCount() )
 
 if( ! empty( $cid ) )
 {
-	list( $id, $keyname, $mask, $begintime, $endtime, $notice ) = $db->query( "SELECT id, keyname, mask, begintime, endtime, notice FROM `" . NV_AUTHORS_GLOBALTABLE . "_config` WHERE `mask` != '-1' AND id=" . $cid )->fetch( 3 );
+	list( $id, $keyname, $mask, $begintime, $endtime, $notice ) = $db->query( "SELECT id, keyname, mask, begintime, endtime, notice FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask != '-1' AND id=" . $cid )->fetch( 3 );
 	$lang_module['adminip_add'] = $lang_module['adminip_edit'];
 }
 

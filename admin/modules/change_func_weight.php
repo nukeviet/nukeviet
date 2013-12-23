@@ -14,15 +14,15 @@ $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
 
 if( empty( $fid ) OR empty( $new_weight ) ) die( 'NO|' . $fid );
 
-$row = $db->query( 'SELECT `in_module` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `func_id`=' . $fid )->fetch();
+$row = $db->query( 'SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $fid )->fetch();
 
 if( empty( $row ) ) die( 'NO|' . $fid );
 
-$sth = $db->prepare( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `subweight`=0 WHERE `in_module`= :in_module AND `show_func` = 0' );
+$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=0 WHERE in_module= :in_module AND show_func = 0' );
 $sth->bindParam( ':in_module', $row['in_module'], PDO::PARAM_STR );
 $sth->execute();
 
-$sth = $db->prepare( 'SELECT `func_id` FROM `' . NV_MODFUNCS_TABLE . '` WHERE `in_module`= :in_module AND func_id!=' . $fid . ' AND `show_func` = 1 ORDER BY `subweight` ASC' );
+$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND func_id!=' . $fid . ' AND show_func = 1 ORDER BY subweight ASC' );
 $sth->bindParam( ':in_module', $row['in_module'], PDO::PARAM_STR );
 $sth->execute();
 
@@ -33,10 +33,10 @@ while( $row = $sth->fetch() )
 
 	if( $weight == $new_weight ) ++$weight;
 
-	$db->exec( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `subweight`=' . $weight . ' WHERE `func_id`=' . $row['func_id'] );
+	$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $weight . ' WHERE func_id=' . $row['func_id'] );
 }
 
-$db->exec( 'UPDATE `' . NV_MODFUNCS_TABLE . '` SET `subweight`=' . $new_weight . ' WHERE `func_id`=' . $fid );
+$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $new_weight . ' WHERE func_id=' . $fid );
 nv_del_moduleCache( 'modules' );
 
 include NV_ROOTDIR . '/includes/header.php';

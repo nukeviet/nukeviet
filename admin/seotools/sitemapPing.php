@@ -103,7 +103,7 @@ $searchEngines['searchEngine'] = array();
 $info = '';
 
 $sitemapFiles = array();
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
+$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " AS f, " . NV_MODULES_TABLE . " AS m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {

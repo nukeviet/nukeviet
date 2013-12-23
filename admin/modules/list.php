@@ -15,7 +15,7 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . '/modules', $global_config[
 // Lay danh sach cac module co trong he thong
 $new_modules = array();
 
-$sql = 'SELECT `title`, `module_file`, `is_sysmod`, `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` ORDER BY `title` ASC';
+$sql = 'SELECT title, module_file, is_sysmod, mod_version FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY title ASC';
 $result = $db->query( $sql );
 
 $is_delCache = false;
@@ -30,7 +30,7 @@ while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $result->fetch( 3 ) )
 
 	if( ! isset( $modules_exit[$m] ) )
 	{
-		$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `act`=2 WHERE `module_file`= :module_file' );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE module_file= :module_file' );
 		$sth->bindParam( ':module_file', $m, PDO::PARAM_STR );
 		$sth->execute();
 
@@ -47,7 +47,7 @@ if( $is_delCache )
 $modules_data = array();
 
 $iw = 0;
-$sql = 'SELECT * FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
+$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 
 $is_delCache = false;
@@ -58,7 +58,7 @@ while( $row = $result->fetch() )
 	if( $iw != $row['weight'] )
 	{
 		$row['weight'] = $iw;
-		$sth = $db->prepare( 'UPDATE `' . NV_MODULES_TABLE . '` SET `weight`=' . $row['weight'] . ' WHERE `title`= :title' );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $row['weight'] . ' WHERE title= :title' );
 		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 		$sth->execute();
 

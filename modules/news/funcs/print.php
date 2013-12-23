@@ -26,17 +26,17 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 }
 if( $id > 0 and $catid > 0 )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` ='" . $id . "' AND `status`=1";
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " WHERE id ='" . $id . "' AND status=1";
 	$result = $db->sql_query( $sql );
 	$content = $db->sql_fetch_assoc( $result );
 
-	$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM `" . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $content['id'] / 2000 ) . "` where `id`=" . $content['id'] ) );
+	$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $content['id'] / 2000 ) . " where id=" . $content['id'] ) );
 	$content = array_merge( $content, $body_contents );
 	unset( $sql, $result, $body_contents );
 
 	if( $content['allowed_print'] == 1 )
 	{
-		$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `sourceid` = '" . $content['sourceid'] . "'";
+		$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid = '" . $content['sourceid'] . "'";
 		$result = $db->sql_query( $sql );
 		list( $sourcetext ) = $db->sql_fetchrow( $result );
 		unset( $sql, $result );

@@ -21,9 +21,9 @@ $page_title = $lang_module['search'] . ' ' . $key;
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search";
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `title`, `alias`, `introtext` , `uploadtime`,
-`author_name`, `filesize`, `fileimage`, `view_hits`, `download_hits`, `comment_allow`, `comment_hits`
-FROM `" . NV_PREFIXLANG . "_" . $module_data . "`";
+$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, title, alias, introtext , uploadtime,
+author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits
+FROM " . NV_PREFIXLANG . "_" . $module_data . "";
 
 if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 {
@@ -44,13 +44,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
 		$allcat = '';
 	}
 	$dbkey = $db->dblikeescape( $key );
-	$sql .= "WHERE (`title` LIKE '%" . $dbkey . "%' OR `description` LIKE '%" . $dbkey . "%' OR `introtext` LIKE '%" . $dbkey . "%') " . $allcat . " AND `status`='1'";
+	$sql .= "WHERE (title LIKE '%" . $dbkey . "%' OR description LIKE '%" . $dbkey . "%' OR introtext LIKE '%" . $dbkey . "%') " . $allcat . " AND status='1'";
 }
 else
 {
-	$sql .= "WHERE `status`='1'";
+	$sql .= "WHERE status='1'";
 }
-$sql .= "ORDER BY `uploadtime` DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
+$sql .= "ORDER BY uploadtime DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
 
 $result = $db->sql_query( $sql );
 

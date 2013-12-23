@@ -16,7 +16,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $page_title = $lang_module['list'];
 $array = array();
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
 $result = $db->sql_query( $sql );
 $num = $db->sql_numrows( $result );
 

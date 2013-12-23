@@ -16,22 +16,22 @@ if( defined( 'NV_IS_AJAX' ) )
 		$mid = $nv_Request->get_int( 'changeweight', 'post', 0 );
 		$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-		$query = 'SELECT `mid` FROM `' . NV_AUTHORS_GLOBALTABLE . '_module` WHERE `mid`!=' . $mid . ' ORDER BY `weight` ASC';
+		$query = 'SELECT mid FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid!=' . $mid . ' ORDER BY weight ASC';
 		$result = $db->query( $query );
 		$weight = 0;
 		while( $row = $result->fetch() )
 		{
 			++$weight;
 			if( $weight == $new_vid ) ++$weight;
-			$db->exec( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '_module` SET `weight`=' . $weight . ' WHERE `mid`=' . $row['mid'] );
+			$db->exec( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $weight . ' WHERE mid=' . $row['mid'] );
 		}
-		$db->exec( 'UPDATE `' . NV_AUTHORS_GLOBALTABLE . '_module` SET `weight`=' . $new_vid . ' WHERE `mid`=' . $mid );
+		$db->exec( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $new_vid . ' WHERE mid=' . $mid );
 	}
 	elseif( $nv_Request->isset_request( 'changact', 'post' ) )
 	{
 		$mid = $nv_Request->get_int( 'mid', 'post', 0 );
 		$act = $nv_Request->get_int( 'changact', 'post', 1 );
-		$query = 'SELECT * FROM `' . NV_AUTHORS_GLOBALTABLE . '_module` WHERE `mid`=' . $mid;
+		$query = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module WHERE mid=' . $mid;
 		$row = $db->query( $query )->fetch();
 		if( !empty( $row ) )
 		{
@@ -39,7 +39,7 @@ if( defined( 'NV_IS_AJAX' ) )
 			{
 				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey'] );
-				$db->exec( "UPDATE `" . NV_AUTHORS_GLOBALTABLE . "_module` SET `act_" . $act . "` = '" . $act_val . "', `checksum` = '" . $checksum . "' WHERE `mid` = " . $mid );
+				$db->exec( "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_module SET act_" . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid );
 			}
 		}
 		die( 'OK' );
@@ -57,7 +57,7 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $a = 0;
-$result = $db->query( 'SELECT * FROM `' . NV_AUTHORS_GLOBALTABLE . '_module` ORDER BY `weight` ASC' );
+$result = $db->query( 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC' );
 $numrows = $result->rowCount();
 while( $row = $result->fetch() )
 {
