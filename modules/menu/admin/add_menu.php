@@ -193,8 +193,6 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 
 			if( $db->sql_query_insert_id( $sql ) )
 			{
-				$db->sql_freeresult();
-
 				nv_fix_cat_order( $post['mid'] );
 
 				$arr_block = array();
