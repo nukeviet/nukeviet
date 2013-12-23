@@ -722,7 +722,7 @@ function nv_groups_add_user( $group_id, $userid )
 				$data = ( $data != '' ) ? explode( ',', $data ) : array();
 				$data[] = $global_config['idsite'];
 				$data = implode( ',', array_unique( array_map( 'intval', $data ) ) );
-				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid . " LIMIT 1" );
+				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 				return true;
 			}
 		}

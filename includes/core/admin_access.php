@@ -160,8 +160,7 @@ function nv_admin_checkdata( $adm_session_value )
 		AND a.lev!=0
 		AND a.is_suspend=0
 		AND b.userid=a.admin_id
-		AND b.active=1
-		LIMIT 1';
+		AND b.active=1';
 	$admin_info = $db->query( $query )->fetch();
 	if( empty( $admin_info ) ) return array();
 
