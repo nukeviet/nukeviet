@@ -288,7 +288,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				// Cap nhat lai thu tu cho nhom cu
 				$func_id_old = $weight = 0;
-				$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC' );
+				$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC' );
 				$sth->bindParam( ':theme', $row_old['theme'], PDO::PARAM_STR );
 				$sth->bindParam( ':position', $row_old['position'], PDO::PARAM_STR );
 				$sth->execute();
@@ -392,7 +392,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				{
 					if( ! in_array( $func_id, $func_list ) )
 					{
-						$sth = $db->prepare( 'SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position' );
+						$sth = $db->prepare( 'SELECT MAX(t1.weight) FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.func_id=' . $func_id . ' AND t2.theme= :theme AND t2.position= :position' );
 						$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 						$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
 						$sth->execute();

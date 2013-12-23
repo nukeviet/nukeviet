@@ -60,7 +60,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	{
 		$check_like = true;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_file AS t1 INNER JOIN " . NV_UPLOAD_GLOBALTABLE . "_dir AS t2 ON t1.did = t2.did";
+		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_file t1 INNER JOIN " . NV_UPLOAD_GLOBALTABLE . "_dir t2 ON t1.did = t2.did";
 		$sql .= " WHERE (t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
 		$sql .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
 

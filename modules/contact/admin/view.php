@@ -81,7 +81,7 @@ if( isset( $contact_allowed['reply'][$row['cid']] ) )
 
 if( $row['is_reply'] and ! empty( $row['reply_content'] ) )
 {
-	$sql = "SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM " . NV_AUTHORS_GLOBALTABLE . " AS t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " AS t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=" . intval( $row['reply_aid'] );
+	$sql = "SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM " . NV_AUTHORS_GLOBALTABLE . " t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=" . intval( $row['reply_aid'] );
 	$result = $db->sql_query( $sql );
 	$adm_row = $db->sql_fetchrow( $result );
 

@@ -22,7 +22,7 @@ $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- catid mediumint(8) unsigned NOT NULL,
+ catid smallint(5) unsigned NOT NULL,
  title varchar(255) NOT NULL,
  alias varchar(255) NOT NULL,
  description mediumtext NOT NULL,
@@ -60,7 +60,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- catid mediumint(8) unsigned NOT NULL DEFAULT '0',
+ catid smallint(5) unsigned NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  description mediumtext NOT NULL,
  introtext mediumtext NOT NULL,
@@ -82,8 +82,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 )ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories (
- id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- parentid mediumint(8) unsigned NOT NULL,
+ id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+ parentid smallint(5) unsigned NOT NULL,
  title varchar(255) NOT NULL,
  alias varchar(255) NOT NULL,
  description mediumtext NOT NULL,

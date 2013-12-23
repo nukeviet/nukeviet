@@ -239,7 +239,7 @@ if( $allowed )
 
 	$array_keyword = array();
 	$key_words = array();
-	$_query = $db->sql_query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id as a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags as a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
+	$_query = $db->sql_query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
 	while( $row = $db->sql_fetch_assoc( $_query ) )
 	{
 		$array_keyword[] = $row;

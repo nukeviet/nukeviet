@@ -79,7 +79,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
-	qid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL DEFAULT '',
 	lang char(2) NOT NULL DEFAULT '',
 	weight mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -150,7 +150,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_openid (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
-	fid int(11) NOT NULL AUTO_INCREMENT,
+	fid mediumint(8) NOT NULL AUTO_INCREMENT,
 	field varchar(25) NOT NULL,
 	weight int(10) unsigned NOT NULL DEFAULT '1',
 	field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
@@ -330,7 +330,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
-	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) NOT NULL,
 	title varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
@@ -345,7 +345,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
-	pid mediumint(8) unsigned NOT NULL DEFAULT '0',
+	pid smallint(5) unsigned NOT NULL DEFAULT '0',
 	clid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	file_name varchar(255) NOT NULL,
 	file_ext varchar(100) NOT NULL,
@@ -368,7 +368,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banip (
-	id int(11) NOT NULL AUTO_INCREMENT,
+	id mediumint(8) NOT NULL AUTO_INCREMENT,
 	ip varchar(32) DEFAULT NULL,
 	mask tinyint(4) NOT NULL DEFAULT '0',
 	area tinyint(3) NOT NULL,
@@ -386,7 +386,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	name_key varchar(255) NOT NULL,
 	note_action text NOT NULL,
 	link_acess varchar(255) NOT NULL,
-	userid int(11) NOT NULL,
+	userid mediumint(8) unsigned NOT NULL,
 	log_time int(11) NOT NULL,
 	PRIMARY KEY (id)
 ) ENGINE=MyISAM";
@@ -404,7 +404,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ipcountry (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
-	did int(11) NOT NULL AUTO_INCREMENT,
+	did mediumint(8) NOT NULL AUTO_INCREMENT,
 	dirname varchar(255) NOT NULL,
 	time int(11) NOT NULL DEFAULT '0',
 	thumb_type tinyint(4) NOT NULL DEFAULT '0',
@@ -426,7 +426,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	srcwidth int(11) NOT NULL DEFAULT '0',
 	srcheight int(11) NOT NULL DEFAULT '0',
 	size varchar(50) NOT NULL DEFAULT '',
-	userid int(11) NOT NULL DEFAULT '0',
+	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	mtime int(11) NOT NULL DEFAULT '0',
 	did int(11) NOT NULL DEFAULT '0',
 	title varchar(255) NOT NULL DEFAULT '',
@@ -437,7 +437,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
-	gid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	gid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL DEFAULT '',
 	idprofile varchar(25) NOT NULL DEFAULT '',
 	weight mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -546,16 +546,16 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 	('sys', 'define', 'nv_allowed_html_tags', '" . NV_ALLOWED_HTML_TAGS . "'),
 	('sys', 'define', 'dir_forum', '')";
 
-$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " (id, start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
-	(NULL, " . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 0, 1, 0, 0),
-	(NULL, " . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES
+	(" . NV_CURRENTTIME . ", 5, 'online_expired_del.php', 'cron_online_expired_del', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'dump_autobackup.php', 'cron_dump_autobackup', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'temp_download_destroy.php', 'cron_auto_del_temp_download', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 30, 'ip_logs_destroy.php', 'cron_del_ip_logs', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'error_log_destroy.php', 'cron_auto_del_error_log', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 360, 'error_log_sendmail.php', 'cron_auto_sendmail_error_log', '', 0, 1, 0, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 0, 1, 0, 0),
+	(" . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES
 	('about', 0, 0, 'page', 'about', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', ''),

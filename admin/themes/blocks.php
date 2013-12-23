@@ -13,10 +13,10 @@ $select_options = array();
 $theme_array = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 if( $global_config['idsite'] )
 {
-	$row = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetch();
-	if( ! empty( $row['theme'] ) )
+	$theme = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+	if( ! empty( $theme ) )
 	{
-		$array_site_cat_theme = explode( ',', $row['theme'] );
+		$array_site_cat_theme = explode( ',', $theme );
 		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
 		while( list( $theme ) = $result->fetch( 3 ) )
 		{
@@ -128,7 +128,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		}
 		else
 		{
-			$result_func = $db->query( 'SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' AS a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid'] );
+			$result_func = $db->query( 'SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid'] );
 			while( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $result_func->fetch( 3 ) )
 			{
 				$xtpl->assign( 'FUNCID_INLIST', $funcid_inlist );

@@ -65,7 +65,7 @@ else
 					$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
 						last_openid AS current_openid, password, question, answer
-						FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1 LIMIT 1';
+						FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
 					$user_info = $db->query( $_sql )->fetch();
 					if( ! empty( $user_info ) )

@@ -94,7 +94,7 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 		$sth->bindParam( ':module', $mod, PDO::PARAM_STR );
 		$sth->execute();
 
-		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id in (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module' );
+		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id in (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)' );
 		$sth->bindParam( ':module', $mod, PDO::PARAM_STR );
 		$sth->execute();
 	}
@@ -458,7 +458,7 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ) );
 				$xtpl->parse( 'main.deact_modules.loop.weight' );
 			}
 
@@ -491,7 +491,7 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 
 			foreach( $weight_list as $new_weight )
 			{
-				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected=\'selected\'' : '' ) );
+				$xtpl->assign( 'WEIGHT', array( 'key' => $new_weight, 'selected' => $new_weight == $values['weight'][0] ? ' selected="selected"' : '' ) );
 				$xtpl->parse( 'main.bad_modules.loop.weight' );
 			}
 

@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'countries', 'post' ) == 1 )
 
 include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
 
-$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
+$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );

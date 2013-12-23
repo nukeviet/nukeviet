@@ -202,7 +202,7 @@ if( isset( $contents['editor'] ) )
 	$xtpl->assign( 'EDITOR3', $contents['editor'][3] );
 	foreach( $contents['editor'][1] as $edt )
 	{
-		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? ' selected=\'selected\'' : '' );
+		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? ' selected="selected"' : '' );
 		$xtpl->assign( 'EDITOR', $edt );
 		$xtpl->parse( 'add.editor.loop' );
 	}

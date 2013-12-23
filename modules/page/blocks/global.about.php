@@ -51,7 +51,7 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 
 		if( ! $is_show )
 		{
-			$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . " WHERE status=1 ORDER BY rand() DESC LIMIT 1";
+			$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . " WHERE status=1 ORDER BY rand() DESC";
 
 			if( ( $query = $db->sql_query( $sql ) ) !== false )
 			{

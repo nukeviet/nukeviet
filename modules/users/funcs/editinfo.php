@@ -139,7 +139,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 		// absolute path:
 		// $CKEditor->basePath = '/ckeditor/'
 		// If not set, CKEditor will try to detect the correct path.
-		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
+		$CKEditor->basePath = NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
 		if( ! empty( $width ) )
 		{
@@ -356,8 +356,7 @@ if( $checkss == $array_data['checkss'] )
 			}
 			else
 			{
-				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg VALUES (
-					NULL,
+				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
 					" . $db->dbescape( $md5_username ) . ",
 					'',

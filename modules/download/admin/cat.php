@@ -165,18 +165,17 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			$new_weight = ( int )$new_weight;
 			++$new_weight;
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_categories VALUES (
- NULL,
- " . $array['parentid'] . ",
- " . $db->dbescape( $array['title'] ) . ",
- " . $db->dbescape( $array['alias'] ) . ",
- " . $db->dbescape( $array['description'] ) . ",
- " . $array['who_view'] . ",
- " . $db->dbescape( $array['groups_view'] ) . ",
- " . $array['who_download'] . ",
- " . $db->dbescape( $array['groups_download'] ) . ",
- " . $new_weight . ",
- 1)";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_categories (parentid, title, alias, description, who_view, groups_view, who_download, groups_download, weight, status) VALUES (
+				 " . $array['parentid'] . ",
+				 " . $db->dbescape( $array['title'] ) . ",
+				 " . $db->dbescape( $array['alias'] ) . ",
+				 " . $db->dbescape( $array['description'] ) . ",
+				 " . $array['who_view'] . ",
+				 " . $db->dbescape( $array['groups_view'] ) . ",
+				 " . $array['who_download'] . ",
+				 " . $db->dbescape( $array['groups_download'] ) . ",
+				 " . $new_weight . ",
+				 1)";
 
 			$catid = $db->sql_query_insert_id( $sql );
 
