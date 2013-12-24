@@ -219,11 +219,10 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			if( empty( $reg_attribs['full_name'] ) ) $reg_attribs['full_name'] = $array_register['username'];
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "
-				(userid, username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+				(username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 				question, answer, passlostkey, view_mail, remember, in_groups,
 				active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				NULL,
 				" . $db->dbescape( $array_register['username'] ) . ",
 				" . $db->dbescape( md5( $array_register['username'] ) ) . ",
 				" . $db->dbescape( $password ) . ",
@@ -455,8 +454,7 @@ if( $checkss == $array_register['checkss'] )
 
 			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 			{
-				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg VALUES (
-					NULL,
+				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					" . $db->dbescape( $array_register['username'] ) . ",
 					" . $db->dbescape( md5( $array_register['username'] ) ) . ",
 					" . $db->dbescape( $password ) . ",
@@ -519,10 +517,9 @@ if( $checkss == $array_register['checkss'] )
 			else
 			{
 				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "
-					(userid, username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+					(username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					NULL,
 					" . $db->dbescape( $array_register['username'] ) . ",
 					" . $db->dbescape( md5( $array_register['username'] ) ) . ",
 					" . $db->dbescape( $password ) . ",

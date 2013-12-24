@@ -722,7 +722,7 @@ function nv_groups_add_user( $group_id, $userid )
 				$data = ( $data != '' ) ? explode( ',', $data ) : array();
 				$data[] = $global_config['idsite'];
 				$data = implode( ',', array_unique( array_map( 'intval', $data ) ) );
-				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid . " LIMIT 1" );
+				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 				return true;
 			}
 		}
@@ -1810,7 +1810,7 @@ function nv_site_mods()
 	else
 	{
 		$site_mods = array();
-		$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' AS m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
+		$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
 		while( $row = $result->fetch() )
 		{
 			$m_title = $row['title'];

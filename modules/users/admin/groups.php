@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'act', 'post' ) )
 	if( ! isset( $groupsList[$group_id] ) OR ! defined( 'NV_IS_SPADMIN' ) OR $group_id <= 3 OR $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( "ERROR|" . $groupsList[$group_id]['act'] );
 
 	$act = $groupsList[$group_id]['act'] ? 0 : 1;
-	$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET act=" . $act . " WHERE group_id=" . $group_id . " LIMIT 1";
+	$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET act=" . $act . " WHERE group_id=" . $group_id;
 	$db->sql_query( $query );
 
 	nv_del_moduleCache( $module_name );
@@ -101,7 +101,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode( ',', $in_groups ) . "' WHERE userid=" . $userid );
 	}
 
-	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE group_id = " . $group_id . " LIMIT 1" );
+	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE group_id = " . $group_id );
 	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE group_id = " . $group_id );
 
 	unset( $groupsList[$group_id] );
@@ -361,7 +361,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					exp_time='" . $post['exp_time'] . "',
 					public='" . $post['public'] . "',
 					siteus='" . $post['siteus'] . "'
-					WHERE group_id=" . $post['id'] . " LIMIT 1";
+					WHERE group_id=" . $post['id'];
 				$ok = $db->sql_query( $query );
 			}
 			elseif( $nv_Request->isset_request( 'add', 'get' ) )
@@ -369,8 +369,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'] ) );
 				$weight = intval( $weight ) + 1;
 				$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
-					(group_id, title, content, add_time, exp_time, public, weight, act, idsite, number, siteus)
-					VALUES (NULL, " . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
+					(title, content, add_time, exp_time, public, weight, act, idsite, number, siteus)
+					VALUES (" . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
 					" . $post['public'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
 				$ok = $post['id'] = $db->sql_query_insert_id( $query );
 			}

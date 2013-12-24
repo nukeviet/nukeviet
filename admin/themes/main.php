@@ -29,10 +29,10 @@ $errorconfig = array();
 $array_site_cat_theme = array();
 if( $global_config['idsite'] )
 {
-	$row = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetch();
-	if( ! empty( $row['theme'] ) )
+	$theme = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+	if( ! empty( $theme ) )
 	{
-		$array_site_cat_theme = explode( ',', $row['theme'] );
+		$array_site_cat_theme = explode( ',', $theme );
 
 		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
 		while( list( $theme ) = $result->fetch( 3 ) )

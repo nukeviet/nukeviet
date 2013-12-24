@@ -172,8 +172,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		{
 			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid=" . intval( $post['mid'] ) . " AND parentid=" . intval( $post['parentid'] . " AND mid=" . $post['mid'] ) ) );
 			$weight = intval( $weight ) + 1;
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows VALUES (
-				NULL,
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, who_view, groups_view, module_name, op, target, css, active_type, status) VALUES (
 				" . intval( $post['parentid'] ) . ",
 				" . intval( $post['mid'] ) . ",
 				" . $db->dbescape( $post['title'] ) . ",
@@ -193,8 +192,6 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 
 			if( $db->sql_query_insert_id( $sql ) )
 			{
-				$db->sql_freeresult();
-
 				nv_fix_cat_order( $post['mid'] );
 
 				$arr_block = array();

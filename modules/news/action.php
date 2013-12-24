@@ -19,7 +19,6 @@ if( $num_table > 0 )
 	{
 		$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_" . $catid_i . "";
 	}
-	$db->sql_freeresult();
 
 	list( $maxid ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(id) FROM " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows" ) );
 	$i1 = 1;
@@ -47,19 +46,19 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
-	 catid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-	 parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
+	 catid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+	 parentid smallint(5) unsigned NOT NULL DEFAULT '0',
 	 title varchar(255) NOT NULL,
 	 titlesite varchar(255) NOT NULL,
 	 alias varchar(255) NOT NULL DEFAULT '',
 	 description text NOT NULL,
 	 image varchar(255) NOT NULL DEFAULT '',
 	 viewdescription tinyint(2) NOT NULL DEFAULT '0',
-	 weight smallint(4) unsigned NOT NULL DEFAULT '0',
-	 sort mediumint(8) NOT NULL DEFAULT '0',
-	 lev smallint(4) NOT NULL DEFAULT '0',
+	 weight smallint(5) unsigned NOT NULL DEFAULT '0',
+	 sort smallint(5) NOT NULL DEFAULT '0',
+	 lev smallint(5) NOT NULL DEFAULT '0',
 	 viewcat varchar(50) NOT NULL DEFAULT 'viewcat_page_new',
-	 numsubcat int(11) NOT NULL DEFAULT '0',
+	 numsubcat smallint(5) NOT NULL DEFAULT '0',
 	 subcatid varchar(255) NOT NULL DEFAULT '',
 	 inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
 	 numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
@@ -87,12 +86,12 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics (
-	 topicid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	 topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 title varchar(255) NOT NULL DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
 	 image varchar(255) NOT NULL,
 	 description varchar(255) NOT NULL,
-	 weight smallint(4) NOT NULL DEFAULT '0',
+	 weight smallint(5) NOT NULL DEFAULT '0',
 	 keywords text NOT NULL,
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
@@ -102,14 +101,14 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (
-	 bid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	 bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 adddefault tinyint(4) NOT NULL DEFAULT '0',
-	 number mediumint(4) NOT NULL DEFAULT '10',
+	 number smallint(5) NOT NULL DEFAULT '10',
 	 title varchar(255) NOT NULL DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
 	 image varchar(255) NOT NULL,
 	 description varchar(255) NOT NULL,
-	 weight smallint(4) NOT NULL DEFAULT '0',
+	 weight smallint(5) NOT NULL DEFAULT '0',
 	 keywords text NOT NULL,
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
@@ -123,7 +122,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 id mediumint(8) unsigned NOT NULL DEFAULT '0',
 	 content text NOT NULL,
 	 post_time int(11) unsigned NOT NULL DEFAULT '0',
-	 userid int(11) NOT NULL DEFAULT '0',
+	 userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	 post_name varchar(100) NOT NULL,
 	 post_email varchar(100) NOT NULL,
 	 post_ip varchar(15) NOT NULL,
@@ -134,7 +133,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block (
-	 bid int(11) unsigned NOT NULL,
+	 bid smallint(5) unsigned NOT NULL,
 	 id int(11) unsigned NOT NULL,
 	 weight int(11) unsigned NOT NULL,
 	 UNIQUE KEY bid (bid,id)
@@ -142,9 +141,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
 	 id int(11) unsigned NOT NULL auto_increment,
-	 catid mediumint(8) unsigned NOT NULL default '0',
+	 catid smallint(5) unsigned NOT NULL default '0',
 	 listcatid varchar(255) NOT NULL default '',
-	 topicid mediumint(8) unsigned NOT NULL default '0',
+	 topicid smallint(5) unsigned NOT NULL default '0',
 	 admin_id mediumint(8) unsigned NOT NULL default '0',
 	 author varchar(255) NOT NULL default '',
 	 sourceid mediumint(8) NOT NULL default '0',
@@ -199,7 +198,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post (
-	 pid mediumint(9) NOT NULL AUTO_INCREMENT,
+	 pid smallint(5) NOT NULL AUTO_INCREMENT,
 	 member tinyint(4) NOT NULL,
 	 group_id mediumint(9) NOT NULL,
 	 addcontent tinyint(4) NOT NULL,
@@ -211,8 +210,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_admins (
-	 userid int(11) NOT NULL default '0',
-	 catid int(11) NOT NULL default '0',
+	 userid mediumint(8) unsigned NOT NULL default '0',
+	 catid smallint(5) NOT NULL default '0',
 	 admin tinyint(4) NOT NULL default '0',
 	 add_content tinyint(4) NOT NULL default '0',
 	 pub_content tinyint(4) NOT NULL default '0',

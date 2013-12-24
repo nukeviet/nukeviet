@@ -110,8 +110,8 @@ $a = 0;
 
 $blocks_positions = array();
 $sth = $db->prepare( 'SELECT t1.position, COUNT(*)
-	FROM ' . NV_BLOCKS_TABLE . '_groups AS t1
-	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS t2 ON t1.bid = t2.bid
+	FROM ' . NV_BLOCKS_TABLE . '_groups t1
+	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
 	WHERE t2.func_id=' . $func_id . ' AND t1.theme = :theme
 	GROUP BY t1.position' );
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -130,8 +130,8 @@ $positions = $content[0]->position;
 //object
 
 $sth = $db->prepare( 'SELECT t1.*, t2.func_id, t2.weight as bweight
-	FROM ' . NV_BLOCKS_TABLE . '_groups AS t1
-	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight AS t2 ON t1.bid = t2.bid
+	FROM ' . NV_BLOCKS_TABLE . '_groups t1
+	INNER JOIN ' . NV_BLOCKS_TABLE . '_weight t2 ON t1.bid = t2.bid
 	WHERE t2.func_id = ' . $func_id . ' AND t1.theme = :theme
 	ORDER BY t1.position ASC, t2.weight ASC' );
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $array_site_cat_module = array();
 if( $global_config['idsite'] )
 {
-	$_module = $db->query( 'SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat AS t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site AS t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+	$_module = $db->query( 'SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
 	if( ! empty( $_module ) )
 	{
 		$array_site_cat_module = explode( ',', $_module );
@@ -70,7 +70,7 @@ if( ! empty( $setmodule ) )
 			}
 			catch (PDOException $e)
 			{
-
+				trigger_error( $e->getMessage() );
 			}
 
 			nv_del_moduleCache( 'modules' );
@@ -78,7 +78,6 @@ if( ! empty( $setmodule ) )
 			if( $return == 'OK_' . $setmodule )
 			{
 				nv_setup_block_module( $setmodule );
-				nv_del_moduleCache( 'themes' );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid'] );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule );

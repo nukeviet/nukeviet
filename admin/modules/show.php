@@ -243,7 +243,7 @@ function nv_show_funcs()
 			{
 				$xtpl->assign( 'WEIGHT', array(
 					'key' => $new_weight,
-					'selected' => $new_weight == $values['subweight'] ? ' selected=\'selected\'' : ''
+					'selected' => $new_weight == $values['subweight'] ? ' selected="selected"' : ''
 				) );
 				$xtpl->parse( 'main.loop.weight' );
 			}

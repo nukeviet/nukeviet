@@ -42,7 +42,7 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'STATUS', array(
 			'key' => $key,
-			'selected' => $key == $row['act'] ? ' selected=\'selected\'' : '',
+			'selected' => $key == $row['act'] ? ' selected="selected"' : '',
 			'title' => $val
 		) );
 

@@ -37,7 +37,7 @@ if( $bid > 0 )
 		}
 
 		$func_id_old = $weight = 0;
-		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t2.theme=:theme AND t2.position=:position ORDER BY t1.func_id ASC, t1.weight ASC' );
+		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t2.theme=:theme AND t2.position=:position ORDER BY t1.func_id ASC, t1.weight ASC' );
 		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos_old, PDO::PARAM_STR );
 		$sth->execute();
@@ -72,7 +72,7 @@ if( $bid > 0 )
 		}
 
 		$func_id_old = $weight = 0;
-		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t2.theme=:theme AND t2.position=:position ORDER BY t1.func_id ASC, t1.weight ASC' );
+		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t2.theme=:theme AND t2.position=:position ORDER BY t1.func_id ASC, t1.weight ASC' );
 		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
 		$sth->execute();

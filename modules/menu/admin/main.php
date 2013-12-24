@@ -73,8 +73,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	elseif( $arr_menu['id'] == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (id, title,menu_item, description) VALUES (
-			NULL,
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
 			" . $db->dbescape( $arr_menu['title'] ) . ",
 			'',
 			" . $db->dbescape( $arr_menu['description'] ) . "

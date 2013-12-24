@@ -17,9 +17,9 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
- id int(11) NOT NULL AUTO_INCREMENT,
- parentid int(11) unsigned NOT NULL,
- mid int(11) NOT NULL DEFAULT '0', 
+ id mediumint(5) NOT NULL AUTO_INCREMENT,
+ parentid mediumint(5) unsigned NOT NULL,
+ mid smallint(5) NOT NULL DEFAULT '0', 
  title varchar(255) NOT NULL,
  link text NOT NULL,
  note varchar(255) NOT NULL DEFAULT '',
@@ -39,7 +39,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_menu (
- id int(11) unsigned NOT NULL AUTO_INCREMENT,
+ id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
  menu_item mediumtext NOT NULL,
  description varchar(255) NOT NULL DEFAULT '',

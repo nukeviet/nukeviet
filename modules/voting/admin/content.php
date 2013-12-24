@@ -34,7 +34,7 @@ if( ! empty( $submit ) )
 	$urlvotenews = $nv_Request->get_array( 'urlvotenews', 'post' );
 	if( $maxoption > ( $sizeof = sizeof( $answervotenews ) + sizeof( $array_answervote ) ) || $maxoption <= 0 ) $maxoption = $sizeof;
 
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m ) )
 	{
 		$phour = $nv_Request->get_int( 'phour', 'post', 0 );
 		$pmin = $nv_Request->get_int( 'pmin', 'post', 0 );
@@ -44,7 +44,7 @@ if( ! empty( $submit ) )
 	{
 		$begindate = NV_CURRENTTIME;
 	}
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m ) )
 	{
 		$ehour = $nv_Request->get_int( 'ehour', 'post', 0 );
 		$emin = $nv_Request->get_int( 'emin', 'post', 0 );
@@ -73,13 +73,13 @@ if( ! empty( $submit ) )
 		}
 	}
 	$rowvote = array(
-		"who_view" => 0,
-		"groups_view" => "",
-		"publ_time" => $begindate,
-		"exp_time" => $enddate,
-		"acceptcm" => $maxoption,
-		"question" => $question,
-		"link" => $link
+		'who_view' => 0,
+		'groups_view' => '',
+		'publ_time' => $begindate,
+		'exp_time' => $enddate,
+		'acceptcm' => $maxoption,
+		'question' => $question,
+		'link' => $link
 	);
 
 	if( ! empty( $question ) and $number_answer > 1 )
@@ -88,7 +88,7 @@ if( ! empty( $submit ) )
 
 		if( empty( $vid ) )
 		{
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (vid, question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (NULL, " . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (" . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
 			$vid = $db->sql_query_insert_id( $sql );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid'] );
 		}
@@ -117,7 +117,7 @@ if( ! empty( $submit ) )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $urlvotenews[$key] ) );
 
-					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (id, vid, title, url, hitstotal) VALUES (NULL, " . $db->dbescape( $vid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $url ) . ", '0')";
+					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (vid, title, url, hitstotal) VALUES (" . $db->dbescape( $vid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $url ) . ", '0')";
 					if( $db->sql_query_insert_id( $sql ) )
 					{
 						++$maxoption_data;
@@ -144,7 +144,7 @@ if( ! empty( $submit ) )
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 				$error = '';
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '' );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 				die();
 			}
 		}
@@ -240,7 +240,7 @@ foreach( $array_who_view as $k => $w )
 	$xtpl->assign( 'WHO_VIEW', array(
 		'key' => $k,
 		'title' => $w,
-		'selected' => $who_view == $k ? ' selected=\'selected\'' : ''
+		'selected' => $who_view == $k ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.who_view' );
 }
@@ -253,14 +253,14 @@ foreach( $groups_list as $group_id => $grtl )
 	$xtpl->assign( 'GROUPS_VIEW', array(
 		'key' => $group_id,
 		'title' => $grtl,
-		'checked' => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : ""
+		'checked' => in_array( $group_id, $groups_view ) ? ' checked="checked"' : ''
 	) );
 	$xtpl->parse( 'main.groups_view' );
 }
 
-$tdate = date( "H|i", $rowvote['publ_time'] );
-$publ_date = date( "d/m/Y", $rowvote['publ_time'] );
-list( $phour, $pmin ) = explode( "|", $tdate );
+$tdate = date( 'H|i', $rowvote['publ_time'] );
+$publ_date = date( 'd/m/Y', $rowvote['publ_time'] );
+list( $phour, $pmin ) = explode( '|', $tdate );
 
 // Thoi gian dang
 $xtpl->assign( 'PUBL_DATE', $publ_date );
@@ -269,7 +269,7 @@ for( $i = 0; $i <= 23; ++$i )
 	$xtpl->assign( 'PHOUR', array(
 		'key' => $i,
 		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
-		"selected" => $i == $phour ? " selected=\"selected\"" : ""
+		'selected' => $i == $phour ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.phour' );
 }
@@ -278,7 +278,7 @@ for( $i = 0; $i < 60; ++$i )
 	$xtpl->assign( 'PMIN', array(
 		'key' => $i,
 		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
-		"selected" => $i == $pmin ? " selected=\"selected\"" : ""
+		'selected' => $i == $pmin ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.pmin' );
 }
@@ -286,9 +286,9 @@ for( $i = 0; $i < 60; ++$i )
 // Thoi gian ket thuc
 if( $rowvote['exp_time'] > 0 )
 {
-	$tdate = date( "H|i", $rowvote['exp_time'] );
-	$exp_date = date( "d/m/Y", $rowvote['exp_time'] );
-	list( $ehour, $emin ) = explode( "|", $tdate );
+	$tdate = date( 'H|i', $rowvote['exp_time'] );
+	$exp_date = date( 'd/m/Y', $rowvote['exp_time'] );
+	list( $ehour, $emin ) = explode( '|', $tdate );
 }
 else
 {
@@ -301,7 +301,7 @@ for( $i = 0; $i <= 23; ++$i )
 	$xtpl->assign( 'EHOUR', array(
 		'key' => $i,
 		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
-		"selected" => $i == $ehour ? " selected=\"selected\"" : ""
+		'selected' => $i == $ehour ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.ehour' );
 }
@@ -310,7 +310,7 @@ for( $i = 0; $i < 60; ++$i )
 	$xtpl->assign( 'EMIN', array(
 		'key' => $i,
 		'title' => str_pad( $i, 2, '0', STR_PAD_LEFT ),
-		"selected" => $i == $emin ? " selected=\"selected\"" : ""
+		'selected' => $i == $emin ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.emin' );
 }

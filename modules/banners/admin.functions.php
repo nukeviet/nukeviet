@@ -156,7 +156,7 @@ function nv_add_client_theme( $contents )
 
 	$xtpl = new XTemplate( 'add_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -174,7 +174,7 @@ function nv_edit_client_theme( $contents )
 
 	$xtpl = new XTemplate( 'edit_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -313,7 +313,7 @@ function nv_add_plan_theme( $contents )
 
 	$xtpl = new XTemplate( 'add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
@@ -362,7 +362,7 @@ function nv_edit_plan_theme( $contents )
 
 	$xtpl = new XTemplate( 'edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
@@ -530,7 +530,7 @@ function nv_add_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
@@ -585,7 +585,7 @@ function nv_edit_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{

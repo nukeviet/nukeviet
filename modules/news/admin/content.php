@@ -53,7 +53,7 @@ else
 				if( $mk[0] > 0 )
 				{
 					$upload_real_dir_page = $mk[2];
-					$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (did, dirname, time) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)" );
+					$db->sql_query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)" );
 				}
 			}
 			elseif( ! empty( $p ) )
@@ -407,7 +407,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			list( $weightopic ) = $db->sql_fetchrow( $db->sql_query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics' ) );
 			$weightopic = intval( $weightopic ) + 1;
 			$aliastopic = change_alias( $rowcontent['topictext'] );
-			$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (topicid, title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $rowcontent['topictext'] ) . ", " . $db->dbescape( $aliastopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", '', '', " . $db->dbescape( $weightopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+			$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES (" . $db->dbescape( $rowcontent['topictext'] ) . ", " . $db->dbescape( $aliastopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", '', '', " . $db->dbescape( $weightopic ) . ", " . $db->dbescape( $rowcontent['topictext'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 			$rowcontent['topicid'] = $db->sql_query_insert_id( $query );
 		}
 
@@ -423,7 +423,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					list( $weight ) = $db->sql_fetchrow( $db->sql_query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' ) );
 					$weight = intval( $weight ) + 1;
-					$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (sourceid, title, link, logo, weight, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+					$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 					$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
 				}
 			}
@@ -434,7 +434,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" ) );
 					$weight = intval( $weight ) + 1;
-					$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (sourceid, title, link, logo, weight, add_time, edit_time) VALUES (NULL, " . $db->dbescape( $rowcontent['sourcetext'] ) . ", '', '', " . $db->dbescape( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
+					$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $rowcontent['sourcetext'] ) . ", '', '', " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 					$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
 				}
 			}
@@ -472,9 +472,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$rowcontent['status'] = 2;
 			}
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-				(id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
-				 (NULL,
-				 " . intval( $rowcontent['catid'] ) . ",
+				(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
+				 (" . intval( $rowcontent['catid'] ) . ",
 				 " . $db->dbescape_string( $rowcontent['listcatid'] ) . ",
 				 " . intval( $rowcontent['topicid'] ) . ",
 				 " . intval( $rowcontent['admin_id'] ) . ",
@@ -574,7 +573,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					 inhome=" . intval( $rowcontent['inhome'] ) . ",
 					 allowed_comm=" . intval( $rowcontent['allowed_comm'] ) . ",
 					 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
-					 edittime=UNIX_TIMESTAMP()
+					 edittime=" . NV_CURRENTTIME . "
 				WHERE id =" . $rowcontent['id'];
 
 			if( $db->exec( $sql ) )
@@ -648,7 +647,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 						list( $tid, $alias, $keywords_i ) = $db->sql_fetchrow( $db->sql_query( "SELECT tid, alias, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags where alias=" . $db->dbescape( $alias_i ) . " OR FIND_IN_SET('" . $db->fixdb( $keyword ) . "', keywords)>0" ) );
 						if( empty( $tid ) )
 						{
-							$tid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (tid, numnews, alias, description, image, keywords) VALUES (NULL, 1, " . $db->dbescape( $alias_i ) . ", '', '', " . $db->dbescape( $keyword ) . ")" );
+							$tid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, " . $db->dbescape( $alias_i ) . ", '', '', " . $db->dbescape( $keyword ) . ")" );
 						}
 						else
 						{

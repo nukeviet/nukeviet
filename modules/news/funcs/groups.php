@@ -32,7 +32,7 @@ if( isset( $array_op[1] ) )
 			'link' => $base_url
 		);
 
-		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows as t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
+		$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
 
 		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
 		list( $all_page ) = $db->sql_fetchrow( $result_all );
@@ -76,7 +76,7 @@ if( isset( $array_op[1] ) )
 		unset( $query, $row );
 
 		$item_array_other = array();
-		$query = $db->sql_query( "SELECT t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows as t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t2.weight > " . $end_weight . " ORDER BY t2.weight ASC LIMIT 0," . $st_links . "" );
+		$query = $db->sql_query( "SELECT t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t2.weight > " . $end_weight . " ORDER BY t2.weight ASC LIMIT 0," . $st_links . "" );
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{
@@ -111,7 +111,7 @@ else
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['groups'] . "/" . $balias
 		);
 
-		$query = $db->sql_query( "SELECT t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows as t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0," . $numberlink );
+		$query = $db->sql_query( "SELECT t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0," . $numberlink );
 
 		while( $item = $db->sql_fetch_assoc( $query ) )
 		{

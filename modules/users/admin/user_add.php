@@ -132,11 +132,10 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
-				userid, username, md5username, password, email, full_name, gender, birthday, sig, regdate,
+				username, md5username, password, email, full_name, gender, birthday, sig, regdate,
 				question, answer, passlostkey, view_mail,
 				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				NULL,
 				" . $db->dbescape( $_user['username'] ) . ",
 				" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ",
 				" . $db->dbescape( $password ) . ",

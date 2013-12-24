@@ -104,7 +104,7 @@ function nv_blocks_content( $sitecontent )
 		$cache = array();
 
 		$in = array();
-		$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' AS m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' AS f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight';
+		$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight';
 		$list = nv_db_cache( $sql, '', 'modules' );
 		foreach( $list as $row )
 		{
@@ -114,8 +114,8 @@ function nv_blocks_content( $sitecontent )
 			}
 		}
 
-		$_result = $db->query( "SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups AS t1
-			 INNER JOIN " . NV_BLOCKS_TABLE . "_weight AS t2
+		$_result = $db->query( "SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
+			 INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
 			 ON t1.bid = t2.bid
 			 WHERE t2.func_id IN (" . implode( ',', $in ) . ")
 			 AND t1.theme ='" . $global_config['module_theme'] . "'

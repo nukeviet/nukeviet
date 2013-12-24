@@ -18,7 +18,7 @@ list( $bid, $theme, $position ) = $db->query( 'SELECT bid, theme, position FROM 
 if( $order > 0 and $bid > 0 )
 {
 	$weight = 0;
-	$sth = $db->prepare( 'SELECT t1.bid FROM ' . NV_BLOCKS_TABLE . '_weight AS t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups AS t2 ON t1.bid = t2.bid WHERE t1.bid!=' . $bid . ' AND t1.func_id=' . $func_id . ' AND t2.theme = :theme AND t2.position = :position ORDER BY t1.weight ASC' );
+	$sth = $db->prepare( 'SELECT t1.bid FROM ' . NV_BLOCKS_TABLE . '_weight t1 INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid WHERE t1.bid!=' . $bid . ' AND t1.func_id=' . $func_id . ' AND t2.theme = :theme AND t2.position = :position ORDER BY t1.weight ASC' );
 	$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 	$sth->bindParam( ':position', $position, PDO::PARAM_STR );
 	$sth->execute();

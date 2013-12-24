@@ -327,7 +327,7 @@ if( defined( 'NV_IS_SPADMIN' ) )
 
 // Parse content
 $xtpl = new XTemplate( 'edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
-$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 $xtpl->assign( 'INFO', $contents['info'] );
 $xtpl->assign( 'ACTION', $contents['action'] );
 $xtpl->assign( 'LANG',$lang_module );
@@ -339,7 +339,7 @@ if( isset( $contents['editor'] ) )
 	foreach( $contents['editor'][1] as $edt )
 	{
 		$xtpl->assign( 'VALUE', $edt );
-		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? ' selected=\'selected\'' : '' );
+		$xtpl->assign( 'SELECTED', $edt == $contents['editor'][2] ? ' selected="selected"' : '' );
 		$xtpl->parse( 'edit.editor.loop' );
 	}
 	$xtpl->parse( 'edit.editor' );

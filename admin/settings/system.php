@@ -176,7 +176,7 @@ $optActive_Modes = array(
 	'3' => $lang_module['optActive_admin']
 );
 
-$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
+$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -262,7 +262,7 @@ if( $errormess != '' )
 foreach( $adminThemes as $name )
 {
 	$xtpl->assign( 'THEME_NAME', $name );
-	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.admin_theme' );
 }
 
@@ -270,7 +270,7 @@ foreach( $closed_site_Modes as $value => $name )
 {
 	$xtpl->assign( 'MODE_VALUE', $value );
 	$xtpl->assign( 'MODE_NAME', $name );
-	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.closed_site_mode' );
 }
 

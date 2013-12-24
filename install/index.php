@@ -695,7 +695,7 @@ elseif( $step == 6 )
 			$db->exec( "TRUNCATE TABLE " . $db_config['prefix'] . "_users" );
 			$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_users
 				(username, md5username, password, email, full_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-				VALUES( :username, :md5username, :password, :email, :full_name, '', '', 0, NULL, " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
+				VALUES(:username, :md5username, :password, :email, :full_name, '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
 			$sth->bindParam( ':username', $login, PDO::PARAM_STR );
 			$sth->bindValue( ':md5username', nv_md5safe( $login ), PDO::PARAM_STR );
 			$sth->bindParam( ':password', $password, PDO::PARAM_STR );

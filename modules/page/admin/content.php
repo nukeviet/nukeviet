@@ -121,9 +121,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = intval( $weight ) + 1;
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
-					(id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status)
-				VALUES (
-					NULL, " . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
+					(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES 
+					(" . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
 					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
 					" . $db->dbescape( $row['layout_func'] ) . "," . $row['gid'] . ", " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
 			$publtime = NV_CURRENTTIME;

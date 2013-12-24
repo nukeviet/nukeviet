@@ -48,8 +48,8 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
 	$weight = intval( $weight ) + 1;
 	$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
-		(qid, title, lang, weight, add_time, edit_time) VALUES (
-		NULL, " . $db->dbescape( $title ) . ", " . $db->dbescape( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		(title, lang, weight, add_time, edit_time) VALUES 
+		(" . $db->dbescape( $title ) . ", " . $db->dbescape( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 	if( ! $db->sql_query_insert_id( $query ) )
 	{
 		die( "NO" );
