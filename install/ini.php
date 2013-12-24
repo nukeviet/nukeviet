@@ -48,7 +48,6 @@ if( $sys_info['ini_set_support'] )
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 $sys_info['php_support'] = ( PHP_VERSION >= 5.2 ) ? 1 : 0;
 
-$sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
 $sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
 $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;

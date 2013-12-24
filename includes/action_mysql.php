@@ -11,6 +11,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,page' );
 
+function nv_create_table_news( $lang_data, $module_data, $catid )
+{
+	global $db, $db_config;
+	return $db->exec( 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_' . $module_data . '_' . $catid . ' LIKE ' . $db_config['prefix'] . '_' . $lang_data . '_' . $module_data . '_rows' );
+}
+
 function nv_delete_table_sys( $lang )
 {
 	global $db_config, $global_config;

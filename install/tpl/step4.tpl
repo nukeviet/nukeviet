@@ -14,9 +14,9 @@
 		<td><span class="highlight_green">{DATA_REQUEST.php_support}</span></td>
 	</tr>
 	<tr>
-		<th scope="row" class="specalt">{LANG.mysql_support}</th>
+		<th scope="row" class="specalt">{LANG.pdo_support}</th>
 		<td class="alt">{LANG.required_on}</td>
-		<td class="alt"><span class="highlight_green">{DATA_REQUEST.mysql_support}</span></td>
+		<td class="alt"><span class="highlight_green">{DATA_REQUEST.pdo_support}</span></td>
 	</tr>
 
 	<tr>

@@ -119,27 +119,6 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 	return $order;
 }
 
-// tao bang co so du lieu cho cac chu de
-/**
- * nv_create_table_rows()
- *
- * @param mixed $catid
- * @return
- */
-function nv_create_table_rows( $catid )
-{
-	global $db, $module_data;
-	$db->sql_query( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$result = $db->sql_query( 'SHOW CREATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_rows' );
-	$show = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( NV_PREFIXLANG . '_' . $module_data . '_rows', NV_PREFIXLANG . '_' . $module_data . '_' . $catid, $sql );
-	$db->sql_query( $sql );
-	$db->sql_query( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid );
-}
-
 /**
  * nv_fix_topic()
  *

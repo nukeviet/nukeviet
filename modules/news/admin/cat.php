@@ -71,7 +71,9 @@ if( ! empty( $savecat ) )
 		$newcatid = ( int )$db->sql_query_insert_id( $sql );
 		if( $newcatid > 0 )
 		{
-			nv_create_table_rows( $newcatid );
+			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
+			
+			nv_create_table_news( NV_LANG_DATA, $module_data, $newcatid );
 			nv_fix_cat_order();
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
