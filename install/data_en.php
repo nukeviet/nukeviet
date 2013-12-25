@@ -8,20 +8,6 @@
  */
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_create_table_news( $catid )
-{
-	global $db, $db_config, $lang_data;
-
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$show = $db->query( 'SHOW CREATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows' )->fetchColumn( 1 );
-
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
-
-	$db->exec( $sql );
-}
-
 $sql_create_table = array();
 
 $sql_create_table[] = 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules';
@@ -804,7 +790,7 @@ $disable_site_content = "For technical reasons Web site temporary not available.
 
 $copyright = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
 
-$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->query( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'";
+$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'";
 
 $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Delete expired online status';

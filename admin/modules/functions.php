@@ -174,11 +174,11 @@ function nv_setup_data_module( $lang, $module_name )
 		$sth->execute();
 		nv_delete_all_cache();
 
-		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ) )
 		{
 			$sql_recreate_module = array();
 
-			include NV_ROOTDIR . '/modules/' . $module_file . '/action.php' ;
+			include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
 
 			if( ! empty( $sql_create_module ) )
 			{

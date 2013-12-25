@@ -108,7 +108,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . " SET
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
 					 title=" . $db->dbescape( $row['title'] ) . ", alias = " . $db->dbescape( $row['alias'] ) . ", image=" . $db->dbescape( $row['image'] ) . ", imagealt=" . $db->dbescape( $row['imagealt'] ) . ", description=" . $db->dbescape( $row['description'] ) . ",
 					 bodytext=" . $db->dbescape( $row['bodytext'] ) . ", keywords=" . $db->dbescape( $row['keywords'] ) . ",
 					 socialbutton=" . $row['socialbutton'] . ", activecomm=" . $row['activecomm'] . ", facebookappid=" . $db->dbescape( $row['facebookappid'] ) . ",

@@ -9,20 +9,6 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_create_table_news( $catid )
-{
-	global $db, $db_config, $lang_data;
-
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$show = $db->query( 'SHOW CREATE TABLE ' . $db_config['prefix'] . '_fr_news_rows' )->fetchColumn( 1 );
-
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
-
-	$db->exec( $sql );
-}
-
 $sql_create_table = array();
 
 $sql_create_table[] = 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules';
@@ -892,7 +878,7 @@ if( $result->rowCount(  ) )
 }
 
 $result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
-if( $db->rowCount( $result ) )
+if( $result->rowCount() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES
 		(1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '', '', '', '<p> NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke. Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.<br />  </p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>', '', 0, 0, '', '', 0, 1, 1, 1280634933, 1280634933, 1),

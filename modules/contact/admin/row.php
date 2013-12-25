@@ -141,7 +141,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . "_rows SET
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
 				full_name=" . $db->dbescape( $full_name ) . ", phone = " . $db->dbescape( $phone ) . ",
 				fax=" . $db->dbescape( $fax ) . ", email=" . $db->dbescape( $email ) . ",
 				note=" . $db->dbescape( $note ) . ", admins=" . $db->dbescape( $admins_list ) . " WHERE id =" . $id;
