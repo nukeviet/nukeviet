@@ -13,7 +13,7 @@ $contents = '';
 
 if( $id )
 {
-	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
+	$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $id . '_' . NV_CACHE_PREFIX . '.cache';
 	// Cache tung giao dien
 
 	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
@@ -27,12 +27,12 @@ if( $id )
 	{
 		$cache = array();
 
-		$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1 AND id=" . $id;
+		$sql = 'SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND id=' . $id;
 		$query = $db->sql_query( $sql );
 		$row = $db->sql_fetchrow( $query );
 
-		$row['add_time'] = nv_date( "H:i T l, d/m/Y", $row['add_time'] );
-		$row['edit_time'] = nv_date( "H:i T l, d/m/Y", $row['edit_time'] );
+		$row['add_time'] = nv_date( 'H:i T l, d/m/Y', $row['add_time'] );
+		$row['edit_time'] = nv_date( 'H:i T l, d/m/Y', $row['edit_time'] );
 		$contents = $cache['contents'] = nv_page_main( $row, $ab_links );
 		$cache['bodytext'] = strip_tags( $row['bodytext'] );
 		$cache['bodytext'] = nv_clean60( $cache['bodytext'], 300 );
@@ -53,12 +53,12 @@ if( $id )
 				$key_words = strip_punctuation( $key_words );
 				$key_words = trim( $key_words );
 				$key_words = nv_strtolower( $key_words );
-				$key_words = preg_replace( "/[ ]+/", ",", $key_words );
+				$key_words = preg_replace( '/[ ]+/', ',', $key_words );
 			}
 
 			$cache['keywords'] = $key_words;
 
-			$query = "UPDATE" . NV_PREFIXLANG . "_" . $module_data . " SET keywords=" . $db->dbescape( $key_words ) . " WHERE id =" . $id;
+			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->dbescape( $key_words ) . ' WHERE id =' . $id;
 			$db->sql_query( $query );
 		}
 
