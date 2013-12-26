@@ -230,7 +230,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 	$numberusers = $db->sql_numrows( $query );
 	if( $numberusers != $groupsList[$group_id]['number'] )
 	{
-		$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET number = " . $numberusers . " WHERE group_id=" . $group_id );
+		$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET numbers = " . $numberusers . " WHERE group_id=" . $group_id );
 	}
 
 	$title = ( $group_id <= 3 ) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
@@ -347,8 +347,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				$post['exp_time'] = 0;
 			}
 
-			$post['public'] = $nv_Request->get_int( 'public', 'post', 0 );
-			if( $post['public'] != 1 ) $post['public'] = 0;
+			$post['publics'] = $nv_Request->get_int( 'publics', 'post', 0 );
+			if( $post['publics'] != 1 ) $post['publics'] = 0;
 
 			$post['siteus'] = $nv_Request->get_int( 'siteus', 'post', 0 );
 			if( $post['siteus'] != 1 ) $post['siteus'] = 0;
@@ -359,7 +359,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					title=" . $db->dbescape( $post['title'] ) . ",
 					content=" . $db->dbescape( $post['content'] ) . ",
 					exp_time='" . $post['exp_time'] . "',
-					public='" . $post['public'] . "',
+					publics='" . $post['publics'] . "',
 					siteus='" . $post['siteus'] . "'
 					WHERE group_id=" . $post['id'];
 				$ok = $db->sql_query( $query );
@@ -369,9 +369,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'] ) );
 				$weight = intval( $weight ) + 1;
 				$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
-					(title, content, add_time, exp_time, public, weight, act, idsite, number, siteus)
+					(title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
 					VALUES (" . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
-					" . $post['public'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
+					" . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
 				$ok = $post['id'] = $db->sql_query_insert_id( $query );
 			}
 			if( $ok )
@@ -391,13 +391,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			$post = $groupsList[$post['id']];
 			$post['content'] = nv_editor_br2nl( $post['content'] );
 			$post['exp_time'] = ! empty( $post['exp_time'] ) ? date( "d/m/Y", $post['exp_time'] ) : "";
-			$post['public'] = $post['public'] ? " checked=\"checked\"" : "";
+			$post['publics'] = $post['publics'] ? " checked=\"checked\"" : "";
 			$post['siteus'] = $post['siteus'] ? " checked=\"checked\"" : "";
 		}
 		else
 		{
 			$post['title'] = $post['content'] = $post['exp_time'] = '';
-			$post['public'] = '';
+			$post['publics'] = '';
 		}
 
 		if( ! empty( $post['content'] ) ) $post['content'] = nv_htmlspecialchars( $post['content'] );
@@ -444,7 +444,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 			'title' => $values['title'],
 			'add_time' => nv_date( "d/m/Y H:i", $values['add_time'] ),
 			'exp_time' => ! empty( $values['exp_time'] ) ? nv_date( "d/m/Y H:i", $values['exp_time'] ) : $lang_global['unlimited'],
-			'public' => $values['public'] ? " checked=\"checked\"" : "",
+			'publics' => $values['publics'] ? " checked=\"checked\"" : "",
 			'number' => number_format( $values['number'] ),
 			'act' => $values['act'] ? " checked=\"checked\"" : ""
 		);

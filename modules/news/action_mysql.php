@@ -112,7 +112,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (
 	 bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 adddefault tinyint(4) NOT NULL DEFAULT '0',
-	 number smallint(5) NOT NULL DEFAULT '10',
+	 numbers smallint(5) NOT NULL DEFAULT '10',
 	 title varchar(255) NOT NULL DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
 	 image varchar(255) NOT NULL,

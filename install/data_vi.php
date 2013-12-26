@@ -909,7 +909,7 @@ if( $result->rowCount() )
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_topics VALUES
 		(1, 'NukeViet 3', 'NukeViet-3', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)";
 
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, number,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
 		(1, 0, 4,'Tin tiêu điểm', 'Tin-tieu-diem', '', 'Tin tiêu điểm', 1, '', 1279945710, 1279956943),
 		(2, 1, 4, 'Tin mới nhất', 'Tin-moi-nhat', '', 'Tin mới nhất', 2, '', 1279945725, 1279956445)";
 

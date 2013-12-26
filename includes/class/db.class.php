@@ -92,62 +92,6 @@ class sql_db extends pdo
 		}
 	}
 
-	public function query( $query )
-	{
-		try
-		{
-			$result = parent::query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}
-	
-	public function exec( $query )
-	{
-		try
-		{
-			$result = parent::exec( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}	
-
-	/**
-	 * sql_db::sql_version()
-	 *
-	 * @return
-	 */
-	public function sql_version()
-	{
-		try
-		{
-			if ( $this->dbtype = 'mysql' )
-			{
-				$rs = parent::query( 'SELECT VERSION()' );
-				return $rs->fetchColumn( );
-			}
-			elseif ( $this->dbtype = 'oci' )
-			{
-				$rs = parent::query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
-				return $rs->fetchColumn( );
-			}
-		}
-		catch( PDOException $e )
-		{
-			return false;
-		}
-	}
-
 	/**
 	 * sql_db::sql_fetchrow()
 	 *

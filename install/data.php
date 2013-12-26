@@ -23,7 +23,7 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module
 	(10, 'upload', 'mod_upload', 10, 1, 1, 1, '')";
 
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
-(group_id, title, content, add_time, exp_time, public, weight, act, idsite, number, siteus) VALUES
+(group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES
 (1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 1, 0),
 (2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0),
 (3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 2, 0)";

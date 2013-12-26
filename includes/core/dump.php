@@ -159,7 +159,7 @@ function nv_dump_save( $params )
 	$template = explode( '@@@', file_get_contents( $path_dump ) );
 
 	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/" );
-	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->sql_version(), PHP_VERSION, $db->dbname );
+	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->getAttribute( PDO::ATTR_SERVER_VERSION ), PHP_VERSION, $db->dbname );
 
 	if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[0] ) ) )
 	{

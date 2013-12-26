@@ -40,10 +40,10 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
-	mid int(11) NOT NULL AUTO_INCREMENT,
+	mid mediumint(8) NOT NULL AUTO_INCREMENT,
 	module varchar(55) NOT NULL,
 	lang_key varchar(50) NOT NULL DEFAULT '',
-	weight int(11) NOT NULL DEFAULT '0',
+	weight mediumint(8) NOT NULL DEFAULT '0',
 	act_1 tinyint(4) NOT NULL DEFAULT '0',
 	act_2 tinyint(4) NOT NULL DEFAULT '1',
 	act_3 tinyint(4) NOT NULL DEFAULT '1',
@@ -54,7 +54,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 	config varchar(100) NOT NULL,
-	content mediumtext NOT NULL,
+	content text NOT NULL,
 	edit_time int(11) unsigned NOT NULL DEFAULT '0',
 	 PRIMARY KEY (config)
 ) ENGINE=MyISAM";
@@ -188,11 +188,11 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	content mediumtext NOT NULL,
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,
-	public tinyint(1) unsigned NOT NULL DEFAULT '0',
+	publics tinyint(1) unsigned NOT NULL DEFAULT '0',
 	weight int(11) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL,
 	idsite int(11) unsigned NOT NULL DEFAULT '0',
-	number mediumint(9) unsigned NOT NULL DEFAULT '0',
+	numbers mediumint(9) unsigned NOT NULL DEFAULT '0',
 	siteus tinyint(4) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (group_id),
 	UNIQUE KEY ktitle (title,idsite),
@@ -225,7 +225,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	session_id varchar(50) DEFAULT NULL,
-	uid mediumint(8) unsigned NOT NULL DEFAULT '0',
+	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	full_name varchar(100) NOT NULL,
 	onl_time int(11) unsigned NOT NULL DEFAULT '0',
 	UNIQUE KEY session_id (session_id),
@@ -398,7 +398,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	src varchar(255) NOT NULL DEFAULT '',
 	srcwidth int(11) NOT NULL DEFAULT '0',
 	srcheight int(11) NOT NULL DEFAULT '0',
-	size varchar(50) NOT NULL DEFAULT '',
+	sizes varchar(50) NOT NULL DEFAULT '',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	mtime int(11) NOT NULL DEFAULT '0',
 	did int(11) NOT NULL DEFAULT '0',
