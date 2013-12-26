@@ -175,8 +175,15 @@ $ctsh['max'] = $max;
 $ctsh['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // quoc gia
-$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='country' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='country' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
+$sdr->reset()
+	->select('c_val,c_count, last_update')
+	->from(NV_COUNTER_TABLE)
+	->where("c_type='country' AND c_count!=0")
+	->order( 'c_count DESC' )
+	->limit('10');	
+$result = $db->query( $sdr->get() );
+
 
 $total = 0;
 $countries_list = array();
@@ -202,8 +209,15 @@ $ctsc['max'] = $max;
 $ctsc['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // trinh duyet
-$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='browser' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='browser' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
+$sdr->reset()
+	->select('c_val,c_count, last_update')
+	->from(NV_COUNTER_TABLE)
+	->where("c_type='browser' AND c_count!=0")
+	->order( 'c_count DESC' )
+	->limit('10');	
+$result = $db->query( $sdr->get() );
+
 
 $total = 0;
 $browsers_list = array();
@@ -229,8 +243,14 @@ $ctsb['max'] = $max;
 $ctsb['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // he dieu hanh
-$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='os' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='os' AND c_count!=0 ORDER BY c_count DESC LIMIT 10";
+$sdr->reset()
+	->select('c_val,c_count, last_update')
+	->from(NV_COUNTER_TABLE)
+	->where("c_type='os' AND c_count!=0")
+	->order( 'c_count DESC' )
+	->limit('10');	
+$result = $db->query( $sdr->get() );
 
 $total = 0;
 $os_list = array();

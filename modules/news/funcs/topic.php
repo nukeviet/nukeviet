@@ -65,7 +65,15 @@ if( $topicid > 0 )
 	unset( $query, $row );
 
 	$topic_other_array = array();
-	$query = $db->sql_query( "SELECT id, catid, addtime, edittime, publtime, title, alias, hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND topicid = " . $topicid . " AND publtime < " . $end_publtime . " ORDER BY publtime DESC LIMIT 0," . $st_links . "" );
+	//$query = $db->sql_query( "SELECT id, catid, addtime, edittime, publtime, title, alias, hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND topicid = " . $topicid . " AND publtime < " . $end_publtime . " ORDER BY publtime DESC LIMIT 0," . $st_links . "" );
+	$sdr->reset()
+		->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+		->from(NV_PREFIXLANG . "_" . $module_data . "_rows")
+		->where("status=1 AND topicid = " . $topicid . " AND publtime < " . $end_publtime)
+		->order( 'publtime DESC' )
+		->limit($st_links);	
+	$query = $db->query( $sdr->get() );
+	
 
 	while( $item = $db->sql_fetch_assoc( $query ) )
 	{

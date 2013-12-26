@@ -33,21 +33,31 @@ if( isset( $array_op[1] ) )
 		}
 	}
 }
+$sdr->reset()
+	->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile')
+	->where()
+	->order( 'publtime DESC' )
+	->limit('30');	
+
 if( ! empty( $catid ) )
 {
 	$channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
 	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_cat_url;
 	$channel['description'] = $global_array_cat[$catid]['description'];
 
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " WHERE status=1 ORDER BY publtime DESC LIMIT 30";
+	//$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " WHERE status=1 ORDER BY publtime DESC LIMIT 30";
+	$sdr->from(NV_PREFIXLANG . "_" . $module_data . "_" . $catid)
+		->where('status=1');
 }
 else
 {
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND inhome='1' ORDER BY publtime DESC LIMIT 30";
+	//$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 AND inhome='1' ORDER BY publtime DESC LIMIT 30";
+	$sdr->from(NV_PREFIXLANG . "_" . $module_data . "_rows")
+		->where("status=1 AND inhome='1'");
 }
 if( $module_info['rss'] )
 {
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sdr->get() );
 	while( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 	{
 		//if( ! empty( $catid ) ) $catid_i = $catid;//cai nay tao ra nhieu link cho 1 bài viet, rat khong tot cho seo

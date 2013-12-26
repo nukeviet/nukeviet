@@ -29,8 +29,13 @@ function nv_block_headline()
 	else
 	{
 		$id = 0;
-		$sql = "SELECT bid, title, number FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC LIMIT 0, 2";
-		$result = $db->sql_query( $sql );
+		//$sql = "SELECT bid, title, number FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC LIMIT 0, 2";
+		$sdr->reset()
+			->select('bid, title, number')
+			->from(NV_PREFIXLANG . "_" . $module_data . "_block_cat")			
+			->order( 'weight ASC' )
+			->limit('2');	
+		$result = $db->query( $sdr->get() );
 		while( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
 		{
 			++$id;

@@ -78,17 +78,25 @@ $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
+$sdr->reset()
+	->select( 'COUNT(*) ')
+	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+	->order('ORDER BY publtime DESC');
 if( $listid == '' )
 {
-	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id NOT IN(SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . ") ORDER BY publtime DESC LIMIT 0,20";
+	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id NOT IN(SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . ") ORDER BY publtime DESC LIMIT 0,20";
+
+	$sdr->where( 'bid=" . $bid "' )
+		->limit('20');
 }
 else
 {
 	$id_array = array_map( "intval", explode( ',', $listid ) );
-	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY publtime DESC";
+	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where status=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY publtime DESC";
+	$sdr->where( 'status=1 AND id IN (" . implode( ',', $id_array ) ")' );
 }
 
-$result = $db->sql_query( $sql );
+$result = $db->query( $sdr->get() );
 if( $db->sql_numrows( $result ) )
 {
 	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )

@@ -140,7 +140,15 @@ if( $allowed )
 	$news_contents['publtime'] = nv_date( 'l - d/m/Y H:i', $news_contents['publtime'] );
 
 	$related_new_array = array();
-	$related_new = $db->sql_query( 'SELECT id, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME . ' ORDER BY id ASC LIMIT 0, ' . $st_links );
+	//$related_new = $db->sql_query( 'SELECT id, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME . ' ORDER BY id ASC LIMIT 0, ' . $st_links );
+	$sdr->reset()
+		->select('id, title, alias,publtime')
+		->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
+		->where('status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME)
+		->order( 'id ASC' )
+		->limit($st_links);	
+	$related_new = $db->query( $sdr->get() );
+	
 	while( $row = $db->sql_fetch_assoc( $related_new ) )
 	{
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
@@ -156,7 +164,14 @@ if( $allowed )
 	unset( $related_new, $row );
 
 	$related_array = array();
-	$related = $db->sql_query( 'SELECT id, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME . ' ORDER BY id DESC LIMIT 0, ' . $st_links );
+	//$related = $db->sql_query( 'SELECT id, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME . ' ORDER BY id DESC LIMIT 0, ' . $st_links );
+	$sdr->reset()
+		->select('id, title, alias,publtime')
+		->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
+		->where('status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME)
+		->order( 'id DESC' )
+		->limit($st_links);	
+	$related = $db->query( $sdr->get() );
 	while( $row = $db->sql_fetch_assoc( $related ) )
 	{
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
@@ -174,7 +189,14 @@ if( $allowed )
 	if( $news_contents['topicid'] > 0 )
 	{
 		list( $topic_title, $topic_alias ) = $db->sql_fetchrow( $db->sql_query( 'SELECT title,alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] ) );
-		$topic = $db->sql_query( 'SELECT id, catid, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id . ' ORDER BY id DESC LIMIT 0, ' . $st_links );
+		//$topic = $db->sql_query( 'SELECT id, catid, title, alias,publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id . ' ORDER BY id DESC LIMIT 0, ' . $st_links );
+		$sdr->reset()
+			->select('id, title, alias,publtime')
+			->from(NV_PREFIXLANG . '_' . $module_data . '_' . '_rows')
+			->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
+			->order( 'id DESC' )
+			->limit($st_links);	
+		$topic = $db->query( $sdr->get() );
 		while( $row = $db->sql_fetch_assoc( $topic ) )
 		{
 			$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
@@ -234,7 +256,13 @@ if( $allowed )
 		);
 	}
 
-	list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( 'SELECT username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] . ' LIMIT 0,1' ) );
+	//list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( 'SELECT username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] . ' LIMIT 0,1' ) );
+	$sdr->reset()
+		->select('username, full_name')
+		->from($db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE)
+		->where('userid = ' . $news_contents['admin_id'])
+		->limit('1');	
+	list( $post_username, $post_full_name ) = $db->sql_fetchrow($db->query( $sdr->get() ));
 	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
 
 	$array_keyword = array();

@@ -35,17 +35,26 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	exit();
 }
 
+	$sdr->reset()
+			->select( 'COUNT(*) ')
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->order( 'id DESC' );
 if( $listid == '' )
 {
-	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 ORDER BY id DESC LIMIT 0,20";
+	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 ORDER BY id DESC LIMIT 0,20";
+
+	$sdr->where( 'inhome=1' )
+		->limit($limit);
+
 }
 else
 {
 	$id_array = array_map( "intval", explode( ',', $listid ) );
-	$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY id DESC";
+	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY id DESC";
+	$sdr->where( 'inhome=1 AND id IN (" . implode( ',', $id_array )")' );
 }
 
-$result = $db->sql_query( $sql );
+$result = $db->query( $sdr->get() );
 
 $xtpl = new XTemplate( 'addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

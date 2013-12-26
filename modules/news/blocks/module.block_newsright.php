@@ -23,8 +23,14 @@ $xtpl = new XTemplate( 'block_newsright.tpl', NV_ROOTDIR . '/themes/' . $module_
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 
-$sql = "SELECT id, catid, publtime, exptime, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status= 1 ORDER BY hitstotal DESC LIMIT 0 , 5";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT id, catid, publtime, exptime, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status= 1 ORDER BY hitstotal DESC LIMIT 0 , 5";
+$sdr->reset()
+	->select('id, catid, publtime, exptime, title, alias')
+	->from( NV_PREFIXLANG . "_" . $module_data . "_rows")
+	->where( 'status= 1' )
+	->order( 'hitstotal DESC' )
+	->limit(5);	
+$result = $db->query( $sdr->get() );
 if( $db->sql_numrows( $result ) )
 {
 	$i = 1;
@@ -38,8 +44,15 @@ if( $db->sql_numrows( $result ) )
 	$xtpl->parse( 'main.topviews' );
 }
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE status= 1 ORDER BY cid DESC LIMIT 0 , 5";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE status= 1 ORDER BY cid DESC LIMIT 0 , 5";
+$sdr->reset()
+	->select( '*' )
+	->from( NV_PREFIXLANG . "_" . $module_data . "_comments" )
+	->where( 'status= 1' )
+	->order( 'cid DESC' )
+	->limit( '5' );	
+$result = $db->query( $sdr->get() );
+
 if( $db->sql_numrows( $result ) )
 {
 	$i = 1;
