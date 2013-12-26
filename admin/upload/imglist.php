@@ -108,10 +108,10 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 
 		while( $file = $sth->fetch() )
 		{
-			$file['data'] = $file['size'];
+			$file['data'] = $file['sizes'];
 			if( $file['type'] == 'image' or $file['ext'] == 'swf' )
 			{
-				$file['size'] = str_replace( '|', ' x ', $file['size'] ) . ' pixels';
+				$file['size'] = str_replace( '|', ' x ', $file['sizes'] ) . ' pixels';
 			}
 			else
 			{

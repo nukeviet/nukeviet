@@ -398,7 +398,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	src varchar(255) NOT NULL DEFAULT '',
 	srcwidth int(11) NOT NULL DEFAULT '0',
 	srcheight int(11) NOT NULL DEFAULT '0',
-	size varchar(50) NOT NULL DEFAULT '',
+	sizes varchar(50) NOT NULL DEFAULT '',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	mtime int(11) NOT NULL DEFAULT '0',
 	did int(11) NOT NULL DEFAULT '0',
