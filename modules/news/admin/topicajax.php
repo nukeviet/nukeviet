@@ -12,8 +12,14 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
-$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE title LIKE '%" . $db->dblikeescape( $q ) . "%' OR keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY weight ASC LIMIT 50";
-$result = $db->sql_query( $sql );
+//$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE title LIKE '%" . $db->dblikeescape( $q ) . "%' OR keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY weight ASC LIMIT 50";
+$sdr->reset()
+	->select('title')
+	->from(NV_PREFIXLANG . "_" . $module_data . "_topics")
+	->where( "title LIKE '%" . $db->dblikeescape( $q ) . "%' OR keywords LIKE '%" . $db->dblikeescape( $q ) . "%'"  )
+	->order( 'weight ASC' )
+	->limit('50');	
+$result = $db->query( $sdr->get() );
 
 $array_data = array();
 while( list( $title ) = $db->sql_fetchrow( $result, 1 ) )

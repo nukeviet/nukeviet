@@ -40,10 +40,10 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
-	mid int(11) NOT NULL AUTO_INCREMENT,
+	mid mediumint(8) NOT NULL AUTO_INCREMENT,
 	module varchar(55) NOT NULL,
 	lang_key varchar(50) NOT NULL DEFAULT '',
-	weight int(11) NOT NULL DEFAULT '0',
+	weight mediumint(8) NOT NULL DEFAULT '0',
 	act_1 tinyint(4) NOT NULL DEFAULT '0',
 	act_2 tinyint(4) NOT NULL DEFAULT '1',
 	act_3 tinyint(4) NOT NULL DEFAULT '1',
@@ -54,7 +54,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 	config varchar(100) NOT NULL,
-	content mediumtext NOT NULL,
+	content text NOT NULL,
 	edit_time int(11) unsigned NOT NULL DEFAULT '0',
 	 PRIMARY KEY (config)
 ) ENGINE=MyISAM";

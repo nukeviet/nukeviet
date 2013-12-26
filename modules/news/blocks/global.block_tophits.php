@@ -48,8 +48,14 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
-		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 AND publtime BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY hitstotal DESC LIMIT 0 , " . $block_config['numrow'];
-		$result = $db->sql_query( $sql );
+		//$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 AND publtime BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY hitstotal DESC LIMIT 0 , " . $block_config['numrow'];
+		$sdr->reset()
+			->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile')
+			->from( NV_PREFIXLANG . "_" . $mod_data . "_rows")
+			->where( "status= 1 AND publtime BETWEEN " . $publtime . " AND " . NV_CURRENTTIME )
+			->order( 'hitstotal DESC' )
+			->limit($block_config['numrow']);	
+		$result = $db->query( $sdr->get() );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
 		{
 			if( $homeimgthumb == 1 ) // image thumb

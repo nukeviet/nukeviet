@@ -22,8 +22,15 @@ if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile )
 }
 else
 {
-	$sql = "SELECT id, catid, publtime, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 ORDER BY publtime DESC LIMIT 1000";
-	$result = $db->sql_query( $sql );
+	//$sql = "SELECT id, catid, publtime, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE status=1 ORDER BY publtime DESC LIMIT 1000";
+	$sdr->reset()
+		->select('id, catid, publtime, alias')
+		->from(NV_PREFIXLANG . "_" . $module_data . "_rows")
+		->where('status=1')
+		->order( 'publtime DESC' )
+		->limit('1000');	
+	$result = $db->query( $sdr->get() );
+
 	$url = array();
 
 	while( list( $id, $catid_i, $publtime, $alias ) = $db->sql_fetchrow( $result ) )

@@ -24,7 +24,15 @@ if( $all_page )
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allbots'];
 
 	$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='bot' AND c_count!=0 ORDER BY c_count DESC LIMIT " . $page . "," . $per_page;
+	// $sdr->reset()
+		// ->select('c_val,c_count, last_update')
+		// ->from(NV_COUNTER_TABLE)
+		// ->where("c_type='bot' AND c_count!=0")
+		// ->order( 'c_count DESC' )
+		// ->limit();	
+	// $result = $db->query( $sdr->get() );
 	$result = $db->sql_query( $sql );
+
 
 	$bot_list = array();
 	while( list( $bot, $count, $last_visit ) = $db->sql_fetchrow( $result ) )

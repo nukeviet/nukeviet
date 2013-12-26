@@ -19,17 +19,24 @@ function nv_show_tags_list( $q = '' )
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags";
+	//$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags";
+	$sdr->reset()
+		->select('*')
+		->from(NV_PREFIXLANG . "_" . $module_data . "_tags");
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$sql .= " WHERE keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY alias ASC";
+		//$sql .= " WHERE keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY alias ASC";
+		$sdr->where("keywords LIKE '%" . $db->dblikeescape( $q ) . "%'")
+			->order('alias ASC');
 	}
 	else
 	{
-		$sql .= " ORDER BY alias ASC LIMIT 10";
+		//$sql .= " ORDER BY alias ASC LIMIT 10";
+		$sdr->order('alias ASC')
+			->limit('10');
 	}
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sdr->get() );
 	$num = $db->sql_numrows( $result );
 
 	if( $num > 0 )
