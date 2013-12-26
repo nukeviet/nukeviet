@@ -545,7 +545,7 @@ function nv_show_block_cat_list()
 				$xtpl->assign( 'NUMBER', array(
 					'key' => $i,
 					'title' => $i,
-					'selected' => $i == $row['number'] ? ' selected="selected"' : ''
+					'selected' => $i == $row['numbers'] ? ' selected="selected"' : ''
 				) );
 				$xtpl->parse( 'main.loop.number' );
 			}

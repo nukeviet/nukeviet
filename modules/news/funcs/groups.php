@@ -99,7 +99,7 @@ else
 	$array_cat = array();
 	$key = 0;
 
-	$query_cat = $db->sql_query( "SELECT bid, number, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC" );
+	$query_cat = $db->sql_query( "SELECT bid, numbers, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC" );
 
 	while( list( $bid, $numberlink, $btitle, $balias ) = $db->sql_fetchrow( $query_cat, 1 ) )
 	{

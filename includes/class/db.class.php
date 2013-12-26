@@ -92,36 +92,6 @@ class sql_db extends pdo
 		}
 	}
 
-	public function query( $query )
-	{
-		try
-		{
-			$result = parent::query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}
-	
-	public function exec( $query )
-	{
-		try
-		{
-			$result = parent::exec( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}	
-
 	/**
 	 * sql_db::sql_fetchrow()
 	 *

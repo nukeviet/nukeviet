@@ -674,7 +674,7 @@ function nv_groups_list_pub()
 {
 	global $db, $db_config, $global_config;
 
-	$query = 'SELECT group_id, title, exp_time, public FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+	$query = 'SELECT group_id, title, exp_time, publics FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -687,7 +687,7 @@ function nv_groups_list_pub()
 		{
 			$reload[] = $list[$i]['group_id'];
 		}
-		elseif( $list[$i]['public'] )
+		elseif( $list[$i]['publics'] )
 		{
 			$groups[$list[$i]['group_id']] = $list[$i]['title'];
 		}
