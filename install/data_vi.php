@@ -9,19 +9,6 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_create_table_news( $catid )
-{
-	global $db, $db_config, $lang_data;
-
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$show = $db->query( 'SHOW CREATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows' )->fetchColumn( 1 );
-
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
-	$db->exec( $sql );
-}
-
 $sql_create_table = array();
 $sql_create_table[] = 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules';
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES
@@ -922,7 +909,7 @@ if( $result->rowCount() )
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_topics VALUES
 		(1, 'NukeViet 3', 'NukeViet-3', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)";
 
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, number,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
 		(1, 0, 4,'Tin tiêu điểm', 'Tin-tieu-diem', '', 'Tin tiêu điểm', 1, '', 1279945710, 1279956943),
 		(2, 1, 4, 'Tin mới nhất', 'Tin-moi-nhat', '', 'Tin mới nhất', 2, '', 1279945725, 1279956445)";
 

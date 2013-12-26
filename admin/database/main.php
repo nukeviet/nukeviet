@@ -22,9 +22,11 @@ if( $nv_Request->isset_request( 'tab', 'get' ) and preg_match( '/^(' . $db_confi
 }
 
 $database = array();
-//$database['db_host_info'] = mysql_get_host_info();
-$database['db_sql_version'] = $db->sql_version();
-//$database['db_proto_info'] = mysql_get_proto_info();
+
+$database['db_host_info'] = $db->getAttribute( PDO::ATTR_DRIVER_NAME );
+$database['db_sql_version'] = $db->getAttribute( PDO::ATTR_SERVER_VERSION );
+$database['db_proto_info'] = $db->getAttribute( PDO::ATTR_CLIENT_VERSION );
+
 $database['server'] = $db->server;
 $database['db_dbname'] = $db->dbname;
 $database['db_uname'] = $db->user;

@@ -403,7 +403,7 @@ function nv_filesListRefresh( $pathimg )
 						{
 							//Cập nhật CSDL file thay đổi
 							$sth = $db->prepare( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-								(name, ext, type, filesize, src, srcwidth, srcheight, size, userid, mtime, did, title, alt)
+								(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
 								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)" );
 							$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 							$sth->execute();
@@ -415,7 +415,7 @@ function nv_filesListRefresh( $pathimg )
 						$info['userid'] = $admin_info['userid'];
 						// Thêm file mới
 						$sth = $db->prepare( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-							(name, ext, type, filesize, src, srcwidth, srcheight, size, userid, mtime, did, title, alt)
+							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
 							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)" );
 						$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 						$sth->execute();

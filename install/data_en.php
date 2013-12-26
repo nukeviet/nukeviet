@@ -8,20 +8,6 @@
  */
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_create_table_news( $catid )
-{
-	global $db, $db_config, $lang_data;
-
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
-	$show = $db->query( 'SHOW CREATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows' )->fetchColumn( 1 );
-
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . '_' . $lang_data . '_news_rows', $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid, $sql );
-
-	$db->exec( $sql );
-}
-
 $sql_create_table = array();
 
 $sql_create_table[] = 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules';
@@ -804,7 +790,7 @@ $disable_site_content = "For technical reasons Web site temporary not available.
 
 $copyright = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
 
-$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->query( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'";
+$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'";
 
 $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Delete expired online status';
@@ -867,7 +853,7 @@ if( $result->rowCount() )
 		(4, ' The Hanoi-based company will further develop and popularise an open source content management system best known as NukeViet in the country. VINADES Chairman Nguyen Anh Tu said NukeViet is totally free and users can download the product at www.nukeviet.vn. NukeViet has been widely used across the country over the past five years. The system, built on PHP-Nuke and MySQL database, enables users to easily post and manage files on the Internet or Intranet.'),
 		(5, ' NukeViet also testing by many experienced webmasters to optimize system features. NukeViet&#039;s core team are programming enthusiasts. All of them want to make NukeViet become the best and most popular open source CMS. NukeViet 3.0 is a powerful system: Learn by experiences f-rom NukeViet 2.0, NukeViet 3.0 build ground up on latest web technologies, allow you easily cre-ate portal, online news express, social network, e commerce system. NukeViet 3.0 can process huge amount of data. It was used by many companies, corporation&#039;s website with millions of news entries with high traffic. NukeViet 3.0 is easy to use system: NukeViet allow you easily to customize and instantly use without any line of code. As developers, NukeViet help you build your own modules rapidly. NukeViet 3.0 features: Technology bases: NukeViet 3.0 using PHP 5 and MySQL 5 as main programming languages. XTemplate and jQuery for use Ajax f-rom system core. NukeViet 3.0 is fully validated with xHTML 1.0, CSS 2.1 and compatible with all major browsers. NukeViet 3.0 layout website using grid CSS framework like BluePrintCSS for design templates rapidly. NukeViet 3.0 has it own core libraries and it is platform independent. You can build your own modules with basic knowledge of PHP and MySQL. Module structure: NukeViet 3.0 re-construct module structure. All module files packed into a particular folder. It&#039;s also define module block and module theme for layout modules in many ways. NukeViet 3.0 support modules can be multiply. We called it abstract modules. It help users automatic cre-ate many modules without any line of code f-rom any exists module which support cre-ate abstract modules. NukeViet 3.0 support automatic setup modules, blocks, themes f-rom Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets. NukeViet allow grant, deny access or even re-install, de-lete module. Multi language: NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database languages. It had features support administrators to build new languages. In NukeViet 3, admin language, user language, interface language, database language are separate for easily build multi languages systems. Right: All manage features only access in admin area. NukeViet 3.0 allow grant access by module and language. It also allow cre-ate user groups and grant access modules by group. Themes: NukeViet 3.0 support automatic install and uninstall themes. You can easily customize themes in module and module&#039;s functions. NukeViet store HTML, CSS code separately f-rom PHP code to help designers rapidly layout website. Customize website using blocks A block can be a widget, advertisement pictures or any defined data. You can place block in many positions visually by drag and d-rop or argument it in Admin Control Panel. Securities: NukeViet using security filters to filter data upload. Logging and control access f-rom many search engine as Google, Yahoo or any search engine. Anti spam using Captcha, anti flood data... NukeViet 3.0 has logging systems to log and track information about client to prevent attack. NukeViet 3.0 support automatic up-date to fix security issues or upgrade your website to latest version of NukeViet. Database: You can backup database and download backup files to restore database to any point you restored your database. Control errors report You can configure to display each type of error only one time. System then sent log files about this error to administrator via email. SEO: Support SEO link Manage and customize website title Manage meta tag Support keywords for cre-ate statistic via search engine Prepared for integrate with third party application NukeViet 3.0 has it own user database and many built-in methods to connect with many forum application. PHPBB or VBB can integrate and use with NukeViet 3.0 by single click. Distributed login NukeViet support login by OpenID. Users can login to your website by accounts f-rom popular and well-known provider, such as Google, Yahoo or other OpenID providers. It help your website more accessible and reduce user&#039;s time to filling out registration forms. Download NukeViet 3.0: http://code.google.com/p/nuke-viet/downloads/list http://code.google.com/p/nuke-viet/downloads/list Website: http://nukeviet.vn/ http://nukeviet.vn')";
 
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, number, title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat (bid, adddefault, numbers, title, alias, image, description, weight, keywords, add_time, edit_time) VALUES
 		(1, 0, 4,'Hot News', 'Hot-News', '', '', 1, '', 1279963759, 1279963759),
 		(2, 1, 4, 'Top News', 'Top-News', '', '', 2, '', 1279963766, 1279963766)";
 

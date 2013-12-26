@@ -92,62 +92,6 @@ class sql_db extends pdo
 		}
 	}
 
-	public function query( $query )
-	{
-		try
-		{
-			$result = parent::query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}
-	
-	public function exec( $query )
-	{
-		try
-		{
-			$result = parent::exec( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}	
-
-	/**
-	 * sql_db::sql_version()
-	 *
-	 * @return
-	 */
-	public function sql_version()
-	{
-		try
-		{
-			if ( $this->dbtype = 'mysql' )
-			{
-				$rs = parent::query( 'SELECT VERSION()' );
-				return $rs->fetchColumn( );
-			}
-			elseif ( $this->dbtype = 'oci' )
-			{
-				$rs = parent::query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
-				return $rs->fetchColumn( );
-			}
-		}
-		catch( PDOException $e )
-		{
-			return false;
-		}
-	}
-
 	/**
 	 * sql_db::sql_fetchrow()
 	 *
@@ -366,6 +310,208 @@ class sql_db extends pdo
 			$value = addcslashes( $value, '_%' );
 		}
 		return $value;
+	}
+
+}
+
+class sqldriver
+{
+	private $_select = '';
+	private $_from = '';
+	private $_join = '';
+	private $_where = '';
+	private $_group = '';
+	private $_having = '';
+	private $_order = '';
+	private $_limit = 0;
+	private $_offset = 0;
+	private $_dbtype = '';
+
+	public function __construct( $config )
+	{
+		//$this->classname = get_class( $this );
+		$this->reset( );
+		$this->_dbtype = $config['dbtype'];
+	}
+
+	/**
+	 * reset query.
+	 *
+	 * @return sqldriver $this
+	 */
+	public function reset( )
+	{
+		$this->_select = '';
+		$this->_from = '';
+		$this->_join = '';
+		$this->_where = '';
+		$this->_group = '';
+		$this->_having = '';
+		$this->_order = '';
+		$this->_limit = 0;
+		$this->_offset = 0;
+
+		return $this;
+	}
+
+	/**
+	 * select for the query.
+	 *
+	 * @param string $select
+	 * @return sqldriver $this
+	 */
+	public function select( $select = '' )
+	{
+		$this->_select = $select;
+
+		return $this;
+	}
+
+	/**
+	 * from for the query.
+	 *
+	 * @param string $from
+	 * @return sqldriver $this
+	 */
+	public function from( $from = '' )
+	{
+		$this->_from = $from;
+
+		return $this;
+	}
+	
+	/**
+	 * join for the query.
+	 *
+	 * @param string join_table_on
+	 * @return sqldriver $this
+	 */
+	public function join( $join_table_on )
+	{
+		$this->_join = $join_table_on;
+
+		return $this;
+	}	
+
+	/**
+	 * where for the query.
+	 *
+	 * @param string $where
+	 * @return sqldriver $this
+	 */
+	public function where( $where = '' )
+	{
+		$this->_where = $where;
+
+		return $this;
+	}
+
+	/**
+	 * group for the query.
+	 *
+	 * @param string $group
+	 * @return sqldriver $this
+	 */
+	public function group( $group = '' )
+	{
+		$this->_group = $group;
+
+		return $this;
+	}
+
+	/**
+	 * having for the query.
+	 *
+	 * @param string $having
+	 * @return sqldriver $this
+	 */
+	public function having( $having = '' )
+	{
+		$this->_having = $having;
+
+		return $this;
+	}
+
+	/**
+	 * order for the query.
+	 *
+	 * @param string $order
+	 * @return sqldriver $this
+	 */
+	public function order( $order = '' )
+	{
+		$this->_order = $order;
+
+		return $this;
+	}
+
+	/**
+	 * sets the limit (and offset optionally) for the query.
+	 *
+	 * @param int $limit
+	 * @param int $offset
+	 * @return sqldriver $this
+	 */
+	public function limit( $limit, $offset = false )
+	{
+		$this->_limit = (int)$limit;
+		$this->_offset = (int)$offset;
+
+		return $this;
+	}
+
+	public function get( )
+	{
+		$return = 'SELECT ' . $this->_select;
+		if( $this->_dbtype == 'oci' AND $this->_offset !== false )
+		{
+			$return .= ', ROWNUM oci_rownum, count(*) over () found_rows ';
+		}
+		$return .= ' FROM ' . $this->_from;
+		
+		if( $this->_join )
+		{
+			$return .= ' ' . $this->_join;
+		}
+
+		if( $this->_where )
+		{
+			$return .= ' WHERE ' . $this->_where;
+			if( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+			{
+				$return .= ' AND ROWNUM <= ' . ($this->_limit + $this->_offset);
+			}
+		}
+		elseif( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+		{
+			$return .= ' WHERE ROWNUM <= ' . ($this->_limit + $this->_offset);
+		}
+		if( $this->_group )
+		{
+			$return .= ' GROUP BY ' . $this->_group;
+		}
+		if( $this->_having )
+		{
+			$return .= ' HAVING BY ' . $this->_having;
+		}
+		if( $this->_order )
+		{
+			$return .= ' ORDER BY ' . $this->_order;
+		}
+
+		if( $this->_dbtype == 'mysql' )
+		{
+			if( $this->_limit )
+			{
+				$return .= ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
+			}
+		}
+		elseif( $this->_dbtype == 'oci' AND $this->_offset > 0 )
+		{
+			$return = 'SELECT ' . $this->_select . ' FROM (' . $return . ') WHERE oci_rownum >= ' . ($this->_offset + 1);
+		}
+
+		return $return;
 	}
 
 }

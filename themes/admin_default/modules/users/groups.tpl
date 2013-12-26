@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.public}:</td>
-					<td><input title="{LANG.public}" type="checkbox" name="public" value="1"{DATA.public} /></td>
+					<td><input title="{LANG.publics}" type="checkbox" name="publics" value="1"{DATA.publics} /></td>
 				</tr>
 				<!-- BEGIN: siteus -->
 				<tr>

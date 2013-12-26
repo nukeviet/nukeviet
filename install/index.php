@@ -334,7 +334,7 @@ elseif( $step == 4 )
 	$title = $lang_module['check_server'];
 
 	$array_resquest = array();
-	$array_resquest_key = array( 'php_support', 'mysql_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
+	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 
 	foreach( $array_resquest_key as $key )
 	{
@@ -343,6 +343,21 @@ elseif( $step == 4 )
 		if( ! $sys_info[$key] )
 		{
 			$nextstep = 0;
+		}
+	}
+	
+	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
+	
+	if ( class_exists( 'PDO' ) ) 
+	{
+		$PDODrivers = PDO::getAvailableDrivers();
+		foreach ($PDODrivers as $_driver)
+		{
+			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
+			{
+				$array_resquest['pdo_support'] = $lang_module['compatible'];
+				break;
+			}
 		}
 	}
 
@@ -372,6 +387,7 @@ elseif( $step == 5 )
 	$nextstep = 0;
 	$db_config['dbport'] = '';
 	$db_config['error'] = '';
+	$db_config['dbtype'] = $nv_Request->get_string( 'dbtype', 'post', $db_config['dbtype'] );
 	$db_config['dbhost'] = $nv_Request->get_string( 'dbhost', 'post', $db_config['dbhost'] );
 	$db_config['dbname'] = $nv_Request->get_string( 'dbname', 'post', $db_config['dbname'] );
 	$db_config['dbuname'] = $nv_Request->get_string( 'dbuname', 'post', $db_config['dbuname'] );
@@ -380,8 +396,10 @@ elseif( $step == 5 )
 	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
 	$db_config['num_table'] = 0;
 	$db_config['create_db'] = 1;
+	
+	$PDODrivers = PDO::getAvailableDrivers();
 
-	if( ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	if( in_array($db_config['dbtype'], $PDODrivers) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
 		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbuname'] ) );
 
@@ -431,8 +449,17 @@ elseif( $step == 5 )
 				nv_save_file_config();
 				$db_config['error'] = '';
 				$sql_create_table = array();
+				
+				define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
+				define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
+				define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
+				define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
+				define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
+				define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+				define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );				
 
 				//cai dat du lieu cho he thong
+				require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
 				require_once NV_ROOTDIR . '/install/data.php';
 
 				foreach( $sql_create_table as $query )
@@ -465,14 +492,12 @@ elseif( $step == 5 )
 					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
 
 					$module_name = '';
-
-					require_once NV_ROOTDIR . '/includes/sqldata.php';
-
 					$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
 					//cai dat du lieu cho ngon ngu
+					require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
+										
 					$sql_create_table = nv_create_table_sys( NV_LANG_DATA );
-
 					foreach( $sql_create_table as $query )
 					{
 						try
@@ -574,7 +599,7 @@ elseif( $step == 5 )
 							$result = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_cat ORDER BY sort ASC" );
 							while( list( $catid_i ) = $result->fetch( 3 ) )
 							{
-								nv_create_table_news( $catid_i );
+								nv_create_table_news( $lang_data, 'news', $catid_i );
 							}
 	
 							$result = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_rows ORDER BY id ASC" );
