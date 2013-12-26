@@ -123,32 +123,6 @@ class sql_db extends pdo
 	}	
 
 	/**
-	 * sql_db::sql_version()
-	 *
-	 * @return
-	 */
-	public function sql_version()
-	{
-		try
-		{
-			if ( $this->dbtype = 'mysql' )
-			{
-				$rs = parent::query( 'SELECT VERSION()' );
-				return $rs->fetchColumn( );
-			}
-			elseif ( $this->dbtype = 'oci' )
-			{
-				$rs = parent::query( "select value from nls_database_parameters where parameter = 'NLS_RDBMS_VERSION'" );
-				return $rs->fetchColumn( );
-			}
-		}
-		catch( PDOException $e )
-		{
-			return false;
-		}
-	}
-
-	/**
 	 * sql_db::sql_fetchrow()
 	 *
 	 * @param object $query_id
