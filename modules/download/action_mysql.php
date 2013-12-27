@@ -94,7 +94,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  weight smallint(4) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
- UNIQUE KEY alias (alias) 
+ UNIQUE KEY alias (alias)
 )ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments (
@@ -106,7 +106,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  post_email varchar(60) NOT NULL,
  post_ip varchar(45) NOT NULL,
  post_time int(11) unsigned NOT NULL DEFAULT '0',
- comment mediumtext NOT NULL,
+ comment text NOT NULL,
  admin_reply varchar(255) NOT NULL,
  admin_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',

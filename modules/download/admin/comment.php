@@ -15,7 +15,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$id = $nv_Request->get_int( 'id', 'get', 0 );
 
 	$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE id=' . $id;
-	$row = $db->query( $result )->fetch();
+	$row = $db->query( $query )->fetch();
 	if( empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=1' );
@@ -53,13 +53,12 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$array['admin_id'] = $admin_info['admin_id'];
 			}
 
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET
-				subject=' . $db->dbescape( $array['subject'] ) . ',
-				comment=' . $db->dbescape( $array['comment'] ) . ',
-				admin_reply=' . $db->dbescape( $array['admin_reply'] ) . ',
-				admin_id=' . $array['admin_id'] . '
-				WHERE id=' . $id;
-			if( $db->exec( $sql ) )
+			$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET subject = :subject, content = :content, admin_reply = :admin_reply, admin_id=' . $array['admin_id'] . ' WHERE id=' . $id );
+			$sth->bindParam( ':subject', $array['subject'] );
+			$sth->bindParam( ':content', $array['comment'] );
+			$sth->bindParam( ':admin_reply', $array['admin_reply'] );
+			$sth->bindParam( ':subject', $array['subject'] );
+			if( $sth->execute() )
 			{
 				nv_del_moduleCache( $module_name );
 
@@ -76,7 +75,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	else
 	{
 		$array['subject'] = $row['subject'];
-		$array['comment'] = nv_br2nl( $row['comment'] );
+		$array['comment'] = nv_br2nl( $row['content'] );
 		$array['admin_reply'] = $row['admin_reply'];
 		$array['admin_id'] = ( int )$row['admin_id'];
 	}
@@ -171,8 +170,8 @@ $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_n
 
 $sdr->reset()
 	->select( 'COUNT(*)' )
-	->from( NV_PREFIXLANG . '_' . $module_data . '_comments a')
-	->join( NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid=b.id');
+	->from( NV_PREFIXLANG . '_' . $module_data . '_comments a' )
+	->join( ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid=b.id' );
 
 if( $nv_Request->isset_request( 'fid', 'get' ) )
 {
@@ -253,12 +252,13 @@ $per_page = 10;
 
 $array = array();
 
-$sdr->select( 'a.id, a.fid, a.subject, a.post_id, a.post_name, a.post_email, a.post_ip, a.post_time, a.comment, a.admin_reply, a.admin_id, a.status, b.title' )
-	->order( 'ORDER BY a.post_time DESC' )
-	->limit($per_page, $page);
+$sdr->select( 'a.id, a.fid, a.subject, a.post_id, a.post_name, a.post_email, a.post_ip, a.post_time, a.content, a.admin_reply, a.admin_id, a.status, b.title' )
+	->order( 'a.post_time DESC' )
+	->limit( $per_page, $page );
 
 $query2 = $db->query( $sdr->get() );
-while( $row = $query2->fetch(  ) )
+
+while( $row = $query2->fetch() )
 {
 	$post_name = $row['post_id'] ? "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $row['post_id'] . "\">" . $row['post_name'] . "</a>" : $row['post_id'];
 	$file = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . $row['fid'] . "\">" . $row['title'] . "</a>";
@@ -306,7 +306,7 @@ while( $row = $query2->fetch(  ) )
 		'post_email' => '<a href="mailto:' . $row['post_email'] . '">' . $row['post_email'] . '</a>',
 		'post_ip' => $row['post_ip'],
 		'post_time' => nv_date( 'd/m/Y H:i', $row['post_time'] ),
-		'comment' => $row['comment'],
+		'comment' => $row['content'],
 		'admin_reply' => $row['admin_reply'],
 		'admin_id' => $admin_id,
 		'st' => $st,
