@@ -16,15 +16,14 @@ $listid = $nv_Request->get_string( 'listid', 'get,post', '' );
 
 if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', "listid " . $listid, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . $listid, $admin_info['userid'] );
 
 	$topicsid = $nv_Request->get_int( 'topicsid', 'post' );
 	$listid = explode( ',', $listid );
 
-	foreach( $listid as $value )
+	foreach( $listid as $_id )
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET topicid='$topicsid' WHERE id='$value'";
-		$result = $db->sql_query( $sql );
+		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . inval( $_id ) );
 	}
 
 	nv_del_moduleCache( $module_name );
@@ -35,23 +34,18 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	exit();
 }
 
-	$sdr->reset()
-			->select( 'COUNT(*) ')
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
-			->order( 'id DESC' );
+$sdr->reset()
+	->select( 'id, title')
+	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+	->order( 'id DESC' );
 if( $listid == '' )
 {
-	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 ORDER BY id DESC LIMIT 0,20";
-
-	$sdr->where( 'inhome=1' )
-		->limit($limit);
-
+	$sdr->where( 'inhome=1' )->limit( 20 );
 }
 else
 {
-	$id_array = array_map( "intval", explode( ',', $listid ) );
-	//$sql = "SELECT id, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where inhome=1 AND id IN (" . implode( ',', $id_array ) . ") ORDER BY id DESC";
-	$sdr->where( 'inhome=1 AND id IN (" . implode( ',', $id_array )")' );
+	$id_array = array_map( 'intval', explode( ',', $listid ) );
+	$sdr->where( 'inhome=1 AND id IN (' . implode( ',', $id_array ) . ')' );
 }
 
 $result = $db->query( $sdr->get() );
@@ -67,13 +61,13 @@ if( $db->sql_numrows( $result ) )
 		$xtpl->assign( 'ROW', array(
 			'id' => $id,
 			'title' => $title,
-			'checked' => in_array( $id, $id_array ) ? " checked=\"checked\"" : ""
+			'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : ''
 		) );
 
 		$xtpl->parse( 'main.loop' );
 	}
 
-	$result = $db->sql_query( "SELECT topicid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics ORDER BY weight ASC" );
+	$result = $db->sql_query( 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
 	while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$xtpl->assign( 'TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ) );

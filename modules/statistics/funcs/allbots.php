@@ -13,31 +13,29 @@ $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['bot'];
 
-$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='bot' AND c_count!=0";
-$result = $db->sql_query( $sql );
-list( $all_page, $max ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_TABLE . ' WHERE c_type='bot' AND c_count!=0" );
+list( $all_page, $max ) = $result->fetch( 3 );
 
 if( $all_page )
 {
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 50;
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allbots'];
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbots'];
 
-	$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='bot' AND c_count!=0 ORDER BY c_count DESC LIMIT " . $page . "," . $per_page;
-	// $sdr->reset()
-		// ->select('c_val,c_count, last_update')
-		// ->from(NV_COUNTER_TABLE)
-		// ->where("c_type='bot' AND c_count!=0")
-		// ->order( 'c_count DESC' )
-		// ->limit();	
-	// $result = $db->query( $sdr->get() );
-	$result = $db->sql_query( $sql );
+	$sdr->reset()
+		->select( 'c_val,c_count, last_update' )
+		->from( NV_COUNTER_TABLE )
+		->where( "c_type='bot' AND c_count!=0" )
+		->order( 'c_count DESC' )
+		->limit( $per_page, $page );
+
+	 $result = $db->query( $sdr->get() );
 
 
 	$bot_list = array();
-	while( list( $bot, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
+	while( list( $bot, $count, $last_visit ) = $result->fetch( 3 ) )
 	{
-		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
+		$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
 		$bot_list[$bot] = array( $count, $last_visit );
 	}
 
@@ -55,7 +53,7 @@ if( $all_page )
 	}
 }
 
-$contents = call_user_func( "allbots" );
+$contents = allbots();
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
