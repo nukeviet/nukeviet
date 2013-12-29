@@ -199,7 +199,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$number_func = $result->rowCount();
 
 	$i = 1;
-	while( list( $mod_name, $mod_name_title ) = $db->fetch( 3 ) )
+	while( list( $mod_name, $mod_name_title ) = $result->fetch( 3 ) )
 	{
 		if( isset( $array_layout_func[$mod_name] ) )
 		{

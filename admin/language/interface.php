@@ -9,6 +9,11 @@
 
 if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
+$dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
+$dirlang = $nv_Request->get_string( 'dirlang', 'get', $dirlang_old );
+
+$page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
+
 $xtpl = new XTemplate( 'interface.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -25,30 +30,7 @@ while( $row = $result->fetch() )
 	}
 }
 
-$select_options = array();
-
-foreach( $array_lang_exit as $langkey )
-{
-	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
-}
-
-$dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
-$dirlang = $nv_Request->get_string( 'dirlang', 'get', $dirlang_old );
-
-if( ! in_array( $dirlang, $array_lang_exit ) )
-{
-	$dirlang = $global_config['site_lang'];
-}
-
-if( $dirlang_old != $dirlang )
-{
-	$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
-}
-
-$sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
-$result = $db->query( $sql );
-
-if( empty( $result->rowCount() ) )
+if( empty( $array_lang_exit ) )
 {
 	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
 
@@ -61,9 +43,26 @@ if( empty( $result->rowCount() ) )
 	exit();
 }
 
-$page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
+$select_options = array();
+foreach( $array_lang_exit as $langkey )
+{
+	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
+}
+
+if( ! in_array( $dirlang, $array_lang_exit ) )
+{
+	$dirlang = $global_config['site_lang'];
+}
+
+if( $dirlang_old != $dirlang )
+{
+	$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
+}
 
 $a = 0;
+
+$sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
+$result = $db->query( $sql );
 while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $result->fetch( 3 ) )
 {
 	switch( $admin_file )

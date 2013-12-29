@@ -12,9 +12,8 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 $topicalias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
 $page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-' ) ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-
 $sth = $db->prepare( 'SELECT topicid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias' );
-$sth->bindParam( ':title', $topicalias, PDO::PARAM_STR );
+$sth->bindParam( ':alias', $topicalias, PDO::PARAM_STR );
 $sth->execute();
 
 list( $topicid, $page_title, $topic_image, $description, $key_words ) = $sth->fetch( 3 );

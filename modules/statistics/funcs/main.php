@@ -22,12 +22,10 @@ $current_number_of_days = date( 't', NV_CURRENTTIME );
 $current_dayofweek = date( 'l', NV_CURRENTTIME );
 
 //Thong ke theo nam
-$result = $db->sql_query( "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='year' ORDER BY c_val" );
-
 $max = 0;
 $total = 0;
 $year_list = array();
-
+$result = $db->query( "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='year' ORDER BY c_val" );
 while( list( $year, $count ) = $result->fetch( 3 ) )
 {
 	$year_list[$year] = $count;
@@ -126,12 +124,12 @@ $dayofweek_list['Saturday'] = array( 'fullname' => $lang_global['saturday'], 'co
 $dayofweek_list2 = "'" . implode( "','", array_keys( $dayofweek_list ) ) . "'";
 
 $sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='dayofweek' AND c_val IN (" . $dayofweek_list2 . ")";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $max = 0;
 $total = 0;
 
-while( list( $dayofweek, $count ) = $db->sql_fetchrow( $result ) )
+while( list( $dayofweek, $count ) = $result->fetch( 3 ) )
 {
 	$dayofweek_list[$dayofweek]['count'] = $count;
 	if( $count > $max )
@@ -156,7 +154,7 @@ $hour_list = array();
 
 $sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='hour' ORDER BY c_val";
 $result = $db->query( $sql );
-while( list( $hour, $count ) = $result->sql_fetchrow( 3 ) )
+while( list( $hour, $count ) = $result->fetch( 3 ) )
 {
 	$hour_list[$hour] = $count;
 	if( $count > $max )

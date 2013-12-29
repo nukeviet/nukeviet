@@ -150,7 +150,7 @@ function nv_save_file_config_global()
 	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
 
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
-	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . $upload_max_filesize . ");\n";
+	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . intval( $upload_max_filesize ) . ");\n";
 
 	if( $config_variable['openid_mode'] )
 	{

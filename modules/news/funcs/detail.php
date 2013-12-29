@@ -157,7 +157,7 @@ if( $allowed )
 			'link' => $link
 		);
 	}
-	$related_new->closeCursor(  );
+	$related->closeCursor(  );
 
 	sort( $related_new_array, SORT_NUMERIC );
 
@@ -193,7 +193,7 @@ if( $allowed )
 
 		$sdr->reset()
 			->select( 'id, catid, title, alias, publtime' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_' . '_rows' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );

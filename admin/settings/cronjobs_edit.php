@@ -12,9 +12,9 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 $sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
-$row = $db->query( $result )->fetch();
+$row = $db->query( $sql )->fetch();
 
-if( ! empty( $row ) )
+if( empty( $row ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
 	die();
@@ -77,7 +77,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 
 			$sth = $db->prepare( 'UPDATE ' . NV_CRONJOBS_GLOBALTABLE . ' SET
-				start_time=' . $start_time . ', interval=' . $interval . ', run_file= :run_file,
+				start_time=' . $start_time . ', inter_val=' . $interval . ', run_file= :run_file,
 				run_func= :run_func, params= :params, del=' . $del . ',
 				' . NV_LANG_INTERFACE . '_cron_name= :cron_name
 				WHERE id=' . $id );
@@ -99,7 +99,7 @@ else
 	$run_file = $row['run_file'];
 	$run_func = $row['run_func'];
 	$params = ! empty( $row['params'] ) ? implode( ', ', explode( ',', $row['params'] ) ) : '';
-	$interval = intval( $row['interval'] );
+	$interval = intval( $row['inter_val'] );
 	$del = intval( $row['del'] );
 	$start_time = $row['start_time'];
 	list( $min, $hour ) = array_map( 'trim', explode( ',', date( 'i,G', $row['start_time'] ) ) );

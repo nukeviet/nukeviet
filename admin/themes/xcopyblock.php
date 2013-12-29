@@ -29,7 +29,7 @@ $xtpl->assign( 'OP', $op );
 $theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
 
 $result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
-while( list( $theme ) = $db->fetch( 3 ) )
+while( list( $theme ) = $result->fetch( 3 ) )
 {
 	if( in_array( $theme, $theme_list ) )
 	{

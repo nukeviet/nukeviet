@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  */
 function nv_show_tags_list( $q = '' )
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
+	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $sdr;
 
 	$sdr->reset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
 
@@ -63,7 +63,7 @@ function nv_show_tags_list( $q = '' )
 	{
 		$contents = '&nbsp;';
 	}
-	$db->sql_freeresult( $result );
+	$sth->closeCursor();
 
 	return $contents;
 }

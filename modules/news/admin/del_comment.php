@@ -13,20 +13,14 @@ $listcid = $nv_Request->get_string( 'list', 'post,get' );
 
 if( ! empty( $listcid ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_comment', "listcid " . $listcid, $admin_info['userid'] );
 	$cid_array = explode( ',', $listcid );
-	$cid_array = array_map( "intval", $cid_array );
-	foreach( $cid_array as $cid )
-	{
-		$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid='" . $cid . "'";
-		$result = $db->sql_query( $sql );
-	}
+	$cid_array = array_map( 'intval', $cid_array );
 
 	// Xac dinh ID cac bai viet
-	$sql = "SELECT DISTINCT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid in (" . implode( ',', $cid_array ) . ")";
-	$query = $db->sql_query( $sql );
+	$sql = 'SELECT DISTINCT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid in (' . implode( ',', $cid_array ) . ')';
+	$query = $db->query( $sql );
 	$array_id = array();
-	while( list( $id ) = $db->sql_fetchrow( $query ) )
+	while( list( $id ) = $query->fetch( 3 ) )
 	{
 		$array_id[] = $id;
 	}
@@ -34,26 +28,34 @@ if( ! empty( $listcid ) )
 
 	// Xac dinh cac chu de bai viet
 	$array_listcatid = array();
-	$query = $db->sql_query( "SELECT id, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id in (" . implode( ',', $array_id ) . ")" );
-	while( list( $id, $listcatid ) = $db->sql_fetchrow( $query ) )
+	$query = $db->query( 'SELECT id, listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode( ',', $array_id ) . ')' );
+	while( list( $id, $listcatid ) = $query->fetch( 3 ) )
 	{
 		$array_listcatid[$id] = explode( ',', $listcatid );
 	}
 
+	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid IN (' . implode( ',', $cid_array ) . ')' );
+
 	foreach( $array_id as $id )
 	{
-		list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments where id= '" . $id . "' AND status=1" ) );
-		$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
-		$db->sql_query( $query );
+		$numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments where id= ' . $id . ' AND status=1' )->fetchColumn();
+		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id );
+
 		$array_catid = $array_listcatid[$id];
 		foreach( $array_catid as $catid_i )
 		{
-			$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET hitscm=" . $numf . " WHERE id=" . $id;
-			$db->sql_query( $query );
+			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id );
 		}
 	}
 
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_comment', 'listcid ' . $listcid, $admin_info['userid'] );
+
 	echo $lang_module['comment_delete_success'];
+}
+else
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment' );
+	die();
 }
 
 ?>

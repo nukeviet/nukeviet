@@ -13,7 +13,7 @@ $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['bot'];
 
-$result = $db->query( "SELECT COUNT(*), MAX(c_count) FROM ' . NV_COUNTER_TABLE . ' WHERE c_type='bot' AND c_count!=0" );
+$result = $db->query( "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='bot' AND c_count!=0" );
 list( $all_page, $max ) = $result->fetch( 3 );
 
 if( $all_page )
