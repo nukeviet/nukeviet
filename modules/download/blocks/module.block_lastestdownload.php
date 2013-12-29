@@ -8,16 +8,23 @@
  */
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
-global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $module_file;
+
+global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $module_file, $sdr;
 
 $xtpl = new XTemplate( 'block_lastestdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$query = "SELECT catid, title, alias, uploadtime FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1 ORDER BY uploadtime DESC LIMIT 5";
-$result = $db->sql_query( $query );
-while( $row = $db->sql_fetchrow( $result ) )
+
+$sdr->reset()
+	->select( 'catid, title, alias, uploadtime' )
+	->from( NV_PREFIXLANG . '_' . $module_data )
+	->where( 'status=1' )
+	->order( 'uploadtime DESC' )
+	->limit( 5 );
+$result = $db->query( $sdr->get() );
+while( $row = $result->fetch() )
 {
 	$catalias = $list_cats[$row['catid']]['alias'];
-	$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $row['alias'];
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $row['alias'];
 	$row['updatetime'] = date( 'd/m/Y h:i', $row['uploadtime'] );
 	$xtpl->assign( 'loop', $row );
 	$xtpl->parse( 'main.loop' );

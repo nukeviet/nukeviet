@@ -12,11 +12,20 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
-$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE title LIKE '%" . $db->dblikeescape( $q ) . "%' OR keywords LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY weight ASC LIMIT 50";
-$result = $db->sql_query( $sql );
+$sdr->reset()
+	->select('title')
+	->from( NV_PREFIXLANG . '_' . $module_data . '_topics' )
+	->where( 'title LIKE :title OR keywords :keywords'  )
+	->order( 'weight ASC' )
+	->limit( 50 );
+
+$sth = $db->prepare( $sdr->get() );
+$sth->bindParam( ':title', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindParam( ':keywords', '%' . $q . '%', PDO::PARAM_STR );
+$sth->execute();
 
 $array_data = array();
-while( list( $title ) = $db->sql_fetchrow( $result, 1 ) )
+while( list( $title ) = $sth->fetch( 3 ) )
 {
 	$array_data[] = $title;
 }

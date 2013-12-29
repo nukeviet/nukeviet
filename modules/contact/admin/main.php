@@ -20,29 +20,35 @@ $contact_allowed = nv_getAllowed();
 if( ! empty( $contact_allowed['view'] ) )
 {
 	$in = implode( ',', array_keys( $contact_allowed['view'] ) );
-	$sql = "" . NV_PREFIXLANG . "_" . $module_data . "_send WHERE cid IN (" . $in . ")";
 
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 30;
-	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-
-	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $sql . " ORDER BY id DESC LIMIT " . $page . "," . $per_page;
-	$result = $db->sql_query( $sql );
-
-	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-	list( $all_page ) = $db->sql_fetchrow( $result_all );
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+	
+	$sdr->reset()
+		->select( 'COUNT(*)' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
+		->where( 'cid IN (' . $in . ')' );
+	
+	list($all_page) = $db->query( $sdr->get() )->fetchColumn();
+	
+	$sdr->select( '*' )
+		->order('id DESC')
+		->limit( $per_page,  $page );
+	
+	$result = $db->query( $sdr->get() );	
 
 	if( $all_page )
 	{
 		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2' );
 
 		$a = 0;
-		$currday = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
+		$currday = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			$image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
-			$status = "New";
+			$status = 'New';
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
 			if( $row['is_read'] == 1 )
@@ -66,7 +72,7 @@ if( ! empty( $contact_allowed['view'] ) )
 				'sender_name' => $row['sender_name'],
 				'path' => $contact_allowed['view'][$row['cid']],
 				'title' => nv_clean60( $row['title'], 60 ),
-				'time' => $row['send_time'] >= $currday ? nv_date( "H:i", $row['send_time'] ) : nv_date( "d/m/Y", $row['send_time'] ),
+				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
 				'style' => $style,
 				'onclick' => $onclick,
 				'status' => $status,

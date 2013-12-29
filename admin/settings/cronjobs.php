@@ -32,14 +32,14 @@ while( $row = $result->fetch() )
 	$contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
 	$contents[$row['id']]['detail'][$lang_module['params']] = ! empty( $row['params'] ) ? implode( ', ', explode( ',', $row['params'] ) ) : '';
 	$contents[$row['id']]['detail'][$lang_module['start_time']] = nv_date( 'l, d/m/Y H:i', $row['start_time'] );
-	$contents[$row['id']]['detail'][$lang_module['interval']] = nv_convertfromSec( $row['interval'] * 60 );
+	$contents[$row['id']]['detail'][$lang_module['interval']] = nv_convertfromSec( $row['inter_val'] * 60 );
 	$contents[$row['id']]['detail'][$lang_module['is_del']] = ! empty( $row['del'] ) ? $lang_module['isdel'] : $lang_module['notdel'];
 	$contents[$row['id']]['detail'][$lang_module['is_sys']] = ! empty( $row['is_sys'] ) ? $lang_module['system'] : $lang_module['client'];
 	$contents[$row['id']]['detail'][$lang_module['act']] = ! empty( $row['act'] ) ? $lang_module['act1'] : $lang_module['act0'];
 	$contents[$row['id']]['detail'][$lang_module['last_time']] = ! empty( $row['last_time'] ) ? nv_date( 'l, d/m/Y H:i', $row['last_time'] ) : $lang_module['last_time0'];
 	$contents[$row['id']]['detail'][$lang_module['last_result']] = empty( $row['last_time'] ) ? $lang_module['last_result_empty'] : $lang_module['last_result' . $row['last_result']];
 
-	$interval = $row['interval'] * 60;
+	$interval = $row['inter_val'] * 60;
 
 	if( empty( $row['act'] ) )
 	{

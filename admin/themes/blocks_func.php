@@ -117,7 +117,7 @@ $sth = $db->prepare( 'SELECT t1.position, COUNT(*)
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 $sth->execute();
 
-while( list( $position, $numposition ) = $result->fetch( 3 ) )
+while( list( $position, $numposition ) = $sth->fetch( 3 ) )
 {
 	$blocks_positions[$position] = $numposition;
 }

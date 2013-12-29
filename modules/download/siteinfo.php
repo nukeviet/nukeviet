@@ -46,7 +46,7 @@ if( $number > 0 )
 // So file dang cho duyet
 $sql = 'SELECT COUNT(*) as numbers FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tmp';
 $array_data = nv_db_cache( $sql, '', $mod );
-$number = isset( $array_data[0]['numbers'] ) ? intval( $array_data[0]['number'] ) : 0;
+$number = isset( $array_data[0]['numbers'] ) ? intval( $array_data[0]['numbers'] ) : 0;
 if( $number > 0 )
 {
 	$pendinginfo[] = array(

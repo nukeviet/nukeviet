@@ -16,11 +16,11 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
  */
 function nv_block_headline()
 {
-	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
+	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config, $sdr;
 
 	$array_bid_content = array();
 
-	$cache_file = NV_LANG_DATA . "_" . $module_name . "_block_headline_" . NV_CACHE_PREFIX . ".cache";
+	$cache_file = NV_LANG_DATA . '_' . $module_name . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
 
 	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
@@ -29,27 +29,38 @@ function nv_block_headline()
 	else
 	{
 		$id = 0;
-		$sql = "SELECT bid, title, numbers FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC LIMIT 0, 2";
-		$result = $db->sql_query( $sql );
+		$sdr->reset()
+			->select( 'bid, title, numbers' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_block_cat' )
+			->order( 'weight ASC' )
+			->limit( 2 );
+		$result = $db->query( $sdr->get() );
+
 		while( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
 		{
 			++$id;
 			$array_bid_content[$id] = array(
-				"id" => $id,
-				"bid" => $bid,
-				"title" => $titlebid,
-				"number" => $numberbid
+				'id' => $id,
+				'bid' => $bid,
+				'title' => $titlebid,
+				'number' => $numberbid
 			);
 		}
 
 		foreach( $array_bid_content as $i => $array_bid )
 		{
-			$sql = "SELECT t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $array_bid['bid'] . " AND t1.status= 1 AND t1.inhome='1' ORDER BY t2.weight ASC LIMIT 0 , " . $array_bid['number'];
-			$result = $db->sql_query( $sql );
+			$sdr->reset()
+				->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt' )
+				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+				->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+				->order( 't2.weight ASC' )
+				->limit( $array_bid['number'] );
+
+			$result = $db->sql_query( $sdr->get() );
 			$array_content = array();
-			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $db->sql_fetchrow( $result ) )
+			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $result->fetch( 3 ) )
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 				$array_content[] = array(
 					'title' => $title,
 					'link' => $link,

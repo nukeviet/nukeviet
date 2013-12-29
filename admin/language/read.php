@@ -99,7 +99,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			}
 			catch (PDOException $e)
 			{
-				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], 'Error insert file: ' . $filelang );
+				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage() );
 			}
 		}
 		else
@@ -115,11 +115,17 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$lang_translator_save['langtype'] = $langtype;
 
 			$author = var_export( $lang_translator_save, true );
-
-			$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET lang_' . $dirlang . '= :$author WHERE idfile= :idfile' );
-			$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
-			$sth->bindParam( ':author', $author, PDO::PARAM_STR );
-			$sth->execute( );
+			try
+				{
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET lang_' . $dirlang . '= :author WHERE idfile= :idfile' );
+				$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth->execute( );
+			}
+			catch (PDOException $e)
+			{
+				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage() );
+			}
 		}
 
 		$temp_lang = array();

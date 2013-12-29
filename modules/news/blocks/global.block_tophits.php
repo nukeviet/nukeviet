@@ -15,14 +15,14 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 	function nv_block_config_tophits_blocks( $module, $data_block, $lang_block )
 	{
 		$html = '';
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['number_day'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_number_day\" size=\"5\" value=\"" . $data_block['number_day'] . "\"/></td>";
-		$html .= "</tr>";
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
-		$html .= "</tr>";
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['number_day'] . '</td>';
+		$html .= '	<td><input type="text" name="config_number_day" size="5" value="' . $data_block['number_day'] . '"/></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['numrow'] . '</td>';
+		$html .= '	<td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
+		$html .= '</tr>';
 		return $html;
 	}
 
@@ -39,7 +39,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_news_block_tophits( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config, $global_config;
+		global $module_array_cat, $module_info, $db, $module_config, $global_config, $sdr;
 
 		$module = $block_config['module'];
 
@@ -48,9 +48,16 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
-		$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 AND publtime BETWEEN " . $publtime . " AND " . NV_CURRENTTIME . " ORDER BY hitstotal DESC LIMIT 0 , " . $block_config['numrow'];
-		$result = $db->sql_query( $sql );
-		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
+
+		$sdr->reset()
+			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile' )
+			->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
+			->where( 'status= 1 AND publtime BETWEEN ' . $publtime . ' AND ' . NV_CURRENTTIME )
+			->order( 'hitstotal DESC' )
+			->limit( $block_config['numrow'] );
+
+		$result = $db->query( $sdr->get() );
+		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) // image thumb
 			{
@@ -72,7 +79,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			{
 				$imgurl = '';
 			}
-			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 
 			$array_block_news[] = array(
 				'id' => $id,
@@ -89,7 +96,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
 
 		$xtpl = new XTemplate( 'block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news' );
@@ -125,12 +132,12 @@ if( defined( 'NV_SYSTEM' ) )
 		else
 		{
 			$module_array_cat = array();
-			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat ORDER BY sort ASC";
+			$sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )
 			{
 				$module_array_cat[$l['catid']] = $l;
-				$module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 			}
 		}
 		$content = nv_news_block_tophits( $block_config, $mod_data );
