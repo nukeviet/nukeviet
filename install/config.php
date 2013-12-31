@@ -9,19 +9,28 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die();
 
-$db_config['dbhost'] = "localhost";
+$db_config['dbhost'] = 'localhost';
 $db_config['dbtype'] = 'mysql';
 $db_config['dbport'] = '';
 $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
+$db_config['prefix'] = 'nv3';
 $db_config['persistent'] = false;
 $db_config['collation'] = 'utf8_general_ci';
 // mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
-$db_config['prefix'] = 'nv3';
-$db_config['prefix_user'] = 'nv3';
+$array_data = array();
+$array_data['lang_multi'] = 0;
+$array_data['site_name'] = '';
+$array_data['nv_login'] = '';
+$array_data['nv_email'] = '';
+$array_data['nv_password'] = '';
+$array_data['re_password'] = '';
+$array_data['question'] = '';
+$array_data['answer_question'] = '';
 
+$global_config['version'] = '3.5.00';// NukeViet 3.5 Develop
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -44,9 +53,9 @@ $global_config['str_referer_blocker'] = 0;
 
 $global_config['lang_multi'] = 1;
 $global_config['lang_geo'] = 0;
-$global_config['site_lang'] = "en";
+$global_config['site_lang'] = 'en';
 $global_config['engine_allowed'] = array();
-$global_config['site_theme'] = "modern";
+$global_config['site_theme'] = 'modern';
 $global_config['gfx_chk'] = 3;
 
 $global_config['nv_unick_type'] = 4;
@@ -334,8 +343,5 @@ $nv_parse_ini_timezone = array(
 	'Pacific/Tongatapu' => array( 'winter_offset' => '46800', 'summer_offset' => '46800' ),
 	'Pacific/Kiritimati' => array( 'winter_offset' => '50400', 'summer_offset' => '50400' )
 );
-
-$global_config['version'] = "3.5.00";
-// NukeViet 3.5 Develop
 
 ?>

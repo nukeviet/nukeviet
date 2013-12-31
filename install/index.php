@@ -385,7 +385,6 @@ elseif( $step == 4 )
 elseif( $step == 5 )
 {
 	$nextstep = 0;
-	$db_config['dbport'] = '';
 	$db_config['error'] = '';
 	$db_config['dbtype'] = $nv_Request->get_string( 'dbtype', 'post', $db_config['dbtype'] );
 	$db_config['dbhost'] = $nv_Request->get_string( 'dbhost', 'post', $db_config['dbhost'] );
@@ -401,15 +400,19 @@ elseif( $step == 5 )
 
 	if( in_array($db_config['dbtype'], $PDODrivers) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
-		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbuname'] ) );
+		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
 
-		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbname'] ) );
+		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname'] );
 
 		$db_config['prefix'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['prefix'] ) );
 
 		if( substr( $sys_info['os'], 0, 3 ) == 'WIN' and $db_config['dbhost'] == 'localhost' )
 		{
 			$db_config['dbhost'] = '127.0.0.1';
+		}
+		if( $db_config['dbtype'] == 'oci' AND empty( $db_config['dbport'] ) )
+		{
+			$db_config['dbport'] = 1521;
 		}
 
 		$db = new sql_db( $db_config );
