@@ -71,6 +71,9 @@ jQuery(document).ready(function() {
 	$('form').submit(function() {
 		$(window).unbind();
 	});
+	
+	// Modify table caption
+	$('table.tab1 caption').prepend(' &nbsp; <i class="icon-double-angle-right"></i> ');
 });
 
 function ver_menu_click() {
@@ -80,13 +83,13 @@ function ver_menu_click() {
 		}, 500);
 		$('#left_menu').css("width", "0px").css("left", "0px");
 		$('#middle').css("margin-left", "0px");
-		$('#cs_menu').removeClass("small").addClass("lage");
+		$('#cs_menu i').removeClass("icon-circle-arrow-left").addClass("icon-circle-arrow-right");
 	} else {
 		$('#middle').css("margin-left", "200px");
 		$('#left_menu').css("width", "200px").css("left", "-200px");
 		$('#ver_menu').show({
 			direction : "horizontal"
 		}, 500);
-		$('#cs_menu').removeClass("lage").addClass("small");
+		$('#cs_menu i').removeClass("icon-circle-arrow-right").addClass("icon-circle-arrow-left");
 	}
 }

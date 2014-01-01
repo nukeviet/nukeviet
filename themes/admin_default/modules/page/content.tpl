@@ -27,7 +27,7 @@
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.image}</td>
-				<td><input class="w500" type="text" name="image" id="image" value="{DATA.image}"/><input type="button" value="Browse server" name="selectimg"/></td>
+				<td><input class="w500" type="text" name="image" id="image" value="{DATA.image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.imagealt}</td>

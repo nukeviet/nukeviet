@@ -340,18 +340,11 @@ sup.required {
 	line-height: 20px;
 }
 
-#info_tab span.small {
-	background: url(../images/small.png) no-repeat center;
+#info_tab #cs_menu{
 	width: 20px;
 	float: left;
-	cursor: pointer
-}
-
-#info_tab span.lage {
-	background: url(../images/lage.png) no-repeat center;
-	width: 20px;
-	float: left;
-	cursor: pointer
+	cursor: pointer;
+	text-align:center;
 }
 
 #info_tab .cell_left {
@@ -416,11 +409,10 @@ table.tab1{
 }
 
 table.tab1 caption {
-	background:url('../images/arrows/arrow4_red.gif') no-repeat left center;
 	font-weight:bold;
 	line-height:27px;
 	text-align:left;
-	text-indent:12px;
+	text-transform:uppercase;
 }
 
 table.tab1 tbody tr:nth-child(odd) {
@@ -478,7 +470,13 @@ table.tab1 tfoot {
 }
 
 table.tab1 th {
-	background: #CCC;
+    background-color: #ededed;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ededed), color-stop(100%, #e8eaeb));
+    background-image: -webkit-linear-gradient(bottom, #ededed 0%, #e8eaeb 100%);
+    background-image: -moz-linear-gradient(bottom, #ededed 0%, #e8eaeb 100%);
+    background-image: -o-linear-gradient(bottom, #ededed 0%, #e8eaeb 100%);
+    background-image: -ms-linear-gradient(bottom, #ededed 0%, #e8eaeb 100%);
+    background-image: linear-gradient(bottom, #ededed 0%, #e8eaeb 100%);
 	font-weight: normal;
 	text-align: left
 }
@@ -500,7 +498,8 @@ table.tab2 td, table.tab2 tr, table.tab2 tbody {
 	padding: 2
 }
 
-/* icon */
+/* Old icons (will be removed in the future)
+ -----------------------------------------------------------------------------*/
 .default_icon {
 	background: url('../images/icons/default.png') no-repeat left center;
 	padding-left: 15px
@@ -526,7 +525,8 @@ table.tab2 td, table.tab2 tr, table.tab2 tbody {
 	padding-left: 15px
 }
 
-/* blockquote */
+/* Block quote
+ -----------------------------------------------------------------------------*/
 div.quote {
 	background: #F0F0F0;
 	border-bottom: 1px solid #E6E6E6;
@@ -666,6 +666,8 @@ a.button2:hover span span {
 	cursor: pointer
 }
 
+/* Generate page
+ -----------------------------------------------------------------------------*/
 .generate_page {
 	font-size: 10px;
 	font-weight: 700;
@@ -691,6 +693,79 @@ a.button2:hover span span {
 .generate_page a:hover {
 	background-color: #e0e0e0;
 	color: red
+}
+
+/* Form, input, button, textarea, ...
+ -----------------------------------------------------------------------------*/
+textarea, input[type=text], input[type=password], input[type=email], input[type=number], input[type=search], input[type=tel], input[type=url], select{
+    padding: 5px 7px;
+    color: #555;
+    font-size: 12px;
+    margin:0;
+    background-color: #fdfdfd;
+    border: 1px solid #c2c2c2;
+}
+textarea:hover, input[type=text]:hover, input[type=password]:hover, input[type=email]:hover, input[type=number]:hover, input[type=search]:hover, input[type=tel]:hover, input[type=url]:hover, select:hover{
+	border: 1px solid #a2a2a2;
+    outline: none;
+
+    box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+    -moz-box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+    -webkit-box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+}
+textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, input[type=number]:focus, input[type=search]:focus, input[type=tel]:focus, input[type=url]:focus, select:focus{
+	border: 1px solid #737373;
+    outline: none;
+
+    box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+    -moz-box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+    -webkit-box-shadow: -1px 1px 2px rgba(0,0,0,.1) inset;
+}
+select{
+    padding: 4px 5px;
+}
+input[type=button], input[type=submit], input[type=reset]{
+    padding: 6px 22px 5px 22px;
+    margin:0;
+    color: #222222;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #F0F0F0;
+    outline:0;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F0F0F0), color-stop(100%, #F5F5F5));
+    background-image: -webkit-linear-gradient(bottom, #F0F0F0 0%, #F5F5F5 100%);
+    background-image: -moz-linear-gradient(bottom, #F0F0F0 0%, #F5F5F5 100%);
+    background-image: -o-linear-gradient(bottom, #F0F0F0 0%, #F5F5F5 100%);
+    background-image: -ms-linear-gradient(bottom, #F0F0F0 0%, #F5F5F5 100%);
+    background-image: linear-gradient(bottom, #F0F0F0 0%, #F5F5F5 100%);
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px solid #dcdcdc;
+}
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover{
+    background-color: #E8E8E8;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8E8E8), color-stop(100%, #F5F5F5));
+    background-image: -webkit-linear-gradient(bottom, #E8E8E8 0%, #F5F5F5 100%);
+    background-image: -moz-linear-gradient(bottom, #E8E8E8 0%, #F5F5F5 100%);
+    background-image: -o-linear-gradient(bottom, #E8E8E8 0%, #F5F5F5 100%);
+    background-image: -ms-linear-gradient(bottom, #E8E8E8 0%, #F5F5F5 100%);
+    background-image: linear-gradient(bottom, #E8E8E8 0%, #F5F5F5 100%);
+
+    -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.3);
+    -moz-box-shadow: 0px 1px 1px rgba(0,0,0,.3);
+    box-shadow: 0px 1px 1px rgba(0,0,0,.3);
+    border: 1px solid #cecece;
+}
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active{
+    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
+    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
+    box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
+    border: 1px solid #c9c9c9;
 }
 
 /* Other

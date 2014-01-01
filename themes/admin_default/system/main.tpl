@@ -65,7 +65,7 @@
 
 		<div id="container">
 			<div id="info_tab">
-				<span id="cs_menu" class="small" onclick="ver_menu_click()">&nbsp;</span>
+				<span id="cs_menu" onclick="ver_menu_click()"><i class="icon-circle-arrow-left icon-large"></i></span>
 				<!-- BEGIN: empty_page_title -->
 				<span class="cell_left">{PAGE_TITLE}</span>
 				<!-- END: empty_page_title -->

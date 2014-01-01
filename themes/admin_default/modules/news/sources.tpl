@@ -34,7 +34,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.source_logo}: </strong></td>
-				<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/><input class="w100" type="button" value="{GLANG.browse_image}" name="selectimg"/>
+				<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
 				<!-- BEGIN: logo -->
 				<br />
 				<img src="{logo}"/></td>

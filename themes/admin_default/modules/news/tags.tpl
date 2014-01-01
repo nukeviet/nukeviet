@@ -4,7 +4,7 @@
 	<br />
 	{LANG.search_key}:
 	<input id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
-	<input type="submit" value="{LANG.search}" />
+	<input type="submit" value="{LANG.search}" /><br /><br />
 </form>
 <div id="module_show_list">
 	{TAGS_LIST}
@@ -44,7 +44,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}</strong></td>
-				<td><input class="w500" type="text" name="image" id="image" value="{image}"/><input type="button" value="Browse server" name="selectimg"/></td>
+				<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 			</tr>
 		</tbody>
 	</table>

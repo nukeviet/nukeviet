@@ -34,7 +34,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}:</strong></td>
-				<td><input style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /><input type="button" value="Browse server" name="selectimg" /></td>
+				<td><input style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" /></td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.keywords}: </strong></td>
