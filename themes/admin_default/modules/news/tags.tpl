@@ -40,7 +40,7 @@
 				<td class="right top">
 				<br />
 				<strong>{LANG.description}</strong></td>
-				<td>				<textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+				<td><textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}</strong></td>

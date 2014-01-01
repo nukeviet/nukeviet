@@ -23,7 +23,7 @@
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.alias}</td>
-				<td><input class="w500" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="255" /> &nbsp; <img src="{NV_BASE_SITEURL}images/refresh.png" width="16" class="refresh" onclick="get_alias('{ID}');" alt="Get alias..." height="16" /></td>
+				<td><input class="w500" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="255" /> <i class="icon-refresh icon-large" onclick="get_alias('{ID}');"></i></td>
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.image}</td>
@@ -35,13 +35,14 @@
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.description} </td>
-				<td >				<textarea class="w500" id="description"  name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+				<td ><textarea class="w500" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 			</tr>
 			<tr>
 				<td colspan="2" class="strong"> {LANG.bodytext}
-				<div>
-					{BODYTEXT}
-				</div></td>
+					<div>
+						{BODYTEXT}
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<td class="right strong">{LANG.keywords}</td>

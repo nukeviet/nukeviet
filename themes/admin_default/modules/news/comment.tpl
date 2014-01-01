@@ -12,7 +12,17 @@
 	</thead>
 	<tfoot>
 		<tr>
-			<td colspan="3"><span><a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;<a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span><a class="edit_icon disable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_disable}</a> - <a class="add_icon enable" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_enable}</a> - <a class="delete_icon delete" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=del_comment">{LANG.comment_delete}</a></td>
+			<td colspan="3">
+				<i class="icon-check icon-large"></i> <a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;
+				<i class="icon-check-empty icon-large"></i> <a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>
+				<span style="width:100px;display:inline-block">&nbsp;</span>
+				<i class="icon-ok-circle icon-large"></i> 
+				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_disable}</a> 
+				<i class="icon-ok icon-large"></i> 
+				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_enable}</a> 
+				<i class="icon-trash icon-large"></i> 
+				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=del_comment">{LANG.comment_delete}</a> 
+			</td>
 			<td colspan="3" class="center">
 			<!-- BEGIN: generate_page -->
 			{GENERATE_PAGE}
@@ -28,7 +38,10 @@
 			<td>{ROW.content}</td>
 			<td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
 			<td class="center">{ROW.status}</td>
-			<td class="center"><a class="edit_icon" href="{ROW.linkedit}">{LANG.comment_edit}</a> - <a class="delete_icon" href="{ROW.linkdelete}">{LANG.comment_delete}</a></td>
+			<td class="center">
+				<i class="icon-edit icon-large"></i> <a href="{ROW.linkedit}">{LANG.comment_edit}</a> &nbsp; 
+				<i class="icon-trash icon-large"></i> <a href="{ROW.linkdelete}">{LANG.comment_delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

@@ -6,8 +6,8 @@
 			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
 		</div>
 		<div class="logout">
-			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span>{NV_GO_CLIENTSECTOR}</span></a>
-			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span class="exit">{NV_LOGOUT}</span></a>
+			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span><i class="icon-home icon-border icon-large"></i> {NV_GO_CLIENTSECTOR}</span></a>
+			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span><i class="icon-power-off icon-border icon-large"></i> {NV_LOGOUT}</span></a>
 		</div>
 		<!-- BEGIN: langdata -->
 		<div class="lang">

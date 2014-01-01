@@ -46,14 +46,14 @@
 	<br />
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$("input[name=selectimg]").click(function() {
-		var area = "logo";
-		var path = "{NV_UPLOADS_DIR}/{MODULE_NAME}/source";
-		var type = "image";
-		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-	//]]>
+//<![CDATA[
+$("input[name=selectimg]").click(function() {
+	var area = "logo";
+	var path = "{NV_UPLOADS_DIR}/{MODULE_NAME}/source";
+	var type = "image";
+	nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+});
+//]]>
 </script>
 <!-- END: main -->

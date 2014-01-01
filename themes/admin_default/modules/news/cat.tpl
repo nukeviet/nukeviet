@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td class="right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp;<img src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias('cat', {catid});" alt="" height="16" /></td>
+					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias('cat', {catid});"></i></td>
 				</tr>
 				<tr>
 					<td class="right"><strong>Title Site: </strong></td>
