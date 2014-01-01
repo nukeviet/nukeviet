@@ -1,4 +1,4 @@
-/*
+﻿/*
  * HTML5 Boilerplate
  *
  * What follows is the result of much research on cross-browser styling.
@@ -97,7 +97,7 @@ textarea {
  ========================================================================== */
 
 html {
-	background: #F0F0F0 url('../images/light_alu.png'); /* 1 */
+	background: #F0F0F0 url(../images/background.png);
 }
 
 body {
@@ -191,8 +191,6 @@ sup.required {
 }
 
 #wrapper {
-	min-width: 800px;
-	max-width: 1366px;
 	margin: 0 auto;
 }
 
