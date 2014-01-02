@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
  */
 function nv_block_headline()
 {
-	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config, $sdr;
+	global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
 
 	$array_bid_content = array();
 
@@ -29,12 +29,12 @@ function nv_block_headline()
 	else
 	{
 		$id = 0;
-		$sdr->reset()
+		$db->sqlreset()
 			->select( 'bid, title, numbers' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_block_cat' )
 			->order( 'weight ASC' )
 			->limit( 2 );
-		$result = $db->query( $sdr->get() );
+		$result = $db->query( $db->sql() );
 
 		while( list( $bid, $titlebid, $numberbid ) = $result->fetch( 3 ) )
 		{
@@ -49,14 +49,14 @@ function nv_block_headline()
 
 		foreach( $array_bid_content as $i => $array_bid )
 		{
-			$sdr->reset()
+			$db->sqlreset()
 				->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 				->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 				->order( 't2.weight ASC' )
 				->limit( $array_bid['number'] );
 
-			$result = $db->query( $sdr->get() );
+			$result = $db->query( $db->sql() );
 			$array_content = array();
 			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $result->fetch( 3 ) )
 			{

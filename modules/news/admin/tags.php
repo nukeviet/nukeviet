@@ -16,21 +16,21 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  */
 function nv_show_tags_list( $q = '' )
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $sdr;
+	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
-	$sdr->reset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
+	$db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
 
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$sdr->where( 'keywords LIKE :keywords' );
+		$db->where( 'keywords LIKE :keywords' );
 	}
 	else
 	{
-		$sdr->order( 'alias ASC' );
+		$db->order( 'alias ASC' );
 	}
 
-	$sth = $db->prepare( $sdr->get() );
+	$sth = $db->prepare( $db->sql() );
 	if( ! empty( $q ) )
 	{
 		$sth->bindParam( ':keywords', '%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );

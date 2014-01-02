@@ -9,18 +9,18 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $module_file, $sdr;
+global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $module_file, $db;
 
 $xtpl = new XTemplate( 'block_lastestdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'catid, title, alias, uploadtime' )
 	->from( NV_PREFIXLANG . '_' . $module_data )
 	->where( 'status=1' )
 	->order( 'uploadtime DESC' )
 	->limit( 5 );
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 while( $row = $result->fetch() )
 {
 	$catalias = $list_cats[$row['catid']]['alias'];

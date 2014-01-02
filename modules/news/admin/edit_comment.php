@@ -23,14 +23,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$delete = $nv_Request->get_int( 'delete', 'post', 0 );
 		if( $delete )
 		{
-			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid=" . $cid );
+			$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments WHERE cid=" . $cid );
 		}
 		else
 		{
 			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
-			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET content=" . $db->dbescape( $content ) . ", status=" . $active . " WHERE cid=" . $cid );
+			$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_comments SET content=" . $db->dbescape( $content ) . ", status=" . $active . " WHERE cid=" . $cid );
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat

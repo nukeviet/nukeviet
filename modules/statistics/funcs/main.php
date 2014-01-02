@@ -172,13 +172,13 @@ $ctsh['max'] = $max;
 $ctsh['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // quoc gia
-$sdr->reset()
+$db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
 	->from( NV_COUNTER_TABLE )
 	->where( "c_type='country' AND c_count!=0" )
 	->order( 'c_count DESC' )
 	->limit( 10 );
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $countries_list = array();
@@ -203,13 +203,13 @@ $ctsc['max'] = $max;
 $ctsc['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // trinh duyet
-$sdr->reset()
+$db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
 	->from( NV_COUNTER_TABLE )
 	->where( "c_type='browser' AND c_count!=0" )
 	->order( 'c_count DESC' )
 	->limit( 0 );
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $browsers_list = array();
@@ -234,13 +234,13 @@ $ctsb['max'] = $max;
 $ctsb['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // he dieu hanh
-$sdr->reset()
+$db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
 	->from( NV_COUNTER_TABLE )
 	->where( "c_type='os' AND c_count!=0" )
 	->order( 'c_count DESC' )
 	->limit( 10 );
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $os_list = array();

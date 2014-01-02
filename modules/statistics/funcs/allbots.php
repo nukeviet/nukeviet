@@ -22,14 +22,14 @@ if( $all_page )
 	$per_page = 50;
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbots'];
 
-	$sdr->reset()
+	$db->sqlreset()
 		->select( 'c_val,c_count, last_update' )
 		->from( NV_COUNTER_TABLE )
 		->where( "c_type='bot' AND c_count!=0" )
 		->order( 'c_count DESC' )
 		->limit( $per_page, $page );
 
-	 $result = $db->query( $sdr->get() );
+	 $result = $db->query( $db->sql() );
 
 
 	$bot_list = array();

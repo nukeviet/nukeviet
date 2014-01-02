@@ -148,13 +148,13 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 			$page = $nv_Request->get_int( 'page', 'get', 0 );
 			$per_page = 15;
 
-			$sdr->reset()
+			$db->sqlreset()
 				->select( 'COUNT(*)' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_comments a' )
 				->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid = b.id LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' c ON a.post_id =c.userid' )
 				->where( 'a.fid=' . $id . ' AND a.status=1 AND b.catid IN (' . $in . ') AND b.status=1 AND b.comment_allow=1' );
 
-			$all_page = $db->query( $sdr->get() )->fetchColumn();
+			$all_page = $db->query( $db->sql() )->fetchColumn();
 			if( $all_page )
 			{
 				$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getcomment&amp;list_comment=' . $id;
@@ -162,13 +162,13 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 				$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 				$yesterday = $today - 86400;
 
-				$sdr->select('a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
+				$db->select('a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
 						a.post_ip AS post_ip, a.post_time AS post_time, a.content AS content, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
 						c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail')
 					->order( 'a.post_time DESC' )
 					->limit( $per_page, $page);
 
-				$result = $db->query( $sdr->get() );
+				$result = $db->query( $db->sql() );
 				while( $row = $result->fetch() )
 				{
 					$post_name = $row['post_name'];

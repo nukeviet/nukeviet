@@ -38,7 +38,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 
 		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
 		{
-			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password='" . $row['passlostkey'] . "', passlostkey='' WHERE userid=" . $row['userid'] );
+			$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password='" . $row['passlostkey'] . "', passlostkey='' WHERE userid=" . $row['userid'] );
 			$contents = $lang_module['change_pass_ok'];
 		}
 	}

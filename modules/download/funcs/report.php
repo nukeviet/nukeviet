@@ -34,6 +34,6 @@ if( $id and ! in_array( $id, $dlrp ) )
 	}
 }
 
-die( "OK" );
+die( 'OK' );
 
 ?>

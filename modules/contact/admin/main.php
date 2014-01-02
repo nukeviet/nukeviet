@@ -25,18 +25,18 @@ if( ! empty( $contact_allowed['view'] ) )
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 	
-	$sdr->reset()
+	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
 		->where( 'cid IN (' . $in . ')' );
 	
-	list($all_page) = $db->query( $sdr->get() )->fetchColumn();
+	list($all_page) = $db->query( $db->sql() )->fetchColumn();
 	
-	$sdr->select( '*' )
+	$db->select( '*' )
 		->order('id DESC')
 		->limit( $per_page, $page );
 	
-	$result = $db->query( $sdr->get() );	
+	$result = $db->query( $db->sql() );	
 
 	if( $all_page )
 	{

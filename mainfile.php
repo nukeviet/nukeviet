@@ -335,9 +335,6 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-// Them lop tao cau lenh SQL khi dung co Limit
-$sdr = new sqldriver( $db_config );
-
 $sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' OR (lang='sys' AND module='site') ORDER BY module ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )

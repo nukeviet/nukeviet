@@ -61,7 +61,7 @@ function nv_fix_subweight( $mod )
 	global $db;
 
 	$subweight = 0;
-	$sth = $db->prepare(  'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
+	$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
 	$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 	$sth->execute();
 	while( $row = $result->fetch() )

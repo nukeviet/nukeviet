@@ -39,7 +39,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_news_block_tophits( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config, $global_config, $sdr;
+		global $module_array_cat, $module_info, $db, $module_config, $global_config;
 
 		$module = $block_config['module'];
 
@@ -49,14 +49,14 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 		$array_block_news = array();
 
-		$sdr->reset()
+		$db->sqlreset()
 			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile' )
 			->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
 			->where( 'status= 1 AND publtime BETWEEN ' . $publtime . ' AND ' . NV_CURRENTTIME )
 			->order( 'hitstotal DESC' )
 			->limit( $block_config['numrow'] );
 
-		$result = $db->query( $sdr->get() );
+		$result = $db->query( $db->sql() );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) // image thumb

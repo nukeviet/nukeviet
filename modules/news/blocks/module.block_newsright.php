@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-global $module_data, $module_name, $module_file, $global_array_cat, $lang_module, $my_head, $global_config, $sdr;
+global $module_data, $module_name, $module_file, $global_array_cat, $lang_module, $my_head, $global_config, $db;
 
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
@@ -23,14 +23,14 @@ $xtpl = new XTemplate( 'block_newsright.tpl', NV_ROOTDIR . '/themes/' . $module_
 $xtpl->assign( 'BASESITE', NV_BASE_SITEURL );
 $xtpl->assign( 'LANG', $lang_module );
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'id, catid, publtime, exptime, title, alias' )
 	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 	->where( 'status = 1' )
 	->order( 'hitstotal DESC' )
 	->limit( 5 );
 
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 if( $result->rowCount() )
 {
 	$i = 1;
@@ -44,13 +44,13 @@ if( $result->rowCount() )
 	$xtpl->parse( 'main.topviews' );
 }
 
-$sdr->reset()
+$db->sqlreset()
 	->select( '*' )
 	->from( NV_PREFIXLANG . '_' . $module_data . '_comments' )
 	->where( 'status= 1' )
 	->order( 'cid DESC' )
 	->limit( 5 );
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 if( $result->rowCount() )
 {

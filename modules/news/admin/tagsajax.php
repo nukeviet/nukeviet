@@ -12,14 +12,14 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
-$sdr->reset()
+$db->sqlreset()
 	->select('alias')
 	->from( NV_PREFIXLANG . '_' . $module_data . '_tags')
 	->where( 'alias LIKE :alias OR keywords LIKE :keywords' )
 	->order( 'alias ASC' )
 	->limit( 50 );
 
-$sth = $db->prepare( $sdr->get() );
+$sth = $db->prepare( $db->sql() );
 $sth->bindParam( ':alias','%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );
 $sth->bindParam( ':keywords','%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );
 $sth->execute();

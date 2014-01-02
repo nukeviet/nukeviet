@@ -35,7 +35,7 @@ if( ! empty( $list_cats ) )
 		}
 	}
 
-	$sdr->reset()
+	$db->sqlreset()
 		->select( 'id, catid, uploadtime, title, alias, introtext, fileimage' )
 		->from( NV_PREFIXLANG . '_' . $module_data )
 		->order( 'uploadtime DESC' )
@@ -47,17 +47,17 @@ if( ! empty( $list_cats ) )
 		$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;cat=' . $list_cats[$catid]['alias'];
 		$channel['description'] = $list_cats[$catid]['description'];
 
-		$sdr->where( 'catid=' . $catid . ' AND status=1' );
+		$db->where( 'catid=' . $catid . ' AND status=1' );
 	}
 	else
 	{
 		$in = array_keys( $list_cats );
 		$in = implode( ',', $in );
- 		$sdr->where( 'catid IN (' . $in . ') AND status=1' );
+ 		$db->where( 'catid IN (' . $in . ') AND status=1' );
 	}
 	if( $module_info['rss'] )
 	{
-		$result = $db->query( $sdr->get() );
+		$result = $db->query( $db->sql() );
 		while( list( $id, $cid, $publtime, $title, $alias, $hometext, $homeimgfile ) = $result->fetch( 3 ) )
 		{
 			$rimages = ( ! empty( $homeimgfile ) ) ? '<img src="' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . $homeimgfile . '" width="100" align="left" border="0">' : '';

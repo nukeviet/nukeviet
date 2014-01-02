@@ -120,7 +120,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET lang_' . $dirlang . '= :author WHERE idfile= :idfile' );
 				$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
 				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
-				$sth->execute( );
+				$sth->execute();
 			}
 			catch (PDOException $e)
 			{
@@ -190,7 +190,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 				}
 				catch (PDOException $e)
 				{
-					if(  $read_type == 0 )
+					if( $read_type == 0 )
 					{
 						$check_type_update = true;
 					}

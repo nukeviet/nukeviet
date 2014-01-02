@@ -179,12 +179,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$mod_name = change_alias( $nv_Request->get_title( 'mod_name', 'post' ) );
 			if( $mod_name != $mod AND preg_match( $global_config['check_module'], $mod_name ) )
 			{
-				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET title= :mod_name  WHERE title= :mod' );
+				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET title= :mod_name WHERE title= :mod' );
 				$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
 				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 				if( $sth->execute() )
 				{
-					$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_module= :mod_name  WHERE in_module= :mod' );
+					$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_module= :mod_name WHERE in_module= :mod' );
 					$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
 					$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 					$sth->execute();

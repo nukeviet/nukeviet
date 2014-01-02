@@ -78,7 +78,7 @@ if( ! empty( $savecat ) )
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
-				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
+				$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
 			}
 
 			nv_del_moduleCache( $module_name );

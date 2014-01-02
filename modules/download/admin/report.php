@@ -109,7 +109,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid=" . $id;
 	$db->query( $sql );
 
-	die( "OK" );
+	die( 'OK' );
 }
 
 //All del
@@ -118,7 +118,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report";
 	$db->query( $sql );
 
-	die( "OK" );
+	die( 'OK' );
 }
 
 //List

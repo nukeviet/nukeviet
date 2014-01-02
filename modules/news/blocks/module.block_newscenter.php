@@ -9,19 +9,19 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $sdr;
+global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db;
 
 $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'lang', $lang_module );
 
-$sdr->reset()
+$db->sqlreset()
 			->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1' )
 			->order( 'publtime DESC' )
 			->limit( 4 );
 
-$list = nv_db_cache( $sdr->get(), 'id', $module_name );
+$list = nv_db_cache( $db->sql(), 'id', $module_name );
 
 $i = 1;
 foreach( $list as $row )

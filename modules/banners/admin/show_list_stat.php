@@ -106,21 +106,21 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 	}
 }
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'COUNT(*)' )->from( NV_BANNERS_GLOBALTABLE. '_click')
 	->where( $where );
 
-$all_page = $db->query( $sdr->get() )->fetchColumn();
+$all_page = $db->query( $db->sql() )->fetchColumn();
 if( empty( $all_page ) ) die( 'Wrong URL' );
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 50;
 
-$sdr->where( '*' )
+$db->where( '*' )
 	->limit($per_page, $per_page)
 	->order('click_time DESC');
 
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 $contents = array();
 $replacement = '';

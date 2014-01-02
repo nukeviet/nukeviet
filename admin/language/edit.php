@@ -77,7 +77,7 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 			$sth = $db->prepare( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ') VALUES (' . $idfile . ', :lang_key, :lang_value)' );
 			$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
 			$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
-			$sth->execute( );
+			$sth->execute();
 		}
 	}
 

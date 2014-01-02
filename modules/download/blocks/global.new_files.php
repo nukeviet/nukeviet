@@ -50,7 +50,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 	function nv_bdown_news( $block_config )
 	{
-		global $db, $module_info, $site_mods, $sdr;
+		global $db, $module_info, $site_mods;
 
 		$module = $block_config['module'];
 		$file = $site_mods[$module]['module_file'];
@@ -70,14 +70,14 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 		if( $list_cat )
 		{
-			$sdr->reset()
+			$db->sqlreset()
 				->select( 'id, catid, title, alias, updatetime' )
 				->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] )
 				->where( 'status AND catid IN (' . implode( ',', array_keys( $list_cat ) ) )
 				->order( 'updatetime DESC' )
 				->limit( $block_config['numrow'] );
 
-			$list = nv_db_cache( $sdr->get(), 'id', $module );
+			$list = nv_db_cache( $db->sql(), 'id', $module );
 
 			if( ! empty( $list ) )
 			{

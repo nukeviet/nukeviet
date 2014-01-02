@@ -25,7 +25,7 @@ if( $bid > 0 )
 		{
 			if( $id > 0 )
 			{
-				$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
+				$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
 			}
 		}
 		nv_news_fix_block( $bid );
@@ -58,7 +58,7 @@ if( $bid > 0 )
 			}
 			elseif( $mod == "delete" )
 			{
-				$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) . "" );
+				$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) . "" );
 				$content = "OK_" . $bid;
 			}
 		}

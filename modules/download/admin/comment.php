@@ -168,7 +168,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 //List
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment';
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'COUNT(*)' )
 	->from( NV_PREFIXLANG . '_' . $module_data . '_comments a' )
 	->join( ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid=b.id' );
@@ -181,11 +181,11 @@ if( $nv_Request->isset_request( 'fid', 'get' ) )
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=comment&status=1' );
 		exit();
 	}
-	$sdr->where( 'a.fid=' . $fid );
+	$db->where( 'a.fid=' . $fid );
 
 	$base_url .= '&amp;fid=' . $fid;
 
-	$all_page = $db->query( $sdr->get() )->fetchColumn();
+	$all_page = $db->query( $db->sql() )->fetchColumn();
 
 	if( empty( $all_page ) )
 	{
@@ -209,9 +209,9 @@ else
 
 	$base_url .= '&amp;status=' . $status;
 
-	$sdr->where( 'a.status=' . $status );
+	$db->where( 'a.status=' . $status );
 
-	$all_page = $db->query( $sdr->get() )->fetchColumn();
+	$all_page = $db->query( $db->sql() )->fetchColumn();
 
 	if( empty( $all_page ) )
 	{
@@ -252,11 +252,11 @@ $per_page = 10;
 
 $array = array();
 
-$sdr->select( 'a.id, a.fid, a.subject, a.post_id, a.post_name, a.post_email, a.post_ip, a.post_time, a.content, a.admin_reply, a.admin_id, a.status, b.title' )
+$db->select( 'a.id, a.fid, a.subject, a.post_id, a.post_name, a.post_email, a.post_ip, a.post_time, a.content, a.admin_reply, a.admin_id, a.status, b.title' )
 	->order( 'a.post_time DESC' )
 	->limit( $per_page, $page );
 
-$query2 = $db->query( $sdr->get() );
+$query2 = $db->query( $db->sql() );
 
 while( $row = $query2->fetch() )
 {

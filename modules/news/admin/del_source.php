@@ -23,12 +23,12 @@ if( $sourceid > 0 )
 		$arr_catid = explode( ',', $row['listcatid'] );
 		foreach( $arr_catid as $catid_i )
 		{
-			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET sourceid = '0' WHERE id =" . $row['id'] );
+			$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET sourceid = '0' WHERE id =" . $row['id'] );
 		}
-		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET sourceid = '0' WHERE id =" . $row['id'] );
+		$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET sourceid = '0' WHERE id =" . $row['id'] );
 	}
 	$result->closeCursor();
-	$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid . "" );
+	$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid . "" );
 	nv_fix_source();
 	nv_del_moduleCache( $module_name );
 	$contents = "OK_" . $sourceid;

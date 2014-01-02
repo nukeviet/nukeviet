@@ -107,20 +107,20 @@ foreach( $list_cats as $value )
 			$in = 'catid IN (' . $in . ')';
 		}
 
-		$sdr->reset()
+		$db->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data )
 			->where( $in . ' AND status=1 ' );
 
-		$all_page = $db->query( $sdr->get() )->fetchColumn();
+		$all_page = $db->query( $db->sql() )->fetchColumn();
 
 		if( $all_page )
 		{
-			$sdr->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' );
-			$sdr->order( 'uploadtime DESC' );
-			$sdr->limit( $new_page );
+			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' );
+			$db->order( 'uploadtime DESC' );
+			$db->limit( $new_page );
 
-			$result = $db->query( $sdr->get() );
+			$result = $db->query( $db->sql() );
 
 			$array_item = array();
 			while( $row = $result->fetch() )

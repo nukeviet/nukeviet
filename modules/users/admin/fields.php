@@ -36,7 +36,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	}
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $new_vid . " WHERE fid=" . $fid;
 	$db->query( $sql );
-	die( "OK" );
+	die( 'OK' );
 }
 
 // lay du lieu sql
@@ -435,10 +435,10 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 			$result = $db->query( $query );
 			while( $row = $result->fetch() )
 			{
-				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $weight . " WHERE fid=" . $row['fid'] );
+				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $weight . " WHERE fid=" . $row['fid'] );
 				++$weight;
 			}
-			die( "OK" );
+			die( 'OK' );
 		}
 	}
 	die( 'NO' );

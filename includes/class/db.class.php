@@ -22,6 +22,16 @@ class sql_db extends pdo
 	public $user = '';
 	public $dbtype = '';
 
+	private $_select = '';
+	private $_from = '';
+	private $_join = '';
+	private $_where = '';
+	private $_group = '';
+	private $_having = '';
+	private $_order = '';
+	private $_limit = 0;
+	private $_offset = 0;
+
 	function __construct( $config )
 	{
 		$aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
@@ -312,34 +322,12 @@ class sql_db extends pdo
 		return $value;
 	}
 
-}
-
-class sqldriver
-{
-	private $_select = '';
-	private $_from = '';
-	private $_join = '';
-	private $_where = '';
-	private $_group = '';
-	private $_having = '';
-	private $_order = '';
-	private $_limit = 0;
-	private $_offset = 0;
-	private $_dbtype = '';
-
-	public function __construct( $config )
-	{
-		//$this->classname = get_class( $this );
-		$this->reset( );
-		$this->_dbtype = $config['dbtype'];
-	}
-
 	/**
 	 * reset query.
 	 *
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
-	public function reset( )
+	public function sqlreset()
 	{
 		$this->_select = '';
 		$this->_from = '';
@@ -358,7 +346,7 @@ class sqldriver
 	 * select for the query.
 	 *
 	 * @param string $select
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function select( $select = '' )
 	{
@@ -371,7 +359,7 @@ class sqldriver
 	 * from for the query.
 	 *
 	 * @param string $from
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function from( $from = '' )
 	{
@@ -384,7 +372,7 @@ class sqldriver
 	 * join for the query.
 	 *
 	 * @param string join_table_on
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function join( $join_table_on )
 	{
@@ -397,7 +385,7 @@ class sqldriver
 	 * where for the query.
 	 *
 	 * @param string $where
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function where( $where = '' )
 	{
@@ -410,7 +398,7 @@ class sqldriver
 	 * group for the query.
 	 *
 	 * @param string $group
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function group( $group = '' )
 	{
@@ -423,7 +411,7 @@ class sqldriver
 	 * having for the query.
 	 *
 	 * @param string $having
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function having( $having = '' )
 	{
@@ -436,7 +424,7 @@ class sqldriver
 	 * order for the query.
 	 *
 	 * @param string $order
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function order( $order = '' )
 	{
@@ -450,7 +438,7 @@ class sqldriver
 	 *
 	 * @param int $limit
 	 * @param int $offset
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function limit( $limit, $offset = false )
 	{
@@ -460,12 +448,12 @@ class sqldriver
 		return $this;
 	}
 
-	public function get( )
+	public function sql()
 	{
 		$return = 'SELECT ' . $this->_select;
-		if( $this->_dbtype == 'oci' AND $this->_offset !== false )
+		if( $this->dbtype == 'oci' AND $this->_offset !== false )
 		{
-			$return .= ', ROWNUM oci_rownum, count(*) over () found_rows ';
+			$return .= ', ROWNUM oci_rownum ';
 		}
 		$return .= ' FROM ' . $this->_from;
 
@@ -477,12 +465,12 @@ class sqldriver
 		if( $this->_where )
 		{
 			$return .= ' WHERE ' . $this->_where;
-			if( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+			if( $this->dbtype == 'oci' AND $this->_limit > 0 )
 			{
 				$return .= ' AND ROWNUM <= ' . ($this->_limit + $this->_offset);
 			}
 		}
-		elseif( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+		elseif( $this->dbtype == 'oci' AND $this->_limit > 0 )
 		{
 			$return .= ' WHERE ROWNUM <= ' . ($this->_limit + $this->_offset);
 		}
@@ -499,21 +487,20 @@ class sqldriver
 			$return .= ' ORDER BY ' . $this->_order;
 		}
 
-		if( $this->_dbtype == 'mysql' )
+		if( $this->dbtype == 'mysql' )
 		{
 			if( $this->_limit )
 			{
 				$return .= ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
 			}
 		}
-		elseif( $this->_dbtype == 'oci' AND $this->_offset > 0 )
+		elseif( $this->dbtype == 'oci' AND $this->_offset > 0 )
 		{
 			$return = 'SELECT ' . $this->_select . ' FROM (' . $return . ') WHERE oci_rownum >= ' . ($this->_offset + 1);
 		}
 
 		return $return;
 	}
-
 }
 
 ?>

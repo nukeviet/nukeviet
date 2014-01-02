@@ -31,7 +31,7 @@ if( isset( $array_op[1] ) )
 	}
 }
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
 	->order( 'publtime DESC' )
 	->limit( 30 );
@@ -42,17 +42,17 @@ if( ! empty( $catid ) )
 	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
 	$channel['description'] = $global_array_cat[$catid]['description'];
 
-	$sdr->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
+	$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 		->where( 'status=1' );
 }
 else
 {
-	$sdr->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+	$db->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 		->where( 'status=1 AND inhome=1' );
 }
 if( $module_info['rss'] )
 {
-	$result = $db->query( $sdr->get() );
+	$result = $db->query( $db->sql() );
 	while( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 	{
 		$catalias = $global_array_cat[$catid_i]['alias'];

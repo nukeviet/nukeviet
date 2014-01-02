@@ -22,7 +22,7 @@ function nv_delete_table_sys( $lang )
 {
 	global $db_config, $global_config;
 
-	$sql_drop_table = array( );
+	$sql_drop_table = array();
 	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modules";
 	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_groups";
 	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_weight";
@@ -42,7 +42,7 @@ function nv_create_table_sys( $lang )
 	$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' );
 	$layoutdefault = ( string )$xml->layoutdefault;
 
-	$sql_create_table = array( );
+	$sql_create_table = array();
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modules (
 		 title VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 module_file VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -113,10 +113,10 @@ function nv_create_table_sys( $lang )
 
 	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_MODFUNCS';
 	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_MODFUNCS
-	  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
-	  FOR EACH ROW WHEN (new.func_id is null)
+	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
+	 FOR EACH ROW WHEN (new.func_id is null)
 		BEGIN
-		  SELECT SNV_' . strtoupper( $lang ) . '_MODFUNCS.nextval INTO :new.func_id FROM DUAL;
+		 SELECT SNV_' . strtoupper( $lang ) . '_MODFUNCS.nextval INTO :new.func_id FROM DUAL;
 		END TNV_' . strtoupper( $lang ) . '_MODFUNCS;';
 
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_searchkeys (

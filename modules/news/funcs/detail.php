@@ -140,14 +140,14 @@ if( $allowed )
 	$news_contents['publtime'] = nv_date( 'l - d/m/Y H:i', $news_contents['publtime'] );
 
 	$related_new_array = array();
-	$sdr->reset()
+	$db->sqlreset()
 		->select( 'id, title, alias, publtime' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 		->where( 'status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
 		->order( 'id ASC' )
 		->limit( $st_links );
 
-	$related = $db->query( $sdr->get() );
+	$related = $db->query( $db->sql() );
 	while( $row = $related->fetch() )
 	{
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
@@ -163,14 +163,14 @@ if( $allowed )
 
 	$related_array = array();
 
-	$sdr->reset()
+	$db->sqlreset()
 		->select('id, title, alias, publtime')
 		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 		->where( 'status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
 		->order( 'id DESC' )
 		->limit( $st_links );
 
-	$related = $db->query( $sdr->get() );
+	$related = $db->query( $db->sql() );
 	while( $row = $related->fetch() )
 	{
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
@@ -191,14 +191,14 @@ if( $allowed )
 	{
 		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
 
-		$sdr->reset()
+		$db->sqlreset()
 			->select( 'id, catid, title, alias, publtime' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
 
-		$topic = $db->query( $sdr->get() );
+		$topic = $db->query( $db->sql() );
 		while( $row = $topic->fetch() )
 		{
 			$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;

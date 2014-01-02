@@ -19,13 +19,13 @@ if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile )
 }
 else
 {
-	$sdr->reset()
+	$db->sqlreset()
 		->select( 'id, catid, publtime, alias' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 		->where( 'status=1' )
 		->order( 'publtime DESC' )
 		->limit( 1000 );
-	$result = $db->query( $sdr->get() );
+	$result = $db->query( $db->sql() );
 
 	$url = array();
 

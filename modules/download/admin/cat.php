@@ -25,7 +25,7 @@ function nv_FixWeightCat( $parentid = 0 )
 	while( $row = $result->fetch() )
 	{
 		++$weight;
-		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET weight=" . $weight . " WHERE id=" . $row['id'] );
+		$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_categories SET weight=" . $weight . " WHERE id=" . $row['id'] );
 	}
 }
 
@@ -614,7 +614,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	nv_FixWeightCat( $parentid );
 	nv_del_moduleCache( $module_name );
 
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Change weight cat
@@ -648,7 +648,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Active - Deactive
@@ -673,7 +673,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	die( "OK" );
+	die( 'OK' );
 }
 
 // List cat

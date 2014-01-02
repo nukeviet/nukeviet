@@ -16,7 +16,7 @@ if( empty( $theme ) or ! preg_match( $global_config['check_theme'], $theme ) ) d
 $sth = $db->prepare('SELECT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
 $sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 $sth->execute();
-if( $sth->rowCount()  )
+if( $sth->rowCount() )
 {
 	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :theme WHERE config_name='site_theme' AND lang='" . NV_LANG_DATA . "'" );
 	$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );

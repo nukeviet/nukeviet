@@ -67,10 +67,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 			}
 			if( $check_permission > 0 )
 			{
-				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET status = '5' WHERE id =" . $id . "" );
+				$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET status = '5' WHERE id =" . $id . "" );
 				foreach( $arr_catid as $catid_i )
 				{
-					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET status = '5' WHERE id =" . $id . "" );
+					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET status = '5' WHERE id =" . $id . "" );
 				}
 				$exp_array[] = $id;
 			}

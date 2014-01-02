@@ -50,13 +50,13 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		{
 			$array_block_news = array();
 			//$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 ORDER BY publtime DESC LIMIT 0 , " . $numrow;
-			$sdr->reset()
+			$db->sqlreset()
 				->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile')
 				->from(NV_PREFIXLANG . "_" . $mod_data . "_rows")
 				->where('status= 1')			
 				->order( 'publtime DESC' )
 				->limit($numrow);	
-			$result = $db->query( $sdr->get() );
+			$result = $db->query( $db->sql() );
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 			{
 				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];

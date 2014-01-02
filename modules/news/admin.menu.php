@@ -43,7 +43,7 @@ if( ! empty( $module_info['admins'] ) )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
 		{
-			$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
+			$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
 			$is_refresh = true;
 		}
 	}

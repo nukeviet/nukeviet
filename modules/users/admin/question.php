@@ -30,7 +30,7 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	{
 		die( 'NO' );
 	}
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Them cau hoi
@@ -54,7 +54,7 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	{
 		die( 'NO' );
 	}
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Chinh thu tu
@@ -84,7 +84,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	}
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $new_vid . " WHERE qid=" . $qid;
 	$db->query( $sql );
-	die( "OK" );
+	die( 'OK' );
 }
 
 // Xoa cau hoi
@@ -113,7 +113,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$db->query( $sql );
 			}
 			$result->closeCursor();
-			die( "OK" );
+			die( 'OK' );
 		}
 	}
 	die( 'NO' );

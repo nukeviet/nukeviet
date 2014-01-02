@@ -29,7 +29,7 @@ if( $id > 0 )
 		if( $time_set == 0 )
 		{
 			$nv_Request->set_Cookie( $module_name . '_clickid_' . $id, 3600, NV_LIVE_COOKIE_TIME );
-			$db->query( "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET hits_total=hits_total+1 WHERE id='" . $id . "'" );
+			$db->exec( "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET hits_total=hits_total+1 WHERE id='" . $id . "'" );
 			$sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_click (bid, click_time, click_day, click_ip, click_country, click_browse_key, click_browse_name, click_os_key, click_os_name, click_ref) 
  		VALUES ('" . $id . "', " . NV_CURRENTTIME . ", '0', '" . $client_info['ip'] . "', '" . $client_info['country'] . "', '', '" . $browser . "', '','" . $client_info['client_os']['name'] . "','" . $client_info['referer'] . "');";
 			$db->query( $sql );

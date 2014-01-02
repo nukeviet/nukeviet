@@ -21,7 +21,7 @@ function nv_site_theme( $contents )
 	$css = nv_html_css();
 	$js = nv_html_site_js();
 
-	if( $client_info['browser']['key'] != "explorer" )
+	if( $client_info['browser']['key'] != 'explorer' )
 	{
 		if( ! $client_info['is_bot'] ) $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/real.css\" />\n";
 	}
@@ -107,7 +107,7 @@ function nv_site_theme( $contents )
 		$arr_cat_title_i = array(
 			'catid' => 0,
 			'title' => $module_info['custom_title'],
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
 		);
 
 		$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
@@ -122,7 +122,7 @@ function nv_site_theme( $contents )
 		$xtpl->parse( 'main.mod_title' );
 	}
 
-	$theme_stat_img = "";
+	$theme_stat_img = '';
 	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) )
 	{
 		$theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
@@ -174,8 +174,8 @@ function nv_site_theme( $contents )
 		$my_footer = nv_admin_menu() . $my_footer;
 	}
 
-	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
-	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
+	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
 
 	return $sitecontent;
 }

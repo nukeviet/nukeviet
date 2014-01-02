@@ -76,6 +76,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_name = $global_config['rewrite_op_mod'];
 	}
 
+	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
 		$module_info = $site_mods[$module_name];

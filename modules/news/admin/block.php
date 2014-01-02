@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( 'intval', $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
+		$db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
@@ -79,22 +79,22 @@ $xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 $id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'id, title')
 	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 	->order( 'publtime DESC' );
 if( $listid == '' )
 {
-	$sdr->where( 'status=1 AND id NOT IN(SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ')' )
+	$db->where( 'status=1 AND id NOT IN(SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ')' )
 		->limit( 20 );
 }
 else
 {
 	$id_array = array_map( 'intval', explode( ',', $listid ) );
-	$sdr->where( 'status=1 AND id IN (' . implode( ',', $id_array ) . ')' );
+	$db->where( 'status=1 AND id IN (' . implode( ',', $id_array ) . ')' );
 }
 
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 if( $result->rowCount() )
 {
 	while( list( $id, $title ) = $result->fetch( 3 ) )

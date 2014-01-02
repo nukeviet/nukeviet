@@ -34,21 +34,21 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	exit();
 }
 
-$sdr->reset()
+$db->sqlreset()
 	->select( 'id, title')
 	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 	->order( 'id DESC' );
 if( $listid == '' )
 {
-	$sdr->where( 'inhome=1' )->limit( 20 );
+	$db->where( 'inhome=1' )->limit( 20 );
 }
 else
 {
 	$id_array = array_map( 'intval', explode( ',', $listid ) );
-	$sdr->where( 'inhome=1 AND id IN (' . implode( ',', $id_array ) . ')' );
+	$db->where( 'inhome=1 AND id IN (' . implode( ',', $id_array ) . ')' );
 }
 
-$result = $db->query( $sdr->get() );
+$result = $db->query( $db->sql() );
 
 $xtpl = new XTemplate( 'addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
