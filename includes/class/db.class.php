@@ -27,9 +27,8 @@ class sql_db extends pdo
 		$aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
 
 		$AvailableDrivers = PDO::getAvailableDrivers();
-		
+
 		$driver_options = array(
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_EMULATE_PREPARES => false,
 			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::ATTR_CASE => PDO::CASE_LOWER,
@@ -39,6 +38,7 @@ class sql_db extends pdo
 		if( in_array( $config['dbtype'], $AvailableDrivers ) AND in_array( $config['dbtype'], $aray_type ) )
 		{
 			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
+			$driver_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		}
 		elseif( $config['dbtype'] == 'oci' )
 		{
@@ -153,7 +153,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );			
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 	}
@@ -172,7 +172,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );			
+			trigger_error( $e->getMessage() );
 			return false;
 		}
 	}
@@ -379,7 +379,7 @@ class sqldriver
 
 		return $this;
 	}
-	
+
 	/**
 	 * join for the query.
 	 *
@@ -391,7 +391,7 @@ class sqldriver
 		$this->_join = $join_table_on;
 
 		return $this;
-	}	
+	}
 
 	/**
 	 * where for the query.
@@ -468,7 +468,7 @@ class sqldriver
 			$return .= ', ROWNUM oci_rownum, count(*) over () found_rows ';
 		}
 		$return .= ' FROM ' . $this->_from;
-		
+
 		if( $this->_join )
 		{
 			$return .= ' ' . $this->_join;

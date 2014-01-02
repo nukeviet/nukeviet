@@ -55,20 +55,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['imagealt'] = $nv_Request->get_title( 'imagealt', 'post', '', 1 );
 
 	$row['description'] = $nv_Request->get_string( 'description', 'post', '' );
-	$description = $row['description'];
-	$l = mb_strlen( $description, 'UTF-8' );
-	for( $i = 0; $i < $l; $i++ )
-	{
-		$s = trim( mb_substr( $description, $i, 1 ) );
-		if( ! empty( $s ) )
-		{
-			echo $s . '------' . urlencode( $s ) . '<br>';
-
-		}
-	}
-
-	die( $description );
-
 	$row['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $row['description'] ) ), '<br />' );
 
 	$row['bodytext'] = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
