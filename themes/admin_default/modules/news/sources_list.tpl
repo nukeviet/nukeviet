@@ -19,7 +19,10 @@
 			</select></td>
 			<td>{ROW.title}</td>
 			<td>{ROW.link}</td>
-			<td class="center"><a class="edit_icon" href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></td>
+			<td class="center">
+				<i class="icon-edit icon-large"></i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
+				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

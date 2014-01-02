@@ -28,7 +28,10 @@
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></td>
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
-			<td><a class="edit_icon" href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;-&nbsp; <a class="delete_icon" href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a></td>
+			<td>
+				<i class="icon-edit icon-large"></i> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp; 
+				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

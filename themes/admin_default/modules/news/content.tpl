@@ -19,7 +19,7 @@
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/><input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /></td>
+							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias();"></i></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>
@@ -63,7 +63,7 @@
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_homeimg}</strong></td>
-							<td><input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="Browse server" name="selectimg"/></td>
+							<td><input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
@@ -228,6 +228,7 @@
 		</table>
 	</div>
 	<div class="gray center">
+		<br />
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status -->
@@ -237,30 +238,32 @@
 		<input name="status0" type="submit" value="{LANG.save_temp}" />
 		<input name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
+		<br />
+		<br />
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-	$("input[name=selectimg]").click(function() {
-		var area = "homeimg";
-		var alt = "homeimgalt";
-		var path = "{UPLOADS_DIR_USER}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-	//]]>
+//<![CDATA[
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+$("input[name=selectimg]").click(function() {
+	var area = "homeimg";
+	var alt = "homeimgalt";
+	var path = "{UPLOADS_DIR_USER}";
+	var currentpath = "{UPLOAD_CURRENT}";
+	var type = "image";
+	nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+});
+//]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}modules/news/js/content.js"></script>
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
-	//<![CDATA[
-	$("#idtitle").change(function() {
-		get_alias();
-	});
-	//]]>
+//<![CDATA[
+$("#idtitle").change(function() {
+	get_alias();
+});
+//]]>
 </script>
 <!-- END: getalias -->
 <!-- END:main -->

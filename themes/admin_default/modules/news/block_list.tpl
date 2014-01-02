@@ -25,7 +25,9 @@
 					<!-- END: weight -->
 				</select></td>
 				<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-				<td class="center"><a class="edit_icon" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a> &nbsp;-&nbsp; <a class="delete_icon" href="javascript:void(0);" onclick="nv_chang_block({BID},{ROW.id},'delete')">{LANG.delete_from_block}</a></td>
+				<td class="center">
+					<i class="icon-edit icon-large"></i> <a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a> &nbsp; 
+					<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_chang_block({BID},{ROW.id},'delete')">{LANG.delete_from_block}</a></td>
 			</tr>
 		<!-- END: loop -->
 		</tbody>

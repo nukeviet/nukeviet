@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.alias}: </strong></td>
-				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <img src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias('blockcat', {bid});" alt="" height="16" /></td>
+				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <i class="icon-refresh icon-large"onclick="get_alias('blockcat', {bid});"></i></td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.keywords}: </strong></td>
@@ -42,7 +42,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}</strong></td>
-				<td><input class="w500" type="text" name="image" id="image" value="{image}"/><input type="button" value="Browse server" name="selectimg"/></td>
+				<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 			</tr>
 		</tbody>
 	</table>
