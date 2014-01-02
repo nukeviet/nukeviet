@@ -22,23 +22,23 @@ if( ! $topicid )
 $global_array_cat = array();
 
 $sql = "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY sort ASC";
-$result = $db->sql_query( $sql );
-while( list( $catid_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( $sql );
+while( list( $catid_i, $alias_i ) = $result->fetch( 3 ) )
 {
 	$global_array_cat[$catid_i] = array( "alias" => $alias_i );
 }
 
 $sql = "SELECT id, catid, alias, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE topicid='" . $topicid . "' ORDER BY id ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $xtpl = new XTemplate( 'topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'TOPICID', $topicid );
 
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$row['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['catid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 		$row['delete'] = nv_link_edit_page( $row['id'] );
@@ -55,7 +55,7 @@ else
 	$xtpl->parse( 'main.empty' );
 }
 
-$db->sql_freeresult( $result );
+$result->closeCursor();
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

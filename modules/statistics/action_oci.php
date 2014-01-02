@@ -9,9 +9,9 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
-$sql_drop_module = array( );
+$sql_drop_module = array();
 $query = $db->query( "select table_name from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
 }

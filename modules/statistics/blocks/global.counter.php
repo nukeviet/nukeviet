@@ -35,8 +35,8 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/' );
 
 		$sql = "SELECT c_type, c_count FROM " . NV_COUNTER_TABLE . " WHERE (c_type='day' AND c_val='" . date( 'd', NV_CURRENTTIME ) . "') OR (c_type='month' AND c_val='" . date( 'M', NV_CURRENTTIME ) . "') OR (c_type='total' AND c_val='hits')";
-		$query = $db->sql_query( $sql );
-		while( list( $c_type, $c_count ) = $db->sql_fetchrow( $query ) )
+		$query = $db->query( $sql );
+		while( list( $c_type, $c_count ) = $query->fetch( 3 ) )
 		{
 			if( $c_type == 'day' )
 			{
@@ -53,10 +53,10 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		}
 
 		$sql = "SELECT userid, full_name FROM " . NV_SESSIONS_GLOBALTABLE . " WHERE onl_time >= " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
-		$query = $db->sql_query( $sql );
+		$query = $db->query( $sql );
 
 		$count_online = $users = $bots = $guests = 0;
-		while( $row = $db->sql_fetchrow( $query ) )
+		while( $row = $query->fetch() )
 		{
 			++$count_online;
 

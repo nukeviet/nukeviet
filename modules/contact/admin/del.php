@@ -16,7 +16,7 @@ nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del', "id " . $t, $admin_info['
 if( $t == 3 )
 {
 	$sql = $sql = "TRUNCATE TABLE " . NV_PREFIXLANG . "_" . $module_data . "_send";
-	$db->sql_query( $sql );
+	$db->query( $sql );
 }
 elseif( $t == 2 )
 {
@@ -26,7 +26,7 @@ elseif( $t == 2 )
 	{
 		$in = implode( ',', $sends );
 		$sql = $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id IN (" . $in . ")";
-		$db->sql_query( $sql );
+		$db->query( $sql );
 	}
 }
 else
@@ -36,7 +36,7 @@ else
 	if( $id )
 	{
 		$sql = $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id = " . $id;
-		$db->sql_query( $sql );
+		$db->query( $sql );
 	}
 }
 

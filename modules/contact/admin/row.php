@@ -14,15 +14,15 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $id )
 {
 	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	if( ! $db->sql_numrows( $result ) )
+	if( ! $result->rowCount() )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
 		die();
 	}
 
-	$frow = $db->sql_fetchrow( $result );
+	$frow = $result->fetch();
 
 	$page_title = $frow['full_name'];
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
@@ -43,10 +43,10 @@ $sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t
 	INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t2 
 	ON t1.admin_id = t2.userid
 	WHERE t1.lev!=0 AND t1.is_suspend=0";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $adms = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$adms[$row['id']] = array(
 		'login' => $row['admin_login'],
@@ -157,7 +157,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
 		}
 
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		nv_del_moduleCache( $module_name );
 

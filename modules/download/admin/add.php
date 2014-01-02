@@ -137,14 +137,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$alias = change_alias( $array['title'] );
 
 	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->dbescape( $alias );
-	$result = $db->sql_query( $sql );
-	list( $is_exists ) = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	list( $is_exists ) = $result->fetch( 3 );
 
 	if( ! $is_exists )
 	{
 		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->dbescape( $array['title'] );
-		$result = $db->sql_query( $sql );
-		list( $is_exists ) = $db->sql_fetchrow( $result );
+		$result = $db->query( $sql );
+		list( $is_exists ) = $result->fetch( 3 );
 	}
 
 	if( empty( $array['title'] ) )
@@ -390,8 +390,8 @@ else
 }
 
 $sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-$result = $db->sql_query( $sql );
-list( $upload_dir ) = $db->sql_fetchrow( $result );
+$result = $db->query( $sql );
+list( $upload_dir ) = $result->fetch( 3 );
 
 if( ! $array['filesize'] ) $array['filesize'] = '';
 

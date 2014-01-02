@@ -12,14 +12,14 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 $lang_siteinfo = nv_get_lang_module( $mod );
 
 // So thanh vien
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_user'], 'value' => $number );
 }
 
 // So thanh vien doi kich hoat
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg' )->fetchColumn();
 if( $number > 0 )
 {
 	$pendinginfo[] = array(

@@ -54,7 +54,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $array['topicid'] == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" ) );
+		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 
 		$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (" . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
@@ -89,7 +89,7 @@ if( ! empty( $savecat ) )
 $array['topicid'] = $nv_Request->get_int( 'topicid', 'get', 0 );
 if( $array['topicid'] > 0 )
 {
-	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'] . "" ) );
+	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->query( "SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'] . "" )->fetch( 3 );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 

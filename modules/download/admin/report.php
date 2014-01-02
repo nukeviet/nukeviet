@@ -22,14 +22,14 @@ if( $nv_Request->isset_request( 'linkcheck', 'post' ) )
 	}
 
 	$query = "SELECT fileupload, linkdirect FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 )
 	{
 		die( "BAD_" . $id );
 	}
 
-	list( $fileupload, $linkdirect ) = $db->sql_fetchrow( $result );
+	list( $fileupload, $linkdirect ) = $result->fetch( 3 );
 
 	$links = array();
 
@@ -74,11 +74,11 @@ if( $nv_Request->isset_request( 'linkcheck', 'post' ) )
 		{
 			if( ! nv_is_url( $link ) )
 			{
-				die( "NO_" . $id );
+				die( 'NO_' . $id );
 			}
 			if( ! nv_check_url( $link ) )
 			{
-				die( "NO_" . $id );
+				die( 'NO_' . $id );
 			}
 		}
 	}
@@ -95,19 +95,19 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( ! $id )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
 
 	$query = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid=" . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
 
 	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report WHERE fid=" . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	die( "OK" );
 }
@@ -116,7 +116,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 if( $nv_Request->isset_request( 'alldel', 'post' ) )
 {
 	$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_report";
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	die( "OK" );
 }
@@ -125,8 +125,8 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 $page_title = $lang_module['download_report'];
 
 $sql = "SELECT a.post_time AS post_time, a.post_ip AS post_ip, b.id AS id, b.title AS title, b.catid AS catid FROM " . NV_PREFIXLANG . "_" . $module_data . "_report a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " b ON a.fid=b.id ORDER BY a.post_time DESC";
-$result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$num = $result->rowCount();
 if( ! $num )
 {
 	$contents = "<div style=\"padding-top:15px;text-align:center\">\n";
@@ -149,7 +149,7 @@ if( empty( $listcats ) )
 
 $array = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$array[$row['id']] = array( //
 		'id' => ( int )$row['id'], //

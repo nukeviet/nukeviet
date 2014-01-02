@@ -18,12 +18,12 @@ $mod = $nv_Request->get_string( 'mod', 'post', '' );
 if( $mod == "cat" )
 {
 	$tab = NV_PREFIXLANG . "_" . $module_data . "_cat";
-	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $tab . " WHERE catid!=" . $id . " AND alias=" . $db->dbescape( $alias ) ) );
+	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE catid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $db->sql_fetch_assoc( $result );
-		$db->sql_freeresult( $result );
+		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
+		$item = $result->fetch();
+		$result->closeCursor();
 
 		$alias .= "-" . $item['auto_increment'];
 	}
@@ -31,12 +31,12 @@ if( $mod == "cat" )
 elseif( $mod == "topics" )
 {
 	$tab = NV_PREFIXLANG . "_" . $module_data . "_topics";
-	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $tab . " WHERE topicid!=" . $id . " AND alias=" . $db->dbescape( $alias ) ) );
+	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE topicid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $db->sql_fetch_assoc( $result );
-		$db->sql_freeresult( $result );
+		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
+		$item = $result->fetch();
+		$result->closeCursor();
 
 		$alias .= "-" . $item['auto_increment'];
 	}
@@ -44,12 +44,12 @@ elseif( $mod == "topics" )
 elseif( $mod == "blockcat" )
 {
 	$tab = NV_PREFIXLANG . "_" . $module_data . "_block_cat";
-	list( $nb ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $tab . " WHERE bid!=" . $id . " AND alias=" . $db->dbescape( $alias ) ) );
+	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE bid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $db->sql_fetch_assoc( $result );
-		$db->sql_freeresult( $result );
+		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
+		$item = $result->fetch();
+		$result->closeCursor();
 
 		$alias .= "-" . $item['auto_increment'];
 	}

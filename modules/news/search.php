@@ -18,10 +18,10 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS r.id, r.title, r.alias, r.catid, r.hometext, 
 	AND r.status= 1 
 	LIMIT " . $pages . "," . $limit;
 
-$tmp_re = $db->sql_query( $sql );
+$tmp_re = $db->query( $sql );
 
-$result = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $result->fetch( 3 );
 
 if( $all_page )
 {
@@ -29,15 +29,15 @@ if( $all_page )
 	$array_cat_alias[0] = "other";
 
 	$sql_cat = "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $m_values['module_data'] . "_cat";
-	$re_cat = $db->sql_query( $sql_cat );
-	while( list( $catid, $alias ) = $db->sql_fetchrow( $re_cat ) )
+	$re_cat = $db->query( $sql_cat );
+	while( list( $catid, $alias ) = $re_cat->fetch( 3 ) )
 	{
 		$array_cat_alias[$catid] = $alias;
 	}
 
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-	while( list( $id, $tilterow, $alias, $catid, $hometext, $bodytext ) = $db->sql_fetchrow( $tmp_re ) )
+	while( list( $id, $tilterow, $alias, $catid, $hometext, $bodytext ) = $tmp_re->fetch( 3 ) )
 	{
 		$content = $hometext . $bodytext;
 

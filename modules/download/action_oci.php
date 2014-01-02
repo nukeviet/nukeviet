@@ -9,9 +9,9 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
-$sql_drop_module = array( );
+$sql_drop_module = array();
 
-$count = $db->query( "select count(*) from all_tables where table_name='" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data ) . "'" )->fetchColumn( );
+$count = $db->query( "select count(*) from all_tables where table_name='" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data ) . "'" )->fetchColumn();
 if( $count )
 {
 	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ' cascade constraints PURGE';
@@ -70,10 +70,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS
-	  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
-	  FOR EACH ROW WHEN (new.id is null)
+	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
+	 FOR EACH ROW WHEN (new.id is null)
 		BEGIN
-		  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS.nextval INTO :new.id FROM DUAL;
+		 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS.nextval INTO :new.id FROM DUAL;
 		END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS;';
 
 
@@ -105,10 +105,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TMP';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TMP
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tmp
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tmp
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TMP.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TMP.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TMP;';
 
 
@@ -132,10 +132,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_categories
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_categories
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments (
@@ -156,10 +156,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN';
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN;';
 
 

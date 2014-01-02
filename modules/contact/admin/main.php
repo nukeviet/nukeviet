@@ -34,7 +34,7 @@ if( ! empty( $contact_allowed['view'] ) )
 	
 	$sdr->select( '*' )
 		->order('id DESC')
-		->limit( $per_page,  $page );
+		->limit( $per_page, $page );
 	
 	$result = $db->query( $sdr->get() );	
 

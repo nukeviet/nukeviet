@@ -10,9 +10,9 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows ORDER BY full_name";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-if( ! $db->sql_numrows( $result ) )
+if( ! $result->rowCount() )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
 	die();
@@ -25,7 +25,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $a = 0;
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$xtpl->assign( 'ROW', array(
 		'full_name' => $row['full_name'],

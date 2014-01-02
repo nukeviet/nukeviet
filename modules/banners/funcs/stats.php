@@ -25,9 +25,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$xtpl->parse( 'main.management' );
 
 	$sql = "SELECT id,title FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act='1' AND clid=" . $banner_client_info['id'] . " ORDER BY id ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$xtpl->assign( 'ads', $row );
 		$xtpl->parse( 'main.ads' );

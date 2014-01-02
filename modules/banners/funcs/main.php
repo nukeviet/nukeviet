@@ -14,10 +14,10 @@ $contents['info'] = $lang_module['main_page_info'];
 $contents['detail'] = $lang_global['detail'];
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE act=1 ORDER BY blang ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 $contents['rows'] = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$contents['rows'][$row['id']]['title'] = array( $row['title'] );
 	$contents['rows'][$row['id']]['blang'] = array( $lang_module['blang'], ( ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) );

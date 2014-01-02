@@ -18,8 +18,8 @@ if( empty( $id ) )
 }
 
 $sql = "SELECT full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 
 if( $numrows != 1 )
 {
@@ -27,7 +27,7 @@ if( $numrows != 1 )
 	die();
 }
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $page_title = $lang_module['info_client_title'];
 

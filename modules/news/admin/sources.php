@@ -31,7 +31,7 @@ if( ! empty( $savecat ) )
 		$link = '';
 	}
 
-	list( $logo_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid . "" ) );
+	$logo_old = $db->query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid . "" )->fetchColumn();
 
 	$logo = $nv_Request->get_title( 'logo', 'post', '' );
 	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
@@ -53,7 +53,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $sourceid == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" ) );
+		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 		if( $db->sql_query_insert_id( $sql ) )
@@ -86,7 +86,7 @@ if( ! empty( $savecat ) )
 $sourceid = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if( $sourceid > 0 )
 {
-	list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT sourceid, title, link, logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources where sourceid=" . $sourceid ) );
+	list( $sourceid, $title, $link, $logo ) = $db->query( "SELECT sourceid, title, link, logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources where sourceid=" . $sourceid )->fetch( 3 );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 

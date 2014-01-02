@@ -41,7 +41,7 @@ if( empty( $vid ) )
 		$is_update = implode( ',', $is_update );
 
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET act=0 WHERE vid IN (" . $is_update . ")";
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		nv_del_moduleCache( $module_name );
 	}
@@ -169,7 +169,7 @@ else
 		{
 			$in = implode( ',', $array_id );
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitstotal = hitstotal+1 WHERE vid ='" . $vid . "' AND id IN (" . $in . ")";
-			$db->sql_query( $sql );
+			$db->query( $sql );
 			file_put_contents( $dir . "/" . $logfile, '', LOCK_EX );
 			$note = $lang_module['okmsg'];
 		}
@@ -180,12 +180,12 @@ else
 	}
 
 	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid = " . $vid . " ORDER BY id ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$totalvote = 0;
 	$vrow = array();
 
-	while( $row2 = $db->sql_fetchrow( $result ) )
+	while( $row2 = $result->fetch() )
 	{
 		$totalvote += ( int )$row2['hitstotal'];
 		$vrow[] = $row2;

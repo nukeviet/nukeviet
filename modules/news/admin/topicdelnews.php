@@ -15,7 +15,7 @@ $id = explode( ',', $id );
 foreach( $id as $value )
 {
 	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET topicid=0 WHERE id='" . $value . "'";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 }
 
 echo $lang_module['topic_delete_success'];

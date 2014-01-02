@@ -14,15 +14,15 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $id )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	if( $db->sql_numrows( $result ) != 1 )
+	if( $result->rowCount() != 1 )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 
-	$row = $db->sql_fetchrow( $result );
+	$row = $result->fetch();
 
 	$page_title = $lang_module['edit'];
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
@@ -103,7 +103,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "" ) );
+			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "" )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
@@ -186,13 +186,13 @@ foreach( $layout_array as $value )
 	$xtpl->parse( 'main.layout_func' );
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
-$result = $db->sql_query( $sql );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( $sql );
+if( $result->rowCount() )
 {
 	$array_googleplus = array();
 	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
 	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
-	while( $grow = $db->sql_fetch_assoc( $result ) )
+	while( $grow = $result->fetch() )
 	{
 		$array_googleplus[] = $grow;
 	}

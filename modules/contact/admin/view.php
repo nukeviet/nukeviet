@@ -18,15 +18,15 @@ if( ! $id )
 }
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id=" . $id;
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) != 1 )
+if( $result->rowCount() != 1 )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $contact_allowed = nv_getAllowed();
 
@@ -40,7 +40,7 @@ $is_read = intval( $row['is_read'] );
 if( ! $is_read )
 {
 	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_send SET is_read=1 WHERE id=" . $id;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$is_read = 1;
 }
@@ -82,8 +82,8 @@ if( isset( $contact_allowed['reply'][$row['cid']] ) )
 if( $row['is_reply'] and ! empty( $row['reply_content'] ) )
 {
 	$sql = "SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM " . NV_AUTHORS_GLOBALTABLE . " t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=" . intval( $row['reply_aid'] );
-	$result = $db->sql_query( $sql );
-	$adm_row = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	$adm_row = $result->fetch();
 
 	$reply_name = $adm_row['admin_fullname'];
 	if( empty( $reply_name ) )

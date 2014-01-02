@@ -10,9 +10,9 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_d . "_cat ORDER BY sort ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-While( $row = $db->sql_fetchrow( $result ) )
+While( $row = $result->fetch() )
 {
 	$t_sp = '';
 

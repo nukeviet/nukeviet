@@ -12,19 +12,19 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['voting_list'];
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY vid ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$sql1 = "SELECT SUM(hitstotal) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid='" . $row['vid'] . "'";
-		$result1 = $db->sql_query( $sql1 );
-		$totalvote = $db->sql_fetchrow( $result1 );
+		$result1 = $db->query( $sql1 );
+		$totalvote = $result1->fetch();
 
 		$xtpl->assign( 'ROW', array(
 			'status' => $row['act'] == 1 ? $lang_module['voting_yes'] : $lang_module['voting_no'],

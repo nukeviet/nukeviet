@@ -36,7 +36,7 @@ function nv_block_headline()
 			->limit( 2 );
 		$result = $db->query( $sdr->get() );
 
-		while( list( $bid, $titlebid, $numberbid ) = $db->sql_fetchrow( $result ) )
+		while( list( $bid, $titlebid, $numberbid ) = $result->fetch( 3 ) )
 		{
 			++$id;
 			$array_bid_content[$id] = array(
@@ -56,7 +56,7 @@ function nv_block_headline()
 				->order( 't2.weight ASC' )
 				->limit( $array_bid['number'] );
 
-			$result = $db->sql_query( $sdr->get() );
+			$result = $db->query( $sdr->get() );
 			$array_content = array();
 			while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt ) = $result->fetch( 3 ) )
 			{

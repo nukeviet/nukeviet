@@ -15,12 +15,12 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( empty( $id ) ) die( 'Stop!!!' );
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 
 if( $numrows != 1 ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $contents = array();
 $contents['caption'] = sprintf( $lang_module['info_plan_caption'], $row['title'] );

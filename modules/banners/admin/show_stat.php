@@ -16,12 +16,12 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( empty( $id ) ) die( 'Stop!!!' );
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 
 if( $numrows != 1 ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $current_day = date( "d" );
 $current_month = date( "n" );
@@ -54,7 +54,7 @@ $day_max = ( $data_month == $current_month ) ? $current_day : date( "t", $time )
 $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $publ_day : 1;
 $maxday = mktime( 24, 60, 60, $data_month, $day_max, $current_year );
 $minday = mktime( 0, 0, 0, $data_month, $day_min, $current_year );
-$sum = $db->sql_numrows( $db->sql_query( "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . "" ) );
+$sum = $db->query( "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . "" )->rowCount();
 
 $cts = array();
 
@@ -65,16 +65,16 @@ if( $ext == 'country' )
 
 	$sql = "SELECT click_country FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . " ORDER BY click_country DESC";
 
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$unknown = 0;
 
 	if( ! empty( $result ) )
 	{
-		$result = $db->sql_query( $sql );
+		$result = $db->query( $sql );
 		$bd = array();
 		if( ! empty( $result ) )
 		{
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				if( ! isset( $bd[$row['click_country']] ) ) $bd[$row['click_country']] = 0;
 				$bd[$row['click_country']] = $bd[$row['click_country']] + 1;
@@ -111,11 +111,11 @@ elseif( $ext == 'browse' )
 
 	$sql = "SELECT click_browse_name FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . " ORDER BY click_country DESC";
 
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$bd = array();
 	if( ! empty( $result ) )
 	{
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			if( ! isset( $bd[$row['click_browse_name']] ) ) $bd[$row['click_browse_name']] = 0;
 			$bd[$row['click_browse_name']] = $bd[$row['click_browse_name']] + 1;
@@ -149,12 +149,12 @@ elseif( $ext == 'browse' )
 elseif( $ext == 'os' )
 {
 	$sql = "SELECT click_os_name FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . " ORDER BY click_os_name DESC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$bd = array();
 
 	if( ! empty( $result ) )
 	{
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			if( ! isset( $bd[$row['click_os_name']] ) ) $bd[$row['click_os_name']] = 0;
 			$bd[$row['click_os_name']] = $bd[$row['click_os_name']] + 1;
@@ -201,12 +201,12 @@ elseif( $ext == 'os' )
 else
 {
 	$sql = "SELECT click_time FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid=" . $id . " AND click_time>=" . $minday . " AND click_time<=" . $maxday . " ORDER BY click_time DESC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$bd = array();
 
 	if( ! empty( $result ) )
 	{
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			if( ! isset( $bd[date( 'd', $row['click_time'] )] ) ) $bd[date( 'd', $row['click_time'] )] = 0;
 			$bd[date( 'd', $row['click_time'] )] = $bd[date( 'd', $row['click_time'] )] + 1;

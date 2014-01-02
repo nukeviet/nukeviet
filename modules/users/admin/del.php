@@ -15,34 +15,34 @@ $userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
 if( ! $userid )
 {
-	die( "NO" );
+	die( 'NO' );
 }
 
 $sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $userid;
-$query = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $query );
+$query = $db->query( $sql );
+$numrows = $query->rowCount();
 if( $numrows )
 {
-	die( "NO" );
+	die( 'NO' );
 }
 
 $sql = "SELECT username, full_name, email, photo, idsite FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid;
-$query = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $query );
+$query = $db->query( $sql );
+$numrows = $query->rowCount();
 if( $numrows != 1 )
 {
-	die( "NO" );
+	die( 'NO' );
 }
 
-list( $username, $full_name, $email, $photo, $idsite ) = $db->sql_fetchrow( $query );
+list( $username, $full_name, $email, $photo, $idsite ) = $query->fetch( 3 );
 
 if( $global_config['idsite'] > 0 AND $idsite != $global_config['idsite'] )
 {
-	die( "NO" );
+	die( 'NO' );
 }
 
-$query = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE group_id IN (1,2,3) AND userid=" . $userid );
-if( $db->sql_numrows( $query ) )
+$query = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE group_id IN (1,2,3) AND userid=" . $userid );
+if( $query->rowCount() )
 {
 	die( "ERROR_" . $lang_module['delete_group_system'] );
 }
@@ -50,16 +50,16 @@ else
 {
 	$userdelete = ( ! empty( $full_name ) ) ? $full_name . " (" . $username . ")" : $username;
 
-	$result = $db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid );
+	$result = $db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid );
 	if( ! $result )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
 
-	$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid . ")" );
-	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid );
-	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid=" . $userid );
-	$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $userid );
+	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid . ")" );
+	$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid );
+	$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid=" . $userid );
+	$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $userid );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', "userid " . $userid, $admin_info['userid'] );
 

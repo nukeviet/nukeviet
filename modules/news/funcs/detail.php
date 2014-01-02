@@ -32,11 +32,11 @@ elseif( $func_who_view == 3 and defined( 'NV_IS_USER' ) and nv_is_in_groups( $us
 
 if( $allowed )
 {
-	$query = $db->sql_query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id );
-	$news_contents = $db->sql_fetch_assoc( $query );
+	$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id );
+	$news_contents = $query->fetch();
 	if( $news_contents['id'] > 0 )
 	{
-		$body_contents = $db->sql_fetch_assoc( $db->sql_query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $news_contents['id'] / 2000 ) . ' where id=' . $news_contents['id'] ) );
+		$body_contents = $db->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $news_contents['id'] / 2000 ) . ' where id=' . $news_contents['id'] )->fetch();
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
 
@@ -47,13 +47,13 @@ if( $allowed )
 			{
 				$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 				$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
-				$db->sql_query( $query );
+				$db->query( $query );
 
 				$array_catid = explode( ',', $news_contents['listcatid'] );
 				foreach( $array_catid as $catid_i )
 				{
 					$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
-					$db->sql_query( $query );
+					$db->query( $query );
 				}
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
@@ -128,9 +128,9 @@ if( $allowed )
 	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 
 	$sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	list( $sourcetext, $source_link, $source_logo ) = $db->sql_fetchrow( $result );
+	list( $sourcetext, $source_link, $source_logo ) = $result->fetch( 3 );
 	unset( $sql, $result );
 
 	$news_contents['newscheckss'] = md5( $news_contents['id'] . session_id() . $global_config['sitekey'] );
@@ -157,7 +157,7 @@ if( $allowed )
 			'link' => $link
 		);
 	}
-	$related->closeCursor(  );
+	$related->closeCursor();
 
 	sort( $related_new_array, SORT_NUMERIC );
 
@@ -180,9 +180,9 @@ if( $allowed )
 			'link' => $link
 		);
 	}
-	$related->closeCursor( );
+	$related->closeCursor();
 
-	$db->sql_freeresult( $related );
+	$related->closeCursor();
 	unset( $related, $row );
 
 	$topic_array = array();
@@ -258,14 +258,14 @@ if( $allowed )
 		);
 	}
 
-	list( $post_username, $post_full_name ) = $db->sql_fetchrow( $db->sql_query( 'SELECT username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] ) );
+	list( $post_username, $post_full_name ) = $db->query( 'SELECT username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
 
 	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
 
 	$array_keyword = array();
 	$key_words = array();
-	$_query = $db->sql_query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
-	while( $row = $db->sql_fetch_assoc( $_query ) )
+	$_query = $db->query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
+	while( $row = $_query->fetch() )
 	{
 		$array_keyword[] = $row;
 		$key_words[] = $row['keyword'];

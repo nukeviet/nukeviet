@@ -123,7 +123,7 @@ foreach( $list_cats as $value )
 			$result = $db->query( $sdr->get() );
 
 			$array_item = array();
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				$uploadtime = ( int )$row['uploadtime'];
 				if( $uploadtime >= $today )

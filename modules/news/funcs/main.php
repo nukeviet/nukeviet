@@ -51,7 +51,7 @@ if( empty( $contents ) )
 
 		$sdr->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' );
 		$sdr->order( $order_by );
-		$sdr->limit( $per_page,  ( $page - 1 ) * $per_page);
+		$sdr->limit( $per_page, ( $page - 1 ) * $per_page);
 		
 		$end_publtime = 0;
 
@@ -177,9 +177,9 @@ if( empty( $contents ) )
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_catpage[$key] = $array_cat_i;
-				$result = $db->sql_query( $sdr->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit($array_cat_i['numlinks'])->get() );
+				$result = $db->query( $sdr->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit($array_cat_i['numlinks'])->get() );
 
-				while( $item = $db->sql_fetch_assoc( $result ) )
+				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
 					{
@@ -268,7 +268,7 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1 AND inhome=1' );
 					
-		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
+		$result_all = $db->query( 'SELECT FOUND_ROWS()' );
 		list( $all_page ) = $db->sql_fetchrow( $sdr->get() );
 
 		$sdr->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )

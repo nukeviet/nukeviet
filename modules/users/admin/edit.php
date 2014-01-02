@@ -20,27 +20,27 @@ if( empty( $userid ) )
 }
 
 $sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 if( $numrows != 1 )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $allow = false;
 
 $sql = "SELECT lev FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $userid;
-$query = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $query );
+$query = $db->query( $sql );
+$numrows = $query->rowCount();
 if( ! $numrows )
 {
 	$allow = true;
 }
 else
 {
-	list( $level ) = $db->sql_fetchrow( $query );
+	list( $level ) = $query->fetch( 3 );
 
 	if( $admin_info['admin_id'] == $userid or $admin_info['level'] < $level )
 	{
@@ -64,15 +64,15 @@ $_user = array();
 $groups_list = nv_groups_list();
 
 $array_old_groups = array();
-$result_gru = $db->sql_query( "SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid );
-while( $row_gru = $db->sql_fetch_assoc( $result_gru ) )
+$result_gru = $db->query( "SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid );
+while( $row_gru = $result_gru->fetch() )
 {
 	$array_old_groups[] = $row_gru['group_id'];
 }
 
 $array_field_config = array();
-$result_field = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
-while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -82,9 +82,9 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
 		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1] . "";
-		$result = $db->sql_query( $query );
+		$result = $db->query( $query );
 		$weight = 0;
-		while( list( $key, $val ) = $db->sql_fetchrow( $result ) )
+		while( list( $key, $val ) = $result->fetch( 3 ) )
 		{
 			$row_field['field_choices'][$key] = $val;
 		}
@@ -137,19 +137,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $userid . " AND md5username=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $userid . " AND md5username=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) )->rowCount() != 0 )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $userid . " AND email=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $userid . " AND email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $userid . " AND email=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $userid . " AND email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -230,7 +230,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				}
 			}
 
-			$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
 				username=" . $db->dbescape( $_user['username'] ) . ",
 				md5username=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ",
 				password=" . $db->dbescape( $password ) . ",
@@ -248,7 +248,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			if( ! empty( $array_field_config ) )
 			{
-				$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info SET " . implode( ', ', $query_field ) . " WHERE userid=" . $userid );
+				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info SET " . implode( ', ', $query_field ) . " WHERE userid=" . $userid );
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', "userid " . $userid, $admin_info['userid'] );
@@ -277,7 +277,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
 					$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo=' . $db->dbescape( $file_name ) . ' WHERE userid=' . $userid;
-					$db->sql_query( $sql );
+					$db->query( $sql );
 				}
 			}
 
@@ -295,8 +295,8 @@ else
 	if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $userid;
-	$result = $db->sql_query( $sql );
-	$custom_fields = $db->sql_fetch_assoc( $result );
+	$result = $db->query( $sql );
+	$custom_fields = $result->fetch();
 }
 
 $genders = array(

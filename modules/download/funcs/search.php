@@ -52,10 +52,10 @@ else
 }
 $sql .= "ORDER BY uploadtime DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
 
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result_all );
+$result_all = $db->query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $result_all->fetch( 3 );
 
 if( ! empty( $all_page ) )
 {
@@ -65,7 +65,7 @@ if( ! empty( $all_page ) )
 	$today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
 	$yesterday = $today - 86400;
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$cattitle = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "\">" . $list_cats[$row['catid']]['title'] . "</a>";
 		$more_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'];

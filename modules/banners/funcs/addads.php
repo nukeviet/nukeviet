@@ -145,9 +145,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		$xtpl->assign( 'pagetitle', $lang_module['addads_pagetitle'] );
 	}
 
-	$result = $db->sql_query( "SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC" );
+	$result = $db->query( "SELECT id,title, blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC" );
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$row['title'] .= ' (' . ( empty( $row['blang'] ) ? $lang_module['addads_block_lang_all'] : $lang_array[$row['blang']] ) . ')';
 		$xtpl->assign( 'blockitem', $row );

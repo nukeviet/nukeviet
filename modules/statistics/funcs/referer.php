@@ -19,15 +19,15 @@ if( ! isset( $host ) or ! preg_match( "/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/",
 
 $sql = "SELECT month01,month02,month03,month04,month05,month06,month07,month08,month09,month10,month11,month12
 FROM " . NV_REFSTAT_TABLE . " WHERE host=" . $db->dbescape( $host );
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 if( empty( $numrows ) )
 {
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
-list( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 ) = $db->sql_fetchrow( $result );
+list( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 ) = $result->fetch( 3 );
 
 $contents = '';
 $current_month_num = date( 'n', NV_CURRENTTIME );

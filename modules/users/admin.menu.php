@@ -9,7 +9,7 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" ) );
+$access_admin = $db->query( "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" )->fetchColumn();
 $access_admin = unserialize( $access_admin );
 
 $allow_func = array( 'main', 'getuserid' );

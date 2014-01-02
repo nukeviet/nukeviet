@@ -12,28 +12,28 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 $lang_siteinfo = nv_get_lang_module( $mod );
 
 // Tong so file
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 1' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_publtime'], 'value' => $number );
 }
 
 // Tong so file het han
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 0' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' where status= 0' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_expired'], 'value' => $number );
 }
 
 // Tong so binh luan duoc dang
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_comments where status = 1' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_comments where status = 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
 }
 
 // So binh luan cho duyet
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_comments where status = 0' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_comments where status = 0' )->fetchColumn();
 if( $number > 0 )
 {
 	$pendinginfo[] = array(
@@ -57,7 +57,7 @@ if( $number > 0 )
 }
 
 // So bao cao loi duoc gui toi
-list( $number ) = $db->sql_fetchrow( $db->sql_query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_report' ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_report' )->fetchColumn();
 if( $number > 0 )
 {
 	$pendinginfo[] = array(

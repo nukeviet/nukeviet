@@ -19,8 +19,8 @@ $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $arr['id'] != 0 )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $arr['id'];
-	$result = $db->sql_query( $sql );
-	$arr = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	$arr = $result->fetch();
 
 	if( empty( $arr ) )
 	{
@@ -40,15 +40,15 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( empty( $id ) ) die( 'NO_' . $id );
 
 	$query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 
 	if( $numrows != 1 ) die( 'NO_' . $id );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', 'aboutid ' . $id, $admin_info['userid'] );
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id = ' . $id;
-	if( $db->exec( $sql )  )
+	if( $db->exec( $sql ) )
 	{
 		nv_del_moduleCache( $module_name );
 	}
@@ -97,7 +97,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 			description = ' . $db->dbescape( $arr_menu['description'] ) . '
 		WHERE id =' . $arr_menu['id'];
 
-		if( $db->sql_query( $sql ) )
+		if( $db->query( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -115,8 +115,8 @@ $sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu';
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
-$result1 = $db->sql_query( $sql1 );
-list( $all_page ) = $db->sql_fetchrow( $result1 );
+$result1 = $db->query( $sql1 );
+list( $all_page ) = $result1->fetch( 3 );
 
 $error2 = '';
 
@@ -132,13 +132,13 @@ else
 	$per_page = 20;
 
 	$sql2 = 'SELECT * ' . $sql . ' LIMIT ' . $page . ', ' . $per_page;
-	$query2 = $db->sql_query( $sql2 );
+	$query2 = $db->query( $sql2 );
 
 	$array = array();
 
 	$a = 0;
 
-	while( $row = $db->sql_fetchrow( $query2 ) )
+	while( $row = $query2->fetch() )
 	{
 		$arr_items = array();
 		$b = 0;

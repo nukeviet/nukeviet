@@ -18,11 +18,11 @@ if( empty( $id ) )
 }
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 if( $numrows != 1 ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $file_name = $row['file_name'];
 $file_ext = $row['file_ext'];
@@ -57,19 +57,19 @@ if( empty( $contents['file_allowed_ext'] ) )
 }
 
 $sql = "SELECT id,login,full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $clients = array();
-while( $cl_row = $db->sql_fetchrow( $result ) )
+while( $cl_row = $result->fetch() )
 {
 	$clients[$cl_row['id']] = $cl_row['full_name'] . " (" . $cl_row['login'] . ")";
 }
 
 $sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $plans = array();
-while( $pl_row = $db->sql_fetchrow( $result ) )
+while( $pl_row = $result->fetch() )
 {
 	$plans[$pl_row['id']] = $pl_row['title'] . " (" . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 }
@@ -198,14 +198,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$exptime = 0;
 			}
 
-			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT pid FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . intval( $id ) . "" ) );
+			$pid_old = $db->query( "SELECT pid FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . intval( $id ) . "" )->fetchColumn();
 
 			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->dbescape( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
 				 file_name=" . $db->dbescape( $file_name ) . ", file_ext=" . $db->dbescape( $file_ext ) . ", file_mime=" . $db->dbescape( $file_mime ) . ",
 				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->dbescape( $file_alt ) . ", imageforswf=" . $db->dbescape( $imageforswf ) . ",
 				 click_url=" . $db->dbescape( $click_url ) . ", target=" . $db->dbescape( $target ) . ",
 				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
-			$db->sql_query( $sql );
+			$db->query( $sql );
 
 			if( $pid_old != $pid )
 			{

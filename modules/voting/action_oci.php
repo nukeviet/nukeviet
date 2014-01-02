@@ -9,15 +9,15 @@
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
-$sql_drop_module = array( );
+$sql_drop_module = array();
 $query = $db->query( "select table_name from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data ) . "' OR table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
 }
 
 $query = $db->query( "select sequence_name from user_sequences WHERE sequence_name LIKE '" . strtoupper( "SNV_" . $lang . "_" . $module_data . "_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop SEQUENCE ' . $row['sequence_name'];
 }
@@ -42,10 +42,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
-  FOR EACH ROW WHEN (new.vid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
+ FOR EACH ROW WHEN (new.vid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.vid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.vid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
@@ -60,10 +60,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data . '_row' ) . '.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data . '_row' ) . '.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW;';
 
 ?>

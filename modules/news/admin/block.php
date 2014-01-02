@@ -13,12 +13,12 @@ $page_title = $lang_module['block'];
 $set_active_op = 'blockcat';
 
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
 	$array_block = array();
-	while( list( $bid_i, $title_i ) = $db->sql_fetchrow( $result ) )
+	while( list( $bid_i, $title_i ) = $result->fetch( 3 ) )
 	{
 		$array_block[$bid_i] = $title_i;
 	}
@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( 'intval', $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->sql_query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
+		$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
@@ -95,9 +95,9 @@ else
 }
 
 $result = $db->query( $sdr->get() );
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
-	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
 			'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : '',

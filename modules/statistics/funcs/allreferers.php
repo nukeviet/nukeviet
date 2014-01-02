@@ -14,8 +14,8 @@ $key_words = $module_info['keywords'];
 $mod_title = $lang_module['referer'];
 
 $sql = "SELECT COUNT(*), SUM(total), MAX(total) FROM " . NV_REFSTAT_TABLE . "";
-$result = $db->sql_query( $sql );
-list( $all_page, $total, $max ) = $db->sql_fetchrow( $result );
+$result = $db->query( $sql );
+list( $all_page, $total, $max ) = $result->fetch( 3 );
 
 if( $all_page )
 {
@@ -24,10 +24,10 @@ if( $all_page )
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allreferers'];
 
 	$sql = "SELECT host,total, last_update FROM " . NV_REFSTAT_TABLE . " WHERE total!=0 ORDER BY total DESC LIMIT " . $page . "," . $per_page;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$host_list = array();
-	while( list( $host, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
+	while( list( $host, $count, $last_visit ) = $result->fetch( 3 ) )
 	{
 		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
 		$bymonth = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['referer'] . "&amp;host=" . $host . "\">" . $lang_module['statbymoth2'] . "</a>\n";

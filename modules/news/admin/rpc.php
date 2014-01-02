@@ -29,8 +29,8 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 	$id = $nv_Request->get_int( 'id', 'post,get', '' );
 	if( $id > 0 )
 	{
-		$query = $db->sql_query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id . "" );
-		$news_contents = $db->sql_fetchrow( $query );
+		$query = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id . "" );
+		$news_contents = $query->fetch();
 		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
 		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
 

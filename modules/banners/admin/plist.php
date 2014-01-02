@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $client_info['is_myreferer'] != 1 ) die( 'Wrong URL' );
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $contents = array();
 $contents['caption'] = $lang_module['plans_list2'];
@@ -23,7 +23,7 @@ $contents['add'] = $lang_module['add_banner'];
 $contents['del'] = $lang_global['delete'];
 $contents['rows'] = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$contents['rows'][$row['id']]['title'] = $row['title'];
 	$contents['rows'][$row['id']]['blang'] = ( ! empty( $row['blang'] ) ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'];

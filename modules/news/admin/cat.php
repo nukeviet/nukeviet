@@ -60,7 +60,7 @@ if( ! empty( $savecat ) )
 
 	if( $catid == 0 and $title != '' )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) ) );
+		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 		$viewcat = "viewcat_page_new";
 		$subcatid = '';
@@ -78,7 +78,7 @@ if( ! empty( $savecat ) )
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
-				$db->sql_query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
+				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comment) VALUES ('" . $admin_id . "', '" . $newcatid . "', '1', '1', '1', '1', '1', '1')" );
 			}
 
 			nv_del_moduleCache( $module_name );
@@ -98,11 +98,11 @@ if( ! empty( $savecat ) )
 		{
 			if( $parentid != $parentid_old )
 			{
-				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) ) );
+				$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->dbescape( $parentid ) )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
 				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE catid=" . intval( $catid );
-				$db->sql_query( $sql );
+				$db->query( $sql );
 
 				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid'] );

@@ -38,13 +38,13 @@ function nv_banner_client_checkdata( $cookie )
 		{
 			$login = $client['login'];
 			$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login = " . $db->dbescape( $login ) . " AND act=1";
-			$result = $db->sql_query( $query );
+			$result = $db->query( $query );
 
-			$numrows = $db->sql_numrows( $result );
+			$numrows = $result->rowCount();
 			if( $numrows != 1 ) return array();
 
-			$row = $db->sql_fetchrow( $result );
-			$db->sql_freeresult( $result );
+			$row = $result->fetch();
+			$result->closeCursor();
 
 			if( strcasecmp( $client['checknum'], $row['check_num'] ) == 0 and 			//checknum
 			! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and 			//user_agent

@@ -50,10 +50,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data );
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . ';';
 
 ?>

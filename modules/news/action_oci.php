@@ -10,15 +10,15 @@
 if( ! defined( 'NV_IS_FILE_MODULES' ) )
 	die( 'Stop!!!' );
 
-$sql_drop_module = array( );
+$sql_drop_module = array();
 $query = $db->query( "select table_name from all_tables WHERE table_name LIKE '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
 }
 
 $query = $db->query( "select sequence_name from user_sequences WHERE sequence_name LIKE '" . strtoupper( "SNV_" . $lang . "_" . $module_data . "_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop SEQUENCE ' . $row['sequence_name'];
 }
@@ -54,10 +54,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat
-  FOR EACH ROW WHEN (new.catid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat
+ FOR EACH ROW WHEN (new.catid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.catid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.catid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_sources (
@@ -75,13 +75,13 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_sources
-  FOR EACH ROW WHEN (new.sourceid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_sources
+ FOR EACH ROW WHEN (new.sourceid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU.nextval INTO :new.sourceid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU.nextval INTO :new.sourceid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU;';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_topics  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_topics (
 	 topicid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -99,13 +99,13 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_topics
-  FOR EACH ROW WHEN (new.topicid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_topics
+ FOR EACH ROW WHEN (new.topicid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP.nextval INTO :new.topicid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP.nextval INTO :new.topicid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP;';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block_cat  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block_cat (
 	 bid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
 	 adddefault NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 numbers NUMBER(5,0) DEFAULT 10 NOT NULL ENABLE,
@@ -125,13 +125,13 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block_cat
-  FOR EACH ROW WHEN (new.bid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block_cat
+ FOR EACH ROW WHEN (new.bid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT.nextval INTO :new.bid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT.nextval INTO :new.bid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT;';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_comments  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_comments (
 	 cid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
 	 id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 content VARCHAR2(4000 CHAR) NOT NULL ENABLE,
@@ -147,23 +147,23 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
-  FOR EACH ROW WHEN (new.cid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
+ FOR EACH ROW WHEN (new.cid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.cid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.cid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN;';
 
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_cid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(id) TABLESPACE USERS";
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_cposttime ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(post_time) TABLESPACE USERS";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block (
 	 bid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 weight NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_block_bid UNIQUE (bid,id)
 )";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
 	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE ,
 	 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 listcatid VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -196,10 +196,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
-  FOR EACH ROW WHEN (new.id is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
+ FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW.nextval INTO :new.id FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW;';
 
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rcat ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows(catid) TABLESPACE USERS";
@@ -212,13 +212,13 @@ $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rpub
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rexptime ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows(exptime) TABLESPACE USERS";
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rstatus ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows(status) TABLESPACE USERS";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_bodytext  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_bodytext (
 	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 bodytext CLOB NOT NULL ENABLE,
 	 primary key (id)
 )";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_bodyhtml_1  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_bodyhtml_1 (
 	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 bodyhtml CLOB NOT NULL ENABLE,
 	 sourcetext VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -231,7 +231,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 primary key (id)
 )";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_config_post  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_config_post (
 	 pid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
 	 member NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 group_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -243,7 +243,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_config UNIQUE (member,group_id)
 )";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_admins  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_admins (
 	 userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 admin NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
@@ -255,7 +255,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_admins UNIQUE (userid,catid)
 )";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_tags  (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_tags (
 	 tid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
 	 numnews NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -269,10 +269,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG
-  BEFORE INSERT  ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags
-  FOR EACH ROW WHEN (new.tid is null)
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags
+ FOR EACH ROW WHEN (new.tid is null)
 	BEGIN
-	  SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG.nextval INTO :new.tid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG.nextval INTO :new.tid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_tags_id (

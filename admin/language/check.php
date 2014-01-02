@@ -175,7 +175,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	}
 	elseif( $check_type == 1 )
 	{
-		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang . "";
+		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
 	}
 
 	if( empty( $array_where ) )

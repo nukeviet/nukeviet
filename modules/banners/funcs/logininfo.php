@@ -30,8 +30,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	else
 	{
 		$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login = " . $db->dbescape( $login ) . " AND act=1";
-		$result = $db->sql_query( $sql );
-		$numrows = $db->sql_numrows( $result );
+		$result = $db->query( $sql );
+		$numrows = $result->rowCount();
 
 		if( $numrows != 1 )
 		{
@@ -39,8 +39,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$row = $db->sql_fetchrow( $result );
-			$db->sql_freeresult( $result );
+			$row = $result->fetch();
+			$result->closeCursor();
 
 			if( ! $crypt->validate( $password, $row['pass'] ) )
 			{
@@ -53,7 +53,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
 				$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET check_num = " . $db->dbescape( $checknum ) . ", last_login = " . $current_login . ", last_ip = " . $db->dbescape( $client_info['ip'] ) . ", last_agent = " . $db->dbescape( $agent ) . " WHERE id=" . $id;
-				if( ! $db->sql_query( $sql ) ) die( 'action' );
+				if( ! $db->query( $sql ) ) die( 'action' );
 				$client = array(
 					'login' => $login,
 					'checknum' => $checknum,

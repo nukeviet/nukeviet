@@ -37,9 +37,9 @@ $type_target[3] = $lang_module['type_target3'];
 
 $arr_menu_item = array();
 $sql = "SELECT title,id FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows ORDER BY id ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$arr_menu_item[$row['id']] = $row['title'];
 }
@@ -54,10 +54,10 @@ function nv_list_menu()
 	global $db, $module_data;
 
 	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_menu ORDER BY id ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$list = array();
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$list[$row['id']] = array(
 			'id' => ( int )$row['id'],
@@ -84,14 +84,14 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 
 	$array = array();
 	$sql = "SELECT id, parentid FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE parentid=" . $parentid . " AND mid= " . $mid . " ORDER BY weight ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$array_cat_order = array();
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$array_cat_order[] = $row['id'];
 	}
-	$db->sql_freeresult( $result );
+	$result->closeCursor();
 
 	$weight = 0;
 	if( $parentid > 0 )
@@ -108,7 +108,7 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 		++$order;
 		++$weight;
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE id=" . intval( $catid_i );
-		$db->sql_query( $sql );
+		$db->query( $sql );
 		$order = nv_fix_cat_order( $mid, $catid_i, $order, $lev );
 	}
 

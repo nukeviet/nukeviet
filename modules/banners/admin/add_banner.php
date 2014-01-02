@@ -36,19 +36,19 @@ if( empty( $contents['file_allowed_ext'] ) )
 }
 
 $sql = "SELECT id,login,full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $clients = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$clients[$row['id']] = $row['full_name'] . " (" . $row['login'] . ")";
 }
 
 $sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $plans = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 }

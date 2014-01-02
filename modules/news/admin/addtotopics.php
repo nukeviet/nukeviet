@@ -54,9 +54,9 @@ $xtpl = new XTemplate( 'addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_conf
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if( $db->sql_numrows( $result ) )
+if( $result->rowCount() )
 {
-	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
 			'id' => $id,
@@ -67,8 +67,8 @@ if( $db->sql_numrows( $result ) )
 		$xtpl->parse( 'main.loop' );
 	}
 
-	$result = $db->sql_query( 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
-	while( $row = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
+	while( $row = $result->fetch() )
 	{
 		$xtpl->assign( 'TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ) );
 		$xtpl->parse( 'main.topicsid' );

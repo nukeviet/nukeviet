@@ -42,9 +42,9 @@ function nv_CreateXML_bannerPlan()
 	include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 
 	$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE act = 1";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$id = intval( $row['id'] );
 		if( $global_config['idsite'] )
@@ -77,8 +77,8 @@ function nv_CreateXML_bannerPlan()
 			$query2 .= " ORDER BY weight ASC";
 		}
 
-		$result2 = $db->sql_query( $query2 );
-		$numrows2 = $db->sql_numrows( $result2 );
+		$result2 = $db->query( $query2 );
+		$numrows2 = $result2->rowCount();
 
 		if( empty( $numrows2 ) )
 		{
@@ -87,7 +87,7 @@ function nv_CreateXML_bannerPlan()
 
 		$plan['banners'] = array();
 
-		while( $row2 = $db->sql_fetchrow( $result2 ) )
+		while( $row2 = $result2->fetch() )
 		{
 			$plan['banners'][] = array(
 				'id' => $row2['id'],
@@ -122,25 +122,25 @@ function nv_fix_banner_weight( $pid )
 {
 	global $db, $global_config;
 
-	list( $pid, $form ) = $db->sql_fetchrow( $db->sql_query( "SELECT id, form FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . intval( $pid ) . "" ) );
+	list( $pid, $form ) = $db->query( "SELECT id, form FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . intval( $pid ) . "" )->fetch( 3 );
 
 	if( $pid > 0 and $form == "sequential" )
 	{
 		$query_weight = "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE pid=" . $pid . " ORDER BY weight ASC, id DESC";
-		$result = $db->sql_query( $query_weight );
+		$result = $db->query( $query_weight );
 
 		$weight = 0;
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			++$weight;
 			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight=" . $weight . " WHERE id=" . $row['id'];
-			$db->sql_query( $sql );
+			$db->query( $sql );
 		}
 	}
 	elseif( $pid > 0 and $form == "random" )
 	{
 		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight='0' WHERE pid=" . $pid;
-		$db->sql_query( $sql );
+		$db->query( $sql );
 	}
 }
 

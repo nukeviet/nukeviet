@@ -101,12 +101,12 @@ if( ! empty( $submit ) )
 				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
-					$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->dbescape( $title ) . ", url = " . $db->dbescape( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->dbescape( $title ) . ", url = " . $db->dbescape( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
 					++$maxoption_data;
 				}
 				else
 				{
-					$db->sql_query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
+					$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
 				}
 			}
 
@@ -139,7 +139,7 @@ if( ! empty( $submit ) )
 				$act = 1;
 			}
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->dbescape( $question ) . ", link=" . $db->dbescape( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->dbescape( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid . "";
-			if( $db->sql_query( $sql ) )
+			if( $db->query( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
@@ -172,14 +172,14 @@ else
 	if( $vid > 0 )
 	{
 		$queryvote = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid . "";
-		$rowvote = $db->sql_fetchrow( $db->sql_query( $queryvote ) );
+		$rowvote = $db->query( $queryvote )->fetch();
 
 		$sql = "SELECT id, title, url FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid='" . $vid . "' ORDER BY id ASC";
-		$result = $db->sql_query( $sql );
-		$maxoption = $db->sql_numrows( $result );
+		$result = $db->query( $sql );
+		$maxoption = $result->rowCount();
 		$maxoption = ( $maxoption > 0 ) ? $maxoption : 1;
 
-		while( list( $id, $title, $url ) = $db->sql_fetchrow( $result ) )
+		while( list( $id, $title, $url ) = $result->fetch( 3 ) )
 		{
 			$array_answervote[$id] = $title;
 			$array_urlvote[$id] = $url;

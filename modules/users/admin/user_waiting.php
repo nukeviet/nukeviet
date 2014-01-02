@@ -15,11 +15,11 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
 	$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $userid;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	if( ! $result )
 	{
-		die( "NO" );
+		die( 'NO' );
 	}
 
 	die( "OK" );
@@ -37,14 +37,14 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	}
 
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $userid;
-	$result = $db->sql_query( $sql );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $sql );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
-	$row = $db->sql_fetchrow( $result );
+	$row = $result->fetch();
 
 	$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
 		username, md5username, password, email, full_name, gender, photo, birthday, 
@@ -68,14 +68,14 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 		$query_field = array();
 		$query_field['userid'] = $userid;
-		$result_field = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
-		while( $row_f = $db->sql_fetch_assoc( $result_field ) )
+		$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
+		while( $row_f = $result_field->fetch() )
 		{
 			$query_field["" . $row_f['field'] . ""] = ( isset( $users_info["" . $row_f['field'] . ""] ) ) ? $users_info["" . $row_f['field'] . ""] : $db->dbescape( $row_f['default_value'] );
 		}
-		if( $db->sql_query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
+		if( $db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
 		{
-			$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
+			$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid'] );
 			$full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
 			$subject = $lang_module['adduser_register'];
@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 		else
 		{
-			$db->sql_query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] );
+			$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] );
 		}
 	}
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting' );
@@ -146,14 +146,14 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
 $sql2 = "SELECT SQL_CALC_FOUND_ROWS * " . $sql . " LIMIT " . $page . ", " . $per_page;
-$query2 = $db->sql_query( $sql2 );
+$query2 = $db->query( $sql2 );
 
-$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $numf ) = $db->sql_fetchrow( $result_all );
+$result_all = $db->query( "SELECT FOUND_ROWS()" );
+list( $numf ) = $result_all->fetch( 3 );
 $all_page = ( $numf ) ? $numf : 1;
 
 $users_list = array();
-while( $row = $db->sql_fetchrow( $query2 ) )
+while( $row = $query2->fetch() )
 {
 	$users_list[$row['userid']] = array(
 		'userid' => ( int )$row['userid'],

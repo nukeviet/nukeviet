@@ -16,9 +16,9 @@ function GetSourceNews( $sourceid )
 	if( $sourceid > 0 )
 	{
 		$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
-		$re = $db->sql_query( $sql );
+		$re = $db->query( $sql );
 
-		if( list( $title ) = $db->sql_fetchrow( $re ) )
+		if( list( $title ) = $re->fetch( 3 ) )
 		{
 			return $title;
 		}
@@ -119,15 +119,15 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	FROM " . $table_search . " as tb1 " . $tbl_src . "
 	WHERE tb1.status=1 " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
 
-	$result = $db->sql_query( $sql );
-	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-	list( $numRecord ) = $db->sql_fetchrow( $result_all );
+	$result = $db->query( $sql );
+	$result_all = $db->query( "SELECT FOUND_ROWS()" );
+	list( $numRecord ) = $result_all->fetch( 3 );
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
 	$show_no_image = $module_config[$module_name]['show_no_image'];
 
-	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 ) //image thumb
 		{

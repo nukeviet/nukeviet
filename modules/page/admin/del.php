@@ -14,9 +14,9 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 if( empty( $id ) ) die( 'NO_' . $id );
 
 $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) != 1 ) die( 'NO_' . $id );
+if( $result->rowCount() != 1 ) die( 'NO_' . $id );
 
 nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete', "ID: " . $id, $admin_info['userid'] );
 
@@ -24,13 +24,13 @@ $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id = " . $i
 if( $db->exec( $sql ) )
 {
 	$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$weight = 0;
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		++$weight;
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET weight=" . $weight . " WHERE id=" . $row['id'];
-		$db->sql_query( $sql );
+		$db->query( $sql );
 	}
 	nv_del_moduleCache( $module_name );
 }

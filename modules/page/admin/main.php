@@ -17,8 +17,8 @@ $page_title = $lang_module['list'];
 $array = array();
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
-$result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$num = $result->rowCount();
 
 if( $num < 1 )
 {
@@ -29,7 +29,7 @@ if( $num < 1 )
 $array_status = array( $lang_module['inactive'], $lang_module['active'] );
 
 $i = 0;
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$row['url_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'];
 

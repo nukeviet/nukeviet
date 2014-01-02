@@ -68,12 +68,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->dbescape( $login ) ) ) > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->dbescape( $login ) )->rowCount() > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = '';
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->dbescape( $email ) ) ) > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->dbescape( $email ) )->rowCount() > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = '';

@@ -841,7 +841,6 @@ while( list( $id, $run_func ) = $result->fetch( 3 ) )
 	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
 	$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_cronjobs SET " . $lang_data . "_cron_name = " . $db->quote( $cron_name ) . " WHERE id=" . $id;
 }
-$db->sql_freeresult( $result );
 
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'modern' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'";
 

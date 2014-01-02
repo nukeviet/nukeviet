@@ -24,13 +24,13 @@ if( $id and ! in_array( $id, $dlrp ) )
 	$nv_Request->set_Session( 'dlrp', $dlrp );
 
 	$query = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id;
-	$result = $db->sql_query( $query );
-	list( $num ) = $db->sql_fetchrow( $result );
+	$result = $db->query( $query );
+	list( $num ) = $result->fetch( 3 );
 
 	if( $num )
 	{
 		$query = "REPLACE INTO " . NV_PREFIXLANG . "_" . $module_data . "_report VALUES (" . $id . ", " . $db->dbescape( $client_info['ip'] ) . ", " . NV_CURRENTTIME . ")";
-		$db->sql_query( $query );
+		$db->query( $query );
 	}
 }
 

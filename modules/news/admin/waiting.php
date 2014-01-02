@@ -16,8 +16,8 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 
 	$exp_array = array();
 	$sql = "SELECT id, listcatid, publtime, exptime, status FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id in (" . implode( ',', $id_array ) . ")";
-	$result = $db->sql_query( $sql );
-	while( list( $id, $listcatid, $publtime, $exptime, $status ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( $sql );
+	while( list( $id, $listcatid, $publtime, $exptime, $status ) = $result->fetch( 3 ) )
 	{
 		if( $exptime == 0 or $exptime > NV_CURRENTTIME )
 		{
@@ -67,10 +67,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 			}
 			if( $check_permission > 0 )
 			{
-				$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET status = '0' WHERE id =" . $id . "" );
+				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET status = '0' WHERE id =" . $id . "" );
 				foreach( $arr_catid as $catid_i )
 				{
-					$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET status = '0' WHERE id =" . $id . "" );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET status = '0' WHERE id =" . $id . "" );
 				}
 				$exp_array[] = $id;
 			}

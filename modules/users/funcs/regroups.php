@@ -30,8 +30,8 @@ else
 		$groups = $in_groups = array();
 
 		$array_old_groups = array();
-		$result_gru = $db->sql_query( "SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
-		while( $row_gru = $db->sql_fetch_assoc( $result_gru ) )
+		$result_gru = $db->query( "SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
+		while( $row_gru = $result_gru->fetch() )
 		{
 			$array_old_groups[] = $row_gru['group_id'];
 		}
@@ -62,7 +62,7 @@ else
 				}
 			}
 
-			$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode( ',', $in_groups ) . "' WHERE userid=" . $user_info['userid'] );
+			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode( ',', $in_groups ) . "' WHERE userid=" . $user_info['userid'] );
 
 			$recomplete = true;
 		}

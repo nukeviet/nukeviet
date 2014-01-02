@@ -58,7 +58,7 @@ function nv_getRPC( $url, $data )
 
 				if( isset( $proxy[3], $proxy[4] ) and ! empty( $proxy[3] ) and ! empty( $proxy[4] ) )
 				{
-					$http_request .= "Proxy-Authorization: Basic " . base64_encode( "" . $proxy[3] . ":" . $proxy[4] . "" ) . "\r\n";
+					$http_request .= "Proxy-Authorization: Basic " . base64_encode( $proxy[3] . ":" . $proxy[4] ) . "\r\n";
 				}
 				$http_request .= "\r\n";
 				$response = '';

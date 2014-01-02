@@ -78,13 +78,13 @@ function set_reg_attribs( $attribs )
 		}
 
 		$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE username=" . $db->dbescape( $username2 );
-		$result = $db->sql_query( $query );
-		$numrows = $db->sql_numrows( $result );
+		$result = $db->query( $query );
+		$numrows = $result->rowCount();
 		if( ! $numrows )
 		{
 			$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE username=" . $db->dbescape( $username2 );
-			$result = $db->sql_query( $query );
-			$numrows = $db->sql_numrows( $result );
+			$result = $db->query( $query );
+			$numrows = $result->rowCount();
 			if( ! $numrows )
 			{
 				$reg_attribs['username'] = $username2;
@@ -149,12 +149,12 @@ function openidLogin_Res1( $attribs )
 		WHERE a.opid=" . $db->dbescape( $opid ) . "
 		AND a.email=" . $db->dbescape( $email ) . "
 		AND a.userid=b.userid";
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows )
 	{
-		list( $user_id, $op_email, $user_active ) = $db->sql_fetchrow( $result );
-		$db->sql_freeresult( $result );
+		list( $user_id, $op_email, $user_active ) = $result->fetch( 3 );
+		$result->closeCursor();
 
 		$nv_Request->unset_request( 'openid_attribs', 'session' );
 
@@ -171,7 +171,7 @@ function openidLogin_Res1( $attribs )
 		}
 
 		$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $db->dbescape( $user_id );
-		$result = $db->sql_query( $query );
+		$result = $db->query( $query );
 		if( defined( 'NV_IS_USER_FORUM' ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php' ) )
 		{
 			require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php' ;
@@ -185,9 +185,9 @@ function openidLogin_Res1( $attribs )
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 			}
 		}
-		elseif( $db->sql_numrows( $result ) )
+		elseif( $result->rowCount() )
 		{
-			$row = $db->sql_fetchrow( $result );
+			$row = $result->fetch();
 			validUserLog( $row, 1, $opid );
 			$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 		}
@@ -200,12 +200,12 @@ function openidLogin_Res1( $attribs )
 	}
 
 	$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->dbescape( $email );
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows )
 	{
-		$nv_row = $db->sql_fetchrow( $result );
-		$db->sql_freeresult( $result );
+		$nv_row = $result->fetch();
+		$result->closeCursor();
 
 		$login_allowed = false;
 
@@ -254,7 +254,7 @@ function openidLogin_Res1( $attribs )
 		if( $login_allowed )
 		{
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $nv_row['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-			$db->sql_query( $sql );
+			$db->query( $sql );
 			if( intval( $nv_row['active'] ) != 1 )
 			{
 				openidLogin_Res0( $lang_module['login_no_active'] );
@@ -285,14 +285,14 @@ function openidLogin_Res1( $attribs )
 		{
 			$query .= " AND regdate>" . ( NV_CURRENTTIME - 86400 );
 		}
-		$result = $db->sql_query( $query );
-		$numrows = $db->sql_numrows( $result );
+		$result = $db->query( $query );
+		$numrows = $result->rowCount();
 		if( $numrows )
 		{
 			if( $global_config['allowuserreg'] == 2 )
 			{
-				$row = $db->sql_fetchrow( $result );
-				$db->sql_freeresult( $result );
+				$row = $result->fetch();
+				$result->closeCursor();
 
 				if( $nv_Request->isset_request( 'openid_active_confirm', 'post' ) )
 				{
@@ -331,14 +331,14 @@ function openidLogin_Res1( $attribs )
 						}
 
 						$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->dbescape( $row['userid'] );
-						$db->sql_query( $sql );
+						$db->query( $sql );
 
 						$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $userid . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-						$db->sql_query( $sql );
+						$db->query( $sql );
 
 						$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $db->dbescape( $userid );
-						$result = $db->sql_query( $query );
-						$row = $db->sql_fetchrow( $result );
+						$result = $db->query( $query );
+						$row = $result->fetch();
 
 						validUserLog( $row, 1, $opid );
 
@@ -423,10 +423,10 @@ function openidLogin_Res1( $attribs )
 					$error = $lang_global['loginincorrect'];
 
 					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
-					$result = $db->sql_query( $sql );
-					if( $db->sql_numrows( $result ) == 1 )
+					$result = $db->query( $sql );
+					if( $result->rowCount() == 1 )
 					{
-						$row = $db->sql_fetchrow( $result );
+						$row = $result->fetch();
 						if( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
 						{
 							if( ! $row['active'] )
@@ -437,7 +437,7 @@ function openidLogin_Res1( $attribs )
 							{
 								$error = '';
 								$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $row['userid'] ) . ", " . $db->dbescape( $attribs['id'] ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-								$db->sql_query( $sql );
+								$db->query( $sql );
 								validUserLog( $row, 1, $opid );
 							}
 						}
@@ -522,12 +522,12 @@ function openidLogin_Res1( $attribs )
 			}
 
 			$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid . " AND active=1";
-			$result = $db->sql_query( $query );
-			$row = $db->sql_fetchrow( $result );
-			$db->sql_freeresult( $result );
+			$result = $db->query( $query );
+			$row = $result->fetch();
+			$result->closeCursor();
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $row['userid'] ) . ", " . $db->dbescape( $reg_attribs['openid'] ) . ", " . $db->dbescape( $reg_attribs['opid'] ) . ", " . $db->dbescape( $reg_attribs['email'] ) . ")";
-			$db->sql_query( $sql );
+			$db->query( $sql );
 			validUserLog( $row, 1, $reg_attribs['opid'] );
 			$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 
@@ -767,10 +767,10 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			$error = $lang_global['loginincorrect'];
 
 			$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
-			$result = $db->sql_query( $sql );
-			if( $db->sql_numrows( $result ) == 1 )
+			$result = $db->query( $sql );
+			if( $result->rowCount() == 1 )
 			{
-				$row = $db->sql_fetchrow( $result );
+				$row = $result->fetch();
 				if( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
 				{
 					if( ! $row['active'] )

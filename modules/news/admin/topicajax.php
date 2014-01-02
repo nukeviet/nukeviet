@@ -15,7 +15,7 @@ if( empty( $q ) ) return;
 $sdr->reset()
 	->select('title')
 	->from( NV_PREFIXLANG . '_' . $module_data . '_topics' )
-	->where( 'title LIKE :title OR keywords :keywords'  )
+	->where( 'title LIKE :title OR keywords :keywords' )
 	->order( 'weight ASC' )
 	->limit( 50 );
 

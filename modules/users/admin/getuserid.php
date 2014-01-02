@@ -216,12 +216,12 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$per_page = 10;
 
 		$sql2 = "SELECT SQL_CALC_FOUND_ROWS userid, username, email, regdate " . $sql . " LIMIT " . $page . ", " . $per_page;
-		$query2 = $db->sql_query( $sql2 );
+		$query2 = $db->query( $sql2 );
 
-		$result = $db->sql_query( "SELECT FOUND_ROWS()" );
-		list( $all_page ) = $db->sql_fetchrow( $result );
+		$result = $db->query( "SELECT FOUND_ROWS()" );
+		list( $all_page ) = $result->fetch( 3 );
 
-		while( $row = $db->sql_fetchrow( $query2 ) )
+		while( $row = $query2->fetch() )
 		{
 			$array_user[$row['userid']] = array(
 				"userid" => $row['userid'],

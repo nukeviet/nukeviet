@@ -53,9 +53,9 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 		{
 			$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . " WHERE status=1 ORDER BY rand() DESC";
 
-			if( ( $query = $db->sql_query( $sql ) ) !== false )
+			if( ( $query = $db->query( $sql ) ) !== false )
 			{
-				if( ( $row = $db->sql_fetchrow( $query ) ) !== false )
+				if( ( $row = $query->fetch() ) !== false )
 				{
 					$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'] . $global_config['rewrite_exturl'];
 					$title = $row['title'];

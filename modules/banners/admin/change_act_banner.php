@@ -16,18 +16,18 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 if( empty( $id ) ) die( 'Stop!!!' );
 
 $sql = "SELECT act FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . $id . " AND actIN (0,1,3)";
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$numrows = $result->rowCount();
 if( $numrows != 1 ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 $act = intval( $row['act'] );
 if( $act == 0 ) $act = 1;
 elseif( $act == 1 ) $act = 3;
 elseif( $act == 3 ) $act = 1;
 
 $sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET act=" . $act . " WHERE id=" . $id;
-$return = $db->sql_query( $sql );
+$return = $db->query( $sql );
 $return = $return ? "OK" : "NO";
 
 nv_CreateXML_bannerPlan();

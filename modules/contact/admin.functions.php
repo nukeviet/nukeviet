@@ -19,7 +19,7 @@ function nv_getAllowed()
 	global $module_data, $db, $admin_info;
 
 	$sql = "SELECT id,full_name,admins FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$contact_allowed = array(
 		'view' => array(),
@@ -27,7 +27,7 @@ function nv_getAllowed()
 		'obt' => array()
 	);
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$id = intval( $row['id'] );
 

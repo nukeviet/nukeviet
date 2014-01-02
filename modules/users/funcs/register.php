@@ -57,17 +57,17 @@ function nv_check_username_reg( $login )
 	if( $login != $db->fixdb( $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
-	$result = $db->sql_query( $sql );
-	list( $deny_name ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
+	$result = $db->query( $sql );
+	list( $deny_name ) = $result->fetch( 3 );
+	$result->closeCursor();
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username=" . $db->dbescape( md5( $login ) );
-	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
+	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE md5username=" . $db->dbescape( md5( $login ) );
-	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
+	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['account_registered_name'], '<strong>' . $login . '</strong>' );
 
 	return '';
 }
@@ -87,9 +87,9 @@ function nv_check_email_reg( $email )
 	if( $error != '' ) return preg_replace( "/\&(l|r)dquo\;/", '', strip_tags( $error ) );
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
-	$result = $db->sql_query( $sql );
-	list( $deny_email ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
+	$result = $db->query( $sql );
+	list( $deny_email ) = $result->fetch( 3 );
+	$result->closeCursor();
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
 
@@ -100,13 +100,13 @@ function nv_check_email_reg( $email )
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email RLIKE " . $db->dbescape( $pattern );
-	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE emailRLIKE " . $db->dbescape( $pattern );
-	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE email RLIKE " . $db->dbescape( $pattern );
-	if( $db->sql_numrows( $db->sql_query( $sql ) ) != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	return '';
 }
@@ -119,8 +119,8 @@ $data_questions[0] = array(
 	'selected' => ''
 );
 $sql = "SELECT qid, title FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-$result = $db->sql_query( $sql );
-while( $row = $db->sql_fetchrow( $result ) )
+$result = $db->query( $sql );
+while( $row = $result->fetch() )
 {
 	$data_questions[$row['qid']] = array(
 		'qid' => $row['qid'],
@@ -249,20 +249,20 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 
 			$query_field = array();
 			$query_field['userid'] = $userid;
-			$result_field = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
-			while( $row_f = $db->sql_fetch_assoc( $result_field ) )
+			$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
+			while( $row_f = $result_field->fetch() )
 			{
 				$query_field["" . $row_f['field'] . ""] = $db->dbescape( $row_f['default_value'] );
 			}
-			$db->sql_query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
+			$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $userid . ", " . $db->dbescape( $reg_attribs['openid'] ) . ", " . $db->dbescape( $reg_attribs['opid'] ) . ", " . $db->dbescape( $reg_attribs['email'] ) . ")";
-			$db->sql_query( $sql );
+			$db->query( $sql );
 
 			$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid . " AND active=1";
-			$result = $db->sql_query( $query );
-			$row = $db->sql_fetchrow( $result );
-			$db->sql_freeresult( $result );
+			$result = $db->query( $query );
+			$row = $result->fetch();
+			$result->closeCursor();
 
 			validUserLog( $row, 1, $reg_attribs['opid'] );
 
@@ -293,9 +293,9 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 	$array_register['agreecheck'] = $array_register['agreecheck'] ? " checked=\"checked\"" : '';
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
-	$result = $db->sql_query( $sql );
-	list( $siteterms ) = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
+	$result = $db->query( $sql );
+	list( $siteterms ) = $result->fetch( 3 );
+	$result->closeCursor();
 
 	$contents = openid_register( $gfx_chk, $array_register, $siteterms, $data_questions );
 
@@ -311,8 +311,8 @@ $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
 
 $array_field_config = array();
-$result_field = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
-while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -322,9 +322,9 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
 		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1] . "";
-		$result = $db->sql_query( $query );
+		$result = $db->query( $query );
 		$weight = 0;
-		while( list( $key, $val ) = $db->sql_fetchrow( $result ) )
+		while( list( $key, $val ) = $result->fetch( 3 ) )
 		{
 			$row_field['field_choices'][$key] = $val;
 		}
@@ -544,7 +544,7 @@ if( $checkss == $array_register['checkss'] )
 				}
 
 				$query_field['userid'] = $userid;
-				$db->sql_query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
+				$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
 
 				$subject = $lang_module['account_register'];
 				$message = sprintf( $lang_module['account_register_info'], $array_register['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, $array_register['username'], $array_register['password'] );
@@ -582,9 +582,9 @@ else
 $array_register['agreecheck'] = $array_register['agreecheck'] ? " checked=\"checked\"" : '';
 
 $sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
-$result = $db->sql_query( $sql );
-list( $siteterms ) = $db->sql_fetchrow( $result );
-$db->sql_freeresult( $result );
+$result = $db->query( $sql );
+list( $siteterms ) = $result->fetch( 3 );
+$result->closeCursor();
 
 $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_questions, $array_field_config, $custom_fields );
 

@@ -15,8 +15,8 @@ $global_array_cat = array();
 $global_array_cat[0] = array( "alias" => "Other" );
 
 $sql = "SELECT catid, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY sort ASC";
-$result = $db->sql_query( $sql );
-while( list( $catid_i, $alias_i ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( $sql );
+while( list( $catid_i, $alias_i ) = $result->fetch( 3 ) )
 {
 	$global_array_cat[$catid_i] = array( "alias" => $alias_i );
 }
@@ -24,13 +24,13 @@ while( list( $catid_i, $alias_i ) = $db->sql_fetchrow( $result ) )
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 20;
 $sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias, c.userid, c.email FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_rows b ON (a.id=b.id) LEFT JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " c ON (a.userid =c.userid) ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result_all );
+$result_all = $db->query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $result_all->fetch( 3 );
 
 $array = array();
-while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
+while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $result->fetch( 3 ) )
 {
 	$arr_listcatid = explode( ',', $listcatid );
 	$catid_i = end( $arr_listcatid );

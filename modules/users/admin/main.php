@@ -87,17 +87,17 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
 $sql2 = "SELECT SQL_CALC_FOUND_ROWS * " . $sql . " LIMIT " . $page . ", " . $per_page;
-$query2 = $db->sql_query( $sql2 );
+$query2 = $db->query( $sql2 );
 
-$result = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT FOUND_ROWS()" );
+list( $all_page ) = $result->fetch( 3 );
 
 $users_list = array();
 $admin_in = array();
 $is_edit = ( in_array( 'edit', $allow_func ) ) ? true : false;
 $is_delete = ( in_array( 'del', $allow_func ) ) ? true : false;
 $is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
-while( $row = $db->sql_fetchrow( $query2 ) )
+while( $row = $query2->fetch() )
 {
 	$users_list[$row['userid']] = array(
 		'userid' => ( int )$row['userid'],
@@ -124,8 +124,8 @@ if( ! empty( $admin_in ) )
 {
 	$admin_in = implode( ',', $admin_in );
 	$sql = "SELECT admin_id, lev FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id IN (" . $admin_in . ")";
-	$query = $db->sql_query( $sql );
-	while( $row = $db->sql_fetchrow( $query ) )
+	$query = $db->query( $sql );
+	while( $row = $query->fetch() )
 	{
 		$users_list[$row['admin_id']]['is_delete'] = false;
 		if( $row['lev'] == 1 )

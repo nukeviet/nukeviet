@@ -23,15 +23,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 		exit();
 	}
 
-	$row = $db->sql_fetchrow( $result );
+	$row = $result->fetch();
 
 	$groups_list = nv_groups_list();
 	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
@@ -41,8 +41,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-	$result = $db->sql_query( $sql );
-	list( $upload_dir ) = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	list( $upload_dir ) = $result->fetch( 3 );
 
 	$array = array();
 	$is_error = false;
@@ -215,8 +215,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 
 		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE title=" . $db->dbescape( $array['title'] );
-		$result = $db->sql_query( $sql );
-		list( $is_exists ) = $db->sql_fetchrow( $result );
+		$result = $db->query( $sql );
+		list( $is_exists ) = $result->fetch( 3 );
 
 		if( empty( $array['title'] ) )
 		{
@@ -409,7 +409,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 
 				$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
-				$db->sql_query( $sql );
+				$db->query( $sql );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 				exit();
@@ -732,14 +732,14 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$query = "SELECT fileupload, fileimage FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 )
 	{
 		die( 'NO' );
 	}
 
-	list( $fileupload, $fileimage ) = $db->sql_fetchrow( $result );
+	list( $fileupload, $fileimage ) = $result->fetch( 3 );
 
 	if( ! empty( $fileupload ) )
 	{
@@ -764,7 +764,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	die( 'OK' );
 }
@@ -775,14 +775,14 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$query = 'SELECT fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( ! $numrows )
 	{
 		die( 'NO' );
 	}
 
-	while( list( $fileupload, $fileimage ) = $db->sql_fetchrow( $result ) )
+	while( list( $fileupload, $fileimage ) = $result->fetch( 3 ) )
 	{
 		if( ! empty( $fileupload ) )
 		{
@@ -808,7 +808,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 	}
 
 	$sql = 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	die( 'OK' );
 }
@@ -819,8 +819,8 @@ $page_title = $lang_module['download_filequeue'];
 $sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
-$result1 = $db->sql_query( $sql1 );
-list( $all_file ) = $db->sql_fetchrow( $result1 );
+$result1 = $db->query( $sql1 );
+list( $all_file ) = $result1->fetch( 3 );
 
 if( ! $all_file )
 {
@@ -843,11 +843,11 @@ if( empty( $listcats ) )
 }
 
 $sql2 = 'SELECT * ' . $sql . ' ORDER BY uploadtime DESC';
-$result2 = $db->sql_query( $sql2 );
+$result2 = $db->query( $sql2 );
 
 $array = array();
 
-while( $row = $db->sql_fetchrow( $result2 ) )
+while( $row = $result2->fetch() )
 {
 	$array[$row['id']] = array(
 		'id' => ( int )$row['id'],

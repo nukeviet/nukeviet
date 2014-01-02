@@ -35,8 +35,8 @@ $key_words = $module_info['keywords'];
 // check user post content
 $array_post_config = array();
 $sql = 'SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY pid ASC';
-$result = $db->sql_query( $sql );
-while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result, 1 ) )
+$result = $db->query( $sql );
+while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
 {
 	$array_post_config[$member][$group_id] = array(
 		'addcontent' => $addcontent,
@@ -172,7 +172,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 {
 	if( $contentid > 0 )
 	{
-		$rowcontent_old = $db->sql_fetchrow( $db->sql_query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid . ' and admin_id= ' . $user_info['userid'] ), 2 );
+		$rowcontent_old = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid . ' and admin_id= ' . $user_info['userid'] )->fetch();
 		$contentid = ( isset( $rowcontent_old['id'] ) ) ? intval( $rowcontent_old['id'] ) : 0;
 
 		if( empty( $contentid ) )
@@ -259,9 +259,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 	$array_catid_module = array();
 	$sql = 'SELECT catid, title, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-	$result_cat = $db->sql_query( $sql );
+	$result_cat = $db->query( $sql );
 
-	while( list( $catid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result_cat, 1 ) )
+	while( list( $catid_i, $title_i, $lev_i ) = $result_cat->fetch( 3 ) )
 	{
 		$array_catid_module[] = array(
 			'catid' => $catid_i,
@@ -271,11 +271,11 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	}
 
 	$sql = 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$array_topic_module = array();
 	$array_topic_module[0] = $lang_module['topic_sl'];
 
-	while( list( $topicid_i, $title_i ) = $db->sql_fetchrow( $result, 1 ) )
+	while( list( $topicid_i, $title_i ) = $result->fetch( 3 ) )
 	{
 		$array_topic_module[$topicid_i] = $title_i;
 	}
@@ -373,11 +373,11 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				if( isset( $url_info['scheme'] ) and isset( $url_info['host'] ) )
 				{
 					$sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
-					list( $rowcontent['sourceid'] ) = $db->sql_fetchrow( $db->sql_query( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link=' . $db->dbescape( $sourceid_link ) ), 1 );
+					$rowcontent['sourceid'] = $db->query( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link=' . $db->dbescape( $sourceid_link ) )->fetchColumn();
 
 					if( empty( $rowcontent['sourceid'] ) )
 					{
-						list( $weight ) = $db->sql_fetchrow( $db->sql_query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' ) );
+						$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
 						$weight = intval( $weight ) + 1;
 						$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $url_info['host'] ) . ", " . $db->dbescape( $sourceid_link ) . ", '', " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 						$rowcontent['sourceid'] = $db->sql_query_insert_id( $query );
@@ -419,12 +419,12 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				{
 					foreach( $catids as $catid )
 					{
-						$db->sql_query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id'] . "" );
+						$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id'] . "" );
 					}
 
 					$tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 );
-					$db->sql_query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
-					$db->sql_query( "INSERT INTO " . $tbhtml . " (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
+					$db->query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
+					$db->query( "INSERT INTO " . $tbhtml . " (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
 							" . $rowcontent['id'] . ",
 							" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
 							" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
@@ -435,7 +435,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			 				" . intval( $rowcontent['allowed_save'] ) . ", 0
 						)" );
 
-					$db->sql_query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->dbescape_string( $rowcontent['bodytext'] ) . ')' );
+					$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->dbescape_string( $rowcontent['bodytext'] ) . ')' );
 					$user_content = defined( 'NV_IS_USER' ) ? ' | ' . $user_info['username'] : '';
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0 );
@@ -480,17 +480,17 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 					foreach( $array_cat_old as $catid )
 					{
-						$db->sql_query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'] );
+						$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'] );
 					}
 
 					$array_cat_new = explode( ',', $rowcontent['listcatid'] );
 
 					foreach( $array_cat_new as $catid )
 					{
-						$db->sql_query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
+						$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
 					}
 
-					$db->sql_query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " SET
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " SET
 							bodyhtml=" . $db->dbescape_string( $rowcontent['bodyhtml'] ) . ",
 							imgposition=" . intval( $rowcontent['imgposition'] ) . ",
 							 sourcetext=" . $db->dbescape_string( $rowcontent['sourcetext'] ) . ",
@@ -500,7 +500,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 							 allowed_save=" . intval( $rowcontent['allowed_save'] ) . "
 							WHERE id =" . $rowcontent['id'] );
 
-					$db->sql_query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=' . $db->dbescape_string( $rowcontent['bodytext'] ) . ' WHERE id =' . $rowcontent['id'] );
+					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=' . $db->dbescape_string( $rowcontent['bodytext'] ) . ' WHERE id =' . $rowcontent['id'] );
 
 					$user_content = defined( 'NV_IS_USER' ) ? ' | ' . $user_info['username'] : '';
 
@@ -566,7 +566,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	}
 	elseif( $contentid > 0 )
 	{
-		$rowcontent = $db->sql_fetchrow( $db->sql_query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid ) );
+		$rowcontent = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $contentid )->fetch();
 
 		if( empty( $rowcontent['id'] ) )
 		{
@@ -574,7 +574,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			die();
 		}
 
-		$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " where id=" . $rowcontent['id'] ) );
+		$body_contents = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " where id=" . $rowcontent['id'] )->fetch();
 		$rowcontent = array_merge( $rowcontent, $body_contents );
 		unset( $body_contents );
 	}
@@ -698,12 +698,12 @@ elseif( defined( 'NV_IS_USER' ) )
 
 	$array_catpage = array();
 	$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE admin_id= " . $user_info['userid'] . " ORDER BY id DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page;
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
-	list( $all_page ) = $db->sql_fetchrow( $result_all );
+	$result_all = $db->query( 'SELECT FOUND_ROWS()' );
+	list( $all_page ) = $result_all->fetch( 3 );
 
-	while( $item = $db->sql_fetchrow( $result ) )
+	while( $item = $result->fetch() )
 	{
 		if( $item['homeimgthumb'] == 1 ) // image thumb
 		{

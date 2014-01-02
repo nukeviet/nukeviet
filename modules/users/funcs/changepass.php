@@ -20,8 +20,8 @@ elseif( ! defined( 'NV_IS_USER' ) )
 	die();
 }
 $sql = "SELECT password FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $user_info['userid'];
-$query = $db->sql_query( $sql );
-list( $oldpassword ) = $db->sql_fetchrow( $query );
+$query = $db->query( $sql );
+list( $oldpassword ) = $query->fetch( 3 );
 
 $page_title = $mod_title = $lang_module['change_pass'];
 $key_words = $module_info['keywords'];
@@ -59,7 +59,7 @@ if( $checkss == $array_data['checkss'] )
 		$new_password = $crypt->hash( $array_data['new_password'] );
 
 		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password=" . $db->dbescape( $new_password ) . " WHERE userid=" . $user_info['userid'];
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		$contents = user_info_exit( $lang_module['change_pass_ok'] );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";

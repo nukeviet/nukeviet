@@ -39,10 +39,10 @@ else
 		if( preg_match( "/^(.*)\-([a-z0-9]{32})$/", $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
 		{
-			$result = $db->sql_query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username = " . $db->dbescape( $md5 ) );
-			if( $db->sql_numrows( $result ) > 0 )
+			$result = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username = " . $db->dbescape( $md5 ) );
+			if( $result->rowCount() > 0 )
 			{
-				$item = $db->sql_fetch_assoc( $result );
+				$item = $result->fetch();
 				if( change_alias( $item['username'] ) != $matches[1] )
 				{
 					// Chuyen ve trang module ngay khong can thong bao
@@ -106,14 +106,14 @@ else
 			}
 		}
 
-		$result = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS userid, username, md5username, full_name, photo, gender, regdate FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE active=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
+		$result = $db->query( "SELECT SQL_CALC_FOUND_ROWS userid, username, md5username, full_name, photo, gender, regdate FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE active=1 ORDER BY " . $orderby . " " . $sortby . " LIMIT " . $page . "," . $per_page );
 
-		$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-		list( $all_page ) = $db->sql_fetchrow( $result_all );
+		$result_all = $db->query( "SELECT FOUND_ROWS()" );
+		list( $all_page ) = $result_all->fetch( 3 );
 
 		$users_array = array();
 
-		while( $item = $db->sql_fetch_assoc( $result ) )
+		while( $item = $result->fetch() )
 		{
 			if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 			{
@@ -152,7 +152,7 @@ else
 
 		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
-		$db->sql_freeresult( $result );
+		$result->closeCursor();
 		unset( $result, $item );
 
 		$contents = nv_memberslist_theme( $users_array, $array_order_new, $generate_page );

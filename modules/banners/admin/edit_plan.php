@@ -18,12 +18,12 @@ if( empty( $id ) )
 }
 
 $query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . $id;
-$result = $db->sql_query( $query );
-$numrows = $db->sql_numrows( $result );
+$result = $db->query( $query );
+$numrows = $result->rowCount();
 
 if( $numrows != 1 ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
+$row = $result->fetch();
 
 $forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
 $forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
@@ -57,10 +57,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		list( $blang_old, $form_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT blang, form FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . intval( $id ) . "" ) );
+		list( $blang_old, $form_old ) = $db->query( "SELECT blang, form FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . intval( $id ) . "" )->fetch( 3 );
 
 		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_plans SET blang=" . $db->dbescape( $blang ) . ", title=" . $db->dbescape( $title ) . ", description=" . $db->dbescape( $description ) . ", form=" . $db->dbescape( $form ) . ", width=" . $width . ", height=" . $height . " WHERE id=" . $id;
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		if( $form_old != $form or $blang_old != $blang )
 		{

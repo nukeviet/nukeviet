@@ -19,24 +19,24 @@ $content = "NO_" . $sourceid;
 if( $mod == "weight" and $new_vid > 0 )
 {
 	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid;
-	$result = $db->sql_query( $sql );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $sql );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 ) die( 'NO_' . $sourceid );
 
 	$sql = "SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid!=" . $sourceid . " ORDER BY weight ASC";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$weight = 0;
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET weight=" . $weight . " WHERE sourceid=" . intval( $row['sourceid'] );
-		$db->sql_query( $sql );
+		$db->query( $sql );
 	}
 
 	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET weight=" . $new_vid . " WHERE sourceid=" . intval( $sourceid );
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	$content = "OK_" . $sourceid;
 	nv_del_moduleCache( $module_name );

@@ -69,8 +69,8 @@ if( $checkss == $data['checkss'] )
 				{
 					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE username=" . $db->dbescape( $data['userField'] ) . " AND regdate>" . $exp;
 				}
-				$result = $db->sql_query( $sql );
-				$numrows = $db->sql_numrows( $result );
+				$result = $db->query( $sql );
+				$numrows = $result->rowCount();
 				if( $numrows == 1 )
 				{
 					$step = 2;
@@ -78,8 +78,8 @@ if( $checkss == $data['checkss'] )
 					{
 						$nv_Request->set_Session( 'lostactivelink_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
+					$row = $result->fetch();
+					$result->closeCursor();
 
 					$question = $row['question'];
 
@@ -127,7 +127,7 @@ if( $checkss == $data['checkss'] )
 							{
 								$password = $crypt->hash( $password_new );
 								$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg SET password=" . $db->dbescape( $password ) . ", checknum=" . $db->dbescape( $checknum ) . " WHERE userid=" . $row['userid'];
-								$db->sql_query( $sql );
+								$db->query( $sql );
 								$info = sprintf( $lang_module['lostactivelink_send'], $row['email'] );
 							}
 							else

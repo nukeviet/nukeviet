@@ -19,8 +19,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	if( $id )
 	{
 		$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-		$result = $db->sql_query( $query );
-		$numrows = $db->sql_numrows( $result );
+		$result = $db->query( $query );
+		$numrows = $result->rowCount();
 		if( $numrows != 1 )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
@@ -30,7 +30,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		define( 'IS_EDIT', true );
 		$page_title = $lang_module['download_editfile'];
 
-		$row = $db->sql_fetchrow( $result );
+		$row = $result->fetch();
 	}
 	else
 	{
@@ -163,14 +163,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$alias = change_alias( $array['title'] );
 
 		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias=' . $db->dbescape( $alias );
-		$result = $db->sql_query( $sql );
-		list( $is_exists ) = $db->sql_fetchrow( $result );
+		$result = $db->query( $sql );
+		list( $is_exists ) = $result->fetch( 3 );
 
 		if( ! $is_exists )
 		{
 			$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->dbescape( $array['title'] );
-			$result = $db->sql_query( $sql );
-			list( $is_exists ) = $db->sql_fetchrow( $result );
+			$result = $db->query( $sql );
+			list( $is_exists ) = $result->fetch( 3 );
 		}
 
 		if( empty( $array['title'] ) )
@@ -254,7 +254,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 who_download=" . $array['who_download'] . ",
 				 groups_download=" . $db->dbescape( $array['groups_download'] ) . "
 				 WHERE id=" . $id;
-			$result = $db->sql_query( $sql );
+			$result = $db->query( $sql );
 
 			if( ! $result )
 			{
@@ -266,7 +266,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				if( $report and $array['is_del_report'] )
 				{
 					$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
-					$db->sql_query( $sql );
+					$db->query( $sql );
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
@@ -449,8 +449,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
-	$result = $db->sql_query( $sql );
-	list( $upload_dir ) = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	list( $upload_dir ) = $result->fetch( 3 );
 
 	if( ! $array['filesize'] ) $array['filesize'] = '';
 
@@ -563,15 +563,15 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	if( empty( $id ) ) die( 'NO' );
 
 	$query = 'SELECT status FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 ) die( 'NO' );
 
-	list( $status ) = $db->sql_fetchrow( $result );
+	list( $status ) = $result->fetch( 3 );
 	$status = $status ? 0 : 1;
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 	die( 'OK' );
 }
 
@@ -585,11 +585,11 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( ! $id ) die( 'NO' );
 
 	$query = 'SELECT fileupload, fileimage,title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
+	$numrows = $result->rowCount();
 	if( $numrows != 1 ) die( 'NO' );
 
-	$row = $db->sql_fetchrow( $result );
+	$row = $result->fetch();
 
 	//Khong xao file vi co the co truong hop file dung chung
 	/*
@@ -597,13 +597,13 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	 */
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 	nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid'] );
 	die( 'OK' );
 }
@@ -638,8 +638,8 @@ else
 }
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
-$result1 = $db->sql_query( $sql1 );
-list( $all_page ) = $db->sql_fetchrow( $result1 );
+$result1 = $db->query( $sql1 );
+list( $all_page ) = $result1->fetch( 3 );
 
 if( ! $all_page )
 {
@@ -661,11 +661,11 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
 $sql2 = 'SELECT * ' . $sql . ' LIMIT ' . $page . ', ' . $per_page;
-$query2 = $db->sql_query( $sql2 );
+$query2 = $db->query( $sql2 );
 
 $array = array();
 
-while( $row = $db->sql_fetchrow( $query2 ) )
+while( $row = $query2->fetch() )
 {
 	$array[$row['id']] = array(
 		'id' => ( int )$row['id'],
