@@ -16,7 +16,6 @@ define( 'NV_CLASS_SQL_DB_PHP', true );
 class sql_db extends pdo
 {
 	public $connect = 0;
-	public $query_strs = array();
 	public $server = '';
 	public $dbname = '';
 	public $user = '';
@@ -81,110 +80,47 @@ class sql_db extends pdo
 	}
 
 	/**
-	 * sql_db::sql_query()
+	 * Insert a row into the database return primary key column
 	 *
 	 * @param string $query
-	 * @return
+	 * @param string $column The name of the primary key column
+	 * @param array $data
+	 * @return integer|false
 	 */
-	public function sql_query( $query = '' )
-	{
-		$query = preg_replace( '/union/', 'UNI0N', $query );
-		try
-		{
-			$result = parent::query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_fetchrow()
-	 *
-	 * @param object $query_id
-	 * @param integer $type
-	 * @return
-	 */
-	public function sql_fetchrow( $query_id, $type = 0 )
+	public function insert_id( $query, $column, $data = array() )
 	{
 		try
 		{
-			switch( $type )
+			if( $this->dbtype == 'oci' )
 			{
-				case 1:
-					return $query_id->fetch( PDO::FETCH_NUM );
-				case 2:
-					return $query_id->fetch( PDO::FETCH_ASSOC );
-				default:
-					return $query_id->fetch( PDO::FETCH_BOTH );
+				$query .= ' RETURNING ' . $column . ' INTO :primary_key';
+			}
+
+			$stmt = $this->prepare( $query );
+			foreach( $data as $key => $value )
+			{
+				$stmt->bindParam( ':' . $key, $value, PDO::PARAM_STR );
+			}
+			if( $this->dbtype == 'oci' )
+			{
+				$stmt->bindParam( ':primary_key', $primary_key, PDO::PARAM_INT, 11 );
+			}
+			$stmt->execute();
+
+			if( $this->dbtype == 'oci' )
+			{
+				return $primary_key;
+			}
+			else
+			{
+				return $this->lastInsertId();
 			}
 		}
 		catch( PDOException $e )
 		{
 			trigger_error( $e->getMessage() );
-			return false;
 		}
-	}
-
-	/**
-	 * sql_db::sql_fetch_assoc()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_fetch_assoc( $query_id )
-	{
-		try
-		{
-			return $query_id->fetch( PDO::FETCH_ASSOC );
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_numrows()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_numrows( $query_id )
-	{
-		try
-		{
-			return $query_id->rowCount();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_affectedrows()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_affectedrows( $query_id )
-	{
-		try
-		{
-			return $query_id->rowCount();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
-		}
+		return false;
 	}
 
 	/**
@@ -201,7 +137,6 @@ class sql_db extends pdo
 			{
 				if( parent::exec( $query ) )
 				{
-					$this->query_strs[] = array( htmlspecialchars( $query ), true );
 					return $this->lastInsertId();
 				}
 			}
@@ -209,27 +144,6 @@ class sql_db extends pdo
 		catch( PDOException $e )
 		{
 			trigger_error( $e->getMessage() );
-		}
-		$this->query_strs[] = array( htmlspecialchars( $query ), false );
-		return false;
-	}
-
-	/**
-	 * sql_db::sql_freeresult()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_freeresult( $query_id )
-	{
-		try
-		{
-			return $query_id->closeCursor();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
 		}
 		return false;
 	}
@@ -434,15 +348,26 @@ class sql_db extends pdo
 	}
 
 	/**
-	 * sets the limit (and offset optionally) for the query.
+	 * sets the limit for the query.
 	 *
 	 * @param int $limit
+	 * @return sql_db $this
+	 */
+	public function limit( $limit )
+	{
+		$this->_limit = (int)$limit;
+
+		return $this;
+	}
+
+	/**
+	 * sets the offset for the query.
+	 *
 	 * @param int $offset
 	 * @return sql_db $this
 	 */
-	public function limit( $limit, $offset = false )
+	public function offset( $offset )
 	{
-		$this->_limit = (int)$limit;
 		$this->_offset = (int)$offset;
 
 		return $this;
@@ -491,7 +416,11 @@ class sql_db extends pdo
 		{
 			if( $this->_limit )
 			{
-				$return .= ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
+				$return .= ' LIMIT ' . $this->_limit;
+			}
+			if( $this->_offset )
+			{
+				$return .= ' OFFSET ' . $this->_offset;
 			}
 		}
 		elseif( $this->dbtype == 'oci' AND $this->_offset > 0 )

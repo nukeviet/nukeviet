@@ -51,7 +51,8 @@ if( empty( $contents ) )
 
 		$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
-			->limit( $per_page, ( $page - 1 ) * $per_page);
+			->limit( $per_page )
+			->offset( ( $page - 1 ) * $per_page );
 
 		$end_publtime = 0;
 
@@ -225,7 +226,8 @@ if( empty( $contents ) )
 
 		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
-			->limit($per_page, ( $page - 1 ) * $per_page );
+			->limit($per_page )
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 		while( $item = $result->fetch() )
@@ -268,12 +270,12 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1 AND inhome=1' );
 
-		$result_all = $db->query( 'SELECT FOUND_ROWS()' );
-		list( $all_page ) = $db->sql_fetchrow( $db->sql() );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
-			->limit($per_page, ( $page - 1 ) * $per_page );
+			->limit($per_page )
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 		while( $item = $result->fetch() )

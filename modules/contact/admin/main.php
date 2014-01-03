@@ -24,19 +24,20 @@ if( ! empty( $contact_allowed['view'] ) )
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
-	
+
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
 		->where( 'cid IN (' . $in . ')' );
-	
+
 	list($all_page) = $db->query( $db->sql() )->fetchColumn();
-	
+
 	$db->select( '*' )
 		->order('id DESC')
-		->limit( $per_page, $page );
-	
-	$result = $db->query( $db->sql() );	
+		->limit( $per_page )
+		->offset( $page );
+
+	$result = $db->query( $db->sql() );
 
 	if( $all_page )
 	{

@@ -166,7 +166,8 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						a.post_ip AS post_ip, a.post_time AS post_time, a.content AS content, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
 						c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail')
 					->order( 'a.post_time DESC' )
-					->limit( $per_page, $page);
+					->limit( $per_page )
+					->offset( $page );
 
 				$result = $db->query( $db->sql() );
 				while( $row = $result->fetch() )

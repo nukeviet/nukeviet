@@ -27,10 +27,10 @@ if( $all_page )
 		->from( NV_COUNTER_TABLE )
 		->where( "c_type='bot' AND c_count!=0" )
 		->order( 'c_count DESC' )
-		->limit( $per_page, $page );
+		->limit( $per_page )
+		->offset( $page );
 
-	 $result = $db->query( $db->sql() );
-
+	$result = $db->query( $db->sql() );
 
 	$bot_list = array();
 	while( list( $bot, $count, $last_visit ) = $result->fetch( 3 ) )

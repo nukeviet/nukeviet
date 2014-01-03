@@ -117,8 +117,9 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 50;
 
 $db->where( '*' )
-	->limit($per_page, $per_page)
-	->order('click_time DESC');
+	->order( 'click_time DESC' )
+	->limit( $per_page )
+	->offset( $page );
 
 $result = $db->query( $db->sql() );
 
@@ -126,7 +127,7 @@ $contents = array();
 $replacement = '';
 
 $a = 0;
-while( $row = $result->sql_fetchrow() )
+while( $row = $result->fetch() )
 {
 	$contents['rows'][$a][] = nv_date( 'd/m/Y H:i', $row['click_time'] );
 	$contents['rows'][$a][] = $row['click_ip'];

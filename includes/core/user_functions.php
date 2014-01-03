@@ -624,35 +624,14 @@ function nv_admin_menu()
 
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		if( ! defined( 'SHADOWBOX' ) )
-		{
-			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-			$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-			define( 'SHADOWBOX', true );
-		}
-
 		$new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
 		$lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
 
 		$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block );
 		$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
 
-		foreach( $db->query_strs as $key => $field )
-		{
-			$data = array(
-				'class' => ( $key % 2 ) ? ' highlight' : ' normal',
-				'imgsrc' => ( $field[1] ) ? NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/good.png' : NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/bad.png',
-				'imgalt' => ( $field[1] ) ? $lang_global['ok'] : $lang_global['fail'],
-				'queries' => nv_htmlspecialchars( $field[0] )
-			);
-			$xtpl->assign( 'DATA', $data );
-			$xtpl->parse( 'main.is_spadadmin3.queries' );
-		}
-
 		$xtpl->parse( 'main.is_spadadmin' );
-		$xtpl->parse( 'main.is_spadadmin2' );
-		$xtpl->parse( 'main.is_spadadmin3' );
+		$xtpl->parse( 'main.memory_time_usage' );
 	}
 
 	if( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )

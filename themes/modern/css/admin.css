@@ -1,7 +1,3 @@
-div.nvshowquery {
-	margin-top: 30px
-}
-
 #toolbar {
 	background-color: #e6f5fc;
 	border-top: 1px solid #CCC;
@@ -114,51 +110,6 @@ div.nvshowquery {
 	border: 1px dotted #000;
 	height: 50px !important;
 	visibility: visible !important
-}
-
-h3.queries {
-	background: url(../images/arrows/arrow4_red.gif) no-repeat left center;
-	font: bold 13px/27px tahoma, verdana, sans-serif;
-	margin-top: 8px;
-	text-indent: 12px
-}
-
-div.queries {
-	background: #fff;
-	border: 1px solid #dadada;
-	margin-bottom: 30px;
-	padding: 2px
-}
-
-div.queries div {
-	padding: 4px
-}
-
-div.queries div.normal {
-	background: #f7f7f7
-}
-
-div.queries div.highlight {
-	background: #eee
-}
-
-div.queries span {
-	display: inline-block;
-	float: left;
-	position: relative
-}
-
-div.queries span.first {
-	width: 3%
-}
-
-div.queries span.first img {
-	float: left;
-	vertical-align: middle
-}
-
-div.queries span.second {
-	width: 87%
 }
 
 .ui-sortable-placeholder * {

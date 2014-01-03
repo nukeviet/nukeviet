@@ -207,8 +207,7 @@ $db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
 	->from( NV_COUNTER_TABLE )
 	->where( "c_type='browser' AND c_count!=0" )
-	->order( 'c_count DESC' )
-	->limit( 0 );
+	->order( 'c_count DESC' );
 $result = $db->query( $db->sql() );
 
 $total = 0;

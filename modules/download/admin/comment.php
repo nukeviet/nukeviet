@@ -254,7 +254,8 @@ $array = array();
 
 $db->select( 'a.id, a.fid, a.subject, a.post_id, a.post_name, a.post_email, a.post_ip, a.post_time, a.content, a.admin_reply, a.admin_id, a.status, b.title' )
 	->order( 'a.post_time DESC' )
-	->limit( $per_page, $page );
+	->limit( $per_page )
+	->offset( $page );
 
 $query2 = $db->query( $db->sql() );
 
