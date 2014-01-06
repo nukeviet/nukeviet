@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
 $sql_drop_module = array();
-$query = $db->query( "select table_name from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data ) . "'" );
+$query = $db->query( "select table_name from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_counter" ) . "'" );
 while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
@@ -18,12 +18,12 @@ while( $row = $query->fetch() )
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . " (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_counter (
 	 c_type VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 c_val VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 c_count NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 last_update NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_typeval UNIQUE (c_type,c_val)
+	 CONSTRAINT cnv_" . $lang . "_counter UNIQUE (c_type,c_val)
 )";
 
 $ar = array();
@@ -507,7 +507,7 @@ $ar[] = "('country', 'unkown', 0, 0)";
 
 foreach ($ar as $_s)
 {
-	$sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . ' (c_type, c_val, c_count, last_update) VALUES ' . $_s;
+	$sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_counter (c_type, c_val, c_count, last_update) VALUES ' . $_s;
 }
 
 ?>

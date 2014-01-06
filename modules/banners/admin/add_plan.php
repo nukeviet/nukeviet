@@ -41,10 +41,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		$sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_plans (blang, title, description, form, width, height, act) VALUES (" . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ",
+		$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_plans (blang, title, description, form, width, height, act) VALUES (" . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ",
 			" . $db->dbescape( $description ) . ", " . $db->dbescape( $form ) . ", " . $width . ", " . $height . ", 1)";
 
-		$id = $db->sql_query_insert_id( $sql );
+		$id = $db->insert_id( $_sql, 'id' );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );

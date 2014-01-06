@@ -30,31 +30,31 @@ if( ! empty( $setmodule ) )
 		$sth = $db->prepare( 'SELECT module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title=:title');
 		$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
-		if( $sth->rowCount())
+		$modrow = $sth->fetch();
+		if( ! empty( $modrow ) )
 		{
-			list( $module_file, $module_data ) = $sth->fetch( 3 );
-			if( ! empty( $array_site_cat_module ) AND ! in_array( $module_file, $array_site_cat_module ) )
+			if( ! empty( $array_site_cat_module ) AND ! in_array( $modrow['module_file'], $array_site_cat_module ) )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 				die();
 			}
 
-			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_MODULES_TABLE . '' )->fetchColumn();
+			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_MODULES_TABLE )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$module_version = array();
-			$version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
+			$version_file = NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/version.php';
 
 			if( file_exists( $version_file ) )
 			{
 				include $version_file;
 			}
 
-			$admin_file = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin.functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/main.php' ) ) ? 1 : 0;
-			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php' ) ) ? 1 : 0;
+			$admin_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/admin.functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/admin/main.php' ) ) ? 1 : 0;
+			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
-			$in_menu = ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php' ) ) ? 1 : 0;
+			$in_menu = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			try
 			{
@@ -63,8 +63,8 @@ if( ! empty( $setmodule ) )
 					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)
 				" );
 				$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
-				$sth->bindParam(':module_file', $module_file, PDO::PARAM_STR );
-				$sth->bindParam(':module_data', $module_data, PDO::PARAM_STR );
+				$sth->bindParam(':module_file', $modrow['module_file'], PDO::PARAM_STR );
+				$sth->bindParam(':module_data', $modrow['module_data'], PDO::PARAM_STR );
 				$sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR );
 				$sth->execute();
 			}

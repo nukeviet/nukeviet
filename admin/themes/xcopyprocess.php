@@ -37,24 +37,23 @@ if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_ex
 		$sth->execute();
 		while( $row = $sth->fetch() )
 		{
-			$sth2 = $db->prepare( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
+			$_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
 				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-				(:theme, :module, :file_name, :title, :link, :template, :position, :exp_time, :active, :groups_view, :all_func, :weight, :config )' );
-			$sth2->bindParam( ':theme', $theme2, PDO::PARAM_STR );
-			$sth2->bindParam( ':module', $row['module'], PDO::PARAM_STR );
-			$sth2->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
-			$sth2->bindParam( ':title', $row['title'], PDO::PARAM_STR );
-			$sth2->bindParam( ':link', $row['link'], PDO::PARAM_STR );
-			$sth2->bindParam( ':template', $row['template'], PDO::PARAM_STR );
-			$sth2->bindParam( ':position', $row['position'], PDO::PARAM_STR );
-			$sth2->bindParam( ':exp_time', $row['exp_time'], PDO::PARAM_INT );
-			$sth2->bindParam( ':active', $row['active'], PDO::PARAM_INT );
-			$sth2->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
-			$sth2->bindParam( ':all_func', $row['all_func'], PDO::PARAM_STR );
-			$sth2->bindParam( ':weight', $row['weight'], PDO::PARAM_STR );
-			$sth2->bindParam( ':config', $row['config'], PDO::PARAM_STR );
-			$sth2->execute();
-			$bid = $db->lastInsertId();
+				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', :groups_view, :all_func, :weight, :config )';
+
+			$data = array();
+			$data['theme'] = $theme2;
+			$data['module'] = $row['module'];
+			$data['file_name'] = $row['file_name'];
+			$data['title'] = $row['title'];
+			$data['link'] = $row['link'];
+			$data['template'] = $row['template'];
+			$data['position'] = $row['position'];
+			$data['groups_view'] = $row['groups_view'];
+			$data['all_func'] = $row['all_func'];
+			$data['weight'] = $row['weight'];
+			$data['config'] = $row['config'];
+			$bid = $db->insert_id( $_sql, 'bid', $data );
 
 			$result_weight = $db->query( 'SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid'] );
 			while( list( $func_id, $weight ) = $result_weight->fetch( 3 ) )

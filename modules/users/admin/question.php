@@ -47,10 +47,10 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	$sql = "SELECT MAX(weight) FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "'";
 	$weight = $db->query( $sql )->fetchColumn();
 	$weight = intval( $weight ) + 1;
-	$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
-		(title, lang, weight, add_time, edit_time) VALUES 
+	$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
+		(title, lang, weight, add_time, edit_time) VALUES
 		(" . $db->dbescape( $title ) . ", " . $db->dbescape( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-	if( ! $db->sql_query_insert_id( $query ) )
+	if( ! $db->insert_id( $_sql, 'qid' ) )
 	{
 		die( 'NO' );
 	}
@@ -65,11 +65,8 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$qid = $nv_Request->get_int( 'qid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	if( empty( $qid ) ) die( 'NO' );
-
-	$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'";
-	$result = $db->query( $query );
-	$numrows = $result->rowCount();
+	$query = "SELECT COUNT(*) FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'";
+	$numrows = $db->query( $query )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO' );
 
 	$query = "SELECT qid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE qid!=" . $qid . " AND lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
@@ -80,10 +77,10 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $weight . " WHERE qid=" . $row['qid'];
-		$db->query( $sql );
+		$db->exec( $sql );
 	}
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $new_vid . " WHERE qid=" . $qid;
-	$db->query( $sql );
+	$db->exec( $sql );
 	die( 'OK' );
 }
 
@@ -129,12 +126,12 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
-	$result = $db->query( $sql );
-	$num = $result->rowCount();
+	$_rows = $db->query( $sql )->fetchAll();
+	$num = sizeof( $_rows );
 
 	if( $num )
 	{
-		while( $row = $result->fetch() )
+		foreach ( $_rows as $row )
 		{
 			$xtpl->assign( 'ROW', array(
 				'qid' => $row['qid'],

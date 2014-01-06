@@ -29,7 +29,6 @@ $data = array();
 $array_userid = array();
 $disabled = ' disabled="disabled"';
 
-$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . $db_config['prefix'] . '_logs WHERE id!=0';
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 
 // Search data
@@ -41,6 +40,8 @@ $data_search = array(
 	'module' => '',
 	'user' => ''
 );
+
+$array_where = array();
 
 $check_like = false;
 if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request( 'checksess', 'get' ) )
@@ -70,7 +71,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	if( ! empty( $data_search['q'] ) and $data_search['q'] != $lang_module['filter_enterkey'] )
 	{
 		$base_url .= '&amp;q=' . $data_search['q'];
-		$sql .= " AND ( name_key LIKE :keyword1 OR note_action LIKE :keyword2 )";
+		$array_where[] = "( name_key LIKE :keyword1 OR note_action LIKE :keyword2 )";
 		$check_like = true;
 	}
 
@@ -79,7 +80,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['from'], $match ) )
 		{
 			$from = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
-			$sql .= ' AND log_time >= ' . $from;
+			$array_where[] = 'log_time >= ' . $from;
 			$base_url .= '&amp;from=' . $data_search['from'];
 		}
 	}
@@ -89,7 +90,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['to'], $match ) )
 		{
 			$to = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
-			$sql .= ' AND log_time <= ' . $to;
+			$array_where[] = 'log_time <= ' . $to;
 			$base_url .= '&amp;to=' . $data_search['to'];
 		}
 	}
@@ -98,14 +99,14 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	{
 		if( in_array( $data_search['lang'], array_keys( $language_array ) ) )
 		{
-			$sql .= ' AND lang=' . $db->quote( $data_search['lang'] );
+			$array_where[] = 'lang=' . $db->quote( $data_search['lang'] );
 			$base_url .= '&amp;lang=' . $data_search['lang'];
 		}
 	}
 
 	if( ! empty( $data_search['module'] ) )
 	{
-		$sql .= ' AND module_name=' . $db->quote( $data_search['module'] );
+		$array_where[] = 'module_name=' . $db->quote( $data_search['module'] );
 		$base_url .= '&amp;module=' . $data_search['module'];
 	}
 
@@ -113,7 +114,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 	{
 		$user_tmp = ( $data_search['user'] == 'system' ) ? 0 : ( int )$data_search['user'];
 
-		$sql .= ' AND userid=' . $user_tmp;
+		$array_where[] = 'userid=' . $user_tmp;
 		$base_url .= '&amp;user=' . $data_search['user'];
 	}
 }
@@ -157,25 +158,43 @@ foreach( $order as $key => $check )
 	);
 }
 
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( $db_config['prefix'] . '_logs' );
+if( ! empty( $array_where ) )
+{
+	$db->where( implode( ' AND ', $array_where) );
+}
+$sth = $db->prepare( $db->sql() );
+if( $check_like )
+{
+	$keyword = '%' . addcslashes( $data_search['q'], '_%' ) . '%';
+
+	$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
+	$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
+}
+$sth->execute();
+$all_page = $sth->fetchColumn();
+
+$db->select( '*' )->limit( $per_page )->offset( $page );
+
 if( $order['lang']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY lang ' . $order['lang']['order'];
+	$db->order( 'lang ' . $order['lang']['order'] );
 }
 elseif( $order['module']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY module_name ' . $order['module']['order'];
+	$db->order( 'module_name ' . $order['module']['order'] );
 }
 elseif( $order['time']['order'] != 'NO' )
 {
-	$sql .= ' ORDER BY log_time ' . $order['time']['order'];
+	$db->order( 'log_time ' . $order['time']['order'] );
 }
 else
 {
-	$sql .= ' ORDER BY id DESC';
+	$db->order( 'id DESC' );
 }
-
-$sql .= ' LIMIT ' . $page . ',' . $per_page;
-
+$sql = $db->sql();
 $sth = $db->prepare( $sql );
 if( $check_like )
 {
@@ -185,8 +204,6 @@ if( $check_like )
 	$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
 }
 $sth->execute();
-
-$all_page = $db->query( 'SELECT FOUND_ROWS()' )->fetchColumn();
 
 while( $data_i = $sth->fetch() )
 {

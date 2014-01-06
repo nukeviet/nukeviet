@@ -68,12 +68,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->dbescape( $login ) )->rowCount() > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->dbescape( $login ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = '';
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->dbescape( $email ) )->rowCount() > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->dbescape( $email ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = '';
@@ -82,12 +82,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass_crypt = $crypt->hash( $pass );
 
-		$sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_clients ( login, pass, reg_time, full_name, email, website, location, yim, phone, fax, mobile, act, check_num, last_login, last_ip, last_agent, uploadtype) VALUES
+		$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_clients ( login, pass, reg_time, full_name, email, website, location, yim, phone, fax, mobile, act, check_num, last_login, last_ip, last_agent, uploadtype) VALUES
 			( " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ",
 			" . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ",
 			" . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
 
-		$id = $db->sql_query_insert_id( $sql );
+		$id = $db->insert_id( $_sql, 'id' );
 
 		if( $id )
 		{

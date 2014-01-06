@@ -528,8 +528,7 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		try
 		{
-			$db->exec( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')" );
-			$array_dirname[$dirname] = $db->lastInsertId();
+			$array_dirname[$dirname] = $db->insert_id( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did" );
 		}
 		catch (PDOException $e)
 		{

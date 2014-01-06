@@ -272,15 +272,15 @@ function nv_setup_data_module( $lang, $module_name )
 				}
 				else
 				{
-					$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
+					$data = array();
+					$data['func_name'] = $func;
+					$data['alias'] = $func;
+					$data['func_custom_name'] = ucfirst( $func );
+					$data['in_module'] = $module_name;
+
+					$arr_func_id[$func] = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')" );
-					$sth->bindParam(':func_name', $func, PDO::PARAM_STR );
-					$sth->bindParam(':alias', $func, PDO::PARAM_STR );
-					$sth->bindValue(':func_custom_name', ucfirst( $func ) );
-					$sth->bindParam(':in_module', $module_name, PDO::PARAM_STR );
-					$sth->execute();
-					$arr_func_id[$func] = $db->lastInsertId();
+					 	( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')", "func_id", $data );
 				}
 			}
 

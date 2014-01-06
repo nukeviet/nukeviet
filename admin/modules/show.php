@@ -129,7 +129,7 @@ function nv_show_funcs()
 		}
 
 		$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE . '' );
+		$db->exec( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE );
 		$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
 		$is_refresh = true;
 	}
@@ -153,10 +153,6 @@ function nv_show_funcs()
 
 		$array_keys = array_keys( $new_funcs );
 
-		$sth = $db->prepare( "INSERT INTO " . NV_MODFUNCS_TABLE . "
-			(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-			( :func_name, :alias, :func_custom_name, :in_module, :show_func, 0, 0, '')" );
-
 		$sth2 = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)' );
 
 		foreach( $array_keys as $func )
@@ -164,13 +160,14 @@ function nv_show_funcs()
 			$show_func = in_array( $func, $modfuncs ) ? 1 : 0;
 			try
 			{
-				$sth->bindParam( ':func_name', $func, PDO::PARAM_STR );
-				$sth->bindParam( ':alias', $func, PDO::PARAM_STR );
-				$sth->bindValue( ':func_custom_name', ucfirst( $func ), PDO::PARAM_STR );
-				$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
-				$sth->bindParam( ':show_func', $show_func, PDO::PARAM_INT );
-				$sth->execute();
-				$func_id = $db->lastInsertId();
+				$data = array();
+				$data['func_name'] = $func;
+				$data['alias'] = $func;
+				$data['func_custom_name'] = ucfirst( $func );
+				$data['in_module'] = $mod;
+				$_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
+				$func_id = $db->insert_id( $_sql, 'func_id', $data );
+
 				if( $show_func )
 				{
 					$sth2->bindParam( ':func_id', $func_id, PDO::PARAM_INT );

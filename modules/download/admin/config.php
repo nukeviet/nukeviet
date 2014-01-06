@@ -71,9 +71,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$array_config['upload_filetype'] = ( ! empty( $array_config['upload_filetype'] ) ) ? implode( ',', $array_config['upload_filetype'] ) : '';
 
-	if( ! preg_match( "/^[a-zA-Z][a-zA-Z0-9\_]*$/", $array_config['upload_dir'] ) )
+	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['upload_dir'] ) )
 	{
-		$array_config['upload_dir'] = "files";
+		$array_config['upload_dir'] = 'files';
 	}
 	else
 	{
@@ -82,7 +82,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['upload_dir'] );
 			if( $mkdir[0] == 0 )
 			{
-				$array_config['upload_dir'] = "files";
+				$array_config['upload_dir'] = 'files';
 			}
 			else
 			{
@@ -91,9 +91,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 	}
 
-	if( ! preg_match( "/^[a-zA-Z][a-zA-Z0-9\_]*$/", $array_config['temp_dir'] ) )
+	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['temp_dir'] ) )
 	{
-		$array_config['temp_dir'] = "temp";
+		$array_config['temp_dir'] = 'temp';
 	}
 	else
 	{
@@ -102,7 +102,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['temp_dir'] );
 			if( $mkdir[0] == 0 )
 			{
-				$array_config['temp_dir'] = "temp";
+				$array_config['temp_dir'] = 'temp';
 			}
 			else
 			{
@@ -111,12 +111,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 	}
 
+	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
 	{
 		if( $config_name != 'readme' )
 		{
-			$query = "REPLACE INTO " . NV_PREFIXLANG . "_" . $module_data . "_config VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
-			$db->query( $query );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
 	}
 
@@ -161,26 +163,26 @@ if( file_exists( $readme_file ) )
 	$array_config['readme'] = nv_htmlspecialchars( $array_config['readme'] );
 }
 
-$sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
+$sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query( $sql );
 while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 {
 	$array_config[$c_config_name] = $c_config_value;
 }
 
-$array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? " checked=\"checked\"" : "";
-$array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? " checked=\"checked\"" : "";
-$array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? " checked=\"checked\"" : "";
-$array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? " checked=\"checked\"" : "";
+$array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? ' checked="checked"' : '';
+$array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? ' checked="checked"' : '';
+$array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
+$array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
 
 $who_addfile = $array_config['who_addfile'];
 $array_config['who_addfile'] = array();
 foreach( $array_who_upload as $key => $who )
 {
-	$array_config['who_addfile'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_addfile ? " selected=\"selected\"" : "" //
+	$array_config['who_addfile'][$key] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_addfile ? ' selected="selected"' : ''
 	);
 }
 
@@ -188,10 +190,10 @@ $who_upload = $array_config['who_upload'];
 $array_config['who_upload'] = array();
 foreach( $array_who_upload as $key => $who )
 {
-	$array_config['who_upload'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_upload ? " selected=\"selected\"" : "" //
+	$array_config['who_upload'][$key] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_upload ? ' selected="selected"' : ''
 	);
 }
 
@@ -199,10 +201,10 @@ $who_autocomment = $array_config['who_autocomment'];
 $array_config['who_autocomment'] = array();
 foreach( $array_who_upload as $key => $who )
 {
-	$array_config['who_autocomment'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_autocomment ? " selected=\"selected\"" : "" //
+	$array_config['who_autocomment'][$key] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_autocomment ? ' selected="selected"' : ''
 	);
 }
 
@@ -212,10 +214,10 @@ if( ! empty( $array_exts ) )
 {
 	foreach( $array_exts as $ext => $mime )
 	{
-		$array_config['upload_filetype'][$ext] = array( //
-			'ext' => $ext, //
-			'title' => $ext . " (mime: " . $mime . ")", //
-			'checked' => ( in_array( $ext, $upload_filetype ) ) ? " checked=\"checked\"" : "" //
+		$array_config['upload_filetype'][$ext] = array(
+			'ext' => $ext,
+			'title' => $ext . ' (mime: ' . $mime . ')',
+			'checked' => ( in_array( $ext, $upload_filetype ) ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -226,10 +228,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array_config['groups_addfile'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_addfile ) ? " checked=\"checked\"" : "" //
+		$array_config['groups_addfile'][$key] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_addfile ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -240,10 +242,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array_config['groups_upload'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_upload ) ? " checked=\"checked\"" : "" //
+		$array_config['groups_upload'][$key] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_upload ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -254,10 +256,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array_config['groups_autocomment'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_autocomment ) ? " checked=\"checked\"" : "" //
+		$array_config['groups_autocomment'][$key] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_autocomment ) ? ' checked="checked"' : ''
 		);
 	}
 }

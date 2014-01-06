@@ -33,7 +33,7 @@ if( $count )
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
-		 id NUMBER NOT NULL ENABLE ,
+		 id NUMBER(8,0) DEFAULT NULL,
 		 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 		 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -81,7 +81,7 @@ $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_cati
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_user_id ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "(user_id) TABLESPACE USERS";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
-		 id NUMBER(8,0) NOT NULL ENABLE ,
+	 	 id NUMBER(8,0) DEFAULT NULL,
 		 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 		 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 description CLOB NOT NULL ENABLE,
@@ -115,7 +115,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_tmp_catid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp(catid) TABLESPACE USERS";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_categories (
-		 id NUMBER(5,0) NOT NULL ENABLE ,
+	 	 id NUMBER(5,0) DEFAULT NULL,
 		 parentid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 		 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -139,7 +139,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments (
-	 id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	 id NUMBER(8,0) DEFAULT NULL,
 	 fid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 subject VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 post_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -166,7 +166,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_comments_fid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(fid) TABLESPACE USERS";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report (
-	 fid NUMBER(8,0) NOT NULL ENABLE,
+	 fid NUMBER(8,0) DEFAULT NULL,
 	 post_ip VARCHAR2(45 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 post_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_report_fid UNIQUE (fid)

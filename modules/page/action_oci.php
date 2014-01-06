@@ -25,7 +25,7 @@ while( $row = $query->fetch() )
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . " (
- id NUMBER(8,0) DEFAULT NULL ,
+ id NUMBER(8,0) DEFAULT NULL,
  title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
  alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
  image VARCHAR2(255 CHAR) DEFAULT '',
@@ -47,7 +47,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_alias UNIQUE (alias)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data );
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . ' MINVALUE 10';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '

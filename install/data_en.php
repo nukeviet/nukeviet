@@ -812,8 +812,8 @@ while( list( $id, $run_func ) = $result->fetch( 3 ) )
 
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'modern' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'";
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
-if( $result->rowCount() )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES
 		(1, 0, 'Co-operate', '', 'Co-operate', '', '', 0, 2, 5, 0, 'viewcat_page_new', 2, '2,3', 1, 3, '', '', 1277689708, 1277689708, 0, ''),
@@ -880,8 +880,8 @@ if( $result->rowCount() )
 	$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'news' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'";
 }
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
-if( $result->rowCount() )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_voting VALUES
 		(2, 'Do you know about Nukeviet 3?', '', 1, 1, 0, '0', 1275318563, 0, 1),
@@ -899,8 +899,8 @@ if( $result->rowCount() )
 		(13, 3, 'All comments on','', 0)";
 }
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
-if( $result->rowCount() )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES
 		(1, 'Welcome to NukeViet 3.0', 'Welcome-to-NukeViet-3-0', '', '', '', '<p> NukeViet developed by Vietnamese and for Vietnamese. It&#039;s the 1st opensource CMS in Vietnam. Next generation of NukeViet, version 3.0 coding ground up. Support newest web technology, include xHTML, CSS 3, XTemplate, jQuery, AJAX...<br /> <br /> NukeViet&#039;s has it own core libraries build in. So, it&#039;s doesn&#039;t depend on other exists frameworks. With basic knowledge of PHP and MySQL, you can easily using NukeViet for your purposes.<br /> <br /> NukeViet 3 core is simply but powerful. It support modules can be multiply. We called it abstract modules. It help users automatic crea-te many modules without any line of code from any exists module which support crea-te abstract modules.<br /> <br /> NukeViet 3 support automatic setup modules, blocks, themes at Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets.<br /> <br /> NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database langguages. Had features support web master to build new languages. Many advance features still developing. Let use it, distribute it and feel about opensource.<br /> <br /> At last, NukeViet 3 is a thanksgiving gift from VINADES.,JSC to community for all of your supports. And we hoping we going to be a biggest opensource CMS not only in VietNam, but also in the world. :).<br /> <br /> If you had any feedbacks and ideas for NukeViet 3 close beta. Feel free to send email to admin@nukeviet.vn. All are welcome<br /> <br /> Best regard.</p>', '', 0, 0, '', '', 0, 1, 1, 1277266815, 1277266815, 1),

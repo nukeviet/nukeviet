@@ -10,31 +10,29 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $id = $nv_Request->get_int( 'id', 'post,get' );
 
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id=" . $id;
-$result = $db->query( $sql );
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
+$row = $db->query( $sql )->fetch();
 
-if( $result->rowCount() )
+if( ! empty( $row ) )
 {
-	$row = $result->fetch();
-
-	if( ! empty( $row['file_name'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'] ) )
+	if( ! empty( $row['file_name'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] ) )
 	{
-		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['file_name'], false );
+		nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'], false );
 	}
 
-	if( ! empty( $row['imageforswf'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'] ) )
+	if( ! empty( $row['imageforswf'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] ) )
 	{
-		nv_deletefile( NV_UPLOADS_REAL_DIR . "/" . NV_BANNER_DIR . "/" . $row['imageforswf'], false );
+		nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'], false );
 	}
-	$sql = "DELETE FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id='$id'";
-	$result1 = $db->query( $sql );
+	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
+	$result1 = $db->exec( $sql );
 
-	$sql = "DELETE FROM " . NV_BANNERS_GLOBALTABLE. "_click WHERE bid='$id'";
-	$result = $db->query( $sql );
+	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id;
+	$result = $db->exec( $sql );
 
 	nv_CreateXML_bannerPlan();
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_banner', "bannerid " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_banner', 'bannerid ' . $id, $admin_info['userid'] );
 	if( defined( 'NV_IS_AJAX' ) )
 	{
 		 echo $lang_module['delfile_success'];

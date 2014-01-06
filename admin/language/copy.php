@@ -12,10 +12,10 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['nv_admin_copy'];
 
 $array_lang_exit = array();
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $result->fetch() )
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
@@ -64,7 +64,7 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 			nv_copyfile( NV_ROOTDIR . '/js/language/vi.js', NV_ROOTDIR . '/js/language/' . $newslang . '.js' );
 			$db->exec( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $newslang . '=author_vi' );
 
-			$query = 'SELECT id, lang_vi FROM ' . NV_LANGUAGE_GLOBALTABLE . '';
+			$query = 'SELECT id, lang_vi FROM ' . NV_LANGUAGE_GLOBALTABLE;
 			$result = $db->query( $query );
 			while( list( $id, $author_lang ) = $result->fetchrow( 3 ) )
 			{
@@ -78,8 +78,8 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 		elseif( isset( $language_array[$typelang] ) )
 		{
 			nv_copyfile( NV_ROOTDIR . '/js/language/' . $typelang . '.js', NV_ROOTDIR . '/js/language/' . $newslang . '.js' );
-			$db->exec( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $newslang . '=author_' . $typelang . '' );
-			$db->exec( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $newslang . '=lang_' . $typelang . '' );
+			$db->exec( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $newslang . '=author_' . $typelang );
+			$db->exec( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $newslang . '=lang_' . $typelang );
 		}
 
 		$nv_Request->set_Cookie( 'dirlang', $newslang, NV_LIVE_COOKIE_TIME );

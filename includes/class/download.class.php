@@ -73,15 +73,15 @@ if( ! defined( 'ALLOWED_SET_TIME_LIMIT' ) )
 class download
 {
 	private $properties = array(
-		"path" => "",
-		"name" => "",
-		"extension" => "",
-		"type" => "",
-		"size" => "",
-		"mtime" => 0,
-		"resume" => "",
-		"max_speed" => "",
-		"directory" => ""
+		'path' => '',
+		'name' => '',
+		'extension' => '',
+		'type' => '',
+		'size' => '',
+		'mtime' => 0,
+		'resume' => '',
+		'max_speed' => '',
+		'directory' => ''
 	);
 	private $disable_functions = array();
 	private $magic_path;
@@ -102,25 +102,25 @@ class download
 		{
 			$directory = NV_UPLOADS_REAL_DIR;
 		}
-		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 		}
 		$this->disable_functions = $disable_functions;
 
 		$path = $this->real_path( $path, $directory );
 		$extension = $this->getextension( $path );
 		$this->properties = array(
-			"path" => $path,
-			"name" => ( $name == '' ) ? substr( strrchr( "/" . $path, "/" ), 1 ) : $name,
-			"extension" => $extension,
-			"type" => "",
-			"size" => intval( sprintf( "%u", filesize( $path ) ) ),
-			"mtime" => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(),
-			"resume" => $resume,
-			"max_speed" => $max_speed,
-			"directory" => $directory
+			'path' => $path,
+			'name' => ( $name == '' ) ? substr( strrchr( '/' . $path, '/' ), 1 ) : $name,
+			'extension' => $extension,
+			'type' => '',
+			'size' => intval( sprintf( '%u', filesize( $path ) ) ),
+			'mtime' => ( $mtime = filemtime( $path ) ) > 0 ? $mtime : time(),
+			'resume' => $resume,
+			'max_speed' => $max_speed,
+			'directory' => $directory
 		);
 		$this->properties['type'] = $this->my_mime_content_type( $path );
 		$this->magic_path = $magic_path;
@@ -226,7 +226,7 @@ class download
 			{
 				$finfo = finfo_open( FILEINFO_MIME );
 			}
-			elseif( $this->magic_path != "auto" )
+			elseif( $this->magic_path != 'auto' )
 			{
 				$finfo = finfo_open( FILEINFO_MIME, $this->magic_path );
 			}
@@ -254,60 +254,60 @@ class download
 			{
 				$mime = finfo_file( $finfo, realpath( $path ) );
 				finfo_close( $finfo );
-				$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 
-		if( empty( $mime ) or $mime == "application/octet-stream" )
+		if( empty( $mime ) or $mime == 'application/octet-stream' )
 		{
-			if( $this->cl_exists( "finfo" ) )
+			if( $this->cl_exists( 'finfo' ) )
 			{
 				$finfo = new finfo( FILEINFO_MIME );
 				if( $finfo )
 				{
 					$mime = $finfo->file( realpath( $path ) );
-					$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 				}
 			}
 		}
 
-		if( empty( $mime ) or $mime == "application/octet-stream" )
+		if( empty( $mime ) or $mime == 'application/octet-stream' )
 		{
 			if( substr( PHP_OS, 0, 3 ) != 'WIN' )
 			{
 				if( $this->func_exists( 'system' ) )
 				{
 					ob_start();
-					system( "file -i -b " . escapeshellarg( $path ) );
+					system( 'file -i -b ' . escapeshellarg( $path ) );
 					$m = ob_get_clean();
 					$m = trim( $m );
 					if( ! empty( $m ) )
 					{
-						$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
 					}
 				}
 				elseif( $this->func_exists( 'exec' ) )
 				{
-					$m = @exec( "file -bi " . escapeshellarg( $path ) );
+					$m = @exec( 'file -bi ' . escapeshellarg( $path ) );
 					$m = trim( $m );
 					if( ! empty( $m ) )
 					{
-						$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
 					}
 				}
 			}
 		}
 
-		if( empty( $mime ) or $mime == "application/octet-stream" )
+		if( empty( $mime ) or $mime == 'application/octet-stream' )
 		{
 			if( $this->func_exists( 'mime_content_type' ) )
 			{
 				$mime = mime_content_type( $path );
-				$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 
-		if( empty( $mime ) or $mime == "application/octet-stream" )
+		if( empty( $mime ) or $mime == 'application/octet-stream' )
 		{
 			$img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
 			if( in_array( $this->properties['extension'], $img_exts ) )
@@ -317,7 +317,7 @@ class download
 					if( array_key_exists( 'mime', $img_info ) and ! empty( $img_info['mime'] ) )
 					{
 						$mime = trim( $img_info['mime'] );
-						$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $mime );
 					}
 
 					if( empty( $mime ) and isset( $img_info[2] ) )
@@ -328,7 +328,7 @@ class download
 			}
 		}
 
-		if( empty( $mime ) or $mime == "application/octet-stream" )
+		if( empty( $mime ) or $mime == 'application/octet-stream' )
 		{
 			$mime_types = nv_parse_ini_file( NV_MIME_INI_FILE );
 
@@ -339,25 +339,25 @@ class download
 			}
 		}
 
-		if( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
+		if( preg_match( '/^application\/(?:x-)?zip(?:-compressed)?$/is', $mime ) )
 		{
-			if( $this->properties['extension'] == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-			elseif( $this->properties['extension'] == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-			elseif( $this->properties['extension'] == "potx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.template";
-			elseif( $this->properties['extension'] == "ppsx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-			elseif( $this->properties['extension'] == "pptx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-			elseif( $this->properties['extension'] == "xlsx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-			elseif( $this->properties['extension'] == "xltx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-			elseif( $this->properties['extension'] == "docm" ) $mime = "application/vnd.ms-word.document.macroEnabled.12";
-			elseif( $this->properties['extension'] == "dotm" ) $mime = "application/vnd.ms-word.template.macroEnabled.12";
-			elseif( $this->properties['extension'] == "potm" ) $mime = "application/vnd.ms-powerpoint.template.macroEnabled.12";
-			elseif( $this->properties['extension'] == "ppam" ) $mime = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
-			elseif( $this->properties['extension'] == "ppsm" ) $mime = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
-			elseif( $this->properties['extension'] == "pptm" ) $mime = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
-			elseif( $this->properties['extension'] == "xlam" ) $mime = "application/vnd.ms-excel.addin.macroEnabled.12";
-			elseif( $this->properties['extension'] == "xlsb" ) $mime = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
-			elseif( $this->properties['extension'] == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
-			elseif( $this->properties['extension'] == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
+			if( $this->properties['extension'] == 'docx' ) $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+			elseif( $this->properties['extension'] == 'dotx' ) $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';
+			elseif( $this->properties['extension'] == 'potx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.template';
+			elseif( $this->properties['extension'] == 'ppsx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
+			elseif( $this->properties['extension'] == 'pptx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+			elseif( $this->properties['extension'] == 'xlsx' ) $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+			elseif( $this->properties['extension'] == 'xltx' ) $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';
+			elseif( $this->properties['extension'] == 'docm' ) $mime = 'application/vnd.ms-word.document.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'dotm' ) $mime = 'application/vnd.ms-word.template.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'potm' ) $mime = 'application/vnd.ms-powerpoint.template.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'ppam' ) $mime = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'ppsm' ) $mime = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'pptm' ) $mime = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'xlam' ) $mime = 'application/vnd.ms-excel.addin.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'xlsb' ) $mime = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'xlsm' ) $mime = 'application/vnd.ms-excel.sheet.macroEnabled.12';
+			elseif( $this->properties['extension'] == 'xltm' ) $mime = 'application/vnd.ms-excel.template.macroEnabled.12';
 		}
 
 		return ! empty( $mime ) ? $mime : 'application/force-download';
@@ -387,7 +387,7 @@ class download
 		{
 			return apache_getenv( $key, true );
 		}
-		return "";
+		return '';
 	}
 
 	/**
@@ -432,7 +432,7 @@ class download
 	{
 		if( ! $this->properties['path'] )
 		{
-			die( "Nothing to download!" );
+			die( 'Nothing to download!' );
 		}
 
 		$seek_start = 0;
@@ -493,13 +493,13 @@ class download
 			$seek_end = $this->properties['size'] - 1;
 		}
 
-		header( "Pragma: public" );
-		header( "Expires: 0" );
-		header( "Cache-Control:" );
-		header( "Cache-Control: public" );
-		header( "Content-Description: File Transfer" );
-		header( "Content-Type: " . $this->properties['type'] );
-		if( strstr( $this->nv_getenv( 'HTTP_USER_AGENT' ), "MSIE" ) != false )
+		header( 'Pragma: public' );
+		header( 'Expires: 0' );
+		header( 'Cache-Control:' );
+		header( 'Cache-Control: public' );
+		header( 'Content-Description: File Transfer' );
+		header( 'Content-Type: ' . $this->properties['type'] );
+		if( strstr( $this->nv_getenv( 'HTTP_USER_AGENT' ), 'MSIE' ) != false )
 		{
 			header( 'Content-Disposition: attachment; filename="' . urlencode( $this->properties['name'] ) . '";' );
 		}
@@ -511,15 +511,15 @@ class download
 
 		if( $data_section and $this->properties['resume'] )
 		{
-			header( "HTTP/1.1 206 Partial Content" );
-			header( "Status: 206 Partial Content" );
+			header( 'HTTP/1.1 206 Partial Content' );
+			header( 'Status: 206 Partial Content' );
 			header( 'Accept-Ranges: bytes' );
-			header( "Content-Range: bytes " . $seek_start . "-" . $seek_end . "/" . $this->properties['size'] );
-			header( "Content-Length: " . ( $seek_end - $seek_start + 1 ) );
+			header( 'Content-Range: bytes ' . $seek_start . '-' . $seek_end . '/' . $this->properties['size'] );
+			header( 'Content-Length: ' . ( $seek_end - $seek_start + 1 ) );
 		}
 		else
 		{
-			header( "Content-Length: " . $this->properties['size'] );
+			header( 'Content-Length: ' . $this->properties['size'] );
 		}
 
 		if( function_exists( 'usleep' ) and ! in_array( 'usleep', $this->disable_functions ) and ( $speed = $this->properties['max_speed'] ) > 0 )
@@ -545,7 +545,7 @@ class download
 		ignore_user_abort( $old_status );
 		if( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
 		{
-			set_time_limit( ini_get( "max_execution_time" ) );
+			set_time_limit( ini_get( 'max_execution_time' ) );
 		}
 		exit();
 	}

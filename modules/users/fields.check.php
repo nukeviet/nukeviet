@@ -171,11 +171,11 @@ foreach( $array_field_config as $row_f )
 
 	if( $userid )
 	{
-		$query_field[] = "" . $row_f['field'] . "=" . $db->dbescape_string( $value );
+		$query_field[] = $row_f['field'] . "=" . $db->dbescape_string( $value );
 	}
 	else
 	{
-		$query_field["" . $row_f['field'] . ""] = $db->dbescape_string( $value );
+		$query_field[$row_f['field']] = $db->dbescape_string( $value );
 	}
 }
 

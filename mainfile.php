@@ -183,8 +183,6 @@ else
 		trigger_error( $lang_global['error_404_content'], 256 );
 	}
 
-	$db_config['dbsystem'] = $db_config['dbname'];
-
 	// Thu muc uploads
 	define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
 

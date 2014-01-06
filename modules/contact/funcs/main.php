@@ -160,12 +160,12 @@ if( ! empty( $array_rows ) )
 
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send 
-				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES 
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES
 				(" . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ",
 				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ",
 				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
-			$db->query( $sql );
+			$db->exec( $sql );
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
 			$fcon .= "<br /><br />----------------------------------------<br /><br />";

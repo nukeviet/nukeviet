@@ -32,19 +32,15 @@ function nv_banner_client_checkdata( $cookie )
 
 	$banner_client_info = array();
 
-	if( isset( $client['login'] ) and preg_match( "/^[a-zA-Z0-9_]{" . NV_UNICKMIN . "," . NV_UNICKMAX . "}$/", $client['login'] ) )
+	if( isset( $client['login'] ) and preg_match( '/^[a-zA-Z0-9_]{' . NV_UNICKMIN . ',' . NV_UNICKMAX . '}$/', $client['login'] ) )
 	{
-		if( isset( $client['checknum'] ) and preg_match( "/^[a-z0-9]{" . $strlen . "}$/", $client['checknum'] ) )
+		if( isset( $client['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $client['checknum'] ) )
 		{
 			$login = $client['login'];
-			$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login = " . $db->dbescape( $login ) . " AND act=1";
-			$result = $db->query( $query );
+			$query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = ' . $db->dbescape( $login ) . ' AND act=1';
+			$row = $db->query( $query )->fetch();
 
-			$numrows = $result->rowCount();
-			if( $numrows != 1 ) return array();
-
-			$row = $result->fetch();
-			$result->closeCursor();
+			if( empty( $row ) ) return array();
 
 			if( strcasecmp( $client['checknum'], $row['check_num'] ) == 0 and 			//checknum
 			! empty( $client['current_agent'] ) and strcasecmp( $client['current_agent'], $row['last_agent'] ) == 0 and 			//user_agent
@@ -85,7 +81,7 @@ if( ! empty( $bncl ) )
 	if( empty( $banner_client_info ) )
 	{
 		$nv_Request->unset_request( 'bncl', 'cookie' );
-		header( "Location: " . $client_info['selfurl'] );
+		header( 'Location: ' . $client_info['selfurl'] );
 		die();
 	}
 	define( 'NV_IS_BANNER_CLIENT', true );

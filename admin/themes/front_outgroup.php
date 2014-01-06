@@ -25,21 +25,22 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 
 	try
 	{
-		$sth = $db->prepare( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
+		$_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
 			(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :theme, :module, :file_name, :title, :link, :template, :position, :exp_time, ' . $row['active'] . ', :groups_view, 0, ' . $row['weight'] . ', :config )' );
-		$sth->bindParam( ':theme', $row['theme'], PDO::PARAM_STR );
-		$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
-		$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
-		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
-		$sth->bindParam( ':link', $row['link'], PDO::PARAM_STR );
-		$sth->bindParam( ':template', $row['template'], PDO::PARAM_STR );
-		$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
-		$sth->bindParam( ':exp_time', $row['exp_time'], PDO::PARAM_INT );
-		$sth->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
-		$sth->bindParam( ':config', $row['config'], PDO::PARAM_STR );
-		$sth->execute();
-		$new_bid = $db->lastInsertId();
+			( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', :groups_view, 0, ' . $row['weight'] . ', :config )';
+
+		$data = array();
+		$data['theme'] = $row['theme'];
+		$data['module'] = $row['module'];
+		$data['file_name'] = $row['file_name'];
+		$data['title'] = $row['title'];
+		$data['link'] = $row['link'];
+		$data['template'] = $row['template'];
+		$data['position'] = $row['position'];
+		$data['groups_view'] = $row['groups_view'];
+		$data['config'] = $row['config'];
+
+		$new_bid = $db->insert_id( $_sql, 'bid', $data );
 
 		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
 

@@ -47,7 +47,7 @@ if( ! empty( $savecat ) )
 
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
-		if( $db->sql_query_insert_id( $sql ) )
+		if( $db->insert_id( $sql, 'bid' ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -77,7 +77,7 @@ if( ! empty( $savecat ) )
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $bid > 0 )
 {
-	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->query( "SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid . "" )->fetch( 3 );
+	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->query( "SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid )->fetch( 3 );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 

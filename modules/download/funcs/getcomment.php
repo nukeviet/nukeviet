@@ -23,12 +23,10 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 		$data = $error = array();
 		if( $id )
 		{
-			$query = 'SELECT who_comment, groups_comment FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1 AND comment_allow=1';
-			$result = $db->query( $query );
-			if( $result->rowCount() )
+			$query = 'SELECT id, who_comment, groups_comment FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1 AND comment_allow=1';
+			list( $id, $who_comment, $groups_comment ) = $db->query( $query )->fetch( 3 );
+			if( $id )
 			{
-				list( $who_comment, $groups_comment ) = $result->fetch( 3 );
-
 				if( nv_set_allow( $who_comment, $groups_comment ) )
 				{
 					$uname = $nv_Request->get_title( 'uname', 'post', '', 1 );

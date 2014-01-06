@@ -14,17 +14,16 @@ $topicid = $nv_Request->get_int( 'topicid', 'post', 0 );
 $mod = $nv_Request->get_string( 'mod', 'post', '' );
 $new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-if( empty( $topicid ) ) die( "NO_" . $topicid );
-$content = "NO_" . $topicid;
+if( empty( $topicid ) ) die( 'NO_' . $topicid );
+$content = 'NO_' . $topicid;
 
-if( $mod == "weight" and $new_vid > 0 )
+if( $mod == 'weight' and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE topicid=" . $topicid;
-	$result = $db->query( $sql );
-	$numrows = $result->rowCount();
+	$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . $topicid;
+	$numrows = $db->query( $sql )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO_' . $topicid );
 
-	$sql = "SELECT topicid FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE topicid!=" . $topicid . " ORDER BY weight ASC";
+	$sql = 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid!=' . $topicid . ' ORDER BY weight ASC';
 	$result = $db->query( $sql );
 
 	$weight = 0;
@@ -32,14 +31,14 @@ if( $mod == "weight" and $new_vid > 0 )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET weight=" . $weight . " WHERE topicid=" . intval( $row['topicid'] );
-		$db->query( $sql );
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . $row['topicid'];
+		$db->exec( $sql );
 	}
 
-	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET weight=" . $new_vid . " WHERE topicid=" . intval( $topicid );
-	$db->query( $sql );
+	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $new_vid . ' WHERE topicid=' . $topicid;
+	$db->exec( $sql );
 
-	$content = "OK_" . $topicid;
+	$content = 'OK_' . $topicid;
 	nv_del_moduleCache( $module_name );
 }
 

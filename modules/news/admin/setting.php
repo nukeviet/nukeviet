@@ -48,9 +48,13 @@ if( ! empty( $savesetting ) )
 		$array_config['module_logo'] = $global_config['site_logo'];
 	}
 
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
+	$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	nv_del_moduleCache( 'settings' );
@@ -277,7 +281,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			else
 			{
 				$addcontent = $postcontent = $editcontent = $delcontent = 0;
-				$pid = $db->sql_query_insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
+				$pid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )", "pid" );
 			}
 
 			$xtpl->assign( 'ROW', array(

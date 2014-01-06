@@ -70,7 +70,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	$numrows = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid )->rowCount();
+	$numrows = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO' );
 
 	$query = 'SELECT gid FROM ' . $db_config['prefix'] . '_googleplus WHERE gid!=' . $gid . ' ORDER BY weight ASC';

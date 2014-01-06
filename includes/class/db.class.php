@@ -87,19 +87,19 @@ class sql_db extends pdo
 	 * @param array $data
 	 * @return integer|false
 	 */
-	public function insert_id( $query, $column, $data = array() )
+	public function insert_id( $_sql, $column, $data = array() )
 	{
 		try
 		{
 			if( $this->dbtype == 'oci' )
 			{
-				$query .= ' RETURNING ' . $column . ' INTO :primary_key';
+				$_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
 			}
 
-			$stmt = $this->prepare( $query );
+			$stmt = $this->prepare( $_sql );
 			foreach( $data as $key => $value )
 			{
-				$stmt->bindParam( ':' . $key, $value, PDO::PARAM_STR );
+				$stmt->bindValue( ':' . $key, $value, PDO::PARAM_STR );
 			}
 			if( $this->dbtype == 'oci' )
 			{
@@ -124,28 +124,149 @@ class sql_db extends pdo
 	}
 
 	/**
-	 * sql_db::sql_query_insert_id()
+	 * sql_db::columns_array()
 	 *
-	 * @param string $query
-	 * @return
+	 * @param string $table
+	 * @return array
 	 */
-	public function sql_query_insert_id( $query )
+	public function columns_array( $table )
 	{
-		try
+		//Array: field 	type 	null 	key 	default 	extra
+		$return = array();
+		if( $this->dbtype == 'mysql' )
 		{
-			if( preg_match( "/^INSERT\s/is", $query ) )
+			$result = $this->query( 'SHOW COLUMNS FROM ' . $table );
+			while( $row = $result->fetch() )
 			{
-				if( parent::exec( $query ) )
-				{
-					return $this->lastInsertId();
-				}
+				$return[$row['field']] = $row;
 			}
 		}
-		catch( PDOException $e )
+		elseif( $this->dbtype == 'oci' )
 		{
-			trigger_error( $e->getMessage() );
+			$result = $this->query( "SELECT column_name, data_type, nullable, data_default, char_length FROM all_tab_columns WHERE table_name = '" . strtoupper( $table ) . "' ORDER BY column_id" );
+			while( $row = $result->fetch() )
+			{
+				if( $row['char_length'] ) $row['data_type'] .= '(' .$row['char_length']. ')';
+				$column_name = strtolower( $row['column_name'] );
+
+				$_tmp = array();
+				$_tmp['field'] = $column_name;
+				$_tmp['type'] = $row['data_type'];
+				$_tmp['null'] = ( $row['nullable'] =='N') ? 'NO' : 'YES';
+				$_tmp['key'] = '';
+				$_tmp['default'] = $row['data_default'];
+				$_tmp['extra'] = '';
+				$return[$column_name] = $_tmp;
+			}
 		}
-		return false;
+		return $return;
+	}
+
+	public function columns_add( $table, $column, $type, $length = null, $null = true, $default = null )
+	{
+		//'type' => 'string|integer
+		if( $this->dbtype == 'mysql' )
+		{
+			if( $type == 'integer' )
+			{
+				$length = $length ? $length : 2147483647;
+				if( $length <= 127 )
+					$type = 'TINYINT';
+				elseif( $length <= 32767 )
+					$type = 'SMALLINT';
+				elseif( $length <= 8388607 )
+					$type = 'MEDIUMINT';
+				elseif( $length <= 2147483647 )
+					$type = 'INT';
+				else
+					$type = 'BIGINT';
+			}
+			else
+			{
+				$length = $length ? $length : 65535;
+				if( $length <= 255 )
+					$type = 'VARCHAR(' . $length . ')';
+				elseif( $length <= 65535 )
+					$type = 'TEXT';
+				elseif( $length <= 16777215 )
+					$type = 'MEDIUMTEXT';
+				else
+					$type = 'LONGTEXT';
+			}
+			$sql = 'ALTER TABLE ' . $table . ' ADD ' . $column . ' ' . $type;
+			if( $default !== null )
+			{
+				$sql .= ' DEFAULT ';
+				if( is_bool( $default ) )
+				{
+					$sql .= $default ? 'true' : 'false';
+				}
+				if( is_string( $default ) )
+				{
+					$sql .= "'" . $default . "'";
+				}
+				else
+				{
+					$sql .= $default;
+				}
+			}
+			if( ! $null )
+			{
+				$sql .= ' NOT NULL';
+			}
+		}
+		elseif( $this->dbtype == 'oci' )
+		{
+			if( $type == 'integer' )
+			{
+				$length = $length ? $length : 2147483647;
+				if( $length <= 127 )
+					$type = 'NUMBER(3,0)';
+				elseif( $length <= 32767 )
+					$type = 'NUMBER(5,0)';
+				elseif( $length <= 8388607 )
+					$type = 'NUMBER(8,0)';
+				elseif( $length <= 2147483647 )
+					$type = 'NUMBER(11,0)';
+				else
+					$type = 'NUMBER(22,0)';
+			}
+			else
+			{
+				$length = $length ? $length : 65535;
+				if( $length <= 4000 )
+					$type = 'VARCHAR2(' . $length . ' CHAR)';
+				else
+					$type = 'CLOB';
+			}
+			$sql = 'ALTER TABLE ' . $table . ' ADD (' . $column . ' ' . $type;
+			if( $default !== null )
+			{
+				$sql .= ' DEFAULT ';
+				if( is_bool( $default ) )
+				{
+					$sql .= $default ? 'true' : 'false';
+				}
+				if( is_string( $default ) )
+				{
+					$sql .= "'" . $default . "'";
+				}
+				else
+				{
+					$sql .= $default;
+				}
+			}
+			if( ! $null )
+			{
+				$sql .= ' NOT NULL ENABLE';
+			}
+			$sql .= ')';
+		}
+		else
+		{
+			return false;
+		}
+		return $this->exec( $sql );
 	}
 
 	/**
@@ -376,7 +497,7 @@ class sql_db extends pdo
 	public function sql()
 	{
 		$return = 'SELECT ' . $this->_select;
-		if( $this->dbtype == 'oci' AND $this->_offset !== false )
+		if( $this->dbtype == 'oci' AND $this->_offset )
 		{
 			$return .= ', ROWNUM oci_rownum ';
 		}

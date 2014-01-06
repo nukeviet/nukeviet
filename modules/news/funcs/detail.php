@@ -47,13 +47,13 @@ if( $allowed )
 			{
 				$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 				$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
-				$db->query( $query );
+				$db->exec( $query );
 
 				$array_catid = explode( ',', $news_contents['listcatid'] );
 				foreach( $array_catid as $catid_i )
 				{
 					$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
-					$db->query( $query );
+					$db->exec( $query );
 				}
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];

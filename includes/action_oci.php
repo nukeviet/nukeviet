@@ -84,6 +84,14 @@ function nv_create_table_sys( $lang )
 		 config VARCHAR2(4000 CHAR),
 		 primary key (bid)
 	)";
+	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_BLOCK MINVALUE 100';
+	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_MODFUNCS
+	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups
+	 FOR EACH ROW WHEN (new.bid is null)
+		BEGIN
+		 SELECT SNV_' . strtoupper( $lang ) . '_BLOCK.nextval INTO :new.bid FROM DUAL;
+		END TNV_' . strtoupper( $lang ) . '_BLOCK;';
+
 	$sql_create_table[] = "CREATE INDEX inv_" . $lang . "_blocks_groups_theme ON " . $db_config['prefix'] . "_" . $lang . "_blocks_groups(theme) TABLESPACE USERS";
 	$sql_create_table[] = "CREATE INDEX inv_" . $lang . "_blocks_groups_module ON " . $db_config['prefix'] . "_" . $lang . "_blocks_groups(module) TABLESPACE USERS";
 	$sql_create_table[] = "CREATE INDEX inv_" . $lang . "_blocks_groups_position ON " . $db_config['prefix'] . "_" . $lang . "_blocks_groups(position) TABLESPACE USERS";
@@ -97,7 +105,7 @@ function nv_create_table_sys( $lang )
 	)";
 
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modfuncs (
-		 func_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+		 func_id NUMBER(8,0) DEFAULT NULL,
 		 func_name VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 alias VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 func_custom_name VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -111,7 +119,7 @@ function nv_create_table_sys( $lang )
 		 CONSTRAINT cnv_" . $lang . "modfuncs_alias UNIQUE (alias,in_module)
 	)";
 
-	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_MODFUNCS';
+	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_MODFUNCS MINVALUE 100';
 	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_MODFUNCS
 	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_modfuncs
 	 FOR EACH ROW WHEN (new.func_id is null)

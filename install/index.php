@@ -413,6 +413,7 @@ elseif( $step == 5 )
 		if( $db_config['dbtype'] == 'oci' AND empty( $db_config['dbport'] ) )
 		{
 			$db_config['dbport'] = 1521;
+			$db_config['dbsystem'] = $db_config['dbuname'];
 		}
 
 		$db = new sql_db( $db_config );
@@ -423,9 +424,13 @@ elseif( $step == 5 )
 		}
 		else
 		{
-			$db_config['dbsystem'] = $db_config['dbname'];
 			$tables = array();
-			$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE '.$db_config['collation'].'' );
+			$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE '.$db_config['collation'] );
+
+			if( $sys_info['allowed_set_time_limit'] )
+			{
+				set_time_limit( 0 );
+			}
 
 			//cai dat du lieu cho he thong
 			$db_config['error'] = '';
@@ -544,7 +549,7 @@ elseif( $step == 5 )
 						}
 						else
 						{
-							$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quot( $setmodule ) );
+							$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quote( $setmodule ) );
 						}
 					}
 
@@ -607,8 +612,8 @@ elseif( $step == 5 )
 
 					try
 					{
-						$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules WHERE title='news'";
-						if( $db->query( $sql )->rowCount() )
+						$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules WHERE title='news'";
+						if( $db->query( $sql )->fetchColumn() )
 						{
 							$result = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_cat ORDER BY sort ASC" );
 							while( list( $catid_i ) = $result->fetch( 3 ) )
@@ -657,7 +662,6 @@ elseif( $step == 6 )
 	$nextstep = 0;
 	$error  = '';
 
-	$db_config['dbsystem'] = $db_config['dbname'];
 	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 
 	$db = new sql_db( $db_config );
@@ -720,10 +724,13 @@ elseif( $step == 6 )
 			$password = $crypt->hash( $array_data['nv_password'] );
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
+			$userid = 1;
 			$db->exec( "TRUNCATE TABLE " . $db_config['prefix'] . "_users" );
+			$db->exec( "TRUNCATE TABLE " . $db_config['prefix'] . "_authors" );
+
 			$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_users
-				(username, md5username, password, email, full_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-				VALUES(:username, :md5username, :password, :email, :full_name, '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
+				(userid, username, md5username, password, email, full_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+				VALUES(" . $userid . ", :username, :md5username, :password, :email, :full_name, '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
 			$sth->bindParam( ':username', $array_data['nv_login'], PDO::PARAM_STR );
 			$sth->bindValue( ':md5username', nv_md5safe( $array_data['nv_login'] ), PDO::PARAM_STR );
 			$sth->bindParam( ':password', $password, PDO::PARAM_STR );
@@ -731,14 +738,11 @@ elseif( $step == 6 )
 			$sth->bindParam( ':full_name', $array_data['nv_login'], PDO::PARAM_STR );
 			$sth->bindParam( ':question', $array_data['question'], PDO::PARAM_STR );
 			$sth->bindParam( ':answer_question', $array_data['answer_question'], PDO::PARAM_STR );
-			$sth->execute();
+			$ok1 = $sth->execute();
 
-			$userid = $db->lastInsertId();
+			$ok2 = $db->exec( "INSERT INTO " . $db_config['prefix'] . "_authors (admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')" );
 
-			$db->exec( "TRUNCATE TABLE " . $db_config['prefix'] . "_authors" );
-			$sql = "INSERT INTO " . $db_config['prefix'] . "_authors (admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')";
-
-			if( $userid > 0 and $db->exec( $sql ) )
+			if( $ok1 and $ok2 )
 			{
 				try
 				{
@@ -785,8 +789,9 @@ elseif( $step == 6 )
 						$global_config['lang_multi'] = 0;
 						$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE lang='sys' AND module = 'global' AND config_name = 'lang_multi'" );
 						$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '1' WHERE lang='sys' AND module = 'global' AND config_name = 'rewrite_optional'" );
-						$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules where title='news'" );
-						if( $result->rowCount() )
+
+						$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules where title='news'" );
+						if( $result->fetchColumn() )
 						{
 							$global_config['rewrite_op_mod'] = 'news';
 							$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'news' WHERE lang='sys' AND module = 'global' AND config_name = 'rewrite_op_mod'" );
@@ -934,6 +939,7 @@ function nv_save_file_config()
 		$db_config['dbport'] = ( ! isset( $db_config['dbport'] ) ) ? '' : $db_config['dbport'];
 		$db_config['dbname'] = ( ! isset( $db_config['dbname'] ) ) ? '' : $db_config['dbname'];
 		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? '' : $db_config['dbuname'];
+		$db_config['dbsystem'] = ( isset( $db_config['dbsystem'] ) ) ? $db_config['dbsystem'] : $db_config['dbuname'];
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
 		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv3' : $db_config['prefix'];
 
@@ -949,6 +955,7 @@ function nv_save_file_config()
 		$content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
 		$content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";
 		$content .= "\$db_config['dbname'] = '" . $db_config['dbname'] . "';\n";
+		$content .= "\$db_config['dbsystem'] = '" . $db_config['dbsystem'] . "';\n";
 		$content .= "\$db_config['dbuname'] = '" . $db_config['dbuname'] . "';\n";
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
 		$content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";

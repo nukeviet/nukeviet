@@ -704,8 +704,8 @@ function nv_set_allow( $who, $groups )
 function nv_groups_add_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
-	$query = $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
-	if( $query->rowCount() )
+	$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
+	if( $query->fetchColumn() )
 	{
 		try
 		{
@@ -741,8 +741,8 @@ function nv_groups_del_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
 
-	$query = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid );
-	if( $query->rowCount() )
+	$row = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetch();
+	if( ! empty( $row ) )
 	{
 		$set_number = false;
 		if( $group_id > 3 )
@@ -751,8 +751,7 @@ function nv_groups_del_user( $group_id, $userid )
 		}
 		else
 		{
-			$data = $query->fetchColumn();
-			$data = str_replace( ',' . $global_config['idsite'] . ',', '', ',' . $data . ',' );
+			$data = str_replace( ',' . $global_config['idsite'] . ',', '', ',' . $row['data'] . ',' );
 			$data = trim( $data, ',' );
 			if( $data == '' )
 			{

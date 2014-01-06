@@ -25,7 +25,7 @@ if( $count )
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
-	 id NUMBER NOT NULL ENABLE ,
+	 id NUMBER(8,0) DEFAULT NULL,
 	 full_name VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 phone VARCHAR2(255 CHAR) DEFAULT NULL,
 	 fax VARCHAR2(255 CHAR) DEFAULT NULL,
@@ -48,7 +48,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_send (
-	 id NUMBER NOT NULL ENABLE,
+	 id NUMBER(8,0) DEFAULT NULL,
 	 cid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 content CLOB NOT NULL ENABLE,

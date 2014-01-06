@@ -54,25 +54,22 @@ $xtpl = new XTemplate( 'addtotopics.tpl', NV_ROOTDIR . '/themes/' . $global_conf
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
-if( $result->rowCount() )
+while( list( $id, $title ) = $result->fetch( 3 ) )
 {
-	while( list( $id, $title ) = $result->fetch( 3 ) )
-	{
-		$xtpl->assign( 'ROW', array(
-			'id' => $id,
-			'title' => $title,
-			'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : ''
-		) );
+	$xtpl->assign( 'ROW', array(
+		'id' => $id,
+		'title' => $title,
+		'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : ''
+	) );
 
-		$xtpl->parse( 'main.loop' );
-	}
+	$xtpl->parse( 'main.loop' );
+}
 
-	$result = $db->query( 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
-	while( $row = $result->fetch() )
-	{
-		$xtpl->assign( 'TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ) );
-		$xtpl->parse( 'main.topicsid' );
-	}
+$result = $db->query( 'SELECT topicid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
+while( $row = $result->fetch() )
+{
+	$xtpl->assign( 'TOPICSID', array( 'key' => $row['topicid'], 'title' => $row['title'] ) );
+	$xtpl->parse( 'main.topicsid' );
 }
 
 $xtpl->parse( 'main' );

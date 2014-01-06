@@ -13,7 +13,7 @@ $page_title = $lang_module['referer'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['referer'];
 
-$sql = "SELECT COUNT(*), SUM(total), MAX(total) FROM " . NV_REFSTAT_TABLE . "";
+$sql = 'SELECT COUNT(*), SUM(total), MAX(total) FROM ' . NV_REFSTAT_TABLE;
 $result = $db->query( $sql );
 list( $all_page, $total, $max ) = $result->fetch( 3 );
 
@@ -21,16 +21,22 @@ if( $all_page )
 {
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 50;
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allreferers'];
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allreferers'];
 
-	$sql = "SELECT host,total, last_update FROM " . NV_REFSTAT_TABLE . " WHERE total!=0 ORDER BY total DESC LIMIT " . $page . "," . $per_page;
-	$result = $db->query( $sql );
+	$db->sqlreset()
+		->select( 'host, total, last_update' )
+		->from( NV_REFSTAT_TABLE )
+		->where( 'total!=0' )
+		->order( 'total DESC' )
+		->limit( $per_page )
+		->offset( $page );
+	$result = $db->query( $db->sql() );
 
 	$host_list = array();
 	while( list( $host, $count, $last_visit ) = $result->fetch( 3 ) )
 	{
-		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-		$bymonth = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['referer'] . "&amp;host=" . $host . "\">" . $lang_module['statbymoth2'] . "</a>\n";
+		$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
+		$bymonth = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
 		$host_list[$host] = array( $count, $last_visit, $bymonth );
 	}
 
@@ -48,7 +54,7 @@ if( $all_page )
 	}
 }
 
-$contents = call_user_func( "allreferers" );
+$contents = allreferers();
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -17,25 +17,22 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	if( empty( $fid ) ) die( 'NO' );
-
-	$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid=" . $fid;
-	$result = $db->query( $query );
-	$numrows = $result->rowCount();
+	$query = 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
+	$numrows = $db->query( $query )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO' );
 
-	$query = "SELECT fid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid!=" . $fid . " ORDER BY weight ASC";
+	$query = 'SELECT fid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
 	$result = $db->query( $query );
 	$weight = 0;
 	while( $row = $result->fetch() )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $weight . " WHERE fid=" . $row['fid'];
-		$db->query( $sql );
+		$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'];
+		$db->exec( $sql );
 	}
-	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $new_vid . " WHERE fid=" . $fid;
-	$db->query( $sql );
+	$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
+	$db->exec( $sql );
 	die( 'OK' );
 }
 
@@ -44,21 +41,21 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 {
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-	$array_choicesql = array( "module" => "table", "table" => "column" );
+	$array_choicesql = array( 'module' => 'table', 'table' => 'column' );
 	$choice = $nv_Request->get_string( 'choice', 'post', '' );
 	$choice_seltected = $nv_Request->get_string( 'choice_seltected', 'post', '' );
 
 	$xtpl = new XTemplate( 'fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	if( $choice == "module" )
+	if( $choice == 'module' )
 	{
 		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 		$xtpl->parse( 'choicesql.loop' );
 		foreach( $site_mods as $module )
 		{
-			$_temp_choice['sl'] = ( $choice_seltected == $module['module_data'] ) ? " selected='selected'" : "";
+			$_temp_choice['sl'] = ( $choice_seltected == $module['module_data'] ) ? ' selected="selected"' : '';
 			$_temp_choice['key'] = $module['module_data'];
 			$_temp_choice['val'] = $module['custom_title'];
 			$xtpl->assign( 'SQL', $_temp_choice );
@@ -68,12 +65,13 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$xtpl->parse( 'choicesql' );
 		$contents = $xtpl->text( 'choicesql' );
 	}
-	elseif( $choice == "table" )
+	elseif( $choice == 'table' )
 	{
 		$module = $nv_Request->get_string( 'module', 'post', '' );
-		if( $module == '' ) exit( "" );
-		$result = $db->query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" );
-		$num_table = intval( $result->rowCount() );
+		if( $module == '' ) exit();
+		$_items = $db->query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" )->fetchAll();
+		$num_table = sizeof( $_items );
+
 		$array_table_module = array();
 		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
@@ -81,9 +79,9 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		if( $num_table > 0 )
 		{
 			$xtpl->parse( 'choicesql.loop' );
-			while( $item = $result->fetch() )
+			foreach ( $_items as $item )
 			{
-				$_temp_choice['sl'] = ( $choice_seltected == $item['name'] ) ? " selected='selected'" : "";
+				$_temp_choice['sl'] = ( $choice_seltected == $item['name'] ) ? ' selected="selected"' : '';
 				$_temp_choice['key'] = $item['name'];
 				$_temp_choice['val'] = $item['name'];
 				$xtpl->assign( 'SQL', $_temp_choice );
@@ -94,23 +92,24 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$xtpl->parse( 'choicesql' );
 		$contents = $xtpl->text( 'choicesql' );
 	}
-	elseif( $choice == "column" )
+	elseif( $choice == 'column' )
 	{
 		$table = $nv_Request->get_string( 'table', 'post', '' );
 		if( $table == '' ) exit();
 
-		$result = $db->query( "SHOW COLUMNS FROM " . $table );
-		$num_table = intval( $result->rowCount() );
+		$_items = $db->columns_array( $table );
+		$num_table = sizeof( $_items );
+
 		$array_table_module = array();
 		$xtpl->assign( 'choicesql_name', 'choicesql_' . $choice );
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 		if( $num_table > 0 )
 		{
-			$choice_seltected = explode( "|", $choice_seltected );
-			while( $item = $result->fetch() )
+			$choice_seltected = explode( '|', $choice_seltected );
+			foreach ( $_items as $item )
 			{
-				$_temp_choice['sl_key'] = ( $choice_seltected[0] == $item['field'] ) ? " selected='selected'" : "";
-				$_temp_choice['sl_val'] = ( $choice_seltected[1] == $item['field'] ) ? " selected='selected'" : "";
+				$_temp_choice['sl_key'] = ( $choice_seltected[0] == $item['field'] ) ? ' selected="selected"' : '';
+				$_temp_choice['sl_val'] = ( $choice_seltected[1] == $item['field'] ) ? ' selected="selected"' : '';
 				$_temp_choice['key'] = $item['field'];
 				$_temp_choice['val'] = $item['field'];
 				$xtpl->assign( 'SQL', $_temp_choice );
@@ -133,7 +132,7 @@ $error = '';
 $field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$preg_replace = array( 'pattern' => "/[^a-zA-Z0-9\_]/", 'replacement' => '' );
+	$preg_replace = array( 'pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '' );
 
 	$dataform = array();
 	$dataform['fid'] = $nv_Request->get_int( 'fid', 'post', 0 );
@@ -161,7 +160,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$language = array();
 	if( $dataform['fid'] )
 	{
-		$dataform_old = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid=" . $dataform['fid'] )->fetch();
+		$dataform_old = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $dataform['fid'] )->fetch();
 		$dataform['field_type'] = $dataform_old['field_type'];
 		if( ! empty( $dataform['language'] ) )
 		{
@@ -189,11 +188,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$dataform['editor_width'] = $nv_Request->get_string( 'editor_width', 'post', '100%', 0 );
 			$dataform['editor_height'] = $nv_Request->get_string( 'editor_height', 'post', '300px', 0 );
-			if( ! preg_match( "/^([0-9]+)(\%|px)+$/", $dataform['editor_width'] ) )
+			if( ! preg_match( '/^([0-9]+)(\%|px)+$/', $dataform['editor_width'] ) )
 			{
 				$dataform['editor_width'] = '100%';
 			}
-			if( ! preg_match( "/^([0-9]+)(\%|px)+$/", $dataform['editor_height'] ) )
+			if( ! preg_match( '/^([0-9]+)(\%|px)+$/', $dataform['editor_height'] ) )
 			{
 				$dataform['editor_height'] = '300px';
 			}
@@ -236,7 +235,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	elseif( $dataform['field_type'] == 'date' )
 	{
 		$date_fields = 1;
-		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'min_date', 'post' ), $m ) )
+		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'min_date', 'post' ), $m ) )
 		{
 			$dataform['min_length'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		}
@@ -244,7 +243,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$dataform['min_length'] = 0;
 		}
-		if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'max_date', 'post' ), $m ) )
+		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'max_date', 'post' ), $m ) )
 		{
 			$dataform['max_length'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		}
@@ -254,7 +253,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 
 		$dataform['current_date'] = $nv_Request->get_int( 'current_date', 'post', 0 );
-		if( ! $dataform['current_date'] and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $nv_Request->get_string( 'default_date', 'post' ), $m ) )
+		if( ! $dataform['current_date'] and preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'default_date', 'post' ), $m ) )
 		{
 			$dataform['default_value'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		}
@@ -283,14 +282,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$dataform['max_length'] = 255;
 		$dataform['default_value'] = $nv_Request->get_int( 'default_value_choice', 'post', 0 );
 
-		if( $dataform['choicetypes'] == "field_choicetypes_text" )
+		if( $dataform['choicetypes'] == 'field_choicetypes_text' )
 		{
 			$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
 			$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
 			$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
 			if( sizeof( $field_choices ) )
 			{
-				unset( $field_choices[""] );
+				unset( $field_choices[''] );
 				$dataform['field_choices'] = serialize( $field_choices );
 			}
 			else
@@ -307,7 +306,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$dataform['sql_choices'] = '';
 			if( $choicesql_module != '' && $choicesql_table != '' && $choicesql_column_key != '' && $choicesql_column_val != '' )
 			{
-				$dataform['sql_choices'] = $choicesql_module . "|" . $choicesql_table . "|" . $choicesql_column_key . "|" . $choicesql_column_val;
+				$dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
 			}
 			else
 			{
@@ -319,14 +318,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		if( empty( $dataform['fid'] ) )
 		{
-			$numrows = $db->query( "SHOW COLUMNS FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE Field='" . $dataform['field'] . "'" )->rowCount();
+			$_columns_array = $db->columns_array( NV_USERS_GLOBALTABLE );
 
-			if( empty( $numrows ) and $dataform['max_length'] <= 4294967296 and ! empty( $dataform['field'] ) and ! empty( $dataform['title'] ) )
+			if(  $dataform['max_length'] <= 4294967296 and ! empty( $dataform['field'] ) and ! empty( $dataform['title'] ) AND !isset( $_columns_array[$dataform['field']] ) )
 			{
-				$weight = $db->query( "SELECT MAX(weight) FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field" )->fetchColumn();
+				$weight = $db->query( 'SELECT MAX(weight) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field' )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
-				$dataform['fid'] = $db->sql_query_insert_id( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field
+				$dataform['fid'] = $db->insert_id( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field
 					(field, weight, field_type, field_choices, sql_choices, match_type,
 					match_regex, func_callback, min_length, max_length,
 					required, show_register, user_editable,
@@ -335,7 +334,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
 					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
-					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->dbescape_string( $dataform['default_value'] ) . ")" );
+					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->dbescape_string( $dataform['default_value'] ) . ")", "fid" );
 
 				if( $dataform['fid'] )
 				{
@@ -360,7 +359,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						$type_date = 'LONGTEXT NOT NULL';
 					}
-					$save = $db->query( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
+					$save = $db->exec( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
 				}
 			}
 		}
@@ -406,7 +405,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				{
 					$type_date = 'LONGTEXT NOT NULL';
 				}
-				$save = $db->query( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
+				$save = $db->exec( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
 			}
 		}
 		if( $save )
@@ -423,19 +422,19 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 
-	list( $fid, $field, $weight ) = $db->query( "SELECT fid, field, weight FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid=" . $fid )->fetch( 3 );
+	list( $fid, $field, $weight ) = $db->query( 'SELECT fid, field, weight FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch( 3 );
 
 	if( $fid and ! empty( $field ) )
 	{
-		$query1 = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid=" . $fid;
-		$query2 = "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info DROP " . $field . "";
+		$query1 = 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
+		$query2 = 'ALTER TABLE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info DROP ' . $field;
 		if( $db->query( $query1 ) and $db->query( $query2 ) )
 		{
-			$query = "SELECT fid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE weight > " . $weight . " ORDER BY weight ASC";
+			$query = 'SELECT fid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
 			$result = $db->query( $query );
 			while( $row = $result->fetch() )
 			{
-				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET weight=" . $weight . " WHERE fid=" . $row['fid'] );
+				$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
 				++$weight;
 			}
 			die( 'OK' );
@@ -455,7 +454,7 @@ $array_field_type = array(
 	'multiselect' => $lang_module['field_type_multiselect']
 );
 
-$array_choice_type = array( "field_choicetypes_sql" => $lang_module['field_choicetypes_sql'], "field_choicetypes_text" => $lang_module['field_choicetypes_text'] );
+$array_choice_type = array( 'field_choicetypes_sql' => $lang_module['field_choicetypes_sql'], 'field_choicetypes_text' => $lang_module['field_choicetypes_text'] );
 
 $xtpl = new XTemplate( 'fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
@@ -471,22 +470,22 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 if( $nv_Request->isset_request( 'qlist', 'get' ) )
 {
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC";
-	$result = $db->query( $sql );
-	$num = $result->rowCount();
+	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC';
+	$_rows = $db->query( $sql )->fetchAll();
+	$num = sizeof( $_rows );
 	if( $num )
 	{
-		while( $row = $result->fetch() )
+		foreach ( $_rows as $row )
 		{
 			$language = unserialize( $row['language'] );
 			$xtpl->assign( 'ROW', array(
 				'fid' => $row['fid'],
 				'field' => $row['field'],
 				'field_lang' => ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : '',
-				"field_type" => $array_field_type[$row['field_type']],
-				"required" => ( $row['required'] ) ? ' checked="checked"' : '',
-				"show_register" => ( $row['show_register'] ) ? ' checked="checked"' : '',
-				"show_profile" => ( $row['show_profile'] ) ? ' checked="checked"' : ''
+				'field_type' => $array_field_type[$row['field_type']],
+				'required' => ( $row['required'] ) ? ' checked="checked"' : '',
+				'show_register' => ( $row['show_register'] ) ? ' checked="checked"' : '',
+				'show_profile' => ( $row['show_profile'] ) ? ' checked="checked"' : ''
 			) );
 
 			for( $i = 1; $i <= $num; ++$i )
@@ -494,7 +493,7 @@ if( $nv_Request->isset_request( 'qlist', 'get' ) )
 				$xtpl->assign( 'WEIGHT', array(
 					'key' => $i,
 					'title' => $i,
-					'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
+					'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
 				) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
@@ -514,7 +513,7 @@ else
 	{
 		if( $fid )
 		{
-			$dataform = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field WHERE fid=" . $fid )->fetch();
+			$dataform = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch();
 
 			if( $dataform['user_editable'] == 'never' )
 			{
@@ -528,7 +527,7 @@ else
 			}
 			if( $dataform['field_type'] == 'editor' )
 			{
-				$array_tmp = explode( "@", $dataform['class'] );
+				$array_tmp = explode( '@', $dataform['class'] );
 				$dataform['editor_width'] = $array_tmp[0];
 				$dataform['editor_height'] = $array_tmp[1];
 				$dataform['class'] = '';
@@ -603,7 +602,7 @@ else
 		if( ! empty( $dataform['sql_choices'] ) )
 		{
 			$choice_type_sql = 1;
-			$sql_data_choice = explode( "|", $dataform['sql_choices'] );
+			$sql_data_choice = explode( '|', $dataform['sql_choices'] );
 			$xtpl->assign( 'SQL_DATA_CHOICE', $sql_data_choice );
 			$xtpl->parse( 'main.nv_load_sqlchoice' );
 		}
@@ -619,8 +618,8 @@ else
 				$xtpl->assign( 'FIELD_CHOICES', array(
 					'checked' => ( $number == $dataform['default_value'] ) ? ' checked="checked"' : '',
 					"number" => $number++,
-					"key" => $key,
-					"value" => $value
+					'key' => $key,
+					'value' => $value
 				) );
 				$xtpl->parse( 'main.load.loop_field_choice' );
 			}

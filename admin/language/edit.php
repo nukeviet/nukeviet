@@ -37,7 +37,7 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 
 	$author = var_export( $lang_translator_save, true );
 
-	$db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= :idfile' );
+	$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= :idfile' );
 	$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
 	$sth->bindParam( ':author', $author, PDO::PARAM_STR );
 	$sth->execute();
@@ -50,10 +50,10 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 
 	if( ! empty( $pozlang ) )
 	{
+		$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $dirlang . '= :lang_value WHERE id= :id' );
 		foreach( $pozlang as $id => $lang_value )
 		{
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
-			$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value WHERE id= :id' );
 			$sth->bindParam( ':id', $id, PDO::PARAM_INT );
 			$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 			$sth->execute();
@@ -64,6 +64,7 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 	$pozlangval = $nv_Request->get_array( 'pozlangval', 'post', array() );
 
 	$sizeof = sizeof( $pozlangkey );
+	$sth = $db->prepare( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ') VALUES (' . $idfile . ', :lang_key, :lang_value)' );
 	for( $i = 1; $i <= $sizeof; ++$i )
 	{
 		$lang_key = strip_tags( $pozlangkey[$i] );
@@ -74,7 +75,6 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 			$lang_value = nv_nl2br( $lang_value );
 			$lang_value = str_replace( '<br />', '<br />', $lang_value );
 
-			$sth = $db->prepare( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . ' (idfile, lang_key, lang_' . $dirlang . ') VALUES (' . $idfile . ', :lang_key, :lang_value)' );
 			$sth->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
 			$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 			$sth->execute();

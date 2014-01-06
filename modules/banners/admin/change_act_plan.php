@@ -15,17 +15,14 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT act FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE id=" . $id;
-$result = $db->query( $sql );
-$numrows = $result->rowCount();
-if( $numrows != 1 ) die( 'Stop!!!' );
+$sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . $id;
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) ) die( 'Stop!!!' );
 
-$row = $result->fetch();
 $act = $row['act'] ? 0 : 1;
 
-$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_plans SET act=" . $act . " WHERE id=" . $id;
-$return = $db->query( $sql );
-$return = $return ? "OK" : "NO";
+$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET act=' . $act . ' WHERE id=' . $id;
+$return = $db->exec( $sql ) ? 'OK' : 'NO';
 
 nv_CreateXML_bannerPlan();
 

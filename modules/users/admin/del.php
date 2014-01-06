@@ -13,55 +13,48 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
-if( ! $userid )
+$sql = 'SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
+$admin_id = $db->query( $sql )->fetchColumn();
+if( $admin_id )
 {
 	die( 'NO' );
 }
 
-$sql = "SELECT * FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id=" . $userid;
-$query = $db->query( $sql );
-$numrows = $query->rowCount();
-if( $numrows )
+$sql = 'SELECT username, full_name, email, photo, idsite FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$row = $db->query( $sql )->fetch( 3 );
+if( empty( $row ) )
 {
 	die( 'NO' );
 }
 
-$sql = "SELECT username, full_name, email, photo, idsite FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid;
-$query = $db->query( $sql );
-$numrows = $query->rowCount();
-if( $numrows != 1 )
-{
-	die( 'NO' );
-}
-
-list( $username, $full_name, $email, $photo, $idsite ) = $query->fetch( 3 );
+list( $username, $full_name, $email, $photo, $idsite ) = $row;
 
 if( $global_config['idsite'] > 0 AND $idsite != $global_config['idsite'] )
 {
 	die( 'NO' );
 }
 
-$query = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE group_id IN (1,2,3) AND userid=" . $userid );
-if( $query->rowCount() )
+$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN (1,2,3) AND userid=' . $userid );
+if( $query->fetchColumn() )
 {
-	die( "ERROR_" . $lang_module['delete_group_system'] );
+	die( 'ERROR_' . $lang_module['delete_group_system'] );
 }
 else
 {
-	$userdelete = ( ! empty( $full_name ) ) ? $full_name . " (" . $username . ")" : $username;
+	$userdelete = ( ! empty( $full_name ) ) ? $full_name . ' (' . $username . ')' : $username;
 
-	$result = $db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid );
+	$result = $db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
 	if( ! $result )
 	{
 		die( 'NO' );
 	}
 
-	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid . ")" );
-	$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $userid );
-	$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid=" . $userid );
-	$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $userid );
+	$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ')' );
+	$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid );
+	$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $userid );
+	$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', "userid " . $userid, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $admin_info['userid'] );
 
 	if( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
 	{
@@ -70,8 +63,8 @@ else
 
 	$subject = $lang_module['delconfirm_email_title'];
 	$message = sprintf( $lang_module['delconfirm_email_content'], $userdelete, $global_config['site_name'] );
-	$message = str_replace( "\n", "<br />", $message );
-	$message .= "<br /><br />------------------------------------------------<br /><br />";
+	$message = nl2br( $message );
+	$message .= '<br /><br />------------------------------------------------<br /><br />';
 	$message .= nv_EncString( $message );
 	nv_sendmail( $global_config['site_email'], $email, $subject, $message );
 	die( 'OK' );

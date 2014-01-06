@@ -25,7 +25,7 @@ while( $row = $query->fetch() )
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . " (
- vid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+ vid NUMBER(5,0) DEFAULT NULL,
  question VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
  link VARCHAR2(255 CHAR) DEFAULT '',
  acceptcm NUMBER(11,0) DEFAULT 1 NOT NULL ENABLE,
@@ -39,7 +39,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_question UNIQUE (question)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT MINVALUE 10';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
@@ -49,7 +49,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
- id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+ id NUMBER(8,0) DEFAULT NULL,
  vid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
  title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
  url VARCHAR2(255 CHAR) DEFAULT '',
@@ -57,7 +57,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  primary key (id),
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_vidtitle UNIQUE (vid,title)
 )";
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW MINVALUE 100';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows

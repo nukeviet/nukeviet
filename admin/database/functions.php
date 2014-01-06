@@ -36,6 +36,7 @@ function nv_show_tables()
 
 	$tables = array();
 
+	die( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 	$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 	while( $item = $result->fetch() )
 	{
@@ -161,14 +162,13 @@ function nv_show_tab()
 	$contents['table']['row']['columns'] = array( $lang_module['field_name'], $lang_module['field_type'], $lang_module['field_null'], $lang_module['field_key'], $lang_module['field_default'], $lang_module['field_extra'] );
 
 	$contents['table']['row']['detail'] = array();
-	$result = $db->query( 'SHOW COLUMNS FROM ' . $tab );
-	while( $row = $result->fetch() )
+	$columns_array = $db->columns_array( $tab );
+	foreach ( $columns_array as $row )
 	{
 		$row['null'] = ( $row['null'] == 'NO' ) ? 'NOT NULL' : 'NULL';
 		$row['key'] = empty( $row['key'] ) ? '' : ( $row['key'] == 'PRI' ? 'PRIMARY KEY' : ( $row['key'] == 'UNI' ? 'UNIQUE KEY' : 'KEY' ) );
 		$contents['table']['row']['detail'][] = $row;
 	}
-	$result->closeCursor();
 
 	$contents = nv_show_tab_theme( $contents );
 

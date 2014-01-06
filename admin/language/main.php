@@ -155,7 +155,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 				{
 					$setmodule = $row['title'];
 					$row['module_file'] = $row['module_file'];
-					
+
 					if( in_array( $row['module_file'], $modules_exit ) AND in_array( $setmodule, $array_module_setup ))
 					{
 						nv_setup_data_module( $keylang, $setmodule );
@@ -197,32 +197,32 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 							exit();
 						}
 					}
-					
+
 					try
 					{
 						//xoa du lieu tai bang nv3_vi_modules
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
-	
+
 						//xoa du lieu tai bang nv3_setup_modules
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
-	
+
 						//xoa du lieu tai bang nv3_vi_blocks
 						$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid in (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );
-	
+
 						//xoa du lieu tai bang nv3_vi_blocks_groups
 						$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
-	
+
 						//xoa du lieu tai bang nv3_vi_modthemes
 						$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );
-	
+
 						//xoa du lieu tai bang nv3_vi_modfuncs
 						$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
-	
+
 						//xoa du lieu tai bang nv3_config
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang= '" . $lang_data . "' AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
-	
-						$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE title='news'" );
-						if( $result->rowCount() )
+
+						$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE title='news'" );
+						if( $result->fetchColumn() )
 						{
 							$result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC' );
 							while( list( $catid_i ) = $result->fetch( 3 ) )
@@ -230,7 +230,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 								nv_create_table_news( $lang_data, 'news', $catid_i );
 							}
 							$result->closeCursor();
-	
+
 							$result = $db->query( 'SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC' );
 							while( list( $id, $listcatid ) = $result->fetch( 3 ) )
 							{
@@ -273,7 +273,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 
 		$sql = 'SELECT title, module_file, module_data FROM ' . $db_config['prefix'] . '_' . $lang . '_modules ORDER BY weight ASC';
 		$result_del_module = $db->query( $sql );
-		
+
 		while( list( $title, $module_file, $module_data ) = $result_del_module->fetch( 3 ) )
 		{
 			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ) )

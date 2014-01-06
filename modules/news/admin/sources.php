@@ -31,7 +31,7 @@ if( ! empty( $savecat ) )
 		$link = '';
 	}
 
-	$logo_old = $db->query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid . "" )->fetchColumn();
+	$logo_old = $db->query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid )->fetchColumn();
 
 	$logo = $nv_Request->get_title( 'logo', 'post', '' );
 	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
@@ -56,10 +56,10 @@ if( ! empty( $savecat ) )
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-		if( $db->sql_query_insert_id( $sql ) )
+		if( $db->insert_id( $sql, 'sourceid' ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -73,7 +73,7 @@ if( ! empty( $savecat ) )
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else

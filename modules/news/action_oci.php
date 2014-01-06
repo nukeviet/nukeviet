@@ -25,7 +25,7 @@ while( $row = $query->fetch() )
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_cat (
-	 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+ 	 catid NUMBER(5,0) DEFAULT NULL,
 	 parentid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 titlesite VARCHAR2(255 CHAR) DEFAULT NULL,
@@ -51,7 +51,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_cat_alias UNIQUE (alias)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT MINVALUE 100';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat
@@ -61,7 +61,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_sources (
-	 sourceid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	 sourceid NUMBER(8,0) DEFAULT NULL,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 link VARCHAR2(255 CHAR) DEFAULT '',
 	 logo VARCHAR2(255 CHAR) DEFAULT '',
@@ -72,7 +72,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_sources_title UNIQUE (title)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU MINVALUE 10';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_sources
@@ -82,7 +82,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_SOU;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_topics (
-	 topicid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+	 topicid NUMBER(5,0) DEFAULT NULL,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 image VARCHAR2(255 CHAR) DEFAULT '',
@@ -96,7 +96,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_topics_alias UNIQUE (alias)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP MINVALUE 10';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_topics
@@ -106,12 +106,12 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TOP;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block_cat (
-	 bid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+	 bid NUMBER(5,0) DEFAULT NULL,
 	 adddefault NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 numbers NUMBER(5,0) DEFAULT 10 NOT NULL ENABLE,
-	 title VARCHAR2(255 CHAR) DEFAULT '',
+	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 image VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 image VARCHAR2(255 CHAR) DEFAULT '',
 	 description VARCHAR2(255 CHAR) DEFAULT '',
 	 weight NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 keywords VARCHAR2(4000 CHAR) DEFAULT '',
@@ -122,7 +122,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_block_cat_alias UNIQUE (alias)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT MINVALUE 10';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block_cat
@@ -132,7 +132,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_comments (
-	 cid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	 cid NUMBER(8,0) DEFAULT NULL,
 	 id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 content VARCHAR2(4000 CHAR) NOT NULL ENABLE,
 	 post_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
@@ -164,7 +164,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 )";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
-	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE ,
+	 id NUMBER(8,0) DEFAULT NULL,
 	 catid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 listcatid VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 topicid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
@@ -193,7 +193,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 primary key (id)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW MINVALUE 100';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROW
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
@@ -256,7 +256,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 )";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_tags (
-	 tid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	 tid NUMBER(8,0) DEFAULT NULL,
 	 numnews NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 image VARCHAR2(255 CHAR) DEFAULT '',
@@ -266,7 +266,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_tagalias UNIQUE (alias)
 )";
 
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG';
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG MINVALUE 100';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_TAG
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags

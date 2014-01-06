@@ -29,21 +29,17 @@ if( empty( $userid ) or empty( $checknum ) )
 
 $del = NV_CURRENTTIME - 86400;
 $sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE regdate < " . $del;
-$db->query( $sql );
+$db->exec( $sql );
 
 $sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $userid;
-$result = $db->query( $sql );
-$numrows = $result->rowCount();
-
-if( $numrows != 1 )
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
-
-$row = $result->fetch();
 
 $check_update_user = false;
 $is_change_email = false;
@@ -78,7 +74,7 @@ if( $checknum == $row['checknum'] )
 					" . $db->dbescape( $row['question'] ) . ",
 					" . $db->dbescape( $row['answer'] ) . ",
 					'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
-		$userid = $db->sql_query_insert_id( $sql );
+		$userid = $db->insert_id( $sql, 'userid' );
 		if( $userid )
 		{
 			$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
@@ -87,10 +83,10 @@ if( $checknum == $row['checknum'] )
 			$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
 			while( $row_f = $result_field->fetch() )
 			{
-				$query_field["" . $row_f['field'] . ""] = ( isset( $users_info["" . $row_f['field'] . ""] ) ) ? $users_info["" . $row_f['field'] . ""] : $db->dbescape( $row_f['default_value'] );
+				$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->dbescape( $row_f['default_value'] );
 			}
 
-			if( $db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
+			if( $db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
 			{
 				$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
 				$check_update_user = true;

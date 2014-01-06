@@ -19,18 +19,16 @@ if( ! $userid or $admin_info['admin_id'] == $userid )
 }
 
 $sql = "SELECT a.lev, b.username, b.active, b.idsite FROM " . NV_AUTHORS_GLOBALTABLE . " a, " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " b WHERE a.admin_id=" . $userid . " AND a.admin_id=b.userid";
-$query = $db->query( $sql );
-$numrows = $query->rowCount();
-if( ! $numrows )
+$row = $db->query( $sql )->fetch( 3 );
+if( empty( $row ) )
 {
 	$level = 0;
 	$sql = "SELECT username, active, idsite FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid;
-	$query = $db->query( $sql );
-	list( $username, $active, $idsite ) = $query->fetch( 3 );
+	list( $username, $active, $idsite ) = $db->query( $sql )->fetch( 3 );
 }
 else
 {
-	list( $level, $username, $active, $idsite ) = $query->fetch( 3 );
+	list( $level, $username, $active, $idsite ) = $row;
 	$level = ( int )$level;
 }
 

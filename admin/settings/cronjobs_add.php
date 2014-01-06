@@ -65,23 +65,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$params = implode( ',', $params );
 			}
 
-			try
-			{
-				$sth = $db->prepare( 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . '
-					(start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name) VALUES
-					(' . $start_time . ', ' . $interval . ', :run_file, :run_func, :params, ' . $del . ', 0, 1, 0, 0, :cron_name)' );
-				$sth->bindParam( ':run_file', $run_file, PDO::PARAM_STR );
-				$sth->bindParam( ':run_func', $run_func, PDO::PARAM_STR );
-				$sth->bindParam( ':params', $params, PDO::PARAM_STR );
-				$sth->bindParam( ':cron_name', $cron_name, PDO::PARAM_STR );
-				$sth->execute();
-
-				$id = $db->lastInsertId();
-			}
-			catch (PDOException $e)
-			{
-				$id = 0;
-			}
+			$_sql = 'INSERT INTO ' . NV_CRONJOBS_GLOBALTABLE . '
+				(start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result, ' . NV_LANG_INTERFACE . '_cron_name) VALUES
+				(' . $start_time . ', ' . $interval . ', :run_file, :run_func, :params, ' . $del . ', 0, 1, 0, 0, :cron_name)';
+			$data = array();
+			$data['run_file'] = $run_file;
+			$data['run_func'] = $run_func;
+			$$data['params'] = $params;
+			$data['cron_name'] = $cron_name;
+			$id = $db->insert_id( $_sql, 'id', $data );
 
 			if( $id )
 			{

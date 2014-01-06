@@ -65,14 +65,14 @@ if( ! empty( $savecat ) )
 		$viewcat = "viewcat_page_new";
 		$subcatid = '';
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, admins, add_time, edit_time, who_view, groups_view) VALUES 
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, admins, add_time, edit_time, who_view, groups_view) VALUES
 			(" . $db->dbescape( $parentid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $titlesite ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", '', '" . $viewdescription . "', " . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewcat ) . ", '0', " . $db->dbescape( $subcatid ) . ", '1', '3', " . $db->dbescape( $keywords ) . ", " . $db->dbescape( $admins ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $who_view ) . "," . $db->dbescape( $groups_view ) . ")";
 
-		$newcatid = ( int )$db->sql_query_insert_id( $sql );
+		$newcatid = $db->insert_id( $sql, 'catid' );
 		if( $newcatid > 0 )
 		{
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
-			
+
 			nv_create_table_news( NV_LANG_DATA, $module_data, $newcatid );
 			nv_fix_cat_order();
 
@@ -102,7 +102,7 @@ if( ! empty( $savecat ) )
 				$weight = intval( $weight ) + 1;
 
 				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE catid=" . intval( $catid );
-				$db->query( $sql );
+				$db->exec( $sql );
 
 				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid'] );

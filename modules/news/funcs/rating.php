@@ -32,12 +32,12 @@ if( $id > 0 and in_array( $point, $array_point ) and $checkss == md5( $id . $cli
 	if( isset( $row['allowed_rating'] ) and $row['allowed_rating'] == 1 )
 	{
 		$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET total_rating=total_rating+" . $point . ", click_rating=click_rating+1 WHERE id=" . $id;
-		$db->query( $query );
+		$db->exec( $query );
 		$array_catid = explode( ',', $row['listcatid'] );
 		foreach( $array_catid as $catid_i )
 		{
 			$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET total_rating=total_rating+" . $point . ", click_rating=click_rating+1 WHERE id=" . $id;
-			$db->query( $query );
+			$db->exec( $query );
 		}
 		$contents = sprintf( $lang_module['stringrating'], $row['total_rating'] + $point, $row['click_rating'] + 1 );
 		die( $contents );

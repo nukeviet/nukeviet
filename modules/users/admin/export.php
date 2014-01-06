@@ -140,16 +140,23 @@ if( $step == 1 and file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 		// Mỗi file ghi 1000 dòng
 		$limit_export_data = 1000;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " AS t1, " . NV_USERS_GLOBALTABLE . "_info AS t2 WHERE t1.userid=t2.userid AND t1.userid>" . $id_export . " ORDER BY t1.userid ASC LIMIT 0 , " . $limit_export_data;
-		$result = $db->query( $sql );
-		$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t1, " . NV_USERS_GLOBALTABLE . "_info t2" )
+			->where( 't1.userid=t2.userid AND t1.userid>' . $id_export);
 
-		$number_page = $result->rowCount();
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( '*' )->order( 't1.userid ASC' )->limit( $limit_export_data );
+
+		$result = $db->query( $db->sql() )->fetchAll();
+
+		$number_page = sizeof( $result );
 		$id_export_save = 0;
 
 		// Ghi dữ liệu bắt đầu từ dòng thứ 5
 		$i = 5;
-		while( $data2 = $result->fetch() )
+		foreach ( $result as $data2 )
 		{
 			$id_export_save = $data2['userid'];
 			$data2['password'] = '';

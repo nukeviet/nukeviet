@@ -15,43 +15,37 @@ $alias = change_alias( $title );
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 $mod = $nv_Request->get_string( 'mod', 'post', '' );
 
-if( $mod == "cat" )
+if( $mod == 'cat' )
 {
-	$tab = NV_PREFIXLANG . "_" . $module_data . "_cat";
-	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE catid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
+	$tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
+	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $result->fetch();
-		$result->closeCursor();
+		$nb = $db->query( 'SELECT MAX(catid) FROM ' . $tab )->fetchColumn();
 
-		$alias .= "-" . $item['auto_increment'];
+		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
 }
-elseif( $mod == "topics" )
+elseif( $mod == 'topics' )
 {
-	$tab = NV_PREFIXLANG . "_" . $module_data . "_topics";
-	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE topicid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
+	$tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
+	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $result->fetch();
-		$result->closeCursor();
+		$nb = $db->query( 'SELECT MAX(topicid) FROM ' . $tab )->fetchColumn();
 
-		$alias .= "-" . $item['auto_increment'];
+		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
 }
-elseif( $mod == "blockcat" )
+elseif( $mod == 'blockcat' )
 {
-	$tab = NV_PREFIXLANG . "_" . $module_data . "_block_cat";
-	$nb = $db->query( "SELECT COUNT(*) FROM " . $tab . " WHERE bid!=" . $id . " AND alias=" . $db->dbescape( $alias ) )->fetchColumn();
+	$tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
+	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$result = $db->query( "SHOW TABLE STATUS WHERE name=" . $db->dbescape( $tab ) );
-		$item = $result->fetch();
-		$result->closeCursor();
+		$nb = $db->query( 'SELECT MAX(bid) FROM ' . $tab )->fetchColumn();
 
-		$alias .= "-" . $item['auto_increment'];
+		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
 }
 

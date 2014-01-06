@@ -285,12 +285,11 @@ while( $row = $query2->fetch() )
 	if( $admin_id )
 	{
 		$sql = 'SELECT username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
-		$result = $db->query( $sql );
-		if( $result->rowCount() )
+		$_rowus = $db->query( $sql )->fetch();
+		if( ! empty( $_rowus ) )
 		{
-			list( $username, $full_name ) = $result->fetch( 3 );
-			if( empty( $full_name ) ) $full_name = $username;
-			$admin_id = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $row['admin_id'] . "\">" . $full_name . "</a>";
+			if( empty( $_rowus['full_name'] ) ) $_rowus['full_name'] = $_rowus['username'];
+			$admin_id = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $row['admin_id'] . "\">" . $_rowus['full_name'] . "</a>";
 		}
 		else
 		{
@@ -299,7 +298,7 @@ while( $row = $query2->fetch() )
 	}
 
 	$array[] = array(
-		'id' => ( int )$row['id'],
+		'id' => $row['id'],
 		'subject' => nv_clean60( $row['subject'], 60 ),
 		'file' => $file,
 		'file_title' => $row['title'],

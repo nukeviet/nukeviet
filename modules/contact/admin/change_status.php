@@ -12,19 +12,16 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
+
+$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+$id = $db->query( $sql )->fetchColumn();
+
 if( empty( $id ) ) die( 'NO' );
-
-$sql = "SELECT act FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
-$result = $db->query( $sql );
-$numrows = $result->rowCount();
-
-if( $numrows != 1 ) die( 'NO' );
 
 $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;
 
-$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET act=" . $new_status . " WHERE id=" . $id;
-$db->query( $sql );
+$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET act=' . $new_status . ' WHERE id=' . $id );
 
 nv_del_moduleCache( $module_name );
 

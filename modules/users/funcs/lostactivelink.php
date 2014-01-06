@@ -69,17 +69,15 @@ if( $checkss == $data['checkss'] )
 				{
 					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE username=" . $db->dbescape( $data['userField'] ) . " AND regdate>" . $exp;
 				}
-				$result = $db->query( $sql );
-				$numrows = $result->rowCount();
-				if( $numrows == 1 )
+				$row = $db->query( $sql )->fetch();
+
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostactivelink_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $result->fetch();
-					$result->closeCursor();
 
 					$question = $row['question'];
 

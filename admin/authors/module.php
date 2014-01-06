@@ -56,10 +56,11 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+
 $a = 0;
-$result = $db->query( 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC' );
-$numrows = $result->rowCount();
-while( $row = $result->fetch() )
+$rows = $db->query( 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC' )->fetchAll();
+$numrows = sizeof( $rows );
+foreach ( $rows as $row )
 {
 	for( $i = 1; $i <= $numrows; $i++ )
 	{

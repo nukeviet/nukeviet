@@ -21,15 +21,21 @@ if( $all_page )
 {
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 50;
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['allbrowsers'];
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'];
 
-	$sql = "SELECT c_val,c_count, last_update FROM " . NV_COUNTER_TABLE . " WHERE c_type='browser' AND c_count!=0 ORDER BY c_count DESC LIMIT " . $page . "," . $per_page;
-	$result = $db->query( $sql );
+	$db->sqlreset()
+		->select( 'c_val,c_count, last_update' )
+		->from( NV_COUNTER_TABLE )
+		->where( "c_type='browser' AND c_count!=0" )
+		->order( 'c_count DESC' )
+		->limit( $per_page )
+		->offset( $page );
+	$result = $db->query( $db->sql() );
 
 	$browsers_list = array();
 	while( list( $browser, $count, $last_visit ) = $result->fetch( 3 ) )
 	{
-		$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
+		$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
 		$browsers_list[$browser] = array( $count, $last_visit );
 	}
 
@@ -47,7 +53,7 @@ if( $all_page )
 	}
 }
 
-$contents = call_user_func( "allbrowsers" );
+$contents = allbrowsers();
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

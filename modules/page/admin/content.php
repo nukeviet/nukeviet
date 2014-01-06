@@ -14,15 +14,13 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $id )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$result = $db->query( $sql );
+	$row = $db->query( $sql )->fetch();
 
-	if( $result->rowCount() != 1 )
+	if(empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
-
-	$row = $result->fetch();
 
 	$page_title = $lang_module['edit'];
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
@@ -103,11 +101,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "" )->fetchColumn();
+			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
-					(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES 
+					(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES
 					(" . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
 					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
 					" . $db->dbescape( $row['layout_func'] ) . "," . $row['gid'] . ", " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
@@ -159,7 +157,7 @@ if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 }
 else
 {
-	$row['bodytext'] = "<textarea style=\"width:100%;height:300px\" name=\"bodytext\">" . $row['bodytext'] . "</textarea>";
+	$row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
 if( ! empty( $row['image'] ) AND is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['image'] ) )
@@ -181,18 +179,18 @@ $xtpl->assign( 'SOCIALBUTTON', ( $row['socialbutton'] ) ? ' checked="checked"' :
 
 foreach( $layout_array as $value )
 {
-	$value = preg_replace( $global_config['check_op_layout'], "\\1", $value );
+	$value = preg_replace( $global_config['check_op_layout'], '\\1', $value );
 	$xtpl->assign( 'LAYOUT_FUNC', array( 'key' => $value, 'selected' => ( $row['layout_func'] == $value ) ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.layout_func' );
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
-$result = $db->query( $sql );
-if( $result->rowCount() )
+$_grows = $db->query( $sql )->fetchAll();
+if( sizeof( $_grows ) )
 {
 	$array_googleplus = array();
 	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
 	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
-	while( $grow = $result->fetch() )
+	foreach ( $_grows as $grow )
 	{
 		$array_googleplus[] = $grow;
 	}
@@ -204,6 +202,7 @@ if( $result->rowCount() )
 	}
 	$xtpl->parse( 'main.googleplus' );
 }
+
 for( $i = 0; $i <= 1; ++$i )
 {
 	$xtpl->assign( 'ACTIVECOMM', array(

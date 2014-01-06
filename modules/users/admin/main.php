@@ -10,19 +10,20 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
+
 $usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 3 );
 $usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
 if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
 }
-$sql = "FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE active=" . ( $usactive % 2 );
+$_where = 'active=' . ( $usactive % 2 );
 if( $usactive > 1 )
 {
-	$sql .= " AND idsite=" . $global_config['idsite'];
+	$_where .= ' AND idsite=' . $global_config['idsite'];
 }
 
-$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&usactive=" . $usactive;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
 
 $methods = array(
 	'userid' => array(
@@ -53,7 +54,7 @@ $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_
 $orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
-if( $ordertype != "ASC" ) $ordertype = "DESC";
+if( $ordertype != 'ASC' ) $ordertype = 'DESC';
 $method = ( ! empty( $method ) and isset( $methods[$method] ) ) ? $method : '';
 
 if( ! empty( $methodvalue ) )
@@ -64,49 +65,57 @@ if( ! empty( $methodvalue ) )
 		$array_like = array();
 		foreach( $key_methods as $method_i )
 		{
-			$array_like[] = "" . $method_i . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+			$array_like[] = $method_i . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
 		}
-		$sql .= " AND (" . implode( " OR ", $array_like ) . ")";
+		$_where .= ' AND (' . implode( ' OR ', $array_like ) . ')';
 	}
 	else
 	{
-		$sql .= " AND (" . $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
-		$methods[$method]['selected'] = " selected=\"selected\"";
+		$_where .= " AND (" . $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
+		$methods[$method]['selected'] = ' selected="selected"';
 	}
-	$base_url .= "&amp;method=" . urlencode( $method ) . "&amp;value=" . urlencode( $methodvalue );
+	$base_url .= '&amp;method=' . urlencode( $method ) . '&amp;value=' . urlencode( $methodvalue );
 	$table_caption = $lang_module['search_page_title'];
 }
 
-if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
-{
-	$sql .= " ORDER BY " . $orderby . " " . $ordertype;
-	$base_url .= "&amp;sortby=" . $orderby . "&amp;sorttype=" . $ordertype;
-}
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 30;
 
-$sql2 = "SELECT SQL_CALC_FOUND_ROWS * " . $sql . " LIMIT " . $page . ", " . $per_page;
-$query2 = $db->query( $sql2 );
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE )
+	->where( $_where );
 
-$result = $db->query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $result->fetch( 3 );
+	$all_page = $db->query( $db->sql() )->fetchColumn();
+
+$db->select( '*' )
+	->limit( $per_page )
+	->offset( $page );
+if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
+{
+	$db->order( $orderby . ' ' . $ordertype);
+	$base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
+}
+
+$result2 = $db->query( $db->sql() );
 
 $users_list = array();
 $admin_in = array();
 $is_edit = ( in_array( 'edit', $allow_func ) ) ? true : false;
 $is_delete = ( in_array( 'del', $allow_func ) ) ? true : false;
 $is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
-while( $row = $query2->fetch() )
+
+while( $row = $result2->fetch() )
 {
 	$users_list[$row['userid']] = array(
 		'userid' => ( int )$row['userid'],
 		'username' => ( string )$row['username'],
 		'full_name' => ( string )$row['full_name'],
 		'email' => ( string )$row['email'],
-		'regdate' => date( "d/m/Y H:i", $row['regdate'] ),
-		'checked' => ( int )$row['active'] ? " checked=\"checked\"" : "",
-		'disabled' => ( $is_setactive ) ? " onclick=\"nv_chang_status(" . $row['userid'] . ");\"" : " disabled=\"disabled\"",
+		'regdate' => date( 'd/m/Y H:i', $row['regdate'] ),
+		'checked' => ( int )$row['active'] ? ' checked="checked"' : '',
+		'disabled' => ( $is_setactive ) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
 		'is_edit' => $is_edit,
 		'is_delete' => $is_delete,
 		'level' => $lang_module['level0'],
@@ -123,7 +132,7 @@ while( $row = $query2->fetch() )
 if( ! empty( $admin_in ) )
 {
 	$admin_in = implode( ',', $admin_in );
-	$sql = "SELECT admin_id, lev FROM " . NV_AUTHORS_GLOBALTABLE . " WHERE admin_id IN (" . $admin_in . ")";
+	$sql = 'SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id IN (' . $admin_in . ')';
 	$query = $db->query( $sql );
 	while( $row = $query->fetch() )
 	{
@@ -162,12 +171,12 @@ if( ! empty( $admin_in ) )
 		}
 		if( ! $users_list[$row['admin_id']]['is_edit'] )
 		{
-			$users_list[$row['admin_id']]['disabled'] = " disabled=\"disabled\"";
+			$users_list[$row['admin_id']]['disabled'] = ' disabled="disabled"';
 		}
 	}
 	if( isset( $users_list[$admin_info['admin_id']] ) )
 	{
-		$users_list[$admin_info['admin_id']]['disabled'] = " disabled=\"disabled\"";
+		$users_list[$admin_info['admin_id']]['disabled'] = ' disabled="disabled"';
 		$users_list[$admin_info['admin_id']]['is_edit'] = true;
 	}
 }
@@ -176,27 +185,27 @@ $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
-$head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=userid&amp;sorttype=ASC";
+$head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
-$head_tds['username']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=username&amp;sorttype=ASC";
+$head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
 $head_tds['full_name']['title'] = $lang_module['name'];
-$head_tds['full_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=full_name&amp;sorttype=ASC";
+$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
 $head_tds['email']['title'] = $lang_module['email'];
-$head_tds['email']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=email&amp;sorttype=ASC";
+$head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
-$head_tds['regdate']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=regdate&amp;sorttype=ASC";
+$head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
 
 foreach( $orders as $order )
 {
 	if( $orderby == $order and $ordertype == 'ASC' )
 	{
-		$head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=" . $order . "&amp;sorttype=DESC";
-		$head_tds[$order]['title'] .= " &darr;";
+		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=DESC';
+		$head_tds[$order]['title'] .= ' &darr;';
 	}
 	elseif( $orderby == $order and $ordertype == 'DESC' )
 	{
-		$head_tds[$order]['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;sortby=" . $order . "&amp;sorttype=ASC";
-		$head_tds[$order]['title'] .= " &uarr;";
+		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=ASC';
+		$head_tds[$order]['title'] .= ' &uarr;';
 	}
 }
 
@@ -219,7 +228,7 @@ foreach( $methods as $m )
 	$xtpl->assign( 'METHODS', $m );
 	$xtpl->parse( 'main.method' );
 }
-$_bg = ( defined( "NV_CONFIG_DIR" ) ) ? 3 : 1;
+$_bg = ( defined( 'NV_CONFIG_DIR' ) ) ? 3 : 1;
 for( $i = $_bg; $i >= 0; $i-- )
 {
 	$m = array(

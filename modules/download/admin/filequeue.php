@@ -15,23 +15,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$page_title = $lang_module['download_filequeue'];
 
 	$id = $nv_Request->get_int( 'id', 'get', 0 );
-
-	if( ! $id )
-	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
-		exit();
-	}
-
 	$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$result = $db->query( $query );
-	$numrows = $result->rowCount();
-	if( $numrows != 1 )
+	$row = $db->query( $query )->fetch();
+	if( empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 		exit();
 	}
-
-	$row = $result->fetch();
 
 	$groups_list = nv_groups_list();
 	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
@@ -42,7 +32,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
-	list( $upload_dir ) = $result->fetch( 3 );
+	$upload_dir = $result->fetchColumn();
 
 	$array = array();
 	$is_error = false;
@@ -58,7 +48,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['author_name'] = $nv_Request->get_title( 'author_name', 'post', '', 1 );
 		$array['author_email'] = $nv_Request->get_title( 'author_email', 'post', '' );
 		$array['author_url'] = $nv_Request->get_title( 'author_url', 'post', '' );
-		$array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( "[NV]", $row['fileupload'] ) : array();
+		$array['fileupload'] = ! empty( $row['fileupload'] ) ? explode( '[NV]', $row['fileupload'] ) : array();
 
 		// Lay duong dan day du file tai len cu
 		if( ! empty( $array['fileupload'] ) )
@@ -67,7 +57,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['fileupload'] = array();
 			foreach( $fileupload as $file )
 			{
-				if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $file ) )
+				if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $file ) )
 				{
 					$file = NV_BASE_SITEURL . NV_UPLOADS_DIR . $file;
 				}
@@ -84,7 +74,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		// Lay duong dan day du hinh cu
 		if( ! empty( $array['fileimage'] ) )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'] ) )
 			{
 				$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
 			}
@@ -103,14 +93,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		// Sort image
 		if( ! empty( $array['fileimage'] ) )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'] ) )
 			{
 				$array['fileimage'] = substr( $array['fileimage'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 			}
 		}
 		if( ! empty( $array['fileimage2'] ) )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage2'] ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage2'] ) )
 			{
 				$array['fileimage2'] = substr( $array['fileimage2'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 			}
@@ -118,9 +108,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		if( ! empty( $array['author_url'] ) )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['author_url'] ) )
 			{
-				$array['author_url'] = "http://" . $array['author_url'];
+				$array['author_url'] = 'http://' . $array['author_url'];
 			}
 		}
 
@@ -181,16 +171,16 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$linkdirect = array();
 				if( ! empty( $links ) )
 				{
-					$links = nv_nl2br( $links, "<br />" );
-					$links = explode( "<br />", $links );
-					$links = array_map( "trim", $links );
+					$links = nv_nl2br( $links, '<br />' );
+					$links = explode( '<br />', $links );
+					$links = array_map( 'trim', $links );
 					$links = array_unique( $links );
 
 					foreach( $links as $link )
 					{
-						if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $link ) )
+						if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $link ) )
 						{
-							$link = "http://" . $link;
+							$link = 'http://' . $link;
 						}
 						if( nv_is_url( $link ) )
 						{
@@ -214,9 +204,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['linkdirect'] = array_unique( $array['linkdirect'] );
 		}
 
-		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE title=" . $db->dbescape( $array['title'] );
+		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE title=' . $db->dbescape( $array['title'] );
 		$result = $db->query( $sql );
-		list( $is_exists ) = $result->fetch( 3 );
+		$is_exists = $result->fetchColumn();
 
 		if( empty( $array['title'] ) )
 		{
@@ -247,7 +237,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		{
 			$alias = change_alias( $array['title'] );
 			$array['description'] = nv_editor_nl2br( $array['description'] );
-			$array['introtext'] = nv_nl2br( $array['introtext'], "<br />" );
+			$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 
 			if( ! in_array( $array['who_comment'], array_keys( $array_who ) ) )
 			{
@@ -284,7 +274,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 					$file = NV_UPLOADS_DIR . $file;
 					$newfile = basename( $file );
 
-					if( preg_match( "/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/", $newfile, $m ) )
+					if( preg_match( '/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/', $newfile, $m ) )
 					{
 						$newfile = $m[1] . $m[3];
 					}
@@ -304,11 +294,11 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 			}
 
-			$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( "[NV]", $array['fileupload'] ) : "";
+			$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( '[NV]', $array['fileupload'] ) : '';
 			if( ( ! empty( $array['linkdirect'] ) ) )
 			{
-				$array['linkdirect'] = array_map( "nv_nl2br", $array['linkdirect'] );
-				$array['linkdirect'] = implode( "[NV]", $array['linkdirect'] );
+				$array['linkdirect'] = array_map( 'nv_nl2br', $array['linkdirect'] );
+				$array['linkdirect'] = implode( '[NV]', $array['linkdirect'] );
 			}
 			else
 			{
@@ -327,7 +317,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				{
 					$newfile = basename( $fileimage );
 
-					if( preg_match( "/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/", $newfile, $m ) )
+					if( preg_match( '/(.*)(\.[a-zA-Z0-9]{32})(\.[a-zA-Z]+)$/', $newfile, $m ) )
 					{
 						$newfile = $m[1] . $m[3];
 					}
@@ -377,7 +367,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 " . $db->dbescape( $array['groups_download'] ) . ",
 				 0, '')";
 
-			if( ! $db->sql_query_insert_id( $sql ) )
+			if( ! $db->insert_id( $sql, 'id' ) )
 			{
 				$is_error = true;
 				$error = $lang_module['file_error2'];
@@ -387,7 +377,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				// Neu khong co file tai len moi moi xoa
 				if( ! empty( $row['fileupload'] ) )
 				{
-					$row['fileupload'] = explode( "[NV]", $row['fileupload'] );
+					$row['fileupload'] = explode( '[NV]', $row['fileupload'] );
 
 					foreach( $row['fileupload'] as $fileupload )
 					{
@@ -408,8 +398,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 					}
 				}
 
-				$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
-				$db->query( $sql );
+				$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 				exit();
@@ -462,7 +451,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['fileupload'] = array();
 		foreach( $fileupload as $tmp )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $tmp ) )
 			{
 				$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
 			}
@@ -476,7 +465,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['fileupload2'] = array();
 		foreach( $fileupload2 as $tmp )
 		{
-			if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+			if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $tmp ) )
 			{
 				$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
 			}
@@ -493,14 +482,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	// Build fileimage
 	if( ! empty( $array['fileimage'] ) )
 	{
-		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'] ) )
 		{
 			$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
 		}
 	}
 	if( ! empty( $array['fileimage2'] ) )
 	{
-		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage2'] ) )
+		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage2'] ) )
 		{
 			$array['fileimage2'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage2'];
 		}
@@ -726,20 +715,12 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	if( ! $id )
+	$query = 'SELECT id, fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
+	list( $id, $fileupload, $fileimage ) = $db->query->fetch( 3 );
+	if( empty( $id ) )
 	{
 		die( 'NO' );
 	}
-
-	$query = "SELECT fileupload, fileimage FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE id=" . $id;
-	$result = $db->query( $query );
-	$numrows = $result->rowCount();
-	if( $numrows != 1 )
-	{
-		die( 'NO' );
-	}
-
-	list( $fileupload, $fileimage ) = $result->fetch( 3 );
 
 	if( ! empty( $fileupload ) )
 	{
@@ -764,7 +745,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id;
-	$db->query( $sql );
+	$db->exec( $sql );
 
 	die( 'OK' );
 }
@@ -776,12 +757,6 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 
 	$query = 'SELECT fileupload, fileimage FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 	$result = $db->query( $query );
-	$numrows = $result->rowCount();
-	if( ! $numrows )
-	{
-		die( 'NO' );
-	}
-
 	while( list( $fileupload, $fileimage ) = $result->fetch( 3 ) )
 	{
 		if( ! empty( $fileupload ) )
@@ -807,9 +782,7 @@ if( $nv_Request->isset_request( 'alldel', 'post' ) )
 		}
 	}
 
-	$sql = 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
-	$db->query( $sql );
-
+	$db->exec( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp' );
 	die( 'OK' );
 }
 
@@ -820,7 +793,7 @@ $sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp';
 
 $sql1 = 'SELECT COUNT(*) ' . $sql;
 $result1 = $db->query( $sql1 );
-list( $all_file ) = $result1->fetch( 3 );
+$all_file = $result1->fetchColumn();
 
 if( ! $all_file )
 {

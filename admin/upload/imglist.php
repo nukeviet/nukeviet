@@ -31,81 +31,100 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
 
 	$check_like = false;
+
+	$db->sqlreset();
 	if( empty( $q ) )
 	{
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $array_dirname[$path];
+		$_where = 'did = ' . $array_dirname[$path];
 		if( $type == 'image' or $type == 'flash' )
 		{
-			$sql .= " AND type='" . $type . "'";
+			$_where .= " AND type='" . $type . "'";
 		}
 		if( $nv_Request->isset_request( 'author', 'get' ) )
 		{
-			$sql .= ' AND userid=' . $admin_info['userid'];
+			$_where .= ' AND userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
+		$db->select( 'COUNT(*)' )
+			->from( NV_UPLOAD_GLOBALTABLE . '_file' )
+			->where( $_where );
+
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( '*' );
 		if( $order == 1 )
 		{
-			$sql .= ' ORDER BY mtime ASC';
+			$db->order( 'mtime ASC' );
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= ' ORDER BY title ASC';
+			$db->order( 'title ASC' );
 		}
 		else
 		{
-			$sql .= ' ORDER BY mtime DESC';
+			$db->order( 'mtime DESC' );
 		}
 	}
 	else
 	{
 		$check_like = true;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS t1.*, t2.dirname FROM " . NV_UPLOAD_GLOBALTABLE . "_file t1 INNER JOIN " . NV_UPLOAD_GLOBALTABLE . "_dir t2 ON t1.did = t2.did";
-		$sql .= " WHERE (t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
-		$sql .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
+		$_where = "(t2.dirname = '" . $path . "' OR t2.dirname LIKE '" . $path . "/%')";
+		$_where .= " AND (t1.title LIKE :keyword1 OR t1.alt LIKE :keyword2)";
 
 		if( $type == "image" or $type == "flash" )
 		{
-			$sql .= " AND t1.type='" . $type . "'";
+			$_where .= " AND t1.type='" . $type . "'";
 		}
 		if( $nv_Request->isset_request( 'author', 'get' ) )
 		{
 			$sql .= ' AND t1.userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
+		$db->select( 'COUNT(*)' )
+			->from( NV_UPLOAD_GLOBALTABLE . '_file t1' )
+			->join( 'INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')
+			->where( $_where );
+
+		$sth = $db->prepare( $db->sql() );
+		$keyword = '%' . addcslashes( $q, '_%' ) . '%';
+		$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
+		$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
+		$sth->execute();
+
+		$all_page = $sth->fetchColumn();
+
+		$db->select( 't1.*, t2.dirname' );
 		if( $order == 1 )
 		{
-			$sql .= ' ORDER BY t1.mtime ASC';
+			$db->order( 't1.mtime ASC' );
 		}
 		elseif( $order == 2 )
 		{
-			$sql .= ' ORDER BY t1.title ASC';
+			$db->order( 't1.title ASC' );
 		}
 		else
 		{
-			$sql .= ' ORDER BY t1.mtime DESC';
+			$db->order( 't1.mtime DESC' );
 		}
 		$base_url .= '&amp;q=' . $q;
 	}
-	$sql .= ' LIMIT ' . $page . ',' . $per_page;
-
-	$sth = $db->prepare( $sql );
-	if( $check_like )
-	{
-		$keyword = '%' . addcslashes( $q, '_%' ) . '%';
-
-		$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
-		$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
-	}
-	$sth->execute();
-
-	$all_page = $db->query( 'SELECT FOUND_ROWS()' )->fetchColumn();
 
 	if( $all_page )
 	{
 		$xtpl = new XTemplate( 'listimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
+		$db->limit( $per_page )->offset( $page );
+		$sth = $db->prepare( $db->sql() );
+		if( $check_like )
+		{
+			$keyword = '%' . addcslashes( $q, '_%' ) . '%';
+
+			$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
+			$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
+		}
+		$sth->execute();
 		while( $file = $sth->fetch() )
 		{
 			$file['data'] = $file['sizes'];

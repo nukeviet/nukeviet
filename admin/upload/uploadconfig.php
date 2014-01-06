@@ -77,27 +77,36 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
 	$nv_auto_resize = ( int )$nv_Request->get_bool( 'nv_auto_resize', 'post', 0 );
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'file_allowed_ext', :type)" );
-	$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
+	$sth->bindValue( ':config_name', 'file_allowed_ext', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $type, PDO::PARAM_STR );
 	$sth->execute();
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'forbid_extensions', :ext)" );
-	$sth->bindParam( ':ext', $ext, PDO::PARAM_STR );
+	$sth->bindValue( ':config_name', 'forbid_extensions', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $ext, PDO::PARAM_STR );
 	$sth->execute();
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'forbid_mimes', :mime)" );
-	$sth->bindParam( ':mime', $mime, PDO::PARAM_STR );
+	$sth->bindValue( ':config_name', 'forbid_mimes', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $mime, PDO::PARAM_STR );
 	$sth->execute();
 
-	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'nv_auto_resize', " . $nv_auto_resize . ")" );
-	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'nv_max_size', " . $nv_max_size . ")" );
-	$db->exec( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'upload_checking_mode', '" . $upload_checking_mode . "')" );
+	$sth->bindValue( ':config_name', 'nv_auto_resize', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $nv_auto_resize, PDO::PARAM_STR );
+	$sth->execute();
+
+	$sth->bindValue( ':config_name', 'nv_max_size', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $nv_max_size, PDO::PARAM_STR );
+	$sth->execute();
+
+	$sth->bindValue( ':config_name', 'upload_checking_mode', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $upload_checking_mode, PDO::PARAM_STR );
+	$sth->execute();
 
 	$array_config_define = array();
 	$array_config_define['nv_max_width'] = $nv_Request->get_int( 'nv_max_width', 'post' );
 	$array_config_define['nv_max_height'] = $nv_Request->get_int( 'nv_max_height', 'post' );
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );

@@ -79,7 +79,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( $check_num == 1 )
 	{
-		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext tb2 ON ( tb1.id = tb2.id ) ";
+		$tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext tb2 ON ( tb1.id = tb2.id ) ';
 		$where = "AND ( tb1.title LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%' ) ";
 	}
 	elseif( $check_num == 2 )
@@ -92,39 +92,44 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	}
 	else
 	{
-		$tbl_src = " LEFT JOIN " . NV_PREFIXLANG . "_" . $module_data . "_bodytext tb2 ON ( tb1.id = tb2.id )";
+		$tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext tb2 ON ( tb1.id = tb2.id )';
 		$where = " AND ( tb1.title LIKE '%" . $dbkey . "%' ";
 		$where .= " OR tb1.author LIKE '%" . $dbkey . "%' OR tb1.sourcetext LIKE '%" . $dbkey . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%')";
 	}
 
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $to_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $to_date, $m ) )
 	{
-		$where .= " AND publtime >=" . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $from_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from_date, $m ) )
 	{
-		$where .= " AND publtime <= " . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime <= ' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 
 	if( $catid > 0 )
 	{
-		$table_search = NV_PREFIXLANG . "_" . $module_data . "_" . $catid;
+		$table_search = NV_PREFIXLANG . '_' . $module_data . '_' . $catid;
 	}
 	else
 	{
-		$table_search = NV_PREFIXLANG . "_" . $module_data . "_rows";
+		$table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
 	}
 
-	$sql = " SELECT SQL_CALC_FOUND_ROWS tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid
-	FROM " . $table_search . " as tb1 " . $tbl_src . "
-	WHERE tb1.status=1 " . $where . " ORDER BY tb1.id DESC LIMIT " . $pages . "," . $per_pages;
+	$db->sqlreset()
+		->select( 'COUNT(*)' )
+		->from( $table_search . ' as tb1 ' . $tbl_src )
+		->where( 'tb1.status=1 ' . $where );
 
-	$result = $db->query( $sql );
-	$result_all = $db->query( "SELECT FOUND_ROWS()" );
-	list( $numRecord ) = $result_all->fetch( 3 );
+	$numRecord = $db->query( $db->sql() )->fetchColumn();
+
+	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
+		->limit( $per_page )
+		->offset( $page );
+
+	$result = $db->query( $db->sql() );
 
 	$array_content = array();
-	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
+	$url_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=';
 	$show_no_image = $module_config[$module_name]['show_no_image'];
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
@@ -162,7 +167,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		);
 	}
 
-	$contents .= call_user_func( 'search_result_theme', $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
+	$contents .= search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
 }
 
 if( empty( $key ) )

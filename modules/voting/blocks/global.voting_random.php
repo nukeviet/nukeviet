@@ -55,7 +55,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			$is_update = implode( ',', $is_update );
 
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " SET act=0 WHERE vid IN (" . $is_update . ")";
-			$db->query( $sql );
+			$db->exec( $sql );
 
 			nv_del_moduleCache( 'voting' );
 		}

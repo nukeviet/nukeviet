@@ -46,7 +46,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$sql .= "full_name=" . $db->dbescape( $full_name ) . ", email=" . $db->dbescape( $email ) . ", website=" . $db->dbescape( $website ) . ",
 		location=" . $db->dbescape( $location ) . ", yim=" . $db->dbescape( $yim ) . ", phone=" . $db->dbescape( $phone ) . ", fax=" . $db->dbescape( $fax ) . ",
 		mobile=" . $db->dbescape( $mobile ) . " WHERE id=" . $banner_client_info['id'];
-	$db->query( $sql );
+	$db->exec( $sql );
 	die( "OK|action" );
 }
 

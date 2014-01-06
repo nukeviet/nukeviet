@@ -11,17 +11,9 @@ if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add'] = $lang_module['nv_admin_add'];
 
-$sql = 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_sys DESC';
-$result = $db->query( $sql );
-
-if( ! $result->rowCount() )
-{
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add' );
-	die();
-}
+$result = $db->query( 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_sys DESC' );
 
 $contents = array();
-
 while( $row = $result->fetch() )
 {
 	$contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : ( isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func'] );
@@ -58,6 +50,11 @@ while( $row = $result->fetch() )
 	}
 
 	$contents[$row['id']]['detail'][$lang_module['next_time']] = $next_time;
+}
+if( ! empty( $contents ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add' );
+	die();
 }
 
 $contents = main_theme( $contents );

@@ -11,12 +11,10 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 
-if( empty( $id ) ) die( 'NO' );
-
 $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-$result = $db->query( $sql );
+$id = $db->query( $sql )->fetchColumn();
 
-if( $result->rowCount() != 1 ) die( 'NO' );
+if( empty( $id ) ) die( 'NO' );
 
 $sql1 = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE cid = ' . $id;
 
@@ -26,8 +24,8 @@ if( $db->exec( $sql1 ) AND $db->exec( $sql2 ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_row', 'rowid ' . $id, $admin_info['userid'] );
 
-	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
-	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_rows' );
+	$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
+	$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_rows' );
 }
 else
 {

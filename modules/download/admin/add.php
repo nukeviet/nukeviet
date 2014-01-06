@@ -138,13 +138,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->dbescape( $alias );
 	$result = $db->query( $sql );
-	list( $is_exists ) = $result->fetch( 3 );
+	$is_exists = $result->fetchColumn();
 
 	if( ! $is_exists )
 	{
 		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->dbescape( $array['title'] );
 		$result = $db->query( $sql );
-		list( $is_exists ) = $result->fetch( 3 );
+		$is_exists = $result->fetchColumn();
 	}
 
 	if( empty( $array['title'] ) )
@@ -234,7 +234,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			 " . $db->dbescape( $array['groups_download'] ) . ",
 			 0, '')";
 
-		if( ! $db->sql_query_insert_id( $sql ) )
+		if( ! $db->insert_id( $sql, 'id' ) )
 		{
 			$is_error = true;
 			$error = $lang_module['file_error2'];
@@ -391,7 +391,7 @@ else
 
 $sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 $result = $db->query( $sql );
-list( $upload_dir ) = $result->fetch( 3 );
+$upload_dir = $result->fetchColumn();
 
 if( ! $array['filesize'] ) $array['filesize'] = '';
 

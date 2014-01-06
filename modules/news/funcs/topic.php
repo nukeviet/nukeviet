@@ -42,8 +42,8 @@ if( $topicid > 0 )
 	$end_publtime = 0;
 	$show_no_image = $module_config[$module_name]['show_no_image'];
 
-	$query = $db->query( $db->sql() );
-	while( $item = $query->fetch() )
+	$result = $db->query( $db->sql() );
+	while( $item = $result->fetch() )
 	{
 		if( $item['homeimgthumb'] == 1 )//image thumb
 		{
@@ -73,8 +73,8 @@ if( $topicid > 0 )
 		$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 		$topic_array[] = $item;
 	}
-	$query->closeCursor();
-	unset( $query, $row );
+	$result->closeCursor();
+	unset( $result, $row );
 
 	$topic_other_array = array();
 
@@ -85,14 +85,13 @@ if( $topicid > 0 )
 		->order( 'publtime DESC' )
 		->limit( $st_links );
 
-	$query = $db->query( $db->sql() );
-	while( $item = $query->fetch() )
+	$result = $db->query( $db->sql() );
+	while( $item = $result->fetch() )
 	{
 		$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 		$topic_other_array[] = $item;
 	}
-
-	unset( $query, $row, $arr_listcatid );
+	unset( $result, $row, $arr_listcatid );
 
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topicalias;
 	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );

@@ -17,17 +17,15 @@ if( defined( 'NV_EDITOR' ) )
 $page_title = $lang_module['siteterms'];
 
 $sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
-$result = $db->query( $sql );
-$numrows = $result->rowCount();
-if( $numrows )
-{
-	$mode = 'edit';
-	$row = $result->fetch();
-}
-else
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) )
 {
 	$mode = 'add';
 	$row = array( 'content' => '' );
+}
+else
+{
+	$mode = 'edit';
 }
 
 $error = '';

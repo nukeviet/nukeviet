@@ -37,34 +37,32 @@ function nv_show_tags_list( $q = '' )
 	}
 	$sth->execute();
 
-	if( $sth->rowCount() )
-	{
-		$xtpl = new XTemplate( 'tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl = new XTemplate( 'tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 
-		$number = 0;
-		while( $row = $sth->fetch() )
-		{
-			$row['number'] = ++$number;
-			$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
-			$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . '#edit';
-			$xtpl->assign( 'ROW', $row );
-			$xtpl->parse( 'main.loop' );
-		}
-		if( empty( $q ) AND $number > 9 )
-		{
-			$xtpl->parse( 'main.other' );
-		}
-		$xtpl->parse( 'main' );
-		$contents = $xtpl->text( 'main' );
-	}
-	else
+	$number = 0;
+	while( $row = $sth->fetch() )
 	{
-		$contents = '&nbsp;';
+		$row['number'] = ++$number;
+		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
+		$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . '#edit';
+		$xtpl->assign( 'ROW', $row );
+		$xtpl->parse( 'main.loop' );
 	}
 	$sth->closeCursor();
 
+	if( empty( $q ) AND $number > 9 )
+	{
+		$xtpl->parse( 'main.other' );
+	}
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	if( empty( $contents ) )
+	{
+		$contents = '&nbsp;';
+	}
 	return $contents;
 }
 

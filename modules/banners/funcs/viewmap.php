@@ -57,17 +57,16 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$geturl = new UrlGetContents();
 
 	$result = $db->query( "SELECT a." . $onetype . " FROM " . NV_BANNERS_GLOBALTABLE. "_click a INNER JOIN " . NV_BANNERS_GLOBALTABLE. "_rows b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY click_time ASC" );
-	if( $result->rowCount() )
+	while( $row = $result->fetch() )
 	{
-		while( $row = $result->fetch() )
+		if( $type == 'date' )
 		{
-			if( $type == 'date' )
-			{
-				$row[$onetype] = date( 'd/m', $row[$onetype] );
-			}
-			$data[] = $row[$onetype];
+			$row[$onetype] = date( 'd/m', $row[$onetype] );
 		}
-
+		$data[] = $row[$onetype];
+	}
+	if( sizeof( $data ) > 0)
+	{
 		$statics = array_count_values( $data );
 
 		foreach( $statics as $country => $quantity )

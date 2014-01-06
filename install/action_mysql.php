@@ -165,7 +165,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_info (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
-	lang char(3) NOT NULL DEFAULT 'sys',
+	lang varchar(3) NOT NULL DEFAULT 'sys',
 	module varchar(25) NOT NULL DEFAULT 'global',
 	config_name varchar(30) NOT NULL DEFAULT '',
 	config_value mediumtext NOT NULL,
@@ -189,7 +189,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
-	group_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
 	content text,
 	add_time int(11) NOT NULL,
@@ -206,7 +206,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 ) ENGINE=MyISAM AUTO_INCREMENT=10";
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
-	group_id mediumint(8) unsigned NOT NULL DEFAULT '0',
+	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	data text NOT NULL,
 	PRIMARY KEY (group_id,userid)
@@ -366,7 +366,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	module_name varchar(150) NOT NULL,
 	name_key varchar(255) NOT NULL,
 	note_action text NOT NULL,
-	link_acess varchar(255) NOT NULL,
+	link_acess varchar(255) DEFAULT '',
 	userid mediumint(8) unsigned NOT NULL,
 	log_time int(11) NOT NULL,
 	PRIMARY KEY (id)

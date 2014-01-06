@@ -29,11 +29,9 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 	$contents = $lang_module['lostpass_active_error_link'];
 
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $nv_Request->get_int( 'u', 'get' );
-	$result = $db->query( $sql );
-	$numrows = $result->rowCount();
-	if( $numrows == 1 )
+	$row = $db->query( $sql )->fetch();
+	if( ! empty( $row ) )
 	{
-		$row = $result->fetch();
 		$k = $nv_Request->get_string( 'k', 'get' );
 
 		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
@@ -73,17 +71,14 @@ else
 				{
 					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username='" . nv_md5safe( $data['userField'] ) . "' AND active=1";
 				}
-				$result = $db->query( $sql );
-				$numrows = $result->rowCount();
-				if( $numrows == 1 )
+				$row = $db->query( $sql )->fetch();
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostpass_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $result->fetch();
-					$result->closeCursor();
 
 					$question = $row['question'];
 

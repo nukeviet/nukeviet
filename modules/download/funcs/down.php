@@ -33,7 +33,7 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 	}
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['linkdirect'][$code]['id'] );
-	$db->query( $sql );
+	$db->exec( $sql );
 
 	$content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 	$content .= sprintf( $lang_module['download_wait2'], $session_files['linkdirect'][$code]['link'] );
@@ -72,7 +72,7 @@ if( ! isset( $session_files['fileupload'][$file]['id'] ) )
 }
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['fileupload'][$file]['id'] );
-$db->query( $sql );
+$db->exec( $sql );
 
 $upload_dir = 'files';
 $is_zip = false;

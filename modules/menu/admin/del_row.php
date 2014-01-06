@@ -15,17 +15,16 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $mid = $nv_Request->get_int( 'mid', 'post', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
 
-if( empty( $id ) ) die( 'NO_' . $id );
-
 $sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
-$result = $db->query( $sql );
+$row = $db->query( $sql )->fetch();
 
-if( $result->rowCount() != 1 ) die( 'NO_' . $id );
-nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
+if( empty( $row ) ) die( 'NO_' . $id );
 
 $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
 if( $db->exec( $sql ) )
 {
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
+
 	nv_del_moduleCache( $module_name );
 	nv_fix_cat_order( $mid );
 
@@ -38,20 +37,19 @@ if( $db->exec( $sql ) )
 		$arr_block[] = $row['id'];
 	}
 	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item= '" . implode( ',', $arr_block ) . "' WHERE id=" . $mid;
-	$db->query( $sql );
+	$db->exec( $sql );
 
 	// Cap nhat cho menu cha
 	if( $parentid > 0 )
 	{
 		$sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
-		$result = $db->query( $sql );
-		if( $result->rowCount() == 1 )
+		$row = $db->query( $sql )->fetch();
+		if( ! empty( $row ) )
 		{
-			list( $subitem ) = $result->fetch( 3 );
-			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $subitem ) ) ), array( $id ) ) );
+			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem=' . $db->dbescape( $subitem ) . ' WHERE id=' . $parentid;
-			$db->query( $sql );
+			$db->exec( $sql );
 		}
 	}
 }

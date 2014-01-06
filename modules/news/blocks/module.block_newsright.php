@@ -31,16 +31,17 @@ $db->sqlreset()
 	->limit( 5 );
 
 $result = $db->query( $db->sql() );
-if( $result->rowCount() )
+$i = 0;
+while( $row = $result->fetch() )
 {
-	$i = 1;
-	while( $row = $result->fetch() )
-	{
-		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
-		$row['catname'] = $global_array_cat[$row['catid']]['title'];
-		$xtpl->assign( 'topviews', $row );
-		$xtpl->parse( 'main.topviews.loop' );
-	}
+	++$i;
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+	$row['catname'] = $global_array_cat[$row['catid']]['title'];
+	$xtpl->assign( 'topviews', $row );
+	$xtpl->parse( 'main.topviews.loop' );
+}
+if( $i )
+{
 	$xtpl->parse( 'main.topviews' );
 }
 
@@ -52,18 +53,19 @@ $db->sqlreset()
 	->limit( 5 );
 $result = $db->query( $db->sql() );
 
-if( $result->rowCount() )
+$i = 0;
+while( $row = $result->fetch() )
 {
-	$i = 1;
-	while( $row = $result->fetch() )
-	{
-		list( $catid, $alias ) = $db->query( 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id'] )->fetch( 3 );
-		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $row['id'] . $global_config['rewrite_exturl'];
-		$row['catname'] = $global_array_cat[$catid]['title'];
-		$row['content'] = nv_clean60( $row['content'], 100 );
-		$xtpl->assign( 'topcomment', $row );
-		$xtpl->parse( 'main.topcomment.loop' );
-	}
+	++$i;
+	list( $catid, $alias ) = $db->query( 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $row['id'] )->fetch( 3 );
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $row['id'] . $global_config['rewrite_exturl'];
+	$row['catname'] = $global_array_cat[$catid]['title'];
+	$row['content'] = nv_clean60( $row['content'], 100 );
+	$xtpl->assign( 'topcomment', $row );
+	$xtpl->parse( 'main.topcomment.loop' );
+}
+if( $i )
+{
 	$xtpl->parse( 'main.topcomment' );
 }
 

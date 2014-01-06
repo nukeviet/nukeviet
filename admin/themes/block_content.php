@@ -319,18 +319,18 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$sth->execute();
 				$row['weight'] = intval( $sth->fetchColumn() ) + 1;
 
-				$sth = $db->prepare( "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )" );
-				$sth->bindParam( ':selectthemes', $selectthemes, PDO::PARAM_STR );
-				$sth->bindParam( ':module', $row['module'], PDO::PARAM_STR );
-				$sth->bindParam( ':file_name', $row['file_name'], PDO::PARAM_STR );
-				$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
-				$sth->bindParam( ':link', $row['link'], PDO::PARAM_STR );
-				$sth->bindParam( ':template', $row['template'], PDO::PARAM_STR );
-				$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
-				$sth->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
-				$sth->bindParam( ':config', $row['config'], PDO::PARAM_STR );
-				$sth->execute();
-				$row['bid'] = $db->lastInsertId();
+				$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
+				$data = array();
+				$data['selectthemes'] = $selectthemes;
+				$data['module'] = $row['module'];
+				$data['file_name'] = $row['file_name'];
+				$data['title'] = $row['title'];
+				$data['link'] = $row['link'];
+				$data['template'] = $row['template'];
+				$data['position'] = $row['position'];
+				$data['groups_view'] = $row['groups_view'];
+				$data['config'] = $row['config'];
+				$row['bid'] = $db->insert_id( $_sql, 'bid', $data );
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_add'], 'Name : ' . $row['title'], $admin_info['userid'] );
 			}

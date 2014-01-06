@@ -111,8 +111,8 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . 's
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 $lang_array_data_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
-while( $row = $result->fetch() )
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{

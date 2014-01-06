@@ -7,19 +7,18 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
 if( isset( $array_op[1] ) )
 {
 	$alias = trim( $array_op[1] );
-	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-") ? intval( substr( $array_op[2], 5 ) ) : 1;
+	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-') ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( "SELECT bid, title, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE alias=" . $db->dbescape( $alias ) )->fetch( 3 );
+	list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->dbescape( $alias ) )->fetch( 3 );
 	if( $bid > 0 )
 	{
-		$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['groups'] . "/" . $alias;
+		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $alias;
 
 		if( $page > 1 )
 		{
@@ -32,15 +31,24 @@ if( isset( $array_op[1] ) )
 			'link' => $base_url
 		);
 
-		$query = $db->query( "SELECT SQL_CALC_FOUND_ROWS t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT " . ($page - 1) * $per_page . "," . $per_page );
-
-		$result_all = $db->query( "SELECT FOUND_ROWS()" );
-		list( $all_page ) = $result_all->fetch( 3 );
-
 		$item_array = array();
 		$end_weight = 0;
 
-		while( $item = $query->fetch() )
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
+			->join( NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' );
+
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight' )
+			->order( 't2.weight ASC' )
+			->limit( $per_page )
+			->offset( ($page - 1) * $per_page );
+
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
 			{
@@ -68,19 +76,24 @@ if( isset( $array_op[1] ) )
 
 			$end_weight = $item['weight'];
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array[] = $item;
 		}
-
-		$query->closeCursor();
+		$result->closeCursor();
 		unset( $query, $row );
 
 		$item_array_other = array();
-		$query = $db->query( "SELECT t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t2.weight > " . $end_weight . " ORDER BY t2.weight ASC LIMIT 0," . $st_links . "" );
-
-		while( $item = $query->fetch() )
+		$db->sqlreset()
+			->select( 't1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
+			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+			->where( 't2.bid= ' . $bid . ' AND t2.weight > ' . $end_weight )
+			->order( 't2.weight ASC' )
+			->limit( $st_links );
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'] . $global_config['rewrite_exturl'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$item_array_other[] = $item;
 		}
 
@@ -89,7 +102,7 @@ if( isset( $array_op[1] ) )
 		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 		if( ! empty( $image_group ) )
 		{
-			$image_group = NV_BASE_SITEURL . NV_FILES_DIR . "/" . $module_name . "/" . $image_group;
+			$image_group = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $image_group;
 		}
 		$contents = topic_theme( $item_array, $item_array_other, $generate_page, $page_title, $description, $image_group );
 	}
@@ -99,7 +112,7 @@ else
 	$array_cat = array();
 	$key = 0;
 
-	$query_cat = $db->query( "SELECT bid, numbers, title, alias FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat ORDER BY weight ASC" );
+	$query_cat = $db->query( 'SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC' );
 
 	while( list( $bid, $numberlink, $btitle, $balias ) = $query_cat->fetch( 3 ) )
 	{
@@ -108,12 +121,18 @@ else
 			'alias' => '',
 			'subcatid' => '',
 			'title' => $btitle,
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['groups'] . "/" . $balias
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias
 		);
 
-		$query = $db->query( "SELECT t1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_block t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status= 1 ORDER BY t2.weight ASC LIMIT 0," . $numberlink );
-
-		while( $item = $query->fetch() )
+		$db->sqlreset()
+			->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' )
+			->order( 't2.weight ASC' )
+			->limit( $numberlink );
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
 			{
@@ -139,7 +158,7 @@ else
 			$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
 			$item['width'] = $module_config[$module_name]['homewidth'];
 
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'];
 			$array_cat[$key]['content'][] = $item;
 		}
 		++$key;
@@ -147,9 +166,9 @@ else
 
 	$viewcat = $module_config[$module_name]['indexfile'];
 
-	if( $viewcat != "viewcat_main_left" and $viewcat != "viewcat_main_bottom" )
+	if( $viewcat != 'viewcat_main_left' and $viewcat != 'viewcat_main_bottom' )
 	{
-		$viewcat == "viewcat_main_right";
+		$viewcat == 'viewcat_main_right';
 	}
 
 	$contents = viewsubcat_main( $viewcat, $array_cat );

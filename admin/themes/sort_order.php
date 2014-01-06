@@ -22,10 +22,10 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 	$sth = $db->prepare( 'SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE position != :position AND bid IN (' . implode( ',', $array_bid ) . ')' );
 	$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
 	$sth->execute();
-
-	if( $sth->rowCount() )
+	$row = $sth->fetch( 3 );
+	if( !empty( $row ) )
 	{
-		list( $bid, $theme, $pos_old ) = $sth->fetch( 3 );
+		list( $bid, $theme, $pos_old ) = $row;
 
 		$sth = $db->prepare( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=2147483647 WHERE bid=' . $bid );
 		$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
@@ -39,15 +39,15 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 		$sth->bindParam( ':position', $pos_old, PDO::PARAM_STR );
 		$sth->execute();
 
-		if( $result->rowCount() )
+		$weight = 0;
+		while( list( $bid_i ) = $sth->fetch( 3 ) )
 		{
-			$weight = 0;
-			while( list( $bid_i ) = $sth->fetch( 3 ) )
-			{
-				++$weight;
-				$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
-			}
+			++$weight;
+			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+		}
 
+		if( $weight )
+		{
 			$func_id_old = $weight = 0;
 
 			$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1

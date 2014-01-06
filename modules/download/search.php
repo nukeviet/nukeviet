@@ -11,7 +11,6 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_sdown_cats' ) )
 {
-
 	/**
 	 * nv_sdown_cats()
 	 *
@@ -22,7 +21,7 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 	{
 		global $db;
 
-		$sql = "SELECT id, title, alias, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE status=1";
+		$sql = 'SELECT id, title, alias, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1';
 		$result = $db->query( $sql );
 
 		$list = array();
@@ -31,9 +30,9 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 			if( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 			{
 				$list[$row['id']] = array(
-					'id' => ( int )$row['id'], //
-					'title' => $row['title'], //
-					'alias' => $row['alias'] //
+					'id' => $row['id'],
+					'title' => $row['title'],
+					'alias' => $row['alias']
 				);
 			}
 		}
@@ -42,33 +41,37 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 }
 
 $list_cats = nv_sdown_cats( $m_values['module_data'] );
-$in = implode( ',', array_keys( $list_cats ) );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS alias,title,description, introtext, catid 
-FROM " . NV_PREFIXLANG . "_" . $m_values['module_data'] . " 
-WHERE catid IN (" . $in . ") 
-AND (" . nv_like_logic( 'title', $dbkeyword, $logic ) . " 
-OR " . nv_like_logic( 'description', $dbkeyword, $logic ) . " 
-OR " . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ") 
-LIMIT " . $pages . "," . $limit;
+$_where = 'catid IN (' . implode( ',', array_keys( $list_cats ) ) . ')
+AND (' . nv_like_logic( 'title', $dbkeyword, $logic ) . '
+OR ' . nv_like_logic( 'description', $dbkeyword, $logic ) . '
+OR ' . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ')';
 
-$tmp_re = $db->query( $sql );
 
-$result = $db->query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $result->fetch( 3 );
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( NV_PREFIXLANG . '_' . $m_values['module_data'] )
+	->where( $_where );
+
+$all_page = $db->query( $db->sql() )->fetchColumn();
+
 
 if( $all_page )
 {
-	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
+	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
+	$db->select( 'alias,title,description, introtext, catid' )
+		->limit($limit)->offset($pages);
+
+	$tmp_re = $db->query( $db->sql() );
 	while( list( $alias, $tilterow, $content, $introtext, $catid ) = $tmp_re->fetch( 3 ) )
 	{
 		$content = $content . ' ' . $introtext;
 
 		$result_array[] = array(
-			'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias, //
-			'title' => BoldKeywordInStr( $tilterow, $key, $logic ), //
-			'content' => BoldKeywordInStr( $content, $key, $logic ) //
+			'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias,
+			'title' => BoldKeywordInStr( $tilterow, $key, $logic ),
+			'content' => BoldKeywordInStr( $content, $key, $logic )
 		);
 	}
 }

@@ -89,7 +89,7 @@ if( ! empty( $submit ) )
 		if( empty( $vid ) )
 		{
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (" . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
-			$vid = $db->sql_query_insert_id( $sql );
+			$vid = $db->insert_id( $sql, 'vid' );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid'] );
 		}
 		if( $vid > 0 )
@@ -101,12 +101,12 @@ if( ! empty( $submit ) )
 				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->dbescape( $title ) . ", url = " . $db->dbescape( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
+					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->dbescape( $title ) . ", url = " . $db->dbescape( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
 					++$maxoption_data;
 				}
 				else
 				{
-					$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid . "" );
+					$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
 				}
 			}
 
@@ -118,7 +118,7 @@ if( ! empty( $submit ) )
 					$url = nv_unhtmlspecialchars( strip_tags( $urlvotenews[$key] ) );
 
 					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (vid, title, url, hitstotal) VALUES (" . $db->dbescape( $vid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $url ) . ", '0')";
-					if( $db->sql_query_insert_id( $sql ) )
+					if( $db->insert_id( $sql, 'id' ) )
 					{
 						++$maxoption_data;
 					}
@@ -138,8 +138,8 @@ if( ! empty( $submit ) )
 			{
 				$act = 1;
 			}
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->dbescape( $question ) . ", link=" . $db->dbescape( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->dbescape( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid . "";
-			if( $db->query( $sql ) )
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->dbescape( $question ) . ", link=" . $db->dbescape( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->dbescape( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
+			if( $db->exec( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
@@ -171,18 +171,21 @@ else
 	$array_urlvote = array();
 	if( $vid > 0 )
 	{
-		$queryvote = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid . "";
+		$queryvote = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE vid=" . $vid;
 		$rowvote = $db->query( $queryvote )->fetch();
 
 		$sql = "SELECT id, title, url FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid='" . $vid . "' ORDER BY id ASC";
 		$result = $db->query( $sql );
-		$maxoption = $result->rowCount();
-		$maxoption = ( $maxoption > 0 ) ? $maxoption : 1;
 
 		while( list( $id, $title, $url ) = $result->fetch( 3 ) )
 		{
 			$array_answervote[$id] = $title;
 			$array_urlvote[$id] = $url;
+			++$maxoption;
+		}
+		if( $maxoption > 1 )
+		{
+			$maxoption = $maxoption - 1;
 		}
 	}
 	else

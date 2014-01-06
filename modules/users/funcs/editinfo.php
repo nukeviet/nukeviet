@@ -40,16 +40,16 @@ function nv_check_username_change( $login )
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
 	$result = $db->query( $sql );
-	list( $deny_name ) = $result->fetch( 3 );
+	$deny_name = $result->fetchColumn();
 	$result->closeCursor();
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND username=" . $db->dbescape( $login );
-	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
+	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
+	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['account_registered_name'], $login );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND username=" . $db->dbescape( $login );
-	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['account_registered_name'], $login );
+	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
+	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['account_registered_name'], $login );
 
 	return '';
 }
@@ -69,7 +69,7 @@ function nv_check_email_change( $email )
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
 	$result = $db->query( $sql );
-	list( $deny_email ) = $result->fetch( 3 );
+	$deny_email = $result->fetchColumn();
 	$result->closeCursor();
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
@@ -81,13 +81,13 @@ function nv_check_email_change( $email )
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->dbescape( $pattern );
-	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email RLIKE " . $db->dbescape( $pattern );
-	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->dbescape( $pattern );
-	if( $db->query( $sql )->rowCount() != 0 ) return sprintf( $lang_module['email_registered_name'], $email );
+	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	return '';
 }
@@ -103,7 +103,7 @@ while( $row_field = $result_field->fetch() )
 	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
-		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1] . "";
+		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1];
 		$result = $db->query( $query );
 		$weight = 0;
 		while( list( $key, $val ) = $result->fetch( 3 ) )
@@ -347,7 +347,7 @@ if( $checkss == $array_data['checkss'] )
 			$checknum = md5( $checknum . $email_new );
 			$md5_username = nv_md5safe( $array_data['username'] );
 
-			$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE md5username=" . $db->dbescape( $md5_username );
+			$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE md5username=" . $db->quote( $md5_username );
 			$db->query( $sql );
 			$error_email_change = nv_check_email_change( $email_new );
 			if( ! empty( $error_email_change ) )
@@ -358,15 +358,15 @@ if( $checkss == $array_data['checkss'] )
 			{
 				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
-					" . $db->dbescape( $md5_username ) . ",
+					" . $db->quote( $md5_username ) . ",
 					'',
-					" . $db->dbescape( $email_new ) . ",
+					" . $db->quote( $email_new ) . ",
 					'',
 					" . NV_CURRENTTIME . ",
 					'',
 					'',
-					" . $db->dbescape( $checknum ) . ", '')";
-				$userid_check = $db->sql_query_insert_id( $sql );
+					" . $db->quote( $checknum ) . ", '')";
+				$userid_check = $db->insert_id( $sql, 'userid' );
 
 				if( $userid_check > 0 )
 				{

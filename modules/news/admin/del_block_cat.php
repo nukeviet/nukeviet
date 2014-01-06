@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $bid = $nv_Request->get_int( 'bid', 'post', 0 );
 
 $contents = "NO_" . $bid;
-$bid = $db->query( "SELECT bid FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE bid=" . intval( $bid ) . "" )->fetchColumn();
+$bid = $db->query( "SELECT bid FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat WHERE bid=" . intval( $bid ) )->fetchColumn();
 if( $bid > 0 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_blockcat', "block_catid " . $bid, $admin_info['userid'] );
@@ -20,7 +20,7 @@ if( $bid > 0 )
 	if( $db->exec( $query ) )
 	{
 		$query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid;
-		$db->query( $query );
+		$db->exec( $query );
 		nv_fix_block_cat();
 		nv_del_moduleCache( $module_name );
 		$contents = "OK_" . $bid;

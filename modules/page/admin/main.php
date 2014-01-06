@@ -16,9 +16,9 @@ $xtpl->assign( 'GLANG', $lang_global );
 $page_title = $lang_module['list'];
 $array = array();
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . " ORDER BY weight ASC";
-$result = $db->query( $sql );
-$num = $result->rowCount();
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' ORDER BY weight ASC';
+$_rows = $db->query( $sql )->fetchAll();
+$num = sizeof( $_rows );
 
 if( $num < 1 )
 {
@@ -29,15 +29,15 @@ if( $num < 1 )
 $array_status = array( $lang_module['inactive'], $lang_module['active'] );
 
 $i = 0;
-while( $row = $result->fetch() )
+foreach ( $_rows as $row )
 {
-	$row['url_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $row['id'];
+	$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
 
 	for( $i = 1; $i <= $num; ++$i )
 	{
 		$xtpl->assign( 'WEIGHT', array(
-			'w' => $i, //
-			'selected' => ( $i == $row['weight'] ) ? " selected=\"selected\"" : "" //
+			'w' => $i,
+			'selected' => ( $i == $row['weight'] ) ? ' selected="selected"' : ''
 		) );
 
 		$xtpl->parse( 'main.row.weight' );
@@ -46,9 +46,9 @@ while( $row = $result->fetch() )
 	foreach( $array_status as $key => $val )
 	{
 		$xtpl->assign( 'STATUS', array(
-			'key' => $key, //
-			'val' => $val, //
-			'selected' => ( $key == $row['status'] ) ? " selected=\"selected\"" : "" //
+			'key' => $key,
+			'val' => $val,
+			'selected' => ( $key == $row['status'] ) ? ' selected="selected"' : ''
 		) );
 
 		$xtpl->parse( 'main.row.status' );

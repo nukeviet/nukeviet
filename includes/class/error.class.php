@@ -66,11 +66,11 @@ class Error
 	);
 
 	/**
-     * Error::__construct()
-     *
-     * @param mixed $config
-     * @return
-     */
+	 * Error::__construct()
+	 *
+	 * @param mixed $config
+	 * @return
+	 */
 	public function __construct( $config )
 	{
 		$this->log_errors_list = $this->parse_error_num( ( int )$config['log_errors_list'] );
@@ -132,10 +132,10 @@ class Error
 	}
 
 	/**
-     * Error::nv_set_ini()
-     *
-     * @return
-     */
+	 * Error::nv_set_ini()
+	 *
+	 * @return
+	 */
 	public function nv_set_ini()
 	{
 		$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
@@ -154,11 +154,11 @@ class Error
 	}
 
 	/**
-     * Error::get_Env()
-     *
-     * @param mixed $key
-     * @return
-     */
+	 * Error::get_Env()
+	 *
+	 * @param mixed $key
+	 * @return
+	 */
 	private function get_Env( $key )
 	{
 		if( ! is_array( $key ) )
@@ -177,11 +177,11 @@ class Error
 	}
 
 	/**
-     * Error::get_error_log_path()
-     *
-     * @param mixed $path
-     * @return
-     */
+	 * Error::get_error_log_path()
+	 *
+	 * @param mixed $path
+	 * @return
+	 */
 	private function get_error_log_path( $path )
 	{
 		$path = ltrim( rtrim( preg_replace( array( "/\\\\/", "/\/{2,}/" ), "/", $path ), '/' ), '/' );
@@ -228,11 +228,11 @@ class Error
 	}
 
 	/**
-     * Error::parse_error_num()
-     *
-     * @param mixed $num
-     * @return
-     */
+	 * Error::parse_error_num()
+	 *
+	 * @param mixed $num
+	 * @return
+	 */
 	private function parse_error_num( $num )
 	{
 		if( $num > E_ALL + E_STRICT ) $num = E_ALL + E_STRICT;
@@ -336,7 +336,7 @@ class Error
 		echo "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
 		echo "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
 		echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-		echo "	If you  have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+		echo "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
 		echo "</body>\n";
 		echo "</html>";
 		die();
@@ -384,14 +384,14 @@ class Error
 	}
 
 	/**
-     * Error::error_handler()
-     *
-     * @param mixed $errno
-     * @param mixed $errstr
-     * @param mixed $errfile
-     * @param mixed $errline
-     * @return
-     */
+	 * Error::error_handler()
+	 *
+	 * @param mixed $errno
+	 * @param mixed $errstr
+	 * @param mixed $errfile
+	 * @param mixed $errline
+	 * @return
+	 */
 	public function error_handler( $errno, $errstr, $errfile, $errline )
 	{
 		if( empty( $errno ) ) return;
@@ -405,7 +405,7 @@ class Error
 
 		if( ! file_exists( $track_errors ) )
 		{
-			//file_put_contents( $track_errors, '', FILE_APPEND );
+			file_put_contents( $track_errors, '', FILE_APPEND );
 			if( ! empty( $this->log_errors_list ) and isset( $this->log_errors_list[$errno] ) )
 			{
 				$this->_log();

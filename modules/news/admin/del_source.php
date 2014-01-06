@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 $sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
 
 $contents = "NO_" . $sourceid;
-list( $sourceid, $title ) = $db->query( "SELECT sourceid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . intval( $sourceid ) . "" )->fetch( 3 );
+list( $sourceid, $title ) = $db->query( "SELECT sourceid, title FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . intval( $sourceid ) )->fetch( 3 );
 if( $sourceid > 0 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_source', $title, $admin_info['userid'] );
@@ -28,7 +28,7 @@ if( $sourceid > 0 )
 		$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET sourceid = '0' WHERE id =" . $row['id'] );
 	}
 	$result->closeCursor();
-	$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid . "" );
+	$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid );
 	nv_fix_source();
 	nv_del_moduleCache( $module_name );
 	$contents = "OK_" . $sourceid;

@@ -11,12 +11,12 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $t = $nv_Request->get_int( 't', 'get', 0 );
 
-nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del', "id " . $t, $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del', 'id ' . $t, $admin_info['userid'] );
 
 if( $t == 3 )
 {
-	$sql = $sql = "TRUNCATE TABLE " . NV_PREFIXLANG . "_" . $module_data . "_send";
-	$db->query( $sql );
+	$sql = $sql = 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send';
+	$db->exec( $sql );
 }
 elseif( $t == 2 )
 {
@@ -25,8 +25,8 @@ elseif( $t == 2 )
 	if( ! empty( $sends ) )
 	{
 		$in = implode( ',', $sends );
-		$sql = $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id IN (" . $in . ")";
-		$db->query( $sql );
+		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id IN (' . $in . ')';
+		$db->exec( $sql );
 	}
 }
 else
@@ -35,8 +35,8 @@ else
 
 	if( $id )
 	{
-		$sql = $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_send WHERE id = " . $id;
-		$db->query( $sql );
+		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id = ' . $id;
+		$db->exec( $sql );
 	}
 }
 

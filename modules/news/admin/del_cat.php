@@ -25,7 +25,7 @@ if( $catid > 0 )
 		}
 		else
 		{
-			$check_rows = $db->query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" )->fetchColumn();
+			$check_rows = $db->query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid )->fetchColumn();
 			if( intval( $check_rows ) > 0 )
 			{
 				if( $delallcheckss == md5( $catid . session_id() . $global_config['sitekey'] ) )
@@ -81,7 +81,7 @@ if( $catid > 0 )
 					{
 						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid'] );
 
-						$sql = $db->query( "SELECT id, catid, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
+						$sql = $db->query( "SELECT id, catid, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid );
 						while( $row = $sql->fetch() )
 						{
 							if( $row['catid'] == $row['listcatid'] )
@@ -104,13 +104,13 @@ if( $catid > 0 )
 								$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
 							}
 						}
-						$db->query( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
+						$db->exec( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid );
 						$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE catid=" . $catid );
 						$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE catid=" . $catid );
 
 						nv_fix_cat_order();
 						nv_del_moduleCache( $module_name );
-						Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid . '' );
+						Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid );
 						die();
 					}
 					elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid )
@@ -120,7 +120,7 @@ if( $catid > 0 )
 						{
 							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['move'], $title . ' --> ' . $newstitle, $admin_info['userid'] );
 
-							$sql = $db->query( "SELECT id, catid, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
+							$sql = $db->query( "SELECT id, catid, listcatid FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid );
 							while( $row = $sql->fetch() )
 							{
 								$arr_catid_old = explode( ',', $row['listcatid'] );
@@ -128,7 +128,7 @@ if( $catid > 0 )
 								$arr_catid_news = array_diff( $arr_catid_old, $arr_catid_i );
 								if( ! in_array( $catidnews, $arr_catid_news ) )
 								{
-									$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catidnews . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['id'] . "" );
+									$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catidnews . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['id'] );
 									$arr_catid_news[] = $catidnews;
 								}
 								if( $catid == $row['catid'] )
@@ -141,13 +141,13 @@ if( $catid > 0 )
 								}
 								$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
 							}
-							$db->query( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
+							$db->exec( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid );
 							$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE catid=" . $catid );
 							$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE catid=" . $catid );
 
 							nv_fix_cat_order();
 							nv_del_moduleCache( $module_name );
-							Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid . '' );
+							Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&parentid=' . $parentid );
 							die();
 						}
 					}
@@ -167,7 +167,7 @@ if( $catid > 0 )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delcatandrows'], $title, $admin_info['userid'] );
 					nv_fix_cat_order();
-					$db->query( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "" );
+					$db->exec( "DROP TABLE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid );
 					$contents = "OK_" . $parentid;
 				}
 				$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE catid=" . $catid );

@@ -195,17 +195,17 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		nv_del_moduleCache( 'modules' );
 	}
 
-	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
-	$number_func = $result->rowCount();
+	$rows = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' )->fetchAll();
+	$number_func = sizeof( $rows );
 
 	$i = 1;
-	while( list( $mod_name, $mod_name_title ) = $result->fetch( 3 ) )
+	foreach ($rows as $row)
 	{
-		if( isset( $array_layout_func[$mod_name] ) )
+		if( isset( $array_layout_func[$row['title']] ) )
 		{
-			$xtpl->assign( 'MOD_NAME_TITLE', $mod_name_title );
+			$xtpl->assign( 'MOD_NAME_TITLE', $row['custom_title'] );
 
-			$array_layout_func_mod = $array_layout_func[$mod_name];
+			$array_layout_func_mod = $array_layout_func[$row['title']];
 
 			foreach( $array_layout_func_mod as $func_name => $func_arr_val )
 			{

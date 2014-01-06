@@ -33,7 +33,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 	edittime NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	is_suspend NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	susp_reason VARCHAR2(4000 CHAR) DEFAULT '',
-	check_num VARCHAR2(40 CHAR) DEFAULT '' NOT NULL ENABLE,
+	check_num VARCHAR2(40 CHAR) DEFAULT NULL,
 	last_login NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	last_ip VARCHAR2(45 CHAR) DEFAULT '',
 	last_agent VARCHAR2(255 CHAR) DEFAULT '',
@@ -41,7 +41,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 )";
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	keyname VARCHAR2(32 CHAR)DEFAULT '',
 	mask NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	begintime NUMBER(11,0) DEFAULT 0,
@@ -59,7 +59,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_AUTHORS_
 	END TNV_' . strtoupper( NV_AUTHORS_GLOBALTABLE ) . '_CONFIG;';
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
-	mid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	mid NUMBER(8,0) DEFAULT NULL,
 	module VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 	lang_key VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	weight NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -71,7 +71,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 	CONSTRAINT unv_authors_module_module UNIQUE (module)
 )";
 
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_AUTHORS_GLOBALTABLE ) . '_MODULE';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_AUTHORS_GLOBALTABLE ) . '_MODULE MINVALUE 100';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_AUTHORS_GLOBALTABLE ) . '_MODULE
   BEFORE INSERT  ON ' . NV_AUTHORS_GLOBALTABLE . '_module
   FOR EACH ROW WHEN (new.mid is null)
@@ -87,7 +87,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 )";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
-	qid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+	qid NUMBER(5,0) DEFAULT NULL,
 	title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	lang CHAR(2 CHAR) DEFAULT '' NOT NULL ENABLE,
 	weight NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -96,7 +96,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
 	primary key (qid),
 	CONSTRAINT unv_users_question_title UNIQUE (title,lang)
 )";
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_QUESTION';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_QUESTION MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_QUESTION
   BEFORE INSERT  ON ' . NV_USERS_GLOBALTABLE . '_question
   FOR EACH ROW WHEN (new.qid is null)
@@ -105,7 +105,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_USERS_GL
 	END TNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_QUESTION;';
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
-	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	userid NUMBER(8,0) DEFAULT NULL,
 	username VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	md5username CHAR(32 CHAR) DEFAULT '' NOT NULL ENABLE,
 	password VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -135,7 +135,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	CONSTRAINT unv_users_email UNIQUE (email)
 )";
 
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_ROW';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_ROW MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_USERS_GLOBALTABLE ) . '_ROW
   BEFORE INSERT  ON ' . NV_USERS_GLOBALTABLE . '
   FOR EACH ROW WHEN (new.userid is null)
@@ -146,7 +146,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_USERS_GL
 $sql_create_module[] = "CREATE INDEX inv_" . NV_USERS_GLOBALTABLE . "_idsite ON " . NV_USERS_GLOBALTABLE . "(idsite) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
-	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	userid NUMBER(8,0) DEFAULT NULL,
 	username VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	md5username CHAR(32 CHAR) DEFAULT '' NOT NULL ENABLE,
 	password VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -183,7 +183,7 @@ $sql_create_table[] = "CREATE INDEX inv_users_openid_userid ON NV3_USERS_OPENID(
 $sql_create_table[] = "CREATE INDEX inv_users_openid_email ON NV3_USERS_OPENID(email) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
-	fid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	fid NUMBER(8,0) DEFAULT NULL,
 	field VARCHAR2(25 CHAR) DEFAULT '' NOT NULL ENABLE,
 	weight NUMBER(11,0) DEFAULT 1 NOT NULL ENABLE,
 	field_type VARCHAR2(4000 CHAR) DEFAULT 'textbox' NOT NULL ENABLE,
@@ -291,7 +291,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_info (
 )";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
-	lang CHAR(3 CHAR) DEFAULT 'sys' NOT NULL ENABLE,
+	lang VARCHAR2(3 CHAR) DEFAULT 'sys' NOT NULL ENABLE,
 	module VARCHAR2(25 CHAR) DEFAULT 'global' NOT NULL ENABLE,
 	config_name VARCHAR2(30 CHAR) DEFAULT '' NOT NULL ENABLE,
 	config_value  VARCHAR2(4000 CHAR) DEFAULT NULL,
@@ -299,7 +299,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
 )";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	start_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	inter_val NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	run_file VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -322,7 +322,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_CRONJOBS
 	END TNV_' . strtoupper( NV_CRONJOBS_GLOBALTABLE ) . ';';
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
-	group_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	group_id NUMBER(5,0) DEFAULT NULL,
 	title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	content VARCHAR2(4000 CHAR) DEFAULT NULL,
 	add_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
@@ -337,7 +337,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	CONSTRAINT unv_groups_ktitle UNIQUE (title,idsite)
 )";
 
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_GROUPS_GLOBALTABLE );
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( NV_GROUPS_GLOBALTABLE ) . ' MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_GROUPS_GLOBALTABLE ) . '
   BEFORE INSERT  ON ' . NV_GROUPS_GLOBALTABLE . '
   FOR EACH ROW WHEN (new.group_id is null)
@@ -346,14 +346,14 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_GROUPS_G
 	END TNV_' . strtoupper( NV_GROUPS_GLOBALTABLE ) . ';';
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
-	group_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
+	group_id NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	data VARCHAR2(4000 CHAR) NOT NULL ENABLE,
 	primary key (group_id,userid)
 )";
 
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	idfile NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	lang_key VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	primary key (id),
@@ -369,7 +369,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_LANGUAGE
 	END TNV_' . strtoupper( NV_LANGUAGE_GLOBALTABLE ) . ';';
 
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
-	idfile NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	idfile NUMBER(8,0) DEFAULT NULL,
 	module VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	admin_file VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	langtype VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -448,7 +448,7 @@ $sql_create_table[] = "CREATE INDEX inv_banners_click_browse_key ON NV3_BANNERS_
 $sql_create_table[] = "CREATE INDEX inv_banners_click_click_os_key ON NV3_BANNERS_CLICK(click_os_key) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	login VARCHAR2(60 CHAR) DEFAULT '' NOT NULL ENABLE,
 	pass VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	reg_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
@@ -480,7 +480,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_CLIENTS;';
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
-	id NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(5,0) DEFAULT NULL,
 	blang CHAR(2 CHAR) DEFAULT NULL,
 	title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	description VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -491,7 +491,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	primary key (id)
 )";
 
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_PLANS';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_PLANS MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_PLANS
   BEFORE INSERT  ON ' . $db_config['prefix'] . '_banners_plans
   FOR EACH ROW WHEN (new.id is null)
@@ -500,7 +500,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_PLANS;';
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	pid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	clid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -521,7 +521,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 	weight NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	primary key (id)
 )";
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_ROWS';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_ROWS MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_ROWS
   BEFORE INSERT  ON ' . $db_config['prefix'] . '_banners_rows
   FOR EACH ROW WHEN (new.id is null)
@@ -532,7 +532,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 $sql_create_table[] = "CREATE INDEX inv_banners_rows_pid ON NV3_BANNERS_ROWS(pid) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banip (
-	id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(8,0) DEFAULT NULL,
 	ip VARCHAR2(32 CHAR)DEFAULT '',
 	mask NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	area NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
@@ -552,12 +552,12 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_BANIP;';
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
-	id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE ,
+	id NUMBER(11,0) DEFAULT NULL,
 	lang VARCHAR2(10 CHAR) DEFAULT '' NOT NULL ENABLE,
 	module_name VARCHAR2(150 CHAR) DEFAULT '' NOT NULL ENABLE,
 	name_key VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	note_action VARCHAR2(4000 CHAR) NOT NULL ENABLE,
-	link_acess VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	link_acess VARCHAR2(255 CHAR) DEFAULT '',
 	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	log_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	primary key (id)
@@ -587,7 +587,7 @@ $sql_create_table[] = "CREATE INDEX inv_ipcountry_country ON NV3_IPCOUNTRY(count
 $sql_create_table[] = "CREATE INDEX inv_ipcountry_time ON NV3_IPCOUNTRY(time) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
-	did NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+	did NUMBER(8,0) DEFAULT NULL,
 	dirname VARCHAR2(255 CHAR) DEFAULT NULL,
 	time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	thumb_type NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
@@ -598,7 +598,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	CONSTRAINT unv_upload_dir_name UNIQUE (dirname)
 )";
 
-$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_UPLOAD_DIR';
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_UPLOAD_DIR MINVALUE 10';
 $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_UPLOAD_DIR
   BEFORE INSERT  ON ' . $db_config['prefix'] . '_upload_dir
   FOR EACH ROW WHEN (new.did is null)
@@ -628,7 +628,7 @@ $sql_create_table[] = "CREATE INDEX inv_upload_file_userid ON NV3_UPLOAD_FILE(us
 $sql_create_table[] = "CREATE INDEX inv_upload_file_type ON NV3_UPLOAD_FILE(type) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
-	gid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
+	gid NUMBER(5,0) DEFAULT NULL,
 	title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	idprofile VARCHAR2(25 CHAR) DEFAULT '' NOT NULL ENABLE,
 	weight NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,

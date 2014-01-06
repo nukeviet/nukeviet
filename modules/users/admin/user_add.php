@@ -24,7 +24,7 @@ while( $row_field = $result_field->fetch() )
 	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
-		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1] . "";
+		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1];
 		$result = $db->query( $query );
 		$weight = 0;
 		while( list( $key, $val ) = $result->fetch( 3 ) )
@@ -70,19 +70,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) )->rowCount() != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username=" . $db->quote( nv_md5safe( $_user['username'] ) ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE email=" . $db->dbescape( $_user['email'] ) )->rowCount() != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -152,7 +152,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				 1,
 				 '" . implode( ',', $_user['in_groups'] ) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
-			$userid = $db->sql_query_insert_id( $sql );
+			$userid = $db->insert_id( $sql, 'userid' );
 
 			if( $userid )
 			{
@@ -176,7 +176,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
 						$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->dbescape( $file_name ) . " WHERE userid=" . $userid;
-						$db->query( $sql );
+						$db->exec( $sql );
 					}
 				}
 

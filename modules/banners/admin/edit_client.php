@@ -11,23 +11,13 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
-if( empty( $id ) )
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id=' . $id;
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
-
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
-$result = $db->query( $sql );
-$numrows = $result->rowCount();
-
-if( $numrows != 1 )
-{
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
-	die();
-}
-
-$row = $result->fetch();
 
 $error = '';
 
@@ -51,7 +41,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if( $website == "http://" ) $website = '';
+	if( $website == 'http://' ) $website = '';
 
 	if( ! empty( $check_login ) )
 	{
@@ -85,16 +75,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['website_incorrect'];
 	}
-	elseif( ! empty( $yim ) and ! preg_match( "/^[a-zA-Z0-9\.\-\_]+$/", $yim ) )
+	elseif( ! empty( $yim ) and ! preg_match( '/^[a-zA-Z0-9\.\-\_]+$/', $yim ) )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $id . " AND login=" . $db->dbescape( $login ) )->rowCount() > 0 )
+	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND login=' . $db->dbescape( $login ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = $row['login'];
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $id . " AND email=" . $db->dbescape( $email ) )->rowCount() > 0 )
+	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND email=' . $db->dbescape( $email ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = $row['email'];
@@ -103,11 +93,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
 
-		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET login=" . $db->dbescape( $login ) . ", pass=" . $db->dbescape( $pass ) . ", full_name=" . $db->dbescape( $full_name ) . ",
- email=" . $db->dbescape( $email ) . ", website=" . $db->dbescape( $website ) . ", location=" . $db->dbescape( $location ) . ", yim=" . $db->dbescape( $yim ) . ",
- phone=" . $db->dbescape( $phone ) . ", fax=" . $db->dbescape( $fax ) . ", mobile=" . $db->dbescape( $mobile ) . ", uploadtype=" . $db->dbescape( $uploadtype ) . " WHERE id=" . $id;
-		$db->query( $sql );
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', "clientid " . $id, $admin_info['userid'] );
+		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login=' . $db->dbescape( $login ) . ', pass=' . $db->dbescape( $pass ) . ', full_name=' . $db->dbescape( $full_name ) . ',
+			 email=' . $db->dbescape( $email ) . ', website=' . $db->dbescape( $website ) . ', location=' . $db->dbescape( $location ) . ', yim=' . $db->dbescape( $yim ) . ',
+			 phone=' . $db->dbescape( $phone ) . ', fax=' . $db->dbescape( $fax ) . ', mobile=' . $db->dbescape( $mobile ) . ', uploadtype=' . $db->dbescape( $uploadtype ) . ' WHERE id=' . $id;
+		$db->exec( $sql );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );
 		die();
 	}
@@ -130,7 +120,7 @@ else
 	$flashcheck = ( in_array( 'flash', $uploadtype ) ) ? 'checked=checked' : '';
 }
 
-if( $website == '' ) $website = "http://";
+if( $website == '' ) $website = 'http://';
 
 $info = ( ! empty( $error ) ) ? $error : $lang_module['edit_client_info'];
 $is_error = ( ! empty( $error ) ) ? 1 : 0;
@@ -139,7 +129,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['edit_client_submit'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit_client&amp;id=" . $id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_client&amp;id=' . $id;
 $contents['login'] = array( $lang_module['login'], 'login_iavim', $login, NV_UNICKMAX );
 $contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, NV_UPASSMAX );
 $contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, NV_UPASSMAX );
@@ -153,7 +143,7 @@ $contents['fax'] = array( $lang_module['fax'], 'fax', $fax, 255 );
 $contents['mobile'] = array( $lang_module['mobile'], 'mobile', $mobile, 255 );
 $contents['uploadtype'] = array( $lang_module['uploadtype'], 'uploadtype', $imagecheck, $flashcheck );
 
-$contents = call_user_func( "nv_edit_client_theme", $contents );
+$contents = call_user_func( 'nv_edit_client_theme', $contents );
 
 $page_title = $lang_module['edit_client'];
 

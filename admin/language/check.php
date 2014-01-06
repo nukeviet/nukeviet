@@ -17,10 +17,10 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $result->fetch() )
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{

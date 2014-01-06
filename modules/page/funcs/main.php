@@ -59,7 +59,7 @@ if( $id )
 			$cache['keywords'] = $key_words;
 
 			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->dbescape( $key_words ) . ' WHERE id =' . $id;
-			$db->query( $query );
+			$db->exec( $query );
 		}
 
 		$cache['alias'] = $row['alias'];

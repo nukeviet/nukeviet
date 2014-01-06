@@ -102,13 +102,13 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 
 	$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->dbescape( $alias );
 	$result = $db->query( $sql );
-	list( $is_exists ) = $result->fetch( 3 );
+	$is_exists = $result->fetchColumn();
 
 	if( ! $is_exists )
 	{
 		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->dbescape( $array['title'] );
 		$result = $db->query( $sql );
-		list( $is_exists ) = $result->fetch( 3 );
+		$is_exists = $result->fetchColumn();
 	}
 
 	if( ! nv_capcha_txt( $seccode ) )
@@ -265,7 +265,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 					 ' . $db->dbescape( $fileimage ) . ',
 					 ' . $db->dbescape( $array['copyright'] ) . ')';
 
-				if( ! $db->sql_query_insert_id( $sql ) )
+				if( ! $db->insert_id( $sql, 'id' ) )
 				{
 					$is_error = true;
 					$error = $lang_module['upload_error3'];

@@ -9,24 +9,16 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows ORDER BY full_name";
-$result = $db->query( $sql );
-
-if( ! $result->rowCount() )
-{
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
-	die();
-}
-
-$page_title = $lang_module['list_row_title'];
-
 $xtpl = new XTemplate( 'list_row.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $a = 0;
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows ORDER BY full_name';
+$result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
+	++$a;
 	$xtpl->assign( 'ROW', array(
 		'full_name' => $row['full_name'],
 		'email' => $row['email'],
@@ -51,11 +43,17 @@ while( $row = $result->fetch() )
 
 	$xtpl->parse( 'main.row' );
 }
-
+if( empty( $a ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
+	die();
+}
 $xtpl->assign( 'URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row' );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
+
+$page_title = $lang_module['list_row_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

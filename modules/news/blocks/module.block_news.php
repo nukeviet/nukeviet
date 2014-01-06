@@ -14,11 +14,10 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 	function nv_block_config_news( $module, $data_block, $lang_block )
 	{
-		$html = '';
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
-		$html .= "</tr>";
+		$html = '<tr>';
+		$html .= '	<td>' . $lang_block['numrow'] . '</td>';
+		$html .= '	<td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
+		$html .= '</tr>';
 		return $html;
 	}
 
@@ -41,7 +40,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		$show_no_image = $module_config[$module]['show_no_image'];
 		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
 
-		$cache_file = NV_LANG_DATA . "_" . $module . "_block_news_" . $numrow . "_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . '_' . $module . '_block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
 		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 		{
 			$array_block_news = unserialize( $cache );
@@ -49,17 +48,18 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		else
 		{
 			$array_block_news = array();
-			//$sql = "SELECT id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile FROM " . NV_PREFIXLANG . "_" . $mod_data . "_rows WHERE status= 1 ORDER BY publtime DESC LIMIT 0 , " . $numrow;
+
 			$db->sqlreset()
-				->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile')
-				->from(NV_PREFIXLANG . "_" . $mod_data . "_rows")
-				->where('status= 1')			
+				->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile' )
+				->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
+				->where( 'status= 1' )
 				->order( 'publtime DESC' )
-				->limit($numrow);	
+				->limit( $numrow );
 			$result = $db->query( $db->sql() );
+
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $module_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'];
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 				if( $homeimgthumb == 1 ) //image thumb
 				{
 					$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
@@ -98,7 +98,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
 		$xtpl = new XTemplate( 'block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news/' );
 		$a = 1;
@@ -134,12 +134,12 @@ if( defined( 'NV_SYSTEM' ) )
 		else
 		{
 			$module_array_cat = array();
-			$sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM " . NV_PREFIXLANG . "_" . $mod_data . "_cat ORDER BY sort ASC";
+			$sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )
 			{
 				$module_array_cat[$l['catid']] = $l;
-				$module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+				$module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 			}
 		}
 		$content = nv_news_block_news( $block_config, $mod_data );

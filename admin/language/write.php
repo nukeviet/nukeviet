@@ -13,8 +13,8 @@ $array_lang_no_check = array();
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
-while( $row = $result->fetch() )
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{

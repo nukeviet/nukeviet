@@ -37,13 +37,10 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	if( empty( $id ) ) die( 'NO_' . $id );
-
 	$query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $id;
 	$result = $db->query( $query );
-	$numrows = $result->rowCount();
 
-	if( $numrows != 1 ) die( 'NO_' . $id );
+	if( ! $result->fetchColumn() ) die( 'NO_' . $id );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', 'aboutid ' . $id, $admin_info['userid'] );
 
@@ -79,7 +76,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 			" . $db->dbescape( $arr_menu['description'] ) . "
 		)";
 
-		if( $db->sql_query_insert_id( $sql ) )
+		if( $db->insert_id( $sql, 'id' ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -95,9 +92,9 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
 			title=' . $db->dbescape( $arr_menu['title'] ) . ',
 			description = ' . $db->dbescape( $arr_menu['description'] ) . '
-		WHERE id =' . $arr_menu['id'];
+			WHERE id =' . $arr_menu['id'];
 
-		if( $db->query( $sql ) )
+		if( $db->exec( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -111,12 +108,11 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 }
 
 // List menu
-$sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu';
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( NV_PREFIXLANG . '_' . $module_data . '_menu' );
 
-$sql1 = 'SELECT COUNT(*) ' . $sql;
-$result1 = $db->query( $sql1 );
-list( $all_page ) = $result1->fetch( 3 );
+$all_page = $db->query( $db->sql() )->fetchColumn();
 
 $error2 = '';
 
@@ -126,18 +122,17 @@ if( ! $all_page )
 }
 else
 {
-	$sql .= ' ORDER BY id DESC';
-
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 20;
 
-	$sql2 = 'SELECT * ' . $sql . ' LIMIT ' . $page . ', ' . $per_page;
-	$query2 = $db->query( $sql2 );
+	$db->select( '*' )
+		->order( 'id DESC' )
+		->limit( $per_page )
+		->offset( $page );
+	$query2 = $db->query( $db->sql() );
 
 	$array = array();
-
 	$a = 0;
-
 	while( $row = $query2->fetch() )
 	{
 		$arr_items = array();
@@ -159,8 +154,8 @@ else
 
 		++$a;
 		$array[$row['id']] = array(
-			'id' => ( int )$row['id'],
-			'nb' => ( int )$a,
+			'id' => $row['id'],
+			'nb' => $a,
 			'title' => $row['title'],
 			'menu_item' => $item,
 			'num' => $b,
@@ -170,6 +165,7 @@ else
 		);
 	}
 
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 }
 

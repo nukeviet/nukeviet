@@ -57,9 +57,9 @@ if( ! empty( $savecat ) )
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 
-		$query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (" . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (" . $db->dbescape( $array['title'] ) . ", " . $db->dbescape( $array['alias'] ) . ", " . $db->dbescape( $array['description'] ) . ", " . $db->dbescape( $array['image'] ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
-		if( $db->sql_query_insert_id( $query ) )
+		if( $db->insert_id( $_sql, 'topicid' ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -89,7 +89,7 @@ if( ! empty( $savecat ) )
 $array['topicid'] = $nv_Request->get_int( 'topicid', 'get', 0 );
 if( $array['topicid'] > 0 )
 {
-	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->query( "SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'] . "" )->fetch( 3 );
+	list( $array['topicid'], $array['title'], $array['alias'], $array['image'], $array['description'], $array['keywords'] ) = $db->query( "SELECT topicid, title, alias, image, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics where topicid=" . $array['topicid'] )->fetch( 3 );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 
