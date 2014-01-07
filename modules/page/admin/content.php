@@ -92,11 +92,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
-					 title=" . $db->dbescape( $row['title'] ) . ", alias = " . $db->dbescape( $row['alias'] ) . ", image=" . $db->dbescape( $row['image'] ) . ", imagealt=" . $db->dbescape( $row['imagealt'] ) . ", description=" . $db->dbescape( $row['description'] ) . ",
-					 bodytext=" . $db->dbescape( $row['bodytext'] ) . ", keywords=" . $db->dbescape( $row['keywords'] ) . ",
-					 socialbutton=" . $row['socialbutton'] . ", activecomm=" . $row['activecomm'] . ", facebookappid=" . $db->dbescape( $row['facebookappid'] ) . ",
-					 layout_func=" . $db->dbescape( $row['layout_func'] ) . ", gid=" . $row['gid'] . ", edit_time=" . NV_CURRENTTIME . " WHERE id =" . $id;
+			$_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, facebookappid = :facebookappid, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
 			$publtime = $row['add_time'];
 		}
 		else
@@ -104,15 +100,28 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
-					(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES
-					(" . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
-					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
-					" . $db->dbescape( $row['layout_func'] ) . "," . $row['gid'] . ", " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
+			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :facebookappid, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+
 			$publtime = NV_CURRENTTIME;
 		}
 
-		if( $db->exec( $sql ) )
+		$sth = $db->prepare( $_sql );
+		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+		$sth->bindParam( ':alias', $row['alias'], PDO::PARAM_STR );
+		$sth->bindParam( ':image', $row['image'], PDO::PARAM_STR );
+		$sth->bindParam( ':imagealt', $row['imagealt'], PDO::PARAM_STR );
+		$sth->bindParam( ':description', $row['description'], PDO::PARAM_STR );
+		$sth->bindParam( ':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen( $row['bodytext'] ) );
+		$sth->bindParam( ':keywords', $row['keywords'], PDO::PARAM_STR );
+		$sth->bindParam( ':socialbutton', $row['socialbutton'], PDO::PARAM_INT );
+		$sth->bindParam( ':activecomm', $row['activecomm'], PDO::PARAM_INT );
+		$sth->bindParam( ':facebookappid', $row['facebookappid'], PDO::PARAM_STR );
+		$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
+		$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
+		$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
+		$sth->execute();
+
+		if( $sth->rowCount() )
 		{
 			if( $id )
 			{

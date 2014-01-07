@@ -95,7 +95,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$idfile = $db->insert_id( 'INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)', 'idfile', $data );
 			if( empty( $idfile ) )
 			{
-				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage() );
+				nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace( NV_ROOTDIR . '/', '', $include_lang ) );
 			}
 		}
 		else

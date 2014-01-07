@@ -51,7 +51,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 id NUMBER(8,0) DEFAULT NULL,
 	 cid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 content CLOB NOT NULL ENABLE,
+	 content VARCHAR2(4000 CHAR) NOT NULL ENABLE,
 	 send_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 sender_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 sender_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -60,7 +60,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 sender_ip VARCHAR2(15 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 is_read NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 is_reply NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 reply_content CLOB NOT NULL ENABLE,
+	 reply_content VARCHAR2(4000 CHAR) DEFAULT '',
 	 reply_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 reply_aid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 primary key (id)

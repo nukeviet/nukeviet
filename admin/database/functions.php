@@ -36,7 +36,6 @@ function nv_show_tables()
 
 	$tables = array();
 
-	die( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 	$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
 	while( $item = $result->fetch() )
 	{
