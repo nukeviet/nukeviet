@@ -33,7 +33,7 @@ require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
 	require_once NV_ROOTDIR . '/' . $file_config_temp;
-	//Bat dau phien lam viec cua MySQL
+	// Bat dau phien lam viec cua MySQL
 	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 }
 
@@ -170,10 +170,10 @@ elseif( $step == 2 )
 	{
 		if( ! empty( $global_config['ftp_server'] ) and ! empty( $global_config['ftp_user_name'] ) and ! empty( $global_config['ftp_user_pass'] ) )
 		{
-			// set up basic connection
+			// Set up basic connection
 			$conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'], 10 );
 
-			// login with username and password
+			// Login with username and password
 			$login_result = ftp_login( $conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass'] );
 			if( ( ! $conn_id ) || ( ! $login_result ) )
 			{
@@ -351,7 +351,7 @@ elseif( $step == 4 )
 	if ( class_exists( 'PDO' ) )
 	{
 		$PDODrivers = PDO::getAvailableDrivers();
-		foreach ($PDODrivers as $_driver)
+		foreach($PDODrivers as $_driver)
 		{
 			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
 			{
@@ -398,12 +398,10 @@ elseif( $step == 5 )
 
 	$PDODrivers = PDO::getAvailableDrivers();
 
-	if( in_array($db_config['dbtype'], $PDODrivers) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
 		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
-
 		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname'] );
-
 		$db_config['prefix'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['prefix'] ) );
 
 		if( substr( $sys_info['os'], 0, 3 ) == 'WIN' and $db_config['dbhost'] == 'localhost' )
@@ -432,7 +430,7 @@ elseif( $step == 5 )
 				set_time_limit( 0 );
 			}
 
-			//cai dat du lieu cho he thong
+			// Cai dat du lieu cho he thong
 			$db_config['error'] = '';
 			$sql_create_table = array();
 			$sql_drop_table = array();
@@ -452,13 +450,13 @@ elseif( $step == 5 )
 			{
 				if( $db_config['db_detete'] == 1 )
 				{
-					foreach ($sql_drop_table as $_sql)
+					foreach( $sql_drop_table as $_sql )
 					{
 						try
 						{
 							$db->exec( $_sql );
 						}
-						catch (PDOException $e)
+						catch( PDOException $e )
 						{
 							$nv_Request->set_Session( 'maxstep', 4 );
 							$db_config['error'] = $e->getMessage();
@@ -487,7 +485,7 @@ elseif( $step == 5 )
 					{
 						$db->exec( $_sql );
 					}
-					catch (PDOException $e)
+					catch( PDOException $e )
 					{
 						$nv_Request->set_Session( 'maxstep', 4 );
 						$db_config['error'] = $e->getMessage();
@@ -496,7 +494,7 @@ elseif( $step == 5 )
 					}
 				}
 
-				//Cai dat du lieu cho cac module
+				// Cai dat du lieu cho cac module
 				if( empty( $db_config['error'] ) )
 				{
 					define( 'NV_IS_MODADMIN', true );
@@ -513,7 +511,7 @@ elseif( $step == 5 )
 					$module_name = '';
 					$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
-					//cai dat du lieu cho ngon ngu
+					// Cai dat du lieu cho ngon ngu
 					require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
 
 					$sql_create_table = nv_create_table_sys( NV_LANG_DATA );
@@ -523,7 +521,7 @@ elseif( $step == 5 )
 						{
 							$db->exec( $_sql );
 						}
-						catch (PDOException $e)
+						catch( PDOException $e )
 						{
 							$nv_Request->set_Session( 'maxstep', 4 );
 							$db_config['error'] = $e->getMessage();
@@ -553,7 +551,7 @@ elseif( $step == 5 )
 						}
 					}
 
-					//cai dat du lieu mau
+					// Cai dat du lieu mau
 					$filesavedata = NV_LANG_DATA;
 					$lang_data = NV_LANG_DATA;
 
@@ -570,7 +568,7 @@ elseif( $step == 5 )
 						{
 							$db->exec( $_sql );
 						}
-						catch (PDOException $e)
+						catch( PDOException $e )
 						{
 							$nv_Request->set_Session( 'maxstep', 4 );
 							$db_config['error'] = $e->getMessage();
@@ -581,28 +579,28 @@ elseif( $step == 5 )
 
 					try
 					{
-						//xoa du lieu tai bang nv3_vi_modules
+						// Xoa du lieu tai bang nv3_vi_modules
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						//xoa du lieu tai bang nv3_setup_modules
+						// Xoa du lieu tai bang nv3_setup_modules
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						//xoa du lieu tai bang nv3_vi_blocks
+						// Xoa du lieu tai bang nv3_vi_blocks
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight WHERE bid in (SELECT bid FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
 
-						//xoa du lieu tai bang nv3_vi_blocks_groups
+						// Xoa du lieu tai bang nv3_vi_blocks_groups
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
-						//xoa du lieu tai bang nv3_vi_modthemes
+						// Xoa du lieu tai bang nv3_vi_modthemes
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modthemes WHERE func_id in (SELECT func_id FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
 
-						//xoa du lieu tai bang nv3_vi_modfuncs
+						// Xoa du lieu tai bang nv3_vi_modfuncs
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
-						//xoa du lieu tai bang nv3_config
+						// Xoa du lieu tai bang nv3_config
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->dbescape( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
-						}
-					catch (PDOException $e)
+					}
+					catch( PDOException $e )
 					{
 						$nv_Request->set_Session( 'maxstep', 4 );
 						$db_config['error'] = $e->getMessage();
@@ -633,7 +631,7 @@ elseif( $step == 5 )
 							$result->closeCursor();
 						}
 					}
-					catch (PDOException $e)
+					catch( PDOException $e )
 					{
 						$nv_Request->set_Session( 'maxstep', 4 );
 						$db_config['error'] = $e->getMessage();
@@ -643,7 +641,7 @@ elseif( $step == 5 )
 
 					if( empty( $db_config['error'] ))
 					{
-						++$step;
+						++ $step;
 						$nv_Request->set_Session( 'maxstep', $step );
 
 						Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
@@ -798,7 +796,7 @@ elseif( $step == 6 )
 						}
 					}
 				}
-				catch (PDOException $e)
+				catch( PDOException $e )
 				{
 					trigger_error( $e->getMessage() );
 					die( $e->getMessage() );
@@ -818,7 +816,7 @@ elseif( $step == 6 )
 				}
 				elseif( nv_save_file_config_global() )
 				{
-					++$step;
+					++ $step;
 					$nv_Request->set_Session( 'maxstep', $step );
 
 					nv_save_file_config();
@@ -881,10 +879,10 @@ elseif( $step == 7 )
 
 		if( isset( $ftp_server_array['ftp_check_login'] ) and intval( $ftp_server_array['ftp_check_login'] ) == 1 )
 		{
-			// set up basic connection
+			// Set up basic connection
 			$conn_id = ftp_connect( $ftp_server_array['ftp_server'], $ftp_server_array['ftp_port'], 10 );
 
-			// login with username and password
+			// Login with username and password
 			$login_result = ftp_login( $conn_id, $ftp_server_array['ftp_user_name'], $ftp_server_array['ftp_user_pass'] );
 
 			if( ( ! $conn_id ) || ( ! $login_result ) )
