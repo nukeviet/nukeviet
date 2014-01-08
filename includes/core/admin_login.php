@@ -202,6 +202,7 @@ $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );
 $xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 $xtpl->assign( 'CHECKSS', $checkss );
+$xtpl->assign( 'NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS );
 
 $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_error_security'], NV_GFX_NUM ) ) );
 
