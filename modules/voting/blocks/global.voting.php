@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2011 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sat, 10 Dec 2011 06:46:54 GMT
  */
 

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -55,7 +56,7 @@ if( ! empty( $savecat ) )
 	{
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->quote( $title ) . ", " . $db->quote( $link ) . ", " . $db->quote( $logo ) . ", " . $db->quote( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 		if( $db->insert_id( $sql, 'sourceid' ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
@@ -69,7 +70,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title=" . $db->dbescape( $title ) . ", link = " . $db->dbescape( $link ) . ", logo=" . $db->dbescape( $logo ) . ", edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title=" . $db->quote( $title ) . ", link = " . $db->quote( $link ) . ", logo=" . $db->quote( $logo ) . ", edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid;
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );

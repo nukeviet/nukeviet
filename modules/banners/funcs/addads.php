@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 21:7
  */
 
@@ -129,8 +130,8 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			if( $endtime != 0 and $endtime <= $begintime ) $endtime = $begintime;
 
 			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows (title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-				(" . $db->dbescape( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ",
-				" . $width . ", " . $height . ", " . $db->dbescape( $description ) . ", '', " . $db->dbescape( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ",
+				(" . $db->quote( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->quote( $file_name ) . ", " . $db->quote( $file_ext ) . ", " . $db->quote( $file_mime ) . ",
+				" . $width . ", " . $height . ", " . $db->quote( $description ) . ", '', " . $db->quote( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ",
 				0, 3,0)";
 			$id = $db->insert_id( $_sql, 'id' );
 

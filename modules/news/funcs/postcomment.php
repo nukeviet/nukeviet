@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -53,7 +54,7 @@ if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == 
 		{
 			$array_catid = explode( ',', $row['listcatid'] );
 			$content = nv_nl2br( $content, '<br />' );
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments (id, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (" . $id . "," . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ", " . $userid . ", " . $db->dbescape( $name ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ")";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments (id, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (" . $id . "," . $db->quote( $content ) . ", " . NV_CURRENTTIME . ", " . $userid . ", " . $db->quote( $name ) . ", " . $db->quote( $email ) . ", " . $db->quote( NV_CLIENT_IP ) . ", " . $status . ")";
 			$result = $db->query( $sql );
 			if( $result )
 			{

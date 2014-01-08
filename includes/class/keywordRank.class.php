@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 25/12/2010, 11:2
  */
 
@@ -24,7 +25,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 {
 	if( ! isset( $global_config ) or empty( $global_config ) )
 	{
-		$global_config = array( 'version' => "3.0.12", 'sitekey' => mt_rand() );
+		$global_config = array( 'version' => '3.0.12', 'sitekey' => mt_rand() );
 	}
 
 	if( ! class_exists( 'UrlGetContents' ) )
@@ -35,15 +36,6 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 	$getContent = new UrlGetContents( $global_config );
 }
 
-/**
- * keywordRank
- *
- * @package NUKEVIET 3.x
- * @author VINADES.,JSC
- * @copyright 2010
- * @version $Id$
- * @access public
- */
 class keywordRank
 {
 	private $keyword;
@@ -52,40 +44,40 @@ class keywordRank
 	private $myDomain;
 	public $currentDomain;
 	private $pattern = array( //
-		'googleByDomain' => "http://www.google.com/search?hl=en&domains=%s&q=%s&sitesearch=%s%s", //
-		'googleByAll' => "http://www.google.com/search?hl=en&q=%s%s" //
+		'googleByDomain' => 'http://www.google.com/search?hl=en&domains=%s&q=%s&sitesearch=%s%s', //
+		'googleByAll' => 'http://www.google.com/search?hl=en&q=%s%s' //
 	);
 	private $langList = array( //
-"af", "sq", "ar", "be", "bg", "ca", "zh-CN", "hr", "cs", "da", "nl", "et", "tl", "fi", "fr", "gl", "de", //
-"en", "el", "ht", "iw", "hi", "hu", "is", "id", "ga", "it", "ja", "ko", "lv", "lt", "mk", "ms", "mt", "no", //
-"fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "th", "tr", "uk", "vi", "cy", "yi" //
+		'af', 'sq', 'ar', 'be', 'bg', 'ca', 'zh-CN', 'hr', 'cs', 'da', 'nl', 'et', 'tl', 'fi', 'fr', 'gl', 'de', //
+		'en', 'el', 'ht', 'iw', 'hi', 'hu', 'is', 'id', 'ga', 'it', 'ja', 'ko', 'lv', 'lt', 'mk', 'ms', 'mt', 'no', //
+		'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 'sk', 'sl', 'es', 'sw', 'sv', 'th', 'tr', 'uk', 'vi', 'cy', 'yi' //
 );
 
 	/**
- * keywordRank::__construct()
- *
- * @param mixed $_pattern
- * @return
- */
+	 * keywordRank::__construct()
+	 *
+	 * @param mixed $_pattern
+	 * @return
+	 */
 	function __construct( $_pattern = array() )
 	{
 		if( isset( $_pattern['googleByDomain'] ) ) $this->$pattern['googleByDomain'] = $_pattern['googleByDomain'];
 		if( isset( $_pattern['googleByAll'] ) ) $this->$pattern['googleByAll'] = $_pattern['googleByAll'];
 		$this->myDomain = NV_SERVER_NAME;
-		//$this->myDomain = "nukeviet.vn";
+		//$this->myDomain = 'nukeviet.vn';
 	}
 
 	/**
- * keywordRank::getInfoFromGoogle()
- *
- * @return
- */
+	 * keywordRank::getInfoFromGoogle()
+	 *
+	 * @return
+	 */
 	private function getInfoFromGoogle()
 	{
 		global $getContent;
 
 		$key = $this->keyword;
-		if( $this->accuracy == "phrase" ) $key = "\"" . $key . "\"";
+		if( $this->accuracy == 'phrase' ) $key = "\"" . $key . "\"";
 		$key = urlencode( $key );
 		$domain = urlencode( $this->currentDomain );
 		$lang = ! empty( $this->lang ) ? "&lr=lang_" . $this->lang : "";
@@ -100,7 +92,7 @@ class keywordRank
 		$result['top50AllPages'] = array();
 		$result['rank'] = array();
 
-		if( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
+		if( preg_match( '/\<div\>About ([0-9,]+) results\<\/div\>/is', $content, $match ) )
 		{
 			$bl = preg_replace( '/\,/', '', $match[1] );
 			$result['myPages'] = ( int )$bl;
@@ -124,12 +116,12 @@ class keywordRank
 		for( $i = 0; $i < 5; ++$i )
 		{
 			$start = $i * 10;
-			if( $start != 0 ) $url .= "&start=" . $start;
+			if( $start != 0 ) $url .= '&start=' . $start;
 			$content = $getContent->get( $url );
 
 			if( $start == 0 )
 			{
-				if( preg_match( "/\<div\>About ([0-9,]+) results\<\/div\>/is", $content, $match ) )
+				if( preg_match( '/\<div\>About ([0-9,]+) results\<\/div\>/is', $content, $match ) )
 				{
 					$bl = preg_replace( '/\,/', '', $match[1] );
 					$result['allPages'] = ( int )$bl;
@@ -143,7 +135,7 @@ class keywordRank
 
 		if( ! empty( $result['top50AllPages'] ) )
 		{
-			$fl_array = preg_grep( "/^http(s?)\:\/\/[(www.)]*" . preg_quote( $this->currentDomain, "/" ) . "/", $result['top50AllPages'] );
+			$fl_array = preg_grep( '/^http(s?)\:\/\/[(www.)]*' . preg_quote( $this->currentDomain, '/' ) . '/', $result['top50AllPages'] );
 			$result['rank'] = array();
 			$array_keys = array_keys( $fl_array );
 			foreach( $array_keys as $k )
@@ -156,20 +148,20 @@ class keywordRank
 	}
 
 	/**
- * keywordRank::process()
- *
- * @param mixed $_keyword
- * @param mixed $_lang
- * @param mixed $_accuracy
- * @param string $from
- * @param string $domain
- * @return
- */
+	 * keywordRank::process()
+	 *
+	 * @param mixed $_keyword
+	 * @param mixed $_lang
+	 * @param mixed $_accuracy
+	 * @param string $from
+	 * @param string $domain
+	 * @return
+	 */
 	public function process( $_keyword, $_lang, $_accuracy, $from = '', $domain = '' )
 	{
 		$this->keyword = $_keyword;
 
-		if( $_accuracy != "phrase" ) $_accuracy = "keyword";
+		if( $_accuracy != 'phrase' ) $_accuracy = 'keyword';
 		$this->accuracy = $_accuracy;
 
 		if( ! in_array( $_lang, $this->langList ) ) $_lang = '';
@@ -185,9 +177,9 @@ class keywordRank
 		$this->currentDomain = $domain;
 
 		if( ! empty( $from ) ) $from = strtolower( $from );
-		if( $from != "yahoo" ) $from = "google";
+		if( $from != 'yahoo' ) $from = 'google';
 
-		if( preg_match( "/^localhost|127\.0\.0/is", $this->currentDomain ) )
+		if( preg_match( '/^localhost|127\.0\.0/is', $this->currentDomain ) )
 		{
 			return false;
 		}
@@ -201,7 +193,7 @@ class keywordRank
 		$result['updtime'] = NV_CURRENTTIME;
 		$result['detail'] = array();
 
-		if( $from == "yahoo" )
+		if( $from == 'yahoo' )
 		{
 			//Viet sau
 		}

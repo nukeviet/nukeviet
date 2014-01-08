@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -162,9 +163,9 @@ if( ! empty( $array_rows ) )
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
 				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES
-				(" . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ",
-				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ",
-				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
+				(" . $fpart . ", " . $db->quote( $ftitle ) . ", " . $db->quote( $fcon ) . ",
+				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->quote( $fname ) . ", " . $db->quote( $femail ) . ",
+				" . $db->quote( $fphone ) . ", " . $db->quote( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
 			$db->exec( $sql );
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";

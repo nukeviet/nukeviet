@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/19/2010 12:19
  */
 
@@ -76,7 +77,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'country';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_country=' . $db->dbescape( $data_val );
+				$where .= ' AND click_country=' . $db->quote( $data_val );
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat3'], ( isset( $countries[$data_val] ) ? $countries[$data_val][1] : $data_val ), nv_monthname( $data_month ), $current_year );
 			}
@@ -87,7 +88,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'browse';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_browse_name=' . $db->dbescape( $data_val );
+				$where .= ' AND click_browse_name=' . $db->quote( $data_val );
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat4'], '{pattern}', nv_monthname( $data_month ), $current_year );
 			}
@@ -98,7 +99,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'os';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_os_name=' . $db->dbescape( $data_val );
+				$where .= ' AND click_os_name=' . $db->quote( $data_val );
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat5'], '{pattern}', nv_monthname( $data_month ), $current_year );
 			}

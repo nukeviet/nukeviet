@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 0:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 0:51
  */
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
@@ -37,7 +38,7 @@ function nv_banner_client_checkdata( $cookie )
 		if( isset( $client['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $client['checknum'] ) )
 		{
 			$login = $client['login'];
-			$query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = ' . $db->dbescape( $login ) . ' AND act=1';
+			$query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = ' . $db->quote( $login ) . ' AND act=1';
 			$row = $db->query( $query )->fetch();
 
 			if( empty( $row ) ) return array();

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
 
@@ -164,7 +165,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	elseif( $post['id'] == 0 )
 	{
-		if( $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title=' . $db->dbescape( $post['title'] ) . ' AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid'] )->fetchColumn() )
+		if( $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title=' . $db->quote( $post['title'] ) . ' AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid'] )->fetchColumn() )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
@@ -175,17 +176,17 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, who_view, groups_view, module_name, op, target, css, active_type, status) VALUES (
 				" . intval( $post['parentid'] ) . ",
 				" . intval( $post['mid'] ) . ",
-				" . $db->dbescape( $post['title'] ) . ",
-				" . $db->dbescape( $post['link'] ) . ",
-				" . $db->dbescape( $post['note'] ) . ",
+				" . $db->quote( $post['title'] ) . ",
+				" . $db->quote( $post['link'] ) . ",
+				" . $db->quote( $post['note'] ) . ",
 				" . intval( $weight ) . ",
 				0, 0, '',
 				" . intval( $post['who_view'] ) . ",
-				" . $db->dbescape( $post['groups_view'] ) . ",
-				" . $db->dbescape( $post['module_name'] ) . ",
-				" . $db->dbescape( $post['op'] ) . ",
+				" . $db->quote( $post['groups_view'] ) . ",
+				" . $db->quote( $post['module_name'] ) . ",
+				" . $db->quote( $post['op'] ) . ",
 				" . intval( $post['target'] ) . ",
-				" . $db->dbescape( $post['css'] ) . ",
+				" . $db->quote( $post['css'] ) . ",
 				" . intval( $post['active_type'] ) . ",
 				1
 			)";
@@ -232,7 +233,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	else
 	{
-		if( $db->query( "SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title=" . $db->dbescape( $post['title'] ) . " AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")" )->fetchColumn() )
+		if( $db->query( "SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title=" . $db->quote( $post['title'] ) . " AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")" )->fetchColumn() )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
@@ -241,15 +242,15 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
 				parentid=" . intval( $post['parentid'] ) . ",
 				mid=" . intval( $post['mid'] ) . ",
-				title=" . $db->dbescape( $post['title'] ) . ",
-				link=" . $db->dbescape( $post['link'] ) . ",
-				note=" . $db->dbescape( $post['note'] ) . ",
+				title=" . $db->quote( $post['title'] ) . ",
+				link=" . $db->quote( $post['link'] ) . ",
+				note=" . $db->quote( $post['note'] ) . ",
 				who_view=" . intval( $post['who_view'] ) . " ,
-				groups_view=" . $db->dbescape( $post['groups_view'] ) . ",
-				module_name=" . $db->dbescape( $post['module_name'] ) . ",
-				op=" . $db->dbescape( $post['op'] ) . ",
+				groups_view=" . $db->quote( $post['groups_view'] ) . ",
+				module_name=" . $db->quote( $post['module_name'] ) . ",
+				op=" . $db->quote( $post['op'] ) . ",
 				target=" . intval( $post['target'] ) . ",
-				css=" . $db->dbescape( $post['css'] ) . ",
+				css=" . $db->quote( $post['css'] ) . ",
 				active_type=" . intval( $post['active_type'] ) . "
 			WHERE id=" . intval( $post['id'] );
 
@@ -453,7 +454,7 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 	$module = $nv_Request->get_string( 'module', 'post', '' );
 	if( empty( $module ) ) die( $lang_module['add_error_module'] );
 
-	$sql = 'SELECT module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= ' . $db->dbescape( $module );
+	$sql = 'SELECT module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= ' . $db->quote( $module );
 	list( $module_f, $module_d ) = $db->query( $sql )->fetch( 3 );
 
 	if( empty($module_f) ) die( $lang_module['add_error_module_exist'] );

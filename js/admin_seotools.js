@@ -1,7 +1,8 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1 - 31 - 2013 5 : 12
  */
 
@@ -117,4 +118,3 @@ function nv_mod_googleplus_result(res) {
 	nv_show_list_googleplus();
 	return;
 }
-

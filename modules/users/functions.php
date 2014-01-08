@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
@@ -44,11 +45,11 @@ function validUserLog( $array_user, $remember, $opid )
 	$user = nv_base64_encode( serialize( $user ) );
 
 	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
-		checknum = " . $db->dbescape( $checknum ) . ",
+		checknum = " . $db->quote( $checknum ) . ",
 		last_login = " . NV_CURRENTTIME . ",
-		last_ip = " . $db->dbescape( $client_info['ip'] ) . ",
-		last_agent = " . $db->dbescape( $client_info['agent'] ) . ",
-		last_openid = " . $db->dbescape( $opid ) . ",
+		last_ip = " . $db->quote( $client_info['ip'] ) . ",
+		last_agent = " . $db->quote( $client_info['agent'] ) . ",
+		last_openid = " . $db->quote( $opid ) . ",
 		remember = " . $remember . "
 		WHERE userid=" . $array_user['userid'] );
 

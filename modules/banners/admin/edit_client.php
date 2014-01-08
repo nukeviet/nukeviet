@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -79,12 +80,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND login=' . $db->dbescape( $login ) )->fetchColumn() > 0 )
+	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND login=' . $db->quote( $login ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = $row['login'];
 	}
-	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND email=' . $db->dbescape( $email ) )->fetchColumn() > 0 )
+	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND email=' . $db->quote( $email ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = $row['email'];
@@ -93,9 +94,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
 
-		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login=' . $db->dbescape( $login ) . ', pass=' . $db->dbescape( $pass ) . ', full_name=' . $db->dbescape( $full_name ) . ',
-			 email=' . $db->dbescape( $email ) . ', website=' . $db->dbescape( $website ) . ', location=' . $db->dbescape( $location ) . ', yim=' . $db->dbescape( $yim ) . ',
-			 phone=' . $db->dbescape( $phone ) . ', fax=' . $db->dbescape( $fax ) . ', mobile=' . $db->dbescape( $mobile ) . ', uploadtype=' . $db->dbescape( $uploadtype ) . ' WHERE id=' . $id;
+		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login=' . $db->quote( $login ) . ', pass=' . $db->quote( $pass ) . ', full_name=' . $db->quote( $full_name ) . ',
+			 email=' . $db->quote( $email ) . ', website=' . $db->quote( $website ) . ', location=' . $db->quote( $location ) . ', yim=' . $db->quote( $yim ) . ',
+			 phone=' . $db->quote( $phone ) . ', fax=' . $db->quote( $fax ) . ', mobile=' . $db->quote( $mobile ) . ', uploadtype=' . $db->quote( $uploadtype ) . ' WHERE id=' . $id;
 		$db->exec( $sql );
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );

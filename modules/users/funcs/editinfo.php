@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -33,7 +34,7 @@ function nv_check_username_change( $login )
 
 	$error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	if( $error != '' ) return preg_replace( '/\&(l|r)dquo\;/', '', strip_tags( $error ) );
-	if( $login != $db->fixdb( $login ) )
+	if( "'" . $login . "'" != $db->quote( $login ) )
 	{
 		return sprintf( $lang_module['account_deny_name'], $login );
 	}
@@ -80,13 +81,13 @@ function nv_check_email_change( $email )
 	$pattern = implode( ".?", $pattern );
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->quote( $pattern );
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email RLIKE " . $db->quote( $pattern );
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->dbescape( $pattern );
+	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->quote( $pattern );
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	return '';
@@ -229,8 +230,8 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			else
 			{
 				$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "
-					SET question=" . $db->dbescape( $array_data['your_question'] ) . ",
-					answer=" . $db->dbescape( $array_data['answer'] ) . "
+					SET question=" . $db->quote( $array_data['your_question'] ) . ",
+					answer=" . $db->quote( $array_data['answer'] ) . "
 					WHERE userid=" . $user_info['userid'];
 				$db->query( $sql );
 
@@ -389,13 +390,13 @@ if( $checkss == $array_data['checkss'] )
 	}
 
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
-		username=" . $db->dbescape_string( $array_data['username'] ) . ",
-		md5username=" . $db->dbescape_string( nv_md5safe( $array_data['username'] ) ) . ",
-		email=" . $db->dbescape_string( $array_data['email'] ) . ",
-		full_name=" . $db->dbescape_string( $array_data['full_name'] ) . ",
-		gender=" . $db->dbescape_string( $array_data['gender'] ) . ",
-		birthday=" . $db->dbescape( $array_data['birthday'] ) . ",
-		view_mail=" . $db->dbescape_string( $array_data['view_mail'] ) . "
+		username=" . $db->quote( $array_data['username'] ) . ",
+		md5username=" . $db->quote( nv_md5safe( $array_data['username'] ) ) . ",
+		email=" . $db->quote( $array_data['email'] ) . ",
+		full_name=" . $db->quote( $array_data['full_name'] ) . ",
+		gender=" . $db->quote( $array_data['gender'] ) . ",
+		birthday=" . $db->quote( $array_data['birthday'] ) . ",
+		view_mail=" . $db->quote( $array_data['view_mail'] ) . "
 		WHERE userid=" . $user_info['userid'];
 	$db->query( $sql );
 
@@ -432,7 +433,7 @@ if( $checkss == $array_data['checkss'] )
 				$file_name = str_replace( NV_ROOTDIR . "/", '', $file_name );
 				@nv_deletefile( $upload_info['name'] );
 			}
-			$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->dbescape_string( $file_name ) . " WHERE userid=" . $user_info['userid'];
+			$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->quote( $file_name ) . " WHERE userid=" . $user_info['userid'];
 			$db->query( $sql );
 		}
 		else

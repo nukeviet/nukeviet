@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 15:5
  */
 
@@ -354,8 +355,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			if( isset( $post['id'] ) AND $post['id'] > 3 )
 			{
 				$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
-					title=" . $db->dbescape( $post['title'] ) . ",
-					content=" . $db->dbescape( $post['content'] ) . ",
+					title=" . $db->quote( $post['title'] ) . ",
+					content=" . $db->quote( $post['content'] ) . ",
 					exp_time='" . $post['exp_time'] . "',
 					publics='" . $post['publics'] . "',
 					siteus='" . $post['siteus'] . "'
@@ -368,7 +369,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				$weight = intval( $weight ) + 1;
 				$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
 					(title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
-					VALUES (" . $db->dbescape( $post['title'] ) . ", " . $db->dbescape( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
+					VALUES (" . $db->quote( $post['title'] ) . ", " . $db->quote( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
 					" . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
 				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id' );
 			}

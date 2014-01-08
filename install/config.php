@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -30,7 +31,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '3.5.00';// NukeViet 3.5 Develop
+$global_config['version'] = '4.0.00';// NukeViet 4.0 Develop
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';

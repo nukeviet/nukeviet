@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/10/2010 19:43
  */
 
@@ -14,15 +15,6 @@ if( ! defined( 'E_USER_DEPRECATED' ) ) define( 'E_USER_DEPRECATED', 16384 ); //k
 if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
-/**
- * Error
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES
- * @version 2010
- * @access public
- */
 class Error
 {
 	const INCORRECT_IP = 'Incorrect IP address specified';

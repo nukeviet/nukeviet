@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.4
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
  */
 
@@ -334,7 +335,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
 					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
-					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->dbescape_string( $dataform['default_value'] ) . ")", "fid" );
+					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->quote( $dataform['default_value'] ) . ")", "fid" );
 
 				if( $dataform['fid'] )
 				{
@@ -379,7 +380,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				show_profile = '" . $dataform['show_profile'] . "',
 				class = '" . $dataform['class'] . "',
 				language='" . serialize( $language ) . "',
-				default_value=" . $db->dbescape_string( $dataform['default_value'] ) . "
+				default_value=" . $db->quote( $dataform['default_value'] ) . "
 				WHERE fid = " . $dataform['fid'];
 			$save = $db->query( $query );
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )

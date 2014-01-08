@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -68,12 +69,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->dbescape( $login ) )->fetchColumn() > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->quote( $login ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = '';
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->dbescape( $email ) )->fetchColumn() > 0 )
+	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->quote( $email ) )->fetchColumn() > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = '';
@@ -83,9 +84,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$pass_crypt = $crypt->hash( $pass );
 
 		$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_clients ( login, pass, reg_time, full_name, email, website, location, yim, phone, fax, mobile, act, check_num, last_login, last_ip, last_agent, uploadtype) VALUES
-			( " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ",
-			" . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ",
-			" . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
+			( " . $db->quote( $login ) . ", " . $db->quote( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->quote( $full_name ) . ",
+			" . $db->quote( $email ) . ", " . $db->quote( $website ) . ", " . $db->quote( $location ) . ", " . $db->quote( $yim ) . ",
+			" . $db->quote( $phone ) . ", " . $db->quote( $fax ) . ", " . $db->quote( $mobile ) . ", 1, '', 0, '', ''," . $db->quote( $uploadtype ) . ")";
 
 		$id = $db->insert_id( $_sql, 'id' );
 

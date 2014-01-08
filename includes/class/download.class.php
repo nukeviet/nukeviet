@@ -1,42 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 17/8/2010, 0:16
  */
-
-/**********************************************************************
-**
-** A class to download files
-** Version 1.0
-** Features :
-** - hide the real path to the file
-** - allow / disallow download resuming
-** - partial download (useful for download managers)
-** - rename the file on the fly
-** - limit download speed
-**
-** Author: Mourad Boufarguine / EPT <mourad.boufarguine@gmail.com>
-**
-** License: Public Domain
-** Warranty: None
-**
-***********************************************************************/
-
-/**
- * include("download.class.php"); // load the class file
-
- * $fichier = new download("example.zip"); // use the original file name, disallow resuming, no speed limit
- * $fichier = new download("example.zip","My Example.zip") ; // rename the file, disallow resuming, no speed limit
- * $fichier = new download("example.zip","My Example.zip",true) ; // rename the file, allow resuming, no speed limit
- * $fichier = new download("example.zip","My Example.zip",true,80) ; // rename the file, allow resuming, speed limit 80ko/s
-
- * $fichier->download_file();
- */
-
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_ROOTDIR' ) )
 {
@@ -61,15 +31,6 @@ if( ! defined( 'ALLOWED_SET_TIME_LIMIT' ) )
 	}
 }
 
-/**
- * download
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES.,JSC
- * @version 2010
- * @access public
- */
 class download
 {
 	private $properties = array(
@@ -87,14 +48,14 @@ class download
 	private $magic_path;
 
 	/**
- * download::__construct()
- *
- * @param mixed $path
- * @param string $name
- * @param bool $resume
- * @param integer $max_speed
- * @return
- */
+	 * download::__construct()
+	 *
+	 * @param mixed $path
+	 * @param string $name
+	 * @param bool $resume
+	 * @param integer $max_speed
+	 * @return
+	 */
 	public function __construct( $path, $directory, $name = '', $resume = false, $max_speed = 0, $magic_path = '' )
 	{
 		$directory = $this->real_dir( $directory );
@@ -127,11 +88,11 @@ class download
 	}
 
 	/**
- * download::real_dir()
- *
- * @param mixed $dir
- * @return
- */
+	 * download::real_dir()
+	 *
+	 * @param mixed $dir
+	 * @return
+	 */
 	function real_dir( $dir )
 	{
 		if( empty( $dir ) ) return false;
@@ -144,11 +105,11 @@ class download
 	}
 
 	/**
- * download::real_path()
- *
- * @param mixed $path
- * @return
- */
+	 * download::real_path()
+	 *
+	 * @param mixed $path
+	 * @return
+	 */
 	function real_path( $path, $dir )
 	{
 		if( empty( $path ) or ! is_readable( $path ) or ! is_file( $path ) )
@@ -175,33 +136,33 @@ class download
 	}
 
 	/**
- * download::func_exists()
- *
- * @param mixed $funcName
- * @return
- */
+	 * download::func_exists()
+	 *
+	 * @param mixed $funcName
+	 * @return
+	 */
 	private function func_exists( $funcName )
 	{
 		return ( function_exists( $funcName ) and ! in_array( $funcName, $this->disable_functions ) );
 	}
 
 	/**
- * download::cl_exists()
- *
- * @param mixed $clName
- * @return
- */
+	 * download::cl_exists()
+	 *
+	 * @param mixed $clName
+	 * @return
+	 */
 	private function cl_exists( $clName )
 	{
 		return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
 	}
 
 	/**
- * download::getextension()
- *
- * @param mixed $filename
- * @return
- */
+	 * download::getextension()
+	 *
+	 * @param mixed $filename
+	 * @return
+	 */
 	private function getextension( $filename )
 	{
 		if( strpos( $filename, '.' ) === false ) return '';
@@ -211,11 +172,11 @@ class download
 	}
 
 	/**
- * download::my_mime_content_type()
- *
- * @param mixed $path
- * @return
- */
+	 * download::my_mime_content_type()
+	 *
+	 * @param mixed $path
+	 * @return
+	 */
 	private function my_mime_content_type( $path )
 	{
 		$mime = '';
@@ -364,11 +325,11 @@ class download
 	}
 
 	/**
- * download::nv_getenv()
- *
- * @param mixed $key
- * @return
- */
+	 * download::nv_getenv()
+	 *
+	 * @param mixed $key
+	 * @return
+	 */
 	private function nv_getenv( $key )
 	{
 		if( isset( $_SERVER[$key] ) )
@@ -391,11 +352,11 @@ class download
 	}
 
 	/**
- * download::get_property()
- *
- * @param mixed $property
- * @return
- */
+	 * download::get_property()
+	 *
+	 * @param mixed $property
+	 * @return
+	 */
 	public function get_property( $property )
 	{
 		if( array_key_exists( $property, $this->properties ) ) return $this->properties[$property];
@@ -404,12 +365,12 @@ class download
 	}
 
 	/**
- * download::set_property()
- *
- * @param mixed $property
- * @param mixed $value
- * @return
- */
+	 * download::set_property()
+	 *
+	 * @param mixed $property
+	 * @param mixed $value
+	 * @return
+	 */
 	public function set_property( $property, $value )
 	{
 		if( array_key_exists( $property, $this->properties ) )
@@ -424,10 +385,10 @@ class download
 	}
 
 	/**
- * download::download_file()
- *
- * @return
- */
+	 * download::download_file()
+	 *
+	 * @return
+	 */
 	public function download_file()
 	{
 		if( ! $this->properties['path'] )

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2010
- * @createdate 1/20/2010 20:48
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 1/20/2010 20:48
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );

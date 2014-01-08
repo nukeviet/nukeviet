@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 17/6/2010, 11:25
  */
 
@@ -17,7 +18,7 @@ if( ! isset( $host ) or ! preg_match( '/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/',
 	die();
 }
 
-$sql = 'SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host=' . $db->dbescape( $host );
+$sql = 'SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host=' . $db->quote( $host );
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {

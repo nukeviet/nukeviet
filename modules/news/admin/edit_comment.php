@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -30,7 +31,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
-			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->dbescape( $content ) . ', status=' . $active . ' WHERE cid=' . $cid );
+			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->quote( $content ) . ', status=' . $active . ' WHERE cid=' . $cid );
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat

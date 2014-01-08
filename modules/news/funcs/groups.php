@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -15,7 +16,7 @@ if( isset( $array_op[1] ) )
 	$alias = trim( $array_op[1] );
 	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-') ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->dbescape( $alias ) )->fetch( 3 );
+	list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
 	if( $bid > 0 )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $alias;

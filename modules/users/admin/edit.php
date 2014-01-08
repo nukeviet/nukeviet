@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright ? 2010 VINADES. All rights reserved
+ * @Copyright ? 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
 
@@ -118,7 +119,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_username;
 	}
-	elseif( $_user['username'] != $db->fixdb( $_user['username'] ) )
+	elseif( "'" . $_user['username'] . "'" != $db->quote( $_user['username'] ) )
 	{
 		$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
 	}
@@ -130,15 +131,15 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->dbescape( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email=' . $db->dbescape( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->dbescape( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -220,17 +221,17 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 
 			$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
-				username=" . $db->dbescape( $_user['username'] ) . ",
+				username=" . $db->quote( $_user['username'] ) . ",
 				md5username='" . nv_md5safe( $_user['username'] ) . "',
-				password=" . $db->dbescape( $password ) . ",
-				email=" . $db->dbescape( $_user['email'] ) . ",
-				full_name=" . $db->dbescape( $_user['full_name'] ) . ",
-				gender=" . $db->dbescape( $_user['gender'] ) . ",
-				photo=" . $db->dbescape( $photo ) . ",
+				password=" . $db->quote( $password ) . ",
+				email=" . $db->quote( $_user['email'] ) . ",
+				full_name=" . $db->quote( $_user['full_name'] ) . ",
+				gender=" . $db->quote( $_user['gender'] ) . ",
+				photo=" . $db->quote( $photo ) . ",
 				birthday=" . $_user['birthday'] . ",
-				sig=" . $db->dbescape( $_user['sig'] ) . ",
-				question=" . $db->dbescape( $_user['question'] ) . ",
-				answer=" . $db->dbescape( $_user['answer'] ) . ",
+				sig=" . $db->quote( $_user['sig'] ) . ",
+				question=" . $db->quote( $_user['question'] ) . ",
+				answer=" . $db->quote( $_user['answer'] ) . ",
 				view_mail=" . $_user['view_mail'] . ",
 				in_groups='".implode( ',', $in_groups )."'
 				WHERE userid=" . $userid );
@@ -265,7 +266,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 					$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-					$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo=' . $db->dbescape( $file_name ) . ' WHERE userid=' . $userid;
+					$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo=' . $db->quote( $file_name ) . ' WHERE userid=' . $userid;
 					$db->query( $sql );
 				}
 			}

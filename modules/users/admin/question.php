@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -24,7 +25,7 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 		die( 'NO' );
 	}
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET
-		title=" . $db->dbescape( $title ) . ", edit_time=" . NV_CURRENTTIME . "
+		title=" . $db->quote( $title ) . ", edit_time=" . NV_CURRENTTIME . "
 		WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'";
 	if( ! $db->exec( $sql ) )
 	{
@@ -49,7 +50,7 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	$weight = intval( $weight ) + 1;
 	$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
 		(title, lang, weight, add_time, edit_time) VALUES
-		(" . $db->dbescape( $title ) . ", " . $db->dbescape( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		(" . $db->quote( $title ) . ", " . $db->quote( NV_LANG_DATA ) . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 	if( ! $db->insert_id( $_sql, 'qid' ) )
 	{
 		die( 'NO' );

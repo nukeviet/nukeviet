@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 20-03-2011 20:08
  */
 
@@ -48,7 +49,7 @@ if( $db->exec( $sql ) )
 		{
 			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem=' . $db->dbescape( $subitem ) . ' WHERE id=' . $parentid;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem=' . $db->quote( $subitem ) . ' WHERE id=' . $parentid;
 			$db->exec( $sql );
 		}
 	}

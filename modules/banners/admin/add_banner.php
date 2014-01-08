@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/12/2010 12:11
  */
 
@@ -145,8 +146,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 
 			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-				( " . $db->dbescape( $title ) . ", " . $pid . ", " . $clid . ", " . $db->dbescape( $file_name ) . ", " . $db->dbescape( $file_ext ) . ", " . $db->dbescape( $file_mime ) . ",
-				" . $width . ", " . $height . ", " . $db->dbescape( $file_alt ) . ", '', " . $db->dbescape( $click_url ) . ", " . $db->dbescape( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
+				( " . $db->quote( $title ) . ", " . $pid . ", " . $clid . ", " . $db->quote( $file_name ) . ", " . $db->quote( $file_ext ) . ", " . $db->quote( $file_mime ) . ",
+				" . $width . ", " . $height . ", " . $db->quote( $file_alt ) . ", '', " . $db->quote( $click_url ) . ", " . $db->quote( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 				0, 1, 0)";
 
 			$id = $db->insert_id( $_sql, 'id' );

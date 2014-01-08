@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -54,7 +55,7 @@ function nv_check_username_reg( $login )
 
 	$error = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	if( $error != '' ) return preg_replace( "/\&(l|r)dquo\;/", '', strip_tags( $error ) );
-	if( $login != $db->fixdb( $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
+	if( "'" . $login . "'" != $db->quote( $login ) ) return sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
 
 	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
 	$result = $db->query( $sql );
@@ -223,15 +224,15 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				question, answer, passlostkey, view_mail, remember, in_groups,
 				active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				" . $db->dbescape( $array_register['username'] ) . ",
-				" . $db->dbescape( nv_md5safe( $array_register['username'] ) ) . ",
-				" . $db->dbescape( $password ) . ",
-				" . $db->dbescape( $reg_attribs['email'] ) . ",
-				" . $db->dbescape( $reg_attribs['full_name'] ) . ",
-				" . $db->dbescape( $reg_attribs['gender'] ) . ",
+				" . $db->quote( $array_register['username'] ) . ",
+				" . $db->quote( nv_md5safe( $array_register['username'] ) ) . ",
+				" . $db->quote( $password ) . ",
+				" . $db->quote( $reg_attribs['email'] ) . ",
+				" . $db->quote( $reg_attribs['full_name'] ) . ",
+				" . $db->quote( $reg_attribs['gender'] ) . ",
 				'', 0, " . NV_CURRENTTIME . ",
-				" . $db->dbescape( $your_question ) . ",
-				" . $db->dbescape( $array_register['answer'] ) . ",
+				" . $db->quote( $your_question ) . ",
+				" . $db->quote( $array_register['answer'] ) . ",
 				'', 0, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 			$userid = $db->insert_id( $sql, 'userid' );
@@ -252,11 +253,11 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
 			while( $row_f = $result_field->fetch() )
 			{
-				$query_field[$row_f['field']] = $db->dbescape( $row_f['default_value'] );
+				$query_field[$row_f['field']] = $db->quote( $row_f['default_value'] );
 			}
 			$db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
 
-			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $userid . ", " . $db->dbescape( $reg_attribs['openid'] ) . ", " . $db->dbescape( $reg_attribs['opid'] ) . ", " . $db->dbescape( $reg_attribs['email'] ) . ")";
+			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $userid . ", " . $db->quote( $reg_attribs['openid'] ) . ", " . $db->quote( $reg_attribs['opid'] ) . ", " . $db->quote( $reg_attribs['email'] ) . ")";
 			$db->exec( $sql );
 
 			$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid . " AND active=1";
@@ -455,15 +456,15 @@ if( $checkss == $array_register['checkss'] )
 			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 			{
 				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
-					" . $db->dbescape( $array_register['username'] ) . ",
-					" . $db->dbescape( nv_md5safe( $array_register['username'] ) ) . ",
-					" . $db->dbescape( $password ) . ",
-					" . $db->dbescape( $array_register['email'] ) . ",
-					" . $db->dbescape( $array_register['full_name'] ) . ",
+					" . $db->quote( $array_register['username'] ) . ",
+					" . $db->quote( nv_md5safe( $array_register['username'] ) ) . ",
+					" . $db->quote( $password ) . ",
+					" . $db->quote( $array_register['email'] ) . ",
+					" . $db->quote( $array_register['full_name'] ) . ",
 					" . NV_CURRENTTIME . ",
-					" . $db->dbescape( $your_question ) . ",
-					" . $db->dbescape( $array_register['answer'] ) . ",
-					" . $db->dbescape( $checknum ) . ", '" . nv_base64_encode( serialize( $query_field ) ) . "'
+					" . $db->quote( $your_question ) . ",
+					" . $db->quote( $array_register['answer'] ) . ",
+					" . $db->quote( $checknum ) . ", '" . nv_base64_encode( serialize( $query_field ) ) . "'
 				)";
 
 				$userid = $db->insert_id( $sql, 'userid' );
@@ -520,14 +521,14 @@ if( $checkss == $array_register['checkss'] )
 					(username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					" . $db->dbescape( $array_register['username'] ) . ",
-					" . $db->dbescape( nv_md5safe( $array_register['username'] ) ) . ",
-					" . $db->dbescape( $password ) . ",
-					" . $db->dbescape( $array_register['email'] ) . ",
-					" . $db->dbescape( $array_register['full_name'] ) . ",
+					" . $db->quote( $array_register['username'] ) . ",
+					" . $db->quote( nv_md5safe( $array_register['username'] ) ) . ",
+					" . $db->quote( $password ) . ",
+					" . $db->quote( $array_register['email'] ) . ",
+					" . $db->quote( $array_register['full_name'] ) . ",
 					'', '', 0, " . NV_CURRENTTIME . ",
-					" . $db->dbescape( $your_question ) . ",
-					" . $db->dbescape( $array_register['answer'] ) . ",
+					" . $db->quote( $your_question ) . ",
+					" . $db->quote( $array_register['answer'] ) . ",
 					'', 0, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 				$userid = $db->insert_id( $sql, userid );

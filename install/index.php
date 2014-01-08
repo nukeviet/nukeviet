@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
  */
 
@@ -598,7 +599,7 @@ elseif( $step == 5 )
 						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
 						// Xoa du lieu tai bang nv3_config
-						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->dbescape( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->quote( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 					}
 					catch( PDOException $e )
 					{
@@ -768,7 +769,7 @@ elseif( $step == 6 )
 					$db->exec( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->quote( $ftp_user_pass ) . ")" );
 					$db->exec( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote( $global_config['ftp_path'] ) . ")" );
 					$db->exec( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote( $global_config['ftp_check_login'] ) . ")" );
-					$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->dbescape_string( $array_data['site_name'] ) . " WHERE module = 'global' AND config_name = 'site_name'" );
+					$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->quote( $array_data['site_name'] ) . " WHERE module = 'global' AND config_name = 'site_name'" );
 
 					$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_authors_module ORDER BY weight ASC" );
 					while( $row = $result->fetch() )

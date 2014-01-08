@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -151,13 +152,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		$alias = change_alias( $array['title'] );
 
-		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias=' . $db->dbescape( $alias );
+		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias=' . $db->quote( $alias );
 		$result = $db->query( $sql );
 		$is_exists = $result->fetchColumn();
 
 		if( ! $is_exists )
 		{
-			$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->dbescape( $array['title'] );
+			$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->quote( $array['title'] );
 			$result = $db->query( $sql );
 			$is_exists = $result->fetchColumn();
 		}
@@ -221,27 +222,27 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
 				 catid=" . $array['catid'] . ",
-				 title=" . $db->dbescape( $array['title'] ) . ",
-				 alias=" . $db->dbescape( $alias ) . ",
-				 description=" . $db->dbescape( $array['description'] ) . ",
-				 introtext=" . $db->dbescape( $array['introtext'] ) . ",
+				 title=" . $db->quote( $array['title'] ) . ",
+				 alias=" . $db->quote( $alias ) . ",
+				 description=" . $db->quote( $array['description'] ) . ",
+				 introtext=" . $db->quote( $array['introtext'] ) . ",
 				 updatetime=" . NV_CURRENTTIME . ",
-				 author_name=" . $db->dbescape( $array['author_name'] ) . ",
-				 author_email=" . $db->dbescape( $array['author_email'] ) . ",
-				 author_url=" . $db->dbescape( $array['author_url'] ) . ",
-				 fileupload=" . $db->dbescape( $array['fileupload'] ) . ",
-				 linkdirect=" . $db->dbescape( $array['linkdirect'] ) . ",
-				 version=" . $db->dbescape( $array['version'] ) . ",
+				 author_name=" . $db->quote( $array['author_name'] ) . ",
+				 author_email=" . $db->quote( $array['author_email'] ) . ",
+				 author_url=" . $db->quote( $array['author_url'] ) . ",
+				 fileupload=" . $db->quote( $array['fileupload'] ) . ",
+				 linkdirect=" . $db->quote( $array['linkdirect'] ) . ",
+				 version=" . $db->quote( $array['version'] ) . ",
 				 filesize=" . $array['filesize'] . ",
-				 fileimage=" . $db->dbescape( $array['fileimage'] ) . ",
-				 copyright=" . $db->dbescape( $array['copyright'] ) . ",
+				 fileimage=" . $db->quote( $array['fileimage'] ) . ",
+				 copyright=" . $db->quote( $array['copyright'] ) . ",
 				 comment_allow=" . $array['comment_allow'] . ",
 				 who_comment=" . $array['who_comment'] . ",
-				 groups_comment=" . $db->dbescape( $array['groups_comment'] ) . ",
+				 groups_comment=" . $db->quote( $array['groups_comment'] ) . ",
 				 who_view=" . $array['who_view'] . ",
-				 groups_view=" . $db->dbescape( $array['groups_view'] ) . ",
+				 groups_view=" . $db->quote( $array['groups_view'] ) . ",
 				 who_download=" . $array['who_download'] . ",
-				 groups_download=" . $db->dbescape( $array['groups_download'] ) . "
+				 groups_download=" . $db->quote( $array['groups_download'] ) . "
 				 WHERE id=" . $id;
 
 			if( ! $db->exec( $sql ) )

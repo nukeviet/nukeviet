@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -44,14 +45,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		if( $mode == 'edit' )
 		{
 			$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET
-				content=" . $db->dbescape( $content ) . ",
+				content=" . $db->quote( $content ) . ",
 				edit_time='" . NV_CURRENTTIME . "'
 				WHERE config ='siteterms_" . NV_LANG_DATA . "'";
 		}
 		else
 		{
 			$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config VALUES (
-				'siteterms_" . NV_LANG_DATA . "', " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ")";
+				'siteterms_" . NV_LANG_DATA . "', " . $db->quote( $content ) . ", " . NV_CURRENTTIME . ")";
 		}
 
 		if( $db->exec( $query ) > 0 )

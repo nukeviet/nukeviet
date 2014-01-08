@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -58,7 +59,7 @@ if( $id )
 
 			$cache['keywords'] = $key_words;
 
-			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->dbescape( $key_words ) . ' WHERE id =' . $id;
+			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->quote( $key_words ) . ' WHERE id =' . $id;
 			$db->exec( $query );
 		}
 

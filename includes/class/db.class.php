@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VuThao (vuthao27@gmail.com)
- * @Copyright (C) 2013 VuThao. All rights reserved
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
 
@@ -267,74 +268,6 @@ class sql_db extends pdo
 			return false;
 		}
 		return $this->exec( $sql );
-	}
-
-	/**
-	 * sql_db::fixdb()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function fixdb( $value )
-	{
-		$value = str_replace( '\'', '&#039;', $value );
-		$value = preg_replace( array( "/(se)(lect)/i", "/(uni)(on)/i", "/(con)(cat)/i", "/(c)(har)/i", "/(out)(file)/i", "/(al)(ter)/i", "/(in)(sert)/i", "/(d)(rop)/i", "/(f)(rom)/i", "/(whe)(re)/i", "/(up)(date)/i", "/(de)(lete)/i", "/(cre)(ate)/i" ), "$1-$2", $value );
-		return $value;
-	}
-
-	/**
-	 * sql_db::unfixdb()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	function unfixdb( $value )
-	{
-		$value = preg_replace( array( "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" ), "$1$2", $value );
-		return $value;
-	}
-
-	/**
-	 * sql_db::dbescape()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function dbescape( $value )
-	{
-		if( is_array( $value ) )
-		{
-			$value = array_map( array( $this, __function__ ), $value );
-		}
-		else
-		{
-			if( ! is_numeric( $value ) || $value{0} == '0' )
-			{
-				$value = $this->quote( $this->fixdb( $value ) );
-			}
-		}
-
-		return $value;
-	}
-
-	/**
-	 * sql_db::dbescape_string()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function dbescape_string( $value )
-	{
-		if( is_array( $value ) )
-		{
-			$value = array_map( array( $this, __function__ ), $value );
-		}
-		else
-		{
-			$value = $this->quote( $this->fixdb( $value ) );
-		}
-
-		return $value;
 	}
 
 	/**

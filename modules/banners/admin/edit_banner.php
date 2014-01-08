@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/14/2010 0:50
  */
 
@@ -195,10 +196,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			$pid_old = $db->query( 'SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . intval( $id ) )->fetchColumn();
 
-			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->dbescape( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
-				 file_name=" . $db->dbescape( $file_name ) . ", file_ext=" . $db->dbescape( $file_ext ) . ", file_mime=" . $db->dbescape( $file_mime ) . ",
-				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->dbescape( $file_alt ) . ", imageforswf=" . $db->dbescape( $imageforswf ) . ",
-				 click_url=" . $db->dbescape( $click_url ) . ", target=" . $db->dbescape( $target ) . ",
+			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->quote( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
+				 file_name=" . $db->quote( $file_name ) . ", file_ext=" . $db->quote( $file_ext ) . ", file_mime=" . $db->quote( $file_mime ) . ",
+				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->quote( $file_alt ) . ", imageforswf=" . $db->quote( $imageforswf ) . ",
+				 click_url=" . $db->quote( $click_url ) . ", target=" . $db->quote( $target ) . ",
 				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
 			$db->exec( $sql );
 

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
@@ -85,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
 	}
 
-	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
 
 	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
@@ -93,7 +94,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
 	}
-	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
 
 	$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
 	if( ! empty( $array_config['password_simple'] ) )
@@ -103,7 +104,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		asort($array_config['password_simple']);
 		$array_config['password_simple'] = implode( "|", $array_config['password_simple'] );
 	}
-	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
 
 	$access_admin = array();
 	$access_admin['access_addus'] = $nv_Request->get_typed_array( 'access_addus', 'post', 'bool' );

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -123,7 +124,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE alias=' . $db->dbescape( $array['alias'] );
+				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE alias=' . $db->quote( $array['alias'] );
 				$count = $db->query( $sql )->fetchColumn();
 				if( $count )
 				{
@@ -155,13 +156,13 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_categories (parentid, title, alias, description, who_view, groups_view, who_download, groups_download, weight, status) VALUES (
 				 ' . $array['parentid'] . ',
-				 ' . $db->dbescape( $array['title'] ) . ',
-				 ' . $db->dbescape( $array['alias'] ) . ',
-				 ' . $db->dbescape( $array['description'] ) . ',
+				 ' . $db->quote( $array['title'] ) . ',
+				 ' . $db->quote( $array['alias'] ) . ',
+				 ' . $db->quote( $array['description'] ) . ',
 				 ' . $array['who_view'] . ',
-				 ' . $db->dbescape( $array['groups_view'] ) . ',
+				 ' . $db->quote( $array['groups_view'] ) . ',
 				 ' . $array['who_download'] . ',
-				 ' . $db->dbescape( $array['groups_download'] ) . ',
+				 ' . $db->quote( $array['groups_download'] ) . ',
 				 ' . $new_weight . ',
 				 1)';
 
@@ -370,7 +371,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id!=' . $catid . ' AND alias=' . $db->dbescape( $array['alias'] );
+				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id!=' . $catid . ' AND alias=' . $db->quote( $array['alias'] );
 				$count = $db->query( $sql )->fetchColumn();
 				if( $count )
 				{
@@ -411,13 +412,13 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET
 				 parentid=' . $array['parentid'] . ',
-				 title=' . $db->dbescape( $array['title'] ) . ',
-				 alias=' . $db->dbescape( $array['alias'] ) . ',
-				 description=' . $db->dbescape( $array['description'] ) . ',
+				 title=' . $db->quote( $array['title'] ) . ',
+				 alias=' . $db->quote( $array['alias'] ) . ',
+				 description=' . $db->quote( $array['description'] ) . ',
 				 who_view=' . $array['who_view'] . ',
-				 groups_view=' . $db->dbescape( $array['groups_view'] ) . ',
+				 groups_view=' . $db->quote( $array['groups_view'] ) . ',
 				 who_download=' . $array['who_download'] . ',
-				 groups_download=' . $db->dbescape( $array['groups_download'] ) . ',
+				 groups_download=' . $db->quote( $array['groups_download'] ) . ',
 				 weight=' . $new_weight . '
 				 WHERE id=' . $catid;
 			$result = $db->exec( $sql );

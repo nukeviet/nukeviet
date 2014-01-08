@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) )
@@ -51,10 +52,10 @@ if( $checknum == $row['checknum'] )
 		$is_change_email = true;
 
 		$userid_change_email = intval( substr( $row['username'], 20 ) );
-		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET email=" . $db->dbescape_string( $row['email'] ) . " WHERE userid=" . $userid_change_email;
+		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET email=" . $db->quote( $row['email'] ) . " WHERE userid=" . $userid_change_email;
 		if( $db->exec( $sql ) )
 		{
-			$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->dbescape( $userid ) );
+			$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->quote( $userid ) );
 			$check_update_user = true;
 		}
 	}
@@ -64,15 +65,15 @@ if( $checknum == $row['checknum'] )
 					username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					" . $db->dbescape( $row['username'] ) . ",
-					" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ",
-					" . $db->dbescape( $row['password'] ) . ",
-					" . $db->dbescape( $row['email'] ) . ",
-					" . $db->dbescape( $row['full_name'] ) . ",
+					" . $db->quote( $row['username'] ) . ",
+					" . $db->quote( nv_md5safe( $row['username'] ) ) . ",
+					" . $db->quote( $row['password'] ) . ",
+					" . $db->quote( $row['email'] ) . ",
+					" . $db->quote( $row['full_name'] ) . ",
 					'', '', 0,
-					" . $db->dbescape( $row['regdate'] ) . ",
-					" . $db->dbescape( $row['question'] ) . ",
-					" . $db->dbescape( $row['answer'] ) . ",
+					" . $db->quote( $row['regdate'] ) . ",
+					" . $db->quote( $row['question'] ) . ",
+					" . $db->quote( $row['answer'] ) . ",
 					'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 		$userid = $db->insert_id( $sql, 'userid' );
 		if( $userid )
@@ -83,7 +84,7 @@ if( $checknum == $row['checknum'] )
 			$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
 			while( $row_f = $result_field->fetch() )
 			{
-				$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->dbescape( $row_f['default_value'] );
+				$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->quote( $row_f['default_value'] );
 			}
 
 			if( $db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )

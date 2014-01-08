@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
 
@@ -62,7 +63,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_username;
 	}
-	elseif( $_user['username'] != $db->fixdb( $_user['username'] ) )
+	elseif( "'" . $_user['username'] . "'" != $db->quote( $_user['username'] ) )
 	{
 		$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
 	}
@@ -136,17 +137,17 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				question, answer, passlostkey, view_mail,
 				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				" . $db->dbescape( $_user['username'] ) . ",
-				" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ",
-				" . $db->dbescape( $password ) . ",
-				" . $db->dbescape( $_user['email'] ) . ",
-				" . $db->dbescape( $_user['full_name'] ) . ",
-				" . $db->dbescape( $_user['gender'] ) . ",
+				" . $db->quote( $_user['username'] ) . ",
+				" . $db->quote( nv_md5safe( $_user['username'] ) ) . ",
+				" . $db->quote( $password ) . ",
+				" . $db->quote( $_user['email'] ) . ",
+				" . $db->quote( $_user['full_name'] ) . ",
+				" . $db->quote( $_user['gender'] ) . ",
 				" . $_user['birthday'] . ",
-				" . $db->dbescape( $_user['sig'] ) . ",
+				" . $db->quote( $_user['sig'] ) . ",
 				" . NV_CURRENTTIME . ",
-				" . $db->dbescape( $_user['question'] ) . ",
-				" . $db->dbescape( $_user['answer'] ) . ",
+				" . $db->quote( $_user['question'] ) . ",
+				" . $db->quote( $_user['answer'] ) . ",
 				'',
 				 " . $_user['view_mail'] . ",
 				 1,
@@ -175,7 +176,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-						$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->dbescape( $file_name ) . " WHERE userid=" . $userid;
+						$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->quote( $file_name ) . " WHERE userid=" . $userid;
 						$db->exec( $sql );
 					}
 				}

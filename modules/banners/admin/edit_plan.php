@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/12/2010 22:1
  */
 
@@ -53,7 +54,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		list( $blang_old, $form_old ) = $db->query( 'SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval( $id ) )->fetch( 3 );
 
-		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang=' . $db->dbescape( $blang ) . ', title=' . $db->dbescape( $title ) . ', description=' . $db->dbescape( $description ) . ', form=' . $db->dbescape( $form ) . ', width=' . $width . ', height=' . $height . ' WHERE id=' . $id;
+		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang=' . $db->quote( $blang ) . ', title=' . $db->quote( $title ) . ', description=' . $db->quote( $description ) . ', form=' . $db->quote( $form ) . ', width=' . $width . ', height=' . $height . ' WHERE id=' . $id;
 		$db->exec( $sql );
 
 		if( $form_old != $form or $blang_old != $blang )

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
 
@@ -71,9 +72,9 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	elseif( $arr_menu['id'] == 0 )
 	{
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
-			" . $db->dbescape( $arr_menu['title'] ) . ",
+			" . $db->quote( $arr_menu['title'] ) . ",
 			'',
-			" . $db->dbescape( $arr_menu['description'] ) . "
+			" . $db->quote( $arr_menu['description'] ) . "
 		)";
 
 		if( $db->insert_id( $sql, 'id' ) )
@@ -90,8 +91,8 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	else
 	{
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
-			title=' . $db->dbescape( $arr_menu['title'] ) . ',
-			description = ' . $db->dbescape( $arr_menu['description'] ) . '
+			title=' . $db->quote( $arr_menu['title'] ) . ',
+			description = ' . $db->quote( $arr_menu['description'] ) . '
 			WHERE id =' . $arr_menu['id'];
 
 		if( $db->exec( $sql ) )

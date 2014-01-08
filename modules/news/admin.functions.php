@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 2:29
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 2:29
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
@@ -304,7 +305,7 @@ function nv_show_cat_list( $parentid = 0 )
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
 			{
 				$viewcat = 'viewcat_page_new';
-				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->dbescape( $viewcat ) . ' WHERE catid=' . intval( $catid );
+				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->quote( $viewcat ) . ' WHERE catid=' . intval( $catid );
 				$db->exec( $sql );
 			}
 

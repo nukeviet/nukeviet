@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -45,7 +46,7 @@ if( ! empty( $savecat ) )
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, " . $db->quote( $title ) . ", " . $db->quote( $alias ) . ", " . $db->quote( $description ) . ", " . $db->quote( $image ) . ", " . $db->quote( $weight ) . ", " . $db->quote( $keywords ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
 		if( $db->insert_id( $sql, 'bid' ) )
 		{
@@ -60,7 +61,7 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title=" . $db->dbescape( $title ) . ", alias = " . $db->dbescape( $alias ) . ", description=" . $db->dbescape( $description ) . ", image= " . $db->dbescape( $image ) . ", keywords= " . $db->dbescape( $keywords ) . ", edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $bid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title=" . $db->quote( $title ) . ", alias = " . $db->quote( $alias ) . ", description=" . $db->quote( $description ) . ", image= " . $db->quote( $image ) . ", keywords= " . $db->quote( $keywords ) . ", edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $bid;
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -88,7 +89,7 @@ if( ! empty( $submit ) )
 
 		if( empty( $vid ) )
 		{
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (" . $db->dbescape( $question ) . ", " . $db->dbescape( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->dbescape( $groups_view ) . ", 0,0,1)";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (" . $db->quote( $question ) . ", " . $db->quote( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->quote( $groups_view ) . ", 0,0,1)";
 			$vid = $db->insert_id( $sql, 'vid' );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid'] );
 		}
@@ -101,7 +102,7 @@ if( ! empty( $submit ) )
 				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->dbescape( $title ) . ", url = " . $db->dbescape( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
+					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->quote( $title ) . ", url = " . $db->quote( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
 					++$maxoption_data;
 				}
 				else
@@ -117,7 +118,7 @@ if( ! empty( $submit ) )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $urlvotenews[$key] ) );
 
-					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (vid, title, url, hitstotal) VALUES (" . $db->dbescape( $vid ) . ", " . $db->dbescape( $title ) . ", " . $db->dbescape( $url ) . ", '0')";
+					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (vid, title, url, hitstotal) VALUES (" . $db->quote( $vid ) . ", " . $db->quote( $title ) . ", " . $db->quote( $url ) . ", '0')";
 					if( $db->insert_id( $sql, 'id' ) )
 					{
 						++$maxoption_data;
@@ -138,7 +139,7 @@ if( ! empty( $submit ) )
 			{
 				$act = 1;
 			}
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->dbescape( $question ) . ", link=" . $db->dbescape( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->dbescape( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->quote( $question ) . ", link=" . $db->quote( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->quote( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
 			if( $db->exec( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );

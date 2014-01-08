@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -28,7 +29,7 @@ $page_title = trim( str_replace( '-', ' ', $alias ) );
 
 if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 {
-	list( $tid, $image_tag, $description, $key_words ) = $db->query( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->dbescape( $alias ) )->fetch( 3 );
+	list( $tid, $image_tag, $description, $key_words ) = $db->query( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
 	if( $tid > 0 )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;

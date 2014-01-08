@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
 
@@ -41,14 +42,14 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
 		last_login, last_ip, last_agent, last_openid, idsite
 		) VALUES (
-		" . $db->dbescape( $row['username'] ) . ",
-		" . $db->dbescape( nv_md5safe( $row['username'] ) ) . ",
-		" . $db->dbescape( $row['password'] ) . ",
-		" . $db->dbescape( $row['email'] ) . ",
-		" . $db->dbescape( $row['full_name'] ) . ",
+		" . $db->quote( $row['username'] ) . ",
+		" . $db->quote( nv_md5safe( $row['username'] ) ) . ",
+		" . $db->quote( $row['password'] ) . ",
+		" . $db->quote( $row['email'] ) . ",
+		" . $db->quote( $row['full_name'] ) . ",
 		'', '', 0, " . $row['regdate'] . ",
-		" . $db->dbescape( $row['question'] ) . ",
-		" . $db->dbescape( $row['answer'] ) . ",
+		" . $db->quote( $row['question'] ) . ",
+		" . $db->quote( $row['answer'] ) . ",
 		'', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 	$userid = $db->insert_id( $sql, 'userid' );
@@ -60,7 +61,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
 		while( $row_f = $result_field->fetch() )
 		{
-			$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->dbescape( $row_f['default_value'] );
+			$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->quote( $row_f['default_value'] );
 		}
 		if( $db->exec( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
 		{
