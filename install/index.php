@@ -409,7 +409,11 @@ elseif( $step == 5 )
 		{
 			$db_config['dbhost'] = '127.0.0.1';
 		}
-		if( $db_config['dbtype'] == 'oci' AND empty( $db_config['dbport'] ) )
+		if( $db_config['dbtype'] == 'mysql' )
+		{
+			$db_config['dbsystem'] = $db_config['dbname'];
+		}
+		elseif( $db_config['dbtype'] == 'oci' AND empty( $db_config['dbport'] ) )
 		{
 			$db_config['dbport'] = 1521;
 			$db_config['dbsystem'] = $db_config['dbuname'];
@@ -424,7 +428,7 @@ elseif( $step == 5 )
 		else
 		{
 			$tables = array();
-			$db->query( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE '.$db_config['collation'] );
+			$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE '.$db_config['collation'] );
 
 			if( $sys_info['allowed_set_time_limit'] )
 			{
