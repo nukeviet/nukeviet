@@ -55,7 +55,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		list( $blang_old, $form_old ) = $db->query( 'SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval( $id ) )->fetch( 3 );
 
 		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang=' . $db->quote( $blang ) . ', title=' . $db->quote( $title ) . ', description=' . $db->quote( $description ) . ', form=' . $db->quote( $form ) . ', width=' . $width . ', height=' . $height . ' WHERE id=' . $id;
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		if( $form_old != $form or $blang_old != $blang )
 		{

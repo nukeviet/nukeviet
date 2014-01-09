@@ -62,7 +62,7 @@ if( ! empty( $savecat ) )
 	else
 	{
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title=" . $db->quote( $title ) . ", alias = " . $db->quote( $alias ) . ", description=" . $db->quote( $description ) . ", image= " . $db->quote( $image ) . ", keywords= " . $db->quote( $keywords ) . ", edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $bid;
-		if( $db->exec( $sql ) )
+		if( $db->query( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );

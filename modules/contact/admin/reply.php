@@ -41,7 +41,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $is_read = intval( $row['is_read'] );
 if( ! $is_read )
 {
-	$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id );
 	$is_read = 1;
 }
 

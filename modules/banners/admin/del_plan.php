@@ -42,22 +42,22 @@ if( ! empty( $banners_id ) )
 	$banners_id = implode( ',', $banners_id );
 
 	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid IN (' . $banners_id . ')';
-	$db->exec( $sql );
+	$db->query( $sql );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_click' );
 
 	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid = ' . $id;
-	$db->exec( $sql );
+	$db->query( $sql );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_rows' );
 }
 
 $sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id = ' . $id;
-$db->exec( $sql );
-
-$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_plans' );
+$db->query( $sql );
 
 nv_CreateXML_bannerPlan();
+
+$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_plans' );
+$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_click' );
+$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_rows' );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK|plans_list|plans_list';

@@ -26,7 +26,7 @@ if( $bid > 0 )
 		{
 			if( $id > 0 )
 			{
-				$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
+				$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
 			}
 		}
 		nv_news_fix_block( $bid );
@@ -48,18 +48,18 @@ if( $bid > 0 )
 					++$weight;
 					if( $weight == $new_vid ) ++$weight;
 					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block SET weight=" . $weight . " WHERE bid=" . $bid . " AND id=" . intval( $row['id'] );
-					$db->exec( $sql );
+					$db->query( $sql );
 				}
 
 				$result->closeCursor();
 				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block SET weight=" . $new_vid . " WHERE bid=" . $bid . " AND id=" . intval( $id );
-				$db->exec( $sql );
+				$db->query( $sql );
 
 				$content = "OK_" . $bid;
 			}
 			elseif( $mod == "delete" )
 			{
-				$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) );
+				$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) );
 				$content = "OK_" . $bid;
 			}
 		}

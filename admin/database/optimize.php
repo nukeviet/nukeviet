@@ -33,9 +33,7 @@ while( $item = $result->fetch() )
 	{
 		$totalfree += $item['data_free'];
 		$tabs[] = substr( $item['name'], strlen( $db_config['prefix'] ) + 1 );
-		$db->exec( 'LOCK TABLE ' . $item['name'] . ' WRITE' );
-		$db->exec( 'OPTIMIZE TABLE ' . $item['name'] );
-		$db->exec( 'UNLOCK TABLE ' . $item['name'] );
+		$db->query( 'OPTIMIZE TABLE ' . $item['name'] );
 	}
 }
 $result->closeCursor();

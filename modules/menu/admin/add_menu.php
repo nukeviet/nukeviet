@@ -204,7 +204,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 					$arr_block[] = $row['id'];
 				}
 
-				$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $post['mid'] );
+				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $post['mid'] );
 
 				if( $post['parentid'] != 0 )
 				{
@@ -218,7 +218,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 					}
 
 					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode( ',', $arr_item_menu ) . "' WHERE mid= " . $post['mid'] . " AND id=" . $post['parentid'];
-					$db->exec( $sql );
+					$db->query( $sql );
 				}
 
 				nv_del_moduleCache( $module_name );
@@ -262,7 +262,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 					$weight = intval( $weight ) + 1;
 
 					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . intval( $weight ) . " WHERE id=" . intval( $post['id'] );
-					$db->exec( $sql );
+					$db->query( $sql );
 				}
 
 				nv_fix_cat_order( $post['mid'] );
@@ -280,7 +280,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 					}
 
 					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item= '" . implode( ',', $arr_block ) . "' WHERE id=" . $post['mid'];
-					$db->exec( $sql );
+					$db->query( $sql );
 
 					$arr_block = array();
 					$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid= " . $mid_old;
@@ -290,7 +290,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_block[] = $row['id'];
 					}
 
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $mid_old );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $mid_old );
 				}
 
 				if( $post['parentid'] != 0 )
@@ -303,7 +303,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_item_menu[] = $row['id'];
 					}
 
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $arr_item_menu ) . "' WHERE mid=" . $post['mid'] . " AND id=" . $post['parentid'] );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $arr_item_menu ) . "' WHERE mid=" . $post['mid'] . " AND id=" . $post['parentid'] );
 				}
 
 				if( $pa_old != 0 )
@@ -316,7 +316,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 						$arr_item_menu[] = $row['id'];
 					}
 
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode( ',', $arr_item_menu ) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode( ',', $arr_item_menu ) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old );
 				}
 
 				nv_del_moduleCache( $module_name );

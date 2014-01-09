@@ -98,7 +98,7 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 
 					if( $bid > 0 )
 					{
-						$row_config = $db->exec( 'SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch();
+						$row_config = $db->query( 'SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch();
 						if( $row_config['file_name'] == $file_name and $row_config['module'] == $module )
 						{
 							$data_block = unserialize( $row_config['config'] );

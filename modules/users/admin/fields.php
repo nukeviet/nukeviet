@@ -30,10 +30,10 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
-	$db->exec( $sql );
+	$db->query( $sql );
 	die( 'OK' );
 }
 
@@ -435,7 +435,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 			$result = $db->query( $query );
 			while( $row = $result->fetch() )
 			{
-				$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
+				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
 				++$weight;
 			}
 			die( 'OK' );

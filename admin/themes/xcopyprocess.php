@@ -59,13 +59,13 @@ if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_ex
 			$result_weight = $db->query( 'SELECT func_id, weight FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $row['bid'] );
 			while( list( $func_id, $weight ) = $result_weight->fetch( 3 ) )
 			{
-				$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
+				$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
 			}
 		}
 	}
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['xcopyblock'], $lang_module['xcopyblock_from'] . ' ' . $theme1 . ' ' . $lang_module['xcopyblock_to'] . ' ' . $theme2, $admin_info['userid'] );
 	nv_del_moduleCache( 'themes' );

@@ -22,7 +22,7 @@ if( empty( $id ) ) die( 'NO' );
 $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;
 
-$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET act=' . $new_status . ' WHERE id=' . $id );
+$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET act=' . $new_status . ' WHERE id=' . $id );
 
 nv_del_moduleCache( $module_name );
 

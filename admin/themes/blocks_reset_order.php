@@ -63,7 +63,7 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 
 				$weight = intval( $weight ) + 1;
 
-				$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
+				$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
 			}
 		}
 	}
@@ -78,7 +78,7 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 	while( list( $bid_i, $position, $weight ) = $sth->fetch( 3 ) )
 	{
 		$array_position[] = $position;
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 	}
 
 	// Kiem tra va cap nhat lai weight tung function
@@ -110,15 +110,15 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 				$func_id_old = $func_id_i;
 			}
 
-			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 		}
 	}
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid'] );
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	echo $lang_module['block_update_success'];
 }

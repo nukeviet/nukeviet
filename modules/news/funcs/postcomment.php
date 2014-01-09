@@ -63,11 +63,11 @@ if( $module_config[$module_name]['activecomm'] == 1 and $id > 0 and $checkss == 
 				if( $status )
 				{
 					$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
-					$db->exec( $query );
+					$db->query( $query );
 					foreach( $array_catid as $catid_i )
 					{
 						$query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET hitscm=" . $numf . " WHERE id=" . $id;
-						$db->exec( $query );
+						$db->query( $query );
 					}
 				}
 				$page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;

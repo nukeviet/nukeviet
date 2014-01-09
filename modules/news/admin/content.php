@@ -54,7 +54,7 @@ else
 				if( $mk[0] > 0 )
 				{
 					$upload_real_dir_page = $mk[2];
-					$db->exec( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)" );
+					$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)" );
 				}
 			}
 			elseif( ! empty( $p ) )
@@ -507,7 +507,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$ct_query = array();
 
 				$tbhtml = NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $rowcontent['id'] / 2000 );
-				$db->exec( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', gid mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
+				$db->query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', gid mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
 
 				$ct_query[] = $db->exec( "INSERT INTO " . $tbhtml . " VALUES
 					(" . $rowcontent['id'] . ",
@@ -621,10 +621,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		{
 			foreach( $id_block_content as $bid_i )
 			{
-				$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
+				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
 			}
 			$id_block_content[] = 0;
-			$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] . " AND bid NOT IN (" . implode( ',', $id_block_content ) . ")" );
+			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] . " AND bid NOT IN (" . implode( ',', $id_block_content ) . ")" );
 			$id_block_content = array_keys( $array_block_cat_module );
 			foreach( $id_block_content as $bid_i )
 			{
@@ -666,12 +666,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 								}
 								if( $keywords_i != $keywords_i2 )
 								{
-									$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET keywords= " . $db->quote( $keywords_i2 ) . " WHERE tid =" . $tid );
+									$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET keywords= " . $db->quote( $keywords_i2 ) . " WHERE tid =" . $tid );
 								}
 							}
-							$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET numnews = numnews+1 WHERE tid = " . $tid );
+							$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET numnews = numnews+1 WHERE tid = " . $tid );
 						}
-						$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags_id (id, tid, keyword) VALUES ('" . $rowcontent['id'] . "', '" . $tid . "', " . $db->quote( $keyword ) . ")" );
+						$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags_id (id, tid, keyword) VALUES ('" . $rowcontent['id'] . "', '" . $tid . "', " . $db->quote( $keyword ) . ")" );
 					}
 				}
 
@@ -680,7 +680,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					if( ! in_array( $keyword, $keywords ) )
 					{
 						$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid );
-						$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
+						$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
 					}
 				}
 			}

@@ -41,7 +41,7 @@ if( isset( $array_dirname[$newfolder] ) )
 	$info = nv_getFileInfo( $newfolder, $file );
 	$info['userid'] = $admin_info['userid'];
 
-	$db->exec( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+	$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
 							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
 							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
 }
@@ -56,7 +56,7 @@ if( ! $mirror )
 	if( isset( $array_dirname[$path] ) )
 	{
 		$did = $array_dirname[$path];
-		$db->exec( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $image . "'" );
+		$db->query( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $image . "'" );
 	}
 }
 

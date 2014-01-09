@@ -24,7 +24,7 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 
 	foreach( $listid as $_id )
 	{
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . inval( $_id ) );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . inval( $_id ) );
 	}
 
 	nv_del_moduleCache( $module_name );

@@ -29,10 +29,10 @@ while( $row = $result->fetch() )
 {
 	++$weight;
 	if( $weight == $new_weight ) ++$weight;
-	$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'] );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'] );
 }
 
-$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid );
+$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid );
 
 nv_del_moduleCache( $module_name );
 

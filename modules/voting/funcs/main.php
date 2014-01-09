@@ -42,7 +42,7 @@ if( empty( $vid ) )
 		$is_update = implode( ',', $is_update );
 
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET act=0 WHERE vid IN (" . $is_update . ")";
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		nv_del_moduleCache( $module_name );
 	}
@@ -170,7 +170,7 @@ else
 		{
 			$in = implode( ',', $array_id );
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitstotal = hitstotal+1 WHERE vid ='" . $vid . "' AND id IN (" . $in . ")";
-			$db->exec( $sql );
+			$db->query( $sql );
 			file_put_contents( $dir . "/" . $logfile, '', LOCK_EX );
 			$note = $lang_module['okmsg'];
 		}

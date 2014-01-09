@@ -65,11 +65,10 @@ function nv_fix_subweight( $mod )
 	$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
 	$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 	$sth->execute();
-	while( $row = $result->fetch() )
+	while( $row = $sth->fetch() )
 	{
 		++$subweight;
-		$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $subweight . ' WHERE func_id=' . $row['func_id'] );
-		nv_del_moduleCache( 'modules' );
+		$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $subweight . ' WHERE func_id=' . $row['func_id'] );
 	}
 }
 
@@ -132,7 +131,7 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 
 		foreach( $array_funcid as $func_id )
 		{
-			$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
+			$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
 		}
 	}
 
@@ -186,7 +185,7 @@ function nv_setup_data_module( $lang, $module_name )
 				{
 					try
 					{
-						$db->exec( $sql );
+						$db->query( $sql );
 					}
 					catch (PDOException $e)
 					{
@@ -269,7 +268,7 @@ function nv_setup_data_module( $lang, $module_name )
 				if( isset( $arr_func_id_old[$func] ) and isset( $arr_func_id_old[$func] ) > 0 )
 				{
 					$arr_func_id[$func] = $arr_func_id_old[$func];
-					$db->exec( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
+					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
 				}
 				else
 				{
@@ -281,7 +280,7 @@ function nv_setup_data_module( $lang, $module_name )
 
 					$arr_func_id[$func] = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')", "func_id", $data );
+					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')", "func_id", $data );
 				}
 			}
 
@@ -294,7 +293,7 @@ function nv_setup_data_module( $lang, $module_name )
 					$arr_show_func[] = $func_id;
 					$show_func = 1;
 					++$subweight;
-					$db->exec( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
+					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
 				}
 			}
 		}

@@ -65,7 +65,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 		if( $db->exec( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
 		{
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid'] );
 			$full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 		else
 		{
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] );
 		}
 	}
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting' );

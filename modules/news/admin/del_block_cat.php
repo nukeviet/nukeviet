@@ -21,7 +21,7 @@ if( $bid > 0 )
 	if( $db->exec( $query ) )
 	{
 		$query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE bid=" . $bid;
-		$db->exec( $query );
+		$db->query( $query );
 		nv_fix_block_cat();
 		nv_del_moduleCache( $module_name );
 		$contents = "OK_" . $bid;

@@ -35,17 +35,17 @@ if( ! empty( $listcid ) )
 		$array_listcatid[$id] = explode( ',', $listcatid );
 	}
 
-	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid IN (' . implode( ',', $cid_array ) . ')' );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid IN (' . implode( ',', $cid_array ) . ')' );
 
 	foreach( $array_id as $id )
 	{
 		$numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments where id= ' . $id . ' AND status=1' )->fetchColumn();
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id );
 
 		$array_catid = $array_listcatid[$id];
 		foreach( $array_catid as $catid_i )
 		{
-			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id );
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id );
 		}
 	}
 

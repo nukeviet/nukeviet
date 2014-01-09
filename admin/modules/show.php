@@ -96,7 +96,7 @@ function nv_show_funcs()
 		if( $row['show_func'] != $show_func )
 		{
 			$row['show_func'] = $show_func;
-			$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id'] );
+			$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id'] );
 			$is_delCache = true;
 		}
 
@@ -123,15 +123,15 @@ function nv_show_funcs()
 	{
 		foreach( $old_funcs as $func => $values )
 		{
-			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id'] );
 			$is_delCache = true;
 		}
 
-		$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
+		$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+		$db->query( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE );
+		$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
 		$is_refresh = true;
 	}
 

@@ -69,7 +69,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 			$did = $array_dirname[$path];
 			$info = nv_getFileInfo( $path, $file );
 			$info['userid'] = $admin_info['userid'];
-			$db->exec( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+			$db->query( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
 							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
 							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
 		}

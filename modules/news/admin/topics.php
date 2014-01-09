@@ -74,7 +74,7 @@ if( ! empty( $savecat ) )
 	else
 	{
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET title=" . $db->quote( $array['title'] ) . ", alias = " . $db->quote( $array['alias'] ) . ", description=" . $db->quote( $array['description'] ) . ", image = " . $db->quote( $array['image'] ) . ", keywords= " . $db->quote( $array['keywords'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE topicid =" . $array['topicid'];
-		if( $db->exec( $sql ) > 0 )
+		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );

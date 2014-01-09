@@ -33,11 +33,11 @@ if( $mod == 'weight' and $new_vid > 0 )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . $row['topicid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $new_vid . ' WHERE topicid=' . $topicid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	$content = 'OK_' . $topicid;
 	nv_del_moduleCache( $module_name );

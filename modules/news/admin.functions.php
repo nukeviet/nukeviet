@@ -99,7 +99,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 		++$order;
 		++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ', sort=' . $order . ', lev=' . $lev . ' WHERE catid=' . intval( $catid_i );
-		$db->exec( $sql );
+		$db->query( $sql );
 		$order = nv_fix_cat_order( $catid_i, $order, $lev );
 	}
 	$numsubcat = $weight;
@@ -115,7 +115,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 			$sql .= ",subcatid='" . implode( ',', $array_cat_order ) . "'";
 		}
 		$sql .= ' WHERE catid=' . intval( $parentid );
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	return $order;
 }
@@ -135,7 +135,7 @@ function nv_fix_topic()
 	{
 		++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_topics SET weight=' . $weight . ' WHERE topicid=' . intval( $row['topicid'] );
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	$result->closeCursor();
 }
@@ -155,7 +155,7 @@ function nv_fix_block_cat()
 	{
 		++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . intval( $row['bid'] );
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	$result->closeCursor();
 }
@@ -175,7 +175,7 @@ function nv_fix_source()
 	{
 		++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . intval( $row['sourceid'] );
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	$result->closeCursor();
 }
@@ -207,12 +207,11 @@ function nv_news_fix_block( $bid, $repairtable = true )
 			{
 				$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . intval( $row['id'] );
 			}
-			$db->exec( $sql );
+			$db->query( $sql );
 		}
 		$result->closeCursor();
 		if( $repairtable )
 		{
-			$db->query( 'REPAIR TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_block' );
 			$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_block' );
 		}
 	}
@@ -306,7 +305,7 @@ function nv_show_cat_list( $parentid = 0 )
 			{
 				$viewcat = 'viewcat_page_new';
 				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->quote( $viewcat ) . ' WHERE catid=' . intval( $catid );
-				$db->exec( $sql );
+				$db->query( $sql );
 			}
 
 			$admin_funcs = array();

@@ -40,24 +40,23 @@ if( ! empty( $banners_id ) )
 	$banners_id = implode( ',', $banners_id );
 
 	$query = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid IN (' . $banners_id . ')';
-	$db->exec( $query );
-
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_click' );
+	$db->query( $query );
 
 	$query = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE clid = ' . $id;
-	$db->exec( $query );
+	$db->query( $query );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_rows' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_click' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_rows' );
 
 	nv_CreateXML_bannerPlan();
 }
 
 $query = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id = ' . $id;
-$db->exec( $query );
+$db->query( $query );
 
 nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_client', 'clientid ' . $id, $admin_info['userid'] );
 
-$db->exec( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_clients' );
+$db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_clients' );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK|client_list|client_list';

@@ -130,13 +130,13 @@ function nv_fix_banner_weight( $pid )
 		{
 			++$weight;
 			$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
-			$db->exec( $sql );
+			$db->query( $sql );
 		}
 	}
 	elseif( $pid > 0 and $form == 'random' )
 	{
 		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=0 WHERE pid=' . $pid;
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 }
 

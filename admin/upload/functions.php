@@ -430,17 +430,17 @@ function nv_filesListRefresh( $pathimg )
 				// Xóa CSDL file không còn tồn tại
 				foreach( $results as $title => $value )
 				{
-					$db->exec( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'" );
+					$db->query( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'" );
 				}
 			}
-			$db->exec( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did );
+			$db->query( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did );
 		}
 	}
 	else
 	{
 		// Xóa CSDL thư mục không còn tồn tại
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 	}
 }
 
@@ -520,8 +520,8 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		// Xóa CSDL thư mục không còn tồn tại
 		$did = $array_dirname[$dirname];
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 		unset( $array_dirname[$dirname] );
 	}
 	$result_new = array_diff( $real_dirlist, $dirlist );

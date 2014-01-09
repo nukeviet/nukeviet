@@ -34,10 +34,10 @@ while( $row = $sth->fetch() )
 
 	if( $weight == $new_weight ) ++$weight;
 
-	$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $weight . ' WHERE func_id=' . $row['func_id'] );
+	$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $weight . ' WHERE func_id=' . $row['func_id'] );
 }
 
-$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $new_weight . ' WHERE func_id=' . $fid );
+$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $new_weight . ' WHERE func_id=' . $fid );
 nv_del_moduleCache( 'modules' );
 
 include NV_ROOTDIR . '/includes/header.php';

@@ -29,11 +29,11 @@ if( $catid > 0 )
 			++$weight;
 			if( $weight == $new_vid ) ++$weight;
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE catid=" . intval( $row['catid'] );
-			$db->exec( $sql );
+			$db->query( $sql );
 		}
 
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $new_vid . " WHERE catid=" . intval( $catid );
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		nv_fix_cat_order();
 		$content = "OK_" . $parentid;
@@ -43,13 +43,13 @@ if( $catid > 0 )
 		if( $mod == "inhome" and ( $new_vid == 0 or $new_vid == 1 ) )
 		{
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET inhome=" . $new_vid . " WHERE catid=" . intval( $catid );
-			$db->exec( $sql );
+			$db->query( $sql );
 			$content = "OK_" . $parentid;
 		}
 		elseif( $mod == "numlinks" and $new_vid >= 0 and $new_vid <= 10 )
 		{
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET numlinks=" . $new_vid . " WHERE catid=" . intval( $catid );
-			$db->exec( $sql );
+			$db->query( $sql );
 			$content = "OK_" . $parentid;
 		}
 		elseif( $mod == "viewcat" and $nv_Request->isset_request( 'new_vid', 'post' ) )
@@ -61,7 +61,7 @@ if( $catid > 0 )
 				$viewcat = "viewcat_page_new";
 			}
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET viewcat=" . $db->quote( $viewcat ) . " WHERE catid=" . intval( $catid );
-			$db->exec( $sql );
+			$db->query( $sql );
 			$content = "OK_" . $parentid;
 		}
 	}

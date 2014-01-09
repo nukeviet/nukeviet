@@ -26,7 +26,7 @@ function nv_FixWeightCat( $parentid = 0 )
 	while( $row = $result->fetch() )
 	{
 		++$weight;
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ' WHERE id=' . $row['id'] );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ' WHERE id=' . $row['id'] );
 	}
 }
 
@@ -56,14 +56,14 @@ function nv_del_cat( $catid )
 	{
 		$ids = implode( ',', $ids );
 		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid IN (' . $ids . ')';
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid IN (' . $ids . ')';
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE catid=' . $catid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $catid;
 	$result = $db->query( $sql );
@@ -73,7 +73,7 @@ function nv_del_cat( $catid )
 	}
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_data, 'Delete Category', $title, $admin_info['userid'] );
 }
@@ -421,9 +421,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 groups_download=' . $db->quote( $array['groups_download'] ) . ',
 				 weight=' . $new_weight . '
 				 WHERE id=' . $catid;
-			$result = $db->exec( $sql );
 
-			if( ! $result )
+			if( ! $db->exec( $sql ) )
 			{
 				$error = $lang_module['error_cat5'];
 				$is_error = true;
@@ -620,9 +619,9 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	{
 		++$weight;
 		if( $weight == $new ) ++$weight;
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ' WHERE id=' . $row['id'] );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $weight . ' WHERE id=' . $row['id'] );
 	}
-	$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $new . ' WHERE id=' . $catid );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET weight=' . $new . ' WHERE id=' . $catid );
 
 	nv_del_moduleCache( $module_name );
 	die( 'OK' );
@@ -642,7 +641,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	$status = $row['status'] ? 0 : 1;
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET status=' . $status . ' WHERE id=' . $catid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	nv_del_moduleCache( $module_name );
 

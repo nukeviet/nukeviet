@@ -255,7 +255,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				if( $report and $array['is_del_report'] )
 				{
 					$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
-					$db->exec( $sql );
+					$db->query( $sql );
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
@@ -555,7 +555,7 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 
 	$status = $row['status'] ? 0 : 1;
 
-	$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id );
 	die( 'OK' );
 }
 
@@ -570,9 +570,9 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$row = $db->query( $query )->fetch();
 	if( empty( $row ) ) die( 'NO' );
 
-	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id );
-	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
-	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id );
 
 	nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid'] );
 	die( 'OK' );

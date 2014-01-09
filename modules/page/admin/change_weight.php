@@ -29,11 +29,11 @@ while( $row = $result->fetch() )
 	if( $weight == $new_weight ) ++$weight;
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
-	$db->exec( $sql );
+	$db->query( $sql );
 }
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $new_weight . ' WHERE id=' . $id;
-$db->exec( $sql );
+$db->query( $sql );
 
 nv_del_moduleCache( $module_name );
 

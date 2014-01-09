@@ -22,9 +22,7 @@ if( ! empty( $id ) )
 	{
 		$res = $db->exec( 'DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $id );
 
-		$db->exec( 'LOCK TABLE ' . NV_CRONJOBS_GLOBALTABLE . ' WRITE' );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE );
-		$db->exec( 'UNLOCK TABLE ' . NV_CRONJOBS_GLOBALTABLE );
+		$db->query( 'OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE );
 	}
 }
 

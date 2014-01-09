@@ -188,7 +188,7 @@ $del = $nv_Request->get_int( 'del', 'get' );
 
 if( ! empty( $del ) and ! empty( $cid ) )
 {
-	$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid );
+	$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid );
 	nv_save_file_banip();
 }
 

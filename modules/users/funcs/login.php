@@ -248,7 +248,7 @@ function openidLogin_Res1( $attribs )
 		if( $login_allowed )
 		{
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $nv_row['userid'] ) . ", " . $db->quote( $attribs['id'] ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
-			$db->exec( $sql );
+			$db->query( $sql );
 			if( intval( $nv_row['active'] ) != 1 )
 			{
 				openidLogin_Res0( $lang_module['login_no_active'] );
@@ -321,10 +321,10 @@ function openidLogin_Res1( $attribs )
 						}
 
 						$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->quote( $row['userid'] );
-						$db->exec( $sql );
+						$db->query( $sql );
 
 						$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $userid . ", " . $db->quote( $attribs['id'] ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
-						$db->exec( $sql );
+						$db->query( $sql );
 
 						$query = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $db->quote( $userid );
 						$result = $db->query( $query );
@@ -426,7 +426,7 @@ function openidLogin_Res1( $attribs )
 							{
 								$error = '';
 								$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $row['userid'] ) . ", " . $db->quote( $attribs['id'] ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
-								$db->exec( $sql );
+								$db->query( $sql );
 								validUserLog( $row, 1, $opid );
 							}
 						}
@@ -516,7 +516,7 @@ function openidLogin_Res1( $attribs )
 			$result->closeCursor();
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . intval( $row['userid'] ) . ", " . $db->quote( $reg_attribs['openid'] ) . ", " . $db->quote( $reg_attribs['opid'] ) . ", " . $db->quote( $reg_attribs['email'] ) . ")";
-			$db->exec( $sql );
+			$db->query( $sql );
 			validUserLog( $row, 1, $reg_attribs['opid'] );
 			$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 

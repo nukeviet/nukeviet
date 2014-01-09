@@ -78,10 +78,10 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $weight . " WHERE qid=" . $row['qid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $new_vid . " WHERE qid=" . $qid;
-	$db->exec( $sql );
+	$db->query( $sql );
 	die( 'OK' );
 }
 

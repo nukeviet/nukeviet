@@ -44,7 +44,7 @@ function validUserLog( $array_user, $remember, $opid )
 
 	$user = nv_base64_encode( serialize( $user ) );
 
-	$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
 		checknum = " . $db->quote( $checknum ) . ",
 		last_login = " . NV_CURRENTTIME . ",
 		last_ip = " . $db->quote( $client_info['ip'] ) . ",

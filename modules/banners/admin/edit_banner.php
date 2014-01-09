@@ -201,7 +201,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->quote( $file_alt ) . ", imageforswf=" . $db->quote( $imageforswf ) . ",
 				 click_url=" . $db->quote( $click_url ) . ", target=" . $db->quote( $target ) . ",
 				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
-			$db->exec( $sql );
+			$db->query( $sql );
 
 			if( $pid_old != $pid )
 			{

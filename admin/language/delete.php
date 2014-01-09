@@ -91,9 +91,9 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'deleteallfile' . sess
 
 		if( $err == 0 )
 		{
-			$db->exec( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . '_file DROP author_' . $dirlang );
-			$db->exec( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP lang_' . $dirlang );
-			$db->exec( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP update_' . $dirlang );
+			$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . '_file DROP author_' . $dirlang );
+			$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP lang_' . $dirlang );
+			$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP update_' . $dirlang );
 
 			$contents = $lang_module['nv_lang_deleteok'];
 		}

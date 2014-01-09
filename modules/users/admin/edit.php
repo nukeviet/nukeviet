@@ -220,7 +220,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				}
 			}
 
-			$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
 				username=" . $db->quote( $_user['username'] ) . ",
 				md5username='" . nv_md5safe( $_user['username'] ) . "',
 				password=" . $db->quote( $password ) . ",
@@ -238,7 +238,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			if( ! empty( $array_field_config ) )
 			{
-				$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $userid );
+				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $userid );
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid'] );

@@ -21,7 +21,7 @@ if( ! empty( $listcid ) )
 
 	foreach( $cid_array as $cid )
 	{
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET status=' . $status . ' WHERE cid=' . $cid );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET status=' . $status . ' WHERE cid=' . $cid );
 	}
 
 	// Xac dinh ID cac bai viet
@@ -45,11 +45,11 @@ if( ! empty( $listcid ) )
 	foreach( $array_id as $id )
 	{
 		$numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments where id = ' . $id . ' AND status=1' )->fetchColumn();
-		$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id );
 		$array_catid = $array_listcatid[$id];
 		foreach( $array_catid as $catid_i )
 		{
-			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id );
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id );
 		}
 	}
 

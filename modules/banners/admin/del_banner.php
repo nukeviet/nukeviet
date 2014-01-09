@@ -26,10 +26,10 @@ if( ! empty( $row ) )
 		nv_deletefile( NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'], false );
 	}
 	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
-	$result1 = $db->exec( $sql );
+	$db->query( $sql );
 
 	$sql = 'DELETE FROM ' . NV_BANNERS_GLOBALTABLE. '_click WHERE bid=' . $id;
-	$result = $db->exec( $sql );
+	$db->query( $sql );
 
 	nv_CreateXML_bannerPlan();
 

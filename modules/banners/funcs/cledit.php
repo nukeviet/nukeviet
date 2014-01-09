@@ -47,7 +47,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$sql .= "full_name=" . $db->quote( $full_name ) . ", email=" . $db->quote( $email ) . ", website=" . $db->quote( $website ) . ",
 		location=" . $db->quote( $location ) . ", yim=" . $db->quote( $yim ) . ", phone=" . $db->quote( $phone ) . ", fax=" . $db->quote( $fax ) . ",
 		mobile=" . $db->quote( $mobile ) . " WHERE id=" . $banner_client_info['id'];
-	$db->exec( $sql );
+	$db->query( $sql );
 	die( "OK|action" );
 }
 

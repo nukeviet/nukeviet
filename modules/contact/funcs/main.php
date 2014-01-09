@@ -166,7 +166,7 @@ if( ! empty( $array_rows ) )
 				(" . $fpart . ", " . $db->quote( $ftitle ) . ", " . $db->quote( $fcon ) . ",
 				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->quote( $fname ) . ", " . $db->quote( $femail ) . ",
 				" . $db->quote( $fphone ) . ", " . $db->quote( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
-			$db->exec( $sql );
+			$db->query( $sql );
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
 			$fcon .= "<br /><br />----------------------------------------<br /><br />";

@@ -33,11 +33,11 @@ if( $mod == 'weight' and $new_vid > 0 )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . $row['bid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET weight=' . $new_vid . ' WHERE bid=' . $bid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	$content = 'OK_' . $bid;
 }
@@ -45,13 +45,13 @@ elseif( $mod == 'adddefault' and $bid > 0 )
 {
 	$new_vid = ( intval( $new_vid ) == 1 ) ? 1 : 0;
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET adddefault=' . $new_vid . ' WHERE bid=' . $bid;
-	$db->exec( $sql );
+	$db->query( $sql );
 	$content = 'OK_' . $bid;
 }
 elseif( $mod == 'numlinks' and $new_vid >= 0 and $new_vid <= 50 )
 {
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat SET numbers=' . $new_vid . ' WHERE bid=' . $bid;
-	$db->exec( $sql );
+	$db->query( $sql );
 	$content = 'OK_' . $bid;
 }
 

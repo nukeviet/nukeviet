@@ -43,11 +43,11 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 
 		$new_bid = $db->insert_id( $_sql, 'bid', $data );
 
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET bid=' . $new_bid . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
 
 		if( ! empty( $row['all_func'] ) )
 		{
-			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid );
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid );
 		}
 
 		nv_del_moduleCache( 'themes' );

@@ -38,7 +38,7 @@ if( $db->exec( $sql ) )
 		$arr_block[] = $row['id'];
 	}
 	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item= '" . implode( ',', $arr_block ) . "' WHERE id=" . $mid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	// Cap nhat cho menu cha
 	if( $parentid > 0 )
@@ -50,7 +50,7 @@ if( $db->exec( $sql ) )
 			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem=' . $db->quote( $subitem ) . ' WHERE id=' . $parentid;
-			$db->exec( $sql );
+			$db->query( $sql );
 		}
 	}
 }

@@ -100,7 +100,7 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 
 						if( $status )
 						{
-							$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits+1 WHERE id=' . $id );
+							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits+1 WHERE id=' . $id );
 						}
 
 					}

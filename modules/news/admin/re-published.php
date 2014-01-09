@@ -83,10 +83,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 					$s_ud .= $key . " = '" . $value . "', ";
 				}
 				$s_ud .= "edittime = '" . NV_CURRENTTIME . "'";
-				$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET " . $s_ud . " WHERE id =" . $id );
+				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET " . $s_ud . " WHERE id =" . $id );
 				foreach( $arr_catid as $catid_i )
 				{
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET " . $s_ud . " WHERE id =" . $id );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET " . $s_ud . " WHERE id =" . $id );
 				}
 				$publ_array[] = $id;
 			}

@@ -109,7 +109,7 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 		++$order;
 		++$weight;
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE id=" . intval( $catid_i );
-		$db->exec( $sql );
+		$db->query( $sql );
 		$order = nv_fix_cat_order( $mid, $catid_i, $order, $lev );
 	}
 

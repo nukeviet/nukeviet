@@ -167,7 +167,7 @@ function nv_dump_save( $params )
 		return false;
 	}
 
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$db->query( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
 
 	$a = 0;
 	foreach( $tables as $table )
@@ -313,7 +313,7 @@ function nv_dump_restore( $file )
 					$sql = preg_replace( array( "/\{\|prefix\|\}/", "/\{\|lang\|\}/" ), array( $db_config['prefix'], NV_LANG_DATA ), $sql );
 					try
 					{
-						$db->exec( $sql );
+						$db->query( $sql );
 					}
 					catch (PDOException $e)
 					{

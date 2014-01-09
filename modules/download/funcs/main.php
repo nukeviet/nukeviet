@@ -64,7 +64,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 					$total = $total + $point;
 					++$click;
 
-					$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail=' . $db->quote( $total . '|' . $click ) . ' WHERE id=' . $id );
+					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail=' . $db->quote( $total . '|' . $click ) . ' WHERE id=' . $id );
 				}
 
 				if( $total and $click )

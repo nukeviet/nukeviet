@@ -81,9 +81,9 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
+		$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
 	}
-	$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $new_vid . ' WHERE gid=' . $gid );
+	$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $new_vid . ' WHERE gid=' . $gid );
 	die( 'OK' );
 }
 
@@ -98,7 +98,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $gid )
 	{
-		$db->exec( 'UPDATE ' . NV_MODULES_TABLE . ' SET gid=0 WHERE gid=' . $gid );
+		$db->query( 'UPDATE ' . NV_MODULES_TABLE . ' SET gid=0 WHERE gid=' . $gid );
 		nv_del_moduleCache( 'modules' );
 
 		$query = 'DELETE FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid;
@@ -110,7 +110,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 			while( $row = $result->fetch() )
 			{
 				++$weight;
-				$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
+				$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
 			}
 			$result->closeCursor();
 			nv_del_moduleCache( 'seotools' );

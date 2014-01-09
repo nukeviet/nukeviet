@@ -16,8 +16,8 @@ list( $bid, $theme, $position ) = $db->query( 'SELECT bid, theme, position FROM 
 
 if( intval( $bid ) > 0 )
 {
-	$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid );
-	$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid );
+	$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid );
+	$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid );
 
 	// reupdate
 	$weight = 0;
@@ -28,7 +28,7 @@ if( intval( $bid ) > 0 )
 	while( list( $bid_i ) = $result->fetch( 3 ) )
 	{
 		++$weight;
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 	}
 
 	$func_id_old = $weight = 0;
@@ -50,13 +50,13 @@ if( intval( $bid ) > 0 )
 			$func_id_old = $func_id_i;
 		}
 
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 	}
 
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	echo $lang_module['block_delete_success'];
 }

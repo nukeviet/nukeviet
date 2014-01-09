@@ -218,7 +218,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			$editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
 			$delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
 			$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-			$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE pid =" . $pid );
+			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE pid =" . $pid );
 		}
 
 		nv_del_moduleCache( 'settings' );
@@ -260,7 +260,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 		}
 		else
 		{
-			$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post WHERE pid = " . $pid );
+			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post WHERE pid = " . $pid );
 		}
 	}
 

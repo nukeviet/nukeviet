@@ -25,7 +25,7 @@ if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)
 }
 if( isset( $array_dirname[$path] ) )
 {
-	$db->exec( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $array_dirname[$path] . " AND title='" . $file . "'" );
+	$db->query( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $array_dirname[$path] . " AND title='" . $file . "'" );
 }
 
 nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_delfile'], $path . '/' . $file, $admin_info['userid'] );

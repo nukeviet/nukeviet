@@ -42,7 +42,7 @@ while( $cron_row = $cron_result->fetch() )
 		}
 		if( ! nv_function_exists( $cron_row['run_func'] ) )
 		{
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
 			continue;
 		}
 
@@ -58,21 +58,21 @@ while( $cron_row = $cron_result->fetch() )
 		$result2 = call_user_func_array( $cron_row['run_func'], $params );
 		if( ! $result2 )
 		{
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
 		}
 		else
 		{
 			if( $cron_row['del'] )
 			{
-				$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $cron_row['id'] );
+				$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $cron_row['id'] );
 			}
 			elseif( empty( $cron_row['inter_val'] ) )
 			{
-				$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
+				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
 			}
 			else
 			{
-				$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
+				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
 			}
 		}
 		unlink( $check_run_cronjobs );

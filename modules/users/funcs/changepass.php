@@ -60,7 +60,7 @@ if( $checkss == $array_data['checkss'] )
 		$new_password = $crypt->hash( $array_data['new_password'] );
 
 		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password=" . $db->quote( $new_password ) . " WHERE userid=" . $user_info['userid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		$contents = user_info_exit( $lang_module['change_pass_ok'] );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";

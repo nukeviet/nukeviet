@@ -128,7 +128,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 							}
 
 							$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->quote( $openid ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
-							$db->exec( $sql );
+							$db->query( $sql );
 
 							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 
@@ -227,7 +227,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 					}
 
 					$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->quote( $openid ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
-					$db->exec( $sql );
+					$db->query( $sql );
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 

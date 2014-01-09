@@ -31,9 +31,9 @@ if( $topicid > 0 )
 			$arr_catid = explode( ',', $row['listcatid'] );
 			foreach( $arr_catid as $catid_i )
 			{
-				$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET topicid = 0 WHERE id =' . $row['id'] );
+				$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET topicid = 0 WHERE id =' . $row['id'] );
 			}
-			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid = 0 WHERE id =' . $row['id'] );
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid = 0 WHERE id =' . $row['id'] );
 		}
 		$check_del_topicid = true;
 	}

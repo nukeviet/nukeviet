@@ -24,25 +24,25 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$delete = $nv_Request->get_int( 'delete', 'post', 0 );
 		if( $delete )
 		{
-			$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid=' . $cid );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE cid=' . $cid );
 		}
 		else
 		{
 			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
-			$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->quote( $content ) . ', status=' . $active . ' WHERE cid=' . $cid );
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->quote( $content ) . ', status=' . $active . ' WHERE cid=' . $cid );
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat
 		$array_catid = explode( ',', $listcatid );
 		$numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments where id= ' . $id . ' AND status=1' )->fetchColumn();
 		$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id;
-		$db->exec( $query );
+		$db->query( $query );
 		foreach( $array_catid as $catid_i )
 		{
 			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET hitscm=' . $numf . ' WHERE id=' . $id;
-			$db->exec( $query );
+			$db->query( $query );
 		}
 		// Het Cap nhat lai so luong comment duoc kich hoat
 	}

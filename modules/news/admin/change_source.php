@@ -32,11 +32,11 @@ if( $mod == 'weight' and $new_vid > 0 )
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . $row['sourceid'];
-		$db->exec( $sql );
+		$db->query( $sql );
 	}
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_sources SET weight=' . $new_vid . ' WHERE sourceid=' . $sourceid;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	$content = 'OK_' . $sourceid;
 	nv_del_moduleCache( $module_name );

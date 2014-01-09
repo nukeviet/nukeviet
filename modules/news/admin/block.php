@@ -50,7 +50,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( 'intval', $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
+		$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );

@@ -20,7 +20,7 @@ $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $new_status . ' WHERE id=' . $id;
-$db->exec( $sql );
+$db->query( $sql );
 nv_del_moduleCache( $module_name );
 
 include NV_ROOTDIR . '/includes/header.php';

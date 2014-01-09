@@ -27,14 +27,14 @@ if( $order > 0 and $bid > 0 )
 	{
 		++$weight;
 		if( $weight == $order ) ++$weight;
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id );
 	}
 
-	$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $order . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
+	$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $order . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
 
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	echo 'OK';
 }

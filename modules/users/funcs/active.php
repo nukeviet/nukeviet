@@ -30,7 +30,7 @@ if( empty( $userid ) or empty( $checknum ) )
 
 $del = NV_CURRENTTIME - 86400;
 $sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE regdate < " . $del;
-$db->exec( $sql );
+$db->query( $sql );
 
 $sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $userid;
 $row = $db->query( $sql )->fetch();
@@ -55,7 +55,7 @@ if( $checknum == $row['checknum'] )
 		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET email=" . $db->quote( $row['email'] ) . " WHERE userid=" . $userid_change_email;
 		if( $db->exec( $sql ) )
 		{
-			$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->quote( $userid ) );
+			$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->quote( $userid ) );
 			$check_update_user = true;
 		}
 	}
@@ -89,14 +89,14 @@ if( $checknum == $row['checknum'] )
 
 			if( $db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
 			{
-				$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
+				$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
 				$check_update_user = true;
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . " | " . $client_info['ip'], 0 );
 			}
 			else
 			{
-				$db->exec( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] );
+				$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] );
 			}
 		}
 	}

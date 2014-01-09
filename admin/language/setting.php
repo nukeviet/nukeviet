@@ -24,7 +24,7 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
 
-	$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'" );
 
 	nv_save_file_config_global();
 

@@ -97,7 +97,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login=' . $db->quote( $login ) . ', pass=' . $db->quote( $pass ) . ', full_name=' . $db->quote( $full_name ) . ',
 			 email=' . $db->quote( $email ) . ', website=' . $db->quote( $website ) . ', location=' . $db->quote( $location ) . ', yim=' . $db->quote( $yim ) . ',
 			 phone=' . $db->quote( $phone ) . ', fax=' . $db->quote( $fax ) . ', mobile=' . $db->quote( $mobile ) . ', uploadtype=' . $db->quote( $uploadtype ) . ' WHERE id=' . $id;
-		$db->exec( $sql );
+		$db->query( $sql );
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );
 		die();

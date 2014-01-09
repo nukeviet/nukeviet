@@ -76,7 +76,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			$xtpl->parse( 'main.delfile.loop' );
 		}
 		$timestamp = intval( $global_config['timestamp'] ) + 1;
-		$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $timestamp . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'" );
+		$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $timestamp . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'" );
 		nv_save_file_config_global();
 	}
 

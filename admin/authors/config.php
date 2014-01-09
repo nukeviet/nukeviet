@@ -69,7 +69,7 @@ if( ! empty( $delid ) )
 	$sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
 	$keyname = $db->query( $sql )->fetchColumn();
 
-	$db->exec( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid );
+	$db->query( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid );
 	nv_save_file_admin_config();
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . ' ' . $lang_module['config'], ' keyname : ' . $keyname, $admin_info['userid'] );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );

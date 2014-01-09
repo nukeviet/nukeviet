@@ -118,18 +118,18 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 				nv_del_moduleCache( 'modules' );
 			}
 		}
-		$db->exec( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id );
+		$db->query( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id );
 		if( $action_account == 1 )
 		{
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET active=0 WHERE userid=' . $admin_id );
 		}
 		elseif( $action_account == 2 )
 		{
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ')' );
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id );
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id );
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id );
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ')' );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id );
 			if( ! empty( $row_user['photo'] ) and is_file( NV_ROOTDIR . '/' . $row_user['photo'] ) )
 			{
 				@nv_deletefile( NV_ROOTDIR . '/' . $row_user['photo'] );
@@ -142,7 +142,7 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 		}
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_admin_del'], 'Username: ' . $row_user['username'] . ', ' . $array_action_account[$action_account], $admin_info['userid'] );
 
-		$db->exec( 'OPTIMIZE TABLE ' . NV_AUTHORS_GLOBALTABLE );
+		$db->query( 'OPTIMIZE TABLE ' . NV_AUTHORS_GLOBALTABLE );
 
 		if( $sendmail )
 		{

@@ -45,7 +45,7 @@ else
 	{
 		if( $id > 0 )
 		{
-			$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id );
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_logs WHERE id=' . $id );
 			++$number_del;
 		}
 	}

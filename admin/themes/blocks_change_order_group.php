@@ -26,13 +26,13 @@ if( $order > 0 and $bid > 0 )
 	{
 		++$weight;
 		if( $weight == $order ) ++$weight;
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 	}
 
-	$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $order . ' WHERE bid=' . $bid );
+	$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $order . ' WHERE bid=' . $bid );
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
 	echo 'OK';
 }
 else

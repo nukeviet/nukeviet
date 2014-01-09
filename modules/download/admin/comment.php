@@ -123,8 +123,8 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 		die( 'NO' );
 	}
 
-	$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits-1 WHERE id=' . $fid );
-	$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE id=' . $id );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits-1 WHERE id=' . $fid );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE id=' . $id );
 
 	nv_del_moduleCache( $module_name );
 	die( 'OK' );
@@ -157,10 +157,10 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 		$status = 1;
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits+1 WHERE id=' . $fid;
 	}
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET status=' . $status . ' WHERE id=' . $id;
-	$db->exec( $sql );
+	$db->query( $sql );
 
 	nv_del_moduleCache( $module_name );
 	die( 'OK' );

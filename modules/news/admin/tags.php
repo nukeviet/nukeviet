@@ -72,8 +72,8 @@ if( $nv_Request->isset_request( 'del_tid', 'get' ) )
 	$tid = $nv_Request->get_int( 'del_tid', 'get', 0 );
 	if( $tid )
 	{
-		$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid=' . $tid );
-		$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid=' . $tid );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid );
 	}
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_show_tags_list();

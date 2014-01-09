@@ -94,11 +94,11 @@ if( defined( 'NV_BANNER_WEIGHT' ) )
 			++$weight;
 			if( $weight == $new_weight ) ++$weight;
 			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight=" . $weight . " WHERE id=" . $row['id'];
-			$db->exec( $sql );
+			$db->query( $sql );
 		}
 
 		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight=" . $new_weight . " WHERE id=" . $id;
-		$db->exec( $sql );
+		$db->query( $sql );
 
 		nv_CreateXML_bannerPlan();
 	}

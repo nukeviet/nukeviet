@@ -102,12 +102,12 @@ if( ! empty( $submit ) )
 				if( $title != '' )
 				{
 					$url = nv_unhtmlspecialchars( strip_tags( $array_urlvote[$id] ) );
-					$db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->quote( $title ) . ", url = " . $db->quote( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
+					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->quote( $title ) . ", url = " . $db->quote( $url ) . " WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
 					++$maxoption_data;
 				}
 				else
 				{
-					$db->exec( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
+					$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id ='" . intval( $id ) . "' AND vid =" . $vid );
 				}
 			}
 

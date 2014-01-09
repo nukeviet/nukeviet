@@ -29,7 +29,7 @@ if( $id and ! in_array( $id, $dlrp ) )
 	if( $id )
 	{
 		$query = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', ' . $db->quote( $client_info['ip'] ) . ', ' . NV_CURRENTTIME . ')';
-		$db->exec( $query );
+		$db->query( $query );
 	}
 }
 

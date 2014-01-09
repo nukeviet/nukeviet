@@ -55,7 +55,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				'siteterms_" . NV_LANG_DATA . "', " . $db->quote( $content ) . ", " . NV_CURRENTTIME . ")";
 		}
 
-		if( $db->exec( $query ) > 0 )
+		if( $db->exec( $query ) )
 		{
 			$error = $lang_module['saveok'];
 		}

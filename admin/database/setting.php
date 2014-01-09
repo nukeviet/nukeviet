@@ -40,7 +40,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_global['dump_interval'] = $dump_interval;
 		$dump_interval = $dump_interval * 1440;
-		$db->exec( "UPDATE " . NV_CRONJOBS_GLOBALTABLE . " SET inter_val=" . $dump_interval . " WHERE run_file = 'dump_autobackup.php' AND run_func = 'cron_dump_autobackup'" );
+		$db->query( "UPDATE " . NV_CRONJOBS_GLOBALTABLE . " SET inter_val=" . $dump_interval . " WHERE run_file = 'dump_autobackup.php' AND run_func = 'cron_dump_autobackup'" );
 	}
 
 	nv_save_file_config_global();
