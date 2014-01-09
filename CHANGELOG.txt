@@ -1,0 +1,324 @@
+CHANGE LOG: NUKEVIET CMS 3.x
+http://nukeviet.vn
+
+NUKEVIET 3.4.02 (3.4.02.r1929)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
+- Fix for system core, captcha, function delete theme, install, module news, download, weblinks
+- Delete block_blocknews (exit with block_groups) in module news. 
+- Opmtimize module weblinks, news, voting, users, download
+- jQuery v1.8.2, jQuery UI 1.8.24
+- Jwplayer 5.10.2295 
+- CKEditor 3.6.5
+- Add Bing site diagnostic, Remove yahoo diagnostic. 
+- Fix check Google PageRank, Google BackLink and Google Indexed.
+- Add new feature for module users (list member)
+- Update Shop to Shop Pro and remove module Shop from default NukeViet (To release from NukeViet Store).
+- Understanding the Windows 8 ISO, ODP file
+- Support IPv6
+- Format code for standard and a few small changes...
+
+NUKEVIET 3.4.01 (3.4.01.r1758)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1723 to r1758)
+- Add Alert when the browser disable JavaScript (Features appear in NukeViet3 closebeta).
+- Update Ajax search for the article source.
+- Fix Optimize CSS and something...
+
+NUKEVIET 3.4 RC1 (3.4.00.r1722)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1501 to r1722)
+- Fix database birthday users.
+- Fix Statistics module.
+- Module contact: fix send mail with phone. Add features selected by ID
+- Module news: add image for topics.
+- Add Google Custom Search.
+- Upgrade module voting 3.1, add block fixed votes and display home module.
+- Fix SEO: Add ALT content for IMG tag, fix breadcrumbs (css class) for google search.
+- Active current menu to top of menu.
+- Add module name at Admin Control Panel.
+- Module download: add global.new_files.php
+- Add cool php captcha 0.3.
+- Update module menu.
+- Add feature switching mobile and desktop interface.
+- New mobile interface and full support.
+- Module upload: add function automatically insert logo on the picture.
+- CKEditor 3.6.3 revision 7365
+- jQuery v1.7.1, jQuery UI 1.8.18
+- Auto detect FTP remove path.
+- Module banner: Add link click for SWF file
+- Add Quick access pending work from module siteinfo (admin control panel).
+- Security fix.
+- Add function Upgrade and Update
+- Fix features, Optimize code, update many module and add more features... 
+
+NUKEVIET 3.3.06.r1500
+CODE: http://code.google.com/p/nuke-viet/source/list (r1476 to r1500)
+- Fix Statistics module.
+- Require PHP 5.2.
+- Fix some features.
+
+NUKEVIET 3.3 Official (3.3.05.r1475)
+CODE: http://code.google.com/p/nuke-viet/source/list (r1204 to r1475)
+Add features:
+- Additional functions to find and insert member ID (Admin Control Panel).
+- Add cron auto delete cache 
+- Support OpenID from http://nukeviet.vn 
+- Support mobile theme & config theme for mobile 
+- Add management feature tag "TITLE", and more features for SEO
+- Module webtools: add manager file robots.txt 
+- Auto replace iframe youtube (by jwplayer)
+- Add Lunar Calendar function.
+- Support Detect language by cookie, IP 
+- Add timezone name to countries.php 
+- Add option to delete all site logs 
+- Add option "site timezone by timezone of visitor's country" 
+- Add option "site timezone by user's PC timezone" 
+- Add features: insert logo into the image
+- Add features: change logo from the admin control panel (config site)
+Fix bug:
+- Module Shop: RSS link, check unit,  fix exchange money 
+- Module menu: Fix error can not delete menu, edit menu
+- Fix install tool.
+- fix clear system 
+- Fix delete module.
+- fix setup layout.
+- fix robots.txt multi-domain site 
+- Module Upload: fix upload file .jpeg 
+Optimize:
+- Optimize and Compress file code NukeViet 
+- Module News and block of module.
+- Optimize PHP Code.
+- Optimize site for SEO (site description, site keywords ...)
+- Optimize module upload
+- Set collation for mysql 
+- Optimize process of determining the country name 
+- Optimize theme 
+Upgrades, updates:
+- Language: Việt Nam, English, Français
+- CKEditor Build r7328 
+- function nv_checkmobile
+- jQuery v1.7, jQuery UI 1.8.16
+- Module Shop V3.0.02 
+- Fix get Google PageRank, Google BackLink and Google Indexed
+Other changes:
+- Module News: Sort comment DESC 
+- Add sitemap xml for module Shop.
+- Update admin toolbar 
+- Change module search 
+- Change page function 
+Remove features:
+- Remove function update revision 
+- Remove IP Library
+
+NUKEVIET 3.2 Official (3.2.00.r1203)
+CODE: http://code.google.com/p/nuke-viet/source/list (r931 to r1203)
+SYSTEM
+	Fix Duplicate title tags & meta descriptions.
+	Sửa chức năng cập nhật theo revision.
+	Cấu hình domain cho phép sử dụng localhost.
+	cau hinh cach cap nhat cac goi ngon ngu theo revision.
+	Sửa lỗi 404 khi url có chứa các từ đặc biệt.
+	Cập nhật trình soạn thảo, Cấu hình lại 1 số chức năng của trình soạn thảo, Sửa upload nhanh trong trình soạn thảo.
+	Cập nhật JW Player 5.5 Bổ sung tính năng chọn ảnh minh họa cho plugin JW Player của trình soạn thảo.
+	Kiểm tra trạng thái máy chủ, nếu > 80% sẽ thông báo "Server too busy. Please try again later".
+	Chỉnh sửa để có thể tùy biến thanh công cụ của admin.
+	Xác định lại theme đang dùng trong lúc cấu hình.
+	Sửa lỗi khi cài mới module không nhận giao diện.
+	Sửa module rss và các module có liên quan đến rss.
+	Xóa Cache của module khi thay đổi cấu hình block.
+	Fix lỗi tại file image.class.php
+	Sửa chmod khi dùng FTP.
+	Sửa cài đặt module: Chấp nhận các module không có chức năng ngoài site.
+	Sửa hệ thống để module không bắt buộc có các function ngoài site.
+	Sửa các block menu khi lấy giao diện theo module.
+	Cập nhật jQuery, và các plugin: jQuery v1.5.2 jQuery UI.
+	class phpsvnclient: trong trường hợp commit file sử dụng Replace.
+	Nâng cấp openid.class.php
+	Sửa lại function kiểm tra mimetype khi upload file.
+Update  Modules
+	Thêm chức năng xóa module không sử dụng (Xóa các file của module)
+	Tách HTML và PHP.
+Rewitte
+	Rewite cho các máy chủ không hỗ trợ.
+	Sửa XML Sitemap Index trên các hosting không hỗ trợ rewitte đầy đủ.
+	Sửa Sitemap.xml để Google Webmaster Tools nhận dễ dàng hơn.
+	Sửa lỗi xác định sai module khi bật tính năng rewite.
+	Cải tiến để có thể rewrite URL riêng lẻ.
+	Rewite các link trong khi gửi mail.
+	Thêm RewriteBase vào file .htaccess
+	Sửa rewite trong trường hợp hosting không hỗ trợ zlib dẫn đến không load được css, js.
+	Sửa ghi rewite trên iis7 không bị mất các cấu hình trong file web.config, Sửa lỗi kiểm tra rewite trên IIS7.
+Giao diện
+	Tách ngôn ngữ của các block ra file riêng.
+	theme default: sửa lỗi không rewite link thống kê truy cập.
+	Sửa lỗi không hiển thị nội dung của block html có các ký tự đặc biệt.
+	Sửa quản lý giao diện: Xóa các block khi xóa giao diện.
+Công cụ web	
+	Thêm chức năng Xóa ip logs.
+	Thêm phần chọn tất cả các công việc khi dọn dẹp hệ thống.
+	Cấu hình chức năng kiểm tra phiên bản nukeviet.
+	Cập nhật chức năng nâng cấp theo revision: Chỉ lấy các bản cập nhật trong thư mục /trunk/nukeviet3.2
+	Sửa chức năng cập nhật Revision, khi xảy ra đổi tên các thư mục của hệ thống.
+	Cập nhật theo Revision, trên các hosting cần FTP để tạo thư mục và di chuyển file.
+Nhật ký hệ thống
+	Ghi lại nhật kí hệ thống ở những sự kiện quan trọng.
+	Thêm công cụ lọc nhật kí hệ thống, thay đổi kiểu sắp xếp nhật kí mặc định.
+Update module Users
+	Cho phép thành viên đăng ký vào nhóm công cộng.
+	Thêm cấu hình cho thành viên lấy lại mật khẩu không bị hỏi câu hỏi bí mật.
+	Sửa khi tích hợp diễn đàn, không cho thêm sửa thành viên.
+	Fix lỗi GodAdmin không xóa được admin.
+	Fix lỗi không kích hoạt được tài khoản thành viên.
+	tắt chức năng autocomplete khi sửa tài khoản thành viên.
+	Fix lỗi không thay đổi được email khi vẫn đăng nhập thành viên.
+	Loại bỏ các dấu chấm trong phần trước ký tự @ của email khi kiểm tra tính hợp lệ (uname@gmail.com = u.name@gmail.com).
+	Block login: Sửa đường dẫn ảnh avata.
+	Block login: Sửa đường dẫn ảnh OpenID.
+Module News: 
+	Sửa thời gian đăng bài viết cần lớn hơn thời gian tạo bài viết.
+	Xóa cache của module thi thành viên xóa bài viết.
+	Sửa hiện thị hình không đúng với bài viết ở block headline.
+	Lỗi hiển thị tiêu đề bài viết chưa đăng trong sitemap
+	Sửa cấu hình phần check copyright trong content.php
+	Sửa blocknews lỗi khi dùng module ảo.
+	Sửa lỗi phân trang Khi cấu hình module "Theo tiêu đề, mới lên trên".
+	Sửa link rss của module ảo news trong giao diện modern.
+	Sửa lỗi không sửa được nguồn tin.
+	Sửa xóa ảnh thumb khi xóa bài viết.
+	Sửa giao form comment cho giao diện moderm.
+	Chỉnh sửa hiển thị comment, sửa phân trang trong quản lý bình luận.
+	Tách HTML và PHP.
+Module Menu
+	Thêm chức năng quản lý các menu.
+	Fix lỗi các function hiển thị trong menu của module User (tùy biến theo trang thái Đăng nhập).
+	Sửa lại tên hàm các menu để có thể dùng 1 lúc nhiều loại menu.
+	Block menu smooth_navigational không hiển thị sub menu của module weblinks.
+Module Language: 
+	Quản lý ngôn ngữ của block.
+Module Faq: 
+	Sửa module để không bắt buộc nhập câu hỏi vào chủ đề, và thêm cách trình bày.
+Module Download: Sửa đường đẫn đến avatar của thành viên.
+Module About: 	
+	Fix lỗi hiển thị cả bài bị đình chỉ trong module About.
+Nhập chung dự án MODULE SHOP với NukeViet 3.2.
+CODE: http://code.google.com/p/nuke-viet/source/list (r2)
+	Tính năng chính:
+	1. Tổ chức trình bày gian hàng theo tác tiêu chí: Loại sản phẩm, nhóm sản phẩm, sản phẩm mới cập nhật…
+	2. Các tính năng phục vụ xem và chọn hàng: danh mục loại sản phẩm, giỏ hàng, sản phẩm cùng loại, sản phẩm mẫu, sản phẩm xem nhiều nhất…
+	3. Đặt hàng: đưa vào giỏ hàng với những sản phẩm cho phép đặt hàng.
+	4. Thanh toán trực tuyến bằng thẻ ATM qua hệ thống thanh toán của NganLuong.VN
+	5. Gửi đơn đặt hàng: thành viên website gửi đơn đặt hàng.
+	6. Lịch sử giao dịch: hiển thị lịch sử giao dịch của thành viên.
+	Các chức năng quản trị hệ thống bao gồm:
+	1. Quản lý đơn vị tiền tệ: cho phép thêm, sửa, xóa các đơn vị tiền tệ.
+	2. Quản lý cổng thanh toán tích hợp: cấu hình các cổng thanh toán nếu có sử dụng 1 hoặc nhiều cổng thanh toán trực tuyến.
+	3. Cấu hình module: thiết lập các thông số cho hệ thống bán hàng
+	4. Quản lý đơn vị sản phẩm: thêm sửa xóa đơn vị sản phẩm (cái, chiếc, con…)
+	5. Quản lý danh mục loại sản phẩm: thêm, sửa, xóa danh mục loại sản phẩm…
+	6. Quản lý nhóm sản phẩm (theo tiêu chí): thêm, sửa, xóa các nhóm sản phẩm.
+	7. Quản lý các block (nhóm sản phẩm).
+	8. Quản lý danh sách hãng sản xuất.
+	9. Quản lý danh sách các sản phẩm: thêm, sửa, xóa, tìm kiếm sản phẩm
+	10. Quản lý đơn đặt hàng và in hóa đơn.
+Sửa lỗi module Shop:
+	Fix lỗi phân trang.
+	Tự động cắt ngắn giới thiệu khi hiển thị.
+	Cắt ngắn giới thiệu nếu vượt quá độ dài cho phép tránh lỗi không xác định.
+	Fix lỗi comment cho sản phẩm.
+
+NUKEVIET 3.1 Official version (3.1.03.r930)
+CODE: http://code.google.com/p/nuke-viet/source/list (r784 to r930)
+- Fix features.
+- jQuery v1.4.4
+- And more... 
+
+NUKEVIET 3.1.0 (beta)
+CODE: http://code.google.com/p/nuke-viet/source/list (r469 to r783)
+1. Fix các lỗi và tối ưu các tính năng cũ.
+2. Module News:
+2.1. Cho phép hiển thị ảnh minh họa ngoài site.
+2.2. Thêm chức năng đăng/sửa/xóa bài dành cho thành viên.
+2.3. Bổ sung cấu hình trình bày theo lưới, theo list bài viết.
+3. Tăng cường hệ thống cache, Nén CSS, JavaScript... đê rtawng tốc độ nạp trang.
+4. Thêm tính năng "Xóa toàn bộ file tạm" cho admin tối cao.
+5. Thêm Mã Theo dõi Google Analytics http://code.google.com/p/nuke-viet/source/detail?r=556
+6. Thêm các tính năng phục vụ SEO:
+6.1. Thêm chức năng quản lý các meta-tags
+6.2. Tạo tự động Sitemap file dành cho các máy chủ tìm kiếm.
+6.3. Thêm Sitemap Ping Service (Gửi các file Sitemap đến các máy chủ tìm kiếm bằng hình thức PING.
+6.4. Đánh giá site theo các chỉ số.
+6.5. Kiểm tra SEO theo từ khóa.
+7. Chức năng nâng cấp, kiểm tra phiên bản:
+7.1. Thêm thông tin nâng cấp từ dự án NUKEVIET.
+7.2. Tự động thông báo phiên bản mới trên trang chủ ACP
+7.3. Thêm chức năng kiểm tra phiên bản cho từng module.
+7.4. Thêm chức năng nâng cấp hệ thống bằng gói nâng cấp.
+7.5. Chức năng nâng cấp theo revision
+7.6. Tăng cường khả năng cài đặt tự động cho block, module kể cả bị ghi đè, không theo chuẩn.
+8. Tái cấu trúc lại block, cho phép Blockglobal nằm trong block module, cho phép thêm tham số cho block.
+9. Thêm giao diện Admin Full và sử dụng giao diện này làm giao diện sau cài đặt (giao diện này nhiều tính năng ưu việt, trong đó có sử dụng ý tưởng cho phép thu gọn menu dọc theo mẫu của iandyou)
+10. Sửa lại chức năng upload, bổ sung tính năng cho phép ghi mỗi admin upload vào 1 thư mục riêng của news.
+11. Quản lý quyền đăng nhập admin.
+12. Thêm nhật ký hệ thống, ghi đầy đủ các thao tác quản trị.
+13. Cùng nhiều thay đổi nhỏ khác....
+
+NUKEVIET 3.0.12 (Official version - online publishing)
+CODE: http://code.google.com/p/nuke-viet/source/list (r362 to r468)
+- Change logo.
+- Add module log.
+- Add modern theme.
+- Fix features.
+- Security fix.
+- And more features ... 
+
+NUKEVIET 3.0.11 (RC3)
+CODE: http://code.google.com/p/nuke-viet/source/list (r303 to r361)
+- Enable/disable RSS modules
+- Update lang, CKEditor 3.4.1
+- Fix module RSS, Download, Banner...
+- Fix many functions.
+- Fix and edit cache system.
+- Security fix.
+- And more features ... 
+
+NUKEVIET 3.0.10 (RC2)
+CODE: http://code.google.com/p/nuke-viet/source/list (r211 to r303)
+- Fix module rss
+- Fix module banner
+- Fix config smtp
+- fix module search
+- Update lang cz,fr
+- Add cache system
+- Add module faq
+- And more features ... 
+
+NUKEVIET 3.0.09 (RC1)
+CODE: http://code.google.com/p/nuke-viet/source/list (r140 to r211)
+- Update module search
+- fix module users
+- Update function support UTF-8
+- Add firewall for admin
+- Add block ip for admin
+- Add banip for site
+- And more features ...
+
+NUKEVIET 3.0.08 (Openbeta 3 - 21/08/2010)
+CODE: http://code.google.com/p/nuke-viet/source/list (r74 to r140)
+- Fix bug NukeViet 3.0.07
+- Replace Module: Download
+- Upgrade Editor: CKeditor 3.4
+- Replace CKfinder by Upload module.
+- Module Download
+- Add features Config: IP, upload...
+- Add features copy block forom theme A to theme B
+- Add features Check the directory chmod
+- Add block module.block_tophits.php for modules News
+- And more features ...
+
+NUKEVIET 3.0.05 (Openbeta 1) TO NUKEVIET 3.0.07 (Openbeta 2 - 14/08/2010)
+CODE: http://code.google.com/p/nuke-viet/source/list (r02 to r73)
+What's New NukeViet 3.0.06:
+- Fix bug NukeViet 3.0.05
+- Add language: Czech
+- Allows members to use the username with special characters.
+- Fix bug NukeViet 3.0.06
+
+NUKEVIET 3.0 main features: http://nukeviet.vn/vi/about/tinh-nang-chinh-nukeviet-3-0-5/
