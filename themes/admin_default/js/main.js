@@ -63,9 +63,9 @@ jQuery(document).ready(function() {
 		contentsource : "markup"
 	});
 
-	$('form').change(function() {
+	$('form.confirm-reload').change(function() {
 		$(window).bind('beforeunload', function() {
-			return '{MSGBEFOREUNLOAD}';
+			return nv_msgbeforeunload;
 		});
 	});
 	$('form').submit(function() {

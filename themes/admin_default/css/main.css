@@ -126,8 +126,8 @@ html {
 }
 
 body, input, button, select {
-	font-family: 'Open Sans', sans-serif;
-	font-size:13px;
+	font-family: arial, sans-serif;
+	font-size:12px;
 	font-weight:400;
 	line-height:18px;
 }

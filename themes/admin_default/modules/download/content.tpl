@@ -7,8 +7,7 @@
 		</p></blockquote>
 </div>
 <!-- END: error -->
-
-<form action="{FORM_ACTION}" method="post">
+<form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<table class="tab1">
 		<tbody>
 			<tr>

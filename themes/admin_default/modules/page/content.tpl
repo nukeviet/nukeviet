@@ -4,7 +4,7 @@
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
-<form action="{FORM_ACTION}" method="post">
+<form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<input name="save" type="hidden" value="1" />
 	<table class="tab1">
 		<colgroup>
