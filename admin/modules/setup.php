@@ -204,7 +204,8 @@ $modules_data = array();
 $is_delCache = false;
 $module_virtual_setup = array();
 
-$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY addtime ASC' );
+$sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY addtime ASC';
+$result = $db->query( $sql_data );
 while( $row = $result->fetch() )
 {
 	if( array_key_exists( $row['module_file'], $modules_exit ) )

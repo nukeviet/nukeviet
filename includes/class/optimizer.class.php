@@ -377,18 +377,6 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::minifyJs()
-	 *
-	 * @param mixed $contents
-	 * @return
-	 */
-	private function minifyJs( $contents )
-	{
-		$contents = preg_replace( "/(\r\n)+|(\n|\r)+/", "\r\n", $contents );
-		return $contents;
-	}
-
-	/**
 	 * optimezer::minifyJsInline()
 	 *
 	 * @param mixed $jsInline
@@ -397,7 +385,7 @@ class optimezer
 	private function minifyJsInline( $matches )
 	{
 		$jsInline = preg_replace( '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/', '', $matches[2] );
-		$jsInline = $this->minifyJs( $jsInline );
+		$jsInline = preg_replace( "/(\r\n)+|(\n|\r)+/", "\r\n", $jsInline );
 		$jsInline = preg_replace( '/^\s+|\s+$/m', '', $jsInline );
 		if( ! $this->_tidySupport and ! preg_match( "/^\/\/<\!\[CDATA\[/", $jsInline ) )
 		{
