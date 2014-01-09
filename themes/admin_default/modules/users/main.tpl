@@ -67,10 +67,10 @@
 				<td class="center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
 				<td style="white-space: nowrap">
 				<!-- BEGIN: edit -->
-				&nbsp;&nbsp; <i class="icon-edit icon-large"></i> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
+				&nbsp;&nbsp; <i class="icon-edit icon-large">&nbsp;</i> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
 				<!-- END: edit -->
 				<!-- BEGIN: del -->
-				&nbsp;&nbsp; <i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+				&nbsp;&nbsp; <i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 				<!-- END: del -->
 				</td>
 			</tr>

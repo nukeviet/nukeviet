@@ -20,8 +20,8 @@
 			<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 			<td>{ROW.description}</td>
 			<td class="center">
-				<i class="icon-edit icon-large"></i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

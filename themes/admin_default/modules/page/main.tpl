@@ -31,8 +31,8 @@
 				<!-- END: status -->
 			</select></td>
 			<td class="center">
-				<i class="icon-edit icon-large"></i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_module_del({ROW.id});">{GLANG.delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_module_del({ROW.id});">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: row -->
