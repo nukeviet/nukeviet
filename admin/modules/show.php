@@ -70,7 +70,7 @@ function nv_show_funcs()
 			'modfuncs' => 'main',
 			'is_sysmod' => 0,
 			'virtual' => 0,
-			'version' => '3.0.01',
+			'version' => '4.0.00',
 			'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
 			'author' => '',
 			'note' => ''
@@ -166,9 +166,9 @@ function nv_show_funcs()
 				$data['alias'] = $func;
 				$data['func_custom_name'] = ucfirst( $func );
 				$data['in_module'] = $mod;
+
 				$_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
 				$func_id = $db->insert_id( $_sql, 'func_id', $data );
-
 				if( $show_func )
 				{
 					$sth2->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
@@ -220,7 +220,7 @@ function nv_show_funcs()
 		nv_del_moduleCache( 'themes' );
 	}
 
-	$fun_change_alias = (isset( $module_version['virtual'] )) ? explode( ',', $module_version['change_alias'] ) : array();
+	$fun_change_alias = (isset( $module_version['change_alias'] )) ? explode( ',', $module_version['change_alias'] ) : array();
 	if( empty( $fun_change_alias ) )
 	{
 		$module_version['virtual'] = 0;
