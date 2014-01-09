@@ -22,8 +22,8 @@
 			<td>{ROW.keywords}</td>
 			<td class="center">{ROW.numnews}</td>
 			<td class="center">
-				<i class="icon-edit icon-large"></i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_del_tags({ROW.tid})">{GLANG.delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_tags({ROW.tid})">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

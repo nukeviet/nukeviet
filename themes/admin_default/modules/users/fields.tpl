@@ -29,8 +29,8 @@
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
 			<td>
-				<i class="icon-edit icon-large"></i> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

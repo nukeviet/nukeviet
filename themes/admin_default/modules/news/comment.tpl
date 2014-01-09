@@ -13,14 +13,14 @@
 	<tfoot>
 		<tr>
 			<td colspan="3">
-				<i class="icon-check icon-large"></i> <a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;
-				<i class="icon-check-empty icon-large"></i> <a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>
+				<i class="icon-check icon-large">&nbsp;</i> <a id="checkall" href="javascript:void(0);">{LANG.comment_checkall}</a> &nbsp;&nbsp;
+				<i class="icon-check-empty icon-large">&nbsp;</i> <a id="uncheckall" href="javascript:void(0);">{LANG.comment_uncheckall}</a>
 				<span style="width:100px;display:inline-block">&nbsp;</span>
-				<i class="icon-ok-circle icon-large"></i> 
+				<i class="icon-ok-circle icon-large">&nbsp;</i> 
 				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_disable}</a> 
-				<i class="icon-ok icon-large"></i> 
+				<i class="icon-ok icon-large">&nbsp;</i> 
 				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=active_comment">{LANG.comment_enable}</a> 
-				<i class="icon-trash icon-large"></i> 
+				<i class="icon-trash icon-large">&nbsp;</i> 
 				<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=del_comment">{LANG.comment_delete}</a> 
 			</td>
 			<td colspan="3" class="center">
@@ -39,8 +39,8 @@
 			<td><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
 			<td class="center">{ROW.status}</td>
 			<td class="center">
-				<i class="icon-edit icon-large"></i> <a href="{ROW.linkedit}">{LANG.comment_edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="{ROW.linkdelete}">{LANG.comment_delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.linkedit}">{LANG.comment_edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="{ROW.linkdelete}">{LANG.comment_delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

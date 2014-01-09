@@ -41,8 +41,8 @@
 			<td> {ROW.menu_item} </td>
 			<td> {ROW.description} </td>
 			<td class="center">
-				<i class="icon-edit icon-large"></i> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
-				<i class="icon-trash icon-large"></i> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a>
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop1 -->

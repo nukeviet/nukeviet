@@ -19,7 +19,7 @@
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias();"></i></td>
+							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias();">&nbsp;</i></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>

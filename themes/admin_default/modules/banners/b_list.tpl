@@ -34,9 +34,9 @@
 			<td>{ROW.exp_date}</td>
 			<td class="center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
 			<td>
-				<i class="icon-search icon-large"></i> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
-				<i class="icon-edit icon-large"></i> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large"></i> <a href="{ROW.delfile}">{CONTENTS.del}</a>
+				<i class="icon-search icon-large">&nbsp;</i> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="{ROW.delfile}">{CONTENTS.del}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->
