@@ -9,10 +9,16 @@
 	margin-left:-175px;
 	margin-top:-350px;
 }
+
+/* Header
+ -----------------------------------------------------------------------------*/
 #logo{
 	text-align:center;
 	margin-bottom:10px;
 }
+
+/* Content
+ -----------------------------------------------------------------------------*/
 #login-content{
 	background:#fff;
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
@@ -24,7 +30,7 @@
 	border-radius: 4px;
 }
 #login-content h3{
-	margin:10px 0 20px 0;
+	margin:0 0 20px 0;
 }
 #login-content label{
 	display:block;
@@ -53,15 +59,29 @@
 #login-content .lostpass{
 	text-align:right;
 	font-style:italic;
+	padding:0;
+	margin:0;
 }
 
+/* Footer
+ -----------------------------------------------------------------------------*/
 #copyright{
 	text-align:center;
 	font-style:italic;
 	color:#999;
 }
+
+/* Message
+ -----------------------------------------------------------------------------*/
 .inner-message{
+	margin-bottom:16px;
+}
+.inner-message .normal{
 	padding-left:10px;
 	border-left:4px #e7e7e7 solid;
-	margin-bottom:16px;
+}
+.inner-message .error{
+	padding-left:10px;
+	border-left:4px #D54E21 solid;
+	color:#D54E21;
 }
