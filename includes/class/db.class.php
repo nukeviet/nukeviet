@@ -88,7 +88,7 @@ class sql_db extends pdo
 	 * @param array $data
 	 * @return integer|false
 	 */
-	public function insert_id( $_sql, $column, $data = array() )
+	public function insert_id( $_sql, $column = '', $data = array() )
 	{
 		try
 		{
