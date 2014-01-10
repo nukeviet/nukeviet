@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -26,7 +27,7 @@ if ( $_SERVER['REMOTE_ADDR'] == '117.6.64.27' or $_SERVER['REMOTE_ADDR'] == '123
 		$module_data = $module_info['module_data'];
 		
 		$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `payment` = '" . $payment . "'";
-		$config = $db->sql_fetchrow( $db->sql_query( $sql ) );
+		$config = $db->query( $sql )->fetch();
 		
 		$payment_config = unserialize( nv_base64_decode( $config['config'] ) );
 		
@@ -57,22 +58,22 @@ if ( $_SERVER['REMOTE_ADDR'] == '117.6.64.27' or $_SERVER['REMOTE_ADDR'] == '123
 			$transaction_i = $nl->checkOrder( $payment_config['public_api_url'], $order_code, $payment_id );
 			if ( $transaction_i !== false )
 			{
-				list( $order_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `order_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_code`=" . $db->dbescape_string( $order_code ) ) );
+				$order_id = $db->query( "SELECT `order_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_code`=" . $db->quote( $order_code ) )->fetchColumn();
 				if ( $order_id > 0 )
 				{
 					$error_update = false;
 					$payment_data = nv_base64_encode( serialize( $transaction_i ) );
-					list( $payment_data_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `payment_data` FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `payment`='" . $payment . "' AND `payment_id`=" . $payment_id . " ORDER BY `transaction_id` DESC LIMIT 1" ) );
+					$payment_data_old = $db->query( "SELECT `payment_data` FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `payment`='" . $payment . "' AND `payment_id`=" . $payment_id . " ORDER BY `transaction_id` DESC LIMIT 1" )->fetchColumn();
 					if ( $payment_data != $payment_data_old )
 					{
 						$nv_transaction_status = intval( $transaction_i['nv_transaction_status'] );
 						$payment_amount = intval( $transaction_i['AMOUNT'] );
 						$payment_time = max( $transaction_i['CREATED_TIME'], $transaction_i['PAID_TIME'] );
 						
-						$transaction_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
+						$transaction_id = $db->insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
 						if ( $transaction_id > 0 )
 						{
-							$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE `order_id`=" . $order_id );
+							$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE `order_id`=" . $order_id );
 						}
 						else
 						{
@@ -101,7 +102,7 @@ if ( $_SERVER['REMOTE_ADDR'] == '117.6.64.27' or $_SERVER['REMOTE_ADDR'] == '123
 		elseif ( ! empty( $module_data ) ) // Trường hợp hòan trả thành công
 		{
 			// Lập trình thông báo hoàn trả thành công và cập nhật hóa đơn
-			list( $order_id ) = $db->sql_fetchrow( $db->sql_query( "SELECT `order_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_code`=" . $db->dbescape_string( $order_code ) ) );
+			$order_id = $db->query( "SELECT `order_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_code`=" . $db->quote( $order_code ) )->fetchColumn();
 			if ( $order_id > 0 )
 			{
 				/*
@@ -118,17 +119,17 @@ if ( $_SERVER['REMOTE_ADDR'] == '117.6.64.27' or $_SERVER['REMOTE_ADDR'] == '123
 				$payment_data = nv_base64_encode( serialize( $input_data ) );
 				
 				$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')";
-				$transaction_id = $db->sql_query_insert_id( $sql );
+				$transaction_id = $db->insert_id( $sql );
 				if ( $transaction_id > 0 )
 				{
-					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE `order_id`=" . $order_id );
+					$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE `order_id`=" . $order_id );
 				}
 				else
 				{
 					file_put_contents( NV_ROOTDIR . '/logs/data_logs/nl_err_' . date( "Ymd" ) . '.log', "ERROR SQL: " . $sql . " \r\n", FILE_APPEND );
 				}
 				$return = 1;
-			}       
+			} 
 		}
 		return $return;
 	}

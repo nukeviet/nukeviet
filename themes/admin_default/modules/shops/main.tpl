@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <table class="tab1">
-<!-- BEGIN: loop -->
-    <tbody {bg}>
+<tbody>
+    <!-- BEGIN: loop -->
         <tr>
             <td width="350" style="padding:10px"><a href="{KEY.link}">{KEY.title}</a></td>
             <td width="100" align="right">
@@ -9,6 +9,6 @@
             </td>
             <td>{KEY.unit}</td>
         </tr>
-    </tbody>
-<!-- END: loop -->
+    <!-- END: loop -->
+<tbody>
 </table>

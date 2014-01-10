@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -12,21 +13,21 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $groupid = $nv_Request->get_int( 'groupid', 'post', 0 );
 $contents = "NO_" . $groupid;
 
-list( $groupid, $parentid, $title ) = $db->sql_fetchrow( $db->sql_query( "SELECT `groupid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid ) );
+list( $groupid, $parentid, $title ) = $db->query( "SELECT `groupid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid )->fetch( 3 );
 
 if( $groupid > 0 )
 {
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
-	list( $check_parentid ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid`=" . $groupid ) );
-	
+	$check_parentid = $db->query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid`=" . $groupid )->fetchColumn();
+
 	if( intval( $check_parentid ) > 0 )
 	{
 		$contents = "ERR_CAT_" . sprintf( $lang_module['delgroup_msg_group'], $check_parentid );
 	}
 	else
 	{
-		list( $check_rows ) = $db->sql_fetchrow( $db->sql_query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" ) );
-		
+		$check_rows = $db->query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" )->fetchColumn();
+
 		if( intval( $check_rows ) > 0 )
 		{
 			if( $delallcheckss == md5( $groupid . session_id() . $global_config['sitekey'] ) )
@@ -34,14 +35,14 @@ if( $groupid > 0 )
 				$delgroupandrows = $nv_Request->get_string( 'delgroupandrows', 'post', "" );
 				$movegroup = $nv_Request->get_string( 'movegroup', 'post', "" );
 				$groupidnews = $nv_Request->get_int( 'groupidnews', 'post', 0 );
-				
+
 				if( empty( $delgroupandrows ) and empty( $movegroup ) )
 				{
 					$sql = "SELECT `groupid`, `" . NV_LANG_DATA . "_title`, `lev` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`!='" . $groupid . "' ORDER BY `order` ASC";
-					$result = $db->sql_query( $sql );
+					$result = $db->query( $sql );
 					$array_group_list = array();
 					$array_group_list[0] = "&nbsp;";
-					while( list( $groupid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result ) )
+					while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 					{
 						$xtitle_i = "";
 						if( $lev_i > 0 )
@@ -65,7 +66,7 @@ if( $groupid > 0 )
 					$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 					$xtpl->assign( 'MODULE_NAME', $module_name );
 					$xtpl->assign( 'OP', $op );
-					
+
 					$xtpl->assign( 'GROUPID', $groupid );
 					$xtpl->assign( 'DELALLCHECKSS', $delallcheckss );
 					$xtpl->assign( 'INFO', sprintf( $lang_module['delgroup_msg_rows_select'], $title, $check_rows ) );
@@ -76,47 +77,47 @@ if( $groupid > 0 )
 						$xtpl->assign( 'GROUP_TITLE', $title_i );
 						$xtpl->parse( 'main.grouploop' );
 					}
-					
+
 					$xtpl->parse( 'main' );
 					$contents = $xtpl->text( 'main' );
 				}
 				elseif( ! empty( $delgroupandrows ) )
 				{
-					$result = $db->sql_query( "SELECT `id`, `group_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" );
-					
-					while( $row = $db->sql_fetchrow( $result ) )
+					$result = $db->query( "SELECT `id`, `group_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" );
+
+					while( $row = $result->fetch() )
 					{
 						nv_del_content_module( $row['id'] );
 					}
-					
-					$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid );
+
+					$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid );
 
 					nv_fix_group_order();
 					nv_del_moduleCache( $module_name );
-					
+
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid );
 					die();
 				}
 				elseif( ! empty( $movegroup ) and $groupidnews > 0 and $groupidnews != $groupid )
 				{
-					list( $groupidnews ) = $db->sql_fetchrow( $db->sql_query( "SELECT `groupid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group`  WHERE `groupid`=" . $groupidnews ) );
-					
+					$groupidnews = $db->query( "SELECT `groupid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupidnews )->fetchColumn();
+
 					if( $groupidnews > 0 )
 					{
-						$result = $db->sql_query( "SELECT `id`, `group_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" );
-						
-						while( $row = $db->sql_fetchrow( $result ) )
+						$result = $db->query( "SELECT `id`, `group_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "$'" );
+
+						while( $row = $result->fetch() )
 						{
 							$row['group_id'] = $row['group_id'] ? explode( ",", $row['group_id'] ) : array();
 							$row['group_id'] = array_diff( $row['group_id'], array( $groupid ) );
 							$row['group_id'][] = $groupidnews;
 							$row['group_id'] = array_unique( $row['group_id'] );
-						
-							$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `group_id`=" . $db->dbescape( implode( ",", $row['group_id'] ) ) . " WHERE `id` =" . $row['id'] );
+
+							$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `group_id`=" . $db->quote( implode( ",", $row['group_id'] ) ) . " WHERE `id` =" . $row['id'] );
 						}
-						
-						$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid );
-						
+
+						$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid );
+
 						nv_fix_group_order();
 						nv_del_moduleCache( $module_name );
 
@@ -134,24 +135,22 @@ if( $groupid > 0 )
 	if( $contents == "NO_" . $groupid )
 	{
 		$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . $groupid;
-		
-		if( $db->sql_query( $sql ) )
+		if( $db->exec( $sql ) )
 		{
-			$db->sql_freeresult();
 			nv_fix_group_order();
 			$contents = "OK_" . $parentid;
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['delgroupandrows'], $title, $admin_info['userid'] );
 		}
-		
+
 		nv_del_moduleCache( $module_name );
 	}
 }
 
 if( defined( 'NV_IS_AJAX' ) )
 {
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {

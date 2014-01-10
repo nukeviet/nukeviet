@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -14,9 +15,9 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 $catid = $nv_Request->get_int( 'catid', 'post,get', 0 );
 
 $sql = "SELECT `id`, `title`, `alias`, `hometext`, `allowed_send` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `id` ='" . $id . "' AND `status`=1";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-list( $id, $title, $alias, $hometext, $allowed_send ) = $db->sql_fetchrow( $result );
+list( $id, $title, $alias, $hometext, $allowed_send ) = $result->fetch( 3 );
 if ( $id > 0 )
 {
 	unset( $sql, $result );
@@ -90,14 +91,14 @@ if ( $id > 0 )
 			"v_name" => $name,
 			"v_mail" => $youremail,
 			"result" => $result,
-			"action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail"  //
+			"action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail" //
 		);
 
 		$contents = sendmail_themme( $sendmail );
 
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 

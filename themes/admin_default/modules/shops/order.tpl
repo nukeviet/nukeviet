@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
-<table summary="" class="tab1">
+<table class="tab1">
 	<thead>
 		<tr>
 			<td width="10px" align="center"></td>
@@ -12,8 +12,8 @@
 			<td width="100px" align="center"><strong>{LANG.comment_funcs}</strong></td>
 		</tr>
 	</thead>
-	<!-- BEGIN: row -->
-    <tbody {bg}>
+	<tbody>
+    <!-- BEGIN: row -->
 	<tr {bgview}>
 		<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
 		<td>{DATA.order_code}</td>
@@ -23,8 +23,8 @@
 		<td>{DATA.status_payment}</td>
 		<td align="center"><span class="edit_icon"><a href="{link_view}" title="">{LANG.view}</a></span> <!-- BEGIN: delete --> &nbsp;-&nbsp;<span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span> <!-- END: delete --></td>
 	</tr>
-    </tbody>
-	<!-- END: row -->
+    <!-- END: row -->
+	<tbody>
 	<tfoot>
 		<tr>
 			<td colspan="2"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> |<a href="#" id="delall">{LANG.prounit_del_select}</a></td>

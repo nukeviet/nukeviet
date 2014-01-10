@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -41,10 +42,10 @@ if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	{
 		$listid = implode( ",", $arrayid );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.product_discounts, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ")  AND t1.status=1";
-		$result = $db->sql_query( $sql );
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.product_discounts, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ") AND t1.status=1";
+		$result = $db->query( $sql );
 
-		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $product_discounts, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
+		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $product_discounts, $unit, $money_unit ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) //image thumb
 			{
@@ -112,8 +113,8 @@ $page_title = $lang_module['cart_title'];
 
 $contents = call_user_func( "cart_product", $data_content, $array_error_product_number );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

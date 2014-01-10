@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -15,7 +16,7 @@ $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.in
 
 if( ! empty( $pro_config['money_unit'] ) != "" and isset( $currencies_array[$pro_config['money_unit']] ) )
 {
-	$page_title .= "  " . $lang_module['money_compare'] . "  " . $currencies_array[$pro_config['money_unit']]['currency'];
+	$page_title .= " " . $lang_module['money_compare'] . " " . $currencies_array[$pro_config['money_unit']]['currency'];
 }
 
 $error = "";
@@ -41,13 +42,11 @@ if( ! empty( $savecat ) )
 		}
 
 		$data['currency'] = ( empty( $data['currency'] ) ) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
-		$sql = "REPLACE INTO `" . $table_name . "` (`id`, `code`, `currency`, `exchange`) VALUES (" . $numeric . ", " . $db->dbescape_string( $data['code'] ) . ", " . $db->dbescape_string( $data['currency'] ) . ", " . $db->dbescape_string( $data['exchange'] ) . ")";
-		$db->sql_query( $sql );
+		$sql = "REPLACE INTO `" . $table_name . "` (`id`, `code`, `currency`, `exchange`) VALUES (" . $numeric . ", " . $db->quote( $data['code'] ) . ", " . $db->quote( $data['currency'] ) . ", " . $db->quote( $data['exchange'] ) . ")";
 
-		if( $db->sql_affectedrows() > 0 )
+		if( $db->exec( $sql ) )
 		{
 			$error = $lang_module['saveok'];
-			$db->sql_freeresult();
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 			die();
@@ -56,12 +55,11 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 elseif( ! empty( $id ) )
 {
-	$data = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . $table_name . "` WHERE `id`=" . $id ) );
+	$data = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `id`=" . $id )->fetch();
 	$data['caption'] = $lang_module['money_edit'];
 }
 
@@ -81,8 +79,8 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $count = 0;
 $array_code_exit = array();
-$result = $db->sql_query( "SELECT `id`, `code`, `currency`, `exchange` FROM `" . $table_name . "` ORDER BY code DESC" );
-while( $row = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT `id`, `code`, `currency`, `exchange` FROM `" . $table_name . "` ORDER BY code DESC" );
+while( $row = $result->fetch() )
 {
 	$array_code_exit[] = $row['code'];
 	$row['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $row['id'];
@@ -176,8 +174,8 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

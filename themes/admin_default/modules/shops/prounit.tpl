@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
   <!-- BEGIN: data -->
-  <table summary="" class="tab1">
+  <table class="tab1">
       <thead>
         <tr>
           <td width="20px" align="center"></td>
@@ -83,7 +83,7 @@
   <!-- END: data -->
   <form action="" method="post">
     <input name="savecat" type="hidden" value="1" />
-    <table summary="" class="tab1">
+    <table class="tab1">
       <caption>{caption}</caption>
       <tr>
           <td align="right" width="150px"><strong>{LANG.prounit_name_unit}: </strong></td>

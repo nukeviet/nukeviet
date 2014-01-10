@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form action="" method="post">
-<table summary="" class="tab1">
-	<tbody class="second">
+<table class="tab1">
+	<tbody>
 		<tr>
 			<td width="40%"><strong>{LANG.setting_home_view}</strong></td>
 			<td><select name="home_view">
@@ -10,44 +10,30 @@
 				<!-- END: home_view_loop -->
 			</select></td>
 		</tr>
-	</tbody>
-    <tbody>
         <tr>
             <td><strong>{LANG.setting_homesite}</strong></td>
             <td><input type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /> x <input type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
         </tr>
-    </tbody>
-	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_per_page}</strong></td>
 			<td><input type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /> {LANG.setting_per_note_home}</td>
 		</tr>
-	</tbody>
-    <tbody>
         <tr>
             <td><strong>{LANG.setting_per_row}</strong></td>
             <td><input type="text" value="{DATA.per_row}" style="width: 40px;" name="per_row" /> {LANG.setting_per_note}</td>
         </tr>
-    </tbody>
-    <tbody class="second">
         <tr>
             <td><strong>{LANG.setting_hometext}</strong></td>
             <td><input type="checkbox" value="1" name="active_showhomtext" {ck_active_showhomtext} /></td>
         </tr>
-    </tbody>
-    <tbody>
         <tr>
             <td><strong>{LANG.setting_active_order}</strong></td>
             <td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
         </tr>
-    </tbody>
-    <tbody class="second">
         <tr>
             <td><strong>{LANG.setting_active_price}</strong></td>
             <td><input type="checkbox" value="1" name="active_price" {ck_active_price} id="active_price" /></td>
         </tr>
-    </tbody>
-    <tbody>
         <tr>
             <td><strong>{LANG.setting_active_order_number}</strong></td>
             <td>
@@ -55,8 +41,6 @@
                 {LANG.setting_active_order_number_note}
             </td>
         </tr>
-    </tbody>
-    <tbody class="second">
         <tr>
             <td><strong>{LANG.setting_active_payment}</strong></td>
             <td>
@@ -64,38 +48,22 @@
                 {LANG.setting_active_payment_note}
             </td>
         </tr>
-    </tbody>
-    <tbody>
         <tr>
             <td><strong>{LANG.activecomm}</strong></td>
             <td><input type="checkbox" value="1" name="comment" {ck_comment} /></td>
         </tr>
-    </tbody>
-	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_auto_postcomm}</strong></td>
 			<td><input type="checkbox" value="1" name="comment_auto" {ck_comment_auto}/></td>
 		</tr>
-	</tbody>
-	
-	
-	
-	<tbody>
         <tr>
             <td><strong>{LANG.setting_compare}</strong></td>
             <td><input type="checkbox" value="1" name="show_compare" {ck_compare} /></td>
         </tr>
-    </tbody>
-	<tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_displays}</strong></td>
 			<td><input type="checkbox" value="1" name="show_displays" {ck_displays}/></td>
 		</tr>
-	</tbody>
-	
-	
-	
-	<tbody>
 		<tr>
 			<td><strong>{LANG.setting_setcomm}</strong></td>
 			<td>
@@ -108,8 +76,6 @@
 				<!-- END: group -->
 			</td>
 		</tr>
-	</tbody>
-	<tbody class="second">
         <tr>
             <td><strong>{LANG.setting_money_all}</strong></td>
             <td><select name="money_unit">
@@ -118,38 +84,26 @@
                 <!-- END: money_loop -->
             </select></td>
         </tr>
-	</tbody>
-	<tbody>
         <tr>
             <td><strong>{LANG.format_order_id}</strong></td>
             <td><input type="text" value="{DATA.format_order_id}" style="width: 100px;" name="format_order_id" /> {LANG.format_order_id_note}</td>
-        </tr>	
-	</tbody>
-	<tbody class="second">
+        </tr>
         <tr>
             <td><strong>{LANG.format_code_id}</strong></td>
             <td><input type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /> {LANG.format_order_id_note}</td>
-        </tr>	
-	</tbody>
-	<tbody>
+        </tr>
 		<tr>
 			<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
 			<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
 		</tr>
-	</tbody>
-    <tbody class="second">
 		<tr>
 			<td><strong>{LANG.setting_active_tooltip}</strong></td>
 			<td><input type="checkbox" value="1" name="active_tooltip" {ck_active_tooltip} id="active_tooltip" /></td>
 		</tr>
-	</tbody>
-    <tbody>
 		<tr>
 			<td><strong>{LANG.setting_show_product_code}</strong></td>
 			<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 		</tr>
-	</tbody>
-    <tbody>
         <tr>
             <td colspan="2" style="text-align: center; padding:10px">
             <input type="submit" value="{LANG.save}" name="Submit1" /> 
@@ -176,8 +130,8 @@
 			<td align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: paymentloop -->
-	<tbody {DATA_PM.class}>
 		<tr>
 			<td align="center">{DATA_PM.slect_weight}</td>
             <td>{DATA_PM.paymentname}</td>
@@ -187,8 +141,8 @@
             </td>
 			<td align="center"><span class="edit_icon"><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></span></td>
 		</tr>
-	</tbody>
 	<!-- END: paymentloop -->
+	<tbody>
 </table>
 <!-- END: payment --> 
 <!-- BEGIN: main -->

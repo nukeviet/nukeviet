@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -31,8 +32,8 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE (`group_id`='" . $groupid . "' OR `group_id` REGEXP '^" . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\\\,' OR `group_id` REGEXP '\\\," . $groupid . "\$') AND `status`=1 ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
 
-$result = $db->sql_query( $sql );
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+$result = $db->query( $sql );
+$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
 $data_content = GetDataInGroup( $result, $groupid );
 $data_content['count'] = $all_page;
@@ -53,8 +54,8 @@ if( $page > 1 )
 
 $contents = call_user_func( $global_array_group[$groupid]['viewgroup'] , $data_content, $pages );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

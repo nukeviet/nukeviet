@@ -63,7 +63,6 @@
 						{LANG.cart_unit}
 					</td>
 				</tr>
-				<tbody>
 					<!-- BEGIN: loop -->
 					<tr{bg}>
 					   <td align="center" style="padding:5px">

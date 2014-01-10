@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -13,13 +14,13 @@ $page_title = $lang_module['block'];
 $set_active_op = "blockcat";
 
 $sql = "SELECT `bid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
-$result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$num = $result->rowCount();
 
 if( $num > 0 )
 {
 	$array_block = array();
-	while( list( $bid_i, $title_i ) = $db->sql_fetchrow( $result ) )
+	while( list( $bid_i, $title_i ) = $result->fetch( 3 ) )
 	{
 		$array_block[$bid_i] = $title_i;
 	}
@@ -53,7 +54,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
+		$db->query( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
@@ -86,11 +87,11 @@ else
 	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `id` DESC";
 }
 
-$result = $db->sql_query( $sql );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( $sql );
+if( $result->rowCount() )
 {
 	$a = 0;
-	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
 			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
@@ -113,8 +114,8 @@ if( $db->sql_numrows( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

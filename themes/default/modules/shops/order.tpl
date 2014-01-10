@@ -36,7 +36,6 @@
 				<td class="amount" align="center" width="60px">{LANG.cart_numbers}</td>
 				<td class="unit">{LANG.cart_unit}</td>
 			</tr>
-			<tbody>
 				<!-- BEGIN: rows -->
 				<tr {bg}>
 					<td align="center">{pro_no}</td>

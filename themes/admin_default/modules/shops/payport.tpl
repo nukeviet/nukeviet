@@ -3,31 +3,27 @@
 <div style="background:#F0F0F0;padding:10px; font-weight:bold">{EDITPAYMENT}</div>
 <form action="" method="post">
 <table class="tab1">
-    <tbody class="second">
+    <tbody>
     <tr>
         <td>{LANG.paymentname}</td>
         <td><input name="paymentname" value="{DATA.paymentname}" style="width: 400px;"></td>
     </tr>
-    </tbody>
     <tr>
         <td>{LANG.domain}</td>
         <td><input name="domain" value="{DATA.domain}" style="width: 400px;"></td>
     </tr>
-    <tbody class="second">
     <tr>
         <td>{LANG.active}</td>
         <td><input type="checkbox" value="1" name="active" {DATA.active}/></td>
     </tr>
-    </tbody>
     <!-- BEGIN: config -->
-    <tbody{cl}>
         <tr>
             <td>{CONFIG_LANG}</td>
             <td><input name="config[{CONFIG_NAME}]" value="{CONFIG_VALUE}" style="width: 400px;"></td>
         </tr>
-    </tbody>
     <!-- END: config -->
-    <tbody class="second">
+    <tbody>
+    <tbody>
     <tr>
         <td>{LANG.images_button}</td>
         <td>
@@ -35,7 +31,6 @@
             <input type="button" value="{LANG.browse_image}" name="selectimg"/>
         </td>
     </tr>
-    </tbody>				
     <tr>
         <td><input name="payment" value="{DATA.payment}" type="hidden"></td>
         <td><input type="submit" value="{LANG.save}" name="saveconfigpaymentedit"></td>
@@ -61,8 +56,8 @@
 			<td align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: paymentloop -->
-	<tbody{DATA_PM.class}>
 		<tr>
 			<td align="center">{DATA_PM.slect_weight}</td>
             <td>{DATA_PM.paymentname}</td>
@@ -70,8 +65,8 @@
 			<td align="center"><input type="checkbox" name="{DATA_PM.payment}" id="{DATA_PM.payment}" {DATA_PM.active} onclick="ChangeActive(this,url_active)"/></td>
 			<td align="center"><span class="edit_icon"><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></span></td>
 		</tr>
-	</tbody>
 	<!-- END: paymentloop -->
+	<tbody>
 </table>
 <!-- END: listpay -->
 
@@ -86,16 +81,16 @@
 			<td align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: opaymentloop -->
-	<tbody{DATA_PM.class}>
 		<tr>
 			<td align="center">{ODATA_PM.STT}</td>
             <td>{ODATA_PM.paymentname}</td>
 			<td>{ODATA_PM.domain}</td>
 			<td align="center"><span class="edit_icon"><a href="{ODATA_PM.link_edit}#edit">{LANG.payment_integrat}</a></span></td>
 		</tr>
-	</tbody>
 	<!-- END: opaymentloop -->
+	<tbody>
 </table>
 <!-- END: olistpay -->
 

@@ -13,7 +13,7 @@
 		<table width="100%" style="margin-bottom:0">
 			<tr>
 				<td valign="top">
-					<table summary="" class="tab1">
+					<table class="tab1">
 						<tbody>
 							<tr>
 								<td width="120px"><strong>{LANG.name} <span class="require">(*)</span></strong></td>
@@ -21,8 +21,6 @@
 									<input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="txt-full" />
 								</td>
 							</tr>
-						</tbody>
-						<tbody class="second">
 							<tr>
 								<td><strong>{LANG.alias}: </strong></td>
 								<td>
@@ -30,8 +28,6 @@
 									<input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /> 
 								</td>
 							</tr>
-						</tbody>
-						<tbody>
 							<tr>
 								<td><strong>{LANG.content_product_code}: </strong></td>
 								<td>
@@ -40,7 +36,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<table summary="" class="tab1" style="margin-bottom:0">
+					<table class="tab1" style="margin-bottom:0">
 						<tbody>
 							<tr>
 								<td width="120px"><strong>{LANG.content_cat} <span class="require">(*)</span></strong></td>
@@ -54,13 +50,11 @@
 							</tr>
 						</tbody>
 					</table>
-					<table summary="" class="tab1" style="margin-bottom:0">
+					<table class="tab1" style="margin-bottom:0">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_homeimg}</strong></td>
 							</tr>
-						</tbody>
-						<tbody class="second">
 							<tr>
 								<td>
 									<input style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/>
@@ -78,15 +72,11 @@
 								</td>
 							</tr>
 							<!-- END: otherimage -->
-						</tbody>
-						<tbody>
 							<tr>
 								<td>
 									{LANG.content_homeimgalt}
 								</td>
 							</tr>
-						</tbody>
-						<tbody class="second">
 							<tr>
 								<td>
 									<input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" />
@@ -94,19 +84,17 @@
 							</tr>
 						</tbody>
 					 </table>
-					 <table summary="" class="tab1" style="margin-bottom:0">
+					 <table class="tab1" style="margin-bottom:0">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_hometext} <span class="require">(*)</span></strong> {LANG.content_notehome}</td>
 							</tr>
-						</tbody>
-						<tbody class="second">
 							<tr>
 								<td><textarea class="textareas" name="hometext" style="width: 98%; height:100px">{rowcontent.hometext}</textarea></td>
 							</tr>
 						</tbody>
 					 </table>
-					<table summary="" class="tab1">
+					<table class="tab1">
 						<tr>
 							<td width="110px"><strong>{LANG.content_product_number}</strong></td>
 							<td>
@@ -139,13 +127,13 @@
 							</td>
 						</tr>
 					</table>
-					<table summary="" class="tab1">
+					<table class="tab1">
 						<tr>
 							<td width="110px"><strong>{LANG.content_product_address}</strong></td>
 							<td><input type="text" maxlength="255" value="{rowcontent.address}" name="address" style="width:98%;"/></td>
 						</tr>
 					</table>
-					<table summary="" class="tab1">
+					<table class="tab1">
 						<tr>
 							<td width="110px"><strong>{LANG.content_sourceid}</strong></td>
 							<td>
@@ -160,27 +148,22 @@
 						<tr>
 							<td><strong>{LANG.content_note}</strong></td>
 						</tr>
-						<tbody class="second">
 							<tr>
 								<td>
 								<textarea class="textareas" rows="4" name="note" style="width:98%">{rowcontent.note}</textarea>
 								</td>
 							</tr>
-						</tbody>
 						<tr>
 							<td><strong>{LANG.content_warranty}</strong></td>
 						</tr>
-						<tbody class="second">
 							<tr>
 								<td>
 								<textarea class="textareas" name="warranty" style="width:98%; height:30px">{rowcontent.warranty}</textarea>
 								</td>
 							</tr>
-						</tbody>
 						<tr>
 							<td><strong>{LANG.content_promotional}</strong></td>
 						</tr>
-						<tbody class="second">
 							<tr>
 								<td>
 								<textarea class="textareas" name="promotional" style="width:98%;height:30px">{rowcontent.promotional}</textarea>
@@ -192,15 +175,13 @@
 				<td valign="top" style="width: 280px">
 					<div style="margin-left:4px;">
 						<!-- BEGIN:listgroup -->
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td>
 									<strong>{LANG.content_group}</strong>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 										<div style="padding:4px; height:100px;background:#FFFFFF; overflow:auto; text-align:left; border: 1px solid #CCCCCC">
@@ -212,15 +193,13 @@
 						</table>
 						<!-- END:listgroup -->
 						<!-- BEGIN:block_cat -->
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td>
 									<strong>{LANG.content_block}</strong>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 										<div style="padding:4px; background:#FFFFFF; text-align:left; border: 1px solid #CCCCCC">
@@ -231,8 +210,8 @@
 							</tbody>
 						</table>
 						<!-- END:block_cat -->
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td style="line-height:16px">
 									<strong>{LANG.content_keywords}</strong><br />
@@ -240,8 +219,6 @@
 									 <a onclick="create_keywords();" href="javascript:void(0);" style="color:#0099CC">{LANG.content_clickhere}</a>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 									<textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 98%;">{rowcontent.keywords}</textarea>
@@ -249,15 +226,13 @@
 								</tr>
 							</tbody>
 						</table>
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td>
 									<strong>{LANG.content_publ_date}</strong> <span class="timestamp">{LANG.content_notetime}</span>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 										<input name="publ_date" id="publ_date" value="{publ_date}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
@@ -274,15 +249,13 @@
 								</tr>
 							</tbody>
 						</table>
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td>
 									<strong>{LANG.content_exp_date}</strong> <span class="timestamp">{LANG.content_notetime}</span>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 										<div>
@@ -304,15 +277,13 @@
 								</tr>
 							</tbody>
 						</table>
-						<table summary="" class="tab1">
-							<tbody class="second">
+						<table class="tab1">
+							<tbody>
 								<tr>
 									<td>
 									<strong>{LANG.content_extra}</strong>
 									</td>
 								</tr>
-							</tbody>
-							<tbody>
 								<tr>
 									<td>
 										<div style="margin-bottom: 2px;">
@@ -354,13 +325,11 @@
 		</table>
 	</div>
 	<div class="gray">
-		<table summary="" class="tab1">
+		<table class="tab1">
 			<tbody>
 				<tr>
 					<td><strong>{LANG.content_bodytext} <span class="require">(*)</span></strong>{LANG.content_bodytext_note}</td>
 				</tr>
-			</tbody>
-			<tbody class="second">
 				<tr>
 					<td>
 						<div style="padding:2px; background:#CCCCCC; margin:0; display:block; position:relative">

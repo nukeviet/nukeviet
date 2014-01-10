@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -48,8 +49,8 @@ else
 
 if ( $module_info['rss'] )
 {
-	$result = $db->sql_query( $sql );
-	while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgthumb ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( $sql );
+	while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgthumb ) = $result->fetch( 3 ) )
 	{
 		$catalias = $global_array_cat[$listcatid]['alias'];
 

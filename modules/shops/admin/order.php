@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -20,14 +21,14 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
 $count = 0;
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS *  FROM `" . $table_name . "` ORDER BY `order_id` DESC LIMIT " . $page . "," . $per_page;
-$result = $db->sql_query( $sql );
-$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $table_name . "` ORDER BY `order_id` DESC LIMIT " . $page . "," . $per_page;
+$result = $db->query( $sql );
+$result_all = $db->query( "SELECT FOUND_ROWS()" );
 
-list( $numf ) = $db->sql_fetchrow( $result_all );
+$numf = $result_all->fetchColumn();
 $all_page = ( $numf ) ? $numf : 1;
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$acno = 0;
 	if( $row['transaction_status'] == 4 )
@@ -99,8 +100,8 @@ $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

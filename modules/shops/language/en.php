@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 04, 2011, 03:18:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jul 04, 2011, 03:18:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -114,7 +115,7 @@ $lang_module['err_no_bodytext'] = 'You need to give the product details!';
 $lang_module['err_no_save'] = 'Error data saving: the title may be exist!';
 $lang_module['err_no_image'] = 'Your file is not an image!';
 $lang_module['err_no_catalogs'] = 'Category missing';
-$lang_module['err_no_product_number'] = 'Quantity  <= 0 or is not a number';
+$lang_module['err_no_product_number'] = 'Quantity <= 0 or is not a number';
 $lang_module['err_no_product_price'] = 'Price <= 0 or is not a number';
 $lang_module['product_post_title'] = 'Post product';
 $lang_module['product_post_info'] = 'Case with * is required!';

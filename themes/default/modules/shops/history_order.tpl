@@ -11,7 +11,6 @@
 		<td align="center" width="40">{LANG.history_remove}</td>
 	</tr>
 	<!-- BEGIN: rows -->
-	<tbody id="{id}">
 		<tr {bg}>
 			<td align="center">{TT}</td>
 			<td><a title="{history_date} {LANG.order_moment} {history_moment}" href="{link}"><strong>{order_code}</strong></a></td>
@@ -27,8 +26,8 @@
 				{text_no_remove}
 			</td>
 		</tr>
-	</tbody>
 	<!-- END: rows -->
+	<tbody>
 	<tfoot>
 		<tr>
 			<td align="right" colspan="7"><input class="button" id="Check_Order" type="button" value="{LANG.history_update}"></td>

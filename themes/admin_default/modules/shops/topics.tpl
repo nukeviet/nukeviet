@@ -3,7 +3,7 @@
 		var url_back = '{url_back}';
 		var url_change_weight = '{url_change}';
 	</script>
-    <table summary="" class="tab1" style="margin-bottom:0">
+    <table class="tab1" style="margin-bottom:0">
         <tbody>
             <tr>
                 <td width="120px"><strong>{LANG.content_cat}</strong></td>
@@ -17,7 +17,7 @@
             </tr>
         </tbody>
     </table>
-    <table summary="" class="tab1" style="margin-bottom:0">
+    <table class="tab1" style="margin-bottom:0">
       <thead>
         <tr>
           <td width="30px" align="center">{LANG.weight}</td>
@@ -93,4 +93,3 @@
 	});
   </script>
 <!-- END: main -->
-

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 10-5-2010 0:14
  */
 
@@ -91,21 +92,21 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 		$tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $from_date, $m );
 		$fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-		$where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate  ) ";
+		$where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate ) ";
 	}
 
 	$table_search = $db_config['prefix'] . "_" . $module_data . "_rows";
 
 	$sql = " SELECT SQL_CALC_FOUND_ROWS `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `publtime`, `homeimgfile`, `homeimgthumb`, `source_id` FROM `" . $table_search . "` WHERE `status`=1 " . $where . " ORDER BY `id` DESC LIMIT " . $pages . "," . $per_pages;
 
-	$result = $db->sql_query( $sql );
-	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-	list( $numRecord ) = $db->sql_fetchrow( $result_all );
+	$result = $db->query( $sql );
+	$result_all = $db->query( "SELECT FOUND_ROWS()" );
+	$numRecord = $result_all->fetchColumn();
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
 
-	while ( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $db->sql_fetchrow( $result ) )
+	while ( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 ) //image thumb
 		{
@@ -150,8 +151,8 @@ else
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['main_title'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

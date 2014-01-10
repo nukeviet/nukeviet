@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -17,11 +18,11 @@ if( $pid == 0 )
 	$table = $db_config['prefix'] . "_" . $module_data . "_catalogs";
 
 	$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev`, `numsubcat` FROM `" . $table . "` ORDER BY `order` ASC";
-	$result_cat = $db->sql_query( $sql );
+	$result_cat = $db->query( $sql );
 	
 	$contents .= $lang_module['group_of'] . ' <select name="cateid">';
 	$contents .= '<option value="0">' . $lang_module['group_of_none'] . '</option>';
-	while( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $db->sql_fetchrow( $result_cat ) )
+	while( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )
 	{
 		$xtitle_i = "";
 		if( $lev_i > 0 )
@@ -41,8 +42,8 @@ else
 	$contents = '';
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

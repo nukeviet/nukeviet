@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 9-8-2010 14:43
  */
 
@@ -81,9 +82,9 @@ if( $checkss == md5( session_id() ) )
 	elseif( $stype == "admin_id" and ! empty( $q ) )
 	{
 		$sql = "SELECT `userid` FROM " . NV_USERS_GLOBALTABLE . " WHERE `userid` IN (SELECT `admin_id` FROM " . NV_AUTHORS_GLOBALTABLE . ") AND `username` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `full_name` LIKE '%" . $db->dblikeescape( $q ) . "%'";
-		$result = $db->sql_query( $sql );
+		$result = $db->query( $sql );
 		$array_admin_id = array();
-		while( list( $admin_id ) = $db->sql_fetchrow( $result ) )
+		while( list( $admin_id ) = $result->fetch( 3 ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
@@ -92,10 +93,10 @@ if( $checkss == md5( session_id() ) )
 	elseif( ! empty( $q ) )
 	{
 		$sql = "SELECT `userid` FROM " . NV_USERS_GLOBALTABLE . " WHERE `userid` IN (SELECT `admin_id` FROM " . NV_AUTHORS_GLOBALTABLE . ") AND `username` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `full_name` LIKE '%" . $db->dblikeescape( $q ) . "%'";
-		$result = $db->sql_query( $sql );
+		$result = $db->query( $sql );
 
 		$array_admin_id = array();
-		while( list( $admin_id ) = $db->sql_fetchrow( $result ) )
+		while( list( $admin_id ) = $result->fetch( 3 ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
@@ -139,7 +140,7 @@ if( $checkss == md5( session_id() ) )
 	}
 }
 
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $from ) );
+$all_page = $db->query( "SELECT COUNT(*) FROM " . $from )->fetchColumn();
 
 $xtpl = new XTemplate( "items.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -196,12 +197,12 @@ $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_n
 $ord_sql = "ORDER BY `" . ( $ordername == "title" ? NV_LANG_DATA . "_title" : $ordername ) . "` " . $order;
 $sql = "SELECT `id`, `listcatid`, `user_id`, `homeimgfile`, `homeimgthumb`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `status`, `edittime`, `publtime`, `exptime`, `product_number`, `product_price`, `product_discounts`, `money_unit`, `username` FROM " . $from . " " . $ord_sql . " LIMIT " . $page . "," . $per_page;
 
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
 
-while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit, $username ) = $db->sql_fetchrow( $result ) )
+while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( "H:i d/m/y", $publtime );
 	$edittime = nv_date( "H:i d/m/y", $edittime );
@@ -288,8 +289,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

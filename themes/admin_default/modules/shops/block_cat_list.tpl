@@ -9,8 +9,8 @@
 			<td style="width:100px;"></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
 		<tr>
 			<td align="center">
 				<select id="id_weight_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','weight');">
@@ -35,7 +35,7 @@
 				&nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_block_cat({ROW.bid})">{GLANG.delete}</a></span>
 			</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 </table>
 <!-- END: main -->

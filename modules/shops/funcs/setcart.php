@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -27,8 +28,8 @@ else
 	{
 		if ( $id > 0 )
 		{
-			$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
-			$data_content = $db->sql_fetchrow( $result, 2 );
+			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$data_content = $result->fetch();
 			
 			$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
 			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_content['money_unit'], $pro_config['money_unit'] );
@@ -76,8 +77,8 @@ else
 	{
 		if ( $id > 0 )
 		{
-			$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
-			$data_content = $db->sql_fetchrow( $result, 2 );
+			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$data_content = $result->fetch();
 			
 			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
@@ -92,8 +93,8 @@ else
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_unhtmlspecialchars( $contents_msg );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

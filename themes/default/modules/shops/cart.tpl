@@ -24,7 +24,6 @@
             <td class="unit" style="width:50px">{LANG.cart_unit}</td>
             <td class="remove" align="center" width="20">   </td>
         </tr>
-        <tbody>
             <!-- BEGIN: rows -->
             <tr id="{id}" {bg}>
                 <td align="center">{stt}</td>

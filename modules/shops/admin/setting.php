@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -29,7 +30,7 @@ $groups_list = nv_groups_list();
 $array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
 if ( ! empty( $groups_list ) )
 {
-    $array_who[] = $lang_global['who_view3'];
+ $array_who[] = $lang_global['who_view3'];
 }
 
 $page_title = $lang_module['setting'];
@@ -74,12 +75,12 @@ if( $savesetting == 1 )
 	{
 		foreach( $data as $config_name => $config_value )
 		{
-			$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
+			$db->query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
 		}
 		$mid = intval( $currencies_array[$data['money_unit']]['numeric'] );
 
 		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` SET `exchange` = '1' WHERE `id` = " . $mid . " LIMIT 1";
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setting'], "Setting", $admin_info['userid'] );
 		nv_del_moduleCache( 'settings' );
@@ -97,10 +98,10 @@ if( $data['active_payment'] == '1' )
 	$array_setting_payment = array();
 	
 	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
-	$all_page = $db->sql_numrows( $result );
+	$result = $db->query( $sql );
+	$all_page = $result->rowCount();
 	
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$array_setting_payment[$row['payment']] = $row;
 	}
@@ -210,8 +211,8 @@ if ( ! empty( $data['groups_comment'] ) )
 }
 
 // Tien te
-$result = $db->sql_query( "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` ORDER BY `code` DESC" );
-while( list( $code, $currency ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` ORDER BY `code` DESC" );
+while( list( $code, $currency ) = $result->fetch( 3 ) )
 {
 	$array_temp = array();
 	$array_temp['value'] = $code;
@@ -258,8 +259,8 @@ if( ! empty( $array_setting_payment ) )
 $xtpl->parse( 'main' );
 
 $contents .= $xtpl->text( 'main' );
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

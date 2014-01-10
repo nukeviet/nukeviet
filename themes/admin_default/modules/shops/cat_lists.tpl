@@ -16,8 +16,8 @@
 		<td style="width:200px;"></td>
 	</tr>
 </thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
 		<tr>
 			<td align="center">
 				<select id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
@@ -59,8 +59,8 @@
 				<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_cat({ROW.catid})">{GLANG.delete}</a></span>
 			</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 </table>
 <!-- END: data -->
 <!-- END: main -->

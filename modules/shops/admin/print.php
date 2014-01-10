@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -17,12 +18,12 @@ if( $save == 1 )
 {
 	$order_id = $nv_Request->get_int( 'order_id', 'post', 0 );
 	
-	$db->sql_query( "UPDATE `" . $table_name . "` SET `status` = 1 WHERE `order_id`=" . $order_id );
+	$db->query( "UPDATE `" . $table_name . "` SET `status` = 1 WHERE `order_id`=" . $order_id );
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
 }
 
-$result = $db->sql_query( "SELECT *  FROM `" . $table_name . "` WHERE `order_id`=" . $id );
-$data = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `order_id`=" . $id );
+$data = $result->fetch();
 
 $xtpl = new XTemplate( "print.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -36,9 +37,9 @@ $listnum = explode( "|", $data['listnum'] );
 $i = 0;
 foreach( $listid as $id )
 {
-	$sql = "SELECT id, " . NV_LANG_DATA . "_title, product_price,money_unit  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $id . "  AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ";
-	$result = $db->sql_query( $sql );
-	list( $id, $title, $product_price, $money_unit ) = $db->sql_fetchrow( $result );
+	$sql = "SELECT id, " . NV_LANG_DATA . "_title, product_price,money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $id . " AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ";
+	$result = $db->query( $sql );
+	list( $id, $title, $product_price, $money_unit ) = $result->fetch( 3 );
 	
 	$xtpl->assign( 'product_name', $title );
 	$xtpl->assign( 'product_number', $listnum[$i] );
@@ -63,8 +64,8 @@ $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

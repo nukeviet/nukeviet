@@ -22,14 +22,10 @@
 				<td align="right"><strong>{LANG.source_title}: </strong></td>
 				<td><input class="txt-full" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
 			<tr>
 				<td align="right"><strong>{LANG.link}: </strong></td>
 				<td><input class="txt-full" name="link" type="text" value="{DATA.link}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td align="right"><strong>{LANG.source_logo}: </strong></td>
 				<td>
@@ -40,7 +36,6 @@
 					<!-- END: logo -->
 				</td>
 			</tr>
-		<tbody>
 	</table>
 	<br />
 	<center><input name="submit1" type="submit" value="{LANG.save}" /></center>

@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -21,7 +22,7 @@ $lang_module['comment_success'] = 'Commentaire avec succès';
 $lang_module['comment_unsuccess'] = 'Erreur de traitement des données ou des données manquantes';
 $lang_module['comment_view'] = 'Voir les commentaires';
 $lang_module['comment_submit'] = 'Envoyer les commentaires';
-$lang_module['comment_timeout'] = 'Vous avez commenté, attendez  %s minutes pour continuer.';
+$lang_module['comment_timeout'] = 'Vous avez commenté, attendez %s minutes pour continuer.';
 $lang_module['comment_limit_characters'] = 'Maximum nombre de caractères: 250';
 $lang_module['comment_capcha'] = 'Code de sécurité';
 $lang_module['comment_you_have'] = 'Il vous reste';

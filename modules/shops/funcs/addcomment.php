@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -38,9 +39,9 @@ if ( $content != "" )
 			$user_info['username'] = $lang_module['comment_customer'];
 			$user_info['userid'] = 0;
 		}
-		$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ",'" . NV_CURRENTTIME . "', '" . $user_info['username'] . "', '" . $user_info['userid'] . "','" . $user_info['email'] . "'," . $db->dbescape( NV_CLIENT_IP ) . ", '" . $status . "','" . $user_info['photo'] . "'," . $db->dbescape( $data['title'] ) . ", " . $db->dbescape( $data['content'] ) . ")";
+		$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ",'" . NV_CURRENTTIME . "', '" . $user_info['username'] . "', '" . $user_info['userid'] . "','" . $user_info['email'] . "'," . $db->quote( NV_CLIENT_IP ) . ", '" . $status . "','" . $user_info['photo'] . "'," . $db->quote( $data['title'] ) . ", " . $db->quote( $data['content'] ) . ")";
 
-		$cid = $db->sql_query_insert_id( $sql );
+		$cid = $db->insert_id( $sql );
 
 		if ( $cid > 0 )
 		{

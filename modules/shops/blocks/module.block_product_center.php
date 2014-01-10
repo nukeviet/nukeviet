@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -36,8 +37,8 @@ if( ! function_exists( 'nv_product_center' ) )
 		else
 		{
 			$sql = "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC LIMIT 1";
-			$result = $db->sql_query( $sql );
-			list( $bid ) = $db->sql_fetchrow( $result );
+			$result = $db->query( $sql );
+			$bid = $result->fetchColumn();
 
 			$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.homeimgthumb , t1.homeimgalt FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status=1 ORDER BY t1.id DESC LIMIT 0 , " . $num;
 			

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -24,13 +25,13 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
 $sql = "`" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` AS a LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS b ON a.id=b.id";
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $sql ) );
+$all_page = $db->query( "SELECT COUNT(*) FROM " . $sql )->fetchColumn();
 
 $sql = "SELECT a.cid, a.content, a.post_email, a.status, b." . NV_LANG_DATA . "_title FROM " . $sql . " ORDER BY `cid` DESC LIMIT " . $page . ", " . $per_page;
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $i = 1;
-while( list( $cid, $content, $email, $status, $title ) = $db->sql_fetchrow( $result ) )
+while( list( $cid, $content, $email, $status, $title ) = $result->fetch( 3 ) )
 {
 	$xtpl->assign( 'ROW', array(
 		"class" => $i ++ % 2 == 0 ? " class=\"second\"" : "",
@@ -54,8 +55,8 @@ if( ! empty( $generate_page ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

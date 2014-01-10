@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -32,19 +33,19 @@ if ( $pro_config['active_payment'] == "1" )
 			{
 				// Lập trình thông báo thành công và cập nhật hóa đơn
 				$order_code = intval( $order_code );
-				$re = $db->sql_query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+				$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 			}
 			// Trường hợp thanh toán ngay. Hãy đưa thông báo thành công và cập nhật hóa đơn phù hợp
 			elseif ( $payment_type == 1 )
 			{
 				$order_code = intval( $order_code );
-				$re = $db->sql_query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+				$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 				// Lập trình thông báo thành công và cập nhật hóa đơn			
 			}
 		}
 		return "den day";
 	}
-   
+ 
 	function RefundOrder ( $transaction_info, $order_code, $payment_id, $refund_payment_id, $payment_type, $secure_code )
 	{
 		global $secure_pass, $db,$db_config,$module_data;
@@ -61,7 +62,7 @@ if ( $pro_config['active_payment'] == "1" )
 		{
 			// Lập trình thông báo hoàn trả thành công và cập nhật hóa đơn		
 			$order_code = intval( $order_code );
-			$re = $db->sql_query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 2 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+			$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 2 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 			// Set payment = 2 la da huy thanh toan
 		}
 	}

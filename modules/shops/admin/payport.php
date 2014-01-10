@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -15,10 +16,10 @@ $array_setting_payment = array();
 
 // Load config template payment port in data
 $sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
-$result = $db->sql_query( $sql );
-$all_page = $db->sql_numrows( $result );
+$result = $db->query( $sql );
+$all_page = $result->rowCount();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$array_setting_payment[$row['payment']] = $row;
 }
@@ -84,22 +85,22 @@ if( ! empty( $payment ) )
 	{
 		if( ! empty( $array_payment_other[$payment] ) )
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment`" ) );
+			$weight = $db->query( "SELECT max(`weight`) FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment`" )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
-			$sql = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_payment` (`payment`, `paymentname`, `domain`, `active`, `weight`, `config`,`images_button`) VALUES (" . $db->dbescape_string( $payment ) . ", " . $db->dbescape_string( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->dbescape_string( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->dbescape_string( $array_payment_other[$payment]['images_button'] ) . ")";
+			$sql = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_payment` (`payment`, `paymentname`, `domain`, `active`, `weight`, `config`,`images_button`) VALUES (" . $db->quote( $payment ) . ", " . $db->quote( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->quote( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->quote( $array_payment_other[$payment]['images_button'] ) . ")";
 
-			$db->sql_query( $sql );
+			$db->query( $sql );
 
 			$data_pay = $array_payment_other[$payment];
 		}
 	}
 
 	// Get data have in database
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE payment=" . $db->dbescape( $payment );
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE payment=" . $db->quote( $payment );
+	$result = $db->query( $sql );
 
-	$data_pay = $db->sql_fetchrow( $result );
+	$data_pay = $result->fetch();
 }
 
 if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
@@ -121,9 +122,9 @@ if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
 		$images_button = "";
 	}
 
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_payment` SET `paymentname` = " . $db->dbescape_string( $paymentname ) . ", `domain` = " . $db->dbescape_string( $domain ) . ", `active`=" . $active . ", `config` = '" . nv_base64_encode( serialize( $array_config ) ) . "',`images_button`=" . $db->dbescape_string( $images_button ) . " WHERE `payment` = " . $db->dbescape_string( $payment ) . " LIMIT 1";
+	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_payment` SET `paymentname` = " . $db->quote( $paymentname ) . ", `domain` = " . $db->quote( $domain ) . ", `active`=" . $active . ", `config` = '" . nv_base64_encode( serialize( $array_config ) ) . "',`images_button`=" . $db->quote( $images_button ) . " WHERE `payment` = " . $db->quote( $payment ) . " LIMIT 1";
 
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_product', "edit " . $paymentname, $admin_info['userid'] );
 	nv_del_moduleCache( $module_name );
@@ -222,8 +223,8 @@ if( NV_LANG_DATA == 'vi' )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -109,7 +109,6 @@ a{ text-decoration:none; color:#000000}
                 {LANG.cart_unit}
             </td>
         </tr>
-        <tbody>
             <!-- BEGIN: loop -->
             <tr {bg}>
                <td align="center">

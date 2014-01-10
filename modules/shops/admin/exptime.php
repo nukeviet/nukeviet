@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,14 +15,14 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 	$listid = $nv_Request->get_string( 'listid', 'get' );
 	$id_array = array_map( "intval", explode( ",", $listid ) );
 	
-	$sql = "SELECT `id`, `listcatid`, `exptime`  FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE `id` IN (" . implode( ",", $id_array ) . ")";
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT `id`, `listcatid`, `exptime` FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE `id` IN (" . implode( ",", $id_array ) . ")";
+	$result = $db->query( $sql );
 	
-	while( list( $id, $listcatid, $exptime ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $exptime ) = $result->fetch( 3 ) )
 	{
 		if( $exptime == 0 or $exptime > NV_CURRENTTIME )
 		{
-			$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `exptime` = '" . NV_CURRENTTIME . "' WHERE `id` =" . $id );
+			$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `exptime` = '" . NV_CURRENTTIME . "' WHERE `id` =" . $id );
 			$arr_catid = array_map( "intval", explode( ",", $listcatid ) );
 		}
 	}

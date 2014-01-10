@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -37,14 +38,14 @@ elseif( $func_who_view == 3 and ( ( defined( 'NV_IS_USER' ) and nv_is_in_groups(
 	$allowed = true;
 }
 
-$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
-$data_content = $db->sql_fetchrow( $sql, 2 );
+$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
+$data_content = $sql->fetch();
 $data_shop = array();
 
 if ( empty( $data_content ) )
 {
-    $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-    redict_link( $lang_module['detail_do_not_view'], $lang_module['redirect_to_back_shops'], $nv_redirect );
+ $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+ redict_link( $lang_module['detail_do_not_view'], $lang_module['redirect_to_back_shops'], $nv_redirect );
 }
 
 $page_title = $data_content[NV_LANG_DATA . '_title'];
@@ -54,12 +55,12 @@ $description = $data_content[NV_LANG_DATA . '_hometext'];
 if( $allowed )
 {
 	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `hitstotal`=`hitstotal`+1 WHERE `id`=" . $id;
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	$catid = $data_content['listcatid'];
 
-	$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id` = " . $data_content['product_unit'] );
-	$data_unit = $db->sql_fetchrow( $sql );
+	$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id` = " . $data_content['product_unit'] );
+	$data_unit = $sql->fetch();
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
 	// Xac dinh anh lon
@@ -96,15 +97,15 @@ if( $allowed )
 		$allow_comment = 2;
 	}
 
-	$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_content['source_id'] );
-	$data_temp = $db->sql_fetchrow( $sql );
+	$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_content['source_id'] );
+	$data_temp = $sql->fetch();
 	$data_content['source'] = $data_temp[NV_LANG_DATA . '_title'];
 
 	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgfile`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id!=" . $id . " AND `listcatid` = " . $data_content['listcatid'] . " AND `status`=1 ORDER BY ID DESC LIMIT " . ( $pro_config['per_row'] * 2 );
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
 	$data_others = array();
-	while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $db->sql_fetchrow( $result ) )
+	while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 ) //image thumb
 		{
@@ -154,9 +155,9 @@ if( $allowed )
 		$arrtempid = implode( ",", $arrid );
 
 		$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgfile`, `homeimgthumb`, `addtime`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`, `" . NV_LANG_DATA . "_hometext` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` IN ( " . $arrtempid . ") AND `status`=1 ORDER BY `id` DESC LIMIT ".( $pro_config['per_row'] * 2 );
-		$result = $db->sql_query( $sql );
+		$result = $db->query( $sql );
 
-		while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $db->sql_fetchrow( $result ) )
+		while ( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice,$hometext ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) //image thumb
 			{
@@ -199,12 +200,12 @@ if( $allowed )
 }
 else
 {
-    $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-    redict_link( $lang_module['detail_no_permission'], $lang_module['redirect_to_back_shops'], $nv_redirect );
+ $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+ redict_link( $lang_module['detail_no_permission'], $lang_module['redirect_to_back_shops'], $nv_redirect );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

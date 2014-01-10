@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -53,9 +54,9 @@ foreach ( $global_array_cat as $row )
 
 // Get money
 $sql = "SELECT `code`,`currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "`";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-while ( $row = $db->sql_fetchrow( $result, 2 ) )
+while ( $row = $result->fetch() )
 {
 	$row['selected'] = ( $typemoney == $row['code'] ) ? "selected=\"selected\"" : "";
 	$xtpl->assign( 'ROW', $row );
@@ -64,9 +65,9 @@ while ( $row = $db->sql_fetchrow( $result, 2 ) )
 
 // Get sources
 $sql = "SELECT " . NV_LANG_DATA . "_title as title, sourceid FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
-while ( $row = $db->sql_fetchrow( $result, 2 ) )
+while ( $row = $result->fetch() )
 {
 	$row['selected'] = ( $row['sourceid'] == $sid ) ? "selected=\"selected\"" : "";
 	$xtpl->assign( 'ROW', $row );
@@ -106,14 +107,14 @@ elseif( $price1 == -1 and $price2 > 0 )
 
 if( ! empty( $typemoney ) )
 {
-	$search .= " AND `money_unit` = " . $db->dbescape( $typemoney ) . "";
+	$search .= " AND `money_unit` = " . $db->quote( $typemoney ) . "";
 }
 $sql_i = ", if(t1.`money_unit` ='" . $pro_config['money_unit'] . "', t1.`product_price` , t1.`product_price` * t2.`exchange` ) AS `product_saleproduct` ";
 $order_by = " `product_saleproduct` DESC ";
 
 if ( !empty( $typemoney ) )
 {
-	$search .= " AND `money_unit` = " . $db->dbescape( $typemoney ) . "";
+	$search .= " AND `money_unit` = " . $db->quote( $typemoney ) . "";
 }
 if ( $cataid != 0 )
 {
@@ -127,9 +128,9 @@ if ( $sid != 0 )
 if ( empty( $search ) )
 {
 	$contents = "<div align =\"center\">" . $lang_module['notresult'] . "</div>";
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
+	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
 
@@ -143,15 +144,15 @@ $table_search = "`" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1"
 $table_exchange = " LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` AS t2 ON t1.money_unit=t2.code";
 $sql = " SELECT SQL_CALC_FOUND_ROWS t1.`id`, t1.`listcatid`, t1.`publtime`, t1.`" . NV_LANG_DATA . "_title`, t1.`" . NV_LANG_DATA . "_alias`, t1.`" . NV_LANG_DATA . "_hometext`, t1.`" . NV_LANG_DATA . "_address`, t1.`homeimgalt`, t1.`homeimgfile`, t1.`homeimgthumb`, t1.`product_price`, t1.`product_discounts`, t1.`money_unit`, t1.`showprice`, t2.`exchange` " . $sql_i . " FROM " . $table_search . " " . $table_exchange . " WHERE t1.`status`=1 " . $search . " " . $show_price . " ORDER BY " . $order_by . " LIMIT " . $page . "," . $per_page;
 
-$result = $db->sql_query( $sql );
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+$result = $db->query( $sql );
+$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid;
 $html_pages = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 
-while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 {
 	if( $homeimgthumb == 1 ) //image thumb
 	{
@@ -197,8 +198,8 @@ else
 	$contents .= view_search_all( $data_content, $html_pages );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

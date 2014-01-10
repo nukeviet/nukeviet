@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -43,7 +44,7 @@ else if ( ! function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' .
 		$CKEditor->config['language'] = NV_LANG_INTERFACE;
 		$CKEditor->config['toolbar'] = $editortoolbar;
 		// Path to CKEditor directory, ideally instead of relative dir, use an absolute path:
-		//   $CKEditor->basePath = '/ckeditor/'
+		// $CKEditor->basePath = '/ckeditor/'
 		// If not set, CKEditor will try to detect the correct path.
 		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
@@ -207,7 +208,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if ( $data_content['id'] > 0 )
 		{
-			list( $homeimgfile ) = $db->sql_fetchrow( $db->sql_query( "SELECT `homeimgfile` FROM `" . $table_name . "` WHERE `id`=" . $data_content['id'] . "" ) );
+			$homeimgfile = $db->query( "SELECT `homeimgfile` FROM `" . $table_name . "` WHERE `id`=" . $data_content['id'] . "" )->fetchColumn();
 			if ( $data_content['homeimgfile'] != $homeimgfile )
 			{
 				$check_thumb = true;
@@ -272,11 +273,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$listfield .= ", `" . $flang . "_" . $fname . "`";
 				if ( $flang == NV_LANG_DATA )
 				{
-					$listvalue .= ", " . $db->dbescape( $data_content[$fname] );
+					$listvalue .= ", " . $db->quote( $data_content[$fname] );
 				}
 				else
 				{
-					$listvalue .= ", " . $db->dbescape( $data_content[$fname] );
+					$listvalue .= ", " . $db->quote( $data_content[$fname] );
 				}
 			}
 
@@ -285,7 +286,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$sql = "INSERT INTO `" . $table_name . "` (`id`, `listcatid`, `group_id`, `user_id`, `source_id`, `addtime`, `edittime`, `status`, `publtime`, `exptime`, `archive`, `product_code`, `product_number`, `product_price`, `product_discounts`, `money_unit`, `product_unit`, `homeimgfile`, `homeimgthumb`, `homeimgalt`, `otherimage`, `imgposition`, `copyright`, `inhome`, `allowed_comm`, `allowed_rating`, `ratingdetail`, `allowed_send`, `allowed_print`, `allowed_save`, `hitstotal`, `hitscm`, `hitslm`, `showprice` " . $listfield . ")
 				VALUES ( NULL,
 				" . $data_content['listcatid'] . ",
-				" . $db->dbescape_string( $data_content['group_id'] ) . ",
+				" . $db->quote( $data_content['group_id'] ) . ",
 				" . intval( $data_content['user_id'] ) . ",
 				" . intval( $data_content['source_id'] ) . ",
 				" . intval( $data_content['addtime'] ) . ",
@@ -294,22 +295,22 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				" . intval( $data_content['publtime'] ) . ",
 				" . intval( $data_content['exptime'] ) . ",
 				" . intval( $data_content['archive'] ) . ",
-				" . $db->dbescape_string( $data_content['product_code'] ) . ",
+				" . $db->quote( $data_content['product_code'] ) . ",
 				" . intval( $data_content['product_number'] ) . ",
 				" . intval( $data_content['product_price'] ) . ",
 				" . intval( $data_content['product_discounts'] ) . ",
-				" . $db->dbescape_string( $data_content['money_unit'] ) . ",
+				" . $db->quote( $data_content['money_unit'] ) . ",
 				" . intval( $data_content['product_unit'] ) . ",
-				" . $db->dbescape_string( $data_content['homeimgfile'] ) . ",
-				" . $db->dbescape_string( $data_content['homeimgthumb'] ) . ",
-				" . $db->dbescape_string( $data_content['homeimgalt'] ) . ",
-				" . $db->dbescape_string( $data_content['otherimage'] ) . ",
+				" . $db->quote( $data_content['homeimgfile'] ) . ",
+				" . $db->quote( $data_content['homeimgthumb'] ) . ",
+				" . $db->quote( $data_content['homeimgalt'] ) . ",
+				" . $db->quote( $data_content['otherimage'] ) . ",
 				" . intval( $data_content['imgposition'] ) . ",
 				" . intval( $data_content['copyright'] ) . ",
 				" . intval( $data_content['inhome'] ) . ",
 				" . intval( $data_content['allowed_comm'] ) . ",
 				" . intval( $data_content['allowed_rating'] ) . ",
-				" . $db->dbescape_string( $data_content['ratingdetail'] ) . ",
+				" . $db->quote( $data_content['ratingdetail'] ) . ",
 				" . intval( $data_content['allowed_send'] ) . ",
 				" . intval( $data_content['allowed_print'] ) . ",
 				" . intval( $data_content['allowed_save'] ) . ",
@@ -320,7 +321,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				" . $listvalue .
 			")";
 
-			$data_content['id'] = $db->sql_query_insert_id( $sql );
+			$data_content['id'] = $db->insert_id( $sql );
 
 			if ( $data_content['id'] > 0 )
 			{
@@ -333,20 +334,19 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$contents .= $info;
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
 
-				include ( NV_ROOTDIR . '/includes/header.php' );
+				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . '/includes/footer.php' );
+				include NV_ROOTDIR . '/includes/footer.php';
 				exit();
 			}
 			else
 			{
 				$error = $lang_module['err_no_save'];
 			}
-			$db->sql_freeresult();
 		}
 		else
 		{
-			$data_content_old = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` where `id`=" . $id . "" ) );
+			$data_content_old = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` where `id`=" . $id . "" )->fetch();
 			if ( $data_content_old['status'] == 1 )
 			{
 				$data_content['status'] = 1;
@@ -357,40 +357,39 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$data_content['homeimgthumb'] = $data_content_old['homeimgthumb'];
 			}
 			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET
-			   `listcatid`=" . $data_content['listcatid'] . ",
-			   `source_id`=" . intval( $data_content['source_id'] ) . ",
-			   `status`=" . intval( $data_content['status'] ) . ",
-			   `publtime`=" . intval( $data_content['publtime'] ) . ",
-			   `exptime`=" . intval( $data_content['exptime'] ) . ",
-			   `edittime`=" . NV_CURRENTTIME . ",
-			   `archive`=" . intval( $data_content['archive'] ) . ",
-			   `product_code` = " . $db->dbescape_string( $data_content['product_code'] ) . ",
-			   `product_number` = " . intval( $data_content['product_number'] ) . ",
-			   `product_price` = " . intval( $data_content['product_price'] ) . ",
-			   `money_unit` = " . $db->dbescape_string( $data_content['money_unit'] ) . ",
-			   `product_unit` = " . intval( $data_content['product_unit'] ) . ",
-			   `homeimgfile`=" . $db->dbescape_string( $data_content['homeimgfile'] ) . ",
-			   `homeimgalt`=" . $db->dbescape_string( $data_content['homeimgalt'] ) . ",
-			   `homeimgthumb`=" . $db->dbescape_string( $data_content['homeimgthumb'] ) . ",
-			   `imgposition`=" . intval( $data_content['imgposition'] ) . ",
-			   `copyright`=" . intval( $data_content['copyright'] ) . ",
-			   `inhome`=" . intval( $data_content['inhome'] ) . ",
-			   `allowed_comm`=" . intval( $data_content['allowed_comm'] ) . ",
-			   `allowed_rating`=" . intval( $data_content['allowed_rating'] ) . ",
-			   `allowed_send`=" . intval( $data_content['allowed_send'] ) . ",
-			   `allowed_print`=" . intval( $data_content['allowed_print'] ) . ",
-			   `allowed_save`=" . intval( $data_content['allowed_save'] ) . ",
-			   `" . NV_LANG_DATA . "_title`=" . $db->dbescape_string( $data_content['title'] ) . ",
-			   `" . NV_LANG_DATA . "_alias`=" . $db->dbescape_string( $data_content['alias'] ) . ",
-			   `" . NV_LANG_DATA . "_hometext`=" . $db->dbescape_string( $data_content['hometext'] ) . ",
-			   `" . NV_LANG_DATA . "_bodytext`=" . $db->dbescape_string( $data_content['bodytext'] ) . ",
-			   `" . NV_LANG_DATA . "_address`=" . $db->dbescape_string( $data_content['address'] ) . ",
-			   `" . NV_LANG_DATA . "_note`=" . $db->dbescape_string( $data_content['note'] ) . ",
-			   `" . NV_LANG_DATA . "_keywords`=" . $db->dbescape_string( $data_content['keywords'] ) . "
+			 `listcatid`=" . $data_content['listcatid'] . ",
+			 `source_id`=" . intval( $data_content['source_id'] ) . ",
+			 `status`=" . intval( $data_content['status'] ) . ",
+			 `publtime`=" . intval( $data_content['publtime'] ) . ",
+			 `exptime`=" . intval( $data_content['exptime'] ) . ",
+			 `edittime`=" . NV_CURRENTTIME . ",
+			 `archive`=" . intval( $data_content['archive'] ) . ",
+			 `product_code` = " . $db->quote( $data_content['product_code'] ) . ",
+			 `product_number` = " . intval( $data_content['product_number'] ) . ",
+			 `product_price` = " . intval( $data_content['product_price'] ) . ",
+			 `money_unit` = " . $db->quote( $data_content['money_unit'] ) . ",
+			 `product_unit` = " . intval( $data_content['product_unit'] ) . ",
+			 `homeimgfile`=" . $db->quote( $data_content['homeimgfile'] ) . ",
+			 `homeimgalt`=" . $db->quote( $data_content['homeimgalt'] ) . ",
+			 `homeimgthumb`=" . $db->quote( $data_content['homeimgthumb'] ) . ",
+			 `imgposition`=" . intval( $data_content['imgposition'] ) . ",
+			 `copyright`=" . intval( $data_content['copyright'] ) . ",
+			 `inhome`=" . intval( $data_content['inhome'] ) . ",
+			 `allowed_comm`=" . intval( $data_content['allowed_comm'] ) . ",
+			 `allowed_rating`=" . intval( $data_content['allowed_rating'] ) . ",
+			 `allowed_send`=" . intval( $data_content['allowed_send'] ) . ",
+			 `allowed_print`=" . intval( $data_content['allowed_print'] ) . ",
+			 `allowed_save`=" . intval( $data_content['allowed_save'] ) . ",
+			 `" . NV_LANG_DATA . "_title`=" . $db->quote( $data_content['title'] ) . ",
+			 `" . NV_LANG_DATA . "_alias`=" . $db->quote( $data_content['alias'] ) . ",
+			 `" . NV_LANG_DATA . "_hometext`=" . $db->quote( $data_content['hometext'] ) . ",
+			 `" . NV_LANG_DATA . "_bodytext`=" . $db->quote( $data_content['bodytext'] ) . ",
+			 `" . NV_LANG_DATA . "_address`=" . $db->quote( $data_content['address'] ) . ",
+			 `" . NV_LANG_DATA . "_note`=" . $db->quote( $data_content['note'] ) . ",
+			 `" . NV_LANG_DATA . "_keywords`=" . $db->quote( $data_content['keywords'] ) . "
 			WHERE `id` =" . $id;
-			$db->sql_query( $sql );
 
-			if ( $db->sql_affectedrows() > 0 )
+			if ( $db->exec( $sql ) )
 			{
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct";
 				$info = "<div class=\"frame\">";
@@ -400,16 +399,15 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$info .= "</div>";
 				$contents .= $info;
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
-				include ( NV_ROOTDIR . '/includes/header.php' );
+				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
-				include ( NV_ROOTDIR . '/includes/footer.php' );
+				include NV_ROOTDIR . '/includes/footer.php';
 				exit();
 			}
 			else
 			{
 				$error = $lang_module['errorsave'];
 			}
-			$db->sql_freeresult();
 		}
 	}
 
@@ -419,7 +417,7 @@ else
 	$id = isset( $array_op[1] ) ? $array_op[1] : 0;
 	if ( $id > 0 )
 	{
-		$rowdata = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id ) );
+		$rowdata = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id )->fetch();
 
 		if( empty( $rowdata ) )
 		{
@@ -475,9 +473,9 @@ else
 }
 
 $sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev`, `numsubcat` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
-$result_cat = $db->sql_query( $sql );
+$result_cat = $db->query( $sql );
 $data_cata = array();
-while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $db->sql_fetchrow( $result_cat ) )
+while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )
 {
 	$xtitle_i = "";
 	if ( $lev_i > 0 )
@@ -502,8 +500,8 @@ while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $db->sql_fetchrow( $r
 // List pro_unit
 $data_unit = array();
 $sql = "SELECT `id`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_units`";
-$result_unit = $db->sql_query( $sql );
-while ( list( $unitid_i, $title_i ) = $db->sql_fetchrow( $result_unit ) )
+$result_unit = $db->query( $sql );
+while ( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
 {
 	$select = ( $data_content['product_unit'] == $unitid_i ) ? "selected=\"selected\"" : "";
 
@@ -516,8 +514,8 @@ while ( list( $unitid_i, $title_i ) = $db->sql_fetchrow( $result_unit ) )
 
 $contents = call_user_func( "post_product", $data_content, $data_cata, $data_unit, $error, $lang_submit );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

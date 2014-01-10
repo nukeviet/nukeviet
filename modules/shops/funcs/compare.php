@@ -1,8 +1,9 @@
 <?php
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 if( ! defined( 'NV_IS_MOD_SHOPS' ) )
@@ -37,7 +38,7 @@ if( $nv_Request->isset_request( 'compare', 'post' ) )
 			$array_id = serialize( $array_id );
 			$_SESSION['array_id'] = $array_id;
 			nv_del_moduleCache( $module_name );
-			die( "OK" );
+			die( 'OK' );
 		}
 	}
 }
@@ -70,9 +71,9 @@ if( ! empty( $array_id ) )
 	foreach( $array_id as $array_id_i )
 	{
 		$sql = "SELECT `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`,`homeimgfile`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`,
-     " . NV_LANG_DATA . "_warranty," . NV_LANG_DATA . "_promotional as promotional," . NV_LANG_DATA . "_note as note, source_id," . NV_LANG_DATA . "_bodytext     FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $array_id_i;
-		$result = $db->sql_query( $sql );
-		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address,$homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $warranty, $promotional, $note, $source_id, $bodytext ) = $db->sql_fetchrow( $result ) )
+ " . NV_LANG_DATA . "_warranty," . NV_LANG_DATA . "_promotional as promotional," . NV_LANG_DATA . "_note as note, source_id," . NV_LANG_DATA . "_bodytext FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $array_id_i;
+		$result = $db->query( $sql );
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address,$homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $warranty, $promotional, $note, $source_id, $bodytext ) = $result->fetch( 3 ) )
 		{
 			// Xac dinh anh lon
 			$homeimgfiles1 = $homeimgfile;
@@ -83,15 +84,15 @@ if( ! empty( $array_id ) )
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$homeimgthumbs  = $homeimgfiles1 = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfiles1;
+				$homeimgthumbs = $homeimgfiles1 = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfiles1;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
-				$homeimgthumbs  = $homeimgfile = $homeimgfiles1;
+				$homeimgthumbs = $homeimgfile = $homeimgfiles1;
 			}
 			else//no image
 			{
-				$homeimgthumbs  = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+				$homeimgthumbs = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 			}
 
 			$data_pro[] = array(
@@ -171,8 +172,8 @@ if( ! empty( $array_id ) )
 		{
 			$xtpl->parse( 'main.grid_rows.product_code' );
 		}
-		$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
-		$data_temp = $db->sql_fetchrow( $sql );
+		$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
+		$data_temp = $sql->fetch();
 		$data_row['source'] = $data_temp[NV_LANG_DATA . '_title'];
 		if( ! empty( $data_row['source'] ) )
 		{
@@ -181,7 +182,7 @@ if( ! empty( $array_id ) )
 			$xtpl->parse( 'main.source' );
 		}
 
-		if( ! empty(  $data_row['promotional']  ) )
+		if( ! empty( $data_row['promotional'] ) )
 		{
 			$xtpl->assign( 'promotional', $data_row['promotional'] );
 			$xtpl->parse( 'main.grid_rows.promotional' );
@@ -191,18 +192,18 @@ if( ! empty( $array_id ) )
 			$xtpl->assign( 'warranty', $data_row['warranty']);
 			$xtpl->parse( 'main.grid_rows.warranty' );
 		}
-		if( ! empty( $data_row['address']  ) )
+		if( ! empty( $data_row['address'] ) )
 		{
-			$xtpl->assign( 'address', $data_row['address']  );
+			$xtpl->assign( 'address', $data_row['address'] );
 			$xtpl->parse( 'main.grid_rows.address' );
 		}
-		if( ! empty( $data_row['note']  ) )
+		if( ! empty( $data_row['note'] ) )
 		{
-			$xtpl->assign( 'note',$data_row['note']  );
+			$xtpl->assign( 'note',$data_row['note'] );
 			$xtpl->parse( 'main.grid_rows.note' );
 		}
-		$sql = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
-		$data_temp = $db->sql_fetchrow( $sql );
+		$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
+		$data_temp = $sql->fetch();
 		$data_row['source'] = $data_temp[NV_LANG_DATA . '_title'];
 
 		if( ! empty( $data_row['source'] ) )
@@ -219,7 +220,7 @@ if( ! empty( $array_id ) )
 else
 {
 	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	die( );
+	die();
 }
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

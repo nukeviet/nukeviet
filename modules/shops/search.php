@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project  NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
- * @Createdate  03-05-2010
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 03-05-2010
  */
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`" . NV_LANG_DATA . "_title`,`" . NV_LANG_DATA . "_alias`, `listcatid`,  `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_bodytext` 
+$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`" . NV_LANG_DATA . "_title`,`" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_bodytext` 
 FROM `" . $db_config['prefix'] . "_" . $m_values['module_data'] . "_rows` 
 WHERE (" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'product_code', $dbkeyword, $logic ) . " 
@@ -18,10 +19,10 @@ OR " . nv_like_logic( NV_LANG_DATA . '_hometext', $dbkeyword, $logic ) . ")
 AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ) 
 LIMIT " . $pages . "," . $limit;
 
-$tmp_re = $db->sql_query( $sql );
+$tmp_re = $db->query( $sql );
 
-$result = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT FOUND_ROWS()" );
+$all_page = $result->fetchColumn();
 
 if( $all_page )
 {
@@ -33,7 +34,7 @@ if( $all_page )
 
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
-	while( list( $id, $tilterow, $alias, $listcatid, $hometext, $bodytext ) = $db->sql_fetchrow( $tmp_re ) )
+	while( list( $id, $tilterow, $alias, $listcatid, $hometext, $bodytext ) = $tmp_re->fetch( 3 ) )
 	{
 		$content = $hometext . $bodytext;
 		$catid = explode( ",", $listcatid );

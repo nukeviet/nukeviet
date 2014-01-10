@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,10 +15,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 	$listid = $nv_Request->get_string( 'listid', 'get' );
 	$id_array = array_filter( array_map( "intval", explode( ",", $listid ) ) );
 	
-	$sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime`  FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE `id` IN (" . implode( ",", $id_array ) . ")";
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT `id`, `listcatid`, `status`, `publtime`, `exptime` FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE `id` IN (" . implode( ",", $id_array ) . ")";
+	$result = $db->query( $sql );
 	
-	while( list( $id, $listcatid, $status, $publtime, $exptime ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $status, $publtime, $exptime ) = $result->fetch( 3 ) )
 	{
 		$data_save = array();
 		$data_save['exptime'] = ( int ) $exptime;
@@ -43,7 +44,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 			}
 
 			$s_ud .= "`edittime` = '" . NV_CURRENTTIME . "'";
-			$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET " . $s_ud . " WHERE `id` =" . $id );
+			$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET " . $s_ud . " WHERE `id` =" . $id );
 		}
 	}
 	nv_set_status_module();

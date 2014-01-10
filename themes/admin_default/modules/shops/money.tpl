@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
-<table summary="" class="tab1">
+<table class="tab1">
 	<thead>
 		<tr>
 			<td width="10px" align="center"></td>

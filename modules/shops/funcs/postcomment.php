@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -49,21 +50,21 @@ if( $pro_config['comment'] and $id > 0 and $checkss == md5( $id . session_id() .
 	}
 	elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	{
-		$result = $db->sql_query( "SELECT `listcatid`, `allowed_comm` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
-		$row = $db->sql_fetchrow( $result );
+		$result = $db->query( "SELECT `listcatid`, `allowed_comm` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
+		$row = $result->fetch();
 		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 		{
 			$content = nv_nl2br( $content, '<br />' );
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ", UNIX_TIMESTAMP(), " . $db->dbescape( $name ) . ", " . $userid . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( NV_CLIENT_IP ) . ", " . $status . ", '', '', " . $db->dbescape( $content ) . ")";
-			$result = $db->sql_query( $sql );
+			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ", UNIX_TIMESTAMP(), " . $db->quote( $name ) . ", " . $userid . ", " . $db->quote( $email ) . ", " . $db->quote( NV_CLIENT_IP ) . ", " . $status . ", '', '', " . $db->quote( $content ) . ")";
+			$result = $db->query( $sql );
 			if( $result )
 			{
 				$page = 0;
-				list( $numf ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` WHERE `id`= '" . $id . "' AND `status`=1" ) );
+				$numf = $db->query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` WHERE `id`= '" . $id . "' AND `status`=1" )->fetchColumn();
 				if( $status )
 				{
 					$result = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
-					$db->sql_query( $result );
+					$db->query( $result );
 				}
 				$page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;
 				if( $page < 0 ) $page = 0;
@@ -92,8 +93,8 @@ else
 	$contents = "ERR_" . $lang_module['comment_unsuccess'];
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

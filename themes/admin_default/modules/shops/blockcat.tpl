@@ -15,7 +15,7 @@
 	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
 	<input type="hidden" name ="bid" value="{DATA.bid}" />
 	<input name="savecat" type="hidden" value="1" />
-	<table summary="" class="tab1">
+	<table class="tab1">
 		<caption>{LANG.add_block_cat}</caption>
 		<col width="150"/>
 		<tbody>
@@ -30,15 +30,13 @@
 				<td align="right"  width="100px"><strong>{LANG.alias}: </strong></td>
 				<td><input style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
 			</tr>
-		</tbody>
 		<!-- END: alias -->
+		<tbody>
 		<tbody>
 			<tr>
 				<td align="right"><strong>{LANG.keywords}: </strong></td>
 				<td><input style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
 				<td valign="top" align="right" width="100px"><br><strong>{LANG.description}</strong></td>
 				<td>

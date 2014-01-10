@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -15,8 +16,8 @@ $contents = $lang_module['order_submit_pay_error'];
 $order_id = $nv_Request->get_int( 'order_id', 'get', 0 );
 $save = $nv_Request->get_string( 'save', 'post,get', '' );
 
-$result = $db->sql_query( "SELECT *  FROM `" . $table_name . "` WHERE `order_id`=" . $order_id );
-$data_content = $db->sql_fetchrow( $result, 2 );
+$result = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `order_id`=" . $order_id );
+$data_content = $result->fetch();
 
 if( empty( $data_content ) )
 {
@@ -41,11 +42,11 @@ if( $save == 1 )
 	$payment = "";
 	$userid = $admin_info['userid'];
 	
-	$transaction_id = $db->sql_query_insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+	$transaction_id = $db->insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
 	
 	if( $transaction_id > 0 )
 	{
-		$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `transaction_status`=" . $transaction_status . ", `transaction_id`=" . $transaction_id . ", `transaction_count`=`transaction_count`+1 WHERE `order_id`=" . $order_id );
+		$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `transaction_status`=" . $transaction_status . ", `transaction_id`=" . $transaction_id . ", `transaction_count`=`transaction_count`+1 WHERE `order_id`=" . $order_id );
 		
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'Log payment product', "ID: " . $id_pro, $admin_info['userid'] );
 	}
@@ -55,8 +56,8 @@ if( $save == 1 )
 	nv_del_moduleCache( $module_name );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -32,8 +32,8 @@
 			</td>
 		</tr>
 	</tfoot>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
 		<tr>
 			<td align="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
 			<td align="center">{ROW.cid}</td>
@@ -42,8 +42,8 @@
 			<td>{ROW.email}</td>
 			<td align="center">{ROW.status}</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 </table>
 <!-- BEGIN: generate_page -->
 <table class="tab1">

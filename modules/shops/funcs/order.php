@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -90,9 +91,9 @@ if ( $post_order == 1 )
 
 	if ( empty( $error ) and $i > 0 )
 	{
-		$result = $db->sql_query( "SHOW TABLE STATUS WHERE `Name`='" . $db_config['prefix'] . "_" . $module_data . "_orders'" );
-		$item = $db->sql_fetch_assoc( $result );
-		$db->sql_freeresult( $result );
+		$result = $db->query( "SHOW TABLE STATUS WHERE `Name`='" . $db_config['prefix'] . "_" . $module_data . "_orders'" );
+		$item = $result->fetch();
+		$result->closeCursor();
 
 		$order_code = vsprintf( $pro_config['format_order_id'], $item['Auto_increment'] );
 		$transaction_status = ( empty( $pro_config['auto_check_order'] ) ) ? - 1 : 0;
@@ -102,16 +103,16 @@ if ( $post_order == 1 )
 			`user_id`, `admin_id`, `shop_id`, `who_is`, `unit_total`, `order_total`, `order_time`, `postip`, `view`,
 			`transaction_status`, `transaction_id`, `transaction_count`
 		) VALUES (
-			NULL , '" . NV_LANG_DATA . "', " . $db->dbescape_string( $order_code ) . ", " . $db->dbescape_string( $data_order['order_name'] ) . ", " . $db->dbescape_string( $data_order['order_email'] ) . ",
-			" . $db->dbescape_string( $data_order['order_address'] ) . "," . $db->dbescape_string( $data_order['order_phone'] ) . ",
-			" . $db->dbescape_string( $data_order['order_note'] ) . ", " . $db->dbescape_string( $data_order['listid'] ) . ",
-			" . $db->dbescape_string( $data_order['listnum'] ) . ", " . $db->dbescape_string( $data_order['listprice'] ) . ",
+			NULL , '" . NV_LANG_DATA . "', " . $db->quote( $order_code ) . ", " . $db->quote( $data_order['order_name'] ) . ", " . $db->quote( $data_order['order_email'] ) . ",
+			" . $db->quote( $data_order['order_address'] ) . "," . $db->quote( $data_order['order_phone'] ) . ",
+			" . $db->quote( $data_order['order_note'] ) . ", " . $db->quote( $data_order['listid'] ) . ",
+			" . $db->quote( $data_order['listnum'] ) . ", " . $db->quote( $data_order['listprice'] ) . ",
 			" . intval( $data_order['user_id'] ) . ", " . intval( $data_order['admin_id'] ) . ", " . intval( $data_order['shop_id'] ) . ",
-			" . intval( $data_order['who_is'] ) . ", " . $db->dbescape_string( $data_order['unit_total'] ) . ", " . doubleval( $data_order['order_total'] ) . ",
-			" . intval( $data_order['order_time'] ) . "," . $db->dbescape( $client_info['ip'] ) . " ,0," . $transaction_status . ",0,0
+			" . intval( $data_order['who_is'] ) . ", " . $db->quote( $data_order['unit_total'] ) . ", " . doubleval( $data_order['order_total'] ) . ",
+			" . intval( $data_order['order_time'] ) . "," . $db->quote( $client_info['ip'] ) . " ,0," . $transaction_status . ",0,0
 		)";
 
-		$order_id = $db->sql_query_insert_id( $sql );
+		$order_id = $db->insert_id( $sql );
 
 		if ( $order_id > 0 )
 		{
@@ -124,7 +125,7 @@ if ( $post_order == 1 )
 			$order_code2 = vsprintf( $pro_config['format_order_id'], $order_id );
 			if ( $order_code != $order_code2 )
 			{
-				$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `order_code`=" . $db->dbescape_string( $order_code2 ) . "  WHERE `order_id`=" . $order_id );
+				$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `order_code`=" . $db->quote( $order_code2 ) . " WHERE `order_id`=" . $order_id );
 			}
 
 			// Gui email thong bao don hang
@@ -157,10 +158,10 @@ if ( $post_order == 1 )
 			{
 				$templistid = implode( ",", $arrayid );
 
-				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE  t1.id IN (" . $templistid . ")  AND t1.status=1";
-				$result = $db->sql_query( $sql );
+				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status=1";
+				$result = $db->query( $sql );
 
-				while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
+				while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
 				{
 					$data_pro[] = array(
 						"id" => $id,
@@ -209,10 +210,10 @@ if ( $action == 0 )
 	{
 		$listid = implode( ",", $arrayid );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2." . NV_LANG_DATA . "_title, t1.money_unit  FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE  t1.id IN (" . $listid . ") AND t1.status=1";
-		$result = $db->sql_query( $sql );
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ") AND t1.status=1";
+		$result = $db->query( $sql );
 
-		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $unit, $money_unit ) = $db->sql_fetchrow( $result ) )
+		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $unit, $money_unit ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) //image thumb
 			{
@@ -267,8 +268,8 @@ if ( $action == 0 )
 	}
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

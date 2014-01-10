@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -29,7 +30,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "	<td><select name=\"config_blockid\">\n";
 
-		$sql = "SELECT `bid`,  " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
+		$sql = "SELECT `bid`, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
 
 		foreach( $list as $l )

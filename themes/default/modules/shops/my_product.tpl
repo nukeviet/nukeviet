@@ -13,7 +13,6 @@
 			<td class="amount" width="80px">{LANG.profile_products_status}</td>
 			<td class="" align="center" width="80px">{LANG.profile_action}</td>
 		</tr>
-		<tbody>
 			<!-- BEGIN: rows -->
 			<tr id="{id}"{bg}>
 				<td class="checkbox" align="center">{no_pro}</td>

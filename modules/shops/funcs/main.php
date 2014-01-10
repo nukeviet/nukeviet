@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -22,10 +23,10 @@ $cache_file = "";
 
 if ($nv_Request->isset_request('changesprice', 'post'))
 {
-    $sorts = $nv_Request->get_int('sort', 'post', 0);
-    $nv_Request->set_Session('sorts', $sorts, NV_LIVE_SESSION_TIME);
-    nv_del_moduleCache($module_name);
-    die("OK");
+ $sorts = $nv_Request->get_int('sort', 'post', 0);
+ $nv_Request->set_Session('sorts', $sorts, NV_LIVE_SESSION_TIME);
+ nv_del_moduleCache($module_name);
+ die("OK");
 }
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
@@ -43,27 +44,27 @@ if( empty( $contents ) )
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 	$html_pages = "";
 	$orderby = "";
-    if ($sorts == 0)
-    {
-        $orderby = " ORDER BY `id` DESC ";
+ if ($sorts == 0)
+ {
+ $orderby = " ORDER BY `id` DESC ";
 
-    }
-    elseif ($sorts == 1)
-    {
-        $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
-    }
-    else
-    {
-        $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
-    }
+ }
+ elseif ($sorts == 1)
+ {
+ $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
+ }
+ else
+ {
+ $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
+ }
 	if( $pro_config['home_view'] == "view_home_all" )
 	{		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `status`=1  " . $orderby . " LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
+		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `status`=1 " . $orderby . " LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
 
-		$result = $db->sql_query( $sql );
-		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+		$result = $db->query( $sql );
+		$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
-		while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+		while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) //image thumb
 			{
@@ -120,12 +121,12 @@ if( empty( $contents ) )
 
 				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
 
-				$result = $db->sql_query( $sql );
-				list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+				$result = $db->query( $sql );
+				$num_pro = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
 				$data_pro = array();
 
-				while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+				while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 				{
 					if( $homeimgthumb == 1 ) //image thumb
 					{
@@ -200,12 +201,12 @@ if( empty( $contents ) )
 
 				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE " . $sql_regexp . " AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $num_links;
 
-				$result = $db->sql_query( $sql );
-				list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+				$result = $db->query( $sql );
+				$num_pro = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
 				$data_pro = array();
 
-				while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $db->sql_fetchrow( $result ) )
+				while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 				{
 					if( $homeimgthumb == 1 ) //image thumb
 					{
@@ -262,9 +263,9 @@ if( empty( $contents ) )
 	}
 	else
 	{
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( "" );
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
 
@@ -282,8 +283,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

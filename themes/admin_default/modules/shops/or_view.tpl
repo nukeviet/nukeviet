@@ -55,8 +55,8 @@
 			<td class="unit">{product_unit}</td>
 			<td class="money" align="right"><strong>{product_price}</strong></td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 	<tfoot>
 		<tr>
 			<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total}</strong></td>
@@ -98,8 +98,8 @@
 			<td align="right">{DATA_TRANS.payment_amount}</td>
 			<td align="right">{DATA_TRANS.transaction_time}</td>
 		</tr>
-	</tbody>
 	<!-- END: looptrans -->
+	<tbody>
 	<!-- BEGIN: checkpayment -->
 	<tfoot>
 		<tr>

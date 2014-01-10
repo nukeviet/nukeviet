@@ -8,8 +8,8 @@
 			<td style="width:120px;"></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
 		<tr>
 			<td align="center">
 				<select id="id_weight_{ROW.sourceid}" onchange="nv_chang_sources('{ROW.sourceid}','weight');">
@@ -26,8 +26,8 @@
 				<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></span>
 			</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 </table>
 <!-- BEGIN: generate_page -->
 <table class="tab1">

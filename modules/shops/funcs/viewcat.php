@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -42,19 +43,19 @@ if( empty( $contents ) )
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'];
 	$orderby = "";
-    if ($sorts == 0)
-    {
-        $orderby = " ORDER BY `id` DESC ";
+ if ($sorts == 0)
+ {
+ $orderby = " ORDER BY `id` DESC ";
 
-    }
-    elseif ($sorts == 1)
-    {
-        $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
-    }
-    else
-    {
-        $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
-    }
+ }
+ elseif ($sorts == 1)
+ {
+ $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
+ }
+ else
+ {
+ $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
+ }
 	if ( $global_array_cat[$catid]['viewcat'] == "view_home_cat" and $global_array_cat[$catid]['numsubcat'] > 0 )
 	{
 		$data_content = array();
@@ -68,12 +69,12 @@ if( empty( $contents ) )
 			$array_cat = GetCatidInParent( $catid_i );
 
 			$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `status`=1 ".$orderby." LIMIT 0," . $array_info_i['numlinks'];
-			$result = $db->sql_query( $sql );
+			$result = $db->query( $sql );
 
 			$data_pro = array();
-			list( $num_pro ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+			$num_pro = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
-			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit,$showprice ) = $db->sql_fetchrow( $result ) )
+			while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit,$showprice ) = $result->fetch( 3 ) )
 			{
 				if( $homeimgthumb == 1 ) //image thumb
 				{
@@ -142,9 +143,9 @@ if( empty( $contents ) )
 			$sql .= " `listcatid` IN (" . implode( ",", $array_cat ) . ")";
 		}
 		$sql .= " AND `status`=1 ".$orderby." LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
-		$result = $db->sql_query( $sql );
+		$result = $db->query( $sql );
 
-		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+		$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
 
 		$data_content = GetDataIn( $result, $catid );
 		$data_content['count'] = $all_page;
@@ -172,8 +173,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

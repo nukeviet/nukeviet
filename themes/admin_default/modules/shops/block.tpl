@@ -16,14 +16,14 @@
 					<td>{LANG.name}</td>
 				</tr>
 			</thead>
+			<tbody>
 			<!-- BEGIN: loop -->
-			<tbody{ROW.class}>
 				<tr>
 					<td align="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"{ROW.checked}></td>
 					<td>{ROW.title}</td>
 				</tr>
-			</tbody>
 			<!-- END: loop -->
+			<tbody>
 			<tfoot>
 				<tr align="left">
 					<td align="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -17,22 +18,20 @@ $contents = $lang_module['active_change_not_complete'];
 
 if( ! empty( $payment ) )
 {
-	list( $value ) = $db->sql_fetchrow( $db->sql_query( "SELECT `active` FROM " . $table . " WHERE `payment`=" . $db->dbescape( $payment ) ) );
+	$value = $db->query( "SELECT `active` FROM " . $table . " WHERE `payment`=" . $db->quote( $payment ) )->fetchColumn();
 	$value = ( $value == '1' ) ? '0' : '1';
-	
-	$sql = "UPDATE " . $table . " SET `active`=" . $value . " WHERE `payment`=" . $db->dbescape( $payment );
-	
-	if( $db->sql_query( $sql ) )
+
+	$sql = "UPDATE " . $table . " SET `active`=" . $value . " WHERE `payment`=" . $db->quote( $payment );
+	if( $db->query( $sql ) )
 	{
-		$db->sql_freeresult();
 		$contents = $lang_module['active_change_complete'];
 	}
 }
 
 nv_del_moduleCache( $module_name );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

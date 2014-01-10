@@ -15,8 +15,8 @@
 			<td style="width:100px;"></td>
 		</tr>
 	</thead>
+	<tbody>
 	<!-- BEGIN: loop -->
-	<tbody{ROW.class}>
 		<tr>
 			<td align="center">
 				<select id="id_weight_{ROW.groupid}" onchange="nv_chang_group('{ROW.groupid}','weight');">
@@ -47,8 +47,8 @@
 				<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_group({ROW.groupid})">{GLANG.delete}</a></span>
 			</td>
 		</tr>
-	</tbody>
 	<!-- END: loop -->
+	<tbody>
 </table>
 <!-- END: data -->
 <!-- END: main -->

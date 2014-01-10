@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/12/2010, 1:27
  */
 
@@ -20,10 +21,10 @@ if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile 
 else
 {
 	$sql = "SELECT `id`, `listcatid`, `edittime`, `" . NV_LANG_DATA . "_alias` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 1000";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 	$url = array();
 	
-	while ( list( $id, $catid_i, $edittime, $alias ) = $db->sql_fetchrow( $result ) )
+	while ( list( $id, $catid_i, $edittime, $alias ) = $result->fetch( 3 ) )
 	{
 		$url[] = array(
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id,

@@ -41,8 +41,8 @@
 				<td></td>
 			</tr>
 		</thead>
+		<tbody>
 		<!-- BEGIN: loop -->
-		<tbody{ROW.class}>
 			<tr>
 				<td align="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"></td>
 				<td>
@@ -64,8 +64,8 @@
 					{ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete}
 				</td>
 			</tr>
-		</tbody>
 		<!-- END: loop -->
+		<tbody>
 		<tfoot>
 			<tr align="left">
 				<td colspan="8">
@@ -84,4 +84,3 @@
 <br /><p align="center">{GENERATE_PAGE}</p>
 <!-- END: generate_page -->
 <!-- END: main -->
-

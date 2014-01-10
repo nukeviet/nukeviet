@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
-* @Createdate Jul 04, 2011, 03:18:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jul 04, 2011, 03:18:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '04/07/2011, 10:18';
@@ -113,7 +114,7 @@ $lang_module['setting_stt'] = 'Order';
 $lang_module['active_change_complete'] = 'Change succesfully';
 $lang_module['active_change_not_complete'] = 'Can not change';
 $lang_module['setting_error_connect'] = 'Unable to connect to Ngân Lượng';
-$lang_module['setting_title_email_send'] = 'Using module Shops  -  Nukeviet';
+$lang_module['setting_title_email_send'] = 'Using module Shops - Nukeviet';
 $lang_module['setting_error_email_send'] = 'The system can not send e-mail ! Please turn on e-mail sending function';
 $lang_module['setting_error_value'] = 'Please enter the connection parameters for payment';
 $lang_module['viewcat_page'] = 'Display method of product';
