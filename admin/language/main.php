@@ -184,20 +184,6 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 				{
 					$sql_create_table = array();
 					include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
-					foreach( $sql_create_table as $query )
-					{
-						try
-						{
-							$db->query( $query );
-						}
-						catch (PDOException $e)
-						{
-							include NV_ROOTDIR . '/includes/header.php';
-							echo nv_admin_theme( 'ERROR SETUP SQL: <br />' . $query );
-							include NV_ROOTDIR . '/includes/footer.php';
-							exit();
-						}
-					}
 
 					try
 					{

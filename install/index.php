@@ -534,6 +534,7 @@ elseif( $step == 5 )
 							break;
 						}
 					}
+					unset( $sql_create_table );
 
 					$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
 					$result = $db->query( $sql );
@@ -564,23 +565,7 @@ elseif( $step == 5 )
 					{
 						$filesavedata = 'en';
 					}
-
 					include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
-
-					foreach( $sql_create_table as $_sql )
-					{
-						try
-						{
-							$db->query( $_sql );
-						}
-						catch( PDOException $e )
-						{
-							$nv_Request->set_Session( 'maxstep', 4 );
-							$db_config['error'] = $e->getMessage();
-							trigger_error( $e->getMessage() );
-							break;
-						}
-					}
 
 					try
 					{

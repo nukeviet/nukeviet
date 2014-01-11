@@ -36,10 +36,18 @@ function nv_online_upd()
 	$sth->execute();
 	if( ! $sth->rowCount() )
 	{
- 		$sth = $db->prepare( 'INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
-		$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
-		$sth->bindParam( ':username', $username, PDO::PARAM_STR );
-		$sth->execute();
+		try
+		{
+	 		$sth = $db->prepare( 'INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
+			$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
+			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
+			$sth->execute();
+		}
+		catch (PDOException $e)
+		{
+			global $lang_global;
+			trigger_error( $lang_global['flood_info1']." \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $client_info['selfurl'] . "\" />", 256 );
+		}		
 	}
 }
 

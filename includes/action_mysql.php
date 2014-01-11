@@ -23,14 +23,14 @@ function nv_delete_table_sys( $lang )
 	global $db_config, $global_config;
 
 	$sql_drop_table = array();
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modules";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_groups";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_weight";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modfuncs";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_searchkeys";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_referer_stats";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modthemes";
-	$sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs DROP " . $lang . "_cron_name";
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modules';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_weight';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modfuncs';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_searchkeys';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_referer_stats';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modthemes';
+	$sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs DROP ' . $lang . '_cron_name';
 
 	return $sql_drop_table;
 }

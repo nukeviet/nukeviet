@@ -42,7 +42,7 @@ if( ! empty( $savecat ) )
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
 		$image = substr( $image, $lu );
 	}
 	else
@@ -61,15 +61,29 @@ if( ! empty( $savecat ) )
 
 	if( $catid == 0 and $title != '' )
 	{
-		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->quote( $parentid ) )->fetchColumn();
+		$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid )->fetchColumn();
 		$weight = intval( $weight ) + 1;
-		$viewcat = "viewcat_page_new";
+		$viewcat = 'viewcat_page_new';
 		$subcatid = '';
 
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, keywords, admins, add_time, edit_time, who_view, groups_view) VALUES
-			(" . $db->quote( $parentid ) . ", " . $db->quote( $title ) . ", " . $db->quote( $titlesite ) . ", " . $db->quote( $alias ) . ", " . $db->quote( $description ) . ", '', '" . $viewdescription . "', " . $db->quote( $weight ) . ", '0', '0', " . $db->quote( $viewcat ) . ", '0', " . $db->quote( $subcatid ) . ", '1', '3', " . $db->quote( $keywords ) . ", " . $db->quote( $admins ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", " . $db->quote( $who_view ) . "," . $db->quote( $groups_view ) . ")";
-
-		$newcatid = $db->insert_id( $sql, 'catid' );
+			(:parentid, :title, :titlesite, :alias, :description, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :who_view, :groups_view)";
+		
+		$data_insert = array();
+		$data_insert['parentid'] = $parentid;
+		$data_insert['title'] = $title;
+		$data_insert['titlesite'] = $titlesite;
+		$data_insert['alias'] = $alias;
+		$data_insert['description'] = $description;
+		$data_insert['weight'] = $weight;
+		$data_insert['viewcat'] = $viewcat;
+		$data_insert['subcatid'] = $subcatid;
+		$data_insert['keywords'] = $keywords;
+		$data_insert['admins'] = $admins;
+		$data_insert['who_view'] = $who_view;
+		$data_insert['groups_view'] = $groups_view;
+		
+		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
 		if( $newcatid > 0 )
 		{
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
@@ -172,12 +186,12 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$xtitle_i = '';
 		if( $lev_i > 0 )
 		{
-			$xtitle_i .= "&nbsp;&nbsp;&nbsp;|";
+			$xtitle_i .= '&nbsp;&nbsp;&nbsp;|';
 			for( $i = 1; $i <= $lev_i; ++$i )
 			{
-				$xtitle_i .= "---";
+				$xtitle_i .= '---';
 			}
-			$xtitle_i .= ">&nbsp;";
+			$xtitle_i .= '>&nbsp;';
 		}
 		$xtitle_i .= $array_value['title'];
 		$array_cat_list[$catid_i] = $xtitle_i;
@@ -192,9 +206,9 @@ if( ! empty( $array_cat_list ) )
 		if( ! in_array( $catid_i, $array_in_cat ) )
 		{
 			$cat_listsub[] = array(
-				"value" => $catid_i,
-				"selected" => ( $catid_i == $parentid ) ? " selected=\"selected\"" : "",
-				"title" => $title_i
+				'value' => $catid_i,
+				'selected' => ( $catid_i == $parentid ) ? " selected=\"selected\"" : "",
+				'title' => $title_i
 			);
 		}
 	}
@@ -203,9 +217,9 @@ if( ! empty( $array_cat_list ) )
 	foreach( $array_who_view as $k => $w )
 	{
 		$who_views[] = array(
-			"value" => $k,
-			"selected" => ( $who_view == $k ) ? " selected=\"selected\"" : "",
-			"title" => $w
+			'value' => $k,
+			'selected' => ( $who_view == $k ) ? " selected=\"selected\"" : "",
+			'title' => $w
 		);
 	}
 
@@ -213,9 +227,9 @@ if( ! empty( $array_cat_list ) )
 	foreach( $groups_list as $group_id => $grtl )
 	{
 		$groups_views[] = array(
-			"value" => $group_id,
-			"checked" => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "",
-			"title" => $grtl
+			'value' => $group_id,
+			'checked' => in_array( $group_id, $groups_view ) ? " checked=\"checked\"" : "",
+			'title' => $grtl
 		);
 	}
 }
@@ -242,18 +256,18 @@ $xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 
 $xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
-if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $image ) )
+if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $image ) )
 {
-	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $image;
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $image;
 }
 $xtpl->assign( 'image', $image );
 
 for( $i = 0; $i <= 2; $i++ )
 {
 	$data = array(
-		"value" => $i,
-		"selected" => ( $viewdescription == $i ) ? " checked=\"checked\"" : "",
-		"title" => $lang_module['viewdescription_' . $i]
+		'value' => $i,
+		'selected' => ( $viewdescription == $i ) ? " checked=\"checked\"" : "",
+		'title' => $lang_module['viewdescription_' . $i]
 	);
 	$xtpl->assign( 'VIEWDESCRIPTION', $data );
 	$xtpl->parse( 'main.content.viewdescription' );

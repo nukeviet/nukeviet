@@ -46,7 +46,7 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
  BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '
  FOR EACH ROW WHEN (new.vid is null)
 	BEGIN
-	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.vid FROM DUAL;
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.vid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (

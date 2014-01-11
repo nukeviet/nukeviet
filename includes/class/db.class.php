@@ -96,11 +96,11 @@ class sql_db extends pdo
 			{
 				$_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
 			}
-
+			$i =0;
 			$stmt = $this->prepare( $_sql );
 			foreach( $data as $key => $value )
 			{
-				$stmt->bindValue( ':' . $key, $value, PDO::PARAM_STR );
+				$stmt->bindParam( ':' . $key, $data[$key], PDO::PARAM_STR, strlen( $value ) );
 			}
 			if( $this->dbtype == 'oci' )
 			{
