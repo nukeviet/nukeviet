@@ -46,7 +46,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  primary key (id)
 )";
 
-//Tạo TRIGGER cho bảng nv3_vi_module_rows
+//Tạo TRIGGER cho bảng nvx_vi_module_rows
 $sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS';
 
 $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS

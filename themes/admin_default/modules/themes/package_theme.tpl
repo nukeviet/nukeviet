@@ -1,5 +1,5 @@
 <!-- BEGIN: complete -->
-<a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv3_theme_{THEMENAME} - {FILESIZE}</span></a>
+<a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv4_theme_{THEMENAME} - {FILESIZE}</span></a>
 <!-- END: complete -->
 <!-- BEGIN: main -->
 <form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">

@@ -227,7 +227,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 	$sql = 'SELECT userid, username, full_name, email, idsite FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')';
 	$_rows = $db->query( $sql )->fetchAll();
 	$numberusers = sizeof( $_rows );
-	if( $numberusers != $groupsList[$group_id]['number'] )
+	if( $numberusers != $groupsList[$group_id]['numbers'] )
 	{
 		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id );
 	}
