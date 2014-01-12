@@ -222,7 +222,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_bodyhtml_1 (
 	 id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 bodyhtml CLOB NOT NULL ENABLE,
-	 sourcetext VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 sourcetext VARCHAR2(255 CHAR) DEFAULT '',
 	 imgposition NUMBER(3,0) DEFAULT 1 NOT NULL ENABLE,
 	 copyright NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 allowed_send NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
