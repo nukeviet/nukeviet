@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/30/2009 1:31
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/30/2009 1:31
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -202,6 +203,7 @@ $xtpl->assign( 'SITEURL', $global_config['site_url'] );
 $xtpl->assign( 'N_SUBMIT', $lang_global['loginsubmit'] );
 $xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 $xtpl->assign( 'CHECKSS', $checkss );
+$xtpl->assign( 'NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS );
 
 $xtpl->assign( 'LOGIN_ERROR_SECURITY', addslashes( sprintf( $lang_global['login_error_security'], NV_GFX_NUM ) ) );
 

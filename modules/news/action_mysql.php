@@ -1,82 +1,47 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
-try
-{
-	$result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC' );
-	while( list( $catid_i ) = $result->fetch( 3 ) )
-	{
-		$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i;
-	}
-}
-catch (PDOException $e)
-{
 
-}
-
-try
+$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_%' ) );
+while( $item = $result->fetch() )
 {
-	$result = $db->query( 'SELECT max(id) FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows' );
-	$maxid = $result->fetchColumn();	
-	$i1 = 1;
-	while( $i1 <= $maxid )
-	{
-		$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_bodyhtml_' . ceil( $i1 / 2000 );
-		$i1 = $i1 + 2000;
-	}
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];
 }
-catch (PDOException $e)
-{
-	
-}
-
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_sources';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_topics';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block_cat';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_bodytext';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config_post';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_admins';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags';
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags_id';
-
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
 	 catid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 parentid smallint(5) unsigned NOT NULL DEFAULT '0',
 	 title varchar(255) NOT NULL,
-	 titlesite varchar(255) NOT NULL,
+	 titlesite varchar(255) DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
-	 description text NOT NULL,
-	 image varchar(255) NOT NULL DEFAULT '',
+	 description text,
+	 image varchar(255) DEFAULT '',
 	 viewdescription tinyint(2) NOT NULL DEFAULT '0',
 	 weight smallint(5) unsigned NOT NULL DEFAULT '0',
 	 sort smallint(5) NOT NULL DEFAULT '0',
 	 lev smallint(5) NOT NULL DEFAULT '0',
 	 viewcat varchar(50) NOT NULL DEFAULT 'viewcat_page_new',
 	 numsubcat smallint(5) NOT NULL DEFAULT '0',
-	 subcatid varchar(255) NOT NULL DEFAULT '',
+	 subcatid varchar(255) DEFAULT '',
 	 inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
 	 numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
-	 keywords text NOT NULL,
-	 admins text NOT NULL,
+	 keywords text,
+	 admins text,
 	 add_time int(11) unsigned NOT NULL DEFAULT '0',
 	 edit_time int(11) unsigned NOT NULL DEFAULT '0',
 	 who_view tinyint(2) unsigned NOT NULL DEFAULT '0',
-	 groups_view varchar(255) NOT NULL DEFAULT '',
+	 groups_view varchar(255) DEFAULT '',
 	 PRIMARY KEY (catid),
 	 UNIQUE KEY alias (alias),
 	 KEY parentid (parentid)
@@ -85,8 +50,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources (
 	 sourceid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	 title varchar(255) NOT NULL DEFAULT '',
-	 link varchar(255) NOT NULL DEFAULT '',
-	 logo varchar(255) NOT NULL DEFAULT '',
+	 link varchar(255) DEFAULT '',
+	 logo varchar(255) DEFAULT '',
 	 weight mediumint(8) unsigned NOT NULL DEFAULT '0',
 	 add_time int(11) unsigned NOT NULL,
 	 edit_time int(11) unsigned NOT NULL,
@@ -98,10 +63,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 title varchar(255) NOT NULL DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
-	 image varchar(255) NOT NULL,
-	 description varchar(255) NOT NULL,
+	 image varchar(255) DEFAULT '',
+	 description varchar(255) DEFAULT '',
 	 weight smallint(5) NOT NULL DEFAULT '0',
-	 keywords text NOT NULL,
+	 keywords text,
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
 	 PRIMARY KEY (topicid),
@@ -115,10 +80,10 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 numbers smallint(5) NOT NULL DEFAULT '10',
 	 title varchar(255) NOT NULL DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
-	 image varchar(255) NOT NULL,
-	 description varchar(255) NOT NULL,
+	 image varchar(255) DEFAULT '',
+	 description varchar(255) DEFAULT '',
 	 weight smallint(5) NOT NULL DEFAULT '0',
-	 keywords text NOT NULL,
+	 keywords text,
 	 add_time int(11) NOT NULL DEFAULT '0',
 	 edit_time int(11) NOT NULL DEFAULT '0',
 	 PRIMARY KEY (bid),
@@ -154,7 +119,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 listcatid varchar(255) NOT NULL default '',
 	 topicid smallint(5) unsigned NOT NULL default '0',
 	 admin_id mediumint(8) unsigned NOT NULL default '0',
-	 author varchar(255) NOT NULL default '',
+	 author varchar(255) default '',
 	 sourceid mediumint(8) NOT NULL default '0',
 	 addtime int(11) unsigned NOT NULL default '0',
 	 edittime int(11) unsigned NOT NULL default '0',
@@ -165,8 +130,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 title varchar(255) NOT NULL default '',
 	 alias varchar(255) NOT NULL default '',
 	 hometext text NOT NULL,
-	 homeimgfile varchar(255) NOT NULL default '',
-	 homeimgalt varchar(255) NOT NULL default '',
+	 homeimgfile varchar(255) default '',
+	 homeimgalt varchar(255) default '',
 	 homeimgthumb tinyint(4) NOT NULL default '0',
 	 inhome tinyint(1) unsigned NOT NULL default '0',
 	 allowed_comm tinyint(1) unsigned NOT NULL default '0',
@@ -226,7 +191,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 pub_content tinyint(4) NOT NULL default '0',
 	 edit_content tinyint(4) NOT NULL default '0',
 	 del_content tinyint(4) NOT NULL default '0',
-	 comment tinyint(4) NOT NULL default '0',
+	 comments tinyint(4) NOT NULL default '0',
 	 UNIQUE KEY userid (userid,catid)
 	) ENGINE=MyISAM";
 
@@ -234,9 +199,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	 numnews mediumint(8) NOT NULL DEFAULT '0',
 	 alias varchar(255) NOT NULL DEFAULT '',
-	 image varchar(255) NOT NULL,
-	 description text NOT NULL,
-	 keywords varchar(255) NOT NULL,
+	 image varchar(255) DEFAULT '',
+	 description text,
+	 keywords varchar(255) DEFAULT '',
 	 PRIMARY KEY (tid),
 	 UNIQUE KEY alias (alias)
 	) ENGINE=MyISAM";

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
 
@@ -27,10 +28,6 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_c
  ('c_time', 'start', 0, 0),
  ('c_time', 'last', 0, 0),
  ('total', 'hits', 0, 0),
- ('year', '2009', 0, 0),
- ('year', '2010', 0, 0),
- ('year', '2011', 0, 0),
- ('year', '2012', 0, 0),
  ('year', '2013', 0, 0),
  ('year', '2014', 0, 0),
  ('year', '2015', 0, 0),

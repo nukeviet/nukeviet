@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 25/11/2011 5:27 GMT+7
  */
 
@@ -343,7 +344,7 @@ function nv_getCountry( $ip )
 		if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', " . $ip_file . ", " . NV_CURRENTTIME . ")" ) )
 		{
 			$time_del = NV_CURRENTTIME - 604800;
-			$db->exec( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
 
 			$array_ip_file = array();
 			$result = $db->query( 'SELECT ip_from, ip_to, country FROM ' . $db_config['prefix'] . '_ipcountry WHERE ip_file=' . $ip_file );

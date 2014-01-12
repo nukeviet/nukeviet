@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 1:58
  */
 
@@ -59,8 +60,8 @@ function nv_admin_add_field_lang( $dirlang )
 	{
 		$add_field = true;
 
-		$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
-		while( $row = $result->fetch() )
+		$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+		foreach ( $columns_array as $row )
 		{
 			if( $row['field'] == 'author_' . $dirlang )
 			{
@@ -71,10 +72,9 @@ function nv_admin_add_field_lang( $dirlang )
 
 		if( $add_field == true )
 		{
-			$db->exec( "ALTER TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file ADD author_" . $dirlang . " VARCHAR( 255 ) NOT NULL DEFAULT ''" );
-			$db->exec( "ALTER TABLE " . NV_LANGUAGE_GLOBALTABLE . " ADD lang_" . $dirlang . " VARCHAR( 255 ) NOT NULL DEFAULT '', ADD update_" . $dirlang . " INT( 11 ) NOT NULL DEFAULT '0'" );
-			$db->exec( "ALTER TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file CHANGE author_" . $dirlang . " author_" . $dirlang . " TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
-			$db->exec( "ALTER TABLE " . NV_LANGUAGE_GLOBALTABLE . " CHANGE lang_" . $dirlang . " lang_" . $dirlang . " TEXT CHARACTER SET utf8 COLLATE " . $db->db_collation . " NULL DEFAULT NULL" );
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'lang_' . $dirlang, 'string', 4000, true, '');
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'update_' . $dirlang, 'integer', 2147483647, true, 0);
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE . '_file', 'author_' . $dirlang, 'string', 255, true, '');
 		}
 	}
 }

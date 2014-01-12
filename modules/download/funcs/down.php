@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
  */
 
@@ -33,7 +34,7 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 	}
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['linkdirect'][$code]['id'] );
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	$content = "<br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 	$content .= sprintf( $lang_module['download_wait2'], $session_files['linkdirect'][$code]['link'] );
@@ -72,7 +73,7 @@ if( ! isset( $session_files['fileupload'][$file]['id'] ) )
 }
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET download_hits=download_hits+1 WHERE id=' . intval( $session_files['fileupload'][$file]['id'] );
-$db->sql_query( $sql );
+$db->query( $sql );
 
 $upload_dir = 'files';
 $is_zip = false;
@@ -80,8 +81,8 @@ $is_resume = false;
 $max_speed = 0;
 
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir' OR config_name='is_zip' OR config_name='is_resume' OR config_name='max_speed'";
-$result = $db->sql_query( $sql );
-while( $row = $db->sql_fetchrow( $result ) )
+$result = $db->query( $sql );
+while( $row = $result->fetch() )
 {
 	if( $row['config_name'] == 'upload_dir' )
 	{

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -16,9 +17,9 @@ if( nv_function_exists( 'curl_init' ) and nv_function_exists( 'curl_exec' ) )
 	{
 		$prcservice = $nv_Request->get_array( 'prcservice', 'post' );
 		$prcservice = implode( ',', $prcservice );
-		$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', :module_name, 'prcservice', :prcservice)" );
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'prcservice'" );
 		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
-		$sth->bindParam( ':prcservice', $prcservice, PDO::PARAM_STR );
+		$sth->bindParam( ':config_value', $prcservice, PDO::PARAM_STR );
 		$sth->execute();
 
 		nv_del_moduleCache( 'settings' );

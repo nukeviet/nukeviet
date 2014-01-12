@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/12/2010, 1:27
  */
 
@@ -20,9 +21,9 @@ if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile )
 else
 {
 	$sql = "SELECT alias,add_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1";
-	$result = $db->sql_query( $sql );
+	$result = $db->query( $sql );
 
-	while( list( $alias, $publtime ) = $db->sql_fetchrow( $result ) )
+	while( list( $alias, $publtime ) = $result->fetch( 3 ) )
 	{
 		$url[] = array( //
 			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias . $global_config['rewrite_exturl'], //

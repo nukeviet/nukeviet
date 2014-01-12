@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-unset( $lang_global, $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
+unset( $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
 global $db, $nv_Request;
 
 $contents = ob_get_contents();
@@ -20,7 +21,7 @@ if( ! defined( 'NV_IS_AJAX' ) )
 	$contents = nv_change_buffer( $contents );
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		$contents = str_replace( '[COUNT_SHOW_QUERIES]', sizeof( $db->query_strs ) . ' / ' . nv_convertfromBytes( memory_get_usage() ) . ' / ' . number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ), $contents );
+		$contents = str_replace( '[MEMORY_TIME_USAGE]', sprintf( $lang_global['memory_time_usage'] , nv_convertfromBytes( memory_get_usage() ), number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ) ), $contents );
 	}
 }
 $db = null;

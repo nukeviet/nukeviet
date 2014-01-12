@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/29/2009 15:33
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/29/2009 15:33
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -28,10 +29,26 @@ function nv_online_upd()
 	{
 		$username = 'bot:' . $client_info['bot_info']['name'];
 	}
-	$sth = $db->prepare( 'REPLACE INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
+
+	$sth = $db->prepare( 'UPDATE nv3_sessions SET userid = ' . $userid . ', full_name = :username, onl_time = ' . NV_CURRENTTIME . ' WHERE session_id = :session_id');
 	$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
 	$sth->bindParam( ':username', $username, PDO::PARAM_STR );
 	$sth->execute();
+	if( ! $sth->rowCount() )
+	{
+		try
+		{
+	 		$sth = $db->prepare( 'INSERT INTO ' . NV_SESSIONS_GLOBALTABLE . ' VALUES ( :session_id, ' . $userid . ', :username, ' . NV_CURRENTTIME . ')' );
+			$sth->bindParam( ':session_id', $client_info['session_id'], PDO::PARAM_STR );
+			$sth->bindParam( ':username', $username, PDO::PARAM_STR );
+			$sth->execute();
+		}
+		catch (PDOException $e)
+		{
+			global $lang_global;
+			trigger_error( $lang_global['flood_info1']." \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $client_info['selfurl'] . "\" />", 256 );
+		}		
+	}
 }
 
 nv_online_upd();

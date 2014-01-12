@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 16-12-2012 15:48
  */
 
@@ -23,9 +24,9 @@ if( defined( 'NV_IS_AJAX' ) )
 		{
 			++$weight;
 			if( $weight == $new_vid ) ++$weight;
-			$db->exec( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $weight . ' WHERE mid=' . $row['mid'] );
+			$db->query( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $weight . ' WHERE mid=' . $row['mid'] );
 		}
-		$db->exec( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $new_vid . ' WHERE mid=' . $mid );
+		$db->query( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . '_module SET weight=' . $new_vid . ' WHERE mid=' . $mid );
 	}
 	elseif( $nv_Request->isset_request( 'changact', 'post' ) )
 	{
@@ -39,7 +40,7 @@ if( defined( 'NV_IS_AJAX' ) )
 			{
 				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey'] );
-				$db->exec( "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_module SET act_" . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid );
+				$db->query( "UPDATE " . NV_AUTHORS_GLOBALTABLE . "_module SET act_" . $act . " = '" . $act_val . "', checksum = '" . $checksum . "' WHERE mid = " . $mid );
 			}
 		}
 		die( 'OK' );
@@ -56,10 +57,11 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+
 $a = 0;
-$result = $db->query( 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC' );
-$numrows = $result->rowCount();
-while( $row = $result->fetch() )
+$rows = $db->query( 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC' )->fetchAll();
+$numrows = sizeof( $rows );
+foreach ( $rows as $row )
 {
 	for( $i = 1; $i <= $numrows; $i++ )
 	{

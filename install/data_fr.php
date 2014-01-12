@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -811,12 +812,11 @@ while( list( $id, $run_func ) = $result->fetch( 3 ) )
 	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
 	$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_cronjobs SET " . $lang_data . "_cron_name = " . $db->quote( $cron_name ) . " WHERE id=" . $id;
 }
-$db->sql_freeresult( $result );
 
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'modern' WHERE lang = '" . $lang_data . "' AND module = 'global' AND config_name = 'site_theme'";
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
-if( $result->rowCount() )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES
 		(1, 0, 'News', '', 'News', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '', '', 1280644983, 1280927178, 0, ''),
@@ -864,8 +864,8 @@ if( $result->rowCount() )
 	$sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'news' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'";
 }
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
-if( $result->rowCount(  ) )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_voting VALUES
 		(1, 'Qu&#039;est ce que NukeViet 3.0?', '', 1, 1, 0, '0', 1275318563, 0, 1)";
@@ -877,8 +877,8 @@ if( $result->rowCount(  ) )
 		(4, 1, 'Toutes ces réponses','', 1)";
 }
 
-$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
-if( $result->rowCount() )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
+if( $result->fetchColumn() )
 {
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES
 		(1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '', '', '', '<p> NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke. Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.<br />  </p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>', '', 0, 0, '', '', 0, 1, 1, 1280634933, 1280634933, 1),

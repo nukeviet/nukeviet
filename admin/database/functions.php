@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -98,7 +99,7 @@ function nv_highlight_string( $tab, $type = 'sql' )
 {
 	global $db;
 
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$db->query( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
 	$show = $db->query( 'SHOW CREATE TABLE ' . $tab )->fetchColumn( 1 );
 	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show );
 	$show = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
@@ -161,14 +162,13 @@ function nv_show_tab()
 	$contents['table']['row']['columns'] = array( $lang_module['field_name'], $lang_module['field_type'], $lang_module['field_null'], $lang_module['field_key'], $lang_module['field_default'], $lang_module['field_extra'] );
 
 	$contents['table']['row']['detail'] = array();
-	$result = $db->query( 'SHOW COLUMNS FROM ' . $tab );
-	while( $row = $result->fetch() )
+	$columns_array = $db->columns_array( $tab );
+	foreach ( $columns_array as $row )
 	{
 		$row['null'] = ( $row['null'] == 'NO' ) ? 'NOT NULL' : 'NULL';
 		$row['key'] = empty( $row['key'] ) ? '' : ( $row['key'] == 'PRI' ? 'PRIMARY KEY' : ( $row['key'] == 'UNI' ? 'UNIQUE KEY' : 'KEY' ) );
 		$contents['table']['row']['detail'][] = $row;
 	}
-	$result->closeCursor();
 
 	$contents = nv_show_tab_theme( $contents );
 

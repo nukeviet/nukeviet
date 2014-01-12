@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -29,16 +30,14 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 	$contents = $lang_module['lostpass_active_error_link'];
 
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $nv_Request->get_int( 'u', 'get' );
-	$result = $db->sql_query( $sql );
-	$numrows = $db->sql_numrows( $result );
-	if( $numrows == 1 )
+	$row = $db->query( $sql )->fetch();
+	if( ! empty( $row ) )
 	{
-		$row = $db->sql_fetchrow( $result );
 		$k = $nv_Request->get_string( 'k', 'get' );
 
 		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
 		{
-			$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password='" . $row['passlostkey'] . "', passlostkey='' WHERE userid=" . $row['userid'] );
+			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET password='" . $row['passlostkey'] . "', passlostkey='' WHERE userid=" . $row['userid'] );
 			$contents = $lang_module['change_pass_ok'];
 		}
 	}
@@ -67,23 +66,20 @@ else
 				$check_email = nv_check_valid_email( $data['userField'] );
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->dbescape( $data['userField'] ) . " AND active=1";
+					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->quote( $data['userField'] ) . " AND active=1";
 				}
 				else
 				{
 					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username='" . nv_md5safe( $data['userField'] ) . "' AND active=1";
 				}
-				$result = $db->sql_query( $sql );
-				$numrows = $db->sql_numrows( $result );
-				if( $numrows == 1 )
+				$row = $db->query( $sql )->fetch();
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostpass_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
 
 					$question = $row['question'];
 
@@ -138,7 +134,7 @@ else
 							if( $ok )
 							{
 								$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET passlostkey='" . $password . "' WHERE userid=" . $row['userid'];
-								$db->sql_query( $sql );
+								$db->query( $sql );
 								if( ! empty( $check_email ) )
 								{
 									$row['email'] = substr( $row['email'], 0, 3 ) . '***' . substr( $row['email'], -6 );

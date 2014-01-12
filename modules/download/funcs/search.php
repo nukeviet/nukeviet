@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
  */
 
@@ -15,89 +16,108 @@ $list_cats = nv_list_cats( true );
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 15;
+
 $key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );
+$cat = $nv_Request->get_int( 'cat', 'post', 0 );
 
 $page_title = $lang_module['search'] . ' ' . $key;
 
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=search";
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=search';
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, title, alias, introtext , uploadtime,
-author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits
-FROM " . NV_PREFIXLANG . "_" . $module_data . "";
+$array_where = array();
 
-if( $nv_Request->isset_request( 'submit', 'post' ) and ! empty( $key ) )
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( NV_PREFIXLANG . '_' . $module_data );
+
+if( ! empty( $key ) )
 {
-	$cat = $nv_Request->get_int( 'cat', 'post', 0 );
-	if( ! empty( $cat ) and isset( $list_cats[$cat] ) )
+	$array_where[] = '(title LIKE :keyword1 OR description LIKE :keyword2 OR introtext LIKE :keyword3)';
+}
+if( ! empty( $cat ) and isset( $list_cats[$cat] ) )
+{
+	$allcat = $list_cats[$cat]['subcats'];
+	if( ! empty( $allcat ) )
 	{
-		$allcat = $list_cats[$cat]['subcats'];
-
-		if( ! empty( $allcat ) )
-		{
-			$allcat[] = $cat;
-		}
-
-		$allcat = ( empty( $allcat ) ) ? ' AND catid = ' . $cat . ' ' : ' AND catid IN (' . implode( ',', $allcat ) . ') ';
+		$allcat[] = $cat;
+		$array_where[] = 'catid IN (' . implode( ',', $allcat ) . ')';
 	}
 	else
 	{
-		$allcat = '';
+		$array_where[] = 'catid = ' . $cat;
 	}
-	$dbkey = $db->dblikeescape( $key );
-	$sql .= "WHERE (title LIKE '%" . $dbkey . "%' OR description LIKE '%" . $dbkey . "%' OR introtext LIKE '%" . $dbkey . "%') " . $allcat . " AND status='1'";
 }
-else
+$array_where[] = 'status=1';
+
+$db->where( implode(' AND ', $array_where) );
+
+$sth = $db->prepare( $db->sql() );
+if( ! empty( $key ) )
 {
-	$sql .= "WHERE status='1'";
+	$keyword = '%' . addcslashes( $key, '_%' ) . '%';
+	$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
+	$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
+	$sth->bindParam( ':keyword3', $keyword, PDO::PARAM_STR );
 }
-$sql .= "ORDER BY uploadtime DESC LIMIT " . ( $page - 1 ) * $per_page . ", " . $per_page;
-
-$result = $db->sql_query( $sql );
-
-$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-list( $all_page ) = $db->sql_fetchrow( $result_all );
+$sth->execute();
+$all_page = $sth->fetchColumn();
 
 if( ! empty( $all_page ) )
 {
 	$download_config = nv_mod_down_config();
 
 	$array = array();
-	$today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
+	$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 	$yesterday = $today - 86400;
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' )
+		->order( 'uploadtime DESC' )
+		->limit( $per_page )
+		->offset( ( $page - 1 ) * $per_page );
+
+	$sth = $db->prepare( $db->sql() );
+	if( ! empty( $key ) )
 	{
-		$cattitle = "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "\">" . $list_cats[$row['catid']]['title'] . "</a>";
-		$more_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'];
+		$keyword = '%' . addcslashes( $key, '_%' ) . '%';
+		$sth->bindParam( ':keyword1', $keyword, PDO::PARAM_STR );
+		$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
+		$sth->bindParam( ':keyword3', $keyword, PDO::PARAM_STR );
+	}
+	$sth->execute();
+
+	while( $row = $sth->fetch() )
+	{
+		$cattitle = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '">' . $list_cats[$row['catid']]['title'] . '</a>';
+		$more_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'];
 
 		$uploadtime = ( int )$row['uploadtime'];
 		if( $uploadtime >= $today )
 		{
-			$uploadtime = $lang_module['today'] . ", " . date( "H:i", $row['uploadtime'] );
+			$uploadtime = $lang_module['today'] . ', ' . date( 'H:i', $row['uploadtime'] );
 		}
 		elseif( $uploadtime >= $yesterday )
 		{
-			$uploadtime = $lang_module['yesterday'] . ", " . date( "H:i", $row['uploadtime'] );
+			$uploadtime = $lang_module['yesterday'] . ', ' . date( 'H:i', $row['uploadtime'] );
 		}
 		else
 		{
-			$uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
+			$uploadtime = nv_date( 'd/m/Y H:i', $row['uploadtime'] );
 		}
 
-		$array[$row['id']] = array( //
-			'id' => ( int )$row['id'], //
-			'title' => $row['title'], //
-			'cattitle' => $cattitle, //
-			'introtext' => $row['introtext'], //
-			'uploadtime' => $uploadtime, //
-			'author_name' => $row['author_name'], //
-			'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-			'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
-			'view_hits' => ( int )$row['view_hits'], //
-			'download_hits' => ( int )$row['download_hits'], //
-			'more_link' => $more_link, //
-			'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
-			'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
+		$array[$row['id']] = array(
+			'id' => $row['id'],
+			'title' => $row['title'],
+			'cattitle' => $cattitle,
+			'introtext' => $row['introtext'],
+			'uploadtime' => $uploadtime,
+			'author_name' => $row['author_name'],
+			'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : '',
+			'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
+			'view_hits' => $row['view_hits'],
+			'download_hits' => $row['download_hits'],
+			'more_link' => $more_link,
+			'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'] : '',
+			'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name : ''
 		);
 
 		if( $row['comment_allow'] )

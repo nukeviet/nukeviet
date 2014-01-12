@@ -1,30 +1,37 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/28/2009 20:8
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/28/2009 20:8
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 // Ten cac table cua CSDL dung chung cho he thong
 
+$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
+while( $item = $result->fetch() )
+{
+	$sql_drop_table[] = 'DROP TABLE ' . $item['name'];
+}
+
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 	admin_id mediumint(8) unsigned NOT NULL,
-	editor varchar(100) NOT NULL,
+	editor varchar(100) DEFAULT '',
 	lev tinyint(1) unsigned NOT NULL DEFAULT '0',
-	files_level varchar(255) NOT NULL,
+	files_level varchar(255) DEFAULT '',
 	position varchar(255) NOT NULL,
 	addtime int(11) NOT NULL DEFAULT '0',
 	edittime int(11) NOT NULL DEFAULT '0',
 	is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
-	susp_reason mediumtext NOT NULL,
+	susp_reason text DEFAULT '',
 	check_num varchar(40) NOT NULL,
 	last_login int(11) unsigned NOT NULL DEFAULT '0',
-	last_ip varchar(45) NOT NULL,
-	last_agent varchar(255) NOT NULL,
+	last_ip varchar(45) DEFAULT '',
+	last_agent varchar(255) DEFAULT '',
 	 PRIMARY KEY (admin_id)
 ) ENGINE=MyISAM";
 
@@ -47,16 +54,16 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 	act_1 tinyint(4) NOT NULL DEFAULT '0',
 	act_2 tinyint(4) NOT NULL DEFAULT '1',
 	act_3 tinyint(4) NOT NULL DEFAULT '1',
-	checksum varchar(32) NOT NULL DEFAULT '',
+	checksum varchar(32) DEFAULT '',
 	PRIMARY KEY (mid),
 	UNIQUE KEY module (module)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 	config varchar(100) NOT NULL,
-	content text NOT NULL,
+	content text,
 	edit_time int(11) unsigned NOT NULL DEFAULT '0',
-	 PRIMARY KEY (config)
+	PRIMARY KEY (config)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
@@ -77,23 +84,23 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	password varchar(50) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
 	full_name varchar(255) NOT NULL DEFAULT '',
-	gender char(1) NOT NULL,
-	photo varchar(255) NOT NULL DEFAULT '',
+	gender char(1) DEFAULT '',
+	photo varchar(255) DEFAULT '',
 	birthday int(11) NOT NULL,
 	sig text,
 	regdate int(11) NOT NULL DEFAULT '0',
 	question varchar(255) NOT NULL,
 	answer varchar(255) NOT NULL DEFAULT '',
-	passlostkey varchar(50) NOT NULL DEFAULT '',
+	passlostkey varchar(50) DEFAULT '',
 	view_mail tinyint(1) unsigned NOT NULL DEFAULT '0',
 	remember tinyint(1) unsigned NOT NULL DEFAULT '0',
-	in_groups varchar(255) NOT NULL DEFAULT '',
+	in_groups varchar(255) DEFAULT '',
 	active tinyint(1) unsigned NOT NULL DEFAULT '0',
-	checknum varchar(40) NOT NULL DEFAULT '',
+	checknum varchar(40) DEFAULT '',
 	last_login int(11) unsigned NOT NULL DEFAULT '0',
-	last_ip varchar(45) NOT NULL DEFAULT '',
-	last_agent varchar(255) NOT NULL DEFAULT '',
-	last_openid varchar(255) NOT NULL DEFAULT '',
+	last_ip varchar(45) DEFAULT '',
+	last_agent varchar(255) DEFAULT '',
+	last_openid varchar(255) DEFAULT '',
 	idsite int(11) NOT NULL DEFAULT '0',
 	PRIMARY KEY (userid),
 	UNIQUE KEY username (username),
@@ -113,7 +120,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
 	question varchar(255) NOT NULL,
 	answer varchar(255) NOT NULL DEFAULT '',
 	checknum varchar(50) NOT NULL DEFAULT '',
-	users_info mediumtext NOT NULL,
+	users_info text,
 	PRIMARY KEY (userid),
 	UNIQUE KEY login (username),
 	UNIQUE KEY md5username (md5username),
@@ -135,7 +142,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
 	field varchar(25) NOT NULL,
 	weight int(10) unsigned NOT NULL DEFAULT '1',
 	field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
-	field_choices mediumtext NOT NULL,
+	field_choices text NOT NULL,
 	sql_choices text NOT NULL,
 	match_type enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
 	match_regex varchar(250) NOT NULL DEFAULT '',
@@ -159,7 +166,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_info (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
-	lang char(3) NOT NULL DEFAULT 'sys',
+	lang varchar(3) NOT NULL DEFAULT 'sys',
 	module varchar(25) NOT NULL DEFAULT 'global',
 	config_name varchar(30) NOT NULL DEFAULT '',
 	config_value mediumtext NOT NULL,
@@ -172,7 +179,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 	inter_val int(11) unsigned NOT NULL DEFAULT '0',
 	run_file varchar(255) NOT NULL,
 	run_func varchar(255) NOT NULL,
-	params varchar(255) NOT NULL,
+	params varchar(255) DEFAULT NULL,
 	del tinyint(1) unsigned NOT NULL DEFAULT '0',
 	is_sys tinyint(1) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -183,9 +190,9 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
-	group_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
-	content mediumtext NOT NULL,
+	content text,
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,
 	publics tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -200,7 +207,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 ) ENGINE=MyISAM AUTO_INCREMENT=10";
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
-	group_id mediumint(8) unsigned NOT NULL DEFAULT '0',
+	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	data text NOT NULL,
 	PRIMARY KEY (group_id,userid)
@@ -256,7 +263,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_modules (
 	mod_version varchar(50) NOT NULL,
 	addtime int(11) NOT NULL DEFAULT '0',
 	author text NOT NULL,
-	note varchar(255) NOT NULL DEFAULT '',
+	note varchar(255) DEFAULT '',
 	PRIMARY KEY (title)
 ) ENGINE=MyISAM";
 
@@ -306,9 +313,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	blang char(2) NOT NULL,
+	blang char(2) DEFAULT '',
 	title varchar(255) NOT NULL,
-	description varchar(255) NOT NULL,
+	description varchar(255) DEFAULT '',
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',
 	height smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -327,9 +334,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 	file_mime varchar(100) NOT NULL,
 	width int(4) unsigned NOT NULL DEFAULT '0',
 	height int(4) unsigned NOT NULL DEFAULT '0',
-	file_alt varchar(255) NOT NULL,
-	imageforswf varchar(255) NOT NULL,
-	click_url varchar(255) NOT NULL,
+	file_alt varchar(255) DEFAULT '',
+	imageforswf varchar(255) DEFAULT '',
+	click_url varchar(255) DEFAULT '',
 	target varchar(10) NOT NULL DEFAULT '_blank',
 	add_time int(11) unsigned NOT NULL DEFAULT '0',
 	publ_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -360,7 +367,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	module_name varchar(150) NOT NULL,
 	name_key varchar(255) NOT NULL,
 	note_action text NOT NULL,
-	link_acess varchar(255) NOT NULL,
+	link_acess varchar(255) DEFAULT '',
 	userid mediumint(8) unsigned NOT NULL,
 	log_time int(11) NOT NULL,
 	PRIMARY KEY (id)
@@ -380,7 +387,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ipcountry (
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did mediumint(8) NOT NULL AUTO_INCREMENT,
-	dirname varchar(255) NOT NULL,
+	dirname varchar(255) DEFAULT NULL,
 	time int(11) NOT NULL DEFAULT '0',
 	thumb_type tinyint(4) NOT NULL DEFAULT '0',
 	thumb_width smallint(6) NOT NULL DEFAULT '0',

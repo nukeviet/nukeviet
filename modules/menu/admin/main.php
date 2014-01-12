@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 21-04-2011 11:17
  */
 
@@ -19,8 +20,8 @@ $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $arr['id'] != 0 )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $arr['id'];
-	$result = $db->sql_query( $sql );
-	$arr = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	$arr = $result->fetch();
 
 	if( empty( $arr ) )
 	{
@@ -37,18 +38,15 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	if( empty( $id ) ) die( 'NO_' . $id );
-
 	$query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $id;
-	$result = $db->sql_query( $query );
-	$numrows = $db->sql_numrows( $result );
+	$result = $db->query( $query );
 
-	if( $numrows != 1 ) die( 'NO_' . $id );
+	if( ! $result->fetchColumn() ) die( 'NO_' . $id );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', 'aboutid ' . $id, $admin_info['userid'] );
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id = ' . $id;
-	if( $db->exec( $sql )  )
+	if( $db->exec( $sql ) )
 	{
 		nv_del_moduleCache( $module_name );
 	}
@@ -74,12 +72,12 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	elseif( $arr_menu['id'] == 0 )
 	{
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
-			" . $db->dbescape( $arr_menu['title'] ) . ",
+			" . $db->quote( $arr_menu['title'] ) . ",
 			'',
-			" . $db->dbescape( $arr_menu['description'] ) . "
+			" . $db->quote( $arr_menu['description'] ) . "
 		)";
 
-		if( $db->sql_query_insert_id( $sql ) )
+		if( $db->insert_id( $sql, 'id' ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -93,11 +91,11 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	else
 	{
 		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
-			title=' . $db->dbescape( $arr_menu['title'] ) . ',
-			description = ' . $db->dbescape( $arr_menu['description'] ) . '
-		WHERE id =' . $arr_menu['id'];
+			title=' . $db->quote( $arr_menu['title'] ) . ',
+			description = ' . $db->quote( $arr_menu['description'] ) . '
+			WHERE id =' . $arr_menu['id'];
 
-		if( $db->sql_query( $sql ) )
+		if( $db->exec( $sql ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -111,12 +109,11 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 }
 
 // List menu
-$sql = 'FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu';
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+$db->sqlreset()
+	->select( 'COUNT(*)' )
+	->from( NV_PREFIXLANG . '_' . $module_data . '_menu' );
 
-$sql1 = 'SELECT COUNT(*) ' . $sql;
-$result1 = $db->sql_query( $sql1 );
-list( $all_page ) = $db->sql_fetchrow( $result1 );
+$all_page = $db->query( $db->sql() )->fetchColumn();
 
 $error2 = '';
 
@@ -126,19 +123,18 @@ if( ! $all_page )
 }
 else
 {
-	$sql .= ' ORDER BY id DESC';
-
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 20;
 
-	$sql2 = 'SELECT * ' . $sql . ' LIMIT ' . $page . ', ' . $per_page;
-	$query2 = $db->sql_query( $sql2 );
+	$db->select( '*' )
+		->order( 'id DESC' )
+		->limit( $per_page )
+		->offset( $page );
+	$query2 = $db->query( $db->sql() );
 
 	$array = array();
-
 	$a = 0;
-
-	while( $row = $db->sql_fetchrow( $query2 ) )
+	while( $row = $query2->fetch() )
 	{
 		$arr_items = array();
 		$b = 0;
@@ -159,8 +155,8 @@ else
 
 		++$a;
 		$array[$row['id']] = array(
-			'id' => ( int )$row['id'],
-			'nb' => ( int )$a,
+			'id' => $row['id'],
+			'nb' => $a,
 			'title' => $row['title'],
 			'menu_item' => $item,
 			'num' => $b,
@@ -170,6 +166,7 @@ else
 		);
 	}
 
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 }
 

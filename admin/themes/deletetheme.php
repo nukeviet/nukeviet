@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -68,20 +69,9 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 			}
 			nv_del_moduleCache( 'themes' );
 
-			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WRITE' );
-			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
-			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
-			$db->exec( 'UNLOCK TABLE' );
-
-			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WRITE' );
-			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
-			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
-			$db->exec( 'UNLOCK TABLE' );
-
-			$db->exec( 'LOCK TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WRITE' );
-			$db->exec( 'REPAIR TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
-			$db->exec( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
-			$db->exec( 'UNLOCK TABLE' );
+			$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
+			$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
+			$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
 
 			echo $lang_module['theme_created_delete_theme_success'];
 		}

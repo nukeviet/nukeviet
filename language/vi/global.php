@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -64,6 +65,8 @@ $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
 $lang_global['relogin_info'] = 'Bạn đã không online một thời gian dài. Hệ thống đòi hỏi bạn phải khai báo lại mật khẩu đăng nhập. Hãy điền mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %1$d lần. Nếu sau %1$d lần mà bạn vẫn không xác minh được mật khẩu, hệ thống sẽ tước quyền truy cập Quản trị của bạn';
 $lang_global['relogin_error_info'] = '%1$s. Hãy điền lại mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %2$d lần nữa. Nếu sau %2$d lần mà bạn vẫn không xác minh được mật khẩu, hệ thống sẽ tước quyền truy cập Quản trị của bạn';
+
+$lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['admin_page'] = 'Quản lý site';
 $lang_global['admin_module_sector'] = 'Quản lý module';
 $lang_global['adminlogin'] = 'Đăng nhập quản trị hệ thống';
@@ -89,7 +92,6 @@ $lang_global['regdate'] = 'Ngày đăng ký';
 $lang_global['online'] = 'Đang truy cập';
 $lang_global['hits'] = 'Tổng lượt truy cập';
 $lang_global['viewstats'] = 'Xem thống kê truy cập';
-$lang_global['db_num_queries'] = 'Số lần truy cập CSDL';
 $lang_global['last_login'] = 'Lần truy cập trước';
 $lang_global['current_login'] = 'Lần truy cập này';
 $lang_global['your_account'] = 'Tài khoản';
@@ -145,7 +147,6 @@ $lang_global['lang_en'] = 'Tiếng Anh';
 $lang_global['option'] = 'Tùy chọn';
 $lang_global['value'] = 'Giá trị';
 $lang_global['reviews'] = 'Đánh giá';
-$lang_global['show_queries'] = 'Danh sách queries';
 $lang_global['add'] = 'Thêm';
 $lang_global['edit'] = 'Sửa';
 $lang_global['delete'] = 'Xóa';

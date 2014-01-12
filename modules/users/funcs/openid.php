@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 25/7/2010, 18:36
  */
 
@@ -26,8 +27,8 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 		{
 			if( ! empty( $opid ) and ( empty( $user_info['current_openid'] ) or ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] != $opid ) ) )
 			{
-				$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->dbescape( $opid );
-				$db->sql_query( $sql );
+				$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->quote( $opid );
+				$db->query( $sql );
 			}
 		}
 	}
@@ -86,9 +87,9 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 							$opid = $crypt->hash( $openid );
 
-							$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->dbescape( $opid );
-							$result = $db->sql_query( $query );
-							list( $count ) = $db->sql_fetchrow( $result );
+							$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->quote( $opid );
+							$result = $db->query( $query );
+							$count = $result->fetchColumn();
 
 							if( $count )
 							{
@@ -97,9 +98,9 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								die();
 							}
 
-							$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email=" . $db->dbescape( $email );
-							$result = $db->sql_query( $query );
-							list( $count ) = $db->sql_fetchrow( $result );
+							$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email=" . $db->quote( $email );
+							$result = $db->query( $query );
+							$count = $result->fetchColumn();
 
 							if( $count )
 							{
@@ -110,13 +111,13 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 							if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 							{
-								$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $email );
+								$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $email );
 								if( $global_config['allowuserreg'] == 2 )
 								{
 									$query .= " AND regdate>" . ( NV_CURRENTTIME - 86400 );
 								}
-								$result = $db->sql_query( $query );
-								list( $count ) = $db->sql_fetchrow( $result );
+								$result = $db->query( $query );
+								$count = $result->fetchColumn();
 
 								if( $count )
 								{
@@ -126,8 +127,8 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								}
 							}
 
-							$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->dbescape( $openid ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-							$db->sql_query( $sql );
+							$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->quote( $openid ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
+							$db->query( $sql );
 
 							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 
@@ -185,9 +186,9 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 					$opid = $crypt->hash( $openid );
 
-					$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->dbescape( $opid );
-					$result = $db->sql_query( $query );
-					list( $count ) = $db->sql_fetchrow( $result );
+					$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE opid=" . $db->quote( $opid );
+					$result = $db->query( $query );
+					$count = $result->fetchColumn();
 
 					if( $count )
 					{
@@ -196,9 +197,9 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						die();
 					}
 
-					$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email=" . $db->dbescape( $email );
-					$result = $db->sql_query( $query );
-					list( $count ) = $db->sql_fetchrow( $result );
+					$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email=" . $db->quote( $email );
+					$result = $db->query( $query );
+					$count = $result->fetchColumn();
 
 					if( $count )
 					{
@@ -209,13 +210,13 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 					if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 					{
-						$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $email );
+						$query = "SELECT COUNT(*) AS count FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $email );
 						if( $global_config['allowuserreg'] == 2 )
 						{
 							$query .= " AND regdate>" . ( NV_CURRENTTIME - 86400 );
 						}
-						$result = $db->sql_query( $query );
-						list( $count ) = $db->sql_fetchrow( $result );
+						$result = $db->query( $query );
+						$count = $result->fetchColumn();
 
 						if( $count )
 						{
@@ -225,8 +226,8 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						}
 					}
 
-					$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->dbescape( $openid ) . ", " . $db->dbescape( $opid ) . ", " . $db->dbescape( $email ) . ")";
-					$db->sql_query( $sql );
+					$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid VALUES (" . $user_info['userid'] . ", " . $db->quote( $openid ) . ", " . $db->quote( $opid ) . ", " . $db->quote( $email ) . ")";
+					$db->query( $sql );
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . " | " . $client_info['ip'] . " | " . $opid, 0 );
 
@@ -248,8 +249,8 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 $data = array();
 $data['openid_list'] = array();
 $sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid=" . $user_info['userid'];
-$query = $db->sql_query( $sql );
-while( $row = $db->sql_fetchrow( $query ) )
+$query = $db->query( $sql );
+while( $row = $query->fetch() )
 {
 	$server = parse_url( $row['openid'] );
 

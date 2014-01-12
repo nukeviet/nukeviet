@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VuThao (vuthao27@gmail.com)
- * @Copyright (C) 2013 VuThao. All rights reserved
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
 
@@ -16,20 +17,28 @@ define( 'NV_CLASS_SQL_DB_PHP', true );
 class sql_db extends pdo
 {
 	public $connect = 0;
-	public $query_strs = array();
 	public $server = '';
 	public $dbname = '';
 	public $user = '';
 	public $dbtype = '';
+
+	private $_select = '';
+	private $_from = '';
+	private $_join = '';
+	private $_where = '';
+	private $_group = '';
+	private $_having = '';
+	private $_order = '';
+	private $_limit = 0;
+	private $_offset = 0;
 
 	function __construct( $config )
 	{
 		$aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
 
 		$AvailableDrivers = PDO::getAvailableDrivers();
-		
+
 		$driver_options = array(
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_EMULATE_PREPARES => false,
 			PDO::ATTR_PERSISTENT => $config['persistent'],
 			PDO::ATTR_CASE => PDO::CASE_LOWER,
@@ -39,6 +48,7 @@ class sql_db extends pdo
 		if( in_array( $config['dbtype'], $AvailableDrivers ) AND in_array( $config['dbtype'], $aray_type ) )
 		{
 			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
+			$driver_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		}
 		elseif( $config['dbtype'] == 'oci' )
 		{
@@ -71,225 +81,193 @@ class sql_db extends pdo
 	}
 
 	/**
-	 * sql_db::sql_query()
+	 * Insert a row into the database return primary key column
 	 *
 	 * @param string $query
-	 * @return
+	 * @param string $column The name of the primary key column
+	 * @param array $data
+	 * @return integer|false
 	 */
-	public function sql_query( $query = '' )
-	{
-		$query = preg_replace( '/union/', 'UNI0N', $query );
-		try
-		{
-			$result = parent::query( $query );
-			$this->query_strs[] = array( htmlspecialchars( $query ), ( $result ? true : false ) );
-			return $result;
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $query . ' --- ' .$e->getMessage() );
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_fetchrow()
-	 *
-	 * @param object $query_id
-	 * @param integer $type
-	 * @return
-	 */
-	public function sql_fetchrow( $query_id, $type = 0 )
+	public function insert_id( $_sql, $column = '', $data = array() )
 	{
 		try
 		{
-			switch( $type )
+			if( $this->dbtype == 'oci' )
 			{
-				case 1:
-					return $query_id->fetch( PDO::FETCH_NUM );
-				case 2:
-					return $query_id->fetch( PDO::FETCH_ASSOC );
-				default:
-					return $query_id->fetch( PDO::FETCH_BOTH );
+				$_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
+			}
+			$i =0;
+			$stmt = $this->prepare( $_sql );
+			foreach( $data as $key => $value )
+			{
+				$stmt->bindParam( ':' . $key, $data[$key], PDO::PARAM_STR, strlen( $value ) );
+			}
+			if( $this->dbtype == 'oci' )
+			{
+				$stmt->bindParam( ':primary_key', $primary_key, PDO::PARAM_INT, 11 );
+			}
+			$stmt->execute();
+
+			if( $this->dbtype == 'oci' )
+			{
+				return $primary_key;
+			}
+			else
+			{
+				return $this->lastInsertId();
 			}
 		}
 		catch( PDOException $e )
 		{
 			trigger_error( $e->getMessage() );
-			return false;
 		}
+		return false;
 	}
 
 	/**
-	 * sql_db::sql_fetch_assoc()
+	 * sql_db::columns_array()
 	 *
-	 * @param object $query_id
-	 * @return
+	 * @param string $table
+	 * @return array
 	 */
-	public function sql_fetch_assoc( $query_id )
+	public function columns_array( $table )
 	{
-		try
+		//Array: field 	type 	null 	key 	default 	extra
+		$return = array();
+		if( $this->dbtype == 'mysql' )
 		{
-			return $query_id->fetch( PDO::FETCH_ASSOC );
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_numrows()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_numrows( $query_id )
-	{
-		try
-		{
-			return $query_id->rowCount();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );			
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_affectedrows()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_affectedrows( $query_id )
-	{
-		try
-		{
-			return $query_id->rowCount();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );			
-			return false;
-		}
-	}
-
-	/**
-	 * sql_db::sql_query_insert_id()
-	 *
-	 * @param string $query
-	 * @return
-	 */
-	public function sql_query_insert_id( $query )
-	{
-		try
-		{
-			if( preg_match( "/^INSERT\s/is", $query ) )
+			$result = $this->query( 'SHOW COLUMNS FROM ' . $table );
+			while( $row = $result->fetch() )
 			{
-				if( parent::exec( $query ) )
+				$return[$row['field']] = $row;
+			}
+		}
+		elseif( $this->dbtype == 'oci' )
+		{
+			$result = $this->query( "SELECT column_name, data_type, nullable, data_default, char_length FROM all_tab_columns WHERE table_name = '" . strtoupper( $table ) . "' ORDER BY column_id" );
+			while( $row = $result->fetch() )
+			{
+				if( $row['char_length'] ) $row['data_type'] .= '(' .$row['char_length']. ')';
+				$column_name = strtolower( $row['column_name'] );
+
+				$_tmp = array();
+				$_tmp['field'] = $column_name;
+				$_tmp['type'] = $row['data_type'];
+				$_tmp['null'] = ( $row['nullable'] =='N') ? 'NO' : 'YES';
+				$_tmp['key'] = '';
+				$_tmp['default'] = $row['data_default'];
+				$_tmp['extra'] = '';
+				$return[$column_name] = $_tmp;
+			}
+		}
+		return $return;
+	}
+
+	public function columns_add( $table, $column, $type, $length = null, $null = true, $default = null )
+	{
+		//'type' => 'string|integer
+		if( $this->dbtype == 'mysql' )
+		{
+			if( $type == 'integer' )
+			{
+				$length = $length ? $length : 2147483647;
+				if( $length <= 127 )
+					$type = 'TINYINT';
+				elseif( $length <= 32767 )
+					$type = 'SMALLINT';
+				elseif( $length <= 8388607 )
+					$type = 'MEDIUMINT';
+				elseif( $length <= 2147483647 )
+					$type = 'INT';
+				else
+					$type = 'BIGINT';
+			}
+			else
+			{
+				$length = $length ? $length : 65535;
+				if( $length <= 255 )
+					$type = 'VARCHAR(' . $length . ')';
+				elseif( $length <= 65535 )
+					$type = 'TEXT';
+				elseif( $length <= 16777215 )
+					$type = 'MEDIUMTEXT';
+				else
+					$type = 'LONGTEXT';
+			}
+			$sql = 'ALTER TABLE ' . $table . ' ADD ' . $column . ' ' . $type;
+			if( $default !== null )
+			{
+				$sql .= ' DEFAULT ';
+				if( is_bool( $default ) )
 				{
-					$this->query_strs[] = array( htmlspecialchars( $query ), true );
-					return $this->lastInsertId();
+					$sql .= $default ? 'true' : 'false';
+				}
+				if( is_string( $default ) )
+				{
+					$sql .= "'" . $default . "'";
+				}
+				else
+				{
+					$sql .= $default;
 				}
 			}
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-		}
-		$this->query_strs[] = array( htmlspecialchars( $query ), false );
-		return false;
-	}
-
-	/**
-	 * sql_db::sql_freeresult()
-	 *
-	 * @param object $query_id
-	 * @return
-	 */
-	public function sql_freeresult( $query_id )
-	{
-		try
-		{
-			return $query_id->closeCursor();
-		}
-		catch( PDOException $e )
-		{
-			trigger_error( $e->getMessage() );
-			return false;
-		}
-		return false;
-	}
-
-	/**
-	 * sql_db::fixdb()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function fixdb( $value )
-	{
-		$value = str_replace( '\'', '&#039;', $value );
-		$value = preg_replace( array( "/(se)(lect)/i", "/(uni)(on)/i", "/(con)(cat)/i", "/(c)(har)/i", "/(out)(file)/i", "/(al)(ter)/i", "/(in)(sert)/i", "/(d)(rop)/i", "/(f)(rom)/i", "/(whe)(re)/i", "/(up)(date)/i", "/(de)(lete)/i", "/(cre)(ate)/i" ), "$1-$2", $value );
-		return $value;
-	}
-
-	/**
-	 * sql_db::unfixdb()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	function unfixdb( $value )
-	{
-		$value = preg_replace( array( "/(se)\-(lect)/i", "/(uni)\-(on)/i", "/(con)\-(cat)/i", "/(c)\-(har)/i", "/(out)\-(file)/i", "/(al)\-(ter)/i", "/(in)\-(sert)/i", "/(d)\-(rop)/i", "/(f)\-(rom)/i", "/(whe)\-(re)/i", "/(up)\-(date)/i", "/(de)\-(lete)/i", "/(cre)\-(ate)/i" ), "$1$2", $value );
-		return $value;
-	}
-
-	/**
-	 * sql_db::dbescape()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function dbescape( $value )
-	{
-		if( is_array( $value ) )
-		{
-			$value = array_map( array( $this, __function__ ), $value );
-		}
-		else
-		{
-			if( ! is_numeric( $value ) || $value{0} == '0' )
+			if( ! $null )
 			{
-				$value = $this->quote( $this->fixdb( $value ) );
+				$sql .= ' NOT NULL';
 			}
 		}
-
-		return $value;
-	}
-
-	/**
-	 * sql_db::dbescape_string()
-	 *
-	 * @param mixed $value
-	 * @return
-	 */
-	public function dbescape_string( $value )
-	{
-		if( is_array( $value ) )
+		elseif( $this->dbtype == 'oci' )
 		{
-			$value = array_map( array( $this, __function__ ), $value );
+			if( $type == 'integer' )
+			{
+				$length = $length ? $length : 2147483647;
+				if( $length <= 127 )
+					$type = 'NUMBER(3,0)';
+				elseif( $length <= 32767 )
+					$type = 'NUMBER(5,0)';
+				elseif( $length <= 8388607 )
+					$type = 'NUMBER(8,0)';
+				elseif( $length <= 2147483647 )
+					$type = 'NUMBER(11,0)';
+				else
+					$type = 'NUMBER(22,0)';
+			}
+			else
+			{
+				$length = $length ? $length : 65535;
+				if( $length <= 4000 )
+					$type = 'VARCHAR2(' . $length . ' CHAR)';
+				else
+					$type = 'CLOB';
+			}
+			$sql = 'ALTER TABLE ' . $table . ' ADD (' . $column . ' ' . $type;
+			if( $default !== null )
+			{
+				$sql .= ' DEFAULT ';
+				if( is_bool( $default ) )
+				{
+					$sql .= $default ? 'true' : 'false';
+				}
+				if( is_string( $default ) )
+				{
+					$sql .= "'" . $default . "'";
+				}
+				else
+				{
+					$sql .= $default;
+				}
+			}
+			if( ! $null )
+			{
+				$sql .= ' NOT NULL ENABLE';
+			}
+			$sql .= ')';
 		}
 		else
 		{
-			$value = $this->quote( $this->fixdb( $value ) );
+			return false;
 		}
-
-		return $value;
+		return $this->exec( $sql );
 	}
 
 	/**
@@ -312,34 +290,12 @@ class sql_db extends pdo
 		return $value;
 	}
 
-}
-
-class sqldriver
-{
-	private $_select = '';
-	private $_from = '';
-	private $_join = '';
-	private $_where = '';
-	private $_group = '';
-	private $_having = '';
-	private $_order = '';
-	private $_limit = 0;
-	private $_offset = 0;
-	private $_dbtype = '';
-
-	public function __construct( $config )
-	{
-		//$this->classname = get_class( $this );
-		$this->reset( );
-		$this->_dbtype = $config['dbtype'];
-	}
-
 	/**
 	 * reset query.
 	 *
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
-	public function reset( )
+	public function sqlreset()
 	{
 		$this->_select = '';
 		$this->_from = '';
@@ -358,7 +314,7 @@ class sqldriver
 	 * select for the query.
 	 *
 	 * @param string $select
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function select( $select = '' )
 	{
@@ -371,7 +327,7 @@ class sqldriver
 	 * from for the query.
 	 *
 	 * @param string $from
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function from( $from = '' )
 	{
@@ -379,25 +335,25 @@ class sqldriver
 
 		return $this;
 	}
-	
+
 	/**
 	 * join for the query.
 	 *
 	 * @param string join_table_on
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function join( $join_table_on )
 	{
 		$this->_join = $join_table_on;
 
 		return $this;
-	}	
+	}
 
 	/**
 	 * where for the query.
 	 *
 	 * @param string $where
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function where( $where = '' )
 	{
@@ -410,7 +366,7 @@ class sqldriver
 	 * group for the query.
 	 *
 	 * @param string $group
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function group( $group = '' )
 	{
@@ -423,7 +379,7 @@ class sqldriver
 	 * having for the query.
 	 *
 	 * @param string $having
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function having( $having = '' )
 	{
@@ -436,7 +392,7 @@ class sqldriver
 	 * order for the query.
 	 *
 	 * @param string $order
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
 	public function order( $order = '' )
 	{
@@ -446,29 +402,40 @@ class sqldriver
 	}
 
 	/**
-	 * sets the limit (and offset optionally) for the query.
+	 * sets the limit for the query.
 	 *
 	 * @param int $limit
-	 * @param int $offset
-	 * @return sqldriver $this
+	 * @return sql_db $this
 	 */
-	public function limit( $limit, $offset = false )
+	public function limit( $limit )
 	{
 		$this->_limit = (int)$limit;
+
+		return $this;
+	}
+
+	/**
+	 * sets the offset for the query.
+	 *
+	 * @param int $offset
+	 * @return sql_db $this
+	 */
+	public function offset( $offset )
+	{
 		$this->_offset = (int)$offset;
 
 		return $this;
 	}
 
-	public function get( )
+	public function sql()
 	{
 		$return = 'SELECT ' . $this->_select;
-		if( $this->_dbtype == 'oci' AND $this->_offset !== false )
+		if( $this->dbtype == 'oci' AND $this->_offset )
 		{
-			$return .= ', ROWNUM oci_rownum, count(*) over () found_rows ';
+			$return .= ', ROWNUM oci_rownum ';
 		}
 		$return .= ' FROM ' . $this->_from;
-		
+
 		if( $this->_join )
 		{
 			$return .= ' ' . $this->_join;
@@ -477,12 +444,12 @@ class sqldriver
 		if( $this->_where )
 		{
 			$return .= ' WHERE ' . $this->_where;
-			if( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+			if( $this->dbtype == 'oci' AND $this->_limit > 0 )
 			{
 				$return .= ' AND ROWNUM <= ' . ($this->_limit + $this->_offset);
 			}
 		}
-		elseif( $this->_dbtype == 'oci' AND $this->_limit > 0 )
+		elseif( $this->dbtype == 'oci' AND $this->_limit > 0 )
 		{
 			$return .= ' WHERE ROWNUM <= ' . ($this->_limit + $this->_offset);
 		}
@@ -499,21 +466,24 @@ class sqldriver
 			$return .= ' ORDER BY ' . $this->_order;
 		}
 
-		if( $this->_dbtype == 'mysql' )
+		if( $this->dbtype == 'mysql' )
 		{
 			if( $this->_limit )
 			{
-				$return .= ' LIMIT ' . $this->_offset . ', ' . $this->_limit;
+				$return .= ' LIMIT ' . $this->_limit;
+			}
+			if( $this->_offset )
+			{
+				$return .= ' OFFSET ' . $this->_offset;
 			}
 		}
-		elseif( $this->_dbtype == 'oci' AND $this->_offset > 0 )
+		elseif( $this->dbtype == 'oci' AND $this->_offset > 0 )
 		{
 			$return = 'SELECT ' . $this->_select . ' FROM (' . $return . ') WHERE oci_rownum >= ' . ($this->_offset + 1);
 		}
 
 		return $return;
 	}
-
 }
 
 ?>

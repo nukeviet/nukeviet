@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -13,8 +14,8 @@ $array_lang_no_check = array();
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
-while( $row = $result->fetch() )
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
@@ -111,10 +112,11 @@ function nv_admin_write_lang( $dirlang, $idfile )
 			$content_lang_no_tran = '';
 			$content_lang = "<?php\n\n";
 			$content_lang .= "/**\n";
-			$content_lang .= "* @Project NUKEVIET 3.x\n";
+			$content_lang .= "* @Project NUKEVIET 4.x\n";
 			$content_lang .= "* @Author VINADES.,JSC (contact@vinades.vn)\n";
 			$content_lang .= "* @Copyright (C) " . date( "Y" ) . " VINADES.,JSC. All rights reserved\n";
 			$content_lang .= "* @Language " . $language_array[$dirlang]['name'] . "\n";
+			$content_lang .= "* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)\n";
 			$content_lang .= "* @Createdate " . gmdate( "M d, Y, h:i:s A", $createdate ) . "\n";
 			$content_lang .= "*/\n";
 

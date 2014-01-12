@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright 2010 VINADES. All rights reserved
+ * @Copyright 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 22, 2010 3:00:20 PM
  */
 
@@ -13,16 +14,14 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $id )
 {
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $id;
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+	$frow = $db->query( $sql )->fetch();
 
-	if( ! $db->sql_numrows( $result ) )
+	if( empty( $frow ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
 		die();
 	}
-
-	$frow = $db->sql_fetchrow( $result );
 
 	$page_title = $frow['full_name'];
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
@@ -38,21 +37,21 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
-$sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname 
-	FROM " . NV_AUTHORS_GLOBALTABLE . " t1 
-	INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t2 
+$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname
+	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
+	INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2
 	ON t1.admin_id = t2.userid
-	WHERE t1.lev!=0 AND t1.is_suspend=0";
-$result = $db->sql_query( $sql );
+	WHERE t1.lev!=0 AND t1.is_suspend=0';
+$result = $db->query( $sql );
 
 $adms = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$adms[$row['id']] = array(
 		'login' => $row['admin_login'],
 		'fullname' => $row['admin_fullname'],
 		'email' => $row['admin_email'],
-		'level' => intval( $row['level'] )
+		'level' => intval( $row['lev'] )
 	);
 }
 
@@ -137,30 +136,33 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 			}
 		}
-		$admins_list = implode( ";", $admins_list );
+		$admins_list = implode( ';', $admins_list );
 
 		if( $id )
 		{
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-				full_name=" . $db->dbescape( $full_name ) . ", phone = " . $db->dbescape( $phone ) . ",
-				fax=" . $db->dbescape( $fax ) . ", email=" . $db->dbescape( $email ) . ",
-				note=" . $db->dbescape( $note ) . ", admins=" . $db->dbescape( $admins_list ) . " WHERE id =" . $id;
-
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, note=:note, admins=:admins WHERE id =' . $id;
+			$name_key = 'log_edit_row';
+			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows 
-				(full_name, phone, fax, email, note, admins, act) VALUES 
-				(" . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",	" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
-
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (full_name, phone, fax, email, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :note, :admins, 1)';
+			$name_key = 'log_add_row';
+			$note_action = $full_name;
 		}
-
-		$db->sql_query( $sql );
-
-		nv_del_moduleCache( $module_name );
-
+		$sth = $db->prepare( $sql);
+		$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
+		$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
+		$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
+		$sth->bindParam( ':email', $email, PDO::PARAM_STR );
+		$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+		$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
+		$sth->execute();
+		if ($sth->rowCount() )
+		{
+			nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
+			nv_del_moduleCache( $module_name );
+		}
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
 		die();
 	}
@@ -184,9 +186,9 @@ else
 		{
 			foreach( $admins_list as $l )
 			{
-				if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $l ) )
+				if( preg_match( '/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $l ) )
 				{
-					$l2 = array_map( "intval", explode( "/", $l ) );
+					$l2 = array_map( 'intval', explode( '/', $l ) );
 					$admid = intval( $l2[0] );
 
 					if( isset( $adms[$admid] ) )
@@ -253,7 +255,7 @@ if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 }
 else
 {
-	$note = "<textarea style=\"width:100%;height:150px\" name=\"note\" id=\"note\">" . $note . "</textarea>";
+	$note = '<textarea style="width:100%;height:150px" name="note" id="note">' . $note . '</textarea>';
 }
 
 $xtpl->assign( 'DATA', array(
@@ -272,10 +274,10 @@ foreach( $adms as $admid => $values )
 		'fullname' => $values['fullname'],
 		'email' => $values['email'],
 		'admid' => $admid,
-		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "",
-		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "",
-		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "",
-		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : ""
+		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? ' checked="checked"' : '',
+		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? ' checked="checked"' : '',
+		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',
+		'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
 	) );
 
 	$xtpl->parse( 'main.admin' );

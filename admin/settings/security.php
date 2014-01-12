@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -126,7 +127,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	$array_config_global['max_requests_60'] = $nv_Request->get_int( 'max_requests_60', 'post' );
 	$array_config_global['max_requests_300'] = $nv_Request->get_int( 'max_requests_300', 'post' );
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -153,7 +154,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	}
 	$array_config_define['nv_allowed_html_tags'] = implode( ', ', $nv_allowed_html_tags );
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -187,7 +188,7 @@ $del = $nv_Request->get_int( 'del', 'get' );
 
 if( ! empty( $del ) and ! empty( $cid ) )
 {
-	$db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid );
+	$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid );
 	nv_save_file_banip();
 }
 
@@ -336,24 +337,24 @@ $banip_area_array[3] = $lang_module['banip_area_both'];
 
 $sql = 'SELECT id, ip, mask, area, begintime, endtime FROM ' . $db_config['prefix'] . '_banip ORDER BY ip DESC';
 $result = $db->query( $sql );
-
-if( $result->rowCount() )
+$i = 0;
+while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 {
-	while( list( $dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
-	{
-		$xtpl->assign( 'ROW', array(
-			'dbip' => $dbip,
-			'dbmask' => $mask_text_array[$dbmask],
-			'dbarea' => $banip_area_array[$dbarea],
-			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
-			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['banip_nolimit'],
-			'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid,
-			'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;del=1&amp;id=' . $dbid
-		) );
+	++$i;
+	$xtpl->assign( 'ROW', array(
+		'dbip' => $dbip,
+		'dbmask' => $mask_text_array[$dbmask],
+		'dbarea' => $banip_area_array[$dbarea],
+		'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
+		'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['banip_nolimit'],
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid,
+		'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;del=1&amp;id=' . $dbid
+	) );
 
-		$xtpl->parse( 'main.listip.loop' );
-	}
-
+	$xtpl->parse( 'main.listip.loop' );
+}
+if( $i )
+{
 	$xtpl->parse( 'main.listip' );
 }
 

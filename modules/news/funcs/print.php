@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -27,18 +28,18 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 if( $id > 0 and $catid > 0 )
 {
 	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " WHERE id ='" . $id . "' AND status=1";
-	$result = $db->sql_query( $sql );
-	$content = $db->sql_fetch_assoc( $result );
+	$result = $db->query( $sql );
+	$content = $result->fetch();
 
-	$body_contents = $db->sql_fetch_assoc( $db->sql_query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $content['id'] / 2000 ) . " where id=" . $content['id'] ) );
+	$body_contents = $db->query( "SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $content['id'] / 2000 ) . " where id=" . $content['id'] )->fetch();
 	$content = array_merge( $content, $body_contents );
 	unset( $sql, $result, $body_contents );
 
 	if( $content['allowed_print'] == 1 )
 	{
 		$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid = '" . $content['sourceid'] . "'";
-		$result = $db->sql_query( $sql );
-		list( $sourcetext ) = $db->sql_fetchrow( $result );
+		$result = $db->query( $sql );
+		$sourcetext = $result->fetchColumn();
 		unset( $sql, $result );
 
 		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );

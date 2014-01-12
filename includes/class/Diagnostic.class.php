@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 23/12/2010, 9:36
  */
 
@@ -12,7 +13,7 @@ define( 'NV_CLASS_DIAGNOSTIC', true );
 
 if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if( ! defined( 'NV_DATADIR' ) ) define( 'NV_DATADIR', "data" );
+if( ! defined( 'NV_DATADIR' ) ) define( 'NV_DATADIR', 'data' );
 if( ! defined( 'NV_SERVER_NAME' ) )
 {
 	$_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
@@ -25,7 +26,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 {
 	if( ! isset( $global_config ) or empty( $global_config ) )
 	{
-		$global_config = array( 'version' => "3.0.12", 'sitekey' => mt_rand() );
+		$global_config = array( 'version' => '3.0.12', 'sitekey' => mt_rand() );
 	}
 
 	if( ! class_exists( 'UrlGetContents' ) )
@@ -36,27 +37,16 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 	$getContent = new UrlGetContents( $global_config );
 }
 
-/**
- * Diagnostic
- *
- * @package NUKEVIET 3.x
- * @author VINADES.,JSC
- * @copyright 2010
- * @version $Id$
- * @access public
- */
 class Diagnostic
 {
-	private $googleDomains = array( // 'www.google.com', //
-'toolbarqueries.google.com' //
-);
+	private $googleDomains = array( 'toolbarqueries.google.com' );
 	private $pattern = array(
-		'PageRank' => "http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s&num=100&filter=0", //
-		'AlexaRank' => "http://data.alexa.com/data?cli=10&dat=nsa&url=%s", //
-		'GoogleBackLink' => "http://www.google.com/search?hl=en&q=link%s", //
-		'GoogleIndexed' => "http://www.google.com/search?hl=en&q=site%s", //
-		'BingBackLink' => "http://www.bing.com/search?q=link%s&go=&qs=bs&form=QBRE", //
-		'BingIndexed' => "http://www.bing.com/search?q=site%s&go=&qs=bs&form=QBRE" //
+		'PageRank' => 'http://%s/tbr?client=navclient-auto&ch=%s&features=Rank&q=info%s&num=100&filter=0',
+		'AlexaRank' => 'http://data.alexa.com/data?cli=10&dat=nsa&url=%s',
+		'GoogleBackLink' => 'http://www.google.com/search?hl=en&q=link%s',
+		'GoogleIndexed' => 'http://www.google.com/search?hl=en&q=site%s',
+		'BingBackLink' => 'http://www.bing.com/search?q=link%s&go=&qs=bs&form=QBRE',
+		'BingIndexed' => 'http://www.bing.com/search?q=site%s&go=&qs=bs&form=QBRE'
 	);
 	private $myDomain;
 	public $currentDomain;
@@ -79,15 +69,15 @@ class Diagnostic
 		if( isset( $_pattern['BingBackLink'] ) ) $this->$pattern['BingBackLink'] = $_pattern['BingBackLink'];
 		if( isset( $_pattern['BingIndexed'] ) ) $this->$pattern['BingIndexed'] = $_pattern['BingIndexed'];
 
-		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 		}
 
 		$this->disable_functions = $disable_functions;
 		$this->myDomain = NV_SERVER_NAME;
-		// $this->myDomain = "nukeviet.vn";
+		// $this->myDomain = 'nukeviet.vn';
 	}
 
 	/**
@@ -193,7 +183,7 @@ class Diagnostic
 		{
 			$ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
 			$host = $this->googleDomains[mt_rand( 0, sizeof( $this->googleDomains ) - 1 )];
-			$url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ":" . $this->currentDomain ) );
+			$url = sprintf( $this->pattern['PageRank'], $host, $ch, urlencode( ':' . $this->currentDomain ) );
 
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_HEADER, 0 );
@@ -204,9 +194,9 @@ class Diagnostic
 			if( ! curl_errno( $ch ) )
 			{
 				$info = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-				if( $info == "200" )
+				if( $info == '200' )
 				{
-					if( preg_match( "/^Rank\_(\d+)\:(\d+)\:(\d+)$/i", $content, $matches ) )
+					if( preg_match( '/^Rank\_(\d+)\:(\d+)\:(\d+)$/i', $content, $matches ) )
 					{
 						curl_close( $ch );
 						return ( int )$matches[3];
@@ -258,10 +248,10 @@ class Diagnostic
 	{
 		global $getContent;
 
-		$url = sprintf( $this->pattern['GoogleBackLink'], urlencode( ":" . $this->currentDomain ) );
+		$url = sprintf( $this->pattern['GoogleBackLink'], urlencode( ':' . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 
-		if( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)<\/div\>/isU", $content, $match ) )
+		if( preg_match( '/\<div(.*?)\>About ([0-9\,]+) results(.*?)<\/div\>/isU', $content, $match ) )
 		{
 			$bl = preg_replace( '/\,/', '', $match[2] );
 			return ( int )$bl;
@@ -281,10 +271,10 @@ class Diagnostic
 	{
 		global $getContent;
 
-		$url = sprintf( $this->pattern['GoogleIndexed'], urlencode( ":" . $this->currentDomain ) );
+		$url = sprintf( $this->pattern['GoogleIndexed'], urlencode( ':' . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 
-		if( preg_match( "/\<div(.*?)\>About ([0-9\,]+) results(.*?)\<\/div\>/isU", $content, $match ) )
+		if( preg_match( '/\<div(.*?)\>About ([0-9\,]+) results(.*?)\<\/div\>/isU', $content, $match ) )
 		{
 			$bl = preg_replace( '/\,/', '', $match[2] );
 			return ( int )$bl;
@@ -304,7 +294,7 @@ class Diagnostic
 	{
 		global $getContent;
 
-		$url = sprintf( $this->pattern['BingBackLink'], urlencode( ":" . $this->currentDomain ) );
+		$url = sprintf( $this->pattern['BingBackLink'], urlencode( ':' . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
@@ -327,7 +317,7 @@ class Diagnostic
 	{
 		global $getContent;
 
-		$url = sprintf( $this->pattern['BingIndexed'], urlencode( ":" . $this->currentDomain ) );
+		$url = sprintf( $this->pattern['BingIndexed'], urlencode( ':' . $this->currentDomain ) );
 		$content = $getContent->get( $url );
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
@@ -359,7 +349,7 @@ class Diagnostic
 		}
 
 		$result = array();
-		$result['date'] = gmdate( "D, d M Y H:i:s", NV_CURRENTTIME ) . " GMT";
+		$result['date'] = gmdate( 'D, d M Y H:i:s', NV_CURRENTTIME ) . ' GMT';
 		$result['PageRank'] = $this->getPageRank();
 		list( $result['AlexaRank'], $result['AlexaBackLink'], $result['AlexaReach'] ) = $this->getAlexaRank();
 		$result['GoogleBackLink'] = $this->getGoogleBackLink();
@@ -394,18 +384,18 @@ class Diagnostic
 		$content = array();
 		$content['item'] = array();
 
-		if( preg_match( "/^localhost|127\.0\.0/is", $this->currentDomain ) )
+		if( preg_match( '/^localhost|127\.0\.0/is', $this->currentDomain ) )
 		{
-			$content['item'][] = array( //
-				'date' => gmdate( "D, d M Y H:i:s", NV_CURRENTTIME ) . " GMT", //
-				'PageRank' => 0, //
-				'AlexaRank' => 0, //
-				'AlexaBackLink' => 0, //
-				'AlexaReach' => 0, //
-				'GoogleBackLink' => 0, //
-				'GoogleIndexed' => 0, //
-				'BingBackLink' => 0, //
-				'BingIndexed' => 0 //
+			$content['item'][] = array(
+				'date' => gmdate( 'D, d M Y H:i:s', NV_CURRENTTIME ) . ' GMT',
+				'PageRank' => 0,
+				'AlexaRank' => 0,
+				'AlexaBackLink' => 0,
+				'AlexaReach' => 0,
+				'GoogleBackLink' => 0,
+				'GoogleIndexed' => 0,
+				'BingBackLink' => 0,
+				'BingIndexed' => 0
 			);
 			return $content;
 		}

@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -76,7 +77,6 @@ $lang_global['regdate'] = 'Date d\'inscription';
 $lang_global['online'] = 'En ligne';
 $lang_global['hits'] = 'Total';
 $lang_global['viewstats'] = 'Consulter les statistiques';
-$lang_global['db_num_queries'] = 'Connexions à la base de données';
 $lang_global['last_login'] = 'Dernière session';
 $lang_global['current_login'] = 'Session en cours';
 $lang_global['your_account'] = 'Mon Compte';
@@ -132,7 +132,6 @@ $lang_global['lang_en'] = 'Anglais';
 $lang_global['option'] = 'Option';
 $lang_global['value'] = 'Valeur';
 $lang_global['reviews'] = 'Évaluer';
-$lang_global['show_queries'] = 'Liste des requêtes';
 $lang_global['add'] = 'Ajouter';
 $lang_global['edit'] = 'Éditer';
 $lang_global['delete'] = 'Supprimer';

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2010
- * @createdate 1/20/2010 20:48
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 1/20/2010 20:48
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -166,12 +167,12 @@ function nv_dump_save( $params )
 		return false;
 	}
 
-	$db->exec( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
+	$db->query( 'SET SQL_QUOTE_SHOW_CREATE = 1' );
 
 	$a = 0;
 	foreach( $tables as $table )
 	{
-		$content = $db->query( 'SHOW CREATE TABLE ' . $table['name'] . '' )->fetchColumn( 1 );
+		$content = $db->query( 'SHOW CREATE TABLE ' . $table['name'] )->fetchColumn( 1 );
 		$content = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $content );
 		$content = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $content );
 
@@ -198,19 +199,23 @@ function nv_dump_save( $params )
 			}
 
 			$columns = array();
-			$result = $db->query( 'SHOW COLUMNS FROM ' . $table['name'] . '' );
-			while( $col = $result->fetch() )
+			$columns_array = $db->columns_array( $table['name'] );
+			foreach ( $columns_array as $col )
 			{
 				$columns[$col['field']] = preg_match( '/^(\w*int|year)/', $col['type'] ) ? 'int' : 'txt';
 			}
-			$result->closeCursor();
 
 			$maxi = ceil( $table['numrow'] / $table['limit'] );
 			$from = 0;
 			$a = 0;
 			for( $i = 0; $i < $maxi; ++$i )
 			{
-				$result = $db->query( 'SELECT * FROM ' . $table['name'] . ' LIMIT ' . $from . ', ' . $table['limit'] );
+				$db->sqlreset()
+					->select( '*' )
+					->from( $table['name'] )
+					->limit( $table['limit'] )
+					->offset( $from );
+				$result = $db->query( $db->sql() );
 				while( $row = $result->fetch() )
 				{
 					$row2 = array();
@@ -308,7 +313,7 @@ function nv_dump_restore( $file )
 					$sql = preg_replace( array( "/\{\|prefix\|\}/", "/\{\|lang\|\}/" ), array( $db_config['prefix'], NV_LANG_DATA ), $sql );
 					try
 					{
-						$db->exec( $sql );
+						$db->query( $sql );
 					}
 					catch (PDOException $e)
 					{

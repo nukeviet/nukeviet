@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
 
@@ -22,14 +23,14 @@ function nv_delete_table_sys( $lang )
 	global $db_config, $global_config;
 
 	$sql_drop_table = array();
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modules";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_groups";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_blocks_weight";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modfuncs";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_searchkeys";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_referer_stats";
-	$sql_drop_table[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_modthemes";
-	$sql_drop_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs DROP " . $lang . "_cron_name";
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modules';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_blocks_weight';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modfuncs';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_searchkeys';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_referer_stats';
+	$sql_drop_table[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $lang . '_modthemes';
+	$sql_drop_table[] = 'ALTER TABLE ' . $db_config['prefix'] . '_cronjobs DROP ' . $lang . '_cron_name';
 
 	return $sql_drop_table;
 }
@@ -47,22 +48,22 @@ function nv_create_table_sys( $lang )
 		 module_file varchar(55) NOT NULL DEFAULT '',
 		 module_data varchar(55) NOT NULL DEFAULT '',
 		 custom_title varchar(255) NOT NULL,
-		 admin_title varchar(255) NOT NULL,
+		 admin_title varchar(255) DEFAULT '',
 		 set_time int(11) unsigned NOT NULL DEFAULT '0',
 		 main_file tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 admin_file tinyint(1) unsigned NOT NULL DEFAULT '0',
-		 theme varchar(100) NOT NULL,
-		 mobile varchar(100) NOT NULL,
-	 	 description varchar(255) NOT NULL DEFAULT '',
-		 keywords mediumtext NOT NULL,
+		 theme varchar(100) DEFAULT '',
+		 mobile varchar(100) DEFAULT '',
+	 	 description varchar(255) DEFAULT '',
+		 keywords text,
 		 groups_view varchar(255) NOT NULL,
 		 in_menu tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 weight tinyint(3) unsigned NOT NULL DEFAULT '1',
 		 submenu tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 act tinyint(1) unsigned NOT NULL DEFAULT '0',
-		 admins varchar(255) NOT NULL,
-		 rss tinyint(4) NOT NULL default '1',
-		 gid smallint(5) NOT NULL default '0',
+		 admins varchar(255) DEFAULT '',
+		 rss tinyint(4) NOT NULL DEFAULT '1',
+		 gid smallint(5) NOT NULL DEFAULT '0',
 		 PRIMARY KEY (title)
 	) ENGINE=MyISAM";
 
@@ -178,7 +179,7 @@ function nv_create_table_sys( $lang )
 
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";
 
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0','" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
 	$sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs ADD " . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
 
 	return $sql_create_table;

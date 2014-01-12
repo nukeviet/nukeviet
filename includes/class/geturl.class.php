@@ -1,21 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 5-8-2010 1:13
  */
 
-/**
- * Get data from file as a URL
- *
- * @package NUKEVIET 3.x
- * @author VINADES.,JSC
- * @copyright 2010
- * @version $Id$
- * @access public
- */
 class UrlGetContents
 {
 	private $allow_methods = array();

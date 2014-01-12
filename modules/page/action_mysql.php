@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
 
@@ -19,15 +20,15 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(255) NOT NULL,
  alias varchar(255) NOT NULL,
- image varchar(255) NOT NULL DEFAULT '',
- imagealt varchar(255) NOT NULL DEFAULT '',
- description text NOT NULL,
+ image varchar(255) DEFAULT '',
+ imagealt varchar(255) DEFAULT '',
+ description text,
  bodytext mediumtext NOT NULL,
- keywords mediumtext NOT NULL,
+ keywords text,
  socialbutton tinyint(4) NOT NULL DEFAULT '0',
  activecomm tinyint(4) NOT NULL DEFAULT '0',
- facebookappid varchar(30) NOT NULL,
- layout_func varchar(100) NOT NULL DEFAULT '',
+ facebookappid varchar(30) DEFAULT '',
+ layout_func varchar(100) DEFAULT '',
  gid mediumint(9) NOT NULL DEFAULT '0',
  weight smallint(4) NOT NULL DEFAULT '0',
  admin_id mediumint(8) unsigned NOT NULL DEFAULT '0',

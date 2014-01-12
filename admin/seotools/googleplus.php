@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -70,7 +71,7 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	$numrows = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid )->rowCount();
+	$numrows = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO' );
 
 	$query = 'SELECT gid FROM ' . $db_config['prefix'] . '_googleplus WHERE gid!=' . $gid . ' ORDER BY weight ASC';
@@ -80,9 +81,9 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
+		$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
 	}
-	$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $new_vid . ' WHERE gid=' . $gid );
+	$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $new_vid . ' WHERE gid=' . $gid );
 	die( 'OK' );
 }
 
@@ -97,7 +98,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $gid )
 	{
-		$db->exec( 'UPDATE ' . NV_MODULES_TABLE . ' SET gid=0 WHERE gid=' . $gid );
+		$db->query( 'UPDATE ' . NV_MODULES_TABLE . ' SET gid=0 WHERE gid=' . $gid );
 		nv_del_moduleCache( 'modules' );
 
 		$query = 'DELETE FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid;
@@ -109,7 +110,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 			while( $row = $result->fetch() )
 			{
 				++$weight;
-				$db->exec( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
+				$db->query( 'UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid'] );
 			}
 			$result->closeCursor();
 			nv_del_moduleCache( 'seotools' );

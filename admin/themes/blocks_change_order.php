@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -26,14 +27,14 @@ if( $order > 0 and $bid > 0 )
 	{
 		++$weight;
 		if( $weight == $order ) ++$weight;
-		$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id );
 	}
 
-	$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $order . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
+	$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $order . ' WHERE bid=' . $bid . ' AND func_id=' . $func_id );
 
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	echo 'OK';
 }

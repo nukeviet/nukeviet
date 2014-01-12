@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -117,7 +118,7 @@ $sth = $db->prepare( 'SELECT t1.position, COUNT(*)
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 $sth->execute();
 
-while( list( $position, $numposition ) = $result->fetch( 3 ) )
+while( list( $position, $numposition ) = $sth->fetch( 3 ) )
 {
 	$blocks_positions[$position] = $numposition;
 }

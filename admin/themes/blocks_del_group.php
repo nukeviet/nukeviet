@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -28,8 +29,8 @@ if( ! empty( $array_expression ) )
 	{
 		foreach( $array_data_i as $position => $array_position )
 		{
-			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode( ',', $array_position ) . ')' );
-			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (' . implode( ',', $array_position ) . ')' );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid in (' . implode( ',', $array_position ) . ')' );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (' . implode( ',', $array_position ) . ')' );
 
 			$weight = 0;
 			$sth = $db->prepare( 'SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=:theme AND position=:position ORDER BY weight ASC' );
@@ -39,7 +40,7 @@ if( ! empty( $array_expression ) )
 			while( list( $bid_i ) = $sth->fetch( 3 ) )
 			{
 				++$weight;
-				$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+				$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 			}
 
 			$func_id_old = $weight = 0;
@@ -61,15 +62,15 @@ if( ! empty( $array_expression ) )
 					$func_id_old = $func_id_i;
 				}
 
-				$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
+				$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 			}
 		}
 	}
 
 	nv_del_moduleCache( 'themes' );
 
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
-	$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
 }
 
 echo $lang_module['block_delete_success'];

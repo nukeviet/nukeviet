@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 2:13
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 2:13
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -150,7 +151,7 @@ function nv_save_file_config_global()
 	$upload_max_filesize = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $config_variable['nv_max_size'] );
 
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
-	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . $upload_max_filesize . ");\n";
+	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . intval( $upload_max_filesize ) . ");\n";
 
 	if( $config_variable['openid_mode'] )
 	{

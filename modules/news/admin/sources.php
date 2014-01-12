@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -31,7 +32,7 @@ if( ! empty( $savecat ) )
 		$link = '';
 	}
 
-	list( $logo_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid . "" ) );
+	$logo_old = $db->query( "SELECT logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE sourceid =" . $sourceid )->fetchColumn();
 
 	$logo = $nv_Request->get_title( 'logo', 'post', '' );
 	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
@@ -53,13 +54,13 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $sourceid == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" ) );
+		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->dbescape( $title ) . ", " . $db->dbescape( $link ) . ", " . $db->dbescape( $logo ) . ", " . $db->dbescape( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-		if( $db->sql_query_insert_id( $sql ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->quote( $title ) . ", " . $db->quote( $link ) . ", " . $db->quote( $logo ) . ", " . $db->quote( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		if( $db->insert_id( $sql, 'sourceid' ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -69,11 +70,11 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title=" . $db->dbescape( $title ) . ", link = " . $db->dbescape( $link ) . ", logo=" . $db->dbescape( $logo ) . ", edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid;
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title=" . $db->quote( $title ) . ", link = " . $db->quote( $link ) . ", logo=" . $db->quote( $logo ) . ", edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid;
 		if( $db->exec( $sql ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -86,7 +87,7 @@ if( ! empty( $savecat ) )
 $sourceid = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if( $sourceid > 0 )
 {
-	list( $sourceid, $title, $link, $logo ) = $db->sql_fetchrow( $db->sql_query( "SELECT sourceid, title, link, logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources where sourceid=" . $sourceid ) );
+	list( $sourceid, $title, $link, $logo ) = $db->query( "SELECT sourceid, title, link, logo FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources where sourceid=" . $sourceid )->fetch( 3 );
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 

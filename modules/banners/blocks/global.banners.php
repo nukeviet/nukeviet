@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 10, 2011 6:04:30 PM
  */
 
@@ -19,9 +20,9 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 		$html = "<select name=\"config_idplanbanner\">\n";
 		$html .= "<option value=\"\">" . $lang_block['idplanbanner'] . "</option>\n";
 		$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
-		$result = $db->sql_query( $query );
+		$result = $db->query( $query );
 
-		while( $row_bpn = $db->sql_fetchrow( $result ) )
+		while( $row_bpn = $result->fetch() )
 		{
 			$value = $row_bpn['title'] . " (";
 			$value .= ( ( ! empty( $row_bpn['blang'] ) and isset( $language_array[$row_bpn['blang']] ) ) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all'] ) . ", ";

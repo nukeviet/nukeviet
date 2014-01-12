@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 2:29
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 2:29
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
@@ -429,17 +430,17 @@ function nv_filesListRefresh( $pathimg )
 				// Xóa CSDL file không còn tồn tại
 				foreach( $results as $title => $value )
 				{
-					$db->exec( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'" );
+					$db->query( "DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'" );
 				}
 			}
-			$db->exec( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did );
+			$db->query( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did );
 		}
 	}
 	else
 	{
 		// Xóa CSDL thư mục không còn tồn tại
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 	}
 }
 
@@ -519,8 +520,8 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		// Xóa CSDL thư mục không còn tồn tại
 		$did = $array_dirname[$dirname];
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
-		$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+		$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 		unset( $array_dirname[$dirname] );
 	}
 	$result_new = array_diff( $real_dirlist, $dirlist );
@@ -528,8 +529,7 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 	{
 		try
 		{
-			$db->exec( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')" );
-			$array_dirname[$dirname] = $db->lastInsertId();
+			$array_dirname[$dirname] = $db->insert_id( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did" );
 		}
 		catch (PDOException $e)
 		{

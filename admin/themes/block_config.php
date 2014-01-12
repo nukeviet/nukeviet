@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -97,7 +98,7 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 
 					if( $bid > 0 )
 					{
-						$row_config = $db->exec( 'SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch();
+						$row_config = $db->query( 'SELECT module, file_name, config FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch();
 						if( $row_config['file_name'] == $file_name and $row_config['module'] == $module )
 						{
 							$data_block = unserialize( $row_config['config'] );

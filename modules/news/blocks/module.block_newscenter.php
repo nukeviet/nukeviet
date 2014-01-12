@@ -1,28 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module;
+global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db;
 
 $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'lang', $lang_module );
 
-//$sql = 'SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE status= 1 ORDER BY publtime DESC LIMIT 0 , 4';
-$sdr->reset()
-			->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile')
-			->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
-			->where('status= 1')			
+$db->sqlreset()
+			->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1' )
 			->order( 'publtime DESC' )
-			->limit('4');	
-		
-$list = nv_db_cache( $sdr->get(), 'id', $module_name );
+			->limit( 4 );
+
+$list = nv_db_cache( $db->sql(), 'id', $module_name );
 
 $i = 1;
 foreach( $list as $row )

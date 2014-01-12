@@ -1,7 +1,8 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author  VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-13-2010 15:24
  */
 
@@ -42,13 +43,16 @@ var nv_login_failed = "Error: For some reasons, system doesn't accept your accou
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
 var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
 
-//contact
+// Contact
 var nv_fullname = "Full name entered is not valid.";
 var nv_title = "Title not valid.";
 var nv_content = "The content is not empty.";
 var nv_code = "Capcha not valid.";
 
-//ErrorMessage
+// Message before unload
+var nv_msgbeforeunload = "The data is unsaved. You will lose all data if you leave this page. Do you want to leave?";
+
+// ErrorMessage
 var NVJL = [];
 NVJL.errorRequest = "There was an error with the request.";
 NVJL.errortimeout = "The request timed out.";

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/28/2009 14:30
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/28/2009 14:30
  */
 
 if( defined( 'NV_CLASS_IMAGE_PHP' ) ) return;
@@ -19,15 +20,6 @@ if( ! defined( 'ERROR_IMAGE6' ) ) define( 'ERROR_IMAGE6', 'Error loading Image' 
 
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
-/**
- * image
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES
- * @version 2010
- * @access public
- */
 class image
 {
 	var $filename;

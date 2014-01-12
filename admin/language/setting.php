@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -23,7 +24,7 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 {
 	$read_type = $nv_Request->get_int( 'read_type', 'post', 0 );
 
-	$db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'" );
 
 	nv_save_file_config_global();
 
@@ -111,8 +112,8 @@ if( $nv_Request->get_string( 'checksessshow', 'post' ) == md5( session_id() . 's
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 $lang_array_data_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
-while( $row = $result->fetch() )
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{

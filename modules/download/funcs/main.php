@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
  */
 
@@ -22,7 +23,7 @@ $contents = '';
 
 $download_config = nv_mod_down_config();
 
-$today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
+$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 $yesterday = $today - 86400;
 
 //rating
@@ -32,24 +33,21 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 	$rating = $nv_Request->get_string( 'rating', 'post', '' );
 
-	if( preg_match( "/^([0-9]+)\_([1-5]+)$/", $rating, $m ) )
+	if( preg_match( '/^([0-9]+)\_([1-5]+)$/', $rating, $m ) )
 	{
 		$id = ( int )$m[1];
 		$point = ( int )$m[2];
 
 		if( $id and ( $point > 0 and $point < 6 ) )
 		{
-			$query = "SELECT rating_detail FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id . " AND catid IN (" . $in . ") AND status=1";
-			$result = $db->sql_query( $query );
-			$numrows = $db->sql_numrows( $result );
-
-			if( $numrows )
+			$sql = 'SELECT id, rating_detail FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1';
+			list( $id, $rating_detail ) = $db->query( $sql )->fetch( 3 );
+			if( $id )
 			{
 				$total = $click = 0;
-				list( $rating_detail ) = $db->sql_fetchrow( $result );
 				if( ! empty( $rating_detail ) )
 				{
-					$rating_detail = explode( "|", $rating_detail );
+					$rating_detail = explode( '|', $rating_detail );
 					$total = ( int )$rating_detail[0];
 					$click = ( int )$rating_detail[1];
 				}
@@ -66,10 +64,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 					$total = $total + $point;
 					++$click;
 
-					$rating_detail = $total . "|" . $click;
-
-					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET rating_detail=" . $db->dbescape( $rating_detail ) . " WHERE id=" . $id;
-					$db->sql_query( $sql );
+					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail=' . $db->quote( $total . '|' . $click ) . ' WHERE id=' . $id );
 				}
 
 				if( $total and $click )
@@ -103,56 +98,61 @@ foreach( $list_cats as $value )
 		$catid_i = $value['id'];
 		if( empty( $value['subcats'] ) )
 		{
-			$in = "catid=" . $catid_i;
+			$in = 'catid=' . $catid_i;
 		}
 		else
 		{
 			$in = $value['subcats'];
 			$in[] = $catid_i;
 			$in = implode( ',', $in );
-			$in = "catid IN (" . $in . ")";
+			$in = 'catid IN (' . $in . ')';
 		}
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS id, catid, title, alias, introtext , uploadtime,
-			author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits
-			FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE " . $in . " AND status=1
-			ORDER BY uploadtime DESC LIMIT 0, " . $new_page;
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( NV_PREFIXLANG . '_' . $module_data )
+			->where( $in . ' AND status=1 ' );
 
-		$result = $db->sql_query( $sql );
-		$query = $db->sql_query( "SELECT FOUND_ROWS()" );
-		list( $all_page ) = $db->sql_fetchrow( $query );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
 		if( $all_page )
 		{
+			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' );
+			$db->order( 'uploadtime DESC' );
+			$db->limit( $new_page );
+
+			$result = $db->query( $db->sql() );
+
 			$array_item = array();
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				$uploadtime = ( int )$row['uploadtime'];
 				if( $uploadtime >= $today )
 				{
-					$uploadtime = $lang_module['today'] . ", " . date( "H:i", $row['uploadtime'] );
+					$uploadtime = $lang_module['today'] . ', ' . date( 'H:i', $row['uploadtime'] );
 				}
 				elseif( $uploadtime >= $yesterday )
 				{
-					$uploadtime = $lang_module['yesterday'] . ", " . date( "H:i", $row['uploadtime'] );
+					$uploadtime = $lang_module['yesterday'] . ', ' . date( 'H:i', $row['uploadtime'] );
 				}
 				else
 				{
-					$uploadtime = nv_date( "d/m/Y H:i", $row['uploadtime'] );
+					$uploadtime = nv_date( 'd/m/Y H:i', $row['uploadtime'] );
 				}
 
 				$array_item[$row['id']] = array(
-					'id' => ( int )$row['id'], //
-					'title' => $row['title'], //
-					'introtext' => $row['introtext'], //
-					'uploadtime' => $uploadtime, //
-					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'], //
-					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : "", //
-					'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '', //
-					'view_hits' => ( int )$row['view_hits'], //
-					'download_hits' => ( int )$row['download_hits'], //
-					'more_link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$row['catid']]['alias'] . "/" . $row['alias'], //
-					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;edit=1&amp;id=" . ( int )$row['id'] : "", //
-					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name : ""
+					'id' => ( int )$row['id'],
+					'title' => $row['title'],
+					'introtext' => $row['introtext'],
+					'uploadtime' => $uploadtime,
+					'author_name' => ! empty( $row['author_name'] ) ? $row['author_name'] : $lang_module['unknown'],
+					'filesize' => ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : '',
+					'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
+					'view_hits' => ( int )$row['view_hits'],
+					'download_hits' => ( int )$row['download_hits'],
+					'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'],
+					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'] : '',
+					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name : ''
 				);
 
 				if( $row['comment_allow'] )
@@ -164,7 +164,7 @@ foreach( $list_cats as $value )
 			$array_cats[$catid_i] = array();
 			$array_cats[$catid_i]['id'] = $value['id'];
 			$array_cats[$catid_i]['title'] = $value['title'];
-			$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $value['alias'];
+			$array_cats[$catid_i]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $value['alias'];
 			$array_cats[$catid_i]['description'] = $list_cats[$value['id']]['description'];
 			$array_cats[$catid_i]['subcats'] = $list_cats[$value['id']]['subcats'];
 			$array_cats[$catid_i]['items'] = $array_item;

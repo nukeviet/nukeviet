@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
  */
 
@@ -23,14 +24,10 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 		$data = $error = array();
 		if( $id )
 		{
-			$query = "SELECT who_comment, groups_comment FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id=" . $id . " AND catid IN (" . $in . ") AND status=1 AND comment_allow=1";
-			$result = $db->sql_query( $query );
-			$numrows = $db->sql_numrows( $result );
-
-			if( $numrows )
+			$query = 'SELECT id, who_comment, groups_comment FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id . ' AND catid IN (' . $in . ') AND status=1 AND comment_allow=1';
+			list( $id, $who_comment, $groups_comment ) = $db->query( $query )->fetch( 3 );
+			if( $id )
 			{
-				list( $who_comment, $groups_comment ) = $db->sql_fetchrow( $result );
-
 				if( nv_set_allow( $who_comment, $groups_comment ) )
 				{
 					$uname = $nv_Request->get_title( 'uname', 'post', '', 1 );
@@ -86,28 +83,32 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 						echo implode( "\n", $error );
 						die();
 					}
-					$content = nv_nl2br( $content, "<br />" );
+					$content = nv_nl2br( $content, '<br />' );
 
-					$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments (fid, subject, post_id, post_name, post_email, post_ip, post_time, comment, admin_reply, admin_id, status) VALUES (
-						" . $id . ",
-						" . $db->dbescape( $subject ) . ",
-						" . $post_id . ",
-						" . $db->dbescape( $uname ) . ",
-						" . $db->dbescape( $uemail ) . ",
-						" . $db->dbescape( $client_info['ip'] ) . ",
-						" . NV_CURRENTTIME . ",
-						" . $db->dbescape( $content ) . ",
-						'', 0, " . $status . ")";
+					try
+					{
+						$sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_comments
+							(fid, subject, post_id, post_name, post_email, post_ip, post_time, content, admin_reply, admin_id, status) VALUES (
+							" . $id . ",:subject, " . $post_id . ", :uname, :uemail, :post_ip, " . NV_CURRENTTIME . ", :content, '', 0, " . $status . ")" );
 
-					if( ! $db->sql_query_insert_id( $sql ) )
+						$sth->bindParam( ':subject', $subject, PDO::PARAM_STR );
+						$sth->bindParam( ':uname', $uname, PDO::PARAM_STR );
+						$sth->bindParam( ':uemail', $uemail, PDO::PARAM_STR );
+						$sth->bindParam( ':post_ip', $client_info['ip'], PDO::PARAM_STR );
+						$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+						$sth->execute();
+
+						if( $status )
+						{
+							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET comment_hits=comment_hits+1 WHERE id=' . $id );
+						}
+
+					}
+					catch (PDOException $e)
 					{
 						$error[] = $lang_module['comment_error6'];
 					}
-					if( $status )
-					{
-						$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET comment_hits=comment_hits+1 WHERE id=" . $id;
-						$db->sql_query( $sql );
-					}
+
 					if( ! empty( $error ) )
 					{
 						echo implode( "\n", $error );
@@ -115,11 +116,11 @@ if( $nv_Request->isset_request( 'ajax', 'post' ) )
 					}
 					elseif( $status == 1 )
 					{
-						die( "OK" );
+						die( 'OK' );
 					}
 					else
 					{
-						die( "WAIT" );
+						die( 'WAIT' );
 					}
 				}
 			}
@@ -146,37 +147,39 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 			$page = $nv_Request->get_int( 'page', 'get', 0 );
 			$per_page = 15;
 
-			$query = "SELECT SQL_CALC_FOUND_ROWS a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
-				a.post_ip AS post_ip, a.post_time AS post_time, a.comment AS comment, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
-				c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail
-				FROM " . NV_PREFIXLANG . "_" . $module_data . "_comments a
-				INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . " b ON a.fid = b.id
-				LEFT JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " c ON a.post_id =c.userid
-				WHERE a.fid=" . $id . " AND a.status=1 AND b.catid IN (" . $in . ") AND b.status=1 AND b.comment_allow=1
-				ORDER BY a.post_time DESC LIMIT " . $page . "," . $per_page;
+			$db->sqlreset()
+				->select( 'COUNT(*)' )
+				->from( NV_PREFIXLANG . '_' . $module_data . '_comments a' )
+				->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . ' b ON a.fid = b.id LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' c ON a.post_id =c.userid' )
+				->where( 'a.fid=' . $id . ' AND a.status=1 AND b.catid IN (' . $in . ') AND b.status=1 AND b.comment_allow=1' );
 
-			$result = $db->sql_query( $query );
-			$query = $db->sql_query( "SELECT FOUND_ROWS()" );
-			list( $all_page ) = $db->sql_fetchrow( $query );
-
+			$all_page = $db->query( $db->sql() )->fetchColumn();
 			if( $all_page )
 			{
-				$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=getcomment&amp;list_comment=" . $id;
+				$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getcomment&amp;list_comment=' . $id;
 
-				$today = mktime( 0, 0, 0, date( "n" ), date( "j" ), date( "Y" ) );
+				$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 				$yesterday = $today - 86400;
 
-				while( $row = $db->sql_fetchrow( $result ) )
+				$db->select('a.id AS id, a.subject AS subject, a.post_id AS post_id, a.post_name AS post_name, a.post_email AS post_email,
+						a.post_ip AS post_ip, a.post_time AS post_time, a.content AS content, a.admin_reply AS admin_reply, a.admin_id AS admin_id,
+						c.email as email, c.full_name as full_name, c.photo as photo, c.view_mail as view_mail')
+					->order( 'a.post_time DESC' )
+					->limit( $per_page )
+					->offset( $page );
+
+				$result = $db->query( $db->sql() );
+				while( $row = $result->fetch() )
 				{
 					$post_name = $row['post_name'];
 					if( ! $row['post_id'] )
 					{
-						$post_name .= " (" . nv_EncodeEmail( $row['post_email'] ) . ", " . $row['post_ip'] . ")";
+						$post_name .= ' (' . nv_EncodeEmail( $row['post_email'] ) . ', ' . $row['post_ip'] . ')';
 						$row['photo'] = '';
 					}
 					else
 					{
-						$row['post_email'] = ( $row['view_mail'] ) ? $row['email'] : "";
+						$row['post_email'] = ( $row['view_mail'] ) ? $row['email'] : '';
 						$row['post_name'] = $row['full_name'];
 						if( defined( 'NV_IS_MODADMIN' ) )
 						{
@@ -188,22 +191,22 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 							{
 								$users[$row['post_id']] = array( $row['id'] );
 							}
-							$post_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $row['post_id'] . "\">" . $post_name . "</a>";
+							$post_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['post_id'] . '">' . $post_name . '</a>';
 						}
 					}
 
 					$post_time = ( int )$row['post_time'];
 					if( $post_time >= $today )
 					{
-						$post_time = $lang_module['today'] . ", " . date( "H:i", $post_time );
+						$post_time = $lang_module['today'] . ', ' . date( 'H:i', $post_time );
 					}
 					elseif( $post_time >= $yesterday )
 					{
-						$post_time = $lang_module['yesterday'] . ", " . date( "H:i", $post_time );
+						$post_time = $lang_module['yesterday'] . ', ' . date( 'H:i', $post_time );
 					}
 					else
 					{
-						$post_time = nv_date( "d/m/Y H:i", $post_time );
+						$post_time = nv_date( 'd/m/Y H:i', $post_time );
 					}
 
 					$admin_reply = '';
@@ -223,7 +226,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						}
 						else
 						{
-							$admin_reply = $lang_module['comment_admin_note'] . ": " . $row['admin_reply'];
+							$admin_reply = $lang_module['comment_admin_note'] . ': ' . $row['admin_reply'];
 						}
 					}
 
@@ -235,10 +238,10 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						'post_ip' => $row['post_ip'],
 						'post_time' => $post_time,
 						'subject' => $row['subject'],
-						'comment' => $row['comment'],
+						'comment' => $row['content'],
 						'admin_reply' => $admin_reply,
-						'edit_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;edit=1&amp;id=" . $row['id'],
-						'del_link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment"
+						'edit_link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;edit=1&amp;id=' . $row['id'],
+						'del_link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment'
 					);
 				}
 
@@ -248,9 +251,9 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 					$in = array_unique( $in );
 					$in = implode( ',', $in );
 
-					$query = "SELECT view_mail, userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid IN (" . $in . ")";
-					$result = $db->sql_query( $query );
-					while( list( $view_mail, $userid ) = $db->sql_fetchrow( $result ) )
+					$query = 'SELECT view_mail, userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $in . ')';
+					$result = $db->query( $query );
+					while( list( $view_mail, $userid ) = $result->fetch( 3 ) )
 					{
 						if( isset( $users[$userid] ) )
 						{
@@ -259,7 +262,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 								if( ! empty( $array[$id]['post_email'] ) and ( defined( 'NV_IS_ADMIN' ) or $view_mail ) )
 								{
 									$array[$id]['post_email'] = nv_EncodeEmail( $array[$id]['post_email'] );
-									$array[$id]['post_name'] .= " (" . $array[$id]['post_email'] . ", " . $array[$id]['post_ip'] . ")";
+									$array[$id]['post_name'] .= ' (' . $array[$id]['post_email'] . ', ' . $array[$id]['post_ip'] . ')';
 								}
 								else
 								{
@@ -276,9 +279,9 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 					$in = array_unique( $in );
 					$in = implode( ',', $in );
 
-					$query = "SELECT userid AS admin_id, username AS admin_login, full_name AS admin_name FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid IN (" . $in . ")";
-					$result = $db->sql_query( $query );
-					while( list( $admin_id, $admin_login, $admin_name ) = $db->sql_fetchrow( $result ) )
+					$query = 'SELECT userid AS admin_id, username AS admin_login, full_name AS admin_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $in . ')';
+					$result = $db->query( $query );
+					while( list( $admin_id, $admin_login, $admin_name ) = $db->fetch( 3 ) )
 					{
 						$admin_name = ! empty( $admin_name ) ? $admin_name : $admin_login;
 
@@ -286,7 +289,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 						{
 							foreach( $admins[$admin_id] as $id )
 							{
-								$array[$id]['admin_reply'] = $lang_module['comment_admin_note'] . " <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=authors&amp;id=" . $admin_id . "\">" . $admin_name . "</a>: " . $array[$id]['admin_reply'];
+								$array[$id]['admin_reply'] = $lang_module['comment_admin_note'] . ' <a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_id . '">' . $admin_name . '</a>: ' . $array[$id]['admin_reply'];
 							}
 						}
 					}

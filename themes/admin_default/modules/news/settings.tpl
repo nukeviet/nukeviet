@@ -114,7 +114,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.module_logo}</strong></td>
-				<td><input name="module_logo" id="module_logo" value="{MODULE_LOGO}" style="width:340px;" type="text"/><input class="w100" value="{GLANG.browse_image}" name="selectimg" type="button" /></td>
+				<td><input name="module_logo" id="module_logo" value="{MODULE_LOGO}" style="width:340px;" type="text"/> <input value="{GLANG.browse_image}" name="selectimg" type="button" /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.config_source}</strong></td>

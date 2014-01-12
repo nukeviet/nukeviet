@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/11/2010 23:0
  */
 
@@ -12,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $contents = array();
 $contents['caption'] = $lang_module['client_list2'];
@@ -23,7 +24,7 @@ $contents['add'] = $lang_global['add'];
 $contents['del'] = $lang_global['delete'];
 $contents['rows'] = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$contents['rows'][$row['id']]['login'] = $row['login'];
 	$contents['rows'][$row['id']]['full_name'] = $row['full_name'];

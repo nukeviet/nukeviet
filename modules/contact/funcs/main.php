@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -26,8 +27,8 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 	$email_list = array();
 
 	$sql = "SELECT email, admins FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id =" . $cid;
-	$result = $db->sql_query( $sql );
-	list( $email, $admins ) = $db->sql_fetchrow( $result );
+	$result = $db->query( $sql );
+	list( $email, $admins ) = $result->fetch( 3 );
 
 	if( ! empty( $email ) )
 	{
@@ -57,9 +58,9 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 			$a_l = implode( ',', $a_l );
 
 			$sql = "SELECT t2.email as admin_email FROM " . NV_AUTHORS_GLOBALTABLE . " t1 INNER JOIN " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
-			$result = $db->sql_query( $sql );
+			$result = $db->query( $sql );
 
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				if( nv_check_valid_email( $row['admin_email'] ) == '' )
 				{
@@ -160,12 +161,12 @@ if( ! empty( $array_rows ) )
 
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send 
-				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES 
-				(" . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ",
-				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ",
-				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
-			$db->sql_query( $sql );
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES
+				(" . $fpart . ", " . $db->quote( $ftitle ) . ", " . $db->quote( $fcon ) . ",
+				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->quote( $fname ) . ", " . $db->quote( $femail ) . ",
+				" . $db->quote( $fphone ) . ", " . $db->quote( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
+			$db->query( $sql );
 
 			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
 			$fcon .= "<br /><br />----------------------------------------<br /><br />";

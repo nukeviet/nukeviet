@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -33,7 +34,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  cid smallint(5) unsigned NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
- content mediumtext NOT NULL,
+ content text NOT NULL,
  send_time int(11) unsigned NOT NULL DEFAULT '0',
  sender_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  sender_name varchar(100) NOT NULL,
@@ -42,7 +43,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  sender_ip varchar(15) NOT NULL,
  is_read tinyint(1) unsigned NOT NULL DEFAULT '0',
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
- reply_content mediumtext NOT NULL,
+ reply_content text,
  reply_time int(11) unsigned NOT NULL DEFAULT '0',
  reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),

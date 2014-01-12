@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -63,23 +64,21 @@ if( $checkss == $data['checkss'] )
 				$exp = NV_CURRENTTIME - 86400;
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->dbescape( $data['userField'] ) . " AND regdate>" . $exp;
+					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $data['userField'] ) . " AND regdate>" . $exp;
 				}
 				else
 				{
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE username=" . $db->dbescape( $data['userField'] ) . " AND regdate>" . $exp;
+					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE username=" . $db->quote( $data['userField'] ) . " AND regdate>" . $exp;
 				}
-				$result = $db->sql_query( $sql );
-				$numrows = $db->sql_numrows( $result );
-				if( $numrows == 1 )
+				$row = $db->query( $sql )->fetch();
+
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostactivelink_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
 
 					$question = $row['question'];
 
@@ -126,8 +125,8 @@ if( $checkss == $data['checkss'] )
 							if( $ok )
 							{
 								$password = $crypt->hash( $password_new );
-								$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg SET password=" . $db->dbescape( $password ) . ", checknum=" . $db->dbescape( $checknum ) . " WHERE userid=" . $row['userid'];
-								$db->sql_query( $sql );
+								$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg SET password=" . $db->quote( $password ) . ", checknum=" . $db->quote( $checknum ) . " WHERE userid=" . $row['userid'];
+								$db->query( $sql );
 								$info = sprintf( $lang_module['lostactivelink_send'], $row['email'] );
 							}
 							else

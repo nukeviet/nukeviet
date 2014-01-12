@@ -15,6 +15,7 @@
 		<meta name="robots" content="noindex, nofollow">
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/normalize.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/font-awesome.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css">
 
@@ -47,6 +48,10 @@
 		<!-- BEGIN: nv_add_editor_js -->
 		{NV_ADD_EDITOR_JS}
 		<!-- END: nv_add_editor_js -->
+		<!--[if IE]>
+		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />
+		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/font-awesome-ie7.css" />
+		<![endif]-->
 	</head>
 	<body>
 		<!--[if lt IE 7]>

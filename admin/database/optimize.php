@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:47
  */
 
@@ -32,9 +33,7 @@ while( $item = $result->fetch() )
 	{
 		$totalfree += $item['data_free'];
 		$tabs[] = substr( $item['name'], strlen( $db_config['prefix'] ) + 1 );
-		$db->exec( 'LOCK TABLE ' . $item['name'] . ' WRITE' );
-		$db->exec( 'OPTIMIZE TABLE ' . $item['name'] );
-		$db->exec( 'UNLOCK TABLE ' . $item['name'] );
+		$db->query( 'OPTIMIZE TABLE ' . $item['name'] );
 	}
 }
 $result->closeCursor();

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -17,10 +18,10 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->query( 'SHOW COLUMNS FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file' );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $result->fetch() )
+foreach ( $columns_array as $row )
 {
 	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
@@ -175,7 +176,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	}
 	elseif( $check_type == 1 )
 	{
-		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang . "";
+		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
 	}
 
 	if( empty( $array_where ) )

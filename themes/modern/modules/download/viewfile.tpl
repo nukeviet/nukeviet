@@ -3,7 +3,7 @@
 	var report_thanks_mess = '{LANG.report_thanks}';
 	var comment_thanks_mess = '{LANG.comment_thanks}';
 	var comment_please_wait = '{LANG.comment_thanks2}';
-	var comment_subject_defaul = '{ROW.comment_subject}'; 
+	var comment_subject_defaul = '{ROW.comment_subject}';
 </script>
 <div class="header-details">
 	<div class="title">
@@ -222,15 +222,28 @@
 <!-- END: comment_allow2 -->
 <script type="text/javascript">nv_list_comments();</script>
 <script type="text/javascript">
-	$("#showform").toggle(function() {
+	function form_comment_show()
+	{
 		$("#form_comment").slideDown();
-	}, function() {
+		$("#showform").one("click", form_comment_close);
+	}
+	function form_comment_close()
+	{
 		$("#form_comment").slideUp();
-	});
-	$("#show-comments").toggle(function() {
-		$("#list_comments").slideUp();
-	}, function() {
+		$("#showform").one("click", form_comment_show);
+	}
+	$("#showform").one("click", form_comment_show);
+
+	function list_comment_show()
+	{
 		$("#list_comments").slideDown();
-	})
+		$("#show-comments").one("click", list_comment_close);
+	}
+	function list_comment_close()
+	{
+		$("#list_comments").slideUp();
+		$("#show-comments").one("click", list_comment_show);
+	}
+	$("#show-comments").one("click", list_comment_show);
 </script>
 <!-- END: main -->

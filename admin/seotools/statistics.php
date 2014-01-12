@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -41,9 +42,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$googleAnalyticsMethod['googleAnalyticsMethod'] = 'classic';
 	}
 
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', :config_name, :config_value)" );
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
 		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 		$sth->execute();

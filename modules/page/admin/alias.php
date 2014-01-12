@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -14,23 +15,13 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 $alias = change_alias( $title );
 
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE id !=" . $id . " AND alias = " . $db->dbescape( $alias ) . "" ) );
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = ' . $db->quote( $alias ) )->fetchColumn();
 
 if( intval( $number ) > 0 )
 {
-	$result = $db->sql_query( "SHOW TABLE STATUS WHERE name='" . NV_PREFIXLANG . "_" . $module_data . "'" );
-	$item = $db->sql_fetch_assoc( $result );
-	$db->sql_freeresult( $result );
-	if( isset( $item['auto_increment'] ) )
-	{
-		$alias = $alias . "-" . $item['auto_increment'];
-	}
-	else
-	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "" ) );
-		$weight = intval( $weight ) + 1;
-		$alias = $alias . "-" . $weight;
-	}
+	$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data )->fetchColumn();
+	$weight = intval( $weight ) + 1;
+	$alias = $alias . '-' . $weight;
 }
 
 include NV_ROOTDIR . '/includes/header.php';

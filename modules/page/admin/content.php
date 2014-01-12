@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,15 +15,13 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $id )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$result = $db->sql_query( $sql );
+	$row = $db->query( $sql )->fetch();
 
-	if( $db->sql_numrows( $result ) != 1 )
+	if(empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
-
-	$row = $db->sql_fetchrow( $result );
 
 	$page_title = $lang_module['edit'];
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
@@ -55,20 +54,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['imagealt'] = $nv_Request->get_title( 'imagealt', 'post', '', 1 );
 
 	$row['description'] = $nv_Request->get_string( 'description', 'post', '' );
-	$description = $row['description'];
-	$l = mb_strlen( $description, 'UTF-8' );
-	for( $i = 0; $i < $l; $i++ )
-	{
-		$s = trim( mb_substr( $description, $i, 1 ) );
-		if( ! empty( $s ) )
-		{
-			echo $s . '------' . urlencode( $s ) . '<br>';
-
-		}
-	}
-
-	die( $description );
-
 	$row['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $row['description'] ) ), '<br />' );
 
 	$row['bodytext'] = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
@@ -108,27 +93,36 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
-					 title=" . $db->dbescape( $row['title'] ) . ", alias = " . $db->dbescape( $row['alias'] ) . ", image=" . $db->dbescape( $row['image'] ) . ", imagealt=" . $db->dbescape( $row['imagealt'] ) . ", description=" . $db->dbescape( $row['description'] ) . ",
-					 bodytext=" . $db->dbescape( $row['bodytext'] ) . ", keywords=" . $db->dbescape( $row['keywords'] ) . ",
-					 socialbutton=" . $row['socialbutton'] . ", activecomm=" . $row['activecomm'] . ", facebookappid=" . $db->dbescape( $row['facebookappid'] ) . ",
-					 layout_func=" . $db->dbescape( $row['layout_func'] ) . ", gid=" . $row['gid'] . ", edit_time=" . NV_CURRENTTIME . " WHERE id =" . $id;
+			$_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, facebookappid = :facebookappid, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
 			$publtime = $row['add_time'];
 		}
 		else
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "" ) );
+			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "
-					(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES 
-					(" . $db->dbescape( $row['title'] ) . ", " . $db->dbescape( $row['alias'] ) . ", " . $db->dbescape( $row['image'] ) . ", " . $db->dbescape( $row['imagealt'] ) . ", " . $db->dbescape( $row['description'] ) . ", " . $db->dbescape( $row['bodytext'] ) . ",
-					" . $db->dbescape( $row['keywords'] ) . ", " . $row['socialbutton'] . ", " . $row['activecomm'] . ", " . $db->dbescape( $row['facebookappid'] ) . ",
-					" . $db->dbescape( $row['layout_func'] ) . "," . $row['gid'] . ", " . $weight . ", " . $admin_info['admin_id'] . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1);";
+			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :facebookappid, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+
 			$publtime = NV_CURRENTTIME;
 		}
 
-		if( $db->exec( $sql ) )
+		$sth = $db->prepare( $_sql );
+		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+		$sth->bindParam( ':alias', $row['alias'], PDO::PARAM_STR );
+		$sth->bindParam( ':image', $row['image'], PDO::PARAM_STR );
+		$sth->bindParam( ':imagealt', $row['imagealt'], PDO::PARAM_STR );
+		$sth->bindParam( ':description', $row['description'], PDO::PARAM_STR );
+		$sth->bindParam( ':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen( $row['bodytext'] ) );
+		$sth->bindParam( ':keywords', $row['keywords'], PDO::PARAM_STR );
+		$sth->bindParam( ':socialbutton', $row['socialbutton'], PDO::PARAM_INT );
+		$sth->bindParam( ':activecomm', $row['activecomm'], PDO::PARAM_INT );
+		$sth->bindParam( ':facebookappid', $row['facebookappid'], PDO::PARAM_STR );
+		$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
+		$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
+		$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
+		$sth->execute();
+
+		if( $sth->rowCount() )
 		{
 			if( $id )
 			{
@@ -173,7 +167,7 @@ if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 }
 else
 {
-	$row['bodytext'] = "<textarea style=\"width:100%;height:300px\" name=\"bodytext\">" . $row['bodytext'] . "</textarea>";
+	$row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
 if( ! empty( $row['image'] ) AND is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['image'] ) )
@@ -195,18 +189,18 @@ $xtpl->assign( 'SOCIALBUTTON', ( $row['socialbutton'] ) ? ' checked="checked"' :
 
 foreach( $layout_array as $value )
 {
-	$value = preg_replace( $global_config['check_op_layout'], "\\1", $value );
+	$value = preg_replace( $global_config['check_op_layout'], '\\1', $value );
 	$xtpl->assign( 'LAYOUT_FUNC', array( 'key' => $value, 'selected' => ( $row['layout_func'] == $value ) ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.layout_func' );
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
-$result = $db->sql_query( $sql );
-if( $db->sql_numrows( $result ) )
+$_grows = $db->query( $sql )->fetchAll();
+if( sizeof( $_grows ) )
 {
 	$array_googleplus = array();
 	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
 	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
-	while( $grow = $db->sql_fetch_assoc( $result ) )
+	foreach ( $_grows as $grow )
 	{
 		$array_googleplus[] = $grow;
 	}
@@ -218,6 +212,7 @@ if( $db->sql_numrows( $result ) )
 	}
 	$xtpl->parse( 'main.googleplus' );
 }
+
 for( $i = 0; $i <= 1; ++$i )
 {
 	$xtpl->assign( 'ACTIVECOMM', array(

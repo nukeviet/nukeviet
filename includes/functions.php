@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 23:48
  */
 
@@ -650,7 +651,7 @@ function nv_user_groups( $in_groups )
 
 	if( $reload )
 	{
-		$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
+		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 
@@ -704,13 +705,13 @@ function nv_set_allow( $who, $groups )
 function nv_groups_add_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
-	$query = $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
-	if( $query->rowCount() )
+	$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
+	if( $query->fetchColumn() )
 	{
 		try
 		{
-			$db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, data) VALUES (" . $group_id . ", " . $userid . ", '" . $global_config['idsite'] . "')" );
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . $group_id );
+			$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, data) VALUES (" . $group_id . ", " . $userid . ", '" . $global_config['idsite'] . "')" );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . $group_id );
 			return true;
 		}
 		catch (PDOException $e)
@@ -722,7 +723,7 @@ function nv_groups_add_user( $group_id, $userid )
 				$data = ( $data != '' ) ? explode( ',', $data ) : array();
 				$data[] = $global_config['idsite'];
 				$data = implode( ',', array_unique( array_map( 'intval', $data ) ) );
-				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
+				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 				return true;
 			}
 		}
@@ -741,8 +742,8 @@ function nv_groups_del_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
 
-	$query = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid );
-	if( $query->rowCount() )
+	$row = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetch();
+	if( ! empty( $row ) )
 	{
 		$set_number = false;
 		if( $group_id > 3 )
@@ -751,8 +752,7 @@ function nv_groups_del_user( $group_id, $userid )
 		}
 		else
 		{
-			$data = $query->fetchColumn();
-			$data = str_replace( ',' . $global_config['idsite'] . ',', '', ',' . $data . ',' );
+			$data = str_replace( ',' . $global_config['idsite'] . ',', '', ',' . $row['data'] . ',' );
 			$data = trim( $data, ',' );
 			if( $data == '' )
 			{
@@ -760,14 +760,14 @@ function nv_groups_del_user( $group_id, $userid )
 			}
 			else
 			{
-				$db->exec( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
+				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 			}
 		}
 
 		if( $set_number )
 		{
-			$db->exec( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid );
-			$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . $group_id );
+			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . $group_id );
 		}
 		return true;
 	}

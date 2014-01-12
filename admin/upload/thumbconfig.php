@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -52,7 +53,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$quality = 90;
 		}
-		$db->exec( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
+		$db->query( 'UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET
 			thumb_type = ' . $type . ', thumb_width = ' . $width . ',
 			thumb_height = ' . $height . ', thumb_quality = ' . $quality . '
 			WHERE did = ' . $did );

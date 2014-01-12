@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -183,8 +184,6 @@ else
 		trigger_error( $lang_global['error_404_content'], 256 );
 	}
 
-	$db_config['dbsystem'] = $db_config['dbname'];
-
 	// Thu muc uploads
 	define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
 
@@ -335,9 +334,6 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-// Them lop tao cau lenh SQL khi dung co Limit
-$sdr = new sqldriver( $db_config );
-
 $sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' OR (lang='sys' AND module='site') ORDER BY module ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )
@@ -369,7 +365,7 @@ if( ! empty( $newCountry ) )
 	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
 	{
 		$time_del = NV_CURRENTTIME - 604800;
-		$db->exec( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
+		$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
 		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
 		$array_ip_file = array();
 		while( $row = $result->fetch() )

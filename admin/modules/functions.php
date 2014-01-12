@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 5:53
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 5:53
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
@@ -61,14 +62,13 @@ function nv_fix_subweight( $mod )
 	global $db;
 
 	$subweight = 0;
-	$sth = $db->prepare(  'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
+	$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :in_module AND show_func=1 ORDER BY subweight ASC' );
 	$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
 	$sth->execute();
-	while( $row = $result->fetch() )
+	while( $row = $sth->fetch() )
 	{
 		++$subweight;
-		$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $subweight . ' WHERE func_id=' . $row['func_id'] );
-		nv_del_moduleCache( 'modules' );
+		$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET subweight=' . $subweight . ' WHERE func_id=' . $row['func_id'] );
 	}
 }
 
@@ -131,7 +131,7 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 
 		foreach( $array_funcid as $func_id )
 		{
-			$db->exec( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
+			$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
 		}
 	}
 
@@ -154,10 +154,9 @@ function nv_setup_data_module( $lang, $module_name )
 	$sth = $db->prepare( 'SELECT module_file, module_data, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
 	$sth->bindParam(':title', $module_name, PDO::PARAM_STR );
 	$sth->execute();
-	if( $sth->rowCount())
+	list( $module_file, $module_data, $module_theme ) = $sth->fetch( 3 );
+	if( !empty( $module_file ) )
 	{
-		list( $module_file, $module_data, $module_theme ) = $sth->fetch( 3 );
-
 		$module_version = array();
 		$version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
 
@@ -186,7 +185,7 @@ function nv_setup_data_module( $lang, $module_name )
 				{
 					try
 					{
-						$db->exec( $sql );
+						$db->query( $sql );
 					}
 					catch (PDOException $e)
 					{
@@ -269,19 +268,19 @@ function nv_setup_data_module( $lang, $module_name )
 				if( isset( $arr_func_id_old[$func] ) and isset( $arr_func_id_old[$func] ) > 0 )
 				{
 					$arr_func_id[$func] = $arr_func_id_old[$func];
-					$db->exec( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
+					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
 				}
 				else
 				{
-					$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
+					$data = array();
+					$data['func_name'] = $func;
+					$data['alias'] = $func;
+					$data['func_custom_name'] = ucfirst( $func );
+					$data['in_module'] = $module_name;
+
+					$arr_func_id[$func] = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')" );
-					$sth->bindParam(':func_name', $func, PDO::PARAM_STR );
-					$sth->bindParam(':alias', $func, PDO::PARAM_STR );
-					$sth->bindValue(':func_custom_name', ucfirst( $func ) );
-					$sth->bindParam(':in_module', $module_name, PDO::PARAM_STR );
-					$sth->execute();
-					$arr_func_id[$func] = $db->lastInsertId();
+					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')", "func_id", $data );
 				}
 			}
 
@@ -294,7 +293,7 @@ function nv_setup_data_module( $lang, $module_name )
 					$arr_show_func[] = $func_id;
 					$show_func = 1;
 					++$subweight;
-					$db->exec( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
+					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
 				}
 			}
 		}

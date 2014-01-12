@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/15/2010 3:35
  */
 
@@ -12,21 +13,21 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $sql = "SELECT id,full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $clients = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$clients[$row['id']] = $row['full_name'];
 }
 
 $sql = "SELECT id,title,blang, form FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $plans = array();
 $plans_form = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 	$plans_form[$row['id']] = $row['form'];
@@ -85,19 +86,19 @@ if( defined( 'NV_BANNER_WEIGHT' ) )
 	if( $id > 0 and $new_weight > 0 )
 	{
 		$query_weight = "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE id!=" . $id . " AND pid=" . $pid . " ORDER BY weight ASC";
-		$result = $db->sql_query( $query_weight );
+		$result = $db->query( $query_weight );
 
 		$weight = 0;
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			++$weight;
 			if( $weight == $new_weight ) ++$weight;
 			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight=" . $weight . " WHERE id=" . $row['id'];
-			$db->sql_query( $sql );
+			$db->query( $sql );
 		}
 
 		$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET weight=" . $new_weight . " WHERE id=" . $id;
-		$db->sql_query( $sql );
+		$db->query( $sql );
 
 		nv_CreateXML_bannerPlan();
 	}
@@ -107,10 +108,10 @@ else
 	$sql .= " ORDER BY id DESC";
 }
 
-$result = $db->sql_query( $sql );
-$num = $db->sql_numrows( $result );
+$rows = $db->query( $sql )->fetchAll();
+$num = sizeof( $rows );
 
-while( $row = $db->sql_fetchrow( $result ) )
+foreach ( $rows as $row )
 {
 	$client = ! empty( $row['clid'] ) ? $clients[$row['clid']] : "";
 

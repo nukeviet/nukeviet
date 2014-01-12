@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/7/2010 12:55
  */
 
@@ -18,7 +19,7 @@ if( $func_id > 0 )
 	if( !empty( $row ) )
 	{
 		$in_submenu = $row['in_submenu'] ? 0 : 1;
-		$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu=' . $in_submenu . ' WHERE func_id=' . $func_id );
+		$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_submenu=' . $in_submenu . ' WHERE func_id=' . $func_id );
 		nv_del_moduleCache( 'modules' );
 		$content = 'OK_' . $func_id;
 	}

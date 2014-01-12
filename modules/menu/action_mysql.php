@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
 
@@ -19,20 +20,20 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
  id mediumint(5) NOT NULL AUTO_INCREMENT,
  parentid mediumint(5) unsigned NOT NULL,
- mid smallint(5) NOT NULL DEFAULT '0', 
+ mid smallint(5) NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  link text NOT NULL,
- note varchar(255) NOT NULL DEFAULT '',
+ note varchar(255) DEFAULT '',
  weight int(11) NOT NULL,
  sort int(11) NOT NULL DEFAULT '0',
  lev int(11) NOT NULL DEFAULT '0',
- subitem mediumtext NOT NULL,
+ subitem text,
  who_view tinyint(2) NOT NULL DEFAULT '0',
- groups_view varchar(255) NOT NULL, 
- module_name varchar(255) NOT NULL DEFAULT '',
- op varchar(255) NOT NULL DEFAULT '', 
- target tinyint(4) NOT NULL DEFAULT '0',
- css varchar(255) NOT NULL DEFAULT '', 
+ groups_view varchar(255) DEFAULT '',
+ module_name varchar(255) DEFAULT '',
+ op varchar(255) DEFAULT '',
+ target tinyint(4) DEFAULT 0,
+ css varchar(255) DEFAULT '',
  active_type tinyint(1) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id)
@@ -41,8 +42,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_menu (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
- menu_item mediumtext NOT NULL,
- description varchar(255) NOT NULL DEFAULT '',
+ menu_item text,
+ description varchar(255) DEFAULT '',
  PRIMARY KEY (id),
  UNIQUE KEY title (title)
 ) ENGINE=MyISAM";

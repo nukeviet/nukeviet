@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -53,9 +54,9 @@ if( rename( NV_ROOTDIR . '/' . $path, NV_ROOTDIR . '/' . $newpath ) )
 			{
 				$src2 = preg_replace( '/^' . nv_preg_quote( $dirname ) . '/', $dirname2, $src );
 			}
-			$db->exec( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'" );
+			$db->query( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET src = '" . $src2 . "' WHERE did = " . $did . " AND title='" . $title . "'" );
 		}
-		$db->exec( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did );
+		$db->query( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_dir SET dirname = '" . $dirname2 . "' WHERE did = " . $did );
 	}
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['renamefolder'], $path . ' -> ' . $newpath, $admin_info['userid'] );
 	echo $newpath;

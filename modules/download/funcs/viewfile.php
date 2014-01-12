@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 19-09-2010 23:30
  */
 
@@ -22,13 +23,13 @@ if( ! preg_match( '/^([a-z0-9\-\_\.]+)$/i', $filealias ) )
 	exit();
 }
 
-$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->dbescape( $filealias ) . ' AND catid=' . $catid . ' AND status=1';
-if( ( $result = $db->sql_query( $query ) ) === false )
+$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->quote( $filealias ) . ' AND catid=' . $catid . ' AND status=1';
+if( ( $result = $db->query( $query ) ) === false )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
-if( ( $row = $db->sql_fetch_assoc( $result ) ) === false )
+if( ( $row = $result->fetch() ) === false )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
@@ -239,7 +240,7 @@ if( ! in_array( $row['id'], $dfile ) )
 	$nv_Request->set_Session( 'dfile', $dfile );
 
 	$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET view_hits=view_hits+1 WHERE id=' . $row['id'];
-	$db->sql_query( $sql );
+	$db->query( $sql );
 	++$row['view_hits'];
 }
 

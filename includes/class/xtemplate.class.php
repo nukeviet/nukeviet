@@ -1,10 +1,5 @@
 <?php
 
-//if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
-// When developing uncomment the line below, re-comment before making public
-//error_reporting(E_ALL);
-
 /**
  * XTemplate PHP templating engine
  *
@@ -1358,7 +1353,7 @@ class XTemplate
 					case 'html':
 						$retval = '<b>[XTemplate]</b><ul>' . nl2br( str_replace( '* ', '<li>', str_replace( " *\n", "</li>\n", $this->_error ) ) ) . '</ul>';
 						break;
-	
+
 					default:
 						$retval = '[XTemplate] ' . str_replace( ' *\n', "\n", $this->_error );
 						break;
@@ -1646,13 +1641,13 @@ class XTemplate
 				$file = $this->tpldir . DIRECTORY_SEPARATOR . $file;
 			}
 		}
-		
+
 		// NukeViet fix error path file
 		$path_file = $file;
 		if ( defined( 'NV_ROOTDIR' ) ){
 			$path_file = str_replace( "\\", "/", $path_file );
 			$path_file = str_replace( NV_ROOTDIR . "/", "", $path_file );
-		}		
+		}
 
 		$file_text = '';
 

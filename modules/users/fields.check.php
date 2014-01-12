@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/5/2012 11:29
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/5/2012 11:29
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -171,11 +172,11 @@ foreach( $array_field_config as $row_f )
 
 	if( $userid )
 	{
-		$query_field[] = "" . $row_f['field'] . "=" . $db->dbescape_string( $value );
+		$query_field[] = $row_f['field'] . "=" . $db->quote( $value );
 	}
 	else
 	{
-		$query_field["" . $row_f['field'] . ""] = $db->dbescape_string( $value );
+		$query_field[$row_f['field']] = $db->quote( $value );
 	}
 }
 

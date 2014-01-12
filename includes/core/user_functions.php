@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -245,7 +246,7 @@ function nv_blocks_content( $sitecontent )
 		}
 		if( ! empty( $unact ) )
 		{
-			$db->exec( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=0 WHERE bid IN (' . implode( ',', $unact ) . ')' );
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=0 WHERE bid IN (' . implode( ',', $unact ) . ')' );
 			unlink( $cache_file );
 		}
 	}
@@ -624,35 +625,14 @@ function nv_admin_menu()
 
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		if( ! defined( 'SHADOWBOX' ) )
-		{
-			$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-			$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-			define( 'SHADOWBOX', true );
-		}
-
 		$new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
 		$lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
 
 		$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block );
 		$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
 
-		foreach( $db->query_strs as $key => $field )
-		{
-			$data = array(
-				'class' => ( $key % 2 ) ? ' highlight' : ' normal',
-				'imgsrc' => ( $field[1] ) ? NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/good.png' : NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/icons/bad.png',
-				'imgalt' => ( $field[1] ) ? $lang_global['ok'] : $lang_global['fail'],
-				'queries' => nv_htmlspecialchars( $field[0] )
-			);
-			$xtpl->assign( 'DATA', $data );
-			$xtpl->parse( 'main.is_spadadmin3.queries' );
-		}
-
 		$xtpl->parse( 'main.is_spadadmin' );
-		$xtpl->parse( 'main.is_spadadmin2' );
-		$xtpl->parse( 'main.is_spadadmin3' );
+		$xtpl->parse( 'main.memory_time_usage' );
 	}
 
 	if( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )
@@ -695,7 +675,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$db->exec( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
+		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 

@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2013 VINADES.,JSC. All rights reserved
- * @createdate 07/30/2013 10:27
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 07/30/2013 10:27
  */
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-list( $access_admin ) = $db->sql_fetchrow( $db->sql_query( "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" ) );
+$access_admin = $db->query( "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" )->fetchColumn();
 $access_admin = unserialize( $access_admin );
 
 $allow_func = array( 'main', 'getuserid' );

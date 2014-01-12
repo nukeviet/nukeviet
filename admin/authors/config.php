@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -68,7 +69,7 @@ if( ! empty( $delid ) )
 	$sql = 'SELECT keyname FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid;
 	$keyname = $db->query( $sql )->fetchColumn();
 
-	$db->exec( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid );
+	$db->query( 'DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE id=' . $delid );
 	nv_save_file_admin_config();
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['adminip_delete'] . ' ' . $lang_module['config'], ' keyname : ' . $keyname, $admin_info['userid'] );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
@@ -93,7 +94,7 @@ if( $nv_Request->isset_request( 'savesetting', 'post' ) )
 		$array_config_global['admin_check_pass_time'] = 120;
 	}
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -297,22 +298,22 @@ if( ! empty( $error ) )
 
 $sql = "SELECT id, keyname, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask = '-1' ORDER BY keyname DESC";
 $result = $db->query( $sql );
-if( $result->rowCount() )
+$i = 0;
+while( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 {
-	$i = 0;
-	while( list( $dbid, $keyname, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
-	{
-		$xtpl->assign( 'ROW', array(
-			'keyname' => $keyname,
-			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
-			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['adminip_nolimit'],
-			'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;uid=' . $dbid . '#iduser',
-			'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
-		) );
+	++$i;
+	$xtpl->assign( 'ROW', array(
+		'keyname' => $keyname,
+		'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
+		'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : $lang_module['adminip_nolimit'],
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;uid=' . $dbid . '#iduser',
+		'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
+	) );
 
-		$xtpl->parse( 'main.list_firewall.loop' );
-	}
-
+	$xtpl->parse( 'main.list_firewall.loop' );
+}
+if( $i )
+{
 	$xtpl->parse( 'main.list_firewall' );
 }
 
@@ -344,23 +345,23 @@ $mask_text_array[1] = '255.xxx.xxx.xxx';
 $sql = "SELECT id, keyname, mask, begintime, endtime FROM " . NV_AUTHORS_GLOBALTABLE . "_config WHERE mask!='-1' ORDER BY keyname DESC";
 $result = $db->query( $sql );
 
-if( $result->rowCount() )
+$i = 0;
+while( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
 {
-	$i = 0;
-	while( list( $dbid, $keyname, $dbmask, $dbbegintime, $dbendtime ) = $result->fetch( 3 ) )
-	{
-		$xtpl->assign( 'ROW', array(
-			'keyname' => $keyname,
-			'mask_text_array' => $mask_text_array[$dbmask],
-			'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
-			'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : '',
-			'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid . '#idip',
-			'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
-		) );
+	++$i;
+	$xtpl->assign( 'ROW', array(
+		'keyname' => $keyname,
+		'mask_text_array' => $mask_text_array[$dbmask],
+		'dbbegintime' => ! empty( $dbbegintime ) ? date( 'd/m/Y', $dbbegintime ) : '',
+		'dbendtime' => ! empty( $dbendtime ) ? date( 'd/m/Y', $dbendtime ) : '',
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid . '#idip',
+		'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delid=' . $dbid
+	) );
 
-		$xtpl->parse( 'main.ipaccess.loop' );
-	}
-
+	$xtpl->parse( 'main.ipaccess.loop' );
+}
+if( $i )
+{
 	$xtpl->parse( 'main.ipaccess' );
 }
 

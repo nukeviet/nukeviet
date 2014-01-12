@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -28,8 +29,8 @@ if( $id )
 		$cache = array();
 
 		$sql = 'SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND id=' . $id;
-		$query = $db->sql_query( $sql );
-		$row = $db->sql_fetchrow( $query );
+		$query = $db->query( $sql );
+		$row = $query->fetch();
 
 		$row['add_time'] = nv_date( 'H:i T l, d/m/Y', $row['add_time'] );
 		$row['edit_time'] = nv_date( 'H:i T l, d/m/Y', $row['edit_time'] );
@@ -58,8 +59,8 @@ if( $id )
 
 			$cache['keywords'] = $key_words;
 
-			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->dbescape( $key_words ) . ' WHERE id =' . $id;
-			$db->sql_query( $query );
+			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->quote( $key_words ) . ' WHERE id =' . $id;
+			$db->query( $query );
 		}
 
 		$cache['alias'] = $row['alias'];

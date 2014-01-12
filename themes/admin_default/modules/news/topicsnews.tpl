@@ -34,37 +34,37 @@
 	<!-- END: empty -->
 </div>
 <script type="text/javascript">
-	$('#checkall').click(function() {
-		$('input:checkbox').each(function() {
-			$(this).attr('checked', 'checked');
-		});
+$('#checkall').click(function() {
+	$('input:checkbox').each(function() {
+		$(this).attr('checked', 'checked');
 	});
-	$('#uncheckall').click(function() {
-		$('input:checkbox').each(function() {
-			$(this).removeAttr('checked');
-		});
+});
+$('#uncheckall').click(function() {
+	$('input:checkbox').each(function() {
+		$(this).removeAttr('checked');
 	});
-	$('a.delete_icon').click(function() {
-		var list = [];
-		$('input[name=newsid]:checked').each(function() {
-			list.push($(this).val());
-		});
-		if (list.length < 1) {
-			alert('{LANG.topic_nocheck}');
-			return false;
-		}
-		if (confirm('{LANG.topic_delete_confirm}')) {
-			$.ajax({
-				type : 'POST',
-				url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
-				data : 'list=' + list,
-				success : function(data) {
-					alert(data);
-					window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid={TOPICID}';
-				}
-			});
-		}
+});
+$('a.delete_icon').click(function() {
+	var list = [];
+	$('input[name=newsid]:checked').each(function() {
+		list.push($(this).val());
+	});
+	if (list.length < 1) {
+		alert('{LANG.topic_nocheck}');
 		return false;
-	});
+	}
+	if (confirm('{LANG.topic_delete_confirm}')) {
+		$.ajax({
+			type : 'POST',
+			url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
+			data : 'list=' + list,
+			success : function(data) {
+				alert(data);
+				window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid={TOPICID}';
+			}
+		});
+	}
+	return false;
+});
 </script>
 <!-- END: main -->

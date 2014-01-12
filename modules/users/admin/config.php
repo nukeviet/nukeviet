@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
@@ -43,7 +44,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_define['nv_upassmin'] = $nv_Request->get_int( 'nv_upassmin', 'post', 5 );
 	$array_config_define['nv_upassmax'] = $nv_Request->get_int( 'nv_upassmax', 'post', 255 );
 
-	$sth = $db->prepare( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'define' AND config_name = :config_name" );
 	foreach( $array_config_define as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -69,10 +70,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['facebook_client_id'] = $nv_Request->get_title( 'facebook_client_id', 'post', '' );
 	$array_config['facebook_client_secret'] = $nv_Request->get_title( 'facebook_client_secret', 'post', '' );
 
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$query = "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('sys', 'global', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")";
-		$db->sql_query( $query );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	$array_config['deny_email'] = $nv_Request->get_title( 'deny_email', 'post', '', 1 );
@@ -83,7 +86,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
 	}
 
-	$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
 
 	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
@@ -91,7 +94,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
 	}
-	$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
 
 	$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
 	if( ! empty( $array_config['password_simple'] ) )
@@ -101,7 +104,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		asort($array_config['password_simple']);
 		$array_config['password_simple'] = implode( "|", $array_config['password_simple'] );
 	}
-	$db->sql_query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->dbescape( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
 
 	$access_admin = array();
 	$access_admin['access_addus'] = $nv_Request->get_typed_array( 'access_addus', 'post', 'bool' );
@@ -111,7 +114,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$access_admin['access_passus'] = $nv_Request->get_typed_array( 'access_passus', 'post', 'bool' );
 	$access_admin['access_groups'] = $nv_Request->get_typed_array( 'access_groups', 'post', 'bool' );
 	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content='" . serialize( $access_admin ) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
-	$db->sql_query( $sql );
+	$db->query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid'] );
 	nv_save_file_config_global();
@@ -145,13 +148,13 @@ if( ! empty( $openid_servers ) )
 	}
 }
 $sql = "SELECT config, content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple'";
-$result = $db->sql_query( $sql );
-while( list( $config, $content ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( $sql );
+while( list( $config, $content ) = $result->fetch( 3 ) )
 {
 	$content = array_map( 'trim', explode( '|', $content ) );
 	$array_config[$config] = implode( ', ', $content );
 }
-$db->sql_freeresult( $result );
+$result->closeCursor();
 
 $array_registertype = array(
 	0 => $lang_module['active_not_allow'],

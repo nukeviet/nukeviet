@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-5-2010 8:49
  */
 
@@ -69,7 +70,7 @@ function nv_show_funcs()
 			'modfuncs' => 'main',
 			'is_sysmod' => 0,
 			'virtual' => 0,
-			'version' => '3.0.01',
+			'version' => '4.0.00',
 			'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
 			'author' => '',
 			'note' => ''
@@ -95,7 +96,7 @@ function nv_show_funcs()
 		if( $row['show_func'] != $show_func )
 		{
 			$row['show_func'] = $show_func;
-			$db->exec( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id'] );
+			$db->query( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET show_func=' . $show_func . ' WHERE func_id=' . $row['func_id'] );
 			$is_delCache = true;
 		}
 
@@ -122,15 +123,15 @@ function nv_show_funcs()
 	{
 		foreach( $old_funcs as $func => $values )
 		{
-			$db->exec( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id'] );
-			$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id = ' . $values['func_id'] );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = ' . $values['func_id'] );
 			$is_delCache = true;
 		}
 
-		$db->exec( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE . '' );
-		$db->exec( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
+		$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+		$db->query( 'OPTIMIZE TABLE ' . NV_MODFUNCS_TABLE );
+		$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes' );
 		$is_refresh = true;
 	}
 
@@ -153,10 +154,6 @@ function nv_show_funcs()
 
 		$array_keys = array_keys( $new_funcs );
 
-		$sth = $db->prepare( "INSERT INTO " . NV_MODFUNCS_TABLE . "
-			(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-			( :func_name, :alias, :func_custom_name, :in_module, :show_func, 0, 0, '')" );
-
 		$sth2 = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)' );
 
 		foreach( $array_keys as $func )
@@ -164,13 +161,14 @@ function nv_show_funcs()
 			$show_func = in_array( $func, $modfuncs ) ? 1 : 0;
 			try
 			{
-				$sth->bindParam( ':func_name', $func, PDO::PARAM_STR );
-				$sth->bindParam( ':alias', $func, PDO::PARAM_STR );
-				$sth->bindValue( ':func_custom_name', ucfirst( $func ), PDO::PARAM_STR );
-				$sth->bindParam( ':in_module', $mod, PDO::PARAM_STR );
-				$sth->bindParam( ':show_func', $show_func, PDO::PARAM_INT );
-				$sth->execute();
-				$func_id = $db->lastInsertId();
+				$data = array();
+				$data['func_name'] = $func;
+				$data['alias'] = $func;
+				$data['func_custom_name'] = ucfirst( $func );
+				$data['in_module'] = $mod;
+
+				$_sql = "INSERT INTO " . NV_MODFUNCS_TABLE . " (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES ( :func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, 0, '')";
+				$func_id = $db->insert_id( $_sql, 'func_id', $data );
 				if( $show_func )
 				{
 					$sth2->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
@@ -222,7 +220,7 @@ function nv_show_funcs()
 		nv_del_moduleCache( 'themes' );
 	}
 
-	$fun_change_alias = (isset( $module_version['virtual'] )) ? explode( ',', $module_version['change_alias'] ) : array();
+	$fun_change_alias = (isset( $module_version['change_alias'] )) ? explode( ',', $module_version['change_alias'] ) : array();
 	if( empty( $fun_change_alias ) )
 	{
 		$module_version['virtual'] = 0;

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:13
  */
 
@@ -86,7 +87,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		if( ! empty( $titles ) )
 		{
 			$update .= 'END WHERE title IN (' . implode( ',', $titles ) . ')';
-			$db->exec( $update );
+			$db->query( $update );
 			nv_del_moduleCache( 'modules' );
 		}
 	}

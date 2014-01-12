@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 08-19-2010 12:55
  */
 
@@ -29,7 +30,7 @@ $xtpl->assign( 'OP', $op );
 $theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
 
 $result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
-while( list( $theme ) = $db->fetch( 3 ) )
+while( list( $theme ) = $result->fetch( 3 ) )
 {
 	if( in_array( $theme, $theme_list ) )
 	{

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-17-2010 0:5
  */
 
@@ -36,7 +37,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 				{
 					try
 					{
-						$db->exec( $sql );
+						$db->query( $sql );
 					}
 					catch (PDOException $e)
 					{
@@ -125,8 +126,8 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			$sth->execute();
 			while( list( $did ) = $sth->fetch( 3 ) )
 			{
-				$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
-				$db->exec( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
+				$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $did );
+				$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE did = ' . $did );
 			}
 		}
 
