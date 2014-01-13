@@ -108,12 +108,26 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET parentid=" . $db->quote( $parentid ) . ", title=" . $db->quote( $title ) . ", titlesite=" . $db->quote( $titlesite ) . ", alias = " . $db->quote( $alias ) . ", description=" . $db->quote( $description ) . ", image=" . $db->quote( $image ) . ", viewdescription=" . $db->quote( $viewdescription ) . ", keywords= " . $db->quote( $keywords ) . ", who_view=" . $db->quote( $who_view ) . ", groups_view=" . $db->quote( $groups_view ) . ", edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $catid;
-		if( $db->exec( $sql ) )
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $catid;
+		
+		$data_insert = array();
+		$data_insert['parentid'] = $parentid;
+		$data_insert['title'] = $title;
+		$data_insert['titlesite'] = $titlesite;
+		$data_insert['alias'] = $alias;
+		$data_insert['image'] = $image;
+		$data_insert['viewdescription'] = $viewdescription;
+		$data_insert['keywords'] = $keywords;
+		$data_insert['description'] = $description;
+		$data_insert['who_view'] = $who_view;
+		$data_insert['groups_view'] = $groups_view;
+		
+		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
+		if( $newcatid > 0 )			
 		{
 			if( $parentid != $parentid_old )
 			{
-				$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $db->quote( $parentid ) )->fetchColumn();
+				$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . $parentid )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
 				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE catid=" . intval( $catid );
