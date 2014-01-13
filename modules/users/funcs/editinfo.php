@@ -474,7 +474,6 @@ if( $checkss == $array_data['checkss'] )
 	}
 	else
 	{
-		$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info SET " . implode( ', ', $query_field ) . " WHERE userid=" . $user_info['userid'] );
 		$contents = user_info_exit( $info );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
 

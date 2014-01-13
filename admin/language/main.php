@@ -134,8 +134,6 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 				}
 			}
 
-			$db->query( "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES ('" . $keylang . "', '1')" );
-
 			if( defined( 'NV_MODULE_SETUP_DEFAULT' ) )
 			{
 				$lang_module['modules'] = '';
@@ -182,30 +180,29 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 				}
 				if( ! empty( $filesavedata ) )
 				{
-					$sql_create_table = array();
-					include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
-
 					try
 					{
-						//xoa du lieu tai bang nv3_vi_modules
+						include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
+						
+						//xoa du lieu tai bang nvx_vi_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						//xoa du lieu tai bang nv3_setup_modules
+						//xoa du lieu tai bang nvx_setup_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						//xoa du lieu tai bang nv3_vi_blocks
+						//xoa du lieu tai bang nvx_vi_blocks
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid in (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );
 
-						//xoa du lieu tai bang nv3_vi_blocks_groups
+						//xoa du lieu tai bang nvx_vi_blocks_groups
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
 
-						//xoa du lieu tai bang nv3_vi_modthemes
+						//xoa du lieu tai bang nvx_vi_modthemes
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );
 
-						//xoa du lieu tai bang nv3_vi_modfuncs
+						//xoa du lieu tai bang nvx_vi_modfuncs
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
 
-						//xoa du lieu tai bang nv3_config
+						//xoa du lieu tai bang nvx_config
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang= '" . $lang_data . "' AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
 						$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE title='news'" );

@@ -569,25 +569,25 @@ elseif( $step == 5 )
 
 					try
 					{
-						// Xoa du lieu tai bang nv3_vi_modules
+						// Xoa du lieu tai bang nvx_vi_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						// Xoa du lieu tai bang nv3_setup_modules
+						// Xoa du lieu tai bang nvx_setup_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						// Xoa du lieu tai bang nv3_vi_blocks
+						// Xoa du lieu tai bang nvx_vi_blocks
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight WHERE bid in (SELECT bid FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
 
-						// Xoa du lieu tai bang nv3_vi_blocks_groups
+						// Xoa du lieu tai bang nvx_vi_blocks_groups
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
-						// Xoa du lieu tai bang nv3_vi_modthemes
+						// Xoa du lieu tai bang nvx_vi_modthemes
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modthemes WHERE func_id in (SELECT func_id FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
 
-						// Xoa du lieu tai bang nv3_vi_modfuncs
+						// Xoa du lieu tai bang nvx_vi_modfuncs
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 
-						// Xoa du lieu tai bang nv3_config
+						// Xoa du lieu tai bang nvx_config
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->quote( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 					}
 					catch( PDOException $e )

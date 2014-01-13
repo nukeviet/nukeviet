@@ -48,7 +48,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			}
 		}
 
-		// Xoa du lieu tai bang nv3_vi_blocks
+		// Xoa du lieu tai bang nvx_vi_blocks
 		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid in (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE module= :module)' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
@@ -71,7 +71,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		// Xoa du lieu tai bang nv3_vi_modfuncs
+		// Xoa du lieu tai bang nvx_vi_modfuncs
 		$sth = $db->prepare( 'DELETE FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
@@ -79,7 +79,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		// Xoa du lieu tai bang nv3_vi_modules
+		// Xoa du lieu tai bang nvx_vi_modules
 		$sth = $db->prepare( 'DELETE FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		if( ! $sth->execute() )
@@ -87,7 +87,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			die( 'NO_' . $modname );
 		}
 
-		// Xoa du lieu tai bang nv3_config
+		// Xoa du lieu tai bang nvx_config
 		$sth = $db->prepare( "DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' AND module= :module" );
 		$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 		$sth->execute();
