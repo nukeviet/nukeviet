@@ -60,8 +60,9 @@ if( $catid > 0 )
 			{
 				$viewcat = "viewcat_page_new";
 			}
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET viewcat=" . $db->quote( $viewcat ) . " WHERE catid=" . intval( $catid );
-			$db->query( $sql );
+			$stmt = $db->prepare ( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET viewcat= :viewcat WHERE catid=" . intval( $catid ));
+			$stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
+			$stmt->execute();
 			$content = "OK_" . $parentid;
 		}
 	}

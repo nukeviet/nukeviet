@@ -31,6 +31,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
+	$stmt = $db->prepare( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login= :login" );
+	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+ 	$stmt->execute();
+ 	$_login =$stmt->fetchColumn() ;
+	
+	$stmt = $db->prepare( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email= :email" );
+	$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+	$stmt->execute();
+ 	$_email =$stmt->fetchColumn() ;
+
 	if( $website == "http://" ) $website = '';
 
 	if( ! empty( $check_login ) )
@@ -69,12 +79,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE login=" . $db->quote( $login ) )->fetchColumn() > 0 )
+	
+	elseif($_login > 0)
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = '';
 	}
-	elseif( $db->query( "SELECT id FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE email=" . $db->quote( $email ) )->fetchColumn() > 0 )
+	elseif($_email > 0)
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = '';
@@ -84,17 +95,30 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$pass_crypt = $crypt->hash( $pass );
 
 		$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_clients ( login, pass, reg_time, full_name, email, website, location, yim, phone, fax, mobile, act, check_num, last_login, last_ip, last_agent, uploadtype) VALUES
-			( " . $db->quote( $login ) . ", " . $db->quote( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->quote( $full_name ) . ",
-			" . $db->quote( $email ) . ", " . $db->quote( $website ) . ", " . $db->quote( $location ) . ", " . $db->quote( $yim ) . ",
-			" . $db->quote( $phone ) . ", " . $db->quote( $fax ) . ", " . $db->quote( $mobile ) . ", 1, '', 0, '', ''," . $db->quote( $uploadtype ) . ")";
+			(  :login, :pass_crypt, " . NV_CURRENTTIME . ", :full_name,
+			:email, :website, :location, :yim,
+			:phone, :fax, :mobile, 1, '', 0, '', '',:uploadtype)";
 
-		$id = $db->insert_id( $_sql, 'id' );
+		$data_insert = array();
+		$data_insert['login'] = $login;
+		$data_insert['pass_crypt'] = $pass_crypt;
+		$data_insert['full_name'] = $full_name;
+		$data_insert['email'] = $email;
+		$data_insert['website'] = $website;
+		$data_insert['location'] = $location;
+		$data_insert['yim'] = $yim;
+		$data_insert['phone'] = $phone;
+		$data_insert['fax'] = $fax;
+		$data_insert['mobile'] = $mobile;
+		$data_insert['uploadtype'] = $uploadtype;
+		
+		$id = $db->insert_id( $_sql, 'id', $data_insert );
 
 		if( $id )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid " . $id, $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=client_list' );
-			die();
+			//die();
 		}
 	}
 }

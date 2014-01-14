@@ -412,8 +412,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$weightopic = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics' )->fetchColumn();
 			$weightopic = intval( $weightopic ) + 1;
 			$aliastopic = change_alias( $rowcontent['topictext'] );
-			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES (" . $db->quote( $rowcontent['topictext'] ) . ", " . $db->quote( $aliastopic ) . ", " . $db->quote( $rowcontent['topictext'] ) . ", '', '', " . $db->quote( $weightopic ) . ", " . $db->quote( $rowcontent['topictext'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-			$rowcontent['topicid'] = $db->insert_id( $_sql, 'topicid' );
+			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+			$data_insert = array();
+			$data_insert['title'] = $rowcontent['topictext'];
+			$data_insert['alias'] = $aliastopic;
+			$data_insert['description'] = $rowcontent['topictext'];
+			$data_insert['weight'] = $weightopic;
+			$data_insert['keywords'] = $rowcontent['topictext'];
+			$rowcontent['topicid'] = $db->insert_id( $_sql, 'topicid', $data_insert );
 		}
 
 		$rowcontent['sourceid'] = 0;
@@ -600,39 +606,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
 					 catid=" . intval( $rowcontent['catid'] ) . ",
-					 listcatid= :listcatid,
+					 listcatid=" . $db->quote( $rowcontent['listcatid'] ) . ",
 					 topicid=" . intval( $rowcontent['topicid'] ) . ",
 					 author=" . $db->quote( $rowcontent['author'] ) . ",
-					 sourceid= :author,
+					 sourceid=" . intval( $rowcontent['sourceid'] ) . ",
 					 status=" . intval( $rowcontent['status'] ) . ",
 					 publtime=" . intval( $rowcontent['publtime'] ) . ",
 					 exptime=" . intval( $rowcontent['exptime'] ) . ",
 					 archive=" . intval( $rowcontent['archive'] ) . ",
-					 title= :title,
-					 alias= :alias,
-					 hometext= :hometext,
-					 homeimgfile= :homeimgfile,
-					 homeimgalt= :homeimgalt,
-					 homeimgthumb= :homeimgthumb,
+					 title=" . $db->quote( $rowcontent['title'] ) . ",
+					 alias=" . $db->quote( $rowcontent['alias'] ) . ",
+					 hometext=" . $db->quote( $rowcontent['hometext'] ) . ",
+					 homeimgfile=" . $db->quote( $rowcontent['homeimgfile'] ) . ",
+					 homeimgalt=" . $db->quote( $rowcontent['homeimgalt'] ) . ",
+					 homeimgthumb=" . $db->quote( $rowcontent['homeimgthumb'] ) . ",
 					 inhome=" . intval( $rowcontent['inhome'] ) . ",
 					 allowed_comm=" . intval( $rowcontent['allowed_comm'] ) . ",
 					 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
 					 edittime=" . NV_CURRENTTIME . "
 				WHERE id =" . $rowcontent['id'];
-				
-			$data_insert = array();
-			$data_insert['listcatid'] = $rowcontent['listcatid'];
-			$data_insert['author'] = $rowcontent['author'] ;
-			$data_insert['title'] = $rowcontent['title'];
-			$data_insert['alias'] = $rowcontent['alias'];
-			$data_insert['hometext'] = $rowcontent['hometext'];
-			$data_insert['homeimgfile'] = $rowcontent['homeimgfile'];
-			$data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
-			$data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
 
-			//$rowcontent['id'] = $db->insert_id( $sql, 'id', $data_insert );
-
-			if( $db->insert_id( $sql, 'id', $data_insert ))
+			if( $db->exec( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid'] );
 

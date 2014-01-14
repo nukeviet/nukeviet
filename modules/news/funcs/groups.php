@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
-
+die('den day di - pqt ');
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $show_no_image = $module_config[$module_name]['show_no_image'];
@@ -16,7 +16,10 @@ if( isset( $array_op[1] ) )
 	$alias = trim( $array_op[1] );
 	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-') ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
+	//list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
+	$stmt = $db->prepare ( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias' );
+	$stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+	list( $bid, $page_title, $image_group, $description, $key_words ) = $stmt->execute()->fetch( 3 );
 	if( $bid > 0 )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $alias;

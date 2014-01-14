@@ -41,6 +41,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
+	
+	$stmt = $db->prepare( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND login= :login' );
+	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+ 	$stmt->execute();
+ 	$_login =$stmt->fetchColumn() ;
+	
+	$stmt = $db->prepare( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND email= :email' );
+	$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+	$stmt->execute();
+ 	$_email =$stmt->fetchColumn() ;
 
 	if( $website == 'http://' ) $website = '';
 
@@ -80,12 +90,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND login=' . $db->quote( $login ) )->fetchColumn() > 0 )
+	elseif( $_login > 0 )
 	{
 		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
 		$login = $row['login'];
 	}
-	elseif( $db->query( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id!=' . $id . ' AND email=' . $db->quote( $email ) )->fetchColumn() > 0 )
+	elseif( $_email > 0 )
 	{
 		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
 		$email = $row['email'];
@@ -94,13 +104,25 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
 
-		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login=' . $db->quote( $login ) . ', pass=' . $db->quote( $pass ) . ', full_name=' . $db->quote( $full_name ) . ',
-			 email=' . $db->quote( $email ) . ', website=' . $db->quote( $website ) . ', location=' . $db->quote( $location ) . ', yim=' . $db->quote( $yim ) . ',
-			 phone=' . $db->quote( $phone ) . ', fax=' . $db->quote( $fax ) . ', mobile=' . $db->quote( $mobile ) . ', uploadtype=' . $db->quote( $uploadtype ) . ' WHERE id=' . $id;
-		$db->query( $sql );
+		$stmt = $db->prepare ('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login= :login, pass= :pass, full_name= :full_name,
+			 email= :email, website= :website, location= :location, yim= :yim,
+			 phone= :phone, fax= :fax, mobile= :mobile, uploadtype= :uploadtype WHERE id=' . $id );
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':full_name', $full_name, PDO::PARAM_STR);
+		$stmt->bindParam(':pass', $pass, PDO::PARAM_STR);
+		$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+		$stmt->bindParam(':website', $website, PDO::PARAM_STR);
+		$stmt->bindParam(':location', $location, PDO::PARAM_STR);
+		$stmt->bindParam(':yim', $yim, PDO::PARAM_STR);
+		$stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+		$stmt->bindParam(':fax', $fax, PDO::PARAM_STR);
+		$stmt->bindParam(':mobile', $mobile, PDO::PARAM_STR);
+		$stmt->bindParam(':uploadtype', $uploadtype, PDO::PARAM_STR);
+		$stmt->execute();
+		
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );
-		die();
+		die('den day di');
 	}
 }
 else

@@ -7,12 +7,16 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 20:59
  */
-
+die('den day di - pqt ');
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
-$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_%' ) );
+//$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_%' ) );
+$stmt = $db->prepare( 'SHOW TABLE STATUS LIKE :status ' );
+$stmt->bindValue (':title', $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_%', PDO::PARAM_STR);
+$result = $stmt->execute();
+
 while( $item = $result->fetch() )
 {
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];

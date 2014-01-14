@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 2:29
  */
-
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
 	die( 'Stop!!!' );
 
@@ -304,8 +303,10 @@ function nv_show_cat_list( $parentid = 0 )
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
 			{
 				$viewcat = 'viewcat_page_new';
-				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->quote( $viewcat ) . ' WHERE catid=' . intval( $catid );
-				$db->query( $sql );
+				//$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->quote( $viewcat ) . ' WHERE catid=' . intval( $catid );
+				$stmt = $db->prepare ('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . intval( $catid ) );
+				$stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
+				$stmt->execute();
 			}
 
 			$admin_funcs = array();

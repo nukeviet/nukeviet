@@ -108,21 +108,19 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $catid;
+		$stmt = $db->prepare ( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $catid );
+		$stmt->bindParam(':parentid', $parentid, PDO::PARAM_INT);
+		$stmt->bindParam(':title', $title, PDO::PARAM_STR);
+		$stmt->bindParam(':titlesite', $titlesite, PDO::PARAM_STR);
+		$stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+		$stmt->bindParam(':image', $image, PDO::PARAM_STR);
+		$stmt->bindParam(':viewdescription', $viewdescription, PDO::PARAM_STR);
+		$stmt->bindParam(':keywords', $keywords, PDO::PARAM_STR);
+		$stmt->bindParam(':description', $description, PDO::PARAM_STR);
+		$stmt->bindParam(':who_view', $who_view, PDO::PARAM_STR);
+		$stmt->bindParam(':groups_view', $groups_view, PDO::PARAM_STR);
+		$newcatid = $stmt->execute();
 		
-		$data_insert = array();
-		$data_insert['parentid'] = $parentid;
-		$data_insert['title'] = $title;
-		$data_insert['titlesite'] = $titlesite;
-		$data_insert['alias'] = $alias;
-		$data_insert['image'] = $image;
-		$data_insert['viewdescription'] = $viewdescription;
-		$data_insert['keywords'] = $keywords;
-		$data_insert['description'] = $description;
-		$data_insert['who_view'] = $who_view;
-		$data_insert['groups_view'] = $groups_view;
-		
-		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
 		if( $newcatid > 0 )			
 		{
 			if( $parentid != $parentid_old )
