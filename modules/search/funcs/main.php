@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$array_modul = LoadModulesSearch();
+$array_mod = LoadModulesSearch();
 $is_search = false;
 $search = array(
 	'key' => '',
@@ -33,7 +33,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	$search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
 
 	if( $search['logic'] != 1 ) $search['logic'] = 0;
-	if( ! isset( $array_modul[$search['mod']] ) ) $search['mod'] = "all";
+	if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
 
 	if( ! empty( $search['key'] ) )
 	{
@@ -52,15 +52,15 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	}
 	else
 	{
-		if( ! empty( $search['mod'] ) and isset( $array_modul[$search['mod']] ) )
+		if( ! empty( $search['mod'] ) and isset( $array_mod[$search['mod']] ) )
 		{
-			$mods = array( $search['mod'] => $array_modul[$search['mod']] );
+			$mods = array( $search['mod'] => $array_mod[$search['mod']] );
 			$limit = 10;
 			$is_generate_page = true;
 		}
 		else
 		{
-			$mods = $array_modul;
+			$mods = $array_mod;
 			$limit = 3;
 			$is_generate_page = false;
 		}
@@ -71,22 +71,22 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 			$all_page = 0;
 			$key = $search['key'];
 			$dbkeyword = $db->dblikeescape( $search['key'] );
-			$logic = $search['logic'] ? "AND" : "OR";
+			$logic = $search['logic'] ? 'AND' : 'OR';
 
 			$result_array = array();
 			include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/search.php' ;
 
 			if( ! empty( $all_page ) and ! empty( $result_array ) )
 			{
-				$search['content'] .= result_theme( $result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $all_page );
+				$search['content'] .= search_result_theme( $result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $all_page );
 			}
 		}
 
-		if( empty( $search['content'] ) ) $search['content'] = $lang_module['search_none'] . " &quot;" . $search['key'] . "&quot;";
+		if( empty( $search['content'] ) ) $search['content'] = $lang_module['search_none'] . ' &quot;' . $search['key'] . '&quot;';
 	}
 }
 
-$contents = call_user_func( "main_theme", $is_search, $search, $array_modul );
+$contents = search_main_theme( $is_search, $search, $array_mod );
 
 $page_title = $module_info['custom_title'];
 if( ! empty( $search['key'] ) )
