@@ -29,7 +29,7 @@ $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 
 $weight = 0;
-while( $row = $db->fetch() )
+while( $row = $sth->fetch() )
 {
 	++$weight;
 	if( $weight == $new_weight ) ++$weight;
