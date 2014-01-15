@@ -69,7 +69,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		if( nv_sendmail( $from, $row['sender_email'], $subject, $mess_content ) )
 		{
 			$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_reply=1, reply_content = :reply_content, reply_time=' . NV_CURRENTTIME . ', reply_aid=' . $admin_info['admin_id'] . ' WHERE id=' . $id );
-			$sth->bindParam( ':reply_content', $mess_content, PDO::PARAM_STR );
+			$sth->bindParam( ':reply_content', $mess_content, PDO::PARAM_STR, strlen( $mess_content ) );
 			$sth->execute();
 
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=view&id=' . $id );

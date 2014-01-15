@@ -578,17 +578,11 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
+	$sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
+	$result = $db->query( $sql );
+	list( $catid, $parentid ) = $result->fetch( 3 );
 
 	if( empty( $catid ) )
-	{
-		die( 'NO' );
-	}
-
-	$sql = 'SELECT COUNT(*) AS count, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
-	$result = $db->query( $sql );
-	list( $count, $parentid ) = $result->fetch( 3 );
-
-	if( $count != 1 )
 	{
 		die( 'NO' );
 	}
