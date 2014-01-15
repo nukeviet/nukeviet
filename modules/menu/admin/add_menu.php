@@ -165,7 +165,10 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	elseif( $post['id'] == 0 )
 	{
-		if( $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title=' . $db->quote( $post['title'] ) . ' AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid'] )->fetchColumn() )
+		$stmt = $db->prepare ( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE title= :title AND parentid=' . $post['parentid'] . ' AND mid=' . $post['mid'] );
+		$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
@@ -176,22 +179,31 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, who_view, groups_view, module_name, op, target, css, active_type, status) VALUES (
 				" . intval( $post['parentid'] ) . ",
 				" . intval( $post['mid'] ) . ",
-				" . $db->quote( $post['title'] ) . ",
-				" . $db->quote( $post['link'] ) . ",
-				" . $db->quote( $post['note'] ) . ",
+				:title,
+				:link,
+				:note,
 				" . intval( $weight ) . ",
 				0, 0, '',
 				" . intval( $post['who_view'] ) . ",
-				" . $db->quote( $post['groups_view'] ) . ",
-				" . $db->quote( $post['module_name'] ) . ",
-				" . $db->quote( $post['op'] ) . ",
+				:groups_view,
+				:module_name,
+				:op,
 				" . intval( $post['target'] ) . ",
-				" . $db->quote( $post['css'] ) . ",
+				:css,
 				" . intval( $post['active_type'] ) . ",
 				1
 			)";
+			
+			$data_insert = array();
+			$data_insert['title'] = $post['title'];
+			$data_insert['link'] = $post['link'];
+			$data_insert['note'] = $post['note'];
+			$data_insert['groups_view'] = $post['groups_view'];
+			$data_insert['module_name'] = $post['module_name'];
+			$data_insert['op'] = $post['op'];
+			$data_insert['css'] = $post['css'];
 
-			if( $db->insert_id( $sql, 'id' ) )
+			if( $db->insert_id( $sql, 'id', $data_insert ) )
 			{
 				nv_fix_cat_order( $post['mid'] );
 
@@ -233,28 +245,39 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 	else
 	{
-		if( $db->query( "SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title=" . $db->quote( $post['title'] ) . " AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")" )->fetchColumn() )
+		$stmt = $db->prepare( "SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title= :title AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")" );
+		$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
 		{
 			$error = $lang_module['title_exit_cat'];
 		}
 		else
 		{
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
+			$stmt = $db->prepare ( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
 				parentid=" . intval( $post['parentid'] ) . ",
 				mid=" . intval( $post['mid'] ) . ",
-				title=" . $db->quote( $post['title'] ) . ",
-				link=" . $db->quote( $post['link'] ) . ",
-				note=" . $db->quote( $post['note'] ) . ",
+				title= :title,
+				link= :link,
+				note= :note,
 				who_view=" . intval( $post['who_view'] ) . " ,
-				groups_view=" . $db->quote( $post['groups_view'] ) . ",
-				module_name=" . $db->quote( $post['module_name'] ) . ",
-				op=" . $db->quote( $post['op'] ) . ",
+				groups_view= :groups_view,
+				module_name= :module_name,
+				op= :op,
 				target=" . intval( $post['target'] ) . ",
-				css=" . $db->quote( $post['css'] ) . ",
+				css= :css,
 				active_type=" . intval( $post['active_type'] ) . "
-			WHERE id=" . intval( $post['id'] );
+			WHERE id=" . intval( $post['id'] ));
 
-			if( $db->exec( $sql ) )
+			$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+			$stmt->bindParam(':link', $post['link'], PDO::PARAM_STR, strlen($post['link']));
+			$stmt->bindParam(':note', $post['note'], PDO::PARAM_STR, strlen($post['note']));
+			$stmt->bindParam(':groups_view', $post['groups_view'], PDO::PARAM_STR, strlen($post['groups_view']));
+			$stmt->bindParam(':module_name', $post['module_name'], PDO::PARAM_STR, strlen($post['module_name']));
+			$stmt->bindParam(':op', $post['op'], PDO::PARAM_STR, strlen($post['op']));
+			$stmt->bindParam(':css', $post['css'], PDO::PARAM_STR, strlen($post['css']));
+
+			if( $stmt->execute() )
 			{
 				if( $pa_old != $post['parentid'] )
 				{
@@ -454,8 +477,11 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 	$module = $nv_Request->get_string( 'module', 'post', '' );
 	if( empty( $module ) ) die( $lang_module['add_error_module'] );
 
-	$sql = 'SELECT module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= ' . $db->quote( $module );
-	list( $module_f, $module_d ) = $db->query( $sql )->fetch( 3 );
+	$stmt = $db->prepare ( 'SELECT module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
+	$stmt->bindParam(':module', $module, PDO::PARAM_STR, strlen($module));
+	$stmt->execute();
+	
+	list( $module_f, $module_d ) = $stmt->fetch( 3 );
 
 	if( empty($module_f) ) die( $lang_module['add_error_module_exist'] );
 

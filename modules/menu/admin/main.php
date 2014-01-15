@@ -64,20 +64,18 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	$arr_menu['id'] = $nv_Request->get_int( 'id', 'post', 0 );
 	$arr_menu['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
 	$arr_menu['description'] = nv_substr( $nv_Request->get_title( 'description', 'post', '', 1 ), 0, 255 );
-
+	
 	if( empty( $arr_menu['title'] ) )
 	{
 		$error = $lang_module['error_menu_block'];
 	}
 	elseif( $arr_menu['id'] == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
-			" . $db->quote( $arr_menu['title'] ) . ",
-			'',
-			" . $db->quote( $arr_menu['description'] ) . "
-		)";
-
-		if( $db->insert_id( $sql, 'id' ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES ( :title, '', :description )";
+		$data_insert = array();
+		$data_insert['title'] = $arr_menu['title'];
+		$data_insert['description'] = $arr_menu['description'];
+		if( $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -90,12 +88,11 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
-			title=' . $db->quote( $arr_menu['title'] ) . ',
-			description = ' . $db->quote( $arr_menu['description'] ) . '
-			WHERE id =' . $arr_menu['id'];
+		$stmt = $db->prepare ( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET title= :title, description = :description WHERE id =' . $arr_menu['id']);
+		$stmt->bindParam(':title', $arr_menu['title'], PDO::PARAM_STR, strlen($arr_menu['title']));
+		$stmt->bindParam(':title', $arr_menu['description'], PDO::PARAM_STR, strlen($arr_menu['description']));
 
-		if( $db->exec( $sql ) )
+		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
