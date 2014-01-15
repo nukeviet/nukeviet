@@ -137,14 +137,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $alias );
-	$result = $db->query( $sql );
+	$stmt = $db->prepare ("SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias= :alias" );
+	$stmt->bindParam(':alias', $alias, PDO::PARAM_STR, strlen($alias));
+	$result = $stmt->execute();
 	$is_exists = $result->fetchColumn();
 
 	if( ! $is_exists )
 	{
-		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->quote( $array['title'] );
-		$result = $db->query( $sql );
+		$stmt = $db->prepare ( "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title= :title");
+		$stmt->bindParam(':title', $array['title'], PDO::PARAM_STR, strlen($array['title']));
+		$result = $stmt->execute();
 		$is_exists = $result->fetchColumn();
 	}
 
@@ -207,35 +209,53 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
 			 " . $array['catid'] . ",
-			 " . $db->quote( $array['title'] ) . ",
-			 " . $db->quote( $alias ) . ",
-			 " . $db->quote( $array['description'] ) . ",
-			 " . $db->quote( $array['introtext'] ) . ",
+			 :title,
+			 :alias ,
+			 :description ,
+			 :introtext ,
 			 " . NV_CURRENTTIME . ",
 			 " . NV_CURRENTTIME . ",
 			 " . $admin_info['admin_id'] . ",
-			 " . $db->quote( $admin_info['username'] ) . ",
-			 " . $db->quote( $array['author_name'] ) . ",
-			 " . $db->quote( $array['author_email'] ) . ",
-			 " . $db->quote( $array['author_url'] ) . ",
-			 " . $db->quote( $array['fileupload'] ) . ",
-			 " . $db->quote( $array['linkdirect'] ) . ",
-			 " . $db->quote( $array['version'] ) . ",
+			 :username,
+			 :author_name ,
+			 :author_email ,
+			 :author_url ,
+			 :fileupload ,
+			 :linkdirect ,
+			 :version ,
 			 " . $array['filesize'] . ",
-			 " . $db->quote( $array['fileimage'] ) . ",
+			 :fileimage ,
 			 1,
-			 " . $db->quote( $array['copyright'] ) . ",
+			 :copyright ,
 			 0, 0,
 			 " . $array['comment_allow'] . ",
 			 " . $array['who_comment'] . ",
-			 " . $db->quote( $array['groups_comment'] ) . ",
+			 :groups_comment ,
 			 " . $array['who_view'] . ",
-			 " . $db->quote( $array['groups_view'] ) . ",
+			 :groups_view ,
 			 " . $array['who_download'] . ",
-			 " . $db->quote( $array['groups_download'] ) . ",
+			 :groups_download ,
 			 0, '')";
-
-		if( ! $db->insert_id( $sql, 'id' ) )
+		
+		$data_insert = array();
+		$data_insert['title'] = $array['title'];
+		$data_insert['alias'] = $alias;
+		$data_insert['description'] = $array['description'];
+		$data_insert['introtext'] = $array['introtext'];
+		$data_insert['username'] = $admin_info['username'];
+		$data_insert['author_name'] = $array['author_name'];
+		$data_insert['author_email'] = $array['author_email'];
+		$data_insert['author_url'] = $array['author_url'];
+		$data_insert['fileupload'] = $array['fileupload'];
+		$data_insert['linkdirect'] = $array['linkdirect'];
+		$data_insert['version'] = $array['version'];
+		$data_insert['fileimage'] = $array['fileimage'];
+		$data_insert['copyright'] = $array['copyright'];
+		$data_insert['groups_comment'] = $array['groups_comment'];
+		$data_insert['groups_view'] = $array['groups_view'];
+		$data_insert['groups_download'] = $array['groups_download'];
+		
+		if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			$is_error = true;
 			$error = $lang_module['file_error2'];

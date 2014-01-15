@@ -101,13 +101,17 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->quote( $alias );
-	$result = $db->query( $sql );
+	$stmt = $db->prepare ('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
+	$stmt->bindParam(':alias', $alias, PDO::PARAM_STR, strlen($alias));
+	$result = $stmt->execute();
 	$is_exists = $result->fetchColumn();
 
 	if( ! $is_exists )
 	{
-		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->quote( $array['title'] );
+		$stmt = $db->prepare ( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title' );
+		$stmt->bindParam(':title', $array['title'], PDO::PARAM_STR, strlen($array['title']));
+		$stmt->execute();
+		
 		$result = $db->query( $sql );
 		$is_exists = $result->fetchColumn();
 	}
@@ -250,23 +254,37 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 
 				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (catid, title, description, introtext, uploadtime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, copyright) VALUES (
 					 ' . $array['catid'] . ',
-					 ' . $db->quote( $array['title'] ) . ',
-					 ' . $db->quote( $array['description'] ) . ',
-					 ' . $db->quote( $array['introtext'] ) . ',
+					 :title,
+					 :description,
+					 :introtext,
 					 ' . NV_CURRENTTIME . ',
 					 ' . $array['user_id'] . ',
-					 ' . $db->quote( $array['user_name'] ) . ',
-					 ' . $db->quote( $array['author_name'] ) . ',
-					 ' . $db->quote( $array['author_email'] ) . ',
-					 ' . $db->quote( $array['author_url'] ) . ',
-					 ' . $db->quote( $fileupload ) . ',
-					 ' . $db->quote( $array['linkdirect'] ) . ',
-					 ' . $db->quote( $array['version'] ) . ',
+					 :user_name,
+					 :author_name,
+					 :author_email,
+					 :author_url,
+					 :fileupload,
+					 :linkdirect,
+					 :version,
 					 ' . $array['filesize'] . ',
-					 ' . $db->quote( $fileimage ) . ',
-					 ' . $db->quote( $array['copyright'] ) . ')';
+					 :fileimage,
+					 :copyright';
 
-				if( ! $db->insert_id( $sql, 'id' ) )
+				$data_insert = array();
+				$data_insert['title'] = $array['title'];
+				$data_insert['description'] = $array['description'];
+				$data_insert['introtext'] = $array['introtext'];
+				$data_insert['user_name'] = $array['user_name'];
+				$data_insert['author_name'] = $array['author_name'];
+				$data_insert['author_email'] = $array['author_email'];
+				$data_insert['author_url'] = $array['author_url'];
+				$data_insert['fileupload'] = $fileupload;
+				$data_insert['linkdirect'] = $array['linkdirect'];
+				$data_insert['version'] = $array['version'];
+				$data_insert['fileimage'] = $fileimage;
+				$data_insert['fileimage'] = $array['copyright'];
+				
+				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 				{
 					$is_error = true;
 					$error = $lang_module['upload_error3'];

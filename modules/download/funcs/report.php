@@ -28,8 +28,9 @@ if( $id and ! in_array( $id, $dlrp ) )
 	$id = $db->query( $query )->fetchColumn();
 	if( $id )
 	{
-		$query = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', ' . $db->quote( $client_info['ip'] ) . ', ' . NV_CURRENTTIME . ')';
-		$db->query( $query );
+		$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_report VALUES (' . $id . ', :ip, ' . NV_CURRENTTIME . ')');
+		$stmt->bindParam(':ip', $client_info['ip'], PDO::PARAM_STR, strlen($client_info['ip']));
+		$stmt->execute();
 	}
 }
 

@@ -23,8 +23,10 @@ if( ! preg_match( '/^([a-z0-9\-\_\.]+)$/i', $filealias ) )
 	exit();
 }
 
-$query = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias=' . $db->quote( $filealias ) . ' AND catid=' . $catid . ' AND status=1';
-if( ( $result = $db->query( $query ) ) === false )
+$stmt = $db->prepare ( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :filealias AND catid=' . $catid . ' AND status=1');
+$stmt->bindParam(':filealias', $filealias, PDO::PARAM_STR, strlen($filealias));
+
+if( ( $result = $stmt->execute() ) === false )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
