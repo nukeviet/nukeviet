@@ -39,15 +39,30 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( empty( $full_name ) ) die( strip_tags( $lang_module['full_name_empty'] ) . '|full_name' );
 	elseif( ! empty( $website ) and ! nv_is_url( $website ) ) die( strip_tags( $lang_module['website_incorrect'] ) . '|website_iavim' );
 	elseif( ! empty( $yim ) and ! preg_match( "/^[a-zA-Z0-9\.\-\_]+$/", $yim ) ) die( strip_tags( $lang_module['yim_incorrect'] ) . '|yim_iavim' );
-	$count = $db->query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $banner_client_info['id'] . " AND email=" . $db->quote( $email ) )->fetchColumn();
+	
+	$stmt = $db->prepare( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id!=" . $banner_client_info['id'] . " AND email= :email" );
+			$stmt->bindParam(':title', $rowcontent['topictext'], PDO::PARAM_STR, strlen($rowcontent['topictext']));
+			$stmt->execute();
+			$count = $stmt->fetchColumn();
+	
 	if( $count > 0 ) die( strip_tags( sprintf( $lang_module['email_is_already_in_use'], $email ) ) . '|email_iavim' );
 
 	$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_clients SET ";
-	if( ! empty( $pass ) ) $sql .= "pass=" . $db->quote( $crypt->hash( $pass ) ) . ", ";
-	$sql .= "full_name=" . $db->quote( $full_name ) . ", email=" . $db->quote( $email ) . ", website=" . $db->quote( $website ) . ",
-		location=" . $db->quote( $location ) . ", yim=" . $db->quote( $yim ) . ", phone=" . $db->quote( $phone ) . ", fax=" . $db->quote( $fax ) . ",
-		mobile=" . $db->quote( $mobile ) . " WHERE id=" . $banner_client_info['id'];
-	$db->query( $sql );
+	if( ! empty( $pass ) ) $sql .= "pass= :pass, ";
+	
+	$sql .= "full_name= :full_name, email= :email, website= :website, location= :location, yim= :yim, phone= :phone, fax= :fax, mobile= :mobile WHERE id=" . $banner_client_info['id'];
+	$stmt = $db->prepare ($sql) ;
+	if( ! empty( $pass ) ) $stmt->bindParam(':pass', $crypt->hash( $pass ), PDO::PARAM_STR, strlen($crypt->hash( $pass )));
+	$stmt->bindParam(':full_name', $full_name, PDO::PARAM_STR, strlen($full_name));
+	$stmt->bindParam(':email', $email, PDO::PARAM_STR, strlen($email));
+	$stmt->bindParam(':website', $website, PDO::PARAM_STR, strlen($website));
+	$stmt->bindParam(':location', $location, PDO::PARAM_STR, strlen($location));
+	$stmt->bindParam(':yim', $yim, PDO::PARAM_STR, strlen($yim));
+	$stmt->bindParam(':phone', $phone, PDO::PARAM_STR, strlen($phone));
+	$stmt->bindParam(':fax', $fax, PDO::PARAM_STR, strlen($fax));
+	$stmt->bindParam(':mobile', $mobile, PDO::PARAM_STR, strlen($mobile));
+	$stmt->execute();
+	
 	die( "OK|action" );
 }
 
