@@ -325,8 +325,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			}
 
 			// Kiểm tra trùng tên nhóm
-			$_sql = 'SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE ' . $db->quote( $post['title'] ) . ' AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))';
-			if( $db->query( $_sql )->fetchColumn() )
+			$stmt = $db->prepare ('SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))');
+			$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+			$stmt->execute();
+			if( $stmt->fetchColumn() )
 			{
 				die( sprintf( $lang_module['error_title_exists'], $post['title'] ) );
 			}
@@ -354,14 +356,17 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 			if( isset( $post['id'] ) AND $post['id'] > 3 )
 			{
-				$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
-					title=" . $db->quote( $post['title'] ) . ",
-					content=" . $db->quote( $post['content'] ) . ",
+				$stmt = $db->prepare ("UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
+					title= :title,
+					content= :content,
 					exp_time='" . $post['exp_time'] . "',
 					publics='" . $post['publics'] . "',
 					siteus='" . $post['siteus'] . "'
-					WHERE group_id=" . $post['id'];
-				$ok = $db->exec( $query );
+					WHERE group_id=" . $post['id']);
+					
+				$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+				$stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+				$ok = $stmt->execute();
 			}
 			elseif( $nv_Request->isset_request( 'add', 'get' ) )
 			{
@@ -369,9 +374,14 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				$weight = intval( $weight ) + 1;
 				$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
 					(title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
-					VALUES (" . $db->quote( $post['title'] ) . ", " . $db->quote( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
+					VALUES ( :title, :content, " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
 					" . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
-				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id' );
+				
+				$data_insert = array();
+				$data_insert['title'] = $post['title'];
+				$data_insert['content'] = $post['content'];
+				
+				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id', $data_insert );
 			}
 			if( $ok )
 			{

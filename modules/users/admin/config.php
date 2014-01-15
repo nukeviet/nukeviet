@@ -86,15 +86,20 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
 	}
 
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
-
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
+	$stmt->execute();
+	
 	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
 	{
 		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
 	}
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
+	$stmt->execute();
+	
 
 	$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
 	if( ! empty( $array_config['password_simple'] ) )
@@ -104,7 +109,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		asort($array_config['password_simple']);
 		$array_config['password_simple'] = implode( "|", $array_config['password_simple'] );
 	}
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
+	$stmt->execute();
 
 	$access_admin = array();
 	$access_admin['access_addus'] = $nv_Request->get_typed_array( 'access_addus', 'post', 'bool' );
