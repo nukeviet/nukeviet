@@ -29,7 +29,6 @@ $page_title = trim( str_replace( '-', ' ', $alias ) );
 
 if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 {
-	//list( $tid, $image_tag, $description, $key_words ) = $db->query( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
 	$stmt = $db->prepare( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias' );
 	$stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 	list( $tid, $image_tag, $description, $key_words ) = $stmt->execute()->fetch( 3 );

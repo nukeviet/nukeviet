@@ -16,7 +16,6 @@ if( isset( $array_op[1] ) )
 	$alias = trim( $array_op[1] );
 	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-') ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	//list( $bid, $page_title, $image_group, $description, $key_words ) = $db->query( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
 	$stmt = $db->prepare ( 'SELECT bid, title, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias' );
 	$stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
 	list( $bid, $page_title, $image_group, $description, $key_words ) = $stmt->execute()->fetch( 3 );

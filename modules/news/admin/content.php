@@ -309,7 +309,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		if( ! empty( $rowcontent['topictext'] ) )
 		{
 			$stmt = $db->prepare ('SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title') ;
-			$stmt->bindParam(':title', $rowcontent['topictext'], PDO::PARAM_STR);
+			$stmt->bindParam(':title', $rowcontent['topictext'], PDO::PARAM_STR, strlen($rowcontent['topictext']));
 			$stmt->execute();
 			$rowcontent['topicid']=$stmt->fetchColumn ();
 			die($rowcontent['topicid']);

@@ -303,7 +303,6 @@ function nv_show_cat_list( $parentid = 0 )
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
 			{
 				$viewcat = 'viewcat_page_new';
-				//$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat=' . $db->quote( $viewcat ) . ' WHERE catid=' . intval( $catid );
 				$stmt = $db->prepare ('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET viewcat= :viewcat WHERE catid=' . intval( $catid ) );
 				$stmt->bindParam(':viewcat', $viewcat, PDO::PARAM_STR);
 				$stmt->execute();
