@@ -42,39 +42,40 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 }
 
 $list_cats = nv_sdown_cats( $m_values['module_data'] );
-
-$_where = 'catid IN (' . implode( ',', array_keys( $list_cats ) ) . ')
-AND (' . nv_like_logic( 'title', $dbkeyword, $logic ) . '
-OR ' . nv_like_logic( 'description', $dbkeyword, $logic ) . '
-OR ' . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ')';
-
-
-$db->sqlreset()
-	->select( 'COUNT(*)' )
-	->from( NV_PREFIXLANG . '_' . $m_values['module_data'] )
-	->where( $_where );
-
-$all_page = $db->query( $db->sql() )->fetchColumn();
-
-
-if( $all_page )
+if( ! empty( $list_cats ) )
 {
-	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
-
-	$db->select( 'alias,title,description, introtext, catid' )
-		->limit($limit)->offset($pages);
-
-	$tmp_re = $db->query( $db->sql() );
-	while( list( $alias, $tilterow, $content, $introtext, $catid ) = $tmp_re->fetch( 3 ) )
+	$_where = 'catid IN (' . implode( ',', array_keys( $list_cats ) ) . ')
+	AND (' . nv_like_logic( 'title', $dbkeyword, $logic ) . '
+	OR ' . nv_like_logic( 'description', $dbkeyword, $logic ) . '
+	OR ' . nv_like_logic( 'introtext', $dbkeyword, $logic ) . ')';
+	
+	
+	$db->sqlreset()
+		->select( 'COUNT(*)' )
+		->from( NV_PREFIXLANG . '_' . $m_values['module_data'] )
+		->where( $_where );
+	
+	$all_page = $db->query( $db->sql() )->fetchColumn();
+	
+	
+	if( $all_page )
 	{
-		$content = $content . ' ' . $introtext;
-
-		$result_array[] = array(
-			'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias,
-			'title' => BoldKeywordInStr( $tilterow, $key, $logic ),
-			'content' => BoldKeywordInStr( $content, $key, $logic )
-		);
+		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
+	
+		$db->select( 'alias,title,description, introtext, catid' )
+			->limit($limit)->offset($pages);
+	
+		$tmp_re = $db->query( $db->sql() );
+		while( list( $alias, $tilterow, $content, $introtext, $catid ) = $tmp_re->fetch( 3 ) )
+		{
+			$content = $content . ' ' . $introtext;
+	
+			$result_array[] = array(
+				'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias,
+				'title' => BoldKeywordInStr( $tilterow, $key, $logic ),
+				'content' => BoldKeywordInStr( $content, $key, $logic )
+			);
+		}
 	}
 }
-
 ?>

@@ -281,7 +281,7 @@ if( $nv_Request->isset_request( 'list_comment', 'get' ) )
 
 					$query = 'SELECT userid AS admin_id, username AS admin_login, full_name AS admin_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $in . ')';
 					$result = $db->query( $query );
-					while( list( $admin_id, $admin_login, $admin_name ) = $db->fetch( 3 ) )
+					while( list( $admin_id, $admin_login, $admin_name ) = $result->fetch( 3 ) )
 					{
 						$admin_name = ! empty( $admin_name ) ? $admin_name : $admin_login;
 

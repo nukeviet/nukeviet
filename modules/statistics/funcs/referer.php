@@ -18,8 +18,11 @@ if( ! isset( $host ) or ! preg_match( '/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/',
 	die();
 }
 
-$sql = 'SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host=' . $db->quote( $host );
-$row = $db->query( $sql )->fetch();
+$sth = $db->prepare( 'SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host= :host' );
+$sth->bindParam( ':host', $host, PDO::PARAM_STR );
+$sth->execute();
+
+$row = $sth->fetch();
 if( empty( $row ) )
 {
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
