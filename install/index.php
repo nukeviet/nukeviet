@@ -392,7 +392,7 @@ elseif( $step == 5 )
 	$db_config['dbname'] = $nv_Request->get_string( 'dbname', 'post', $db_config['dbname'] );
 	$db_config['dbuname'] = $nv_Request->get_string( 'dbuname', 'post', $db_config['dbuname'] );
 	$db_config['dbpass'] = $nv_Request->get_string( 'dbpass', 'post', $db_config['dbpass'] );
-	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', 'nv3' );
+	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', $db_config['prefix'] );
 	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
 	$db_config['num_table'] = 0;
 	$db_config['create_db'] = 1;

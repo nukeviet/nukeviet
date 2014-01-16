@@ -31,7 +31,7 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 	$array_funcid = array();
 	// Danh sach ID tat ca cac function co block trong he thong
 	$result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-	while( list( $func_id_i ) = $db->fetch( 3 ) )
+	while( list( $func_id_i ) = $result->fetch( 3 ) )
 	{
 		$array_funcid[] = $func_id_i;
 	}
@@ -46,7 +46,7 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 		$func_list = array();
 		// Cac fuction da them block
 		$result = $db->query( 'SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid );
-		while( list( $func_inlist ) = $db->fetch( 3 ) )
+		while( list( $func_inlist ) = $result->fetch( 3 ) )
 		{
 			$func_list[] = $func_inlist;
 		}

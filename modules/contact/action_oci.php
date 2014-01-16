@@ -57,7 +57,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 sender_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	 sender_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 sender_email VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 sender_phone VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 sender_phone VARCHAR2(255 CHAR) DEFAULT '',
 	 sender_ip VARCHAR2(15 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 is_read NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 is_reply NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
