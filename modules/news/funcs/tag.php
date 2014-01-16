@@ -29,7 +29,11 @@ $page_title = trim( str_replace( '-', ' ', $alias ) );
 
 if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 {
-	list( $tid, $image_tag, $description, $key_words ) = $db->query( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias=' . $db->quote( $alias ) )->fetch( 3 );
+	$stmt = $db->prepare( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	list( $tid, $image_tag, $description, $key_words ) = $stmt->fetch( 3 );
+
 	if( $tid > 0 )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . $alias;

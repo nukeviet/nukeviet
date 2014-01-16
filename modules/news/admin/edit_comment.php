@@ -12,13 +12,12 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['comment_edit_title'];
 $cid = $nv_Request->get_int( 'cid', 'get' );
-
 if( $nv_Request->isset_request( 'submit', 'post' ) )
-{
+{$cid = $nv_Request->get_int( 'cid', 'post' );
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_comment', 'id ' . $cid, $admin_info['userid'] );
 	$sql = 'SELECT a.id, a.title, a.listcatid, a.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows a INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_comments b ON a.id=b.id WHERE b.cid=' . $cid;
-
 	list( $id, $title, $listcatid, $alias ) = $db->query( $sql )->fetch( 3 );
+	
 	if( $id > 0 )
 	{
 		$delete = $nv_Request->get_int( 'delete', 'post', 0 );
@@ -31,7 +30,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$content = $nv_Request->get_textarea( 'content', '', NV_ALLOWED_HTML_TAGS, 1 );
 			$active = $nv_Request->get_int( 'active', 'post', 0 );
 			$status = ( $status == 1 ) ? 1 : 0;
-			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content=' . $db->quote( $content ) . ', status=' . $active . ' WHERE cid=' . $cid );
+			
+			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_comments SET content= :content, status=' . $active . ' WHERE cid=' . $cid );
+			$stmt->bindParam( ':content', $content, PDO::PARAM_STR );
+			$stmt->execute();
 		}
 
 		// Cap nhat lai so luong comment duoc kich hoat

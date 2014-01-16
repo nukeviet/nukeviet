@@ -56,8 +56,14 @@ if( ! empty( $savecat ) )
 	{
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->quote( $title ) . ", " . $db->quote( $link ) . ", " . $db->quote( $logo ) . ", " . $db->quote( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-		if( $db->insert_id( $sql, 'sourceid' ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, :link, :logo, :weight, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$data_insert = array();
+		$data_insert['title'] = $title;
+		$data_insert['link'] = $link;
+		$data_insert['logo'] = $logo;
+		$data_insert['weight'] = $weight;
+		
+		if( $db->insert_id( $sql, 'sourceid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', " ", $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -70,8 +76,11 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title=" . $db->quote( $title ) . ", link = " . $db->quote( $link ) . ", logo=" . $db->quote( $logo ) . ", edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid;
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_sources SET title= :title, link = :link, logo= :logo, edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $sourceid );
+		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
+		$stmt->bindParam( ':link', $link, PDO::PARAM_STR );
+		$stmt->bindParam( ':logo', $logo, PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_source', "sourceid " . $sourceid, $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
