@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -64,7 +65,7 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'], 'file name : ' . $themename . '_' . $modulename . '.zip', $admin_info['userid'] );
 
-		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv3_theme_' . $themename . '_' . $modulename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
+		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $modulename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
 
 		$xtpl->assign( 'LINKGETFILE', $linkgetfile );
 		$xtpl->assign( 'THEMENAME', $themename );
@@ -91,10 +92,9 @@ else
 		}
 	}
 
-	$sql = 'SELECT `title`, `module_file`, `custom_title` FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
-	$result = $db->sql_query( $sql );
+	$result = $db->query( 'SELECT title, module_file, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	$array_module_seup = array();
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		if ( $row['module_file'] == $row['module_file'] )
 		{

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 12/9/2010, 22:27
  */
 
@@ -136,15 +137,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `alias`=" . $db->dbescape( $alias );
-	$result = $db->sql_query( $sql );
-	list( $is_exists ) = $db->sql_fetchrow( $result );
+	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $alias );
+	$result = $db->query( $sql );
+	$is_exists = $result->fetchColumn();
 
 	if( ! $is_exists )
 	{
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tmp` WHERE `title`=" . $db->dbescape( $array['title'] );
-		$result = $db->sql_query( $sql );
-		list( $is_exists ) = $db->sql_fetchrow( $result );
+		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->quote( $array['title'] );
+		$result = $db->query( $sql );
+		$is_exists = $result->fetchColumn();
 	}
 
 	if( empty( $array['title'] ) )
@@ -204,38 +205,37 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 		$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "` VALUES (
-			 NULL,
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
 			 " . $array['catid'] . ",
-			 " . $db->dbescape( $array['title'] ) . ",
-			 " . $db->dbescape( $alias ) . ",
-			 " . $db->dbescape( $array['description'] ) . ",
-			 " . $db->dbescape( $array['introtext'] ) . ",
+			 " . $db->quote( $array['title'] ) . ",
+			 " . $db->quote( $alias ) . ",
+			 " . $db->quote( $array['description'] ) . ",
+			 " . $db->quote( $array['introtext'] ) . ",
 			 " . NV_CURRENTTIME . ",
 			 " . NV_CURRENTTIME . ",
 			 " . $admin_info['admin_id'] . ",
-			 " . $db->dbescape( $admin_info['username'] ) . ",
-			 " . $db->dbescape( $array['author_name'] ) . ",
-			 " . $db->dbescape( $array['author_email'] ) . ",
-			 " . $db->dbescape( $array['author_url'] ) . ",
-			 " . $db->dbescape( $array['fileupload'] ) . ",
-			 " . $db->dbescape( $array['linkdirect'] ) . ",
-			 " . $db->dbescape( $array['version'] ) . ",
+			 " . $db->quote( $admin_info['username'] ) . ",
+			 " . $db->quote( $array['author_name'] ) . ",
+			 " . $db->quote( $array['author_email'] ) . ",
+			 " . $db->quote( $array['author_url'] ) . ",
+			 " . $db->quote( $array['fileupload'] ) . ",
+			 " . $db->quote( $array['linkdirect'] ) . ",
+			 " . $db->quote( $array['version'] ) . ",
 			 " . $array['filesize'] . ",
-			 " . $db->dbescape( $array['fileimage'] ) . ",
+			 " . $db->quote( $array['fileimage'] ) . ",
 			 1,
-			 " . $db->dbescape( $array['copyright'] ) . ",
+			 " . $db->quote( $array['copyright'] ) . ",
 			 0, 0,
 			 " . $array['comment_allow'] . ",
 			 " . $array['who_comment'] . ",
-			 " . $db->dbescape( $array['groups_comment'] ) . ",
+			 " . $db->quote( $array['groups_comment'] ) . ",
 			 " . $array['who_view'] . ",
-			 " . $db->dbescape( $array['groups_view'] ) . ",
+			 " . $db->quote( $array['groups_view'] ) . ",
 			 " . $array['who_download'] . ",
-			 " . $db->dbescape( $array['groups_download'] ) . ",
+			 " . $db->quote( $array['groups_download'] ) . ",
 			 0, '')";
 
-		if( ! $db->sql_query_insert_id( $sql ) )
+		if( ! $db->insert_id( $sql, 'id' ) )
 		{
 			$is_error = true;
 			$error = $lang_module['file_error2'];
@@ -390,9 +390,9 @@ else
 	$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 }
 
-$sql = "SELECT `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config` WHERE `config_name`='upload_dir'";
-$result = $db->sql_query( $sql );
-list( $upload_dir ) = $db->sql_fetchrow( $result );
+$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
+$result = $db->query( $sql );
+$upload_dir = $result->fetchColumn();
 
 if( ! $array['filesize'] ) $array['filesize'] = '';
 

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -41,17 +42,23 @@ if( empty( $contents ) )
 
 	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
 	{
-		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
+		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 AND `inhome`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
-		$result = $db->sql_query( $sql );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
 
-		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
-		list( $all_page ) = $db->sql_fetchrow( $result_all );
+		$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->order( $order_by )
+			->limit( $per_page )
+			->offset( ( $page - 1 ) * $per_page );
 
 		$end_publtime = 0;
 
-		while( $item = $db->sql_fetch_assoc( $result ) )
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
@@ -79,18 +86,22 @@ if( empty( $contents ) )
 			$end_publtime = $item['publtime'];
 		}
 
+		$db->sqlreset()
+			->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' );
+
 		if( $viewcat == 'viewcat_page_new' )
 		{
-			$sql = 'SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 AND `inhome`=1 AND `publtime` < ' . $end_publtime . ' ' . $order_by . ' LIMIT 0,' . $st_links;
+			$db->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
 		}
 		else
 		{
-			$sql = 'SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 AND `inhome`=1 AND `publtime` > ' . $end_publtime . ' ' . $order_by . ' LIMIT 0,' . $st_links;
+			$db->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
 		}
+		$db->order( $order_by )->limit( $st_links );
 
-		$result = $db->sql_query( $sql );
-
-		while( $item = $db->sql_fetch_assoc( $result ) )
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_cat_other[] = $item;
@@ -105,15 +116,19 @@ if( empty( $contents ) )
 		$array_cat = array();
 
 		$key = 0;
+		$db->sqlreset()
+			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->where( 'status= 1 AND inhome=1' )
+			->order( 'publtime DESC' );
+
 		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_cat[$key] = $array_cat_i;
-				$sql = 'SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid . '` WHERE `status`= 1 AND `inhome`=1 ORDER BY `publtime` DESC LIMIT 0 , ' . $array_cat_i['numlinks'];
-				$result = $db->sql_query( $sql );
 
-				while( $item = $db->sql_fetch_assoc( $result ) )
+				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit( $array_cat_i['numlinks'] )->sql() );
+				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
 					{
@@ -154,15 +169,19 @@ if( empty( $contents ) )
 
 		// cac bai viet cua cac chu de con
 		$key = 0;
+
+		$db->sqlreset()
+			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+			->where( 'status= 1 AND inhome=1' )
+			->order( 'publtime DESC' );
 		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_catpage[$key] = $array_cat_i;
-				$sql = 'SELECT `id`, `listcatid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_' . $_catid . '` WHERE `status`= 1 AND `inhome`=1 ORDER BY `publtime` DESC LIMIT 0 , ' . $array_cat_i['numlinks'];
-				$result = $db->sql_query( $sql );
+				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit($array_cat_i['numlinks'])->sql() );
 
-				while( $item = $db->sql_fetch_assoc( $result ) )
+				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
 					{
@@ -198,14 +217,21 @@ if( empty( $contents ) )
 	}
 	elseif( $viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old' )
 	{
-		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 AND `inhome`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
-		$result = $db->sql_query( $sql );
+		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? ' publtime DESC' : ' publtime ASC';
+		$db->sqlreset()
+			->select( 'COUNT(*) ')
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
-		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
-		list( $all_page ) = $db->sql_fetchrow( $result_all );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
 
-		while( $item = $db->sql_fetch_assoc( $result ) )
+		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->order( $order_by )
+			->limit($per_page )
+			->offset( ( $page - 1 ) * $per_page );
+
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )
 			{
@@ -238,14 +264,22 @@ if( empty( $contents ) )
 	}
 	elseif( $viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old' ) // Xem theo tieu de
 	{
-		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'ORDER BY `publtime` DESC' : 'ORDER BY `publtime` ASC';
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating` FROM `' . NV_PREFIXLANG . '_' . $module_data . '_rows` WHERE `status`= 1 AND `inhome`=1 ' . $order_by . ' LIMIT ' . ( $page - 1 ) * $per_page . ',' . $per_page;
-		$result = $db->sql_query( $sql );
+		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'publtime DESC' : 'publtime ASC';
 
-		$result_all = $db->sql_query( 'SELECT FOUND_ROWS()' );
-		list( $all_page ) = $db->sql_fetchrow( $result_all );
+		$db->sqlreset()
+			->select( 'COUNT(*) ')
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
-		while( $item = $db->sql_fetch_assoc( $result ) )
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->order( $order_by )
+			->limit($per_page )
+			->offset( ( $page - 1 ) * $per_page );
+
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
 			$item['imghome'] = '';
 

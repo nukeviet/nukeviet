@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Oct 25, 2012, 03:11:41 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -41,7 +42,7 @@ $lang_module['note'] = 'Not';
 $lang_module['result'] = 'Sonuç';
 $lang_module['php_support'] = 'Support php';
 $lang_module['php_version'] = 'PHP Versiyonu';
-$lang_module['mysql_support'] = 'MySQL Desteği';
+$lang_module['pdo_support'] = 'PHP Data Objects Desteği';
 $lang_module['request'] = 'Require';
 $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Require off';

@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
 $adminThemes = array( '' );
-$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . "/themes", $global_config['check_theme_admin'] ) );
+$adminThemes = array_merge( $adminThemes, nv_scandir( NV_ROOTDIR . '/themes', $global_config['check_theme_admin'] ) );
 unset( $adminThemes[0] );
 
 $closed_site_Modes = array();
@@ -67,9 +68,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
 
 	$array_config_site['searchEngineUniqueID'] = $nv_Request->get_title( 'searchEngineUniqueID', 'post', '' );
-	if( preg_match( "/[^a-zA-Z0-9\:\-\_\.]/", $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
+	if( preg_match( '/[^a-zA-Z0-9\:\-\_\.]/', $array_config_site['searchEngineUniqueID'] ) ) $array_config_site['searchEngineUniqueID'] = '';
 
-	$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name" );
 	foreach( $array_config_site as $config_name => $config_value )
 	{
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -81,7 +82,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_global = array();
 		$site_timezone = $nv_Request->get_title( 'site_timezone', 'post', '', 0 );
-		if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == "byCountry" ) ) )
+		if( empty( $site_timezone ) or ( ! empty( $site_timezone ) and ( in_array( $site_timezone, $timezone_array ) or $site_timezone == 'byCountry' ) ) )
 		{
 			$array_config_global['site_timezone'] = $site_timezone;
 		}
@@ -90,7 +91,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( ! empty( $my_domains ) )
 		{
-			$my_domains = array_map( "trim", explode( ',', $my_domains ) );
+			$my_domains = array_map( 'trim', explode( ',', $my_domains ) );
 			foreach( $my_domains as $dm )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
@@ -135,7 +136,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
 		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
-		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', :config_name, :config_value)" );
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config_global as $config_name => $config_value )
 		{
 			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
@@ -176,7 +177,7 @@ $optActive_Modes = array(
 	'3' => $lang_module['optActive_admin']
 );
 
-$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
+$xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -188,10 +189,8 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$sql = "SELECT `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='sys' AND `module`='global'";
-	$result = $db->sql_query( $sql );
-
-	while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'" );
+	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
 		$array_config_global[$c_config_name] = $c_config_value;
 	}
@@ -264,7 +263,7 @@ if( $errormess != '' )
 foreach( $adminThemes as $name )
 {
 	$xtpl->assign( 'THEME_NAME', $name );
-	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'THEME_SELECTED', ( $name == $global_config['admin_theme'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.admin_theme' );
 }
 
@@ -272,7 +271,7 @@ foreach( $closed_site_Modes as $value => $name )
 {
 	$xtpl->assign( 'MODE_VALUE', $value );
 	$xtpl->assign( 'MODE_NAME', $name );
-	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected=\'selected\'' : '' ) );
+	$xtpl->assign( 'MODE_SELECTED', ( $value == $global_config['closed_site'] ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.closed_site_mode' );
 }
 

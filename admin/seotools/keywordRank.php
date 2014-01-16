@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 25/12/2010, 1:5
  */
 
@@ -42,8 +43,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		else
 		{
 			$myDomain = NV_SERVER_NAME;
-			// $myDomain = "nukeviet.vn";
-			$from = "google";
+			// $myDomain = 'nukeviet.vn';
+			$from = 'google';
 
 			$tempFile = md5( $keyword . $lang . $accuracy . $from . $myDomain );
 			$tempFile = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $tempFile;
@@ -77,9 +78,9 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				$loop[] = array( 'key' => $lang_module['currentDomain'], 'value' => $info['myDomain'] );
 				$loop[] = array( 'key' => $lang_module['keyword'], 'value' => $info['keyword'] );
 				$loop[] = array( 'key' => $lang_module['language'], 'value' => ! empty( $info['lang'] ) ? strtoupper( $info['lang'] ) : $lang_module['langAll'] );
-				$loop[] = array( 'key' => $lang_module['accuracy'], 'value' => $info['accuracy'] == "keyword" ? $lang_module['byKeyword'] : $lang_module['byPhrase'] );
+				$loop[] = array( 'key' => $lang_module['accuracy'], 'value' => $info['accuracy'] == 'keyword' ? $lang_module['byKeyword'] : $lang_module['byPhrase'] );
 				$loop[] = array( 'key' => $lang_module['fromEngine'], 'value' => strtoupper( $info['fromEngine'] ) );
-				$loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( "d/m/Y H:i", $info['updtime'] ) );
+				$loop[] = array( 'key' => $lang_module['updDate'], 'value' => nv_date( 'd/m/Y H:i', $info['updtime'] ) );
 				foreach( $loop as $a => $l )
 				{
 					$xtpl->assign( 'LOOP', $l );
@@ -93,7 +94,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$mainResult = array();
 					if( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['allPages'], 'value' => number_format( $info['detail']['allPages'] ) );
 					if( isset( $info['detail']['myPages'] ) ) $mainResult[] = array( 'key' => $lang_module['myPages'], 'value' => number_format( $info['detail']['myPages'] ) );
-					if( isset( $info['detail']['rank'] ) ) $mainResult[] = array( 'key' => $lang_module['rankResult'], 'value' => ( empty( $info['detail']['rank'] ) ? $lang_module['rank0'] : implode( " - ", $info['detail']['rank'] ) ) );
+					if( isset( $info['detail']['rank'] ) ) $mainResult[] = array( 'key' => $lang_module['rankResult'], 'value' => ( empty( $info['detail']['rank'] ) ? $lang_module['rank0'] : implode( ' - ', $info['detail']['rank'] ) ) );
 
 					if( ! empty( $mainResult ) )
 					{
@@ -123,7 +124,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$xtpl->assign( 'CAPTION', $lang_module['Top50'] );
 					foreach( $info['detail']['top50AllPages'] as $key => $link )
 					{
-						$a_class = isset( $info['detail']['rank'][$key] ) ? " class=\"myLink\"" : "";
+						$a_class = isset( $info['detail']['rank'][$key] ) ? ' class="myLink"' : '';
 						$xtpl->assign( 'ID', $key + 1 );
 						$xtpl->assign( 'A_CLASS', $a_class );
 						$xtpl->assign( 'URL', $link );

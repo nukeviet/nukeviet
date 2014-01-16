@@ -1,21 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 27/11/2010, 22:45
  */
 
-/**
- * optimezer
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES.,JSC
- * @version 2010
- * @access public
- */
 class optimezer
 {
 	private $_content;
@@ -24,7 +16,7 @@ class optimezer
 	private $_conditonJs = array();
 	private $_condCount = 0;
 	private $_meta = array();
-	private $_title = "<title></title>";
+	private $_title = '<title></title>';
 	private $_style = array();
 	private $_links = array();
 	private $_cssLinks = array();
@@ -35,7 +27,7 @@ class optimezer
 	private $_jsCount = 0;
 	private $siteRoot;
 	private $base_siteurl;
-	private $cssDir = "files/css";
+	private $cssDir = 'files/css';
 	private $eol = "\r\n";
 	private $cssImgNewPath;
 	private $_tidySupport = false;
@@ -85,15 +77,15 @@ class optimezer
 		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
 		if( defined( 'NV_IS_UPDATE' ) ) // Update se bao gom ca admin nen update phai dat truoc
 		{
-			$base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/install(.*)$#', '', $base_siteurl );
 		}
 		elseif( defined( 'NV_ADMIN' ) )
 		{
-			$base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/' . NV_ADMINDIR . '(.*)$#', '', $base_siteurl );
 		}
 		elseif( ! empty( $base_siteurl ) )
 		{
-			$base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/index\.php(.*)$#', '', $base_siteurl );
 		}
 
 		$this->base_siteurl = $base_siteurl . '/';
@@ -147,7 +139,7 @@ class optimezer
 		{
 			foreach( $matches[0] as $tag )
 			{
-				if( preg_match( "/^<meta/", $tag ) )
+				if( preg_match( '/^<meta/', $tag ) )
 				{
 					preg_match_all( "/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
 					if( ! empty( $matches2 ) )
@@ -339,7 +331,7 @@ class optimezer
 	{
 		$num = $this->_condCount;
 		++$this->_condCount;
-		return "{|condition_" . $num . "|}";
+		return '{|condition_' . $num . '|}';
 	}
 
 	/**
@@ -352,7 +344,7 @@ class optimezer
 	{
 		$num = $this->_jsCount;
 		++$this->_jsCount;
-		return "{|js_" . $num . "|}";
+		return '{|js_' . $num . '|}';
 	}
 
 	/**
@@ -372,28 +364,16 @@ class optimezer
 			{
 				$link = preg_replace( '#^' . $this->base_siteurl . '#', '', $link );
 
-				if( ! empty( $media ) and ! preg_match( "/all/", $media ) ) $contents .= "@media " . $media . "{" . $this->eol;
+				if( ! empty( $media ) and ! preg_match( '/all/', $media ) ) $contents .= '@media ' . $media . '{' . $this->eol;
 				$contents .= $this->getCssContent( $link ) . $this->eol;
-				if( ! empty( $media ) and ! preg_match( "/all/", $media ) ) $contents .= "}" . $this->eol;
+				if( ! empty( $media ) and ! preg_match( '/all/', $media ) ) $contents .= '}' . $this->eol;
 			}
 
 			$contents = $this->minifyCss( $contents );
 			file_put_contents( $newCSSLinkPath, $contents );
 		}
 
-		return $this->base_siteurl . $this->cssDir . "/" . $newCSSLink . ".opt.css";
-	}
-
-	/**
-	 * optimezer::minifyJs()
-	 *
-	 * @param mixed $contents
-	 * @return
-	 */
-	private function minifyJs( $contents )
-	{
-		$contents = preg_replace( "/(\r\n)+|(\n|\r)+/", "\r\n", $contents );
-		return $contents;
+		return $this->base_siteurl . $this->cssDir . '/' . $newCSSLink . '.opt.css';
 	}
 
 	/**
@@ -405,13 +385,13 @@ class optimezer
 	private function minifyJsInline( $matches )
 	{
 		$jsInline = preg_replace( '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/', '', $matches[2] );
-		$jsInline = $this->minifyJs( $jsInline );
+		$jsInline = preg_replace( "/(\r\n)+|(\n|\r)+/", "\r\n", $jsInline );
 		$jsInline = preg_replace( '/^\s+|\s+$/m', '', $jsInline );
 		if( ! $this->_tidySupport and ! preg_match( "/^\/\/<\!\[CDATA\[/", $jsInline ) )
 		{
 			$jsInline = "//<![CDATA[" . $this->eol . $jsInline . $this->eol . "//]]>";
 		}
-		$jsInline = "<script" . $matches[1] . ">" . $this->eol . $jsInline . $this->eol . "</script>";
+		$jsInline = '<script' . $matches[1] . '>' . $this->eol . $jsInline . $this->eol . '</script>';
 		return $jsInline;
 	}
 
@@ -424,7 +404,7 @@ class optimezer
 	private function getCssContent( $link )
 	{
 		$content = file_get_contents( $this->siteRoot . '/' . $link );
-		$this->cssImgNewPath = "../../" . str_replace( '\\', '/', dirname( $link ) ) . "/";
+		$this->cssImgNewPath = '../../' . str_replace( '\\', '/', dirname( $link ) ) . '/';
 		$content = preg_replace_callback( "/url[\s]*\([\s]*[\'\"]*([^\'\"\)]+)[\'\"]*[\s]*\)/", array( $this, 'changeCssURL' ), $content );
 		return $content;
 	}
@@ -437,19 +417,19 @@ class optimezer
 	 */
 	private function changeCssURL( $matches )
 	{
-		if( preg_match( "/^(http(s?)|ftp\:\/\/)/", $matches[1] ) )
+		if( preg_match( '/^(http(s?)|ftp\:\/\/)/', $matches[1] ) )
 		{
 			$url = $matches[1];
 		}
 		else
 		{
 			$url = $this->cssImgNewPath . $matches[1];
-			while( preg_match( "/([^\/(\.\.)]+)\/\.\.\//", $url ) )
+			while( preg_match( '/([^\/(\.\.)]+)\/\.\.\//', $url ) )
 			{
 				$url = preg_replace( '/([^\/(\.\.)]+)\/\.\.\//', '', $url );
 			}
 		}
-		return "url(" . $url . ")";
+		return 'url(' . $url . ')';
 	}
 
 	/**
@@ -470,7 +450,7 @@ class optimezer
 		$cssContent = str_replace( array( ' 0px', ':0px', ';}', ':0 0 0 0', ':0.', ' 0.' ), array( ' 0', ':0', '}', ':0', ':.', ' .' ), $cssContent );
 		$cssContent = preg_replace( '/\\s*([{;])\\s*([\\*_]?[\\w\\-]+)\\s*:\\s*(\\b|[#\'"-])/x', '$1$2:$3', $cssContent );
 
-		$cssContent = preg_replace_callback( '/(?:\\s*[^~>+,\\s]+\\s*[,>+~])+\\s*[^~>+,\\s]+{/x', array( $this, 'selectorsCB' ), $cssContent );
+		//$cssContent = preg_replace_callback( '/(?:\\s*[^~>+,\\s]+\\s*[,>+~])+\\s*[^~>+,\\s]+{/x', array( $this, 'selectorsCB' ), $cssContent );
 		$cssContent = preg_replace( '/([^=])#([a-f\\d])\\2([a-f\\d])\\3([a-f\\d])\\4([\\s;\\}])/i', '$1#$2$3$4$5', $cssContent );
 		$cssContent = preg_replace_callback( '/font-family:([^;}]+)([;}])/', array( $this, 'fontFamilyCB' ), $cssContent );
 		$cssContent = preg_replace( '/@import\\s+url/', '@import url', $cssContent );

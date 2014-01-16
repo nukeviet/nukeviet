@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/12/2010, 1:27
  */
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $url = array();
-$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_Sitemap_" . NV_CACHE_PREFIX . ".cache";
+$cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . NV_LANG_DATA . '_' . $module_name . '_Sitemap_' . NV_CACHE_PREFIX . '.cache';
 $pa = NV_CURRENTTIME - 7200;
 
 if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
@@ -23,13 +24,17 @@ else
 	$in = array_keys( $list_cats );
 	$in = implode( ',', $in );
 
-	$sql = "SELECT `catid`, `alias`, `uploadtime` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `catid` IN (" . $in . ") AND `status`=1 ORDER BY `uploadtime` DESC LIMIT 1000";
-	$result = $db->sql_query( $sql );
-
-	while( list( $cid, $alias, $publtime ) = $db->sql_fetchrow( $result ) )
+	$db->sqlreset()
+		->select( 'catid, alias, uploadtime' )
+		->from( NV_PREFIXLANG . '_' . $module_data )
+		->where( 'catid IN (' . $in . ') AND status=1' )
+		->order( 'uploadtime DESC' )
+		->limit( 1000 );
+	$result = $db->query( $db->sql() );
+	while( list( $cid, $alias, $publtime ) = $result->fetch( 3 ) )
 	{
 		$url[] = array(
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $list_cats[$cid]['alias'] . "/" . $alias, //
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias, //
 			'publtime' => $publtime
 		);
 	}

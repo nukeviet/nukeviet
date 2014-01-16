@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -76,7 +77,6 @@ $lang_global['regdate'] = 'Datu Registrovat';
 $lang_global['online'] = 'Online';
 $lang_global['hits'] = 'Hits';
 $lang_global['viewstats'] = 'Zobrazit počítadlo statistiky';
-$lang_global['db_num_queries'] = 'Počet dotazů připojené databáze';
 $lang_global['last_login'] = 'Poslední přihlášení';
 $lang_global['current_login'] = 'Aktuální Přihlášení';
 $lang_global['your_account'] = 'Účet';
@@ -132,7 +132,6 @@ $lang_global['lang_en'] = 'Angličtina';
 $lang_global['option'] = 'Volba';
 $lang_global['value'] = 'hodnota';
 $lang_global['reviews'] = 'Recenze';
-$lang_global['show_queries'] = 'Seznam dotazů';
 $lang_global['add'] = 'Přidat';
 $lang_global['edit'] = 'Upravit';
 $lang_global['delete'] = 'Vymazat';

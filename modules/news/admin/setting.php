@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -48,9 +49,13 @@ if( ! empty( $savesetting ) )
 		$array_config['module_logo'] = $global_config['site_logo'];
 	}
 
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
+	$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 	foreach( $array_config as $config_name => $config_value )
 	{
-		$db->exec( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->dbescape( $module_name ) . ", " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
 	}
 
 	nv_del_moduleCache( 'settings' );
@@ -78,7 +83,7 @@ foreach( $array_viewcat_full as $key => $val )
 	$xtpl->assign( 'INDEXFILE', array(
 		'key' => $key,
 		'title' => $val,
-		'selected' => $key == $module_config[$module_name]['indexfile'] ? ' selected=\'selected\'' : ''
+		'selected' => $key == $module_config[$module_name]['indexfile'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.indexfile' );
 }
@@ -89,7 +94,7 @@ for( $i = 5; $i <= 30; ++$i )
 	$xtpl->assign( 'PER_PAGE', array(
 		'key' => $i,
 		'title' => $i,
-		'selected' => $i == $module_config[$module_name]['per_page'] ? ' selected=\'selected\'' : ''
+		'selected' => $i == $module_config[$module_name]['per_page'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.per_page' );
 }
@@ -100,7 +105,7 @@ for( $i = 0; $i <= 20; ++$i )
 	$xtpl->assign( 'ST_LINKS', array(
 		'key' => $i,
 		'title' => $i,
-		'selected' => $i == $module_config[$module_name]['st_links'] ? ' selected=\'selected\'' : ''
+		'selected' => $i == $module_config[$module_name]['st_links'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.st_links' );
 }
@@ -130,7 +135,7 @@ while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
 	$xtpl->assign( 'SETCOMM', array(
 		'key' => $comm_i,
 		'title' => $title_i,
-		'selected' => $comm_i == $module_config[$module_name]['setcomm'] ? ' selected=\'selected\'' : ''
+		'selected' => $comm_i == $module_config[$module_name]['setcomm'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.setcomm' );
 }
@@ -141,7 +146,7 @@ for( $i = 0; $i <= 2; ++$i )
 	$xtpl->assign( 'ACTIVECOMM', array(
 		'key' => $i,
 		'title' => $lang_module['activecomm_' . $i],
-		'selected' => $i == $module_config[$module_name]['activecomm'] ? ' selected=\'selected\'' : ''
+		'selected' => $i == $module_config[$module_name]['activecomm'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.activecomm' );
 }
@@ -169,7 +174,7 @@ foreach( $array_structure_image as $type => $dir )
 	$xtpl->assign( 'STRUCTURE_UPLOAD', array(
 		'key' => $type,
 		'title' => $dir,
-		'selected' => $type == $structure_image_upload ? ' selected=\'selected\'' : ''
+		'selected' => $type == $structure_image_upload ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.structure_upload' );
 }
@@ -181,7 +186,7 @@ foreach( $array_config_source as $key => $val )
 	$xtpl->assign( 'CONFIG_SOURCE', array(
 		'key' => $key,
 		'title' => $val,
-		'selected' => $key == $module_config[$module_name]['config_source'] ? ' selected=\'selected\'' : ''
+		'selected' => $key == $module_config[$module_name]['config_source'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.config_source' );
 }
@@ -213,7 +218,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			$editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
 			$delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
 			$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-			$db->sql_query( "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` SET `addcontent` = '" . $addcontent . "', `postcontent` = '" . $postcontent . "', `editcontent` = '" . $editcontent . "', `delcontent` = '" . $delcontent . "' WHERE `pid` =" . $pid . " LIMIT 1" );
+			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE pid =" . $pid );
 		}
 
 		nv_del_moduleCache( 'settings' );
@@ -236,9 +241,9 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 	$array_post_member = array();
 	$array_post_data = array();
 
-	$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` ORDER BY `pid` ASC";
-	$result = $db->sql_query( $sql );
-	while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $db->sql_fetchrow( $result ) )
+	$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY pid ASC";
+	$result = $db->query( $sql );
+	while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
 	{
 		if( isset( $array_post_title[$member][$group_id] ) )
 		{
@@ -255,7 +260,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 		}
 		else
 		{
-			$db->sql_query( "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` WHERE `pid` = " . $pid . " LIMIT 1" );
+			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post WHERE pid = " . $pid );
 		}
 	}
 
@@ -277,7 +282,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 			else
 			{
 				$addcontent = $postcontent = $editcontent = $delcontent = 0;
-				$pid = $db->sql_query_insert_id( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config_post` (`pid`,`member`, `group_id`,`addcontent`,`postcontent`,`editcontent`,`delcontent`) VALUES (NULL , '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
+				$pid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )", "pid" );
 			}
 
 			$xtpl->assign( 'ROW', array(

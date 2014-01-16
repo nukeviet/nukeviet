@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 15:48
  */
 
@@ -15,12 +16,12 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . '/modules', $global_config[
 // Lay danh sach cac module co trong he thong
 $new_modules = array();
 
-$sql = 'SELECT `title`, `module_file`, `is_sysmod`, `mod_version` FROM `' . $db_config['prefix'] . '_setup_modules` ORDER BY `title` ASC';
-$result = $db->sql_query( $sql );
+$sql = 'SELECT title, module_file, is_sysmod, mod_version FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY title ASC';
+$result = $db->query( $sql );
 
 $is_delCache = false;
 
-while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $result ) )
+while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $result->fetch( 3 ) )
 {
 	$new_modules[$m] = array(
 		'module_file' => $mod_file,
@@ -28,9 +29,12 @@ while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $db->sql_fetchrow( $res
 		'mod_version' => $mod_version
 	);
 
-	if( ! isset( $modules_exit[$db->unfixdb( $m )] ) )
+	if( ! isset( $modules_exit[$m] ) )
 	{
-		$db->sql_query( 'UPDATE `' . NV_MODULES_TABLE . '` SET `act`=2 WHERE `module_file`=' . $db->dbescape( $m ) );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE module_file= :module_file' );
+		$sth->bindParam( ':module_file', $m, PDO::PARAM_STR );
+		$sth->execute();
+
 		$is_delCache = true;
 	}
 }
@@ -44,18 +48,21 @@ if( $is_delCache )
 $modules_data = array();
 
 $iw = 0;
-$sql = 'SELECT * FROM `' . NV_MODULES_TABLE . '` ORDER BY `weight` ASC';
-$result = $db->sql_query( $sql );
+$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
+$result = $db->query( $sql );
 
 $is_delCache = false;
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	++$iw;
 	if( $iw != $row['weight'] )
 	{
 		$row['weight'] = $iw;
-		$db->sql_query( 'UPDATE `' . NV_MODULES_TABLE . '` SET `weight`=' . $row['weight'] . ' WHERE `title`=' . $db->dbescape( $row['title'] ) );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $row['weight'] . ' WHERE title= :title' );
+		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+		$sth->execute();
+
 		$is_delCache = true;
 	}
 
@@ -114,7 +121,8 @@ while( $row = $db->sql_fetchrow( $result ) )
 		$deact_modules[$row['title']] = $mod;
 	}
 }
-$db->sql_freeresult( $result );
+$result->closeCursor();
+
 if( $is_delCache )
 {
 	nv_del_moduleCache( 'modules' );

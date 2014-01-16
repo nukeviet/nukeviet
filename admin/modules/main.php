@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 9:32
  */
 
@@ -17,10 +18,10 @@ if( sizeof( $site_mods ) < 1 )
 
 $page_title = $lang_module['main'];
 
-$contents['div_id'] = "list_mods";
-$contents['ajax'] = "nv_show_list_mods();";
+$contents['div_id'] = 'list_mods';
+$contents['ajax'] = 'nv_show_list_mods();';
 
-$contents = call_user_func( "main_theme", $contents );
+$contents = call_user_func( 'main_theme', $contents );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

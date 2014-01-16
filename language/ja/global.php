@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -76,7 +77,6 @@ $lang_global['regdate'] = '登録日';
 $lang_global['online'] = 'オンライン';
 $lang_global['hits'] = 'トータルアクセス数';
 $lang_global['viewstats'] = 'アクセス数統計を見ます。';
-$lang_global['db_num_queries'] = 'データベースへのアクセス数';
 $lang_global['last_login'] = '前回のアクセス';
 $lang_global['current_login'] = '今回のアクセス';
 $lang_global['your_account'] = 'アカウント';
@@ -132,7 +132,6 @@ $lang_global['lang_en'] = '英語';
 $lang_global['option'] = 'オプション';
 $lang_global['value'] = '値';
 $lang_global['reviews'] = 'レビュー';
-$lang_global['show_queries'] = 'クエリのリスト';
 $lang_global['add'] = '追加';
 $lang_global['edit'] = '編集';
 $lang_global['delete'] = '削除';

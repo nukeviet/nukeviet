@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -17,12 +18,12 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $db->sql_fetch_assoc( $result ) )
+foreach ( $columns_array as $row )
 {
-	if( substr( $row['field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
 		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
@@ -42,7 +43,7 @@ if( empty( $array_lang_exit ) )
 }
 $lang_array_file = array();
 
-$lang_array_file_temp = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
+$lang_array_file_temp = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 foreach( $lang_array_file_temp as $value )
 {
 	if( file_exists( NV_ROOTDIR . '/language/' . $value . '/global.php' ) )
@@ -51,7 +52,7 @@ foreach( $lang_array_file_temp as $value )
 	}
 }
 
-$language_array_source = array( "vi", "en" );
+$language_array_source = array( 'vi', 'en' );
 
 $language_check_type = array(
 	0 => $lang_module['nv_check_type_0'],
@@ -76,7 +77,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
 			if( ! empty( $lang_value ) )
 			{
-				$sth = $db->prepare( 'UPDATE `' . NV_LANGUAGE_GLOBALTABLE . '` SET `lang_' . $typelang . '`= :lang_value WHERE `id`= :id' );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value WHERE id= :id' );
 				$sth->bindParam( ':id', $id, PDO::PARAM_INT );
 				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 				$sth->execute();
@@ -121,10 +122,9 @@ foreach( $language_array_source as $key )
 	}
 }
 
-$sql = "SELECT `idfile`, `module`, `admin_file` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
-$result = $db->sql_query( $sql );
-
-while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
+$result = $db->query( $sql );
+while( list( $idfile_i, $module, $admin_file, ) = $result->fetch( 3 ) )
 {
 	switch( $admin_file )
 	{
@@ -167,31 +167,31 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	$array_where = array();
 	if( $idfile > 0 )
 	{
-		$array_where[] = "`idfile`='" . $idfile . "'";
+		$array_where[] = 'idfile=' . $idfile;
 	}
 
 	if( $check_type == 0 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=''";
+		$array_where[] = "lang_" . $typelang . "=''";
 	}
 	elseif( $check_type == 1 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=`lang_" . $sourcelang . "`";
+		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
 	}
 
 	if( empty( $array_where ) )
 	{
-		$query = "SELECT `id`, `idfile`, `lang_key`, `lang_" . $typelang . "` as datalang, `lang_" . $sourcelang . "` as sourcelang FROM `" . NV_LANGUAGE_GLOBALTABLE . "` ORDER BY `id` ASC";
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' ORDER BY id ASC';
 	}
 	else
 	{
-		$query = "SELECT `id`, `idfile`, `lang_key`, `lang_" . $typelang . "` as datalang, `lang_" . $sourcelang . "` as sourcelang FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE " . implode( " AND ", $array_where ) . " ORDER BY `id` ASC";
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE ' . implode( ' AND ', $array_where ) . ' ORDER BY id ASC';
 	}
-	$result = $db->sql_query( $query );
+	$result = $db->query( $query );
 
 	$array_lang_data = array();
 
-	while( list( $id, $idfile_i, $lang_key, $datalang, $datasourcelang ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $idfile_i, $lang_key, $datalang, $datasourcelang ) = $result->fetch( 3 ) )
 	{
 		$array_lang_data[$idfile_i][$id] = array(
 			'lang_key' => $lang_key,

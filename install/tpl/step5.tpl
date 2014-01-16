@@ -16,8 +16,10 @@
 	<tr>
 		<th scope="row" class="spec">{LANG.database_type} <span
 			class="highlight_red">*</span></th>
-		<td><select name="db_type">
-			<option>MySQL</option>
+		<td><select name="dbtype">
+			<!-- BEGIN: dbtype -->
+			<option value="{DBTYPE.value}" {DBTYPE.selected}>{DBTYPE.text}</option>
+			<!-- END: dbtype -->
 		</select></td>
 		<td>{LANG.database_default} <strong>MySQL</strong></td>
 	</tr>

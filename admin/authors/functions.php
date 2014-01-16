@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -12,9 +13,9 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 unset( $page_title, $select_options );
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_authors']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_authors']
 );
 define( 'NV_IS_FILE_AUTHORS', true );
 
@@ -44,13 +45,13 @@ function nv_admin_add_result( $result )
 	$contents['info']['modules'] = array( $lang_module['nv_admin_modules'], $result['modules'] );
 	$contents['info']['position'] = array( $lang_module['position'], $result['position'] );
 	$contents['info']['editor'] = array( $lang_module['editor'], ( ! empty( $result['editor'] ) ? $result['editor'] : $lang_module['not_use'] ) );
-	$contents['info']['allow_files_type'] = array( $lang_module['allow_files_type'], ( ! empty( $result['allow_files_type'] ) ? implode( ", ", $result['allow_files_type'] ) : $lang_global['no'] ) );
+	$contents['info']['allow_files_type'] = array( $lang_module['allow_files_type'], ( ! empty( $result['allow_files_type'] ) ? implode( ', ', $result['allow_files_type'] ) : $lang_global['no'] ) );
 	$contents['info']['allow_modify_files'] = array( $lang_module['allow_modify_files'], ( $result['allow_modify_files'] ? $lang_global['yes'] : $lang_global['no'] ) );
 	$contents['info']['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], ( $result['allow_create_subdirectories'] ? $lang_global['yes'] : $lang_global['no'] ) );
 	$contents['info']['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], ( $result['allow_modify_subdirectories'] ? $lang_global['yes'] : $lang_global['no'] ) );
-	$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add";
-	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;admin_id=" . $result['admin_id'] );
-	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
+	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
+	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 
 	$xtpl->assign( 'TITLE', $contents['title'] );
 	$a = 0;
@@ -97,11 +98,11 @@ function nv_admin_edit_result( $result )
 	$contents['thead'] = array( $lang_module['field'], $lang_module['old_value'], $lang_module['new_value'] );
 
 	$contents['change'] = $result['change'];
-	$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;admin_id=" . $result['admin_id'];
+	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'];
 	$contents['download'] = $lang_module['nv_admin_add_download'];
 	$contents['sendmail'] = $lang_module['nv_admin_add_sendmail'];
-	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
-	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;admin_id=" . $result['admin_id'] );
+	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
 
 	$page_title = sprintf( $lang_module['nv_admin_edit_result'], $result['login'] );
 
@@ -144,7 +145,7 @@ function nv_check_add_admin()
 {
 	global $lang_module, $module_name, $global_config;
 
-	if( defined( "NV_IS_GODADMIN" ) or ( defined( "NV_IS_SPADMIN" ) and $global_config['spadmin_add_admin'] == 1 ) )
+	if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $global_config['spadmin_add_admin'] == 1 ) )
 	{
 		$xtpl = new XTemplate( 'badd.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
 		$xtpl->assign( 'LANG', $lang_module );
@@ -153,7 +154,7 @@ function nv_check_add_admin()
 		return $xtpl->text( 'main' );
 	}
 
-	return "";
+	return '';
 }
 
 ?>

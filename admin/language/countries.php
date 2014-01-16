@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,10 +15,9 @@ $page_title = $lang_module['countries'];
 $array_lang_setup = array();
 $array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
-$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
-$result = $db->sql_query( $sql );
-
-while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
+$result = $db->query( $sql );
+while( list( $lang_i ) = $result->fetch( 3 ) )
 {
 	if( in_array( $lang_i, $global_config['allow_sitelangs'] ) )
 	{
@@ -53,7 +53,7 @@ if( $nv_Request->isset_request( 'countries', 'post' ) == 1 )
 
 include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
 
-$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
+$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );

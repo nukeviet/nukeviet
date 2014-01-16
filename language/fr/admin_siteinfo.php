@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -28,7 +29,7 @@ $lang_module['site_timezone'] = 'Fuseau horaire du site';
 $lang_module['server_configs_info'] = 'Infos du serveur';
 $lang_module['server_phpversion'] = 'Version de PHP';
 $lang_module['server_phpos'] = 'Système d\'exploitation';
-$lang_module['server_mysqlversion'] = 'Version de MySQL';
+$lang_module['server_databaseversion'] = 'Version de Database';
 $lang_module['configuration_php'] = 'Infos de PHP';
 $lang_module['directive'] = 'Directives';
 $lang_module['local_value'] = 'Valeur locale';

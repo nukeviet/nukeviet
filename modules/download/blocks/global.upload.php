@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -17,7 +18,7 @@ if( defined( 'NV_SYSTEM' ) )
 		function nv_mod_down_config( $module_data )
 		{
 			global $site_mods, $module_info;
-			$sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+			$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 			$list = nv_db_cache( $sql );
 			$download_config = array();
 			foreach( $list as $values )

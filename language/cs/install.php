@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -41,7 +42,7 @@ $lang_module['note'] = 'Poznámka';
 $lang_module['result'] = 'Výsledek';
 $lang_module['php_support'] = 'Podpora PHP';
 $lang_module['php_version'] = 'PHP verze';
-$lang_module['mysql_support'] = 'Podpora MySQL';
+$lang_module['pdo_support'] = 'Podpora PHP Data Objects';
 $lang_module['request'] = 'Vyžadovat';
 $lang_module['safe_mode'] = 'Nouzový režim';
 $lang_module['required_off'] = 'Požadovat vypnout';

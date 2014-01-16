@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/11/2010 23:32
  */
 
@@ -14,21 +15,16 @@ $id = $nv_Request->get_int( 'id', 'get', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `id`=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-if( $numrows != 1 ) die( 'Stop!!!' );
-$row = $db->sql_fetchrow( $result );
+$sql = "SELECT full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients WHERE id=" . $id;
+$full_name = $db->query( $sql )->fetchColumn();
 
-$full_name = $row['full_name'];
+if( $full_name != 1 ) die( 'Stop!!!' );
 
 $contents = array();
 $contents['info'] = '';
 
-$sql = "SELECT `full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `clid`=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-
+$sql = "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE clid=" . $id;
+$numrows = $db->query( $sql )->fetchColumn();
 if( $numrows != 1 )
 {
 	$contents['info'] = sprintf( $lang_module['banners_client_empty'], $full_name );

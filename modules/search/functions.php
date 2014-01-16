@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -76,12 +77,9 @@ function nv_substr_clean( $string, $mode = 'lr' )
  */
 function BoldKeywordInStr( $str, $keyword, $logic )
 {
-	global $db;
-
 	$str = nv_br2nl( $str );
 	$str = nv_nl2br( $str, ' ' );
 	$str = nv_unhtmlspecialchars( strip_tags( trim( $str ) ) );
-	$str = $db->unfixdb( $str );
 
 	$pos = false;
 

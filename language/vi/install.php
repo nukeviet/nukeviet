@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
@@ -41,7 +42,7 @@ $lang_module['note'] = 'Ghi chú';
 $lang_module['result'] = 'Kết quả';
 $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
-$lang_module['mysql_support'] = 'Hỗ trợ MySQL';
+$lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
 $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';

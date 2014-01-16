@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -28,7 +29,7 @@ $lang_module['site_timezone'] = 'サイトのTimezone';
 $lang_module['server_configs_info'] = 'サーバー構成';
 $lang_module['server_phpversion'] = 'PHPバージョン';
 $lang_module['server_phpos'] = 'サーバーOS';
-$lang_module['server_mysqlversion'] = 'MySQLのバージョン';
+$lang_module['server_databaseversion'] = 'Databaseのバージョン';
 $lang_module['configuration_php'] = 'PHPの設定情報';
 $lang_module['directive'] = '指示';
 $lang_module['local_value'] = '値';

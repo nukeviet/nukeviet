@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -111,7 +112,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl = new XTemplate( $file_name_tpl, $dir_template );
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ' );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] . '' );
+	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] );
 	$xtpl->assign( 'SITE_DESCRIPTION', $global_config['site_description'] );
 	$xtpl->assign( 'NV_CHECK_PASS_MSTIME', (intval( $global_config['admin_check_pass_time'] ) - 62) * 1000 );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -311,16 +312,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
 	{
-		$xtpl->assign( 'NV_SHOW_QUERIES', $lang_global['show_queries'] );
-		$xtpl->assign( 'NV_DB_NUM_QUERIES', $lang_global['db_num_queries'] );
-		foreach( $db->query_strs as $key => $field )
-		{
-			$xtpl->assign( 'NV_FIELD1', ($field[1] ? 'good' : 'bad') );
-			$xtpl->assign( 'NV_FIELD', $field[0] );
-			$xtpl->parse( 'main.nv_show_queries.nv_show_queries_loop' );
-		}
-		$xtpl->parse( 'main.nv_show_queries' );
-		$xtpl->parse( 'main.nv_queries' );
+		$xtpl->parse( 'main.memory_time_usage' );
 	}
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );

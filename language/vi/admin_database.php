@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -21,10 +22,10 @@ $lang_module['database_info'] = 'Thông tin chung về CSDL &ldquo;<strong>%s</s
 $lang_module['tables_info'] = 'Các Table thuộc CSDL &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_caption'] = 'Thông tin chung về table &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Thông tin về các trường của table &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['db_host_info'] = 'Máy chủ MySql';
-$lang_module['db_sql_version'] = 'Phiên bản máy chủ MySql';
-$lang_module['db_proto_info'] = 'Phiên bản giao thức MySql';
-$lang_module['server'] = 'Tên máy chủ MySql';
+$lang_module['db_host_info'] = 'Máy chủ';
+$lang_module['db_sql_version'] = 'Phiên bản máy chủ';
+$lang_module['db_proto_info'] = 'Phiên bản giao thức';
+$lang_module['server'] = 'Tên máy chủ';
 $lang_module['db_dbname'] = 'Tên CSDL';
 $lang_module['db_uname'] = 'Tài khoản truy cập CSDL';
 $lang_module['db_charset'] = 'Bảng mã CSDL';

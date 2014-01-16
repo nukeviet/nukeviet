@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
@@ -137,19 +138,19 @@ if( ! nv_function_exists( 'nv_smooth_navigational_menu' ) )
 				{
 					if( $mod_file == "shops" )
 					{
-						$sql = "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` as title, `" . NV_LANG_DATA . "_alias` as alias FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` ORDER BY `order` ASC";
+						$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title as title, " . NV_LANG_DATA . "_alias as alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat ORDER BY sort ASC";
 					}
 					elseif( $mod_file == "download" )
 					{
-						$sql = "SELECT `id` as catid, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories` ORDER BY `parentid` ASC, `weight` ASC";
+						$sql = "SELECT id as catid, parentid, title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_categories ORDER BY parentid ASC, weight ASC";
 					}
 					elseif( $mod_file == "weblinks" )
 					{
-						$sql = "SELECT `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` ORDER BY `parentid` ASC, `weight` ASC";
+						$sql = "SELECT catid, parentid, title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat ORDER BY parentid ASC, weight ASC";
 					}
 					else
 					{
-						$sql = "SELECT `catid`, `parentid`, `title`, `alias` FROM `" . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat` ORDER BY `order` ASC";
+						$sql = "SELECT catid, parentid, title, alias FROM " . NV_PREFIXLANG . "_" . $modvalues['module_data'] . "_cat ORDER BY sort ASC";
 					}
 					$list = nv_db_cache( $sql, 'catid', $modname );
 					$module_array_cat = array();

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
@@ -38,8 +39,8 @@ function nv_read_data_from_excel( $file_name )
 	$user_field['active'] = array( 'col' => 12, 'title' => ( isset( $lang_module['active_users'] ) ) ? $lang_module['active_users'] : 'active' );
 
 	$col = 13;
-	$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
-	while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+	$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+	while( $row_field = $result_field->fetch() )
 	{
 		$language = unserialize( $row_field['language'] );
 		$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row_field['field'];

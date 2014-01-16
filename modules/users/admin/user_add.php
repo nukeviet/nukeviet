@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
 
@@ -14,8 +15,8 @@ $page_title = $lang_module['user_add'];
 $groups_list = nv_groups_list();
 
 $array_field_config = array();
-$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
-while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
 	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -24,10 +25,10 @@ while( $row_field = $db->sql_fetch_assoc( $result_field ) )
 	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
 		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
-		$query = "SELECT `" . $row_field['sql_choices'][2] . "`, `" . $row_field['sql_choices'][3] . "` FROM `" . $row_field['sql_choices'][1] . "`";
-		$result = $db->sql_query( $query );
+		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1];
+		$result = $db->query( $query );
 		$weight = 0;
-		while( list( $key, $val ) = $db->sql_fetchrow( $result ) )
+		while( list( $key, $val ) = $result->fetch( 3 ) )
 		{
 			$row_field['field_choices'][$key] = $val;
 		}
@@ -62,7 +63,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_username;
 	}
-	elseif( $_user['username'] != $db->fixdb( $_user['username'] ) )
+	elseif( "'" . $_user['username'] . "'" != $db->quote( $_user['username'] ) )
 	{
 		$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $_user['username'] . '</strong>' );
 	}
@@ -70,19 +71,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`=" . $db->dbescape( nv_md5safe( $_user['username'] ) ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username=" . $db->quote( nv_md5safe( $_user['username'] ) ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `userid` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_openid` WHERE `email`=" . $db->dbescape( $_user['email'] ) ) ) != 0 )
+	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -104,7 +105,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	else
 	{
-		$query_field = array( '`userid`' => 0 );
+		$query_field = array( 'userid' => 0 );
 		if( ! empty( $array_field_config ) )
 		{
 			require NV_ROOTDIR . '/modules/users/fields.check.php';
@@ -131,34 +132,33 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
-			$sql = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` (
-				`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `birthday`, `sig`, `regdate`,
-				`question`, `answer`, `passlostkey`, `view_mail`,
-				`remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`)
+			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
+				username, md5username, password, email, full_name, gender, birthday, sig, regdate,
+				question, answer, passlostkey, view_mail,
+				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				NULL,
-				" . $db->dbescape( $_user['username'] ) . ",
-				" . $db->dbescape( nv_md5safe( $_user['username'] ) ) . ",
-				" . $db->dbescape( $password ) . ",
-				" . $db->dbescape( $_user['email'] ) . ",
-				" . $db->dbescape( $_user['full_name'] ) . ",
-				" . $db->dbescape( $_user['gender'] ) . ",
+				" . $db->quote( $_user['username'] ) . ",
+				" . $db->quote( nv_md5safe( $_user['username'] ) ) . ",
+				" . $db->quote( $password ) . ",
+				" . $db->quote( $_user['email'] ) . ",
+				" . $db->quote( $_user['full_name'] ) . ",
+				" . $db->quote( $_user['gender'] ) . ",
 				" . $_user['birthday'] . ",
-				" . $db->dbescape( $_user['sig'] ) . ",
+				" . $db->quote( $_user['sig'] ) . ",
 				" . NV_CURRENTTIME . ",
-				" . $db->dbescape( $_user['question'] ) . ",
-				" . $db->dbescape( $_user['answer'] ) . ",
+				" . $db->quote( $_user['question'] ) . ",
+				" . $db->quote( $_user['answer'] ) . ",
 				'',
 				 " . $_user['view_mail'] . ",
 				 1,
 				 '" . implode( ',', $_user['in_groups'] ) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
-			$userid = $db->sql_query_insert_id( $sql );
+			$userid = $db->insert_id( $sql, 'userid' );
 
 			if( $userid )
 			{
-				$query_field['`userid`'] = $userid;
-				$db->sql_query( "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_info` (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
+				$query_field['userid'] = $userid;
+				$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid " . $userid, $admin_info['userid'] );
 				if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
@@ -176,8 +176,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-						$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `photo`=" . $db->dbescape( $file_name ) . " WHERE `userid`=" . $userid;
-						$db->sql_query( $sql );
+						$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->quote( $file_name ) . " WHERE userid=" . $userid;
+						$db->query( $sql );
 					}
 				}
 

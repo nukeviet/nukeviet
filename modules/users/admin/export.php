@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Dec 3, 2010 11:33:22 AM
  */
 
@@ -108,8 +109,8 @@ if( $step == 1 and file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 	$objComment->setWidth( '220pt' )->setHeight( '20pt' );
 
 	$user_field_info = array();
-	$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
-	while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+	$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+	while( $row_field = $result_field->fetch() )
 	{
 		$language = unserialize( $row_field['language'] );
 		$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row_field['field'];
@@ -140,16 +141,23 @@ if( $step == 1 and file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 		// Mỗi file ghi 1000 dòng
 		$limit_export_data = 1000;
 
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t1, `" . NV_USERS_GLOBALTABLE . "_info` AS t2 WHERE t1.`userid`=t2.`userid` AND t1.`userid`>" . $id_export . " ORDER BY t1.`userid` ASC LIMIT 0 , " . $limit_export_data;
-		$result = $db->sql_query( $sql );
-		list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT FOUND_ROWS()" ) );
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t1, " . NV_USERS_GLOBALTABLE . "_info t2" )
+			->where( 't1.userid=t2.userid AND t1.userid>' . $id_export);
 
-		$number_page = $db->sql_numrows( $result );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( '*' )->order( 't1.userid ASC' )->limit( $limit_export_data );
+
+		$result = $db->query( $db->sql() )->fetchAll();
+
+		$number_page = sizeof( $result );
 		$id_export_save = 0;
 
 		// Ghi dữ liệu bắt đầu từ dòng thứ 5
 		$i = 5;
-		while( $data2 = $db->sql_fetchrow( $result ) )
+		foreach ( $result as $data2 )
 		{
 			$id_export_save = $data2['userid'];
 			$data2['password'] = '';

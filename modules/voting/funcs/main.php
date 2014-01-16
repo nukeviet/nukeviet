@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:33
  */
 
@@ -16,7 +17,7 @@ if( empty( $vid ) )
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 
-	$sql = "SELECT `vid`, `question`, `link`, `acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `act`=1 ORDER BY `publ_time` DESC";
+	$sql = "SELECT vid, question, link, acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE act=1 ORDER BY publ_time DESC";
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
 	$allowed = array();
@@ -40,8 +41,8 @@ if( empty( $vid ) )
 	{
 		$is_update = implode( ',', $is_update );
 
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "` SET `act`=0 WHERE `vid` IN (" . $is_update . ")";
-		$db->sql_query( $sql );
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET act=0 WHERE vid IN (" . $is_update . ")";
+		$db->query( $sql );
 
 		nv_del_moduleCache( $module_name );
 	}
@@ -66,7 +67,7 @@ if( empty( $vid ) )
 
 			$xtpl->assign( 'VOTING', $voting_array );
 
-			$sql = "SELECT `id`, `vid`, `title`, `url` FROM `" . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows` WHERE `vid` = " . $current_voting['vid'] . " ORDER BY `id` ASC";
+			$sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows WHERE vid = " . $current_voting['vid'] . " ORDER BY id ASC";
 			$list = nv_db_cache( $sql, '', $module_name );
 
 			foreach( $list as $row )
@@ -105,7 +106,7 @@ else
 		exit();
 	}
 
-	$sql = "SELECT `vid`, `question`,`acceptcm`, `who_view`, `groups_view`, `publ_time`, `exp_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `act`=1";
+	$sql = "SELECT vid, question,acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE act=1";
 
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
@@ -168,8 +169,8 @@ else
 		elseif( $count <= $acceptcm )
 		{
 			$in = implode( ',', $array_id );
-			$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `hitstotal` = hitstotal+1 WHERE `vid` ='" . $vid . "' AND `id` IN (" . $in . ")";
-			$db->sql_query( $sql );
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitstotal = hitstotal+1 WHERE vid ='" . $vid . "' AND id IN (" . $in . ")";
+			$db->query( $sql );
 			file_put_contents( $dir . "/" . $logfile, '', LOCK_EX );
 			$note = $lang_module['okmsg'];
 		}
@@ -179,13 +180,13 @@ else
 		}
 	}
 
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `vid` = " . $vid . " ORDER BY `id` ASC";
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid = " . $vid . " ORDER BY id ASC";
+	$result = $db->query( $sql );
 
 	$totalvote = 0;
 	$vrow = array();
 
-	while( $row2 = $db->sql_fetchrow( $result ) )
+	while( $row2 = $result->fetch() )
 	{
 		$totalvote += ( int )$row2['hitstotal'];
 		$vrow[] = $row2;

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 25/11/2011 5:27 GMT+7
  */
 
@@ -340,14 +341,14 @@ function nv_getCountry( $ip )
 	{
 		global $db, $db_config;
 
-		if( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', '" . $ip_file . "', '" . NV_CURRENTTIME . "')" ) )
+		if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', " . $ip_file . ", " . NV_CURRENTTIME . ")" ) )
 		{
 			$time_del = NV_CURRENTTIME - 604800;
-			$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "' AND `country`='ZZ' AND `time` < " . $time_del );
-			$result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $ip_file . "'" );
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
 
 			$array_ip_file = array();
-			while( $row = $db->sql_fetch_assoc( $result ) )
+			$result = $db->query( 'SELECT ip_from, ip_to, country FROM ' . $db_config['prefix'] . '_ipcountry WHERE ip_file=' . $ip_file );
+			while( $row = $result->fetch() )
 			{
 				$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
 			}

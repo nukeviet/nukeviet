@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -24,11 +25,11 @@ elseif( md5( $id . session_id() ) == $checkss )
 }
 if( ! empty( $del_array ) )
 {
-	$sql = "SELECT `id`, `listcatid`, `admin_id`, `title`, `alias`, `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` IN (" . implode( ',', $del_array ) . ")";
-	$result = $db->sql_query( $sql );
+	$sql = "SELECT id, listcatid, admin_id, title, alias, status FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id IN (" . implode( ',', $del_array ) . ")";
+	$result = $db->query( $sql );
 	$del_array = $no_del_array = array();
 	$artitle = array();
-	while( list( $id, $listcatid, $post_id, $title, $alias, $status ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $listcatid, $post_id, $title, $alias, $status ) = $result->fetch( 3 ) )
 	{
 		$check_permission = false;
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -68,8 +69,8 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 			$did = $array_dirname[$path];
 			$info = nv_getFileInfo( $path, $file );
 			$info['userid'] = $admin_info['userid'];
-			$db->sql_query( "REPLACE INTO `" . NV_UPLOAD_GLOBALTABLE . "_file`
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) VALUES
+			$db->query( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
 							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
 		}
 

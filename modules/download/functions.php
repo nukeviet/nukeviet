@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 0:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 0:51
  */
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
@@ -52,8 +53,8 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 {
 	global $module_data, $module_name, $module_info;
 
-	$sql = "SELECT `id`,`title`,`alias`,`description`,`who_view`,`groups_view`,`who_download`,`groups_download`, `parentid`
- FROM `" . NV_PREFIXLANG . "_" . $module_data . "_categories` WHERE `status`=1 ORDER BY `parentid`,`weight` ASC";
+	$sql = "SELECT id,title,alias,description,who_view,groups_view,who_download,groups_download, parentid
+ FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE status=1 ORDER BY parentid,weight ASC";
 
 	$list = nv_db_cache( $sql, 'id' );
 
@@ -105,7 +106,7 @@ function nv_mod_down_config()
 {
 	global $module_name, $module_data, $module_name;
 
-	$sql = "SELECT `config_name`,`config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+	$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 
 	$list = nv_db_cache( $sql );
 

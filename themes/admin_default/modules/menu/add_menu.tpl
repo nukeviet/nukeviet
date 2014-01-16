@@ -39,7 +39,10 @@
 			</td>
 			<td>{ROW.link}</td>
 			<td>{ROW.name_block}</td>
-			<td class="center"><a class="edit_icon" href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a></td>
+			<td class="center">
+				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
+				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop1 -->
 	</tbody>

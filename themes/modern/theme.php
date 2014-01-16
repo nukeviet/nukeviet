@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -21,7 +22,7 @@ function nv_site_theme( $contents )
 	$css = nv_html_css();
 	$js = nv_html_site_js();
 
-	if( $client_info['browser']['key'] != "explorer" )
+	if( $client_info['browser']['key'] != 'explorer' )
 	{
 		if( ! $client_info['is_bot'] ) $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/real.css\" />\n";
 	}
@@ -72,7 +73,7 @@ function nv_site_theme( $contents )
 	$xtpl->assign( 'THEME_RSS_INDEX_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss' );
 
 	$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
-	$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', ' . NV_MIN_SEARCH_LENGTH . ', ' . NV_MAX_SEARCH_LENGTH . ');" );
+	$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
 
 	$xtpl->assign( 'THEME_SITE_NAME', sprintf( $lang_global['copyright'], $global_config['site_name'] ) );
 	$xtpl->assign( 'THEME_CONTACT_EMAIL', $lang_global['email'] . ': ' . nv_EncodeEmail( $global_config['site_email'] ) );
@@ -99,7 +100,7 @@ function nv_site_theme( $contents )
 		$xtpl->parse( 'main.color_select' );
 	}
 
-	$arr_home['index'] = array( "custom_title" => $lang_global['Home'], "in_menu" => 1 );
+	$arr_home['index'] = array( 'custom_title' => $lang_global['Home'], 'in_menu' => 1 );
 	$site_mods = array_merge( $arr_home, $site_mods );
 
 	$a = 0;
@@ -120,20 +121,20 @@ function nv_site_theme( $contents )
 				$module_current = '';
 			}
 
-			if( $modname == "index" )
+			if( $modname == 'index' )
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 			}
 			else
 			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname;
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname;
 			}
 
 			$aryay_menu = array(
-				"title" => $modvalues['custom_title'],
-				"class" => $modname,
-				"current" => $module_current,
-				"link" => $link
+				'title' => $modvalues['custom_title'],
+				'class' => $modname,
+				'current' => $module_current,
+				'link' => $link
 			);
 
 			$xtpl->assign( 'TOP_MENU', $aryay_menu );
@@ -159,7 +160,7 @@ function nv_site_theme( $contents )
 		$arr_cat_title_i = array(
 			'catid' => 0,
 			'title' => $module_info['custom_title'],
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
 		);
 
 		$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
@@ -227,8 +228,8 @@ function nv_site_theme( $contents )
 		$my_footer = nv_admin_menu() . $my_footer;
 	}
 
-	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
-	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
+	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
 
 	return $sitecontent;
 }

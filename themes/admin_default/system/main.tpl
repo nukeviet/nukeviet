@@ -6,8 +6,8 @@
 			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
 		</div>
 		<div class="logout">
-			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span>{NV_GO_CLIENTSECTOR}</span></a>
-			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span class="exit">{NV_LOGOUT}</span></a>
+			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span><i class="icon-home icon-large">&nbsp;</i> {NV_GO_CLIENTSECTOR}</span></a>
+			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span><i class="icon-power-off icon-large">&nbsp;</i> {NV_LOGOUT}</span></a>
 		</div>
 		<!-- BEGIN: langdata -->
 		<div class="lang">
@@ -65,7 +65,7 @@
 
 		<div id="container">
 			<div id="info_tab">
-				<span id="cs_menu" class="small" onclick="ver_menu_click()">&nbsp;</span>
+				<span id="cs_menu" onclick="ver_menu_click()"><i class="icon-circle-arrow-left icon-large">&nbsp;</i></span>
 				<!-- BEGIN: empty_page_title -->
 				<span class="cell_left">{PAGE_TITLE}</span>
 				<!-- END: empty_page_title -->
@@ -124,34 +124,15 @@
 
 	<footer id="footer">
 		<div class="copyright">
-			<!-- BEGIN: nv_queries -->
-			{NV_DB_NUM_QUERIES}: [COUNT_SHOW_QUERIES] <a href="#queries" onclick="nv_show_hidden('div_hide',2);">{NV_SHOW_QUERIES}</a>
+			<!-- BEGIN: memory_time_usage -->
+			[MEMORY_TIME_USAGE]
 			<br/>
-			<!-- END: nv_queries -->
+			<!-- END: memory_time_usage -->
 			<strong>{NV_COPYRIGHT}</strong>
 		</div>
 		<div class="imgstat">
 			<a title="NUKEVIET CMS" href="http://nukeviet.vn" target="_blank"><img alt="NUKEVIET CMS" src="{NV_BASE_SITEURL}images/banner_nukeviet_88x15.jpg" width="88" height="15" /></a>
 			<br/>
-		</div>
-		<div id="div_hide" class="clearfix" style="visibility:hidden;display:none;">
-			<!-- BEGIN: nv_show_queries -->
-			<table id="queries" class="tab1">
-				<caption> {NV_SHOW_QUERIES} </caption>
-				<colgroup>
-					<col style="width:18px"/>
-					<col />
-				</colgroup>
-				<tbody>
-					<!-- BEGIN: nv_show_queries_loop -->
-					<tr>
-						<td class="{NV_FIELD1}">&nbsp;</td>
-						<td> {NV_FIELD} </td>
-					</tr>
-					<!-- END: nv_show_queries_loop -->
-				</tbody>
-			</table>
-			<!-- END: nv_show_queries -->
 		</div>
 	</footer>
 	<!-- #footer -->

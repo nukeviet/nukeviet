@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.public}:</td>
-					<td><input title="{LANG.public}" type="checkbox" name="public" value="1"{DATA.public} /></td>
+					<td><input title="{LANG.publics}" type="checkbox" name="publics" value="1"{DATA.publics} /></td>
 				</tr>
 				<!-- BEGIN: siteus -->
 				<tr>
@@ -112,7 +112,8 @@
 			<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
 			<td>
 			<!-- BEGIN: action -->
-			<a class="edit_icon" href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a>&nbsp;-&nbsp;<a class="delete_icon" class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+			<i class="icon-edit icon-large">&nbsp;</i> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp; 
+			<i class="icon-trash icon-large">&nbsp;</i> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 			<!-- END: action -->
 			</td>
 		</tr>

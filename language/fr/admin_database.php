@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Français
-* @Createdate Jun 21, 2010, 12:30:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -21,10 +22,10 @@ $lang_module['database_info'] = 'Infos générales de Base de données &ldquo;<s
 $lang_module['tables_info'] = 'Tables de base de données &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_caption'] = 'Infos générales de table &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Infos générales des champs de table &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['db_host_info'] = 'Serveur MySql';
-$lang_module['db_sql_version'] = 'Version de MySql';
-$lang_module['db_proto_info'] = 'Version de MySql';
-$lang_module['server'] = 'Nom du serveur MySql';
+$lang_module['db_host_info'] = 'Serveur';
+$lang_module['db_sql_version'] = 'Version';
+$lang_module['db_proto_info'] = 'Version';
+$lang_module['server'] = 'Nom du serveur';
 $lang_module['db_dbname'] = 'Nom de Base de données';
 $lang_module['db_uname'] = 'Nom d\'utilisateur';
 $lang_module['db_charset'] = 'Charset';

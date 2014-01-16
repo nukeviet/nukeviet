@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/10/2011, 23:14
  */
 
@@ -14,18 +15,18 @@ $page_title = $lang_module['pagetitle'];
 $array_config = array();
 if( $nv_Request->isset_request( 'save', 'post' ) )
 {
-	$array_config['pageTitleMode'] = nv_substr( $nv_Request->get_title( 'pageTitleMode', 'post', '', 1), 0, 255 );
+	$pageTitleMode = $nv_Request->get_title( 'pageTitleMode', 'post', '', 1);
 
-	foreach( $array_config as $config_name => $config_value )
-	{
-		$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('sys', 'site', " . $db->dbescape( $config_name ) . ", " . $db->dbescape( $config_value ) . ")" );
-	}
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'" );
+	$sth->bindParam( ':config_value', $pageTitleMode, PDO::PARAM_STR, 255 );
+	$sth->execute();
+
 	nv_delete_all_cache( false );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();
 }
 
-if( ! isset( $global_config['pageTitleMode'] ) or empty( $global_config['pageTitleMode'] ) ) $global_config['pageTitleMode'] = "pagetitle - sitename";
+if( ! isset( $global_config['pageTitleMode'] ) or empty( $global_config['pageTitleMode'] ) ) $global_config['pageTitleMode'] = 'pagetitle - sitename';
 
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );

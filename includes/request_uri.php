@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 5, 2011 11:29:47 AM
  */
 
@@ -23,7 +24,7 @@ $base_siteurl_quote = nv_preg_quote( $base_siteurl );
 
 $request_uri = preg_replace( '/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI'] );
 
-if( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
+if( $global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] AND preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
 {
 	$_GET[NV_NAME_VARIABLE] = 'page';
 	$_GET[NV_OP_VARIABLE] = $matches[1];

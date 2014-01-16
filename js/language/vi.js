@@ -1,7 +1,8 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author  VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-13-2010 15:24
  */
 
@@ -42,13 +43,16 @@ var nv_login_failed = "Lỗi: Vì một lý do nào đó, hệ thống không ti
 var nv_content_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận thông tin của bạn. Hãy thử khai báo lại lần nữa";
 var nv_rangelength = "Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự.";
 
-//contact
+// Contact
 var nv_fullname = "Họ tên nhập không hợp lệ.";
 var nv_title = "Bạn chưa nhập tiêu đề.";
 var nv_content = "Nội dung không được để trống.";
 var nv_code = "Mã chống spam không đúng.";
 
-//ErrorMessage
+// Message before unload
+var nv_msgbeforeunload = "Dữ liệu chưa được lưu. Bạn sẽ bị mất dữ liệu nếu thoát khỏi trang này. Bạn có đồng ý thoát không?";
+
+// ErrorMessage
 var NVJL = [];
 NVJL.errorRequest = "Đã có lỗi xảy ra trong quá trình truy vấn.";
 NVJL.errortimeout = "Thời gian chờ thực thi yêu cầu đã quá thời lượng cho phép.";

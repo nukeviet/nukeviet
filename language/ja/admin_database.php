@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -21,10 +22,10 @@ $lang_module['database_info'] = 'General information about the database &ldquo;<
 $lang_module['tables_info'] = '&ldquo;<strong>%s</strong>&rdquo;データベースのテーブル';
 $lang_module['table_caption'] = '&ldquo;<strong>%s</strong>&rdquo;テーブル情報';
 $lang_module['table_row_caption'] = '&ldquo;<strong>%s</strong>&rdquo;テーブルのフィールド情報';
-$lang_module['db_host_info'] = 'MySQLサーバ';
-$lang_module['db_sql_version'] = 'MySQLバージョン';
-$lang_module['db_proto_info'] = 'MySQLのプロトコルバージョン';
-$lang_module['server'] = 'MySQLサーバ名';
+$lang_module['db_host_info'] = 'サーバ';
+$lang_module['db_sql_version'] = 'バージョン';
+$lang_module['db_proto_info'] = 'のプロトコルバージョン';
+$lang_module['server'] = 'サーバ名';
 $lang_module['db_dbname'] = 'データベース名';
 $lang_module['db_uname'] = 'ユーザ名';
 $lang_module['db_charset'] = 'コード群';

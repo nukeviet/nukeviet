@@ -57,7 +57,10 @@
 				<td> {CONTENT_TD.full_name} </td>
 				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 				<td> {CONTENT_TD.regdate} </td>
-				<td> &nbsp;&nbsp;<a class="edit_icon" href="{ACTIVATE_URL}">{LANG.awaiting_active}</a>&nbsp;&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a></td>
+				<td>
+					<i class="icon-edit icon-large">&nbsp;</i> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
+					<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+				</td>
 			</tr>
 			<!-- END: xusers -->
 		</tbody>

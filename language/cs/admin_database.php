@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language česky
-* @Createdate Aug 01, 2010, 02:40:00 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Aug 01, 2010, 02:40:00 PM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -21,12 +22,12 @@ $lang_module['database_info'] = 'Informace o databázi "<strong>%s </ strong>"';
 $lang_module['tables_info'] = 'Tabulka v databázi "<strong>%s </ strong>"';
 $lang_module['table_caption'] = 'Tabulka o informaci "<strong>%s </ strong>"';
 $lang_module['table_row_caption'] = 'Tabulka o informaci soubory "<strong>%s </ strong>"';
-$lang_module['db_host_info'] = 'Mysql server';
-$lang_module['db_sql_version'] = 'Mysql verze';
-$lang_module['db_proto_info'] = 'Mysql TCP / IP verze';
-$lang_module['server'] = 'MySQL serveru jméno';
+$lang_module['db_host_info'] = 'server';
+$lang_module['db_sql_version'] = 'verze';
+$lang_module['db_proto_info'] = 'TCP / IP verze';
+$lang_module['server'] = 'serveru jméno';
 $lang_module['db_dbname'] = 'Název databáze';
-$lang_module['db_uname'] = 'Uživatelské jméno mysql';
+$lang_module['db_uname'] = 'Uživatelské jméno';
 $lang_module['db_charset'] = 'Kódování data';
 $lang_module['db_collation'] = 'Porovnání';
 $lang_module['db_time_zone'] = 'Časové pásmo';

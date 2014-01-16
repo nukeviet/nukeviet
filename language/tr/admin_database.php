@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Oct 25, 2012, 03:11:41 PM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -21,12 +22,12 @@ $lang_module['database_info'] = 'Veritabanı bilgi &ldquo;<strong>%s</strong>&rd
 $lang_module['tables_info'] = 'Tabloda veri tabanı &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_caption'] = 'Tablo bilgileri &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Tablo alan bilgileri &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['db_host_info'] = 'MySQL sunucusu';
-$lang_module['db_sql_version'] = 'Mysql sürümü';
-$lang_module['db_proto_info'] = 'Mysql TCP / IP sürüm';
-$lang_module['server'] = 'Mysql sunucu adı';
+$lang_module['db_host_info'] = 'Sunucusu';
+$lang_module['db_sql_version'] = 'Sürümü';
+$lang_module['db_proto_info'] = 'TCP / IP sürüm';
+$lang_module['server'] = 'Sunucu adı';
 $lang_module['db_dbname'] = 'Veritabanı adı';
-$lang_module['db_uname'] = 'mysql Kullanıcı adı';
+$lang_module['db_uname'] = 'Kullanıcı adı';
 $lang_module['db_charset'] = 'Karakter seti';
 $lang_module['db_collation'] = 'Karşılaştırma';
 $lang_module['db_time_zone'] = 'Saat dilimi';

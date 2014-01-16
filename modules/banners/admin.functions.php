@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 2:29
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 2:29
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
@@ -41,10 +42,10 @@ function nv_CreateXML_bannerPlan()
 
 	include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 
-	$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `act` = 1";
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE act = 1';
+	$result = $db->query( $sql );
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$id = intval( $row['id'] );
 		if( $global_config['idsite'] )
@@ -70,24 +71,17 @@ function nv_CreateXML_bannerPlan()
 		$plan['width'] = $row['width'];
 		$plan['height'] = $row['height'];
 
-		$query2 = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid` = " . $id . " AND (`exp_time` > " . NV_CURRENTTIME . " OR `exp_time` = 0 ) AND `act` = 1";
+		$query2 = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid = ' . $id . ' AND (exp_time > ' . NV_CURRENTTIME . ' OR exp_time = 0 ) AND act = 1';
 
-		if( $row['form'] == "sequential" )
+		if( $row['form'] == 'sequential' )
 		{
-			$query2 .= " ORDER BY `weight` ASC";
-		}
-
-		$result2 = $db->sql_query( $query2 );
-		$numrows2 = $db->sql_numrows( $result2 );
-
-		if( empty( $numrows2 ) )
-		{
-			continue;
+			$query2 .= ' ORDER BY weight ASC';
 		}
 
 		$plan['banners'] = array();
 
-		while( $row2 = $db->sql_fetchrow( $result2 ) )
+		$result2 = $db->query( $query2 );
+		while( $row2 = $result2->fetch() )
 		{
 			$plan['banners'][] = array(
 				'id' => $row2['id'],
@@ -106,9 +100,11 @@ function nv_CreateXML_bannerPlan()
 				'exp_time' => $row2['exp_time']
 			);
 		}
-
-		$array2XML = new Array2XML();
-		$array2XML->saveXML( $plan, 'plan', $xmlfile, $encoding = $global_config['site_charset'] );
+		if( sizeof( $plan['banners'] ) )
+		{
+			$array2XML = new Array2XML();
+			$array2XML->saveXML( $plan, 'plan', $xmlfile, $encoding = $global_config['site_charset'] );
+		}
 	}
 }
 
@@ -122,25 +118,25 @@ function nv_fix_banner_weight( $pid )
 {
 	global $db, $global_config;
 
-	list( $pid, $form ) = $db->sql_fetchrow( $db->sql_query( "SELECT `id`, `form` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE `id`=" . intval( $pid ) . "" ) );
+	list( $pid, $form ) = $db->query( 'SELECT id, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval( $pid ) )->fetch( 3 );
 
-	if( $pid > 0 and $form == "sequential" )
+	if( $pid > 0 and $form == 'sequential' )
 	{
-		$query_weight = "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `pid`=" . $pid . " ORDER BY `weight` ASC, `id` DESC";
-		$result = $db->sql_query( $query_weight );
+		$query_weight = 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid=' . $pid . ' ORDER BY weight ASC, id DESC';
+		$result = $db->query( $query_weight );
 
 		$weight = 0;
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			++$weight;
-			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
-			$db->sql_query( $sql );
+			$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'];
+			$db->query( $sql );
 		}
 	}
-	elseif( $pid > 0 and $form == "random" )
+	elseif( $pid > 0 and $form == 'random' )
 	{
-		$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `weight`='0' WHERE `pid`=" . $pid;
-		$db->sql_query( $sql );
+		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET weight=0 WHERE pid=' . $pid;
+		$db->query( $sql );
 	}
 }
 
@@ -156,7 +152,7 @@ function nv_add_client_theme( $contents )
 
 	$xtpl = new XTemplate( 'add_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -174,7 +170,7 @@ function nv_edit_client_theme( $contents )
 
 	$xtpl = new XTemplate( 'edit_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -222,7 +218,7 @@ function nv_cl_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $cl_id => $values )
 		{
-			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
+			$values['checked'] = $values['act'][1] ? ' checked="checked"' : '';
 
 			$xtpl->assign( 'ROW', $values );
 			$xtpl->parse( 'main.loop' );
@@ -313,14 +309,14 @@ function nv_add_plan_theme( $contents )
 
 	$xtpl = new XTemplate( 'add_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
 		$xtpl->assign( 'BLANG', array(
 			'key' => $key,
 			'title' => $blang['name'],
-			'selected' => $key == $contents['blang'][4] ? ' selected=\'selected\'' : ''
+			'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.blang' );
 	}
@@ -330,7 +326,7 @@ function nv_add_plan_theme( $contents )
 		$xtpl->assign( 'FORM', array(
 			'key' => $form,
 			'title' => $form,
-			'selected' => $form == $contents['form'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $form == $contents['form'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.form' );
 	}
@@ -341,7 +337,7 @@ function nv_add_plan_theme( $contents )
 	}
 	else
 	{
-		$description = "<textarea name=\"" . $contents['description'][1] . "\" id=\"" . $contents['description'][1] . "\" style=\"width:" . $contents['description'][3] . ";height:" . $contents['description'][4] . "\">" . $contents['description'][2] . "</textarea>\n";
+		$description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
 	}
 
 	$xtpl->assign( 'DESCRIPTION', $description );
@@ -362,14 +358,14 @@ function nv_edit_plan_theme( $contents )
 
 	$xtpl = new XTemplate( 'edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTENTS', $contents );
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['blang'][3] as $key => $blang )
 	{
 		$xtpl->assign( 'BLANG', array(
 			'key' => $key,
 			'title' => $blang['name'],
-			'selected' => $key == $contents['blang'][4] ? ' selected=\'selected\'' : ''
+			'selected' => $key == $contents['blang'][4] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.blang' );
 	}
@@ -379,7 +375,7 @@ function nv_edit_plan_theme( $contents )
 		$xtpl->assign( 'FORM', array(
 			'key' => $form,
 			'title' => $form,
-			'selected' => $form == $contents['form'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $form == $contents['form'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.form' );
 	}
@@ -390,7 +386,7 @@ function nv_edit_plan_theme( $contents )
 	}
 	else
 	{
-		$description = "<textarea name=\"" . $contents['description'][1] . "\" id=\"" . $contents['description'][1] . "\" style=\"width:" . $contents['description'][3] . ";height:" . $contents['description'][4] . "\">" . $contents['description'][2] . "</textarea>\n";
+		$description = '<textarea name="' . $contents['description'][1] . '" id="' . $contents['description'][1] . '" style="width:' . $contents['description'][3] . ';height:' . $contents['description'][4] . '">' . $contents['description'][2] . '</textarea>\n';
 	}
 
 	$xtpl->assign( 'DESCRIPTION', $description );
@@ -441,7 +437,7 @@ function nv_plist_theme( $contents )
 	{
 		foreach( $contents['rows'] as $pl_id => $values )
 		{
-			$values['checked'] = $values['act'][1] ? " checked=\"checked\"" : "";
+			$values['checked'] = $values['act'][1] ? ' checked="checked"' : '';
 
 			$xtpl->assign( 'ROW', $values );
 			$xtpl->parse( 'main.loop' );
@@ -530,14 +526,14 @@ function nv_add_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
 		$xtpl->assign( 'PLAN', array(
 			'key' => $pid,
 			'title' => $ptitle,
-			'selected' => $pid == $contents['plan'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.plan' );
 	}
@@ -547,7 +543,7 @@ function nv_add_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array(
 			'key' => $clid,
 			'title' => $clname,
-			'selected' => $clid == $contents['client'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $clid == $contents['client'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.client' );
 	}
@@ -556,7 +552,7 @@ function nv_add_banner_theme( $contents )
 		$xtpl->assign( 'TARGET', array(
 			'key' => $target,
 			'title' => $ptitle,
-			'selected' => $target == $contents['target'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $target == $contents['target'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.target' );
 	}
@@ -585,14 +581,14 @@ function nv_edit_banner_theme( $contents )
 		return $xtpl->text( 'upload_blocked' );
 	}
 
-	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class=\'error\'' : '' );
+	$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
 
 	foreach( $contents['plan'][2] as $pid => $ptitle )
 	{
 		$xtpl->assign( 'PLAN', array(
 			'key' => $pid,
 			'title' => $ptitle,
-			'selected' => $pid == $contents['plan'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.plan' );
 	}
@@ -602,7 +598,7 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'CLIENT', array(
 			'key' => $clid,
 			'title' => $clname,
-			'selected' => $clid == $contents['client'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $clid == $contents['client'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.client' );
 	}
@@ -612,7 +608,7 @@ function nv_edit_banner_theme( $contents )
 		$xtpl->assign( 'TARGET', array(
 			'key' => $target,
 			'title' => $ptitle,
-			'selected' => $target == $contents['target'][3] ? ' selected=\'selected\'' : ''
+			'selected' => $target == $contents['target'][3] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.target' );
 	}
@@ -678,8 +674,8 @@ function nv_b_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $b_id => $values )
 		{
-			$values['delfile'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=del_banner&amp;id=" . $b_id;
-			$values['checked'] = $values['act'][1] == '1' ? " checked=\"checked\"" : "";
+			$values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del_banner&amp;id=' . $b_id;
+			$values['checked'] = $values['act'][1] == '1' ? ' checked="checked"' : '';
 
 			$xtpl->assign( 'ROW', $values );
 
@@ -770,7 +766,7 @@ function nv_show_stat_theme( $contents )
 			$xtpl->assign( 'KEY', $key );
 			$xtpl->assign( 'ROW', $value );
 
-			if( ! preg_match( "/^[0-9]+$/", $key ) )
+			if( ! preg_match( '/^[0-9]+$/', $key ) )
 			{
 				$xtpl->parse( 'main.loop.t1' );
 			}

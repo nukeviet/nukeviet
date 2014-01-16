@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/14/2010 0:50
  */
 
@@ -11,18 +12,13 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 
-if( empty( $id ) )
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
-
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id;
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-if( $numrows != 1 ) die( 'Stop!!!' );
-
-$row = $db->sql_fetchrow( $result );
 
 $file_name = $row['file_name'];
 $file_ext = $row['file_ext'];
@@ -56,22 +52,22 @@ if( empty( $contents['file_allowed_ext'] ) )
 	exit();
 }
 
-$sql = "SELECT `id`,`login`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
-$result = $db->sql_query( $sql );
+$sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
+$result = $db->query( $sql );
 
 $clients = array();
-while( $cl_row = $db->sql_fetchrow( $result ) )
+while( $cl_row = $result->fetch() )
 {
-	$clients[$cl_row['id']] = $cl_row['full_name'] . " (" . $cl_row['login'] . ")";
+	$clients[$cl_row['id']] = $cl_row['full_name'] . ' (' . $cl_row['login'] . ')';
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
-$result = $db->sql_query( $sql );
+$sql = 'SELECT id,title,blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
+$result = $db->query( $sql );
 
 $plans = array();
-while( $pl_row = $db->sql_fetchrow( $result ) )
+while( $pl_row = $result->fetch() )
 {
-	$plans[$pl_row['id']] = $pl_row['title'] . " (" . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
+	$plans[$pl_row['id']] = $pl_row['title'] . ' (' . ( ! empty( $pl_row['blang'] ) ? $language_array[$pl_row['blang']]['name'] : $lang_module['blang_all'] ) . ')';
 }
 
 if( empty( $plans ) )
@@ -97,8 +93,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$target = '_blank';
 	}
 
-	if( ! empty( $publ_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date ) ) $publ_date = '';
-	if( ! empty( $exp_date ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date ) ) $exp_date = '';
+	if( ! empty( $publ_date ) and ! preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date ) ) $publ_date = '';
+	if( ! empty( $exp_date ) and ! preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date ) ) $exp_date = '';
 
 	if( ! empty( $clid ) and ! isset( $clients[$clid] ) ) $clid = 0;
 	if( $click_url == 'http://' ) $click_url = '';
@@ -178,7 +174,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		if( empty( $error ) )
 		{
-			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $publ_date, $m ) )
+			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m ) )
 			{
 				$publtime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 				if( $publtime < $row['add_time'] ) $publtime = $row['add_time'];
@@ -188,7 +184,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$publtime = $publtime = $row['add_time'];
 			}
 
-			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $exp_date, $m ) )
+			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m ) )
 			{
 				$exptime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 				if( $exptime <= $publtime ) $exptime = $publtime;
@@ -198,14 +194,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$exptime = 0;
 			}
 
-			list( $pid_old ) = $db->sql_fetchrow( $db->sql_query( "SELECT `pid` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . intval( $id ) . "" ) );
+			$pid_old = $db->query( 'SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . intval( $id ) )->fetchColumn();
 
-			$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `title`=" . $db->dbescape( $title ) . ", `pid`=" . $pid . ", `clid`=" . $clid . ",
-				 `file_name`=" . $db->dbescape( $file_name ) . ", `file_ext`=" . $db->dbescape( $file_ext ) . ", `file_mime`=" . $db->dbescape( $file_mime ) . ",
-				 `width`=" . $width . ", `height`=" . $height . ", `file_alt`=" . $db->dbescape( $file_alt ) . ", `imageforswf`=" . $db->dbescape( $imageforswf ) . ",
-				 `click_url`=" . $db->dbescape( $click_url ) . ", `target`=" . $db->dbescape( $target ) . ",
-				 `publ_time`=" . $publtime . ", `exp_time`=" . $exptime . " WHERE `id`=" . $id;
-			$db->sql_query( $sql );
+			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->quote( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
+				 file_name=" . $db->quote( $file_name ) . ", file_ext=" . $db->quote( $file_ext ) . ", file_mime=" . $db->quote( $file_mime ) . ",
+				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->quote( $file_alt ) . ", imageforswf=" . $db->quote( $imageforswf ) . ",
+				 click_url=" . $db->quote( $click_url ) . ", target=" . $db->quote( $target ) . ",
+				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
+			$db->query( $sql );
 
 			if( $pid_old != $pid )
 			{

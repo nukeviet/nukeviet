@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/7/2010 2:23
  */
 
@@ -13,11 +14,10 @@ if( ! $nv_Request->isset_request( 'id', 'post,get' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
-$sql = "SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,f.alias AS fun_alias, m.custom_title AS mod_custom_title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE f.func_id=" . $id . " AND f.in_module=m.title";
-$result = $db->sql_query( $sql );
-$row = $db->sql_fetchrow( $result );
+$sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,f.alias AS fun_alias, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id=' . $id . ' AND f.in_module=m.title';
+$row = $db->query( $sql )->fetch();
 
-if( ! isset($row['func_title']) OR $row['func_title']=='main' ) die( "NO_" . $id );
+if( ! isset($row['func_title']) OR $row['func_title']=='main' ) die( 'NO_' . $id );
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -26,12 +26,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	if( empty( $fun_alias ) ) $fun_alias = $row['func_title'];
 	$fun_alias = strtolower( change_alias( $fun_alias ) );
 
-	$sql = "UPDATE `" . NV_MODFUNCS_TABLE . "` SET `alias`=" . $db->dbescape( $fun_alias ) . " WHERE `func_id`=" . $id;
-	$db->sql_query( $sql );
+	$sth = $db->prepare('UPDATE ' . NV_MODFUNCS_TABLE . ' SET alias= :alias WHERE func_id=' . $id );
+	$sth->bindParam( ':alias', $fun_alias, PDO::PARAM_STR );
+	$sth->execute();
 
 	nv_del_moduleCache( 'modules' );
 
-	die( "OK|show_funcs|action" );
+	die( 'OK|show_funcs|action' );
 }
 else
 {

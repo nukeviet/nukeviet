@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 3:21
  */
 
@@ -131,17 +132,16 @@ function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
 	}
 	else
 	{
-		if( ( $result = $db->sql_query( $sql ) ) !== false )
+		if( ( $result = $db->query( $sql ) ) !== false )
 		{
 			$a = 0;
-			while( $row = $db->sql_fetch_assoc( $result ) )
+			while( $row = $result->fetch() )
 			{
 				$key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
 				$list[$key2] = $row;
 				++$a;
 			}
-
-			$db->sql_freeresult( $result );
+			$result->closeCursor();
 
 			$cache = serialize( $list );
 			nv_set_cache( $cache_file, $cache );

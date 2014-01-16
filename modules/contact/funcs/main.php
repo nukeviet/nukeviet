@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -25,9 +26,9 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	$email_list = array();
 
-	$sql = "SELECT `email`, `admins` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` =" . $cid;
-	$result = $db->sql_query( $sql );
-	list( $email, $admins ) = $db->sql_fetchrow( $result );
+	$sql = 'SELECT email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . $cid;
+	$result = $db->query( $sql );
+	list( $email, $admins ) = $result->fetch( 3 );
 
 	if( ! empty( $email ) )
 	{
@@ -36,14 +37,14 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	if( ! empty( $admins ) )
 	{
-		$admins = array_map( "trim", explode( ";", $admins ) );
+		$admins = array_map( 'trim', explode( ';', $admins ) );
 
 		$a_l = array();
 		foreach( $admins as $adm )
 		{
-			if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $adm ) )
+			if( preg_match( '/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $adm ) )
 			{
-				$adm2 = array_map( "trim", explode( "/", $adm ) );
+				$adm2 = array_map( 'trim', explode( '/', $adm ) );
 
 				if( $adm2[3] == 1 )
 				{
@@ -56,10 +57,10 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		{
 			$a_l = implode( ',', $a_l );
 
-			$sql = "SELECT t2.email as admin_email FROM `" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (" . $a_l . ")";
-			$result = $db->sql_query( $sql );
+			$sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (' . $a_l . ')';
+			$result = $db->query( $sql );
 
-			while( $row = $db->sql_fetchrow( $result ) )
+			while( $row = $result->fetch() )
 			{
 				if( nv_check_valid_email( $row['admin_email'] ) == '' )
 				{
@@ -83,7 +84,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 }
 
 //Danh sach cac bo phan
-$sql = "SELECT `id`, `full_name`, `phone`, `fax`, `email`, `note` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `act`=1";
+$sql = 'SELECT id, full_name, phone, fax, email, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE act=1';
 $array_rows = nv_db_cache( $sql, 'id' );
 
 $page_title = $module_info['custom_title'];
@@ -160,33 +161,39 @@ if( ! empty( $array_rows ) )
 
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_send` VALUES
-				(NULL , " . $fpart . ", " . $db->dbescape( $ftitle ) . ", " . $db->dbescape( $fcon ) . ",
-				" . NV_CURRENTTIME . ", " . $sender_id . ", " . $db->dbescape( $fname ) . ", " . $db->dbescape( $femail ) . ",
-				" . $db->dbescape( $fphone ) . ", " . $db->dbescape( $client_info['ip'] ) . ", 0, 0, '', 0, 0);";
-			$db->sql_query( $sql );
-
-			$website = "<a href=\"" . $global_config['site_url'] . "\">" . $global_config['site_name'] . "</a>";
-			$fcon .= "<br /><br />----------------------------------------<br /><br />";
-
-			if( empty( $fphone ) )
+			$sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES
+				(" . $fpart . ", :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0, '', 0, 0)" );
+			$sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );
+			$sth->bindParam( ':content', $fcon, PDO::PARAM_STR, strlen( $fcon ) );
+			$sth->bindParam( ':sender_name', $fname, PDO::PARAM_STR );
+			$sth->bindParam( ':sender_email', $femail, PDO::PARAM_STR );
+			$sth->bindParam( ':sender_phone', $fphone, PDO::PARAM_STR );
+			$sth->bindParam( ':sender_ip', $client_info['ip'], PDO::PARAM_STR );
+			if( $sth->execute() )
 			{
-				$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name'] );
+				$website = '<a href="' . $global_config['site_url'] . '">' . $global_config['site_name'] . '</a>';
+				$fcon .= '<br /><br />----------------------------------------<br /><br />';
+	
+				if( empty( $fphone ) )
+				{
+					$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name'] );
+				}
+				else
+				{
+					$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name'] );
+				}
+	
+				nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
+	
+				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+				$contents .= call_user_func( 'sendcontact', $url );
+	
+				include NV_ROOTDIR . '/includes/header.php';
+				echo nv_site_theme( $contents );
+				include NV_ROOTDIR . '/includes/footer.php';
+				exit();
 			}
-			else
-			{
-				$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name'] );
-			}
-
-			nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
-
-			$url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA;
-			$contents .= call_user_func( "sendcontact", $url );
-
-			include NV_ROOTDIR . '/includes/header.php';
-			echo nv_site_theme( $contents );
-			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 	}
 }
@@ -204,19 +211,19 @@ elseif( file_exists( $content_file ) )
 }
 
 $array_content = array(
-	"error" => $error,
-	"fpart" => $fpart,
-	"bodytext" => $bodytext,
-	"fname" => $fname,
-	"femail" => $femail,
-	"fcon" => $fcon,
-	"ftitle" => $ftitle,
+	'error' => $error,
+	'fpart' => $fpart,
+	'bodytext' => $bodytext,
+	'fname' => $fname,
+	'femail' => $femail,
+	'fcon' => $fcon,
+	'ftitle' => $ftitle,
 	'fphone' => $fphone
 );
 
 $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$contents = call_user_func( "main_theme", $array_content, $array_rows, $base_url, $checkss );
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$contents = call_user_func( 'main_theme', $array_content, $array_rows, $base_url, $checkss );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

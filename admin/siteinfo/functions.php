@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 5:50
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 5:50
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
@@ -15,9 +16,9 @@ if( $admin_info['level'] == 1 )
 }
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_siteinfo']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_siteinfo']
 );
 
 define( 'NV_IS_FILE_SITEINFO', true );
@@ -30,7 +31,7 @@ define( 'NV_IS_FILE_SITEINFO', true );
 function nv_siteinfo_getlang()
 {
 	global $db_config;
-	$sql = "SELECT DISTINCT `lang` FROM `" . $db_config['prefix'] . "_logs`";
+	$sql = 'SELECT DISTINCT lang FROM ' . $db_config['prefix'] . '_logs';
 	$result = nv_db_cache( $sql, 'lang' );
 	$array_lang = array();
 
@@ -53,7 +54,7 @@ function nv_siteinfo_getlang()
 function nv_siteinfo_getuser()
 {
 	global $db_config;
-	$sql = "SELECT `userid`, `username` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid` IN ( SELECT DISTINCT `userid` FROM `" . $db_config['prefix'] . "_logs` WHERE `userid`!=0 ) ORDER BY `username` ASC";
+	$sql = 'SELECT userid, username FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
 	$result = nv_db_cache( $sql, 'userid' );
 	$array_user = array();
 
@@ -61,7 +62,7 @@ function nv_siteinfo_getuser()
 	{
 		foreach( $result as $row )
 		{
-			$array_user[] = array( "userid" => ( int )$row['userid'], "username" => $row['username'] );
+			$array_user[] = array( 'userid' => ( int )$row['userid'], 'username' => $row['username'] );
 		}
 	}
 
@@ -76,7 +77,7 @@ function nv_siteinfo_getuser()
 function nv_siteinfo_getmodules()
 {
 	global $db_config;
-	$sql = "SELECT DISTINCT `module_name` FROM `" . $db_config['prefix'] . "_logs`";
+	$sql = 'SELECT DISTINCT module_name FROM ' . $db_config['prefix'] . '_logs';
 	$result = nv_db_cache( $sql, 'module_name' );
 	$array_modules = array();
 

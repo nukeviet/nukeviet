@@ -30,11 +30,11 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.alias}: </strong></td>
-				<td><input style="width: 600px" name="alias" id="idalias" type="text" value="{DATA.alias}" maxlength="255" /><img				src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;"  onclick="get_alias('topics', {DATA.topicid});" alt="" height="16" /></td>
+				<td><input style="width: 600px" name="alias" id="idalias" type="text" value="{DATA.alias}" maxlength="255" /> &nbsp; <i class="icon-refresh icon-large" onclick="get_alias('topics', {DATA.topicid});">&nbsp;</i></td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.content_homeimg}:</strong></td>
-				<td><input style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /><input type="button" value="Browse server" name="selectimg" /></td>
+				<td><input style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" /></td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.keywords}: </strong></td>

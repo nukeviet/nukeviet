@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -16,18 +17,16 @@ if( defined( 'NV_EDITOR' ) )
 
 $page_title = $lang_module['siteterms'];
 
-$sql = "SELECT `content` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` WHERE `config`='siteterms_" . NV_LANG_DATA . "'";
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-if( $numrows )
-{
-	$mode = 'edit';
-	$row = $db->sql_fetchrow( $result );
-}
-else
+$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) )
 {
 	$mode = 'add';
 	$row = array( 'content' => '' );
+}
+else
+{
+	$mode = 'edit';
 }
 
 $error = '';
@@ -45,18 +44,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$content = nv_editor_nl2br( $content );
 		if( $mode == 'edit' )
 		{
-			$query = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` SET
-				`content`=" . $db->dbescape( $content ) . ",
-				`edit_time`='" . NV_CURRENTTIME . "'
-				WHERE `config` ='siteterms_" . NV_LANG_DATA . "'";
+			$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET
+				content=" . $db->quote( $content ) . ",
+				edit_time='" . NV_CURRENTTIME . "'
+				WHERE config ='siteterms_" . NV_LANG_DATA . "'";
 		}
 		else
 		{
-			$query = "INSERT INTO `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_config` VALUES (
-				'siteterms_" . NV_LANG_DATA . "', " . $db->dbescape( $content ) . ", " . NV_CURRENTTIME . ")";
+			$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config VALUES (
+				'siteterms_" . NV_LANG_DATA . "', " . $db->quote( $content ) . ", " . NV_CURRENTTIME . ")";
 		}
 
-		if( $db->exec( $query ) > 0 )
+		if( $db->exec( $query ) )
 		{
 			$error = $lang_module['saveok'];
 		}

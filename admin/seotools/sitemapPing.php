@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
  */
 
@@ -101,10 +102,11 @@ $searchEngine = $module = '';
 $searchEngines = array();
 $searchEngines['searchEngine'] = array();
 $info = '';
+
 $sitemapFiles = array();
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM `" . NV_MODFUNCS_TABLE . "` AS f, `" . NV_MODULES_TABLE . "` AS m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
-$result = $db->sql_query( $sql );
-while( $row = $db->sql_fetchrow( $result ) )
+$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " f, " . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
+$result = $db->query( $sql );
+while( $row = $result->fetch() )
 {
 	$sitemapFiles[$row['name']] = $row['title'];
 }

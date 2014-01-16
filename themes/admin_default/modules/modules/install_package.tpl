@@ -1,5 +1,5 @@
 <!-- BEGIN: package_complete -->
-<a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv3_module_{MODULENAME} - {FILESIZE}</span></a>
+<a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv4_module_{MODULENAME} - {FILESIZE}</span></a>
 <!-- END: package_complete -->
 <!-- BEGIN: main -->
 <form name="install_module" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">

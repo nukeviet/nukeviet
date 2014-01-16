@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -44,11 +45,11 @@ class ips
 	}
 
 	/**
- * ips::nv_getenv()
- *
- * @param mixed $key
- * @return
- */
+	 * ips::nv_getenv()
+	 *
+	 * @param mixed $key
+	 * @return
+	 */
 	private function nv_getenv( $key )
 	{
 		if( isset( $_SERVER[$key] ) )
@@ -71,21 +72,21 @@ class ips
 	}
 
 	/**
- * ips::nv_validip()
- *
- * @param mixed $ip
- * @return
- */
+	 * ips::nv_validip()
+	 *
+	 * @param mixed $ip
+	 * @return
+	 */
 	public function nv_validip( $ip )
 	{
 		return filter_var( $ip, FILTER_VALIDATE_IP );
 	}
 
 	/**
- * ips::server_ip()
- *
- * @return
- */
+	 * ips::server_ip()
+	 *
+	 * @return
+	 */
 	public function server_ip()
 	{
 		$serverip = $this->nv_getenv( 'SERVER_ADDR' );
@@ -105,10 +106,10 @@ class ips
 	}
 
 	/**
- * ips::nv_get_clientip()
- *
- * @return
- */
+	 * ips::nv_get_clientip()
+	 *
+	 * @return
+	 */
 	private function nv_get_clientip()
 	{
 		$clientip = '';
@@ -142,10 +143,10 @@ class ips
 	}
 
 	/**
- * ips::nv_get_forwardip()
- *
- * @return
- */
+	 * ips::nv_get_forwardip()
+	 *
+	 * @return
+	 */
 	private function nv_get_forwardip()
 	{
 		if( $this->nv_getenv( 'HTTP_X_FORWARDED_FOR' ) and $this->nv_validip( $this->nv_getenv( 'HTTP_X_FORWARDED_FOR' ) ) )
@@ -171,10 +172,10 @@ class ips
 	}
 
 	/**
- * ips::nv_get_remote_addr()
- *
- * @return
- */
+	 * ips::nv_get_remote_addr()
+	 *
+	 * @return
+	 */
 	private function nv_get_remote_addr()
 	{
 		if( $this->nv_getenv( 'REMOTE_ADDR' ) and $this->nv_validip( $this->nv_getenv( 'REMOTE_ADDR' ) ) )
@@ -185,10 +186,10 @@ class ips
 	}
 
 	/**
- * ips::nv_getip()
- *
- * @return
- */
+	 * ips::nv_getip()
+	 *
+	 * @return
+	 */
 	private function nv_getip()
 	{
 		if( $this->client_ip != 'none' )
@@ -228,10 +229,10 @@ class ips
 	}
 
 	/**
- * ips::nv_chech_proxy()
- *
- * @return
- */
+	 * ips::nv_chech_proxy()
+	 *
+	 * @return
+	 */
 	public function nv_check_proxy()
 	{
 		$proxy = 'No';

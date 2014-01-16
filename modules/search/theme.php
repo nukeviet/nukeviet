@@ -1,23 +1,24 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
 /**
- * main_theme()
+ * search_main_theme()
  *
  * @param mixed $is_search
  * @param mixed $search
  * @param mixed $array_modul
  * @return
  */
-function main_theme( $is_search, $search, $array_modul )
+function search_main_theme( $is_search, $search, $array_modul )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
@@ -78,7 +79,7 @@ function main_theme( $is_search, $search, $array_modul )
  * @param mixed $all_page
  * @return
  */
-function result_theme( $result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $all_page )
+function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $all_page )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
 	$xtpl = new XTemplate( 'result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );

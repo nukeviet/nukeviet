@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/12/2010 12:34
  */
 
@@ -11,52 +12,52 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['banners_list'];
 
-$sql = "SELECT `id`,`full_name` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` ORDER BY `login` ASC";
-$result = $db->sql_query( $sql );
+$sql = "SELECT id,full_name FROM " . NV_BANNERS_GLOBALTABLE. "_clients ORDER BY login ASC";
+$result = $db->query( $sql );
 
 $clients = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$clients[$row['id']] = $row['full_name'];
 }
 
-$sql = "SELECT `id`,`title`,`blang` FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` ORDER BY `blang`, `title` ASC";
-$result = $db->sql_query( $sql );
+$sql = "SELECT id,title,blang FROM " . NV_BANNERS_GLOBALTABLE. "_plans ORDER BY blang, title ASC";
+$result = $db->query( $sql );
 
 $plans = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$plans[$row['id']] = $row['title'] . " (" . ( ! empty( $row['blang'] ) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all'] ) . ")";
 }
 
 $contents = array();
 
-$sql = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE ";
+$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE ";
 if( in_array( $nv_Request->get_int( 'act', 'get' ), array( 2, 3, 4 ) ) )
 {
-	$sql .= "`act`=" . $nv_Request->get_int( 'act', 'get' );
+	$sql .= "act=" . $nv_Request->get_int( 'act', 'get' );
 	$contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int( 'act', 'get' )];
 }
 else
 {
-	$sql .= "`act`=1";
+	$sql .= "act=1";
 	$contents['caption'] = $lang_module['banners_list1'];
 }
 
 if( $nv_Request->get_bool( 'clid', 'get' ) and isset( $clients[$nv_Request->get_int( 'clid', 'get' )] ) )
 {
-	$sql .= " AND `clid`=" . $nv_Request->get_int( 'clid', 'get' );
+	$sql .= " AND clid=" . $nv_Request->get_int( 'clid', 'get' );
 	$contents['caption'] .= " " . sprintf( $lang_module['banners_list_cl'], $clients[$nv_Request->get_int( 'clid', 'get' )] );
 }
 elseif( $nv_Request->get_bool( 'pid', 'get' ) and isset( $plans[$nv_Request->get_int( 'pid', 'get' )] ) )
 {
-	$sql .= " AND `pid`=" . $nv_Request->get_int( 'pid', 'get' );
+	$sql .= " AND pid=" . $nv_Request->get_int( 'pid', 'get' );
 	$contents['caption'] .= " " . sprintf( $lang_module['banners_list_pl'], $plans[$nv_Request->get_int( 'pid', 'get' )] );
 }
 
-$sql .= " ORDER BY `id` DESC";
+$sql .= " ORDER BY id DESC";
 
-$result = $db->sql_query( $sql );
+$result = $db->query( $sql );
 
 $contents['thead'] = array( $lang_module['title'], $lang_module['in_plan'], $lang_module['of_client'], $lang_module['publ_date'], $lang_module['exp_date'], $lang_module['is_act'], $lang_global['actions'] );
 $contents['view'] = $lang_global['detail'];
@@ -64,7 +65,7 @@ $contents['edit'] = $lang_global['edit'];
 $contents['del'] = $lang_global['delete'];
 $contents['rows'] = array();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$client = ! empty( $row['clid'] ) ? $clients[$row['clid']] : "";
 

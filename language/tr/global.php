@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language Türkçe
-* @Createdate Oct 25, 2012, 03:11:41 PM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Oct 25, 2012, 03:11:41 PM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -76,7 +77,6 @@ $lang_global['regdate'] = 'Kayıt tarihi';
 $lang_global['online'] = 'Çevrimiçi';
 $lang_global['hits'] = 'Hitler';
 $lang_global['viewstats'] = 'View counter statistics';
-$lang_global['db_num_queries'] = 'Number queries connected Database';
 $lang_global['last_login'] = 'Son giriş';
 $lang_global['current_login'] = 'Geçerli Giriş';
 $lang_global['your_account'] = 'Hesabınız';
@@ -132,7 +132,6 @@ $lang_global['lang_en'] = 'Türkçe';
 $lang_global['option'] = 'Seçenek';
 $lang_global['value'] = 'değer';
 $lang_global['reviews'] = 'Yorumlar';
-$lang_global['show_queries'] = 'Liste sorgular';
 $lang_global['add'] = 'Ekle';
 $lang_global['edit'] = 'Düzenle';
 $lang_global['delete'] = 'Sil';
