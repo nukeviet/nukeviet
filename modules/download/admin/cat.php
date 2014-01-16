@@ -124,8 +124,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE alias=' . $db->quote( $array['alias'] );
-				$count = $db->query( $sql )->fetchColumn();
+				$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE alias= :alias' );
+				$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
+				$stmt->execute();
+				$count = $stmt->fetchColumn();
 				if( $count )
 				{
 					$error = $lang_module['error_cat1'];
@@ -156,17 +158,23 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_categories (parentid, title, alias, description, who_view, groups_view, who_download, groups_download, weight, status) VALUES (
 				 ' . $array['parentid'] . ',
-				 ' . $db->quote( $array['title'] ) . ',
-				 ' . $db->quote( $array['alias'] ) . ',
-				 ' . $db->quote( $array['description'] ) . ',
+				 :title,
+				 :alias,
+				 :description,
 				 ' . $array['who_view'] . ',
-				 ' . $db->quote( $array['groups_view'] ) . ',
+				 :groups_view,
 				 ' . $array['who_download'] . ',
-				 ' . $db->quote( $array['groups_download'] ) . ',
+				 :groups_download,
 				 ' . $new_weight . ',
 				 1)';
-
-			$catid = $db->insert_id( $sql, 'id' );
+			$data_insert = array();
+			$data_insert['title'] = $array['title'];
+			$data_insert['alias'] = $array['alias'];
+			$data_insert['description'] = $array['description'];
+			$data_insert['groups_view'] = $array['groups_view'];
+			$data_insert['groups_download'] = $array['groups_download'];
+			
+			$catid = $db->insert_id( $sql, 'id', $data_insert );
 
 			if( ! $catid )
 			{
@@ -371,8 +379,11 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			if( ! $is_error )
 			{
-				$sql = 'SELECT COUNT(*) AS count FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id!=' . $catid . ' AND alias=' . $db->quote( $array['alias'] );
-				$count = $db->query( $sql )->fetchColumn();
+				$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id!=' . $catid . ' AND alias= :alias' );
+				$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
+				$stmt->execute();
+				
+				$count = $stmt->fetchColumn();
 				if( $count )
 				{
 					$error = $lang_module['error_cat1'];
@@ -410,19 +421,25 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$new_weight = $row['weight'];
 			}
 
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET
+			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_categories SET
 				 parentid=' . $array['parentid'] . ',
-				 title=' . $db->quote( $array['title'] ) . ',
-				 alias=' . $db->quote( $array['alias'] ) . ',
-				 description=' . $db->quote( $array['description'] ) . ',
+				 title= :title,
+				 alias= :alias,
+				 description= :description,
 				 who_view=' . $array['who_view'] . ',
-				 groups_view=' . $db->quote( $array['groups_view'] ) . ',
+				 groups_view= :groups_view,
 				 who_download=' . $array['who_download'] . ',
-				 groups_download=' . $db->quote( $array['groups_download'] ) . ',
+				 groups_download= :groups_download,
 				 weight=' . $new_weight . '
-				 WHERE id=' . $catid;
+				 WHERE id=' . $catid );
 
-			if( ! $db->exec( $sql ) )
+			$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
+			$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR, strlen( $array['description'] ) );
+			$stmt->bindParam( ':groups_view', $array['groups_view'], PDO::PARAM_STR );
+			$stmt->bindParam( ':groups_download', $array['groups_download'], PDO::PARAM_STR );
+
+			if( ! $stmt->execute() )
 			{
 				$error = $lang_module['error_cat5'];
 				$is_error = true;
@@ -578,17 +595,11 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
+	$sql = 'SELECT id, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
+	$result = $db->query( $sql );
+	list( $catid, $parentid ) = $result->fetch( 3 );
 
 	if( empty( $catid ) )
-	{
-		die( 'NO' );
-	}
-
-	$sql = 'SELECT COUNT(*) AS count, parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
-	$result = $db->query( $sql );
-	list( $count, $parentid ) = $result->fetch( 3 );
-
-	if( $count != 1 )
 	{
 		die( 'NO' );
 	}

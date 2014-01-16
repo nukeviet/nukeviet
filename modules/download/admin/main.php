@@ -152,15 +152,17 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		$alias = change_alias( $array['title'] );
 
-		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias=' . $db->quote( $alias );
-		$result = $db->query( $sql );
-		$is_exists = $result->fetchColumn();
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id!=' . $id . ' AND alias= :alias ');
+		$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+		$stmt->execute();
+		$is_exists = $stmt->fetchColumn();
 
 		if( ! $is_exists )
 		{
-			$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title=' . $db->quote( $array['title'] );
-			$result = $db->query( $sql );
-			$is_exists = $result->fetchColumn();
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title');
+			$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+			$stmt->execute();
+			$is_exists = $stmt->fetchColumn();
 		}
 
 		if( empty( $array['title'] ) )
@@ -220,32 +222,48 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
 			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
 
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
+			$stmt = $db->prepare( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET
 				 catid=" . $array['catid'] . ",
-				 title=" . $db->quote( $array['title'] ) . ",
-				 alias=" . $db->quote( $alias ) . ",
-				 description=" . $db->quote( $array['description'] ) . ",
-				 introtext=" . $db->quote( $array['introtext'] ) . ",
+				 title= :title,
+				 alias= :alias,
+				 description= :description,
+				 introtext= :introtext,
 				 updatetime=" . NV_CURRENTTIME . ",
-				 author_name=" . $db->quote( $array['author_name'] ) . ",
-				 author_email=" . $db->quote( $array['author_email'] ) . ",
-				 author_url=" . $db->quote( $array['author_url'] ) . ",
-				 fileupload=" . $db->quote( $array['fileupload'] ) . ",
-				 linkdirect=" . $db->quote( $array['linkdirect'] ) . ",
-				 version=" . $db->quote( $array['version'] ) . ",
+				 author_name= :author_name,
+				 author_email= :author_email,
+				 author_url= :author_url,
+				 fileupload= :fileupload,
+				 linkdirect= :linkdirect,
+				 version= :version,
 				 filesize=" . $array['filesize'] . ",
-				 fileimage=" . $db->quote( $array['fileimage'] ) . ",
-				 copyright=" . $db->quote( $array['copyright'] ) . ",
+				 fileimage= :fileimage,
+				 copyright= :copyright,
 				 comment_allow=" . $array['comment_allow'] . ",
 				 who_comment=" . $array['who_comment'] . ",
-				 groups_comment=" . $db->quote( $array['groups_comment'] ) . ",
+				 groups_comment= :groups_comment,
 				 who_view=" . $array['who_view'] . ",
-				 groups_view=" . $db->quote( $array['groups_view'] ) . ",
+				 groups_view= :groups_view,
 				 who_download=" . $array['who_download'] . ",
-				 groups_download=" . $db->quote( $array['groups_download'] ) . "
-				 WHERE id=" . $id;
+				 groups_download= :groups_download
+				 WHERE id=" . $id );
 
-			if( ! $db->exec( $sql ) )
+			$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR, strlen( $array['description'] ) );
+			$stmt->bindParam( ':introtext', $array['introtext'], PDO::PARAM_STR, strlen( $array['introtext'] ) );
+			$stmt->bindParam( ':author_name', $array['author_name'], PDO::PARAM_STR );
+			$stmt->bindParam( ':author_email', $array['author_email'], PDO::PARAM_STR );
+			$stmt->bindParam( ':author_url', $array['author_url'], PDO::PARAM_STR );
+			$stmt->bindParam( ':fileupload', $array['fileupload'], PDO::PARAM_STR, strlen( $array['fileupload'] ) );
+			$stmt->bindParam( ':linkdirect', $array['linkdirect'], PDO::PARAM_STR, strlen( $array['linkdirect'] ) );
+			$stmt->bindParam( ':version', $array['version'], PDO::PARAM_STR );
+			$stmt->bindParam( ':fileimage', $array['fileimage'], PDO::PARAM_STR );
+			$stmt->bindParam( ':copyright', $array['copyright'], PDO::PARAM_STR );
+			$stmt->bindParam( ':groups_comment', $array['groups_comment'], PDO::PARAM_STR );
+			$stmt->bindParam( ':groups_view', $array['groups_view'], PDO::PARAM_STR );
+			$stmt->bindParam( ':groups_download', $array['groups_download'], PDO::PARAM_STR );
+
+			if( ! $stmt->execute() )
 			{
 				$is_error = true;
 				$error = $lang_module['file_error1'];
@@ -254,8 +272,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			{
 				if( $report and $array['is_del_report'] )
 				{
-					$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id;
-					$db->query( $sql );
+					$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
