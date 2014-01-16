@@ -38,8 +38,10 @@ function nv_banner_client_checkdata( $cookie )
 		if( isset( $client['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $client['checknum'] ) )
 		{
 			$login = $client['login'];
-			$query = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = ' . $db->quote( $login ) . ' AND act=1';
-			$row = $db->query( $query )->fetch();
+			$stmt = $db->prepare( 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = :login AND act=1');
+			$stmt->bindParam( ':login', $login, PDO::PARAM_STR, strlen($login) );
+			$stmt->execute();
+			$row = $stmt->fetch();
 
 			if( empty( $row ) ) return array();
 

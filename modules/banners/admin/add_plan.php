@@ -10,8 +10,8 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
-$forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
+$forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', '/^form\_([a-zA-Z0-9\_\-]+)\.php$/' );
+$forms = preg_replace( '/^form\_([a-zA-Z0-9\_\-]+)\.php$/', '\\1', $forms );
 
 $error = '';
 
@@ -42,10 +42,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_plans (blang, title, description, form, width, height, act) VALUES (" . $db->quote( $blang ) . ", " . $db->quote( $title ) . ",
-			" . $db->quote( $description ) . ", " . $db->quote( $form ) . ", " . $width . ", " . $height . ", 1)";
-
-		$id = $db->insert_id( $_sql, 'id' );
+		$_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE. '_plans (blang, title, description, form, width, height, act) VALUES ( :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1)';
+		$data_insert = array();
+		$data_insert['blang'] = $blang;
+		$data_insert['title'] = $title;
+		$data_insert['description'] = $description;
+		$data_insert['form'] = $form;
+		$id = $db->insert_id( $_sql, 'id', $data_insert );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid'] );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
