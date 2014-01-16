@@ -44,15 +44,20 @@ function validUserLog( $array_user, $remember, $opid )
 
 	$user = nv_base64_encode( serialize( $user ) );
 
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
-		checknum = " . $db->quote( $checknum ) . ",
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+		checknum = :checknum,
 		last_login = " . NV_CURRENTTIME . ",
-		last_ip = " . $db->quote( $client_info['ip'] ) . ",
-		last_agent = " . $db->quote( $client_info['agent'] ) . ",
-		last_openid = " . $db->quote( $opid ) . ",
+		last_ip = :last_ip,
+		last_agent = :last_agent,
+		last_openid = :opid,
 		remember = " . $remember . "
 		WHERE userid=" . $array_user['userid'] );
 
+	$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
+	$stmt->bindParam( ':last_ip', $client_info['ip'], PDO::PARAM_STR );
+	$stmt->bindParam( ':last_agent', $client_info['agent'], PDO::PARAM_STR );
+	$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
+	$stmt->execute();
 	$live_cookie_time = ( $remember ) ? NV_LIVE_COOKIE_TIME : 0;
 
 	$nv_Request->set_Cookie( 'nvloginhash', $user, $live_cookie_time );

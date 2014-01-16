@@ -326,7 +326,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$weight = $db->query( 'SELECT MAX(weight) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field' )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
-				$dataform['fid'] = $db->insert_id( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field
+				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field
 					(field, weight, field_type, field_choices, sql_choices, match_type,
 					match_regex, func_callback, min_length, max_length,
 					required, show_register, user_editable,
@@ -335,8 +335,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
 					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
-					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', " . $db->quote( $dataform['default_value'] ) . ")", "fid" );
+					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', :default_value)";
 
+				$data_insert = array();
+				$data_insert['default_value'] = $dataform['default_value'];
+				$dataform['fid'] = $db->insert_id( $sql, 'fid', $data_insert );
 				if( $dataform['fid'] )
 				{
 					$type_date = '';
@@ -380,8 +383,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				show_profile = '" . $dataform['show_profile'] . "',
 				class = '" . $dataform['class'] . "',
 				language='" . serialize( $language ) . "',
-				default_value=" . $db->quote( $dataform['default_value'] ) . "
+				default_value= :default_value
 				WHERE fid = " . $dataform['fid'];
+
+			$stmt = $db->prepare ($query) ;
+			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
+			$stmt->execute();
 			$save = $db->query( $query );
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
 			{
