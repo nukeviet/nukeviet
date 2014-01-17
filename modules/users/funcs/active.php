@@ -29,10 +29,10 @@ if( empty( $userid ) or empty( $checknum ) )
 }
 
 $del = NV_CURRENTTIME - 86400;
-$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE regdate < " . $del;
+$sql = 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE regdate < ' . $del;
 $db->query( $sql );
 
-$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $userid;
+$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $userid;
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
@@ -52,10 +52,13 @@ if( $checknum == $row['checknum'] )
 		$is_change_email = true;
 
 		$userid_change_email = intval( substr( $row['username'], 20 ) );
-		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET email=" . $db->quote( $row['email'] ) . " WHERE userid=" . $userid_change_email;
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET email= :email WHERE userid=' . $userid_change_email );
+		$stmt->bindParam( ':email', $row['email'], PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
-			$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $db->quote( $userid ) );
+			$stmt = $db->prepare( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid= :userid' );
+			$stmt->bindParam( ':userid', $userid, PDO::PARAM_STR );
+			$stmt->execute();
 			$check_update_user = true;
 		}
 	}
@@ -65,38 +68,48 @@ if( $checknum == $row['checknum'] )
 					username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					" . $db->quote( $row['username'] ) . ",
-					" . $db->quote( nv_md5safe( $row['username'] ) ) . ",
-					" . $db->quote( $row['password'] ) . ",
-					" . $db->quote( $row['email'] ) . ",
-					" . $db->quote( $row['full_name'] ) . ",
+					:username,
+					:md5_username,
+					:password,
+					:email,
+					:full_name,
 					'', '', 0,
-					" . $db->quote( $row['regdate'] ) . ",
-					" . $db->quote( $row['question'] ) . ",
-					" . $db->quote( $row['answer'] ) . ",
+					:regdate,
+					:question,
+					:answer,
 					'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
-		$userid = $db->insert_id( $sql, 'userid' );
+
+		$data_insert = array();
+		$data_insert['username'] = $row['username'];
+		$data_insert['md5_username'] = nv_md5safe( $row['username'] );
+		$data_insert['password'] = $row['password'];
+		$data_insert['email'] = $row['email'];
+		$data_insert['full_name'] = $row['full_name'];
+		$data_insert['regdate'] = $row['regdate'];
+		$data_insert['question'] = $row['question'];
+		$data_insert['answer'] = $row['answer'];
+		$userid = $db->insert_id( $sql, 'userid', $data_insert );
 		if( $userid )
 		{
 			$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 			$query_field = array();
 			$query_field['userid'] = $userid;
-			$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY fid ASC" );
+			$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
 			while( $row_f = $result_field->fetch() )
 			{
 				$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->quote( $row_f['default_value'] );
 			}
 
-			if( $db->exec( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" ) )
+			if( $db->exec( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
 			{
-				$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid=" . $row['userid'] );
+				$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
 				$check_update_user = true;
 
-				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . " | " . $client_info['ip'], 0 );
+				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . ' | ' . $client_info['ip'], 0 );
 			}
 			else
 			{
-				$db->query( "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] );
+				$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] );
 			}
 		}
 	}

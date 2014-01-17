@@ -15,9 +15,11 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 $alias = change_alias( $title );
 
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = ' . $db->quote( $alias ) )->fetchColumn();
+$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = :alias' );
+$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR, strlen($alias));
+$stmt->execute();
 
-if( intval( $number ) > 0 )
+if( $stmt->fetchColumn() )
 {
 	$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data )->fetchColumn();
 	$weight = intval( $weight ) + 1;

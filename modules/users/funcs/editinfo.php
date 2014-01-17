@@ -81,20 +81,26 @@ function nv_check_email_change( $email )
 	$pattern = implode( ".?", $pattern );
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->quote( $pattern );
-	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
+	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
+	$stmt->execute();
+	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email RLIKE " . $db->quote( $pattern );
-	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email RLIKE :pattern' );
+	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
+	$stmt->execute();
+	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE userid!=" . $user_info['userid'] . " AND email RLIKE " . $db->quote( $pattern );
-	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
+	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
+	$stmt->execute();
+	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
 	return '';
 }
 
 $array_field_config = array();
-$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -103,8 +109,8 @@ while( $row_field = $result_field->fetch() )
 	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
 	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
-		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
-		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1];
+		$row_field['sql_choices'] = explode( '|', $row_field['sql_choices'] );
+		$query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
 		$result = $db->query( $query );
 		$weight = 0;
 		while( list( $key, $val ) = $result->fetch( 3 ) )
@@ -124,7 +130,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	define( 'NV_IS_CKEDITOR', true );
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ;
 
-	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
+	function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = '' )
 	{
 		// Create class instance.
 		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
@@ -151,13 +157,13 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
 		}
 		// Change default textarea attributes
-		$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
+		$CKEditor->textareaAttributes = array( 'cols' => 80, 'rows' => 10 );
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
 }
 
-$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $user_info['userid'];
+$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
 $query = $db->query( $sql );
 $row = $query->fetch();
 
@@ -229,11 +235,12 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			}
 			else
 			{
-				$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "
-					SET question=" . $db->quote( $array_data['your_question'] ) . ",
-					answer=" . $db->quote( $array_data['answer'] ) . "
-					WHERE userid=" . $user_info['userid'];
-				$db->query( $sql );
+				$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '
+					SET question= :question, answer= :answer
+					WHERE userid=' . $user_info['userid'] );
+				$stmt->bindParam( ':question', $array_data['your_question'], PDO::PARAM_STR );
+				$stmt->bindParam( ':answer', $array_data['answer'], PDO::PARAM_STR );
+				$stmt->execute();
 
 				$contents = user_info_exit( $lang_module['change_question_ok'] );
 				$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
@@ -270,7 +277,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 }
 else
 {
-	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info WHERE userid=" . $user_info['userid'];
+	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
 	$result = $db->query( $sql );
 	$custom_fields = $result->fetch();
 }
@@ -318,9 +325,9 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
-	if( $array_data['gender'] != "M" and $array_data['gender'] != "F" ) $array_data['gender'] = '';
+	if( $array_data['gender'] != 'M' and $array_data['gender'] != 'F' ) $array_data['gender'] = '';
 
-	if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $array_data['birthday'], $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array_data['birthday'], $m ) )
 	{
 		$array_data['birthday'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -329,13 +336,13 @@ if( $checkss == $array_data['checkss'] )
 		$array_data['birthday'] = 0;
 	}
 
-	if( ! empty( $array_data['yim'] ) and ! preg_match( "/^([a-zA-Z0-9\_\.]+)$/", $array_data['yim'] ) )
+	if( ! empty( $array_data['yim'] ) and ! preg_match( '/^([a-zA-Z0-9\_\.]+)$/', $array_data['yim'] ) )
 	{
 		$array_data['yim'] = $row['yim'];
 		$error[] = $lang_module['yahoo'];
 	}
 
-	if( $array_data['gender'] == "N" ) $array_data['gender'] = '';
+	if( $array_data['gender'] == 'N' ) $array_data['gender'] = '';
 
 	if( $array_data['view_mail'] != 1 ) $array_data['view_mail'] = 0;
 
@@ -348,8 +355,9 @@ if( $checkss == $array_data['checkss'] )
 			$checknum = md5( $checknum . $email_new );
 			$md5_username = nv_md5safe( $array_data['username'] );
 
-			$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE md5username=" . $db->quote( $md5_username );
-			$db->query( $sql );
+			$stmt = $db->prepare( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE md5username= :md5username' );
+			$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
+			$stmt->execute();
 			$error_email_change = nv_check_email_change( $email_new );
 			if( ! empty( $error_email_change ) )
 			{
@@ -359,15 +367,20 @@ if( $checkss == $array_data['checkss'] )
 			{
 				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
-					" . $db->quote( $md5_username ) . ",
+					:md5_username,
 					'',
-					" . $db->quote( $email_new ) . ",
+					:email_new,
 					'',
 					" . NV_CURRENTTIME . ",
 					'',
 					'',
-					" . $db->quote( $checknum ) . ", '')";
-				$userid_check = $db->insert_id( $sql, 'userid' );
+					:checknum ";
+
+				$data_insert = array();
+				$data_insert['md5_username'] = $md5_username;
+				$data_insert['email_new'] = $email_new;
+				$data_insert['checknum'] = $checknum;
+				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
 
 				if( $userid_check > 0 )
 				{
@@ -389,16 +402,23 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
-	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
-		username=" . $db->quote( $array_data['username'] ) . ",
-		md5username=" . $db->quote( nv_md5safe( $array_data['username'] ) ) . ",
-		email=" . $db->quote( $array_data['email'] ) . ",
-		full_name=" . $db->quote( $array_data['full_name'] ) . ",
-		gender=" . $db->quote( $array_data['gender'] ) . ",
-		birthday=" . $db->quote( $array_data['birthday'] ) . ",
-		view_mail=" . $db->quote( $array_data['view_mail'] ) . "
-		WHERE userid=" . $user_info['userid'];
-	$db->query( $sql );
+	$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET
+		username= :username,
+		md5username= :md5username,
+		email= :email,
+		full_name= :full_name,
+		gender= :gender,
+		birthday= :birthday,
+		view_mail= :view_mail
+		WHERE userid=' . $user_info['userid'] );
+	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
+	$stmt->bindParam( ':md5username', nv_md5safe( $array_data['username'] ), PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $array_data['username'], PDO::PARAM_STR );
+	$stmt->bindParam( ':full_name', $array_data['full_name'], PDO::PARAM_STR );
+	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
+	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
+	$stmt->bindParam( ':view_mail', $array_data['view_mail'], PDO::PARAM_STR );
+	$stmt->execute();
 
 	if( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
 	{
@@ -430,11 +450,12 @@ if( $checkss == $array_data['checkss'] )
 			if( file_exists( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename ) )
 			{
 				//@chmod($file_name, 0644);
-				$file_name = str_replace( NV_ROOTDIR . "/", '', $file_name );
+				$file_name = str_replace( NV_ROOTDIR . '/', '', $file_name );
 				@nv_deletefile( $upload_info['name'] );
 			}
-			$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->quote( $file_name ) . " WHERE userid=" . $user_info['userid'];
-			$db->query( $sql );
+			$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $user_info['userid'] );
+			$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR );
+			$stmt->execute();
 		}
 		else
 		{
@@ -446,8 +467,8 @@ if( $checkss == $array_data['checkss'] )
 	$sec = 3;
 	if( ! empty( $error ) )
 	{
-		$error = implode( "<br />", $error );
-		$info = $info . ", " . sprintf( $lang_module['editinfo_error'], "<span style=\"color:#fb490b;\">" . $error . "</span>" );
+		$error = implode( '<br />', $error );
+		$info = $info . ', ' . sprintf( $lang_module['editinfo_error'], '<span style="color:#fb490b;">' . $error . '</span>' );
 		$sec = 5;
 	}
 	$query_field = array();
@@ -459,9 +480,9 @@ if( $checkss == $array_data['checkss'] )
 		require NV_ROOTDIR . '/modules/users/fields.check.php';
 		if( empty( $error ) )
 		{
-			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info SET " . implode( ', ', $query_field ) . " WHERE userid=" . $user_info['userid'] );
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $user_info['userid'] );
 			$contents = user_info_exit( $info );
-			$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+			$contents .= '<meta http-equiv="refresh" content="' . $sec . ';url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_site_theme( $contents );
@@ -475,7 +496,7 @@ if( $checkss == $array_data['checkss'] )
 	else
 	{
 		$contents = user_info_exit( $info );
-		$contents .= "<meta http-equiv=\"refresh\" content=\"" . $sec . ";url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+		$contents .= '<meta http-equiv="refresh" content="' . $sec . ';url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
@@ -486,7 +507,7 @@ else
 {
 	$array_data['full_name'] = $row['full_name'];
 	$array_data['gender'] = $row['gender'];
-	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( "d/m/Y", $row['birthday'] ) : '';
+	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
 	$array_data['view_mail'] = intval( $row['view_mail'] );
 }
 

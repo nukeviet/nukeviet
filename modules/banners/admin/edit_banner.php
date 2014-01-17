@@ -61,7 +61,7 @@ while( $cl_row = $result->fetch() )
 	$clients[$cl_row['id']] = $cl_row['full_name'] . ' (' . $cl_row['login'] . ')';
 }
 
-$sql = 'SELECT id,title,blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
+$sql = 'SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
 $result = $db->query( $sql );
 
 $plans = array();
@@ -196,13 +196,21 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			$pid_old = $db->query( 'SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . intval( $id ) )->fetchColumn();
 
-			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->quote( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
-				 file_name=" . $db->quote( $file_name ) . ", file_ext=" . $db->quote( $file_ext ) . ", file_mime=" . $db->quote( $file_mime ) . ",
-				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->quote( $file_alt ) . ", imageforswf=" . $db->quote( $imageforswf ) . ",
-				 click_url=" . $db->quote( $click_url ) . ", target=" . $db->quote( $target ) . ",
-				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
-			$db->query( $sql );
-
+			$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
+				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
+				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
+				 click_url= :click_url, target= :target,
+				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id );
+			$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_ext', $file_ext, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_mime', $file_mime, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_alt', $file_alt, PDO::PARAM_STR );
+			$stmt->bindParam( ':imageforswf', $imageforswf, PDO::PARAM_STR );
+			$stmt->bindParam( ':click_url', $click_url, PDO::PARAM_STR );
+			$stmt->bindParam( ':target', $target, PDO::PARAM_STR );
+			$stmt->execute();
+			
 			if( $pid_old != $pid )
 			{
 				nv_fix_banner_weight( $pid );

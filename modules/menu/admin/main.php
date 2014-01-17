@@ -71,13 +71,11 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	elseif( $arr_menu['id'] == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
-			" . $db->quote( $arr_menu['title'] ) . ",
-			'',
-			" . $db->quote( $arr_menu['description'] ) . "
-		)";
-
-		if( $db->insert_id( $sql, 'id' ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES ( :title, '', :description )";
+		$data_insert = array();
+		$data_insert['title'] = $arr_menu['title'];
+		$data_insert['description'] = $arr_menu['description'];
+		if( $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -90,12 +88,10 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
-			title=' . $db->quote( $arr_menu['title'] ) . ',
-			description = ' . $db->quote( $arr_menu['description'] ) . '
-			WHERE id =' . $arr_menu['id'];
-
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET title= :title, description = :description WHERE id =' . $arr_menu['id'] );
+		$stmt->bindParam( ':title', $arr_menu['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $arr_menu['description'], PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );

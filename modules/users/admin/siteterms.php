@@ -44,18 +44,22 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$content = nv_editor_nl2br( $content );
 		if( $mode == 'edit' )
 		{
-			$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET
-				content=" . $db->quote( $content ) . ",
+			$stmt = $db->prepare ( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET
+				content= :content,
 				edit_time='" . NV_CURRENTTIME . "'
-				WHERE config ='siteterms_" . NV_LANG_DATA . "'";
+				WHERE config ='siteterms_" . NV_LANG_DATA . "'");
+				
+			$stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen($content));
+			$stmt->execute();
 		}
 		else
 		{
-			$query = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config VALUES (
-				'siteterms_" . NV_LANG_DATA . "', " . $db->quote( $content ) . ", " . NV_CURRENTTIME . ")";
+			$stmt = $db->prepare ( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config VALUES (
+				'siteterms_" . NV_LANG_DATA . "', :content, " . NV_CURRENTTIME . ")");
 		}
-
-		if( $db->exec( $query ) )
+		
+		$stmt->bindParam(':content', $content, PDO::PARAM_STR, strlen( $content ) );
+		if( $stmt->execute() )
 		{
 			$error = $lang_module['saveok'];
 		}

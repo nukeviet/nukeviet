@@ -77,7 +77,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'country';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_country=' . $db->quote( $data_val );
+				$where .= ' AND click_country= ?';
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat3'], ( isset( $countries[$data_val] ) ? $countries[$data_val][1] : $data_val ), nv_monthname( $data_month ), $current_year );
 			}
@@ -88,7 +88,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'browse';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_browse_name=' . $db->quote( $data_val );
+				$where .= ' AND click_browse_name= ?';
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat4'], '{pattern}', nv_monthname( $data_month ), $current_year );
 			}
@@ -99,7 +99,7 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 			{
 				$data_ext = 'os';
 				$data_val = $nv_Request->get_string( 'val', 'get' );
-				$where .= ' AND click_os_name=' . $db->quote( $data_val );
+				$where .= ' AND click_os_name= ?';
 				$base_url .= '&amp;ext=' . $data_ext . '&amp;val=' . $data_val;
 				$caption = sprintf( $lang_module['show_list_stat5'], '{pattern}', nv_monthname( $data_month ), $current_year );
 			}
@@ -110,8 +110,12 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 $db->sqlreset()
 	->select( 'COUNT(*)' )->from( NV_BANNERS_GLOBALTABLE. '_click')
 	->where( $where );
+	
+$stmt = $db->prepare( $db->sql()) ;
+$stmt->bindParam(1, $data_val, PDO::PARAM_STR, strlen($data_val));
+$stmt->execute();
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$all_page = $stmt->fetchColumn();
 if( empty( $all_page ) ) die( 'Wrong URL' );
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );

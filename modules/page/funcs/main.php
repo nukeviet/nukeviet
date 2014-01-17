@@ -59,8 +59,10 @@ if( $id )
 
 			$cache['keywords'] = $key_words;
 
-			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords=' . $db->quote( $key_words ) . ' WHERE id =' . $id;
-			$db->query( $query );
+			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords= :keywords WHERE id =' . $id );
+			$stmt->bindParam( ':keywords', $keywords, PDO::PARAM_STR, strlen( $keywords ) );
+			$stmt->execute();
+
 		}
 
 		$cache['alias'] = $row['alias'];

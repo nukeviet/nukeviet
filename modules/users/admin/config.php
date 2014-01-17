@@ -22,7 +22,7 @@ function valid_name_config( $array_name )
 	foreach( $array_name as $v )
 	{
 		$v = trim( $v );
-		if( ! empty( $v ) and preg_match( "/^[a-z0-9\-\.\_]+$/", $v ) )
+		if( ! empty( $v ) and preg_match( '/^[a-z0-9\-\.\_]+$/', $v ) )
 		{
 			$array_retutn[] = $v;
 		}
@@ -63,7 +63,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['openid_mode'] = $nv_Request->get_int( 'openid_mode', 'post', 0 );
 	$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 	$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
-	$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : "";
+	$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
 	$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 
 	// Cau hinh cho facebook
@@ -83,18 +83,23 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	if( ! empty( $array_config['deny_email'] ) )
 	{
 		$array_config['deny_email'] = valid_name_config( explode( ',', $array_config['deny_email'] ) );
-		$array_config['deny_email'] = implode( "|", $array_config['deny_email'] );
+		$array_config['deny_email'] = implode( '|', $array_config['deny_email'] );
 	}
 
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_email'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$stmt->bindParam( ':content', $array_config['deny_email'], PDO::PARAM_STR, strlen( $array_config['deny_email'] ) );
+	$stmt->execute();
 
 	$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
 	if( ! empty( $array_config['deny_name'] ) )
 	{
 		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
-		$array_config['deny_name'] = implode( "|", $array_config['deny_name'] );
+		$array_config['deny_name'] = implode( '|', $array_config['deny_name'] );
 	}
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['deny_name'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$stmt->bindParam( ':content', $array_config['deny_name'], PDO::PARAM_STR, strlen( $array_config['deny_name'] ) );
+	$stmt->execute();
+
 
 	$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
 	if( ! empty( $array_config['password_simple'] ) )
@@ -102,9 +107,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['password_simple'] = array_map( 'trim', explode( ',', $array_config['password_simple'] ) );
 		$array_config['password_simple'] = array_unique( $array_config['password_simple'] );
 		asort($array_config['password_simple']);
-		$array_config['password_simple'] = implode( "|", $array_config['password_simple'] );
+		$array_config['password_simple'] = implode( '|', $array_config['password_simple'] );
 	}
-	$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content=" . $db->quote( $array_config['password_simple'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
+	$stmt->execute();
 
 	$access_admin = array();
 	$access_admin['access_addus'] = $nv_Request->get_typed_array( 'access_addus', 'post', 'bool' );
@@ -126,13 +133,13 @@ else
 	$array_config = $global_config;
 }
 
-$array_config['allowmailchange'] = ! empty( $array_config['allowmailchange'] ) ? " checked=\"checked\"" : "";
-$array_config['allowuserpublic'] = ! empty( $array_config['allowuserpublic'] ) ? " checked=\"checked\"" : "";
-$array_config['allowquestion'] = ! empty( $array_config['allowquestion'] ) ? " checked=\"checked\"" : "";
-$array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] ) ? " checked=\"checked\"" : "";
-$array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? " checked=\"checked\"" : "";
-$array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? " checked=\"checked\"" : "";
-$array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? " checked=\"checked\"" : "";
+$array_config['allowmailchange'] = ! empty( $array_config['allowmailchange'] ) ? ' checked="checked"' : '';
+$array_config['allowuserpublic'] = ! empty( $array_config['allowuserpublic'] ) ? ' checked="checked"' : '';
+$array_config['allowquestion'] = ! empty( $array_config['allowquestion'] ) ? ' checked="checked"' : '';
+$array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] ) ? ' checked="checked"' : '';
+$array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
+$array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
+$array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
 $servers = $array_config['openid_servers'];
 
 $openid_servers = array();
@@ -143,7 +150,7 @@ if( ! empty( $openid_servers ) )
 	$array_keys = array_keys( $openid_servers );
 	foreach( $array_keys as $server )
 	{
-		$checked = ( ! empty( $servers ) and in_array( $server, $servers ) ) ? " checked=\"checked\"" : "";
+		$checked = ( ! empty( $servers ) and in_array( $server, $servers ) ) ? ' checked="checked"' : '';
 		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
 	}
 }
@@ -186,9 +193,9 @@ if( ! in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . 
 for( $id = 3; $id < 20; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( NV_UNICKMIN == $id ) ? " selected=\"selected\"" : "",
-		"value" => $id
+		'id' => $id,
+		'select' => ( NV_UNICKMIN == $id ) ? ' selected="selected"' : '',
+		'value' => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_unickmin' );
@@ -196,9 +203,9 @@ for( $id = 3; $id < 20; $id++ )
 for( $id = 20; $id < 100; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( NV_UNICKMAX == $id ) ? " selected=\"selected\"" : "",
-		"value" => $id
+		'id' => $id,
+		'select' => ( NV_UNICKMAX == $id ) ? ' selected="selected"' : '',
+		'value' => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_unickmax' );
@@ -208,9 +215,9 @@ $lang_global['unick_type_0'] = $lang_module['unick_type_0'];
 for( $id = 0; $id < 5; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( $global_config['nv_unick_type'] == $id ) ? " selected=\"selected\"" : "",
-		"value" => $lang_global['unick_type_' . $id]
+		'id' => $id,
+		'select' => ( $global_config['nv_unick_type'] == $id ) ? ' selected="selected"' : '',
+		'value' => $lang_global['unick_type_' . $id]
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_unick_type' );
@@ -219,9 +226,9 @@ for( $id = 0; $id < 5; $id++ )
 for( $id = 5; $id < 20; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( NV_UPASSMIN == $id ) ? " selected=\"selected\"" : "",
-		"value" => $id
+		'id' => $id,
+		'select' => ( NV_UPASSMIN == $id ) ? ' selected="selected"' : '',
+		'value' => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_upassmin' );
@@ -229,9 +236,9 @@ for( $id = 5; $id < 20; $id++ )
 for( $id = 20; $id < 255; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( NV_UPASSMAX == $id ) ? " selected=\"selected\"" : "",
-		"value" => $id
+		'id' => $id,
+		'select' => ( NV_UPASSMAX == $id ) ? ' selected="selected"' : '',
+		'value' => $id
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_upassmax' );
@@ -241,9 +248,9 @@ $lang_global['upass_type_0'] = $lang_module['upass_type_0'];
 for( $id = 0; $id < 5; $id++ )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( $global_config['nv_upass_type'] == $id ) ? " selected=\"selected\"" : "",
-		"value" => $lang_global['upass_type_' . $id]
+		'id' => $id,
+		'select' => ( $global_config['nv_upass_type'] == $id ) ? ' selected="selected"' : '',
+		'value' => $lang_global['upass_type_' . $id]
 	);
 	$xtpl->assign( 'OPTION', $array );
 	$xtpl->parse( 'main.nv_upass_type' );
@@ -252,9 +259,9 @@ for( $id = 0; $id < 5; $id++ )
 foreach( $array_registertype as $id => $titleregister )
 {
 	$array = array(
-		"id" => $id,
-		"select" => ( $array_config['allowuserreg'] == $id ) ? " selected=\"selected\"" : "",
-		"value" => $titleregister
+		'id' => $id,
+		'select' => ( $array_config['allowuserreg'] == $id ) ? ' selected="selected"' : '',
+		'value' => $titleregister
 	);
 	$xtpl->assign( 'REGISTERTYPE', $array );
 	$xtpl->parse( 'main.registertype' );
@@ -266,9 +273,9 @@ foreach( $nv_files as $value )
 	if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
 	{
 		$array = array(
-			"id" => $value,
-			"select" => ( $value == DIR_FORUM ) ? " selected=\"selected\"" : "",
-			"value" => $value
+			'id' => $value,
+			'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
+			'value' => $value
 		);
 		$xtpl->assign( 'DIR_FORUM', $array );
 		$xtpl->parse( 'main.dir_forum' );
@@ -277,11 +284,11 @@ foreach( $nv_files as $value )
 
 foreach( $array_whoview as $id => $titleregister )
 {
-	$select = ( $array_config['whoviewuser'] == $id ) ? " selected=\"selected\"" : "";
+	$select = ( $array_config['whoviewuser'] == $id ) ? ' selected="selected"' : '';
 	$array = array(
-		"id" => $id,
-		"select" => $select,
-		"value" => $titleregister
+		'id' => $id,
+		'select' => $select,
+		'value' => $titleregister
 	);
 	$xtpl->assign( 'WHOVIEW', $array );
 	$xtpl->parse( 'main.whoviewlistuser' );

@@ -146,11 +146,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			if( $exptime != 0 and $exptime <= $publtime ) $exptime = $publtime;
 
 			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-				( " . $db->quote( $title ) . ", " . $pid . ", " . $clid . ", " . $db->quote( $file_name ) . ", " . $db->quote( $file_ext ) . ", " . $db->quote( $file_mime ) . ",
-				" . $width . ", " . $height . ", " . $db->quote( $file_alt ) . ", '', " . $db->quote( $click_url ) . ", " . $db->quote( $target ) . ", " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
+				( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
+				" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 				0, 1, 0)";
-
-			$id = $db->insert_id( $_sql, 'id' );
+			
+			$data_insert = array();
+			$data_insert['title'] = $title;
+			$data_insert['file_name'] = $file_name;
+			$data_insert['file_ext'] = $file_ext;
+			$data_insert['file_mime'] = $file_mime;
+			$data_insert['file_alt'] = $file_alt;
+			$data_insert['click_url'] = $click_url;
+			$data_insert['target'] = $target;
+			$id = $db->insert_id( $_sql, 'id', $data_insert );
 
 			nv_fix_banner_weight( $pid );
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid'] );

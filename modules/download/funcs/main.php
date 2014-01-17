@@ -63,8 +63,12 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 					$total = $total + $point;
 					++$click;
+					$rating_detail = $total . '|' . $click ;
 
-					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail=' . $db->quote( $total . '|' . $click ) . ' WHERE id=' . $id );
+					$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail= :rating_detail WHERE id=' . $id );
+					$stmt->bindParam( ':rating_detail', $rating_detail, PDO::PARAM_STR );
+					$stmt->execute();
+					
 				}
 
 				if( $total and $click )

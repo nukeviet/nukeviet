@@ -40,8 +40,10 @@ else
 		if( preg_match( '/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
 		{
-			$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username = ' . $db->quote( $md5 ) );
-			$item = $result->fetch();
+			$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username = :md5' );
+			$stmt->bindParam( ':md5', $md5, PDO::PARAM_STR );
+			$stmt->execute();
+			$item = $stmt->fetch();
 			if( ! empty( $item ) )
 			{
 				if( change_alias( $item['username'] ) != $matches[1] )

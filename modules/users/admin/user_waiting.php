@@ -42,17 +42,25 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
 		last_login, last_ip, last_agent, last_openid, idsite
 		) VALUES (
-		" . $db->quote( $row['username'] ) . ",
-		" . $db->quote( nv_md5safe( $row['username'] ) ) . ",
-		" . $db->quote( $row['password'] ) . ",
-		" . $db->quote( $row['email'] ) . ",
-		" . $db->quote( $row['full_name'] ) . ",
+		:username,
+		:md5_username,
+		:password,
+		:email,
+		:full_name,
 		'', '', 0, " . $row['regdate'] . ",
-		" . $db->quote( $row['question'] ) . ",
-		" . $db->quote( $row['answer'] ) . ",
+		:question,
+		:answer,
 		'', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
-
-	$userid = $db->insert_id( $sql, 'userid' );
+	
+	$data_insert = array();
+	$data_insert['username'] = $row['username'];
+	$data_insert['md5_username'] = nv_md5safe( $row['username'] );
+	$data_insert['password'] = $row['password'];
+	$data_insert['email'] = $row['email'];
+	$data_insert['full_name'] = $row['full_name'];
+	$data_insert['question'] = $row['question'];
+	$data_insert['answer'] = $row['answer'];
+	$userid = $db->insert_id( $sql, 'userid', $data_insert );
 	if( $userid )
 	{
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
