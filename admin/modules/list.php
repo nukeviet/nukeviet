@@ -91,7 +91,7 @@ while( $row = $result->fetch() )
 	$weight_list[] = $row['weight'];
 
 	$mod['title'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'], $row['title'] );
-	$mod['version'] = preg_replace_callback( "/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/", "nv_parse_vers", $row['mod_version'] );
+	$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['mod_version'] );
 	$mod['custom_title'] = $row['custom_title'];
 	$mod['in_menu'] = array( $row['in_menu'], "nv_chang_in_menu('" . $row['title'] . "');" );
 	$mod['submenu'] = array( $row['submenu'], "nv_chang_submenu('" . $row['title'] . "');" );
