@@ -29,7 +29,7 @@ if( ! empty( $setmodule ) )
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
 		$sth = $db->prepare( 'SELECT module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title=:title');
-		$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
+		$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
 		$modrow = $sth->fetch();
 		if( ! empty( $modrow ) )
@@ -63,10 +63,10 @@ if( ! empty( $setmodule ) )
 					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss) VALUES
 					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)
 				" );
-				$sth->bindParam(':title', $setmodule, PDO::PARAM_STR );
-				$sth->bindParam(':module_file', $modrow['module_file'], PDO::PARAM_STR );
-				$sth->bindParam(':module_data', $modrow['module_data'], PDO::PARAM_STR );
-				$sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR );
+				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
+				$sth->bindParam( ':module_file', $modrow['module_file'], PDO::PARAM_STR );
+				$sth->bindParam( ':module_data', $modrow['module_data'], PDO::PARAM_STR );
+				$sth->bindParam( ':custom_title', $custom_title, PDO::PARAM_STR );
 				$sth->execute();
 			}
 			catch (PDOException $e)

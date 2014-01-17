@@ -16,7 +16,7 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $alias = change_alias( $title );
 
 $stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id !=' . $id . ' AND alias = :alias' );
-$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR, strlen($alias));
+$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 $stmt->execute();
 
 if( $stmt->fetchColumn() )

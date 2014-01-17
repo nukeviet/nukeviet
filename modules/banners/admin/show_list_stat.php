@@ -110,9 +110,9 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 $db->sqlreset()
 	->select( 'COUNT(*)' )->from( NV_BANNERS_GLOBALTABLE. '_click')
 	->where( $where );
-	
+
 $stmt = $db->prepare( $db->sql()) ;
-$stmt->bindParam(1, $data_val, PDO::PARAM_STR, strlen($data_val));
+$stmt->bindParam( 1, $data_val, PDO::PARAM_STR, strlen( $data_val ) );
 $stmt->execute();
 
 $all_page = $stmt->fetchColumn();

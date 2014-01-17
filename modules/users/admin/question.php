@@ -24,11 +24,11 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 	{
 		die( 'NO' );
 	}
-	$stmt = $db->prepare ( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET
 		title= :title, edit_time=" . NV_CURRENTTIME . "
-		WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'");
-	
-	$stmt->bindParam(':title', $title, PDO::PARAM_STR, strlen( $title ) );
+		WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'" );
+
+	$stmt->bindParam( ':title', $title, PDO::PARAM_STR, strlen( $title ) );
 	if( ! $stmt->execute() )
 	{
 		die( 'NO' );
@@ -53,9 +53,9 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
 		(title, lang, weight, add_time, edit_time) VALUES
 		( :title, " .  NV_LANG_DATA  . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-		
+
 	$data_insert = array();
-	$data_insert['title'] = $title;	
+	$data_insert['title'] = $title;
 	if( ! $db->insert_id( $_sql, 'qid', $data_insert ) )
 	{
 		die( 'NO' );

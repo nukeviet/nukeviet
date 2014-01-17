@@ -206,7 +206,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 
 		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE title= :title ');
-		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR, strlen($array['title']));
+		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
 		$stmt->execute();
 		$is_exists = $stmt->fetchColumn();
 
@@ -341,7 +341,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
 				 " . $array['catid'] . ", :title, :alias, :description, :introtext, " . $row['uploadtime'] . ", " . NV_CURRENTTIME . ", " . $row['user_id'] . ", :user_name, :author_name, :author_email, :author_url, :fileupload, :linkdirect, :version, " . $array['filesize'] . ", :fileimage, 1, :copyright, 0, 0, " . $array['comment_allow'] . ", " . $array['who_comment'] . ", :groups_comment, " . $array['who_view'] . ", :groups_view, " . $array['who_download'] . ", :groups_download, 0, '')";
-			
+
 			$data_insert = array();
 			$data_insert['title'] = $array['title'];
 			$data_insert['alias'] = $alias;
@@ -359,7 +359,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$data_insert['groups_comment'] = $array['groups_comment'];
 			$data_insert['groups_view'] = $array['groups_view'];
 			$data_insert['groups_download'] = $array['groups_download'];
-			
+
 			if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 			{
 				$is_error = true;

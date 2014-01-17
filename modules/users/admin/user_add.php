@@ -61,31 +61,31 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
-	$stmt->bindParam(':title', nv_md5safe( $_user['username'] ), PDO::PARAM_STR, strlen(nv_md5safe( $_user['username'] )));
+	$stmt->bindParam( ':title', nv_md5safe( $_user['username'] ), PDO::PARAM_STR, strlen(nv_md5safe( $_user['username'] )) );
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
-	$stmt->bindParam(':md5username', nv_md5safe( $_user['username'] ), PDO::PARAM_STR, strlen(nv_md5safe( $_user['username'] )));
+	$stmt->bindParam( ':md5username', nv_md5safe( $_user['username'] ), PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
-	$stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_reg  chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' );
-	$stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email_reg = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_openid chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE email= :email' );
-	$stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email_openid = $stmt->fetchColumn();
 
@@ -216,8 +216,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-						$stmt = $db->prepare ( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid);
-						$stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR, strlen($file_name));
+						$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid );
+						$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR, strlen( $file_name) );
 						$stmt->execute();
 					}
 				}

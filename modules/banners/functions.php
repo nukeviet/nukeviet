@@ -39,7 +39,7 @@ function nv_banner_client_checkdata( $cookie )
 		{
 			$login = $client['login'];
 			$stmt = $db->prepare( 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = :login AND act=1');
-			$stmt->bindParam( ':login', $login, PDO::PARAM_STR, strlen($login) );
+			$stmt->bindParam( ':login', $login, PDO::PARAM_STR );
 			$stmt->execute();
 			$row = $stmt->fetch();
 

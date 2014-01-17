@@ -386,7 +386,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				default_value= :default_value
 				WHERE fid = " . $dataform['fid'];
 
-			$stmt = $db->prepare ($query) ;
+			$stmt = $db->prepare( $query ) ;
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
 			$stmt->execute();
 			$save = $db->query( $query );

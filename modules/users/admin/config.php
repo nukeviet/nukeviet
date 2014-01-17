@@ -110,7 +110,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['password_simple'] = implode( '|', $array_config['password_simple'] );
 	}
 	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
-	$stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
+	$stmt->bindParam( ':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
 	$stmt->execute();
 
 	$access_admin = array();

@@ -193,7 +193,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 				" . intval( $post['active_type'] ) . ",
 				1
 			)";
-			
+
 			$data_insert = array();
 			$data_insert['title'] = $post['title'];
 			$data_insert['link'] = $post['link'];
@@ -246,7 +246,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	else
 	{
 		$stmt = $db->prepare( "SELECT count(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE title= :title AND parentid=" . $post['parentid'] . " AND mid=" . $post['mid'] . " AND id NOT IN (" . $post['id'] . ")" );
-		$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR, strlen($post['title']));
+		$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
 		$stmt->execute();
 		if( $stmt->fetchColumn() )
 		{
@@ -270,12 +270,12 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			WHERE id=" . intval( $post['id'] ));
 
 			$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
-			$stmt->bindParam( ':link', $post['link'], PDO::PARAM_STR, strlen($post['link']));
-			$stmt->bindParam( ':note', $post['note'], PDO::PARAM_STR, strlen($post['note']));
-			$stmt->bindParam( ':groups_view', $post['groups_view'], PDO::PARAM_STR, strlen($post['groups_view']));
-			$stmt->bindParam( ':module_name', $post['module_name'], PDO::PARAM_STR, strlen($post['module_name']));
-			$stmt->bindParam( ':op', $post['op'], PDO::PARAM_STR, strlen($post['op']));
-			$stmt->bindParam( ':css', $post['css'], PDO::PARAM_STR, strlen($post['css']));
+			$stmt->bindParam( ':link', $post['link'], PDO::PARAM_STR );
+			$stmt->bindParam( ':note', $post['note'], PDO::PARAM_STR );
+			$stmt->bindParam( ':groups_view', $post['groups_view'], PDO::PARAM_STR );
+			$stmt->bindParam( ':module_name', $post['module_name'], PDO::PARAM_STR );
+			$stmt->bindParam( ':op', $post['op'], PDO::PARAM_STR );
+			$stmt->bindParam( ':css', $post['css'], PDO::PARAM_STR );
 
 			if( $stmt->execute() )
 			{
@@ -478,9 +478,9 @@ if( $nv_Request->isset_request( 'action', 'post' ) )
 	if( empty( $module ) ) die( $lang_module['add_error_module'] );
 
 	$stmt = $db->prepare( 'SELECT module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
-	$stmt->bindParam( ':module', $module, PDO::PARAM_STR, strlen($module));
+	$stmt->bindParam( ':module', $module, PDO::PARAM_STR );
 	$stmt->execute();
-	
+
 	list( $module_f, $module_d ) = $stmt->fetch( 3 );
 
 	if( empty($module_f) ) die( $lang_module['add_error_module_exist'] );

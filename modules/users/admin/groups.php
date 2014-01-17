@@ -325,8 +325,8 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			}
 
 			// Kiểm tra trùng tên nhóm
-			$stmt = $db->prepare ('SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))' );
-			$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))' );
+			$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
 			$stmt->execute();
 			if( $stmt->fetchColumn() )
 			{
@@ -356,16 +356,16 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 			if( isset( $post['id'] ) AND $post['id'] > 3 )
 			{
-				$stmt = $db->prepare ("UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
+				$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
 					title= :title,
 					content= :content,
 					exp_time='" . $post['exp_time'] . "',
 					publics='" . $post['publics'] . "',
 					siteus='" . $post['siteus'] . "'
-					WHERE group_id=" . $post['id']);
+					WHERE group_id=" . $post['id'] );
 
-				$stmt->bindParam(':title', $post['title'], PDO::PARAM_STR );
-				$stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen( $post['content'] ) );
+				$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
+				$stmt->bindParam( ':content', $post['content'], PDO::PARAM_STR, strlen( $post['content'] ) );
 				$ok = $stmt->execute();
 			}
 			elseif( $nv_Request->isset_request( 'add', 'get' ) )
