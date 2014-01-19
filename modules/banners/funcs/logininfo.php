@@ -51,18 +51,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
 				$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET check_num = :check_num, last_login = ' . $current_login . ', last_ip = :last_ip, last_agent = :last_agent WHERE id=' . $id );
-				$stmt->bindParam( ':check_num', $check_num, PDO::PARAM_STR );
-				$stmt->bindParam( ':last_ip', $client_info['ip'], PDO::PARAM_STR );
-				$stmt->bindParam( ':last_agent', $agent, PDO::PARAM_STR );
-				
+				$stmt->bindValue( ':check_num', $check_num, PDO::PARAM_STR );
+				$stmt->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
+				$stmt->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
+
 				if( ! $stmt->execute() ) die( 'action' );
-				
+
 				$client = array(
 					'login' => $login,
 					'checknum' => $checknum,
-					'current_agent' => $agent,
+					'current_agent' => NV_USER_AGENT,
 					'last_agent' => $row['last_agent'],
-					'current_ip' => $client_info['ip'],
+					'current_ip' => NV_CLIENT_IP,
 					'last_ip' => $row['last_ip'],
 					'current_login' => $current_login,
 					'last_login' => intval( $row['last_login'] )

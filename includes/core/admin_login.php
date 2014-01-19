@@ -110,13 +110,12 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 				{
 					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
 					$admin_id = intval( $row['admin_id'] );
-					$agent = substr( NV_USER_AGENT, 0, 254 );
 					$checknum = nv_genpass( 10 );
 					$checknum = $crypt->hash( $checknum );
 					$array_admin = array(
 						'admin_id' => $admin_id,
 						'checknum' => $checknum,
-						'current_agent' => $agent,
+						'current_agent' => NV_USER_AGENT,
 						'last_agent' => $row['admin_last_agent'],
 						'current_ip' => NV_CLIENT_IP,
 						'last_ip' => $row['admin_last_ip'],
@@ -126,9 +125,9 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 					$admin_serialize = serialize( $array_admin );
 
 					$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET check_num = :check_num, last_login = ' . NV_CURRENTTIME . ', last_ip = :last_ip, last_agent = :last_agent WHERE admin_id=' . $admin_id );
-					$sth->bindParam( ':check_num', $checknum, PDO::PARAM_STR );
+					$sth->bindValue( ':check_num', $checknum, PDO::PARAM_STR );
 					$sth->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
-					$sth->bindParam( ':last_agent', $agent, PDO::PARAM_STR );
+					$sth->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
 					$sth->execute();
 
 					$nv_Request->set_Session( 'admin', $admin_serialize );

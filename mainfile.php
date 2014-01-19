@@ -62,10 +62,9 @@ $ips = new ips();
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
 define( 'NV_CLIENT_IP', $ips->remote_ip );
-define( 'NV_USER_AGENT', $nv_Request->user_agent );
 
 // Neu khong co IP
-if( $client_info['ip'] == 'none' ) die( 'Error: Your IP address is not correct' );
+if( NV_CLIENT_IP == 'none' ) die( 'Error: Your IP address is not correct' );
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
@@ -144,6 +143,8 @@ define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 
 define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_SERVER_NAME ) );
 // Hau to cua file cache
+
+define( 'NV_USER_AGENT', $nv_Request->user_agent );
 
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
