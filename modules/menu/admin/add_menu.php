@@ -234,7 +234,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 				}
 
 				nv_del_moduleCache( $module_name );
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
 				exit();
 			}
 			else
@@ -343,7 +343,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 				}
 
 				nv_del_moduleCache( $module_name );
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid'] );
 				exit();
 			}
 			else
@@ -377,8 +377,8 @@ while( $row = $result->fetch() )
 		'link' => nv_htmlspecialchars( $row['link'] ),
 		'weight' => $row['weight'],
 		'title' => $row['title'],
-		'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
-		'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit',
+		'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
+		'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit',
 		'name_block' => $arr_menu[$row['mid']]['title']
 	);
 }
@@ -389,12 +389,12 @@ if( $post['parentid'] != 0 )
 	$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $post['parentid'];
 	$result = $db->query( $sql );
 	$parentid = $result->fetchColumn();
-	$link_title = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;parentid=0';
+	$link_title = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] . '&amp;parentid=0';
 }
 
 $xtpl = new XTemplate( 'add_menu.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] ) . '&amp;parentid=' . $post['parentid'];
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $post['mid'] ) . '&amp;parentid=' . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
 
 if( ! empty( $arr_table ) )
@@ -639,7 +639,7 @@ if( $link_title != '' )
 	$xtpl->assign( 'link_title', $link_title );
 	$xtpl->parse( 'main.title' );
 }
-$link_menu = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
+$link_menu = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 $xtpl->assign( 'link_menu', $link_menu );
 
 // Xuat kieu active menu

@@ -50,7 +50,7 @@ $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $
 
 $where = 'bid=' . $bid;
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
 $caption = sprintf( $lang_module['show_list_stat1'], nv_monthname( $data_month ), $current_year );
 
 $data_ext = $data_val = '';

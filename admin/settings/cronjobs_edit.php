@@ -17,7 +17,7 @@ $row = $db->query( $sql )->fetch();
 
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
 	die();
 }
 
@@ -89,7 +89,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth->bindParam( ':cron_name', $cron_name, PDO::PARAM_STR );
 			$sth->execute();
 
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs' );
 			die();
 		}
 	}
@@ -109,7 +109,7 @@ else
 $contents = array();
 $contents['is_error'] = ! empty( $error ) ? 1 : 0;
 $contents['title'] = ! empty( $error ) ? $error : $lang_module['nv_admin_edit_title'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 $contents['cron_name'] = array( $lang_module['cron_name'], $cron_name, 100 );
 
 $filelist = nv_scandir( NV_ROOTDIR . '/includes/cronjobs', '/^([a-zA-Z0-9\_\.]+)\.php$/' );

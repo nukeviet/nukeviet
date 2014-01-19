@@ -32,8 +32,8 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 	{
 		$query = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id );
 		$news_contents = $query->fetch();
-		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
+		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
 
 		$prcservice = ( isset( $module_config['webtools']['prcservice'] ) ) ? $module_config['webtools']['prcservice'] : "";
 		$prcservice = ( ! empty( $prcservice ) ) ? explode( ',', $prcservice ) : array();
@@ -65,7 +65,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 						$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 						$xtpl->assign( 'MODULE_NAME', $module_name );
 						$xtpl->assign( 'OP', $op );
-						$xtpl->assign( 'LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5( $id . $global_config['sitekey'] . session_id() ) . "&getdata=1" );
+						$xtpl->assign( 'LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5( $id . $global_config['sitekey'] . session_id() ) . "&getdata=1" );
 
 						$xtpl->assign( 'HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 						foreach( $services_active as $key => $service )

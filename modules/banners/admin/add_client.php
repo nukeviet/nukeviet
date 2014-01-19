@@ -115,7 +115,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				if( $id )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', 'bannerid ' . $id, $admin_info['userid'] );
-					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=client_list' );
+					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=client_list' );
 					die();
 				}
 			}
@@ -136,7 +136,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_client_submit'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_client';
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_client';
 $contents['login'] = array( $lang_module['login'], 'login_iavim', $login, NV_UNICKMAX );
 $contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, NV_UPASSMAX );
 $contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, NV_UPASSMAX );

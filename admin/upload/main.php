@@ -66,7 +66,7 @@ if( $popup )
 }
 else
 {
-	$xtpl->assign( 'IFRAME_SRC', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;popup=1&amp;nomudim=1' );
+	$xtpl->assign( 'IFRAME_SRC', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;popup=1&amp;nomudim=1' );
 	$xtpl->parse( 'uploadPage' );
 	$contents = $xtpl->text( 'uploadPage' );
 	$head_site = 1;

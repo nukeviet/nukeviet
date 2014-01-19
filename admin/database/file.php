@@ -49,8 +49,8 @@ for( $index = $count; $index >= 0; --$index )
 	$file = $value['file'];
 	$mc = $value['mc'];
 
-	$link_getfile = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file . '&amp;checkss=' . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
-	$link_delete = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delfile&amp;filename=' . $file . '&amp;checkss=' . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
+	$link_getfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file . '&amp;checkss=' . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
+	$link_delete = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delfile&amp;filename=' . $file . '&amp;checkss=' . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
 
 	$xtpl->assign( 'ROW', array(
 		'stt' => $a,

@@ -571,7 +571,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 		if( empty( $rowcontent['id'] ) )
 		{
-			Header( 'Location: ' . nv_url_rewrite( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			die();
 		}
 

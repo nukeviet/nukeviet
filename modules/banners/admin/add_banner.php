@@ -56,7 +56,7 @@ while( $row = $result->fetch() )
 
 if( empty( $plans ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan' );
 	die();
 }
 
@@ -164,7 +164,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid'] );
 			nv_CreateXML_bannerPlan();
 			$op2 = ( $file_ext == 'swf' ) ? 'edit_banner' : 'info_banner';
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op2 . '&id=' . $id );
 			die();
 		}
 	}
@@ -191,7 +191,7 @@ $contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['add_banner_in
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ', ', $contents['file_allowed_ext'] );
 $contents['submit'] = $lang_module['add_banner'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner';
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['plan'] = array( $lang_module['in_plan'], 'pid', $plans, $pid );
 $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid );

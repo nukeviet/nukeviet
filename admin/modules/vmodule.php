@@ -53,7 +53,7 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 				if( $sth->execute() )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' ' . $module_data, '', $admin_info['userid'] );
-					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5( $title . session_id() . $global_config['sitekey'] ) );
+					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5( $title . session_id() . $global_config['sitekey'] ) );
 					die();
 				}
 			}

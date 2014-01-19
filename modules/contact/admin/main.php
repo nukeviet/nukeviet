@@ -24,7 +24,7 @@ if( ! empty( $contact_allowed['view'] ) )
 
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 	$per_page = 30;
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
@@ -42,7 +42,7 @@ if( ! empty( $contact_allowed['view'] ) )
 
 	if( $all_page )
 	{
-		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2' );
+		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2' );
 
 		$a = 0;
 		$currday = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
@@ -67,7 +67,7 @@ if( ! empty( $contact_allowed['view'] ) )
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
 
-			$onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
+			$onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
 
 			$xtpl->assign( 'ROW', array(
 				'id' => $row['id'],
