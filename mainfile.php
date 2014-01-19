@@ -58,17 +58,19 @@ require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 // Xac dinh IP cua client
 require NV_ROOTDIR . '/includes/class/ips.class.php';
 $ips = new ips();
-$client_info['ip'] = $ips->remote_ip;
-if( $client_info['ip'] == 'none' ) die( 'Error: Your IP address is not correct' );
-// Neu khong co IP
 // define( 'NV_SERVER_IP', $ips->server_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
-define( 'NV_CLIENT_IP', $client_info['ip'] );
+define( 'NV_CLIENT_IP', $ips->remote_ip );
+define( 'NV_USER_AGENT', $nv_Request->user_agent );
+
+// Neu khong co IP
+if( $client_info['ip'] == 'none' ) die( 'Error: Your IP address is not correct' );
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
+$client_info['country'] = nv_getCountry_from_cookie( NV_CLIENT_IP );
+$client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
@@ -95,7 +97,7 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 require NV_ROOTDIR . '/includes/class/xtemplate.class.php';
 
 // IP Ban
-if( nv_is_banIp( $client_info['ip'] ) ) trigger_error( 'Hi and Good-bye!!!', 256 );
+if( nv_is_banIp( NV_CLIENT_IP ) ) trigger_error( 'Hi and Good-bye!!!', 256 );
 
 // Chan proxy
 if( $global_config['proxy_blocker'] != 0 )
@@ -114,7 +116,7 @@ if( defined( 'NV_SYSTEM' ) )
 
 // Ket noi voi class xu ly request
 require NV_ROOTDIR . '/includes/class/request.class.php';
-$nv_Request = new Request( $global_config, $client_info['ip'] );
+$nv_Request = new Request( $global_config, NV_CLIENT_IP );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
 // vd: mydomain1.com
@@ -131,7 +133,6 @@ define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain );
 define( 'NV_HEADERSTATUS', $nv_Request->headerstatus );
 // vd: HTTP/1.0
 
-define( 'NV_USER_AGENT', $nv_Request->user_agent );
 define( 'NV_BASE_SITEURL', $nv_Request->base_siteurl . '/' );
 // vd: /ten_thu_muc_chua_site/
 
@@ -194,11 +195,6 @@ else
 // Xac dinh duong dan thuc den thu muc upload
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
 
-if( NV_LANG_DATA == 'vi' )
-{
-	require NV_ROOTDIR . '/includes/core/amlich.php';
-}
-
 // vd: /ten_thu_muc_chua_site/
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 
@@ -231,15 +227,11 @@ $client_info['is_myreferer'] = $nv_Request->referer_key;
 // trang dang xem
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri;
 
-// HTTP_USER_AGENT
-$client_info['agent'] = $nv_Request->user_agent;
-
-if( preg_match( '/^[0-9]{10,}$/', $nv_Request->get_string( 'nocache', 'get', '' ) ) and // Xac dinh co phai AJAX hay khong
-	$client_info['is_myreferer'] === 1 )
-	define( 'NV_IS_AJAX', true );
+// Xac dinh co phai AJAX hay khong
+if( preg_match( '/^[0-9]{10,}$/', $nv_Request->get_string( 'nocache', 'get', '' ) ) and $client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
-if( NV_USER_AGENT == 'none' )
+if( NV_USER_AGENT == 'none' and NV_ANTI_AGENT )
 {
 	trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
 }

@@ -136,6 +136,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	}
 
 	$array_config_define = array();
+	$array_config_define['nv_anti_agent'] = ( int )$nv_Request->get_bool( 'nv_anti_agent', 'post' );
 	$array_config_define['nv_gfx_num'] = $nv_Request->get_int( 'nv_gfx_num', 'post' );
 	$array_config_define['nv_gfx_width'] = $nv_Request->get_int( 'nv_gfx_width', 'post' );
 	$array_config_define['nv_gfx_height'] = $nv_Request->get_int( 'nv_gfx_height', 'post' );
@@ -275,6 +276,7 @@ else
 	$id = $ip = $mask = $area = $begintime = $endtime = $notice = '';
 }
 
+$xtpl->assign( 'ANTI_AGENT', ( NV_ANTI_AGENT ) ? ' checked="checked"' : '' );
 foreach( $proxy_blocker_array as $proxy_blocker_i => $proxy_blocker_v )
 {
 	$xtpl->assign( 'PROXYSELECTED', ( $global_config['proxy_blocker'] == $proxy_blocker_i ) ? ' selected="selected"' : '' );

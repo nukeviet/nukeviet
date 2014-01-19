@@ -87,6 +87,9 @@ define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, cap
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );
 
+//Chặn các bots nếu agent không có
+define( 'NV_ANTI_AGENT', 0 );
+
 $nv_parse_ini_timezone = array(
 	'Pacific/Midway' => array( 'winter_offset' => -39600, 'summer_offset' => -39600 ),
 	'Pacific/Pago_Pago' => array( 'winter_offset' => -39600, 'summer_offset' => -39600 ),

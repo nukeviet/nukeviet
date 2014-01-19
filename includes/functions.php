@@ -137,8 +137,6 @@ function nv_checkagent( $a )
  */
 function nv_check_bot()
 {
-	global $client_info;
-
 	$file_bots = NV_ROOTDIR . '/' . NV_DATADIR . '/bots.config';
 	$bots = ( file_exists( $file_bots ) and filesize( $file_bots ) ) ? unserialize( file_get_contents( $file_bots ) ) : array();
 
@@ -150,19 +148,19 @@ function nv_check_bot()
 	{
 		$is_bot = false;
 
-		if( $values['agent'] and preg_match( '#' . str_replace( '\*', '.*?', nv_preg_quote( $values['agent'], '#' ) ) . '#i', $client_info['agent'] ) ) $is_bot = true;
+		if( $values['agent'] and preg_match( '#' . str_replace( '\*', '.*?', nv_preg_quote( $values['agent'], '#' ) ) . '#i', NV_USER_AGENT ) ) $is_bot = true;
 
 		if( ! empty( $values['ips'] ) and ( $is_bot or ! $values['agent'] ) )
 		{
 			$is_bot = false;
 			$ips = implode( '|', array_map( 'nv_preg_quote', explode( '|', $values['ips'] ) ) );
-			if( preg_match( '/^' . $ips . '/', $client_info['ip'] ) ) $is_bot = true;
+			if( preg_match( '/^' . $ips . '/', NV_CLIENT_IP ) ) $is_bot = true;
 		}
 
 		if( $is_bot ) return array(
 			'name' => $name,
 			'agent' => $values['agent'],
-			'ip' => $client_info['ip'],
+			'ip' => NV_CLIENT_IP,
 			'allowed' => $values['allowed']
 		);
 	}
