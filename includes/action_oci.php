@@ -69,7 +69,7 @@ function nv_create_table_sys( $lang )
 	)";
 
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_groups (
-		 bid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+		 bid NUMBER(8,0) DEFAULT NULL,
 		 theme VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 module VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 file_name VARCHAR2(55 CHAR)DEFAULT '',
@@ -86,7 +86,7 @@ function nv_create_table_sys( $lang )
 		 primary key (bid)
 	)";
 	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_BLOCK MINVALUE 100';
-	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_MODFUNCS
+	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_BLOCK
 	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups
 	 FOR EACH ROW WHEN (new.bid is null)
 		BEGIN

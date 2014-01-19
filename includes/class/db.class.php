@@ -267,7 +267,15 @@ class sql_db extends pdo
 		{
 			return false;
 		}
-		return $this->exec( $sql );
+
+		try
+		{
+			return $this->query( $sql );
+		}
+		catch (PDOException $e)
+		{
+			return false;
+		}
 	}
 
 	/**

@@ -397,7 +397,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE INDEX inv_sessions_onl_time ON NV3_SESSIONS(onl_time) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
-	lang CHAR(2 CHAR) DEFAULT '' NOT NULL ENABLE,
+	lang CHAR(2 CHAR) NOT NULL ENABLE,
 	module VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	tables VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	version VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -406,13 +406,13 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 )";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
-	lang CHAR(2 CHAR) DEFAULT '' NOT NULL ENABLE,
+	lang CHAR(2 CHAR) NOT NULL ENABLE,
 	setup NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	primary key (lang)
 )";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_modules (
-	title VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
+	title VARCHAR2(55 CHAR) NOT NULL ENABLE,
 	is_sysmod NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	virtual NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	module_file VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
