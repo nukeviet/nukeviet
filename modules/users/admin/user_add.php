@@ -59,15 +59,17 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 
+	$md5username = nv_md5safe( $_user['username'] );
+
 	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
-	$stmt->bindParam( ':title', nv_md5safe( $_user['username'] ), PDO::PARAM_STR, strlen(nv_md5safe( $_user['username'] )) );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
-	$stmt->bindParam( ':md5username', nv_md5safe( $_user['username'] ), PDO::PARAM_STR );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
@@ -158,8 +160,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['birthday'] = 0;
 			}
 
-			$password = $crypt->hash( $_user['password1'] );
-
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
@@ -184,8 +184,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				 '" . implode( ',', $_user['in_groups'] ) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 			$data_insert = array();
 			$data_insert['username'] = $_user['username'];
-			$data_insert['md5_username'] = nv_md5safe( $_user['username'] );
-			$data_insert['password'] = $_user['password'];
+			$data_insert['md5_username'] = $md5username;
+			$data_insert['password'] = $crypt->hash( $_user['password1'] );
 			$data_insert['email'] = $_user['email'];
 			$data_insert['full_name'] = $_user['full_name'];
 			$data_insert['gender'] = $_user['gender'];

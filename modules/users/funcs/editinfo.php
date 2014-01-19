@@ -374,7 +374,7 @@ if( $checkss == $array_data['checkss'] )
 					" . NV_CURRENTTIME . ",
 					'',
 					'',
-					:checknum ";
+					:checknum )";
 
 				$data_insert = array();
 				$data_insert['md5_username'] = $md5_username;
