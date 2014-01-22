@@ -29,7 +29,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "	<td><select name=\"config_blockid\">\n";
-		$sql = "SELECT `bid`, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
+		$sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
 		foreach( $list as $l )
 		{
@@ -136,7 +136,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		if( $module != $module_name )
 		{
-			$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
+			$sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, who_view, groups_view FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
 
 			$list = nv_db_cache( $sql, "catid", $module );
 			foreach( $list as $row )
@@ -171,8 +171,15 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		$xtpl = new XTemplate( "block.others_product.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
-		$list = nv_db_cache( $sql, "id", $module );
+		$db->sqlreset()
+			->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice" )
+			->from( $db_config['prefix'] . "_" . $module . "_rows t1" )
+			->join( "INNER JOIN " . $db_config['prefix'] . "_" . $module . "_block t2 ON t1.id = t2.id" )
+			->where( "t2.bid= " . $block_config['blockid'] . " AND t1.status =1" )
+			->order( 't1.addtime DESC, t2.weight ASC' )
+			->limit( $block_config['numrow'] );
+
+		$list = nv_db_cache( $db->sql(), "id", $module );
 
 		$i = 1;
 		$cut_num = $block_config['cut_num'];
@@ -223,7 +230,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 			$bg = ( $i % 2 == 0 ) ? "bg" : "";
 			$xtpl->assign( "bg", $bg );
 			$xtpl->parse( 'main.loop' );
-			$i++;
+			++$i;
 		}
 
 		$xtpl->parse( 'main' );

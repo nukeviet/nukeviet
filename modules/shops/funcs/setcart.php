@@ -8,53 +8,56 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-if ( ! isset( $_SESSION[$module_data . '_cart'] ) ) $_SESSION[$module_data . '_cart'] = array();
+if( ! isset( $_SESSION[$module_data . '_cart'] ) ) $_SESSION[$module_data . '_cart'] = array();
 
 $id = $nv_Request->get_int( 'id', 'post,get', 1 );
 $num = $nv_Request->get_int( 'num', 'post,get', 1 );
 $ac = $nv_Request->get_string( 'ac', 'post,get', 0 );
 $contents_msg = "";
 
-if ( ! is_numeric( $num ) || $num < 0 )
+if( ! is_numeric( $num ) || $num < 0 )
 {
 	$contents_msg = 'ERR_' . $lang_module['cart_set_err'];
 }
 else
 {
-	if ( $ac == 0 )
+	if( $ac == 0 )
 	{
-		if ( $id > 0 )
+		if( $id > 0 )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
-			
+
 			$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
 			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_content['money_unit'], $pro_config['money_unit'] );
-			
-			if ( $pro_config['active_price'] == '0' ) { $price_product_discounts = 0; }
-			
-			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
+
+			if( $pro_config['active_price'] == '0' )
+			{
+				$price_product_discounts = 0;
+			}
+
+			if( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'];
 			}
 			else
 			{
 				$update_cart = true;
-				if ( ! isset( $_SESSION[$module_data . '_cart'][$id] ) )
+				if( ! isset( $_SESSION[$module_data . '_cart'][$id] ) )
 				{
-					$_SESSION[$module_data . '_cart'][$id] = array( 
+					$_SESSION[$module_data . '_cart'][$id] = array(
 						'num' => $num,
 						'order' => 0,
 						'price' => $price_product_discounts,
-						'store' => $data_content['product_number'] 
+						'store' => $data_content['product_number']
 					);
 				}
 				else
 				{
-					if ( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
+					if( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 					{
 						$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
 						$update_cart = false;
@@ -64,7 +67,7 @@ else
 						$_SESSION[$module_data . '_cart'][$id]['num'] = $_SESSION[$module_data . '_cart'][$id]['num'] + $num;
 					}
 				}
-				if ( $update_cart )
+				if( $update_cart )
 				{
 					$title = str_replace( "_", "#@#", $data_content[NV_LANG_DATA . '_title'] );
 					$contents = sprintf( $lang_module['set_cart_success'], $title );
@@ -75,18 +78,18 @@ else
 	}
 	else
 	{
-		if ( $id > 0 )
+		if( $id > 0 )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
-			
-			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
+
+			if( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'] . ': ' . $data_content['product_number'];
 			}
 			else
 			{
-				if ( isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id]['num'] = $num;
+				if( isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id]['num'] = $num;
 				$contents_msg = 'OK_' . $lang_module['cart_set_ok'] . $num;
 			}
 		}

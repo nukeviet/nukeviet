@@ -53,13 +53,16 @@ if( ! empty( $savecat ) )
 	{
 		if( $data['bid'] == 0 )
 		{
-			if( $db->query( "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` WHERE `" . NV_LANG_DATA . "_alias`=" . $db->quote( $data['alias'] ) )->rowCount() )
+			$stmt = $db->prepare( "SELECT bid FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat WHERE " . NV_LANG_DATA . "_alias= :alias" );
+			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->rowCount() )
 			{
 				$error = $lang_module['block_error_alias'];
 			}
 			else
 			{
-				$weight = $db->query( "SELECT max(`weight`) FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat`" )->fetchColumn();
+				$weight = $db->query( "SELECT max(weight) FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat" )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 				$listfield = "";
 				$listvalue = "";
@@ -67,20 +70,20 @@ if( ! empty( $savecat ) )
 				foreach( $field_lang as $field_lang_i )
 				{
 					list( $flang, $fname ) = $field_lang_i;
-					$listfield .= ", `" . $flang . "_" . $fname . "`";
-					if( $flang == NV_LANG_DATA )
-					{
-						$listvalue .= ", " . $db->quote( $data[$fname] );
-					}
-					else
-					{
-						$listvalue .= ", " . $db->quote( $data[$fname] );
-					}
+					$listfield .= ", " . $flang . "_" . $fname;
+					if( $flang == NV_LANG_DATA ) $listvalue .= ", :" . $flang . "_" . $fname;
 				}
 
-				$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` (`bid`, `adddefault`,`image`, `thumbnail`, `weight`, `add_time`, `edit_time` " . $listfield . ") VALUES (NULL, 0, '', '', " . $db->quote( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, thumbnail, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', '', " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
 
-				if( $db->insert_id( $sql ) )
+				$data_insert = array();
+				foreach( $field_lang as $field_lang_i )
+				{
+					list( $flang, $fname ) = $field_lang_i;
+					$data_insert[$flang . "_" . $fname] = $data[$fname];
+				}
+
+				if( $db->insert_id( $sql, 'bid', $data_insert ) )
 				{
 					nv_del_moduleCache( $module_name );
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -94,14 +97,21 @@ if( ! empty( $savecat ) )
 		}
 		else
 		{
-			if( $db->query( "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` WHERE `" . NV_LANG_DATA . "_alias`=" . $db->quote( $data['alias'] ) . " AND `bid`!=" . $data['bid'] )->rowCount() )
+			$stmt = $db->prepare( "SELECT bid FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat WHERE " . NV_LANG_DATA . "_alias= :alias AND bid!=" . $data['bid'] );
+			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->rowCount() )
 			{
 				$error = $lang_module['block_error_alias'];
 			}
 			else
 			{
-				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `" . NV_LANG_DATA . "_title`=" . $db->quote( $data['title'] ) . ", `" . NV_LANG_DATA . "_alias` = " . $db->quote( $data['alias'] ) . ", `" . NV_LANG_DATA . "_description`=" . $db->quote( $data['description'] ) . ", `" . NV_LANG_DATA . "_keywords`= " . $db->quote( $data['keywords'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $data['bid'];
-				if( $db->exec( $sql ) )
+				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, edit_time=UNIX_TIMESTAMP() WHERE bid =" . $data['bid'] );
+				$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+				$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+				$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+				$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+				if( $stmt->execute() )
 				{
 					$error = $lang_module['saveok'];
 					nv_del_moduleCache( $module_name );
@@ -131,7 +141,7 @@ $xtpl->assign( 'BLOCK_CAT_LIST', nv_show_block_cat_list() );
 $data['bid'] = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $data['bid'] > 0 )
 {
-	list( $data['bid'], $data['title'], $data['alias'], $data['description'], $data['keywords'] ) = $db->query( "SELECT `bid`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_description`, `" . NV_LANG_DATA . "_keywords` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` where `bid`=" . $data['bid'] . "" )->fetch( 3 );
+	list( $data['bid'], $data['title'], $data['alias'], $data['description'], $data['keywords'] ) = $db->query( "SELECT bid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_keywords FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat where bid=" . $data['bid'] . "" )->fetch( 3 );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 

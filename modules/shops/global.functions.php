@@ -15,20 +15,21 @@ $pro_config = $module_config[$module_name];
 
 if( ! empty( $pro_config ) )
 {
-	$temp = explode( "x", $pro_config['image_size'] );
+	$temp = explode( 'x', $pro_config['image_size'] );
 	$pro_config['homewidth'] = $temp[0];
 	$pro_config['homeheight'] = $temp[1];
 	$pro_config['blockwidth'] = $temp[0];
 	$pro_config['blockheight'] = $temp[1];
 }
-if( empty( $pro_config['format_order_id'] ) ) $pro_config['format_order_id'] = strtoupper( $module_name ) . "%d";
-if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0; // Thoi gian xu ly archive
+if( empty( $pro_config['format_order_id'] ) ) $pro_config['format_order_id'] = strtoupper( $module_name ) . '%d';
+if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0;
+// Thoi gian xu ly archive
 
 // Lay ty gia ngoai te
 $money_config = array();
 
-$sql = "SELECT `code`, `currency`, `exchange` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "`";
-$list = nv_db_cache( $sql, "", $module_name );
+$sql = 'SELECT code, currency, exchange FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
+$list = nv_db_cache( $sql, '', $module_name );
 
 foreach( $list as $row )
 {
@@ -37,7 +38,7 @@ foreach( $list as $row )
 		'code' => $row['code'],
 		'currency' => $row['currency'],
 		'exchange' => $row['exchange'],
-		"is_config" => $is_config
+		'is_config' => $is_config
 	);
 }
 unset( $list, $row );
@@ -53,9 +54,9 @@ if( $pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_C
  *
  * @return
  */
-function nv_fomart_money( $number, $dec_point = ",", $thousands_sep = " " )
+function nv_fomart_money( $number, $dec_point = ',', $thousands_sep = ' ' )
 {
-	return preg_replace( "/\\" . $dec_point . "00$/", "", number_format( $number, 2, $dec_point, $thousands_sep) );
+	return preg_replace( "/\\" . $dec_point . "00$/", "", number_format( $number, 2, $dec_point, $thousands_sep ) );
 }
 
 /**
@@ -81,14 +82,14 @@ function nv_set_status_module()
 	// status_3= "Het han";
 
 	// Dang cac san pham cho kich hoat theo thoi gian
-	$result = $db->query( "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=2 AND `publtime` < " . NV_CURRENTTIME . " ORDER BY `publtime` ASC" );
+	$result = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE status =2 AND publtime < ' . NV_CURRENTTIME . ' ORDER BY publtime ASC' );
 	while( list( $id ) = $result->fetch( 3 ) )
 	{
-		$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `status`='1' WHERE `id`=" . $id );
+		$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET status =1 WHERE id=' . $id );
 	}
 
 	// Ngung hieu luc cac san pham da het han
-	$result = $db->query( "SELECT `id`, `archive` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 AND `exptime` > 0 AND `exptime` <= " . NV_CURRENTTIME . " ORDER BY `exptime` ASC" );
+	$result = $db->query( 'SELECT id, archive FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE status =1 AND exptime > 0 AND exptime <= ' . NV_CURRENTTIME . ' ORDER BY exptime ASC' );
 	while( list( $id, $archive ) = $result->fetch( 3 ) )
 	{
 		if( intval( $archive ) == 0 )
@@ -102,9 +103,9 @@ function nv_set_status_module()
 	}
 
 	// Tim kiem thoi gian chay lan ke tiep
-	$time_publtime = $db->query( "SELECT MIN(publtime) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=2 AND `publtime` > " . NV_CURRENTTIME )->fetchColumn();
+	$time_publtime = $db->query( 'SELECT MIN(publtime) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE status =2 AND publtime > ' . NV_CURRENTTIME )->fetchColumn();
 
-	$time_exptime = $db->query( "SELECT MIN(exptime) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 AND `exptime` > " . NV_CURRENTTIME )->fetchColumn();
+	$time_exptime = $db->query( 'SELECT MIN(exptime) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE status =1 AND exptime > ' . NV_CURRENTTIME )->fetchColumn();
 
 	$timecheckstatus = min( $time_publtime, $time_exptime );
 	if( ! $timecheckstatus )
@@ -112,7 +113,7 @@ function nv_set_status_module()
 		$timecheckstatus = max( $time_publtime, $time_exptime );
 	}
 
-	$db->query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
+	$db->query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", 'timecheckstatus', '" . intval( $timecheckstatus ) . "')" );
 	nv_del_moduleCache( 'settings' );
 	nv_del_moduleCache( $module_name );
 
@@ -134,10 +135,13 @@ function nv_comment_module( $id, $page )
 	$comment_array = array();
 	$per_page = 10;
 
-	$sql = "SELECT SQL_CALC_FOUND_ROWS a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` AS a LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` AS b ON a.post_id =b.userid WHERE a.id= '" . $id . "' AND a.status=1 ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
-	$comment = $db->query( $sql );
-	$result_all = $db->query( "SELECT FOUND_ROWS()" );
-	$all_page = $result_all->fetchColumn();
+	// Fetch Limit
+	$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_comments_' . NV_LANG_DATA . ' a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.post_id =b.userid' )->where( 'a.id= ' . $id . ' AND a.status =1' );
+
+	$all_page = $db->query( $db->sql() )->fetchColumn();
+
+	$db->select( 'a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail' )->order( 'a.cid DESC' )->limit( $per_page )->offset( $page );
+	$comment = $db->query( $db->sql() );
 
 	while( list( $content, $post_time, $post_name, $post_email, $userid, $user_email, $user_full_name, $photo, $view_mail ) = $comment->fetch( 3 ) )
 	{
@@ -146,21 +150,21 @@ function nv_comment_module( $id, $page )
 			$post_email = $user_email;
 			$post_name = $user_full_name;
 		}
-		$post_email = $view_mail ? $post_email : "";
+		$post_email = $view_mail ? $post_email : '';
 		$comment_array[] = array(
-			"content" => $content,
-			"post_time" => $post_time,
-			"userid" => $userid,
-			"post_name" => $post_name,
-			"post_email" => $post_email,
-			"photo" => $photo
+			'content' => $content,
+			'post_time' => $post_time,
+			'userid' => $userid,
+			'post_name' => $post_name,
+			'post_email' => $post_email,
+			'photo' => $photo
 		);
 	}
 	$comment->closeCursor();
 	unset( $row, $comment );
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=comment&amp;id=" . $id . "&checkss=" . md5( $id . session_id() . $global_config['sitekey'] );
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;id=' . $id . '&checkss=' . md5( $id . session_id() . $global_config['sitekey'] );
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'showcomment' );
-	return array( "comment" => $comment_array, "page" => $generate_page );
+	return array( 'comment' => $comment_array, 'page' => $generate_page );
 }
 
 /**
@@ -173,32 +177,32 @@ function nv_del_content_module( $id )
 {
 	global $db, $module_name, $module_data, $title, $db_config;
 
-	$content_del = "NO_" . $id;
-	$title = "";
+	$content_del = 'NO_' . $id;
+	$title = '';
 
-	list( $id, $listcatid, $title, $group_id ) = $db->query( "SELECT `id`, `listcatid`, `" . NV_LANG_DATA . "_title`, `group_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . intval( $id ) )->fetch( 3 );
+	list( $id, $listcatid, $title, $group_id ) = $db->query( 'SELECT id, listcatid, ' . NV_LANG_DATA . '_title, group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . intval( $id ) )->fetch( 3 );
 	if( $id > 0 )
 	{
 		$number_no_del = 0;
-		$array_catid = explode( ",", $listcatid );
+		$array_catid = explode( ',', $listcatid );
 		if( $number_no_del == 0 )
 		{
-			$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+			$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . $id;
 			if( ! $db->exec( $sql ) )
 			{
-				$number_no_del ++;
+				++$number_no_del;
 			}
 		}
 		if( $number_no_del == 0 )
 		{
-			$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments` WHERE `id` = " . $id );
-			$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `id` = " . $id );
-			$content_del = "OK_" . $id;
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_comments WHERE id = ' . $id );
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );
+			$content_del = 'OK_' . $id;
 			nv_fix_group_count( $group_id );
 		}
 		else
 		{
-			$content_del = "ERR_" . $lang_module['error_del_content'];
+			$content_del = 'ERR_' . $lang_module['error_del_content'];
 		}
 	}
 	return $content_del;
@@ -213,7 +217,7 @@ function nv_del_content_module( $id )
 function nv_archive_content_module( $id )
 {
 	global $db, $module_data, $db_config;
-	$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `status`=3 WHERE `id`=" . $id );
+	$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET status =3 WHERE id=' . $id );
 }
 
 /**
@@ -253,10 +257,10 @@ function nv_file_table( $table )
 	global $db_config, $db;
 	$lang_value = nv_list_lang();
 	$arrfield = array();
-	$result = $db->query( "SHOW COLUMNS FROM " . $table . "" );
+	$result = $db->query( 'SHOW COLUMNS FROM ' . $table );
 	while( list( $field ) = $result->fetch( 3 ) )
 	{
-		$tmp = explode( "_", $field );
+		$tmp = explode( '_', $field );
 		foreach( $lang_value as $lang_i )
 		{
 			if( ! empty( $tmp[0] ) && ! empty( $tmp[1] ) )
@@ -280,7 +284,7 @@ function nv_file_table( $table )
 function nv_list_lang()
 {
 	global $db_config, $db;
-	$re = $db->query( "SELECT lang FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1" );
+	$re = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 	$lang_value = array();
 	while( list( $lang_i ) = $re->fetch( 3 ) )
 	{
@@ -302,12 +306,12 @@ function nv_list_lang()
  * @param string $type
  * @return
  */
-function product_number_order( $listid, $listnum, $type = "-" )
+function product_number_order( $listid, $listnum, $type = '-' )
 {
 	global $db_config, $db, $module_data;
 
-	$arrayid = explode( "|", $listid );
-	$arraynum = explode( "|", $listnum );
+	$arrayid = explode( '|', $listid );
+	$arraynum = explode( '|', $listnum );
 
 	foreach( $arrayid as $i => $id )
 	{
@@ -315,7 +319,7 @@ function product_number_order( $listid, $listnum, $type = "-" )
 		{
 			if( empty( $arraynum[$i] ) ) $arraynum[$i] = 0;
 
-			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `product_number` = `product_number` " . $type . " " . intval( $arraynum[$i] ) . " WHERE `id` =" . $id;
+			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number ' . $type . ' ' . intval( $arraynum[$i] ) . ' WHERE id =' . $id;
 			$db->query( $sql );
 		}
 	}
@@ -337,10 +341,10 @@ function nv_fix_group_count( $listid )
 	{
 		if( ! empty( $id ) )
 		{
-			$sql = "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE ( `group_id`='" . $id . "' OR `group_id` REGEXP '^" . $id . "\\\,' OR `group_id` REGEXP '\\\," . $id . "\\\,' OR `group_id` REGEXP '\\\," . $id . "$' ) AND `status`=1 AND `publtime` <= " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime` >=" . NV_CURRENTTIME . ")";
+			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' ) AND status =1 AND publtime <= " . NV_CURRENTTIME . " AND (exptime=0 OR exptime >=" . NV_CURRENTTIME . ")";
 			$num = $db->query( $sql )->fetchColumn();
 
-			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `numpro`=" . $num . " WHERE `groupid`=" . intval( $id );
+			$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numpro=" . $num . " WHERE groupid=" . intval( $id );
 			$db->query( $sql );
 
 			unset( $result );
@@ -359,7 +363,7 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 {
 	global $global_array_cat, $array_cat;
 	$array_cat[] = $catid;
-	$subcatid = explode( ",", $global_array_cat[$catid]['subcatid'] );
+	$subcatid = explode( ',', $global_array_cat[$catid]['subcatid'] );
 	if( ! empty( $subcatid ) )
 	{
 		foreach( $subcatid as $id )
@@ -401,7 +405,7 @@ function GetGroupidInParent( $groupid, $check_inhome = 0 )
 {
 	global $global_array_group, $array_group;
 	$array_group[] = $groupid;
-	$subgroupid = explode( ",", $global_array_group[$groupid]['subgroupid'] );
+	$subgroupid = explode( ',', $global_array_group[$groupid]['subgroupid'] );
 	if( ! empty( $subgroupid ) )
 	{
 		foreach( $subgroupid as $id )

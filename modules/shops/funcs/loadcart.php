@@ -8,19 +8,19 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
 $total = 0;
-if ( ! empty( $_SESSION[$module_data . '_cart'] ) )
+if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 {
-	foreach ( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
+	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
 		$total = $total + $info['price'] * $info['num'];
 	}
 }
 
-if ( $pro_config['active_price'] == '0' ) $total = 0;
+if( $pro_config['active_price'] == '0' ) $total = 0;
 
 $total = FormatNumber( $total, 2, '.', ',' );
 
@@ -36,7 +36,7 @@ $xtpl->assign( 'LANG', $lang_tmp );
 $xtpl->assign( 'total', $total );
 $xtpl->assign( 'LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart" );
 
-if ( defined( 'NV_IS_USER' ) )
+if( defined( 'NV_IS_USER' ) )
 {
 	$xtpl->assign( 'LINK_HIS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=history" );
 	$xtpl->parse( 'main.enable.history' );
@@ -45,9 +45,9 @@ if ( defined( 'NV_IS_USER' ) )
 $xtpl->assign( 'money_unit', $pro_config['money_unit'] );
 $xtpl->assign( 'num', $num );
 
-if ( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.enable.price' );
+if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.enable.price' );
 
-if ( $pro_config['active_order'] == '1' ) 
+if( $pro_config['active_order'] == '1' )
 {
 	$xtpl->parse( 'main.enable' );
 }

@@ -156,7 +156,7 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
 					$xtpl->parse( 'main.catalogs.items' );
-					$i++;
+					++$i;
 				}
 				if( $data_row['num_pro'] > $data_row['num_link'] ) $xtpl->parse( 'main.catalogs.view_next' );
 				$xtpl->parse( 'main.catalogs' );
@@ -273,7 +273,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
 					$xtpl->parse( 'main.catalogs.items' );
-					$i++;
+					++$i;
 				}
 				if( $data_row['num_pro'] > $data_row['num_link'] ) $xtpl->parse( 'main.catalogs.view_next' );
 				$xtpl->parse( 'main.catalogs' );
@@ -393,7 +393,7 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 			}
 
 			$xtpl->parse( 'main.items' );
-			$i++;
+			++$i;
 		}
 		if( ! empty( $html_pages ) )
 		{
@@ -489,7 +489,7 @@ function view_search_all( $data_content, $html_pages = "" )
 			}
 
 			$xtpl->parse( 'main.items' );
-			$i++;
+			++$i;
 		}
 		if( ! empty( $html_pages ) )
 		{
@@ -639,7 +639,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			}
 
 			$xtpl->parse( 'main.grid_rows' );
-			$i++;
+			++$i;
 		}
 	}
 	$xtpl->assign( 'pages', $pages );
@@ -1025,7 +1025,7 @@ function print_product( $data_content, $data_unit, $page_title )
 		$xtpl->assign( 'height', $pro_config['homeheight'] );
 		$xtpl->assign( 'width', $pro_config['homewidth'] );
 
-		$link_url = $global_config['site_url'] . '/' . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data_content['id'] . "/" . $data_content[NV_LANG_DATA . '_alias'] . "";
+		$link_url = $global_config['site_url'] . '/' . "?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data_content['id'] . "/" . $data_content[NV_LANG_DATA . '_alias'];
 		$xtpl->assign( 'link_url', $link_url );
 		$xtpl->assign( 'site_name', $global_config['site_name'] );
 		$xtpl->assign( 'url', $global_config['site_url'] );
@@ -1082,7 +1082,7 @@ function cart_product( $data_content, $array_error_number )
 
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + ( double )( $price_product_discounts ) * ( int )( $data_row['num'] );
-			$i++;
+			++$i;
 		}
 	}
 	if( ! empty( $array_error_number ) )
@@ -1149,7 +1149,7 @@ function uers_order( $data_content, $data_order, $error )
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + ( double )( $price_product_discounts ) * ( int )( $data_row['num'] );
-			$i++;
+			++$i;
 		}
 	}
 	$xtpl->assign( 'price_total', FormatNumber( $price_total, 2, '.', ',' ) );
@@ -1204,7 +1204,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
 
 		$xtpl->parse( 'main.loop' );
-		$i++;
+		++$i;
 	}
 	if( ! empty( $data_content['order_note'] ) )
 	{
@@ -1269,7 +1269,7 @@ function print_pay( $data_content, $data_pro )
 		$xtpl->assign( 'bg', $bg );
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
 		$xtpl->parse( 'main.loop' );
-		$i++;
+		++$i;
 	}
 	if( ! empty( $data_content['order_note'] ) )
 	{
@@ -1397,7 +1397,7 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'TT', $i + 1 );
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
 		$xtpl->parse( 'main.rows' );
-		$i++;
+		++$i;
 	}
 	if( $pro_config['active_price'] == '1' )
 	{
@@ -1691,7 +1691,7 @@ function my_product( $data_pro, $pages_pro, $page, $per_page )
 			$xtpl->assign( 'bg', $bg );
 			$xtpl->parse( 'main.rows.allow' );
 			$xtpl->parse( 'main.rows' );
-			$i++;
+			++$i;
 		}
 	}
 
@@ -1766,7 +1766,7 @@ function email_new_order( $data_content, $data_pro )
 
 		if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.loop.price2' );
 		$xtpl->parse( 'main.loop' );
-		$i++;
+		++$i;
 	}
 
 	if( ! empty( $data_content['order_note'] ) )

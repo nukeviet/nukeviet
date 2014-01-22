@@ -25,7 +25,7 @@ if( $bid > 0 and $del_list != "" )
 	{
 		if( $id > 0 )
 		{
-			$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . $id );
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . $id );
 		}
 	}
 
@@ -34,33 +34,33 @@ if( $bid > 0 and $del_list != "" )
 }
 elseif( $bid > 0 and $id > 0 )
 {
-	list( $bid, $id ) = $db->query( "SELECT `bid`, `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . intval( $bid ) . " AND `id`=" . intval( $id ) )->fetch( 3 );
+	list( $bid, $id ) = $db->query( "SELECT bid, id FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . intval( $bid ) . " AND id=" . intval( $id ) )->fetch( 3 );
 
 	if( $bid > 0 and $id > 0 )
 	{
 		if( $mod == "weight" and $new_vid > 0 )
 		{
-			$sql = "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
+			$sql = "SELECT id FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id!=" . $id . " ORDER BY weight ASC";
 			$result = $db->query( $sql );
 			$weight = 0;
 
 			while( $row = $result->fetch() )
 			{
-				$weight++;
-				if( $weight == $new_vid ) $weight++;
-				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $row['id'] );
+				++$weight;
+				if( $weight == $new_vid ) ++$weight;
+				$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block SET weight=" . $weight . " WHERE bid=" . $bid . " AND id=" . intval( $row['id'] );
 				$db->query( $sql );
 			}
 			$result->closeCursor();
 
-			$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block` SET `weight`=" . $new_vid . " WHERE `bid`=" . $bid . " AND `id`=" . intval( $id );
+			$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block SET weight=" . $new_vid . " WHERE bid=" . $bid . " AND id=" . intval( $id );
 			$db->query( $sql );
 
 			$content = "OK_" . $bid;
 		}
 		elseif( $mod == "delete" )
 		{
-			$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . $bid . " AND `id`=" . intval( $id ) );
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $bid . " AND id=" . intval( $id ) );
 			nv_news_fix_block( $bid );
 			$content = "OK_" . $bid;
 		}

@@ -20,7 +20,7 @@ if( $active )
 {
 	foreach( $cid_array as $cid )
 	{
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` SET `status`='1' WHERE `status`!=1 AND `cid`=" . $cid;
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " SET status ='1' WHERE status !=1 AND cid=" . $cid;
 		$db->query( $sql );
 	}
 }
@@ -28,7 +28,7 @@ else
 {
 	foreach( $cid_array as $cid )
 	{
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` SET `status`='0' WHERE `status`=1 AND cid=" . $cid;
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " SET status ='0' WHERE status =1 AND cid=" . $cid;
 		$db->query( $sql );
 	}
 }

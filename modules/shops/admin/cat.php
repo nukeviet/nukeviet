@@ -55,11 +55,14 @@ if( ! empty( $savecat ) )
 		$error = $lang_module['error_cat_name'];
 	}
 
-	$check_alias = $db->query( "SELECT count(*) FROM `" . $table_name . "` WHERE `catid`!=" . $data['catid'] . " AND `" . NV_LANG_DATA . "_alias`=" . $db->quote( $data['alias'] ) )->fetchColumn();
+	$stmt = $db->prepare( "SELECT count(*) FROM " . $table_name . " WHERE catid!=" . $data['catid'] . " AND " . NV_LANG_DATA . "_alias= :alias" );
+	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+	$stmt->execute();
+	$check_alias = $stmt->fetchColumn();
 
 	if( $check_alias and $data['parentid'] > 0 )
 	{
-		$parentid_alias = $db->query( "SELECT `" . NV_LANG_DATA . "_alias` FROM `" . $table_name . "` WHERE `catid`=" . $data['parentid'] )->fetchColumn();
+		$parentid_alias = $db->query( "SELECT " . NV_LANG_DATA . "_alias FROM " . $table_name . " WHERE catid=" . $data['parentid'] )->fetchColumn();
 		$data['alias'] = $parentid_alias . "-" . $data['alias'];
 	}
 
@@ -70,27 +73,34 @@ if( ! empty( $savecat ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", `" . $flang . "_" . $fname . "`";
-			if( $flang == NV_LANG_DATA )
-			{
-				$listvalue .= ", " . $db->quote( $data[$fname] );
-			}
-			else
-			{
-				$listvalue .= ", " . $db->quote( $data[$fname] );
-			}
+			$listfield .= ", " . $flang . "_" . $fname;
+			$listvalue .= ", :" . $flang . "_" . $fname;
 		}
-		$weight = $db->query( "SELECT max(`weight`) FROM `" . $table_name . "` WHERE `parentid`=" . $db->quote( $data['parentid'] ) )->fetchColumn();
+		$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid" );
+		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+		$stmt->execute();
+		$weight = $stmt->fetchColumn();
 
 		$weight = intval( $weight ) + 1;
 
 		$viewcat = "viewcat_page_list";
 		$subcatid = "";
 
-		$sql = "INSERT INTO `" . $table_name . "` (`catid`, `parentid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewcat`, `numsubcat`, `subcatid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view` " . $listfield . " )
- 			VALUES (NULL, " . $db->quote( $data['parentid'] ) . ",' ',' '," . $db->quote( $weight ) . ", '0', '0', " . $db->quote( $viewcat ) . ", '0', " . $db->quote( $subcatid ) . ", '1', '4'," . $db->quote( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->quote( $data['who_view'] ) . "," . $db->quote( $groups_view ) . $listvalue . " )";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, thumbnail, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, admins, add_time, edit_time, who_view, groups_view " . $listfield . " )
+ 			VALUES (NULL, :parentid, ' ', ' '," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $data['who_view'] . ", :groups_view" . $listvalue . ")";
+		$data_insert = array();
+		$data_insert['parentid'] = $data['parentid'];
+		$data_insert['subcatid'] = $subcatid;
+		$data_insert['viewcat'] = $viewcat;
+		$data_insert['admins'] = $admins;
+		$data_insert['groups_view'] = $groups_view;
+		foreach( $field_lang as $field_lang_i )
+		{
+			list( $flang, $fname ) = $field_lang_i;
+			$data_insert[$flang . "_" . $fname] = $data[$fname];
+		}
 
-		$newcatid = intval( $db->insert_id( $sql ) );
+		$newcatid = intval( $db->insert_id( $sql, 'catid', $data_insert ) );
 		if( $newcatid > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_catalog', "id " . $newcatid, $admin_info['userid'] );
@@ -106,17 +116,27 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $data['catid'] > 0 and $data['title'] != "" and $error == "" )
 	{
-		$sql = "UPDATE `" . $table_name . "` SET `parentid`=" . $db->quote( $data['parentid'] ) . ", `" . NV_LANG_DATA . "_title`=" . $db->quote( $data['title'] ) . ", `" . NV_LANG_DATA . "_alias` = " . $db->quote( $data['alias'] ) . ", `" . NV_LANG_DATA . "_description`=" . $db->quote( $data['description'] ) . ", `" . NV_LANG_DATA . "_keywords`= " . $db->quote( $data['keywords'] ) . ", `who_view`=" . $db->quote( $data['who_view'] ) . ", `groups_view`=" . $db->quote( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `catid` =" . $data['catid'];
+		$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid= :parentid, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=UNIX_TIMESTAMP() WHERE catid =" . $data['catid'] );
+		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+		$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+		$stmt->bindParam( ':who_view', $data['who_view'], PDO::PARAM_INT );
+		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
 
-		if( $db->exec( $sql ) )
+		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', "id " . $data['catid'], $admin_info['userid'] );
 
 			if( $data['parentid'] != $data['parentid_old'] )
 			{
-				$weight = $db->query( "SELECT max(`weight`) FROM `" . $table_name . "` WHERE `parentid`=" . $db->quote( $data['parentid'] ) . "" )->fetchColumn();
+				$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid " );
+				$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+				$stmt->execute();
+				$weight->fetchColumn();
 				$weight = intval( $weight ) + 1;
-				$sql = "UPDATE `" . $table_name . "` SET `weight`=" . $weight . " WHERE `catid`=" . intval( $data['catid'] );
+				$sql = "UPDATE " . $table_name . " SET weight=" . $weight . " WHERE catid=" . intval( $data['catid'] );
 				$db->query( $sql );
 				nv_fix_cat_order();
 			}
@@ -136,7 +156,7 @@ $data['parentid'] = $nv_Request->get_int( 'parentid', 'get,post', 0 );
 $data['catid'] = $nv_Request->get_int( 'catid', 'get', 0 );
 if( $data['catid'] > 0 )
 {
-	list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['who_view'], $data['groups_view'] ) = $db->query( "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_description`, `" . NV_LANG_DATA . "_keywords`, `who_view`, `groups_view` FROM `" . $table_name . "` where `catid`=" . $data['catid'] . "" )->fetch( 3 );
+	list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['who_view'], $data['groups_view'] ) = $db->query( "SELECT catid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_keywords, who_view, groups_view FROM " . $table_name . " where catid=" . $data['catid'] . "" )->fetch( 3 );
 	$caption = $lang_module['edit_cat'];
 }
 else
@@ -145,7 +165,7 @@ else
 }
 $groups_view = explode( ",", $groups_view );
 
-$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev` FROM `" . $table_name . "` WHERE `catid` !='" . $data['catid'] . "' ORDER BY `order` ASC";
+$sql = "SELECT catid, " . NV_LANG_DATA . "_title, lev FROM " . $table_name . " WHERE catid !='" . $data['catid'] . "' ORDER BY sort ASC";
 $result = $db->query( $sql );
 $array_cat_list = array();
 $array_cat_list[0] = array( '0', $lang_module['cat_sub_sl'] );

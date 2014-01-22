@@ -13,10 +13,10 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $sourceid = $nv_Request->get_int( 'sourceid', 'post', 0 );
 
 $contents = "NO_" . $sourceid;
-$sourceid = $db->query( "SELECT `sourceid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid )->fetchColumn();
+$sourceid = $db->query( "SELECT sourceid FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid )->fetchColumn();
 if( $sourceid > 0 )
 {
-	$check_rows = $db->query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `source_id` =" . $sourceid )->fetchColumn();
+	$check_rows = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE source_id =" . $sourceid )->fetchColumn();
 
 	if( $check_rows > 0 )
 	{
@@ -24,7 +24,7 @@ if( $sourceid > 0 )
 	}
 	else
 	{
-		$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid;
+		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid;
 		if( $db->query( $sql ) )
 		{
 			nv_fix_source();

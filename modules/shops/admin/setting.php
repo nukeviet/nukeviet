@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.ini', true );
@@ -28,9 +28,9 @@ if( ! empty( $data ) )
 
 $groups_list = nv_groups_list();
 $array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if ( ! empty( $groups_list ) )
+if( ! empty( $groups_list ) )
 {
- $array_who[] = $lang_global['who_view3'];
+	$array_who[] = $lang_global['who_view3'];
 }
 
 $page_title = $lang_module['setting'];
@@ -65,21 +65,21 @@ if( $savesetting == 1 )
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
 
-	if ( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
+	if( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
 	{
 		$data['who_comment'] = 0;
 	}
 	$data['groups_comment'] = ( ! empty( $data['groups_comment'] ) ) ? implode( ',', $data['groups_comment'] ) : '';
-	
+
 	if( $error == '' )
 	{
 		foreach( $data as $config_name => $config_value )
 		{
-			$db->query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
+			$db->query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
 		}
 		$mid = intval( $currencies_array[$data['money_unit']]['numeric'] );
 
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` SET `exchange` = '1' WHERE `id` = " . $mid . " LIMIT 1";
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " SET exchange = '1' WHERE id = " . $mid;
 		$db->query( $sql );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setting'], "Setting", $admin_info['userid'] );
@@ -96,11 +96,11 @@ $array_setting_payment = array();
 if( $data['active_payment'] == '1' )
 {
 	$array_setting_payment = array();
-	
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
+
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$all_page = $result->rowCount();
-	
+
 	while( $row = $result->fetch() )
 	{
 		$array_setting_payment[$row['payment']] = $row;
@@ -110,7 +110,7 @@ if( $data['active_payment'] == '1' )
 // Xu ly quyen binh luan
 $who_comment = $data['who_comment'];
 $data['who_comment'] = array();
-foreach ( $array_who as $key => $who )
+foreach( $array_who as $key => $who )
 {
 	$data['who_comment'][$key] = array(
 		'key' => $key, //
@@ -121,9 +121,9 @@ foreach ( $array_who as $key => $who )
 
 $groups_comment = ! empty( $data['groups_comment'] ) ? explode( ",", $data['groups_comment'] ) : array();
 $data['groups_comment'] = array();
-if ( ! empty( $groups_list ) )
+if( ! empty( $groups_list ) )
 {
-	foreach ( $groups_list as $key => $title )
+	foreach( $groups_list as $key => $title )
 	{
 		$data['groups_comment'][$key] = array(
 			'key' => $key, //
@@ -138,7 +138,12 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
-$check_view = array( "view_home_all" => "", "view_home_cat" => "", "view_home_group" => "", "view_home_none" => "" );
+$check_view = array(
+	"view_home_all" => "",
+	"view_home_cat" => "",
+	"view_home_group" => "",
+	"view_home_none" => ""
+);
 $check_view[$data['home_view']] = "selected=\"selected\"";
 
 foreach( $check_view as $type_view => $select )
@@ -195,14 +200,14 @@ $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
 
 // Binh luan
-foreach ( $data['who_comment'] as $who )
+foreach( $data['who_comment'] as $who )
 {
 	$xtpl->assign( 'WHO_COMMENT', $who );
 	$xtpl->parse( 'main.who_comment' );
 }
-if ( ! empty( $data['groups_comment'] ) )
+if( ! empty( $data['groups_comment'] ) )
 {
-	foreach ( $data['groups_comment'] as $group )
+	foreach( $data['groups_comment'] as $group )
 	{
 		$xtpl->assign( 'GROUPS_COMMENT', $group );
 		$xtpl->parse( 'main.group.groups_comment' );
@@ -211,7 +216,7 @@ if ( ! empty( $data['groups_comment'] ) )
 }
 
 // Tien te
-$result = $db->query( "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` ORDER BY `code` DESC" );
+$result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );
 while( list( $code, $currency ) = $result->fetch( 3 ) )
 {
 	$array_temp = array();
@@ -234,7 +239,7 @@ if( ! empty( $array_setting_payment ) )
 {
 	$a = 0;
 	$payment = $nv_Request->get_string( 'payment', 'get', 0 );
-	
+
 	foreach( $array_setting_payment as $value )
 	{
 		$value['titleactive'] = ( ! empty( $value['active'] ) ) ? $lang_global['yes'] : $lang_global['no'];
@@ -248,7 +253,7 @@ if( ! empty( $array_setting_payment ) )
 		$value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
 		$xtpl->assign( 'DATA_PM', $value );
 		$xtpl->parse( 'main.payment.paymentloop' );
-		$a ++;
+		++$a;
 	}
 	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 	$xtpl->assign( 'url_change', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=changepay" );

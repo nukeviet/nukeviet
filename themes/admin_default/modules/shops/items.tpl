@@ -23,7 +23,8 @@
 	</select>
 	<br />
 	{LANG.search_key}: <input type="text" value="{Q}" maxlength="{NV_MAX_SEARCH_LENGTH}" name="q" style="width: 265px">
-	<input type="submit" value="{LANG.search}"><br>
+	<input type="submit" value="{LANG.search}">
+	<br>
 	<input type="hidden" name ="checkss" value="{CHECKSESS}" />
 	<label><em>{SEARCH_NOTE}</em></label>
 </form>
@@ -38,49 +39,47 @@
 				<td  align="center">{LANG.status}</td>
 				<td  align="center">{LANG.order_product_price}</td>
 				<td align="center">{LANG.content_product_number1}</td>
-				<td></td>
+				<td>&nbsp;</td>
 			</tr>
 		</thead>
 		<tbody>
-		<!-- BEGIN: loop -->
+			<!-- BEGIN: loop -->
 			<tr>
 				<td align="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"></td>
-				<td>
-					<a href="{ROW.imghome}" rel="shadowbox[random]"/ title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}" width="40"/></a>
-				</td>
+				<td><a href="{ROW.imghome}" rel="shadowbox[random]"/ title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}" width="40"/></a></td>
 				<td class="top">
-					<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
-					<div class="product-info">
-						<span class="price">{LANG.content_product_discounts}: {ROW.product_discounts}%</span> | 
-						{LANG.order_update}: <span class="other">{ROW.edittime}</span> |
-						{LANG.content_admin}: <span class="other">{ROW.admin_id}</span>
-					</div>
-				</td>
+				<p>
+					<a target="_blank" href="{ROW.link}">{ROW.title}</a>
+				</p>
+				<div class="product-info">
+					<span class="price">{LANG.content_product_discounts}: {ROW.product_discounts}%</span> |
+					{LANG.order_update}: <span class="other">{ROW.edittime}</span> |
+					{LANG.content_admin}: <span class="other">{ROW.admin_id}</span>
+				</div></td>
 				<td align="center">{ROW.publtime}</td>
 				<td align="center">{ROW.status}</td>
 				<td class="aright require">{ROW.product_price} {ROW.money_unit}</td>
 				<td align="center">{ROW.product_number}</td>
-				<td>
-					{ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete}
-				</td>
+				<td> {ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
 			</tr>
-		<!-- END: loop -->
-		<tbody>
+			<!-- END: loop -->
+		</tbody>
 		<tfoot>
 			<tr align="left">
 				<td colspan="8">
-					<select name="action" id="action">
-						<!-- BEGIN: action -->
-						<option value="{ACTION.key}">{ACTION.title}</option>
-						<!-- END: action -->
-					</select>
-					<input type="button" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}">
-				</td>
+				<select name="action" id="action">
+					<!-- BEGIN: action -->
+					<option value="{ACTION.key}">{ACTION.title}</option>
+					<!-- END: action -->
+				</select><input type="button" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}"></td>
 			</tr>
 		</tfoot>
 	</table>
 </form>
 <!-- BEGIN: generate_page -->
-<br /><p align="center">{GENERATE_PAGE}</p>
+<br />
+<p align="center">
+	{GENERATE_PAGE}
+</p>
 <!-- END: generate_page -->
 <!-- END: main -->

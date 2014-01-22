@@ -13,7 +13,15 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['sources'];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_sources";
 list( $rowcontent['sourceid'], $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
-$rowcontent = array( 'sourceid' => 0, 'link' => '', 'logo' => '', 'weight' => 0, 'add_time' => 0, 'edit_time' => 0, 'title' => '' );
+$rowcontent = array(
+	'sourceid' => 0,
+	'link' => '',
+	'logo' => '',
+	'weight' => 0,
+	'add_time' => 0,
+	'edit_time' => 0,
+	'title' => ''
+);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -24,7 +32,7 @@ if( ! empty( $savecat ) )
 	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$rowcontent['link'] = strtolower( nv_substr( $nv_Request->get_title( 'link', 'post', '', 1 ), 0, 255 ) );
 
-	$logo_old = $db->query( "SELECT `logo` FROM `" . $table_name . "` WHERE `sourceid` =" . $rowcontent['sourceid'] )->fetchColumn();
+	$logo_old = $db->query( "SELECT logo FROM " . $table_name . " WHERE sourceid =" . $rowcontent['sourceid'] )->fetchColumn();
 
 	$rowcontent['logo'] = $nv_Request->get_string( 'logo', 'post', '' );
 
@@ -50,7 +58,7 @@ if( ! empty( $savecat ) )
 	{
 		if( $rowcontent['sourceid'] == 0 )
 		{
-			$weight = $db->query( "SELECT max(`weight`) FROM `" . $table_name . "`" )->fetchColumn();
+			$weight = $db->query( "SELECT max(weight) FROM " . $table_name . "" )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$listfield = "";
@@ -58,20 +66,19 @@ if( ! empty( $savecat ) )
 			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ", `" . $flang . "_" . $fname . "`";
-				if( $flang == NV_LANG_DATA )
-				{
-					$listvalue .= ", " . $db->quote( $rowcontent[$fname] );
-				}
-				else
-				{
-					$listvalue .= ", " . $db->quote( $rowcontent[$fname] );
-				}
+				$listfield .= ", " . $flang . "_" . $fname;
+				$listvalue .= ", :" . $flang . "_" . $fname;
 			}
-
-			$sql = "INSERT INTO `" . $table_name . "` (`sourceid`,`link`, `logo`, `weight`, `add_time`, `edit_time` " . $listfield . ") VALUES (NULL, " . $db->quote( $link ) . ", " . $db->quote( $logo ) . ", " . $db->quote( $weight ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
-
-			if( $db->insert_id( $sql ) )
+			$sql = "INSERT INTO " . $table_name . " (sourceid,link, logo, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, :link, :logo, " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+			$data_insert = array();
+			$data_insert['link'] = $rowcontent['link'];
+			$data_insert['logo'] = $rowcontent['logo'];
+			foreach( $field_lang as $field_lang_i )
+			{
+				list( $flang, $fname ) = $field_lang_i;
+				$data_insert[$flang . "_" . $fname] = $rowcontent[$fname];
+			}
+			if( $db->insert_id( $sql, 'sourceid', $data_insert ) )
 			{
 				nv_del_moduleCache( $module_name );
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -84,8 +91,11 @@ if( ! empty( $savecat ) )
 		}
 		else
 		{
-			$sql = "UPDATE `" . $table_name . "` SET `" . NV_LANG_DATA . "_title`=" . $db->quote( $rowcontent['title'] ) . ", `link` = " . $db->quote( $rowcontent['link'] ) . ", `logo`=" . $db->quote( $rowcontent['logo'] ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `sourceid` =" . $rowcontent['sourceid'];
-			if( $db->exec( $sql ) )
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . NV_LANG_DATA . "_title= :title, link = :link, logo= :logo, edit_time=UNIX_TIMESTAMP() WHERE sourceid =" . $rowcontent['sourceid'] );
+			$stmt->bindParam( ':title', $rowcontent['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':link', $rowcontent['link'], PDO::PARAM_STR );
+			$stmt->bindParam( ':logo', $rowcontent['logo'], PDO::PARAM_STR );
+			if( $stmt->execute() )
 			{
 				nv_del_moduleCache( $module_name );
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -102,7 +112,7 @@ if( ! empty( $savecat ) )
 $rowcontent['sourceid'] = $nv_Request->get_int( 'sourceid', 'get', 0 );
 if( $rowcontent['sourceid'] > 0 )
 {
-	list( $rowcontent['sourceid'], $rowcontent['title'], $rowcontent['link'], $rowcontent['logo'] ) = $db->query( "SELECT `sourceid`, `" . NV_LANG_DATA . "_title`, `link`, `logo` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` where `sourceid`=" . $rowcontent['sourceid'] . "" )->fetch( 3 );
+	list( $rowcontent['sourceid'], $rowcontent['title'], $rowcontent['link'], $rowcontent['logo'] ) = $db->query( "SELECT sourceid, " . NV_LANG_DATA . "_title, link, logo FROM " . $db_config['prefix'] . "_" . $module_data . "_sources where sourceid=" . $rowcontent['sourceid'] . "" )->fetch( 3 );
 	$lang_module['add_sources'] = $lang_module['edit_sources'];
 }
 

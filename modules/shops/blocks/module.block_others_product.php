@@ -29,8 +29,14 @@ if( ! function_exists( 'nv_others_product' ) )
 			$xtpl->assign( 'LANG', $lang_module );
 			$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $module_info['template'] );
 
-			$sql = "SELECT `id`, `listcatid`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias` ,`addtime`, `homeimgfile`, `homeimgthumb`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 AND `listcatid` = " . $catid . " AND `id` < " . $id . " ORDER BY `id` DESC LIMIT 0,20";
-			$result = $db->query( $sql );
+			$db->sqlreset()
+				->select( 'id, listcatid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias ,addtime, homeimgfile, homeimgthumb, product_price, product_discounts, money_unit, showprice' )
+				->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+				->where( 'status =1 AND listcatid = ' . $catid . ' AND id < ' . $id )
+				->order( 'id DESC' )
+				->limit( 20 );
+
+			$result = $db->query( $db->sql() );
 
 			$i = 1;
 			while( list( $id_i, $listcatid_i, $title_i, $alias_i, $addtime_i, $homeimgfile_i, $homeimgthumb_i, $product_price_i, $product_discounts_i, $money_unit_i, $showprice_i ) = $result->fetch( 3 ) )
@@ -77,7 +83,7 @@ if( ! function_exists( 'nv_others_product' ) )
 				$bg = ( $i % 2 == 0 ) ? "bg" : "";
 				$xtpl->assign( "bg", $bg );
 				$xtpl->parse( 'main.loop' );
-				$i++;
+				++$i;
 			}
 
 			$xtpl->parse( 'main' );

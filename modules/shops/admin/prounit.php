@@ -34,7 +34,7 @@ if( ! empty( $savecat ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", `" . $flang . "_" . $fname . "`";
+			$listfield .= ", " . $flang . "_" . $fname;
 			if( $flang == NV_LANG_DATA )
 			{
 				$listvalue .= ", " . $db->quote( $data[$fname] );
@@ -45,7 +45,7 @@ if( ! empty( $savecat ) )
 			}
 		}
 
-		$sql = "INSERT INTO `" . $table_name . "` (`id` " . $listfield . ") VALUES (NULL " . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (id " . $listfield . ") VALUES (NULL " . $listvalue . ")";
 
 		if( $db->insert_id( $sql ) )
 		{
@@ -61,8 +61,10 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . $table_name . "` SET `" . NV_LANG_DATA . "_title`=" . $db->quote( $data['title'] ) . ", `" . NV_LANG_DATA . "_note` = " . $db->quote( $data['note'] ) . " WHERE `id` =" . $data['id'];
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_note = :note WHERE id =" . $data['id'] );
+		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':note', $data['note'], PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
 			$error = $lang_module['saveok'];
 
@@ -80,7 +82,7 @@ else
 {
 	if( $data['id'] > 0 )
 	{
-		$data_old = $db->query( "SELECT * FROM `" . $table_name . "` WHERE id=" . $data['id'] )->fetch();
+		$data_old = $db->query( "SELECT * FROM " . $table_name . " WHERE id=" . $data['id'] )->fetch();
 		$data = array(
 			"id" => $data_old['id'],
 			"title" => $data_old[NV_LANG_DATA . '_title'],
@@ -95,7 +97,7 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'caption', $lang_module['prounit_info'] );
 
 $count = 0;
-$result = $db->query( "SELECT `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_note` FROM `" . $table_name . "` ORDER BY `id` DESC" );
+$result = $db->query( "SELECT id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_note FROM " . $table_name . " ORDER BY id DESC" );
 while( list( $id, $title, $note ) = $result->fetch( 3 ) )
 {
 	$xtpl->assign( 'title', $title );
@@ -105,14 +107,13 @@ while( list( $id, $title, $note ) = $result->fetch( 3 ) )
 	$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delunit&id=" . $id );
 
 	$xtpl->parse( 'main.data.row' );
-	$count++;
+	++$count;
 }
 
 $xtpl->assign( 'URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delunit" );
 $xtpl->assign( 'URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 
 if( $count > 0 ) $xtpl->parse( 'main.data' );
-
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

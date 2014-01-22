@@ -15,38 +15,38 @@ $bid = $nv_Request->get_int( 'bid', 'post', 0 );
 $mod = $nv_Request->get_string( 'mod', 'post', '' );
 $new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-if( empty( $bid ) ) die( "NO_" . $bid );
-$content = "NO_" . $bid;
+if( empty( $bid ) ) die( 'NO_' . $bid );
+$content = 'NO_' . $bid;
 
-if( $mod == "weight" and $new_vid > 0 )
+if( $mod == 'weight' and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` WHERE `bid`=" . $bid;
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat WHERE bid=' . $bid;
 	$result = $db->query( $sql );
 	$numrows = $result->rowCount();
 	if( $numrows != 1 ) die( 'NO_' . $topicid );
 
-	$sql = "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` WHERE `bid`!=" . $bid . " ORDER BY `weight` ASC";
+	$sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat WHERE bid!=' . $bid . ' ORDER BY weight ASC';
 	$result = $db->query( $sql );
 	$weight = 0;
 	while( $row = $result->fetch() )
 	{
-		$weight++;
-		if( $weight == $new_vid ) $weight++;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `weight`=" . $weight . " WHERE `bid`=" . intval( $row['bid'] );
+		++$weight;
+		if( $weight == $new_vid ) ++$weight;
+		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET weight=' . $weight . ' WHERE bid=' . intval( $row['bid'] );
 		$db->query( $sql );
 	}
-	
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `weight`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+
+	$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET weight=' . $new_vid . ' WHERE bid=' . intval( $bid );
 	$db->query( $sql );
-	
-	$content = "OK_" . $bid;
+
+	$content = 'OK_' . $bid;
 }
-elseif( $mod == "adddefault" and $bid > 0 )
+elseif( $mod == 'adddefault' and $bid > 0 )
 {
 	$new_vid = ( intval( $new_vid ) == 1 ) ? 1 : 0;
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `adddefault`=" . $new_vid . " WHERE `bid`=" . intval( $bid );
+	$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_block_cat SET adddefault=' . $new_vid . ' WHERE bid=' . intval( $bid );
 	$db->query( $sql );
-	$content = "OK_" . $bid;
+	$content = 'OK_' . $bid;
 }
 
 nv_del_moduleCache( $module_name );

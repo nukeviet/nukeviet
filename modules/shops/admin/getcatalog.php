@@ -17,9 +17,9 @@ if( $pid == 0 )
 	$cateid = $nv_Request->get_int( 'cid', 'get', 0 );
 	$table = $db_config['prefix'] . "_" . $module_data . "_catalogs";
 
-	$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev`, `numsubcat` FROM `" . $table . "` ORDER BY `order` ASC";
+	$sql = "SELECT catid, " . NV_LANG_DATA . "_title, lev, numsubcat FROM " . $table . " ORDER BY sort ASC";
 	$result_cat = $db->query( $sql );
-	
+
 	$contents .= $lang_module['group_of'] . ' <select name="cateid">';
 	$contents .= '<option value="0">' . $lang_module['group_of_none'] . '</option>';
 	while( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )

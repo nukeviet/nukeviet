@@ -15,7 +15,7 @@ $page_title = $lang_module['setup_payment'];
 $array_setting_payment = array();
 
 // Load config template payment port in data
-$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 $result = $db->query( $sql );
 $all_page = $result->rowCount();
 
@@ -85,10 +85,10 @@ if( ! empty( $payment ) )
 	{
 		if( ! empty( $array_payment_other[$payment] ) )
 		{
-			$weight = $db->query( "SELECT max(`weight`) FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment`" )->fetchColumn();
+			$weight = $db->query( "SELECT max(weight) FROM " . $db_config['prefix'] . "_" . $module_data . "_payment" )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
-			$sql = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_payment` (`payment`, `paymentname`, `domain`, `active`, `weight`, `config`,`images_button`) VALUES (" . $db->quote( $payment ) . ", " . $db->quote( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->quote( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->quote( $array_payment_other[$payment]['images_button'] ) . ")";
+			$sql = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_payment (payment, paymentname, domain, active, weight, config,images_button) VALUES (" . $db->quote( $payment ) . ", " . $db->quote( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->quote( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->quote( $array_payment_other[$payment]['images_button'] ) . ")";
 
 			$db->query( $sql );
 
@@ -97,10 +97,10 @@ if( ! empty( $payment ) )
 	}
 
 	// Get data have in database
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE payment=" . $db->quote( $payment );
-	$result = $db->query( $sql );
-
-	$data_pay = $result->fetch();
+	$stmt = $db->prepare( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment= :payment" );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
+	$data_pay = $stmt->fetch();
 }
 
 if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
@@ -122,9 +122,12 @@ if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
 		$images_button = "";
 	}
 
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_payment` SET `paymentname` = " . $db->quote( $paymentname ) . ", `domain` = " . $db->quote( $domain ) . ", `active`=" . $active . ", `config` = '" . nv_base64_encode( serialize( $array_config ) ) . "',`images_button`=" . $db->quote( $images_button ) . " WHERE `payment` = " . $db->quote( $payment ) . " LIMIT 1";
-
-	$db->query( $sql );
+	$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_payment SET paymentname = :paymentname, domain = :domain, active=" . $active . ", config = '" . nv_base64_encode( serialize( $array_config ) ) . "',images_button= :images_button WHERE payment = :payment" );
+	$stmt->bindParam( ':paymentname', $paymentname, PDO::PARAM_STR );
+	$stmt->bindParam( ':domain', $domain, PDO::PARAM_STR );
+	$stmt->bindParam( ':images_button', $images_button, PDO::PARAM_STR );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_product', "edit " . $paymentname, $admin_info['userid'] );
 	nv_del_moduleCache( $module_name );
@@ -148,7 +151,7 @@ if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 		$xtpl->assign( 'DATA_PM', $value );
 
 		$xtpl->parse( 'main.listpay.paymentloop' );
-		$a ++;
+		++$a;
 	}
 
 	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -171,7 +174,7 @@ if( ! empty( $array_payment_other ) && empty( $data_pay ) )
 			$xtpl->assign( 'ODATA_PM', $value );
 
 			$xtpl->parse( 'main.olistpay.opaymentloop' );
-			$a ++;
+			++$a;
 		}
 	}
 
