@@ -93,7 +93,7 @@ if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 }
 else
 {
-	$data = "<textarea style=\"width: 100%\" name=\"content\" id=\"content\" cols=\"20\" rows=\"8\">" . $content . "</textarea>";
+	$data = '<textarea style="width: 100%" name="content" id="content" cols="20" rows="8">' . $content . '</textarea>';
 }
 
 $xtpl->assign( 'DATA', $data );

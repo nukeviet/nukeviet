@@ -29,11 +29,12 @@ if( $nv_Request->isset_request( 'edit', 'post' ) )
 		WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'" );
 
 	$stmt->bindParam( ':title', $title, PDO::PARAM_STR, strlen( $title ) );
-	if( ! $stmt->execute() )
+	if( $stmt->execute() )
 	{
-		die( 'NO' );
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['savequestion'], 'id: '. $qid . '; ' .$title );
+		die( 'OK' );
 	}
-	die( 'OK' );
+	die( 'NO' );
 }
 
 // Them cau hoi
@@ -52,15 +53,16 @@ if( $nv_Request->isset_request( 'add', 'post' ) )
 	$weight = intval( $weight ) + 1;
 	$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question
 		(title, lang, weight, add_time, edit_time) VALUES
-		( :title, " .  NV_LANG_DATA  . ", " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		( :title, '" .  NV_LANG_DATA  . "', " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
 	$data_insert = array();
 	$data_insert['title'] = $title;
-	if( ! $db->insert_id( $_sql, 'qid', $data_insert ) )
+	if( $db->insert_id( $_sql, 'qid', $data_insert ) )
 	{
-		die( 'NO' );
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addquestion'], $title );
+		die( 'OK' );
 	}
-	die( 'OK' );
+	die( 'NO'.$_sql );
 }
 
 // Chinh thu tu
@@ -82,10 +84,10 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $weight . " WHERE qid=" . $row['qid'];
+		$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
 		$db->query( $sql );
 	}
-	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $new_vid . " WHERE qid=" . $qid;
+	$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $new_vid . ' WHERE qid=' . $qid;
 	$db->query( $sql );
 	die( 'OK' );
 }
@@ -97,13 +99,14 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$qid = $nv_Request->get_int( 'qid', 'post', 0 );
 
-	$qid = $db->query( "SELECT qid FROM " . NV_USERS_GLOBALTABLE . "_question WHERE qid=" . $qid )->fetchColumn();
+	list( $qid, $title ) = $db->query( 'SELECT qid, title FROM ' . NV_USERS_GLOBALTABLE . '_question WHERE qid=' . $qid )->fetch( 3 );
 
 	if( $qid )
 	{
-		$sql = "DELETE FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE qid=" . $qid;
+		$sql = 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_question WHERE qid=' . $qid;
 		if( $db->exec( $sql ) )
 		{
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['deletequestion'], 'id: '. $qid . '; ' .$title );
 
 			// fix weight question
 			$sql = "SELECT qid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
@@ -112,7 +115,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 			while( $row = $result->fetch() )
 			{
 				++$weight;
-				$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question SET weight=" . $weight . " WHERE qid=" . $row['qid'];
+				$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
 				$db->query( $sql );
 			}
 			$result->closeCursor();
@@ -134,7 +137,6 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 	$_rows = $db->query( $sql )->fetchAll();
 	$num = sizeof( $_rows );
-
 	if( $num )
 	{
 		foreach ( $_rows as $row )
@@ -149,7 +151,7 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 				$xtpl->assign( 'WEIGHT', array(
 					'key' => $i,
 					'title' => $i,
-					'selected' => $i == $row['weight'] ? ' selected=\'selected\'' : ''
+					'selected' => $i == $row['weight'] ? ' selected="selected"' : ''
 				) );
 				$xtpl->parse( 'main.data.loop.weight' );
 			}

@@ -119,7 +119,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			die( $e->getMessage() );
 		}
 		return false;
 	}

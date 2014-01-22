@@ -27,7 +27,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
 	addtime int(11) NOT NULL DEFAULT '0',
 	edittime int(11) NOT NULL DEFAULT '0',
 	is_suspend tinyint(1) unsigned NOT NULL DEFAULT '0',
-	susp_reason text DEFAULT '',
+	susp_reason text,
 	check_num varchar(40) NOT NULL,
 	last_login int(11) unsigned NOT NULL DEFAULT '0',
 	last_ip varchar(45) DEFAULT '',
