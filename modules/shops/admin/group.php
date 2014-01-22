@@ -66,7 +66,7 @@ if( ! empty( $savegroup ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", " . $flang . "_" . $fname . "";
+			$listfield .= ", " . $flang . "_" . $fname;
 			if( $flang == NV_LANG_DATA )
 			{
 				$listvalue .= ", " . $db->quote( $data[$fname] );
@@ -87,7 +87,7 @@ if( ! empty( $savegroup ) )
 		$subgroupid = "";
 
 		$sql = "INSERT INTO " . $table_name . " (groupid, parentid,cateid, image, thumbnail, weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, numlinks, admins, add_time, edit_time, who_view, groups_view,numpro " . $listfield . " )
- 			VALUES (NULL, ".(int)$data['parentid'].", ".$data['cateid'].",' ',' ',".(int)$weight.", '0', '0', :viewgroup, '0', :subgroupid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()," .(int)$data['who_view'].", :groups_view ,'0' " . $listvalue . " )";
+ 			VALUES (NULL, " . (int)$data['parentid'] . ", " . $data['cateid'] . ",' ',' '," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()," . (int)$data['who_view'] . ", :groups_view ,'0' " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;
@@ -95,7 +95,7 @@ if( ! empty( $savegroup ) )
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $groups_view;
 		$newgroupid = intval( $db->insert_id( $sql, 'groupid', $data_insert ) );
-		
+
 		if( $newgroupid > 0 )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_catalog', "id " . $newcatid, $admin_info['userid'] );

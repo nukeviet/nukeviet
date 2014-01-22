@@ -148,12 +148,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 		$db->sqlreset()
 			->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt" )
-			->from( $db_config['prefix'] . "_" . $mod_data . "_rows  t1" )
-			->join( "INNER JOIN " . $db_config['prefix'] . "_" . $mod_data . "_block t2 ON t1.id = t2.id")
+			->from( $db_config['prefix'] . "_" . $mod_data . "_rows t1" )
+			->join( "INNER JOIN " . $db_config['prefix'] . "_" . $mod_data . "_block t2 ON t1.id = t2.id" )
 			->where( "t2.bid= " . $block_config['blockid'] . " AND t1.status =1" )
 			->order( 't1.id DESC' )
 			->limit( $num );
-				
+
 		$list = nv_db_cache( $db->sql(), '', $module );
 
 		foreach( $list as $row )
@@ -186,10 +186,10 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			if( $i % $num_view == 0 )
 			{
 				$page_i .= "<li><a href=\"#\">" . $j . "</a></li>";
-				$j++;
+				++$j;
 				$xtpl->parse( 'main.loop' );
 			}
-			$i++;
+			++$i;
 		}
 
 		if( $i > $num_view and ( $i - 1 ) % $num_view != 0 )

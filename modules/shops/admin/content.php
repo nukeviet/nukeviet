@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
 $table_name = $db_config['prefix'] . "_" . $module_data . "_rows";
@@ -100,7 +100,7 @@ $rowcontent = array(
 	"warranty" => "",
 	"promotional" => "",
 	"sourcetext" => "",
-	"topictext" => "",
+	"topictext" => ""
 );
 
 $page_title = $lang_module['content_add'];
@@ -238,7 +238,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$stmt->bindParam( ':product_code', $rowcontent['product_code'], PDO::PARAM_STR );
 		$stmt->execute();
 		$id_err = $stmt->rowCount();
-			
+
 		$stmt = $db->prepare( "SELECT id FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE product_code= :product_code" );
 		$stmt->bindParam( ':product_code', $rowcontent['product_code'], PDO::PARAM_STR );
 		$stmt->execute();
@@ -298,9 +298,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			foreach( $field_lang_source as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ", " . $flang . "_" . $fname . "";
+				$listfield .= ", " . $flang . "_" . $fname;
 				$listvalue .= ", :" . $flang . "_" . $fname;
-				
+
 			}
 			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_sources (sourceid, link, logo, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, '', '', " . (int)$weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
 			$data_insert = array();
@@ -310,7 +310,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$data_insert[$flang . "_" . $fname] = $rowcontent[$fname];
 			}
 			//print_r($expression)
-			$rowcontent['source_id'] =  $db->insert_id( $sql, 'catid', $data_insert );
+			$rowcontent['source_id'] = $db->insert_id( $sql, 'catid', $data_insert );
 		}
 
 		// Xu ly tu khoa
@@ -356,7 +356,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", " . $flang . "_" . $fname . "";
+			$listfield .= ", " . $flang . "_" . $fname;
 			$listvalue .= ", :" . $flang . "_" . $fname;
 		}
 
@@ -421,7 +421,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$data_insert[$flang . "_" . $fname] = $rowcontent[$fname];
 			}
 
-			$rowcontent['id'] =  $db->insert_id( $sql, 'catid', $data_insert );
+			$rowcontent['id'] = $db->insert_id( $sql, 'catid', $data_insert );
 
 			if( $rowcontent['id'] > 0 )
 			{
@@ -430,13 +430,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					$i = 1;
 					$auto_product_code = vsprintf( $pro_config['format_code_id'], $rowcontent['id'] );
-					
+
 					$stmt = $db->prepare( "SELECT id FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE product_code= :product_code" );
 					$stmt->bindParam( ':product_code', $auto_product_code, PDO::PARAM_STR );
 					$stmt->execute();
 					while( $stmt->rowCount() )
 					{
-						$auto_product_code = vsprintf( $pro_config['format_code_id'], ( $rowcontent['id'] + $i ++ ) );
+						$auto_product_code = vsprintf( $pro_config['format_code_id'], ( $rowcontent['id'] + $i++ ) );
 					}
 
 					$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET product_code= :product_code WHERE id=" . $rowcontent['id'] );
@@ -511,7 +511,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 " . NV_LANG_DATA . "_promotional= :promotional,
 			 " . NV_LANG_DATA . "_warranty= :warranty
 			WHERE id =" . $rowcontent['id'] );
-			
+
 			$stmt->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':group_id', $rowcontent['group_id'], PDO::PARAM_STR );
 			$stmt->bindParam( ':product_code', $rowcontent['product_code'], PDO::PARAM_STR );
@@ -615,7 +615,7 @@ elseif( $rowcontent['id'] > 0 )
 		"keywords" => $rowdata[NV_LANG_DATA . '_keywords'],
 		"address" => $rowdata[NV_LANG_DATA . '_address'],
 		"promotional" => $rowdata[NV_LANG_DATA . '_promotional'],
-		"warranty" => $rowdata[NV_LANG_DATA . '_warranty'],
+		"warranty" => $rowdata[NV_LANG_DATA . '_warranty']
 	);
 
 	$page_title = $lang_module['content_edit'];
@@ -710,7 +710,7 @@ if( ! empty( $otherimage ) )
 		$data_otherimage_i = array( "id" => $items, "value" => $otherimage_i );
 		$xtpl->assign( 'DATAOTHERIMAGE', $data_otherimage_i );
 		$xtpl->parse( 'main.otherimage' );
-		$items++;
+		++$items;
 	}
 }
 $xtpl->assign( 'FILE_ITEMS', $items );
@@ -850,7 +850,6 @@ while( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
 	$xtpl->assign( 'uch', $uch );
 	$xtpl->parse( 'main.rowunit' );
 }
-
 
 $archive_checked = ( $rowcontent['archive'] ) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'archive_checked', $archive_checked );

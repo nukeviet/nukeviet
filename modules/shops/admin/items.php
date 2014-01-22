@@ -8,11 +8,11 @@
  * @Createdate 9-8-2010 14:43
  */
 
- if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['content_list'];
 
-if ( ! defined( 'SHADOWBOX' ) )
+if( ! defined( 'SHADOWBOX' ) )
 {
 	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
@@ -127,7 +127,7 @@ if( $checkss == md5( session_id() ) )
 			$from .= " AND";
 		}
 
-		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
+		if( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
 			$from .= " listcatid=" . $catid;
 		}
@@ -166,7 +166,11 @@ foreach( $global_array_cat as $cat )
 // Kieu tim kiem
 foreach( $array_search as $key => $val )
 {
-	$xtpl->assign( 'STYPE', array( "key" => $key, "title" => $val, "selected" => ( $key == $stype ) ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'STYPE', array(
+		"key" => $key,
+		"title" => $val,
+		"selected" => ( $key == $stype ) ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.stype' );
 }
 
@@ -174,7 +178,11 @@ foreach( $array_search as $key => $val )
 $i = 5;
 while( $i <= 1000 )
 {
-	$xtpl->assign( 'PER_PAGE', array( "key" => $i, "title" => $i, "selected" => ( $i == $per_page ) ? " selected=\"selected\"" : "" ) );
+	$xtpl->assign( 'PER_PAGE', array(
+		"key" => $i,
+		"title" => $i,
+		"selected" => ( $i == $per_page ) ? " selected=\"selected\"" : ""
+	) );
 	$xtpl->parse( 'main.per_page' );
 	$i = $i + 5;
 }
@@ -195,14 +203,8 @@ $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;per_page=" . $per_page . "&amp;catid=" . $catid . "&amp;stype=" . $stype . "&amp;q=" . $q . "&amp;checkss=" . $checkss . "&amp;ordername=" . $ordername . "&amp;order=" . $order;
 $ord_sql = ( $ordername == "title" ? NV_LANG_DATA . "_title" : $ordername ) . " " . $order;
-$db->sqlreset()
-	->select( "id, listcatid, user_id, homeimgfile, homeimgthumb, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, status , edittime, publtime, exptime, product_number, product_price, product_discounts, money_unit, username" )
-	->from( $from )
-	->order( $ord_sql )
-	->limit( $per_page )
-	->offset( $page );
+$db->sqlreset()->select( "id, listcatid, user_id, homeimgfile, homeimgthumb, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, status , edittime, publtime, exptime, product_number, product_price, product_discounts, money_unit, username" )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( $page );
 $result = $db->query( $db->sql() );
-//die('den day'.NV_LANG_DATA.$db->sql());
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
@@ -224,16 +226,16 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 	}
 
 	// Xac dinh anh nho
-	if( $homeimgthumb == 1 ) //image thumb
+	if( $homeimgthumb == 1 )//image thumb
 	{
 		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		$imghome = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 2 ) //image file
+	elseif( $homeimgthumb == 2 )//image file
 	{
 		$imghome = $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 3 ) //image url
+	elseif( $homeimgthumb == 3 )//image url
 	{
 		$imghome = $thumb = $homeimgfile;
 	}
@@ -262,11 +264,11 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		"imghome" => $imghome,
 		"product_discounts" => $product_discounts,
 		"link_edit" => nv_link_edit_page( $id ),
-		"link_delete" => nv_link_delete_page( $id ),
+		"link_delete" => nv_link_delete_page( $id )
 	) );
 	$xtpl->parse( 'main.loop' );
 
-	$a++;
+	++$a;
 }
 
 $array_list_action = array(

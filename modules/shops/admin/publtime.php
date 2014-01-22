@@ -14,17 +14,17 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 {
 	$listid = $nv_Request->get_string( 'listid', 'get' );
 	$id_array = array_filter( array_map( "intval", explode( ",", $listid ) ) );
-	
+
 	$sql = "SELECT id, listcatid, status , publtime, exptime FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id IN (" . implode( ",", $id_array ) . ")";
 	$result = $db->query( $sql );
-	
+
 	while( list( $id, $listcatid, $status, $publtime, $exptime ) = $result->fetch( 3 ) )
 	{
 		$data_save = array();
-		$data_save['exptime'] = ( int ) $exptime;
-		$data_save['publtime'] = ( int ) $publtime;
+		$data_save['exptime'] = ( int )$exptime;
+		$data_save['publtime'] = ( int )$publtime;
 		$data_save['status'] = 1;
-		
+
 		if( $exptime > 0 and $exptime < NV_CURRENTTIME )
 		{
 			$data_save['exptime'] = 0;
@@ -34,7 +34,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 		{
 			$data_save['publtime'] = NV_CURRENTTIME;
 		}
-		
+
 		if( ! empty( $data_save ) )
 		{
 			$s_ud = "";

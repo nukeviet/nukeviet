@@ -70,12 +70,11 @@ if( ! empty( $savecat ) )
 				foreach( $field_lang as $field_lang_i )
 				{
 					list( $flang, $fname ) = $field_lang_i;
-					$listfield .= ", " . $flang . "_" . $fname . "";
-					if( $flang == NV_LANG_DATA )
-					$listvalue .= ", :" . $flang . "_" . $fname;
+					$listfield .= ", " . $flang . "_" . $fname;
+					if( $flang == NV_LANG_DATA ) $listvalue .= ", :" . $flang . "_" . $fname;
 				}
 
-				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, thumbnail, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', '', ".$weight.", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, thumbnail, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', '', " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
 
 				$data_insert = array();
 				foreach( $field_lang as $field_lang_i )
@@ -83,7 +82,7 @@ if( ! empty( $savecat ) )
 					list( $flang, $fname ) = $field_lang_i;
 					$data_insert[$flang . "_" . $fname] = $data[$fname];
 				}
-				
+
 				if( $db->insert_id( $sql, 'bid', $data_insert ) )
 				{
 					nv_del_moduleCache( $module_name );

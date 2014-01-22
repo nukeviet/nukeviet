@@ -1,13 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -348,4 +348,5 @@ $lang_module['displays_price_desc'] = 'Giá giảm dần';
 $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['compare'] = 'So sánh';
 $lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
+
 ?>

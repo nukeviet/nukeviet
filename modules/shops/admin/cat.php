@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
- if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['cat_title'];
 
@@ -59,7 +59,7 @@ if( ! empty( $savecat ) )
 	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 	$stmt->execute();
 	$check_alias = $stmt->fetchColumn();
-	
+
 	if( $check_alias and $data['parentid'] > 0 )
 	{
 		$parentid_alias = $db->query( "SELECT " . NV_LANG_DATA . "_alias FROM " . $table_name . " WHERE catid=" . $data['parentid'] )->fetchColumn();
@@ -73,13 +73,13 @@ if( ! empty( $savecat ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", " . $flang . "_" . $fname . "";
+			$listfield .= ", " . $flang . "_" . $fname;
 			$listvalue .= ", :" . $flang . "_" . $fname;
 		}
-		$stmt= $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid" );
+		$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid" );
 		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 		$stmt->execute();
-		$weight=$stmt->fetchColumn();
+		$weight = $stmt->fetchColumn();
 
 		$weight = intval( $weight ) + 1;
 
@@ -87,7 +87,7 @@ if( ! empty( $savecat ) )
 		$subcatid = "";
 
 		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, thumbnail, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, admins, add_time, edit_time, who_view, groups_view " . $listfield . " )
- 			VALUES (NULL, :parentid, ' ', ' ',". $weight.", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), ".$data['who_view'].", :groups_view".$listvalue. ")";
+ 			VALUES (NULL, :parentid, ' ', ' '," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $data['who_view'] . ", :groups_view" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['subcatid'] = $subcatid;
@@ -99,7 +99,7 @@ if( ! empty( $savecat ) )
 			list( $flang, $fname ) = $field_lang_i;
 			$data_insert[$flang . "_" . $fname] = $data[$fname];
 		}
-		
+
 		$newcatid = intval( $db->insert_id( $sql, 'catid', $data_insert ) );
 		if( $newcatid > 0 )
 		{
@@ -110,7 +110,7 @@ if( ! empty( $savecat ) )
 			die();
 		}
 		else
-		{die("den day ha");
+		{
 			$error = $lang_module['errorsave'];
 		}
 	}
@@ -124,7 +124,7 @@ if( ! empty( $savecat ) )
 		$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
 		$stmt->bindParam( ':who_view', $data['who_view'], PDO::PARAM_INT );
 		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
-		
+
 		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', "id " . $data['catid'], $admin_info['userid'] );

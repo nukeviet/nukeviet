@@ -8,9 +8,9 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_USER' ) )
+if( ! defined( 'NV_IS_USER' ) )
 {
 	$redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart";
 	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $redirect ) );
@@ -24,7 +24,7 @@ $result = $db->query( $sql );
 
 $link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 
-while ( list( $order_id, $order_code, $order_note, $user_id, $unit_total, $order_total, $order_time, $transaction_status, $transaction_id, $transaction_count ) = $result->fetch( 3 ) )
+while( list( $order_id, $order_code, $order_note, $user_id, $unit_total, $order_total, $order_time, $transaction_status, $transaction_id, $transaction_count ) = $result->fetch( 3 ) )
 {
 	$checkss = md5( $order_id . $global_config['sitekey'] . session_id() );
 	$data_content[] = array(
@@ -38,7 +38,8 @@ while ( list( $order_id, $order_code, $order_note, $user_id, $unit_total, $order
 		"unit_total" => $unit_total,
 		"order_total" => $order_total,
 		"order_time" => $order_time,
-		"link" => $link_module . "&amp;" . NV_OP_VARIABLE . "=payment&amp;order_id=" . $order_id . "&checkss=" . $checkss, "link_remove" => $link_module . "&amp;" . NV_OP_VARIABLE . "=delhis&amp;order_id=" . $order_id . "&checkss=" . $checkss 
+		"link" => $link_module . "&amp;" . NV_OP_VARIABLE . "=payment&amp;order_id=" . $order_id . "&checkss=" . $checkss,
+		"link_remove" => $link_module . "&amp;" . NV_OP_VARIABLE . "=delhis&amp;order_id=" . $order_id . "&checkss=" . $checkss
 	);
 }
 

@@ -27,26 +27,20 @@ $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_n
 $sql = "" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " a LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_rows b ON a.id=b.id";
 $all_page = $db->query( "SELECT COUNT(*) FROM " . $sql )->fetchColumn();
 
-$db->sqlreset()
-	->select("a.cid, a.content, a.post_email, a.status, b." . NV_LANG_DATA . "_title" )
-	->from( $sql )
-	->where( 'a.status =1' )
-	->order( 'cid DESC' )
-	->limit( $per_page )
-	->offset( $page );
-	
+$db->sqlreset()->select( "a.cid, a.content, a.post_email, a.status, b." . NV_LANG_DATA . "_title" )->from( $sql )->where( 'a.status =1' )->order( 'cid DESC' )->limit( $per_page )->offset( $page );
+
 $result = $db->query( $db->sql() );
 
 $i = 1;
 while( list( $cid, $content, $email, $status, $title ) = $result->fetch( 3 ) )
 {
 	$xtpl->assign( 'ROW', array(
-		"class" => $i ++ % 2 == 0 ? " class=\"second\"" : "",
+		"class" => $i++ % 2 == 0 ? " class=\"second\"" : "",
 		"cid" => $cid,
 		"content" => $content,
 		"email" => $email,
 		"title" => $title,
-		"status" => ( $status == 1 ) ? $lang_module['comment_enable'] : $lang_module['comment_disable'],
+		"status" => ( $status == 1 ) ? $lang_module['comment_enable'] : $lang_module['comment_disable']
 	) );
 	$xtpl->parse( 'main.loop' );
 }

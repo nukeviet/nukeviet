@@ -17,9 +17,13 @@
 		<div class="items" style="width:{pwidth}%">
 			<div class="items_content">
 				<div class="content_top{CSS_PRODUCT_CODE}">
-					<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/> <!-- BEGIN: tooltip --> <span class="tip"><strong>{title_pro}</strong>
+					<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/>
+					<!-- BEGIN: tooltip -->
+					<span class="tip"><strong>{title_pro}</strong>
 						<br />
-						<img src="{img_pro}" style="max-width:{width}px;">{intro}</span> <!-- END: tooltip --> </a>
+						<img src="{img_pro}" style="max-width:{width}px;">{intro}</span>
+					<!-- END: tooltip -->
+					</a>
 					<br />
 					<span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span>
 					<br />
@@ -62,7 +66,6 @@
 					<!-- END: order -->
 					<a class="pro_detail" href="{link_pro}" title="{title_pro}">{LANG.detail_product}</a>
 				</div>
-
 
 			</div>
 		</div>

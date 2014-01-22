@@ -13,18 +13,18 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $payment = $nv_Request->get_string( 'id', 'post,get', '' );
 $value = $nv_Request->get_int( 'value', 'post,get', 0 );
 
-$table = $db_config['prefix'] . "_" . $module_data . "_payment";
+$table = $db_config['prefix'] . '_' . $module_data . '_payment';
 $contents = $lang_module['active_change_not_complete'];
 
 if( ! empty( $payment ) )
 {
-	$stmt = $db->prepare( "SELECT active FROM " . $table . " WHERE payment= :payment" );
+	$stmt = $db->prepare( 'SELECT active FROM ' . $table . ' WHERE payment= :payment' );
 	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
 	$stmt->execute();
 	$value = $stmt->fetchColumn();
 	$value = ( $value == '1' ) ? '0' : '1';
 
-	$stmt = $db->prepare( "UPDATE " . $table . " SET active=" . $value . " WHERE payment= :payment" );
+	$stmt = $db->prepare( 'UPDATE ' . $table . ' SET active=' . $value . ' WHERE payment= :payment' );
 	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
 	if( $stmt->execute() )
 	{

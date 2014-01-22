@@ -227,7 +227,7 @@ function nv_del_block_list(oForm, bid) {
 	var del_list = '';
 	var fa = oForm['idcheck[]'];
 	if (fa.length) {
-		for ( var i = 0; i < fa.length; i++) {
+		for (var i = 0; i < fa.length; i++) {
 			if (fa[i].checked) {
 				del_list = del_list + ',' + fa[i].value;
 			}
@@ -248,7 +248,7 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 	var fa = oForm['idcheck[]'];
 	var listid = '';
 	if (fa.length) {
-		for ( var i = 0; i < fa.length; i++) {
+		for (var i = 0; i < fa.length; i++) {
 			if (fa[i].checked) {
 				listid = listid + fa[i].value + ',';
 			}

@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
-die('den day:n post ');
+
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
@@ -35,22 +35,22 @@ elseif( defined( 'NV_IS_ADMIN' ) )
 else
 {
 	$userid = 0;
-	$name = "";
-	$email = "";
+	$name = '';
+	$email = '';
 }
 
-$contents = "ERR_Error Access!!!";
+$contents = 'ERR_Error Access!!!';
 
-if( $pro_config['comment'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $code != "" and $content != "" )
+if( $pro_config['comment'] and $id > 0 and $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $code != '' and $content != '' )
 {
 	$timeout = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'cookie', 0 );
 	if( ! nv_capcha_txt( $code ) )
 	{
-		$contents = "ERR_" . $lang_global['securitycodeincorrect'];
+		$contents = 'ERR_' . $lang_global['securitycodeincorrect'];
 	}
 	elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	{
-		$result = $db->query( "SELECT listcatid, allowed_comm FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . " AND status =1" );
+		$result = $db->query( 'SELECT listcatid, allowed_comm FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $id . ' AND status =1' );
 		$row = $result->fetch();
 		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 		{
@@ -62,37 +62,37 @@ if( $pro_config['comment'] and $id > 0 and $checkss == md5( $id . session_id() .
 			if( $stmt->execute() )
 			{
 				$page = 0;
-				$numf = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " WHERE id= '" . $id . "' AND status =1" )->fetchColumn();
+				$numf = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_comments_' . NV_LANG_DATA . ' WHERE id= ' . $id . ' AND status =1' )->fetchColumn();
 				if( $status )
 				{
-					$result = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
+					$result = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET hitscm=' . $numf . ' WHERE id=' . $id;
 					$db->query( $result );
 				}
 				$page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;
 				if( $page < 0 ) $page = 0;
 				$nv_Request->set_Cookie( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
-				$contents = "OK_" . $id . "_" . $checkss . "_" . $page . "_" . $lang_module['comment_success'];
+				$contents = 'OK_' . $id . '_' . $checkss . '_' . $page . '_' . $lang_module['comment_success'];
 			}
 			else
 			{
-				$contents = "ERR_" . $lang_module['comment_unsuccess'];
+				$contents = 'ERR_' . $lang_module['comment_unsuccess'];
 			}
 		}
 		else
 		{
-			$contents = "ERR_" . $lang_module['comment_unsuccess'];
+			$contents = 'ERR_' . $lang_module['comment_unsuccess'];
 		}
 	}
 	else
 	{
 		$timeout = ceil( ( $difftimeout - NV_CURRENTTIME + $timeout ) / 60 );
 		$timeoutmsg = sprintf( $lang_module['comment_timeout'], $timeout );
-		$contents = "ERR_" . $timeoutmsg;
+		$contents = 'ERR_' . $timeoutmsg;
 	}
 }
 else
 {
-	$contents = "ERR_" . $lang_module['comment_unsuccess'];
+	$contents = 'ERR_' . $lang_module['comment_unsuccess'];
 }
 
 include NV_ROOTDIR . '/includes/header.php';

@@ -8,33 +8,27 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_USER' ) )
 {
 	redict_link( $lang_module['product_login_fail'], $lang_module['redirect_to_back_login'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
 }
 
-if ( defined( 'NV_EDITOR' ) )
+if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
-else if ( ! function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
+else if( ! function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' ) )
 {
 	define( 'NV_EDITOR', TRUE );
 	define( 'NV_IS_CKEDITOR', TRUE );
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/ckeditor/ckeditor_php5.php';
 
-	function nv_aleditor ( $textareaname, $width = "100%", $height = '450px', $val = '' )
+	function nv_aleditor( $textareaname, $width = "100%", $height = '450px', $val = '' )
 	{
 		// Create class instance.
-		$editortoolbar = array(
-			array(
-			'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat'
-		), array(
-			'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source'
-		)
-		);
+		$editortoolbar = array( array( 'Link', 'Unlink', 'Image', 'Table', 'Font', 'FontSize', 'RemoveFormat' ), array( 'Bold', 'Italic', 'Underline', 'StrikeThrough', '-', 'Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'OrderedList', 'UnorderedList', '-', 'Outdent', 'Indent', 'TextColor', 'BGColor', 'Source' ) );
 		$CKEditor = new CKEditor();
 		// Do not print the code directly to the browser, return it instead
 		$CKEditor->returnOutput = true;
@@ -48,22 +42,20 @@ else if ( ! function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' .
 		// If not set, CKEditor will try to detect the correct path.
 		$CKEditor->basePath = NV_BASE_SITEURL . '' . NV_EDITORSDIR . '/ckeditor/';
 		// Set global configuration (will be used by all instances of CKEditor).
-		if ( ! empty( $width ) )
+		if( ! empty( $width ) )
 		{
 			$CKEditor->config['width'] = strpos( $width, '%' ) ? $width : intval( $width );
 		}
-		if ( ! empty( $height ) )
+		if( ! empty( $height ) )
 		{
 			$CKEditor->config['height'] = strpos( $height, '%' ) ? $height : intval( $height );
 		}
 		// Change default textarea attributes
-		$CKEditor->textareaAttributes = array(
-			"cols" => 80,
-			"rows" => 10,
-		);
+		$CKEditor->textareaAttributes = array( "cols" => 80, "rows" => 10 );
 		$val = nv_unhtmlspecialchars( $val );
 		return $CKEditor->editor( $textareaname, $val );
 	}
+
 }
 
 $data_content = array(
@@ -115,13 +107,13 @@ $data_content = array(
 	"topictext" => "",
 	"description" => "",
 	"warranty" => "",
-	"promotional" => "",
+	"promotional" => ""
 );
 
 $page_title = $lang_module['content_add'];
 
 $id = isset( $array_op[1] ) ? $array_op[1] : 0;
-if ( $id == 0 )
+if( $id == 0 )
 {
 	$lang_submit = $lang_module['product_post_title'];
 }
@@ -133,7 +125,7 @@ else
 $error = "";
 $table_name = $db_config['prefix'] . "_" . $module_data . "_rows";
 
-if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
+if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
 	$field_lang = nv_file_table( $table_name );
 
@@ -161,18 +153,18 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$data_content['note'] = $data_content['pstatus'] . "|" . $data_content['payment'] . "|" . $data_content['move'];
 	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
 
-	if ( $data_content['title'] == "" ) $error = $lang_module['err_no_title'] . ".";
-	elseif ( $data_content['listcatid'] == 0 ) $error = $lang_module['err_no_catalogs'] . ".";
-	elseif ( trim( strip_tags( $data_content['hometext'] ) ) == "" ) $error = $lang_module['err_no_hometext'] . ".";
-	elseif ( $data_content['bodytext'] == "" ) $error = $lang_module['err_no_bodytext'] . ".";
-	elseif ( $data_content['product_price'] <= 0 ) $error = $lang_module['err_no_product_price'] . ".";
-	elseif ( $data_content['product_number'] <= 0 ) $error = $lang_module['err_no_product_number'] . ".";
+	if( $data_content['title'] == "" ) $error = $lang_module['err_no_title'] . ".";
+	elseif( $data_content['listcatid'] == 0 ) $error = $lang_module['err_no_catalogs'] . ".";
+	elseif( trim( strip_tags( $data_content['hometext'] ) ) == "" ) $error = $lang_module['err_no_hometext'] . ".";
+	elseif( $data_content['bodytext'] == "" ) $error = $lang_module['err_no_bodytext'] . ".";
+	elseif( $data_content['product_price'] <= 0 ) $error = $lang_module['err_no_product_price'] . ".";
+	elseif( $data_content['product_number'] <= 0 ) $error = $lang_module['err_no_product_number'] . ".";
 
 	// Xu ly anh minh hoa
 	$data_content['homeimgfile'] = '';
-	if ( $error == "" )
+	if( $error == "" )
 	{
-		if ( is_uploaded_file( $_FILES['homeimg']["tmp_name"] ) )
+		if( is_uploaded_file( $_FILES['homeimg']["tmp_name"] ) )
 		{
 			$contents_type = array();
 			$contents_type['upload_blocked'] = "";
@@ -181,11 +173,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, "u_" . $user_info['username'], true );
 
-			require_once ( NV_ROOTDIR . "/includes/class/upload.class.php" );
+			require_once NV_ROOTDIR . "/includes/class/upload.class.php";
 			$upload = new upload( $contents_type['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
 			$upload_info = $upload->save_file( $_FILES['homeimg'], NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_name . '/' . "u_" . $user_info['username'], false );
-			if ( ! empty( $upload_info['error'] ) )
+			if( ! empty( $upload_info['error'] ) )
 			{
 				$error = $lang_module['err_no_image'];
 			}
@@ -195,48 +187,48 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 		}
 
-		if ( file_exists( NV_DOCUMENT_ROOT . $data_content['homeimgfile'] ) )
+		if( file_exists( NV_DOCUMENT_ROOT . $data_content['homeimgfile'] ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
 			$data_content['homeimgfile'] = substr( $data_content['homeimgfile'], $lu );
 		}
-		elseif ( ! nv_is_url( $data_content['homeimgfile'] ) )
+		elseif( ! nv_is_url( $data_content['homeimgfile'] ) )
 		{
 			$data_content['homeimgfile'] = "";
 		}
 		$check_thumb = false;
 
-		if ( $data_content['id'] > 0 )
+		if( $data_content['id'] > 0 )
 		{
 			$homeimgfile = $db->query( "SELECT homeimgfile FROM " . $table_name . " WHERE id=" . $data_content['id'] . "" )->fetchColumn();
-			if ( $data_content['homeimgfile'] != $homeimgfile )
+			if( $data_content['homeimgfile'] != $homeimgfile )
 			{
 				$check_thumb = true;
-				if ( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgfile ) )
+				if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgfile ) )
 				{
 					nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . "/" . $module_name . "/" . $homeimgfile );
 					$data_content['homeimgthumb'] = 0;
 				}
 			}
 		}
-		elseif ( ! empty( $data_content['homeimgfile'] ) )
+		elseif( ! empty( $data_content['homeimgfile'] ) )
 		{
 			$check_thumb = true;
 		}
 
 		$homeimgfile = NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $data_content['homeimgfile'];
-		if ( $check_thumb and file_exists( $homeimgfile ) )
+		if( $check_thumb and file_exists( $homeimgfile ) )
 		{
 			$data_content['homeimgthumb'] = 2;
-			require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
+			require_once NV_ROOTDIR . "/includes/class/image.class.php";
 			$basename = basename( $homeimgfile );
 			$image = new image( $homeimgfile, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$thumb_basename = $basename;
 			$i = 1;
-			while ( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
+			while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb/' . $thumb_basename ) )
 			{
 				$thumb_basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $basename );
-				$i ++;
+				++$i;
 			}
 			$image->resizeXY( $pro_config['homewidth'], $pro_config['homeheight'] );
 			$image->save( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/thumb', $thumb_basename );
@@ -247,7 +239,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 		}
 
-		if ( empty( $exp_date ) )
+		if( empty( $exp_date ) )
 		{
 			$data_content['exptime'] = 0;
 		}
@@ -259,19 +251,19 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 	}
 
-	if ( $error == "" )
+	if( $error == "" )
 	{
 		$id = isset( $array_op[1] ) ? $array_op[1] : 0;
 
-		if ( $id == 0 )
+		if( $id == 0 )
 		{
 			$listfield = "";
 			$listvalue = "";
-			foreach ( $field_lang as $field_lang_i )
+			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ", " . $flang . "_" . $fname . "";
-				if ( $flang == NV_LANG_DATA )
+				$listfield .= ", " . $flang . "_" . $fname;
+				if( $flang == NV_LANG_DATA )
 				{
 					$listvalue .= ", " . $db->quote( $data_content[$fname] );
 				}
@@ -318,12 +310,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				" . intval( $data_content['hitscm'] ) . ",
 				" . intval( $data_content['hitslm'] ) . ",
 				" . intval( $data_content['showprice'] ) . "
-				" . $listvalue .
-			")";
+				" . $listvalue . ")";
 
 			$data_content['id'] = $db->insert_id( $sql );
 
-			if ( $data_content['id'] > 0 )
+			if( $data_content['id'] > 0 )
 			{
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct";
 				$info = "<div class=\"frame\">";
@@ -347,11 +338,11 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		else
 		{
 			$data_content_old = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $id . "" )->fetch();
-			if ( $data_content_old['status'] == 1 )
+			if( $data_content_old['status'] == 1 )
 			{
 				$data_content['status'] = 1;
 			}
-			if ( $data_content['homeimgfile'] == "" )
+			if( $data_content['homeimgfile'] == "" )
 			{
 				$data_content['homeimgfile'] = $data_content_old['homeimgfile'];
 				$data_content['homeimgthumb'] = $data_content_old['homeimgthumb'];
@@ -388,7 +379,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 " . NV_LANG_DATA . "_note= :note,
 			 " . NV_LANG_DATA . "_keywords= :keywords
 			WHERE id =" . $id );
-			
+
 			$stmt->bindParam( ':product_code', $data_content['product_code'], PDO::PARAM_STR );
 			$stmt->bindParam( ':money_unit', $data_content['money_unit'], PDO::PARAM_STR );
 			$stmt->bindParam( ':homeimgfile', $data_content['homeimgfile'], PDO::PARAM_STR );
@@ -402,7 +393,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':note', $data_content['note'], PDO::PARAM_STR );
 			$stmt->bindParam( ':keywords', $data_content['keywords'], PDO::PARAM_STR );
 
-			if ( $stmt->execute() )
+			if( $stmt->execute() )
 			{
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct";
 				$info = "<div class=\"frame\">";
@@ -428,7 +419,7 @@ if ( $nv_Request->get_int( 'save', 'post' ) == 1 )
 else
 {
 	$id = isset( $array_op[1] ) ? $array_op[1] : 0;
-	if ( $id > 0 )
+	if( $id > 0 )
 	{
 		$rowdata = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id=" . $id )->fetch();
 
@@ -488,12 +479,12 @@ else
 $sql = "SELECT catid, " . NV_LANG_DATA . "_title, lev, numsubcat FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs ORDER BY sort ASC";
 $result_cat = $db->query( $sql );
 $data_cata = array();
-while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )
+while( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )
 {
 	$xtitle_i = "";
-	if ( $lev_i > 0 )
+	if( $lev_i > 0 )
 	{
-		for ( $i = 1; $i <= $lev_i; $i ++ )
+		for( $i = 1; $i <= $lev_i; $i++ )
 		{
 			$xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
@@ -506,7 +497,7 @@ while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3
 		'catid' => $catid_i,
 		'numsubcat' => $numsubcat_i,
 		'select' => $select,
-		'disabled' => '',
+		'disabled' => ''
 	);
 }
 
@@ -514,7 +505,7 @@ while ( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3
 $data_unit = array();
 $sql = "SELECT id, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_units";
 $result_unit = $db->query( $sql );
-while ( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
+while( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
 {
 	$select = ( $data_content['product_unit'] == $unitid_i ) ? "selected=\"selected\"" : "";
 

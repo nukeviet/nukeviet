@@ -34,7 +34,7 @@ if( ! empty( $savecat ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", " . $flang . "_" . $fname . "";
+			$listfield .= ", " . $flang . "_" . $fname;
 			if( $flang == NV_LANG_DATA )
 			{
 				$listvalue .= ", " . $db->quote( $data[$fname] );
@@ -107,14 +107,13 @@ while( list( $id, $title, $note ) = $result->fetch( 3 ) )
 	$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delunit&id=" . $id );
 
 	$xtpl->parse( 'main.data.row' );
-	$count++;
+	++$count;
 }
 
 $xtpl->assign( 'URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delunit" );
 $xtpl->assign( 'URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 
 if( $count > 0 ) $xtpl->parse( 'main.data' );
-
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

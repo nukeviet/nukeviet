@@ -8,13 +8,12 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_SHOPS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( empty( $catid ) )
 {
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	exit( );
+	exit();
 }
 
 $page_title = $global_array_cat[$catid]['title'];
@@ -30,7 +29,7 @@ $sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $op . "_" . $catid . "_" . $page . "_" . NV_CACHE_PREFIX . ".cache";
-	if( ($cache = nv_get_cache( $cache_file )) != false )
+	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 	{
 		$contents = $cache;
 	}
@@ -38,7 +37,7 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 
 if( empty( $contents ) )
 {
-	$data_content = array( );
+	$data_content = array();
 
 	$count = 0;
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
@@ -59,25 +58,25 @@ if( empty( $contents ) )
 	}
 	if( $global_array_cat[$catid]['viewcat'] == "view_home_cat" and $global_array_cat[$catid]['numsubcat'] > 0 )
 	{
-		$data_content = array( );
+		$data_content = array();
 		$array_subcatid = explode( ",", $global_array_cat[$catid]['subcatid'] );
 
 		foreach( $array_subcatid as $catid_i )
 		{
 			$array_info_i = $global_array_cat[$catid_i];
 
-			$array_cat = array( );
+			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid_i );
 
 			// Fetch Limit
-			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( "listcatid IN (" . implode( ",", $array_cat ) . ") AND status =1 " );
+			$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( "listcatid IN (" . implode( ",", $array_cat ) . ") AND status =1 " );
 
-			$num_pro = $db->query( $db->sql( ) )->fetchColumn( );
+			$num_pro = $db->query( $db->sql() )->fetchColumn();
 
 			$db->select( "id, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )->order( $orderby )->limit( $array_info_i['numlinks'] );
-			$result = $db->query( $db->sql( ) );
+			$result = $db->query( $db->sql() );
 
-			$data_pro = array( );
+			$data_pro = array();
 
 			while( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 			{
@@ -129,7 +128,7 @@ if( empty( $contents ) )
 		if( $page > 1 )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-			exit( );
+			exit();
 		}
 
 		$contents = call_user_func( 'view_home_cat', $data_content, $sorts );
@@ -143,17 +142,17 @@ if( empty( $contents ) )
 		}
 		else
 		{
-			$array_cat = array( );
+			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid );
 			$where = " listcatid IN (" . implode( ",", $array_cat ) . ")";
 		}
 
-		$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( $where . " AND status =1 " );
+		$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( $where . " AND status =1 " );
 
-		$all_page = $db->query( $db->sql( ) )->fetchColumn( );
+		$all_page = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( "id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )->order( $orderby )->limit( $per_page )->offset( ($page - 1) * $per_page );
-		$result = $db->query( $db->sql( ) );
+		$db->select( "id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )->order( $orderby )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+		$result = $db->query( $db->sql() );
 
 		$data_content = GetDataIn( $result, $catid );
 		$data_content['count'] = $all_page;
@@ -163,7 +162,7 @@ if( empty( $contents ) )
 		if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 		{
 			Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-			exit( );
+			exit();
 		}
 
 		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages, $sorts );
@@ -184,4 +183,5 @@ if( $page > 1 )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
 ?>

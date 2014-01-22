@@ -13,7 +13,15 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['sources'];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_sources";
 list( $rowcontent['sourceid'], $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
-$rowcontent = array( 'sourceid' => 0, 'link' => '', 'logo' => '', 'weight' => 0, 'add_time' => 0, 'edit_time' => 0, 'title' => '' );
+$rowcontent = array(
+	'sourceid' => 0,
+	'link' => '',
+	'logo' => '',
+	'weight' => 0,
+	'add_time' => 0,
+	'edit_time' => 0,
+	'title' => ''
+);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -58,10 +66,10 @@ if( ! empty( $savecat ) )
 			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ", " . $flang . "_" . $fname . "";
+				$listfield .= ", " . $flang . "_" . $fname;
 				$listvalue .= ", :" . $flang . "_" . $fname;
 			}
-			$sql = "INSERT INTO " . $table_name . " (sourceid,link, logo, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, :link, :logo, ".$weight.", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+			$sql = "INSERT INTO " . $table_name . " (sourceid,link, logo, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, :link, :logo, " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
 			$data_insert = array();
 			$data_insert['link'] = $rowcontent['link'];
 			$data_insert['logo'] = $rowcontent['logo'];

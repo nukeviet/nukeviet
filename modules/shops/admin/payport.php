@@ -151,7 +151,7 @@ if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 		$xtpl->assign( 'DATA_PM', $value );
 
 		$xtpl->parse( 'main.listpay.paymentloop' );
-		$a ++;
+		++$a;
 	}
 
 	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
@@ -174,7 +174,7 @@ if( ! empty( $array_payment_other ) && empty( $data_pay ) )
 			$xtpl->assign( 'ODATA_PM', $value );
 
 			$xtpl->parse( 'main.olistpay.opaymentloop' );
-			$a ++;
+			++$a;
 		}
 	}
 

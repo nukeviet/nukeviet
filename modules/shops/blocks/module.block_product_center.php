@@ -20,15 +20,15 @@ if( ! function_exists( 'nv_product_center' ) )
 	function nv_product_center()
 	{
 		global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config;
-		
+
 		$num_view = 6;
 		$num = 30;
 		$array = array();
-		
+
 		$xtpl = new XTemplate( "block.product_center.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $module_info['template'] );
-		
+
 		$cache_file = NV_LANG_DATA . "_" . $module_name . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
 		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 		{
@@ -42,7 +42,7 @@ if( ! function_exists( 'nv_product_center' ) )
 				->where( 'status =1' )
 				->order( 'weight ASC' )
 				->limit( 1 );
-						
+
 			$result = $db->query( $db->sql() );
 			$bid = $result->fetchColumn();
 
@@ -53,20 +53,20 @@ if( ! function_exists( 'nv_product_center' ) )
 				->where( "t2.bid= " . $bid . " AND t1.status =1" )
 				->order( 't1.id DESC' )
 				->limit( $num );
-						
+
 			$array = nv_db_cache( $db->sql(), 'id', $module_name );
 			$cache = serialize( $array );
 			nv_set_cache( $cache_file, $cache );
 		}
-		
+
 		$i = 1;
 		$j = 1;
 		$page_i = "";
-		
+
 		foreach( $array as $row )
 		{
 			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
-			
+
 			$thumb = explode( "|", $row['homeimgthumb'] );
 			if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
 			{
@@ -76,33 +76,33 @@ if( ! function_exists( 'nv_product_center' ) )
 			{
 				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 			}
-			
+
 			$xtpl->assign( 'LINK', $link );
 			$xtpl->assign( 'TITLE', $row['title'] );
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $thumb[0] );
-			
+
 			$xtpl->parse( 'main.loop.items' );
-			
+
 			if( $i % $num_view == 0 )
 			{
 
 				$page_i .= "<li><a href=\"#\">" . $j . "</a></li>";
-				$j++;
+				++$j;
 				$xtpl->parse( 'main.loop' );
 			}
-			
-			$i++;
+
+			++$i;
 		}
-		
+
 		if( $i > $num_view and ( $i - 1 ) % $num_view != 0 )
 		{
 			$page_i .= "<li><a href=\"#\">" . $j . "</a></li>";
 			$xtpl->parse( 'main.loop' );
 		}
-		
+
 		$xtpl->assign( 'page', $page_i );
-		
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

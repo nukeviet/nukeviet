@@ -20,11 +20,11 @@ if( $catid > 0 )
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
 	$check_parentid = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE parentid = '" . $catid . "'" )->fetchColumn();
 
-	if( intval( $check_parentid ) > 0 ) // Chu de con
+	if( intval( $check_parentid ) > 0 )// Chu de con
 	{
 		$contents = "ERR_CAT_" . sprintf( $lang_module['delcat_msg_cat'], $check_parentid );
 	}
-	else // San pham trong chu de
+	else// San pham trong chu de
 	{
 		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE listcatid='" . $catid . "'" )->fetchColumn();
 
@@ -36,7 +36,7 @@ if( $catid > 0 )
 				$movecat = $nv_Request->get_string( 'movecat', 'post', "" );
 				$catidnews = $nv_Request->get_int( 'catidnews', 'post', 0 );
 
-				if( empty( $delcatandrows ) and empty( $movecat ) ) // Hien form
+				if( empty( $delcatandrows ) and empty( $movecat ) )// Hien form
 				{
 					$sql = "SELECT catid, " . NV_LANG_DATA . "_title, lev FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid !='" . $catid . "' ORDER BY sort ASC";
 					$result = $db->query( $sql );
@@ -83,7 +83,7 @@ if( $catid > 0 )
 					$xtpl->parse( 'main' );
 					$contents = $xtpl->text( 'main' );
 				}
-				elseif( ! empty( $delcatandrows ) ) // Xoa loai san pham va san pham
+				elseif( ! empty( $delcatandrows ) )// Xoa loai san pham va san pham
 				{
 					$sql = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE listcatid=" . $catid );
 					while( $row = $sql->fetch() )
@@ -98,7 +98,7 @@ if( $catid > 0 )
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid );
 					die();
 				}
-				elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid ) // Di chuyen san pham sang chu de moi
+				elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid )// Di chuyen san pham sang chu de moi
 				{
 					$catidnews = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid =" . $catidnews )->fetchColumn();
 

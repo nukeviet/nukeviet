@@ -8,12 +8,12 @@
  * @Createdate 10-5-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-function BoldKeywordInStr ( $str, $keyword )
+function BoldKeywordInStr( $str, $keyword )
 {
 	$tmp = explode( " ", $keyword );
-	foreach ( $tmp as $k )
+	foreach( $tmp as $k )
 	{
 		$tp = strtolower( $k );
 		$str = str_replace( $tp, "<span class=\"keyword\">" . $tp . "</span>", $str );
@@ -43,12 +43,12 @@ $array_cat_search[0] = array(
 	'xtitle' => ''
 );
 
-foreach ( $global_array_cat as $arr_cat_i )
+foreach( $global_array_cat as $arr_cat_i )
 {
 	$xtitle = "";
-	if ( $arr_cat_i['lev'] > 0 )
+	if( $arr_cat_i['lev'] > 0 )
 	{
-		for ( $i = 1; $i <= $arr_cat_i['lev']; $i ++ )
+		for( $i = 1; $i <= $arr_cat_i['lev']; $i++ )
 		{
 			$xtitle .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		}
@@ -67,14 +67,14 @@ $contents = call_user_func( "search_theme", $key, $check_num, $date_array, $arra
 $where = "";
 $tbl_src = "";
 
-if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
+if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
 	$dbkey = $db->dblikeescape( $key );
 	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
 
-	if ( $catid != 0 )
+	if( $catid != 0 )
 	{
-		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
+		if( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
 			$where .= "AND listcatid=" . $catid;
 		}
@@ -86,7 +86,7 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 		}
 	}
 
-	if ( $to_date != "" )
+	if( $to_date != "" )
 	{
 		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $to_date, $m );
 		$tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
@@ -98,38 +98,32 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 	$table_search = $db_config['prefix'] . "_" . $module_data . "_rows";
 
 	// Fetch Limit
-	$db->sqlreset()
-	  ->select( 'COUNT(*)' )
-	  ->from( $table_search )
-	  ->where( "status =1 " . $where );
-	
+	$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search )->where( "status =1 " . $where );
+
 	$numRecord = $db->query( $db->sql() )->fetchColumn();
-	
-	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )
-	  ->order( 'id DESC' )
-	  ->limit( $per_pages )
-	  ->offset( $pages );
+
+	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )->order( 'id DESC' )->limit( $per_pages )->offset( $pages );
 
 	$result = $db->query( $db->sql() );
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
 
-	while ( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
+	while( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
 	{
-		if( $homeimgthumb == 1 ) //image thumb
+		if( $homeimgthumb == 1 )//image thumb
 		{
 			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 2 ) //image file
+		elseif( $homeimgthumb == 2 )//image file
 		{
 			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 3 ) //image url
+		elseif( $homeimgthumb == 3 )//image url
 		{
 			$thumb = $homeimgfile;
 		}
-		else //no image
+		else//no image
 		{
 			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
 		}

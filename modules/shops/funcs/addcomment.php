@@ -7,12 +7,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
-die('den day: add');
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-if ( ! defined( 'NV_IS_USER' ) and $pro_config['who_comment'] == "member" )
+ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+
+if( ! defined( 'NV_IS_USER' ) and $pro_config['who_comment'] == 'member' )
 {
-	die( "ERR_" . $lang_module['comment_do_not_send'] );
+	die( 'ERR_' . $lang_module['comment_do_not_send'] );
 }
 
 $difftimeout = 360;
@@ -20,21 +20,18 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $content = $nv_Request->get_title( 'content', 'post', '', 1 );
 $code = $nv_Request->get_title( 'code', 'post', '' );
 $status = $pro_config['comment_auto'];
-$data = array(
-	"content" => $content,
-	"title" => "none"
-);
+$data = array( 'content' => $content, 'title' => 'none' );
 
-if ( $content != "" )
+if( $content != '' )
 {
 	$timeout = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'cookie', 0 );
-	if ( ! nv_capcha_txt( $code ) )
+	if( ! nv_capcha_txt( $code ) )
 	{
-		$contents = "ERR_" . $lang_global['securitycodeincorrect'];
+		$contents = 'ERR_' . $lang_global['securitycodeincorrect'];
 	}
-	elseif ( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
+	elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	{
-		if ( empty( $user_info ) )
+		if( empty( $user_info ) )
 		{
 			$user_info['username'] = $lang_module['comment_customer'];
 			$user_info['userid'] = 0;
@@ -48,24 +45,24 @@ if ( $content != "" )
 		$data_insert['username'] = $user_info['username'];
 		$cid = $db->insert_id( $sql, 'cid', $data_insert );
 
-		if ( $cid > 0 )
+		if( $cid > 0 )
 		{
-			$contents = "OK_" . $lang_module['comment_success'];
+			$contents = 'OK_' . $lang_module['comment_success'];
 			$nv_Request->set_Cookie( $module_name . '_' . $op . '_' . $id, NV_CURRENTTIME );
 		}
 		else
-			$contents = "ERR_" . $lang_module['comment_unsuccess'];
+			$contents = 'ERR_' . $lang_module['comment_unsuccess'];
 	}
 	else
 	{
 		$timeout = ceil( ( $difftimeout - NV_CURRENTTIME + $timeout ) / 60 );
 		$timeoutmsg = sprintf( $lang_module['comment_timeout'], $timeout );
-		$contents = "ERR_" . $timeoutmsg;
+		$contents = 'ERR_' . $timeoutmsg;
 	}
 }
 else
 {
-	$contents = "ERR_" . $lang_module['comment_unsuccess'];
+	$contents = 'ERR_' . $lang_module['comment_unsuccess'];
 }
 
 echo $contents;

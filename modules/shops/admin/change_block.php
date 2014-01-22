@@ -46,8 +46,8 @@ elseif( $bid > 0 and $id > 0 )
 
 			while( $row = $result->fetch() )
 			{
-				$weight++;
-				if( $weight == $new_vid ) $weight++;
+				++$weight;
+				if( $weight == $new_vid ) ++$weight;
 				$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block SET weight=" . $weight . " WHERE bid=" . $bid . " AND id=" . intval( $row['id'] );
 				$db->query( $sql );
 			}

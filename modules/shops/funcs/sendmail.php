@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $checkss = $nv_Request->get_string( 'checkss', 'post', '' );
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
@@ -18,14 +18,14 @@ $sql = "SELECT id, title, alias, hometext, allowed_send FROM " . NV_PREFIXLANG .
 $result = $db->query( $sql );
 
 list( $id, $title, $alias, $hometext, $allowed_send ) = $result->fetch( 3 );
-if ( $id > 0 )
+if( $id > 0 )
 {
 	unset( $sql, $result );
 	$result = "";
 	$check = false;
-	if ( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
+	if( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
 	{
-		$link = "" . $global_config['site_url'] . "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . "";
+		$link = "" . $global_config['site_url'] . "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id;
 		$link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
 		$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
@@ -38,23 +38,21 @@ if ( $id > 0 )
 		$err_name = "";
 		$message = "";
 		$success = "";
-		if ( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
+		if( $global_config['gfx_chk'] == 1 and ! nv_capcha_txt( $nv_seccode ) )
 		{
 			$err_name = $lang_global['securitycodeincorrect'];
 		}
-		elseif ( empty( $name ) )
+		elseif( empty( $name ) )
 		{
 			$err_name = $lang_module['sendmail_err_name'];
 		}
-		elseif ( empty( $err_email ) and empty( $err_youremail ) )
+		elseif( empty( $err_email ) and empty( $err_youremail ) )
 		{
 			$subject = $lang_module['sendmail_subject'] . "$name";
-			$message .= "" . $lang_module['sendmail_welcome'] . " <strong>" . $global_config['site_name'] . "</strong> " . $lang_module['sendmail_welcome1'] . "<br /><br />" . $content . "<br /><br />" . $hometext . " <br/><br /><strong>" . $lang_module['sendmail_welcome2'] . "</strong><br />" . $link . "";
-			$from = array(
-				$name, $youremail
-			);
+			$message .= "" . $lang_module['sendmail_welcome'] . " <strong>" . $global_config['site_name'] . "</strong> " . $lang_module['sendmail_welcome1'] . "<br /><br />" . $content . "<br /><br />" . $hometext . " <br/><br /><strong>" . $lang_module['sendmail_welcome2'] . "</strong><br />" . $link;
+			$from = array( $name, $youremail );
 			$check = nv_sendmail( $from, $to_mail, $subject, $message );
-			if ( $check )
+			if( $check )
 			{
 				$success = "" . $lang_module['sendmail_success'] . "<strong> " . $to_mail . "</strong>";
 			}
@@ -64,17 +62,21 @@ if ( $id > 0 )
 			}
 		}
 		$result = array(
-			"err_name" => $err_name, "err_email" => $err_email, "err_yourmail" => $err_youremail, "send_success" => $success, "check" => $check
+			"err_name" => $err_name,
+			"err_email" => $err_email,
+			"err_yourmail" => $err_youremail,
+			"send_success" => $success,
+			"check" => $check
 		);
 	}
-	if ( $id > 0 && $allowed_send == 1 )
+	if( $id > 0 && $allowed_send == 1 )
 	{
-		if ( defined( 'NV_IS_ADMIN' ) )
+		if( defined( 'NV_IS_ADMIN' ) )
 		{
 			$name = $admin_info['username'];
 			$youremail = $admin_info['email'];
 		}
-		elseif ( defined( 'NV_IS_USER' ) )
+		elseif( defined( 'NV_IS_USER' ) )
 		{
 			$name = $user_info['username'];
 			$youremail = $user_info['email'];

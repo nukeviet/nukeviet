@@ -20,7 +20,7 @@ $page_title = $lang_module['profile_manage_myproducts'];
 $per_page = 20;
 if( preg_match( "/^page\-([0-9]+)$/", ( isset( $array_op[1] ) ? $array_op[1] : "" ), $m ) )
 {
-	$page = ( int ) $m[1];
+	$page = ( int )$m[1];
 }
 
 $all_page = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 WHERE t1.product_unit = t2.id AND t1.user_id = " . $user_info['userid'] )->fetchColumn();
@@ -28,32 +28,26 @@ $all_page = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 
-$db->sqlreset()
-	->select( 'id, listcatid, publtime, exptime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, homeimgfile, homeimgthumb, product_price, status ' )
-	->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
-	->where( "user_id = " . $user_info['userid'] )
-	->order( 'id DESC' )
-	->limit( $per_page )
-	->offset( ( $page - 1 ) * $per_page );
+$db->sqlreset()->select( 'id, listcatid, publtime, exptime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, homeimgfile, homeimgthumb, product_price, status ' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( "user_id = " . $user_info['userid'] )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 $result = $db->query( $db->sql() );
 $data_pro = array();
 
 while( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgfile, $homeimgthumb, $product_price, $status ) = $result->fetch( 3 ) )
 {
-	if( $homeimgthumb == 1 ) //image thumb
+	if( $homeimgthumb == 1 )//image thumb
 	{
 		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 2 ) //image file
+	elseif( $homeimgthumb == 2 )//image file
 	{
 		$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 3 ) //image url
+	elseif( $homeimgthumb == 3 )//image url
 	{
 		$thumb = $homeimgfile;
 	}
-	else //no image
+	else//no image
 	{
 		$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 	}

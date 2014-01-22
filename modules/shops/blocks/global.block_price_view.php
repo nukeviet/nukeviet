@@ -22,19 +22,18 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	 */
 	function nv_block_config_product_price_blocks( $module, $data_block, $lang_block )
 	{
-		$html = "";
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['price_begin'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_price_begin\" value=\"" . $data_block['price_begin'] . "\"/></td>";
-		$html .= "</tr>";
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['price_end'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_price_end\" value=\"" . $data_block['price_end'] . "\"/></td>";
-		$html .= "</tr>";
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['price_step'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_price_step\" value=\"" . $data_block['price_step'] . "\"/></td>";
-		$html .= "</tr>";
+		$html = '<tr>';
+		$html .= '	<td>' . $lang_block['price_begin'] . '</td>';
+		$html .= '	<td><input type="text" name="config_price_begin" value="' . $data_block['price_begin'] . '"/></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['price_end'] . '</td>';
+		$html .= '	<td><input type="text" name="config_price_end" value="' . $data_block['price_end'] . '"/></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['price_step'] . '</td>';
+		$html .= '	<td><input type="text" name="config_price_step" value="' . $data_block['price_step'] . '"/></td>';
+		$html .= '</tr>';
 		return $html;
 	}
 	/**
@@ -46,16 +45,16 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	 */
 	function numoney_to_strmoney( $money, $mod_file )
 	{
-		include ( NV_ROOTDIR . "/modules/" . $mod_file . "/language/" . NV_LANG_DATA . ".php" );
+		include NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php' ;
 		if( $money > 1000 and $money < 1000000 )
 		{
 			$money = $money / 1000;
-			return $money . " " . $lang_module['money_thousand'];
+			return $money . ' ' . $lang_module['money_thousand'];
 		}
 		elseif( $money >= 1000000 )
 		{
 			$money = $money / 1000000;
-			return $money . " " . $lang_module['money_million'];
+			return $money . ' ' . $lang_module['money_million'];
 		}
 		return $money;
 	}
@@ -90,30 +89,30 @@ if( ! function_exists( 'nv_view_product_price' ) )
 		$cataid = $nv_Request->get_int( 'cata', 'get', 0 );
 
 		if( $cataid == 0 ) $cataid = $catid;
-		$recata = "";
-		if( $cataid > 0 ) $recata = "&cata=" . $cataid;
+		$recata = '';
+		if( $cataid > 0 ) $recata = '&cata=' . $cataid;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		
-		include ( NV_ROOTDIR . "/modules/" . $mod_file . "/language/" . NV_LANG_DATA . ".php" );
-		
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module . "/block.price_view.tpl" ) )
+
+		include NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module . '/block.price_view.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
-		
-		$xtpl = new XTemplate( "block.price_view.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module );
+
+		$xtpl = new XTemplate( 'block.price_view.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'TEMPLATE', $block_theme );
 		$xtpl->assign( 'MODULE_FILE', $mod_file );
-		
+
 		$val = $block_config['price_begin'];
 
 		while( true )
@@ -121,25 +120,25 @@ if( ! function_exists( 'nv_view_product_price' ) )
 			$price1 = $val;
 			$price2 = $val + $block_config['price_step'];
 			$arr_price = array();
-			
+
 			if( $val < $block_config['price_end'] )
 			{
-				$title = numoney_to_strmoney( $price1, $mod_file ) . " ---> " . numoney_to_strmoney( $price2, $mod_file );
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=search_result&price1=" . $price1 . "&price2=" . $price2 . $recata;
-				$arr_price = array( "title" => $title, "link" => $link );
+				$title = numoney_to_strmoney( $price1, $mod_file ) . ' ---> ' . numoney_to_strmoney( $price2, $mod_file );
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=search_result&price1=' . $price1 . '&price2=' . $price2 . $recata;
+				$arr_price = array( 'title' => $title, 'link' => $link );
 			}
 			elseif( $val >= $block_config['price_end'] )
 			{
-				$title = $lang_module['price2_over'] . " " . numoney_to_strmoney( $val, $mod_file );
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=search_result&price2=" . $val . $recata;
-				$arr_price = array( "title" => $title, "link" => $link );
+				$title = $lang_module['price2_over'] . ' ' . numoney_to_strmoney( $val, $mod_file );
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=search_result&price2=' . $val . $recata;
+				$arr_price = array( 'title' => $title, 'link' => $link );
 			}
-			
+
 			$xtpl->assign( 'ROW', $arr_price );
 			$xtpl->parse( 'main.loopprice' );
-			
+
 			if( $val >= $block_config['price_end'] ) break;
-			
+
 			$val += $block_config['price_step'];
 		}
 

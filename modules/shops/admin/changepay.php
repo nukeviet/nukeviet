@@ -22,18 +22,18 @@ $stmt->execute();
 list( $payment, $weight_old ) = $stmt->fetch( 3 );
 if( ! empty( $payment ) )
 {
-	$sql = "SELECT payment FROM " . $table . " WHERE weight = " . intval( $new_weight ) . "";
+	$sql = "SELECT payment FROM " . $table . " WHERE weight = " . intval( $new_weight );
 	$result = $db->query( $sql );
 	$payment_swap = $result->fetchColumn();
-	
+
 	$stmt = $db->prepare( "UPDATE " . $table . " SET weight=" . $new_weight . " WHERE payment= :payment" );
 	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
 	$stmt->execute();
-	
+
 	$stmt = $db->prepare( "UPDATE " . $table . " SET weight=" . $weight_old . " WHERE payment= :payment" );
 	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
 	$stmt->execute();
-	
+
 	$content = "OK_" . $payment;
 	nv_del_moduleCache( $payment );
 }

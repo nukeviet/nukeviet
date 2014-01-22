@@ -4,11 +4,15 @@
 	<div class="items" style="width:25%">
 		<div class="items_content" style="height: auto !important">
 			<div class="content_top{CSS_PRODUCT_CODE}">
-				<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:100px;max-width:100px"/> <!-- BEGIN: tooltip --> <span class="tip"><strong>{title_pro}</strong>
+				<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:100px;max-width:100px"/>
+				<!-- BEGIN: tooltip -->
+				<span class="tip"><strong>{title_pro}</strong>
 					<br />
 					<img src="{img_pro}" style="max-width:{width}px;">
 					<br />
-					{intro}</span> <!-- END: tooltip --> </a>
+					{intro}</span>
+				<!-- END: tooltip -->
+				</a>
 				<br />
 				<span><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></span>
 				<br />
@@ -20,9 +24,11 @@
 			</div>
 			<!-- BEGIN: price -->
 			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span><!-- BEGIN: discounts -->
+				<span class="{class_money}">{product_price} {money_unit}</span>
+				<!-- BEGIN: discounts -->
 				<br />
-				<span class="money">{product_discounts} {money_unit}</span><!-- END: discounts -->
+				<span class="money">{product_discounts} {money_unit}</span>
+				<!-- END: discounts -->
 			</p>
 			<!-- END: price -->
 			<!-- BEGIN: contact -->
@@ -82,4 +88,5 @@
 		<strong style="color: #f00">{LANG.chuachonsp}</strong>
 	</center>
 	<!-- END: nodata -->
-</div><!-- END: main -->
+</div>
+<!-- END: main -->

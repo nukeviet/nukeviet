@@ -22,17 +22,12 @@ $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_n
 $count = 0;
 
 // Fetch Limit
-$db->sqlreset()
-  ->select( 'COUNT(*)' )
-  ->from( $table_name );
+$db->sqlreset()->select( 'COUNT(*)' )->from( $table_name );
 
 $all_page = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( '*' )
-  ->order( 'order_id DESC' )
-  ->limit( $per_page )
-  ->offset( $page );
-$query = $db->query($db->sql());
+$db->select( '*' )->order( 'order_id DESC' )->limit( $per_page )->offset( $page );
+$query = $db->query( $db->sql() );
 while( $row = $query->fetch() )
 {
 	$acno = 0;
@@ -56,7 +51,7 @@ while( $row = $query->fetch() )
 	{
 		$row['status_payment'] = $lang_module['history_payment_no'];
 	}
-	elseif( $row['transaction_status'] == -1 )
+	elseif( $row['transaction_status'] == - 1 )
 	{
 		$row['status_payment'] = $lang_module['history_payment_wait'];
 	}
@@ -64,16 +59,16 @@ while( $row = $query->fetch() )
 	{
 		$row['status_payment'] = "ERROR";
 	}
-	
+
 	$row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
 	$row['order_time'] = nv_date( "H:i d/m/y", $row['order_time'] );
 	$row['order_total'] = FormatNumber( $row['order_total'], 2, '.', ',' );
-	
+
 	$xtpl->assign( 'DATA', $row );
 
 	$xtpl->assign( 'order_id', $row['order_id'] . "_" . md5( $row['order_id'] . $global_config['sitekey'] . session_id() ) );
 	$xtpl->assign( 'link_view', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_view&order_id=" . $row['order_id'] );
-	
+
 	if( $row['transaction_status'] < 1 )
 	{
 		$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_del&order_id=" . $row['order_id'] . "&checkss=" . md5( $row['order_id'] . $global_config['sitekey'] . session_id() ) );
@@ -84,15 +79,15 @@ while( $row = $query->fetch() )
 	{
 		$xtpl->assign( 'DIS', 'disabled="disabled"' );
 	}
-	
+
 	$bg = ( $count % 2 == 0 ) ? "class=\"second\"" : "";
 	$bgview = ( $row['order_view'] == '0' ) ? "class=\"bgview\"" : "";
-	
+
 	$xtpl->assign( 'bg', $bg );
 	$xtpl->assign( 'bgview', $bgview );
-	
+
 	$xtpl->parse( 'main.data.row' );
-	$count ++;
+	++$count;
 }
 
 $xtpl->assign( 'URL_CHECK_PAYMENT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checkpayment" );

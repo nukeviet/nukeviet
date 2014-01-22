@@ -8,44 +8,44 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
-if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
-if ( ! isset( $_SESSION[$module_data . '_cart'] ) ) $_SESSION[$module_data . '_cart'] = array();
+if( ! isset( $_SESSION[$module_data . '_cart'] ) ) $_SESSION[$module_data . '_cart'] = array();
 
 $id = $nv_Request->get_int( 'id', 'post,get', 1 );
 $num = $nv_Request->get_string( 'num', 'post,get', 1 );
 $ac = $nv_Request->get_string( 'ac', 'post,get', 0 );
 
-if ( ! is_numeric( $num ) || $num <= 0 )
+if( ! is_numeric( $num ) || $num <= 0 )
 {
 	die( 'ERR_' . $lang_module['cart_set_err'] );
 }
 
-if ( $ac == 0 )
+if( $ac == 0 )
 {
-	if ( $id > 0 )
+	if( $id > 0 )
 	{
 		$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 		$data_content = $result->fetch();
 		$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
-		
-		if ( $num > $data_content['product_number'] )
+
+		if( $num > $data_content['product_number'] )
 		{
 			die( 'ERR_' . $lang_module['cart_set_err_num'] );
 		}
-		
-		if ( ! isset( $_SESSION[$module_data . '_cart'][$id] ) )
+
+		if( ! isset( $_SESSION[$module_data . '_cart'][$id] ) )
 		{
 			$_SESSION[$module_data . '_cart'][$id] = array(
 				'num' => $num,
 				'order' => 0,
-				'price' => $price_product_discounts 
+				'price' => $price_product_discounts
 			);
 		}
 		else
 		{
-			if ( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] )
+			if( ( $_SESSION[$module_data . '_cart'][$id]['num'] + $num ) > $data_content['product_number'] )
 			{
 				die( 'ERR_' . $lang_module['cart_set_err_num'] );
 			}
@@ -59,18 +59,20 @@ if ( $ac == 0 )
 		$chk = $nv_Request->get_string( 'chk', 'post', 0 );
 		$listid = explode( ",", $chk );
 		$i = 0;
-		foreach ( $listid as $id )
+		foreach( $listid as $id )
 		{
 			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . "" );
 			$data_content = $result->fetch();
-			if ( ! isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id] = array( 
-				'num' => $num, 'order' => 0, 'price' => $data_content['product_price'] 
+			if( ! isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id] = array(
+				'num' => $num,
+				'order' => 0,
+				'price' => $data_content['product_price']
 			);
 			else
 			{
 				$_SESSION[$module_data . '_cart'][$id]['num'] = $_SESSION[$module_data . '_cart'][$id]['num'] + $num;
 			}
-			$i ++;
+			++$i;
 		}
 		$contents = sprintf( $lang_module['set_cart_success'], ( $i ) );
 		echo 'OK_' . $contents;
@@ -78,15 +80,15 @@ if ( $ac == 0 )
 }
 else
 {
-	if ( $id > 0 )
+	if( $id > 0 )
 	{
 		$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . "" );
 		$data_content = $result->fetch();
-		if ( $num > $data_content['product_number'] )
+		if( $num > $data_content['product_number'] )
 		{
 			die( 'ERR_' . $lang_module['cart_set_err_num'] );
 		}
-		if ( isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id]['num'] = $num;
+		if( isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id]['num'] = $num;
 		echo 'OK_' . $lang_module['cart_set_ok'] . $num;
 	}
 }

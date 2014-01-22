@@ -128,7 +128,7 @@ foreach( $array_info as $info )
 	$bg = ( $i % 2 == 0 ) ? "class=\"second\"" : "";
 	$xtpl->assign( "bg", $bg );
 	$xtpl->parse( 'main.loop' );
-	$i++;
+	++$i;
 }
 
 $xtpl->parse( 'main' );

@@ -11,9 +11,7 @@
 			<input type="text" name="q" value="{KEY}" style="width:400px" id="key"/>
 		</div>
 		<div class="rows clearfix">
-			<label>
-				{LANG.search_cat} : 
-			</label>
+			<label> {LANG.search_cat} : </label>
 			<select name="catid" class ="sl-choose">
 				<!-- BEGIN: search_cat -->
 				<option value="{SEARCH_CAT.catid}" {SEARCH_CAT.select}>{SEARCH_CAT.xtitle}{SEARCH_CAT.title}</option>
@@ -35,17 +33,17 @@
 	</form>
 </div>
 <script type="text/javascript">
-  $("#reset").click(function(){
-	  $('#from_date').val("");
-	  $('#to_date').val("");
-	  $('#key').val("");
-  });
+	$("#reset").click(function() {
+		$('#from_date').val("");
+		$('#to_date').val("");
+		$('#key').val("");
+	}); 
 </script>
 <!-- END: main -->
 <!-- BEGIN: results -->
 <div class="result-frame">
 	<div class="result-title">
-		<strong>{LANG.search_on} {TITLE_MOD}</strong> 
+		<strong>{LANG.search_on} {TITLE_MOD}</strong>
 	</div>
 	<br />
 	<!-- BEGIN: noneresult -->
@@ -55,14 +53,17 @@
 	<!-- END: noneresult -->
 	<div class="cl-result">
 		<!-- BEGIN: result -->
-		<span class="linktitle">
-			<a href="{LINK}">{TITLEROW}</a>
-		</span>
+		<span class="linktitle"> <a href="{LINK}">{TITLEROW}</a> </span>
 		<div class="result-content">
-			<!-- BEGIN: result_img --><img src="{IMG_SRC}" border="0" width="100px" style="float:left; margin-right:5px;"/><!-- END: result_img -->
-			{CONTENT}<br />
+			<!-- BEGIN: result_img -->
+			<img src="{IMG_SRC}" border="0" width="100px" style="float:left; margin-right:5px;"/>
+			<!-- END: result_img -->
+			{CONTENT}
+			<br />
 			<!-- BEGIN: adminlink -->
-			<div class="fr">{ADMINLINK}</div>
+			<div class="fr">
+				{ADMINLINK}
+			</div>
 			<!-- END: adminlink -->
 			<div style="clear:both;"></div>
 		</div>
@@ -74,10 +75,9 @@
 		<!-- END: pages_viewpages -->
 	</div>
 	<div class="cl-info">
-		<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title} 
-			<br>
-			{LANG.info_adv}
-		</i>
+		<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
+		<br>
+		{LANG.info_adv} </i>
 	</div>
 </div>
 <div class="result-frame">
@@ -89,23 +89,14 @@
 			<input type="hidden" name="domains" value="{MY_DOMAIN}" />
 			<table width="100%">
 				<tr>
-					<td align="center" width="100px">
-						<img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" />
-					</td>
-					<td align="left">
-						<input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" />
-					</td>
-					<td>
-						<input type="submit" name="sa" value="{LANG.search_title}" id="sbb">
-					</td>
+					<td align="center" width="100px"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></td>
+					<td align="left"><input type="text" name="q" size="38" maxlength="255" value="{KEY}" id="sbi" /></td>
+					<td><input type="submit" name="sa" value="{LANG.search_title}" id="sbb"></td>
 				</tr>
 			</table>
 			<table width="100%">
 				<tr>
-					<td>
-					<input type="radio" name="sitesearch" value="" checked id="ss0" />
-					{LANG.search_on_internet}
-					<input type="radio" name="sitesearch" value="{MY_DOMAIN}"/>{LANG.search_on_nuke}
+					<td><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet} <input type="radio" name="sitesearch" value="{MY_DOMAIN}"/>{LANG.search_on_nuke}
 				</tr>
 			</table>
 		</form>

@@ -14,10 +14,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 {
 	$listid = $nv_Request->get_string( 'listid', 'get' );
 	$id_array = array_map( "intval", explode( ",", $listid ) );
-	
+
 	$sql = "SELECT id, listcatid, exptime FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id IN (" . implode( ",", $id_array ) . ")";
 	$result = $db->query( $sql );
-	
+
 	while( list( $id, $listcatid, $exptime ) = $result->fetch( 3 ) )
 	{
 		if( $exptime == 0 or $exptime > NV_CURRENTTIME )
@@ -26,7 +26,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 			$arr_catid = array_map( "intval", explode( ",", $listcatid ) );
 		}
 	}
-	
+
 	nv_set_status_module();
 	nv_del_moduleCache( $module_name );
 }

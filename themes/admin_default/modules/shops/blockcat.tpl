@@ -23,29 +23,27 @@
 				<td align="right"><strong>{LANG.block_name}: </strong></td>
 				<td><input style="width: 650px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 			</tr>
-		</tbody>
-		<!-- BEGIN: alias -->
-		<tbody>
+			<!-- BEGIN: alias -->
 			<tr>
-				<td align="right"  width="100px"><strong>{LANG.alias}: </strong></td>
+				<td align="right" width="100px"><strong>{LANG.alias}: </strong></td>
 				<td><input style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
 			</tr>
-		<!-- END: alias -->
-		<tbody>
-		<tbody>
+			<!-- END: alias -->
 			<tr>
 				<td align="right"><strong>{LANG.keywords}: </strong></td>
 				<td><input style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 			</tr>
 			<tr>
-				<td valign="top" align="right" width="100px"><br><strong>{LANG.description}</strong></td>
-				<td>
-					<textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea>
-				</td>
+				<td valign="top" align="right" width="100px">
+				<br>
+				<strong>{LANG.description}</strong></td>
+				<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 			</tr>
 		</tbody>
 	</table>
 	<br />
-	<center><input name="submit1" type="submit" value="{LANG.save}" /></center>
+	<div align="center">
+		<input name="submit1" type="submit" value="{LANG.save}" />
+	</div>
 </form>
 <!-- END: main -->
