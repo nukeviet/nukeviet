@@ -129,7 +129,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		if( ! empty( $array['email'] ) )
 		{
 			$base_url .= '&amp;email=' . rawurlencode( $array['email'] );
-			$$array_where[] = "( email LIKE '%" . $db->dblikeescape( $array['email'] ) . "%' )";
+			$array_where[] = "( email LIKE '%" . $db->dblikeescape( $array['email'] ) . "%' )";
 		}
 
 		if( ! empty( $array['sig'] ) )
