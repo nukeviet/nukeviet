@@ -26,7 +26,7 @@ if ( $ac == 0 )
 {
 	if ( $id > 0 )
 	{
-		$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+		$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 		$data_content = $result->fetch();
 		$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
 		
@@ -61,7 +61,7 @@ if ( $ac == 0 )
 		$i = 0;
 		foreach ( $listid as $id )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . "" );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . "" );
 			$data_content = $result->fetch();
 			if ( ! isset( $_SESSION[$module_data . '_cart'][$id] ) ) $_SESSION[$module_data . '_cart'][$id] = array( 
 				'num' => $num, 'order' => 0, 'price' => $data_content['product_price'] 
@@ -80,7 +80,7 @@ else
 {
 	if ( $id > 0 )
 	{
-		$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . "" );
+		$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . "" );
 		$data_content = $result->fetch();
 		if ( $num > $data_content['product_number'] )
 		{

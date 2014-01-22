@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
-
+die('den day:n post ');
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
@@ -50,20 +50,22 @@ if( $pro_config['comment'] and $id > 0 and $checkss == md5( $id . session_id() .
 	}
 	elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	{
-		$result = $db->query( "SELECT `listcatid`, `allowed_comm` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id . " AND `status`=1" );
+		$result = $db->query( "SELECT listcatid, allowed_comm FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . " AND status =1" );
 		$row = $result->fetch();
 		if( isset( $row['allowed_comm'] ) and ( $row['allowed_comm'] == 1 or ( $row['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
 		{
 			$content = nv_nl2br( $content, '<br />' );
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ", UNIX_TIMESTAMP(), " . $db->quote( $name ) . ", " . $userid . ", " . $db->quote( $email ) . ", " . $db->quote( NV_CLIENT_IP ) . ", " . $status . ", '', '', " . $db->quote( $content ) . ")";
-			$result = $db->query( $sql );
-			if( $result )
+			$stmt = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " (cid, id, post_time, post_name, post_id, post_email, post_ip, status , photo, title, content) VALUES (NULL, " . $id . ", UNIX_TIMESTAMP(), :name, " . $userid . ", :email, NV_CLIENT_IP, " . $status . ", '', '', :content)" );
+			$stmt->bindParam( ':name', $name, PDO::PARAM_STR );
+			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
+			$stmt->bindParam( ':content', $content, PDO::PARAM_STR );
+			if( $stmt->execute() )
 			{
 				$page = 0;
-				$numf = $db->query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` WHERE `id`= '" . $id . "' AND `status`=1" )->fetchColumn();
+				$numf = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " WHERE id= '" . $id . "' AND status =1" )->fetchColumn();
 				if( $status )
 				{
-					$result = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `hitscm`=" . $numf . " WHERE `id`=" . $id;
+					$result = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET hitscm=" . $numf . " WHERE id=" . $id;
 					$db->query( $result );
 				}
 				$page = ceil( ( $numf - $per_page_comment ) / $per_page_comment ) * $per_page_comment;

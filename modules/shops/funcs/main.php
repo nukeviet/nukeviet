@@ -46,23 +46,33 @@ if( empty( $contents ) )
 	$orderby = "";
  if ($sorts == 0)
  {
- $orderby = " ORDER BY `id` DESC ";
+ $orderby = " id DESC ";
 
  }
  elseif ($sorts == 1)
  {
- $orderby = " ORDER BY `product_price` ASC, `id` DESC ";
+ $orderby = " product_price ASC, id DESC ";
  }
  else
  {
- $orderby = " ORDER BY `product_price` DESC, `id` DESC ";
+ $orderby = " product_price DESC, id DESC ";
  }
 	if( $pro_config['home_view'] == "view_home_all" )
-	{		
-		$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `status`=1 " . $orderby . " LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
-
-		$result = $db->query( $sql );
-		$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
+	{
+		// Fetch Limit
+		$db->sqlreset()
+		  ->select( 'COUNT(*)' )
+		  ->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+		  ->where( "inhome=1 AND status =1 " );
+		
+		$all_page = $db->query( $db->sql() )->fetchColumn();
+		
+		$db->select( "id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )
+		  ->order( $orderby )
+		  ->limit( $per_page )
+		  ->offset( ( $page - 1 ) * $per_page );
+				
+		$result = $db->query( $db->sql() );
 
 		while ( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
 		{
@@ -119,11 +129,19 @@ if( empty( $contents ) )
 				$array_cat = array();
 				$array_cat = GetCatidInParent( $catid_i, true );
 
-				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid` IN (" . implode( ",", $array_cat ) . ") AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $array_info_i['numlinks'];
-
-				$result = $db->query( $sql );
-				$num_pro = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
-
+				// Fetch Limit
+				$db->sqlreset()
+				  ->select( 'COUNT(*)' )
+				  ->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+				  ->where( "listcatid IN (" . implode( ",", $array_cat ) . ") AND inhome=1 AND status =1" );
+				
+				$num_pro = $db->query( $db->sql() )->fetchColumn();
+				
+				$db->select( "id, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )
+				  ->order( 'id DESC' )
+				  ->limit( $array_info_i['numlinks'] );
+				
+				$result = $db->query( $db->sql() );
 				$data_pro = array();
 
 				while ( list( $id, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
@@ -195,14 +213,23 @@ if( empty( $contents ) )
 				$sql_regexp = array();
 				foreach( $array_group as $_gid )
 				{
-					$sql_regexp[] = "( `group_id`='" . $_gid . "' OR `group_id` REGEXP '^" . $_gid . "\\\,' OR `group_id` REGEXP '\\\," . $_gid . "\\\,' OR `group_id` REGEXP '\\\," . $_gid . "$' )";
+					$sql_regexp[] = "( group_id='" . $_gid . "' OR group_id REGEXP '^" . $_gid . "\\\,' OR group_id REGEXP '\\\," . $_gid . "\\\,' OR group_id REGEXP '\\\," . $_gid . "$' )";
 				}
 				$sql_regexp = "(" . implode( " OR ", $sql_regexp ) . ")";
 
-				$sql = "SELECT SQL_CALC_FOUND_ROWS `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`, `homeimgalt`, `homeimgfile`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE " . $sql_regexp . " AND `inhome`=1 AND `status`=1 ORDER BY `id` DESC LIMIT 0," . $num_links;
+				// Fetch Limit
+				$db->sqlreset()
+				  ->select( 'COUNT(*)' )
+				  ->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+				  ->where( $sql_regexp . " AND inhome=1 AND status =1" );
+				
+				$num_pro = $db->query( $db->sql() )->fetchColumn();
+				
+				$db->select( "id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )
+				  ->order( 'id DESC' )
+				  ->limit( $num_links );
 
-				$result = $db->query( $sql );
-				$num_pro = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
+				$result = $db->query( $db->sql() );
 
 				$data_pro = array();
 

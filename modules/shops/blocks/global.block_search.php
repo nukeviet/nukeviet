@@ -60,7 +60,7 @@ if( ! function_exists( 'nv_search_product' ) )
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-		$sql = "SELECT `catid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
+		$sql = "SELECT catid, lev, " . NV_LANG_DATA . "_title AS title FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
 		$list = nv_db_cache( $sql, '', $module );
 		
 		foreach( $list as $row )
@@ -82,7 +82,7 @@ if( ! function_exists( 'nv_search_product' ) )
 		}
 		
 		// Get money
-		$sql = "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_money_" . NV_LANG_DATA . "`";
+		$sql = "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $mod_data . "_money_" . NV_LANG_DATA . "";
 		$list = nv_db_cache( $sql, '', $module );
 
 		foreach( $list as $row )
@@ -92,7 +92,7 @@ if( ! function_exists( 'nv_search_product' ) )
 			$xtpl->parse( 'main.typemoney' );
 		}
 		
-		$sql = "SELECT `" . NV_LANG_DATA . "_title` AS `title`, `sourceid` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_sources`";
+		$sql = "SELECT " . NV_LANG_DATA . "_title AS title, sourceid FROM " . $db_config['prefix'] . "_" . $mod_data . "_sources";
 		$list = nv_db_cache( $sql, '', $module );
 		
 		foreach( $list as $row )

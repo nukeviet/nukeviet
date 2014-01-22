@@ -19,7 +19,7 @@ $val = $nv_Request->get_int( 'val', 'get,post', 0 );
 $timeout = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'cookie', 0 );
 if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 {
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `ratingdetail`=`ratingdetail`+" . $val . " WHERE `id`=" . $id;
+	$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET ratingdetail=ratingdetail+" . $val . " WHERE id=" . $id;
 	$db->query( $sql );
 	$nv_Request->set_Cookie( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 	$msg = sprintf( $lang_module['detail_rate_ok'], $val );

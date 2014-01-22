@@ -30,22 +30,35 @@ if ( $check )
  $transaction_i = $nl->checkOrder( $payment_config['public_api_url'], $order_code, $payment_id );
  if ( $transaction_i !== false )
  {
- $order_id = $db->query( "SELECT `order_id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_code`=" . $db->quote( $order_code ) )->fetchColumn();
+ $stmt = $db->prepare( "SELECT order_id FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_code= :order_code" );
+ $stmt->bindParam( ':order_code', $order_code, PDO::PARAM_STR );
+ $stmt->execute();
+ $order_id =$stmt->fetchColumn();
  if ( $order_id > 0 )
  {
  $error_update = false;
  $payment_data = nv_base64_encode( serialize( $transaction_i ) );
- $payment_data_old = $db->query( "SELECT `payment_data` FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `payment`='" . $payment . "' AND `payment_id`=" . $db->quote( $payment_id ) . " ORDER BY `transaction_id` DESC LIMIT 1" )->fetchColumn();
+ $db->sqlreset()
+	->select( 'payment_data' )
+	->from( $db_config['prefix'] . "_" . $module_data . "_transaction" )
+	->where( "payment='" . $payment . "' AND payment_id= :payment_id" )
+	->order( 'transaction_id DESC' )
+	->limit( 1 );
+ 
+ $stmt = $db->prepare( $db->sql() );
+ $stmt->bindParam( ':payment_id', $payment_id, PDO::PARAM_STR );
+ $stmt->execute();
+ $payment_data_old = $stmt->fetchColumn();
  if ( $payment_data != $payment_data_old )
  {
  $nv_transaction_status = intval( $transaction_i['nv_transaction_status'] );
  $payment_amount = intval( $transaction_i['AMOUNT'] );
  $payment_time = max( $transaction_i['CREATED_TIME'], $transaction_i['PAID_TIME'] );
  
- $transaction_id = $db->insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
+ $transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, UNIX_TIMESTAMP(), '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
  if ( $transaction_id > 0 )
  {
- $db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE `order_id`=" . $order_id );
+ $db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $order_id );
  }
  else
  {

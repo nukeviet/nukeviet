@@ -28,7 +28,7 @@ else
 	{
 		if ( $id > 0 )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
 			
 			$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
@@ -77,7 +77,7 @@ else
 	{
 		if ( $id > 0 )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
 			
 			if ( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )

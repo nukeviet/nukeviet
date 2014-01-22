@@ -50,7 +50,7 @@ $array_groupid_in_row = unserialize( $inrow );
 
 $array_cat = GetCatidInChild( $cid );
 
-$sql = "SELECT `groupid`, `parentid`, `cateid`, `" . NV_LANG_DATA . "_title` AS `title`, `lev`, `numsubgroup` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` ORDER BY `order` ASC";
+$sql = "SELECT groupid, parentid, cateid, " . NV_LANG_DATA . "_title AS title, lev, numsubgroup FROM " . $db_config['prefix'] . "_" . $module_data . "_group ORDER BY sort ASC";
 $result_group = $db->query( $sql );
 
 $data_group = array();

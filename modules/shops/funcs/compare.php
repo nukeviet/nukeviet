@@ -70,8 +70,8 @@ if( ! empty( $array_id ) )
 {
 	foreach( $array_id as $array_id_i )
 	{
-		$sql = "SELECT `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_address`,`homeimgfile`, `homeimgalt`, `homeimgthumb`, `product_code`, `product_price`, `product_discounts`, `money_unit`, `showprice`,
- " . NV_LANG_DATA . "_warranty," . NV_LANG_DATA . "_promotional as promotional," . NV_LANG_DATA . "_note as note, source_id," . NV_LANG_DATA . "_bodytext FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $array_id_i;
+		$sql = "SELECT id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address,homeimgfile, homeimgalt, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice,
+ " . NV_LANG_DATA . "_warranty," . NV_LANG_DATA . "_promotional as promotional," . NV_LANG_DATA . "_note as note, source_id," . NV_LANG_DATA . "_bodytext FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $array_id_i;
 		$result = $db->query( $sql );
 		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address,$homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $warranty, $promotional, $note, $source_id, $bodytext ) = $result->fetch( 3 ) )
 		{
@@ -172,7 +172,7 @@ if( ! empty( $array_id ) )
 		{
 			$xtpl->parse( 'main.grid_rows.product_code' );
 		}
-		$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
+		$sql = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid = " . $data_row['source_id'] );
 		$data_temp = $sql->fetch();
 		$data_row['source'] = $data_temp[NV_LANG_DATA . '_title'];
 		if( ! empty( $data_row['source'] ) )
@@ -202,7 +202,7 @@ if( ! empty( $array_id ) )
 			$xtpl->assign( 'note',$data_row['note'] );
 			$xtpl->parse( 'main.grid_rows.note' );
 		}
-		$sql = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid` = " . $data_row['source_id'] );
+		$sql = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid = " . $data_row['source_id'] );
 		$data_temp = $sql->fetch();
 		$data_row['source'] = $data_temp[NV_LANG_DATA . '_title'];
 

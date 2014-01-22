@@ -42,7 +42,7 @@ if( ! empty( $savecat ) )
 		}
 
 		$data['currency'] = ( empty( $data['currency'] ) ) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
-		$sql = "REPLACE INTO `" . $table_name . "` (`id`, `code`, `currency`, `exchange`) VALUES (" . $numeric . ", " . $db->quote( $data['code'] ) . ", " . $db->quote( $data['currency'] ) . ", " . $db->quote( $data['exchange'] ) . ")";
+		$sql = "REPLACE INTO " . $table_name . " (id, code, currency, exchange) VALUES (" . $numeric . ", " . $db->quote( $data['code'] ) . ", " . $db->quote( $data['currency'] ) . ", " . $db->quote( $data['exchange'] ) . ")";
 
 		if( $db->exec( $sql ) )
 		{
@@ -59,7 +59,7 @@ if( ! empty( $savecat ) )
 }
 elseif( ! empty( $id ) )
 {
-	$data = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `id`=" . $id )->fetch();
+	$data = $db->query( "SELECT * FROM " . $table_name . " WHERE id=" . $id )->fetch();
 	$data['caption'] = $lang_module['money_edit'];
 }
 
@@ -79,7 +79,7 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $count = 0;
 $array_code_exit = array();
-$result = $db->query( "SELECT `id`, `code`, `currency`, `exchange` FROM `" . $table_name . "` ORDER BY code DESC" );
+$result = $db->query( "SELECT id, code, currency, exchange FROM " . $table_name . " ORDER BY code DESC" );
 while( $row = $result->fetch() )
 {
 	$array_code_exit[] = $row['code'];

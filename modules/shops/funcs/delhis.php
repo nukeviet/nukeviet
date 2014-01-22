@@ -16,13 +16,13 @@ $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
 	$table_name = $db_config['prefix'] . "_" . $module_data . "_orders";
-	$re = $db->query( "SELECT * FROM `" . $table_name . "` WHERE order_id=" . $order_id );
+	$re = $db->query( "SELECT * FROM " . $table_name . " WHERE order_id=" . $order_id );
 	$data = $re->fetch();
 	if ( ! empty( $data ) )
 	{
 		if ( $data['status'] == 0 and $data['status'] == 0 )
 		{
-			$re = $db->query( "DELETE FROM `" . $table_name . "` WHERE order_id=" . $order_id );
+			$re = $db->query( "DELETE FROM " . $table_name . " WHERE order_id=" . $order_id );
 			echo "OK_" . str_replace( "_", "#@#", $lang_module['del_history_ok'] );
 			die();
 		}

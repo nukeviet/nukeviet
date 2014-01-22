@@ -17,9 +17,10 @@ $payment = $nv_Request->get_string( 'payment', 'get', '' );
 if ( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".complete.php" ) )
 {
 	// Lay thong tin config neu cong thanh toan duoc kich hoat.
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `active`=1 and `payment`=" . $db->quote( $payment );
-	$result = $db->query( $sql );
-	if ( $result->rowCount() )
+	$stmt = $db->prepare( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE active=1 and payment= :payment" );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
+	if ( $stmt->rowCount() )
 	{
 		$row = $result->fetch();
 		$payment_config = unserialize( nv_base64_decode( $row['config'] ) );

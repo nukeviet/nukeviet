@@ -70,19 +70,19 @@ $tbl_src = "";
 if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
 	$dbkey = $db->dblikeescape( $key );
-	$where = "AND ( `product_code` LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
+	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
 
 	if ( $catid != 0 )
 	{
 		if ( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
-			$where .= "AND `listcatid`=" . $catid;
+			$where .= "AND listcatid=" . $catid;
 		}
 		else
 		{
 			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid );
-			$where .= "AND `listcatid` IN (" . implode( ",", $array_cat ) . ")";
+			$where .= "AND listcatid IN (" . implode( ",", $array_cat ) . ")";
 		}
 	}
 
@@ -92,16 +92,25 @@ if ( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 		$tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $from_date, $m );
 		$fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-		$where .= " AND ( `publtime` < $fdate AND `publtime` >= $tdate ) ";
+		$where .= " AND ( publtime < $fdate AND publtime >= $tdate ) ";
 	}
 
 	$table_search = $db_config['prefix'] . "_" . $module_data . "_rows";
 
-	$sql = " SELECT SQL_CALC_FOUND_ROWS `id`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `publtime`, `homeimgfile`, `homeimgthumb`, `source_id` FROM `" . $table_search . "` WHERE `status`=1 " . $where . " ORDER BY `id` DESC LIMIT " . $pages . "," . $per_pages;
+	// Fetch Limit
+	$db->sqlreset()
+	  ->select( 'COUNT(*)' )
+	  ->from( $table_search )
+	  ->where( "status =1 " . $where );
+	
+	$numRecord = $db->query( $db->sql() )->fetchColumn();
+	
+	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )
+	  ->order( 'id DESC' )
+	  ->limit( $per_pages )
+	  ->offset( $pages );
 
-	$result = $db->query( $sql );
-	$result_all = $db->query( "SELECT FOUND_ROWS()" );
-	$numRecord = $result_all->fetchColumn();
+	$result = $db->query( $db->sql() );
 
 	$array_content = array();
 	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";

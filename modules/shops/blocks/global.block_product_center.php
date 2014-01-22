@@ -30,7 +30,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
 		$html .= "	<td><select name=\"config_blockid\">\n";
 
-		$sql = "SELECT `bid`, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
+		$sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
 
 		foreach( $list as $l )
@@ -117,7 +117,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		if( $module != $module_name )
 		{
 			$my_head .= '<link rel="stylesheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/' . $mod_file . '.css' . '" type="text/css" />';
-			$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
+			$sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, who_view, groups_view FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
 
 			$list = nv_db_cache( $sql, "catid", $module );
 			foreach( $list as $row )
@@ -146,8 +146,15 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$xtpl = new XTemplate( "block.product_center.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $block_theme );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt FROM `" . $db_config['prefix'] . "_" . $mod_data . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $mod_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.id DESC LIMIT 0," . $num;
-		$list = nv_db_cache( $sql, '', $module );
+		$db->sqlreset()
+			->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt" )
+			->from( $db_config['prefix'] . "_" . $mod_data . "_rows  t1" )
+			->join( "INNER JOIN " . $db_config['prefix'] . "_" . $mod_data . "_block t2 ON t1.id = t2.id")
+			->where( "t2.bid= " . $block_config['blockid'] . " AND t1.status =1" )
+			->order( 't1.id DESC' )
+			->limit( $num );
+				
+		$list = nv_db_cache( $db->sql(), '', $module );
 
 		foreach( $list as $row )
 		{

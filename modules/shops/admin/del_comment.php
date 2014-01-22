@@ -18,7 +18,7 @@ $del_array = array_map( "intval", $del_array );
 
 foreach( $del_array as $cid )
 {
-	$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` WHERE cid='$cid'";
+	$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " WHERE cid='$cid'";
 	$result = $db->query( $sql );
 }
 

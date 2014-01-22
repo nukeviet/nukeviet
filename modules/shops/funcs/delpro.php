@@ -15,10 +15,10 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 $contents = "NO_" . $lang_module['profile_del_error'];
 
-list( $id, $user_id ) = $db->query( "SELECT `id` ,`user_id` FROM `" . $db_config ['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . intval( $id ) )->fetch( 3 );
+list( $id, $user_id ) = $db->query( "SELECT id ,user_id FROM " . $db_config ['prefix'] . "_" . $module_data . "_rows WHERE id=" . intval( $id ) )->fetch( 3 );
 if( $id > 0 and $user_id == $user_info ['userid'] )
 {
-	$sql = "DELETE FROM `" . $db_config ['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+	$sql = "DELETE FROM " . $db_config ['prefix'] . "_" . $module_data . "_rows WHERE id=" . $id;
 	if ( $db->exec( $sql ) )
 	{
 		$contents = "OK_" . $id;

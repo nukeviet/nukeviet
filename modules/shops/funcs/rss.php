@@ -40,11 +40,23 @@ if ( ! empty( $catid ) )
 	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_cat_url;
 	$channel['description'] = $global_array_cat[$catid]['description'];
 
-	$sql = "SELECT `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `homeimgfile` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`= " . $catid . " AND `status`=1 ORDER BY `publtime` DESC LIMIT 30";
+	$db->sqlreset()
+		->select( 'id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, homeimgfile' )
+		->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+		->where( "listcatid= " . $catid . " AND status =1" )
+		->order( 'publtime DESC' )
+		->limit( 30 );
+	$sql = $db->sql();
 }
 else
 {
-	$sql = "SELECT `id`, `listcatid`, `publtime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_hometext`, `homeimgfile`, `homeimgthumb` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 30";
+	$db->sqlreset()
+		->select( 'id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, homeimgfile, homeimgthumb' )
+		->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+		->where( 'status =1' )
+		->order( 'publtime DESC' )
+		->limit( 30 );
+	$sql = $db->sql();
 }
 
 if ( $module_info['rss'] )

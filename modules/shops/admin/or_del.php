@@ -17,7 +17,7 @@ $contents = "NO_" . $order_id;
 
 if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
-	$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_id`=" . $order_id );
+	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
 	$data_order = $result->fetch();
 
 	// Cong lai san pham trong kho
@@ -26,10 +26,10 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
 	}
 
-	$exec = $db->exec( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_id`=" . $order_id . " AND `transaction_status` < 1" );
+	$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
 	if( $exec )
 	{
-		$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `order_id`=" . $order_id );
+		$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
 		$contents = "OK_" . $order_id;
 	}
 }
@@ -46,7 +46,7 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 
 		if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 		{
-			$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_id`=" . $order_id );
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
 			$data_order = $result->fetch();
 			$result->closeCursor();
 
@@ -56,10 +56,10 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 				product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
 			}
 
-			$exec = $db->exec( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `order_id`=" . $order_id . " AND `transaction_status` < 1" );
+			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
 			if( $exec )
 			{
-				$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `order_id`=" . $order_id );
+				$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
 			}
 		}
 	}

@@ -33,13 +33,13 @@ if ( $pro_config['active_payment'] == "1" )
 			{
 				// Lập trình thông báo thành công và cập nhật hóa đơn
 				$order_code = intval( $order_code );
-				$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+				$re = $db->query( "UPDATE " . $table_name . " SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 			}
 			// Trường hợp thanh toán ngay. Hãy đưa thông báo thành công và cập nhật hóa đơn phù hợp
 			elseif ( $payment_type == 1 )
 			{
 				$order_code = intval( $order_code );
-				$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+				$re = $db->query( "UPDATE " . $table_name . " SET payment_id=" . $payment_id . " , payment = 1 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 				// Lập trình thông báo thành công và cập nhật hóa đơn			
 			}
 		}
@@ -62,7 +62,7 @@ if ( $pro_config['active_payment'] == "1" )
 		{
 			// Lập trình thông báo hoàn trả thành công và cập nhật hóa đơn		
 			$order_code = intval( $order_code );
-			$re = $db->query( "UPDATE `" . $table_name . "` SET payment_id=" . $payment_id . " , payment = 2 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
+			$re = $db->query( "UPDATE " . $table_name . " SET payment_id=" . $payment_id . " , payment = 2 , payment_type = " . $payment_type . " WHERE id=" . $order_code );
 			// Set payment = 2 la da huy thanh toan
 		}
 	}

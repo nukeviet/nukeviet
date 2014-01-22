@@ -18,7 +18,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 {
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 	
-	$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE order_id=" . $order_id );
+	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
 	$data = $result->fetch();
 	
 	if ( empty( $data ) )
@@ -51,7 +51,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 	{
 		$templistid = implode( ",", $arrayid );
 		
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status=1";
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status =1";
 		
 		$result = $db->query( $sql );
 		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
@@ -82,7 +82,7 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 	}
 	elseif ( $data['transaction_status'] == 0 )
 	{
-		$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `active`=1 ORDER BY `weight` ASC";
+		$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE active=1 ORDER BY weight ASC";
 		$result = $db->query( $sql );
 		
 		while ( $row = $result->fetch() )
@@ -120,8 +120,8 @@ if ( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . 
 	}
 	elseif ( $data['transaction_status'] == 1 and $data['transaction_id'] > 0 )
 	{
-		$payment = $db->query( "SELECT `payment` FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `transaction_id`=" . $data['transaction_id'] )->fetchColumn();
-		$config = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `payment` = '" . $payment . "'" )->fetch();
+		$payment = $db->query( "SELECT payment FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE transaction_id=" . $data['transaction_id'] )->fetchColumn();
+		$config = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment = '" . $payment . "'" )->fetch();
 		$intro_pay = sprintf( $lang_module['order_by_payment'], $config['domain'], $config['paymentname'] );
 	}
 	if ( $data['transaction_status'] == 4 )
@@ -164,12 +164,12 @@ elseif ( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $n
 	$checksum = $nv_Request->get_string( 'checksum', 'get' );
 	$payment = $nv_Request->get_string( 'payment', 'get' );
 	
-	$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE order_id=" . $order_id );
+	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
 	$data = $result->fetch();
 	
 	if ( isset( $data['transaction_status'] ) and intval( $data['transaction_status'] ) == 0 and preg_match( "/^[a-zA-Z0-9]+$/", $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".checkout_url.php" ) )
 	{
-		$config = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `payment` = '" . $payment . "'" )->fetch();
+		$config = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment = '" . $payment . "'" )->fetch();
 		$payment_config = unserialize( nv_base64_decode( $config['config'] ) );
 		
 		// Cap nhat cong thanh toan
@@ -180,9 +180,9 @@ elseif ( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $n
 		
 		$userid = ( defined( 'NV_IS_USER' ) ) ? $user_info['userid'] : 0;
 		
-		$transaction_id = $db->insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+		$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
 		
-		$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = 1 WHERE `order_id`=" . $order_id );
+		$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = 1 WHERE order_id=" . $order_id );
 		
 		require_once ( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $payment . ".checkout_url.php" );
 	}

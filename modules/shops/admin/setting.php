@@ -75,11 +75,11 @@ if( $savesetting == 1 )
 	{
 		foreach( $data as $config_name => $config_value )
 		{
-			$db->query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
+			$db->query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
 		}
 		$mid = intval( $currencies_array[$data['money_unit']]['numeric'] );
 
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` SET `exchange` = '1' WHERE `id` = " . $mid . " LIMIT 1";
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " SET exchange = '1' WHERE id = " . $mid ;
 		$db->query( $sql );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['setting'], "Setting", $admin_info['userid'] );
@@ -97,7 +97,7 @@ if( $data['active_payment'] == '1' )
 {
 	$array_setting_payment = array();
 	
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$all_page = $result->rowCount();
 	
@@ -211,7 +211,7 @@ if ( ! empty( $data['groups_comment'] ) )
 }
 
 // Tien te
-$result = $db->query( "SELECT `code`, `currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` ORDER BY `code` DESC" );
+$result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );
 while( list( $code, $currency ) = $result->fetch( 3 ) )
 {
 	$array_temp = array();

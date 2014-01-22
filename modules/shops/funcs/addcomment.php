@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
-
+die('den day: add');
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if ( ! defined( 'NV_IS_USER' ) and $pro_config['who_comment'] == "member" )
@@ -39,9 +39,14 @@ if ( $content != "" )
 			$user_info['username'] = $lang_module['comment_customer'];
 			$user_info['userid'] = 0;
 		}
-		$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` (`cid`, `id`, `post_time`, `post_name`, `post_id`, `post_email`, `post_ip`, `status`, `photo`, `title`, `content`) VALUES (NULL, " . $id . ",'" . NV_CURRENTTIME . "', '" . $user_info['username'] . "', '" . $user_info['userid'] . "','" . $user_info['email'] . "'," . $db->quote( NV_CLIENT_IP ) . ", '" . $status . "','" . $user_info['photo'] . "'," . $db->quote( $data['title'] ) . ", " . $db->quote( $data['content'] ) . ")";
+		$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " (cid, id, post_time, post_name, post_id, post_email, post_ip, status , photo, title, content) VALUES (NULL, " . $id . ",'" . NV_CURRENTTIME . "', '" . $user_info['username'] . "', '" . $user_info['userid'] . "','" . $user_info['email'] . "'," . $db->quote( NV_CLIENT_IP ) . ", '" . $status . "','" . $user_info['photo'] . "'," . $db->quote( $data['title'] ) . ", " . $db->quote( $data['content'] ) . ")";
 
-		$cid = $db->insert_id( $sql );
+		$data_insert = array();
+		$data_insert['username'] = $user_info['username'];
+		$data_insert['username'] = $user_info['username'];
+		$data_insert['username'] = $user_info['username'];
+		$data_insert['username'] = $user_info['username'];
+		$cid = $db->insert_id( $sql, 'cid', $data_insert );
 
 		if ( $cid > 0 )
 		{

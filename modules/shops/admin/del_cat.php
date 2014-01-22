@@ -13,12 +13,12 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $catid = $nv_Request->get_int( 'catid', 'post', 0 );
 $contents = "NO_" . $catid;
 
-list( $catid, $parentid, $title ) = $db->query( "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid )->fetch( 3 );
+list( $catid, $parentid, $title ) = $db->query( "SELECT catid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid )->fetch( 3 );
 
 if( $catid > 0 )
 {
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
-	$check_parentid = $db->query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid` = '" . $catid . "'" )->fetchColumn();
+	$check_parentid = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE parentid = '" . $catid . "'" )->fetchColumn();
 
 	if( intval( $check_parentid ) > 0 ) // Chu de con
 	{
@@ -26,7 +26,7 @@ if( $catid > 0 )
 	}
 	else // San pham trong chu de
 	{
-		$check_rows = $db->query( "SELECT count(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`='" . $catid . "'" )->fetchColumn();
+		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE listcatid='" . $catid . "'" )->fetchColumn();
 
 		if( intval( $check_rows ) > 0 )
 		{
@@ -38,7 +38,7 @@ if( $catid > 0 )
 
 				if( empty( $delcatandrows ) and empty( $movecat ) ) // Hien form
 				{
-					$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_title`, `lev` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid` !='" . $catid . "' ORDER BY `order` ASC";
+					$sql = "SELECT catid, " . NV_LANG_DATA . "_title, lev FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid !='" . $catid . "' ORDER BY sort ASC";
 					$result = $db->query( $sql );
 
 					$array_cat_list = array();
@@ -85,13 +85,13 @@ if( $catid > 0 )
 				}
 				elseif( ! empty( $delcatandrows ) ) // Xoa loai san pham va san pham
 				{
-					$sql = $db->query( "SELECT `id`, `listcatid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`=" . $catid );
+					$sql = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE listcatid=" . $catid );
 					while( $row = $sql->fetch() )
 					{
 						nv_del_content_module( $row['id'] );
 					}
 
-					$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid );
+					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid );
 
 					nv_fix_cat_order();
 					nv_del_moduleCache( $module_name );
@@ -100,16 +100,16 @@ if( $catid > 0 )
 				}
 				elseif( ! empty( $movecat ) and $catidnews > 0 and $catidnews != $catid ) // Di chuyen san pham sang chu de moi
 				{
-					$catidnews = $db->query( "SELECT `catid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid` =" . $catidnews )->fetchColumn();
+					$catidnews = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid =" . $catidnews )->fetchColumn();
 
 					if( $catidnews > 0 )
 					{
-						$sql = $db->query( "SELECT `id`, `listcatid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `listcatid`=" . $catid );
+						$sql = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE listcatid=" . $catid );
 						while( $row = $sql->fetch() )
 						{
-							$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `listcatid`=" . $catidnews . " WHERE `id` =" . $row['id'] );
+							$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET listcatid=" . $catidnews . " WHERE id =" . $row['id'] );
 						}
-						$db->query( "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . $catid );
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid );
 						nv_fix_cat_order();
 						nv_del_moduleCache( $module_name );
 
@@ -127,7 +127,7 @@ if( $catid > 0 )
 
 	if( $contents == "NO_" . $catid )
 	{
-		$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE catid=" . $catid;
+		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid;
 		if( $db->query( $sql ) )
 		{
 			nv_fix_cat_order();

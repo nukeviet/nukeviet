@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_d . "_catalogs` ORDER BY `order` ASC";
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_d . "_catalogs ORDER BY sort ASC";
 $result = $db->query( $sql );
 
 while( $row = $result->fetch() )

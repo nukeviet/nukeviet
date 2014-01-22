@@ -53,7 +53,7 @@ foreach ( $global_array_cat as $row )
 }
 
 // Get money
-$sql = "SELECT `code`,`currency` FROM `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "`";
+$sql = "SELECT code,currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "";
 $result = $db->query( $sql );
 
 while ( $row = $result->fetch() )
@@ -64,7 +64,7 @@ while ( $row = $result->fetch() )
 }
 
 // Get sources
-$sql = "SELECT " . NV_LANG_DATA . "_title as title, sourceid FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources`";
+$sql = "SELECT " . NV_LANG_DATA . "_title as title, sourceid FROM " . $db_config['prefix'] . "_" . $module_data . "_sources";
 $result = $db->query( $sql );
 
 while ( $row = $result->fetch() )
@@ -89,7 +89,7 @@ $contents = $xtpl->text( 'form' );
 $search = "";
 if ( $keyword != "" )
 {
-	$search = " AND (`" . NV_LANG_DATA . "_title` LIKE '%" . $db->dblikeescape( $keyword ) . "%' OR `product_code` LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
+	$search = " AND (" . NV_LANG_DATA . "_title LIKE '%" . $db->dblikeescape( $keyword ) . "%' OR product_code LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
 }
 
 if( ( $price1 >= 0 and $price2 > 0 ) )
@@ -107,23 +107,23 @@ elseif( $price1 == -1 and $price2 > 0 )
 
 if( ! empty( $typemoney ) )
 {
-	$search .= " AND `money_unit` = " . $db->quote( $typemoney ) . "";
+	$search .= " AND money_unit = " . $db->quote( $typemoney ) . "";
 }
-$sql_i = ", if(t1.`money_unit` ='" . $pro_config['money_unit'] . "', t1.`product_price` , t1.`product_price` * t2.`exchange` ) AS `product_saleproduct` ";
-$order_by = " `product_saleproduct` DESC ";
+$sql_i = ", if(t1.money_unit ='" . $pro_config['money_unit'] . "', t1.product_price , t1.product_price * t2.exchange ) AS product_saleproduct ";
+$order_by = " product_saleproduct DESC ";
 
 if ( !empty( $typemoney ) )
 {
-	$search .= " AND `money_unit` = " . $db->quote( $typemoney ) . "";
+	$search .= " AND money_unit = " . $db->quote( $typemoney ) . "";
 }
 if ( $cataid != 0 )
 {
 	$array_cat = GetCatidInParent( $cataid );
-	$search .= " AND `listcatid` IN (" . implode( ",", $array_cat ).") ";
+	$search .= " AND listcatid IN (" . implode( ",", $array_cat ).") ";
 }
 if ( $sid != 0 )
 {
-	$search .= " AND `source_id` =" . $sid . " ";
+	$search .= " AND source_id =" . $sid . " ";
 }
 if ( empty( $search ) )
 {
@@ -137,15 +137,25 @@ if ( empty( $search ) )
 $show_price = "";
 if ( $pro_config['active_price'] )
 {
-	if( ! empty( $price1_temp ) or ! empty( $price2_temp ) ) $show_price = "AND `showprice`=1";
+	if( ! empty( $price1_temp ) or ! empty( $price2_temp ) ) $show_price = "AND showprice=1";
 }
 
-$table_search = "`" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1";
-$table_exchange = " LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . "` AS t2 ON t1.money_unit=t2.code";
-$sql = " SELECT SQL_CALC_FOUND_ROWS t1.`id`, t1.`listcatid`, t1.`publtime`, t1.`" . NV_LANG_DATA . "_title`, t1.`" . NV_LANG_DATA . "_alias`, t1.`" . NV_LANG_DATA . "_hometext`, t1.`" . NV_LANG_DATA . "_address`, t1.`homeimgalt`, t1.`homeimgfile`, t1.`homeimgthumb`, t1.`product_price`, t1.`product_discounts`, t1.`money_unit`, t1.`showprice`, t2.`exchange` " . $sql_i . " FROM " . $table_search . " " . $table_exchange . " WHERE t1.`status`=1 " . $search . " " . $show_price . " ORDER BY " . $order_by . " LIMIT " . $page . "," . $per_page;
+$table_search = "" . $db_config['prefix'] . "_" . $module_data . "_rows t1";
+$table_exchange = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " t2 ON t1.money_unit=t2.code";
 
-$result = $db->query( $sql );
-$all_page = $db->query( "SELECT FOUND_ROWS()" )->fetchColumn();
+// Fetch Limit
+$db->sqlreset()
+  ->select( 'COUNT(*)' )
+  ->from( $table_search . " " . $table_exchange )
+  ->where( "t1.status =1 " . $search . " " . $show_price  );
+
+$all_page = $db->query( $db->sql() )->fetchColumn();
+
+$db->select( "t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1." . NV_LANG_DATA . "_address, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice, t2.exchange " . $sql_i )
+  ->order( $order_by )
+  ->limit( $per_page )
+  ->offset( $page );
+$result = $db->query( $db->sql() );
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid;
 $html_pages = nv_generate_page( $base_url, $all_page, $per_page, $page );

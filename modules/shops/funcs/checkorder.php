@@ -17,7 +17,7 @@ $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if ( $checkss == md5( $user_info["userid"] . $global_config['sitekey'] . session_id() ) )
 {
 	$array_data_payment = array();
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE `active`=1 ORDER BY `weight` ASC";
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE active=1 ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	while ( $row = $result->fetch() )
 	{
@@ -33,7 +33,7 @@ if ( $checkss == md5( $user_info["userid"] . $global_config['sitekey'] . session
 	$array_transaction_status_check = array( 
 		1, 2, 4 
 	);
-	$sql = "SELECT t1.order_id, t1.order_code, t2.payment, t2.payment_id, t2.payment_data FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_transaction` AS t2 ON t1.transaction_id = t2.transaction_id WHERE t1.user_id = " . $user_info["userid"] . " AND t1.transaction_status in (" . implode( ",", $array_transaction_status_check ) . ") ORDER BY t1.order_id DESC ";
+	$sql = "SELECT t1.order_id, t1.order_code, t2.payment, t2.payment_id, t2.payment_data FROM " . $db_config['prefix'] . "_" . $module_data . "_orders AS t1 INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_transaction AS t2 ON t1.transaction_id = t2.transaction_id WHERE t1.user_id = " . $user_info["userid"] . " AND t1.transaction_status in (" . implode( ",", $array_transaction_status_check ) . ") ORDER BY t1.order_id DESC ";
 	$result = $db->query( $sql );
 	while ( list( $order_id, $order_code, $payment, $payment_id, $payment_data ) = $result->fetch( 3 ) )
 	{

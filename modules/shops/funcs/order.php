@@ -28,8 +28,8 @@ $data_order = array(
 	"user_id" => $user_info["userid"],
 	"order_name" => ( ! empty( $user_info["full_name"] ) ) ? $user_info["full_name"] : $user_info["username"],
 	"order_email" => $user_info["email"],
-	"order_address" => $user_info["location"],
-	"order_phone" => $user_info["telephone"],
+	"order_address" => '',
+	"order_phone" => '',
 	"order_note" => "",
 	"listid" => "",
 	"listnum" => "",
@@ -91,29 +91,38 @@ if ( $post_order == 1 )
 
 	if ( empty( $error ) and $i > 0 )
 	{
-		$result = $db->query( "SHOW TABLE STATUS WHERE `Name`='" . $db_config['prefix'] . "_" . $module_data . "_orders'" );
+		$result = $db->query( "SHOW TABLE STATUS WHERE Name='" . $db_config['prefix'] . "_" . $module_data . "_orders'" );
 		$item = $result->fetch();
 		$result->closeCursor();
 
-		$order_code = vsprintf( $pro_config['format_order_id'], $item['Auto_increment'] );
+		$order_code = vsprintf( $pro_config['format_order_id'], $item['auto_increment'] );
 		$transaction_status = ( empty( $pro_config['auto_check_order'] ) ) ? - 1 : 0;
-
-		$sql = "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_orders` (
-			`order_id`, `lang`, `order_code`, `order_name`, `order_email`, `order_address`, `order_phone`, `order_note`, `listid`, `listnum`, `listprice`,
-			`user_id`, `admin_id`, `shop_id`, `who_is`, `unit_total`, `order_total`, `order_time`, `postip`, `view`,
-			`transaction_status`, `transaction_id`, `transaction_count`
+		$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
+			order_id, lang, order_code, order_name, order_email, order_address, order_phone, order_note, listid, listnum, listprice,
+			user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
+			transaction_status, transaction_id, transaction_count
 		) VALUES (
-			NULL , '" . NV_LANG_DATA . "', " . $db->quote( $order_code ) . ", " . $db->quote( $data_order['order_name'] ) . ", " . $db->quote( $data_order['order_email'] ) . ",
-			" . $db->quote( $data_order['order_address'] ) . "," . $db->quote( $data_order['order_phone'] ) . ",
-			" . $db->quote( $data_order['order_note'] ) . ", " . $db->quote( $data_order['listid'] ) . ",
-			" . $db->quote( $data_order['listnum'] ) . ", " . $db->quote( $data_order['listprice'] ) . ",
+			NULL , '" . NV_LANG_DATA . "', :order_code, :order_name, :order_email,
+			:order_address, :order_phone,
+			:order_note, :listid,
+			:listnum, :listprice,
 			" . intval( $data_order['user_id'] ) . ", " . intval( $data_order['admin_id'] ) . ", " . intval( $data_order['shop_id'] ) . ",
-			" . intval( $data_order['who_is'] ) . ", " . $db->quote( $data_order['unit_total'] ) . ", " . doubleval( $data_order['order_total'] ) . ",
-			" . intval( $data_order['order_time'] ) . "," . $db->quote( $client_info['ip'] ) . " ,0," . $transaction_status . ",0,0
+			" . intval( $data_order['who_is'] ) . ", :unit_total, " . doubleval( $data_order['order_total'] ) . ",
+			" . intval( $data_order['order_time'] ) . ", :ip, 0, " . $transaction_status . ", 0, 0
 		)";
-
-		$order_id = $db->insert_id( $sql );
-
+		$data_insert = array();
+		$data_insert['order_code'] = $order_code;
+		$data_insert['order_name'] = $data_order['order_name'];
+		$data_insert['order_email'] = $data_order['order_email'];
+		$data_insert['order_address'] = $data_order['order_address'];
+		$data_insert['order_phone'] = $data_order['order_phone'];
+		$data_insert['order_note'] = $data_order['order_note'];
+		$data_insert['listid'] = $data_order['listid'];
+		$data_insert['listnum'] = $data_order['listnum'];
+		$data_insert['listprice'] = $data_order['listprice'];
+		$data_insert['ip'] = $client_info['ip'];
+		$data_insert['unit_total'] = $data_order['unit_total'];
+		$order_id = $db->insert_id( $sql, 'order_id', $data_insert );
 		if ( $order_id > 0 )
 		{
 			// Neu tat chuc nang dat hang vo han thi tru so sp trong kho
@@ -125,7 +134,9 @@ if ( $post_order == 1 )
 			$order_code2 = vsprintf( $pro_config['format_order_id'], $order_id );
 			if ( $order_code != $order_code2 )
 			{
-				$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET `order_code`=" . $db->quote( $order_code2 ) . " WHERE `order_id`=" . $order_id );
+				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET order_code= :order_code WHERE order_id=" . $order_id );
+				$stmt->bindParam( ':order_code', $order_code2, PDO::PARAM_STR );
+				$stmt->execute();
 			}
 
 			// Gui email thong bao don hang
@@ -158,7 +169,7 @@ if ( $post_order == 1 )
 			{
 				$templistid = implode( ",", $arrayid );
 
-				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status=1";
+				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status =1";
 				$result = $db->query( $sql );
 
 				while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
@@ -210,7 +221,7 @@ if ( $action == 0 )
 	{
 		$listid = implode( ",", $arrayid );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2." . NV_LANG_DATA . "_title, t1.money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ") AND t1.status=1";
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ") AND t1.status =1";
 		$result = $db->query( $sql );
 
 		while ( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $unit, $money_unit ) = $result->fetch( 3 ) )

@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int ( 'id', 'get,post', 0 );
 
-$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id` = " . $id );
+$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 $data_content = $result->fetch();
 
 if( empty( $data_content ) )
@@ -25,7 +25,7 @@ if( empty( $data_content ) )
 
 $catid = $data_content['listcatid'];
 
-$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id` = " .$data_content['product_unit'] );
+$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_units WHERE id = " .$data_content['product_unit'] );
 $data_unit = $result->fetch();
 $data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 

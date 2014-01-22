@@ -16,19 +16,23 @@ $new_weight = $nv_Request->get_int( 'w', 'post', 0 );
 $content = "NO_" . $payment;
 $table = $db_config['prefix'] . "_" . $module_data . "_payment";
 
-list( $payment, $weight_old ) = $db->query( "SELECT `payment`, `weight` FROM `" . $table . "` WHERE `payment`=" . $db->quote( $payment ) )->fetch( 3 );
-
+$stmt = $db->prepare( "SELECT payment, weight FROM " . $table . " WHERE payment= :payment" );
+$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+$stmt->execute();
+list( $payment, $weight_old ) = $stmt->fetch( 3 );
 if( ! empty( $payment ) )
 {
-	$sql = "SELECT `payment` FROM `" . $table . "` WHERE `weight` = " . intval( $new_weight ) . "";
+	$sql = "SELECT payment FROM " . $table . " WHERE weight = " . intval( $new_weight ) . "";
 	$result = $db->query( $sql );
 	$payment_swap = $result->fetchColumn();
 	
-	$sql = "UPDATE `" . $table . "` SET `weight`=" . $new_weight . " WHERE `payment`=" . $db->quote( $payment );
-	$db->query( $sql );
+	$stmt = $db->prepare( "UPDATE " . $table . " SET weight=" . $new_weight . " WHERE payment= :payment" );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
 	
-	$sql = "UPDATE `" . $table . "` SET `weight`=" . $weight_old . " WHERE `payment`=" . $db->quote( $payment_swap );
-	$db->query( $sql );
+	$stmt = $db->prepare( "UPDATE " . $table . " SET weight=" . $weight_old . " WHERE payment= :payment" );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
 	
 	$content = "OK_" . $payment;
 	nv_del_moduleCache( $payment );

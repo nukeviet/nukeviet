@@ -36,13 +36,25 @@ if( ! function_exists( 'nv_product_center' ) )
 		}
 		else
 		{
-			$sql = "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC LIMIT 1";
-			$result = $db->query( $sql );
+			$db->sqlreset()
+				->select( 'bid' )
+				->from( $db_config['prefix'] . "_" . $module_data . "_block_cat" )
+				->where( 'status =1' )
+				->order( 'weight ASC' )
+				->limit( 1 );
+						
+			$result = $db->query( $db->sql() );
 			$bid = $result->fetchColumn();
 
-			$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.homeimgthumb , t1.homeimgalt FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.status=1 ORDER BY t1.id DESC LIMIT 0 , " . $num;
-			
-			$array = nv_db_cache( $sql, 'id', $module_name );
+			$db->sqlreset()
+				->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgthumb , t1.homeimgalt" )
+				->from( $db_config['prefix'] . "_" . $module_data . "_rows t1" )
+				->join( "INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_block t2 ON t1.id = t2.id" )
+				->where( "t2.bid= " . $bid . " AND t1.status =1" )
+				->order( 't1.id DESC' )
+				->limit( $num );
+						
+			$array = nv_db_cache( $db->sql(), 'id', $module_name );
 			$cache = serialize( $array );
 			nv_set_cache( $cache_file, $cache );
 		}

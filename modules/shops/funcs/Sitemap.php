@@ -20,8 +20,14 @@ if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile 
 }
 else
 {
-	$sql = "SELECT `id`, `listcatid`, `edittime`, `" . NV_LANG_DATA . "_alias` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 1000";
-	$result = $db->query( $sql );
+	$db->sqlreset()
+		->select( "id, listcatid, edittime, " . NV_LANG_DATA . "_alias" )
+		->from( $db_config['prefix'] . "_" . $module_data . "_rows" )
+		->where( 'status =1' )
+		->order( 'publtime DESC' )
+		->limit( 1000 );
+	
+	$result = $db->query( $db->sql() );
 	$url = array();
 	
 	while ( list( $id, $catid_i, $edittime, $alias ) = $result->fetch( 3 ) )

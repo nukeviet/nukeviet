@@ -15,7 +15,7 @@ $contents = "NO_" . $id;
 
 if( $id > 0 )
 {
-	$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id`=" . $id;
+	$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_units WHERE id=" . $id;
 	if( $db->exec( $sql ) )
 	{
 		$contents = "OK_" . $id;
@@ -31,7 +31,7 @@ else
 	{
 		if( $id > 0 )
 		{
-			$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` WHERE `id`=" . $id;
+			$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_units WHERE id=" . $id;
 			$db->query( $sql );
 		}
 	}

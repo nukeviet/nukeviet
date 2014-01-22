@@ -12,11 +12,11 @@ $page_title = $lang_module['order_title'];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_orders";
 
 $order_id = $nv_Request->get_int( 'order_id', 'post,get', 0 );
-$db->query( "UPDATE `" . $table_name . "` SET view = 1 WHERE `order_id`=" . $order_id );
+$db->query( "UPDATE " . $table_name . " SET order_view = 1 WHERE order_id=" . $order_id );
 
 $save = $nv_Request->get_string( 'save', 'post', '' );
 
-$result = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `order_id`=" . $order_id );
+$result = $db->query( "SELECT * FROM " . $table_name . " WHERE order_id=" . $order_id );
 $data_content = $result->fetch();
 
 if( empty( $data_content ) ) Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
@@ -31,11 +31,11 @@ if( $save == 1 and intval( $data_content['transaction_status'] ) == -1 )
 	$payment = "";
 	$userid = $admin_info['userid'];
 	
-	$transaction_id = $db->insert_id( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_transaction` (`transaction_id`, `transaction_time`, `transaction_status`, `order_id`, `userid`, `payment`, `payment_id`, `payment_time`, `payment_amount`, `payment_data`) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
 	
 	if( $transaction_id > 0 )
 	{
-		$db->query( "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_orders` SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " WHERE `order_id`=" . $order_id );
+		$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . " , transaction_id = " . $transaction_id . " WHERE order_id=" . $order_id );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_process_product', "order_id " . $order_id, $admin_info['userid'] );
 	}
@@ -54,7 +54,7 @@ $i = 0;
 
 foreach( $listid as $id )
 {
-	$sql = "SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1.product_price,t2." . NV_LANG_DATA . "_title FROM `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2, `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1 WHERE t1.product_unit = t2.id AND t1.id =" . $id . " AND t1.status=1 AND t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime>" . NV_CURRENTTIME . ")";
+	$sql = "SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1.product_price,t2." . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_units AS t2, " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =" . $id . " AND t1.status =1 AND t1.publtime < " . NV_CURRENTTIME . " AND (t1.exptime=0 OR t1.exptime>" . NV_CURRENTTIME . ")";
 	
 	$result = $db->query( $sql );
 	
@@ -154,7 +154,7 @@ $xtpl->assign( 'URL_ACTIVE_PAY', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIA
 $xtpl->assign( 'URL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_view&order_id=" . $order_id );
 
 $array_data_payment = array();
-$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 $result = $db->query( $sql );
 
 while( $row = $result->fetch() )
@@ -193,7 +193,7 @@ if( ! empty( $checkpayment ) and $checkpayment == md5( $order_id . session_id() 
 
 $a = 1;
 $array_transaction = array();
-$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_transaction` WHERE `order_id`=" . $order_id . " ORDER BY `transaction_id` ASC" );
+$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id . " ORDER BY transaction_id ASC" );
 
 if( $result->rowCount() )
 {
@@ -240,7 +240,7 @@ if( $result->rowCount() )
 		}
 		if( $row['userid'] > 0 )
 		{
-			$username = $db->query( "SELECT `username` FROM " . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] )->fetchColumn();
+			$username = $db->query( "SELECT username FROM " . NV_USERS_GLOBALTABLE . " WHERE userid=" . $row['userid'] )->fetchColumn();
 			$row['payment'] = $username;
 			$row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['userid'];
 		}

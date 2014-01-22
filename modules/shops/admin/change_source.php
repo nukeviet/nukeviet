@@ -19,12 +19,12 @@ $content = "NO_" . $sourceid;
 
 if( $mod == "weight" and $new_vid > 0 )
 {
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid`=" . $sourceid;
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid;
 	$result = $db->query( $sql );
 	$numrows = $result->rowCount();
 	if( $numrows != 1 ) die( 'NO_' . $sourceid );
 
-	$sql = "SELECT `sourceid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` WHERE `sourceid`!=" . $sourceid . " ORDER BY `weight` ASC";
+	$sql = "SELECT sourceid FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid!=" . $sourceid . " ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	
 	$weight = 0;
@@ -32,11 +32,11 @@ if( $mod == "weight" and $new_vid > 0 )
 	{
 		$weight++;
 		if( $weight == $new_vid ) $weight++;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_sources` SET `weight`=" . $weight . " WHERE `sourceid`=" . intval( $row['sourceid'] );
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_sources SET weight=" . $weight . " WHERE sourceid=" . intval( $row['sourceid'] );
 		$db->query( $sql );
 	}
 	
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_sources` SET `weight`=" . $new_vid . " WHERE `sourceid`=" . intval( $sourceid );
+	$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_sources SET weight=" . $new_vid . " WHERE sourceid=" . intval( $sourceid );
 	$db->query( $sql );
 	
 	nv_del_moduleCache( $module_name );

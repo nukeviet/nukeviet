@@ -24,7 +24,7 @@ $global_array_cat[0] = array(
 	"keywords" => ""
 );
 
-$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description`, `inhome`, `" . NV_LANG_DATA . "_keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` ORDER BY `order` ASC";
+$sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description, inhome, " . NV_LANG_DATA . "_keywords, who_view, groups_view FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs ORDER BY sort ASC";
 $result = $db->query( $sql );
 
 while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $result->fetch( 3 ) )
@@ -105,7 +105,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 {
 	global $db, $db_config, $module_data;
 
-	$sql = "SELECT `catid`, `parentid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid`=" . $parentid . " ORDER BY `weight` ASC";
+	$sql = "SELECT catid, parentid FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE parentid=" . $parentid . " ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$array_cat_order = array();
 	while( $row = $result->fetch() )
@@ -128,7 +128,7 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 	{
 		$order ++;
 		$weight ++;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `weight`=" . $weight . ", `order`=" . $order . ", `lev`='" . $lev . "' WHERE `catid`=" . intval( $catid_i );
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE catid=" . intval( $catid_i );
 		$db->query( $sql );
 		$order = nv_fix_cat_order( $catid_i, $order, $lev );
 	}
@@ -136,16 +136,16 @@ function nv_fix_cat_order( $parentid = 0, $order = 0, $lev = 0 )
 	$numsubcat = $weight;
 	if( $parentid > 0 )
 	{
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `numsubcat`=" . $numsubcat;
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET numsubcat=" . $numsubcat;
 		if( $numsubcat == 0 )
 		{
-			$sql .= ", `subcatid`='', `viewcat`='viewcat_page_list'";
+			$sql .= ", subcatid='', viewcat='viewcat_page_list'";
 		}
 		else
 		{
-			$sql .= ", `subcatid`='" . implode( ",", $array_cat_order ) . "'";
+			$sql .= ", subcatid='" . implode( ",", $array_cat_order ) . "'";
 		}
-		$sql .= " WHERE `catid`=" . intval( $parentid );
+		$sql .= " WHERE catid=" . intval( $parentid );
 		$db->query( $sql );
 	}
 	return $order;
@@ -160,13 +160,13 @@ function nv_fix_block_cat()
 {
 	global $db, $db_config, $module_data;
 
-	$sql = "SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
+	$sql = "SELECT bid FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat ORDER BY weight ASC";
 	$weight = 0;
 	$result = $db->query( $sql );
 	while( $row = $result->fetch() )
 	{
 		$weight++;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` SET `weight`=" . $weight . " WHERE `bid`=" . intval( $row['bid'] );
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET weight=" . $weight . " WHERE bid=" . intval( $row['bid'] );
 		$db->query( $sql );
 	}
 	$result->closeCursor();
@@ -181,13 +181,13 @@ function nv_fix_source()
 {
 	global $db, $db_config, $module_data;
 
-	$sql = "SELECT `sourceid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` ORDER BY `weight` ASC";
+	$sql = "SELECT sourceid FROM " . $db_config['prefix'] . "_" . $module_data . "_sources ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$weight = 0;
 	while( $row = $result->fetch() )
 	{
 		$weight++;
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_sources` SET `weight`=" . $weight . " WHERE `sourceid`=" . intval( $row['sourceid'] );
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_sources SET weight=" . $weight . " WHERE sourceid=" . intval( $row['sourceid'] );
 		$db->query( $sql );
 	}
 	$result->closeCursor();
@@ -208,7 +208,7 @@ function nv_news_fix_block( $bid, $repairtable = true )
 
 	if( $bid > 0 )
 	{
-		$sql = "SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`='" . $bid . "' ORDER BY `weight` ASC";
+		$sql = "SELECT id FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid='" . $bid . "' ORDER BY weight ASC";
 		$result = $db->query( $sql );
 		$weight = 0;
 		while( $row = $result->fetch() )
@@ -216,11 +216,11 @@ function nv_news_fix_block( $bid, $repairtable = true )
 			$weight++;
 			if( $weight <= 500 )
 			{
-				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_block` SET `weight`=" . $weight . " WHERE `bid`='" . $bid . "' AND `id`=" . intval( $row['id'] );
+				$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block SET weight=" . $weight . " WHERE bid='" . $bid . "' AND id=" . intval( $row['id'] );
 			}
 			else
 			{
-				$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`='" . $bid . "' AND `id`=" . intval( $row['id'] );
+				$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid='" . $bid . "' AND id=" . intval( $row['id'] );
 			}
 			$db->query( $sql );
 		}
@@ -228,8 +228,8 @@ function nv_news_fix_block( $bid, $repairtable = true )
 
 		if( $repairtable )
 		{
-			$db->query( "REPAIR TABLE `" . $db_config['prefix'] . "_" . $module_data . "_block`" );
-			$db->query( "OPTIMIZE TABLE `" . $db_config['prefix'] . "_" . $module_data . "_block`" );
+			$db->query( "REPAIR TABLE " . $db_config['prefix'] . "_" . $module_data . "_block" );
+			$db->query( "OPTIMIZE TABLE " . $db_config['prefix'] . "_" . $module_data . "_block" );
 		}
 	}
 }
@@ -261,7 +261,7 @@ function nv_show_cat_list( $parentid = 0 )
 
 		while( $parentid_i > 0 )
 		{
-			list( $catid_i, $parentid_i, $title_i ) = $db->query( "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `catid`=" . intval( $parentid_i ) )->fetch( 3 );
+			list( $catid_i, $parentid_i, $title_i ) = $db->query( "SELECT catid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . intval( $parentid_i ) )->fetch( 3 );
 
 			$array_cat_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&amp;parentid=" . $catid_i . "\"><strong>" . $title_i . "</strong></a>";
 
@@ -277,7 +277,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = "SELECT `catid`, `parentid`, `" . NV_LANG_DATA . "_title`, `weight`, `viewcat`, `numsubcat`, `inhome`, `numlinks` FROM `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` WHERE `parentid`='" . $parentid . "' ORDER BY `weight` ASC";
+	$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title, weight, viewcat, numsubcat, inhome, numlinks FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE parentid='" . $parentid . "' ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num = $result->rowCount();
 
@@ -292,8 +292,9 @@ function nv_show_cat_list( $parentid = 0 )
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
 			{
 				$viewcat = "viewcat_page_list";
-				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_catalogs` SET `viewcat`=" . $db->quote( $viewcat ) . " WHERE `catid`=" . intval( $catid );
-				$db->query( $sql );
+				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET viewcat= :viewcat WHERE catid=" . intval( $catid ) );
+				$stmt->bindParam( ':viewcat', $viewcat, PDO::PARAM_STR );
+				$stmt->execute();
 			}
 
 			$xtpl->assign( 'ROW', array(
@@ -357,7 +358,7 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 {
 	global $db, $db_config, $module_data;
 
-	$sql = "SELECT `groupid`, `parentid` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid`=" . $parentid . " ORDER BY `weight` ASC";
+	$sql = "SELECT groupid, parentid FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid=" . $parentid . " ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$array_group_order = array();
 	while( $row = $result->fetch() )
@@ -379,7 +380,7 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 		$order ++;
 		$weight ++;
 
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `weight`=" . $weight . ", `order`=" . $order . ", `lev`='" . $lev . "' WHERE `groupid`=" . intval( $groupid_i );
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET weight=" . $weight . ", order=" . $order . ", lev='" . $lev . "' WHERE groupid=" . intval( $groupid_i );
 		$db->query( $sql );
 
 		$order = nv_fix_group_order( $groupid_i, $order, $lev );
@@ -389,16 +390,16 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 
 	if( $parentid > 0 )
 	{
-		$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `numsubgroup`=" . $numsubgroup;
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numsubgroup=" . $numsubgroup;
 		if( $numsubgroup == 0 )
 		{
-			$sql .= ",`subgroupid`='', `viewgroup`='viewcat_page_list'";
+			$sql .= ",subgroupid='', viewgroup='viewcat_page_list'";
 		}
 		else
 		{
-			$sql .= ",`subgroupid`='" . implode( ",", $array_group_order ) . "'";
+			$sql .= ",subgroupid='" . implode( ",", $array_group_order ) . "'";
 		}
-		$sql .= " WHERE `groupid`=" . intval( $parentid );
+		$sql .= " WHERE groupid=" . intval( $parentid );
 		$db->query( $sql );
 	}
 	return $order;
@@ -430,7 +431,7 @@ function nv_show_group_list( $parentid = 0 )
 		$a = 0;
 		while( $parentid_i > 0 )
 		{
-			list( $groupid_i, $parentid_i, $title_i ) = $db->query( "SELECT `groupid`, `parentid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `groupid`=" . intval( $parentid_i ) )->fetch( 3 );
+			list( $groupid_i, $parentid_i, $title_i ) = $db->query( "SELECT groupid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . intval( $parentid_i ) )->fetch( 3 );
 
 			$array_group_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid_i . "\"><strong>" . $title_i . "</strong></a>";
 			$a ++;
@@ -445,7 +446,7 @@ function nv_show_group_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = "SELECT `groupid`, `parentid`, `" . NV_LANG_DATA . "_title`, `weight`, `viewgroup`, `numsubgroup`, `inhome`, `numlinks` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` WHERE `parentid` = '" . $parentid . "' ORDER BY `weight` ASC";
+	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, numlinks FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num = $result->rowCount();
 
@@ -460,8 +461,9 @@ function nv_show_group_list( $parentid = 0 )
 			if( ! array_key_exists( $viewgroup, $array_viewgroup ) )
 			{
 				$viewgroup = "viewcat_page_list";
-				$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_group` SET `viewgroup`=" . $db->quote( $viewgroup ) . " WHERE `groupid`=" . intval( $groupid );
-				$db->query( $sql );
+				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET viewgroup= :viewgroup WHERE groupid=" . intval( $groupid ) );
+				$stmt->bindParam( ':viewgroup', $viewgroup, PDO::PARAM_STR );
+				$stmt->execute();
 			}
 
 			$xtpl->assign( 'ROW', array(
@@ -525,7 +527,7 @@ function nv_show_block_cat_list()
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', 'blockcat' );
 
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat ORDER BY weight ASC";
 	$result = $db->query( $sql );
 
 	$num = $result->rowCount();
@@ -537,7 +539,7 @@ function nv_show_block_cat_list()
 
 		while( $row = $result->fetch() )
 		{
-			$numnews = $db->query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . $row['bid'] )->fetchColumn();
+			$numnews = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $row['bid'] )->fetchColumn();
 
 			$xtpl->assign( 'ROW', array(
 				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
@@ -588,7 +590,7 @@ function nv_show_sources_list()
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', $op );
 
-	$num = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` ORDER BY `weight` ASC" )->rowCount();
+	$num = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources ORDER BY weight ASC" )->rowCount();
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sources";
 	$all_page = ( $num > 1 ) ? $num : 1;
 	$per_page = 15;
@@ -597,8 +599,14 @@ function nv_show_sources_list()
 	if( $num > 0 )
 	{
 		$a = 0;
-		$result = $db->query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_sources` ORDER BY `weight` LIMIT " . $page . ", " . $per_page );
-
+		$db->sqlreset()
+			->select( '*' )
+			->from( $db_config['prefix'] . "_" . $module_data . "_sources" )
+			->order( 'weight' )
+			->limit( $per_page )
+			->offset( $page );
+		$result = $db->query( $db->sql() );
+				
 		while( $row = $result->fetch() )
 		{
 			$xtpl->assign( 'ROW', array(
@@ -654,7 +662,7 @@ function nv_show_block_list( $bid )
 	$xtpl->assign( 'OP', $op );
 	$xtpl->assign( 'BID', $bid );
 
-	$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t2.weight FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` as t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module_data . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.inhome='1' ORDER BY t2.weight ASC";
+	$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t2.weight FROM " . $db_config['prefix'] . "_" . $module_data . "_rows as t1 INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.inhome='1' ORDER BY t2.weight ASC";
 
 	$result = $db->query( $sql );
 	$num = $result->rowCount();

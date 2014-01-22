@@ -24,11 +24,18 @@ $per_page = 15;
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
-$sql = "`" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` AS a LEFT JOIN `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS b ON a.id=b.id";
+$sql = "" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " a LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_rows b ON a.id=b.id";
 $all_page = $db->query( "SELECT COUNT(*) FROM " . $sql )->fetchColumn();
 
-$sql = "SELECT a.cid, a.content, a.post_email, a.status, b." . NV_LANG_DATA . "_title FROM " . $sql . " ORDER BY `cid` DESC LIMIT " . $page . ", " . $per_page;
-$result = $db->query( $sql );
+$db->sqlreset()
+	->select("a.cid, a.content, a.post_email, a.status, b." . NV_LANG_DATA . "_title" )
+	->from( $sql )
+	->where( 'a.status =1' )
+	->order( 'cid DESC' )
+	->limit( $per_page )
+	->offset( $page );
+	
+$result = $db->query( $db->sql() );
 
 $i = 1;
 while( list( $cid, $content, $email, $status, $title ) = $result->fetch( 3 ) )

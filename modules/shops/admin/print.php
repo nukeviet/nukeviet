@@ -18,11 +18,11 @@ if( $save == 1 )
 {
 	$order_id = $nv_Request->get_int( 'order_id', 'post', 0 );
 	
-	$db->query( "UPDATE `" . $table_name . "` SET `status` = 1 WHERE `order_id`=" . $order_id );
+	$db->query( "UPDATE " . $table_name . " SET status  = 1 WHERE order_id=" . $order_id );
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=order" );
 }
 
-$result = $db->query( "SELECT * FROM `" . $table_name . "` WHERE `order_id`=" . $id );
+$result = $db->query( "SELECT * FROM " . $table_name . " WHERE order_id=" . $id );
 $data = $result->fetch();
 
 $xtpl = new XTemplate( "print.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
@@ -37,7 +37,7 @@ $listnum = explode( "|", $data['listnum'] );
 $i = 0;
 foreach( $listid as $id )
 {
-	$sql = "SELECT id, " . NV_LANG_DATA . "_title, product_price,money_unit FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE id = " . $id . " AND status=1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ";
+	$sql = "SELECT id, " . NV_LANG_DATA . "_title, product_price,money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id . " AND status =1 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") ";
 	$result = $db->query( $sql );
 	list( $id, $title, $product_price, $money_unit ) = $result->fetch( 3 );
 	

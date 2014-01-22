@@ -7,13 +7,13 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
+die ('block.php');
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['block'];
 $set_active_op = "blockcat";
 
-$sql = "SELECT `bid`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
+$sql = "SELECT bid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat ORDER BY weight ASC";
 $result = $db->query( $sql );
 $num = $result->rowCount();
 
@@ -54,7 +54,7 @@ if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get
 	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->query( "INSERT INTO `" . $db_config['prefix'] . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
+		$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid . "', '" . $id . "', '0')" );
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
@@ -79,12 +79,19 @@ $listid = $nv_Request->get_string( 'listid', 'get', '' );
 
 if( $listid == "" )
 {
-	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `id` NOT IN(SELECT `id` FROM `" . $db_config['prefix'] . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `id` DESC LIMIT 0,20";
+	$db->sqlreset()
+		->select( 'id, ' . NV_LANG_DATA . '_title' )
+		->from( $db_config['prefix'] . '_' . $module_data . '_rows' )
+		->where( "inhome=1 AND id NOT IN(SELECT id FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $bid . ")" )
+		->order( 'id DESC' )
+		->limit( 20 );
+	$sql = $db->sql();
+	
 }
 else
 {
 	$id_array = array_map( "intval", explode( ",", $listid ) );
-	$sql = "SELECT `id`, `" . NV_LANG_DATA . "_title` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `inhome`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `id` DESC";
+	$sql = "SELECT id, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE inhome=1 AND id IN (" . implode( ",", $id_array ) . ") ORDER BY id DESC";
 }
 
 $result = $db->query( $sql );

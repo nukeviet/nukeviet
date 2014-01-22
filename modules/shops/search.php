@@ -10,25 +10,30 @@
 
 if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS `id`,`" . NV_LANG_DATA . "_title`,`" . NV_LANG_DATA . "_alias`, `listcatid`, `" . NV_LANG_DATA . "_hometext`, `" . NV_LANG_DATA . "_bodytext` 
-FROM `" . $db_config['prefix'] . "_" . $m_values['module_data'] . "_rows` 
-WHERE (" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . " 
+// Fetch Limit
+$db->sqlreset()
+  ->select( 'COUNT(*)' )
+  ->from( $db_config['prefix'] . "_" . $m_values['module_data'] . "_rows" )
+  ->where( "(" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( 'product_code', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( NV_LANG_DATA . '_bodytext', $dbkeyword, $logic ) . " 
 OR " . nv_like_logic( NV_LANG_DATA . '_hometext', $dbkeyword, $logic ) . ") 
-AND ( `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ") ) 
-LIMIT " . $pages . "," . $limit;
+AND ( publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") )"  );
 
-$tmp_re = $db->query( $sql );
+$all_page = $db->query( $db->sql() )->fetchColumn();
 
-$result = $db->query( "SELECT FOUND_ROWS()" );
-$all_page = $result->fetchColumn();
+$db->select( "id," . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_bodytext" )
+  ->order( 'id DESC' )
+  ->limit( $limit )
+  ->offset( $pages );
+
+$tmp_re = $db->query( $db->sql() );
 
 if( $all_page )
 {
 	$array_cat_alias = array();
 
-	$sql = "SELECT `catid`, `" . NV_LANG_DATA . "_alias` AS `alias` FROM `" . $db_config['prefix'] . "_" . $m_values['module_data'] . "_catalogs`";
+	$sql = "SELECT catid, " . NV_LANG_DATA . "_alias AS alias FROM " . $db_config['prefix'] . "_" . $m_values['module_data'] . "_catalogs";
 	$array_cat_alias = nv_db_cache( $sql, 'catid', $m_values['module_name'] );
 	$array_cat_alias[0] = array( "alias" => "Other" );
 

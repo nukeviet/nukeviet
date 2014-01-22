@@ -21,14 +21,19 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
 $count = 0;
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . $table_name . "` ORDER BY `order_id` DESC LIMIT " . $page . "," . $per_page;
-$result = $db->query( $sql );
-$result_all = $db->query( "SELECT FOUND_ROWS()" );
+// Fetch Limit
+$db->sqlreset()
+  ->select( 'COUNT(*)' )
+  ->from( $table_name );
 
-$numf = $result_all->fetchColumn();
-$all_page = ( $numf ) ? $numf : 1;
+$all_page = $db->query( $db->sql() )->fetchColumn();
 
-while( $row = $result->fetch() )
+$db->select( '*' )
+  ->order( 'order_id DESC' )
+  ->limit( $per_page )
+  ->offset( $page );
+$query = $db->query($db->sql());
+while( $row = $query->fetch() )
 {
 	$acno = 0;
 	if( $row['transaction_status'] == 4 )
@@ -81,7 +86,7 @@ while( $row = $result->fetch() )
 	}
 	
 	$bg = ( $count % 2 == 0 ) ? "class=\"second\"" : "";
-	$bgview = ( $row['view'] == '0' ) ? "class=\"bgview\"" : "";
+	$bgview = ( $row['order_view'] == '0' ) ? "class=\"bgview\"" : "";
 	
 	$xtpl->assign( 'bg', $bg );
 	$xtpl->assign( 'bgview', $bgview );

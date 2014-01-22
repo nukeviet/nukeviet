@@ -16,7 +16,7 @@ $replaces = array();
 $q = str_replace( $searchs, $replaces, $q );
 if( ! $q ) return;
 
-$sql = "SELECT `title`, `link` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_sources` WHERE `title` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `link` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `weight` ASC";
+$sql = "SELECT title, link FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape( $q ) . "%' OR link LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY weight ASC";
 $result = $db->query( $sql );
 while( list( $title, $link ) = $result->fetch( 3 ) )
 {
