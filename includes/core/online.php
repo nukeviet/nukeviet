@@ -45,9 +45,7 @@ function nv_online_upd()
 		}
 		catch (PDOException $e)
 		{
-			global $lang_global;
-			trigger_error( $lang_global['flood_info1']." \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $client_info['selfurl'] . "\" />", 256 );
-		}		
+		}
 	}
 }
 
