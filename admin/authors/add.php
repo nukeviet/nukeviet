@@ -57,7 +57,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	if( $count ) die( $lang_module['add_error_exist'] );
 
 	$sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
-	list( $userid, $username, $active ) = $db->query( $result )->fetch( 3 );
+	list( $userid, $username, $active ) = $db->query( $sql )->fetch( 3 );
 
 	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
 	if( empty( $position ) ) die( $lang_module['position_incorrect'] );
