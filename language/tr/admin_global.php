@@ -55,26 +55,5 @@ $lang_global['login_error_password'] = 'Hata: Girilen şifre geçersiz. (Sadece 
 $lang_global['login_error_security'] = 'Hata: geçersiz Güvenlik Kodu! (Sadece Latin alfabesi %1$s karakter)';
 $lang_global['error_zlib_support'] = 'Hata: Sunucu zlib uzantı desteklemez, Sen zlib uzatma etkinleştirmek için barındırma sağlayıcınıza başvurmanız gerekir.';
 $lang_global['error_zip_extension'] = 'Hata: Sunucu ZIP uzantılı desteklemiyor, Sen ZIP uzantılı etkinleştirmek için barındırma sağlayıcınıza başvurmanız gerekir.';
-$lang_global['error_uploadNameEmpty'] = 'UserFile Adı boş';
-$lang_global['error_uploadSizeEmpty'] = 'UserFile boyutu boş';
-$lang_global['error_upload_ini_size'] = 'Yüklenen dosya php.ini içindeki upload_max_filesize yönergesini aşıyor';
-$lang_global['error_upload_form_size'] = 'Yüklenen dosya HTML formunda belirtilen MAX_FILE_SIZE aşıyor';
-$lang_global['error_upload_partial'] = 'Yüklenen dosya sadece kısmen yüklendi';
-$lang_global['error_upload_no_file'] = 'Hiçbir dosya yüklenmedi';
-$lang_global['error_upload_no_tmp_dir'] = 'Geçici bir klasör Eksik';
-$lang_global['error_upload_cant_write'] = 'Diske dosya yazma başarısız';
-$lang_global['error_upload_extension'] = 'File upload stopped by extension';
-$lang_global['error_upload_unknown'] = 'Bilinmeyen yükleme hatası';
-$lang_global['error_upload_type_not_allowed'] = 'Bu dosya türüne izin verilmez';
-$lang_global['error_upload_mime_not_recognize'] = 'Sisteme yüklenen dosyanın uzantı türünü tanımıyor';
-$lang_global['error_upload_max_user_size'] = 'Dosya izin verilen maksimum boyutu aşıyor. Maksimum boyut %d bytes';
-$lang_global['error_upload_not_image'] = 'Dosya bilinen bir görüntü formatı değildir';
-$lang_global['error_upload_image_failed'] = 'Görüntü İçeriği başarısız';
-$lang_global['error_upload_image_width'] = 'The image is not allowed because the width is greater than the maximum of %d pixels';
-$lang_global['error_upload_image_height'] = 'The image is not allowed because the height is greater than the maximum of %d pixels';
-$lang_global['error_upload_forbidden'] = 'Yükleme yasak';
-$lang_global['error_upload_writable'] = '%s dizini yazılabilir değil';
-$lang_global['error_upload_urlfile'] = 'URL geçerli değil ve yüklenemiyor';
-$lang_global['error_upload_url_notfound'] = 'url bulunamadı';
 
 ?>
