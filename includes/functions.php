@@ -1689,7 +1689,7 @@ function nv_change_buffer( $buffer )
 {
 	global $db, $sys_info, $global_config;
 
-	if( defined( 'NV_ANTI_IFRAME' ) and NV_ANTI_IFRAME ) $buffer = preg_replace( '/(<body[^>]*>)/', "$1\r\n<script type=\"text/javascript\">if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
+	if( NV_ANTI_IFRAME ) $buffer = preg_replace( '/(<body[^>]*>)/', "$1\r\n<script type=\"text/javascript\">if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
@@ -1722,8 +1722,11 @@ function nv_change_buffer( $buffer )
 		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
 	}
 
-	$body_replace = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>\n";
-
+	$body_replace = '';
+	if( NV_CURRENTTIME > $global_config['cronjobs_next_time'] )
+	{
+		$body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>\n";
+	}
 	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
 	{
 		$body_replace .= "<script type=\"text/javascript\">
@@ -1733,7 +1736,7 @@ function nv_change_buffer( $buffer )
 			</script>\n";
 		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>\n";
 	}
-	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . "\\1", $buffer, 1 );
+	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . '\\1', $buffer, 1 );
 
 	if( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{

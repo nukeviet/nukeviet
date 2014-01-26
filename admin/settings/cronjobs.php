@@ -32,21 +32,20 @@ while( $row = $result->fetch() )
 	$contents[$row['id']]['detail'][$lang_module['last_time']] = ! empty( $row['last_time'] ) ? nv_date( 'l, d/m/Y H:i', $row['last_time'] ) : $lang_module['last_time0'];
 	$contents[$row['id']]['detail'][$lang_module['last_result']] = empty( $row['last_time'] ) ? $lang_module['last_result_empty'] : $lang_module['last_result' . $row['last_result']];
 
-	$interval = $row['inter_val'] * 60;
-
 	if( empty( $row['act'] ) )
 	{
 		$next_time = 'n/a';
 	}
 	else
 	{
-		if( empty( $interval ) )
+		$interval = $row['inter_val'] * 60;
+		if( empty( $interval ) OR empty( $row['last_time'] ) )
 		{
-			$next_time = nv_date( 'l, d/m/Y H:i', max( $row['start_time'], NV_CURRENTTIME ) );
+			$next_time = nv_date( 'l, d/m/Y H:i', max( $row['start_time'], $global_config['cronjobs_next_time'], NV_CURRENTTIME ) );
 		}
 		else
 		{
-			$next_time = nv_date( 'l, d/m/Y H:i', $row['start_time'] + ceil( ( NV_CURRENTTIME - $row['start_time'] ) / $interval ) * $interval );
+			$next_time = nv_date( 'l, d/m/Y H:i', $row['last_time'] + $interval );
 		}
 	}
 
