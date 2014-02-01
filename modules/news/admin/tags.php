@@ -34,7 +34,7 @@ function nv_show_tags_list( $q = '' )
 	$sth = $db->prepare( $db->sql() );
 	if( ! empty( $q ) )
 	{
-		$sth->bindParam( ':keywords', '%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );
+		$sth->bindValue( ':keywords', '%' . $q . '%', PDO::PARAM_STR );
 	}
 	$sth->execute();
 
