@@ -13,10 +13,10 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 'checkss', 'get' ) == md5( $global_config['sitekey'] . session_id() ) )
 {
 	$listid = $nv_Request->get_string( 'listid', 'get' );
-	$id_array = array_map( "intval", explode( ',', $listid ) );
+	$id_array = array_map( 'intval', explode( ',', $listid ) );
 
 	$exp_array = array();
-	$sql = "SELECT id, listcatid, publtime, exptime, status FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id in (" . implode( ',', $id_array ) . ")";
+	$sql = 'SELECT id, listcatid, publtime, exptime, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode( ',', $id_array ) . ')';
 	$result = $db->query( $sql );
 	while( list( $id, $listcatid, $publtime, $exptime, $status ) = $result->fetch( 3 ) )
 	{
@@ -68,10 +68,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 			}
 			if( $check_permission > 0 )
 			{
-				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET status = '3' WHERE id =" . $id );
+				$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = 3 WHERE id =' . $id );
 				foreach( $arr_catid as $catid_i )
 				{
-					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET status = '3' WHERE id =" . $id );
+					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET status = 3 WHERE id =' . $id );
 				}
 				$exp_array[] = $id;
 			}
@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 
 	if( ! empty( $exp_array ) )
 	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_exp_content', "listid: " . implode( ", ", $exp_array ), $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_exp_content', 'listid: ' . implode( ', ', $exp_array ), $admin_info['userid'] );
 	}
 	nv_set_status_module();
 }
