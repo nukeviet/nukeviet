@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 		$row = $db->query( "SELECT userid, username, password FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'" )->fetch();
 		if( empty( $row ) )
 		{
-			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] . ' ' . $lang_global['fail'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0 );
 		}
 		else
 		{
@@ -108,7 +108,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 				}
 				else
 				{
-					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0 );
 					$admin_id = intval( $row['admin_id'] );
 					$checknum = nv_genpass( 10 );
 					$checknum = $crypt->hash( $checknum );
@@ -148,7 +148,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 			}
 			else
 			{
-				nv_insert_logs( NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . strtolower( $lang_global['loginsubmit'] . ' ' . $lang_global['fail'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+				nv_insert_logs( NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0 );
 			}
 		}
 	}

@@ -1777,8 +1777,8 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 	global $db_config, $db;
 
 	$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_logs
-		(lang,module_name,name_key,note_action ,link_acess ,userid ,log_time ) VALUES
-		( :lang, :module_name, :name_key, :note_action, :link_acess, :userid, ' . NV_CURRENTTIME . ')' );
+		(lang, module_name, name_key, note_action, link_acess, userid, log_time) VALUES
+		(:lang, :module_name, :name_key, :note_action, :link_acess, :userid, ' . NV_CURRENTTIME . ')' );
 	$sth->bindParam( ':lang', $lang, PDO::PARAM_STR );
 	$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 	$sth->bindParam( ':name_key', $name_key, PDO::PARAM_STR );
@@ -1787,7 +1787,7 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 	$sth->bindParam( ':userid', $userid, PDO::PARAM_INT );
 	if( $sth->execute() )
 	{
-		nv_del_moduleCache( 'siteinfo' );
+		//nv_del_moduleCache( 'siteinfo' );
 		return true;
 	}
 
