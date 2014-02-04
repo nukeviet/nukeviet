@@ -193,6 +193,10 @@ function nv_xmlOutput( $content, $lastModified )
 		$tidy->cleanRepair();
 		$content = ( string )$tidy;
 	}
+	else
+	{
+		$content = trim( $content );
+	}
 
 	@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $lastModified ) . ' GMT' );
 	@Header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', $lastModified ) . ' GMT' );
