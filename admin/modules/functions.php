@@ -43,7 +43,7 @@ function nv_fix_module_weight()
 	while( $row = $result->fetch() )
 	{
 		++$weight;
-		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $weight . ' WHERE title= :title' );
+		$sth = $db->prepare ( 'UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $weight . ' WHERE title= :title' );
 		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 		$sth->execute();
 	}
@@ -152,7 +152,7 @@ function nv_setup_data_module( $lang, $module_name )
 	$return = 'NO_' . $module_name;
 
 	$sth = $db->prepare( 'SELECT module_file, module_data, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
-	$sth->bindParam(':title', $module_name, PDO::PARAM_STR );
+	$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 	$sth->execute();
 	list( $module_file, $module_data, $module_theme ) = $sth->fetch( 3 );
 	if( !empty( $module_file ) )
@@ -249,7 +249,7 @@ function nv_setup_data_module( $lang, $module_name )
 			$arr_func_id_old = array();
 
 			$sth = $db->prepare( 'SELECT func_id, func_name FROM ' . $db_config['prefix'] . '_' . $lang . '_modfuncs WHERE in_module= :in_module' );
-			$sth->bindParam(':in_module', $module_name, PDO::PARAM_STR );
+			$sth->bindParam( ':in_module', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 			while( $row = $sth->fetch() )
 			{
@@ -301,7 +301,7 @@ function nv_setup_data_module( $lang, $module_name )
 		{
 			// Xoa du lieu tai bang _modfuncs
 			$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang . '_modfuncs WHERE in_module= :in_module' );
-			$sth->bindParam(':in_module', $module_name, PDO::PARAM_STR );
+			$sth->bindParam( ':in_module', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 		}
 

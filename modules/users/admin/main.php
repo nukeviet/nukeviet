@@ -24,7 +24,7 @@ if( $usactive > 1 )
 	$_where .= ' AND idsite=' . $global_config['idsite'];
 }
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
 
 $methods = array(
 	'userid' => array(
@@ -186,26 +186,26 @@ $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];
-$head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
+$head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
-$head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
+$head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
 $head_tds['full_name']['title'] = $lang_module['name'];
-$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
+$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
 $head_tds['email']['title'] = $lang_module['email'];
-$head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
+$head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
-$head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
+$head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
 
 foreach( $orders as $order )
 {
 	if( $orderby == $order and $ordertype == 'ASC' )
 	{
-		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=DESC';
+		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=DESC';
 		$head_tds[$order]['title'] .= ' &darr;';
 	}
 	elseif( $orderby == $order and $ordertype == 'DESC' )
 	{
-		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=ASC';
+		$head_tds[$order]['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=' . $order . '&amp;sorttype=ASC';
 		$head_tds[$order]['title'] .= ' &uarr;';
 	}
 }
@@ -215,7 +215,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php' );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
-$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+$xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 $xtpl->assign( 'SEARCH_VALUE', $methodvalue );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
@@ -261,7 +261,7 @@ foreach( $users_list as $u )
 	{
 		if( $u['is_edit'] )
 		{
-			$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid'] );
+			$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid'] );
 			$xtpl->parse( 'main.xusers.edit' );
 		}
 		if( $u['is_delete'] )

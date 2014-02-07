@@ -63,8 +63,12 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 
 					$total = $total + $point;
 					++$click;
+					$rating_detail = $total . '|' . $click ;
 
-					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail=' . $db->quote( $total . '|' . $click ) . ' WHERE id=' . $id );
+					$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail= :rating_detail WHERE id=' . $id );
+					$stmt->bindParam( ':rating_detail', $rating_detail, PDO::PARAM_STR );
+					$stmt->execute();
+					
 				}
 
 				if( $total and $click )
@@ -151,8 +155,8 @@ foreach( $list_cats as $value )
 					'view_hits' => ( int )$row['view_hits'],
 					'download_hits' => ( int )$row['download_hits'],
 					'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'],
-					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'] : '',
-					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name : ''
+					'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'] : '',
+					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
 				);
 
 				if( $row['comment_allow'] )

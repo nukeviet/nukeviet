@@ -75,7 +75,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 					{
 						$db->sqlreset()
 							->select( NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias' )
-							->from( NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_catalogs' )
+							->from( $db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs' )
 							->where( 'parentid=0 AND inhome=1' )
 							->order( 'weight ASC' )
 							->limit( 10 );

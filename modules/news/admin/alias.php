@@ -19,7 +19,10 @@ $mod = $nv_Request->get_string( 'mod', 'post', '' );
 if( $mod == 'cat' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
-	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
 		$nb = $db->query( 'SELECT MAX(catid) FROM ' . $tab )->fetchColumn();
@@ -30,7 +33,10 @@ if( $mod == 'cat' )
 elseif( $mod == 'topics' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
-	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
 		$nb = $db->query( 'SELECT MAX(topicid) FROM ' . $tab )->fetchColumn();
@@ -41,7 +47,10 @@ elseif( $mod == 'topics' )
 elseif( $mod == 'blockcat' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
-	$nb = $db->query( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias=' . $db->quote( $alias ) )->fetchColumn();
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
 		$nb = $db->query( 'SELECT MAX(bid) FROM ' . $tab )->fetchColumn();

@@ -145,14 +145,14 @@ if( $sys_info['ftp_support'] )
 		if( empty( $error ) )
 		{
 			nv_save_file_config_global();
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 			exit();
 		}
 		$array_config['ftp_user_pass'] = $ftp_user_pass;
 	}
 
 	$xtpl->assign( 'VALUE', $array_config );
-	$xtpl->assign( 'DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+	$xtpl->assign( 'DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 
 	if( ! empty( $error ) )
 	{

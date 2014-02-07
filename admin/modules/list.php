@@ -90,15 +90,15 @@ while( $row = $result->fetch() )
 
 	$weight_list[] = $row['weight'];
 
-	$mod['title'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'], $row['title'] );
-	$mod['version'] = preg_replace_callback( "/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/", "nv_parse_vers", $row['mod_version'] );
+	$mod['title'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'], $row['title'] );
+	$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['mod_version'] );
 	$mod['custom_title'] = $row['custom_title'];
 	$mod['in_menu'] = array( $row['in_menu'], "nv_chang_in_menu('" . $row['title'] . "');" );
 	$mod['submenu'] = array( $row['submenu'], "nv_chang_submenu('" . $row['title'] . "');" );
 	$mod['weight'] = array( $row['weight'], "nv_chang_weight('" . $row['title'] . "');" );
 	$mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
 
-	$mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit'] );
+	$mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit'] );
 	$mod['recreate'] = array( "nv_recreate_mod('" . $row['title'] . "');", $lang_global['recreate'] );
 	$mod['del'] = ( $row['is_sysmod'] == 0 or $row['title'] != $row['module_file'] ) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
 

@@ -16,7 +16,7 @@ $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id='
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -24,7 +24,7 @@ $contact_allowed = nv_getAllowed();
 
 if( ! isset( $contact_allowed['view'][$row['cid']] ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -53,10 +53,10 @@ $row['send_name'] = $sender_name;
 $row['time'] = nv_date( 'H:i d/m/Y', $row['send_time'] );
 
 $part_row_title = $contact_allowed['view'][$row['cid']];
-$part_row_title = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['cid'] . '">' . $part_row_title . '</a>';
+$part_row_title = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['cid'] . '">' . $part_row_title . '</a>';
 
 $row['part_row_title'] = $part_row_title;
-$row['url_back'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+$row['url_back'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $xtpl->assign( 'DATA', $row );
 
@@ -64,7 +64,7 @@ if( ! empty( $row['sender_phone'] ) ) $xtpl->parse( 'main.sender_phone' );
 
 if( isset( $contact_allowed['reply'][$row['cid']] ) )
 {
-	$xtpl->assign( 'URL_REPLY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=reply&amp;id=' . $row['id'] );
+	$xtpl->assign( 'URL_REPLY', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=reply&amp;id=' . $row['id'] );
 
 	$xtpl->parse( 'main.reply' );
 }

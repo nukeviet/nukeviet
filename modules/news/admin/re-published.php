@@ -13,11 +13,11 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 'checkss', 'get' ) == md5( $global_config['sitekey'] . session_id() ) )
 {
 	$listid = $nv_Request->get_string( 'listid', 'get' );
-	$id_array = array_map( "intval", explode( ',', $listid ) );
+	$id_array = array_map( 'intval', explode( ',', $listid ) );
 
 	$publ_array = array();
 
-	$sql = "SELECT id, listcatid, status, publtime, exptime FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id in (" . implode( ',', $id_array ) . ")";
+	$sql = 'SELECT id, listcatid, status, publtime, exptime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id in (' . implode( ',', $id_array ) . ')';
 	$result = $db->query( $sql );
 	while( list( $id, $listcatid, $status, $publtime, $exptime ) = $result->fetch( 3 ) )
 	{
@@ -83,10 +83,10 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 					$s_ud .= $key . " = '" . $value . "', ";
 				}
 				$s_ud .= "edittime = '" . NV_CURRENTTIME . "'";
-				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET " . $s_ud . " WHERE id =" . $id );
+				$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET ' . $s_ud . ' WHERE id =' . $id );
 				foreach( $arr_catid as $catid_i )
 				{
-					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET " . $s_ud . " WHERE id =" . $id );
+					$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i . ' SET ' . $s_ud . ' WHERE id =' . $id );
 				}
 				$publ_array[] = $id;
 			}
@@ -94,12 +94,12 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 	}
 	if( ! empty( $publ_array ) )
 	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_re_publ_content', "listid: " . implode( ", ", $publ_array ), $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_re_publ_content', 'listid: ' . implode( ', ', $publ_array ), $admin_info['userid'] );
 	}
 	nv_set_status_module();
 }
 
-Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 die();
 
 ?>

@@ -29,6 +29,10 @@
 				<td><input type="text" value="{MAX_REQUESTS_300}" name="max_requests_300" style="width: 50px; text-align: right" class="required digits"/></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.nv_anti_agent}</strong></td>
+				<td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
+			</tr>
+			<tr>
 				<td><strong>{LANG.proxy_blocker}</strong></td>
 				<td>
 				<select name="proxy_blocker">

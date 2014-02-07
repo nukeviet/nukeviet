@@ -49,7 +49,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( ! empty( $array['author_url'] ) )
 	{
-		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['author_url'] ) )
+		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['author_url'] ) )
 		{
 			$array['author_url'] = 'http://' . $array['author_url'];
 		}
@@ -82,7 +82,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	// Sort image
 	if( ! empty( $array['fileimage'] ) )
 	{
-		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'] ) )
 		{
 			$array['fileimage'] = substr( $array['fileimage'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
 		}
@@ -104,7 +104,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				foreach( $links as $link )
 				{
-					if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $link ) )
+					if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $link ) )
 					{
 						$link = 'http://' . $link;
 					}
@@ -137,15 +137,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE alias=" . $db->quote( $alias );
-	$result = $db->query( $sql );
-	$is_exists = $result->fetchColumn();
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	$is_exists = $stmt->fetchColumn();
 
 	if( ! $is_exists )
 	{
-		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_tmp WHERE title=" . $db->quote( $array['title'] );
-		$result = $db->query( $sql );
-		$is_exists = $result->fetchColumn();
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title');
+		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+		$stmt->execute();
+		$is_exists = $stmt->fetchColumn();
 	}
 
 	if( empty( $array['title'] ) )
@@ -207,35 +209,53 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
 			 " . $array['catid'] . ",
-			 " . $db->quote( $array['title'] ) . ",
-			 " . $db->quote( $alias ) . ",
-			 " . $db->quote( $array['description'] ) . ",
-			 " . $db->quote( $array['introtext'] ) . ",
+			 :title,
+			 :alias ,
+			 :description ,
+			 :introtext ,
 			 " . NV_CURRENTTIME . ",
 			 " . NV_CURRENTTIME . ",
 			 " . $admin_info['admin_id'] . ",
-			 " . $db->quote( $admin_info['username'] ) . ",
-			 " . $db->quote( $array['author_name'] ) . ",
-			 " . $db->quote( $array['author_email'] ) . ",
-			 " . $db->quote( $array['author_url'] ) . ",
-			 " . $db->quote( $array['fileupload'] ) . ",
-			 " . $db->quote( $array['linkdirect'] ) . ",
-			 " . $db->quote( $array['version'] ) . ",
+			 :username,
+			 :author_name ,
+			 :author_email ,
+			 :author_url ,
+			 :fileupload ,
+			 :linkdirect ,
+			 :version ,
 			 " . $array['filesize'] . ",
-			 " . $db->quote( $array['fileimage'] ) . ",
+			 :fileimage ,
 			 1,
-			 " . $db->quote( $array['copyright'] ) . ",
+			 :copyright ,
 			 0, 0,
 			 " . $array['comment_allow'] . ",
 			 " . $array['who_comment'] . ",
-			 " . $db->quote( $array['groups_comment'] ) . ",
+			 :groups_comment ,
 			 " . $array['who_view'] . ",
-			 " . $db->quote( $array['groups_view'] ) . ",
+			 :groups_view ,
 			 " . $array['who_download'] . ",
-			 " . $db->quote( $array['groups_download'] ) . ",
+			 :groups_download ,
 			 0, '')";
-
-		if( ! $db->insert_id( $sql, 'id' ) )
+		
+		$data_insert = array();
+		$data_insert['title'] = $array['title'];
+		$data_insert['alias'] = $alias;
+		$data_insert['description'] = $array['description'];
+		$data_insert['introtext'] = $array['introtext'];
+		$data_insert['username'] = $admin_info['username'];
+		$data_insert['author_name'] = $array['author_name'];
+		$data_insert['author_email'] = $array['author_email'];
+		$data_insert['author_url'] = $array['author_url'];
+		$data_insert['fileupload'] = $array['fileupload'];
+		$data_insert['linkdirect'] = $array['linkdirect'];
+		$data_insert['version'] = $array['version'];
+		$data_insert['fileimage'] = $array['fileimage'];
+		$data_insert['copyright'] = $array['copyright'];
+		$data_insert['groups_comment'] = $array['groups_comment'];
+		$data_insert['groups_view'] = $array['groups_view'];
+		$data_insert['groups_download'] = $array['groups_download'];
+		
+		if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			$is_error = true;
 			$error = $lang_module['file_error2'];
@@ -243,7 +263,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		else
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['file_addfile'], $array['title'], $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 			exit();
 		}
 		$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? explode( '[NV]', $array['fileupload'] ) : array();
@@ -268,7 +288,7 @@ $array['linkdirect_num'] = sizeof( $array['linkdirect'] );
 // Build fileimage
 if( ! empty( $array['fileimage'] ) )
 {
-	if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $array['fileimage'] ) )
+	if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $array['fileimage'] ) )
 	{
 		$array['fileimage'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . $array['fileimage'];
 	}
@@ -281,7 +301,7 @@ if( ! empty( $array['fileupload'] ) )
 	$array['fileupload'] = array();
 	foreach( $fileupload as $tmp )
 	{
-		if( ! preg_match( "#^(http|https|ftp|gopher)\:\/\/#", $tmp ) )
+		if( ! preg_match( '#^(http|https|ftp|gopher)\:\/\/#', $tmp ) )
 		{
 			$tmp = NV_BASE_SITEURL . NV_UPLOADS_DIR . $tmp;
 		}
@@ -295,21 +315,21 @@ if( ! sizeof( $array['fileupload'] ) ) array_push( $array['fileupload'], '' );
 $listcats = nv_listcats( $array['catid'] );
 if( empty( $listcats ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
 }
 
-$array['comment_allow'] = $array['comment_allow'] ? " checked=\"checked\"" : "";
-$array['is_del_report'] = $array['is_del_report'] ? " checked=\"checked\"" : "";
+$array['comment_allow'] = $array['comment_allow'] ? ' checked="checked"' : '';
+$array['is_del_report'] = $array['is_del_report'] ? ' checked="checked"' : '';
 
 $who_comment = $array['who_comment'];
 $array['who_comment'] = array();
 foreach( $array_who as $key => $who )
 {
-	$array['who_comment'][] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
+	$array['who_comment'][] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_comment ? ' selected="selected"' : ''
 	);
 }
 
@@ -319,10 +339,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array['groups_comment'][] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
+		$array['groups_comment'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_comment ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -331,10 +351,10 @@ $who_view = $array['who_view'];
 $array['who_view'] = array();
 foreach( $array_who as $key => $who )
 {
-	$array['who_view'][] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_view ? " selected=\"selected\"" : "" //
+	$array['who_view'][] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_view ? ' selected="selected"' : ''
 	);
 }
 
@@ -344,10 +364,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array['groups_view'][] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_view ) ? " checked=\"checked\"" : "" //
+		$array['groups_view'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -356,10 +376,10 @@ $who_download = $array['who_download'];
 $array['who_download'] = array();
 foreach( $array_who as $key => $who )
 {
-	$array['who_download'][] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_download ? " selected=\"selected\"" : "" //
+	$array['who_download'][] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_download ? ' selected="selected"' : ''
 	);
 }
 
@@ -369,10 +389,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array['groups_download'][] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_download ) ? " checked=\"checked\"" : "" //
+		$array['groups_download'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_download ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -387,7 +407,7 @@ if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 }
 else
 {
-	$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
+	$array['description'] = '<textarea style="width:100%; height:300px" name="description" id="description">' . $array['description'] . '</textarea>';
 }
 
 $sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
@@ -398,7 +418,7 @@ if( ! $array['filesize'] ) $array['filesize'] = '';
 
 $xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array );

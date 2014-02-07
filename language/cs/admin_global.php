@@ -55,26 +55,5 @@ $lang_global['login_error_password'] = 'Chyba: Heslo nebylo správné nebo prohl
 $lang_global['login_error_security'] = 'Chyba: Kód ověrění nebyla prohlášena nebo neplatná! (Pouze latinské abecedy. Musí mít%1$s znaků)';
 $lang_global['error_zlib_support'] = 'Chyba: Váš server nepodporuje zlib,kontaktuje vašeho poskytovatele hostingových služeb,aby umožnil zlib mohou využít funkce.';
 $lang_global['error_zip_extension'] = 'Chyba: Váš server nepodporuje extension ZIP ,kontaktujte vašeho hostingových služeb,aby umožnil extension ZIP.';
-$lang_global['error_uploadNameEmpty'] = 'Chyba: název souboru nesprávně';
-$lang_global['error_uploadSizeEmpty'] = 'Chyba: Velikost souboru nesprávně';
-$lang_global['error_upload_ini_size'] = 'Chyba: Velikost soubor větší než je povoleno v php.ini';
-$lang_global['error_upload_form_size'] = 'Chyba: Velikost soubor větší než je povoleno v MAX_FILE_SIZE na HTML';
-$lang_global['error_upload_partial'] = 'Chyba: pouze část souboru je nahrán';
-$lang_global['error_upload_no_file'] = 'Chyba: žadná nahraný soubor';
-$lang_global['error_upload_no_tmp_dir'] = 'Chyba:žádná adresa na souboru';
-$lang_global['error_upload_cant_write'] = 'Chyba: Nelze zapisovat soubor nahrát';
-$lang_global['error_upload_extension'] = 'Chyba: Soubor byl blokován protože rozšíření není platný';
-$lang_global['error_upload_unknown'] = 'Došlo k chybě při nahrávání';
-$lang_global['error_upload_type_not_allowed'] = 'Chyba: formát souboru nahrát nepovolit';
-$lang_global['error_upload_mime_not_recognize'] = 'Chyba: Systém nemůže určit formát nahraných souborů';
-$lang_global['error_upload_max_user_size'] = 'Chyba: Velikost soubor větší než je povoleno.Maximal %d bytes';
-$lang_global['error_upload_not_image'] = 'Chyba: Systém nemůže určit formát souboru';
-$lang_global['error_upload_image_failed'] = 'Chyba: Neplatný obrázek';
-$lang_global['error_upload_image_width'] = 'Chyba: Obrázek šířce větší než povolené.Maximal %d pixels %d pixels';
-$lang_global['error_upload_image_height'] = 'Chyba: obrázek nahrát do výšky větší než je povoleno.Maximal';
-$lang_global['error_upload_forbidden'] = 'Chyba: žádné adresář soubory';
-$lang_global['error_upload_writable'] = 'Chyba:soubor %s neumožňuje nahrávání souborů obsahujících.Musíte zapisovat soubor na 0777';
-$lang_global['error_upload_urlfile'] = 'Chyba: URL nesprávě';
-$lang_global['error_upload_url_notfound'] = 'Chyba: Nelze nahrávat soubor z URL, kterou poskytují';
 
 ?>

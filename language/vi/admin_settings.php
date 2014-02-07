@@ -44,6 +44,7 @@ $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
+$lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
 
 $lang_module['captcha_type'] = 'Loại captcha';

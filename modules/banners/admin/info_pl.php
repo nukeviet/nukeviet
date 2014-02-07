@@ -28,8 +28,8 @@ $contents['rows']['is_act'] = array( $lang_module['is_act'], $row['act'] ? $lang
 
 if( ! empty( $row['description'] ) ) $contents['rows']['description'] = array( $lang_module['description'], $row['description'] );
 
-$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id, $lang_global['edit'] );
-$contents['add'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;pid=' . $id, $lang_module['add_banner'] );
+$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id, $lang_global['edit'] );
+$contents['add'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;pid=' . $id, $lang_module['add_banner'] );
 $contents['del'] = array( 'nv_pl_del2(' . $id . ');', $lang_global['delete'] );
 $contents['act'] = array( 'nv_pl_chang_act2(' . $id . ');', $lang_module['change_act'] );
 

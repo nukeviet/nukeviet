@@ -16,7 +16,7 @@ $sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id;
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -61,7 +61,7 @@ while( $cl_row = $result->fetch() )
 	$clients[$cl_row['id']] = $cl_row['full_name'] . ' (' . $cl_row['login'] . ')';
 }
 
-$sql = 'SELECT id,title,blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
+$sql = 'SELECT id, title, blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
 $result = $db->query( $sql );
 
 $plans = array();
@@ -72,7 +72,7 @@ while( $pl_row = $result->fetch() )
 
 if( empty( $plans ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add_plan' );
 	die();
 }
 
@@ -196,13 +196,21 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 			$pid_old = $db->query( 'SELECT pid FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . intval( $id ) )->fetchColumn();
 
-			$sql = "UPDATE " . NV_BANNERS_GLOBALTABLE. "_rows SET title=" . $db->quote( $title ) . ", pid=" . $pid . ", clid=" . $clid . ",
-				 file_name=" . $db->quote( $file_name ) . ", file_ext=" . $db->quote( $file_ext ) . ", file_mime=" . $db->quote( $file_mime ) . ",
-				 width=" . $width . ", height=" . $height . ", file_alt=" . $db->quote( $file_alt ) . ", imageforswf=" . $db->quote( $imageforswf ) . ",
-				 click_url=" . $db->quote( $click_url ) . ", target=" . $db->quote( $target ) . ",
-				 publ_time=" . $publtime . ", exp_time=" . $exptime . " WHERE id=" . $id;
-			$db->query( $sql );
-
+			$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
+				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
+				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
+				 click_url= :click_url, target= :target,
+				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id );
+			$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_ext', $file_ext, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_mime', $file_mime, PDO::PARAM_STR );
+			$stmt->bindParam( ':file_alt', $file_alt, PDO::PARAM_STR );
+			$stmt->bindParam( ':imageforswf', $imageforswf, PDO::PARAM_STR );
+			$stmt->bindParam( ':click_url', $click_url, PDO::PARAM_STR );
+			$stmt->bindParam( ':target', $target, PDO::PARAM_STR );
+			$stmt->execute();
+			
 			if( $pid_old != $pid )
 			{
 				nv_fix_banner_weight( $pid );
@@ -212,7 +220,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_banner', 'bannerid ' . $id, $admin_info['userid'] );
 			nv_CreateXML_bannerPlan();
 
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_banner&id=' . $id );
 			die();
 		}
 	}
@@ -233,7 +241,7 @@ $contents['info'] = ( ! empty( $error ) ) ? $error : $lang_module['edit_banner_i
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['file_allowed_ext'] = implode( ', ', $contents['file_allowed_ext'] );
 $contents['submit'] = $lang_module['edit_banner'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id;
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['plan'] = array( $lang_module['in_plan'], 'pid', $plans, $pid );
 $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid );

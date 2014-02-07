@@ -14,7 +14,7 @@ require NV_ROOTDIR . '/includes/class/flood.class.php';
 
 $rules = array( '60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300'] );
 
-$flb = new FloodBlocker( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, $client_info['ip'] );
+$flb = new FloodBlocker( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, NV_CLIENT_IP );
 
 if( $flb->is_blocker )
 {

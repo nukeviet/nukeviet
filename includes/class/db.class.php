@@ -119,7 +119,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			die( $e->getMessage() );
 		}
 		return false;
 	}
@@ -267,11 +267,19 @@ class sql_db extends pdo
 		{
 			return false;
 		}
-		return $this->exec( $sql );
+
+		try
+		{
+			return $this->query( $sql );
+		}
+		catch (PDOException $e)
+		{
+			return false;
+		}
 	}
 
 	/**
-	 * sql_db::nv_dblikeescape()
+	 * sql_db::dblikeescape()
 	 *
 	 * @param mixed $value
 	 * @return
@@ -284,7 +292,7 @@ class sql_db extends pdo
 		}
 		else
 		{
-			$value = trim( $this->quote( $this->fixdb( $value ) ), "'" );
+			$value = trim( $this->quote( $value ), "'" );
 			$value = addcslashes( $value, '_%' );
 		}
 		return $value;

@@ -29,7 +29,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 {
 	$contents = $lang_module['lostpass_active_error_link'];
 
-	$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid=" . $nv_Request->get_int( 'u', 'get' );
+	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $nv_Request->get_int( 'u', 'get' );
 	$row = $db->query( $sql )->fetch();
 	if( ! empty( $row ) )
 	{
@@ -41,7 +41,7 @@ if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k'
 			$contents = $lang_module['change_pass_ok'];
 		}
 	}
-	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+	$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 }
 else
 {
@@ -66,13 +66,18 @@ else
 				$check_email = nv_check_valid_email( $data['userField'] );
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->quote( $data['userField'] ) . " AND active=1";
+					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :userField AND active=1';
+					$userField = $data['userField'];
 				}
 				else
 				{
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username='" . nv_md5safe( $data['userField'] ) . "' AND active=1";
+					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username=:userField AND active=1';
+					$userField = nv_md5safe( $data['userField']);
 				}
-				$row = $db->query( $sql )->fetch();
+				$stmt = $db->prepare( $sql ) ;
+				$stmt->bindParam( ':userField', $userField, PDO::PARAM_STR );
+				$stmt->execute();
+				$row = $stmt->fetch();
 				if( ! empty( $row ) )
 				{
 					$step = 2;
@@ -98,7 +103,7 @@ else
 						$nv_Request->unset_request( 'lostpass_seccode', 'session' );
 
 						$contents = user_info_exit( $info );
-						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass', true ) . "\" />";
+						$contents .= '<meta http-equiv="refresh" content="15;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass', true ) . '" />';
 
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
@@ -125,9 +130,9 @@ else
 							$passlostkey = md5( $row['userid'] . $password . $global_config['sitekey'] );
 
 							$subject = sprintf( $lang_module['lostpass_email_subject'], $global_config['site_name'] );
-							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&u=" . $row['userid'] . "&k=" . $passlostkey;
+							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&u=' . $row['userid'] . '&k=' . $passlostkey;
 							$message = sprintf( $lang_module['lostpass_email_content'], $row['full_name'], $global_config['site_name'], $link_lostpass_content_email, $row['username'], $password_new );
-							$message .= "<br /><br />------------------------------------------------<br /><br />";
+							$message .= '<br /><br />------------------------------------------------<br /><br />';
 							$message .= nv_EncString( $message );
 
 							$ok = nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
@@ -147,7 +152,7 @@ else
 							}
 
 							$contents = user_info_exit( $info );
-							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+							$contents .= '<meta http-equiv="refresh" content="10;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
@@ -184,7 +189,7 @@ else
 	}
 
 	$data['step'] = $step;
-	$data['info'] = empty( $error ) ? $lang_module['step' . $data['step']] : "<span style=\"color:#fb490b;\">" . $error . "</span>";
+	$data['info'] = empty( $error ) ? $lang_module['step' . $data['step']] : '<span style="color:#fb490b;">' . $error . '</span>';
 	$contents = user_lostpass( $data, $question );
 }
 

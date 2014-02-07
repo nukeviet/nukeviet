@@ -59,8 +59,6 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		$begintime = $nv_Request->get_title( 'begintime', 'post', '', 1 );
 		$endtime = $nv_Request->get_title( 'endtime', 'post', '', 1 );
 
-		if( ! empty( $begintime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime ) ) $begintime = '';
-		if( ! empty( $endtime ) and ! preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime ) ) $endtime = '';
 		if( $url == 'http://' ) $url = '';
 
 		if( empty( $title ) )
@@ -104,37 +102,39 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			$width = $upload_info['img_info'][0];
 			$height = $upload_info['img_info'][1];
 
-			if( empty( $begintime ) )
+			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m ) )
 			{
-				$begintime = NV_CURRENTTIME;
-			}
-			else
-			{
-				unset( $m );
-				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $begintime, $m );
 				$begintime = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 				if( $begintime < NV_CURRENTTIME ) $begintime = NV_CURRENTTIME;
 			}
-
-			if( empty( $endtime ) )
+			else
 			{
-				$endtime = 0;
+				$begintime = NV_CURRENTTIME;
+			}
+
+			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m ) )
+			{
+				$endtime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 			}
 			else
 			{
-				unset( $m );
-				preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $endtime, $m );
-				$endtime = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
+				$endtime = 0;
 			}
 
 			if( $endtime != 0 and $endtime <= $begintime ) $endtime = $begintime;
 
 			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows (title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
-				(" . $db->quote( $title ) . ", " . $blockid . ", " . $banner_client_info['id'] . ", " . $db->quote( $file_name ) . ", " . $db->quote( $file_ext ) . ", " . $db->quote( $file_mime ) . ",
-				" . $width . ", " . $height . ", " . $db->quote( $description ) . ", '', " . $db->quote( $url ) . ", " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ",
-				0, 3,0)";
-			$id = $db->insert_id( $_sql, 'id' );
-
+				( :title, " . $blockid . ", " . $banner_client_info['id'] . ", :file_name, :file_ext, :file_mime, " . $width . ", " . $height . ", :description, '', :url, " . NV_CURRENTTIME . ", " . $begintime . ", " . $endtime . ", 0, 3, 0)";
+			$data_insert = array();
+			$data_insert['title'] = $title;
+			$data_insert['file_name'] = $file_name;
+			$data_insert['file_ext'] = $file_ext;
+			$data_insert['file_mime'] = $file_mime;
+			$data_insert['description'] = $description;
+			$data_insert['url'] = $url;
+		
+			$id = $db->insert_id( $_sql, 'id', $data_insert );
+				
 			if( $id )
 			{
 				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '">' );

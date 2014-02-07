@@ -32,7 +32,7 @@ foreach ( $columns_array as $row )
 
 if( empty( $array_lang_exit ) )
 {
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
@@ -46,7 +46,7 @@ if( empty( $array_lang_exit ) )
 $select_options = array();
 foreach( $array_lang_exit as $langkey )
 {
-	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
+	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
 }
 
 if( ! in_array( $dirlang, $array_lang_exit ) )
@@ -98,8 +98,8 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $result-
 		'langsitename' => $langsitename,
 		'author' => $array_translator['author'],
 		'createdate' => $array_translator['createdate'],
-		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() ),
-		'url_export' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=write&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() )
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() ),
+		'url_export' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=write&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() )
 	) );
 	if( in_array( 'write', $allow_func ) )
 	{

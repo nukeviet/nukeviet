@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_AUTHORS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_SPADMIN' ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -20,7 +20,7 @@ $admin_id = $nv_Request->get_int( 'admin_id', 'get', 0 );
 
 if( empty( $admin_id ) or $admin_id == $admin_info['admin_id'] )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -28,14 +28,14 @@ $sql = 'SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $admin_i
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
 
 if( $row['lev'] == 1 or ( ! defined( 'NV_IS_GODADMIN' ) and $row['lev'] == 2 ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -191,7 +191,7 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 				nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'] );
 			}
 		}
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 }
@@ -204,7 +204,7 @@ else
 $contents = array();
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
 $contents['title'] = ( ! empty( $error ) ) ? $error : sprintf( $lang_module['delete_sendmail_info'], $row_user['username'] );
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $admin_id;
 $contents['sendmail'] = $sendmail;
 
 $contents['reason'] = array( $reason, 255 );

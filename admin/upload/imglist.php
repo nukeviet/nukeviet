@@ -29,7 +29,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	$selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES );
 	$selectfile = basename( $selectfile );
 
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
 
 	$check_like = false;
 

@@ -20,7 +20,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$row = $db->query( $query )->fetch();
 	if( empty( $row ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 		exit();
 	}
 
@@ -205,9 +205,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['linkdirect'] = array_unique( $array['linkdirect'] );
 		}
 
-		$sql = 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE title=' . $db->quote( $array['title'] );
-		$result = $db->query( $sql );
-		$is_exists = $result->fetchColumn();
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE title= :title ');
+		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+		$stmt->execute();
+		$is_exists = $stmt->fetchColumn();
 
 		if( empty( $array['title'] ) )
 		{
@@ -339,36 +340,27 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			}
 
 			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
-				 " . $array['catid'] . ",
-				 " . $db->quote( $array['title'] ) . ",
-				 " . $db->quote( $alias ) . ",
-				 " . $db->quote( $array['description'] ) . ",
-				 " . $db->quote( $array['introtext'] ) . ",
-				 " . $row['uploadtime'] . ",
-				 " . NV_CURRENTTIME . ",
-				 " . $row['user_id'] . ",
-				 " . $db->quote( $array['user_name'] ) . ",
-				 " . $db->quote( $array['author_name'] ) . ",
-				 " . $db->quote( $array['author_email'] ) . ",
-				 " . $db->quote( $array['author_url'] ) . ",
-				 " . $db->quote( $array['fileupload'] ) . ",
-				 " . $db->quote( $array['linkdirect'] ) . ",
-				 " . $db->quote( $array['version'] ) . ",
-				 " . $array['filesize'] . ",
-				 " . $db->quote( $array['fileimage'] ) . ",
-				 1,
-				 " . $db->quote( $array['copyright'] ) . ",
-				 0, 0,
-				 " . $array['comment_allow'] . ",
-				 " . $array['who_comment'] . ",
-				 " . $db->quote( $array['groups_comment'] ) . ",
-				 " . $array['who_view'] . ",
-				 " . $db->quote( $array['groups_view'] ) . ",
-				 " . $array['who_download'] . ",
-				 " . $db->quote( $array['groups_download'] ) . ",
-				 0, '')";
+				 " . $array['catid'] . ", :title, :alias, :description, :introtext, " . $row['uploadtime'] . ", " . NV_CURRENTTIME . ", " . $row['user_id'] . ", :user_name, :author_name, :author_email, :author_url, :fileupload, :linkdirect, :version, " . $array['filesize'] . ", :fileimage, 1, :copyright, 0, 0, " . $array['comment_allow'] . ", " . $array['who_comment'] . ", :groups_comment, " . $array['who_view'] . ", :groups_view, " . $array['who_download'] . ", :groups_download, 0, '')";
 
-			if( ! $db->insert_id( $sql, 'id' ) )
+			$data_insert = array();
+			$data_insert['title'] = $array['title'];
+			$data_insert['alias'] = $alias;
+			$data_insert['description'] = $array['description'];
+			$data_insert['user_name'] = $array['user_name'];
+			$data_insert['author_name'] = $array['author_name'];
+			$data_insert['introtext'] = $array['introtext'];
+			$data_insert['author_email'] = $array['author_email'];
+			$data_insert['author_url'] = $array['author_url'];
+			$data_insert['fileupload'] = $array['fileupload'];
+			$data_insert['linkdirect'] = $array['linkdirect'];
+			$data_insert['version'] = $array['version'];
+			$data_insert['fileimage'] = $array['fileimage'];
+			$data_insert['copyright'] = $array['copyright'];
+			$data_insert['groups_comment'] = $array['groups_comment'];
+			$data_insert['groups_view'] = $array['groups_view'];
+			$data_insert['groups_download'] = $array['groups_download'];
+
+			if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 			{
 				$is_error = true;
 				$error = $lang_module['file_error2'];
@@ -401,7 +393,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 				$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id=' . $id );
 
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=filequeue' );
 				exit();
 			}
 		}
@@ -499,7 +491,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$listcats = nv_listcats( $array['catid'] );
 	if( empty( $listcats ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 		exit();
 	}
 
@@ -597,7 +589,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	if( ! $array['filesize'] ) $array['filesize'] = '';
 
 	$xtpl = new XTemplate( 'filequeue_edit.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;edit=1&amp;id=' . $id );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;edit=1&amp;id=' . $id );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -801,7 +793,7 @@ if( ! $all_file )
 	$contents = "<div style=\"padding-top:15px;text-align:center\">\n";
 	$contents .= "<strong>" . $lang_module['filequeue_empty'] . "</strong>";
 	$contents .= "</div>\n";
-	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
+	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "\" />";
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
@@ -812,7 +804,7 @@ if( ! $all_file )
 $listcats = nv_listcats( 0 );
 if( empty( $listcats ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
 	exit();
 }
 
@@ -827,7 +819,7 @@ while( $row = $result2->fetch() )
 		'id' => ( int )$row['id'],
 		'title' => $row['title'],
 		'cattitle' => $listcats[$row['catid']]['title'],
-		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
+		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
 		'uploadtime' => nv_date( 'd/m/Y H:i', $row['uploadtime'] )
 	);
 }
@@ -843,7 +835,7 @@ if( ! empty( $array ) )
 	foreach( $array as $row )
 	{
 		$xtpl->assign( 'ROW', $row );
-		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=filequeue&amp;edit=1&amp;id=' . $row['id'] );
+		$xtpl->assign( 'EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=filequeue&amp;edit=1&amp;id=' . $row['id'] );
 		$xtpl->parse( 'main.row' );
 		++$a;
 	}

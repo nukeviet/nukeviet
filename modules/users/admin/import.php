@@ -86,10 +86,10 @@ if( $step == 1 )
 {
 	if( file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 	{
-		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
+		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
 
 		$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 

@@ -25,11 +25,11 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 {
 	$temp = explode( '_', $filename );
 
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . strtolower( $lang_module['file_backup'] ), 'File name: ' . end( $temp ), $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['file_backup'], 'File name: ' . end( $temp ), $admin_info['userid'] );
 
 	nv_deletefile( $path_filename );
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=file&rand=' . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=file&rand=' . nv_genpass() );
 	exit();
 }
 else

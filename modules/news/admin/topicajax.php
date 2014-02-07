@@ -16,13 +16,13 @@ if( empty( $q ) ) return;
 $db->sqlreset()
 	->select('title')
 	->from( NV_PREFIXLANG . '_' . $module_data . '_topics' )
-	->where( 'title LIKE :title OR keywords :keywords' )
+	->where( 'title LIKE :title OR keywords LIKE :keywords' )
 	->order( 'weight ASC' )
 	->limit( 50 );
 
 $sth = $db->prepare( $db->sql() );
-$sth->bindParam( ':title', '%' . $q . '%', PDO::PARAM_STR );
-$sth->bindParam( ':keywords', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':title', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':keywords', '%' . $q . '%', PDO::PARAM_STR );
 $sth->execute();
 
 $array_data = array();

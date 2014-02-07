@@ -26,7 +26,7 @@ while( $row = $result->fetch() )
 		'phone' => $row['phone'],
 		'fax' => $row['fax'],
 		'id' => $row['id'],
-		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id'] //
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id'] //
 	) );
 
 	$array = array( $lang_global['disable'], $lang_global['active'] );
@@ -46,10 +46,10 @@ while( $row = $result->fetch() )
 }
 if( empty( $a ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
 	die();
 }
-$xtpl->assign( 'URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row' );
+$xtpl->assign( 'URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row' );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

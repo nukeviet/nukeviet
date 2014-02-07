@@ -194,7 +194,7 @@ if( $rowcontent['id'] > 0 )
 
 	if( ! $check_permission )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 
@@ -308,7 +308,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['topictext'] = $nv_Request->get_title( 'topictext', 'post', '' );
 		if( ! empty( $rowcontent['topictext'] ) )
 		{
-			$rowcontent['topicid'] = $db->query( 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title=' . $db->quote( $rowcontent['topictext'] ) )->fetchColumn();
+			$stmt = $db->prepare( 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title') ;
+			$stmt->bindParam( ':title', $rowcontent['topictext'], PDO::PARAM_STR );
+			$stmt->execute();
+			$rowcontent['topicid'] = $stmt->fetchColumn();
 		}
 	}
 	$rowcontent['author'] = $nv_Request->get_title( 'author', 'post', '', 1 );
@@ -408,8 +411,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$weightopic = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics' )->fetchColumn();
 			$weightopic = intval( $weightopic ) + 1;
 			$aliastopic = change_alias( $rowcontent['topictext'] );
-			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES (" . $db->quote( $rowcontent['topictext'] ) . ", " . $db->quote( $aliastopic ) . ", " . $db->quote( $rowcontent['topictext'] ) . ", '', '', " . $db->quote( $weightopic ) . ", " . $db->quote( $rowcontent['topictext'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-			$rowcontent['topicid'] = $db->insert_id( $_sql, 'topicid' );
+			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+			$data_insert = array();
+			$data_insert['title'] = $rowcontent['topictext'];
+			$data_insert['alias'] = $aliastopic;
+			$data_insert['description'] = $rowcontent['topictext'];
+			$data_insert['weight'] = $weightopic;
+			$data_insert['keywords'] = $rowcontent['topictext'];
+			$rowcontent['topicid'] = $db->insert_id( $_sql, 'topicid', $data_insert );
 		}
 
 		$rowcontent['sourceid'] = 0;
@@ -419,24 +428,41 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			if( isset( $url_info['scheme'] ) and isset( $url_info['host'] ) )
 			{
 				$sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
-				$rowcontent['sourceid'] = $db->query( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link=' . $db->quote( $sourceid_link ) )->fetchColumn();
+				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link');
+				$stmt->bindParam( ':link', $sourceid_link, PDO::PARAM_STR );
+				$stmt->execute();
+				$rowcontent['sourceid'] = $stmt->fetchColumn();
+
 				if( empty( $rowcontent['sourceid'] ) )
 				{
 					$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
 					$weight = intval( $weight ) + 1;
-					$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->quote( $url_info['host'] ) . ", " . $db->quote( $sourceid_link ) . ", '', " . $db->quote( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-					$rowcontent['sourceid'] = $db->insert_id( $_sql, 'sourceid' );
+					$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+
+					$data_insert = array();
+					$data_insert['title'] = $url_info['host'];
+					$data_insert['sourceid_link'] = $sourceid_link;
+					$data_insert['weight'] = $weight;
+
+					$rowcontent['sourceid'] = $db->insert_id( $_sql, 'sourceid', $data_insert );
 				}
 			}
 			else
 			{
-				$rowcontent['sourceid'] = $db->query( "SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title=" . $db->quote( $rowcontent['sourcetext'] ) )->fetchColumn();
+				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title');
+				$stmt->bindParam( ':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR );
+				$stmt->execute();
+				$rowcontent['sourceid'] = $stmt->fetchColumn();
+
 				if( empty( $rowcontent['sourceid'] ) )
 				{
-					$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources" )->fetchColumn();
+					$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
 					$weight = intval( $weight ) + 1;
-					$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES (" . $db->quote( $rowcontent['sourcetext'] ) . ", '', '', " . $db->quote( $weight ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-					$rowcontent['sourceid'] = $db->insert_id( $_sql, 'sourceid' );
+					$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . " , " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+					$data_insert = array();
+					$data_insert['title'] = $rowcontent['sourcetext'];
+
+					$rowcontent['sourceid'] = $db->insert_id( $_sql, 'sourceid', $data_insert );
 				}
 			}
 		}
@@ -472,35 +498,45 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$rowcontent['status'] = 2;
 			}
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
 				(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
-				 (" . intval( $rowcontent['catid'] ) . ",
-				 " . $db->quote( $rowcontent['listcatid'] ) . ",
-				 " . intval( $rowcontent['topicid'] ) . ",
-				 " . intval( $rowcontent['admin_id'] ) . ",
-				 " . $db->quote( $rowcontent['author'] ) . ",
-				 " . intval( $rowcontent['sourceid'] ) . ",
-				 " . intval( $rowcontent['addtime'] ) . ",
-				 " . intval( $rowcontent['edittime'] ) . ",
-				 " . intval( $rowcontent['status'] ) . ",
-				 " . intval( $rowcontent['publtime'] ) . ",
-				 " . intval( $rowcontent['exptime'] ) . ",
-				 " . intval( $rowcontent['archive'] ) . ",
-				 " . $db->quote( $rowcontent['title'] ) . ",
-				 " . $db->quote( $rowcontent['alias'] ) . ",
-				 " . $db->quote( $rowcontent['hometext'] ) . ",
-				 " . $db->quote( $rowcontent['homeimgfile'] ) . ",
-				 " . $db->quote( $rowcontent['homeimgalt'] ) . ",
-				 " . $db->quote( $rowcontent['homeimgthumb'] ) . ",
-				 " . intval( $rowcontent['inhome'] ) . ",
-				 " . intval( $rowcontent['allowed_comm'] ) . ",
-				 " . intval( $rowcontent['allowed_rating'] ) . ",
-				 " . intval( $rowcontent['hitstotal'] ) . ",
-				 " . intval( $rowcontent['hitscm'] ) . ",
-				 " . intval( $rowcontent['total_rating'] ) . ",
-				 " . intval( $rowcontent['click_rating'] ) . ")";
+				 (' . intval( $rowcontent['catid'] ) . ',
+				 :listcatid,
+				 ' . $rowcontent['topicid'] . ',
+				 ' . intval( $rowcontent['admin_id'] ) . ',
+				 :author,
+				 ' . intval( $rowcontent['sourceid'] ) . ',
+				 ' . intval( $rowcontent['addtime'] ) . ',
+				 ' . intval( $rowcontent['edittime'] ) . ',
+				 ' . intval( $rowcontent['status'] ) . ',
+				 ' . intval( $rowcontent['publtime'] ) . ',
+				 ' . intval( $rowcontent['exptime'] ) . ',
+				 ' . intval( $rowcontent['archive'] ) . ',
+				 :title,
+				 :alias,
+				 :hometext,
+				 :homeimgfile,
+				 :homeimgalt,
+				 :homeimgthumb,
+				 ' . intval( $rowcontent['inhome'] ) . ',
+				 ' . intval( $rowcontent['allowed_comm'] ) . ',
+				 ' . intval( $rowcontent['allowed_rating'] ) . ',
+				 ' . intval( $rowcontent['hitstotal'] ) . ',
+				 ' . intval( $rowcontent['hitscm'] ) . ',
+				 ' . intval( $rowcontent['total_rating'] ) . ',
+				 ' . intval( $rowcontent['click_rating'] ) . ')';
 
-			$rowcontent['id'] = $db->insert_id( $sql, 'id' );
+			$data_insert = array();
+			$data_insert['listcatid'] = $rowcontent['listcatid'];
+			$data_insert['author'] = $rowcontent['author'] ;
+			$data_insert['title'] = $rowcontent['title'];
+			$data_insert['alias'] = $rowcontent['alias'];
+			$data_insert['hometext'] = $rowcontent['hometext'];
+			$data_insert['homeimgfile'] = $rowcontent['homeimgfile'];
+			$data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
+			$data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
+
+			$rowcontent['id'] = $db->insert_id( $sql, 'id', $data_insert );
 			if( $rowcontent['id'] > 0 )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid'] );
@@ -509,24 +545,32 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$tbhtml = NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $rowcontent['id'] / 2000 );
 				$db->query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', gid mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
 
-				$ct_query[] = $db->exec( "INSERT INTO " . $tbhtml . " VALUES
-					(" . $rowcontent['id'] . ",
-					 " . $db->quote( $rowcontent['bodyhtml'] ) . ",
-					 " . $db->quote( $rowcontent['sourcetext'] ) . ",
-					 " . intval( $rowcontent['imgposition'] ) . ",
-					 " . intval( $rowcontent['copyright'] ) . ",
-					 " . intval( $rowcontent['allowed_send'] ) . ",
-					 " . intval( $rowcontent['allowed_print'] ) . ",
-					 " . intval( $rowcontent['allowed_save'] ) . ",
-					 " . intval( $rowcontent['gid'] ) . "
-					 )" );
+				$sql = 'INSERT INTO ' . $tbhtml . ' VALUES
+					(' . $rowcontent['id'] . ',
+					 :bodyhtml,
+					 :sourcetext,
+					 ' . $rowcontent['imgposition'] . ',
+					 ' . $rowcontent['copyright'] . ',
+					 ' . $rowcontent['allowed_send'] . ',
+					 ' . $rowcontent['allowed_print'] . ',
+					 ' . $rowcontent['allowed_save'] . ',
+					 ' . $rowcontent['gid'] . '
+					 )' ;
+				$data_insert = array();
+				$data_insert['bodyhtml'] = $rowcontent['bodyhtml'];
+				$data_insert['sourcetext'] = $rowcontent['sourcetext'];
+
+				$ct_query[] = $db->insert_id( $sql, 'id', $data_insert );
 
 				foreach( $catids as $catid )
 				{
-					$ct_query[] = ( int )$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id'] );
+					$ct_query[] = ( int )$db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
 				}
 
-				$ct_query[] = ( int )$db->exec( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_bodytext VALUES (" . $rowcontent['id'] . ", " . $db->quote( $rowcontent['bodytext'] ) . ")" );
+				$sql= 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', :bodytext )' ;
+				$data_insert = array();
+				$data_insert['bodytext'] = $rowcontent['bodytext'];
+				$ct_query[] = ( int )$db->insert_id( $sql, 'id', $data_insert );
 
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
@@ -541,7 +585,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 		else
 		{
-			$rowcontent_old = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch();
+			$rowcontent_old = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch();
 			if( $rowcontent_old['status'] == 1 )
 			{
 				$rowcontent['status'] = 1;
@@ -555,43 +599,57 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$rowcontent['status'] = 2;
 			}
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET
-					 catid=" . intval( $rowcontent['catid'] ) . ",
-					 listcatid=" . $db->quote( $rowcontent['listcatid'] ) . ",
-					 topicid=" . intval( $rowcontent['topicid'] ) . ",
-					 author=" . $db->quote( $rowcontent['author'] ) . ",
-					 sourceid=" . intval( $rowcontent['sourceid'] ) . ",
-					 status=" . intval( $rowcontent['status'] ) . ",
-					 publtime=" . intval( $rowcontent['publtime'] ) . ",
-					 exptime=" . intval( $rowcontent['exptime'] ) . ",
-					 archive=" . intval( $rowcontent['archive'] ) . ",
-					 title=" . $db->quote( $rowcontent['title'] ) . ",
-					 alias=" . $db->quote( $rowcontent['alias'] ) . ",
-					 hometext=" . $db->quote( $rowcontent['hometext'] ) . ",
-					 homeimgfile=" . $db->quote( $rowcontent['homeimgfile'] ) . ",
-					 homeimgalt=" . $db->quote( $rowcontent['homeimgalt'] ) . ",
-					 homeimgthumb=" . $db->quote( $rowcontent['homeimgthumb'] ) . ",
-					 inhome=" . intval( $rowcontent['inhome'] ) . ",
-					 allowed_comm=" . intval( $rowcontent['allowed_comm'] ) . ",
-					 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
-					 edittime=" . NV_CURRENTTIME . "
-				WHERE id =" . $rowcontent['id'];
+			$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
+					 catid=' . intval( $rowcontent['catid'] ) . ',
+					 listcatid=:listcatid,
+					 topicid=' . $rowcontent['topicid'] . ',
+					 author=:author,
+					 sourceid=' . intval( $rowcontent['sourceid'] ) . ',
+					 status=' . intval( $rowcontent['status'] ) . ',
+					 publtime=' . intval( $rowcontent['publtime'] ) . ',
+					 exptime=' . intval( $rowcontent['exptime'] ) . ',
+					 archive=' . intval( $rowcontent['archive'] ) . ',
+					 title=:title,
+					 alias=:alias,
+					 hometext=:hometext,
+					 homeimgfile=:homeimgfile,
+					 homeimgalt=:homeimgalt,
+					 homeimgthumb=:homeimgthumb,
+					 inhome=' . intval( $rowcontent['inhome'] ) . ',
+					 allowed_comm=' . intval( $rowcontent['allowed_comm'] ) . ',
+					 allowed_rating=' . intval( $rowcontent['allowed_rating'] ) . ',
+					 edittime=' . NV_CURRENTTIME . '
+				WHERE id =' . $rowcontent['id'] );
 
-			if( $db->exec( $sql ) )
+			$sth->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
+			$sth->bindParam( ':author', $rowcontent['author'], PDO::PARAM_STR );
+			$sth->bindParam( ':title', $rowcontent['title'], PDO::PARAM_STR );
+			$sth->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
+			$sth->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen( $rowcontent['hometext'] ) );
+			$sth->bindParam( ':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR );
+			$sth->bindParam( ':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR );
+			$sth->bindParam( ':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR );
+
+			if( $sth->execute() )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid'] );
 
 				$ct_query = array();
-				$ct_query[] = $db->exec( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " SET
-					bodyhtml=" . $db->quote( $rowcontent['bodyhtml'] ) . ",
-					sourcetext=" . $db->quote( $rowcontent['sourcetext'] ) . ",
-					imgposition=" . intval( $rowcontent['imgposition'] ) . ",
-					copyright=" . intval( $rowcontent['copyright'] ) . ",
-					allowed_send=" . intval( $rowcontent['allowed_send'] ) . ",
-					allowed_print=" . intval( $rowcontent['allowed_print'] ) . ",
-					allowed_save=" . intval( $rowcontent['allowed_save'] ) . ",
-					gid=" . intval( $rowcontent['gid'] ) . "
-				WHERE id =" . $rowcontent['id'] );
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $rowcontent['id'] / 2000 ) . ' SET
+					bodyhtml=:bodyhtml,
+					sourcetext=:sourcetext,
+					imgposition=' . intval( $rowcontent['imgposition'] ) . ',
+					copyright=' . intval( $rowcontent['copyright'] ) . ',
+					allowed_send=' . intval( $rowcontent['allowed_send'] ) . ',
+					allowed_print=' . intval( $rowcontent['allowed_print'] ) . ',
+					allowed_save=' . intval( $rowcontent['allowed_save'] ) . ',
+					gid=' . intval( $rowcontent['gid'] ) . '
+				WHERE id =' . $rowcontent['id'] );
+
+				$sth->bindParam( ':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen( $rowcontent['bodyhtml'] ) );
+				$sth->bindParam( ':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen( $rowcontent['sourcetext'] ) );
+
+				$ct_query[] = (int) $sth->execute();
 
 				$array_cat_old = explode( ',', $rowcontent_old['listcatid'] );
 				$array_cat_new = explode( ',', $rowcontent['listcatid'] );
@@ -603,9 +661,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 				foreach( $array_cat_new as $catid )
 				{
-					$ct_query[] = $db->exec( 'REPLACE INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
+					$ct_query[] = $db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'] );
+					$ct_query[] = $db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
 				}
-				$ct_query[] = $db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=' . $db->quote( $rowcontent['bodytext'] ) . ' WHERE id =' . $rowcontent['id'] );
+
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=:bodytext WHERE id =' . $rowcontent['id'] );
+				$sth->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
+				$ct_query[] = (int) $sth->execute();
+
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
 					$error[] = $lang_module['errorsave'];
@@ -621,10 +684,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		{
 			foreach( $id_block_content as $bid_i )
 			{
-				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
+				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)' );
 			}
 			$id_block_content[] = 0;
-			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] . " AND bid NOT IN (" . implode( ',', $id_block_content ) . ")" );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid NOT IN (' . implode( ',', $id_block_content ) . ')' );
 			$id_block_content = array_keys( $array_block_cat_module );
 			foreach( $id_block_content as $bid_i )
 			{
@@ -645,10 +708,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					{
 						$alias_i = str_replace( ' ', '-', $keyword );
 
-						list( $tid, $alias, $keywords_i ) = $db->query( "SELECT tid, alias, description, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_tags where alias=" . $db->quote( $alias_i ) . " OR FIND_IN_SET(" . $db->quote( $keyword ) . ", keywords)>0" )->fetch( 3 );
+						$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
+						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
+						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+						$sth->execute();
+
+						list( $tid, $alias, $keywords_i ) = $sth->fetch( 3 );
 						if( empty( $tid ) )
 						{
-							$tid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, " . $db->quote( $alias_i ) . ", '', '', " . $db->quote( $keyword ) . ")", "tid" );
+							$array_insert = array();
+							$array_insert['alias'] = $alias_i;
+							$array_insert['keyword'] = $keyword;
+
+							$tid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
 						}
 						else
 						{
@@ -666,12 +738,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 								}
 								if( $keywords_i != $keywords_i2 )
 								{
-									$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET keywords= " . $db->quote( $keywords_i2 ) . " WHERE tid =" . $tid );
+									$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET keywords= :keywords WHERE tid =' . $tid );
+									$sth->bindParam( ':keywords', $keywords_i2, PDO::PARAM_STR );
+									$sth->execute();
 								}
 							}
-							$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_tags SET numnews = numnews+1 WHERE tid = " . $tid );
+							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 						}
-						$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags_id (id, tid, keyword) VALUES ('" . $rowcontent['id'] . "', '" . $tid . "', " . $db->quote( $keyword ) . ")" );
+						$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . $tid . ', :keyword)' );
+						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+						$sth->execute();
 					}
 				}
 
@@ -679,7 +755,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					if( ! in_array( $keyword, $keywords ) )
 					{
-						$db->exec( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid );
+						$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid );
 						$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
 					}
 				}
@@ -687,12 +763,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( isset( $module_config['webtools']['prcservice'] ) and ! empty( $module_config['webtools']['prcservice'] ) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1) )
 			{
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass() );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass() );
 				die();
 			}
 			else
 			{
-				$url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 				$msg1 = $lang_module['content_saveok'];
 				$msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
 				redriect( $msg1, $msg2, $url );
@@ -767,22 +843,10 @@ else
 
 if( empty( $array_cat_check_content ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 	die();
 }
 $contents = '';
-$my_head = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.menu.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.autocomplete.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
-
-$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.menu.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.autocomplete.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
 $lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );

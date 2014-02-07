@@ -64,7 +64,7 @@
 			return alert("{LANG.title_empty}"), $("input[name=title]").select(), false
 		}
 		if ( typeof (CKEDITOR) !== 'undefined') {
-			$("textarea[name=content]").val(CKEDITOR.instances.content.getData());
+			$("textarea[name=content]").val(CKEDITOR.instances.users_content.getData());
 		}
 		var a = $(this).serialize(), b = $(this).attr("action");
 		$("input[name=submit]").attr("disabled", "disabled");
@@ -112,7 +112,7 @@
 			<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
 			<td>
 			<!-- BEGIN: action -->
-			<i class="icon-edit icon-large">&nbsp;</i> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp; 
+			<i class="icon-edit icon-large">&nbsp;</i> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
 			<i class="icon-trash icon-large">&nbsp;</i> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 			<!-- END: action -->
 			</td>
@@ -215,7 +215,7 @@
 			<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 			<td>
 			<!-- BEGIN: delete -->
-			<a class="delete_icon" class="del" href="{LOOP.userid}">{LANG.exclude_user2}</a>
+			<a class="delete_icon" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>
@@ -224,11 +224,11 @@
 </table>
 <script type="text/javascript">
 	//<![CDATA[
-	$("a.del").click(function() {
+	$("a.delete_icon").click(function() {
 		$.ajax({
 			type : "POST",
 			url : "{MODULE_URL}={OP}",
-			data : "gid={GID}&exclude=" + $(this).attr("href"),
+			data : "gid={GID}&exclude=" + $(this).attr("title"),
 			success : function(a) {
 				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a)
 			}

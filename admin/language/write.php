@@ -252,7 +252,7 @@ if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get
 	if( empty( $content ) )
 	{
 		$xtpl->assign( 'INCLUDE_LANG', str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) ) );
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface' );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface' );
 
 		$xtpl->parse( 'main.complete' );
 	}
@@ -298,7 +298,7 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 
 		if( empty( $content ) )
 		{
-			$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
+			$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
 
 			$i = 0;
 			foreach( $array_filename as $name )
@@ -328,7 +328,7 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 }
 else
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main&dirlang=' . $dirlang );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main&dirlang=' . $dirlang );
 	die();
 }
 

@@ -21,8 +21,8 @@ $db->sqlreset()
 	->limit( 50 );
 
 $sth = $db->prepare( $db->sql() );
-$sth->bindParam( ':title', '%' . $q . '%', PDO::PARAM_STR );
-$sth->bindParam( ':link', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':title', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':link', '%' . $q . '%', PDO::PARAM_STR );
 $sth->execute();
 
 $array_data = array();

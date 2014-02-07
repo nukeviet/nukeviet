@@ -97,7 +97,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 }
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $array_cat_view ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
 	die();
 }
 $array_search = array(
@@ -251,7 +251,7 @@ while( $i <= 1000 )
 	$i = $i + 5;
 }
 $order2 = ( $order == 'asc' ) ? 'desc' : 'asc';
-$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss;
+$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss;
 $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;

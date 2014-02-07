@@ -35,7 +35,7 @@ while( $row = $result->fetch() )
 //Neu khong co nhom => chuyen den trang tao nhom
 if( ! $groupcount and ! $nv_Request->isset_request( 'add', 'get' ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add' );
 	die();
 }
 
@@ -215,7 +215,7 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 
 //Danh sach thanh vien (AJAX)
@@ -262,7 +262,7 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	$group_id = $nv_Request->get_int( 'userlist', 'get', 0 );
 	if( ! isset( $groupsList[$group_id] ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		die();
 	}
 
@@ -299,18 +299,18 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			if( empty( $post['id'] ) or ! isset( $groupsList[$post['id']] ) OR $post['id'] <= 3 OR $groupsList[$post['id']]['idsite'] != $global_config['idsite'] )
 			{
 
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 				die();
 			}
 
 			$xtpl->assign( 'PTITLE', $lang_module['nv_admin_edit'] );
-			$xtpl->assign( 'ACTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&edit&id=' . $post['id'] );
+			$xtpl->assign( 'ACTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&edit&id=' . $post['id'] );
 			$log_title = $lang_module['nv_admin_edit'];
 		}
 		else
 		{
 			$xtpl->assign( 'PTITLE', $lang_module['nv_admin_add'] );
-			$xtpl->assign( 'ACTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add' );
+			$xtpl->assign( 'ACTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&add' );
 			$log_title = $lang_module['nv_admin_add'];
 		}
 
@@ -325,8 +325,10 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			}
 
 			// Kiểm tra trùng tên nhóm
-			$_sql = 'SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE ' . $db->quote( $post['title'] ) . ' AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))';
-			if( $db->query( $_sql )->fetchColumn() )
+			$stmt = $db->prepare( 'SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))' );
+			$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->fetchColumn() )
 			{
 				die( sprintf( $lang_module['error_title_exists'], $post['title'] ) );
 			}
@@ -354,24 +356,32 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 			if( isset( $post['id'] ) AND $post['id'] > 3 )
 			{
-				$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
-					title=" . $db->quote( $post['title'] ) . ",
-					content=" . $db->quote( $post['content'] ) . ",
+				$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " SET
+					title= :title,
+					content= :content,
 					exp_time='" . $post['exp_time'] . "',
 					publics='" . $post['publics'] . "',
 					siteus='" . $post['siteus'] . "'
-					WHERE group_id=" . $post['id'];
-				$ok = $db->exec( $query );
+					WHERE group_id=" . $post['id'] );
+
+				$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
+				$stmt->bindParam( ':content', $post['content'], PDO::PARAM_STR, strlen( $post['content'] ) );
+				$ok = $stmt->execute();
 			}
 			elseif( $nv_Request->isset_request( 'add', 'get' ) )
 			{
 				$weight = $db->query( "SELECT max(weight) FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'] )->fetchColumn();
 				$weight = intval( $weight ) + 1;
+
 				$_sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "
 					(title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
-					VALUES (" . $db->quote( $post['title'] ) . ", " . $db->quote( $post['content'] ) . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ",
-					" . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ");";
-				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id' );
+					VALUES ( :title, :content, " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+
+				$data_insert = array();
+				$data_insert['title'] = $post['title'];
+				$data_insert['content'] = $post['content'];
+
+				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id', $data_insert );
 			}
 			if( $ok )
 			{

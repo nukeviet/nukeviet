@@ -30,9 +30,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( $global_config['gfx_chk'] and ! nv_capcha_txt( $seccode ) ) die( 'action' );
 	else
 	{
-		$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = ' . $db->quote( $login ) . ' AND act=1';
-		$row = $db->query( $sql )->fetch();
-
+		$stmt = $db->prepare( 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = :login AND act=1');
+		$stmt->bindParam( ':login', $login, PDO::PARAM_STR );
+		$stmt->execute();
+		$row = $stmt->fetch();
 		if( empty( $row ) )
 		{
 			die( 'action' );
@@ -49,14 +50,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$current_login = NV_CURRENTTIME;
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
-				$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET check_num = ' . $db->quote( $checknum ) . ', last_login = ' . $current_login . ', last_ip = ' . $db->quote( $client_info['ip'] ) . ', last_agent = ' . $db->quote( $agent ) . ' WHERE id=' . $id;
-				if( ! $db->exec( $sql ) ) die( 'action' );
+				$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET check_num = :check_num, last_login = ' . $current_login . ', last_ip = :last_ip, last_agent = :last_agent WHERE id=' . $id );
+				$stmt->bindValue( ':check_num', $check_num, PDO::PARAM_STR );
+				$stmt->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
+				$stmt->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
+
+				if( ! $stmt->execute() ) die( 'action' );
+
 				$client = array(
 					'login' => $login,
 					'checknum' => $checknum,
-					'current_agent' => $agent,
+					'current_agent' => NV_USER_AGENT,
 					'last_agent' => $row['last_agent'],
-					'current_ip' => $client_info['ip'],
+					'current_ip' => NV_CLIENT_IP,
 					'last_ip' => $row['last_ip'],
 					'current_login' => $current_login,
 					'last_login' => intval( $row['last_login'] )
