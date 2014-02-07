@@ -1782,7 +1782,7 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 	$sth->bindParam( ':lang', $lang, PDO::PARAM_STR );
 	$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 	$sth->bindParam( ':name_key', $name_key, PDO::PARAM_STR );
-	$sth->bindParam( ':note_action', $note_action, PDO::PARAM_STR );
+	$sth->bindParam( ':note_action', $note_action, PDO::PARAM_STR, strlen( $note_action ) );
 	$sth->bindParam( ':link_acess', $link_acess, PDO::PARAM_STR );
 	$sth->bindParam( ':userid', $userid, PDO::PARAM_INT );
 	if( $sth->execute() )
