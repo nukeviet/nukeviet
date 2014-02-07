@@ -3,7 +3,6 @@
 	<blockquote {CLASS}><span>{INFO}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">
-	<!-- BEGIN: position -->
 	<table class="tab1 fixtab">
 		<colgroup>
 			<col class="w200">
@@ -11,7 +10,13 @@
 			<col class="w350">
 			<col/>
 		</colgroup>
+		<tfoot>
+			<tr>
+				<td colspan="4" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" /></td>
+			</tr>
+		</tfoot>
 		<tbody>
+			<!-- BEGIN: position -->
 			<tr>
 				<td> {POSITION0}: </td>
 				<td><sup class="required"> &lowast; </sup></td>
@@ -91,13 +96,8 @@
 					</div>
 				</div></td>
 			</tr>
-			<!-- END: lev -->			
+			<!-- END: lev -->
 		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="4" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
 	</table>
 </form>
 <!-- END: edit -->
