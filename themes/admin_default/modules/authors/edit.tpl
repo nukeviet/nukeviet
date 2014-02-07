@@ -11,11 +11,6 @@
 			<col class="w350">
 			<col/>
 		</colgroup>
-		<tfoot>
-			<tr>
-				<td colspan="4" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
 		<tbody>
 			<tr>
 				<td> {POSITION0}: </td>
@@ -96,8 +91,13 @@
 					</div>
 				</div></td>
 			</tr>
-			<!-- END: lev -->
+			<!-- END: lev -->			
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" /></td>
+			</tr>
+		</tfoot>
 	</table>
 </form>
 <!-- END: edit -->
