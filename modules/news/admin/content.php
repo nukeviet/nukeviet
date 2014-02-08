@@ -450,10 +450,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			else
 			{
 				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title');
-				$stmt->bindParam( ':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR );
+				$stmt->bindParam( ':title', $rowcontent['sourcetext'], PDO::PARAM_STR );
 				$stmt->execute();
 				$rowcontent['sourceid'] = $stmt->fetchColumn();
-
+				
 				if( empty( $rowcontent['sourceid'] ) )
 				{
 					$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
@@ -679,6 +679,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$error[] = $lang_module['errorsave'];
 			}
 		}
+
 		nv_set_status_module();
 		if( empty( $error ) )
 		{
