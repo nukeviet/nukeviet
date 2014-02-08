@@ -177,7 +177,15 @@ function nv_setup_data_module( $lang, $module_name )
 		{
 			$sql_recreate_module = array();
 
-			$db->query( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			try
+			{
+			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			}
+			catch( PDOException $e )
+			{
+			  trigger_error( $e->getMessage() );
+			}
+
 			include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
 
 			if( ! empty( $sql_create_module ) )

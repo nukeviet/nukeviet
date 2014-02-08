@@ -428,7 +428,15 @@ elseif( $step == 5 )
 		else
 		{
 			$tables = array();
-			$db->query( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+
+			try
+			{
+			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			}
+			catch( PDOException $e )
+			{
+			  trigger_error( $e->getMessage() );
+			}
 
 			if( $sys_info['allowed_set_time_limit'] )
 			{

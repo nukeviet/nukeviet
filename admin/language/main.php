@@ -115,7 +115,14 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 
 			$global_config['site_theme'] = $site_theme;
 
-			$db->query( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			try
+			{
+			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			}
+			catch( PDOException $e )
+			{
+			  trigger_error( $e->getMessage() );
+			}
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
 			$sql_create_table = nv_create_table_sys( $keylang );
