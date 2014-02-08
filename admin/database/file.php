@@ -53,7 +53,7 @@ for( $index = $count; $index >= 0; --$index )
 	$link_delete = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=delfile&amp;filename=' . $file . '&amp;checkss=' . md5( $file . $client_info['session_id'] . $global_config['sitekey'] );
 
 	$xtpl->assign( 'ROW', array(
-		'stt' => $a,
+		'stt' => ++$a,
 		'name' => $mc[2] . '.' . $mc[3],
 		'filesize' => nv_convertfromBytes( $value['filesize'] ),
 		'filetime' => nv_date( 'l d/m/Y h:i:s A', $filetime ),
