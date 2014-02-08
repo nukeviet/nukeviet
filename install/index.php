@@ -428,7 +428,7 @@ elseif( $step == 5 )
 		else
 		{
 			$tables = array();
-			$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE '.$db_config['collation'] );
+			$db->query( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 
 			if( $sys_info['allowed_set_time_limit'] )
 			{
