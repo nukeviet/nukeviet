@@ -16,7 +16,7 @@ $set_active_op = 'topics';
 $topicid = $nv_Request->get_int( 'topicid', 'get' );
 if( ! $topicid )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics' );
 	die();
 }
 
@@ -51,7 +51,7 @@ $result->closeCursor();
 
 if( $i )
 {
-	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topicdelnews' );
+	$xtpl->assign( 'URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topicdelnews' );
 	$xtpl->parse( 'main.data' );
 }
 else

@@ -23,7 +23,7 @@ if( $all_page )
 
 	$db->select( 'id,title,alias,bodytext' )
 		->limit( $limit )
-		->offset( $page );
+		->offset( $pages );
 	$result = $db->query( $db->sql() );
 	while( list( $id, $tilterow, $alias, $content ) = $result->fetch( 3 ) )
 	{

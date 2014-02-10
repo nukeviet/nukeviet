@@ -386,7 +386,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				default_value= :default_value
 				WHERE fid = " . $dataform['fid'];
 
-			$stmt = $db->prepare ($query) ;
+			$stmt = $db->prepare( $query ) ;
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
 			$stmt->execute();
 			$save = $db->query( $query );
@@ -418,7 +418,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		if( $save )
 		{
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 			die();
 		}
 	}
@@ -465,7 +465,7 @@ $array_field_type = array(
 $array_choice_type = array( 'field_choicetypes_sql' => $lang_module['field_choicetypes_sql'], 'field_choicetypes_text' => $lang_module['field_choicetypes_text'] );
 
 $xtpl = new XTemplate( 'fields.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );

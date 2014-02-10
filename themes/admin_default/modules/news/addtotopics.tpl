@@ -34,15 +34,19 @@
 </div>
 <script type="text/javascript">
 	$(function() {
-		$('input[name=checkall]').toggle(function() {
+	    function checkallfirst() {
+	        $(this).one("click", checkallsecond);
 			$('input:checkbox').each(function() {
 				$(this).attr('checked', 'checked');
 			});
-		}, function() {
+	    }
+	    function checkallsecond() {
+	        $(this).one("click", checkallfirst);
 			$('input:checkbox').each(function() {
 				$(this).removeAttr('checked');
 			});
-		});
+	    }
+	    $('input[name=checkall]').one("click", checkallfirst);
 
 		$('input[name=update]').click(function() {
 			var listid = [];
@@ -65,6 +69,6 @@
 			});
 			return false;
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

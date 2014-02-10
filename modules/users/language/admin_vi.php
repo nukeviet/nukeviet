@@ -42,7 +42,6 @@ $lang_module['funcs'] = 'Chức năng';
 $lang_module['user_add'] = 'Thêm tài khoản mới';
 $lang_module['password'] = 'Mật khẩu';
 $lang_module['repassword'] = 'Lặp lại mật khẩu';
-$lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['answer'] = 'Câu trả lời';
 $lang_module['gender'] = 'Giới tính';
 $lang_module['male'] = 'Nam';
@@ -56,9 +55,13 @@ $lang_module['year'] = 'Năm';
 $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là thành viên của nhóm';
+
+$lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['addquestion'] = 'Thêm câu hỏi bảo mật';
-$lang_module['savequestion'] = 'Lưu câu hỏi bảo mật';
+$lang_module['savequestion'] = 'Sửa câu hỏi bảo mật';
+$lang_module['deletequestion'] = 'Xóa câu hỏi bảo mật';
 $lang_module['errornotitle'] = 'Lỗi bạn chưa nhập câu hỏi bảo mật';
+
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề có thể bị trùng';
 $lang_module['weight'] = 'vị trí';
 $lang_module['save'] = 'Lưu';

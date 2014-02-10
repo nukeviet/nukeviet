@@ -50,7 +50,7 @@ $day_min = ( $current_month == $publ_month and $current_year == $publ_year ) ? $
 
 $where = 'bid=' . $bid;
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show_list_stat&amp;bid=' . $bid . '&amp;month=' . $data_month;
 $caption = sprintf( $lang_module['show_list_stat1'], nv_monthname( $data_month ), $current_year );
 
 $data_ext = $data_val = '';
@@ -110,9 +110,9 @@ if( in_array( $nv_Request->get_string( 'ext', 'get', 'no' ), array( 'day', 'coun
 $db->sqlreset()
 	->select( 'COUNT(*)' )->from( NV_BANNERS_GLOBALTABLE. '_click')
 	->where( $where );
-	
+
 $stmt = $db->prepare( $db->sql()) ;
-$stmt->bindParam(1, $data_val, PDO::PARAM_STR, strlen($data_val));
+$stmt->bindParam( 1, $data_val, PDO::PARAM_STR, strlen( $data_val ) );
 $stmt->execute();
 
 $all_page = $stmt->fetchColumn();

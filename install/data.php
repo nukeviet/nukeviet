@@ -23,7 +23,7 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
 
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 1, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0)";
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 2, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
@@ -121,6 +121,7 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_live_session_time', '0')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_anti_iframe', '" . NV_ANTI_IFRAME . "')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_anti_agent', '" . NV_ANTI_AGENT . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_allowed_html_tags', '" . NV_ALLOWED_HTML_TAGS . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'dir_forum', '')";
 

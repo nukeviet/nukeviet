@@ -34,7 +34,7 @@ foreach( $theme_array as $themes_i )
 {
 	if( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )
 	{
-		$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setuplayout&amp;selectthemes=' . $themes_i] = $themes_i;
+		$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setuplayout&amp;selectthemes=' . $themes_i] = $themes_i;
 	}
 }
 

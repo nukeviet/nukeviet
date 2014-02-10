@@ -21,8 +21,8 @@ $db->sqlreset()
 	->limit( 50 );
 
 $sth = $db->prepare( $db->sql() );
-$sth->bindParam( ':alias','%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );
-$sth->bindParam( ':keywords','%' . $db->dblikeescape( $q ) . '%', PDO::PARAM_STR );
+$sth->bindValue( ':alias','%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':keywords','%' . $q . '%', PDO::PARAM_STR );
 $sth->execute();
 
 $array_data = array();

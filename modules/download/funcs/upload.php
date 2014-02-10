@@ -266,7 +266,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 					 :version,
 					 ' . $array['filesize'] . ',
 					 :fileimage,
-					 :copyright';
+					 :copyright)';
 
 				$data_insert = array();
 				$data_insert['title'] = $array['title'];
@@ -281,7 +281,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$data_insert['version'] = $array['version'];
 				$data_insert['fileimage'] = $fileimage;
 				$data_insert['fileimage'] = $array['copyright'];
-				
+
 				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 				{
 					$is_error = true;

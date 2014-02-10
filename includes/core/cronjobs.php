@@ -21,8 +21,7 @@ while( $cron_row = $cron_result->fetch() )
 	else
 	{
 		$interval = $cron_row['inter_val'] * 60;
-		$current_time = $cron_row['start_time'] + floor( ( NV_CURRENTTIME - $cron_row['start_time'] ) / $interval ) * $interval;
-		if( $cron_row['last_time'] < $current_time )
+		if( $cron_row['last_time'] + $interval < NV_CURRENTTIME )
 		{
 			$cron_allowed = true;
 		}
@@ -73,6 +72,12 @@ while( $cron_row = $cron_result->fetch() )
 			else
 			{
 				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
+
+				$cronjobs_next_time = NV_CURRENTTIME + $interval;
+				if( $db->exec( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (config_value < '" . NV_CURRENTTIME . "' OR config_value > '" . $cronjobs_next_time . "')") )
+				{
+					nv_del_moduleCache( 'settings' );
+				}
 			}
 		}
 		unlink( $check_run_cronjobs );

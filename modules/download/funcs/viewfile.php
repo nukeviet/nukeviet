@@ -264,8 +264,8 @@ $flrt = $nv_Request->get_string( 'flrt', 'session', '' );
 $flrt = ! empty( $flrt ) ? unserialize( $flrt ) : array();
 $row['rating_disabled'] = ! in_array( $row['id'], $flrt ) ? false : true;
 
-$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'];
-$row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'];
+$row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $row['disabled'] = '';
 $row['comment_uname'] = '';

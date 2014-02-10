@@ -110,7 +110,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['password_simple'] = implode( '|', $array_config['password_simple'] );
 	}
 	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
-	$stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
+	$stmt->bindParam( ':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
 	$stmt->execute();
 
 	$access_admin = array();
@@ -125,7 +125,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid'] );
 	nv_save_file_config_global();
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	die();
 }
 else
@@ -178,7 +178,7 @@ $array_whoview = array(
 $ignorefolders = array( "", ".", "..", "index.html", ".htaccess" );
 
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 if( ! in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )

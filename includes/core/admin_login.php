@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_admin_checkip() )
 {
-	nv_info_die( $global_config['site_description'], $lang_global['site_info'], sprintf( $lang_global['admin_ipincorrect'], $client_info['ip'] ) . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />' );
+	nv_info_die( $global_config['site_description'], $lang_global['site_info'], sprintf( $lang_global['admin_ipincorrect'], NV_CLIENT_IP ) . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />' );
 }
 
 if( ! nv_admin_checkfirewall() )
@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 		$row = $db->query( "SELECT userid, username, password FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'" )->fetch();
 		if( empty( $row ) )
 		{
-			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] . ' ' . $lang_global['fail'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0 );
 		}
 		else
 		{
@@ -108,17 +108,16 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 				}
 				else
 				{
-					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . strtolower( $lang_global['loginsubmit'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0 );
 					$admin_id = intval( $row['admin_id'] );
-					$agent = substr( NV_USER_AGENT, 0, 254 );
 					$checknum = nv_genpass( 10 );
 					$checknum = $crypt->hash( $checknum );
 					$array_admin = array(
 						'admin_id' => $admin_id,
 						'checknum' => $checknum,
-						'current_agent' => $agent,
+						'current_agent' => NV_USER_AGENT,
 						'last_agent' => $row['admin_last_agent'],
-						'current_ip' => $client_info['ip'],
+						'current_ip' => NV_CLIENT_IP,
 						'last_ip' => $row['admin_last_ip'],
 						'current_login' => NV_CURRENTTIME,
 						'last_login' => intval( $row['admin_last_login'] )
@@ -126,9 +125,9 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 					$admin_serialize = serialize( $array_admin );
 
 					$sth = $db->prepare( 'UPDATE ' . NV_AUTHORS_GLOBALTABLE . ' SET check_num = :check_num, last_login = ' . NV_CURRENTTIME . ', last_ip = :last_ip, last_agent = :last_agent WHERE admin_id=' . $admin_id );
-					$sth->bindParam( ':check_num', $checknum, PDO::PARAM_STR );
-					$sth->bindParam( ':last_ip', $client_info['ip'], PDO::PARAM_STR );
-					$sth->bindParam( ':last_agent', $agent, PDO::PARAM_STR );
+					$sth->bindValue( ':check_num', $checknum, PDO::PARAM_STR );
+					$sth->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
+					$sth->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
 					$sth->execute();
 
 					$nv_Request->set_Session( 'admin', $admin_serialize );
@@ -149,7 +148,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request
 			}
 			else
 			{
-				nv_insert_logs( NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . strtolower( $lang_global['loginsubmit'] . ' ' . $lang_global['fail'] ), ' Client IP:' . NV_CLIENT_IP, 0 );
+				nv_insert_logs( NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0 );
 			}
 		}
 	}

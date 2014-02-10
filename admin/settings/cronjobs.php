@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add'] = $lang_module['nv_admin_add'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_add'] = $lang_module['nv_admin_add'];
 
 $result = $db->query( 'SELECT * FROM ' . NV_CRONJOBS_GLOBALTABLE . ' ORDER BY is_sys DESC' );
 
@@ -18,9 +18,9 @@ $contents = array();
 while( $row = $result->fetch() )
 {
 	$contents[$row['id']]['caption'] = isset( $row[NV_LANG_INTERFACE . '_cron_name'] ) ? $row[NV_LANG_INTERFACE . '_cron_name'] : ( isset( $row[NV_LANG_DATA . '_cron_name'] ) ? $row[NV_LANG_DATA . '_cron_name'] : $row['run_func'] );
-	$contents[$row['id']]['edit'] = array( ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_edit&amp;id=' . $row['id'] );
+	$contents[$row['id']]['edit'] = array( ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_edit&amp;id=' . $row['id'] );
 	$contents[$row['id']]['delete'] = array( ( empty( $row['is_sys'] ) ? 1 : 0 ), $lang_global['delete'] );
-	$contents[$row['id']]['disable'] = array( ( ( empty( $row['is_sys'] ) or empty( $row['act'] ) ) ? 1 : 0 ), ( $row['act'] ? $lang_global['disable'] : $lang_global['activate'] ), NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_act&amp;id=' . $row['id'] );
+	$contents[$row['id']]['disable'] = array( ( ( empty( $row['is_sys'] ) or empty( $row['act'] ) ) ? 1 : 0 ), ( $row['act'] ? $lang_global['disable'] : $lang_global['activate'] ), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cronjobs_act&amp;id=' . $row['id'] );
 	$contents[$row['id']]['detail'][$lang_module['run_file']] = $row['run_file'];
 	$contents[$row['id']]['detail'][$lang_module['run_func']] = $row['run_func'];
 	$contents[$row['id']]['detail'][$lang_module['params']] = ! empty( $row['params'] ) ? implode( ', ', explode( ',', $row['params'] ) ) : '';
@@ -32,21 +32,20 @@ while( $row = $result->fetch() )
 	$contents[$row['id']]['detail'][$lang_module['last_time']] = ! empty( $row['last_time'] ) ? nv_date( 'l, d/m/Y H:i', $row['last_time'] ) : $lang_module['last_time0'];
 	$contents[$row['id']]['detail'][$lang_module['last_result']] = empty( $row['last_time'] ) ? $lang_module['last_result_empty'] : $lang_module['last_result' . $row['last_result']];
 
-	$interval = $row['inter_val'] * 60;
-
 	if( empty( $row['act'] ) )
 	{
 		$next_time = 'n/a';
 	}
 	else
 	{
-		if( empty( $interval ) )
+		$interval = $row['inter_val'] * 60;
+		if( empty( $interval ) OR empty( $row['last_time'] ) )
 		{
-			$next_time = nv_date( 'l, d/m/Y H:i', max( $row['start_time'], NV_CURRENTTIME ) );
+			$next_time = nv_date( 'l, d/m/Y H:i', max( $row['start_time'], $global_config['cronjobs_next_time'], NV_CURRENTTIME ) );
 		}
 		else
 		{
-			$next_time = nv_date( 'l, d/m/Y H:i', $row['start_time'] + ceil( ( NV_CURRENTTIME - $row['start_time'] ) / $interval ) * $interval );
+			$next_time = nv_date( 'l, d/m/Y H:i', $row['last_time'] + $interval );
 		}
 	}
 
@@ -54,7 +53,7 @@ while( $row = $result->fetch() )
 }
 if( empty( $contents ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs_add' );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cronjobs_add' );
 	die();
 }
 

@@ -41,7 +41,24 @@ var nv_error_email = "Erreur: Vous n'avez pas entré votre e-mail ou l'e-mail n'
 var nv_error_seccode = "Erreur: Vous n'avez pas entré le code de sécurité ou le code n'est pas correct. Code de sécurité est une série de [num] caractères affichées en image.";
 var nv_login_failed = "Erreur: Le système n'accepte pas votre compte. Essayez de nouveau.";
 var nv_content_failed = "Erreur: Le système n'accepte pas les infos. Essayez de nouveau.";
+
+var nv_required ="Ce champ est obligatoire.";
+var nv_remote = "Merci de corriger ce champ.";
+var nv_email = "Merci d'entrer un e-mail valide.";
+var nv_url = "Merci de donner un lien valide.";
+var nv_date = "Merci de donner une date valide.";
+var nv_dateISO = "Merci de donner une date valide (ISO).";
+var nv_number = "Merci d'entrer un nombre valide.";
+var nv_digits = "Merci d'entrer uniquement les chiffres.";
+var nv_creditcard = "Merci d'entrer un numéro valide de carte bancaire.";
+var nv_equalTo = "Merci d'entrer la même valeur encore une fois.";
+var nv_accept = "Merci d'entrer une valeur avec extension valide.";
+var nv_maxlength = "Merci de ne pas entrer plus de {0} caractères.";
+var nv_minlength = "Merci d'entrer au minimum {0} caractères.";
 var nv_rangelength = "Merci d'entrer une valeur entre {0} et {1} caractères.";
+var nv_range = "Merci d'entrer une valeur entre {0} et {1}.";
+var nv_max = "Merci d'entrer une valeur moins ou égale à {0}.";
+var nv_min = "Merci d'entrer une valeur plus ou égal à {0}.";
 
 //contact
 var nv_fullname = "Nom complet entré n'est pas valide.";

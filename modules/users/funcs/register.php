@@ -487,7 +487,7 @@ if( $checkss == $array_register['checkss'] )
 					:your_question,
 					:answer,
 					:checknum,
-					 '" . nv_base64_encode( serialize( $query_field ) ) . "'
+					:users_info
 				)";
 				$data_insert = array();
 				$data_insert['username'] = $array_register['username'];
@@ -498,6 +498,7 @@ if( $checkss == $array_register['checkss'] )
 				$data_insert['your_question'] = $your_question;
 				$data_insert['answer'] = $array_register['answer'];
 				$data_insert['checknum'] = $checknum;
+				$data_insert['users_info'] = nv_base64_encode( serialize( $query_field ) );
 				$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 				if( ! $userid )

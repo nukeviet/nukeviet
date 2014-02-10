@@ -87,7 +87,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  parentid smallint(5) unsigned NOT NULL,
  title varchar(255) NOT NULL,
  alias varchar(255) NOT NULL,
- description text DEFAULT '',
+ description text,
  who_view tinyint(1) unsigned NOT NULL DEFAULT '0',
  groups_view varchar(255) DEFAULT '',
  who_download tinyint(1) unsigned NOT NULL DEFAULT '0',

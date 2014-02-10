@@ -435,7 +435,7 @@ function nv_check_rewrite_file()
 
 		$web_config = @file_get_contents( NV_ROOTDIR . '/web.config' );
 
-		return ( preg_match( '/<rule name=\'nv_rule_rewrite\'>(.*)<\/rule>/s', $web_config ) );
+		return ( preg_match( '/<rule name="nv_rule_rewrite">(.*)<\/rule>/s', $web_config ) );
 	}
 
 	return false;

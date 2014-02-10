@@ -237,7 +237,7 @@ if( file_exists( $filename ) )
 					nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
 
 					$theme = substr( $ziplistContent[0]['filename'], 0, -1 );
-					$nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setuplayout&selectthemes=' . $theme;
+					$nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setuplayout&selectthemes=' . $theme;
 
 					$xtpl->assign( 'NV_REDIRECT', $nv_redirect );
 

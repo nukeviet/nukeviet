@@ -50,7 +50,7 @@ if( $db->exec( $sql ) )
 			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
 			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid );
-			$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen($subitem));
+			$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen( $subitem ) );
 			$stmt->execute();
 		}
 	}

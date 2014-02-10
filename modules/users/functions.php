@@ -24,7 +24,7 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  */
 function validUserLog( $array_user, $remember, $opid )
 {
-	global $db, $db_config, $client_info, $crypt, $nv_Request;
+	global $db, $db_config, $crypt, $nv_Request;
 
 	$remember = intval( $remember );
 	$checknum = nv_genpass( 10 );
@@ -32,9 +32,9 @@ function validUserLog( $array_user, $remember, $opid )
 	$user = array(
 		'userid' => $array_user['userid'],
 		'checknum' => $checknum,
-		'current_agent' => $client_info['agent'],
+		'current_agent' => NV_USER_AGENT,
 		'last_agent' => $array_user['last_agent'],
-		'current_ip' => $client_info['ip'],
+		'current_ip' => NV_CLIENT_IP,
 		'last_ip' => $array_user['last_ip'],
 		'current_login' => NV_CURRENTTIME,
 		'last_login' => intval( $array_user['last_login'] ),
@@ -53,10 +53,10 @@ function validUserLog( $array_user, $remember, $opid )
 		remember = " . $remember . "
 		WHERE userid=" . $array_user['userid'] );
 
-	$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
-	$stmt->bindParam( ':last_ip', $client_info['ip'], PDO::PARAM_STR );
-	$stmt->bindParam( ':last_agent', $client_info['agent'], PDO::PARAM_STR );
-	$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
+	$stmt->bindValue( ':checknum', $checknum, PDO::PARAM_STR );
+	$stmt->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
+	$stmt->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
+	$stmt->bindValue( ':opid', $opid, PDO::PARAM_STR );
 	$stmt->execute();
 	$live_cookie_time = ( $remember ) ? NV_LIVE_COOKIE_TIME : 0;
 

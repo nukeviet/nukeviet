@@ -135,7 +135,7 @@
 				<td style="vertical-align:top"> {LANG.block_function}:
 				<br />
 				<br />
-				<label><input type="button" name="checkmod" value="{LANG.block_check}" style="margin-bottom:5px"/></label></td>
+				<label><input type="button" name="checkallmod" value="{LANG.block_check}" style="margin-bottom:5px"/></label></td>
 				<td>
 				<div class="list-funcs">
 					<table class="tab1">
@@ -192,8 +192,9 @@
 <!-- END: hide_block_config -->
 
 <script type="text/javascript">
-	$("select[name=file_name]").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadblocks&module={ROW.module}&bid={ROW.bid}&nocache=" + new Date().getTime());
 	$(function() {
+		$("select[name=file_name]").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadblocks&module={ROW.module}&bid={ROW.bid}&nocache=" + new Date().getTime());
+
 		$("#exp_time").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
@@ -203,8 +204,7 @@
 			buttonImage : "{NV_BASE_SITEURL}images/calendar.gif",
 			buttonImageOnly : true
 		});
-	});
-	$(function() {
+
 		$("select[name=module]").change(function() {
 			var type = $("select[name=module]").val();
 			$("select[name=file_name]").html("");
@@ -278,17 +278,24 @@
 				$("#shows_all_func").show();
 			}
 		});
-		$("input[name=checkmod]").toggle(function() {
+
+	    function checkallmodfirst() {
+	        $(this).one("click", checkallmodsecond);
 			$("input.checkmodule").prop("checked", true);
 			$("input[name='func_id[]']:checkbox").each(function() {
 				$("input[name='func_id[]']:visible").prop("checked", true);
 			});
-		}, function() {
+	    }
+
+	    function checkallmodsecond() {
+	        $(this).one("click", checkallmodfirst);
 			$("input.checkmodule").prop("checked", false);
 			$("input[name='func_id[]']:checkbox").each(function() {
 				$("input[name='func_id[]']:visible").prop("checked", false);
 			});
-		});
+	    }
+	    $("input[name=checkallmod]").one("click", checkallmodfirst);
+
 		$("input[name='func_id[]']:checkbox").change(function() {
 			var numfuc = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox").length;
 			var fuccheck = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox:checked").length;

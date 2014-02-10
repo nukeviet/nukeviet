@@ -41,7 +41,24 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
-var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
+
+var nv_required ="Dieses Feld ist ein Pflichtfeld.";
+var nv_remote = "Please fix this field.";
+var nv_email = "Geben Sie bitte eine gültige E-Mail Adresse ein.";
+var nv_url = "Geben Sie bitte eine gültige URL ein.";
+var nv_date = "Bitte geben Sie ein gültiges Datum ein.";
+var nv_dateISO = "Bitte geben Sie ein gültiges Datum ein (ISO).";
+var nv_number = "Geben Sie bitte eine Nummer ein.";
+var nv_digits = "Geben Sie bitte nur Ziffern ein.";
+var nv_creditcard = "PGeben Sie bitte eine gültige Kreditkarten-Nummer ein.";
+var nv_equalTo = "Bitte denselben Wert wiederholen.";
+var nv_accept = "Please enter a value with a valid extension.";
+var nv_maxlength = "Geben Sie bitte maximal {0} Zeichen ein.";
+var nv_minlength = "Geben Sie bitte mindestens {0} Zeichen ein.";
+var nv_rangelength = "Geben Sie bitte mindestens {0} und maximal {1} Zeichen ein.";
+var nv_range = "Geben Sie bitte einen Wert zwischen {0} und {1} ein.";
+var nv_max = "Geben Sie bitte einen Wert kleiner oder gleich {0} ein.";
+var nv_min = "Geben Sie bitte einen Wert größer oder gleich {0} ein.";
 
 //contact
 var nv_fullname = "Full name entered is not valid.";
