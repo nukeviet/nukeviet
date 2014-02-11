@@ -545,16 +545,12 @@ class upload
 	 * @param mixed $userfile
 	 * @return
 	 */
-	private function check_tmpfile( $userfile )
+	private function check_tmpfile( $userfile, $no_check_size )
 	{
 		if( empty( $userfile ) ) return _ERROR_UPLOAD_NO_FILE;
 
 		if( ! isset( $userfile['name'] ) or empty( $userfile['name'] ) ) return _ERROR_UPLOAD_NAMEEMPTY;
 		if( ! isset( $userfile['size'] ) or empty( $userfile['size'] ) ) return _ERROR_UPLOAD_SIZEEMPTY;
-		if( ! empty( $this->config['maxsize'] ) and $userfile['size'] > $this->config['maxsize'] )
-		{
-			return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
-		}
 		if( ! isset( $userfile['tmp_name'] ) or empty( $userfile['tmp_name'] ) or ! file_exists( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_SIZEEMPTY;
 		if( ! isset( $userfile['error'] ) or $userfile['error'] != UPLOAD_ERR_OK )
 		{
@@ -600,6 +596,14 @@ class upload
 			return _ERROR_UPLOAD_MIME_NOT_RECOGNIZE;
 		}
 
+		if( ! empty( $this->config['maxsize'] ) and $userfile['size'] > $this->config['maxsize'] )
+		{
+			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			{
+				return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
+			}
+		}
+
 		if( preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) or preg_match( '#application\/[x\-]*(shockwave\-flash)#', $this->file_mime ) )
 		{
 			$this->is_img = true;
@@ -609,9 +613,12 @@ class upload
 
 			if( ! $this->verify_image( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_IMAGE_FAILED;
 
-			if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] ) return sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
+			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			{
+				if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] ) return sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
 
-			if( ! empty( $this->config['maxheight'] ) and $this->img_info[1] > $this->config['maxheight'] ) return sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->config['maxheight'] );
+				if( ! empty( $this->config['maxheight'] ) and $this->img_info[1] > $this->config['maxheight'] ) return sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->config['maxheight'] );
+			}
 		}
 
 		return '';
@@ -673,7 +680,7 @@ class upload
 	 * @param bool $replace_if_exists
 	 * @return
 	 */
-	public function save_file( $userfile, $savepath, $replace_if_exists = true )
+	public function save_file( $userfile, $savepath, $replace_if_exists = true, $no_check_size = false )
 	{
 		$this->file_extension = '';
 		$this->file_mime = '';
@@ -681,7 +688,7 @@ class upload
 		$this->img_info = array();
 
 		$return = array();
-		$return['error'] = $this->check_tmpfile( $userfile );
+		$return['error'] = $this->check_tmpfile( $userfile, $no_check_size );
 		if( ! empty( $return['error'] ) )
 		{
 			return $return;
@@ -1138,7 +1145,7 @@ class upload
 	 * @param bool $replace_if_exists
 	 * @return
 	 */
-	public function save_urlfile( $urlfile, $savepath, $replace_if_exists = true )
+	public function save_urlfile( $urlfile, $savepath, $replace_if_exists = true, $no_check_size = false )
 	{
 		$this->file_extension = '';
 		$this->file_mime = '';
@@ -1207,12 +1214,6 @@ class upload
 		}
 
 		$return['size'] = filesize( $this->temp_file );
-		if( $return['size'] > $this->config['maxsize'] )
-		{
-			@unlink( $this->temp_file );
-			$return['error'] = sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
-			return $return;
-		}
 
 		$this->file_extension = $this->urlfile_extension;
 		$this->file_mime = $this->get_mime_type( array( 'type' => $this->urlfile_mime, 'tmp_name' => $this->temp_file ) );
@@ -1221,6 +1222,16 @@ class upload
 			@unlink( $this->temp_file );
 			$return['error'] = _ERROR_UPLOAD_MIME_NOT_RECOGNIZE;
 			return $return;
+		}
+
+		if( ! empty( $this->config['maxsize'] ) and $return['size'] > $this->config['maxsize'] )
+		{
+			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			{
+				@unlink( $this->temp_file );
+				$return['error'] = sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
+				return $return;
+			}
 		}
 
 		if( preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) or preg_match( '#application\/[x\-]*(shockwave\-flash)#', $this->file_mime ) )
@@ -1242,18 +1253,21 @@ class upload
 				return $return;
 			}
 
-			if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] )
+			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
-				@unlink( $this->temp_file );
-				$return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
-				return $return;
-			}
+				if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] )
+				{
+					@unlink( $this->temp_file );
+					$return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
+					return $return;
+				}
 
-			if( ! empty( $this->config['maxheight'] ) and $this->img_info[1] > $this->config['maxheight'] )
-			{
-				@unlink( $this->temp_file );
-				$return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->config['maxheight'] );
-				return $return;
+				if( ! empty( $this->config['maxheight'] ) and $this->img_info[1] > $this->config['maxheight'] )
+				{
+					@unlink( $this->temp_file );
+					$return['error'] = sprintf( _ERROR_UPLOAD_IMAGE_HEIGHT, $this->config['maxheight'] );
+					return $return;
+				}
 			}
 		}
 
