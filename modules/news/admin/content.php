@@ -8,8 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_EDITOR' ) )
 {
@@ -174,7 +173,7 @@ if( $rowcontent['id'] > 0 )
 						{
 							++$check_edit;
 						}
-						elseif( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ($status == 0 or $status = 2) )
+						elseif( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ( $status == 0 or $status = 2 ) )
 						{
 							++$check_edit;
 						}
@@ -279,7 +278,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['listcatid'] = implode( ',', $catids );
 
-	$rowcontent['status'] = ($nv_Request->isset_request( 'status1', 'post' )) ? 1 : 0;
+	$rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
 
 	if( $rowcontent['status'] and $rowcontent['publtime'] > NV_CURRENTTIME )
 	{
@@ -308,7 +307,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['topictext'] = $nv_Request->get_title( 'topictext', 'post', '' );
 		if( ! empty( $rowcontent['topictext'] ) )
 		{
-			$stmt = $db->prepare( 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title') ;
+			$stmt = $db->prepare( 'SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title' ) ;
 			$stmt->bindParam( ':title', $rowcontent['topictext'], PDO::PARAM_STR );
 			$stmt->execute();
 			$rowcontent['topicid'] = $stmt->fetchColumn();
@@ -345,12 +344,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['archive'] = $nv_Request->get_int( 'archive', 'post', 0 );
 	if( $rowcontent['archive'] > 0 )
 	{
-		$rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
+		$rowcontent['archive'] = ( $rowcontent['exptime'] > NV_CURRENTTIME ) ? 1 : 2;
 	}
 	$rowcontent['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
 
 	$alias = $nv_Request->get_title( 'alias', 'post', '' );
-	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+	$rowcontent['alias'] = ( $alias == '' ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
 	$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
 
@@ -428,7 +427,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			if( isset( $url_info['scheme'] ) and isset( $url_info['host'] ) )
 			{
 				$sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
-				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link');
+				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE link= :link' );
 				$stmt->bindParam( ':link', $sourceid_link, PDO::PARAM_STR );
 				$stmt->execute();
 				$rowcontent['sourceid'] = $stmt->fetchColumn();
@@ -449,11 +448,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			}
 			else
 			{
-				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title');
+				$stmt = $db->prepare( 'SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title' );
 				$stmt->bindParam( ':title', $rowcontent['sourcetext'], PDO::PARAM_STR );
 				$stmt->execute();
 				$rowcontent['sourceid'] = $stmt->fetchColumn();
-				
+
 				if( empty( $rowcontent['sourceid'] ) )
 				{
 					$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
@@ -493,7 +492,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if( $rowcontent['id'] == 0 )
 		{
-			$rowcontent['publtime'] = ($rowcontent['publtime'] > NV_CURRENTTIME) ? $rowcontent['publtime'] : NV_CURRENTTIME;
+			$rowcontent['publtime'] = ( $rowcontent['publtime'] > NV_CURRENTTIME ) ? $rowcontent['publtime'] : NV_CURRENTTIME;
 			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
 			{
 				$rowcontent['status'] = 2;
@@ -762,7 +761,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 			}
 
-			if( isset( $module_config['webtools']['prcservice'] ) and ! empty( $module_config['webtools']['prcservice'] ) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1) )
+			if( isset( $module_config['webtools']['prcservice'] ) and ! empty( $module_config['webtools']['prcservice'] ) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ( $rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1 ) )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass() );
 				die();
@@ -785,8 +784,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 }
 
-if( ! empty( $rowcontent['bodyhtml'] ) )
-	$rowcontent['bodyhtml'] = nv_htmlspecialchars( $rowcontent['bodyhtml'] );
+if( ! empty( $rowcontent['bodyhtml'] ) ) $rowcontent['bodyhtml'] = nv_htmlspecialchars( $rowcontent['bodyhtml'] );
 
 if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
 {
@@ -878,14 +876,14 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	if( ! empty( $check_show ) )
 	{
 		$space = intval( $array_value['lev'] ) * 30;
-		$catiddisplay = (sizeof( $array_catid_in_row ) > 1 and ( in_array( $catid_i, $array_catid_in_row ))) ? '' : ' display: none;';
+		$catiddisplay = ( sizeof( $array_catid_in_row ) > 1 and ( in_array( $catid_i, $array_catid_in_row ) ) ) ? '' : ' display: none;';
 		$temp = array(
 			'catid' => $catid_i,
 			'space' => $space,
 			'title' => $array_value['title'],
-			'disabled' => ( ! in_array( $catid_i, $array_cat_check_content )) ? ' disabled="disabled"' : '',
-			'checked' => ( in_array( $catid_i, $array_catid_in_row )) ? ' checked="checked"' : '',
-			'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
+			'disabled' => ( ! in_array( $catid_i, $array_cat_check_content ) ) ? ' disabled="disabled"' : '',
+			'checked' => ( in_array( $catid_i, $array_catid_in_row ) ) ? ' checked="checked"' : '',
+			'catidchecked' => ( $catid_i == $rowcontent['catid'] ) ? ' checked="checked"' : '',
 			'catiddisplay' => $catiddisplay
 		);
 		$xtpl->assign( 'CATS', $temp );
@@ -894,13 +892,13 @@ foreach( $global_array_cat as $catid_i => $array_value )
 }
 
 // Copyright
-$checkcop = ($rowcontent['copyright']) ? ' checked="checked"' : '';
+$checkcop = ( $rowcontent['copyright'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'checkcop', $checkcop );
 
 // topic
 while( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 {
-	$sl = ($topicid_i == $rowcontent['topicid']) ? ' selected="selected"' : '';
+	$sl = ( $topicid_i == $rowcontent['topicid'] ) ? ' selected="selected"' : '';
 	$xtpl->assign( 'topicid', $topicid_i );
 	$xtpl->assign( 'topic_title', $title_i );
 	$xtpl->assign( 'sl', $sl );
@@ -910,7 +908,7 @@ while( list( $topicid_i, $title_i ) = each( $array_topic_module ) )
 // position images
 while( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) )
 {
-	$sl = ($id_imgposition == $rowcontent['imgposition']) ? ' selected="selected"' : '';
+	$sl = ( $id_imgposition == $rowcontent['imgposition'] ) ? ' selected="selected"' : '';
 	$xtpl->assign( 'id_imgposition', $id_imgposition );
 	$xtpl->assign( 'title_imgposition', $title_imgposition );
 	$xtpl->assign( 'posl', $sl );
@@ -922,13 +920,13 @@ $xtpl->assign( 'publ_date', $publ_date );
 $select = '';
 for( $i = 0; $i <= 23; ++$i )
 {
-	$select .= "<option value=\"" . $i . "\"" . (($i == $phour) ? ' selected="selected"' : '') . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $phour ) ? ' selected="selected"' : '' ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'phour', $select );
 $select = '';
 for( $i = 0; $i < 60; ++$i )
 {
-	$select .= "<option value=\"" . $i . "\"" . (($i == $pmin) ? ' selected="selected"' : '') . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $pmin ) ? ' selected="selected"' : '' ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'pmin', $select );
 
@@ -937,13 +935,13 @@ $xtpl->assign( 'exp_date', $exp_date );
 $select = '';
 for( $i = 0; $i <= 23; ++$i )
 {
-	$select .= "<option value=\"" . $i . "\"" . (($i == $ehour) ? ' selected="selected"' : '') . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $ehour ) ? ' selected="selected"' : '' ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'ehour', $select );
 $select = '';
 for( $i = 0; $i < 60; ++$i )
 {
-	$select .= "<option value=\"" . $i . "\"" . (($i == $emin) ? ' selected="selected"' : '') . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $emin ) ? ' selected="selected"' : '' ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'emin', $select );
 
@@ -951,7 +949,7 @@ $xtpl->assign( 'emin', $select );
 $select = '';
 while( list( $commid_i, $commid_title_i ) = each( $array_allowed_comm ) )
 {
-	$comm_sl = ($commid_i == $rowcontent['allowed_comm']) ? ' selected="selected"' : '';
+	$comm_sl = ( $commid_i == $rowcontent['allowed_comm'] ) ? ' selected="selected"' : '';
 	$select .= "<option value=\"" . $commid_i . "\" " . $comm_sl . ">" . $commid_title_i . "</option>\n";
 }
 $xtpl->assign( 'allowed_comm', $select );
@@ -960,7 +958,7 @@ $xtpl->assign( 'allowed_comm', $select );
 $select = '';
 while( list( $sourceid_i, $source_title_i ) = each( $array_source_module ) )
 {
-	$source_sl = ($sourceid_i == $rowcontent['sourceid']) ? ' selected="selected"' : '';
+	$source_sl = ( $sourceid_i == $rowcontent['sourceid'] ) ? ' selected="selected"' : '';
 	$select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
 }
 $xtpl->assign( 'sourceid', $select );
@@ -986,17 +984,17 @@ if( sizeof( $array_block_cat_module ) )
 	$xtpl->parse( 'main.block_cat' );
 }
 
-$archive_checked = ($rowcontent['archive']) ? ' checked="checked"' : '';
+$archive_checked = ( $rowcontent['archive'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'archive_checked', $archive_checked );
-$inhome_checked = ($rowcontent['inhome']) ? ' checked="checked"' : '';
+$inhome_checked = ( $rowcontent['inhome'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'inhome_checked', $inhome_checked );
-$allowed_rating_checked = ($rowcontent['allowed_rating']) ? ' checked="checked"' : '';
+$allowed_rating_checked = ( $rowcontent['allowed_rating'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'allowed_rating_checked', $allowed_rating_checked );
-$allowed_send_checked = ($rowcontent['allowed_send']) ? ' checked="checked"' : '';
+$allowed_send_checked = ( $rowcontent['allowed_send'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'allowed_send_checked', $allowed_send_checked );
-$allowed_print_checked = ($rowcontent['allowed_print']) ? ' checked="checked"' : '';
+$allowed_print_checked = ( $rowcontent['allowed_print'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'allowed_print_checked', $allowed_print_checked );
-$allowed_save_checked = ($rowcontent['allowed_save']) ? ' checked="checked"' : '';
+$allowed_save_checked = ( $rowcontent['allowed_save'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'allowed_save_checked', $allowed_save_checked );
 
 $xtpl->assign( 'edit_bodytext', $edits );
@@ -1027,21 +1025,15 @@ $_array = $db->query( $sql )->fetchAll();
 if( sizeof( $_array ) )
 {
 	$array_googleplus = array();
-	$array_googleplus[] = array(
-		'gid' => - 1,
-		'title' => $lang_module['googleplus_1']
-	);
-	$array_googleplus[] = array(
-		'gid' => 0,
-		'title' => $lang_module['googleplus_0']
-	);
+	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
+	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
 	foreach ( $_array as $row )
 	{
 		$array_googleplus[] = $row;
 	}
 	foreach( $array_googleplus as $grow )
 	{
-		$grow['selected'] = ($rowcontent['gid'] == $grow['gid']) ? ' selected="selected"' : '';
+		$grow['selected'] = ( $rowcontent['gid'] == $grow['gid'] ) ? ' selected="selected"' : '';
 		$xtpl->assign( 'GOOGLEPLUS', $grow );
 		$xtpl->parse( 'main.googleplus.gid' );
 	}
@@ -1058,4 +1050,5 @@ if( $rowcontent['id'] > 0 )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
 ?>
