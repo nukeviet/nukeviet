@@ -1823,6 +1823,7 @@ function nv_site_mods()
 					'module_file' => $row['module_file'],
 					'module_data' => $row['module_data'],
 					'custom_title' => $row['custom_title'],
+					'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
 					'admin_file' => $row['admin_file'],
 					'theme' => $row['theme'],
 					'mobile' => $row['mobile'],

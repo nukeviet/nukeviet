@@ -187,11 +187,11 @@ if( ! empty( $module_name ) )
 			}
 			elseif( isset( $site_mods[$module_name] ) )
 			{
-				$admin_menu_mods[$module_name] = $site_mods[$module_name]['custom_title'];
+				$admin_menu_mods[$module_name] = $site_mods[$module_name]['admin_title'];
 			}
 			foreach( $site_mods as $key => $value )
 			{
-				if( $value['admin_file'] ) $admin_menu_mods[$key] = $value['custom_title'];
+				if( $value['admin_file'] ) $admin_menu_mods[$key] = $value['admin_title'];
 			}
 			require $include_file;
 			exit();
