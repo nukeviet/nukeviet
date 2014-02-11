@@ -41,7 +41,24 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
-var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
+
+ var nv_required = "このフィールドは必須です。";
+ var nv_remote = "このフィールドを修正してください。";
+ var nv_email = "有効なEメールアドレスを入力してください。";
+ var nv_url = "有効なURLを入力してください。";
+ var nv_date = "有効な日付を入力してください。";
+ var nv_dateISO = "有効な日付（ISO）を入力してください。";
+ var nv_number = "有効な数字を入力してください。";
+ var nv_digits = "数字のみを入力してください。";
+ var nv_creditcard = "有効なクレジットカード番号を入力してください。";
+ var nv_equalTo = "同じ値をもう一度入力してください。";
+ var nv_accept = "有効な拡張子を含む値を入力してください。";
+ var nv_maxlength = "{0} 文字以内で入力してください。";
+ var nv_minlength = "{0} 文字以上で入力してください。";
+ var nv_rangelength = "{0} 文字から {1} 文字までの値を入力してください。";
+ var nv_range = "{0} から {1} までの値を入力してください。";
+ var nv_max = "{0} 以下の値を入力してください。";
+ var nv_min = "{0} 以上の値を入力してください。";
 
 //contact
 var nv_fullname = "Full name entered is not valid.";

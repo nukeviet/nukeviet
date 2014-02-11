@@ -41,7 +41,24 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
-var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
+
+var nv_required = "Tento údaj je povinný.";
+var nv_remote = "Prosím, opravte tento údaj.";
+var nv_email = "Prosím, zadejte platný e-mail.";
+var nv_url = "Prosím, zadejte platné URL.";
+var nv_date = "Prosím, zadejte platné datum.";
+var nv_dateISO = "Prosím, zadejte platné datum (ISO).";
+var nv_number = "Prosím, zadejte číslo.";
+var nv_digits = "Prosím, zadávejte pouze číslice.";
+var nv_creditcard = "Prosím, zadejte číslo kreditní karty.";
+var nv_equalTo = "Prosím, zadejte znovu stejnou hodnotu.";
+var nv_accept = "Prosím, zadejte soubor se správnou příponou.";
+var nv_maxlength = "Prosím, zadejte nejvíce {0} znaků.";
+var nv_minlength = "Prosím, zadejte nejméně {0} znaků.";
+var nv_rangelength = "Prosím, zadejte od {0} do {1} znaků.";
+var nv_range = "Prosím, zadejte hodnotu od {0} do {1}.";
+var nv_max = "Prosím, zadejte hodnotu menší nebo rovnu {0}.";
+var nv_min = "Prosím, zadejte hodnotu větší nebo rovnu {0}.";
 
 //contact
 var nv_fullname = "Full name entered is not valid.";
