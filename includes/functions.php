@@ -1825,6 +1825,7 @@ function nv_site_mods()
 					'custom_title' => $row['custom_title'],
 					'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
 					'admin_file' => $row['admin_file'],
+					'main_file' => $row['main_file'],
 					'theme' => $row['theme'],
 					'mobile' => $row['mobile'],
 					'description' => $row['description'],
