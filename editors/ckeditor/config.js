@@ -5,7 +5,8 @@
 
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
-	config.extraPlugins = 'autosave';
+	config.allowedContent = true;
+	config.extraPlugins = 'autosave,youtube,video';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
