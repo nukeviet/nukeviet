@@ -27,11 +27,7 @@
 				}
 
 				if (confirm(editor.lang.autosave.loadSavedContent)) {
-					if (editor.plugins.bbcode) {
-						editor._.data = autoSavedContent;
-					} else {
-						editor.setData(autoSavedContent);
-					}
+					editor.setData(autoSavedContent);
 				}
 
 				localStorage.removeItem(autoSaveKey);

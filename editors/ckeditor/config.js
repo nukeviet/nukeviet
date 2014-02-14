@@ -5,8 +5,15 @@
 
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
-	config.extraPlugins = 'autosave';
+	config.allowedContent = true;
+	config.extraPlugins = 'autosave,youtube,video';
 	config.entities = false;
+	config.youtube_width = '640';
+	config.youtube_height = '480';
+	config.youtube_related = false;
+	config.youtube_older = true;
+	config.youtube_privacy = false;
+	config.youtube_autoplay = true;
 	// Default setting.
 	config.toolbarGroups = [
 	    { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },

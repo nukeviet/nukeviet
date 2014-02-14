@@ -655,7 +655,7 @@ class Request
 					$width = ( $width > 0 ) ? $width : 480;
 					$height = ( $height > 0 ) ? $height : 360;
 
-					$ojwplayer = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="' . $height . '" width="' . $width . '"><param name="movie" value="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf" /><param name="wmode" value="transparent" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value="file=http://www.youtube.com/watch?v=' . $vid . '" /><embed allowfullscreen="true" allowscriptaccess="always" flashvars="file=http://www.youtube.com/watch?v=' . $vid . '" height="' . $height . '" width="' . $width . '" src="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf"></embed></object>';
+					$ojwplayer = '<object height="' . $height . '" width="' . $width . '"><param name="movie" value="//www.youtube.com/v/' . $vid . '?rel=0&amp;hl=pt_BR&amp;version=3" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed allowfullscreen="true" allowscriptaccess="always" height="' . $height . '" src="//www.youtube.com/v/' . $vid . '?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3" type="application/x-shockwave-flash" width="' . $width . '"></embed></object>';
 					$source = str_replace( $_m, $ojwplayer, $source );
 				}
 
