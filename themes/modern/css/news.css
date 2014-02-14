@@ -131,3 +131,18 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
+
+.icon_new{
+	background: url('../images/news/new.gif') no-repeat;
+	display: inline-block;
+	width: 33px;
+	height: 15px;
+}
+
+.icon_new_small{
+	background: url('../images/squared-blue.png') 2px 13px no-repeat;
+}
+
+.icon_list{
+	background: url(../images/bullet-orange.png) 2px 13px no-repeat;
+}

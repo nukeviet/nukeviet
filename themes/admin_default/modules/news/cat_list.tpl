@@ -14,6 +14,7 @@
 			<td class="center">{LANG.inhome}</td>
 			<td>{LANG.viewcat_page}</td>
 			<td class="center">{LANG.numlinks}</td>
+			<td class="center">{LANG.newday}</td>
 			<td>&nbsp;</td>
 		</tr>
 	</thead>
@@ -72,6 +73,18 @@
 				<!-- END: loop -->
 			</select>
 			<!-- END: numlinks -->
+			</td>
+			<td class="center">
+			<!-- BEGIN: title_newday -->
+			{NEWDAY}
+			<!-- END: title_newday -->
+			<!-- BEGIN: newday -->
+			<select id="id_newday_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','newday');">
+				<!-- BEGIN: loop -->
+				<option value="{NEWDAY.key}"{NEWDAY.selected}>{NEWDAY.title}</option>
+				<!-- END: loop -->
+			</select>
+			<!-- END: newday -->
 			</td>
 			<td class="center">{ROW.adminfuncs}</td>
 		</tr>

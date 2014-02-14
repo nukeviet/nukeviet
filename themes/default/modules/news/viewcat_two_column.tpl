@@ -18,7 +18,12 @@
 			<!-- BEGIN: image -->
 			<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a>
 			<!-- END: image -->
-			<h3><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h3>
+			<h3>
+				<a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
+			</h3>
 			<p>
 				{NEWSTOP.hometext}
 			</p>
@@ -47,7 +52,12 @@
 		</div>
 		<div class="items{BORDER}">
 			<!-- BEGIN: content -->
-			<h3><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h3>
+			<h3>
+				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
+			</h3>
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a>
 			<!-- END: image -->

@@ -135,7 +135,6 @@ div.span-25 ul.related li {
 }
 
 div.news_column ul.related a {
-	background: url(../images/arrow_left_orange.png) no-repeat 0 6px;
 	color: #3b3b3b;
 	display: inline-block;
 	padding-left: 6px
@@ -667,4 +666,19 @@ ul.list-number .small {
 
 ul.list-number li {
 	padding-bottom: 5px
+}
+
+.icon_new{
+	background: url('../images/news/new.gif') no-repeat;
+	display: inline-block;
+	width: 33px;
+	height: 15px;
+}
+
+.icon_new_small{
+	background: url('../images/squared-blue.png') no-repeat 0 6px;
+}
+
+.icon_list{
+	background: url(../images/arrow_left_orange.png) no-repeat 0 6px;
 }
