@@ -544,7 +544,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$tbhtml = NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $rowcontent['id'] / 2000 );
 				$db->query( "CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', gid mediumint(9) NOT NULL DEFAULT '0', PRIMARY KEY (id)) ENGINE=MyISAM" );
 
-				$sql = 'INSERT INTO ' . $tbhtml . ' VALUES
+				$stmt = $db->prepare( 'INSERT INTO ' . $tbhtml . ' VALUES
 					(' . $rowcontent['id'] . ',
 					 :bodyhtml,
 					 :sourcetext,
@@ -554,22 +554,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					 ' . $rowcontent['allowed_print'] . ',
 					 ' . $rowcontent['allowed_save'] . ',
 					 ' . $rowcontent['gid'] . '
-					 )' ;
-				$data_insert = array();
-				$data_insert['bodyhtml'] = $rowcontent['bodyhtml'];
-				$data_insert['sourcetext'] = $rowcontent['sourcetext'];
-
-				$ct_query[] = $db->insert_id( $sql, 'id', $data_insert );
+					 )' );
+				$stmt->bindParam( ':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen( $rowcontent['bodyhtml'] ) );
+				$stmt->bindParam( ':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen( $rowcontent['sourcetext'] ) );
+				$ct_query[] = ( int )$stmt->execute();
 
 				foreach( $catids as $catid )
 				{
 					$ct_query[] = ( int )$db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
 				}
 
-				$sql= 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', :bodytext )' ;
-				$data_insert = array();
-				$data_insert['bodytext'] = $rowcontent['bodytext'];
-				$ct_query[] = ( int )$db->insert_id( $sql, 'id', $data_insert );
+				$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', :bodytext )' );
+				$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
+				$ct_query[] = ( int )$stmt->execute();
 
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
