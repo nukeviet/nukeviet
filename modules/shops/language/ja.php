@@ -1,11 +1,14 @@
 <?php
 
+
+
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -333,5 +336,6 @@ $lang_module['noneprice'] = '価格は？より大きくなければならない
 $lang_module['search_adv'] = '高度な検索';
 $lang_module['money_thousand'] = '千';
 $lang_module['money_million'] = '億';
+
 
 ?>

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 9-8-2010 14:43
  */
 
@@ -15,7 +16,7 @@ $link = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name 
 $array_info = array();
 
 // Tong so luong san pham
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ")" ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ")" )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_all'],
 	"value" => $number,
@@ -24,16 +25,16 @@ $array_info[] = array(
 );
 
 // Tong so luong san pham chua duyet
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `status`= 0 AND `publtime` < " . NV_CURRENTTIME . " AND (`exptime`=0 OR `exptime`>" . NV_CURRENTTIME . ")" ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE status = 0 AND publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ")" )->fetchColumn();
+
 $array_info[] = array(
 	"title" => $lang_module['product_number_all_noctive'],
 	"value" => $number,
 	"link" => $link . "=items",
 	"unit" => $lang_module['product_unit']
 );
-
 // Tong so luong binh luan
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . "` " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_comments_" . NV_LANG_DATA . " " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_commet'],
 	"value" => $number,
@@ -42,7 +43,7 @@ $array_info[] = array(
 );
 
 // Tong so luong so luong san pham trong kho
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT SUM(product_number) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` " ) );
+$number = $db->query( "SELECT SUM(product_number) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_rows " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_all_store'],
 	"value" => $number,
@@ -51,7 +52,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order'],
 	"value" => $number,
@@ -60,7 +61,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang moi
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `view` = 0 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_view = 0 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_new'],
 	"value" => $number,
@@ -69,7 +70,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang nhung chua duyet
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `transaction_status` = -1 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE transaction_status = -1 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_no_active'],
 	"value" => $number,
@@ -78,7 +79,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang chua thanh toan
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `transaction_status` = 0 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE transaction_status = 0 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_no_payment'],
 	"value" => $number,
@@ -87,7 +88,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang da thanh toan
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `transaction_status` = 4 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE transaction_status = 4 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_payment'],
 	"value" => $number,
@@ -96,7 +97,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang da gui thanh toan
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `transaction_status` = 1 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE transaction_status = 1 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_send_payment'],
 	"value" => $number,
@@ -105,7 +106,7 @@ $array_info[] = array(
 );
 
 // Tong so luong don dat hang da gui thanh toan
-list( $number ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) AS `number` FROM `" . $db_config['prefix'] . "_" . $module_data . "_orders` WHERE `transaction_status` = 5 " ) );
+$number = $db->query( "SELECT COUNT(*) AS number FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE transaction_status = 5 " )->fetchColumn();
 $array_info[] = array(
 	"title" => $lang_module['product_number_order_dis_payment'],
 	"value" => $number,
@@ -127,14 +128,14 @@ foreach( $array_info as $info )
 	$bg = ( $i % 2 == 0 ) ? "class=\"second\"" : "";
 	$xtpl->assign( "bg", $bg );
 	$xtpl->parse( 'main.loop' );
-	$i++;
+	++$i;
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

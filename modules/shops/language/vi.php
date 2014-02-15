@@ -1,12 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Tiếng Việt
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -310,7 +311,7 @@ $lang_module['keywords'] = 'Từ khóa';
 $lang_module['search_reset'] = 'Xóa trắng';
 $lang_module['product_number_max'] = 'Sản phẩm: %1$s trong kho chỉ còn: %2$s';
 $lang_module['back_history'] = 'Quay lại trang lịch sử giao dịch';
-$lang_module['order_by_payment'] = 'Đơn hàng này bạn đang thực hiện quá trình thanh toán trên <a href="%1$s">%2$s</a>, Bạn cần thực hiện tiếp quá trình thanh toán này để  hoàn tất đơn hàng.';
+$lang_module['order_by_payment'] = 'Đơn hàng này bạn đang thực hiện quá trình thanh toán trên <a href="%1$s">%2$s</a>, Bạn cần thực hiện tiếp quá trình thanh toán này để hoàn tất đơn hàng.';
 $lang_module['update_order'] = 'Thông báo: Hệ thống đã cập nhật lại thông tin giao dịch các đơn hàng: %1$s';
 $lang_module['no_update_order'] = 'Thông báo: Hệ thống không tìm thấy các giao dịch nào mới';
 $lang_module['active_order_dis'] = 'Chức năng đặt hàng trực truyến đã bị tắt';
@@ -341,5 +342,11 @@ $lang_module['noneprice'] = 'Giá đến phải lớn hơn từ';
 $lang_module['search_adv'] = 'Tìm kiếm nâng cao';
 $lang_module['money_thousand'] = 'nghìn';
 $lang_module['money_million'] = 'triệu';
+$lang_module['displays_new'] = 'Mới cập nhật';
+$lang_module['displays_price_asc'] = 'Giá tăng dần';
+$lang_module['displays_price_desc'] = 'Giá giảm dần';
+$lang_module['displays_product'] = 'Sắp xếp theo: ';
+$lang_module['compare'] = 'So sánh';
+$lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 
 ?>

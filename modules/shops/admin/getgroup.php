@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 18:49
  */
 
@@ -49,11 +50,11 @@ $array_groupid_in_row = unserialize( $inrow );
 
 $array_cat = GetCatidInChild( $cid );
 
-$sql = "SELECT `groupid`, `parentid`, `cateid`, `" . NV_LANG_DATA . "_title` AS `title`, `lev`, `numsubgroup` FROM `" . $db_config['prefix'] . "_" . $module_data . "_group` ORDER BY `order` ASC";
-$result_group = $db->sql_query( $sql );
+$sql = "SELECT groupid, parentid, cateid, " . NV_LANG_DATA . "_title AS title, lev, numsubgroup FROM " . $db_config['prefix'] . "_" . $module_data . "_group ORDER BY sort ASC";
+$result_group = $db->query( $sql );
 
 $data_group = array();
-while( $row = $db->sql_fetchrow( $result_group, 2 ) )
+while( $row = $result_group->fetch() )
 {
 	$data_group[$row['groupid']] = $row;
 }
@@ -90,8 +91,8 @@ foreach( $data_group as $groupid_i => $groupinfo_i )
 	}
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents_temp_none . "<hr />" . $contents_temp_cate;
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

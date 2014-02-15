@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -15,7 +16,7 @@ $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.in
 
 if( ! empty( $pro_config['money_unit'] ) != "" and isset( $currencies_array[$pro_config['money_unit']] ) )
 {
-	$page_title .= "  " . $lang_module['money_compare'] . "  " . $currencies_array[$pro_config['money_unit']]['currency'];
+	$page_title .= " " . $lang_module['money_compare'] . " " . $currencies_array[$pro_config['money_unit']]['currency'];
 }
 
 $error = "";
@@ -28,10 +29,10 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( ! empty( $savecat ) )
 {
-	$data['code'] = filter_text_input( 'code', 'post' );
-	$data['currency'] = filter_text_input( 'currency', 'post', '', 1 );
+	$data['code'] = $nv_Request->get_title( 'code', 'post' );
+	$data['currency'] = $nv_Request->get_title( 'currency', 'post', '', 1 );
 	$data['exchange'] = $nv_Request->get_float( 'exchange', 'post,get', 0 );
-	
+
 	if( isset( $currencies_array[$data['code']] ) )
 	{
 		$numeric = intval( $currencies_array[$data['code']]['numeric'] );
@@ -39,15 +40,13 @@ if( ! empty( $savecat ) )
 		{
 			$data['exchange'] = 1;
 		}
-		
+
 		$data['currency'] = ( empty( $data['currency'] ) ) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
-		$sql = "REPLACE INTO `" . $table_name . "` (`id`, `code`, `currency`, `exchange`) VALUES (" . $numeric . ", " . $db->dbescape_string( $data['code'] ) . ", " . $db->dbescape_string( $data['currency'] ) . ", " . $db->dbescape_string( $data['exchange'] ) . ")";
-		$db->sql_query( $sql );
-		
-		if( $db->sql_affectedrows() > 0 )
+		$sql = "REPLACE INTO " . $table_name . " (id, code, currency, exchange) VALUES (" . $numeric . ", " . $db->quote( $data['code'] ) . ", " . $db->quote( $data['currency'] ) . ", " . $db->quote( $data['exchange'] ) . ")";
+
+		if( $db->exec( $sql ) )
 		{
 			$error = $lang_module['saveok'];
-			$db->sql_freeresult();
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 			die();
@@ -56,12 +55,11 @@ if( ! empty( $savecat ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 elseif( ! empty( $id ) )
 {
-	$data = $db->sql_fetchrow( $db->sql_query( "SELECT * FROM `" . $table_name . "` WHERE `id`=" . $id ) );
+	$data = $db->query( "SELECT * FROM " . $table_name . " WHERE id=" . $id )->fetch();
 	$data['caption'] = $lang_module['money_edit'];
 }
 
@@ -81,14 +79,14 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $count = 0;
 $array_code_exit = array();
-$result = $db->sql_query( "SELECT `id`, `code`, `currency`, `exchange` FROM `" . $table_name . "` ORDER BY code DESC" );
-while( $row = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT id, code, currency, exchange FROM " . $table_name . " ORDER BY code DESC" );
+while( $row = $result->fetch() )
 {
 	$array_code_exit[] = $row['code'];
 	$row['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $row['id'];
 	$row['link_del'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delmoney&id=" . $row['id'];
 	$row['exchange'] = floatval( $row['exchange'] );
-	
+
 	if( intval( $row['exchange'] ) == floatval( $row['exchange'] ) )
 	{
 		$row['exchange'] = intval( $row['exchange'] );
@@ -113,11 +111,11 @@ while( $row = $db->sql_fetchrow( $result ) )
 	{
 		$row['exchange'] = number_format( $row['exchange'], 10, '.', ' ' );
 	}
-	
+
 	$xtpl->assign( 'ROW', $row );
 	$xtpl->parse( 'main.data.row' );
-	
-	$count ++;
+
+	++$count;
 }
 
 $xtpl->assign( 'URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=delmoney" );
@@ -139,9 +137,9 @@ foreach( $currencies_array as $code => $value )
 		$array_temp['value'] = $code;
 		$array_temp['title'] = $code . " - " . $value['currency'];
 		$array_temp['selected'] = ( $value['numeric'] == $data['id'] ) ? " selected=\"selected\"" : "";
-		
+
 		$xtpl->assign( 'DATAMONEY', $array_temp );
-		
+
 		$xtpl->parse( 'main.money' );
 	}
 }
@@ -176,8 +174,8 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

@@ -1,12 +1,13 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
-* @Language Français
-* @Createdate Apr 15, 2011, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
+ */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -64,9 +65,9 @@ $lang_module['cat_title'] = 'Liste des Catégories';
 $lang_module['link'] = 'Site du fabricant';
 $lang_module['cat_sub'] = 'Catégorie';
 $lang_module['cat_sub_sl'] = 'Catégorie principale';
-$lang_module['delcat_msg_cat'] = 'Cette catégorie ont  %s sous-catégories, vous devez supprimer ou déplacer les sous-catégories d\'abord';
+$lang_module['delcat_msg_cat'] = 'Cette catégorie ont %s sous-catégories, vous devez supprimer ou déplacer les sous-catégories d\'abord';
 $lang_module['delcat_msg_rows'] = 'Cette catégorie ont % s produits, êtes-vous sûr de les supprimer ou de les déplacer vers les autres catégories';
-$lang_module['delcat_msg_rows_select'] = 'Attention: la catégorie  %1$s a %2$s produits. <br /> Lorsque vous supprimez cette catégorie, vous supprimez tous les produits dedans';
+$lang_module['delcat_msg_rows_select'] = 'Attention: la catégorie %1$s a %2$s produits. <br /> Lorsque vous supprimez cette catégorie, vous supprimez tous les produits dedans';
 $lang_module['delcat_msg_rows_move'] = 'Ou sélectionnez Catégorie pour déplacer les produits';
 $lang_module['delcatandrows'] = 'Supprimer la catégorie et les produits';
 $lang_module['delcat_msg_rows_noselect'] = 'Choisissez la catégorie pour déplacer les produits';

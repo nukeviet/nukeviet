@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -23,14 +24,14 @@ $savegroup = $nv_Request->get_int( 'savegroup', 'post', 0 );
 if( ! empty( $savegroup ) )
 {
 	$field_lang = nv_file_table( $table_name );
-	
+
 	$data['groupid'] = $nv_Request->get_int( 'groupid', 'post', 0 );
 	$data['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$data['cateid'] = $nv_Request->get_int( 'cateid', 'post', 0 );
-	$data['title'] = filter_text_input( 'title', 'post', '', 1, 255 );
-	$data['keywords'] = filter_text_input( 'keywords', 'post', '', 1 );
-	$data['alias'] = filter_text_input( 'alias', 'post', '', 1, 255 );
+	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
+	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
 	$data['alias'] = ( $data['alias'] == "" ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
@@ -46,15 +47,18 @@ if( ! empty( $savegroup ) )
 	{
 		$error = $lang_module['error_group_name'];
 	}
-	
-	list( $check_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM " . $table_name . " WHERE groupid!=" . $data['groupid'] . " AND `" . NV_LANG_DATA . "_alias`=" . $db->dbescape( $data['alias'] ) ) );
-	
+
+	$stmt = $db->prepare( "SELECT COUNT(*) FROM " . $table_name . " WHERE groupid!=" . $data['groupid'] . " AND " . NV_LANG_DATA . "_alias= :alias" );
+
+	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+	$stmt->execute();
+	$check_alias = $stmt->fetchColumn();
 	if( $check_alias and $data['parentid'] > 0 )
 	{
-		list( $parentid_alias ) = $db->sql_fetchrow( $db->sql_query( "SELECT `" . NV_LANG_DATA . "_alias` FROM " . $table_name . " WHERE `groupid`=" . $data['parentid'] ) );
+		$parentid_alias = $db->query( "SELECT " . NV_LANG_DATA . "_alias FROM " . $table_name . " WHERE groupid=" . $data['parentid'] )->fetchColumn();
 		$data['alias'] = $parentid_alias . "-" . $data['alias'];
 	}
-	
+
 	if( $data['groupid'] == 0 and $data['title'] != "" and $error == "" )
 	{
 		$listfield = "";
@@ -62,32 +66,40 @@ if( ! empty( $savegroup ) )
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
-			$listfield .= ", `" . $flang . "_" . $fname . "`";
+			$listfield .= ", " . $flang . "_" . $fname;
 			if( $flang == NV_LANG_DATA )
 			{
-				$listvalue .= ", " . $db->dbescape( $data[$fname] );
+				$listvalue .= ", " . $db->quote( $data[$fname] );
 			}
 			else
 			{
-				$listvalue .= ", " . $db->dbescape( $data[$fname] );
+				$listvalue .= ", " . $db->quote( $data[$fname] );
 			}
 		}
-		
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT MAX(`weight`) FROM " . $table_name . " WHERE `parentid`=" . $db->dbescape( $data['parentid'] ) ) );
+
+		$stmt = $db->prepare( "SELECT MAX(weight) FROM " . $table_name . " WHERE parentid= :parentid" );
+		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+		$stmt->execute();
+		$weight = $stmt->fetchColumn();
 		$weight = intval( $weight ) + 1;
-		
+
 		$viewgroup = "viewgroup_page_list";
 		$subgroupid = "";
-		
-		$sql = "INSERT INTO " . $table_name . " (`groupid`, `parentid`,`cateid`, `image`, `thumbnail`, `weight`, `order`, `lev`, `viewgroup`, `numsubgroup`, `subgroupid`, `inhome`, `numlinks`, `admins`, `add_time`, `edit_time`, `who_view`, `groups_view`,`numpro` " . $listfield . " ) 
-         VALUES (NULL, " . $db->dbescape( $data['parentid'] ) . "," . $db->dbescape( $data['cateid'] ) . ",' ',' '," . $db->dbescape( $weight ) . ", '0', '0', " . $db->dbescape( $viewgroup ) . ", '0', " . $db->dbescape( $subgroupid ) . ", '1', '4'," . $db->dbescape( $admins ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $db->dbescape( $data['who_view'] ) . "," . $db->dbescape( $groups_view ) . ',0 ' . $listvalue . " )";
 
-		$newgroupid = intval( $db->sql_query_insert_id( $sql ) );
+		$sql = "INSERT INTO " . $table_name . " (groupid, parentid,cateid, image, thumbnail, weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, numlinks, admins, add_time, edit_time, who_view, groups_view,numpro " . $listfield . " )
+ 			VALUES (NULL, " . (int)$data['parentid'] . ", " . $data['cateid'] . ",' ',' '," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()," . (int)$data['who_view'] . ", :groups_view ,'0' " . $listvalue . " )";
+
+		$data_insert = array();
+		$data_insert['viewgroup'] = $viewgroup;
+		$data_insert['subgroupid'] = $subgroupid;
+		$data_insert['admins'] = $admins;
+		$data_insert['groups_view'] = $groups_view;
+		$newgroupid = intval( $db->insert_id( $sql, 'groupid', $data_insert ) );
+
 		if( $newgroupid > 0 )
 		{
-			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_group'], $data['title'], $admin_info['userid'] );
-			$db->sql_freeresult();
-			nv_fix_group_order();
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_catalog', "id " . $newcatid, $admin_info['userid'] );
+			nv_fix_cat_order();
 			nv_del_moduleCache( $module_name );
 			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $data['parentid'] );
 			die();
@@ -99,19 +111,26 @@ if( ! empty( $savegroup ) )
 	}
 	elseif( $data['groupid'] > 0 and $data['title'] != "" and $error == "" )
 	{
-		$sql = "UPDATE " . $table_name . " SET `parentid`=" . $db->dbescape( $data['parentid'] ) . ", `cateid`=" . $db->dbescape( $data['cateid'] ) . ", `" . NV_LANG_DATA . "_title`=" . $db->dbescape( $data['title'] ) . ", `" . NV_LANG_DATA . "_alias` =  " . $db->dbescape( $data['alias'] ) . ", `" . NV_LANG_DATA . "_description`=" . $db->dbescape( $data['description'] ) . ", `" . NV_LANG_DATA . "_keywords`= " . $db->dbescape( $data['keywords'] ) . ", `who_view`=" . $db->dbescape( $data['who_view'] ) . ", `groups_view`=" . $db->dbescape( $groups_view ) . ", `edit_time`=UNIX_TIMESTAMP( ) WHERE `groupid` =" . $data['groupid'];
-		$db->sql_query( $sql );
-		
-		if( $db->sql_affectedrows() > 0 )
+		$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid=" . (int)$data['parentid'] . ", cateid= :cateid, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=UNIX_TIMESTAMP() WHERE groupid =" . $data['groupid'] );
+		$stmt->bindParam( ':cateid', $data['cateid'], PDO::PARAM_STR );
+		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+		$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+		$stmt->bindParam( ':who_view', $data['who_view'], PDO::PARAM_STR );
+		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_group'], $data['title'], $admin_info['userid'] );
-			$db->sql_freeresult();
 			if( $data['parentid'] != $data['parentid_old'] )
 			{
-				list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM " . $table_name . " WHERE `parentid`=" . $db->dbescape( $data['parentid'] ) ) );
+				$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid" );
+				$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+				$stmt->execute();
+				$weight = $stmt->fetchColumn();
 				$weight = intval( $weight ) + 1;
-				$sql = "UPDATE " . $table_name . " SET `weight`=" . $weight . " WHERE `groupid`=" . intval( $data['groupid'] );
-				$db->sql_query( $sql );
+				$sql = "UPDATE " . $table_name . " SET weight=" . $weight . " WHERE groupid=" . intval( $data['groupid'] );
+				$db->query( $sql );
 				nv_fix_group_order();
 			}
 
@@ -124,7 +143,6 @@ if( ! empty( $savegroup ) )
 		{
 			$error = $lang_module['errorsave'];
 		}
-		$db->sql_freeresult();
 	}
 }
 
@@ -133,7 +151,7 @@ $data['groupid'] = $nv_Request->get_int( 'groupid', 'get', 0 );
 
 if( $data['groupid'] > 0 )
 {
-	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['who_view'], $data['groups_view'] ) = $db->sql_fetchrow( $db->sql_query( "SELECT `groupid`, `parentid`,`cateid`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `" . NV_LANG_DATA . "_description`, `" . NV_LANG_DATA . "_keywords`, `who_view`, `groups_view`  FROM " . $table_name . " where `groupid`=" . $data['groupid'] ) );
+	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['who_view'], $data['groups_view'] ) = $db->query( "SELECT groupid, parentid,cateid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_keywords, who_view, groups_view FROM " . $table_name . " where groupid=" . $data['groupid'] )->fetch( 3 );
 	$caption = $lang_module['edit_group'];
 }
 else
@@ -142,12 +160,12 @@ else
 }
 $groups_view = explode( ",", $groups_view );
 
-$sql = "SELECT `groupid`, `" . NV_LANG_DATA . "_title`, `lev` FROM " . $table_name . " WHERE `groupid` !='" . $data['groupid'] . "' ORDER BY `order` ASC";
-$result = $db->sql_query( $sql );
+$sql = "SELECT groupid, " . NV_LANG_DATA . "_title, lev FROM " . $table_name . " WHERE groupid !='" . $data['groupid'] . "' ORDER BY sort ASC";
+$result = $db->query( $sql );
 $array_group_list = array();
 $array_group_list[0] = array( '0', $lang_module['group_sub_sl'] );
 
-while( list( $groupid_i, $title_i, $lev_i ) = $db->sql_fetchrow( $result ) )
+while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 {
 	$xtitle_i = "";
 	if( $lev_i > 0 )
@@ -208,8 +226,8 @@ $xtpl->assign( 'groups_list_html', $contents_html );
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>

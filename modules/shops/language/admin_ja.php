@@ -1,11 +1,14 @@
 <?php
 
+
+
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language 日本語
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -361,5 +364,6 @@ $lang_module['block_error_name'] = 'エラー：商品のブロックの名前�
 $lang_module['block_error_alias'] = 'エラー：この別名は終了しました。それの名前を変更して再度お試し下さい！';
 $lang_module['source_title'] = 'メーカー名';
 $lang_module['source_error_title'] = 'エラー：メーカー名の空間';
+
 
 ?>

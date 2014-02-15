@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -92,7 +93,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 
 		if( $module != $module_name )
 		{
-			$sql = "SELECT `groupid`, `parentid`, `cateid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewgroup`, `numsubgroup`, `subgroupid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view`, `numpro` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_group` ORDER BY `order` ASC";
+			$sql = "SELECT groupid, parentid, cateid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewgroup, numsubgroup, subgroupid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, who_view, groups_view, numpro FROM " . $db_config['prefix'] . "_" . $mod_data . "_group ORDER BY sort ASC";
 
 			$list = nv_db_cache( $sql, "", $module );
 			foreach( $list as $row )

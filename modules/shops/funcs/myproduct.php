@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -19,33 +20,34 @@ $page_title = $lang_module['profile_manage_myproducts'];
 $per_page = 20;
 if( preg_match( "/^page\-([0-9]+)$/", ( isset( $array_op[1] ) ? $array_op[1] : "" ), $m ) )
 {
-	$page = ( int ) $m[1];
+	$page = ( int )$m[1];
 }
 
-list( $all_page ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` AS t1, `" . $db_config['prefix'] . "_" . $module_data . "_units` AS t2 WHERE t1.product_unit = t2.id AND t1.user_id = " . $user_info['userid'] ) );
+$all_page = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 WHERE t1.product_unit = t2.id AND t1.user_id = " . $user_info['userid'] )->fetchColumn();
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 
-$sql = "SELECT `id`, `listcatid`, `publtime`, `exptime`, `" . NV_LANG_DATA . "_title`, `" . NV_LANG_DATA . "_alias`, `homeimgfile`, `homeimgthumb`, `product_price`, `status` FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `user_id` = " . $user_info['userid'] . " ORDER BY `id` DESC LIMIT " . ( ( $page - 1 ) * $per_page ) . "," . $per_page;
-$result = $db->sql_query( $sql );
+$db->sqlreset()->select( 'id, listcatid, publtime, exptime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, homeimgfile, homeimgthumb, product_price, status ' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( "user_id = " . $user_info['userid'] )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+
+$result = $db->query( $db->sql() );
 $data_pro = array();
 
-while( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgfile, $homeimgthumb, $product_price, $status ) = $db->sql_fetchrow( $result ) )
+while( list( $id, $listcatid, $publtime, $exptime, $title, $alias, $homeimgfile, $homeimgthumb, $product_price, $status ) = $result->fetch( 3 ) )
 {
-	if( $homeimgthumb == 1 ) //image thumb
+	if( $homeimgthumb == 1 )//image thumb
 	{
 		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 2 ) //image file
+	elseif( $homeimgthumb == 2 )//image file
 	{
 		$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $homeimgthumb == 3 ) //image url
+	elseif( $homeimgthumb == 3 )//image url
 	{
 		$thumb = $homeimgfile;
 	}
-	else //no image
+	else//no image
 	{
 		$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 	}
@@ -80,8 +82,8 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
