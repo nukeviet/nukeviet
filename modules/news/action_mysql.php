@@ -36,6 +36,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 subcatid varchar(255) DEFAULT '',
 	 inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
 	 numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
+	 newday tinyint(2) unsigned NOT NULL DEFAULT '2',
 	 keywords text,
 	 admins text,
 	 add_time int(11) unsigned NOT NULL DEFAULT '0',

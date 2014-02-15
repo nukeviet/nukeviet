@@ -276,7 +276,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$xtpl->parse( 'main.cat_title' );
 	}
 
-	$sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
+	$sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
 	$rowall = $db->query( $sql )->fetchAll( 3 );
 	$num = sizeof( $rowall );
 	$a = 1;
@@ -287,7 +287,7 @@ function nv_show_cat_list( $parentid = 0 )
 
 	foreach ($rowall as $row)
 	{
-		list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks ) = $row;
+		list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday ) = $row;
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )
 		{
 			$check_show = 1;
@@ -363,6 +363,9 @@ function nv_show_cat_list( $parentid = 0 )
 
 				$xtpl->assign( 'NUMLINKS', $numlinks );
 				$xtpl->parse( 'main.data.loop.title_numlinks' );
+				
+				$xtpl->assign( 'NEWDAY', $newday );
+				$xtpl->parse( 'main.data.loop.title_newday' );
 			}
 			else
 			{
@@ -398,6 +401,17 @@ function nv_show_cat_list( $parentid = 0 )
 					$xtpl->parse( 'main.data.loop.numlinks.loop' );
 				}
 				$xtpl->parse( 'main.data.loop.numlinks' );
+				
+				for( $i = 0; $i <= 10; ++$i )
+				{
+					$xtpl->assign( 'NEWDAY', array(
+						'key' => $i,
+						'title' => $i,
+						'selected' => $i == $newday ? ' selected="selected"' : ''
+					) );
+					$xtpl->parse( 'main.data.loop.newday.loop' );
+				}
+				$xtpl->parse( 'main.data.loop.newday' );
 			}
 
 			if( $numsubcat )

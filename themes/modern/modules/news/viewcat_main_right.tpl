@@ -17,7 +17,13 @@
 		<div class="{WCT}">
 			<div class="content-box clearfix">
 				<div class="m-bottom">
-					<h4><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h4>
+					<h4>
+						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+						<!-- BEGIN: newday -->
+						<span class="icon_new"></span>
+						<!-- END: newday -->
+					</h4>
+					
 					<p class="small">
 						{LANG.pubtime}: {CONTENT.publtime} - {LANG.view}: {CONTENT.hitstotal} - {LANG.total_comment}: {CONTENT.hitscm}
 					</p>
@@ -43,6 +49,12 @@
 			<ul>
 				<!-- BEGIN: loop -->
 				<li>
+					<!-- BEGIN: newday -->
+					<span class="icon_new_small"></span>
+					<!-- END: newday -->
+					<!-- BEGIN: iconlist -->
+					<span class="icon_list"></span>
+					<!-- END: iconlist -->
 					<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
 				</li>
 				<!-- END: loop -->

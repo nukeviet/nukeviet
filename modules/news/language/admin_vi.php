@@ -48,6 +48,7 @@ $lang_module['weight'] = 'vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
 $lang_module['numlinks'] = 'Số liên kết';
+$lang_module['newday'] = 'Icon tin mới (ngày)';
 
 $lang_module['description'] = 'Miêu tả';
 $lang_module['viewdescription'] = 'Hiển thị miêu tả khi xem chủ đề';

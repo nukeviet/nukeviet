@@ -360,13 +360,12 @@ a.rss {
 .cat-news .ot-news ul, .cat-news .ot-news-full ul {
 	list-style-type: none;
 	margin: 0;
-	padding: 0 10px
+	padding: 0 14px
 }
 
 .cat-news .ot-news ul li, .cat-news .ot-news-full ul li {
-	background: url(../images/bullet-orange.png) 2px 13px no-repeat;
 	border-bottom: 1px solid #d8d8d8;
-	padding: 5px 0 5px 12px
+	padding: 5px 0 5px 16px
 }
 
 .cat-news .ot-news-full ul li {

@@ -21,7 +21,7 @@ function voting_result( $voting )
 	global $module_info, $global_config, $module_file;
 
 	$xtpl = new XTemplate( 'result.voting.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'SCRIPT', '<script type=\'text/javascript\' src=\'' . NV_BASE_SITEURL . 'js/jquery/jquery.min.js\'></script>\n' );
+	$xtpl->assign( 'SCRIPT', '<script type=\'text/javascript\' src=\'' . NV_BASE_SITEURL . 'js/jquery/jquery.min.js\'></script>' );
 	$xtpl->assign( 'PUBLTIME', $voting['pubtime'] );
 	$xtpl->assign( 'LANG', $voting['lang'] );
 	$xtpl->assign( 'VOTINGQUESTION', $voting['question'] );

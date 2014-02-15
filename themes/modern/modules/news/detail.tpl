@@ -184,6 +184,9 @@
 		<li>
 			<a title="{TOPIC.title}" href="{TOPIC.link}">{TOPIC.title}</a>
 			<span class="date">({TOPIC.time})</span>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
@@ -200,6 +203,9 @@
 		<li>
 			<a title="{RELATED_NEW.title}" href="{RELATED_NEW.link}">{RELATED_NEW.title}</a>
 			<span class="date">({RELATED_NEW.time})</span>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
@@ -213,6 +219,9 @@
 		<li>
 			<a title="{RELATED.title}" href="{RELATED.link}">{RELATED.title}</a>
 			<span class="date">({RELATED.time})</span>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
