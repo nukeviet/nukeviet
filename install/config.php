@@ -17,7 +17,7 @@ $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['prefix'] = 'nv4';
-$db_config['persistent'] = false;
+$db_config['persistent'] = true;
 $db_config['collation'] = 'utf8_general_ci';
 // mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
@@ -82,10 +82,13 @@ define( 'NV_UNICKMIN', 4 );
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption, video, source, track' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );
+
+//Chặn các bots nếu agent không có
+define( 'NV_ANTI_AGENT', 0 );
 
 $nv_parse_ini_timezone = array(
 	'Pacific/Midway' => array( 'winter_offset' => -39600, 'summer_offset' => -39600 ),

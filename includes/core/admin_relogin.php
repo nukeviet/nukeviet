@@ -106,10 +106,11 @@ if( defined( 'NV_IS_ADMIN' ) )
 			}
 			$xtpl = new XTemplate( 'relogin.tpl', $dir_template );
 
+			$xtpl->assign( 'NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS );
 			$xtpl->assign( 'CHARSET', $global_config['site_charset'] );
 			$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 			$xtpl->assign( 'PAGE_TITLE', $lang_global['admin_page'] );
-			$xtpl->assign( 'CSS', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/login.css' );
+			$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 			$xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 			$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );

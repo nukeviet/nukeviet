@@ -49,8 +49,9 @@ if( $db->exec( $sql ) )
 		{
 			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem=' . $db->quote( $subitem ) . ' WHERE id=' . $parentid;
-			$db->query( $sql );
+			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid );
+			$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen( $subitem ) );
+			$stmt->execute();
 		}
 	}
 }

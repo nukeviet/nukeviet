@@ -408,7 +408,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				if( empty( $blockredirect ) )
 				{
-					$blockredirect = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
+					$blockredirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
 				}
 
 				// Chuyen huong

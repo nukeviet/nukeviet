@@ -31,7 +31,7 @@ function nv_referer_update()
 		$log_current = mktime( 0, 0, 0, date( 'n', NV_CURRENTTIME ), date( 'j', NV_CURRENTTIME ), date( 'Y', NV_CURRENTTIME ) );
 
 		$content = '[' . date( 'r', NV_CURRENTTIME ) . ']';
-		$content .= ' [' . $client_info['ip'] . ']';
+		$content .= ' [' . NV_CLIENT_IP . ']';
 		$content .= ' [' . $client_info['referer'] . ']';
 		$content .= ' [' . $client_info['selfurl'] . ']';
 		$content .= "\r\n";

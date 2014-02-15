@@ -30,7 +30,7 @@ function nv_admin_add_result( $result )
 	global $module_name, $lang_global, $lang_module, $page_title, $global_config;
 	if( ! defined( 'NV_IS_GODADMIN' ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 	//parse content
@@ -49,9 +49,9 @@ function nv_admin_add_result( $result )
 	$contents['info']['allow_modify_files'] = array( $lang_module['allow_modify_files'], ( $result['allow_modify_files'] ? $lang_global['yes'] : $lang_global['no'] ) );
 	$contents['info']['allow_create_subdirectories'] = array( $lang_module['allow_create_subdirectories'], ( $result['allow_create_subdirectories'] ? $lang_global['yes'] : $lang_global['no'] ) );
 	$contents['info']['allow_modify_subdirectories'] = array( $lang_module['allow_modify_subdirectories'], ( $result['allow_modify_subdirectories'] ? $lang_global['yes'] : $lang_global['no'] ) );
-	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
-	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
-	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add';
+	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
+	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 
 	$xtpl->assign( 'TITLE', $contents['title'] );
 	$a = 0;
@@ -98,11 +98,11 @@ function nv_admin_edit_result( $result )
 	$contents['thead'] = array( $lang_module['field'], $lang_module['old_value'], $lang_module['new_value'] );
 
 	$contents['change'] = $result['change'];
-	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'];
+	$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'];
 	$contents['download'] = $lang_module['nv_admin_add_download'];
 	$contents['sendmail'] = $lang_module['nv_admin_add_sendmail'];
-	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
-	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
+	$contents['go_home'] = array( $lang_module['main'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+	$contents['go_edit'] = array( $lang_global['edit'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $result['admin_id'] );
 
 	$page_title = sprintf( $lang_module['nv_admin_edit_result'], $result['login'] );
 
@@ -149,7 +149,7 @@ function nv_check_add_admin()
 	{
 		$xtpl = new XTemplate( 'badd.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
 		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
+		$xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

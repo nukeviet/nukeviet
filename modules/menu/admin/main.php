@@ -71,16 +71,14 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	elseif( $arr_menu['id'] == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES (
-			" . $db->quote( $arr_menu['title'] ) . ",
-			'',
-			" . $db->quote( $arr_menu['description'] ) . "
-		)";
-
-		if( $db->insert_id( $sql, 'id' ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES ( :title, '', :description )";
+		$data_insert = array();
+		$data_insert['title'] = $arr_menu['title'];
+		$data_insert['description'] = $arr_menu['description'];
+		if( $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			exit();
 		}
 		else
@@ -90,15 +88,13 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET
-			title=' . $db->quote( $arr_menu['title'] ) . ',
-			description = ' . $db->quote( $arr_menu['description'] ) . '
-			WHERE id =' . $arr_menu['id'];
-
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET title= :title, description = :description WHERE id =' . $arr_menu['id'] );
+		$stmt->bindParam( ':title', $arr_menu['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $arr_menu['description'], PDO::PARAM_STR );
+		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			exit();
 		}
 		else
@@ -160,19 +156,19 @@ else
 			'title' => $row['title'],
 			'menu_item' => $item,
 			'num' => $b,
-			'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $row['id'],
-			'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1&amp;id=' . $row['id'],
+			'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $row['id'],
+			'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1&amp;id=' . $row['id'],
 			'description' => $row['description']
 		);
 	}
 
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name;
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 }
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'ADD_NEW', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1' );
+$xtpl->assign( 'ADD_NEW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1' );
 
 if( $error2 != '' )
 {

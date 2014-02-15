@@ -3,7 +3,6 @@
 	<blockquote {CLASS}><span>{INFO}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">
-	<!-- BEGIN: position -->
 	<table class="tab1 fixtab">
 		<colgroup>
 			<col class="w200">
@@ -17,6 +16,7 @@
 			</tr>
 		</tfoot>
 		<tbody>
+			<!-- BEGIN: position -->
 			<tr>
 				<td> {POSITION0}: </td>
 				<td><sup class="required"> &lowast; </sup></td>

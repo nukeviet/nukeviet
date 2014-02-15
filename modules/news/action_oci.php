@@ -42,6 +42,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 subcatid VARCHAR2(255 CHAR) DEFAULT NULL,
 	 inhome NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 numlinks NUMBER(3,0) DEFAULT 3 NOT NULL ENABLE,
+	 newday NUMBER(3,0) DEFAULT 2 NOT NULL ENABLE,
 	 keywords VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 add_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,

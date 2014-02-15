@@ -34,8 +34,8 @@ if( ! empty( $row['mobile'] ) ) $contents['rows'][] = array( $lang_module['mobil
 if( ! empty( $row['uploadtype'] ) ) $contents['rows'][] = array( $lang_module['uploadtype'], $row['uploadtype'] );
 
 $contents['rows'][] = array( $lang_module['is_act'], $row['act'] ? $lang_global['yes'] : $lang_global['no'] );
-$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_client&amp;id=' . $id, $lang_global['edit'] );
-$contents['add'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;clid=' . $id, $lang_module['add_banner'] );
+$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_client&amp;id=' . $id, $lang_global['edit'] );
+$contents['add'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_banner&amp;clid=' . $id, $lang_module['add_banner'] );
 $contents['del'] = array( 'nv_cl_del2(' . $id . ');', $lang_global['delete'] );
 $contents['act'] = array( 'nv_chang_act2(' . $id . ');', $lang_module['change_act'] );
 

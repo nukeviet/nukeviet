@@ -13,7 +13,12 @@
 		</div>
 		<div class="clear"></div>
 		<div class="{WCT}{BORDER}items clearfix">
-			<h3><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h3>
+			<h3>
+				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
+			</h3>
 			<!-- BEGIN: image -->
 			<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" /></a>
 			<!-- END: image -->
@@ -24,7 +29,7 @@
 		<!-- BEGIN: related -->
 		<ul class="related fixedwidth">
 			<!-- BEGIN: loop -->
-			<li>
+			<li class="{CLASS}">
 				<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
 			</li>
 			<!-- END: loop -->

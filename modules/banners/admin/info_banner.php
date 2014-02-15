@@ -17,21 +17,21 @@ $row = $db->query( $sql )->fetch();
 
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
 list( $ptitle, $plang ) = $db->query( 'SELECT title, blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . $row['pid'] )->fetch( 3 );
 
 $ptitle = $ptitle . ' (' . ( ! empty( $plang ) ? $language_array[$plang]['name'] : $lang_module['blang_all'] ) . ')';
-$ptitle = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['pid'] . '">' . $ptitle . '</a>';
+$ptitle = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_plan&amp;id=' . $row['pid'] . '">' . $ptitle . '</a>';
 
 list( $cl_full_name, $cl_login ) = $db->query( 'SELECT full_name, login FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id=' . $row['clid'] )->fetch( 3 );
 
 if( ! empty( $cl_full_name ) )
 {
 	$cl_full_name = $cl_full_name . ' (' . $cl_login . ')';
-	$cl_full_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_client&amp;id=' . $row['clid'] . '">' . $cl_full_name . '</a>';
+	$cl_full_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_client&amp;id=' . $row['clid'] . '">' . $cl_full_name . '</a>';
 }
 
 $img_info = sprintf( $lang_module['img_info2'], $row['file_ext'], $row['file_mime'], $row['width'], $row['height'] );
@@ -41,7 +41,7 @@ if( ! empty( $click_url ) ) $click_url = '<a href="' . $click_url . '" target="_
 
 $contents = array();
 $contents['caption'] = sprintf( $lang_module['info_banner_caption'], $row['title'] );
-$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id, $lang_global['edit'] );
+$contents['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_banner&amp;id=' . $id, $lang_global['edit'] );
 $contents['del'] = array( 'nv_b_del2(' . $id . ');', $lang_global['delete'] );
 if( $row['act'] != '2' ) $contents['act'] = array( 'nv_b_chang_act2(' . $id . ');', $lang_module['change_act'] );
 $contents['rows'][] = array( 'id', $row['id'] );

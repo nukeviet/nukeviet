@@ -24,7 +24,7 @@ if( $nv_Request->isset_request( 'id', 'get' ) )
 
 	if( $numrows != 1 )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 		die();
 	}
 }
@@ -87,7 +87,7 @@ if( $numrows )
 			$last_reason = unserialize( $row['susp_reason'] );
 			$last_reason = array_shift( $last_reason );
 			list( $susp_admin_id, $susp_admin_name ) = $db->query( 'SELECT userid,full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $last_reason['start_admin'] ) )->fetch( 3 );
-			$susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
+			$susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
 			$is_suspend = sprintf( $lang_module['is_suspend1'], nv_date( 'd/m/Y H:i', $last_reason['starttime'] ), $susp_admin_name, $last_reason['info'] );
 		}
 
@@ -144,16 +144,16 @@ if( $numrows )
 
 		if( ! empty( $thead['edit'] ) )
 		{
-			$thead['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $lang_global['edit'] );
+			$thead['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $row['admin_id'], $lang_global['edit'] );
 		}
 
 		if( ! empty( $thead['chg_is_suspend'] ) )
 		{
-			$thead['chg_is_suspend'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $lang_module['chg_is_suspend2'] );
+			$thead['chg_is_suspend'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=suspend&amp;admin_id=' . $row['admin_id'], $lang_module['chg_is_suspend2'] );
 		}
 		if( ! empty( $thead['del'] ) )
 		{
-			$thead['del'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $lang_global['delete'] );
+			$thead['del'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;admin_id=' . $row['admin_id'], $lang_global['delete'] );
 		}
 
 		if( empty( $row['files_level'] ) )
@@ -170,7 +170,7 @@ if( $numrows )
 
 		$admins[$row['admin_id']] = array();
 		$admins[$row['admin_id']]['caption'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? sprintf( $lang_module['admin_info_title2'], $row['full_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['full_name'] );
-		$admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
+		$admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
 		$admins[$row['admin_id']]['thead'] = $thead;
 		$admins[$row['admin_id']]['options'] = array();
 		$admins[$row['admin_id']]['options']['login'] = array( $lang_module['login'], $login );

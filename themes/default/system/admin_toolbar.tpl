@@ -11,7 +11,7 @@
 		<!-- END: memory_time_usage -->
 	</ul>
 	<div class="action fr">
-		<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php" title="{GLANG.admin_page}"><span class="icons icon-sitemanager">{GLANG.admin_page}</span></a>
+		<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span class="icons icon-sitemanager">{GLANG.admin_page}</span></a>
 		<!-- BEGIN: is_spadadmin -->
 		<a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span class="icons icon-drag">{LANG_DBLOCK}</span></a>
 		<!-- END: is_spadadmin -->

@@ -175,7 +175,8 @@ function nv_create_table_sys( $lang )
 		('" . $lang . "', 'global', 'autologosize3', '30'),
 		('" . $lang . "', 'global', 'autologomod', ''),
 		('" . $lang . "', 'global', 'metaTagsOgp', '1'),
- 		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
+		('" . $lang . "', 'global', 'cronjobs_next_time', '" . NV_CURRENTTIME . "'),
+		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
 
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";
 

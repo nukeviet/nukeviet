@@ -16,7 +16,7 @@ $row = $db->query( $query )->fetch();
 
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -54,8 +54,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		list( $blang_old, $form_old ) = $db->query( 'SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval( $id ) )->fetch( 3 );
 
-		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang=' . $db->quote( $blang ) . ', title=' . $db->quote( $title ) . ', description=' . $db->quote( $description ) . ', form=' . $db->quote( $form ) . ', width=' . $width . ', height=' . $height . ' WHERE id=' . $id;
-		$db->query( $sql );
+		$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang= :blang, title= :title, description= :description, form= :form, width=' . $width . ', height=' . $height . ' WHERE id=' . $id );
+		$stmt->bindParam( ':blang', $blang, PDO::PARAM_STR );
+		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $description, PDO::PARAM_STR );
+		$stmt->bindParam( ':form', $form, PDO::PARAM_STR );
+		$stmt->execute();
 
 		if( $form_old != $form or $blang_old != $blang )
 		{
@@ -64,7 +68,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_plan', 'planid ' . $id, $admin_info['userid'] );
 		nv_CreateXML_bannerPlan();
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
 		die();
 	}
 }
@@ -93,7 +97,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['edit_plan'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id;
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
 $contents['form'] = array( $lang_module['form'], 'form', $forms, $form );

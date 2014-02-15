@@ -10,7 +10,7 @@
 
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-global $global_config, $sys_info, $client_info, $lang_global, $nv_Request;
+global $global_config, $sys_info, $lang_global, $nv_Request;
 
 //Nen trang
 if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'output_handler' ) == '' )
@@ -33,6 +33,10 @@ if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'ou
 @Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', strtotime( '-1 day' ) ) . " GMT" );
 @Header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', NV_CURRENTTIME - 60 ) . " GMT" );
 
+@Header( 'X-Frame-Options: SAMEORIGIN' );
+@Header( 'X-Content-Type-Options: nosniff' );
+@Header( 'X-XSS-Protection: 1; mode=block' );
+
 $server_software = $nv_Request->get_string( 'SERVER_SOFTWARE', 'server', '' );
 if( strstr( $server_software, 'Apache/2' ) )
 {
@@ -45,7 +49,7 @@ else
 
 @Header( 'Pragma: no-cache' );
 
-if( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
+if( preg_match( '/(Googlebot)/i', NV_USER_AGENT ) )
 {
 	@Header( 'X-Robots-Tag: index,archive,follow,noodp', true );
 }

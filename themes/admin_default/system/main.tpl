@@ -3,7 +3,7 @@
 <div id="wrapper">
 	<header id="header">
 		<div class="logo">
-			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
+			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
 		</div>
 		<div class="logout">
 			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span><i class="icon-home icon-large">&nbsp;</i> {NV_GO_CLIENTSECTOR}</span></a>
@@ -26,7 +26,7 @@
 		<ul>
 			<!-- BEGIN: top_menu_loop -->
 			<li>
-				<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}</a>
+				<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}</a>
 				<!-- BEGIN: submenu -->
 				<ul>
 					<!-- BEGIN: submenu_loop -->
@@ -99,12 +99,12 @@
 			<ul id="ver_menu">
 				<!-- BEGIN: menu_loop -->
 				<li>
-					<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+					<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
 					<!-- BEGIN: submenu -->
 					<ul>
 						<!-- BEGIN: submenu_loop -->
 						<li>
-							<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+							<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
 						</li>
 						<!-- END: submenu_loop -->
 					</ul>
@@ -112,7 +112,7 @@
 				</li>
 				<!-- BEGIN: current -->
 				<li>
-					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
 				</li>
 				<!-- END: current -->
 				<!-- END: menu_loop -->

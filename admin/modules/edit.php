@@ -16,7 +16,7 @@ $mod = $nv_Request->get_title( 'mod', 'get' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -26,7 +26,7 @@ $sth->execute();
 $row = $sth->fetch();
 if( empty($row) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -194,7 +194,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_delete_all_cache();
 			nv_insert_logs( NV_LANG_DATA, $module_name, sprintf( $lang_module['edit'], $mod ), '', $admin_info['userid'] );
 
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 			exit();
 		}
 		else
@@ -240,7 +240,7 @@ if( file_exists( NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.ph
 	$data['rss'] = array( $lang_module['activate_rss'], $rss );
 }
 
-$data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $mod;
+$data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $mod;
 $data['custom_title'] = $custom_title;
 $data['admin_title'] = $admin_title;
 $data['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );

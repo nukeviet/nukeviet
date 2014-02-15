@@ -58,27 +58,38 @@ if( ! empty( $savecat ) )
 		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 
-		$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (" . $db->quote( $array['title'] ) . ", " . $db->quote( $array['alias'] ) . ", " . $db->quote( $array['description'] ) . ", " . $db->quote( $array['image'] ) . ", " . $db->quote( $weight ) . ", " . $db->quote( $array['keywords'] ) . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-
-		if( $db->insert_id( $_sql, 'topicid' ) )
+		$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, :image, :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$data_insert = array();
+		$data_insert['title'] = $array['title'];
+		$data_insert['alias'] = $array['alias'];
+		$data_insert['description'] = $array['description'];
+		$data_insert['image'] = $array['image'];
+		$data_insert['weight'] = $weight;
+		$data_insert['keywords'] = $array['keywords'];
+		if( $db->insert_id( $_sql, 'topicid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
-		{
+		{die('den day');
 			$error = $lang_module['errorsave'];
 		}
 	}
 	else
 	{
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET title=" . $db->quote( $array['title'] ) . ", alias = " . $db->quote( $array['alias'] ) . ", description=" . $db->quote( $array['description'] ) . ", image = " . $db->quote( $array['image'] ) . ", keywords= " . $db->quote( $array['keywords'] ) . ", edit_time=" . NV_CURRENTTIME . " WHERE topicid =" . $array['topicid'];
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_topics SET title= :title, alias = :alias, description= :description, image = :image, keywords= :keywords, edit_time=" . NV_CURRENTTIME . " WHERE topicid =" . $array['topicid'] );
+		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR );
+		$stmt->bindParam( ':image', $array['image'], PDO::PARAM_STR );
+		$stmt->bindParam( ':keywords', $array['keywords'], PDO::PARAM_STR );
+	
+		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-			die();
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		}
 		else
 		{

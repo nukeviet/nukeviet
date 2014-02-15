@@ -17,7 +17,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_admin_checkip()
 {
-	global $global_config, $client_info;
+	global $global_config;
 
 	if( $global_config['block_admin_ip'] )
 	{
@@ -32,7 +32,7 @@ function nv_admin_checkip()
 			{
 				if( $array_ip['begintime'] < NV_CURRENTTIME and ( $array_ip['endtime'] == 0 or $array_ip['endtime'] > NV_CURRENTTIME ) )
 				{
-					if( preg_replace( $array_ip['mask'], '', $client_info['ip'] ) == preg_replace( $array_ip['mask'], '', $ip_i ) )
+					if( preg_replace( $array_ip['mask'], '', NV_CLIENT_IP ) == preg_replace( $array_ip['mask'], '', $ip_i ) )
 					{
 						return true;
 					}

@@ -17,7 +17,7 @@ $row = $db->query( $query )->fetch();
 
 if( empty( $row ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -47,7 +47,7 @@ else
 
 if( empty( $allowed ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -252,7 +252,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 		if( empty( $result['change'] ) )
 		{
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '#aid' . $admin_id );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '#aid' . $admin_id );
 			exit();
 		}
 		nv_admin_edit_result( $result );
@@ -276,7 +276,7 @@ $page_title = $lang_module['nv_admin_edit'];
 $contents = array();
 $contents['info'] = ( ! empty( $error ) ) ? $error : sprintf( $lang_module['nv_admin_edit_info'], $row_user['username'] );
 $contents['is_error'] = ( ! empty( $error ) ) ? 1 : 0;
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $admin_id;
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;admin_id=' . $admin_id;
 if( defined( 'NV_IS_SPADMIN' ) and $row['admin_id'] != $admin_info['admin_id'] )
 {
 	$mods = array();

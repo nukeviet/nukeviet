@@ -69,7 +69,7 @@ function nv_create_table_sys( $lang )
 	)";
 
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_blocks_groups (
-		 bid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE ,
+		 bid NUMBER(8,0) DEFAULT NULL,
 		 theme VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 module VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 file_name VARCHAR2(55 CHAR)DEFAULT '',
@@ -86,7 +86,7 @@ function nv_create_table_sys( $lang )
 		 primary key (bid)
 	)";
 	$sql_create_table[] = 'create sequence SNV_' . strtoupper( $lang ) . '_BLOCK MINVALUE 100';
-	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_MODFUNCS
+	$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang ) . '_BLOCK
 	 BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups
 	 FOR EACH ROW WHEN (new.bid is null)
 		BEGIN
@@ -190,6 +190,7 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'autologosize3', '30')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'autologomod', '')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'metaTagsOgp', '1')";
+	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'cronjobs_next_time', '" . NV_CURRENTTIME . "')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
 
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";

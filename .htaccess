@@ -63,6 +63,7 @@ RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php
+RewriteRule (.*)tag\/(.*)$ index.php
 </IfModule>
 
 #nukeviet_rewrite_end

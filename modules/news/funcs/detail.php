@@ -142,9 +142,10 @@ if( $allowed )
 
 	$related_new_array = array();
 	$db->sqlreset()
-		->select( 'id, title, alias, publtime' )
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		->where( 't1.status=1 AND t1.publtime > ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
 		->order( 'id ASC' )
 		->limit( $st_links );
 
@@ -154,8 +155,9 @@ if( $allowed )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 		$related_new_array[] = array(
 			'title' => $row['title'],
-			'time' => nv_date( 'd/m/Y', $row['publtime'] ),
-			'link' => $link
+			'time' => $row['publtime'],
+			'link' => $link,
+			'newday' => $row['newday']
 		);
 	}
 	$related->closeCursor();
@@ -165,9 +167,10 @@ if( $allowed )
 	$related_array = array();
 
 	$db->sqlreset()
-		->select('id, title, alias, publtime')
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		->where( 't1.status=1 AND t1.publtime < ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
 		->order( 'id DESC' )
 		->limit( $st_links );
 
@@ -177,8 +180,9 @@ if( $allowed )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 		$related_array[] = array(
 			'title' => $row['title'],
-			'time' => nv_date( 'd/m/Y', $row['publtime'] ),
-			'link' => $link
+			'time' => $row['publtime'],
+			'link' => $link,
+			'newday' => $row['newday']
 		);
 	}
 	$related->closeCursor();
@@ -193,9 +197,10 @@ if( $allowed )
 		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
 
 		$db->sqlreset()
-			->select( 'id, catid, title, alias, publtime' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
-			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
+			->select( 't1.id, t1.catid, t1.title, t1.alias, t1.publtime, t2.newday' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+			->where( 't1.status=1 AND t1.topicid = ' . $news_contents['topicid'] . ' AND t1.id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
 
@@ -207,7 +212,8 @@ if( $allowed )
 			$topic_array[] = array(
 				'title' => $row['title'],
 				'link' => $link,
-				'time' => nv_date( 'd/m/Y', $row['publtime'] ),
+				'time' => $row['publtime'],
+				'newday' => $row['newday'],
 				'topiclink' => $topiclink,
 				'topictitle' => $topic_title
 			);

@@ -674,7 +674,7 @@ function nv_b_list_theme( $contents )
 	{
 		foreach( $contents['rows'] as $b_id => $values )
 		{
-			$values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del_banner&amp;id=' . $b_id;
+			$values['delfile'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del_banner&amp;id=' . $b_id;
 			$values['checked'] = $values['act'][1] == '1' ? ' checked="checked"' : '';
 
 			$xtpl->assign( 'ROW', $values );

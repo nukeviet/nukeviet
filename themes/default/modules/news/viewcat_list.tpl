@@ -19,6 +19,9 @@
 			<!-- BEGIN: adminlink -->
 			<span style="padding-left:10px"> {ADMINLINK} </span>
 			<!-- END: adminlink -->
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
 			</td>
 		</tr>
 		<!-- END: viewcatloop -->

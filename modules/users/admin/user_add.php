@@ -15,7 +15,7 @@ $page_title = $lang_module['user_add'];
 $groups_list = nv_groups_list();
 
 $array_field_config = array();
-$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -24,8 +24,8 @@ while( $row_field = $result_field->fetch() )
 	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
 	elseif( ! empty( $row_field['sql_choices'] ) )
 	{
-		$row_field['sql_choices'] = explode( "|", $row_field['sql_choices'] );
-		$query = "SELECT " . $row_field['sql_choices'][2] . ", " . $row_field['sql_choices'][3] . " FROM " . $row_field['sql_choices'][1];
+		$row_field['sql_choices'] = explode( '|', $row_field['sql_choices'] );
+		$query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
 		$result = $db->query( $query );
 		$weight = 0;
 		while( list( $key, $val ) = $result->fetch( 3 ) )
@@ -59,6 +59,38 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 
+	$md5username = nv_md5safe( $_user['username'] );
+
+	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
+	$stmt->execute();
+	$query_error_username = $stmt->fetchColumn();
+
+	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
+	$stmt->execute();
+	$query_error_username = $stmt->fetchColumn();
+
+	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->execute();
+	$query_error_email = $stmt->fetchColumn();
+
+	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_reg  chưa.
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->execute();
+	$query_error_email_reg = $stmt->fetchColumn();
+
+	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_openid chưa.
+	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE email= :email' );
+	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
+	$stmt->execute();
+	$query_error_email_openid = $stmt->fetchColumn();
+
 	if( ( $error_username = nv_check_valid_login( $_user['username'], NV_UNICKMAX, NV_UNICKMIN ) ) != '' )
 	{
 		$error = $error_username;
@@ -71,19 +103,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username=" . $db->quote( nv_md5safe( $_user['username'] ) ) )->fetchColumn() )
+	elseif( $query_error_username )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $query_error_email )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $query_error_email_reg )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_openid WHERE email=" . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $query_error_email_openid )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -113,13 +145,13 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 		if( empty( $error ) )
 		{
-			$_user['sig'] = nv_nl2br( $_user['sig'], "<br />" );
-			if( $_user['gender'] != "M" and $_user['gender'] != "F" )
+			$_user['sig'] = nv_nl2br( $_user['sig'], '<br />' );
+			if( $_user['gender'] != 'M' and $_user['gender'] != 'F' )
 			{
 				$_user['gender'] = '';
 			}
 
-			if( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $_user['birthday'], $m ) )
+			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user['birthday'], $m ) )
 			{
 				$_user['birthday'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 			}
@@ -128,8 +160,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['birthday'] = 0;
 			}
 
-			$password = $crypt->hash( $_user['password1'] );
-
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
@@ -137,30 +167,40 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				question, answer, passlostkey, view_mail,
 				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
-				" . $db->quote( $_user['username'] ) . ",
-				" . $db->quote( nv_md5safe( $_user['username'] ) ) . ",
-				" . $db->quote( $password ) . ",
-				" . $db->quote( $_user['email'] ) . ",
-				" . $db->quote( $_user['full_name'] ) . ",
-				" . $db->quote( $_user['gender'] ) . ",
+				:username,
+				:md5_username,
+				:password,
+				:email,
+				:full_name,
+				:gender,
 				" . $_user['birthday'] . ",
-				" . $db->quote( $_user['sig'] ) . ",
+				:sig,
 				" . NV_CURRENTTIME . ",
-				" . $db->quote( $_user['question'] ) . ",
-				" . $db->quote( $_user['answer'] ) . ",
+				:question,
+				:answer,
 				'',
 				 " . $_user['view_mail'] . ",
 				 1,
 				 '" . implode( ',', $_user['in_groups'] ) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+			$data_insert = array();
+			$data_insert['username'] = $_user['username'];
+			$data_insert['md5_username'] = $md5username;
+			$data_insert['password'] = $crypt->hash( $_user['password1'] );
+			$data_insert['email'] = $_user['email'];
+			$data_insert['full_name'] = $_user['full_name'];
+			$data_insert['gender'] = $_user['gender'];
+			$data_insert['sig'] = $_user['sig'];
+			$data_insert['question'] = $_user['question'];
+			$data_insert['answer'] = $_user['answer'];
 
-			$userid = $db->insert_id( $sql, 'userid' );
+			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( $userid )
 			{
 				$query_field['userid'] = $userid;
-				$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info (" . implode( ', ', array_keys( $query_field ) ) . ") VALUES (" . implode( ', ', array_values( $query_field ) ) . ")" );
+				$db->query( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', "userid " . $userid, $admin_info['userid'] );
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', 'userid ' . $userid, $admin_info['userid'] );
 				if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
 				{
 					require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
@@ -176,8 +216,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-						$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET photo=" . $db->quote( $file_name ) . " WHERE userid=" . $userid;
-						$db->query( $sql );
+						$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid );
+						$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR, strlen( $file_name) );
+						$stmt->execute();
 					}
 				}
 
@@ -189,7 +230,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					}
 				}
 
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 				exit();
 			}
 			$error = $lang_module['edit_add_error'];
@@ -213,16 +254,16 @@ $genders = array(
 	'M' => array(
 		'key' => 'M',
 		'title' => $lang_module['male'],
-		'selected' => $_user['gender'] == "M" ? " selected=\"selected\"" : ""
+		'selected' => $_user['gender'] == 'M' ? ' selected="selected"' : ''
 	),
 	'F' => array(
 		'key' => 'F',
 		'title' => $lang_module['female'],
-		'selected' => $_user['gender'] == "F" ? " selected=\"selected\"" : ""
+		'selected' => $_user['gender'] == 'F' ? ' selected="selected"' : ''
 	)
 );
 
-$_user['view_mail'] = $_user['view_mail'] ? " checked=\"checked\"" : "";
+$_user['view_mail'] = $_user['view_mail'] ? ' checked="checked"' : '';
 
 if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_htmlspecialchars( $_user['sig'] );
 
@@ -234,7 +275,7 @@ if( ! empty( $groups_list ) )
 		$groups[] = array(
 			'id' => $group_id,
 			'title' => $grtl,
-			'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? " checked=\"checked\"" : ""
+			'checked' => ( ! empty( $_user['in_groups'] ) and in_array( $group_id, $_user['in_groups'] ) ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -242,7 +283,7 @@ if( ! empty( $groups_list ) )
 $xtpl = new XTemplate( 'user_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $_user );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_add' );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_add' );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
@@ -336,7 +377,7 @@ else
 					if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 					{
 						$row['value'] = nv_htmlspecialchars( nv_editor_br2nl( $row['value'] ) );
-						$array_tmp = explode( "@", $row['class'] );
+						$array_tmp = explode( '@', $row['class'] );
 						$edits = nv_aleditor( 'custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'] );
 						$xtpl->assign( 'EDITOR', $edits );
 						$xtpl->parse( 'main.edit_user.field.loop.editor' );
@@ -356,7 +397,7 @@ else
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.select.loop' );
 					}
@@ -371,7 +412,7 @@ else
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( $key == $row['value'] ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.radio' );
 					}
@@ -386,7 +427,7 @@ else
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.checkbox' );
 					}
@@ -398,7 +439,7 @@ else
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.edit_user.field.loop.multiselect.loop' );
 					}

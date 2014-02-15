@@ -41,7 +41,24 @@ var nv_error_email = "Lỗi: Bạn chưa khai báo địa chỉ hộp thư đi�
 var nv_error_seccode = "Lỗi: Bạn chưa khai báo mã chống spam hoặc khai báo không đúng. Mã chống spam phải là một dãy số có chiều dài là [num] ký tự được thể hiện trong hình bên";
 var nv_login_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận tài khoản của bạn. Hãy thử khai báo lại lần nữa";
 var nv_content_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận thông tin của bạn. Hãy thử khai báo lại lần nữa";
+
+var nv_required = "Trường này là bắt buộc.";
+var nv_remote = "Xin vui lòng sửa chữa trường này.";
+var nv_email = "Xin vui lòng nhập địa chỉ email hợp lệ.";
+var nv_url = "Xin vui lòng nhập URL hợp lệ.";
+var nv_date = "Xin vui lòng nhập ngày hợp lệ.";
+var nv_dateISO = "Xin vui lòng nhập ngày hợp lệ (ISO).";
+var nv_number = "Xin vui lòng nhập số hợp lệ.";
+var nv_digits = "Xin vui lòng nhập chỉ chữ số";
+var nv_creditcard = "Xin vui lòng nhập số thẻ tín dụng hợp lệ.";
+var nv_equalTo = "Xin vui lòng nhập cùng một giá trị một lần nữa.";
+var nv_accept = "Xin vui lòng nhập giá trị có phần mở rộng hợp lệ.";
+var nv_maxlength = "Xin vui lòng nhập không quá {0} ký tự.";
+var nv_minlength = "Xin vui lòng nhập ít nhất {0} ký tự.";
 var nv_rangelength = "Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự.";
+var nv_range = "Xin vui lòng nhập một giá trị giữa {0} và {1}.";
+var nv_max = "Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}.";
+var nv_min = "Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}.";
 
 // Contact
 var nv_fullname = "Họ tên nhập không hợp lệ.";
