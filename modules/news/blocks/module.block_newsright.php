@@ -48,8 +48,8 @@ if( $i )
 
 $db->sqlreset()
 	->select( '*' )
-	->from( NV_PREFIXLANG . '_' . $module_data . '_comments' )
-	->where( 'status= 1' )
+	->from( NV_PREFIXLANG . '_comments' )
+	->where( 'module= ' . $db->quote( $module_name ) . ' AND status= 1' )
 	->order( 'cid DESC' )
 	->limit( 5 );
 $result = $db->query( $db->sql() );

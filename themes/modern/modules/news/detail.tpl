@@ -33,10 +33,10 @@
 			<!-- END: post_name -->
 		</span>
 	</div>
-    
+
     <!-- BEGIN: socialbutton -->
     <div style="margin-right: 50px;"  class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
-    
+
     <div class="g-plusone" data-size="medium"></div>
     <script type="text/javascript">
       window.___gcfg = {lang: nv_sitelang};
@@ -50,7 +50,7 @@
     <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
  	<!-- END: socialbutton -->
-    
+
  	<div class="clear"></div>
 </div>
 <!-- BEGIN: showhometext -->
@@ -122,12 +122,12 @@
 			{LANG.rating}
 		</div>
         <!-- BEGIN: data_rating -->
-        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate"> 
+        <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
            {LANG.rating_average}:
-           <span itemprop="rating">{DETAIL.numberrating}</span> - 
-           <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count} 
+           <span itemprop="rating">{DETAIL.numberrating}</span> -
+           <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count}
         </span>
-        <!-- END: data_rating -->       
+        <!-- END: data_rating -->
 		<form id="form3B" action="">
 			<div class="clearfix">
 				<div id="stringrating" class="small">
@@ -228,41 +228,7 @@
 </div>
 <!-- END: related -->
 <!-- BEGIN: comment -->
-<div id="idcomment">
-	<div class="header-comment">
-		<div class="fr right small">
-			<a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">+ {LANG.comment_view}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="nv_show_hidden('formcomment',2);" href="javascript:void(0);" id="hide-comments">- {LANG.comment_send}</a>
-		</div>
-		<h3>{LANG.comment}</h3>
-		<div class="clear"></div>
-	</div>
-	<div id="showcomment" class="list-comments">
-		{COMMENTCONTENT}
-	</div>
-	<div id="formcomment" class="comment-form">
-		<!-- BEGIN: form -->
-		<div class="box-border content-box">
-			<div class="box clearfix">
-				<input id="commentname" type="text" value="{NAME}" {DISABLED} class="input input-c fl" onblur="if(this.value=='')this.value='{LANG.comment_name}';" onclick="if(this.value=='{LANG.comment_name}')this.value='';"/>
-				<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="input input-c fr" onblur="if(this.value=='')this.value='{LANG.comment_email}';" onclick="if(this.value=='{LANG.comment_email}')this.value='';"/>
-			</div>
-			<p><textarea id="commentcontent" class="input typer box2" cols="1" rows="1" onblur="if(this.value=='')this.value='{LANG.comment_content}';" onclick="if(this.value=='{LANG.comment_content}')this.value='';">{LANG.comment_content}</textarea>
-			</p>
-			<p>
-				{LANG.comment_seccode}: &nbsp; <img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>&nbsp; <input id="commentseccode_iavim" type="text" class="input capcha" />&nbsp; <input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');" class="button" />&nbsp; <input id="reset-cm" type="reset" value="RESET" class="button-2" />
-			</p>
-		</div>
-		<script type="text/javascript">
-			$("#reset-cm").click(function() {
-				$("#commentcontent,#commentseccode_iavim").val("");
-			});
-		</script>
-		<!-- END: form -->
-		<!-- BEGIN: form_login-->
-		{COMMENT_LOGIN}
-		<!-- END: form_login -->
-	</div>
-</div>
+<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
 <!-- END: comment -->
 <!-- BEGIN: commentfacebook -->
     <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="620"></div>

@@ -537,7 +537,7 @@ ul.list-tab li.ui-tabs-selected a {
 	width: 16px;
 	height: 16px;
 	text-indent: -19999px;
-	background: url(../images/icons/home.png) no-repeat;	
+	background: url(../images/icons/home.png) no-repeat;
 }
 
 .header-details {
@@ -653,60 +653,6 @@ ul.list-tab li.ui-tabs-selected a {
 .other-news ul li {
 	background: url(../images/bullet-orange.png) 3px 10px no-repeat;
 	padding: 3px 0 3px 12px
-}
-
-#idcomment {
-	border-top: 2px solid #b93d00;
-	padding: 8px 0
-}
-
-#idcomment .header-comment {
-	line-height: 2;
-	padding-bottom: .5em
-}
-
-#idcomment .header-comment h3 {
-	background: url(../images/com.png) 0 50% no-repeat;
-	line-height: 1.2;
-	margin-bottom: 0;
-	padding-left: 30px
-}
-
-#idcomment .comment-form .box-border {
-	background: url(../images/hot-news-g.png) 0 bottom repeat-x
-}
-
-#idcomment .comment-form .capcha {
-	width: 100px
-}
-
-#idcomment .comment-form .typer {
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-size: 1em;
-	height: 40px
-}
-
-#idcomment .list-comments .alt {
-	background: #f6f6f6
-}
-
-#idcomment .list-comments h4 {
-	color: #b93d00;
-	margin-bottom: .5em
-}
-
-#idcomment .list-comments .ava {
-	float: left;
-	width: 60px
-}
-
-#idcomment .list-comments .ava img {
-	vertical-align: middle;
-	width: 40px
-}
-
-#idcomment .list-comments .comment-content {
-	margin-left: 60px
 }
 
 #footer {
@@ -988,11 +934,11 @@ ul.list_item li.second {
 	display: block
 }
 
-.box50, #idcomment .comment-form .input-c, #footer .div2 {
+.box50, #footer .div2 {
 	width: 49%
 }
 
-.box50 p, .block-about p, #idcomment .comment-form p {
+.box50 p, .block-about p {
 	margin-bottom: .5em
 }
 
@@ -1009,7 +955,7 @@ ul.list_item li.second {
 	width: 100%
 }
 
-.block-login img, #idcomment .comment-form img {
+.block-login img {
 	margin-left: 10px;
 	vertical-align: middle
 }
@@ -1024,7 +970,7 @@ ul.list-number li, ul.list_item li {
 	padding-bottom: 6px
 }
 
-.details-content, #idcomment .comment-form, #idcomment .list-comments {
+.details-content {
 	padding: 8px 0
 }
 
