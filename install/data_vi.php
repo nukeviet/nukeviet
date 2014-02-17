@@ -23,17 +23,16 @@ $sth->execute( array('search', 'search', 'search', 'Tìm kiếm', '', 1273474173
 $sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 0, 9, 1, 1, '', 0, 0) );
 $sth->execute( array('rss', 'rss', 'rss', 'Rss', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0, 0) );
 $sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 11, 1, 1, '', 0, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', 1279366705, 1, 1, '', '', '', '', '0', 0, 12, 1, 1, '', 0, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 $sth->execute( array(1, 'Sitemap', 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
 $sth->execute( array(2, 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
 $sth->execute( array(3, 'Sitemap', 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
-$sth->execute( array(4, 'comment', 'comment', 'Comment', 'news', 0, 0, 0, '') );
 $sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 0, 3, '') );
 $sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 4, '') );
 $sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 5, '') );
-$sth->execute( array(8, 'postcomment', 'postcomment', 'Postcomment', 'news', 0, 0, 0, '') );
 $sth->execute( array(9, 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
 $sth->execute( array(10, 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
 $sth->execute( array(11, 'rss', 'feed', 'Rss', 'news', 1, 0, 1, '') );
@@ -78,6 +77,10 @@ $sth->execute( array(50, 'memberlist', 'memberlist', 'Danh sách thành viên', 
 $sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 9, '') );
 $sth->execute( array(52, 'tag', 'tag', 'Tag', 'news', 1, 0, 2, '') );
 $sth->execute( array(53, 'main', 'main', 'Main', 'page', 1, 0, 1, '') );
+$sth->execute( array(54, 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
+$sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
+$sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
+$sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
