@@ -261,7 +261,7 @@ if( $allowed )
 	// comment
 	define( 'NV_COMM_ID', $news_contents['id'] );
 	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
-	//require_once NV_ROOTDIR . '/modules/comment/comment.php';
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
 
 	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
 	$id_profile_googleplus = $news_contents['gid'];

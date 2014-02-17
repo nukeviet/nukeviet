@@ -17,6 +17,13 @@ while( $item = $result->fetch() )
 {
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];
 }
+
+$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comments'" );
+$rows = $result->fetchAll();
+if( sizeof( $rows ) )
+{
+	$sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
+}
 $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (

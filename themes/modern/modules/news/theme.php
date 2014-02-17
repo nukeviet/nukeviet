@@ -692,9 +692,19 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	if( $module_config[$module_name]['socialbutton'] )
 	{
 		global $meta_property;
-		$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
-		$xtpl->assign( 'FACEBOOKAPPID', $module_config[$module_name]['facebookappid'] );
-		$xtpl->parse( 'main.facebookjssdk' );
+		if( ! defined( 'FACEBOOK_JSSDK' ) )
+		{
+			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
+			$facebookappid = $module_config[$module_name]['facebookappid'];
+			$xtpl->assign( 'FACEBOOK_LANG', $lang );
+			$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
+			$xtpl->parse( 'main.facebookjssdk' );
+			if( ! empty( $facebookappid ) )
+			{
+				$meta_property['fb:app_id'] = $facebookappid;
+			}
+			define( 'FACEBOOK_JSSDK', true );
+		}
 	}
 
 	if( $module_config[$module_name]['socialbutton'] )
