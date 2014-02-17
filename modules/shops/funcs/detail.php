@@ -65,20 +65,20 @@ if( $allowed )
 
 	// Xac dinh anh lon
 	$homeimgfile = $data_content['homeimgfile'];
-	if( $data_content['homeimgthumb'] == 1 ) //image thumb
+	if( $data_content['homeimgthumb'] == 1 )//image thumb
 	{
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $data_content['homeimgthumb'] == 2 ) //image file
+	elseif( $data_content['homeimgthumb'] == 2 )//image file
 	{
 		$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 	}
-	elseif( $data_content['homeimgthumb'] == 3 ) //image url
+	elseif( $data_content['homeimgthumb'] == 3 )//image url
 	{
 		$data_content['homeimgthumb'] = $data_content['homeimgfile'] = $homeimgfile;
 	}
-	else //no image
+	else//no image
 	{
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 	}
@@ -108,19 +108,19 @@ if( $allowed )
 	$data_others = array();
 	while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $result->fetch( 3 ) )
 	{
-		if( $homeimgthumb == 1 ) //image thumb
+		if( $homeimgthumb == 1 )//image thumb
 		{
 			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 2 ) //image file
+		elseif( $homeimgthumb == 2 )//image file
 		{
 			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 3 ) //image url
+		elseif( $homeimgthumb == 3 )//image url
 		{
 			$thumb = $homeimgfile;
 		}
-		else //no image
+		else//no image
 		{
 			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
 		}
@@ -161,19 +161,19 @@ if( $allowed )
 
 			while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $product_code, $product_price, $product_discounts, $money_unit, $showprice, $hometext ) = $result->fetch( 3 ) )
 			{
-				if( $homeimgthumb == 1 ) //image thumb
+				if( $homeimgthumb == 1 )//image thumb
 				{
 					$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
 				}
-				elseif( $homeimgthumb == 2 ) //image file
+				elseif( $homeimgthumb == 2 )//image file
 				{
 					$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
 				}
-				elseif( $homeimgthumb == 3 ) //image url
+				elseif( $homeimgthumb == 3 )//image url
 				{
 					$thumb = $homeimgfile;
 				}
-				else //no image
+				else//no image
 				{
 					$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
 				}
