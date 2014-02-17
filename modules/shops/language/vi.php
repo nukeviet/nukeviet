@@ -349,4 +349,11 @@ $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['compare'] = 'So sánh';
 $lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 
+$lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
+$lang_module['rateavg_percent'] = 'Đánh giá trung bình';
+$lang_module['5star'] = '5 sao';
+$lang_module['4star'] = '4 sao';
+$lang_module['3star'] = '3 sao';
+$lang_module['2star'] = '2 sao';
+$lang_module['1star'] = '1 sao';
 ?>
