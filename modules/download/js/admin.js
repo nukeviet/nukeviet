@@ -272,44 +272,6 @@ function nv_report_alldel_result(res) {
 
 //  ---------------------------------------
 
-function nv_chang_comment_status(cid) {
-	var nv_timer = nv_settimeout_disable('status' + cid, 5000);
-	nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=comment&changestatus=1&id=' + cid + '&num=' + nv_randomPassword(8), '', 'nv_chang_comment_status_res');
-	return;
-}
-
-//  ---------------------------------------
-
-function nv_chang_comment_status_res(res) {
-	if (res != 'OK') {
-		alert(nv_is_change_act_confirm[2]);
-	}
-	window.location.href = window.location.href;
-	return;
-}
-
-//  ---------------------------------------
-
-function nv_comment_del(cid) {
-	if (confirm(nv_is_del_confirm[0])) {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=comment&del=1&id=' + cid, '', 'nv_comment_del_result');
-	}
-	return false;
-}
-
-//  ---------------------------------------
-
-function nv_comment_del_result(res) {
-	if (res == 'OK') {
-		window.location.href = window.location.href;
-	} else {
-		alert(nv_is_del_confirm[2]);
-	}
-	return false;
-}
-
-//  ---------------------------------------
-
 function nv_file_additem() {
 	file_items++;
 	var newitem = "<input readonly=\"readonly\" class=\"txt\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" style=\"width : 300px\" maxlength=\"255\" />";

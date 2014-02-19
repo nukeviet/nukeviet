@@ -243,7 +243,10 @@ if( ! in_array( $row['id'], $dfile ) )
 	++$row['view_hits'];
 }
 
-$row['is_comment_allow'] = $row['comment_allow'] ? nv_set_allow( $row['who_comment'], $row['groups_comment'] ) : false;
+// comment
+define( 'NV_COMM_ID', $row['id'] );
+define( 'NV_COMM_ALLOWED', $row['comment_allow'] ? nv_set_allow( $row['who_comment'], $row['groups_comment'] ) : false ); // Không bắt buộc
+require_once NV_ROOTDIR . '/modules/comment/comment.php';
 
 $row['rating_point'] = 0;
 if( ! empty( $row['rating_detail'] ) )
@@ -266,22 +269,6 @@ $row['rating_disabled'] = ! in_array( $row['id'], $flrt ) ? false : true;
 
 $row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'];
 $row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-
-$row['disabled'] = '';
-$row['comment_uname'] = '';
-$row['comment_uemail'] = '';
-$row['comment_subject'] = $lang_module['file_comment_re'] . ': ' . $row['title'];
-if( defined( 'NV_IS_USER' ) )
-{
-	$row['disabled'] = ' disabled="disabled"';
-	$row['comment_uname'] = ! empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
-	$row['comment_uemail'] = $user_info['email'];
-}
-else
-{
-	$row['comment_uname'] = $lang_module['file_comment_username'];
-	$row['comment_uemail'] = $lang_module['file_comment_useremail'];
-}
 
 $page_title = $row['title'];
 $key_words = $module_info['keywords'];

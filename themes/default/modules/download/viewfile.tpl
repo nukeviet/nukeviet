@@ -1,10 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-	var report_thanks_mess = '{LANG.report_thanks}';
-	var comment_thanks_mess = '{LANG.comment_thanks}';
-	var comment_please_wait = '{LANG.comment_thanks2}';
-	var comment_subject_defaul = '{ROW.comment_subject}'; 
-</script>
 <div class="block_download">
 	<div class="title_bar">
 		{ROW.title}
@@ -250,66 +244,7 @@
 	</div>
 	<!-- END: is_admin -->
 </div>
-<!-- BEGIN: comment_allow2 -->
-<a name="lcm"></a>
-<div id="list_comments"></div>
-<input type="hidden" name="comment_fid" id="comment_fid" value="{ROW.id}" />
-<!-- BEGIN: is_comment_allow -->
-<div id="hidden_form_comment" class="comment_top">
-	<a href="javascript:void(0);" onclick="show_form();">{LANG.file_your_comment}</a>
-</div>
-<div id="form_comment" class="form_comment" style="visibility: hidden; display: none">
-	<form id="commentForm" name="commentForm" action="{FORM_ACTION}" method="post">
-		<dl class="clearfix">
-			<dd class="fl">
-				<label> {LANG.file_comment_username}: </label>
-			</dd>
-			<dt class="fr">
-				<input class="txt" type="text" name="comment_uname" id="comment_uname" value="{ROW.comment_uname}" maxlength="100"{ROW.disabled} />
-			</dt>
-		</dl>
-		<dl class="clearfix">
-			<dd class="fl">
-				<label> {LANG.file_comment_useremail}: </label>
-			</dd>
-			<dt class="fr">
-				<input class="txt" type="text" name="comment_uemail" value="{ROW.comment_uemail}" id="comment_uemail_iavim" maxlength="100"{ROW.disabled} />
-			</dt>
-		</dl>
-		<dl class="clearfix">
-			<dd class="fl">
-				<label> {LANG.file_comment_subject}: </label>
-			</dd>
-			<dt class="fr">
-				<input class="txt" name="comment_subject" type="text" value="{ROW.comment_subject}" id="comment_subject" maxlength="255" />
-			</dt>
-		</dl>
-		<dl class="clearfix">
-			<dd class="fl">
-				<label> {LANG.file_comment_content}: </label>
-				<br /><textarea class="textarea" cols="20" rows="2" id="comment_content" name="comment_content"></textarea>
-			</dd>
-		</dl>
-		<dl class="clearfix">
-			<dd class="fl">
-				<label> {LANG.file_comment_captcha}: </label>
-			</dd>
-			<dt class="fr">
-				<img style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{GLANG.captcha}" />
-				<img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
-			</dt>
-			<dt class="fr" style="width:200px">
-				<input style="width:80px;vertical-align: middle" type="text" value="" name="comment_seccode" id="comment_seccode_iavim" maxlength="{CAPTCHA_MAXLENGTH}" />
-			</dt>
-		</dl>
-		<div style="float: right;">
-			<input name="hidden_form_comment" type="button" value="{LANG.comment_form_hidden}" onclick="hidden_form();" />
-		</div>
-		<input id="comment_submit" type="submit" class="submit" value="{LANG.file_comment_send}" />
-		<a name="cform"></a>
-	</form>
-</div>
-<!-- END: is_comment_allow -->
-<script type="text/javascript">nv_list_comments();</script>
-<!-- END: comment_allow2 -->
+<!-- BEGIN: comment -->
+<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+<!-- END: comment -->
 <!-- END: main -->

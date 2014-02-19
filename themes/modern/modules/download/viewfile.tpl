@@ -1,10 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-	var report_thanks_mess = '{LANG.report_thanks}';
-	var comment_thanks_mess = '{LANG.comment_thanks}';
-	var comment_please_wait = '{LANG.comment_thanks2}';
-	var comment_subject_defaul = '{ROW.comment_subject}';
-</script>
 <div class="header-details">
 	<div class="title">
 		<h1>{ROW.title}</h1>
@@ -181,69 +175,7 @@
 
 	<div class="clear"></div>
 </div>
-<!-- BEGIN: comment_allow2 -->
-<a name="lcm"></a>
-<div id="idcomment">
-	<div class="header-comment">
-		<div class="fr right small">
-			<a href="javascript:void(0);" id="show-comments" name="show-comments">+ {LANG.view_comment_title}</a>&nbsp;
-			+ <a href="javascript:void(0);" id="showform">{LANG.file_your_comment}</a>
-		</div>
-		<h3>{LANG.file_comment_title}</h3>
-		<div class="clear"></div>
-	</div>
-	<div id="list_comments" class="list-comments"></div>
-	<input type="hidden" name="comment_fid" id="comment_fid" value="{ROW.id}" />
-	<!-- BEGIN: is_comment_allow -->
-	<div id="form_comment" class="comment-form" style="display:none">
-		<form id="commentForm" name="commentForm" action="{FORM_ACTION}" method="post">
-			<div class="box-border content-box">
-				<div class="box clearfix">
-					<input id="comment_uname" name="comment_uname" type="text" class="input input-c fl" onblur="if(this.value=='')this.value='{ROW.comment_uname}';" onclick="if(this.value=='{ROW.comment_uname}')this.value='';" value="{ROW.comment_uname}" maxlength="100"{ROW.disabled}/>
-					<input id="comment_uemail_iavim" name="comment_uemail" type="text" class="input input-c fr" onblur="if(this.value=='')this.value='{ROW.comment_uemail}';" onclick="if(this.value=='{ROW.comment_uemail}')this.value='';" value="{ROW.comment_uemail}" maxlength="100"{ROW.disabled}/> &nbsp;
-				</div>
-				<p>
-					{LANG.file_comment_subject}: <input id="comment_subject" name="comment_subject" type="text" class="input input-c" value="{ROW.comment_subject}" />
-				</p>
-				<p>
-					{LANG.file_comment_content}:
-					<textarea rows="1" cols="1" name="comment_content" id="comment_content" class="input typer box2" value=""></textarea>
-				</p>
-				<p>
-					{LANG.file_comment_captcha}: &nbsp; <img  style="vertical-align: middle" height="22" id="vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{GLANG.captcha}" />
-					<img style="vertical-align: middle" alt="{GLANG.captcharefresh}" src="{NV_BASE_SITEURL}images/refresh.png" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','comment_seccode_iavim');" />
-					&nbsp; <input type="text" class="input capcha" name="comment_seccode" id="comment_seccode_iavim" maxlength="{CAPTCHA_MAXLENGTH}"/>&nbsp; <input type="submit" class="button" id="comment_submit" name="comment_submit" type="submit" value="{LANG.file_comment_send}" />
-				</p>
-			</div>
-		</form>
-	</div>
-	<!-- END: is_comment_allow -->
-</div>
-<!-- END: comment_allow2 -->
-<script type="text/javascript">nv_list_comments();</script>
-<script type="text/javascript">
-	function form_comment_show()
-	{
-		$("#form_comment").slideDown();
-		$("#showform").one("click", form_comment_close);
-	}
-	function form_comment_close()
-	{
-		$("#form_comment").slideUp();
-		$("#showform").one("click", form_comment_show);
-	}
-	$("#showform").one("click", form_comment_show);
-
-	function list_comment_show()
-	{
-		$("#list_comments").slideDown();
-		$("#show-comments").one("click", list_comment_close);
-	}
-	function list_comment_close()
-	{
-		$("#list_comments").slideUp();
-		$("#show-comments").one("click", list_comment_show);
-	}
-	$("#show-comments").one("click", list_comment_show);
-</script>
+<!-- BEGIN: comment -->
+<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+<!-- END: comment -->
 <!-- END: main -->

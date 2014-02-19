@@ -82,25 +82,6 @@
 					<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" /></td>
 				</tr>
 				<tr>
-					<td>{LANG.file_who_autocomment}</td>
-					<td>
-					<select name="who_autocomment">
-						<!-- BEGIN: who_autocomment -->
-						<option value="{WHO_AUTOCOMMENT.key}"{WHO_AUTOCOMMENT.selected}> {WHO_AUTOCOMMENT.title}</option>
-						<!-- END: who_autocomment -->
-					</select>
-					<!-- BEGIN: group2 -->
-					<br />
-					{LANG.groups_upload}
-					<br />
-					<!-- BEGIN: groups_autocomment -->
-					<input name="groups_autocomment[]" value="{GROUPS_AUTOCOMMENT.key}" type="checkbox"{GROUPS_AUTOCOMMENT.checked} /> {GROUPS_AUTOCOMMENT.title}
-					<br />
-					<!-- END: groups_autocomment -->
-					<!-- END: group2 -->
-					</td>
-				</tr>
-				<tr>
 					<td>{LANG.is_resume}</td>
 					<td><input name="is_resume" value="1" type="checkbox"{DATA.is_resume} /></td>
 				</tr>

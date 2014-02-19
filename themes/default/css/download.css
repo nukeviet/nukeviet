@@ -138,73 +138,6 @@
 	padding-left: 20px
 }
 
-.comment_top {
-	background: url(../images/download/comment.gif) no-repeat center left;
-	font: bold 13px/32px tahoma, verdana, sans-serif;
-	padding-left: 34px
-}
-
-.div_comm {
-	margin-bottom: 10px
-}
-
-.div_comm .div_comments {
-	background: #fff;
-	border-bottom: 1px solid #ccc;
-	border-left: 1px solid #ccc;
-	border-right: 1px solid #ccc;
-	max-height: 400px;
-	overflow: auto;
-	padding: 10px
-}
-
-.div_comm .div_detail {
-	margin-bottom: 20px
-}
-
-.div_comm .div_detail .comm_content {
-	font: normal 13px arial, verdana, sans-serif;
-	margin-top: 5px
-}
-
-.div_comm .div_detail .post_name {
-	border-bottom: 1px solid #ccc;
-	font: normal 13px/23px arial, verdana, sans-serif
-}
-
-.div_comm .div_detail .title {
-	color: #444;
-	font: bold 14px tahoma, verdana, sans-serif
-}
-
-.div_comments {
-	margin-bottom: 15px
-}
-
-.form_comment {
-	background: #F2F2F2;
-	border: 1px solid #ccc;
-	padding: 5px
-}
-
-.form_comment .error, .upload_form .error {
-	color: red
-}
-
-.form_comment .txt {
-	width: 350px
-}
-
-.form_comment dl {
-	padding: 2px
-}
-
-.form_comment textarea {
-	height: 100px;
-	overflow: auto;
-	width: 488px
-}
-
 .gray {
 	background: #F2F2F2
 }
@@ -770,7 +703,7 @@ ul.spec li {
 	text-align: center
 }
 
-.form_comment input[type=text], .form_comment textarea, .upload_content input[type=text], .upload_content input[type=file], .upload_content textarea, .box, .box-border, .box-border-shadow, .content-box, .clearfix, .container, .sideon {
+.form_comment input[type=text], .upload_content input[type=text], .upload_content input[type=file], .upload_content textarea, .box, .box-border, .box-border-shadow, .content-box, .clearfix, .container, .sideon {
 	display: block
 }
 

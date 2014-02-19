@@ -587,7 +587,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$row = $db->query( $query )->fetch();
 	if( empty( $row ) ) die( 'NO' );
 
-	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id );
 
