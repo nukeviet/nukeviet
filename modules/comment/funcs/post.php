@@ -15,10 +15,9 @@ $difftimeout = 360;
 $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 
 $module = $nv_Request->get_string( 'module', 'post,get' );
-if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
+if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND isset( $site_mods[$module] ) )
 {
 	// Kiểm tra module có được Sử dụng chức năng bình luận
-
 	$id = $nv_Request->get_int( 'id', 'post,get' );
 	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get' );
 	$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
@@ -80,13 +79,24 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 					if( $stmt->rowCount() )
 					{
 						$nv_Request->set_Cookie( $module_name . '_timeout', NV_CURRENTTIME );
-
+						if( $status )
+						{
+							$row = array();
+							$row['module'] =  $module;
+							$row['id'] = $id;
+							
+							$mod_info = $site_mods[$module];
+							if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
+							{
+								include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+							}
+						}
 						$contents = 'OK_' . $lang_module['comment_success'];
 					}
 				}
 				catch( PDOException $e )
 				{
-					$contents = 'ERR_' . $e->getMessage();
+					//$contents = 'ERR_' . $e->getMessage();
 				}
 			}
 			else
