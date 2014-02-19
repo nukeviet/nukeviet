@@ -6,7 +6,7 @@
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={FACEBOOKAPPID}";
+      js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 </script>
@@ -18,7 +18,7 @@
         <!-- BEGIN: socialbutton -->
         <div class="clear"></div>
         <div style="margin-right: 50px;" class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
-        
+
         <div class="g-plusone" data-size="medium"></div>
         <script type="text/javascript">
           window.___gcfg = {lang: nv_sitelang};
@@ -28,7 +28,7 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
           })();
         </script>
-    
+
         <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
         <!-- END: socialbutton -->
@@ -106,12 +106,12 @@
 				{STRINGRATING}
 			</div>
             <!-- BEGIN: data_rating -->
-            <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate"> 
+            <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
                {LANG.rating_average}:
-               <span itemprop="rating">{DETAIL.numberrating}</span> - 
-               <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count} 
+               <span itemprop="rating">{DETAIL.numberrating}</span> -
+               <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count}
             </span>
-            <!-- END: data_rating -->           
+            <!-- END: data_rating -->
 			<div style="padding: 5px;">
 				<input class="hover-star" type="radio" value="1" title="{LANGSTAR.verypoor}" /><input class="hover-star" type="radio" value="2" title="{LANGSTAR.poor}" /><input class="hover-star" type="radio" value="3" title="{LANGSTAR.ok}" /><input class="hover-star" type="radio" value="4" title="{LANGSTAR.good}" /><input class="hover-star" type="radio" value="5" title="{LANGSTAR.verygood}" /><span id="hover-test" style="margin: 0 0 0 20px;">{LANGSTAR.note}</span>
 			</div>
@@ -162,52 +162,8 @@
 	</div>
 	<!-- END: keywords -->
 	<!-- BEGIN: comment -->
-	<div id="idcomment">
-		<ul class="control">
-			<li>
-				<a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);"><img src="{IMGSHOWCOMMENT}" alt="Show comment" /><strong>{LANG.comment_view}</strong></a>
-			</li>
-			<li>
-				-- <a onclick="nv_show_hidden('formcomment',2);" href="javascript:void(0);"><img alt="Add comment" src="{IMGADDCOMMENT}" /><strong>{LANG.comment_send}</strong></a>
-			</li>
-		</ul>
-		<div class="clearfix"></div>
-		<div id="showcomment">
-			{COMMENTCONTENT}
-		</div>
-		<div id="formcomment">
-			<!-- BEGIN: form -->
-			<div class="add">
-				<img alt="Comment add" src="{IMGADDCOMMENT}" /><strong>{LANG.comment_title}</strong>
-			</div>
-			<div class="name">
-				<label> <strong>{LANG.comment_name}</strong> </label>
-				<input {DISABLED} type="text" id="commentname" value="{NAME}" />
-			</div>
-			<div class="email">
-				<label> <strong>{LANG.comment_email}</strong> </label>
-				<input {DISABLED} type="text" id="commentemail_iavim" value="{EMAIL}" />
-			</div>
-			<div class="content">
-				<label> <strong>{LANG.comment_content}</strong> </label><textarea cols="50" rows="5" id="commentcontent"></textarea>
-			</div>
-			<div class="captcha">
-				<label> <strong>{LANG.comment_seccode}</strong> </label>
-				<input type="text" id="commentseccode_iavim" /><img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>
-			</div>
-			<div style="text-align: center;">
-				<input type="button" id="buttoncontent" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');"/>
-			</div>
-			<!-- END: form -->
-			<!-- BEGIN: form_login-->
-			{COMMENT_LOGIN}
-			<!-- END: form_login -->
-		</div>
-	</div>
+		<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
 	<!-- END: comment -->
-    <!-- BEGIN: commentfacebook -->
-        <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="510"></div>
-    <!-- END: commentfacebook -->
 
 	<!-- BEGIN: topic -->
 	<p>

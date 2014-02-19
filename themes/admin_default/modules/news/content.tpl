@@ -21,11 +21,11 @@
 					<tbody>
 						<tr>
 							<td><strong>{LANG.name}</strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="w400" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="w350" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias();">&nbsp;</i></td>
+							<td><input class="w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias();">&nbsp;</i></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>

@@ -222,26 +222,6 @@ if( $allowed )
 		unset( $topic, $rows );
 	}
 
-	// Check: comment
-	$commentenable = 0;
-	$news_contents['comment'] = '';
-	if( $news_contents['allowed_comm'] )
-	{
-		if( $module_config[$module_name]['activecomm'] == 1 )
-		{
-			$comment_array = nv_comment_module( $news_contents['id'], 0 );
-			$news_contents['comment'] = comment_theme( $comment_array );
-		}
-		if( $news_contents['allowed_comm'] == 1 or ( $news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) )
-		{
-			$commentenable = 1;
-		}
-		elseif( $news_contents['allowed_comm'] == 2 )
-		{
-			$commentenable = 2;
-		}
-	}
-
 	if( $news_contents['allowed_rating'] )
 	{
 		$time_set_rating = $nv_Request->get_int( $module_name . '_' . $op . '_' . $news_contents['id'], 'cookie', 0 );
@@ -277,7 +257,13 @@ if( $allowed )
 		$array_keyword[] = $row;
 		$key_words[] = $row['keyword'];
 	}
-	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable );
+
+	// comment
+	define( 'NV_COMM_ID', $news_contents['id'] );
+	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
+	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
 	$id_profile_googleplus = $news_contents['gid'];
 
 	$page_title = $news_contents['title'];

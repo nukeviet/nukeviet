@@ -90,12 +90,12 @@
 			}
 		}
 	});
-	$('.hover-star').rating('select', '{NUMBERRATING}'); 
+	$('.hover-star').rating('select', '{NUMBERRATING}');
 </script>
 <!-- BEGIN: disablerating -->
 <script type="text/javascript">
 	$(".hover-star").rating('disable');
-	sr = 2; 
+	sr = 2;
 </script>
 <!-- END: disablerating -->
 <!-- END: allowed_rating -->
@@ -107,27 +107,7 @@
 <!-- END: loop -->
 <!-- END: keywords -->
 <!-- BEGIN: comment -->
-<div id="showcomment">
-	{COMMENTCONTENT}
-</div>
-<!-- BEGIN: form -->
-<div class="hr"></div>
-<h3>{LANG.comment_title}</h3>
-{LANG.comment_name}
-<input {DISABLED} type="text" id="commentname" value="{NAME}"/>
-{LANG.comment_email}
-<input {DISABLED} type="text" id="commentemail_iavim" value="{EMAIL}" />
-{LANG.comment_content}
-<textarea id="commentcontent"></textarea>
-{LANG.comment_seccode}
- <input type="text" id="commentseccode_iavim" />
-<img id="vimg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}"/>
-<img src="{CAPTCHA_REFR_SRC}" width="16" height="16" onclick="nv_change_captcha('vimg','commentseccode_iavim');"/>
-<input type="button" id="buttoncontent" value="{LANG.comment_submit}" onclick="sendcommment('{NEWSID}', '{NEWSCHECKSS}', '{GFX_NUM}');"/>
-<!-- END: form -->
-<!-- BEGIN: form_login-->
-{COMMENT_LOGIN}
-<!-- END: form_login -->
+<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
 <!-- END: comment -->
 <!-- BEGIN: topic -->
 <h2>{LANG.topic}</h2>

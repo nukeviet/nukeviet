@@ -150,6 +150,7 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (t
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ('menu', 0, 1, 'menu', 'menu', '3.1.00 1273225635', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ('rss', 1, 0, 'rss', 'rss', '3.0.01 1287532800', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ('page', 1, 1, 'page', 'page', '3.5.00 1385567707', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ('comment', 1, 1, 'comment', 'comment', '3.5.00 1385567707', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";

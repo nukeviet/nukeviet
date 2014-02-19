@@ -353,7 +353,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	return $xtpl->text( 'main' );
 }
 
-function detail_theme( $news_contents, $related_new_array, $related_array, $topic_array, $commentenable )
+function detail_theme( $news_contents, $related_new_array, $related_array, $topic_array )
 {
 	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $global_array_cat, $my_head, $lang_global, $user_info, $admin_info, $catid;
 
@@ -456,49 +456,6 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		$xtpl->parse( 'main.adminlink' );
 	}
 
-	$xtpl->assign( 'COMMENTCONTENT', $news_contents['comment'] );
-	$xtpl->assign( 'IMGSHOWCOMMENT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/comment.png' );
-	$xtpl->assign( 'IMGADDCOMMENT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/comment_add.png' );
-	if( $commentenable == 1 )
-	{
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$xtpl->assign( 'NAME', $admin_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $admin_info['email'] );
-			$xtpl->assign( 'DISABLED', ' disabled=\'disabled\'' );
-		}
-		elseif( defined( 'NV_IS_USER' ) )
-		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $user_info['email'] );
-			$xtpl->assign( 'DISABLED', ' disabled=\'disabled\'' );
-		}
-		else
-		{
-			$xtpl->assign( 'NAME', '' );
-			$xtpl->assign( 'EMAIL', '' );
-			$xtpl->assign( 'DISABLED', '' );
-		}
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
-		$xtpl->parse( 'main.comment.form' );
-	}
-	elseif( $commentenable == 2 )
-	{
-		global $client_info;
-		$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
-		$xtpl->assign( 'COMMENT_LOGIN', '<a title=\'' . $lang_global['loginsubmit'] . '\' href=\'' . $link_login . '\'>' . $lang_module['comment_login'] . '</a>' );
-		$xtpl->parse( 'main.comment.form_login' );
-	}
-
-	$xtpl->parse( 'main.comment' );
-
 	if( ! empty( $related_new_array ) )
 	{
 		foreach( $related_new_array as $key => $related_new_array_i )
@@ -528,6 +485,13 @@ function detail_theme( $news_contents, $related_new_array, $related_array, $topi
 		}
 		$xtpl->parse( 'main.topic' );
 	}
+
+	if( defined( 'NV_COMM_URL' ) )
+	{
+		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->parse( 'main.comment' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -587,34 +551,6 @@ function topic_theme( $topic_array, $topic_other_array, $page_title, $descriptio
 			$xtpl->parse( 'main.other.loop' );
 		}
 		$xtpl->parse( 'main.other' );
-	}
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-function comment_theme( $comment_array )
-{
-	$comment = '';
-	global $global_config, $module_info, $module_name, $module_file, $topictitle, $topicalias, $module_config, $lang_module;
-	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-
-	$k = 0;
-	foreach( $comment_array['comment'] as $comment_array_i )
-	{
-		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
-		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
-		$xtpl->assign( 'COMMENT', $comment_array_i );
-		if( $module_config[$module_name]['emailcomm'] and ! empty( $comment_array_i['post_email'] ) )
-		{
-			$xtpl->parse( 'main.detail.emailcomm' );
-		}
-		$xtpl->parse( 'main.detail' );
-		++$k;
-	}
-	if( ! empty( $comment_array['page'] ) )
-	{
-		$xtpl->assign( 'PAGE', $comment_array['page'] );
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
