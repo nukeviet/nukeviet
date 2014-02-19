@@ -4,6 +4,7 @@
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
@@ -15,7 +16,7 @@ $id = $nv_Request->get_int( 'id', 'get,post', 0 );
 $showdata = $nv_Request->get_int( 'showdata', 'get,post', 0 );
 if( $showdata == 1 )
 {
-	$sql = "SELECT ratingdetail FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+	$sql = "SELECT ratingdetail FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id=" . $id;
     $ratingdetail = $db->query( $sql )->fetchColumn();
     
 	if( ! empty( $ratingdetail ) || $ratingdetail != 0 )
@@ -39,9 +40,9 @@ if( $showdata == 1 )
         $xtpl->assign( 'RATE_AVG_PERCENT', $ratefercent_avg );
 		$xtpl->parse( 'main.allowed_rating' );
 		$contents = $xtpl->text( 'main.allowed_rating' );
-		include ( NV_ROOTDIR . '/includes/header.php' );
+		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
-		include ( NV_ROOTDIR . '/includes/footer.php' );
+		include NV_ROOTDIR . '/includes/footer.php';
         exit();
 	}
 }
@@ -51,7 +52,7 @@ $timeout = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'cookie',
 
 if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 {
-	$sql = "SELECT ratingdetail FROM `" . $db_config['prefix'] . "_" . $module_data . "_rows` WHERE `id`=" . $id;
+	$sql = "SELECT ratingdetail FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id=" . $id;
 	$ratingdetail = $db->query( $sql )->fetchColumn();
 	if( ! empty( $ratingdetail ) )
 	{
@@ -70,7 +71,7 @@ if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 	$ratingdetail[$val] = $ratingdetail[$val] + 1;
 
 	$ratingdetail = serialize( $ratingdetail );
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_rows` SET `ratingdetail`='" . $ratingdetail . "' WHERE `id`=" . $id;
+	$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET ratingdetail='" . $ratingdetail . "' WHERE id=" . $id;
 	$db->query( $sql );
 
 	$nv_Request->set_Cookie( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
@@ -84,8 +85,8 @@ else
 	$contents = "ERR_" . $timeoutmsg;
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
+include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
