@@ -30,7 +30,7 @@ $data = array();
 $array_userid = array();
 $disabled = ' disabled="disabled"';
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 
 // Search data
 $data_search = array(
@@ -78,7 +78,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 	if( ! empty( $data_search['from'] ) )
 	{
-		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['from'], $match ) )
+		if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $data_search['from'], $match ) )
 		{
 			$from = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
 			$array_where[] = 'log_time >= ' . $from;
@@ -88,7 +88,7 @@ if( $nv_Request->isset_request( 'filter', 'get' ) and $nv_Request->isset_request
 
 	if( ! empty( $data_search['to'] ) )
 	{
-		if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $data_search['to'], $match ) )
+		if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $data_search['to'], $match ) )
 		{
 			$to = mktime( 0, 0, 0, $match[2], $match[1], $match[3] );
 			$array_where[] = 'log_time <= ' . $to;
@@ -166,6 +166,7 @@ if( ! empty( $array_where ) )
 {
 	$db->where( implode( ' AND ', $array_where) );
 }
+
 $sth = $db->prepare( $db->sql() );
 if( $check_like )
 {
@@ -300,7 +301,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'checksess', md5( 'siteinfo_' . session_id() . '_' . $admin_info['userid'] ) );
-$xtpl->assign( 'URL_DEL', $base_url . '&amp;' . NV_OP_VARIABLE . '=logs_del' );
+$xtpl->assign( 'URL_DEL', $base_url . '&' . NV_OP_VARIABLE . '=logs_del' );
 $xtpl->assign( 'URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'DISABLE', $disabled );
 $xtpl->assign( 'DATA_SEARCH', $data_search );

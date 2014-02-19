@@ -94,7 +94,7 @@ $(document).ready(function() {
 			<td> {DATA.username} </td>
 			<td> {DATA.time} </td>
 			<!-- BEGIN: delete -->
-			<td class="center"><a href="{DEL_URL}" class = "delete_icon">{GLANG.delete}</a></td>
+			<td class="center"><a href="{DEL_URL}" class = "delete delete_icon">{GLANG.delete}</a></td>
 			<!-- END: delete -->
 		</tr>
 		<!-- END: row -->
