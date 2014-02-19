@@ -59,12 +59,63 @@
 				{LANG.cart_note} : {note}
 			</div>
 			<!-- END: note -->
-			<!-- BEGIN: allowed_rating -->
-			<p style="padding:6px 0; border-bottom:1px dotted #000000; color:#006699">
-				<span>{LANG.detail_rank} : <span class="math_rate">{RATE}</span> {LANG.detail_rate_math}</span>
-				<span class="div_rate"> <a href="#" class="rate">1</a> <a href="#" class="rate">2</a> <a href="#" class="rate">3</a> <a href="#" class="rate">4</a> <a href="#" class="rate">5</a> </span>
-			<p>
-				<!-- END: allowed_rating -->
+			<div id="ratedata">
+                <!-- BEGIN: allowed_rating -->
+            	<div class="clearfix">
+                    <span class="rateavg_percent">{LANG.rateavg_percent}: {RATE_AVG_PERCENT}</span>
+            		<div class="header-oop icon-rating">
+            			{LANG.detail_rank}
+            		</div>    
+            		<form id="form3B" action="">
+            			<div class="clearfix">
+            				<div id="stringrating" class="small">
+            					{STRINGRATING}
+            				</div>
+        					<div class="rate-star">
+                                <div class="width-star-title">{LANG.5star}</div>
+                                <div class="width-star-bg" value-data="5">
+                                    <input type="hidden" name="valuerate" value="5" />
+                                    <div class="width-star-value" title="{PERCENT_RATE.5}%" style="width:{PERCENT_RATE.5}%">&nbsp;</div>
+                                </div>
+                                <div class="width-star-num">{RATINGDETAIL.5}</div>
+                            </div>
+                            <div class="rate-star">
+                                <div class="width-star-title">{LANG.4star}</div>
+                                <div class="width-star-bg" value-data="4">
+                                    <input type="hidden" name="valuerate" value="4" />
+                                    <div class="width-star-value" title="{PERCENT_RATE.4}%" style="width:{PERCENT_RATE.4}%">&nbsp;</div>
+                                </div>
+                                <div class="width-star-num">{RATINGDETAIL.4}</div>
+                            </div>
+                            <div class="rate-star">
+                                <div class="width-star-title">{LANG.3star}</div>
+                                <div class="width-star-bg" value-data="3">
+                                    <input type="hidden" name="valuerate" value="3" />
+                                    <div class="width-star-value" title="{PERCENT_RATE.3}%" style="width:{PERCENT_RATE.3}%">&nbsp;</div>
+                                </div>
+                                <div class="width-star-num">{RATINGDETAIL.3}</div>
+                            </div>
+                            <div class="rate-star">
+                                <div class="width-star-title">{LANG.2star}</div>
+                                <div class="width-star-bg" value-data="2">
+                                    <input type="hidden" name="valuerate" value="2" />
+                                    <div class="width-star-value" title="{PERCENT_RATE.2}%" style="width:{PERCENT_RATE.2}%">&nbsp;</div>
+                                </div>
+                                <div class="width-star-num">{RATINGDETAIL.2}</div>
+                            </div>
+                            <div class="rate-star">
+                                <div class="width-star-title">{LANG.1star}</div>
+                                <div class="width-star-bg" value-data="1">
+                                    <input type="hidden" name="valuerate" value="1" />
+                                    <div class="width-star-value" title="{PERCENT_RATE.1}%" style="width:{PERCENT_RATE.1}%">&nbsp;</div>
+                                </div>
+                                <div class="width-star-num">{RATINGDETAIL.1}</div>
+                            </div>
+            			</div>
+            		</form>
+                </div>
+                <!-- END: allowed_rating -->
+            </div>
 				<div class="clearfix fl" style="width:170px; padding:6px 0px">
 					<strong class="fl">{LANG.detail_share} : </strong>
 					<span class="share clearfix">
@@ -169,20 +220,25 @@
 	});
 	<!-- END: allowed_print_js -->
 	<!-- BEGIN: allowed_rating_js -->
-	$("a.rate").click(function(event){
-	event.preventDefault();
-	var val = $(this).html();
-	$.ajax({
-	type: "POST",
-	url: '{LINK_RATE}'+'&nocache=' + new Date().getTime(),
-	data: 'val=' + val,
-	success: function(data){
-	var s = data.split('_');
-	alert(s[1]);
-	}
-	});
-	return false;
-	});
+	$(".width-star-bg").click(function(event){
+        event.preventDefault();
+        var val = $(this).attr("value-data");
+        if( confirm( '{LANG.rateconfirm}' )){
+            $.ajax({
+                type: "POST",
+                url: '{LINK_RATE}'+'&nocache=' + new Date().getTime(),
+                data: 'val=' + val,
+                success: function(data){
+                var s = data.split('_');
+                if( s[0] == 'OK' ){
+                    $("#ratedata").load('{LINK_RATE}&showdata=1');
+                }
+                alert(s[1]);
+                }
+            });
+        }   
+        return false;
+    });
 	<!-- END: allowed_rating_js -->
 	});</script>
 <!-- END: main -->

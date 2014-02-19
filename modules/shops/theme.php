@@ -826,6 +826,10 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		$xtpl->assign( 'product_price', CurrencyConversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'] ) );
 		$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
 		$xtpl->assign( 'PRODUCT_CODE', $data_content['product_code'] );
+        $xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
+        $xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
+        $xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
+                
 		if( ! empty( $data_content[NV_LANG_DATA . '_warranty'] ) )
 		{
 			$xtpl->assign( 'promotional', $data_content[NV_LANG_DATA . '_promotional'] );

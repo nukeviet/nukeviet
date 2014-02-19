@@ -798,3 +798,35 @@ img.calendar {
 .compare {
 	margin-bottom: 10px;
 }
+
+.rate-star{
+    padding: 5px;
+    float: left;
+    height: 14px;
+    line-height: 14px;
+}
+.rate-star .width-star-title{
+    float: left;
+    margin-right: 5px;
+}
+.rate-star .width-star-num{
+    float: left;
+    font-weight: bold;
+    margin-left: 5px;
+}
+.rate-star .width-star-bg{
+    width: 180px;
+    float: left;
+    cursor: pointer;
+    border-radius: 3px;
+    background: #dadada;
+}
+.rate-star .width-star-value{
+    float: left;
+    border-radius: 3px;
+    background: url("../images/shops/star-png.png") repeat-x;
+}
+.rateavg_percent{
+    font-size: 18px;
+    font-weight: bold;
+}
