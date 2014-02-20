@@ -4,9 +4,12 @@
 	{error}
 </div>
 <!-- END: error -->
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.autocomplete.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.autocomplete.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/popcalendar/popcalendar.js"></script>
+
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <script type="text/javascript">var inrow = '{inrow}';</script>
 <form action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" value="1" name="save">
@@ -190,14 +193,15 @@
 								<td><strong>{LANG.content_publ_date}</strong><span class="timestamp">{LANG.content_notetime}</span></td>
 							</tr>
 							<tr>
-								<td><input name="publ_date" id="publ_date" value="{publ_date}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-									<img src="{NV_BASE_SITEURL}images/calendar.jpg" width="18" style="cursor: pointer; vertical-align: middle;"	onclick="popCalendar.show(this, 'publ_date', 'dd/mm/yyyy', false);" alt="" height="17">
-								<select name="phour">
-									{phour}
-								</select> :
-								<select name="pmin">
-									{pmin}
-								</select><input type="button" value="{LANG.comment_delete}" style="font-size:11px" onclick="clearobval('publ_date')" /></td>
+								<td>
+									<input name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+									<select name="phour">
+										{phour}
+									</select> :
+									<select name="pmin">
+										{pmin}
+									</select><input type="button" value="{LANG.del}" style="font-size:11px" onclick="clearobval('publ_date')" />
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -209,8 +213,7 @@
 							<tr>
 								<td>
 								<div>
-									<input name="exp_date" id="exp_date" value="{exp_date}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-									<img src="{NV_BASE_SITEURL}images/calendar.jpg" width="18" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exp_date', 'dd/mm/yyyy', false);" alt="" height="17">
+									<input name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 									<select name="ehour">
 										{ehour}
 									</select>
@@ -218,7 +221,7 @@
 									<select name="emin">
 										{emin}
 									</select>
-									<input type="button" value="{LANG.comment_delete}" style="font-size:11px;" onclick="clearobval('exp_date')" />
+									<input type="button" value="{LANG.del}" style="font-size:11px;" onclick="clearobval('exp_date')" />
 								</div>
 								<div style="margin-top: 5px;">
 									<input type="checkbox" value="1" name="archive" {archive_checked} />
@@ -296,9 +299,43 @@
 	</div>
 </form>
 
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
 <script type="text/javascript">
-	var file_items = {FILE_ITEMS}
-	};
+	$(document).ready(function() {
+		$("#publ_date,#exp_date").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+
+		var cachesource = {};
+		$("#AjaxSourceText").autocomplete({
+			minLength : 2,
+			delay : 500,
+			source : function(request, response) {
+				var term = request.term;
+				if ( term in cachesource) {
+					response(cachesource[term]);
+					return;
+				}
+				$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=sourceajax", request, function(data, status, xhr) {
+					cachesource[term] = data;
+					response(data);
+				});
+			}
+		});
+	});
+
+	var file_items = {FILE_ITEMS};
 	var file_selectfile = '{LANG.file_selectfile}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
@@ -312,29 +349,10 @@
 		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", "850", "400", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-	$(document).ready(function() {
-		$("#AjaxSourceText").autocomplete("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={module_name}&{NV_OP_VARIABLE}=sourceajax", {
-			delay : 10,
-			minChars : 2,
-			matchSubset : 1,
-			matchContains : 1,
-			cacheLength : 10,
-			onItemSelect : selectItem,
-			onFindValue : findValue,
-			formatItem : formatItem,
-			autoFill : true
-		});
-	});
-	<!-- BEGIN:
-	getalias-- > $("#idtitle").change(function() {
-		get_alias();
-	});
-	<!-- END:
-	getalias-- >
+
 	function clearobval(ob) {
 		$("#" + ob + "").val('');
 	}
-
 
 	$("#listgroupid").load('{url_load}');
 
@@ -384,7 +402,7 @@
 				return str.substring(0, i);
 			if (temp == ".") {
 				if (count > 0)
-					return str.substring(0, i);
+					return str.substring(0, ipubl_date);
 				count++;
 			}
 		}
@@ -406,4 +424,12 @@
 		return str;
 	}
 </script>
+
+<!-- BEGIN:getalias -->
+<script type="text/javascript">
+	$("#idtitle").change(function() {
+		get_alias();
+	});
+</script>
+<!-- END:getalias -->
 <!-- END:main -->

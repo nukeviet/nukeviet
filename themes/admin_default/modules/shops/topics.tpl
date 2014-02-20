@@ -22,7 +22,7 @@
 			<td width="30px" align="center">{LANG.weight}</td>
 			<td><strong>{LANG.topic_title}</strong></td>
 			<td><strong>{LANG.topic_sub}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.comment_funcs}</strong></td>
+			<td width="120px" align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<!-- BEGIN: listrow -->

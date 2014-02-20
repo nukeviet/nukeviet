@@ -7,7 +7,7 @@
 			<td><strong>{LANG.money_name}</strong></td>
 			<td><strong>{LANG.currency}</strong></td>
 			<td><strong>{LANG.exchange}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.comment_funcs}</strong></td>
+			<td width="120px" align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tfoot>

@@ -12,44 +12,6 @@ function sendrating(id, point, newscheckss) {
 	}
 }
 
-function sendcommment(id, newscheckss, gfx_count) {
-	var commentseccode = document.getElementById('commentseccode_iavim');
-	var commentcontent = strip_tags(document.getElementById('commentcontent').value);
-	if (!nv_name_check(commentseccode)) {
-		error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
-		alert(error);
-		commentseccode.focus();
-	} else if (commentcontent == "") {
-		alert(nv_content);
-		document.getElementById('commentcontent').focus();
-	} else {
-		var sd = document.getElementById('buttoncontent');
-		sd.disabled = true;
-		nv_ajax('post', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=postcomment&code=' + commentseccode.value + '&id=' + id + '&checkss=' + newscheckss + '&content=' + encodeURIComponent(commentcontent), '', 'nv_commment_result');
-	}
-	return;
-}
-
-function nv_commment_result(res) {
-	nv_change_captcha('vimg', 'commentseccode_iavim');
-	var r_split = res.split("_");
-	if (r_split[0] == 'OK') {
-		document.getElementById('commentcontent').value = "";
-		nv_show_comment(r_split[1], r_split[2], r_split[3]);
-		alert(r_split[4]);
-	} else if (r_split[0] == 'ERR') {
-		alert(r_split[1]);
-	} else {
-		alert(nv_content_failed);
-	}
-	nv_set_disable_false('buttoncontent');
-	return false;
-}
-
-function nv_show_comment(id, checkss, page) {
-	nv_ajax('get', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=comment&id=' + id + '&checkss=' + checkss + '&page=' + page, 'showcomment', '');
-}
-
 function remove_text() {
 	document.getElementById('to_date').value = "";
 	document.getElementById('from_date').value = "";

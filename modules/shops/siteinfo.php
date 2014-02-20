@@ -41,14 +41,14 @@ if( $number > 0 )
 }
 
 // Tong so binh luan duoc dang
-$number = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $mod_data . '_comments_' . NV_LANG_DATA . ' where status = 1' )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND status = 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
 }
 
 // So binh luan cho duyet
-$number = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $mod_data . '_comments_' . NV_LANG_DATA . ' where status = 0' )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND status = 0' )->fetchColumn();
 if( $number > 0 )
 {
 	$pendinginfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment_pending'], 'value' => $number );

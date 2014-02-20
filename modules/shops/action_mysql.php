@@ -21,7 +21,7 @@ if( $num_table > 0 )
 {
 	while( $item = $result->fetch() )
 	{
-		$array_lang_module_setup[] = str_replace( $db_config['prefix'] . "_" . $module_data . "_money_", "", $item['Name'] );
+		$array_lang_module_setup[] = str_replace( $db_config['prefix'] . "_" . $module_data . "_money_", "", $item['name'] );
 	}
 	if( $lang != $global_config['site_lang'] and in_array( $global_config['site_lang'], $array_lang_module_setup ) )
 	{
@@ -39,6 +39,14 @@ if( $num_table > 0 )
 		}
 	}
 }
+
+$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comments'" );
+$rows = $result->fetchAll();
+if( sizeof( $rows ) )
+{
+	$sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
+}
+
 if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 {
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_rows
@@ -94,7 +102,6 @@ elseif( $op != 'setup' )
 }
 
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_money_' . $lang;
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_comments_' . $lang;
 
 $sql_create_module = $sql_drop_module;
 
@@ -241,21 +248,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  UNIQUE KEY bid (bid,id)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_comments_" . $lang . " (
- cid mediumint(8) unsigned NOT NULL auto_increment,
- id mediumint(8) unsigned NOT NULL default '0',
- post_time int(11) unsigned NOT NULL default '0',
- post_name varchar(100) NOT NULL,
- post_id int(11) NOT NULL,
- post_email varchar(100) NOT NULL,
- post_ip varchar(15) NOT NULL,
- status tinyint(1) unsigned NOT NULL default '0',
- photo varchar(255) NOT NULL,
- title varchar(255) NOT NULL,
- content mediumtext NOT NULL,
- PRIMARY KEY (cid)
-) ENGINE=MyISAM";
-
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_units (
  id int(11) NOT NULL auto_increment,
  PRIMARY KEY (id)
@@ -335,10 +327,6 @@ $data['image_size'] = '100x500';
 $data['home_view'] = 'view_home_all';
 $data['per_page'] = 20;
 $data['per_row'] = 4;
-$data['comment'] = 1;
-$data['comment_auto'] = 1;
-$data['who_comment'] = 0;
-$data['groups_comment'] = '';
 $data['money_unit'] = 'VND';
 $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
@@ -432,5 +420,14 @@ $sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_da
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat ADD UNIQUE (" . $lang . "_alias)";
+
+// Comments
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '3')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
 
 ?>

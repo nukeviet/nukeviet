@@ -44,39 +44,12 @@
 				<td><input type="checkbox" value="1" name="active_payment" {ck_active_payment} id="active_payment" /> {LANG.setting_active_payment_note} </td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.activecomm}</strong></td>
-				<td><input type="checkbox" value="1" name="comment" {ck_comment} /></td>
-			</tr>
-			<tr>
-				<td><strong>{LANG.setting_auto_postcomm}</strong></td>
-				<td><input type="checkbox" value="1" name="comment_auto" {ck_comment_auto}/></td>
-			</tr>
-			<tr>
 				<td><strong>{LANG.setting_compare}</strong></td>
 				<td><input type="checkbox" value="1" name="show_compare" {ck_compare} /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_displays}</strong></td>
 				<td><input type="checkbox" value="1" name="show_displays" {ck_displays}/></td>
-			</tr>
-			<tr>
-				<td><strong>{LANG.setting_setcomm}</strong></td>
-				<td>
-				<select name="who_comment">
-					<!-- BEGIN: who_comment -->
-					<option value="{WHO_COMMENT.key}"{WHO_COMMENT.selected}>{WHO_COMMENT.title}</option>
-					<!-- END: who_comment -->
-				</select>
-				<!-- BEGIN: group -->
-				<br />
-				{LANG.group_select_info}
-				<br />
-				<!-- BEGIN: groups_comment -->
-				<label><input type="checkbox" name="groups_comment[]" value="{GROUPS_COMMENT.key}"{GROUPS_COMMENT.checked}/> {GROUPS_COMMENT.title}</label>
-				<br />
-				<!-- END: groups_comment -->
-				<!-- END: group -->
-				</td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_money_all}</strong></td>
