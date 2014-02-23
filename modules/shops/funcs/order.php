@@ -101,11 +101,11 @@ if( $post_order == 1 )
 		$order_code = vsprintf( $pro_config['format_order_id'], $item['auto_increment'] );
 		$transaction_status = ( empty( $pro_config['auto_check_order'] ) ) ? - 1 : 0;
 		$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
-			order_id, lang, order_code, order_name, order_email, order_address, order_phone, order_note, listid, listnum, listprice,
+			lang, order_code, order_name, order_email, order_address, order_phone, order_note, listid, listnum, listprice,
 			user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
 			transaction_status, transaction_id, transaction_count
 		) VALUES (
-			NULL , '" . NV_LANG_DATA . "', :order_code, :order_name, :order_email,
+			'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email,
 			:order_address, :order_phone,
 			:order_note, :listid,
 			:listnum, :listprice,

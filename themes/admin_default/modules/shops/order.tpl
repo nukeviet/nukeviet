@@ -9,7 +9,7 @@
 			<td><strong>{LANG.order_email}</strong></td>
 			<td align="right"><strong>{LANG.order_total}</strong></td>
 			<td><strong>{LANG.order_payment}</strong></td>
-			<td width="100px" align="center"><strong>{LANG.comment_funcs}</strong></td>
+			<td width="100px" align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tbody>

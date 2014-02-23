@@ -785,13 +785,12 @@ function viewcat_page_list( $data_content, $pages, $sort )
  *
  * @param mixed $data_content
  * @param mixed $data_unit
- * @param mixed $allow_comment
  * @param mixed $data_others
  * @param mixed $data_shop
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $allow_comment, $data_others, $data_shop, $array_other_view )
+function detail_product( $data_content, $data_unit, $data_others, $data_shop, $array_other_view )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config;
 
@@ -829,7 +828,7 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
         $xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
         $xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
         $xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
-                
+
 		if( ! empty( $data_content[NV_LANG_DATA . '_warranty'] ) )
 		{
 			$xtpl->assign( 'promotional', $data_content[NV_LANG_DATA . '_promotional'] );
@@ -912,31 +911,6 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 		}
 	}
 
-	if( $allow_comment != 0 )
-	{
-		$xtpl->parse( 'main.comment_tab' );
-	}
-
-	$xtpl->assign( 'COMMENTCONTENT', $data_content['comment'] );
-	if( $pro_config['comment'] == "1" )
-	{
-		if( $allow_comment == 1 )
-		{
-			$xtpl->assign( "COMMENT_CHECKSESS", md5( $data_content['id'] . session_id() . $global_config['sitekey'] ) );
-			$xtpl->assign( "NV_GFX_NUM", NV_GFX_NUM );
-			$xtpl->parse( 'main.comment.form' );
-		}
-		elseif( $allow_comment == 2 )
-		{
-			global $client_info, $lang_global;
-			$link_login = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] . "#formcomment" );
-			$xtpl->assign( 'COMMENT_LOGIN', "<a title=\"" . $lang_global['loginsubmit'] . "\" href=\"" . $link_login . "\">" . $lang_module['comment_do_not_send'] . "</a>" );
-			$xtpl->parse( 'main.comment.form_login' );
-		}
-
-		$xtpl->parse( 'main.comment' );
-	}
-
 	if( ! empty( $data_others ) )
 	{
 		$hmtl = view_home_all( $data_others );
@@ -986,6 +960,13 @@ function detail_product( $data_content, $data_unit, $allow_comment, $data_others
 	{
 		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_content['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_content['id'] ) );
 		$xtpl->parse( 'main.adminlink' );
+	}
+
+	if( defined( 'NV_COMM_URL' ) )
+	{
+		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->parse( 'main.comment' );
+		$xtpl->parse( 'main.comment_tab' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -1522,221 +1503,6 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 }
 
 /**
- * post_product()
- *
- * @param mixed $data_content
- * @param mixed $data_cata
- * @param mixed $data_unit
- * @param mixed $error
- * @param mixed $lang_submit
- * @return
- */
-function post_product( $data_content, $data_cata, $data_unit, $error, $lang_submit )
-{
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $my_head;
-
-	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.css\" />\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.autocomplete.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-
-	$xtpl = new XTemplate( "post.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
-	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-
-	if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
-	{
-		$editor = nv_aleditor( 'bodytext', '98%', '150px', $data_content['bodytext'] );
-	}
-	else
-	{
-		$editor = "<textarea style=\"width:99%\" rows=\"8\" name=\"bodytext\" id=\"bodytext\">" . $data_content['bodytext'] . "</textarea>";
-	}
-
-	$xtpl->assign( 'NV_EDITOR', $editor );
-	$xtpl->assign( 'DATA', $data_content );
-
-	if( $data_content['homeimgthumb'] != "" )
-	{
-		$array_img = explode( "|", $data_content['homeimgthumb'] );
-		if( ! empty( $array_img[0] ) and ! nv_is_url( $array_img[0] ) )
-		{
-			$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_img[0];
-		}
-		else
-		{
-			$array_img[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/thumb/no_image.jpg";
-		}
-		$xtpl->assign( 'img_pro', $array_img[0] );
-		$xtpl->parse( 'main.imgpro' );
-	}
-
-	if( ! empty( $data_cata ) )
-	{
-		foreach( $data_cata as $dcat )
-		{
-			$xtpl->assign( 'catid', $dcat['catid'] );
-			$xtpl->assign( 'title', $dcat['title'] );
-			$xtpl->assign( 'xtitle', $dcat['xtitle'] );
-			$xtpl->assign( 'select', $dcat['select'] );
-			$xtpl->assign( 'disabled', $dcat['disabled'] );
-			$xtpl->parse( 'main.loop_cata' );
-		}
-	}
-
-	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
-
-	if( ! empty( $data_unit ) )
-	{
-		foreach( $data_unit as $dunit )
-		{
-			$xtpl->assign( 'unitid', $dunit['unitid'] );
-			$xtpl->assign( 'utitle', $dunit['title'] );
-			$xtpl->assign( 'select', $dunit['select'] );
-			$xtpl->parse( 'main.loop_product_unit' );
-		}
-	}
-
-	if( ! empty( $money_config ) )
-	{
-		foreach( $money_config as $code => $info )
-		{
-			$info['select'] = ( $data_content['money_unit'] == $code ) ? "selected=\"selected\"" : "";
-			$xtpl->assign( 'MON', $info );
-			$xtpl->parse( 'main.money_unit' );
-		}
-	}
-
-	if( $error != "" )
-	{
-		$xtpl->assign( 'info', $error );
-		$xtpl->parse( 'main.error' );
-	}
-
-	$xtpl->assign( 'lang_submit', $lang_submit );
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * users_profile()
- *
- * @return
- */
-function users_profile()
-{
-	global $module_info, $lang_module, $module_file, $module_name, $user_info;
-
-	$xtpl = new XTemplate( "profile.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
-	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-
-	$xtpl->assign( 'PROFILE_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=profile" );
-	$xtpl->assign( 'USER_EDIT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=editinfo" );
-	$xtpl->assign( 'USER_CHANGE_PASS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=changepass" );
-	$xtpl->assign( 'USER_LOGOUT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
-	$xtpl->assign( 'URL_MYPRO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct" );
-
-	$data_user = user_get( $user_info );
-	if( ! empty( $data_user ) )
-	{
-		$xtpl->assign( 'USER', $data_user );
-		$xtpl->parse( 'main.user' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * my_product()
- *
- * @param mixed $data_pro
- * @param mixed $pages_pro
- * @param mixed $page
- * @return
- */
-function my_product( $data_pro, $pages_pro, $page, $per_page )
-{
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config;
-
-	$xtpl = new XTemplate( "my_product.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
-	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-
-	$xtpl->assign( 'PROFILE_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=profile" );
-	$xtpl->assign( 'USER_EDIT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=editinfo" );
-	$xtpl->assign( 'USER_LOGOUT', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=logout" );
-
-	$xtpl->assign( 'URL_MYPRO', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=myproduct" );
-
-	$i = ( ( $page - 1 ) * $per_page ) + 1;
-	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
-
-	if( ! empty( $data_pro ) )
-	{
-		foreach( $data_pro as $dpro )
-		{
-			$xtpl->assign( 'title_pro', $dpro['title'] );
-			$xtpl->assign( 'id', $dpro['id'] );
-			$xtpl->assign( 'img_pro', $dpro['homeimgthumb'] );
-			$xtpl->assign( 'link_pro', $dpro['link_pro'] );
-			$xtpl->assign( 'product_price', FormatNumber( $dpro['product_price'], 0, "", "" ) );
-			$xtpl->assign( 'pro_num', $dpro['product_price'] );
-			$products_status = ( $dpro['status'] == '1' ) ? $lang_module['profile_products_status_ok'] : $lang_module['profile_products_status_no'];
-			$xtpl->assign( 'products_status', $products_status );
-			$xtpl->assign( 'link_del', $dpro['link_del'] );
-			$xtpl->assign( 'link_edit', $dpro['link_edit'] );
-			$xtpl->assign( 'no_pro', $i );
-			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
-			$xtpl->assign( 'bg', $bg );
-			$xtpl->parse( 'main.rows.allow' );
-			$xtpl->parse( 'main.rows' );
-			++$i;
-		}
-	}
-
-	$xtpl->assign( 'pages_pro', $pages_pro );
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * user_get()
- *
- * @param mixed $user_info
- * @return
- */
-/**
- * user_get()
- *
- * @param mixed $user_info
- * @return
- */
-function user_get( $user_info )
-{
-	global $lang_module;
-	$user_info['gender'] = ( $user_info['gender'] == "M" ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
-	$user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
-	$user_info['regdate'] = nv_date( 'd-m-Y', $user_info['regdate'] );
-	$user_info['website'] = empty( $user_info['website'] ) ? $lang_module['na'] : "<a href=\"" . $user_info['website'] . "\" target=\"_blank\">" . $user_info['website'] . "</a>";
-	$user_info['location'] = empty( $user_info['location'] ) ? $lang_module['na'] : $user_info['location'];
-	$user_info['yim'] = empty( $user_info['yim'] ) ? $lang_module['na'] : $user_info['yim'];
-	$user_info['telephone'] = empty( $user_info['telephone'] ) ? $lang_module['na'] : $user_info['telephone'];
-	$user_info['fax'] = empty( $user_info['fax'] ) ? $lang_module['na'] : $user_info['fax'];
-	$user_info['mobile'] = empty( $user_info['mobile'] ) ? $lang_module['na'] : $user_info['mobile'];
-	$user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
-	$user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
-	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
-	$user_info['st_login'] = $user_info['st_login'] ? $lang_module['yes'] : $lang_module['no'];
-	$user_info['email'] = $user_info['email'] = empty( $user_info['email'] ) ? $lang_module['na'] : $user_info['email'];
-	return $user_info;
-}
-
-/**
  * email_new_order()
  *
  * @param mixed $data_content
@@ -1787,41 +1553,6 @@ function email_new_order( $data_content, $data_pro )
 		$xtpl->parse( 'main.price3' );
 	}
 
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * comment_theme()
- *
- * @param mixed $comment_array
- * @return
- */
-function comment_theme( $comment_array )
-{
-	global $module_info, $module_name, $module_file, $module_config, $lang_module;
-
-	$xtpl = new XTemplate( "comment.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-
-	$k = 0;
-	foreach( $comment_array['comment'] as $comment_array_i )
-	{
-		$comment_array_i['post_time'] = nv_date( "d/m/Y H:i", $comment_array_i['post_time'] );
-		$comment_array_i['bg'] = ( $k % 2 ) ? " bg" : "";
-		$comment_array_i['photo'] = $comment_array_i['photo'] ? NV_BASE_SITEURL . $comment_array_i['photo'] : NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
-		$xtpl->assign( 'COMMENT', $comment_array_i );
-		if( ! empty( $comment_array_i['post_email'] ) )
-		{
-			$xtpl->parse( 'main.detail.emailcomm' );
-		}
-		$xtpl->parse( 'main.detail' );
-		++$k;
-	}
-	if( ! empty( $comment_array['page'] ) )
-	{
-		$xtpl->assign( 'PAGE', $comment_array['page'] );
-	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

@@ -110,68 +110,10 @@ a.pro_detail:hover, a.pro_order:hover {
 	display: inline-block;
 }
 
-/* COMMENT FORM */
-#detail .list-comments .alt {
-	background: #f6f6f6;
-}
-
-#detail .list-comments .m-bottom {
-	margin-bottom: 5px;
-}
-
-#detail .list-comments .bg {
-	background-image: none;
-}
-
-#detail .list-comments h4 {
-	color: #b93d00;
-	margin-bottom: .5em;
-}
-
-#detail .list-comments .ava {
-	float: left;
-	width: 60px;
-}
-
-#detail .list-comments .ava img {
-	vertical-align: middle;
-	width: 40px;
-}
-
-#detail .list-comments .comment-content {
-	margin-left: 60px;
-}
-
 #detail .prd_rate {
 	padding: 0px;
 }
 
-#detail .prd_rate form.comment {
-	background: #f7f7f7;
-	border: 1px solid #dfdfdf;
-	padding: 10px;
-	margin-bottom: 10px;
-}
-
-#detail .prd_rate form.comment span {
-	display: block;
-	margin-bottom: 10px;
-}
-
-#detail .prd_rate form.comment textarea {
-	border: 1px solid #dfdfdf;
-	width: 658px;
-	height: 80px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	padding: 4px;
-	margin-bottom: 10px;
-}
-
-#detail .prd_rate form.comment img {
-	vertical-align: middle;
-	margin-left: 10px;
-}
 
 #detail .prd_rate div.line {
 	margin-bottom: 10px;

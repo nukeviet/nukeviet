@@ -165,34 +165,7 @@
 				</div>
 				<!-- BEGIN: comment -->
 				<div class="Page">
-					<div class="prd_rate">
-						<!-- BEGIN: form -->
-						<form class="comment" action="" onsubmit="return false;">
-							<input type="hidden" value="{proid}" name="proid" id="proid" />
-							<fieldset>
-								<span id="charlimitinfo">{LANG.comment_limit_characters}</span>
-								<textarea id="commentcontent" rows="5" name="commentcontent" style="width:90%"></textarea>
-								<div class="fl clearfix">
-									<label for="captcha"> {LANG.comment_capcha} </label>
-									<img height="20" name="vimg" src="{NV_BASE_SITEURL}?scaptcha=captcha" title="{LANG.captcha}" alt="{LANG.captcha}" id="vimg" />
-									<input type="text" maxlength="{NV_GFX_NUM}" value="" id="commentseccode_iavim" name="fcode" style="width:60px"/>
-									<input type="button" value="Reset" class="button" onclick="nv_change_captcha('vimg','commentseccode_iavim');" style="margin-right:5px" />
-								</div>
-								<div>
-									<input onclick="sendcommment('{proid}','{COMMENT_CHECKSESS}','{NV_GFX_NUM}')" type="button" value="{LANG.comment_send}" id="buttoncontent" class="button"/>
-								</div>
-							</fieldset>
-						</form>
-						<!-- END: form -->
-						<!-- BEGIN: form_login -->
-						<p>
-							{COMMENT_LOGIN}
-						</p>
-						<!-- END: form_login -->
-						<div id="showcomment">
-							{COMMENTCONTENT}
-						</div>
-					</div>
+					<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
 				</div>
 				<!-- END: comment -->
 			</div>

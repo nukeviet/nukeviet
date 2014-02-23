@@ -10,17 +10,35 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$q = $nv_Request->get_title( 'q', 'get', '', 1 );
+$q = $nv_Request->get_title( 'term', 'get', '', 1 );
 $searchs = array( 'http://www.', 'http://', 'https://www.', 'https://' );
 $replaces = array();
 $q = str_replace( $searchs, $replaces, $q );
 if( ! $q ) return;
 
-$sql = "SELECT title, link FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title LIKE '%" . $db->dblikeescape( $q ) . "%' OR link LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY weight ASC";
-$result = $db->query( $sql );
-while( list( $title, $link ) = $result->fetch( 3 ) )
+$db->sqlreset()
+	->select( NV_LANG_DATA . '_title, link' )
+	->from( $db_config['prefix'] . '_' . $module_data . '_sources' )
+	->where( NV_LANG_DATA . '_title LIKE :title OR link LIKE :link' )
+	->order( 'weight ASC' )
+	->limit( 50 );
+
+$sth = $db->prepare( $db->sql() );
+$sth->bindValue( ':title', '%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':link', '%' . $q . '%', PDO::PARAM_STR );
+$sth->execute();
+
+$array_data = array();
+while( list( $title, $link ) = $sth->fetch( 3 ) )
 {
-	echo "" . $title . "|" . $link . "\n";
+	$array_data[] = array( 'label' => $title, 'value' => $title );
 }
+
+header( 'Cache-Control: no-cache, must-revalidate' );
+header( 'Content-type: application/json' );
+
+ob_start( 'ob_gzhandler' );
+echo json_encode( $array_data );
+exit();
 
 ?>

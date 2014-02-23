@@ -331,31 +331,9 @@ function nv_sh(sl_id, div_id) {
 	return false;
 }
 
-// Autocomplete function
-
-function findValue(li) {
-	if (li == null)
-		return alert("No match!");
-
-	if (!!li.extra)
-		var sValue = li.extra[0];
-
-	else
-		var sValue = li.selectValue;
-	return sValue;
-}
-
-function selectItem(li) {
-	sValue = findValue(li);
-}
-
-function formatItem(row) {
-	return row[0] + " (" + row[1] + ")";
-}
-
 function nv_chang_pays(payid, object,url_change,url_back) {
 	var value = $(object).val();
-	$.ajax({	
+	$.ajax({
 		type: 'POST',
 		url: url_change,
 		data:'oid='+payid + '&w='+value,
@@ -368,7 +346,7 @@ function nv_chang_pays(payid, object,url_change,url_back) {
 
 function ChangeActive(idobject,url_active){
 	var id = $(idobject).attr('id');
-	$.ajax({	
+	$.ajax({
 		type: 'POST',
 		url: url_active,
 		data:'id='+id ,

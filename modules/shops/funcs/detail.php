@@ -83,20 +83,6 @@ if( $allowed )
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 	}
 
-	$data_content['comment'] = "";
-	$allow_comment = 0;
-
-	if( nv_set_allow( $pro_config['who_comment'], $pro_config['groups_comment'] ) and ! empty( $pro_config['comment'] ) and ( ( $data_content['allowed_comm'] == 1 ) or ( $data_content['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) ) )
-	{
-		$data_comment = nv_comment_module( $data_content['id'], 0 );
-		$data_content['comment'] = comment_theme( $data_comment );
-		$allow_comment = 1;
-	}
-	elseif( $data_content['allowed_comm'] == 2 and ( $pro_config['who_comment'] == 1 or $pro_config['who_comment'] == 0 ) and ! defined( 'NV_IS_USER' ) )
-	{
-		$allow_comment = 2;
-	}
-
 	$sql = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid = " . $data_content['source_id'] );
 	$data_temp = $sql->fetch();
 	$data_content['source'] = $data_temp[NV_LANG_DATA . '_title'];
@@ -196,7 +182,7 @@ if( $allowed )
 
 		}
 	}
-    
+
     if( ! empty( $data_content['ratingdetail'] ) )
 	{
 		$data_content['ratingdetail'] = unserialize( $data_content['ratingdetail'] );
@@ -223,10 +209,15 @@ if( $allowed )
 
 	$total_rate = $data_content['ratingdetail'][1] + ( $data_content['ratingdetail'][2] * 2 ) + ( $data_content['ratingdetail'][3] * 3 ) + ( $data_content['ratingdetail'][4] * 4 ) + ( $data_content['ratingdetail'][5] * 5 );
 	$data_content['ratefercent_avg'] = round( $total_rate / $total_value, 1 );
-    
+
 	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid]['alias'] . "/" . $data_content[NV_LANG_DATA . '_alias'] . "-" . $data_content['id'], $data_content['homeimgthumb'] );
 
-	$contents = detail_product( $data_content, $data_unit, $allow_comment, $data_others, $data_shop, $array_other_view );
+	// comment
+	define( 'NV_COMM_ID', $data_content['id'] );
+	define( 'NV_COMM_ALLOWED', $data_content['allowed_comm'] );
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
+	$contents = detail_product( $data_content, $data_unit, $data_others, $data_shop, $array_other_view );
 }
 else
 {
