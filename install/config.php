@@ -17,7 +17,7 @@ $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['prefix'] = 'nv4';
-$db_config['persistent'] = true;
+$db_config['persistent'] = false;
 $db_config['collation'] = 'utf8_general_ci';
 // mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
