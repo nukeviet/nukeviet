@@ -107,14 +107,37 @@
 <!-- END: loop -->
 <!-- END: keywords -->
 <!-- BEGIN: comment -->
-<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+<script type='text/javascript'>
+function setIframeHeight( iframeId )
+{
+	var ifDoc, ifRef = document.getElementById( iframeId );
+	try{   
+		ifDoc = ifRef.contentWindow.document.documentElement;  
+	}
+	catch( e ){ 
+		try{ 
+	   		ifDoc = ifRef.contentDocument.documentElement;  
+	  	}
+	  	catch(ee){}  
+	}
+	if( ifDoc ){
+		ifRef.height = 1;  
+		ifRef.height = ifDoc.scrollHeight; 
+	 }
+}
+</script>
+<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 <!-- END: comment -->
 <!-- BEGIN: topic -->
 <h2>{LANG.topic}</h2>
 <ul class="list">
 	<!-- BEGIN: loop -->
 	<li>
-		<a href="{TOPIC.link}">{TOPIC.title}</a><span class="smll">({TOPIC.time})</span>
+		<a href="{TOPIC.link}">{TOPIC.title}</a>
+		<span class="smll">({TOPIC.time})</span>
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
 	</li>
 	<!-- END: loop -->
 </ul>
@@ -127,7 +150,11 @@
 <ul class="list">
 	<!-- BEGIN: loop -->
 	<li>
-		<a href="{RELATED_NEW.link}">{RELATED_NEW.title}</a><span class="smll">({RELATED_NEW.time})</span>
+		<a title="{RELATED_NEW.title}" href="{RELATED_NEW.link}">{RELATED_NEW.title}</a>
+		<span class="smll">({RELATED_NEW.time})</span>
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
 	</li>
 	<!-- END: loop -->
 </ul>
@@ -137,7 +164,11 @@
 <ul class="list">
 	<!-- BEGIN: loop -->
 	<li>
-		<a href="{RELATED.link}">{RELATED.title}</a><span class="smll">({RELATED.time})</span>
+		<a href="{RELATED.link}">{RELATED.title}</a>
+		<span class="smll">({RELATED.time})</span>
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
 	</li>
 	<!-- END: loop -->
 </ul>
