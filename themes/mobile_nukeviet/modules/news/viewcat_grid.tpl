@@ -8,7 +8,12 @@
 		<!-- BEGIN: image -->
 		<a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG1}" width="{IMGWIDTH1}" /></a>
 		<!-- END: image -->
-		<h4><a href="{CONTENT.link}">{CONTENT.title}</a></h4>
+		<h4>
+			<a href="{CONTENT.link}">{CONTENT.title}</a>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
+		</h4>
 		<!-- BEGIN: adminlink -->
 		{ADMINLINK}
 		<!-- END: adminlink -->

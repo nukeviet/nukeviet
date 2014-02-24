@@ -15,7 +15,12 @@
 	<!-- BEGIN: image -->
 	<a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG}" width="{IMGWIDTH}" /></a>
 	<!-- END: image -->
-	<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+	<h3>
+		<a href="{CONTENT.link}">{CONTENT.title}</a>
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
+	</h3>
 	<p>
 		{CONTENT.hometext}
 	</p>
@@ -28,7 +33,7 @@
 	<!-- BEGIN: related -->
 	<ul class="list">
 		<!-- BEGIN: loop -->
-		<li>
+		<li class="{CLASS}">
 			<a href="{OTHER.link}">{OTHER.title}</a>
 		</li>
 		<!-- END: loop -->
