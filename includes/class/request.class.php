@@ -8,9 +8,6 @@
  * @Createdate 4/8/2010 6:35
  */
 
-if( defined( 'NV_CLASS_REQUEST' ) ) return;
-define( 'NV_CLASS_REQUEST', true );
-
 if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if( ! defined( 'NV_LIVE_SESSION_TIME' ) ) define( 'NV_LIVE_SESSION_TIME', 0 );
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( '/[\/]+$/', '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
