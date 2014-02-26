@@ -96,7 +96,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
 				$dm = preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $dm );
-				$dm = nv_check_domain( strtolower( $dm ) );
+				$dm = nv_check_domain( nv_strtolower( $dm ) );
 				if( ! empty( $dm ) )
 				{
 					$array_config_global['my_domains'][] = $dm;
