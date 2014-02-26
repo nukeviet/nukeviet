@@ -272,7 +272,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
 	$catids = array_unique( $nv_Request->get_typed_array( 'catids', 'post', 'int', array() ) );
-	$id_block_content = array_unique( $nv_Request->get_typed_array( 'bids', 'post', 'int', array() ) );
+	$id_block_content_post = array_unique( $nv_Request->get_typed_array( 'bids', 'post', 'int', array() ) );
 
 	$rowcontent['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
 
@@ -679,12 +679,22 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		nv_set_status_module();
 		if( empty( $error ) )
 		{
-			foreach( $id_block_content as $bid_i )
+			$id_block_content_new = array_diff( $id_block_content_post, $id_block_content );
+			$id_block_content_del = array_diff( $id_block_content, $id_block_content_post );
+			foreach( $id_block_content_new as $bid_i )
 			{
-				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)' );
+				$_sql = 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid_i;
+				$weight = $db->query( $_sql )->fetchColumn();
+				$weight = intval( $weight ) + 1;
+				
+				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', ' . $weight . ')' );
 			}
-			$id_block_content[] = 0;
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid NOT IN (' . implode( ',', $id_block_content ) . ')' );
+			foreach( $id_block_content_del as $bid_i )
+			{
+				$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid = ' . $bid_i );
+				nv_news_fix_block( $bid_i, false );
+			}
+			
 			$id_block_content = array_keys( $array_block_cat_module );
 			foreach( $id_block_content as $bid_i )
 			{
@@ -779,6 +789,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$msg2 = $lang_module['content_back'];
 		redriect( $msg1, $msg2, $url );
 	}
+	$id_block_content = $id_block_content_post;
 }
 
 if( ! empty( $rowcontent['bodyhtml'] ) ) $rowcontent['bodyhtml'] = nv_htmlspecialchars( $rowcontent['bodyhtml'] );
