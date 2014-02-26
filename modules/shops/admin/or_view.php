@@ -242,7 +242,7 @@ if( $result->rowCount() )
 		}
 		if( $row['userid'] > 0 )
 		{
-			$username = $db->query( 'SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
+			$username = $db->query( 'SELECT username FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
 			$row['payment'] = $username;
 			$row['link_user'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=edit&userid=' . $row['userid'];
 		}
