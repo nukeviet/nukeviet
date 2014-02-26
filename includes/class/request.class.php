@@ -306,7 +306,7 @@ class Request
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'SERVER_NAME', 'HTTP_HOST' ) ) );
+		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
 		$_SERVER['SERVER_PORT'] = $this->get_Env( 'SERVER_PORT' );
 		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( 'SERVER_PROTOCOL' );
 		$this->base_siteurl = $base_siteurl;
