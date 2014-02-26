@@ -8,22 +8,8 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-if( defined( 'NV_CLASS_IPS_PHP' ) ) return;
-define( 'NV_CLASS_IPS_PHP', true );
-
-/**
- * ips
- *
- * @package
- * @author
- * @copyright anhtunguyen
- * @version 2009
- * @access public
- */
 class ips
 {
-	public $server_ip;
 	public $client_ip;
 	public $forward_ip;
 	public $remote_addr;

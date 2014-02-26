@@ -277,6 +277,17 @@ else
 	$array['filesize'] = $array['who_comment'] = $array['who_view'] = $array['who_download'] = 0;
 	$array['comment_allow'] = 1;
 	$array['is_del_report'] = 1;
+
+	switch ( $module_config[$module_name]['setcomm'] )
+	{
+		case 0:
+			$array['comment_allow'] = 0;
+			break;
+
+		case 2:
+			$array['who_comment'] = 1;// Thanh vien  
+			break;
+	}
 }
 
 if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );

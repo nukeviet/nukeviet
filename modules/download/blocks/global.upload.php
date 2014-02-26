@@ -48,7 +48,6 @@ if( defined( 'NV_SYSTEM' ) )
 			{
 				$download_config['is_upload_allow'] = false;
 			}
-			$download_config['is_autocomment_allow'] = nv_set_allow( $download_config['who_autocomment'], $download_config['groups_autocomment'] );
 			return $download_config;
 		}
 	}

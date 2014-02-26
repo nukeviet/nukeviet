@@ -38,7 +38,7 @@ function nv_FixWeightCat( $parentid = 0 )
  */
 function nv_del_cat( $catid )
 {
-	global $db, $module_data, $admin_info;
+	global $db, $module_name, $module_data, $admin_info;
 
 	$sql = 'SELECT parentid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
 	list( $p, $title ) = $db->query( $sql )->fetch( 3 );
@@ -55,7 +55,7 @@ function nv_del_cat( $catid )
 	if( ! empty( $ids ) )
 	{
 		$ids = implode( ',', $ids );
-		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid IN (' . $ids . ')';
+		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id IN (' . $ids . ')';
 		$db->query( $sql );
 
 		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid IN (' . $ids . ')';

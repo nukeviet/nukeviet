@@ -14,7 +14,6 @@ $submenu['add'] = $lang_module['file_addfile'];
 $submenu['filequeue'] = $lang_module['download_filequeue'];
 $submenu['report'] = $lang_module['download_report'];
 $submenu['cat'] = $lang_module['download_catmanager'];
-$submenu['comment'] = $lang_module['download_comment'];
 $submenu['config'] = $lang_module['download_config'];
 
 ?>

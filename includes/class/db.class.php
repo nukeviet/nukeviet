@@ -8,9 +8,6 @@
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
 
-if ( defined( 'NV_CLASS_SQL_DB_PHP' ) ) return;
-define( 'NV_CLASS_SQL_DB_PHP', true );
-
 /**
  * extends for PDO
  */

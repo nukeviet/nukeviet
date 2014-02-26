@@ -46,10 +46,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( isset( $site_mods[$row['module']] ) )
 		{
-			$m_values = $site_mods[$row['module']];
-			if( file_exists( NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/comment.php' ) )
+			$mod_info = $site_mods[$row['module']];
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{
-				include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/comment.php';
+				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
 			}
 		}
 	}

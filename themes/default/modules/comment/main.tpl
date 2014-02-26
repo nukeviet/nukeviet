@@ -4,6 +4,7 @@
 	<head>
 		{THEME_PAGE_TITLE}
 		{THEME_META_TAGS}
+		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/reset.css" media="screen"/>
 		{THEME_CSS}
 		{THEME_SITE_JS}
 	</head>

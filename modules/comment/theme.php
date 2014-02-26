@@ -26,6 +26,7 @@ function nv_theme_comment_main( $module, $id, $allowed_comm, $checkss, $comment,
 	$xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
 	$xtpl->assign( 'THEME_CSS', nv_html_css() );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
+	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 
 	$xtpl->assign( 'MODULE_COMM', $module );
 	$xtpl->assign( 'ID_COMM', $id );

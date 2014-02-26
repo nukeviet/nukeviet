@@ -32,8 +32,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['who_upload'] = $nv_Request->get_int( 'who_upload', 'post', 0 );
 	$array_config['groups_upload'] = $nv_Request->get_typed_array( 'groups_upload', 'post', 'int' );
-	$array_config['who_autocomment'] = $nv_Request->get_int( 'who_autocomment', 'post', 0 );
-	$array_config['groups_autocomment'] = $nv_Request->get_typed_array( 'groups_autocomment', 'post', 'int' );
 	$array_config['maxfilesize'] = $nv_Request->get_int( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
 	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
@@ -57,13 +55,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	$array_config['groups_upload'] = ( ! empty( $array_config['groups_upload'] ) ) ? implode( ',', $array_config['groups_upload'] ) : '';
-
-	if( ! in_array( $array_config['who_autocomment'], array_keys( $array_who_upload ) ) )
-	{
-		$array_config['who_autocomment'] = 0;
-	}
-
-	$array_config['groups_autocomment'] = ( ! empty( $array_config['groups_autocomment'] ) ) ? implode( ',', $array_config['groups_autocomment'] ) : '';
 
 	if( $array_config['maxfilesize'] <= 0 or $array_config['maxfilesize'] > NV_UPLOAD_MAX_FILESIZE )
 	{
@@ -147,8 +138,6 @@ $array_config['groups_addfile'] = '';
 $array_config['is_upload'] = 0;
 $array_config['who_upload'] = 0;
 $array_config['groups_upload'] = '';
-$array_config['who_autocomment'] = 0;
-$array_config['groups_autocomment'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
 $array_config['upload_dir'] = 'files';
@@ -198,17 +187,6 @@ foreach( $array_who_upload as $key => $who )
 	);
 }
 
-$who_autocomment = $array_config['who_autocomment'];
-$array_config['who_autocomment'] = array();
-foreach( $array_who_upload as $key => $who )
-{
-	$array_config['who_autocomment'][$key] = array(
-		'key' => $key,
-		'title' => $who,
-		'selected' => $key == $who_autocomment ? ' selected="selected"' : ''
-	);
-}
-
 $upload_filetype = ! empty( $array_config['upload_filetype'] ) ? explode( ',', $array_config['upload_filetype'] ) : array();
 $array_config['upload_filetype'] = array();
 if( ! empty( $array_exts ) )
@@ -247,20 +225,6 @@ if( ! empty( $groups_list ) )
 			'key' => $key,
 			'title' => $title,
 			'checked' => in_array( $key, $groups_upload ) ? ' checked="checked"' : ''
-		);
-	}
-}
-
-$groups_autocomment = ! empty( $array_config['groups_autocomment'] ) ? explode( ',', $array_config['groups_autocomment'] ) : array();
-$array_config['groups_autocomment'] = array();
-if( ! empty( $groups_list ) )
-{
-	foreach( $groups_list as $key => $title )
-	{
-		$array_config['groups_autocomment'][$key] = array(
-			'key' => $key,
-			'title' => $title,
-			'checked' => in_array( $key, $groups_autocomment ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -307,22 +271,6 @@ if( ! empty( $array_config['groups_upload'] ) )
 		$xtpl->parse( 'main.group_empty.groups_upload' );
 	}
 	$xtpl->parse( 'main.group_empty' );
-}
-
-foreach( $array_config['who_autocomment'] as $who )
-{
-	$xtpl->assign( 'WHO_AUTOCOMMENT', $who );
-	$xtpl->parse( 'main.who_autocomment' );
-}
-
-if( ! empty( $array_config['groups_autocomment'] ) )
-{
-	foreach( $array_config['groups_autocomment'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_AUTOCOMMENT', $group );
-		$xtpl->parse( 'main.group2.groups_autocomment' );
-	}
-	$xtpl->parse( 'main.group2' );
 }
 
 $xtpl->parse( 'main' );
