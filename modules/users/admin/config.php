@@ -270,15 +270,18 @@ foreach( $array_registertype as $id => $titleregister )
 $nv_files = @scandir( NV_ROOTDIR );
 foreach( $nv_files as $value )
 {
-	if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+	if( is_dir( NV_ROOTDIR . '/' . $value ) )
 	{
-		$array = array(
-			'id' => $value,
-			'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
-			'value' => $value
-		);
-		$xtpl->assign( 'DIR_FORUM', $array );
-		$xtpl->parse( 'main.dir_forum' );
+		if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+		{
+			$array = array(
+				'id' => $value,
+				'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
+				'value' => $value
+			);
+			$xtpl->assign( 'DIR_FORUM', $array );
+			$xtpl->parse( 'main.dir_forum' );
+		}
 	}
 }
 

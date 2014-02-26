@@ -41,7 +41,7 @@ if( isset( $array_op[1] ) )
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->join( NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' );
 
 		$all_page = $db->query( $db->sql() )->fetchColumn();
