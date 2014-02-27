@@ -108,9 +108,9 @@ if( ! empty( $array_op ) and $op == 'main' )
 	if( $catid == 0 )
 	{
 		$contents = $lang_module['nocatpage'] . $array_op[0];
-		if( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == 'page-' )
+		if( isset( $array_op[0] ) and substr( $array_op[0], 0, 5 ) == 'page-' )
 		{
-			$page = intval( substr( $array_op[1], 5 ) );
+			$page = intval( substr( $array_op[0], 5 ) );
 		}
 		elseif( ! empty( $alias_cat_url ) )
 		{
