@@ -34,8 +34,6 @@ require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
 	require_once NV_ROOTDIR . '/' . $file_config_temp;
-	// Bat dau phien lam viec cua MySQL
-	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 }
 
 $contents = '';
@@ -331,10 +329,24 @@ elseif( $step == 3 )
 }
 elseif( $step == 4 )
 {
-	$nextstep = 1;
+	$nextstep = 0;
 	$title = $lang_module['check_server'];
-
+	
 	$array_resquest = array();
+	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
+	if ( class_exists( 'PDO' ) )
+	{
+		$PDODrivers = PDO::getAvailableDrivers();
+		foreach($PDODrivers as $_driver)
+		{
+			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
+			{
+				$array_resquest['pdo_support'] = $lang_module['compatible'];
+				$nextstep = 1;
+				break;
+			}
+		}
+	}	
 	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 
 	foreach( $array_resquest_key as $key )
@@ -344,21 +356,6 @@ elseif( $step == 4 )
 		if( ! $sys_info[$key] )
 		{
 			$nextstep = 0;
-		}
-	}
-
-	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
-
-	if ( class_exists( 'PDO' ) )
-	{
-		$PDODrivers = PDO::getAvailableDrivers();
-		foreach($PDODrivers as $_driver)
-		{
-			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
-			{
-				$array_resquest['pdo_support'] = $lang_module['compatible'];
-				break;
-			}
 		}
 	}
 
@@ -419,6 +416,8 @@ elseif( $step == 5 )
 			$db_config['dbsystem'] = $db_config['dbuname'];
 		}
 
+		// Bat dau phien lam viec cua MySQL
+		require_once NV_ROOTDIR . '/includes/class/db.class.php';
 		$db = new sql_db( $db_config );
 
 		if( empty( $db->connect ) )
@@ -659,7 +658,9 @@ elseif( $step == 6 )
 	$error  = '';
 
 	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
-
+	
+	// Bat dau phien lam viec cua MySQL
+	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 	$db = new sql_db( $db_config );
 	if( ! empty( $db->error ) )
 	{
