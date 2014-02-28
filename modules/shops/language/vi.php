@@ -17,22 +17,6 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['comment_success'] = 'Bình luận thành công';
-$lang_module['comment_unsuccess'] = 'Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
-$lang_module['comment_view'] = 'Xem phản hồi';
-$lang_module['comment_submit'] = 'Gửi bình luận';
-$lang_module['comment_timeout'] = 'Bạn đã bình luận vui lòng đợi %s phút sau để có gửi bình luận tiếp.';
-$lang_module['comment_limit_characters'] = 'Số ký tự được gõ là 250';
-$lang_module['comment_capcha'] = 'Nhập mã bảo vệ';
-$lang_module['comment_you_have'] = 'Bạn còn';
-$lang_module['comment_characters_left'] = 'Ký tự';
-$lang_module['comment_limit'] = 'Bạn đã hết ký tự được gõ';
-$lang_module['comment_list'] = 'Danh sách phản hồi';
-$lang_module['comment_user_view_info'] = 'Xem hồ sơ';
-$lang_module['comment_send'] = 'Gửi bình luận';
-$lang_module['comment_do_not_send'] = 'Bạn phải đăng nhập thành viên mới được gửi bình luận tại đây';
-$lang_module['comment_date'] = 'Ngày';
-$lang_module['comment_customer'] = 'Khách';
 $lang_module['title_products'] = 'sản phẩm';
 $lang_module['product_host'] = 'Sản phẩm hot';
 $lang_module['product_page'] = 'Trang';
@@ -349,4 +333,11 @@ $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['compare'] = 'So sánh';
 $lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 
+$lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
+$lang_module['rateavg_percent'] = 'Đánh giá trung bình';
+$lang_module['5star'] = '5 sao';
+$lang_module['4star'] = '4 sao';
+$lang_module['3star'] = '3 sao';
+$lang_module['2star'] = '2 sao';
+$lang_module['1star'] = '1 sao';
 ?>

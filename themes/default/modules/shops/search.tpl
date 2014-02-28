@@ -1,5 +1,7 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/popcalendar/popcalendar.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <div class="search">
 	<h3 class="title-search">{LANG.search_title}</h3>
 	<form action="{BASE_URL_SITE}index.php" name="fsea" method="get" id="fsea">
@@ -21,10 +23,8 @@
 		<div class="rows clearfix">
 			<span>{LANG.finter_title} :</span>
 			<input name="to_date" id="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
-			<img src="{NV_BASE_SITEURL}images/calendar.gif" onclick="popCalendar.show(this, 'to_date', 'dd.mm.yyyy', true);" class="calendar"/>
 			{LANG.to_date} &nbsp;
 			<input name="from_date" id="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" />
-			<img src="{NV_BASE_SITEURL}images/calendar.gif" onclick="popCalendar.show(this, 'from_date', 'dd.mm.yyyy', true);" class="calendar"/>
 		</div>
 		<div class="rows clearfix" align="center">
 			<input class="button" type="submit" value="{LANG.search_title}"/>
@@ -32,7 +32,22 @@
 		</div>
 	</form>
 </div>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#to_date,#from_date").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+	});
 	$("#reset").click(function() {
 		$('#from_date').val("");
 		$('#to_date').val("");

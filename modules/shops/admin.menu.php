@@ -16,7 +16,6 @@ $submenu['cat'] = $lang_module['categories'];
 $submenu['group'] = $lang_module['group'];
 $submenu['blockcat'] = $lang_module['block'];
 $submenu['sources'] = $lang_module['sources'];
-$submenu['comment'] = $lang_module['comment'];
 $submenu['prounit'] = $lang_module['prounit'];
 $submenu['order'] = $lang_module['order_title'];
 $submenu['money'] = $lang_module['money'];

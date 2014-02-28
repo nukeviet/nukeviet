@@ -45,10 +45,6 @@ if( $savesetting == 1 )
 	$data['image_size'] = $data['homewidth'] . "x" . $data['homeheight'];
 	$data['per_page'] = $nv_Request->get_int( 'per_page', 'post', 0 );
 	$data['per_row'] = $nv_Request->get_int( 'per_row', 'post', 0 );
-	$data['comment'] = $nv_Request->get_int( 'comment', 'post', 0 );
-	$data['comment_auto'] = $nv_Request->get_int( 'comment_auto', 'post', 0 );
-	$data['who_comment'] = $nv_Request->get_string( 'who_comment', 'post', 0 );
-	$data['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
 	$data['auto_check_order'] = $nv_Request->get_string( 'auto_check_order', 'post', 0 );
 	$data['post_auto_member'] = $nv_Request->get_string( 'post_auto_member', 'post', 0 );
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
@@ -64,12 +60,6 @@ if( $savesetting == 1 )
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
-
-	if( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
-	{
-		$data['who_comment'] = 0;
-	}
-	$data['groups_comment'] = ( ! empty( $data['groups_comment'] ) ) ? implode( ',', $data['groups_comment'] ) : '';
 
 	if( $error == '' )
 	{
@@ -107,32 +97,6 @@ if( $data['active_payment'] == '1' )
 	}
 }
 
-// Xu ly quyen binh luan
-$who_comment = $data['who_comment'];
-$data['who_comment'] = array();
-foreach( $array_who as $key => $who )
-{
-	$data['who_comment'][$key] = array(
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
-	);
-}
-
-$groups_comment = ! empty( $data['groups_comment'] ) ? explode( ",", $data['groups_comment'] ) : array();
-$data['groups_comment'] = array();
-if( ! empty( $groups_list ) )
-{
-	foreach( $groups_list as $key => $title )
-	{
-		$data['groups_comment'][$key] = array(
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
-		);
-	}
-}
-
 $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
@@ -159,12 +123,6 @@ for( $i = 5; $i <= 50; $i = $i + 5 )
 {
 	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $data['per_page'] ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 }
-
-$check = ( $data['comment'] == '1' ) ? "checked=\"checked\"" : "";
-$xtpl->assign( 'ck_comment', $check );
-
-$check = ( $data['comment_auto'] == '1' ) ? "checked=\"checked\"" : "";
-$xtpl->assign( 'ck_comment_auto', $check );
 
 $check = ( $data['auto_check_order'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_auto_check_order', $check );
@@ -198,22 +156,6 @@ $xtpl->assign( 'ck_compare', $check );
 
 $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
-
-// Binh luan
-foreach( $data['who_comment'] as $who )
-{
-	$xtpl->assign( 'WHO_COMMENT', $who );
-	$xtpl->parse( 'main.who_comment' );
-}
-if( ! empty( $data['groups_comment'] ) )
-{
-	foreach( $data['groups_comment'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_COMMENT', $group );
-		$xtpl->parse( 'main.group.groups_comment' );
-	}
-	$xtpl->parse( 'main.group' );
-}
 
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );

@@ -6,7 +6,7 @@
 			<td width="20px" align="center">&nbsp;</td>
 			<td><strong>{LANG.prounit_name_unit}</strong></td>
 			<td><strong>{LANG.prounit_name_note}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.comment_funcs}</strong></td>
+			<td width="120px" align="center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tbody>
