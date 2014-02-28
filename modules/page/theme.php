@@ -20,7 +20,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 function nv_page_main( $row, $ab_links )
 {
 	global $module_file, $lang_module, $module_info;
-
+	
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $row );
