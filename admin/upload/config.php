@@ -44,10 +44,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->bindParam( ':config_value', $upload_logo, PDO::PARAM_STR );
 	$sth->execute();
 
-	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize1 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize1" );
-	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize2 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize2" );
-	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize3 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize3" );
-	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologomod . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologomod" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize1 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize1'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize2 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize2'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize3 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize3'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologomod . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologomod'" );
 
 	nv_delete_all_cache();
 

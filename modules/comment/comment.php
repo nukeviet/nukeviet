@@ -12,8 +12,6 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_COMM_ID' ) )
 {
-	$commentenable = 0;
-	$news_contents['comment'] = '';
 	if( $module_config[$module_name]['activecomm'] )
 	{
 		// Kiểm tra quyền đăng bình luận
