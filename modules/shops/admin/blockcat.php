@@ -74,7 +74,7 @@ if( ! empty( $savecat ) )
 					if( $flang == NV_LANG_DATA ) $listvalue .= ", :" . $flang . "_" . $fname;
 				}
 
-				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, thumbnail, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', '', " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, thumbnail, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', '', " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . " " . $listvalue . ")";
 
 				$data_insert = array();
 				foreach( $field_lang as $field_lang_i )
@@ -106,7 +106,7 @@ if( ! empty( $savecat ) )
 			}
 			else
 			{
-				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, edit_time=UNIX_TIMESTAMP() WHERE bid =" . $data['bid'] );
+				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat SET " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $data['bid'] );
 				$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 				$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 				$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );

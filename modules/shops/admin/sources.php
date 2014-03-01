@@ -69,7 +69,7 @@ if( ! empty( $savecat ) )
 				$listfield .= ", " . $flang . "_" . $fname;
 				$listvalue .= ", :" . $flang . "_" . $fname;
 			}
-			$sql = "INSERT INTO " . $table_name . " (sourceid,link, logo, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, :link, :logo, " . $weight . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP() " . $listvalue . ")";
+			$sql = "INSERT INTO " . $table_name . " ( link, logo, weight, add_time, edit_time " . $listfield . ") VALUES ( :link, :logo, " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . " " . $listvalue . ")";
 			$data_insert = array();
 			$data_insert['link'] = $rowcontent['link'];
 			$data_insert['logo'] = $rowcontent['logo'];
@@ -91,7 +91,7 @@ if( ! empty( $savecat ) )
 		}
 		else
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . NV_LANG_DATA . "_title= :title, link = :link, logo= :logo, edit_time=UNIX_TIMESTAMP() WHERE sourceid =" . $rowcontent['sourceid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . NV_LANG_DATA . "_title= :title, link = :link, logo= :logo, edit_time=" . NV_CURRENTTIME . " WHERE sourceid =" . $rowcontent['sourceid'] );
 			$stmt->bindParam( ':title', $rowcontent['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':link', $rowcontent['link'], PDO::PARAM_STR );
 			$stmt->bindParam( ':logo', $rowcontent['logo'], PDO::PARAM_STR );

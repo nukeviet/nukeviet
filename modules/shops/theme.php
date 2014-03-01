@@ -656,7 +656,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
  * @param mixed $pages
  * @return
  */
-function viewcat_page_list( $data_content, $pages, $sort )
+function viewcat_page_list( $data_content, $pages, $sort = 0 )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays;
 

@@ -87,7 +87,7 @@ if( ! empty( $savecat ) )
 		$subcatid = "";
 
 		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, thumbnail, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, admins, add_time, edit_time, who_view, groups_view " . $listfield . " )
- 			VALUES (NULL, :parentid, ' ', ' '," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), " . $data['who_view'] . ", :groups_view" . $listvalue . ")";
+ 			VALUES (NULL, :parentid, ' ', ' '," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", " . $data['who_view'] . ", :groups_view" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['subcatid'] = $subcatid;
@@ -116,35 +116,37 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $data['catid'] > 0 and $data['title'] != "" and $error == "" )
 	{
-		$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid= :parentid, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=UNIX_TIMESTAMP() WHERE catid =" . $data['catid'] );
-		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
-		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
-		$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
-		$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
-		$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
-		$stmt->bindParam( ':who_view', $data['who_view'], PDO::PARAM_INT );
-		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
-
-		if( $stmt->execute() )
+		try
 		{
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', "id " . $data['catid'], $admin_info['userid'] );
-
-			if( $data['parentid'] != $data['parentid_old'] )
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid= :parentid, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
+			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+			$stmt->bindParam( ':who_view', $data['who_view'], PDO::PARAM_INT );
+			$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
+			if( $stmt->execute() )
 			{
-				$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid " );
-				$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
-				$stmt->execute();
-				$weight->fetchColumn();
-				$weight = intval( $weight ) + 1;
-				$sql = "UPDATE " . $table_name . " SET weight=" . $weight . " WHERE catid=" . intval( $data['catid'] );
-				$db->query( $sql );
-				nv_fix_cat_order();
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', "id " . $data['catid'], $admin_info['userid'] );
+
+				if( $data['parentid'] != $data['parentid_old'] )
+				{
+					$stmt = $db->prepare( "SELECT max(weight) FROM " . $table_name . " WHERE parentid= :parentid " );
+					$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
+					$stmt->execute();
+					$weight->fetchColumn();
+					$weight = intval( $weight ) + 1;
+					$sql = "UPDATE " . $table_name . " SET weight=" . $weight . " WHERE catid=" . intval( $data['catid'] );
+					$db->query( $sql );
+					nv_fix_cat_order();
+				}
+				nv_del_moduleCache( $module_name );
+				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $data['parentid'] );
+				die();
 			}
-			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&parentid=" . $data['parentid'] );
-			die();
 		}
-		else
+		catch( PDOException $e )
 		{
 			$error = $lang_module['errorsave'];
 		}
