@@ -1,5 +1,7 @@
 <!-- BEGIN: main -->
 <h1 class="title_about" style="color: #0943ae;font-size:14px; margin-top:5px">{CONTENT.title}</h1>
+<p class="hometext">{CONTENT.description}</p>
+<div class="image" align="center"><a rel="shadowbox" href="{CONTENT.image}"><img src="{CONTENT.image}" width="500" /></div>
 {CONTENT.bodytext}
 <!-- BEGIN: other -->
 <ul style="margin:10px;" >

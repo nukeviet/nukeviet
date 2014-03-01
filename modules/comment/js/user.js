@@ -38,6 +38,7 @@ function sendcommment(module, id, allowed, newscheckss, gfx_count) {
 }
 
 function nv_commment_result(res) {
+	nv_change_captcha('vimg', 'commentseccode_iavim');
 	var rs = res.split("_");
 	if (rs[0] == 'OK') {
 		document.location = document.location;
@@ -47,6 +48,7 @@ function nv_commment_result(res) {
 	} else {
 		alert(nv_content_failed);
 	}
+	nv_set_disable_false('buttoncontent');
 	return false;
 }
 
