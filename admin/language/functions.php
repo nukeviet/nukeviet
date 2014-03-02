@@ -72,9 +72,9 @@ function nv_admin_add_field_lang( $dirlang )
 
 		if( $add_field == true )
 		{
-			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'lang_' . $dirlang, 'string', 4000, true, '');
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'lang_' . $dirlang, 'string', 4000, true );
 			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'update_' . $dirlang, 'integer', 2147483647, true, 0);
-			$db->columns_add( NV_LANGUAGE_GLOBALTABLE . '_file', 'author_' . $dirlang, 'string', 255, true, '');
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE . '_file', 'author_' . $dirlang, 'string', 4000, true );
 		}
 	}
 }
