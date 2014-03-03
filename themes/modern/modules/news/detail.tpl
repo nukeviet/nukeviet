@@ -228,26 +228,7 @@
 </div>
 <!-- END: related -->
 <!-- BEGIN: comment -->
-	<script type='text/javascript'>
-	function setIframeHeight( iframeId )
-	{
-		var ifDoc, ifRef = document.getElementById( iframeId );
-		try{   
-			ifDoc = ifRef.contentWindow.document.documentElement;  
-		}
-		catch( e ){ 
-			try{ 
-		   		ifDoc = ifRef.contentDocument.documentElement;  
-		  	}
-		  	catch(ee){}  
-		}
-		if( ifDoc ){
-			ifRef.height = 1;  
-			ifRef.height = ifDoc.scrollHeight; 
-		 }
-	}
-	</script>
-	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 <!-- END: comment -->
 <!-- BEGIN: commentfacebook -->
     <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="620"></div>
