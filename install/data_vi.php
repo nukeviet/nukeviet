@@ -9,6 +9,8 @@
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+try
+{
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -194,10 +196,25 @@ $sth->execute( array(50, 'left-body-right', 'default') );
 $sth->execute( array(50, 'body', 'mobile_nukeviet') );
 $sth->execute( array(51, 'body-right', 'modern') );
 $sth->execute( array(51, 'left-body-right', 'default') );
+$sth->execute( array(51, 'body', 'mobile_nukeviet') );
+$sth->execute( array(52, 'body', 'mobile_nukeviet') );
 $sth->execute( array(52, 'body-right', 'modern') );
 $sth->execute( array(52, 'left-body-right', 'default') );
-$sth->execute( array(53, 'body', 'modern') );
 $sth->execute( array(53, 'body', 'default') );
+$sth->execute( array(53, 'body', 'modern') );
+$sth->execute( array(53, 'body', 'mobile_nukeviet') );
+$sth->execute( array(54, 'body', 'mobile_nukeviet') );
+$sth->execute( array(54, 'body-right', 'modern') );
+$sth->execute( array(54, 'left-body-right', 'default') );
+$sth->execute( array(55, 'body', 'mobile_nukeviet') );
+$sth->execute( array(55, 'body-right', 'modern') );
+$sth->execute( array(55, 'left-body-right', 'default') );
+$sth->execute( array(56, 'body', 'mobile_nukeviet') );
+$sth->execute( array(56, 'body-right', 'modern') );
+$sth->execute( array(56, 'left-body-right', 'default') );
+$sth->execute( array(57, 'body', 'mobile_nukeviet') );
+$sth->execute( array(57, 'body-right', 'modern') );
+$sth->execute( array(57, 'left-body-right', 'default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -828,6 +845,37 @@ $sth->execute( array(6, 51, 3) );
 $sth->execute( array(19, 11, 1) );
 $sth->execute( array(19, 51, 1) );
 
+$sth->execute( array(17, 53, 1) );
+$sth->execute( array(17, 57, 1) );
+$sth->execute( array(17, 56, 1) );
+$sth->execute( array(17, 55, 1) );
+$sth->execute( array(17, 54, 1) );
+$sth->execute( array(8, 53, 1) );
+$sth->execute( array(8, 51, 1) );
+$sth->execute( array(8, 11, 1) );
+$sth->execute( array(8, 57, 1) );
+$sth->execute( array(8, 56, 1) );
+$sth->execute( array(8, 55, 1) );
+$sth->execute( array(8, 54, 1) );
+$sth->execute( array(20, 53, 1) );
+$sth->execute( array(20, 51, 1) );
+$sth->execute( array(20, 11, 1) );
+$sth->execute( array(20, 57, 1) );
+$sth->execute( array(20, 56, 1) );
+$sth->execute( array(20, 55, 1) );
+$sth->execute( array(20, 54, 1) );
+
+$sth->execute( array(16, 53, 1) );
+$sth->execute( array(16, 57, 1) );
+$sth->execute( array(16, 56, 1) );
+$sth->execute( array(16, 55, 1) );
+$sth->execute( array(16, 54, 1) );
+$sth->execute( array(15, 53, 1) );
+$sth->execute( array(15, 57, 1) );
+$sth->execute( array(15, 56, 1) );
+$sth->execute( array(15, 55, 1) );
+$sth->execute( array(15, 54, 1) );
+
 $disable_site_content = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
 $copyright = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền';
 
@@ -1090,6 +1138,13 @@ if( $result->fetchColumn() )
 	$bodytext = "<p style=\"text-align: justify;\"> <strong>Công ty cổ phần phát triển nguồn mở Việt Nam</strong> (VINADES.,JSC) là công ty mã nguồn mở đầu tiên của Việt Nam sở hữu riêng một mã nguồn mở nổi tiếng và đang được sử dụng ở hàng ngàn website lớn nhỏ trong mọi lĩnh vực.<br /> <br /> Ra đời từ hoạt động của tổ chức nguồn mở NukeViet (từ năm 2004) và chính thức được thành lập đầu 2010 tại Hà Nội, khi đó báo chí đã gọi VINADES.,JSC là &quot;Công ty mã nguồn mở đầu tiên tại Việt Nam&quot;.<br /> <br /> Ngay sau khi thành lập, VINADES.,JSC đã thành công trong việc xây dựng <strong><a href=\"http://nukeviet.vn/\" target=\"_blank\">NukeViet</a></strong> thành một <a href=\"http://nukeviet.vn/\" target=\"_blank\">mã nguồn mở</a> thuần Việt. Với khả năng mạnh mẽ, cùng các ưu điểm vượt trội về công nghệ, độ an toàn và bảo mật, NukeViet đã được hàng ngàn website lựa chọn sử dụng trong năm qua. Ngay khi ra mắt phiên bản mới năm 2010, NukeViet đã tạo nên hiệu ứng truyền thông chưa từng có trong lịch sử mã nguồn mở Việt Nam. Tiếp đó, năm 2011 Mã nguồn mở NukeViet đã giành giải thưởng Nhân tài đất Việt cho sản phẩm Công nghệ thông tin đã được ứng dụng rộng rãi.<br /> <div style=\"text-align: center;\"> <object height=\"400\" width=\"480\"><param name=\"movie\" value=\"//www.youtube.com/v/ZOhu2bLE-eA?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3\" /><param name=\"allowFullScreen\" value=\"true\" /><param name=\"allowscriptaccess\" value=\"always\" /><embed allowfullscreen=\"true\" allowscriptaccess=\"always\" height=\"400\" src=\"//www.youtube.com/v/ZOhu2bLE-eA?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3\" type=\"application/x-shockwave-flash\" width=\"480\"></embed></object> <br /> <strong>Video clip trao giải Nhân tài đất Việt 2011.</strong><br /> Sản phẩm &quot;Mã nguồn mở NukeViet&quot; đã nhận giải cao nhất (Giải ba, không có giải nhất, giải nhì) của Giải thưởng Nhân Tài Đất Việt 2011 ở lĩnh vực Công nghệ thông tin - Sản phẩm đã có ứng dụng rộng rãi.</div><br /> Tự chuyên nghiệp hóa mình, thoát khỏi mô hình phát triển tự phát, công ty đã nỗ lực vươn mình ra thế giới và đang phấn đấu trở thành một trong những hiện tượng của thời &quot;dotcom&quot; ở Việt Nam.<br /> <br /> Để phục vụ hoạt động của công ty, công ty liên tục mở rộng và tuyển thêm nhân sự ở các vị trí: Lập trình viên, chuyên viên đồ họa, nhân viên kinh doanh... Hãy liên hệ ngay để gia nhập VINADES.,JSC và cùng chúng tôi trở thành một công ty phát triển nguồn mở thành công nhất Việt Nam.</p> <p>Nếu bạn có nhu cầu triển khai các hệ thống <a href=\"http://toasoandientu.vn\" target=\"_blank\">Tòa Soạn Điện Tử</a>, <a href=\"http://webnhanh.vn\" target=\"_blank\">phần mềm trực tuyến</a>, <a href=\"http://vinades.vn\" target=\"_blank\">thiết kế web</a> theo yêu cầu hoặc dịch vụ có liên quan, hãy liên hệ công ty chuyên quản NukeViet theo thông tin dưới đây:</p><strong><span style=\"font-family: Tahoma; color: rgb(255, 69, 0); font-size: 14px;\">CÔNG TY CỔ PHẦN PHÁT TRIỂN NGUỒN MỞ VIỆT NAM</span></strong><br /><div> <strong>VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY</strong> (<strong>VINADES.,JSC</strong>)<br /> <div>Website: <a href=\"http://vinades.vn/\">http://vinades.vn</a> | <a href=\"http://nukeviet.vn/\">http://nukeviet.vn</a> | <a href=\"http://webnhanh.vn/\">http://webnhanh.vn</a></div><br />Trụ sở: Phòng 1805 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội.<br /> - Tel: +84-4-85872007<br /> - Fax: +84-4-35500914<br /> - Email: <a href=\"mailto:contact@vinades.vn\">contact@vinades.vn</a></div></div>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
+
+	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
 
+}
+catch( PDOException $e )
+{
+  die( $e->getMessage() );
+}
 ?>

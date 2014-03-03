@@ -29,7 +29,10 @@ if( defined( 'NV_COMM_ID' ) )
 		{
 			$allowed = 0;
 		}
-		define( 'NV_COMM_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&module=' . $module_name . '&id=' . NV_COMM_ID . '&allowed=' . $allowed . '&checkss=' . md5( $module_name . '-' . NV_COMM_ID . '-' . $allowed . '-' . $global_config['sitekey'] ) );
+		if( $allowed )
+		{
+			define( 'NV_COMM_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&module=' . $module_name . '&id=' . NV_COMM_ID . '&allowed=' . $allowed . '&checkss=' . md5( $module_name . '-' . NV_COMM_ID . '-' . $allowed . '-' . $global_config['sitekey'] ) );
+		}
 	}
 }
 
