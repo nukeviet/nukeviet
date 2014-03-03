@@ -612,14 +612,26 @@ function nv_html_site_js()
  */
 function nv_admin_menu()
 {
-	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head;
+	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head, $global_config;
 
-	$block_theme = 'default';
-
+	if( $module_info['theme'] == $module_info['template'] and file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $module_info['template'];
+	}
+	elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $global_config['site_theme'];
+	}
+	else
+	{
+		$block_theme = 'default';
+	}
+	
 	$xtpl = new XTemplate( 'admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system' );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'ADMIN_INFO', $admin_info );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'TEMPLATE', $block_theme );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
 	$xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id'] );
 
