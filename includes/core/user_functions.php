@@ -653,6 +653,8 @@ function nv_admin_menu()
 		$xtpl->parse( 'main.is_modadmin' );
 	}
 
+	$xtpl->parse( 'main.lev' . $admin_info['level'] );
+	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
