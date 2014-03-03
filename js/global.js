@@ -679,4 +679,20 @@ function NewWindow(mypage, myname, w, h, scroll) {
 	win = window.open(mypage, myname, settings)
 }
 
+function nv_setIframeHeight(iframeId) {
+	var ifDoc, ifRef = document.getElementById(iframeId);
+	try {
+		ifDoc = ifRef.contentWindow.document.documentElement;
+	} catch( e ) {
+		try {
+			ifDoc = ifRef.contentDocument.documentElement;
+		} catch(ee) {
+		}
+	}
+	if (ifDoc) {
+		ifRef.height = 1;
+		ifRef.height = ifDoc.scrollHeight;
+	}
+}
+
 nv_check_timezone();
