@@ -119,10 +119,7 @@ class ips
 		{
 			return $clientip;
 		}
-		elseif( $_SERVER['SERVER_NAME'] == 'localhost' )
-		{
-			return '127.0.0.1';
-		}
+		else
 		{
 			return 'none';
 		}
@@ -210,6 +207,11 @@ class ips
 					return $ip;
 				}
 			}
+		}
+
+		if( $_SERVER['SERVER_NAME'] == 'localhost' )
+		{
+			return '127.0.0.1';
 		}
 		return 'none';
 	}
