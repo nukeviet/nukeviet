@@ -6,3 +6,9 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+body{
+	font-size:12px;
+}
+a:hover{
+	text-decoration:none;
+}
