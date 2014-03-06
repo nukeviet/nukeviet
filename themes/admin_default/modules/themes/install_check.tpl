@@ -116,7 +116,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td class="center" style="color:green"><strong>{LANG.autoinstall_theme_unzip_success}</strong>
+			<td class="center" style="color:green"><strong>{NV_REDIRECT_LANG}</strong>
 			<br />
 			<br />
 			<a href="{NV_REDIRECT}" title="{LANG.autoinstall_theme_unzip_setuppage}">{LANG.autoinstall_theme_unzip_setuppage}</a></td>
@@ -129,7 +129,6 @@
 	function redirect_page() {
 		parent.location = "{NV_REDIRECT}";
 	}
-
 	//]]>
 </script>
 <!-- END: complete -->

@@ -32,9 +32,11 @@
 		<col style="width:50%" />
 		<tbody>
 			<!-- BEGIN: loop -->
-			<td>{FILE.stt}</td>
-			<td>{FILE.filename}</td>
-			<td>{FILE.size}</td>
+			<tr>
+				<td>{FILE.stt}</td>
+				<td>{FILE.filename}</td>
+				<td>{FILE.size}</td>
+			</tr>
 			<!-- END: loop -->
 		</tbody>
 	</table>
