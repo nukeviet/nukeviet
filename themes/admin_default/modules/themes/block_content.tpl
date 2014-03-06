@@ -16,9 +16,6 @@
 		margin: 2px
 	}
 </style>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	//<![CDATA[
 	var htmlload = '<tr><td class="center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
@@ -47,7 +44,7 @@
 				<td>
 				<select name="module">
 					<option value="">{LANG.block_select_type}</option>
-					<option value="global"{GLOBAL_SELECTED}>{LANG.block_type_global}</option>
+					<option value="theme"{THEME_SELECTED}>{LANG.block_type_global}</option>
 					<!-- BEGIN: module -->
 					<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
 					<!-- END: module -->
@@ -160,189 +157,17 @@
 	</div>
 </form>
 
-<!-- BEGIN: hidefunclist -->
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("tr.funclist").css({
-			"display" : "none"
-		});
-		$("#idmodule_{HIDEFUNCLIST}").css({
-			"display" : "block"
-		});
-	});
+	var bid = parseInt('{ROW.bid}');
+	var bid_module = '{ROW.module}';
+	var selectthemes = '{SELECTTHEMES}';
+	var lang_block_no_func = '{LANG.block_no_func}';
+	var lang_block_error_nogroup = '{LANG.block_error_nogroup}';
 </script>
-<!-- END: hidefunclist -->
-
-<!-- BEGIN: load_block_config -->
-<script type="text/javascript">
-	$("#block_config").show();
-	$("#block_config").html(htmlload);
-	$.get("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=block_config&bid={ROW.bid}&module={ROW.module}&file_name={ROW.file_name}&nocache=" + new Date().getTime(), function(theResponse) {
-		if (theResponse.length > 10) {
-			$("#block_config").html(theResponse);
-		} else {
-			$("#block_config").hide();
-		}
-	});
-</script>
-<!-- END: load_block_config -->
-
-<!-- BEGIN: hide_block_config -->
-<script type="text/javascript">$("#block_config").hide();</script>
-<!-- END: hide_block_config -->
-
-<script type="text/javascript">
-	$(function() {
-		$("select[name=file_name]").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadblocks&module={ROW.module}&bid={ROW.bid}&nocache=" + new Date().getTime());
-
-		$("#exp_time").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : "{NV_BASE_SITEURL}images/calendar.gif",
-			buttonImageOnly : true
-		});
-
-		$("select[name=module]").change(function() {
-			var type = $("select[name=module]").val();
-			$("select[name=file_name]").html("");
-			if (type != "") {
-				$("#block_config").html("");
-				$("#block_config").hide();
-				$("select[name=file_name]").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadblocks&module=" + type + "&nocache=" + new Date().getTime());
-			}
-		});
-		$("select[name=file_name]").change(function() {
-			var file_name = $("select[name=file_name]").val();
-			var type = $("select[name=module]").val();
-			if (file_name.substring(0, 7) == "global.") {
-				$("tr.funclist").css({
-					"display" : ""
-				});
-				$("#labelmoduletype1").css({
-					"display" : ""
-				});
-			} else {
-				$("#labelmoduletype1").css({
-					"display" : "none"
-				});
-				$("tr.funclist").css({
-					"display" : "none"
-				});
-				$("#idmodule_" + type).css({
-					"display" : "block"
-				});
-				var $radios = $("input:radio[name=all_func]");
-				$radios.filter("[value=0]").prop("checked", true);
-				$("#shows_all_func").show();
-			}
-			var blok_file_name = "";
-			if (file_name != "") {
-				var arr_file = file_name.split("|");
-				if (parseInt(arr_file[1]) == 1) {
-					blok_file_name = arr_file[0];
-				}
-			}
-			if (blok_file_name != "") {
-				$("#block_config").show();
-				$("#block_config").html(htmlload);
-				$.get("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=block_config&bid={ROW.bid}&module=" + type + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
-					if (theResponse.length > 10) {
-						$("#block_config").html(theResponse);
-					} else {
-						$("#block_config").hide();
-					}
-				});
-			} else {
-				$("#block_config").hide();
-			}
-		});
-		$("input[name=all_func]").click(function() {
-			var module = $("select[name=module]").val();
-			var af = $(this).val();
-			if (af == "0" && module != "global") {
-				$("#shows_all_func").show();
-			} else if (module == "global" && af == 0) {
-				$("#shows_all_func").show();
-			} else if (af == 1) {
-				$("#shows_all_func").hide();
-			}
-		});
-		$("input[name=leavegroup]").click(function() {
-			var lv = $("input[name='leavegroup']:checked").val();
-			if (lv == "1") {
-				var $radios = $("input:radio[name=all_func]");
-				$radios.filter("[value=0]").prop("checked", true);
-				$("#shows_all_func").show();
-			}
-		});
-
-	    function checkallmodfirst() {
-	        $(this).one("click", checkallmodsecond);
-			$("input.checkmodule").prop("checked", true);
-			$("input[name='func_id[]']:checkbox").each(function() {
-				$("input[name='func_id[]']:visible").prop("checked", true);
-			});
-	    }
-
-	    function checkallmodsecond() {
-	        $(this).one("click", checkallmodfirst);
-			$("input.checkmodule").prop("checked", false);
-			$("input[name='func_id[]']:checkbox").each(function() {
-				$("input[name='func_id[]']:visible").prop("checked", false);
-			});
-	    }
-	    $("input[name=checkallmod]").one("click", checkallmodfirst);
-
-		$("input[name='func_id[]']:checkbox").change(function() {
-			var numfuc = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox").length;
-			var fuccheck = $("#" + $(this).parent().parent().parent().attr("id") + " input[name='func_id[]']:checkbox:checked").length;
-			if (fuccheck != numfuc) {
-				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", false);
-			} else if (numfuc == fuccheck) {
-				$("#" + $(this).parent().parent().parent().attr("id") + " .checkmodule").prop("checked", true);
-			}
-		});
-		$("input.checkmodule").change(function() {
-			$("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").prop("checked", $(this).prop('checked'));
-		});
-		$("select[name=who_view]").change(function() {
-			var groups = $("select[name=who_view]").val();
-			if (groups == 3) {
-				$("#groups_list").show();
-			} else {
-				$("#groups_list").hide();
-			}
-		});
-		$("input[name=confirm]").click(function() {
-			var leavegroup = $("input[name=leavegroup]").is(":checked") ? 1 : 0;
-			var all_func = $("input[name='all_func']:checked").val();
-			if (all_func == 0) {
-				var funcid = [];
-				$("input[name='func_id[]']:checked").each(function() {
-					funcid.push($(this).val());
-				});
-				if (funcid.length < 1) {
-					alert("{LANG.block_no_func}");
-					return false;
-				}
-			}
-			var who_view = $("select[name=who_view]").val();
-			if (who_view == 3) {
-				var grouplist = [];
-				$("input[name='groups_view[]']:checked").each(function() {
-					grouplist.push($(this).val());
-				});
-				if (grouplist.length < 1) {
-					alert("{LANG.block_error_nogroup}");
-					return false;
-				}
-			}
-		});
-	});
-</script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/block_content.js"></script>
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->
 <script type="text/javascript">parent.location = "{BLOCKREDIRECT}";</script>

@@ -16,7 +16,7 @@ $theme2 = $nv_Request->get_title( 'theme2', 'post' );
 $position = $nv_Request->get_title( 'position', 'post' );
 $position = explode( ',', $position );
 
-if( ! empty( $theme1 ) and ! empty( $theme2 ) and $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini' ) and file_exists( NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini' ) and ! empty( $position ) )
+if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global_config['check_theme'], $theme2 ) and $theme1 != $theme2 and file_exists( NV_ROOTDIR . '/themes/' . $theme1 . '/config.ini' ) and file_exists( NV_ROOTDIR . '/themes/' . $theme2 . '/config.ini' ) and ! empty( $position ) )
 {
 	foreach( $position as $pos )
 	{

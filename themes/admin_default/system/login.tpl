@@ -58,7 +58,7 @@
 			<div id="login-content">
 				<h3>{LOGIN_TITLE}</h3>
 				<div class="inner-message">{LOGIN_INFO}</div>
-				<form class="loginform" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();" autocomplete="off">
+				<form class="loginform" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
 					<!-- BEGIN: lang_multi -->
 					<p class="muti-lang">
 						<label for="langinterface">{LANGTITLE}:</label>

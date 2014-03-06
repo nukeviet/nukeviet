@@ -19,11 +19,48 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  */
 function nv_page_main( $row, $ab_links )
 {
-	global $module_file, $lang_module, $module_info;
-	
+	global $module_file, $lang_module, $module_info, $meta_property, $my_head;
+
+	if( ! defined( 'SHADOWBOX' ) )
+	{
+		$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
+		define( 'SHADOWBOX', true );
+	}
+
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $row );
+
+	if( $row['facebookappid'] )
+	{
+		$meta_property['fb:app_id'] = $row['facebookappid'];
+		$xtpl->assign( 'FACEBOOKAPPID', $row['facebookappid'] );
+		$xtpl->parse( 'main.facebookjssdk' );
+	}
+
+	if( $row['socialbutton'] )
+	{
+		if( ! defined( 'FACEBOOK_JSSDK' ) )
+		{
+			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
+			$facebookappid = $row['facebookappid'];
+			$xtpl->assign( 'FACEBOOK_LANG', $lang );
+			$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
+			$xtpl->parse( 'main.facebookjssdk' );
+			if( ! empty( $facebookappid ) )
+			{
+				$meta_property['fb:app_id'] = $facebookappid;
+			}
+			define( 'FACEBOOK_JSSDK', true );
+		}
+		$xtpl->parse( 'main.socialbutton' );
+	}
+	if( ! empty( $row['image'] ) )
+	{
+		$xtpl->parse( 'main.image' );
+	}
 
 	if( ! empty( $ab_links ) )
 	{
@@ -33,6 +70,12 @@ function nv_page_main( $row, $ab_links )
 			$xtpl->parse( 'main.other.loop' );
 		}
 		$xtpl->parse( 'main.other' );
+	}
+
+	if( defined( 'NV_COMM_URL' ) )
+	{
+		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->parse( 'main.comment' );
 	}
 
 	$xtpl->parse( 'main' );
