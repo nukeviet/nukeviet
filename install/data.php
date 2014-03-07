@@ -32,6 +32,8 @@ $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, 
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('password_simple', '000000|1234|2000|12345|111111|123123|123456|654321|696969|1234567|12345678|123456789|1234567890|aaaaaa|abc123|abc123@|abc@123|adobe1|adobe123|azerty|baseball|dragon|football|harley|iloveyou|jennifer|jordan|letmein|macromedia|master|michael|monkey|mustang|password|photoshop|pussy|qwerty|shadow|superman', " . NV_CURRENTTIME . ")";
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('deny_email', 'yoursite.com|mysite.com|localhost|xxx', " . NV_CURRENTTIME . ")";
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
+$sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
+$sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'closed_site', '0')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'admin_theme', 'admin_default')";
