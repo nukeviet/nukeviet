@@ -298,9 +298,18 @@ if( $checkss == $array_data['checkss'] )
 	$error = array();
 	$array_data['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
+	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
 	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 
+	if( nv_unhtmlspecialchars( $array_data['photo'] ) != $row['photo'] )
+	{
+		if( ! empty( $row['photo'] ) and is_file( NV_ROOTDIR . '/' . $row['photo'] ) )
+		{
+			@nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
+		}
+	}
+	
 	if( $array_data['allowloginchange'] )
 	{
 		$array_data['username'] = nv_substr( $nv_Request->get_title( 'username', 'post', '', 1 ), 0, NV_UNICKMAX );
@@ -374,14 +383,16 @@ if( $checkss == $array_data['checkss'] )
 					" . NV_CURRENTTIME . ",
 					'',
 					'',
-					:checknum )";
+					:checknum,
+					'' )";
 
 				$data_insert = array();
 				$data_insert['md5_username'] = $md5_username;
 				$data_insert['email_new'] = $email_new;
 				$data_insert['checknum'] = $checknum;
-				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
 
+				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
+				
 				if( $userid_check > 0 )
 				{
 					$subject = $lang_module['email_active'];
@@ -408,60 +419,23 @@ if( $checkss == $array_data['checkss'] )
 		email= :email,
 		full_name= :full_name,
 		gender= :gender,
+		photo= :photo,
 		birthday= :birthday,
 		view_mail= :view_mail
 		WHERE userid=' . $user_info['userid'] );
+
+	$md5username = nv_md5safe( $array_data['username'] );
+	$photo = nv_unhtmlspecialchars( $array_data['photo'] );
+	
 	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
-	$stmt->bindParam( ':md5username', nv_md5safe( $array_data['username'] ), PDO::PARAM_STR );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
 	$stmt->bindParam( ':full_name', $array_data['full_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
+	$stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
 	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
 	$stmt->bindParam( ':view_mail', $array_data['view_mail'], PDO::PARAM_STR );
 	$stmt->execute();
-
-	if( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
-	{
-		require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
-
-		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'] );
-		$upload_info = $upload->save_file( $_FILES['avatar'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
-
-		@unlink( $_FILES['avatar']['tmp_name'] );
-
-		if( empty( $upload_info['error'] ) )
-		{
-			@chmod( $upload_info['name'], 0644 );
-			if( ! empty( $array_data['photo'] ) and is_file( NV_ROOTDIR . '/' . $array_data['photo'] ) )
-			{
-				@nv_deletefile( NV_ROOTDIR . '/' . $array_data['photo'] );
-			}
-
-			$image = $upload_info['name'];
-			$basename = $upload_info['basename'];
-			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '\2', $basename );
-
-			require_once NV_ROOTDIR . '/includes/class/image.class.php' ;
-
-			$_image = new image( $image, 80, 80 );
-			$_image->resizeXY( 80, 80 );
-			$_image->save( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, $basename );
-			$file_name = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename;
-			if( file_exists( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename ) )
-			{
-				//@chmod($file_name, 0644);
-				$file_name = str_replace( NV_ROOTDIR . '/', '', $file_name );
-				@nv_deletefile( $upload_info['name'] );
-			}
-			$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $user_info['userid'] );
-			$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR );
-			$stmt->execute();
-		}
-		else
-		{
-			$error[] = $lang_module['avata'];
-		}
-	}
 
 	$info = $lang_module['editinfo_ok'];
 	$sec = 3;

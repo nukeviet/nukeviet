@@ -1906,7 +1906,7 @@ function nv_site_mods()
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups' );
+				$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups', 'avatar' );
 				if( ! defined( 'NV_IS_ADMIN' ) )
 				{
 					$user_ops[] = 'logout';

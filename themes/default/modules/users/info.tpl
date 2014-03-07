@@ -81,10 +81,11 @@
 			</dl>
 			<dl class="clearfix gray">
 				<dd class="fl">
-					<label> {LANG.avata} (80x80) </label>
+					<label> {LANG.avata} </label>
 				</dd>
 				<dt class="fr">
-					<input type="file" class="txt" name="avatar" />
+					<input type="text" class="txt" id="avatar" name="avatar" value="{DATA.photo}" readonly="readonly" style="background: #fbfbfb" />
+					<input type="button" value="{LANG.avata_chosen}" id="btn_upload" />
 				</dt>
 			</dl>
 			<dl class="clearfix">
@@ -173,6 +174,12 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	}); 
-</script>
+	});
+	
+	$("input[id=btn_upload]").click(function() {
+		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", "850", "500", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false
+	});
+
+	</script>
 <!-- END: main -->
