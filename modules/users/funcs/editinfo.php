@@ -413,7 +413,7 @@ if( $checkss == $array_data['checkss'] )
 		WHERE userid=' . $user_info['userid'] );
 	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
 	$stmt->bindParam( ':md5username', nv_md5safe( $array_data['username'] ), PDO::PARAM_STR );
-	$stmt->bindParam( ':email', $array_data['username'], PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
 	$stmt->bindParam( ':full_name', $array_data['full_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
 	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
