@@ -32,12 +32,12 @@ $lang_module['comment_timeout'] = 'Bạn đã bình chọn vui lòng đợi %s p
 
 $lang_module['sortcomm_0'] = 'Sắp xếp theo bình luận mới';
 $lang_module['sortcomm_1'] = 'Sắp xếp theo bình luận cũ';
-$lang_module['sortcomm_2'] = 'Sắp xếp theo bình luận Like';
+$lang_module['sortcomm_2'] = 'Sắp xếp theo số lượt thích';
 
 $lang_module['feedback'] = 'Trả lời';
 $lang_module['like'] = 'Thích';
 $lang_module['dislike'] = 'Không thích';
 $lang_module['delete'] = 'Xóa';
-$lang_module['like_unsuccess'] = 'Bạn đã chọn bình luận này trước đó';
+$lang_module['like_unsuccess'] = 'Bạn đã đánh giá bình luận này trước đó';
 
 ?>
