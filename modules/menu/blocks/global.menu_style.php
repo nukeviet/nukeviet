@@ -291,6 +291,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				$xtpl->parse( 'main.loopcat1' );
 			}
 		}
+		$xtpl->assign( 'MENUID', $block_config['bid'] );
 		$xtpl->parse( 'main' );
 
 		return $xtpl->text( 'main' );
@@ -574,7 +575,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 					$list_cats[$catid]['class'] = nv_bmenu_active_menu( $list_cats[$catid] );
 
 					$xtpl->assign( 'MENUTREE', $list_cats[$catid] );
-
+					
 					if( ! empty( $list_cats[$catid]['subcats'] ) )
 					{
 						$tree = nv_sub_menu( $style, $list_cats, $list_cats[$catid]['subcats'] );

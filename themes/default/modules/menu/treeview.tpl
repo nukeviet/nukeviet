@@ -14,7 +14,7 @@
 <script src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#navigation").treeview({
+		$("#navigation{MENUID}").treeview({
 			collapsed : true,
 			unique : true,
 			persist : "location"
@@ -22,7 +22,7 @@
 	}); 
 </script>
 <style type="text/css">
-	#navigation a {
+	#navigation{MENUID} a {
 		background-color: transparent !important
 	}
 
@@ -34,7 +34,7 @@
 		font-weight: normal
 	}
 </style>
-<ul id="navigation">
+<ul id="navigation{MENUID}">
 	<!-- BEGIN: loopcat1 -->
 	<li {CAT1.class}>
 		<a title="{CAT1.note}" href="{CAT1.link}"{CAT1.target}>{CAT1.title}</a>

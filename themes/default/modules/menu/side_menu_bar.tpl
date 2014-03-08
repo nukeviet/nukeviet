@@ -17,14 +17,14 @@
 			down : ['downarrowclass', '{NV_BASE_SITEURL}themes/{BLOCK_THEME}/images/ddsmoothmenu/down.gif', 23],
 			right : ['rightarrowclass', '{NV_BASE_SITEURL}themes/{BLOCK_THEME}/images/ddsmoothmenu/right.gif']
 		},
-		mainmenuid : "smoothmenu_2",
+		mainmenuid : "smoothmenu_2_{MENUID}",
 		zIndex : 200,
 		orientation : 'v',
 		classname : 'ddsmoothmenu-v',
 		contentsource : "markup"
 	}); 
 </script>
-<div class="ddsmoothmenu-v" id="smoothmenu_2">
+<div class="ddsmoothmenu-v" id="smoothmenu_2_{MENUID}">
 	<ul>
 		<!-- BEGIN: loopcat1 -->
 		<li {CAT1.class}>
