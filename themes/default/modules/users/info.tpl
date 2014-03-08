@@ -84,7 +84,7 @@
 					<label> {LANG.avata} </label>
 				</dd>
 				<dt class="fr">
-					<input type="text" class="txt" id="avatar" name="avatar" value="{DATA.photo}" readonly="readonly" style="background: #fbfbfb" />
+					<input type="text" class="txt" id="avatar" name="avatar" value="{DATA.photo}" />
 					<input type="button" value="{LANG.avata_chosen}" id="btn_upload" />
 				</dt>
 			</dl>
