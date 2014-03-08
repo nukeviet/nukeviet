@@ -377,7 +377,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 			}
 		}
-
+		$xtpl->assign( 'MENUID', $block_config['bid'] );
 		$xtpl->parse( 'main' );
 		return ( $xtpl->text( 'main' ) );
 	}
