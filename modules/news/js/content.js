@@ -44,7 +44,7 @@ $("#description").bind("keyup paste", function() {
 $(document).ready(function() {
 	$("input[name='catids[]']").click(function() {
 		var catid = $("input:radio[name=catid]:checked").val();
-		var $radios_catid = $("input:radio[name=catid]");
+		var radios_catid = $("input:radio[name=catid]");
 		var catids = [];
 		$("input[name='catids[]']").each(function() {
 			if ($(this).prop('checked')) {
@@ -53,7 +53,7 @@ $(document).ready(function() {
 			} else {
 				$("#catright_" + $(this).val()).hide();
 				if ($(this).val() == catid) {
-					$radios_catid.filter("[value=" + catid + "]").prop("checked", false);
+					radios_catid.filter("[value=" + catid + "]").prop("checked", false);
 				}
 			}
 		});
@@ -64,7 +64,7 @@ $(document).ready(function() {
 			};
 			catid = parseInt($("input:radio[name=catid]:checked").val() + "");
 			if (!catid) {
-				alert(content_checkcatmsg);
+				radios_catid.filter("[value=" + catids[0] + "]").prop("checked", true);
 			}
 		}
 	});
