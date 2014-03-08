@@ -41,7 +41,7 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 if( empty( $contents ) )
 {
 	$data_content = array();
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=main";
 	$html_pages = "";
 	$orderby = "";
 	if( $sorts == 0 )
