@@ -49,6 +49,7 @@ $lang_module['male'] = 'Nam';
 $lang_module['female'] = 'Nữ';
 $lang_module['NA'] = 'N/A';
 $lang_module['avata'] = 'Hình đại diện';
+$lang_module['avata_chosen'] = 'Chọn ảnh';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
