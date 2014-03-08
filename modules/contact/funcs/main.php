@@ -70,16 +70,12 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		}
 	}
 
-	$email_list = array_unique( $email_list );
 
 	if( ! empty( $email_list ) )
 	{
 		$from = array( $full_name, $femail );
-
-		foreach( $email_list as $to )
-		{
-			@nv_sendmail( $from, $to, $ftitle, $fcontent );
-		}
+		$email_list = array_unique( $email_list );
+		@nv_sendmail( $from, $email_list, $ftitle, $fcontent );
 	}
 }
 
@@ -162,8 +158,8 @@ if( ! empty( $array_rows ) )
 			$sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
 			$sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
-				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply, reply_content, reply_time, reply_aid) VALUES
-				(" . $fpart . ", :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0, '', 0, 0)" );
+				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
+				(" . $fpart . ", :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
 			$sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );
 			$sth->bindParam( ':content', $fcon, PDO::PARAM_STR, strlen( $fcon ) );
 			$sth->bindParam( ':sender_name', $fname, PDO::PARAM_STR );
@@ -174,7 +170,7 @@ if( ! empty( $array_rows ) )
 			{
 				$website = '<a href="' . $global_config['site_url'] . '">' . $global_config['site_name'] . '</a>';
 				$fcon .= '<br /><br />----------------------------------------<br /><br />';
-	
+
 				if( empty( $fphone ) )
 				{
 					$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name'] );
@@ -183,12 +179,12 @@ if( ! empty( $array_rows ) )
 				{
 					$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name'] );
 				}
-	
+
 				nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
-	
+
 				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				$contents .= call_user_func( 'sendcontact', $url );
-	
+
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';

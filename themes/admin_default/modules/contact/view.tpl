@@ -50,10 +50,10 @@
 		</tr>
 		<tr>
 			<td>{LANG.reply_user_send_title}</td>
-			<td>{REPLY.sender_name} &lt;{DATA.sender_email}&gt;</td>
+			<td>{REPLY.reply_time}</td>
 		</tr>
 		<tr>
-			<td colspan="2">{DATA.reply_content}</td>
+			<td colspan="2">{REPLY.reply_content}</td>
 		</tr>
 	</tbody>
 </table>
