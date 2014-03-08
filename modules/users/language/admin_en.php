@@ -21,6 +21,7 @@ $lang_module['modforum'] = 'Members management by forum %1$s.';
 $lang_module['list_module_title'] = 'Members list';
 $lang_module['member_add'] = 'Add member';
 
+$lang_module['avatar_size'] = 'Avatar size';
 $lang_module['member_wating'] = 'Member wating';
 $lang_module['list_question'] = 'Question list';
 $lang_module['search_type'] = 'Search by';

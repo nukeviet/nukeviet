@@ -1268,4 +1268,58 @@ function user_info_exit_redirect( $info, $nv_redirect )
 	exit();
 }
 
+/**
+ * nv_avatar()
+ *
+ * @return void
+ */
+function nv_avatar( $array )
+{
+	global $module_info, $module_file, $module_name, $lang_module, $global_config, $db;
+
+	$xtpl = new XTemplate( 'avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
+	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
+	$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
+	$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
+	$xtpl->assign( 'NV_AVATAR_UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar' );
+
+	$lang_module['avata_bigfile'] = sprintf( $lang_module['avata_bigfile'], nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
+	$lang_module['avata_bigsize'] = sprintf( $lang_module['avata_bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
+	
+	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+	$result = $db->query( $sql );
+	$global_config['avatar_width'] = $result->fetchColumn();
+	$result->closeCursor();
+	
+	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+	$result = $db->query( $sql );
+	$global_config['avatar_height'] = $result->fetchColumn();
+	$result->closeCursor();
+
+	$xtpl->assign( 'NV_AVATAR_WIDTH', $global_config['avatar_width'] );
+	$xtpl->assign( 'NV_AVATAR_HEIGHT', $global_config['avatar_height'] );
+	$xtpl->assign( 'LANG', $lang_module );
+	
+	if( ! $array['success'] )
+	{
+		$xtpl->parse( 'main.uploadform' );
+	}
+	else
+	{
+		$xtpl->assign( 'FILENAME', $array['filename'] );
+		$xtpl->parse( 'main.uploadsuccess' );
+	}
+	
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $contents;
+	include NV_ROOTDIR . '/includes/footer.php';
+	exit();
+}
+	
 ?>

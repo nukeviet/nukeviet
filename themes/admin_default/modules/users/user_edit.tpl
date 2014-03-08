@@ -21,6 +21,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
 <form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
 	<table class="tab1">
 		<colgroup>
@@ -74,7 +75,8 @@
 					<br />
 				</div>
 				<!-- END: photo -->
-				<input type="file" name='photo' /></td>
+				<input type="text" name='photo' value="{DATA.photo}" id="avatar" readonly="readonly" />
+				<input type="button" value="{LANG.avata_chosen}" id="btn_upload" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"> {LANG.birthday} </td>
@@ -205,6 +207,11 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
+	});
+	
+	$("input[id=btn_upload]").click(function() {
+		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", "850", "500", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false
 	});
 	//]]>
 </script>

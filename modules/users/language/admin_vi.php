@@ -17,6 +17,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['avatar_size'] = 'Kích thước ảnh đại diện';
 $lang_module['dir_forum'] = 'Thư mục chứa diễn đàn';
 $lang_module['modforum'] = 'Chức năng quản lý thành viên hiện do diễn đàn quản lý.';
 $lang_module['list_module_title'] = 'Danh sách thành viên';
@@ -48,6 +49,7 @@ $lang_module['male'] = 'Nam';
 $lang_module['female'] = 'Nữ';
 $lang_module['NA'] = 'N/A';
 $lang_module['avata'] = 'Hình đại diện';
+$lang_module['avata_chosen'] = 'Chọn ảnh';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
