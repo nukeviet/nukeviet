@@ -1123,27 +1123,27 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 {
 	global $db, $global_config, $sys_info;
 
-	$sendmail_from = ini_get( 'sendmail_from' );
-
-	require_once NV_ROOTDIR . '/includes/phpmailer/class.phpmailer.php';
+	require_once NV_ROOTDIR . '/includes/phpmailer/PHPMailerAutoload.php';
 
 	try
 	{
-		$mail = new PHPMailer( true );
+		$mail = new PHPMailer;
 		$mail->SetLanguage( NV_LANG_INTERFACE, NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/' );
 		$mail->CharSet = $global_config['site_charset'];
+
 		$mailer_mode = strtolower( $global_config['mailer_mode'] );
 
 		if( $mailer_mode == 'smtp' )
 		{
-			$mail->IsSMTP();
+
+			$mail->isSMTP();
 			$mail->SMTPAuth = true;
 			$mail->Port = $global_config['smtp_port'];
 			$mail->Host = $global_config['smtp_host'];
 			$mail->Username = $global_config['smtp_username'];
 			$mail->Password = $global_config['smtp_password'];
-			$SMTPSecure = intval( $global_config['smtp_ssl'] );
 
+			$SMTPSecure = intval( $global_config['smtp_ssl'] );
 			switch( $SMTPSecure )
 			{
 				case 1:
@@ -1172,18 +1172,17 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 		$message = nv_url_rewrite( $message );
 		$message = nv_change_buffer( $message );
 		$message = nv_unhtmlspecialchars( $message );
-		$subject = nv_unhtmlspecialchars( $subject );
 
-		$mail->From = $sendmail_from;
+		$mail->From = $global_config['site_email'];
 		$mail->FromName = $global_config['site_name'];
 
 		if( is_array( $from ) )
 		{
-			$mail->AddReplyTo( $from[1], $from[0] );
+			$mail->addReplyTo( $from[1], $from[0] );
 		}
 		else
 		{
-			$mail->AddReplyTo( $from );
+			$mail->addReplyTo( $from );
 		}
 
 		if( empty( $to ) ) return false;
@@ -1192,12 +1191,13 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 
 		foreach( $to as $_to )
 		{
-			$mail->AddAddress( $_to );
+			$mail->addAddress( $_to );
 		}
 
-		$mail->Subject = $subject;
+		$mail->Subject = nv_unhtmlspecialchars( $subject );
 		$mail->WordWrap = 120;
-		$mail->MsgHTML( $message );
+		$mail->Body = $message;
+		$mail->AltBody = strip_tags( $message );
 		$mail->IsHTML( true );
 
 		if( ! empty( $files ) )
@@ -1206,18 +1206,16 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 
 			foreach( $files as $file )
 			{
-				$mail->AddAttachment( $file );
+				$mail->addAttachment( $file );
 			}
 		}
 
-		$send = $mail->Send();
-
-		if( ! $send )
+		if( ! $mail->Send() )
 		{
 			trigger_error( $mail->ErrorInfo, E_USER_WARNING );
 		}
 
-		return $send;
+		return true;
 	}
 	catch( phpmailerException $e )
 	{

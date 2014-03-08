@@ -12,17 +12,17 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 $page_title = $lang_module['smtp_config'];
 $smtp_encrypted_array = array();
-$smtp_encrypted_array[0] = "None";
-$smtp_encrypted_array[1] = "SSL";
-$smtp_encrypted_array[2] = "TSL";
+$smtp_encrypted_array[0] = 'None';
+$smtp_encrypted_array[1] = 'SSL';
+$smtp_encrypted_array[2] = 'TSL';
 
 $array_config = array();
 $errormess = '';
 $array_config['mailer_mode'] = nv_substr( $nv_Request->get_title( 'mailer_mode', 'post', $global_config['mailer_mode'], 1 ), 0, 255 );
 $array_config['smtp_host'] = nv_substr( $nv_Request->get_title( 'smtp_host', 'post', $global_config['smtp_host'], 1 ), 0, 255 );
 $array_config['smtp_port'] = nv_substr( $nv_Request->get_title( 'smtp_port', 'post', $global_config['smtp_port'], 1 ), 0, 255 );
-$array_config['smtp_username'] = nv_substr( $nv_Request->get_title( 'smtp_username', 'post', $global_config['smtp_username'], 1 ), 0, 255 );
-$array_config['smtp_password'] = nv_substr( $nv_Request->get_title( 'smtp_password', 'post', $global_config['smtp_password'], 1 ), 0, 255 );
+$array_config['smtp_username'] = nv_substr( $nv_Request->get_title( 'smtp_username', 'post', $global_config['smtp_username'] ), 0, 255 );
+$array_config['smtp_password'] = nv_substr( $nv_Request->get_title( 'smtp_password', 'post', $global_config['smtp_password'] ), 0, 255 );
 
 if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 {
