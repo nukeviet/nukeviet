@@ -472,6 +472,7 @@ a .icon-flip-vertical:before {
 }
 .icon-refresh:before {
   content: "\f021";
+  cursor:pointer
 }
 .icon-list-alt:before {
   content: "\f022";
