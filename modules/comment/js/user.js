@@ -38,15 +38,16 @@ function sendcommment(module, id, allowed, newscheckss, gfx_count) {
 }
 
 function nv_commment_result(res) {
-	nv_change_captcha('vimg', 'commentseccode_iavim');
 	var rs = res.split("_");
 	if (rs[0] == 'OK') {
 		document.location = document.location;
-		alert(rs[1]);
-	} else if (rs[0] == 'ERR') {
-		alert(rs[1]);
 	} else {
-		alert(nv_content_failed);
+		nv_change_captcha('vimg', 'commentseccode_iavim');
+		if (rs[0] == 'ERR') {
+			alert(rs[1]);
+		} else {
+			alert(nv_content_failed);
+		}
 	}
 	nv_set_disable_false('buttoncontent');
 	return false;
