@@ -1553,11 +1553,11 @@ function nv_check_url( $url, $is_200 = 0 )
 		$url_info = @parse_url( $url );
 		$port = isset( $url_info['port'] ) ? intval( $url_info['port'] ) : 80;
 
-		$userAgents = array( //
-			'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0', //
-			'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', //
-			'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)', //
-			'Mozilla/4.8 [en] (Windows NT 6.0; U)', //
+		$userAgents = array(
+			'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
+			'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+			'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
+			'Mozilla/4.8 [en] (Windows NT 6.0; U)',
 			'Opera/9.25 (Windows NT 6.0; U; en)'
 		);
 
@@ -1785,7 +1785,6 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 	$sth->bindParam( ':userid', $userid, PDO::PARAM_INT );
 	if( $sth->execute() )
 	{
-		//nv_del_moduleCache( 'siteinfo' );
 		return true;
 	}
 
@@ -1809,47 +1808,54 @@ function nv_site_mods()
 	else
 	{
 		$site_mods = array();
-		$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
-		while( $row = $result->fetch() )
+		try
 		{
-			$m_title = $row['title'];
-			$f_name = $row['func_name'];
-			$f_alias = $row['alias'];
-			if( ! isset( $site_mods[$m_title] ) )
+			$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
+			while( $row = $result->fetch() )
 			{
-				$site_mods[$m_title] = array(
-					'module_file' => $row['module_file'],
-					'module_data' => $row['module_data'],
-					'custom_title' => $row['custom_title'],
-					'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
-					'admin_file' => $row['admin_file'],
-					'main_file' => $row['main_file'],
-					'theme' => $row['theme'],
-					'mobile' => $row['mobile'],
-					'description' => $row['description'],
-					'keywords' => $row['keywords'],
-					'groups_view' => $row['groups_view'],
-					'in_menu' => $row['in_menu'],
-					'submenu' => $row['submenu'],
-					'is_modadmin' => false,
-					'admins' => $row['admins'],
-					'rss' => $row['rss'],
-					'gid' => $row['gid'],
-					'funcs' => array()
+				$m_title = $row['title'];
+				$f_name = $row['func_name'];
+				$f_alias = $row['alias'];
+				if( ! isset( $site_mods[$m_title] ) )
+				{
+					$site_mods[$m_title] = array(
+						'module_file' => $row['module_file'],
+						'module_data' => $row['module_data'],
+						'custom_title' => $row['custom_title'],
+						'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
+						'admin_file' => $row['admin_file'],
+						'main_file' => $row['main_file'],
+						'theme' => $row['theme'],
+						'mobile' => $row['mobile'],
+						'description' => $row['description'],
+						'keywords' => $row['keywords'],
+						'groups_view' => $row['groups_view'],
+						'in_menu' => $row['in_menu'],
+						'submenu' => $row['submenu'],
+						'is_modadmin' => false,
+						'admins' => $row['admins'],
+						'rss' => $row['rss'],
+						'gid' => $row['gid'],
+						'funcs' => array()
+					);
+				}
+				$site_mods[$m_title]['funcs'][$f_alias] = array(
+					'func_id' => $row['func_id'],
+					'func_name' => $f_name,
+					'show_func' => $row['show_func'],
+					'func_custom_name' => $row['func_custom_name'],
+					'in_submenu' => $row['in_submenu']
 				);
+				$site_mods[$m_title]['alias'][$f_name] = $f_alias;
 			}
-			$site_mods[$m_title]['funcs'][$f_alias] = array(
-				'func_id' => $row['func_id'],
-				'func_name' => $f_name,
-				'show_func' => $row['show_func'],
-				'func_custom_name' => $row['func_custom_name'],
-				'in_submenu' => $row['in_submenu']
-			);
-			$site_mods[$m_title]['alias'][$f_name] = $f_alias;
+			$cache = serialize( $site_mods );
+			nv_set_cache( $cache_file, $cache );
+			unset( $cache, $result );
 		}
-		$cache = serialize( $site_mods );
-		nv_set_cache( $cache_file, $cache );
-		unset( $cache, $result );
+		catch( PDOException $e )
+		{
+			return $site_mods;
+		}
 	}
 
 	if( defined( 'NV_SYSTEM' ) )

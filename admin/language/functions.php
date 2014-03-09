@@ -36,6 +36,13 @@ if( empty( $global_config['idsite'] ) )
 		$allow_func[] = 'delete';
 	}
 }
+
+if( ! isset( $global_config['site_description'] ) )
+{
+	$global_config['site_description'] = '';
+	$global_config['cronjobs_next_time'] = NV_CURRENTTIME;
+}
+
 define( 'ALLOWED_HTML_LANG', 'a, b, blockquote, br, em, h1, h2, h3, h4, h5, h6, hr, p, span, strong' );
 
 $allowed_html_tags = array_map( 'trim', explode( ',', ALLOWED_HTML_LANG ) );
