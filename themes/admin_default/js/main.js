@@ -81,12 +81,10 @@ function ver_menu_click() {
 		$('#ver_menu').hide({
 			direction : "horizontal"
 		}, 500);
-		$('#left_menu').css("width", "0px").css("left", "0px");
-		$('#middle').css("margin-left", "0px");
+		$('#contentwrapper').css("margin-left", "0px");
 		$('#cs_menu i').removeClass("icon-circle-arrow-left").addClass("icon-circle-arrow-right");
 	} else {
-		$('#middle').css("margin-left", "200px");
-		$('#left_menu').css("width", "200px").css("left", "-200px");
+		$('#contentwrapper').css("margin-left", "226px");
 		$('#ver_menu').show({
 			direction : "horizontal"
 		}, 500);
