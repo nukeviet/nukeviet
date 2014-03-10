@@ -554,7 +554,7 @@ function nv_DigitalClock(div_id) {
 
 function nv_search_submit(search_query, search_button, minlength, maxlength) {
 	var query = document.getElementById(search_query);
-	var format_query = formatStringAsUriComponent(query.value);
+	var format_query = strip_tags(query.value);
 	var allowed = (format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
 	if (!allowed) {
 		query.value = format_query;

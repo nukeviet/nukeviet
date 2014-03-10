@@ -16,6 +16,14 @@ if( $id )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND id=' . $id;
 	$row = $db->query( $sql )->fetch();
+
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], true );
+	if( ! empty( $array_op ) AND $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	{
+		Header( 'Location: ' . $base_url_rewrite );
+		die();
+	}
+
 	if( ! empty( $row['image'] ) && ! nv_is_url( $row['image'] ) )
 	{
 		$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['image'];

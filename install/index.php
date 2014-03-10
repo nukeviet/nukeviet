@@ -331,7 +331,7 @@ elseif( $step == 4 )
 {
 	$nextstep = 0;
 	$title = $lang_module['check_server'];
-	
+
 	$array_resquest = array();
 	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
 	if ( class_exists( 'PDO' ) )
@@ -346,7 +346,7 @@ elseif( $step == 4 )
 				break;
 			}
 		}
-	}	
+	}
 	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 
 	foreach( $array_resquest_key as $key )
@@ -658,7 +658,7 @@ elseif( $step == 6 )
 	$error  = '';
 
 	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
-	
+
 	// Bat dau phien lam viec cua MySQL
 	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 	$db = new sql_db( $db_config );
@@ -842,6 +842,32 @@ elseif( $step == 6 )
 						file_put_contents( NV_ROOTDIR . '/robots.txt', $contents, LOCK_EX );
 					}
 
+					define( 'NV_IS_MODADMIN', true );
+
+					$module_name = 'upload';
+					$lang_global['mod_upload'] = 'upload';
+					$global_config['upload_logo'] = '';
+
+					define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+					define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/upload/functions.php';
+
+					$real_dirlist = array();
+					foreach( $allow_upload_dir as $dir )
+					{
+						$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+					}
+					foreach( $real_dirlist as $dirname )
+					{
+						try
+						{
+							$array_dirname[$dirname] = $db->insert_id( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did" );
+						}
+						catch (PDOException $e)
+						{
+							trigger_error( $e->getMessage() );
+						}
+					}
 					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}

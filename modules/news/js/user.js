@@ -12,11 +12,6 @@ function sendrating(id, point, newscheckss) {
 	}
 }
 
-function remove_text() {
-	document.getElementById('to_date').value = "";
-	document.getElementById('from_date').value = "";
-}
-
 function nv_del_content(id, checkss, base_adminurl) {
 	if (confirm(nv_is_del_confirm[0])) {
 		nv_ajax('post', base_adminurl + 'index.php', nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&id=' + id + '&checkss=' + checkss, '', 'nv_del_content_result');

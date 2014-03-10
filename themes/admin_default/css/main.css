@@ -312,13 +312,17 @@ h3{
 /* Middle
  -----------------------------------------------------------------------------*/
 #middle {
-	margin-left: 200px;
+	background:#F2F2F2 url('../images/content-bg.png') repeat-y 0px;
+}
+
+#contentwrapper{
+	margin-left: 226px;
 	height: 1%;
 	position: relative;
 	background-color: #F2F2F2;
 }
 
-#middle:after {
+#contentwrapper:after{
 	content: '';
 	clear: both;
 	display: table;
@@ -329,17 +333,19 @@ h3{
 	float: left;
 	overflow: hidden;
 	margin-right: -100%;
-	background-color: #fff;
+	padding-top:7px;
 }
 
 #contentmod {
-	border: 5px solid #F2F2F2;
 	padding: 5px;
+	background-color: #fff;
+	margin-bottom:10px;
 }
 
 #top_message {
 	background: #d7d7d7 url('../images/top_message_bg.jpg') repeat-x left top;
-	height: 28px
+	height: 28px;
+	margin-bottom:2px;
 }
 
 #top_message div.clock {
@@ -378,6 +384,7 @@ h3{
 	font: bold 11px/22px Arial, Verdana, sans-serif;
 	height: 20px;
 	line-height: 20px;
+	margin-bottom:7px;
 }
 
 #info_tab #cs_menu{
@@ -407,7 +414,8 @@ h3{
 	float: left;
 	width: 200px;
 	position: relative;
-	left: -200px;
+	left: -226px;
+	padding: 5px 21px 10px 5px;
 }
 
 /* Footer

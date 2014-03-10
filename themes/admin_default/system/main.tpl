@@ -62,63 +62,65 @@
 	</div>
 
 	<section id="middle">
+		<div id="contentwrapper">
+			<div id="container">
+				<div id="info_tab">
+					<span id="cs_menu" onclick="ver_menu_click()"><i class="icon-circle-arrow-left icon-large">&nbsp;</i></span>
+					<!-- BEGIN: empty_page_title -->
+					<span class="cell_left">{PAGE_TITLE}</span>
+					<!-- END: empty_page_title -->
 
-		<div id="container">
-			<div id="info_tab">
-				<span id="cs_menu" onclick="ver_menu_click()"><i class="icon-circle-arrow-left icon-large">&nbsp;</i></span>
-				<!-- BEGIN: empty_page_title -->
-				<span class="cell_left">{PAGE_TITLE}</span>
-				<!-- END: empty_page_title -->
-
-				<!-- BEGIN: select_option -->
-				<span class="cell_right">
-					<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
-						<option value="">{PLEASE_SELECT}</option>
-						<!-- BEGIN: select_option_loop -->
-						<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
-						<!-- END: select_option_loop -->
-					</select> </span>
-				<!-- END: select_option -->
-				<!-- BEGIN: site_mods -->
-				<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
-				<!-- END: site_mods -->
-				<div class="clearfix"></div>
-			</div>
-			<div id="contentmod">
-				{THEME_ERROR_INFO}
-				{MODULE_CONTENT}
-				<div class="clearfix">
-					&nbsp;
+					<!-- BEGIN: select_option -->
+					<span class="cell_right">
+						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+							<option value="">{PLEASE_SELECT}</option>
+							<!-- BEGIN: select_option_loop -->
+							<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
+							<!-- END: select_option_loop -->
+						</select> </span>
+					<!-- END: select_option -->
+					<!-- BEGIN: site_mods -->
+					<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
+					<!-- END: site_mods -->
+					<div class="clearfix"></div>
 				</div>
+				<div id="contentmod">
+					{THEME_ERROR_INFO}
+					{MODULE_CONTENT}
+					<div class="clearfix">
+						&nbsp;
+					</div>
+				</div>
+				<!-- #content-->
 			</div>
-			<!-- #content-->
-		</div>
-		<!-- #container-->
+			<!-- #container-->
 
-		<aside id="left_menu" class="ddsmoothmenu-v">
-			<ul id="ver_menu">
-				<!-- BEGIN: menu_loop -->
-				<li>
-					<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
-					<!-- BEGIN: submenu -->
-					<ul>
-						<!-- BEGIN: submenu_loop -->
-						<li>
-							<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-						</li>
-						<!-- END: submenu_loop -->
-					</ul>
-					<!-- END: submenu -->
-				</li>
-				<!-- BEGIN: current -->
-				<li>
-					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-				</li>
-				<!-- END: current -->
-				<!-- END: menu_loop -->
-			</ul>
-		</aside>
-		<!-- #left_menu -->
+			<aside id="left_menu" class="ddsmoothmenu-v">
+				<ul id="ver_menu">
+					<!-- BEGIN: menu_loop -->
+					<li>
+						<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+						<!-- BEGIN: submenu -->
+						<ul>
+							<!-- BEGIN: submenu_loop -->
+							<li>
+								<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+							</li>
+							<!-- END: submenu_loop -->
+						</ul>
+						<!-- END: submenu -->
+					</li>
+					<!-- BEGIN: current -->
+					<li>
+						<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+					</li>
+					<!-- END: current -->
+					<!-- END: menu_loop -->
+				</ul>
+			</aside>
+			<!-- #left_menu -->
+		</div>
+		<!-- #contentwrapper-->
 	</section>
 	<!-- #middle-->
 

@@ -25,8 +25,10 @@ if( $ok1 AND $ok2 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_row', 'rowid ' . $id, $admin_info['userid'] );
 
-	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id NOT IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send)' );
 	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_rows' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_reply' );
 }
 else
 {
