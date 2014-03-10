@@ -44,8 +44,7 @@
 				</tr>
 				<tr>
 					<td class="cltxt"> {LANG.finter_title} : </td>
-					<td><input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/> {LANG.to_date} <input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" /></td>
-					<td class="cltxt"><img src="{NV_BASE_SITEURL}images/refresh.png" onclick="remove_text()" style="cursor:pointer"/></td>
+					<td><input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" type="text"/> {LANG.to_date} <input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" type="text" /></td>
 				</tr>
 				<tr>
 					<td class="cltxt">&nbsp;</td>

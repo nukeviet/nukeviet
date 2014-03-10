@@ -21,13 +21,10 @@ function LoadModulesSearch()
 {
 	global $site_mods, $global_config;
 
-	$pathmodule = NV_ROOTDIR . '/modules';
-	$folder = nv_scandir( $pathmodule, $global_config['check_module'] );
 	$arrayfolder = array();
 	foreach( $site_mods as $mod => $arr_mod )
 	{
-		$pathserch = $pathmodule . '/' . $arr_mod['module_file'] . '/search.php';
-		if( file_exists( $pathserch ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $arr_mod['module_file'] . '/search.php' ) )
 		{
 			$arrayfolder[$mod] = array(
 				'module_name' => $mod,

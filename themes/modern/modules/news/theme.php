@@ -1045,7 +1045,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config;
+	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
 	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1058,9 +1058,8 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		foreach( $array_content as $value )
 		{
 			$catid_i = $value['catid'];
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
 
-			$xtpl->assign( 'LINK', $url );
+			$xtpl->assign( 'LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl'] );
 			$xtpl->assign( 'TITLEROW', strip_tags( BoldKeywordInStr( $value['title'], $key ) ) );
 			$xtpl->assign( 'CONTENT', BoldKeywordInStr( $value['hometext'], $key ) . "..." );
 			$xtpl->assign( 'TIME', date( 'd/m/Y h:i:s A', $value['publtime'] ) );
