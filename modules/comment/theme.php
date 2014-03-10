@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_MOD_COMMENT' ) ) die( 'Stop!!!' );
  * @param mixed $array_data
  * @return
  */
-function nv_theme_comment_main( $module, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url )
+function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url )
 {
 	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $admin_info, $user_info, $lang_global;
 
@@ -29,6 +29,7 @@ function nv_theme_comment_main( $module, $id, $allowed_comm, $checkss, $comment,
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 
 	$xtpl->assign( 'MODULE_COMM', $module );
+	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );

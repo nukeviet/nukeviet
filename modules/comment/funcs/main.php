@@ -16,12 +16,13 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 {
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 
-	$id = $nv_Request->get_int( 'id', 'post,get' );
-	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get' );
+	$area = $nv_Request->get_int( 'area', 'post,get', 0 );
+	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
+	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get', 0 );
 	$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
 	$page = $nv_Request->get_int( 'page', 'get', 0 );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $id . '-' . $allowed_comm . '-' . $global_config['sitekey'] ) )
+	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . $global_config['sitekey'] ) )
 	{
 		// Kiểm tra quyền đăng bình luận
 		$allowed = intval( $module_config[$module]['allowed_comm'] );
@@ -56,7 +57,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 			$nv_Request->set_Cookie( 'sortcomm', $sortcomm, NV_LIVE_COOKIE_TIME );
 		}
 
-		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss;
+		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss;
 
 		$is_delete = false;
 		if( defined( 'NV_IS_ADMIN' ) )
@@ -72,13 +73,17 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 			}
 		}
 
-		$comment_array = nv_comment_data( $module, $id, $allowed_comm, $page, $sortcomm, $base_url );
+		$comment_array = nv_comment_data( $module, $area, $id, $allowed_comm, $page, $sortcomm, $base_url );
 		$comment = nv_comment_theme( $module, $comment_array, $is_delete );
 
-		$contents = nv_theme_comment_main( $module, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url );
+		$contents = nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url );
 		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
 		include NV_ROOTDIR . '/includes/footer.php';
+	}
+	else
+	{
+		die( 'Stop!!!' );
 	}
 }
 Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );

@@ -17,7 +17,9 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_comments (
  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  module varchar(55) NOT NULL,
+ area tinyint(4) NOT NULL DEFAULT '0',
  id mediumint(8) unsigned NOT NULL DEFAULT '0',
+ pid mediumint(8) unsigned NOT NULL DEFAULT '0',
  content text NOT NULL,
  post_time int(11) unsigned NOT NULL DEFAULT '0',
  userid mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -28,8 +30,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  likes mediumint(9) NOT NULL DEFAULT '0',
  dislikes mediumint(9) NOT NULL DEFAULT '0',
  PRIMARY KEY (cid),
+ KEY mod_id (module,area,id)
  KEY post_time (post_time),
- KEY mod_id (module,id)
 ) ENGINE=MyISAM";
 
 ?>

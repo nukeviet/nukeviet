@@ -22,13 +22,19 @@ $per_page_comment = 5;
  * @param mixed $page
  * @return
  */
-function nv_comment_data( $module, $id, $allowed, $page, $sortcomm, $base_url )
+function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base_url )
 {
 	global $db, $module_name, $global_config, $module_config, $db_config, $per_page_comment;
 
 	$comment_array = array();
+	$_where = 'a.module=' . $db->quote( $module );
+	if( $area )
+	{
+		$_where .= ' AND a.area= ' . $area;
+	}
+	$_where .= ' AND a.id= ' . $id . ' AND a.status=1';
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( 'a.module=' . $db->quote( $module ) . ' AND a.id= ' . $id . ' AND a.status=1' );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
 
 	$all_page = $db->query( $db->sql() )->fetchColumn();
 	if( $all_page )
