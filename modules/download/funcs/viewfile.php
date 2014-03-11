@@ -41,6 +41,14 @@ if( ! nv_set_allow( $row['who_view'], $row['groups_view'] ) )
 	exit();
 }
 
+$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die();
+}
+
+
 $row['cattitle'] = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '">' . $list_cats[$row['catid']]['title'] . '</a>';
 
 $row['uploadtime'] = ( int )$row['uploadtime'];
@@ -245,7 +253,7 @@ if( ! in_array( $row['id'], $dfile ) )
 
 // comment
 define( 'NV_COMM_ID', $row['id'] );
-define( 'NV_COMM_ALLOWED', $row['comment_allow'] ? nv_set_allow( $row['who_comment'], $row['groups_comment'] ) : false ); // Không bắt buộc
+define( 'NV_COMM_ALLOWED', $row['comment_allow'] ? nv_set_allow( $row['who_comment'], $row['groups_comment'] ) : false );
 require_once NV_ROOTDIR . '/modules/comment/comment.php';
 
 $row['rating_point'] = 0;
@@ -267,7 +275,7 @@ $flrt = $nv_Request->get_string( 'flrt', 'session', '' );
 $flrt = ! empty( $flrt ) ? unserialize( $flrt ) : array();
 $row['rating_disabled'] = ! in_array( $row['id'], $flrt ) ? false : true;
 
-$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . ( int )$row['id'];
+$row['edit_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'];
 $row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $page_title = $row['title'];
