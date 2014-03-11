@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -207,5 +207,25 @@ $lang_module['config_source_link'] = 'Show link of information source';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
 $lang_module['search_status'] = 'Status';
+$lang_module['checkall'] = 'Check all';
+$lang_module['uncheckall'] = 'Uncheck all';
+$lang_module['viewdescription'] = 'Show describes when view topic';
+$lang_module['viewdescription_0'] = 'No display';
+$lang_module['viewdescription_1'] = 'Display in page 1 of topic';
+$lang_module['viewdescription_2'] = 'Display in all page of topic';
+$lang_module['content_tag'] = 'Tags';
+$lang_module['content_tag_note'] = 'To generate automatically, copy the entire contents of the article in the box below and click';
+$lang_module['allowed_rating_point'] = 'Showing reviews on google if article have points';
+$lang_module['no_allowed_rating'] = 'No display';
+$lang_module['facebookAppID'] = 'Facebook App ID';
+$lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
+$lang_module['socialbutton'] = 'Display Like facebook, G+, Twitter tools when view aricle';
+$lang_module['tags'] = 'Tags manage';
+$lang_module['add_tags'] = 'Add tag';
+$lang_module['edit_tags'] = 'Edit tag';
+$lang_module['alias_search'] = 'Show the different tags, use the search function to display more results';
+$lang_module['googleplus'] = 'authentication Google+ (copyright)';
+$lang_module['googleplus_1'] = 'Not use';
+$lang_module['googleplus_0'] = 'According configuration copyright of module';
 
 ?>

@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -88,5 +88,42 @@ $lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';
 $lang_module['googleAnalyticsSetDomainName_1'] = 'One domain with multiple subdomains';
 $lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
 $lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
+$lang_module['submit'] = 'Submit';
+$lang_module['weight'] = 'No.';
+$lang_module['metaTagsOgp'] = 'Active meta-Tag Open Graph protocol';
+$lang_module['metaTagsOgpNote'] = 'Open Graph protocol: Is a prepared  data to share on facebook, view detail in <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
+$lang_module['module'] = 'Module';
+$lang_module['custom_title'] = 'Outside site name';
+$lang_module['googleplus'] = 'Authentication Google+';
+$lang_module['googleplus_page_title'] = 'Configuring authentication Google+ (copyright)';
+$lang_module['googleplus_list'] = 'List of account Google+';
+$lang_module['googleplus_module'] = 'Configuring authentication Google+ default for module';
+$lang_module['googleplus_title'] = 'Title profile Google+';
+$lang_module['googleplus_idprofile'] = 'ID profile Google+';
+$lang_module['googleplus_add'] = 'Add new';
+$lang_module['googleplusNote1'] = 'The establishment will verify copyright protects original article, copy all TOP avoid higher original post. The settings will be set for the entire module. <br  /> If the function module configuration authentication Google+, the function that takes precedence over';
+$lang_module['googleplusNote2'] = 'If the link is Google+ https://plus.google.com/105065032561530186108 then ID profile enter 105065032561530186108';
+$lang_module['googleAnalyticsMethod'] = 'Choose your method of Google Analytics tracking site';
+$lang_module['rpc'] = 'PING service';
+$lang_module['rpc_setting'] = 'Configuration PING service';
+$lang_module['rpc_error_timeout'] = 'Please wait %s again to continue Ping';
+$lang_module['rpc_error_titleEmpty'] = 'Please declare the name of the URL needed Ping';
+$lang_module['rpc_error_urlEmpty'] = 'Please correct URL declare Ping';
+$lang_module['rpc_error_rsschannelEmpty'] = 'Please correct declaration of URLs RSS channel';
+$lang_module['rpc_error_serviceEmpty'] = 'Service not available. Please notify the board administrator';
+$lang_module['rpc_error_unknown'] = 'Unknown error';
+$lang_module['rpc_flerror0'] = 'PING successed';
+$lang_module['rpc_flerror1'] = 'Error';
+$lang_module['rpc_ftitle'] = 'PING is a free utility to help you quickly create indexes for your website on major search servers.';
+$lang_module['rpc_webtitle'] = 'Title news';
+$lang_module['rpc_weblink'] = 'URL news';
+$lang_module['rpc_rsslink'] = 'RSS chanel news';
+$lang_module['rpc_submit'] = 'PING !';
+$lang_module['rpc_linkname'] = 'Sever';
+$lang_module['rpc_reruslt'] = 'Result';
+$lang_module['rpc_message'] = 'Message';
+$lang_module['rpc_ping'] = 'PING when updating data';
+$lang_module['rpc_ping_page'] = 'PING article';
+$lang_module['rpc_finish'] = 'Complete PING process, you may want to transfer the management page article?';
 
 ?>

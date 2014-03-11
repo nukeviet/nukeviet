@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -34,7 +34,7 @@ $lang_module['block_tpl'] = 'Template';
 $lang_module['block_pos'] = 'Position';
 $lang_module['block_groupbl'] = 'In group';
 $lang_module['block_leavegroup'] = 'Split from the group and create a new group';
-$lang_module['block_group_notice'] = 'Note: <br /> If you change a block of a group then you will change all other blocks in that group. <br/> If not want to change the other blocks of group but wanted to split the block into a new group, please check out the group split button and create new group.';
+$lang_module['block_group_notice'] = 'Note: <br /> If you change a block of a group then you will change all other blocks in that group. <br /> If not want to change the other blocks of group but wanted to split the block into a new group, please check out the group split button and create new group.';
 $lang_module['block_group_block'] = 'Group';
 $lang_module['block_no_more_func'] = 'If not to choose functions from the group then only one function is selected';
 $lang_module['block_no_func'] = 'Please select at least one function';
@@ -159,5 +159,7 @@ $lang_module['block_weight_confirm'] = 'Do you want to set up the position of bl
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Info: Package interfaces you install the file already exists, you have to make sure the installation to overwrite this file';
 $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
 $lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
+$lang_module['autoinstall_theme_success_setupblocks'] = 'The installation process is successful. The system will automatically transfer you to the page of the block management interface.';
+$lang_module['autoinstall_theme_success_setuplayout'] = 'The installation process is successful. The system will automatically transfer you to the page layout settings interface.';
 
 ?>
