@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -177,5 +177,25 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
+$lang_module['rewrite_op_mod'] = 'Remove module name in the url';
+$lang_module['security'] = 'Setup security';
+$lang_module['is_flood_blocker'] = 'Active anti-flood';
+$lang_module['max_requests_60'] = 'The maximum number of requests per minute';
+$lang_module['max_requests_300'] = 'The maximum number of requests in 5 minute';
+$lang_module['nv_anti_iframe'] = 'Anti-Iframe';
+$lang_module['nv_anti_agent'] = 'Check and block computer if the agent does not exist';
+$lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
+$lang_module['captcha_num'] = 'Number characters of captcha';
+$lang_module['captcha_size'] = 'Size of captcha';
+$lang_module['variables'] = 'Setup cookie session';
+$lang_module['live_cookie_time'] = 'The lifetime of the cookie';
+$lang_module['live_session_time'] = 'The lifetime of the session';
+$lang_module['live_session_time0'] = '=0 exist when closing the browser';
+$lang_module['cookie_secure'] = 'cookie secure';
+$lang_module['cookie_httponly'] = 'cookie httponly';
+$lang_module['banip_title_add'] = 'Add IP block';
+$lang_module['banip_title_edit'] = 'Edit IP block';
+$lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
+$lang_module['cdn_download'] = 'Download javascript, css';
 
 ?>

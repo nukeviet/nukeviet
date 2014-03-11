@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 29, 2010, 02:24:00 AM
+* @Createdate Jun 29, 2010, 02:24:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '29/06/2010, 09:24';
@@ -251,5 +251,8 @@ $lang_module['updatemod_title_upgrade'] = 'Update module "%s"';
 $lang_module['updatemod_notexist'] = 'You did not install this module on system so that do not have any work to execute, you should delete this updating pack to website run back';
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
 $lang_module['file_not_writable'] = 'Error: System could not write file %1$s';
+$lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
+$lang_module['lang_multi'] = 'Multi-language website';
+$lang_module['lang_multi_note'] = 'If you have plans to build a multi-language site, you should select this feature';
 
 ?>

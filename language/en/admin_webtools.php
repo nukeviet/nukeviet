@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -58,5 +58,14 @@ $lang_module['autocheckupdate'] = 'Enable automatic version checking';
 $lang_module['updatetime'] = 'Time to check new version';
 $lang_module['clearip_logs'] = 'Delete ip logs';
 $lang_module['update_manual_delete'] = 'Please delete it manually.';
+$lang_module['mudim'] = 'Configure Vietnamese percussion';
+$lang_module['mudim_active'] = 'Active Mudim';
+$lang_module['mudim_active_no'] = 'No active';
+$lang_module['mudim_active_all'] = 'Active on site';
+$lang_module['mudim_active_site'] = 'Enable external site areas';
+$lang_module['mudim_active_admin'] = 'Active in admin control panel';
+$lang_module['mudim_showpanel'] = 'Display mudim control panel';
+$lang_module['mudim_method'] = 'Typing default';
+$lang_module['mudim_displaymode'] = 'Display type';
 
 ?>

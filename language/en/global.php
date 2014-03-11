@@ -6,10 +6,10 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -249,5 +249,15 @@ $lang_global['ftp_err_rawlist'] = 'Error: Unable to determine the directory list
 $lang_global['ftp_err_list_detail'] = 'Error: Unrecognized parameter files, folders';
 $lang_global['ftp_err_fget'] = 'Error: Can not read the text file';
 $lang_global['ftp_err_NVbuffet'] = 'Error: Missing class NVbuffer';
+$lang_global['unick_type_1'] = 'Account used only numbers';
+$lang_global['unick_type_2'] = 'Account used only numbers and letters';
+$lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
+$lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
+$lang_global['upass_type_1'] = 'Password should combin number and letter';
+$lang_global['upass_type_2'] = 'Password should combin number and letter, have special characters';
+$lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
+$lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
+$lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
+$lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 
 ?>

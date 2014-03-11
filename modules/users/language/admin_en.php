@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate May 30, 2010, 05:07:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate May 30, 2010, 05:07:00 PM
+*/
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -20,7 +20,6 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['modforum'] = 'Members management by forum %1$s.';
 $lang_module['list_module_title'] = 'Members list';
 $lang_module['member_add'] = 'Add member';
-
 $lang_module['avatar_size'] = 'Avatar size';
 $lang_module['member_wating'] = 'Member wating';
 $lang_module['list_question'] = 'Question list';
@@ -196,7 +195,6 @@ $lang_module['whoviewlistuser'] = 'Who can view a list of members';
 $lang_module['whoview_all'] = 'All';
 $lang_module['whoview_user'] = 'User';
 $lang_module['whoview_admin'] = 'Administrator';
-
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';
@@ -247,16 +245,73 @@ $lang_module['field_number'] = 'STT';
 $lang_module['field_value'] = 'Value';
 $lang_module['field_text'] = 'Text';
 $lang_module['field_add_choice'] = 'More choices';
-
 $lang_module['field_choicetypes_title'] = 'Choose the type of data';
 $lang_module['field_choicetypes_sql'] = 'Retrieve data from database';
 $lang_module['field_choicetypes_text'] = 'Get data from input';
 $lang_module['field_options_choicesql'] = 'Module selection, data tables and data fields';
-$lang_module['field_options_choicesql_module'] = "Select the module";
-$lang_module['field_options_choicesql_table'] = "Select the data table";
-$lang_module['field_options_choicesql_column'] = "Select the column data";
-$lang_module['field_options_choicesql_key'] = "Select columns as key";
-$lang_module['field_options_choicesql_val'] = "Select column as value";
+$lang_module['field_options_choicesql_module'] = 'Select the module';
+$lang_module['field_options_choicesql_table'] = 'Select the data table';
+$lang_module['field_options_choicesql_column'] = 'Select the column data';
+$lang_module['field_options_choicesql_key'] = 'Select columns as key';
+$lang_module['field_options_choicesql_val'] = 'Select column as value';
 $lang_module['field_sql_choices_empty'] = 'Error: Selection retrieve data from the database is not full';
+$lang_module['dir_forum'] = 'Dir forum';
+$lang_module['avata_chosen'] = 'Chosen avatar';
+$lang_module['deletequestion'] = 'Delete security question';
+$lang_module['password_simple'] = 'Simple passwords';
+$lang_module['delete_group_system'] = 'Error: not delete the account because this account is the administrator of the site';
+$lang_module['siteus'] = 'Allow subsite add members to the group';
+$lang_module['error_group_in_site'] = 'Error: You just added and deleted from the group account, the account management of your site.';
+$lang_module['usactive_0'] = 'Account locked';
+$lang_module['usactive_1'] = 'Account active';
+$lang_module['usactive_2'] = 'Account admin blocked';
+$lang_module['usactive_3'] = 'Account admin active';
+$lang_module['access_register'] = 'Configure register';
+$lang_module['nv_unick'] = 'Number characters account';
+$lang_module['nv_unick_type'] = 'Characters allow when create account';
+$lang_module['nv_upass'] = 'Number characters of password';
+$lang_module['unick_type_0'] = 'Use any character';
+$lang_module['nv_upass_type'] = 'Complexity of the password';
+$lang_module['upass_type_0'] = 'Unlimit';
+$lang_module['access_other'] = 'Other configure';
+$lang_module['access_caption'] = 'Configure using module';
+$lang_module['access_admin'] = 'Group manage';
+$lang_module['access_addus'] = 'Create member';
+$lang_module['access_waiting'] = 'Active member';
+$lang_module['access_editus'] = 'Edit member';
+$lang_module['access_delus'] = 'Delete member';
+$lang_module['access_passus'] = 'Change password';
+$lang_module['access_groups'] = 'Group manage';
+$lang_module['field_edit'] = 'Edit';
+$lang_module['field_choices_empty'] = 'Empty Choice Fields';
+$lang_module['field_date_error'] = 'Min date must smaller max day';
+$lang_module['field_number_error'] = 'Min value must smaller max value';
+$lang_module['field_match_type_error'] = '%s do not rule';
+$lang_module['field_match_type_required'] = '%s require enter';
+$lang_module['field_min_max_error'] = '%1$s enter from %2$s to %3$s letter';
+$lang_module['field_min_max_value'] = '%1$s enter from %2$s to %3$s';
+$lang_module['facebook_config'] = 'Configure login, register width facebook';
+$lang_module['facebook_client_id'] = 'App ID/API Key';
+$lang_module['facebook_client_secret'] = 'Secret code';
+$lang_module['import'] = 'Import from excel';
+$lang_module['import_note'] = 'To import data from Excel files, you need <a title="Download sample file" href="%1$s" /><b /> download sample file , then fill full data file not exceeding 2,000 per account and upload to folder <b />%2$s';
+$lang_module['export'] = 'Export data to excel';
+$lang_module['export_example'] = 'Sample file data module users';
+$lang_module['required_phpexcel'] = 'To use this function you need to install the PHPExcel library, you can download in  <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';
+$lang_module['export_comment_userid'] = 'This data should be blank, if you enter this value system will replace the account with corresponding userid';
+$lang_module['export_comment_password'] = 'If you do not enter data system will set the default password is the current date';
+$lang_module['export_comment_gender'] = 'Accep values​​: M = Male, F = Female';
+$lang_module['export_comment_date'] = 'Enter by: Month / Day / Year or empty';
+$lang_module['export_complete'] = 'Export data successfully, you just download and unzip the file to retrieve data';
+$lang_module['export_note'] = 'The process of data can occur within a few minutes, please wait until the completion notice';
+$lang_module['read_note'] = 'To continue the process of reading the data file, select the file you need then click on the execute button, the data read process can take place within a few minutes, please wait until further notice';
+$lang_module['read_submit'] = 'Perform';
+$lang_module['read_filename'] = 'File name';
+$lang_module['read_filesite'] = 'Size';
+$lang_module['read_complete'] = 'Reading data successfully, you want to move to site members list';
+$lang_module['read_error'] = 'Error reading file %1$s, the system does not update account: %2$s Name: %3$s. So the system is stopped!';
+$lang_module['read_error_field'] = 'Error reading file %1$s, you need to check column: %2$s column should be: %3$s. So the system is stopped!';
+$lang_module['read_error_memory_limit'] = 'Error: The system can not read the data, please check your data files only to about 2,000 lines per file or you must configure the php.ini file memory_limit value (128MB read about 2,000 lines)';
+$lang_module['read_ignore'] = 'Read the incorrect data standards';
 
 ?>
