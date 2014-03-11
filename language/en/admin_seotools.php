@@ -9,7 +9,7 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -101,7 +101,7 @@ $lang_module['googleplus_module'] = 'Configuring authentication Google+ default 
 $lang_module['googleplus_title'] = 'Title profile Google+';
 $lang_module['googleplus_idprofile'] = 'ID profile Google+';
 $lang_module['googleplus_add'] = 'Add new';
-$lang_module['googleplusNote1'] = 'The establishment will verify copyright protects original article, copy all TOP avoid higher original post. The settings will be set for the entire module. <br  /> If the function module configuration authentication Google+, the function that takes precedence over';
+$lang_module['googleplusNote1'] = 'The establishment will verify copyright protects original article, copy all TOP avoid higher original post. The settings will be set for the entire module. <br /> If the function module configuration authentication Google+, the function that takes precedence over';
 $lang_module['googleplusNote2'] = 'If the link is Google+ https://plus.google.com/105065032561530186108 then ID profile enter 105065032561530186108';
 $lang_module['googleAnalyticsMethod'] = 'Choose your method of Google Analytics tracking site';
 $lang_module['rpc'] = 'PING service';
