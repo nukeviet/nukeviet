@@ -4,7 +4,7 @@
 	<blockquote class="error"> {ERROR} </blockquote>
 </div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_smtp">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_smtp">
 	<table class="tab1">
 		<col class="w150"/>
 		<col style="white-space: nowrap" />

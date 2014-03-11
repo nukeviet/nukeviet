@@ -69,7 +69,7 @@
 		$("input[name=checkfile]").click(function() {
 			$("#message").show();
 			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
 				$("#message").hide();
 			});
 		});
@@ -78,7 +78,7 @@
 </script>
 <!-- END: autoinstall_theme_uploadedfile -->
 <!-- BEGIN: main -->
-<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
+<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>

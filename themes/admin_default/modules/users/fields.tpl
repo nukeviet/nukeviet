@@ -284,7 +284,7 @@
 	}
 
 	function nv_show_list_field() {
-		$('#module_show_list').html('<center><img alt="" src="{NV_BASE_SITEURL}images/load_bar.gif"></center>').load('{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&nocache=' + new Date().getTime());
+		$('#module_show_list').html('<center><img alt="" src="{NV_BASE_SITEURL}images/load_bar.gif"></center>').load('{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&nocache=' + new Date().getTime());
 		return;
 	}
 

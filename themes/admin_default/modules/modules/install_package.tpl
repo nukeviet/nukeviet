@@ -2,7 +2,7 @@
 <a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv4_module_{MODULENAME} - {FILESIZE}</span></a>
 <!-- END: package_complete -->
 <!-- BEGIN: main -->
-<form name="install_module" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
+<form name="install_module" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
@@ -36,7 +36,7 @@
 				$("#step1").slideUp();
 				$.ajax({
 					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}",
+					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}",
 					data : "modulename=" + modulename + "&{NV_OP_VARIABLE}={OP}",
 					success : function(data) {
 						$("input[name=back]").removeAttr("disabled");

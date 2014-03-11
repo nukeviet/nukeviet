@@ -37,7 +37,7 @@
 	<label><em>{LANG.search_note}</em></label>
 </form>
 
-<form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
+<form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
 	<table class="tab1">
 		<thead>
 			<tr>
