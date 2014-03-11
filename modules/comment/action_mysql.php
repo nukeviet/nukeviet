@@ -30,8 +30,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  likes mediumint(9) NOT NULL DEFAULT '0',
  dislikes mediumint(9) NOT NULL DEFAULT '0',
  PRIMARY KEY (cid),
- KEY mod_id (module,area,id)
- KEY post_time (post_time),
+ KEY mod_id (module,area,id),
+ KEY post_time (post_time)
 ) ENGINE=MyISAM";
 
 ?>
