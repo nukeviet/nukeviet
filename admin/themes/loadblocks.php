@@ -33,7 +33,7 @@ if( $module == 'theme' )
 	{
 		if( preg_match( $global_config['check_block_theme'], $file_name, $matches ) )
 		{
-			$sel = ( $file_name == $row['file_name'] ) ? ' selected' : '';
+			$sel = ( $file_name == $row['file_name'] ) ? ' selected="selected"' : '';
 			$load_config = ( file_exists( NV_ROOTDIR . '/themes/' . $row['theme'] . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) ) ? 1 : 0;
 			$load_mod_array = array();
 			if( $matches[1] != 'global' )
@@ -50,12 +50,9 @@ if( $module == 'theme' )
 		}
 	}
 }
-elseif( preg_match( $global_config['check_module'], $module ) )
+elseif( isset( $site_mods[$module]['module_file'] ) )
 {
-	$sth = $db->prepare( 'SELECT module_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
-	$sth->bindParam( ':title', $module, PDO::PARAM_STR );
-	$sth->execute();
-	$module_file = $sth->fetchColumn();
+	$module_file = $site_mods[$module]['module_file'];
 	if( !empty( $module_file ) )
 	{
 		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks' ) )
@@ -64,7 +61,7 @@ elseif( preg_match( $global_config['check_module'], $module ) )
 
 			foreach( $block_file_list as $file_name )
 			{
-				$sel = ( $file == $file_name ) ? ' selected' : '';
+				$sel = ( $file_name == $row['file_name'] ) ? ' selected="selected"' : '';
 
 				unset( $matches );
 				preg_match( $global_config['check_block_module'], $file_name, $matches );

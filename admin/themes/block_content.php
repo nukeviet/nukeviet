@@ -177,10 +177,10 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$row['groups_view'] = ( string )$who_view;
 	}
 
-	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) OR preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] )) ) ? 1 : 0;
-	$array_funcid = $nv_Request->get_array( 'func_id', 'post' );
+	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) OR preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) ) ) ? 1 : 0;
+	$array_funcid_post = $nv_Request->get_array( 'func_id', 'post' );
 
-	if( empty( $all_func ) and empty( $array_funcid ) )
+	if( empty( $all_func ) and empty( $array_funcid_post ) )
 	{
 		$error[] = $lang_module['block_no_func'];
 	}
@@ -271,15 +271,25 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	else
 	{
+		$array_funcid_module = array();
+		foreach ( $site_mods as $mod => $_arr_mod )
+		{
+			foreach ( $_arr_mod['funcs'] as $_func => $_row )
+			{
+				if( $_row['show_func'] )
+				{
+					$array_funcid_module[$_row['func_id']] = $mod;
+				}
+			}
+		}
+
 		if( $all_func )
 		{
-			$array_funcid = array();
-			$func_result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-
-			while( list( $func_id_i ) = $func_result->fetch( 3 ) )
-			{
-				$array_funcid[] = $func_id_i;
-			}
+			$array_funcid = array_keys( $array_funcid_module );
+		}
+		elseif( preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) )
+		{
+			$array_funcid = array_intersect( $array_funcid_post, array_keys( $array_funcid_module ) );
 		}
 		else
 		{
@@ -292,34 +302,24 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					{
 						if( $row_i['module_file'] == $matches[1] )
 						{
-							$array_in_module[] = $db->quote( $mod );
+							$array_in_module[] = $mod;
 						}
 					}
 				}
 			}
 			elseif( isset( $site_mods[$module] ) )
 			{
-				$array_in_module[] = $db->quote( $module );
+				$array_in_module[] = $mod;
 			}
-			else
-			{
-				// Chuyen huong
-				$xtpl->assign( 'BLOCKREDIRECT', nv_base64_decode( $blockredirect ) );
-				$xtpl->parse( 'blockredirect' );
-				$contents = $xtpl->text( 'blockredirect' );
 
-				include NV_ROOTDIR . '/includes/header.php';
-				echo $contents;
-				include NV_ROOTDIR . '/includes/footer.php';
-				die();
-			}
-			$array_funcid_module = array();
-			$query = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module IN (' . implode(',', $array_in_module) . ') ORDER BY in_module ASC, subweight ASC' );
-			while( list( $func_id_i ) = $query->fetch( 3 ) )
+			$array_funcid = array();
+			foreach ($array_funcid_module as $func_id => $mod)
 			{
-				$array_funcid_module[] = $func_id_i;
+				if( in_array( $mod, $array_in_module ) AND in_array( $func_id, $array_funcid_post ) )
+				{
+					$array_funcid = $func_id;
+				}
 			}
-			$array_funcid = array_intersect( $array_funcid, $array_funcid_module );
 		}
 
 		if( is_array( $array_funcid ) )

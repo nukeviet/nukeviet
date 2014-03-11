@@ -15,6 +15,11 @@ if( ! nv_function_exists( 'nv_facebook_comment_box_blocks' ) )
 	function nv_block_config_facebook_comment_box_blocks( $module, $data_block, $lang_block )
 	{
 		$html = '';
+
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['facebookappid'] . '</td>';
+		$html .= '	<td><input type="text" name="config_facebookappid" size="50" value="' . $data_block['facebookappid'] . '"/></td>';
+		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '	<td>' . $lang_block['width'] . '</td>';
 		$html .= '	<td><input type="text" name="config_width" size="5" value="' . $data_block['width'] . '"/></td>';
@@ -46,21 +51,22 @@ if( ! nv_function_exists( 'nv_facebook_comment_box_blocks' ) )
 		$return = array();
 		$return['error'] = array();
 		$return['config'] = array();
+		$return['config']['facebookappid'] = $nv_Request->get_title( 'config_facebookappid', 'post', 0 );
 		$return['config']['width'] = $nv_Request->get_int( 'config_width', 'post', 0 );
 		$return['config']['numpost'] = $nv_Request->get_int( 'config_numpost', 'post', 0 );
-		$return['config']['scheme'] = $nv_Request->get_string( 'config_scheme', 'post', 0 );
+		$return['config']['scheme'] = $nv_Request->get_title( 'config_scheme', 'post', 0 );
 
 		return $return;
 	}
 
 	function nv_facebook_comment_box_blocks( $block_config )
 	{
-		global $client_info, $module_name, $meta_property;
+		global $client_info, $module_name;
 		$content = '';
 		if( ! defined( 'FACEBOOK_JSSDK' ) )
 		{
 			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			$facebookappid = ( isset( $module_config[$module_name]['facebookappid'] ) ) ? $module_config[$module_name]['facebookappid'] : '';
+			$facebookappid = ( isset( $module_config[$module_name]['facebookappid'] ) ) ? $module_config[$module_name]['facebookappid'] : $block_config['facebookappid'];
 
 			$content .= "<div id=\"fb-root\"></div>
 			<script type=\"text/javascript\">
@@ -72,15 +78,9 @@ if( ! nv_function_exists( 'nv_facebook_comment_box_blocks' ) )
 			 fjs.parentNode.insertBefore(js, fjs);
 			 }(document, 'script', 'facebook-jssdk'));
 			</script>";
-			if( ! empty( $facebookappid ) )
-			{
-				$meta_property['fb:app_id'] = $facebookappid;
-			}
 			define( 'FACEBOOK_JSSDK', true );
 		}
-
-		$url = $client_info['selfurl'];
-		$content .= '<div class="fb-comments" data-href="' . $url . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
+		$content .= '<div class="fb-comments" data-href="' . $client_info['selfurl'] . '" data-num-posts="' . $block_config['numpost'] . '" data-width="' . $block_config['width'] . '" data-colorscheme="' . $block_config['scheme'] . '"></div>';
 
 		return $content;
 	}
