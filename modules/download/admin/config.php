@@ -62,7 +62,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
     else
     {
-        $array_config['maxfilesize'] = intval($array_config['maxfilesize'] * 1048576);
+        $array_config['maxfilesize'] = intval( $array_config['maxfilesize'] * 1048576 );
     }
 
 	$array_config['upload_filetype'] = ( ! empty( $array_config['upload_filetype'] ) ) ? implode( ',', $array_config['upload_filetype'] ) : '';

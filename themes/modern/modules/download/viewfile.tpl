@@ -34,8 +34,6 @@
 			<!-- BEGIN: fileupload -->
 			<p>
 				<strong>{LANG.download_fileupload} {SITE_NAME}:</strong>
-				<br />
-				<span class="small">( {LANG.filesize}: {ROW.filesize} )</span>
 			</p>
 			<ul class="links_down">
 				<!-- BEGIN: row -->
@@ -86,6 +84,9 @@
 	</div>
 	<div class="gg2 fr">
 		<ul class="spec">
+			<li>
+				<strong>{LANG.filesize}</strong>: {ROW.filesize}
+			</li>
 			<li>
 				<strong>{LANG.file_version}</strong>: {ROW.version}
 			</li>

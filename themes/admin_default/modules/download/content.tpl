@@ -73,7 +73,7 @@
 			</tr>
 			<tr>
 				<td> {LANG.file_size} </td>
-				<td><input type="text" class="w100" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /> {LANG.config_maxfilebyte} </td>
+				<td><input type="text" class="w100 right" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /> {LANG.config_maxfilemb} </td>
 			</tr>
 			<tr>
 				<td> {LANG.file_version} </td>

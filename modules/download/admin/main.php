@@ -147,7 +147,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		if( ! empty( $array['linkdirect'] ) and empty( $array['fileupload'] ) )
 		{
-			$array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
+			$array['filesize'] = $nv_Request->get_float( 'filesize', 'post', 0 );
+            $array['filesize'] = intval( $array['filesize'] * 1048576 );
 		}
 
 		$alias = change_alias( $array['title'] );
@@ -459,7 +460,14 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$result = $db->query( $sql );
 	$upload_dir = $result->fetchColumn();
 
-	if( ! $array['filesize'] ) $array['filesize'] = '';
+	if( empty( $array['filesize'] ) )
+	{
+	    $array['filesize'] = '';
+    }
+    else
+    {
+        $array['filesize'] = number_format( $array['filesize']/1048576, 2);
+    }
 
 	$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
