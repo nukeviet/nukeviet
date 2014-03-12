@@ -111,9 +111,19 @@ while( $row = $result->fetch() )
 	$sitemapFiles[$row['name']] = $row['title'];
 }
 
+if( $global_config['check_rewrite_file'] )
+{
+    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap.xml';
+}
+else
+{
+    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+}
+
 $xtpl = new XTemplate( 'sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'URL_SITEMAP', $url_sitemap );
 $xtpl->assign( 'ACTION_FORM', NV_BASE_ADMINURL. 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '='.$op);
 
 if( $nv_Request->isset_request( 'submit', 'post' ) AND empty( $global_config['idsite'] ) )
