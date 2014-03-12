@@ -33,7 +33,7 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 
 		// Get and insert block from theme 1
 		$sth = $db->prepare( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position' );
-		$sth->bindParam( ':theme', $theme2, PDO::PARAM_STR );
+		$sth->bindParam( ':theme', $theme1, PDO::PARAM_STR );
 		$sth->bindParam( ':position', $pos, PDO::PARAM_STR );
 		$sth->execute();
 		while( $row = $sth->fetch() )
