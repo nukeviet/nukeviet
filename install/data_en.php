@@ -80,7 +80,7 @@ $sth->execute( array(54, 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
 $sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
 $sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
 $sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
-$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 11, '') );
+$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
