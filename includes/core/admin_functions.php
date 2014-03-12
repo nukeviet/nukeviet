@@ -42,7 +42,7 @@ function nv_var_export( $var_array )
 
 function nv_save_file_config_global()
 {
-	global $db, $sys_info, $global_config;
+	global $db, $sys_info, $global_config, $db_config;
 
 	if( $global_config['idsite'] )
 	{
@@ -281,6 +281,15 @@ function nv_save_file_config_global()
 	}
 
 	$content_config .= "\n";
+
+    $nv_plugin_area = array( );
+    $_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_plugin ORDER BY plugin_area ASC, weight ASC';
+    $_query = $db->query( $_sql );
+    while( $row = $_query->fetch( ) )
+    {
+        $nv_plugin_area[$row['plugin_area']][] = $row['plugin_file'];
+    }
+    $content_config .= "\$nv_plugin_area=" . nv_var_export( $nv_plugin_area ) . ";\n\n";
 
 	$content_config .= "\$rewrite_keys=" . nv_var_export( array_keys( $rewrite ) ) . ";\n";
 	$content_config .= "\$rewrite_values=" . nv_var_export( array_values( $rewrite ) ) . ";\n";
