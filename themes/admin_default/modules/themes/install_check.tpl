@@ -41,7 +41,7 @@
 			if (confirm("{LANG.autoinstall_theme_error_warning_overwrite}")) {
 				$("#message").show();
 				$("#step1").html("");
-				$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function() {
+				$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function() {
 					$("#message").hide();
 				});
 			}
@@ -72,7 +72,7 @@
 		$("input[name=checkfile]").click(function() {
 			$("#message").show();
 			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
 				$("#message").hide();
 			});
 		});

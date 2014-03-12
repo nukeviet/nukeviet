@@ -122,11 +122,11 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 			if( $admin_file )
 			{
-				$content_lang .= "\nif( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) ";
+				$content_lang .= "\nif( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )";
 			}
 			else
 			{
-				$content_lang .= "\nif( ! defined( 'NV_MAINFILE' ) ) ";
+				$content_lang .= "\nif( ! defined( 'NV_MAINFILE' ) )";
 			}
 
 			$content_lang .= " die( 'Stop!!!' );\n\n";

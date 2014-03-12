@@ -9,7 +9,7 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -215,7 +215,7 @@ $lang_module['listusers_sort_by_regdate'] = 'join date';
 $lang_module['listusers_order_DESC'] = 'descending';
 $lang_module['listusers_order_ASC'] = 'ascending';
 $lang_module['lostpass_email_subject'] = 'Guide password recovery in website %s';
-$lang_module['lostpass_email_content'] = 'Hello %1$s,<br  /><br  />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br  /><br  />URL: %3$s<br  /><br  />The information required to declare:<br  /><br  />Account Name: %4$s<br  />Email: %5$s<br  />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br  /><br  />Administrator';
+$lang_module['lostpass_email_content'] = 'Hello %1$s,<br /><br />You propose to change my login password at the website %2$s. To change your password, you need to access the link below:<br /><br />URL: %3$s<br /><br />The information required to declare:<br /><br />Account Name: %4$s<br />Email: %5$s<br />This letter is automatically sent to your email inbox from site %2$s. If you do not know anything about the contents of this letter, just delete it.<br /><br />Administrator';
 $lang_module['field_match_type_error'] = '%s not follow rule!';
 $lang_module['field_min_max_value'] = '%1$s enter from %2$s to %3$s';
 $lang_module['field_min_max_error'] = '%1$s enter from %2$s to %3$s letters';

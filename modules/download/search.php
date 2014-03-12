@@ -71,7 +71,7 @@ if( ! empty( $list_cats ) )
 			$content = $content . ' ' . $introtext;
 	
 			$result_array[] = array(
-				'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias,
+				'link' => $link . $list_cats[$catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'title' => BoldKeywordInStr( $tilterow, $key, $logic ),
 				'content' => BoldKeywordInStr( $content, $key, $logic )
 			);

@@ -9,7 +9,7 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -109,7 +109,6 @@ $lang_module['autoinstall_package_processing'] = 'please wait to complete...';
 $lang_module['autoinstall_theme_error_uploadfile'] = 'Error: Unable to upload files. Please check directory permission or chmod directory';
 $lang_module['autoinstall_theme_unzip_abort'] = 'The installation can not continue automatically by the host does not support.';
 $lang_module['autoinstall_theme_permission_folder'] = 'The installation can not continue automatically, because the system can not create folders.';
-$lang_module['autoinstall_theme_unzip_success'] = 'The installation process successfully. The system will automatically switch you to a page layout settings for the interface.';
 $lang_module['autoinstall_theme_error_movefile'] = 'The automatic installation can not continue the host does not support moving files after extract';
 $lang_module['autoinstall_theme_cantunzip'] = 'Error: can not extract. Please check folders permissions.';
 $lang_module['autoinstall_theme_unzip_filelist'] = 'List of extracted files';

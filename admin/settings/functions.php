@@ -24,6 +24,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'cronjobs_edit';
 	$allow_func[] = 'cronjobs_del';
 	$allow_func[] = 'cronjobs_act';
+	$allow_func[] = 'plugin';
 	$allow_func[] = 'variables';
 	$allow_func[] = 'cdn';
 }

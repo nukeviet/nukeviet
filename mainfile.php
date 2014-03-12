@@ -296,6 +296,15 @@ require NV_ROOTDIR . '/includes/class/crypt.class.php';
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
 
+if( isset( $nv_plugin_area[1] ) )
+{
+    // Kết nối với các plugin Trước khi kết nối CSDL
+    foreach ( $nv_plugin_area[1] as $_fplugin )
+    {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
+
 // Bat dau phien lam viec cua MySQL
 require NV_ROOTDIR . '/includes/class/db.class.php';
 $db = new sql_db( $db_config );
@@ -467,5 +476,14 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_ADMIN' ) )
 unset( $nv_check_update );
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
+
+if( isset( $nv_plugin_area[2] ) )
+{
+    // Kết nối với các plugin Trước khi gọi các module
+    foreach ( $nv_plugin_area[2] as $_fplugin )
+    {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
 
 ?>

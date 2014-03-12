@@ -9,7 +9,7 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )  die( 'Stop!!!' );
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -197,5 +197,17 @@ $lang_module['banip_title_add'] = 'Add IP block';
 $lang_module['banip_title_edit'] = 'Edit IP block';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
 $lang_module['cdn_download'] = 'Download javascript, css';
+
+$lang_module['plugin'] = 'Configuration Plugin';
+$lang_module['plugin_info'] = 'php file plugin implementation is contained in the &ldquo;<strong>includes/plugin/</strong>&rdquo;. The plugin will always run when the system is activated';
+$lang_module['plugin_file'] = 'Executable File';
+$lang_module['plugin_area'] = 'Area';
+$lang_module['plugin_area_1'] = 'Before the database connection';
+$lang_module['plugin_area_2'] = 'Before run the module';
+$lang_module['plugin_area_3'] = 'Website content before sending to the browser';
+$lang_module['plugin_number'] = 'Order Number';
+$lang_module['plugin_func'] = 'Aunction';
+$lang_module['plugin_add'] = 'Add a plugin';
+$lang_module['plugin_file_delete'] = 'Deleted from the system';
 
 ?>

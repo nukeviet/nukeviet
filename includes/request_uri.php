@@ -39,21 +39,21 @@ elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/\+]+)(' . nv_p
 	{
 		$_GET[NV_LANG_VARIABLE] = $request_uri_array[0];
 
-		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
+		if( isset( $request_uri_array[1]{0} ) )
 		{
 			$_GET[NV_NAME_VARIABLE] = $request_uri_array[1];
 
-			if( isset( $request_uri_array[2] ) and ! empty( $request_uri_array[2] ) )
+			if( isset( $request_uri_array[2]{0} ) )
 			{
 				$_GET[NV_OP_VARIABLE] = $request_uri_array[2];
 			}
 		}
 	}
-	elseif( ! empty( $request_uri_array[0] ) )
+	elseif( isset( $request_uri_array[0]{0} ) )
 	{
 		$_GET[NV_NAME_VARIABLE] = $request_uri_array[0];
 
-		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
+		if( isset( $request_uri_array[1]{0} ) )
 		{
 			$lop = strlen( $request_uri_array[0] ) + 1;
 			$_GET[NV_OP_VARIABLE] = substr( $matches[1], $lop );

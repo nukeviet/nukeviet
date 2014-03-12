@@ -14,15 +14,16 @@ $difftimeout = 360;
 
 $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 
-$module = $nv_Request->get_string( 'module', 'post,get' );
+$module = $nv_Request->get_string( 'module', 'post' );
 if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND isset( $site_mods[$module] ) )
 {
 	// Kiểm tra module có được Sử dụng chức năng bình luận
-	$id = $nv_Request->get_int( 'id', 'post,get' );
-	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get' );
-	$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
+	$area = $nv_Request->get_int( 'area', 'post', 0 );
+	$id = $nv_Request->get_int( 'id', 'post' );
+	$allowed_comm = $nv_Request->get_int( 'allowed', 'post' );
+	$checkss = $nv_Request->get_string( 'checkss', 'post' );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $id . '-' . $allowed_comm . '-' . $global_config['sitekey'] ) )
+	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . $global_config['sitekey'] ) )
 	{
 		// Kiểm tra quyền đăng bình luận
 		$allowed = intval( $module_config[$module]['allowed_comm'] );
@@ -67,9 +68,11 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 			elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 			{
 				$content = nv_nl2br( $content, '<br />' );
+				$pid = $nv_Request->get_int( 'pid', 'post', 0 );
+
 				try
 				{
-					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_comments (module, id, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $id . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')' );
+					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_comments (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')' );
 					$stmt->bindParam( ':module', $module, PDO::PARAM_STR );
 					$stmt->bindParam( ':content', $content, PDO::PARAM_STR, strlen( $content ) );
 					$stmt->bindParam( ':post_name', $name, PDO::PARAM_STR );
@@ -84,7 +87,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 							$row = array();
 							$row['module'] =  $module;
 							$row['id'] = $id;
-							
+
 							$mod_info = $site_mods[$module];
 							if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 							{

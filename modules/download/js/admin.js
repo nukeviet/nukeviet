@@ -185,6 +185,12 @@ function nv_gourl(mylink, is_myUrl, butt) {
 
 //  ---------------------------------------
 
+function nv_delurl(id, item) {
+		$( "#fileupload_item_"+item ).remove();
+}
+
+//  ---------------------------------------
+
 function nv_checkfile_result(res) {
 	alert(res);
 	return false;
@@ -272,12 +278,13 @@ function nv_report_alldel_result(res) {
 
 //  ---------------------------------------
 
-function nv_file_additem() {
+function nv_file_additem(id) {
 	file_items++;
-	var newitem = "<input readonly=\"readonly\" class=\"txt\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" style=\"width : 300px\" maxlength=\"255\" />";
+	var newitem = "<div id=\"fileupload_item_" + file_items + "\"><input readonly=\"readonly\" class=\"w300\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
 	newitem += "&nbsp;<input type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse_file( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
 	newitem += "&nbsp;<input type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" /><br />";
+	newitem += "&nbsp;<input type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + " ); \" /></div>";
 	$("#fileupload_items").append(newitem);
 }
 

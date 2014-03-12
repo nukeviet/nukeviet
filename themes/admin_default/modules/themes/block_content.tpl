@@ -34,7 +34,7 @@
 	<blockquote class="error"><span id="message">{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
-<form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;selectthemes={SELECTTHEMES}&amp;blockredirect={BLOCKREDIRECT}">
+<form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;selectthemes={SELECTTHEMES}&amp;blockredirect={BLOCKREDIRECT}">
 	<table class="tab1">
 		<col style="width:160px;white-space:nowrap" />
 		<col style="width:600px;white-space:nowrap" />

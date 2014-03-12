@@ -59,13 +59,13 @@
 			var theme = $(this).attr("title");
 			$.ajax({
 				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=activatetheme",
+				url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=activatetheme",
 				data : "theme=" + theme,
 				success : function(data) {
 					if (data != "OK_" + theme) {
 						alert(data);
 					}
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}";
+					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
 				}
 			});
 		});
@@ -74,11 +74,11 @@
 			if (confirm("{LANG.theme_created_delete_theme}" + theme + " ?")) {
 				$.ajax({
 					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=deletetheme",
+					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=deletetheme",
 					data : "theme=" + theme,
 					success : function(data) {
 						alert(data);
-						window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}";
+						window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
 					}
 				});
 			}

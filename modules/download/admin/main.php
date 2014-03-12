@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['filesize'] = 0;
 		if( ! empty( $array['fileupload'] ) )
 		{
-			$fileupload = $array['fileupload'];
+			$fileupload = array_unique( $array['fileupload'] );
 			$array['fileupload'] = array();
 			foreach( $fileupload as $file )
 			{
@@ -147,7 +147,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		if( ! empty( $array['linkdirect'] ) and empty( $array['fileupload'] ) )
 		{
-			$array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
+			$array['filesize'] = $nv_Request->get_float( 'filesize', 'post', 0 );
+            $array['filesize'] = intval( $array['filesize'] * 1048576 );
 		}
 
 		$alias = change_alias( $array['title'] );
@@ -453,12 +454,20 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 	}
+    $array['id'] = $id;
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
 	$upload_dir = $result->fetchColumn();
 
-	if( ! $array['filesize'] ) $array['filesize'] = '';
+	if( empty( $array['filesize'] ) )
+	{
+	    $array['filesize'] = '';
+    }
+    else
+    {
+        $array['filesize'] = number_format( $array['filesize']/1048576, 2);
+    }
 
 	$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 

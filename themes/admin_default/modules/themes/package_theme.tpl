@@ -2,7 +2,7 @@
 <a href="{LINKGETFILE}"><span style="font-size:16px;color:red">nv4_theme_{THEMENAME} - {FILESIZE}</span></a>
 <!-- END: complete -->
 <!-- BEGIN: main -->
-<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
+<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
@@ -39,7 +39,7 @@
 				$("#step1").slideUp();
 				$.ajax({
 					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}",
+					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}",
 					data : "themename=" + themename + "&{NV_OP_VARIABLE}={OP}",
 					success : function(data) {
 						$("input[name=back]").removeAttr("disabled");

@@ -40,8 +40,9 @@
 				<td>
 				<div id="fileupload_items">
 					<!-- BEGIN: fileupload -->
-					<input readonly="readonly" class="w300" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp; <input type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />&nbsp; <input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />&nbsp; <input type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" />
-					<br />
+					<div id="fileupload_item_{FILEUPLOAD.key}">
+						<input readonly="readonly" class="w300" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp; <input type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse_file( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />&nbsp; <input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />&nbsp; <input type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" /> <input type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
+					</div>
 					<!-- END: fileupload -->
 				</div>
 				<script type="text/javascript">
@@ -51,7 +52,9 @@
 					var file_dir = '{FILES_DIR}';
 					var file_checkUrl = '{LANG.file_checkUrl}';
 					var file_gourl = '{LANG.file_gourl}';
-				</script><input type="button" value="{LANG.add_file_items}" onclick="nv_file_additem();" /> ({LANG.add_file_items_note}) </td>
+					var file_delurl = '{LANG.file_delurl}';
+				</script>
+				<input type="button" value="{LANG.add_file_items}" onclick="nv_file_additem({DATA.id});" /> ({LANG.add_file_items_note}) </td>
 			</tr>
 			<tr>
 				<td style="vertical-align:top"> {LANG.file_linkdirect}
@@ -70,7 +73,7 @@
 			</tr>
 			<tr>
 				<td> {LANG.file_size} </td>
-				<td><input type="text" class="w100" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /> {LANG.config_maxfilebyte} </td>
+				<td><input type="text" class="w100 right" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /> {LANG.config_maxfilemb} </td>
 			</tr>
 			<tr>
 				<td> {LANG.file_version} </td>
@@ -171,7 +174,7 @@
 
 <script type="text/javascript">
 	$("input[name=selectimg]").click(function() {
-		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileimage&path={IMG_DIR}&type=image", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 </script>

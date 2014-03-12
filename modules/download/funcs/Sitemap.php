@@ -34,7 +34,7 @@ else
 	while( list( $cid, $alias, $publtime ) = $result->fetch( 3 ) )
 	{
 		$url[] = array(
-			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias, //
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'], //
 			'publtime' => $publtime
 		);
 	}

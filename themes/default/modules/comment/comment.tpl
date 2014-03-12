@@ -19,7 +19,7 @@
 			</div>
 			<!-- END: delete -->
 			<div class="feedback">
-				<a href="javascript:;" onclick="{COMMENT.cid}">{LANG.feedback}</a>
+				<a href="javascript:;" onclick="nv_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a>
 			</div>
 			<div class="like">
 				<a href="javascript:;" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a>: <span id="like{COMMENT.cid}">{COMMENT.likes}</span>
