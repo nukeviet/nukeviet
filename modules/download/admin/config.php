@@ -32,7 +32,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['who_upload'] = $nv_Request->get_int( 'who_upload', 'post', 0 );
 	$array_config['groups_upload'] = $nv_Request->get_typed_array( 'groups_upload', 'post', 'int' );
-	$array_config['maxfilesize'] = $nv_Request->get_int( 'maxfilesize', 'post', 0 );
+	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
 	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
 	$array_config['temp_dir'] = $nv_Request->get_title( 'temp_dir', 'post', '' );
@@ -60,6 +60,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 	}
+    else
+    {
+        $array_config['maxfilesize'] = intval($array_config['maxfilesize'] * 1048576);
+    }
 
 	$array_config['upload_filetype'] = ( ! empty( $array_config['upload_filetype'] ) ) ? implode( ',', $array_config['upload_filetype'] ) : '';
 
@@ -228,12 +232,12 @@ if( ! empty( $groups_list ) )
 		);
 	}
 }
-
+$array_config['maxfilesize'] = number_format( $array_config['maxfilesize']/1048576, 2);
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
+$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
 
 foreach( $array_config['upload_filetype'] as $filetype )
 {

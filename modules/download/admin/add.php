@@ -236,7 +236,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			 " . $array['who_download'] . ",
 			 :groups_download ,
 			 0, '')";
-		
+
 		$data_insert = array();
 		$data_insert['title'] = $array['title'];
 		$data_insert['alias'] = $alias;
@@ -254,7 +254,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$data_insert['groups_comment'] = $array['groups_comment'];
 		$data_insert['groups_view'] = $array['groups_view'];
 		$data_insert['groups_download'] = $array['groups_download'];
-		
+
 		if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 		{
 			$is_error = true;
@@ -285,7 +285,7 @@ else
 			break;
 
 		case 2:
-			$array['who_comment'] = 1;// Thanh vien  
+			$array['who_comment'] = 1;// Thanh vien
 			break;
 	}
 }
@@ -420,6 +420,7 @@ else
 {
 	$array['description'] = '<textarea style="width:100%; height:300px" name="description" id="description">' . $array['description'] . '</textarea>';
 }
+$array['id'] = 0;
 
 $sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 $result = $db->query( $sql );

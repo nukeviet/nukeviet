@@ -69,9 +69,9 @@
 				</tr>
 				<tr>
 					<td>{LANG.config_maxfilesize}</td>
-					<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" /> {LANG.config_maxfilebyte}
+					<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="right"/> {LANG.config_maxfilemb}
 					<br />
-					{LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} {LANG.config_maxfilebyte} </td>
+					{LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE}</td>
 				</tr>
 				<tr>
 					<td>{LANG.config_uploadedfolder}</td>

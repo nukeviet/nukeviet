@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['filesize'] = 0;
 		if( ! empty( $array['fileupload'] ) )
 		{
-			$fileupload = $array['fileupload'];
+			$fileupload = array_unique( $array['fileupload'] );
 			$array['fileupload'] = array();
 			foreach( $fileupload as $file )
 			{
@@ -453,6 +453,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 	}
+    $array['id'] = $id;
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
