@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script src="{NV_BASE_SITEURL}js/admin.js" type="text/javascript"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -174,11 +175,11 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	});
-	
-	$("input[id=btn_upload]").click(function() {
-		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", "850", "500", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false
+		
+		$("#btn_upload").click(function() {
+			nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 850, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+			return false;
+		});
 	});
 
 	</script>
