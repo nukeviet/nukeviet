@@ -124,6 +124,7 @@ function nv_save_file_config_global()
 	$allowed_html_tags = '';
 	$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND (module='global' OR module='define') ORDER BY config_name ASC";
 	$result = $db->query( $sql );
+	
 	while( list( $c_module, $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
 		if( $c_module == 'define' )
