@@ -2,7 +2,7 @@
 <!-- BEGIN: is_ping -->
 <form action="{ACTION_FORM}" method="post">
 	<table class="tab1">
-		<caption> {LANG.sitemapPing} </caption>
+		<caption> <a href="{URL_SITEMAP}">{LANG.sitemapPing}</a> </caption>
 		<tr>
 			<td>
 			<select name="searchEngine">
@@ -16,7 +16,7 @@
 				<!-- BEGIN: Module -->
 				<option value="{MODULE_NAME}"{MODULE_SELECTED}>{MODULE_TITLE}</option>
 				<!-- END: Module -->
-			</select><input type="submit" name="ping" value="{LANG.sitemapSend}" /></td>
+			</select> &nbsp; <input type="submit" name="ping" value="{LANG.sitemapSend}" /></td>
 		</tr>
 		<!-- BEGIN: info -->
 		<tr>
