@@ -78,8 +78,6 @@
 		        return;
 		    }
 		    
-		    $('#upload_icon').hide();
-		    
 		    // preview element
 		    var oImage = document.getElementById('preview');
 		
@@ -95,6 +93,8 @@
 			        $('.error').html('{LANG.avata_bigsize}').show();
 			        return;
 			    }
+			    
+			    $('#upload_icon').hide();
 		        
 		        oImage.onload = function () { // onload event handler
 		
@@ -158,7 +158,7 @@
                     <div class="error"></div>
 					
 					<a href="#" id="upload_icon" title="{LANG.avata_select_img}">
-						<img src="http://localhost/nukeviet4/themes/default/images/users/upload.png" width="200" />
+						<img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/users/upload.png" width="200" />
 						<h5>{LANG.avata_select_img}</h5>
 					</a>
 					
