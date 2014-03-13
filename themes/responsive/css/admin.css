@@ -13,7 +13,7 @@
 	box-shadow: 0 -2px 4px rgba(0,0,0,.1);
 	width:100%;
 	background-color: #e6f5fc;
-	border-top: 1px solid #CCC;
+	border-top: 1px solid #ccc;
 	bottom:0;
 	left:0;
 	height:28px;
@@ -46,7 +46,7 @@
 	#toolbar ul li{
 		width:100%;
 		margin:0;
-		border-bottom:1px #ddd solid;
+		border-bottom:1px #C2E7F8 solid;
 		padding:6px 0 5px 0;
 		-webkit-box-shadow: 0 1px 1px rgba(255,255,255,.9);
 		box-shadow: 0 1px 1px rgba(255,255,255,.9);
@@ -60,5 +60,10 @@
 	}
 	#toolbar ul{
 		margin:5px;
+	}
+}
+@media (min-width:992px){
+	#wraper{
+		margin-bottom:28px;
 	}
 }
