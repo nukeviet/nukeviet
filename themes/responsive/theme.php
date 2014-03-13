@@ -43,7 +43,6 @@ function nv_site_theme( $contents )
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
-	$xtpl->assign( 'THEME_DIGCLOCK_TEXT', nv_date( 'H:i T l, d/m/Y', NV_CURRENTTIME ) );
 
 	// Search form variables
 	$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
@@ -190,13 +189,6 @@ function nv_site_theme( $contents )
 	
 	$sitecontent = nv_blocks_content( $sitecontent );
 	$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info(), $sitecontent );
-
-	// Theme clock
-	$theme_footer_js = "<script type=\"text/javascript\">\n";
-	$theme_footer_js .= "nv_DigitalClock('digclock');\n";
-	$theme_footer_js .= "</script>\n";
-	
-	$my_footer = $theme_footer_js . $my_footer;
 
 	if( defined( 'NV_IS_ADMIN' ) )
 	{

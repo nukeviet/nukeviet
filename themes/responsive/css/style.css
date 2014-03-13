@@ -55,6 +55,11 @@ header{
 #header .pull-right{
 	margin:33px 33px 0 0;
 }
+#header #logo a{
+	font-size:22px;
+	line-height:80px;
+	color:#333;
+}
 
 #social-icons{
 	float:left;
@@ -78,8 +83,8 @@ header{
 	text-align:center;
 	font-size:22px;
 	line-height:34px;
-	-webkit-border-radius:10px;
-	border-radius:10px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
 	-webkit-transition: all 0.4s ease;
 	transition: all 0.4s ease;
 }
@@ -127,7 +132,7 @@ header{
 	border-width:0 1px 0 1px;
 	box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
 	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
-	padding-top:5px;
+	padding-top:10px;
 }
 
 /* FOOTER */
