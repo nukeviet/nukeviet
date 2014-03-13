@@ -83,7 +83,7 @@ function nv_site_theme( $contents )
 		);
 
 		$xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
-		$xtpl->parse( 'main.mod_title.loop' );
+		$xtpl->parse( 'main.breadcrumbs.loop' );
 
 		foreach( $array_mod_title as $arr_cat_title_i )
 		{
@@ -130,6 +130,61 @@ function nv_site_theme( $contents )
 		$xtpl->parse( 'main.theme_type' );
 	}
 
+	// Footer Menu
+	$arr_home['index'] = array( 'custom_title' => $lang_global['Home'], 'in_menu' => 1 );
+	$footer_menu = array_merge( $arr_home, $site_mods );
+	$footer_menu_size = sizeof( $footer_menu );
+	
+	$a = 0;
+	foreach( $footer_menu as $modname => $modvalues )
+	{
+		if( ! empty( $modvalues['in_menu'] ) )
+		{
+			if( $home == 1 and $a == 0 )
+			{
+				$module_current = ' class="current"';
+			}
+			elseif( $modname == $module_name and $home != 1 )
+			{
+				$module_current = ' class="current"';
+			}
+			else
+			{
+				$module_current = '';
+			}
+
+			if( $modname == 'index' )
+			{
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+			}
+			else
+			{
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname;
+			}
+
+			$aryay_menu = array(
+				'title' => $modvalues['custom_title'],
+				'class' => $modname,
+				'current' => $module_current,
+				'link' => $link
+			);
+
+			$xtpl->assign( 'FOOTER_MENU', $aryay_menu );
+
+			if( $a <= 5 )
+			{
+				if( $a < 5 and $a < $footer_menu_size )
+				{
+					$xtpl->parse( 'main.footer_menu.defis' );
+				}
+
+				$xtpl->parse( 'main.footer_menu' );
+			}
+		}
+
+		++ $a;
+	}
+	
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
 	

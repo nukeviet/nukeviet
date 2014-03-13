@@ -7,3 +7,9 @@
  */
 
 // NukeViet Default Custom JS
+$(document).ready(function(){
+	$('#totop').click(function(){
+		$('body').animate({scrollTop : 0}, 'slow');
+		return false;
+	});
+});
