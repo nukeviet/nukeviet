@@ -38,7 +38,7 @@
 					<div class="row" id="header-wraper">
 						<div id="header">
 							<div id="logo">
-								<a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{SITE_NAME}" /> {SITE_NAME}</a>
+								<a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{SITE_NAME}" /><span>{SITE_NAME}</span></a>
 							</div>
 							<div class="pull-right">
 								<div id="social-icons">
