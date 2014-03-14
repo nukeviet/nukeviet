@@ -35,6 +35,29 @@
 	color:#999;
 }
 
+/* DRAG BLOCK */
+.column {
+	border: 1px solid red;
+	height: auto !important;
+	min-height: 50px;
+	width: 100%
+}
+
+.portlet {
+	border: 1px solid navy;
+	margin: 1px
+}
+
+.ui-sortable-placeholder {
+	border: 1px dotted #000;
+	height: 50px !important;
+	visibility: visible !important
+}
+
+.ui-sortable-placeholder * {
+	visibility: hidden
+}
+
 @media (max-width: 991px) {
 	#toolbar{
 		position:relative;
