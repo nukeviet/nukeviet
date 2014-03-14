@@ -63,15 +63,16 @@ header{
 
 #social-icons{
 	float:left;
-	width:220px;
+	width:250px;
 }
 #social-icons ul{
 	list-style:none;
 	padding:0;
-	margin:0
+	margin:0;
+	text-align:right;
 }
 #social-icons ul li{
-	float:left;
+	display:inline-block;
 }
 #social-icons ul li a{
 	display:block;
@@ -79,7 +80,7 @@ header{
 	height:34px;
 	background:#00a8ff;
 	color:#fff;
-	margin-left:10px;
+	margin-right:10px;
 	text-align:center;
 	font-size:22px;
 	line-height:34px;
@@ -91,9 +92,6 @@ header{
 #social-icons ul li a:hover{
 	background:#fff;
 	color:#00a8ff;
-}
-#social-icons ul li:first-child a{
-	margin-left:0;
 }
 #social-icons ul li a i{
 	margin-right:-5px;
@@ -145,13 +143,13 @@ header{
 	color:#fff;
 }
 #footer .footer-copyright .menu{
-	float:right;
 	list-style:none;
 	padding:0;
 	margin:0;
+	text-align:right;
 }
 #footer .footer-copyright .menu li{
-	float:left;
+	display:inline-block;
 }
 #footer .footer-copyright .menu li span{
 	display:inline-block;
@@ -169,10 +167,113 @@ header{
 }
 #footer .footer-copyright .theme-change{
 	margin-top:10px;
+	text-align:right;
+	width:100%;
+	float:right;
 }
 
+/* PAGE BREAK LINE */
+.nv-hr{
+	clear:both;
+	height:1px;
+	border-bottom:1px #dadada solid;
+	margin:10px 0;
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1);
+	-box-shadow:0 1px 1px rgba(0,0,0,0.1);
+}
+.nv-hr.nv-hr-lg{
+	margin:20px 0;
+}
+.nv-hr.nv-hr-sm{
+	margin:5px 0;
+}
+
+/* SOCIAL SHARE ICON, BUTTON */
+.nv-social-share{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.nv-social-share li{
+	display:inline-block;
+}
+.nv-social-share li.facebook{
+	position:relative;
+	top:-4px;
+	padding-right:40px;
+}
+
+/* LIST ITEM */
+.nv-list-item{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.nv-list-item li{
+	padding:4px;
+	margin:0;
+}
 
 /* RESPONSIVE */
+@media (max-width: 768px){
+	#banner img{
+		height:100%;
+		width:auto;
+		min-width:100%;
+	}
+}
+@media (max-width: 992px){
+	#header{
+		height:190px;
+	}
+	#header #logo{
+		width:100%;
+		text-align:center;
+		padding:10px 0;
+	}
+	#header .pull-right{
+		width:100%;
+		margin:0;
+	}
+	#social-icons{
+		width:100%;
+		text-align:center;
+		margin-bottom:10px;
+	}
+	#social-icons ul{
+		width:100%;
+		text-align:center;
+	}
+	#search{
+		width:100%;
+	}
+	#search form{
+		padding:0 10px;
+	}
+	
+	#banner{
+		height:190px;
+	}
+	
+	#menu-site-default .navbar-right{
+		display:none;
+	}
+	
+	#footer .footer-copyright .panel-body{
+		text-align:center;
+	}
+	#footer .footer-copyright .menu{
+		text-align:center;
+	}
+	#footer .footer-copyright .theme-change{
+		text-align:center;
+	}
+}
+@media (max-width: 1200px){
+	#header #logo a span{
+		display:none;
+	}
+}
 @media (min-width: 768px){
 	#wraper{
 		width: 730px;

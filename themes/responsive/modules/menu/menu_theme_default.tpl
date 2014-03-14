@@ -2,7 +2,7 @@
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
-			<span class="sr-only">Toggle navigation</span>
+			<span class="sr-only">&nbsp;</span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
@@ -25,7 +25,7 @@
 			<!-- END: top_menu -->
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="#">{THEME_DIGCLOCK_TEXT}</a></li>
+			<li><a href="#" id="digclock">{THEME_DIGCLOCK_TEXT}</a></li>
 		</ul>
 	</div>
 </div>

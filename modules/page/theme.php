@@ -19,7 +19,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  */
 function nv_page_main( $row, $ab_links )
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head;
+	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info;
 
 	if( ! defined( 'SHADOWBOX' ) )
 	{
@@ -33,30 +33,30 @@ function nv_page_main( $row, $ab_links )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $row );
 
-	if( $row['facebookappid'] )
-	{
-		$meta_property['fb:app_id'] = $row['facebookappid'];
-		$xtpl->assign( 'FACEBOOKAPPID', $row['facebookappid'] );
-		$xtpl->parse( 'main.facebookjssdk' );
-	}
-
 	if( $row['socialbutton'] )
 	{
-		if( ! defined( 'FACEBOOK_JSSDK' ) )
+		if( ! defined( 'FACEBOOK_JSSDK' ) and $row['facebookappid'] )
 		{
-			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			$facebookappid = $row['facebookappid'];
-			$xtpl->assign( 'FACEBOOK_LANG', $lang );
-			$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
+			$meta_property['fb:app_id'] = $row['facebookappid'];
+			
+			$xtpl->assign( 'FACEBOOK_LANG', ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US' );
+			$xtpl->assign( 'FACEBOOK_APPID', $row['facebookappid'] );
+			
 			$xtpl->parse( 'main.facebookjssdk' );
-			if( ! empty( $facebookappid ) )
-			{
-				$meta_property['fb:app_id'] = $facebookappid;
-			}
+			
 			define( 'FACEBOOK_JSSDK', true );
 		}
+		
+		if( defined( 'FACEBOOK_JSSDK' ) )
+		{
+			$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
+		
+			$xtpl->parse( 'main.socialbutton.facebook' );
+		}
+		
 		$xtpl->parse( 'main.socialbutton' );
 	}
+	
 	if( ! empty( $row['image'] ) )
 	{
 		$xtpl->parse( 'main.image' );
