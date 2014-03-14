@@ -296,7 +296,7 @@ if( ! empty( $admins ) )
 
 	$xtpl->parse( 'main' );
 
-	$contents = nv_check_add_admin() . $xtpl->text( 'main' );
+	$contents = $xtpl->text( 'main' );
 }
 
 include NV_ROOTDIR . '/includes/header.php';
