@@ -667,7 +667,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
-					echo 1; exit;
 					$error[] = $lang_module['errorsave'];
 				}
 			}
