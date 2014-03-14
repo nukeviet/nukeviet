@@ -172,6 +172,48 @@ header{
 	float:right;
 }
 
+/* PAGE BREAK LINE */
+.nv-hr{
+	clear:both;
+	height:1px;
+	border-bottom:1px #dadada solid;
+	margin:10px 0;
+	-webkit-box-shadow:0 1px 1px rgba(0,0,0,0.1);
+	-box-shadow:0 1px 1px rgba(0,0,0,0.1);
+}
+.nv-hr.nv-hr-lg{
+	margin:20px 0;
+}
+.nv-hr.nv-hr-sm{
+	margin:5px 0;
+}
+
+/* SOCIAL SHARE ICON, BUTTON */
+.nv-social-share{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.nv-social-share li{
+	display:inline-block;
+}
+.nv-social-share li.facebook{
+	position:relative;
+	top:-4px;
+	padding-right:40px;
+}
+
+/* LIST ITEM */
+.nv-list-item{
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.nv-list-item li{
+	padding:4px;
+	margin:0;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px){
 	#banner img{
