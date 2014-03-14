@@ -657,16 +657,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 				foreach( $array_cat_new as $catid )
 				{
-					$ct_query[] = $db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'] );
+					$db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id'] );
 					$ct_query[] = $db->exec( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id'] );
 				}
 
 				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=:bodytext WHERE id =' . $rowcontent['id'] );
 				$sth->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
 				$ct_query[] = (int) $sth->execute();
-
+				
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
+					echo 1; exit;
 					$error[] = $lang_module['errorsave'];
 				}
 			}
