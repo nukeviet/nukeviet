@@ -309,7 +309,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 			elseif( isset( $site_mods[$module] ) )
 			{
-				$array_in_module[] = $mod;
+				$array_in_module[] = $module;
 			}
 
 			$array_funcid = array();
