@@ -317,7 +317,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			{
 				if( in_array( $mod, $array_in_module ) AND in_array( $func_id, $array_funcid_post ) )
 				{
-					$array_funcid = $func_id;
+					$array_funcid[] = $func_id;
 				}
 			}
 		}
