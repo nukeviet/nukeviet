@@ -1,3 +1,4 @@
+# Base ignore
 /.project
 /.buildpath
 /.settings
@@ -15,5 +16,9 @@
 /sess/sess_*
 /tmp/
 
+# Ignore some class
 /includes/class/PHPExcel/
 /includes/class/PHPExcel.php
+
+# Ignore some upload dirs
+/uploads/download
