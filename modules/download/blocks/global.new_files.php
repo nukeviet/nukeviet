@@ -74,7 +74,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 			$db->sqlreset()
 				->select( 'id, catid, title, alias, updatetime' )
 				->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] )
-				->where( 'status AND catid IN (' . implode( ',', array_keys( $list_cat ) ) )
+				->where( 'status AND catid IN (' . implode( ',', array_keys( $list_cat ) ) . ')' )
 				->order( 'updatetime DESC' )
 				->limit( $block_config['numrow'] );
 
