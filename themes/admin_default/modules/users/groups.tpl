@@ -41,7 +41,7 @@
 			{CONTENT}
 		</div>
 		<input type="hidden" name="save" value="1" />
-		<input name="submit" type="submit" value="{LANG.save}" />
+		<p class="center"><input name="submit" type="submit" class="button" value="{LANG.save}" /></p>
 	</form>
 </div>
 <script type="text/javascript">
