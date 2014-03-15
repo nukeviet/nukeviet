@@ -26,8 +26,7 @@
 	<tr>
 		<th scope="row" class="specalt">{LANG.host_name} <span
 			class="highlight_red">*</span></th>
-		<td class="alt"><input type="text" value="{DATADASE.dbhost}"
-			name="dbhost" class="required" /></td>
+		<td class="alt"><input type="text" value="{DATADASE.dbhost}" name="dbhost" class="required" /> Port: <input type="text" value="{DATADASE.dbport}" name="dbport" class="required" style="width: 40px;text-align: right"/></td>
 		<td class="alt">{LANG.host_name_note} <strong>localhost</strong>.</td>
 	</tr>
 	<tr>
