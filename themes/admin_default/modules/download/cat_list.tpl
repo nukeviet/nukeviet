@@ -33,9 +33,13 @@
 			</tr>
 			<!-- END: row -->
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">
+					<p><a class="button button-h" href="{ADD_NEW_CAT}">{LANG.addcat_titlebox}</a></p>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
-</div>
-<div style="margin:10px">
-	<a class="button1" href="{ADD_NEW_CAT}"><span><span>{LANG.addcat_titlebox}</span></span></a>
 </div>
 <!-- END: main -->

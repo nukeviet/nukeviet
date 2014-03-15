@@ -12,11 +12,11 @@
 		<tbody>
 			<tr>
 				<td> {LANG.category_cat_name} </td>
-				<td><input class="w300" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
+				<td><input class="w300" type="text" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
 			</tr>
 			<tr>
 				<td> {LANG.alias} </td>
-				<td><input class="w300" value="{DATA.alias}" name="alias" id="alias" maxlength="100" /></td>
+				<td><input class="w300" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="100" /></td>
 			</tr>
 			<tr>
 				<td> {LANG.description} </td>

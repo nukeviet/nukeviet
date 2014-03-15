@@ -39,8 +39,12 @@
 		</tr>
 		<!-- END: row -->
 	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="8">
+				<p><a class="button button-h" href="{ADD_NEW_FILE}">{LANG.file_addfile}</a></p>
+			</td>
+		</tr>
+	</tfoot>
 </table>
-<div style="margin-top:8px">
-	<a class="button1" href="{ADD_NEW_FILE}"><span><span>{LANG.file_addfile}</span></span></a>
-</div>
 <!-- END: main -->

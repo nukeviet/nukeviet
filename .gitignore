@@ -22,3 +22,4 @@
 
 # Ignore some upload dirs
 /uploads/download
+/files/download

@@ -243,6 +243,10 @@ sup.required {
 	color: red
 }
 
+.m-bottom{
+	margin-bottom:10px;
+}
+
 /* Heading
  -----------------------------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6{
@@ -771,7 +775,7 @@ textarea:focus, input[type=text]:focus, input[type=password]:focus, input[type=e
 select{
     padding: 4px 5px;
 }
-input[type=button], input[type=submit], input[type=reset]{
+input[type=button], input[type=submit], input[type=reset], .button{
     padding: 6px 22px 5px 22px;
     margin:0;
     color: #222;
@@ -791,7 +795,7 @@ input[type=button], input[type=submit], input[type=reset]{
     border-radius: 3px;
     border: 1px solid #dcdcdc;
 }
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover{
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover, .button:hover{
     background-color: #E8E8E8;
 
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #E8E8E8), color-stop(100%, #F5F5F5));
@@ -806,14 +810,14 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover{
     box-shadow: 0px 1px 1px rgba(0,0,0,.3);
     border: 1px solid #cecece;
 }
-input[type=button]:active, input[type=submit]:active, input[type=reset]:active{
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active, .button:active{
     -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
     -moz-box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
     box-shadow: 0px 1px 3px rgba(0,0,0,.3) inset;
     border: 1px solid #c9c9c9;
 }
 
-input.button-h{
+input.button-h, .button-h{
 	color:#fff;
 	background: linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
 	background: -o-linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
@@ -823,7 +827,7 @@ input.button-h{
 	border: 1px solid #336895;
 	box-shadow: inset 0 1px 0 #8dc2f0;
 }
-input.button-h:hover{
+input.button-h:hover, .button-h:hover{
 	background: linear-gradient(bottom, #5c96c9 0%, #6bafea 100%);
 	background: -o-linear-gradient(bottom, #5c96c9 0%, #6bafea 100%);
 	background: -moz-linear-gradient(bottom, #5c96c9 0%, #6bafea 100%);
@@ -831,8 +835,12 @@ input.button-h:hover{
 	background: -ms-linear-gradient(bottom, #5c96c9 0%, #6bafea 100%);
 	border: 1px solid #336895;
 }
-input.button-h:active{
+input.button-h:active, .button-h:active{
 	border: 1px solid #336895;
+}
+
+a.button-h:hover{
+	color:#fff;
 }
 
 input[type="checkbox"],
