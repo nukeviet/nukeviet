@@ -19,13 +19,13 @@
 			<tr>
 				<td>{LANG.add_user}:</td>
 				<td><sup class="required">&lowast;</sup></td>
-				<td><input class="w300" name="userid" id="userid" type="text" value="{USERID}" maxlength="20" /><input type="button" value="{LANG.add_select}" onclick="open_browse_us()" /></td>
+				<td><input class="w250" name="userid" id="userid" type="text" value="{USERID}" maxlength="20" />&nbsp;<input type="button" value="{LANG.add_select}" onclick="open_browse_us()" /></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td> {POSITION0}: </td>
 				<td><sup class="required"> &lowast; </sup></td>
-				<td><input class="w300" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" /></td>
+				<td><input class="w250" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" /></td>
 				<td><span class="row">&lArr;</span> {POSITION2} </td>
 			</tr>
 			<!-- BEGIN: editor -->
@@ -106,7 +106,6 @@
 	function open_browse_us() {
 		nv_open_browse_file('{NV_BASE_ADMINURL}index.php?' + nv_name_variable + '=users&' + nv_fc_variable + '=getuserid&area=userid&filtersql={FILTERSQL}', 'NVImg', '850', '600', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');
 	}
-
 
 	$(document).ready(function() {
 		$("form#addadmin").submit(function() {

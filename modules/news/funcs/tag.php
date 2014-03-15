@@ -41,7 +41,6 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 		{
 			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 		}
-		$key_words = $module_info['keywords'];
 
 		$array_mod_title[] = array(
 			'catid' => 0,
