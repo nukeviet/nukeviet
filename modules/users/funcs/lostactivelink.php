@@ -132,7 +132,6 @@ if( $checkss == $data['checkss'] )
 								$stmt->bindParam( ':password', $password, PDO::PARAM_STR );
 								$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
 								$stmt->execute();
-								$db->query( $sql );
 								$info = sprintf( $lang_module['lostactivelink_send'], $row['email'] );
 							}
 							else
