@@ -364,7 +364,7 @@ function openidLogin_Res1( $attribs )
 						$info = $lang_module['account_active_ok'] . "<br /><br />\n";
 						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_home'] . '</a>]';
-						$contents .= user_info_exit( $info );
+						$contents = user_info_exit( $info );
 						$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 						include NV_ROOTDIR . '/includes/header.php';
