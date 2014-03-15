@@ -1,4 +1,4 @@
-.listdata1 {
+﻿.listdata1 {
 	background: #F2F2F2;
 	border-top: #F0F0F0 solid 1px;
 	font-size: 11px;
@@ -43,20 +43,6 @@
 	font-size: 11px;
 	font-weight: 700;
 	text-decoration: underline
-}
-
-.edit_icon1 {
-	background: url(../images/icons/edit.png) no-repeat left center;
-	border: none;
-	cursor: pointer;
-	padding-left: 15px
-}
-
-.del_icon1 {
-	background: url(../images/icons/delete.png) no-repeat left center;
-	border: none;
-	cursor: pointer;
-	padding-left: 15px
 }
 
 .contact {
