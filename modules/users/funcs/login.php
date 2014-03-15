@@ -379,7 +379,7 @@ function openidLogin_Res1( $attribs )
 					}
 				}
 
-				$page_title = $mod_title = $lang_module['openid_active_title'];
+				$page_title = $mod_title = $lang_module['openid_activate_account'];
 				$key_words = $module_info['keywords'];
 
 				$lang_module['login_info'] = sprintf( $lang_module['openid_active_confirm_info'], $email );
