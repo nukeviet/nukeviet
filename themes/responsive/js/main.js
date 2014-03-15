@@ -16,4 +16,10 @@ $(document).ready(function(){
 		$('body').animate({scrollTop : 0}, 'slow');
 		return false;
 	});
+	
+	// Trigger tooltip
+	$('.form-tooltip').tooltip({
+		selector: "[data-toggle=tooltip]",
+		container: "body"
+	});
 });
