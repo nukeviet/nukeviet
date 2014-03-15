@@ -69,13 +69,13 @@
 		    var rFilter = /^(image\/jpeg|image\/png)$/i;
 		    if (! rFilter.test(oFile.type)) {
 		        $('.error').html('{LANG.avata_filetype}').show();
-		        return;
+		        return false;
 		    }
 		
 		    // check for file size
 		    if (oFile.size > '{NV_UPLOAD_MAX_FILESIZE}') {
 		        $('.error').html('{LANG.avata_bigfile}').show();
-		        return;
+		        return false;
 		    }
 		    
 		    // preview element
@@ -89,14 +89,14 @@
 		        // e.target.result contains the DataURL which we can use as a source of the image
 		        oImage.src = e.target.result;
 		        
-			    if (oImage.naturalWidth > '{NV_MAX_WIDTH}' || oImage.naturalHeight > '{NV_MAX_HEIGHT}') {
-			        $('.error').html('{LANG.avata_bigsize}').show();
-			        return;
-			    }
-			    
-			    $('#upload_icon').hide();
-		        
-		        oImage.onload = function () { // onload event handler
+			        oImage.onload = function () { // onload event handler
+					
+				    if (oImage.naturalWidth > '{NV_MAX_WIDTH}' || oImage.naturalHeight > '{NV_MAX_HEIGHT}') {
+				        $('.error').html('{LANG.avata_bigsize}').show();
+				        return false;
+				    }
+				    
+				    $('#upload_icon').hide();
 		
 		            // display step 2
 		            $('.step2').fadeIn(500);
@@ -187,14 +187,18 @@
     </body>
 </html>
 <script>
+//<![CDATA[
 var a = opener.document.getElementById("avatar").value;
 if( a != '' )
 {
 	$('#old_images').val(a);
 }
 
-$('#upload_icon').click(function() {
-    $('input[type="file"]').click();
+$(document).ready(function() {
+	$('#upload_icon').click(function() {
+    	$('input[type="file"]').click();
+	});
 });
+//]]>
 </script>
 <!-- END: main -->
