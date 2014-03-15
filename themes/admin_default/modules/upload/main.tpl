@@ -77,7 +77,7 @@
 		</select>
 	</div>
 	<div class="search">
-		<a href="#" title="{LANG.search}"><img alt="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
+		<a href="#" title="{LANG.search}"><i class="icon-search icon-large">&nbsp;</i></a>
 	</div>
 	<div class="uploadForm" style="display:none">
 		<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">

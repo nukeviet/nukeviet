@@ -24,15 +24,15 @@
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 				<!-- END: weight -->
 			</select></td>
-			<td><a class="search_icon" href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
+			<td><i class="icon-search icon-large">&nbsp;</i> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
 			<td>{ROW.values.custom_title}</td>
 			<td>{ROW.values.version}</td>
 			<td><input name="change_inmenu_{ROW.mod}" id="change_inmenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.in_menu.1}"{ROW.inmenu_checked} /></td>
 			<td><input name="change_submenu_{ROW.mod}" id="change_submenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.submenu.1}"{ROW.submenu_checked} /></td>
 			<td><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" checked="checked"{ROW.act_disabled} /></td>
-			<td><a class="edit_icon" href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp; <a class="default_icon" href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+			<td><i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp; <i class="icon-sun icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 			<!-- BEGIN: delete -->
-			&nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+			&nbsp;-&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>
@@ -65,15 +65,15 @@
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 				<!-- END: weight -->
 			</select></td>
-			<td><a class="search_icon" href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
+			<td><i class="icon-search icon-large">&nbsp;</i> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
 			<td>{ROW.values.custom_title}</td>
 			<td>{ROW.values.version}</td>
 			<td><input name="change_inmenu_{ROW.mod}" id="change_inmenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.in_menu.1}"{ROW.inmenu_checked} /></td>
 			<td><input name="change_submenu_{ROW.mod}" id="change_submenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.submenu.1}"{ROW.submenu_checked} /></td>
 			<td><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" /></td>
-			<td><a class="edit_icon" href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<a class="default_icon" href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+			<td><i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<i class="icon-sun icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 			<!-- BEGIN: delete -->
-			&nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+			&nbsp;-&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>
@@ -106,15 +106,15 @@
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 				<!-- END: weight -->
 			</select></td>
-			<td><a class="search_icon" href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
+			<td><i class="icon-search icon-large">&nbsp;</i> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
 			<td>{ROW.values.custom_title}</td>
 			<td>{ROW.values.version}</td>
 			<td><input name="change_inmenu_{ROW.mod}" id="change_inmenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.in_menu.1}"{ROW.inmenu_checked} /></td>
 			<td><input name="change_submenu_{ROW.mod}" id="change_submenu_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.submenu.1}"{ROW.submenu_checked} /></td>
 			<td><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" /></td>
-			<td><a class="edit_icon" href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<a class="default_icon" href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+			<td><i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<i class="icon-sun icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 			<!-- BEGIN: delete -->
-			&nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+			&nbsp;-&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>

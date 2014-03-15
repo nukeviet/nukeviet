@@ -146,7 +146,7 @@
 </table>
 <br/>
 <div>
-	<a class="button2" href="{EDIT_HREF}"><span><span>{EDIT}</span></span></a>
-	<a class="button2" href="{HOME_HREF}"><span><span>{HOME}</span></span></a>
+	<a class="button button-h" href="{EDIT_HREF}">{EDIT}</a>
+	<a class="button button-h" href="{HOME_HREF}">{HOME}</a>
 </div>
 <!-- END: add_result -->

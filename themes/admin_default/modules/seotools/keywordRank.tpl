@@ -77,7 +77,7 @@
 		</dd>
 		<dd class="fl">
 			<div id="fsubmit">
-				<a id="keywordRankCheck" class="button1" href="#"><span><span>{LANG.check}</span></span></a>
+				<a id="keywordRankCheck" class="button button-h" href="#">{LANG.check}</a>
 			</div>
 			<div id="load_img">&nbsp;</div>
 		</dd>

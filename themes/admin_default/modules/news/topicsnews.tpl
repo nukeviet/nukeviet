@@ -11,7 +11,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <a class="delete_icon" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+				<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <i class="icon-trash icon-large">&nbsp;</i> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -44,7 +44,7 @@ $('#uncheckall').click(function() {
 		$(this).removeAttr('checked');
 	});
 });
-$('a.delete_icon').click(function() {
+$('a.delete').click(function() {
 	var list = [];
 	$('input[name=newsid]:checked').each(function() {
 		list.push($(this).val());

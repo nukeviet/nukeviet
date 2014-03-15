@@ -31,7 +31,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.ftp_path}</strong></td>
-				<td><input class="w250" type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" /><input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
+				<td><input class="w250" type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" /> <input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
 			</tr>
 		</tbody>
 	</table>

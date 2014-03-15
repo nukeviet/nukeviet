@@ -106,7 +106,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.cdn_url}</strong></td>
-				<td><input type="text" name="cdn_url" value="{DATA.cdn_url}" style="width: 230px"/><input type="button" value="{LANG.cdn_download}"  id="cdn_download"/></td>
+				<td><input type="text" name="cdn_url" value="{DATA.cdn_url}" style="width: 230px"/> <input type="button" value="{LANG.cdn_download}"  id="cdn_download"/></td>
 			</tr>
 			<!-- END: system -->
 			<tr>

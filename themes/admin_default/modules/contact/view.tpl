@@ -30,9 +30,10 @@
 		<tr>
 			<td class="center">
 			<!-- BEGIN: reply -->
-			<a class="button1" href="{URL_REPLY}"><span><span>{LANG.send_title}</span></span></a>
+			<a class="button button-h" href="{URL_REPLY}">{LANG.send_title}</a>
 			<!-- END: reply -->
-			<a class="button1" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});"><span><span>{GLANG.delete}</span></span></a><a class="button1" href="{DATA.url_back}"><span><span>{LANG.back_title}</span></span></a></td>
+			<a class="button button-h" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
+			<a class="button button-h" href="{DATA.url_back}">{LANG.back_title}</a></td>
 		</tr>
 	</tbody>
 </table>

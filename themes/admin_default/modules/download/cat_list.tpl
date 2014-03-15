@@ -29,7 +29,7 @@
 				<td><strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub} </td>
 				<td> {ROW.parentid} </td>
 				<td class="center"><input type="checkbox" name="active" id="change_status{ROW.id}" value="1"{ROW.status} onclick="nv_chang_status({ROW.id});" /></td>
-				<td class="center"><a class="edit_icon" href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_row_del({ROW.id});">{GLANG.delete}</a></td>
+				<td class="center"><i class="icon-edit icon-large">&nbsp;</i> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_row_del({ROW.id});">{GLANG.delete}</a></td>
 			</tr>
 			<!-- END: row -->
 		</tbody>

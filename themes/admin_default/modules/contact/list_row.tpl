@@ -2,7 +2,7 @@
 <table class="tab1">
 	<tbody>
 		<tr>
-			<td class="center"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="button1"><span><span>{LANG.add_row_title}</span></span></a></td>
+			<td class="center"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="button button-h">{LANG.add_row_title}</a></td>
 		</tr>
 	</tbody>
 </table>

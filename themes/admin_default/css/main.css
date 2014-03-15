@@ -550,33 +550,6 @@ table.tab2 td, table.tab2 tr, table.tab2 tbody {
 	padding: 2
 }
 
-/* Old icons (will be removed in the future)
- -----------------------------------------------------------------------------*/
-.default_icon {
-	background: url('../images/icons/default.png') no-repeat left center;
-	padding-left: 15px
-}
-
-.add_icon {
-	background: url('../images/icons/add.png') no-repeat left center;
-	padding-left: 15px
-}
-
-.edit_icon {
-	background: url('../images/icons/edit.png') no-repeat left center;
-	padding-left: 15px
-}
-
-.delete_icon {
-	background: url('../images/icons/delete.png') no-repeat left center;
-	padding-left: 15px
-}
-
-.search_icon {
-	background: url('../images/icons/search.png') no-repeat left center;
-	padding-left: 15px
-}
-
 /* Block quote
  -----------------------------------------------------------------------------*/
 div.quote {
@@ -601,121 +574,6 @@ div.quote blockquote span {
 	background: transparent url('../images/bottom-quote.gif') no-repeat bottom right;
 	display: inline-block;
 	width: 97%
-}
-
-a.button1 {
-	background: url('../images/button_bg.gif') no-repeat right top;
-	color: #333;
-	cursor: pointer;
-	display: block;
-	float: left;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	margin-left: 2px;
-	padding-right: 10px;
-	text-decoration: none;
-	text-align: center
-}
-
-a.button1 span {
-	background: url('../images/button_bg.gif') no-repeat left -20px;
-	cursor: pointer;
-	display: block;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	padding-left: 10px;
-	text-decoration: none;
-	float: left
-}
-
-a.button1 span span {
-	background: url('../images/button_bg.gif') repeat-x left -40px;
-	cursor: pointer;
-	display: block;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	padding-left: 0px;
-	text-decoration: none;
-	float: left
-}
-
-a.button1:hover {
-	background: url('../images/button_bg.gif') no-repeat right -60px;
-	color: #000;
-	cursor: pointer
-}
-
-a.button1:hover span {
-	background: url('../images/button_bg.gif') no-repeat left -80px;
-	color: #000;
-	cursor: pointer
-}
-
-a.button1:hover span span {
-	background: url('../images/button_bg.gif') repeat-x left -100px;
-	color: #000;
-	cursor: pointer
-}
-
-a.button2 {
-	background: url('../images/button_bg.gif') no-repeat right -120px;
-	color: #333;
-	cursor: pointer;
-	display: block;
-	float: left;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	margin-left: 2px;
-	outline: none;
-	padding-right: 10px;
-	text-decoration: none;
-	text-align: center
-}
-
-a.button2 span {
-	background: url('../images/button_bg.gif') no-repeat left -140px;
-	cursor: pointer;
-	display: block;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	padding-left: 10px;
-	text-decoration: none;
-	float: left
-}
-
-a.button2 span span {
-	background: url('../images/button_bg.gif') repeat-x left -160px;
-	cursor: pointer;
-	display: block;
-	font: normal 11px/20px Tahoma, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	padding-left: 0px;
-	text-decoration: none;
-	float: left
-}
-
-a.button2:hover {
-	background: url('../images/button_bg.gif') no-repeat right top;
-	color: #000;
-	cursor: pointer
-}
-
-a.button2:hover span {
-	background: url('../images/button_bg.gif') no-repeat left -20px;
-	color: #000;
-	cursor: pointer
-}
-
-a.button2:hover span span {
-	background: url('../images/button_bg.gif') repeat-x left -40px;
-	color: #000;
-	cursor: pointer
 }
 
 /* Generate page
@@ -818,7 +676,7 @@ input[type=button]:active, input[type=submit]:active, input[type=reset]:active, 
 }
 
 input.button-h, .button-h{
-	color:#fff;
+	color:#fff!important;
 	background: linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
 	background: -o-linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
 	background: -moz-linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
@@ -826,6 +684,7 @@ input.button-h, .button-h{
 	background: -ms-linear-gradient(bottom, #4889C2 0%, #5BA7E9 100%);
 	border: 1px solid #336895;
 	box-shadow: inset 0 1px 0 #8dc2f0;
+	text-decoration:none!important;
 }
 input.button-h:hover, .button-h:hover{
 	background: linear-gradient(bottom, #5c96c9 0%, #6bafea 100%);
@@ -840,7 +699,7 @@ input.button-h:active, .button-h:active{
 }
 
 a.button-h:hover{
-	color:#fff;
+	color:#fff!important;
 }
 
 input[type="checkbox"],

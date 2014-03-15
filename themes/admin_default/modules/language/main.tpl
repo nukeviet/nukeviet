@@ -43,13 +43,13 @@
 			</td>
 			<td>
 			<!-- BEGIN: setup_delete -->
-			<a class="delete_icon" onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
+			<i class="icon-trash icon-large">&nbsp;</i> <a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
 			<!-- END: setup_delete -->
 			<!-- BEGIN: setup_note -->
 			{LANG.nv_setup}
 			<!-- END: setup_note -->
 			<!-- BEGIN: setup_new -->
-			<a class="default_icon" href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
+			<i class="icon-sun icon-large">&nbsp;</i> <a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
 			<!-- END: setup_new -->
 			</td>
 		</tr>
