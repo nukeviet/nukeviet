@@ -33,13 +33,13 @@
 			</tr>
 			<tr>
 				<td> {LANG.file_author_homepage} </td>
-				<td><input class="w300" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" /><input type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" /><input type="button" value="{LANG.file_gourl}" id="go_author_url" onclick="nv_gourl('author_url',0, 'go_author_url');" /></td>
+				<td><input class="w300" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" /> <input type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" /><input type="button" value="{LANG.file_gourl}" id="go_author_url" onclick="nv_gourl('author_url',0, 'go_author_url');" /></td>
 			</tr>
 			<tr>
 				<td style="vertical-align:top"> {LANG.file_myfile} </td>
 				<td>
 				<!-- BEGIN: fileupload -->
-				<input class="w300" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" disabled="disabled" /><input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" /><input type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}',1, 'go_fileupload{FILEUPLOAD.key}');" />
+				<input class="w300" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" disabled="disabled" /> <input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" /> <input type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}',1, 'go_fileupload{FILEUPLOAD.key}');" />
 				<br />
 				<!-- END: fileupload -->
 				<div id="fileupload2_items">
@@ -90,7 +90,7 @@
 				<td style="vertical-align:top"> {LANG.file_image} </td>
 				<td>
 				<!-- BEGIN: fileimage -->
-				<input class="w300" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" disabled="disabled" /><input type="button" value="{LANG.file_checkUrl}" id= "check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" /><input type="button" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
+				<input class="w300" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" disabled="disabled" /> <input type="button" value="{LANG.file_checkUrl}" id= "check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" /> <input type="button" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
 				<br />
 				<!-- BEGIN: if_fileimage -->
 				<div style="padding-top:10px">
@@ -98,7 +98,7 @@
 				</div>
 				<!-- END: if_fileimage -->
 				<!-- END: fileimage -->
-				<input class="w300" value="{DATA.fileimage2}" name="fileimage2" id="fileimage2" maxlength="255" /><input type="button" value="{LANG.file_selectfile}" name="selectimg" /><input type="button" value="{LANG.file_checkUrl}" id="check_fileimage2" onclick="nv_checkfile('fileimage2',1, 'check_fileimage2');" /><input type="button" value="{LANG.file_gourl}" id= "go_fileimage2" onclick="nv_gourl('fileimage2',1, 'go_fileimage2');" /></td>
+				<input class="w300" value="{DATA.fileimage2}" name="fileimage2" id="fileimage2" maxlength="255" /> <input type="button" value="{LANG.file_selectfile}" name="selectimg" /> <input type="button" value="{LANG.file_checkUrl}" id="check_fileimage2" onclick="nv_checkfile('fileimage2',1, 'check_fileimage2');" /> <input type="button" value="{LANG.file_gourl}" id= "go_fileimage2" onclick="nv_gourl('fileimage2',1, 'go_fileimage2');" /></td>
 			</tr>
 			<tr>
 				<td class="top"> {LANG.intro_title} </td>

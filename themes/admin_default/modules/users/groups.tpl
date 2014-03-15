@@ -215,7 +215,7 @@
 			<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 			<td>
 			<!-- BEGIN: delete -->
-			<a class="delete_icon" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+			<i class="icon-trash icon-large">&nbsp;</i> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>
@@ -224,7 +224,7 @@
 </table>
 <script type="text/javascript">
 	//<![CDATA[
-	$("a.delete_icon").click(function() {
+	$("a.delete").click(function() {
 		$.ajax({
 			type : "POST",
 			url : "{MODULE_URL}={OP}",

@@ -14,8 +14,8 @@
 	</table>
 </div>
 <div style="margin-top:10px;position:relative;float:right;width:490px;">
-	<a class="button2" href="javascript:void(0);" onclick="nv_show_highlight('php');"><span><span>{SHOW_LANG.0}</span></span></a>
-	<a class="button2" href="javascript:void(0);" onclick="nv_show_highlight('sql');"><span><span>{SHOW_LANG.1}</span></span></a>
+	<a class="button button-h" href="javascript:void(0);" onclick="nv_show_highlight('php');">{SHOW_LANG.0}</a>
+	<a class="button button-h" href="javascript:void(0);" onclick="nv_show_highlight('sql');">{SHOW_LANG.1}</a>
 	<div class="clearfix"></div>
 	<div id="my_highlight" style="background-color:#F2F2F2;border: 1px solid #CCC;margin-top:10px;padding:10px;">
 		{SHOW}

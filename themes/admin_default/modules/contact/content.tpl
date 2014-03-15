@@ -20,7 +20,7 @@
 <table class="tab1">
 	<tbody>
 		<tr>
-			<td class="center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button1"><span><span>{GLANG.edit}</span></span></a></td>
+			<td class="center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button button-h">{GLANG.edit}</a></td>
 		</tr>
 	</tbody>
 </table>

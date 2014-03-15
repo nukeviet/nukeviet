@@ -23,7 +23,7 @@
 </table>
 <!-- END: data -->
 <div style="text-align:center; padding-top:15px;">
-	<strong>{LANG.question}: </strong><input style="width: 450px" name="new_title" id="new_title" type="text" maxlength="255" /><input name="Button1" type="button" value="{LANG.addquestion}" onclick="nv_add_question();return;" />
+	<strong>{LANG.question}: </strong><input style="width: 450px" name="new_title" id="new_title" type="text" maxlength="255" /> <input name="Button1" type="button" value="{LANG.addquestion}" onclick="nv_add_question();return;" />
 </div>
 <!-- END: main -->
 <!-- BEGIN: load -->

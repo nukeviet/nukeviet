@@ -754,7 +754,7 @@ elseif( defined( 'NV_IS_USER' ) )
 
 		if( $array_row_i['is_edit_content'] )
 		{
-			$array_link_content[] = "<span class=\"edit_icon\"><a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a></span>";
+			$array_link_content[] = "<i class=\"icon-edit icon-large\">&nbsp;</i> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
 		}
 
 		if( $array_row_i['is_del_content'] )

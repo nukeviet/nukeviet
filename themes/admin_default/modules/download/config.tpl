@@ -61,10 +61,11 @@
 				<tr>
 					<td class="top">{LANG.config_allowfiletype}</td>
 					<td>
-					<!-- BEGIN: upload_filetype -->
-					<input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}
-					<br />
-					<!-- END: upload_filetype -->
+						<div class="dl-fixheight">
+							<!-- BEGIN: upload_filetype -->
+							<label><input name="upload_filetype[]" value="{UPLOAD_FILETYPE.ext}" type="checkbox"{UPLOAD_FILETYPE.checked} /> {UPLOAD_FILETYPE.title}</label><br />
+							<!-- END: upload_filetype -->
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -95,7 +96,7 @@
 				</tr>
 				<tr>
 					<td class="top">{LANG.zip_readme}</td>
-					<td><textarea name="readme" cols="20" rows="2" style="width: 100%; height: 300px; overflow: auto">{DATA.readme}</textarea></td>
+					<td><textarea name="readme" cols="20" rows="5" class="txt-full">{DATA.readme}</textarea></td>
 				</tr>
 			</tbody>
 		</table>

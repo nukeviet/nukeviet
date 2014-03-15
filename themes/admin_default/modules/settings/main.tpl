@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.site_logo}</strong></td>
-				<td><input type="text" class="w350" name="site_logo" id="site_logo" value="{VALUE.site_logo}" /><input class="w100" type="button" value="{LANG.browse_image}" name="selectimg"/></td>
+				<td><input type="text" class="w350" name="site_logo" id="site_logo" value="{VALUE.site_logo}" /> <input type="button" value="{LANG.browse_image}" name="selectimg"/></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.theme}</strong></td>

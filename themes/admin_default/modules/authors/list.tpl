@@ -20,13 +20,13 @@
 			<td>{DATA.is_suspend}</td>
 			<td>
 			<!-- BEGIN: edit -->
-			<a class="edit_icon" href="{EDIT_HREF}">{EDIT_NAME}</a>
+			<i class="icon-edit icon-large">&nbsp;</i> <a href="{EDIT_HREF}">{EDIT_NAME}</a>
 			<!-- END: edit -->
 			<!-- BEGIN: suspend -->
-			&nbsp;-&nbsp;<a class="edit_icon" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+			&nbsp;-&nbsp;<i class="icon-edit icon-large">&nbsp;</i> <a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
 			<!-- END: suspend -->
 			<!-- BEGIN: del -->
-			&nbsp;-&nbsp;<a class="delete_icon" href="{DEL_HREF}">{DEL_NAME}</a>
+			&nbsp;-&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="{DEL_HREF}">{DEL_NAME}</a>
 			<!-- END: del -->
 			</td>
 		</tr>

@@ -14,8 +14,8 @@
 			<td>&nbsp;</td>
 			<td>
 			<div style="HEIGHT:24px;">
-				<a class="button2" href="javascript:void(0);" onclick="{CONTENT.submit.1}"><span><span>{CONTENT.submit.0}</span></span></a>
-				<a class="button2" href="javascript:void(0);" onclick="{CONTENT.cancel.1}"><span><span>{CONTENT.cancel.0}</span></span></a>
+				<a class="button button-h" href="javascript:void(0);" onclick="{CONTENT.submit.1}">{CONTENT.submit.0}</a>
+				<a class="button button-h" href="javascript:void(0);" onclick="{CONTENT.cancel.1}">{CONTENT.cancel.0}</a>
 			</div></td>
 		</tr>
 	</tbody>
