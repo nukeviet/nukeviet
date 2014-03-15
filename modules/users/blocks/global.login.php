@@ -94,7 +94,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
 				$assigns['title'] = ucfirst( $server );
 				$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
-				$assigns['img_width'] = $assigns['img_height'] = 16;
+				$assigns['img_width'] = $assigns['img_height'] = 24;
 
 				$xtpl->assign( 'OPENID', $assigns );
 				$xtpl->parse( 'main.openid.server' );

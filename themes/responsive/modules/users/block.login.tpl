@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="{USER_LOGIN}" method="post" role="form">
+<form action="{USER_LOGIN}" method="post" role="form" class="form-tooltip">
 	<div class="form-group">
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-user fa-lg">&nbsp;</i></span>
@@ -37,7 +37,7 @@
 	<div class="text-center">
 		<!-- BEGIN: server -->
 		<a title="{OPENID.title}" href="{OPENID.href}">
-			<img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /> {OPENID.title}
+	 		&nbsp;<img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" data-toggle="tooltip" data-placement="top" title="{OPENID.title}"/>&nbsp;
 		</a>
 		<!-- END: server -->
 	</div>
@@ -46,15 +46,19 @@
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
-	<p>
-		{LANG.wellcome}: <strong>{USER.full_name}</strong>
-	</p>
-	<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="fl" /></a>
-	<!-- BEGIN: admin -->
-	<a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a>
-	<!-- END: admin -->
-	<a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a>
-	<a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a>
-	{in_group}
+	<p>{LANG.wellcome}: <strong>{USER.full_name}</strong></p>
+	<div class="row">
+		<div class="col-xs-6 text-center">
+			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
+		</div>
+		<div class="col-xs-6">
+			<ul class="nv-list-item">
+				<!-- BEGIN: admin --><li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a></li><!-- END: admin -->
+				<li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a></li>
+				<li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a></li>
+				<li><i class="fa fa-chevron-right ">&nbsp;</i> {in_group}</li>
+			</ul>
+		</div>
+	</div>
 </div>
 <!-- END: signed -->
