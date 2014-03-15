@@ -301,14 +301,6 @@ if( $checkss == $array_data['checkss'] )
 	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
 	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
-
-	if( nv_unhtmlspecialchars( $array_data['photo'] ) != $row['photo'] )
-	{
-		if( ! empty( $row['photo'] ) and is_file( NV_ROOTDIR . '/' . $row['photo'] ) )
-		{
-			@nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
-		}
-	}
 	
 	if( $array_data['allowloginchange'] )
 	{

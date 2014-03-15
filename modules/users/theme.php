@@ -1288,16 +1288,6 @@ function nv_avatar( $array )
 
 	$lang_module['avata_bigfile'] = sprintf( $lang_module['avata_bigfile'], nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
 	$lang_module['avata_bigsize'] = sprintf( $lang_module['avata_bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-	
-	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
-	$result = $db->query( $sql );
-	$global_config['avatar_width'] = $result->fetchColumn();
-	$result->closeCursor();
-	
-	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
-	$result = $db->query( $sql );
-	$global_config['avatar_height'] = $result->fetchColumn();
-	$result->closeCursor();
 
 	$xtpl->assign( 'NV_AVATAR_WIDTH', $global_config['avatar_width'] );
 	$xtpl->assign( 'NV_AVATAR_HEIGHT', $global_config['avatar_height'] );

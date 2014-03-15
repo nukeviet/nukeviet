@@ -402,11 +402,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'BORDER', 'border_b ' );
 					}
-					$xtpl->assign( 'WCT', 'lt-news fl ' );
+					$xtpl->assign( 'WCT', 'fixedwidth ' );
 				}
 				else
 				{
-					$xtpl->assign( 'WCT', 'news-full ' );
+					$xtpl->assign( 'WCT', 'fullwidth noborder ' );
 					$xtpl->assign( 'BG', '' );
 				}
 

@@ -47,13 +47,7 @@
 			<!-- BEGIN: related -->
 			<ul>
 				<!-- BEGIN: loop -->
-				<li>
-					<!-- BEGIN: newday -->
-					<span class="icon_new_small"></span>
-					<!-- END: newday -->
-					<!-- BEGIN: iconlist -->
-					<span class="icon_list"></span>
-					<!-- END: iconlist -->
+				<li class="{CLASS}">
 					<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
 				</li>
 				<!-- END: loop -->

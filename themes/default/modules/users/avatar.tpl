@@ -116,7 +116,7 @@
 		
 		            // initialize Jcrop
 		            $('#preview').Jcrop({
-						maxSize: [avatar_width, avatar_height],
+						minSize: [avatar_width, avatar_height],
 		                aspectRatio : 1, // keep aspect ratio 1:1
 		                bgFade: true, // use fade effect
 		                bgOpacity: .3, // fade opacity
@@ -150,15 +150,14 @@
                     <input type="hidden" id="y1" name="y1" />
                     <input type="hidden" id="x2" name="x2" />
                     <input type="hidden" id="y2" name="y2" />
-                    <input type="hidden" id="avatar_width" name="avatar_width" value="{NV_AVATAR_WIDTH}" />
-                    <input type="hidden" id="avatar_height" name="avatar_height" value="{NV_AVATAR_HEIGHT}" />
+                    <input type="hidden" id="old_images" name="old_images" />
 
                     <div><input type="file" name="image_file" id="image_file" onchange="fileSelectHandler()" /></div>
 
                     <div class="error"></div>
 					
-					<a href="#" title="{LANG.avata_select_img}">
-						<img class="upload_icon" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/users/upload.png" width="200" />
+					<a href="#" id="upload_icon" title="{LANG.avata_select_img}">
+						<img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/users/upload.png" width="200" />
 						<h5>{LANG.avata_select_img}</h5>
 					</a>
 					
@@ -187,11 +186,15 @@
         </div>
     </body>
 </html>
-<script type="text/javascript">
-//<![CDATA[
-$("#upload_icon").click(function() {
+<script>
+var a = opener.document.getElementById("avatar").value;
+if( a != '' )
+{
+	$('#old_images').val(a);
+}
+
+$('#upload_icon').click(function() {
     $('input[type="file"]').click();
 });
-//]]>
 </script>
 <!-- END: main -->
