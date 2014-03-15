@@ -540,7 +540,7 @@ function openidLogin_Res1( $attribs )
 			$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
 			$data_insert['email'] = $reg_attribs['email'];
 			$data_insert['full_name'] = $reg_attribs['full_name'];
-			$data_insert['gender'] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' ); // code Error
+			$data_insert['gender'] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' );
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( ! $userid )
