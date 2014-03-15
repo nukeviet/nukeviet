@@ -57,12 +57,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_site['site_email'] = $site_email;
 	}
 
-	$error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
-	if( nv_check_valid_email( $error_send_email ) == '' )
-	{
-		$array_config_site['error_send_email'] = $error_send_email;
-	}
-
 	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
 	$array_config_site['date_pattern'] = nv_substr( $nv_Request->get_title( 'date_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
 	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
@@ -133,6 +127,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array_config_global['rewrite_op_mod'] = '';
 		}
 
+        $error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
+        if( nv_check_valid_email( $error_send_email ) == '' )
+        {
+            $array_config_global['error_send_email'] = $error_send_email;
+        }
+
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
 		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
@@ -189,6 +189,8 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
+    $xtpl->parse( 'main.error_send_email' );
+
 	$result = $db->query( "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'" );
 	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
