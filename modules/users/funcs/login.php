@@ -408,9 +408,12 @@ function openidLogin_Res1( $attribs )
 	}
 
 	$contents = '';
+	$page_title = $lang_module['openid_login'];
+	
 	if( $option == 3 )
 	{
 		$error = '';
+		
 		if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		{
 			$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
