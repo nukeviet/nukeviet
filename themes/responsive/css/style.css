@@ -212,6 +212,11 @@ header{
 	padding-right:40px;
 }
 
+/* FORM CONTROL */
+.nv-captcha{
+	vertical-align: middle;
+}
+
 /* LIST ITEM */
 .nv-list-item{
 	list-style:none;

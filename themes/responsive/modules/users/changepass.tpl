@@ -8,7 +8,7 @@
 	<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
 </ul>
 <h2>{LANG.change_pass}</h2>
-<form role="form" action="{USER_CHANGEPASS}" method="post" class="form-horizontal form-tooltip m-bottom">
+<form action="{USER_CHANGEPASS}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<p class="text-info">
 		<i class="fa fa-quote-left">&nbsp;</i> 
 		{DATA.change_info}

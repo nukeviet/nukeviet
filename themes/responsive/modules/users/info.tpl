@@ -95,7 +95,7 @@
 	<!-- BEGIN: field -->
 	<!-- BEGIN: loop -->
 	<div class="form-group">
-		<label class="col-sm-3 control-label" data-toggle="tooltip" data-placement="top" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
+		<label class="col-sm-3 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
 		<div class="col-sm-9">
 			<!-- BEGIN: textbox -->
 			<input class="{FIELD.required} {FIELD.class} form-control" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
