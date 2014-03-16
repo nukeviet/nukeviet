@@ -6,12 +6,26 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+/* Font */
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto Regular'), local('Roboto-Regular'), url('../fonts/roboto-400.woff') format('woff');
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/roboto-700.woff') format('woff');
+}
+
 /* Fix bootstrap when tidy enabled */
 .input-group-btn{
 	font-size:14px!important;
 }
 
-/* GLOBAL */
+/* Global */
 body{
 	font-size:12px;
 	background:#ccc url('../images/bg.png') repeat;
@@ -29,6 +43,7 @@ iframe{
 h1, h2, h3, h4, h5, h6{
 	margin-top:0;
 	margin-bottom:10px;
+	font-family: 'Roboto', sans-serif;
 }
 .m-bottom{
 	margin-bottom:10px!important;
@@ -43,7 +58,7 @@ h1, h2, h3, h4, h5, h6{
 	cursor:pointer;
 }
 
-/* HEADER */
+/* Header */
 header{
 	position:relative;
 }
@@ -131,12 +146,12 @@ header{
 	min-height:100%;
 }
 
-/* NAV */
+/* Nav */
 .navbar{
 	margin-bottom:0;
 }
 
-/* BODY */
+/* Body */
 #body{
 	background:#fff;
 	border-color:#dadada;
@@ -147,7 +162,7 @@ header{
 	padding-top:10px;
 }
 
-/* FOOTER */
+/* Footer */
 #footer .footer-copyright{
 	background: #121214;
 	border-top: 4px solid #1F1F1F;
@@ -186,7 +201,7 @@ header{
 	float:right;
 }
 
-/* PAGE BREAK LINE */
+/* Page break line */
 .nv-hr{
 	clear:both;
 	height:1px;
@@ -202,7 +217,7 @@ header{
 	margin:5px 0;
 }
 
-/* SOCIAL SHARE ICON, BUTTON */
+/* Social share, social button */
 .nv-social-share{
 	list-style:none;
 	margin:0;
@@ -217,12 +232,12 @@ header{
 	padding-right:40px;
 }
 
-/* FORM CONTROL */
+/* Form control */
 .nv-captcha{
 	vertical-align: middle;
 }
 
-/* LIST ITEM */
+/* List item */
 .nv-list-item{
 	list-style:none;
 	margin:0;
@@ -239,7 +254,7 @@ header{
 	padding:1px;
 }
 
-/* RESPONSIVE */
+/* Responsive theme */
 @media (max-width: 768px){
 	#banner img{
 		height:100%;
