@@ -254,6 +254,45 @@ header{
 	padding:1px;
 }
 
+/* Info die */
+.nv-infodie{
+	margin:0 auto;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	border:1px #dadada solid;
+	background:#fff;
+	position:absolute;
+	min-height:300px!important;
+	min-width:300px!important;
+	display: table;
+}
+.nv-infodie .panel-body{
+	display: table-cell;
+	vertical-align: middle;
+}
+.nv-infodie .logo{
+	max-width: 90%!important;
+}
+@media (max-width: 599px){
+	.nv-infodie{
+		width:100%;
+	}
+}
+@media (min-width: 600px){
+	.nv-infodie{
+		width:500px;
+		left:50%;
+		margin-left:-250px;
+	}
+}
+@media (min-height: 600px){
+	.nv-infodie{
+		height:500px;
+		top:50%;
+		margin-top:-250px;
+	}
+}
+
 /* Responsive theme */
 @media (max-width: 768px){
 	#banner img{

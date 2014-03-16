@@ -99,25 +99,33 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
 
+	// Get theme 
+	$template = '';
+
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
+		$template = $global_config['admin_theme'];
 	}
 	elseif( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
+		$template = 'admin_default';
 	}
 	elseif( isset( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
+		$template = $global_config['module_theme'];
 	}
 	elseif( isset( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+		$template = $global_config['site_theme'];
 	}
 	else
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/default/system';
+		$template = 'default';
 	}
 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
@@ -126,6 +134,11 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
+	$xtpl->assign( 'LANG', $lang_global );
+	$xtpl->assign( 'TEMPLATE', $template );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	
 	if( isset( $size[1] ) )
 	{
 		if( $size[0] > 490 )
@@ -164,6 +177,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->parse( 'main' );
 
 	$global_config['mudim_active'] = 0;
+	
 	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
 	include NV_ROOTDIR . '/includes/footer.php';
