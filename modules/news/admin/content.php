@@ -664,7 +664,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=:bodytext WHERE id =' . $rowcontent['id'] );
 				$sth->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
 				$ct_query[] = (int) $sth->execute();
-				
+
 				if( array_sum( $ct_query ) != sizeof( $ct_query ) )
 				{
 					$error[] = $lang_module['errorsave'];
@@ -686,7 +686,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$_sql = 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid_i;
 				$weight = $db->query( $_sql )->fetchColumn();
 				$weight = intval( $weight ) + 1;
-				
+
 				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', ' . $weight . ')' );
 			}
 			foreach( $id_block_content_del as $bid_i )
@@ -694,7 +694,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid = ' . $bid_i );
 				nv_news_fix_block( $bid_i, false );
 			}
-			
+
 			$id_block_content = array_keys( $array_block_cat_module );
 			foreach( $id_block_content as $bid_i )
 			{
@@ -713,7 +713,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					if( ! in_array( $keyword, $array_keywords_old ) )
 					{
-						$alias_i = str_replace( ' ', '-', $keyword );
+						$alias_i = ( $module_config[$module_name]['tags_alias'] ) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
 
 						$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
