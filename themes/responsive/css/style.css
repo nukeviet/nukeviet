@@ -273,6 +273,7 @@ header{
 .nv-infodie .logo{
 	max-width: 90%!important;
 }
+
 @media (max-width: 499px){
 	.nv-infodie{
 		width:100%;
