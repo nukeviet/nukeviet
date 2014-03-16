@@ -2,24 +2,24 @@
 <form action="{USER_LOGIN}" method="post" role="form" class="form-tooltip">
 	<div class="form-group">
 		<div class="input-group">
-			<span class="input-group-addon"><i class="fa fa-user fa-lg">&nbsp;</i></span>
+			<span class="input-group-addon"><em class="fa fa-user fa-lg">&nbsp;</em></span>
 			<input type="text" class="form-control" id="block_login_iavim" name="nv_login" value="" placeholder="{LANG.username}">
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="input-group">
-			<span class="input-group-addon"><i class="fa fa-key fa-lg fa-fix">&nbsp;</i></span>
+			<span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix">&nbsp;</em></span>
 			<input type="password" class="form-control" id="block_password_iavim" name="nv_password" value="" placeholder="{LANG.password}">
 		</div>
 	</div>
 	<!-- BEGIN: captcha -->
 	<div class="form-group text-right">
 		<img id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" />
-		&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');">&nbsp;</i>
+		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');">&nbsp;</em>
 	</div>
 	<div class="form-group">
 		<div class="input-group">
-			<span class="input-group-addon"><i class="fa fa-shield fa-lg fa-fix">&nbsp;</i></span>
+			<span class="input-group-addon"><em class="fa fa-shield fa-lg fa-fix">&nbsp;</em></span>
 			<input id="block_seccode_iavim" name="nv_seccode" type="text" class="form-control" maxlength="{GFX_MAXLENGTH}" placeholder="{LANG.securitycode}"/>
 		</div>
 	</div>
@@ -53,10 +53,10 @@
 		</div>
 		<div class="col-xs-6">
 			<ul class="nv-list-item">
-				<!-- BEGIN: admin --><li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a></li><!-- END: admin -->
-				<li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a></li>
-				<li><i class="fa fa-chevron-right ">&nbsp;</i> <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a></li>
-				<li><i class="fa fa-chevron-right ">&nbsp;</i> {in_group}</li>
+				<!-- BEGIN: admin --><li><em class="fa fa-chevron-right ">&nbsp;</em> <a title="{LANG.logout}" href="{LOGOUT_ADMIN}">{LANG.logout}</a></li><!-- END: admin -->
+				<li><em class="fa fa-chevron-right ">&nbsp;</em> <a title="{LANG.changpass}" href="{CHANGE_PASS}">{LANG.changpass}</a></li>
+				<li><em class="fa fa-chevron-right ">&nbsp;</em> <a title="{LANG.edituser}" href="{CHANGE_INFO}">{LANG.edituser}</a></li>
+				<li><em class="fa fa-chevron-right ">&nbsp;</em> {in_group}</li>
 			</ul>
 		</div>
 	</div>

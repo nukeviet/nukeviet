@@ -23,7 +23,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td style="color:red"><b>{LANG.autoinstall_theme_error_warning_overwrite}</b></td>
+			<td style="color:red"><strong>{LANG.autoinstall_theme_error_warning_overwrite}</strong></td>
 		</tr>
 	</tbody>
 </table>

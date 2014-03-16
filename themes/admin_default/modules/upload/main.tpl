@@ -77,7 +77,7 @@
 		</select>
 	</div>
 	<div class="search">
-		<a href="#" title="{LANG.search}"><i class="icon-search icon-large">&nbsp;</i></a>
+		<a href="#" title="{LANG.search}"><em class="icon-search icon-large">&nbsp;</em></a>
 	</div>
 	<div class="uploadForm" style="display:none">
 		<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">

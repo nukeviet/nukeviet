@@ -189,17 +189,17 @@ UAV.init = function(){
 			<input type="hidden" id="h" name="h"/>
 			<input type="file" name="image_file" id="image_file" class="hide"/>
 			<h1 id="upload_icon" class="upload-button text-center">
-				<i class="fa fa-upload fa-5x">&nbsp;</i><br />
+				<em class="fa fa-upload fa-5x">&nbsp;</em><br />
 				<span>{LANG.avata_select_img}</span>
 			</h1>
 			<div class="img-area"><img id="preview"/></div>
 			<div class="info" id="uploadInfo">
 				<div class="text-center">
 					<p>
-						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filesize}"><i class="fa fa-asterisk">&nbsp;</i> <span id="image-size">&nbsp;</span></span>
-						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_ftype}"><i class="fa fa-bolt">&nbsp;</i> <span id="image-type">&nbsp;</span></span>
-						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filedimension}"><i class="fa fa-bullseye">&nbsp;</i> <span id="original-dimension">&nbsp;</span></span>
-						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_displaydimension}"><i class="fa fa-circle-o">&nbsp;</i> <span id="display-dimension">&nbsp;</span></span>
+						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filesize}"><em class="fa fa-asterisk">&nbsp;</em> <span id="image-size">&nbsp;</span></span>
+						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_ftype}"><em class="fa fa-bolt">&nbsp;</em> <span id="image-type">&nbsp;</span></span>
+						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filedimension}"><em class="fa fa-bullseye">&nbsp;</em> <span id="original-dimension">&nbsp;</span></span>
+						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_displaydimension}"><em class="fa fa-circle-o">&nbsp;</em> <span id="display-dimension">&nbsp;</span></span>
 					</p>
 					<input id="btn-submit" type="submit" class="btn btn-primary btn-sm" value="{LANG.avata_crop}" /> 
 					<input id="btn-reset" type="button" class="btn btn-primary btn-sm" value="{LANG.avata_chosen_other}" />

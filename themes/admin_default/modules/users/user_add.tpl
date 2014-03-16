@@ -112,7 +112,7 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td><b>{FIELD.title}</b>
+				<td><strong>{FIELD.title}</strong>
 				<br>
 				<em>{FIELD.description}</em></td>
 				<td>

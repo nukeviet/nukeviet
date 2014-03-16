@@ -7,8 +7,8 @@
 	</div>
 	<div class="col-sm-9">
 		<ul class="nv-list-item">
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {LANG.account2}: <strong>{USER.username}</strong><!-- BEGIN: viewemail --> ({USER.email})<!-- END: viewemail --></li>
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {LANG.last_login}: {USER.last_login}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong><!-- BEGIN: viewemail --> ({USER.email})<!-- END: viewemail --></li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.last_login}: {USER.last_login}</li>
 		</ul>
 	</div>
 </div>

@@ -62,7 +62,7 @@
 	<h3 class="title-search">{LANG.search_on} {TITLE_MOD}</h3>
 	<!-- BEGIN: noneresult -->
 	<div class="result-content">
-		{LANG.search_none} : "<b>{KEY}</b>" {LANG.search_in_module} <b>{INMOD}</b>
+		{LANG.search_none} : "<strong>{KEY}</strong>" {LANG.search_in_module} <strong>{INMOD}</strong>
 	</div>
 	<!-- END: noneresult -->
 	<!-- BEGIN: result -->
@@ -94,7 +94,7 @@
 </div>
 <div class="result-frame">
 	<div>
-		<b>{LANG.search_adv_internet} :</b>
+		<strong>{LANG.search_adv_internet} :</strong>
 	</div>
 	<div align="center">
 		<form method="get" action="http://www.google.com/search" target="_top">

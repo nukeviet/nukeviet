@@ -16,7 +16,7 @@
 			<td style="padding-left:50px;width:50%">
 			<!-- END: deactive -->
 			<p>
-				<b>{ROW.name}</b> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><b>{ROW.author}</b></a>
+				<strong>{ROW.name}</strong> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><strong>{ROW.author}</strong></a>
 			</p>
 			<p><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/>
 			</p>

@@ -23,7 +23,7 @@
 			<td><strong>{ROW.title}</strong></td>
 			<td><a href="{ROW.catlink}">{ROW.cattitle}</a></td>
 			<td class="center"> {ROW.post_time} </td>
-			<td class="center"><i class="icon-search icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_report_check({ROW.id});">{LANG.file_checkUrl}</a> &nbsp;&nbsp;<i class="icon-edit icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_report_edit({ROW.id});">{GLANG.edit}</a> &nbsp;&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_report_del({ROW.id});">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-search icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_check({ROW.id});">{LANG.file_checkUrl}</a> &nbsp;&nbsp;<em class="icon-edit icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_edit({ROW.id});">{GLANG.edit}</a> &nbsp;&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_report_del({ROW.id});">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: row -->
 	</tbody>

@@ -56,7 +56,7 @@
 		<div class="col-sm-4">
 			<label class="control-label">
 				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" class="nv-captcha"/>
-				&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','nv_seccode_iavim');">&nbsp;</i>
+				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','nv_seccode_iavim');">&nbsp;</em>
 			</label>
 		</div>
 	</div>

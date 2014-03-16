@@ -129,7 +129,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 		{
 			$value = array_unique( $value );
 			asort( $value );
-			$contents .= '<b>' . $key . ' </b><br>&nbsp;&nbsp;&nbsp;&nbsp; ' . implode( '<br>&nbsp;&nbsp;&nbsp;&nbsp;', $value ) . '<br><br>';
+			$contents .= '<strong>' . $key . ' </strong><br>&nbsp;&nbsp;&nbsp;&nbsp; ' . implode( '<br>&nbsp;&nbsp;&nbsp;&nbsp;', $value ) . '<br><br>';
 		}
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_admin_theme( $contents );

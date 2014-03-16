@@ -17,8 +17,8 @@
 			<td>{ROW.totalvote} {LANG.voting_totalcm}</td>
 			<td class="center">{ROW.status}</td>
 			<td class="center">
-				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_content({ROW.vid}, '{ROW.checksess}')">{GLANG.delete}</a>
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_content({ROW.vid}, '{ROW.checksess}')">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

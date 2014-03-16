@@ -23,7 +23,7 @@
 									<div class="input-group">
 										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}">
 										<span class="input-group-btn">
-											<button class="btn btn-info" type="submit"><i class="fa fa-lg fa-search">&nbsp;</i></button>
+											<button class="btn btn-info" type="submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
 										</span>
 									</div>
 								</form>
@@ -47,7 +47,7 @@
 			<div class="container" id="body">
 				<!-- BEGIN: breadcrumbs -->
 				<ol class="breadcrumb">
-					<li class="home"><i class="fa fa-lg fa-home">&nbsp;</i><a href="{THEME_SITE_HREF}">{LANG.Home}</a></li>
+					<li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}">{LANG.Home}</a></li>
 					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}">{BREADCRUMBS.title}</a></li><!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->

@@ -112,8 +112,8 @@
 			<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
 			<td>
 			<!-- BEGIN: action -->
-			<i class="icon-edit icon-large">&nbsp;</i> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
-			<i class="icon-trash icon-large">&nbsp;</i> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+			<em class="icon-edit icon-large">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
+			<em class="icon-trash icon-large">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 			<!-- END: action -->
 			</td>
 		</tr>
@@ -215,7 +215,7 @@
 			<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 			<td>
 			<!-- BEGIN: delete -->
-			<i class="icon-trash icon-large">&nbsp;</i> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+			<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>

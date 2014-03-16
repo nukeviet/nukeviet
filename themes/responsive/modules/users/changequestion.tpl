@@ -10,23 +10,23 @@
 <h2>{LANG.change_question_pagetitle}</h2>
 <div class="well">
 	<p>
-		<i class="fa fa-info fa-lg">&nbsp;</i> {LANG.changequestion_info}:
+		<em class="fa fa-info fa-lg">&nbsp;</em> {LANG.changequestion_info}:
 	</p>
 	<ul class="nv-list-item">
 		<li>
-			<i class="fa fa-angle-right">&nbsp;</i> {LANG.changequestion_info1}
+			<em class="fa fa-angle-right">&nbsp;</em> {LANG.changequestion_info1}
 		</li>
 		<li>
-			<i class="fa fa-angle-right">&nbsp;</i> {LANG.changequestion_info2}
+			<em class="fa fa-angle-right">&nbsp;</em> {LANG.changequestion_info2}
 		</li>
 	</ul>
 </div>
 <!-- BEGIN: step1 -->
 <form id="changeQuestionForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<i class="fa fa-quote-left">&nbsp;</i> 
+		<em class="fa fa-quote-left">&nbsp;</em> 
 		{DATA.info} 
-		<i class="fa fa-quote-right">&nbsp;</i>
+		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
 		<label for="nv_username_iavim" class="col-sm-3 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
@@ -54,9 +54,9 @@ function question_change() {
 </script>
 <form id="changeQuestionForm" action="{FORM2_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<i class="fa fa-quote-left">&nbsp;</i> 
+		<em class="fa fa-quote-left">&nbsp;</em> 
 		{DATA.info} 
-		<i class="fa fa-quote-right">&nbsp;</i>
+		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
 		<label for="question" class="col-sm-4 control-label">{LANG.question}:</label>

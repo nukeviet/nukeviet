@@ -22,7 +22,7 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr class="center">
-				<td  class="left"><b>{DATA.dirname}</b></td>
+				<td  class="left"><strong>{DATA.dirname}</strong></td>
 				<td>
 				<select name="thumb_type[{DATA.did}]">
 					<!-- BEGIN: thumb_type -->
