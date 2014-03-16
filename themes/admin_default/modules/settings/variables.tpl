@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.live_session_time}</strong></td>
-				<td><input class="required digits" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" style="width: 50px; text-align: right"/> ({GLANG.min}) <i>{LANG.live_session_time0}</i></td>
+				<td><input class="required digits" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" style="width: 50px; text-align: right"/> ({GLANG.min}) <em>{LANG.live_session_time0}</em></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.cookie_secure}</strong></td>

@@ -55,6 +55,7 @@ UAV.common = {
 	read: function(file){
 		var fRead = new FileReader();
 		fRead.onload = function(e){
+			$('#' + UAV.config.target).show();
 			$('#' + UAV.config.target).attr('src', e.target.result);
 			$('#' + UAV.config.target).load(function(){
 				var img = document.getElementById(UAV.config.target);
@@ -138,7 +139,7 @@ UAV.common = {
 		UAV.data.error = false;
 		UAV.data.busy = false;
 		UAV.tool.clear();
-		$('#' + UAV.config.target).removeAttr('src').removeAttr('style');
+		$('#' + UAV.config.target).removeAttr('src').removeAttr('style').hide();
 		$('#' + UAV.config.uploadIcon).show();
 		$('#' + UAV.config.uploadInfo).hide();
 		$('#' + UAV.config.imageType).html('');

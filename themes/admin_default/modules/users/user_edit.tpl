@@ -119,7 +119,7 @@
 			<tr>
 				<td><b>{FIELD.title}</b>
 				<br>
-				<i>{FIELD.description}</i></td>
+				<em>{FIELD.description}</em></td>
 				<td>
 				<!-- BEGIN: required -->
 				(<span style="color:#FF0000">*</span>)

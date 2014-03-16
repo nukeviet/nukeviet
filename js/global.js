@@ -174,7 +174,6 @@ function is_array(mixed_var) {
 	return ( mixed_var instanceof Array );
 }
 
-// strip_tags('<p>Kevin</p> <b>van</b> <i>Zonneveld</i>', '<i><b>');
 function strip_tags(str, allowed_tags) {
 	var key = '', allowed = false;
 	var matches = [];

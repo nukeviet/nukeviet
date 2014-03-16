@@ -6,6 +6,11 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+/* Fix bootstrap when tidy enabled */
+.input-group-btn{
+	font-size:14px!important;
+}
+
 /* GLOBAL */
 body{
 	font-size:12px;
@@ -102,7 +107,7 @@ header{
 	background:#fff;
 	color:#00a8ff;
 }
-#social-icons ul li a i{
+#social-icons ul li a .fa{
 	margin-right:-5px;
 }
 
@@ -171,7 +176,7 @@ header{
 	-webkit-border-radius:2px;
 	margin-left:10px;
 }
-#footer .footer-copyright .menu li.top i{
+#footer .footer-copyright .menu li.top .fa{
 	margin-right:-2px;
 }
 #footer .footer-copyright .theme-change{

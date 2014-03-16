@@ -51,9 +51,9 @@
 {VIEW_PAGES}
 <!-- END: pages_result -->
 <p>
-	<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
+	<em>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
 	<br />
-	{LANG.info_adv}</i>
+	{LANG.info_adv}</em>
 </p>
 <b>{LANG.search_adv_internet} :</b>
 <form method="get" action="http://www.google.com/search">

@@ -87,9 +87,9 @@
 	</div>
 	<!-- END: pages_result -->
 	<div class="cl-info">
-		<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
+		<em>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
 		<br />
-		{LANG.info_adv} </i>
+		{LANG.info_adv} </em>
 	</div>
 </div>
 <div class="result-frame">
