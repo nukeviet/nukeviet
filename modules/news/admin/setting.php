@@ -35,6 +35,7 @@ if( ! empty( $savesetting ) )
 	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
+	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 
 	if( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
 	{
@@ -122,6 +123,7 @@ $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' 
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'MODULE_LOGO', $module_logo );
 
 $array_structure_image = array();

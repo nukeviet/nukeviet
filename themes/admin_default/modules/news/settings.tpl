@@ -99,6 +99,10 @@
 				<td><strong>{LANG.setting_copyright}</strong></td>
 				<td><textarea style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
 			</tr>
+			<tr>
+				<td><strong>{LANG.tags_alias}</strong></td>
+				<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
+			</tr>
 		</tbody>
 	</table>
 </form>
