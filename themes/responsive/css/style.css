@@ -273,19 +273,31 @@ header{
 .nv-infodie .logo{
 	max-width: 90%!important;
 }
+<<<<<<< HEAD
 @media (max-width: 499px){
+=======
+@media (max-width: 599px){
+>>>>>>> 7f26ee6b1c3b30b6c47f7c87cb161baca779d89c
 	.nv-infodie{
 		width:100%;
 	}
 }
+<<<<<<< HEAD
 @media (min-width: 500px){
+=======
+@media (min-width: 600px){
+>>>>>>> 7f26ee6b1c3b30b6c47f7c87cb161baca779d89c
 	.nv-infodie{
 		width:500px;
 		left:50%;
 		margin-left:-250px;
 	}
 }
+<<<<<<< HEAD
 @media (min-height: 500px){
+=======
+@media (min-height: 600px){
+>>>>>>> 7f26ee6b1c3b30b6c47f7c87cb161baca779d89c
 	.nv-infodie{
 		height:500px;
 		top:50%;
