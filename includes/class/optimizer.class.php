@@ -153,7 +153,7 @@ class optimezer
 						{
 							$this->_meta['name'][strtolower( $combine['name'] )] = $combine['content'];
 						}
-						elseif ( array_key_exists( 'charset', $combine ) )
+						elseif( array_key_exists( 'charset', $combine ) )
 						{
 							$this->_meta['charset'] = $combine['charset'];
 						}
@@ -215,7 +215,7 @@ class optimezer
 			}
 		}
 
-		if ( ! empty( $this->_meta['charset'] ) )
+		if( ! empty( $this->_meta['charset'] ) )
 		{
 			$meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
 		}
@@ -273,53 +273,60 @@ class optimezer
 		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
 		$this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
 
-		if ( $this->_tidySupport )
+		if( $this->_tidySupport )
 		{
-			if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 ) return $this->tidy5( $this->_content );
-			return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
+			if( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 )
+			{
+				return $this->tidy5( $this->_content );
+			}
+			else
+			{
+				return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
+			}
 		}
 
 		return $this->_content;
 	}
 
 	/**
- * optimezer::tidy5()
- *
- * @param mixed $string
- * @return
- */
- private function tidy5( $string )
- {
- $menu = array();
- if ( strpos( $string, '<menu' ) !== false )
- {
- $menu = array(
- '<menu' => '<menutidy',
- '</menu' => '</menutidy',
- );
- $string = str_replace( array_keys( $menu ), $menu, $string );
- }
-
- $this->tidy_options['doctype'] = 'omit';
- //$this->tidy_options['output-html'] = true;
- //$this->tidy_options['output-xhtml'] = false;
- $this->tidy_options['drop-proprietary-attributes'] = false;
- $this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
-
- $string = tidy_repair_string( $string, $this->tidy_options, 'utf8' );
-
- if ( empty( $string ) !== true )
- {
- if ( ! empty( $menu ) )
- {
- $string = str_replace( $menu, array_keys( $menu ), $string );
- }
-
- return "<!DOCTYPE html>\n" . $string;
- }
-
- return false;
- }
+	 * optimezer::tidy5()
+	 *
+	 * @param mixed $string
+	 * @return
+	 */
+	private function tidy5( $string )
+	{
+		$menu = array();
+		 
+		if( strpos( $string, '<menu' ) !== false )
+		{
+	 		$menu = array(
+				'<menu' => '<menutidy',
+				'</menu' => '</menutidy',
+			);
+			$string = str_replace( array_keys( $menu ), $menu, $string );
+		}
+		
+		$this->tidy_options['doctype'] = 'omit';
+		//$this->tidy_options['output-html'] = true;
+		//$this->tidy_options['output-xhtml'] = false;
+		$this->tidy_options['drop-proprietary-attributes'] = false;
+		$this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
+		
+		$string = tidy_repair_string( $string, $this->tidy_options, 'utf8' );
+		
+		if( empty( $string ) !== true )
+		{
+			if( ! empty( $menu ) )
+			{
+				$string = str_replace( $menu, array_keys( $menu ), $string );
+			}
+		
+			return "<!DOCTYPE html>\n" . $string;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * optimezer::conditionCallback()
