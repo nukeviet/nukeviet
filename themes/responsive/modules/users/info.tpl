@@ -64,11 +64,23 @@
 	<div class="form-group">
 		<label for="avatar" class="col-sm-3 control-label">{LANG.avata}:</label>
 		<div class="col-sm-9">
-			<div class="input-group">
-				<input type="text" class="form-control" id="avatar" name="avatar" value="{DATA.photo}">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" id="btn_upload"> <i class="fa fa-folder-open-o">&nbsp;</i></button>
-				</span>
+			<!-- BEGIN: photo -->
+			<p id="current-photo" class="pull-left text-center">
+				<img src="{DATA.photo}" alt="{DATA.username}" class="img-thumbnail m-bottom"/><br />
+				<span class="fa-pointer" id="current-photo-btn"><i class="fa fa-trash-o">&nbsp;</i> {LANG.avata_delete}</span>
+				<input type="hidden" name="photo_delete" id="photo_delete" value="{DATA.photo_delete}"/>
+			</p>
+			<!-- END: photo -->
+			<div id="change-photo">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<i class="fa fa-trash-o fa-fix fa-pointer" data-toggle="tooltip" data-placement="left" title="{LANG.avata_clear}" onclick="$('#avatar').val('');">&nbsp;</i>
+					</span>
+					<input type="text" class="form-control" id="avatar" name="avatar" value="" readonly="readonly"/>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="btn_upload" data-toggle="tooltip" data-placement="right" title="{LANG.avata_pagetitle}"> <i class="fa fa-folder-open-o fa-fix">&nbsp;</i></button>
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -78,7 +90,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control datepicker" id="birthday" name="birthday" value="{DATA.birthday}" readonly="readonly">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" id="birthday-btn"> <i class="fa fa-calendar">&nbsp;</i></button>
+					<button class="btn btn-default" type="button" id="birthday-btn"> <i class="fa fa-calendar fa-fix">&nbsp;</i></button>
 				</span>
 			</div>
 		</div>
@@ -104,7 +116,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" id="custom_fields_{FIELD.field}" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" readonly="readonly">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <i class="fa fa-calendar">&nbsp;</i></button>
+					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <i class="fa fa-calendar fa-fix">&nbsp;</i></button>
 				</span>
 			</div>
 			<!-- END: date -->
@@ -144,23 +156,27 @@
 	</div>
 </form>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#frm').validate();
-		$(".datepicker").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			showOn: 'focus'
-		});
-		$('#birthday-btn').click(function(){
-			$("#birthday").datepicker('show');
-		});
-		
-		$("#btn_upload").click(function() {
-			nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 850, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-			return false;
-		});
+$(document).ready(function() {
+	$('#frm').validate();
+	$(".datepicker").datepicker({
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		showOn: 'focus'
 	});
+	$('#birthday-btn').click(function(){
+		$("#birthday").datepicker('show');
+	});
+	$("#btn_upload").click(function() {
+		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		return false;
+	});
+	$('#current-photo-btn').click(function(){
+		$('#current-photo').hide();
+		$('#photo_delete').val('1');
+		$('#change-photo').show();
+	});
+});
 </script>
 <!-- END: main -->
