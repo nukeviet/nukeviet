@@ -659,6 +659,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
+	
 	if( ! empty( $error ) )
 	{
 		$xtpl->assign( 'ERROR', $error );
@@ -671,10 +672,12 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 	{
 		$xtpl->parse( 'main.allowopenid' );
 	}
+	
 	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
+	
 	if( ! defined( 'NV_IS_ADMIN' ) )
 	{
 		$xtpl->parse( 'main.logout' );
@@ -706,6 +709,14 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->assign( 'GENDER', $gender );
 		$xtpl->parse( 'main.gender_option' );
 	}
+	
+	// Parse photo
+	if( ! empty( $data['photo'] ) )
+	{
+		$xtpl->parse( 'main.photo' );
+	}
+	
+	// Parse custom fields
 	if( ! empty( $array_field_config ) )
 	{
 		$a = 0;
@@ -715,6 +726,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
 				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
+				
 				if( $userid == 0 and empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )
@@ -743,13 +755,16 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				{
 					$row['value'] = ( isset( $custom_fields[$row['field']] ) ) ? $custom_fields[$row['field']] : $row['default_value'];
 				}
+				
 				$row['required'] = ( $row['required'] ) ? 'required' : '';
 
 				$xtpl->assign( 'FIELD', $row );
+				
 				if( $row['required'] )
 				{
 					$xtpl->parse( 'main.field.loop.required' );
 				}
+				
 				if( $row['field_type'] == 'textbox' or $row['field_type'] == 'number' )
 				{
 					$xtpl->parse( 'main.field.loop.textbox' );
@@ -815,6 +830,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				{
 					$number = 0;
 					$valuecheckbox = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
+					
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -829,6 +845,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 				elseif( $row['field_type'] == 'multiselect' )
 				{
 					$valueselect = ( ! empty( $row['value'] ) ) ? explode( ',', $row['value'] ) : array();
+					
 					foreach( $row['field_choices'] as $key => $value )
 					{
 						$xtpl->assign( 'FIELD_CHOICES', array(
@@ -1271,45 +1288,51 @@ function user_info_exit_redirect( $info, $nv_redirect )
 /**
  * nv_avatar()
  *
+ * @param mixed $array
  * @return void
  */
 function nv_avatar( $array )
 {
-	global $module_info, $module_file, $module_name, $lang_module, $global_config, $db;
+	global $module_info, $module_file, $module_name, $lang_module, $global_config, $my_head;
 
+	// Include JS and CSS
+	$my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.Jcrop.min.js\" type=\"text/javascript\"></script>" . NV_EOL;
+	$my_head .= "<link href=\"" . NV_BASE_SITEURL . "js/jquery/jquery.Jcrop.min.css\" rel=\"stylesheet\" type=\"text/css\" />" . NV_EOL;
+	
 	$xtpl = new XTemplate( 'avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
-	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
+	
+	$xtpl->assign( 'NV_AVATAR_WIDTH', $global_config['avatar_width'] );
+	$xtpl->assign( 'NV_AVATAR_HEIGHT', $global_config['avatar_height'] );
 	$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
 	$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
+	$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
 	$xtpl->assign( 'NV_AVATAR_UPLOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar' );
 
 	$lang_module['avata_bigfile'] = sprintf( $lang_module['avata_bigfile'], nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
 	$lang_module['avata_bigsize'] = sprintf( $lang_module['avata_bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-
-	$xtpl->assign( 'NV_AVATAR_WIDTH', $global_config['avatar_width'] );
-	$xtpl->assign( 'NV_AVATAR_HEIGHT', $global_config['avatar_height'] );
+	$lang_module['avata_smallsize'] = sprintf( $lang_module['avata_smallsize'], $global_config['avatar_width'], $global_config['avatar_height'] );
+	
 	$xtpl->assign( 'LANG', $lang_module );
 	
+	if( $array['error'] )
+	{
+		$xtpl->assign( 'ERROR', $array['error'] );
+		$xtpl->parse( 'main.error' );
+	}
 	if( ! $array['success'] )
 	{
-		$xtpl->parse( 'main.uploadform' );
+		$xtpl->parse( 'main.init' );
 	}
 	else
 	{
 		$xtpl->assign( 'FILENAME', $array['filename'] );
-		$xtpl->parse( 'main.uploadsuccess' );
+		$xtpl->parse( 'main.complete' );
 	}
 	
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
-	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
+	return $xtpl->text( 'main' );
 }
 	
 ?>
