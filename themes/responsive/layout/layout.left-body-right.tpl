@@ -1,5 +1,6 @@
 <!-- BEGIN: main -->
-{FILE "header.tpl"}
+{FILE "header_only.tpl"}
+{FILE "header_extended.tpl"}
 <div class="col-sm-3 col-md-2">
 	[LEFT]
 </div>
@@ -13,5 +14,6 @@
 <div class="col-sm-3 col-md-3">
 	[RIGHT]
 </div>
-{FILE "footer.tpl"}
+{FILE "footer_extended.tpl"}
+{FILE "footer_only.tpl"}
 <!-- END: main -->

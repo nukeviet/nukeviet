@@ -172,7 +172,7 @@ $info = '';
 $array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
 $checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
-//Thay doi cau hoi - cau tra loi du phong
+// Thay doi cau hoi - cau tra loi du phong
 if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 {
 	$oldpassword = $row['password'];
@@ -282,13 +282,12 @@ else
 	$custom_fields = $result->fetch();
 }
 
-//Thay doi thong tin khac
+// Thay doi thong tin khac
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 
 $array_data['username'] = $row['username'];
 $array_data['email'] = $row['email'];
-$array_data['photo'] = $row['photo'];
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
 $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) ) ) ? 1 : 0;
@@ -296,11 +295,13 @@ $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! em
 if( $checkss == $array_data['checkss'] )
 {
 	$error = array();
+	
 	$array_data['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
 	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
+	$array_data['photo_delete'] = $nv_Request->get_int( 'photo_delete', 'post', 0 );
 	
 	if( $array_data['allowloginchange'] )
 	{
@@ -405,6 +406,66 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
+	// Check photo
+	if( $array_data['photo_delete'] )
+	{
+		if( ! empty( $array_data['photo'] ) )
+		{
+			$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $array_data['photo'];
+			
+			if( ! file_exists( $tmp_photo ) )
+			{
+				$array_data['photo'] = '';
+				$error[] = $lang_module['avata_news_not_exists'];
+			}
+			else
+			{
+				$new_photo_name = $array_data['photo'];
+				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
+				
+				$new_photo_name2 = $new_photo_name;
+				$i = 1;
+				while( file_exists( $new_photo_path . $new_photo_name2 ) )
+				{
+					$new_photo_name2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $new_photo_name );
+					++ $i;
+				}
+				$new_photo = $new_photo_path . $new_photo_name2;
+				
+				if( nv_copyfile( $tmp_photo, $new_photo ) )
+				{
+					$array_data['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
+				}
+				else
+				{
+					$array_data['photo'] = '';
+					$error[] = $lang_module['avata_news_copy_error'];
+				}
+				
+				nv_deletefile( $tmp_photo );
+			}			
+		}
+		
+		// Delete old photo
+		if( ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
+		{
+			nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
+		}
+	}
+	else
+	{
+		$array_data['photo'] = $row['photo'];
+		
+		if( ! empty( $array_data['photo'] ) )
+		{
+			if( ! file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
+			{
+				$array_data['photo'] = '';
+				$error[] = $lang_module['avata_old_not_exists'];
+			}
+		}
+	}
+
 	$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET
 		username= :username,
 		md5username= :md5username,
@@ -475,10 +536,14 @@ else
 	$array_data['gender'] = $row['gender'];
 	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
 	$array_data['view_mail'] = intval( $row['view_mail'] );
+	$array_data['photo'] = $row['photo'];
+	$array_data['photo_delete'] = 0;
 }
 
+// Checked viewmail
 $array_data['view_mail'] = $array_data['view_mail'] ? ' selected="selected"' : '';
 
+// Gender data
 $array_data['gender_array'] = array();
 $array_data['gender_array']['N'] = array(
 	'value' => 'N',
@@ -495,6 +560,19 @@ $array_data['gender_array']['F'] = array(
 	'title' => $lang_module['female'],
 	'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' )
 );
+
+// Check photo path
+if( ! empty( $array_data['photo'] ) )
+{
+	if( file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
+	{
+		$array_data['photo'] = NV_BASE_SITEURL . $array_data['photo'];
+	}
+	else
+	{
+		$array_data['photo'] = '';
+	}
+}
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 

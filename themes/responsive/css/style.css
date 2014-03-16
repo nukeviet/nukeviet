@@ -25,8 +25,17 @@ h1, h2, h3, h4, h5, h6{
 	margin-top:0;
 	margin-bottom:10px;
 }
+.m-bottom{
+	margin-bottom:10px!important;
+}
 #wraper{
 	margin:0 auto;
+}
+.fa-fix{
+	margin-right:-5px;
+}
+.fa-pointer{
+	cursor:pointer;
 }
 
 /* HEADER */
@@ -203,6 +212,11 @@ header{
 	padding-right:40px;
 }
 
+/* FORM CONTROL */
+.nv-captcha{
+	vertical-align: middle;
+}
+
 /* LIST ITEM */
 .nv-list-item{
 	list-style:none;
@@ -212,6 +226,12 @@ header{
 .nv-list-item li{
 	padding:4px;
 	margin:0;
+}
+.nv-list-item.sm li{
+	padding:2px;
+}
+.nv-list-item.xsm li{
+	padding:1px;
 }
 
 /* RESPONSIVE */

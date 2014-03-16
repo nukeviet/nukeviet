@@ -21,6 +21,10 @@
 /includes/class/PHPExcel.php
 
 # Ignore some uploads, files dir
-/uploads/download
 /files/download
 /files/*.jpg
+/uploads/download
+/uploads/users/*.jpg
+/uploads/contact/*.jpg
+/uploads/about/*.jpg
+/uploads/page/*.jpg
