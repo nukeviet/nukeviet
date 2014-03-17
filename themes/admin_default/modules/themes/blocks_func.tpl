@@ -28,7 +28,7 @@
 	</thead>
 	<tfoot>
 		<tr class="aright">
-			<td colspan="7"><i class="icon-plus-sign icon-large">&nbsp;</i> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <i class="icon-trash icon-large">&nbsp;</i> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+			<td colspan="7"><em class="icon-plus-sign icon-large">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
 		</tr>
 	</tfoot>
 	<tbody>
@@ -49,7 +49,7 @@
 			<td>{ROW.title}</td>
 			<td>{ROW.module} {ROW.file_name}</td>
 			<td class="center">{ROW.active}</td>
-			<td class="center"><i class="icon-edit icon-large">&nbsp;</i> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp;<i class="icon-trash icon-large">&nbsp;</i> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
 			<td class="center"><label><input type="checkbox" name="idlist" value="{ROW.bid}"/></label></td>
 		</tr>
 		<!-- END: loop -->

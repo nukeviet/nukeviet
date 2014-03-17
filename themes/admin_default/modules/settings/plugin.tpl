@@ -25,7 +25,7 @@
 					<!-- END: weight -->
 				</select></td>
 				<td>{DATA.plugin_file}</td>
-				<td class="center"><i class="icon-trash icon-large"> </i><a onclick="return confirm(nv_is_del_confirm[0]);" href="{DATA.plugin_delete}">{LANG.isdel}</a></td>
+				<td class="center"><em class="icon-trash icon-large"> </em><a onclick="return confirm(nv_is_del_confirm[0]);" href="{DATA.plugin_delete}">{LANG.isdel}</a></td>
 			</tr>
 			<!-- END: loop -->
 			<!-- BEGIN: add -->

@@ -294,7 +294,7 @@ $lang_module['facebook_config'] = 'Configure login, register width facebook';
 $lang_module['facebook_client_id'] = 'App ID/API Key';
 $lang_module['facebook_client_secret'] = 'Secret code';
 $lang_module['import'] = 'Import from excel';
-$lang_module['import_note'] = 'To import data from Excel files, you need <a title="Download sample file" href="%1$s" /><b /> download sample file , then fill full data file not exceeding 2,000 per account and upload to folder <b />%2$s';
+$lang_module['import_note'] = 'To import data from Excel files, you need <a title="Download sample file" href="%1$s" /> download sample file , then fill full data file not exceeding 2,000 per account and upload to folder <b />%2$s';
 $lang_module['export'] = 'Export data to excel';
 $lang_module['export_example'] = 'Sample file data module users';
 $lang_module['required_phpexcel'] = 'To use this function you need to install the PHPExcel library, you can download in  <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';

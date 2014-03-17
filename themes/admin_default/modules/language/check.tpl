@@ -1,6 +1,6 @@
 <!-- BEGIN: empty -->
 <div class="center">
-	<b>{LANG.nv_lang_error_exit}</b>
+	<strong>{LANG.nv_lang_error_exit}</strong>
 </div>
 <meta http-equiv="Refresh" content="3;URL={URL}" />
 <!-- END: empty -->
@@ -60,7 +60,7 @@
 <!-- BEGIN: nodata -->
 <div class="center">
 	<br />
-	<b>{LANG.nv_lang_check_no_data}</b>
+	<strong>{LANG.nv_lang_check_no_data}</strong>
 </div>
 <!-- END: nodata -->
 <!-- BEGIN: data -->

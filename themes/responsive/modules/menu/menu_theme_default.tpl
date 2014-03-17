@@ -11,11 +11,11 @@
 	<div class="collapse navbar-collapse" id="menu-site-default">
 		<ul class="nav navbar-nav">
 			<li<!-- BEGIN: home_active --> class="active"<!-- END: home_active -->> 
-				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><i class="fa fa-lg fa-home">&nbsp;</i> {LANG.Home}</a>
+				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
 			<li{TOP_MENU.current}>
-				<a href="{TOP_MENU.link}">{TOP_MENU.title}<!-- BEGIN: has_sub --> <b class="caret"></b><!-- END: has_sub --></a>
+				<a href="{TOP_MENU.link}">{TOP_MENU.title}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
 				<!-- BEGIN: sub -->
 				<ul class="dropdown-menu">
 					<!-- BEGIN: item --><li><a href="{SUB.link}" title="{SUB.title}">{SUB.title}</a></li><!-- END: item -->

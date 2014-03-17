@@ -117,9 +117,9 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td><b>{FIELD.title}</b>
+				<td><strong>{FIELD.title}</strong>
 				<br>
-				<i>{FIELD.description}</i></td>
+				<em>{FIELD.description}</em></td>
 				<td>
 				<!-- BEGIN: required -->
 				(<span style="color:#FF0000">*</span>)

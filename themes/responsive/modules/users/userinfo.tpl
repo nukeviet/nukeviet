@@ -15,26 +15,26 @@
 	</div>
 	<div class="col-md-9">
 		<ul class="nv-list-item xsm">
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {USER.current_mode}</li>
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {LANG.current_login}: {USER.current_login}</li>
-			<li><i class="fa fa-chevron-right ">&nbsp;</i> {LANG.ip}: {USER.current_ip}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {USER.current_mode}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
 		</ul>
 	</div>
 </div>
 <!-- BEGIN: change_login_note -->
 <div class="alert alert-danger">
-	<i class="fa fa-exclamation-triangle ">&nbsp;</i> {USER.change_name_info}
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.change_name_info}
 </div>
 <!-- END: change_login_note -->
 <!-- BEGIN: pass_empty_note -->
 <div class="alert alert-danger">
-	<i class="fa fa-exclamation-triangle ">&nbsp;</i> {USER.pass_empty_note}
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.pass_empty_note}
 </div>
 <!-- END: pass_empty_note -->
 <!-- BEGIN: question_empty_note -->
 <div class="alert alert-danger">
-	<i class="fa fa-exclamation-triangle ">&nbsp;</i> {USER.question_empty_note}
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.question_empty_note}
 </div>
 <!-- END: question_empty_note -->
 <div class="table-responsive">

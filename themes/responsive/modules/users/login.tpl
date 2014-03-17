@@ -2,9 +2,9 @@
 <h2>{LANG.login}</h2>
 <form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<p>
-		<i class="fa fa-quote-left">&nbsp;</i>
+		<em class="fa fa-quote-left">&nbsp;</em>
 		{LANG.login_info}
-		<i class="fa fa-quote-right">&nbsp;</i>
+		<em class="fa fa-quote-right">&nbsp;</em>
 	</p>
 	<div class="form-group">
 		<label for="login_iavim" class="col-sm-3 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
@@ -22,7 +22,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
 			<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-			&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</i>
+			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
 		</div>
 	</div>
 	<div class="form-group">

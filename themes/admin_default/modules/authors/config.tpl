@@ -81,7 +81,7 @@
 			<td class="left">{ROW.keyname}</td>
 			<td class="center">{ROW.dbbegintime}</td>
 			<td class="center">{ROW.dbendtime}</td>
-			<td class="center"><i class="icon-edit icon-large">&nbsp;</i> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <i class="icon-trash icon-large">&nbsp;</i> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <em class="icon-trash icon-large">&nbsp;</em> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>
@@ -157,7 +157,7 @@
 			<td class="center">{ROW.mask_text_array}</td>
 			<td class="center">{ROW.dbbegintime}</td>
 			<td class="center">{ROW.dbendtime}</td>
-			<td class="center"><i class="icon-edit icon-large">&nbsp;</i> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <i class="icon-trash icon-large">&nbsp;</i> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <em class="icon-trash icon-large">&nbsp;</em> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

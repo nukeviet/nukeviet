@@ -115,7 +115,7 @@ foreach( $site_mods as $mod => $value )
 $a++;
 $xtpl->assign( 'MOD_VALUE', 'all' );
 $xtpl->assign( 'LEV_CHECKED', ( $global_config['autologomod'] == 'all' ) ? 'checked="checked"' : '' );
-$xtpl->assign( 'CUSTOM_TITLE', '<b>' . $lang_module['autologomodall'] . '</b>' );
+$xtpl->assign( 'CUSTOM_TITLE', '<strong>' . $lang_module['autologomodall'] . '</strong>' );
 
 $xtpl->parse( 'main.loop1.loop2' );
 $xtpl->parse( 'main.loop1' );

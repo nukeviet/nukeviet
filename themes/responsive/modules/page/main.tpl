@@ -54,7 +54,7 @@
 <div class="nv-hr">&nbsp;</div>
 <ul class="nv-list-item">
 	<!-- BEGIN: loop -->
-	<li><i class="fa fa-angle-double-right">&nbsp;</i> <a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></li>
+	<li><em class="fa fa-angle-double-right">&nbsp;</em> <a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a></li>
 	<!-- END: loop -->
 </ul>
 <!-- END: other -->

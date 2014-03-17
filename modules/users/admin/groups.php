@@ -27,7 +27,7 @@ while( $row = $result->fetch() )
 	else
 	{
 		$row['weight'] = ++$weight_siteus;
-		$row['title'] = '<b>' . $row['title'] . '</b>';
+		$row['title'] = '<strong>' . $row['title'] . '</strong>';
 	}
 	$groupsList[$row['group_id']] = $row;
 }

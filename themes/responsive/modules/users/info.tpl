@@ -20,7 +20,7 @@
 <form id="frm" role="form" action="{EDITINFO_FORM}" method="post" enctype="multipart/form-data" class="form-horizontal form-tooltip m-bottom">
 	<!-- BEGIN: error -->
 	<div class="alert alert-danger">
-		<i class="fa fa-exclamation-triangle ">&nbsp;</i> {ERROR}
+		<em class="fa fa-exclamation-triangle ">&nbsp;</em> {ERROR}
 	</div>
 	<!-- END: error -->
 	<div class="form-group">
@@ -67,18 +67,18 @@
 			<!-- BEGIN: photo -->
 			<p id="current-photo" class="pull-left text-center">
 				<img src="{DATA.photo}" alt="{DATA.username}" class="img-thumbnail m-bottom"/><br />
-				<span class="fa-pointer" id="current-photo-btn"><i class="fa fa-trash-o">&nbsp;</i> {LANG.avata_delete}</span>
+				<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o">&nbsp;</em> {LANG.avata_delete}</span>
 				<input type="hidden" name="photo_delete" id="photo_delete" value="{DATA.photo_delete}"/>
 			</p>
 			<!-- END: photo -->
 			<div id="change-photo">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<i class="fa fa-trash-o fa-fix fa-pointer" data-toggle="tooltip" data-placement="left" title="{LANG.avata_clear}" onclick="$('#avatar').val('');">&nbsp;</i>
+						<em class="fa fa-trash-o fa-fix fa-pointer" data-toggle="tooltip" data-placement="left" title="{LANG.avata_clear}" onclick="$('#avatar').val('');">&nbsp;</em>
 					</span>
 					<input type="text" class="form-control" id="avatar" name="avatar" value="" readonly="readonly"/>
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="btn_upload" data-toggle="tooltip" data-placement="right" title="{LANG.avata_pagetitle}"> <i class="fa fa-folder-open-o fa-fix">&nbsp;</i></button>
+						<button class="btn btn-default" type="button" id="btn_upload" data-toggle="tooltip" data-placement="right" title="{LANG.avata_pagetitle}"> <em class="fa fa-folder-open-o fa-fix">&nbsp;</em></button>
 					</span>
 				</div>
 			</div>
@@ -90,7 +90,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control datepicker" id="birthday" name="birthday" value="{DATA.birthday}" readonly="readonly">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" id="birthday-btn"> <i class="fa fa-calendar fa-fix">&nbsp;</i></button>
+					<button class="btn btn-default" type="button" id="birthday-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
 				</span>
 			</div>
 		</div>
@@ -116,7 +116,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" id="custom_fields_{FIELD.field}" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" readonly="readonly">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <i class="fa fa-calendar fa-fix">&nbsp;</i></button>
+					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
 				</span>
 			</div>
 			<!-- END: date -->

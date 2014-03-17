@@ -11,7 +11,7 @@
 <br />
 <br />
 <div class="center">
-	<b>{LANG.nv_data_setup_ok}</b>
+	<strong>{LANG.nv_data_setup_ok}</strong>
 </div>
 <meta http-equiv="Refresh" content="5;URL={URL}" />
 <!-- END: contents_setup -->
@@ -43,13 +43,13 @@
 			</td>
 			<td>
 			<!-- BEGIN: setup_delete -->
-			<i class="icon-trash icon-large">&nbsp;</i> <a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
+			<em class="icon-trash icon-large">&nbsp;</em> <a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
 			<!-- END: setup_delete -->
 			<!-- BEGIN: setup_note -->
 			{LANG.nv_setup}
 			<!-- END: setup_note -->
 			<!-- BEGIN: setup_new -->
-			<i class="icon-sun icon-large">&nbsp;</i> <a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
+			<em class="icon-sun icon-large">&nbsp;</em> <a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
 			<!-- END: setup_new -->
 			</td>
 		</tr>

@@ -15,7 +15,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
 			<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-			&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</i>
+			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
 		</div>
 	</div>
 	<div class="form-group">

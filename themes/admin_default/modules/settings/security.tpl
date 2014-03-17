@@ -127,7 +127,7 @@
 			<td class="center">{ROW.dbarea}</td>
 			<td class="center">{ROW.dbbegintime}</td>
 			<td class="center">{ROW.dbendtime}</td>
-			<td class="center"><i class="icon-edit icon-large">&nbsp;</i> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> - <i class="icon-trash icon-large">&nbsp;</i> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> - <em class="icon-trash icon-large">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

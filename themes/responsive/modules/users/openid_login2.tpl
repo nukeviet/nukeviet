@@ -8,7 +8,7 @@
 </p>
 <ul class="nv-list-item m-bottom">
 	<!-- BEGIN: login_note -->
-	<li><i class="fa fa-angle-right">&nbsp;</i> <a href="{USER_LOGIN.link}">{USER_LOGIN.title}</a></li>
+	<li><em class="fa fa-angle-right">&nbsp;</em> <a href="{USER_LOGIN.link}">{USER_LOGIN.title}</a></li>
 	<!-- END: login_note -->
 </ul>
 <div class="form-tooltip text-center well">

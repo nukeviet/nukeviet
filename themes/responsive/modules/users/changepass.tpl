@@ -10,9 +10,9 @@
 <h2>{LANG.change_pass}</h2>
 <form action="{USER_CHANGEPASS}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<p class="text-info">
-		<i class="fa fa-quote-left">&nbsp;</i> 
+		<em class="fa fa-quote-left">&nbsp;</em> 
 		{DATA.change_info}
-		<i class="fa fa-quote-right">&nbsp;</i> 
+		<em class="fa fa-quote-right">&nbsp;</em> 
 	</p>
 	<!-- BEGIN: passEmpty -->
 	<div class="form-group">

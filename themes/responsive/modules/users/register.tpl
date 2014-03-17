@@ -7,9 +7,9 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <h2>{LANG.register}</h2>
 <div class="m-bottom">
-	<i class="fa fa-quote-left">&nbsp;</i> 
+	<em class="fa fa-quote-left">&nbsp;</em> 
 	{DATA.info} 
-	<i class="fa fa-quote-right">&nbsp;</i>
+	<em class="fa fa-quote-right">&nbsp;</em>
 </div>
 <form id="registerForm" action="{USER_REGISTER}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<div class="form-group">
@@ -88,7 +88,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" id="custom_fields_{FIELD.field}" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" readonly="readonly">
 				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <i class="fa fa-calendar">&nbsp;</i></button>
+					<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <em class="fa fa-calendar">&nbsp;</em></button>
 				</span>
 			</div>
 			<!-- END: date -->
@@ -131,7 +131,7 @@
 		<div class="col-sm-4">
 			<label class="control-label">
 				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-				&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</i>
+				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</em>
 			</label>
 		</div>
 	</div>

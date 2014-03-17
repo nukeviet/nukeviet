@@ -23,7 +23,7 @@ function nv_groups_list()
 	$groups = array();
 	while( $row = $result->fetch() )
 	{
-		$groups[$row['group_id']] = ( $global_config['idsite'] > 0 AND empty( $row['idsite'] ) ) ? '<b>' . $row['title'] . '</b>' : $row['title'];
+		$groups[$row['group_id']] = ( $global_config['idsite'] > 0 AND empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
 	}
 	return $groups;
 }

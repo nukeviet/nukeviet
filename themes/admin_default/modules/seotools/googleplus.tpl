@@ -59,7 +59,7 @@
 			</select></td>
 			<td class="center">{ROW.idprofile}</td>
 			<td><input name="hidden_{ROW.gid}" id="hidden_{ROW.gid}" type="hidden" value="{ROW.title}" /><input type="text" name="title_{ROW.gid}" id="title_{ROW.gid}" value="{ROW.title}" class="w250" /> <input type="button" onclick="nv_save_title({ROW.gid});" value="{GLANG.save}" /></td>
-			<td class="center"><i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: googleplus -->
 	</tbody>

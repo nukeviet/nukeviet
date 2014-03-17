@@ -73,7 +73,7 @@ jQuery(document).ready(function() {
 	});
 	
 	// Modify table caption
-	$('table.tab1 caption').prepend(' &nbsp; <i class="icon-double-angle-right">&nbsp;</i> ');
+	$('table.tab1 caption').prepend(' &nbsp; <em class="icon-double-angle-right">&nbsp;</em> ');
 });
 
 function ver_menu_click() {

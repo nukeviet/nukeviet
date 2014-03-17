@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.alias}: </strong></td>
-				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <i class="icon-refresh icon-large"onclick="get_alias('blockcat', {bid});">&nbsp;</i></td>
+				<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large"onclick="get_alias('blockcat', {bid});">&nbsp;</em></td>
 			</tr>
 			<tr>
 				<td class="right"><strong>{LANG.keywords}: </strong></td>

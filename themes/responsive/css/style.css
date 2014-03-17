@@ -6,7 +6,26 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-/* GLOBAL */
+/* Font */
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto Regular'), local('Roboto-Regular'), url('../fonts/roboto-400.woff') format('woff');
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/roboto-700.woff') format('woff');
+}
+
+/* Fix bootstrap when tidy enabled */
+.input-group-btn{
+	font-size:14px!important;
+}
+
+/* Global */
 body{
 	font-size:12px;
 	background:#ccc url('../images/bg.png') repeat;
@@ -24,6 +43,7 @@ iframe{
 h1, h2, h3, h4, h5, h6{
 	margin-top:0;
 	margin-bottom:10px;
+	font-family: 'Roboto', sans-serif;
 }
 .m-bottom{
 	margin-bottom:10px!important;
@@ -38,7 +58,7 @@ h1, h2, h3, h4, h5, h6{
 	cursor:pointer;
 }
 
-/* HEADER */
+/* Header */
 header{
 	position:relative;
 }
@@ -102,7 +122,7 @@ header{
 	background:#fff;
 	color:#00a8ff;
 }
-#social-icons ul li a i{
+#social-icons ul li a .fa{
 	margin-right:-5px;
 }
 
@@ -126,12 +146,12 @@ header{
 	min-height:100%;
 }
 
-/* NAV */
+/* Nav */
 .navbar{
 	margin-bottom:0;
 }
 
-/* BODY */
+/* Body */
 #body{
 	background:#fff;
 	border-color:#dadada;
@@ -142,7 +162,7 @@ header{
 	padding-top:10px;
 }
 
-/* FOOTER */
+/* Footer */
 #footer .footer-copyright{
 	background: #121214;
 	border-top: 4px solid #1F1F1F;
@@ -171,7 +191,7 @@ header{
 	-webkit-border-radius:2px;
 	margin-left:10px;
 }
-#footer .footer-copyright .menu li.top i{
+#footer .footer-copyright .menu li.top .fa{
 	margin-right:-2px;
 }
 #footer .footer-copyright .theme-change{
@@ -181,7 +201,7 @@ header{
 	float:right;
 }
 
-/* PAGE BREAK LINE */
+/* Page break line */
 .nv-hr{
 	clear:both;
 	height:1px;
@@ -197,7 +217,7 @@ header{
 	margin:5px 0;
 }
 
-/* SOCIAL SHARE ICON, BUTTON */
+/* Social share, social button */
 .nv-social-share{
 	list-style:none;
 	margin:0;
@@ -212,12 +232,12 @@ header{
 	padding-right:40px;
 }
 
-/* FORM CONTROL */
+/* Form control */
 .nv-captcha{
 	vertical-align: middle;
 }
 
-/* LIST ITEM */
+/* List item */
 .nv-list-item{
 	list-style:none;
 	margin:0;
@@ -234,7 +254,47 @@ header{
 	padding:1px;
 }
 
-/* RESPONSIVE */
+/* Info die */
+.nv-infodie{
+	margin:0 auto;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	border:1px #dadada solid;
+	background:#fff;
+	position:absolute;
+	min-height:300px!important;
+	min-width:300px!important;
+	display: table;
+}
+.nv-infodie .panel-body{
+	display: table-cell;
+	vertical-align: middle;
+}
+.nv-infodie .logo{
+	max-width: 90%!important;
+}
+
+@media (max-width: 499px){
+	.nv-infodie{
+		width:100%;
+	}
+}
+@media (min-width: 500px){
+	.nv-infodie{
+		width:500px;
+		left:50%;
+		margin-left:-250px;
+	}
+}
+@media (min-height: 500px){
+	.nv-infodie{
+		height:500px;
+		top:50%;
+		margin-top:-250px;
+	}
+}
+
+/* Responsive theme */
 @media (max-width: 768px){
 	#banner img{
 		height:100%;

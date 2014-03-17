@@ -2,10 +2,10 @@
 <ul class="list_item">
 	<!-- BEGIN: loop -->
 	<li class="{DATA.class}">
-		<a {DATA.target} title="{DATA.title}" href="{DATA.link}"><b>{DATA.text}</b></a>
+		<a {DATA.target} title="{DATA.title}" href="{DATA.link}"><strong>{DATA.text}</strong></a>
 		<br />
 		<!-- BEGIN: pubDate -->
-		<i>{DATA.pubDate}</i>
+		<em>{DATA.pubDate}</em>
 		<br />
 		<!-- END: pubDate -->
 		<!-- BEGIN: description -->

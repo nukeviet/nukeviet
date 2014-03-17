@@ -301,7 +301,7 @@ $lang_module['facebook_client_id'] = 'App ID/API Key';
 $lang_module['facebook_client_secret'] = 'Mã Bí Mật';
 
 $lang_module['import'] = 'Nhập dữ liệu từ file Excel';
-$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><b>download file dữ liệu mẫu</b></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <b>%2$s</b>';
+$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><strong>download file dữ liệu mẫu</strong></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <strong>%2$s</strong>';
 $lang_module['export'] = 'Xuất dữ liệu ra file Excel';
 $lang_module['export_example'] = 'File dữ liệu mẫu module users';
 $lang_module['required_phpexcel'] = 'Để sử dụng chức năng này bạn cần cài đặt thư viện PHPExcel, bạn có thể download tại <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';

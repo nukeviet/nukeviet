@@ -15,7 +15,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td><b>{LANG.autoinstall_theme_uploadedfile}</b><span style="color:red;font-weight:bold">{FILENAME}</span> - {LANG.autoinstall_theme_uploadedfilesize}<span style="color:red;font-weight:bold">{FILESIZE}</span></td>
+			<td><strong>{LANG.autoinstall_theme_uploadedfile}</strong><span style="color:red;font-weight:bold">{FILENAME}</span> - {LANG.autoinstall_theme_uploadedfilesize}<span style="color:red;font-weight:bold">{FILESIZE}</span></td>
 		</tr>
 	</tbody>
 </table>

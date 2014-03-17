@@ -71,7 +71,7 @@
 	</thead>
 	<tfoot>
 		<tr>
-			<td colspan="3"><i class="icon-check icon-large">&nbsp;</i><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; <i class="icon-check-empty icon-large">&nbsp;</i><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a><span style="width:100px;display:inline-block">&nbsp;</span><i class="icon-ok-circle icon-large">&nbsp;</i><a class="disable" href="javascript:void(0);">{LANG.disable}</a><i class="icon-ok icon-large">&nbsp;</i><a class="enable" href="javascript:void(0);">{LANG.enable}</a><i class="icon-trash icon-large">&nbsp;</i><a class="delete" href="javascript:void(0);">{LANG.delete}</a></td>
+			<td colspan="3"><em class="icon-check icon-large">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; <em class="icon-check-empty icon-large">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a><span style="width:100px;display:inline-block">&nbsp;</span><em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a><em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a><em class="icon-trash icon-large">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a></td>
 			<td colspan="3" class="center">
 			<!-- BEGIN: generate_page -->
 			<div class="generate_page">
@@ -88,8 +88,8 @@
 			<td>{ROW.module}</td>
 			<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
 			<td>{ROW.email}</td>
-			<td class="center"><i class="icon-{ROW.status} icon-large">&nbsp;</i></td>
-			<td class="center"><i class="icon-edit icon-large">&nbsp;</i><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <i class="icon-trash icon-large">&nbsp;</i><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
+			<td class="center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="icon-trash icon-large">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

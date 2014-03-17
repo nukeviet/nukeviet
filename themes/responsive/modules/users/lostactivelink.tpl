@@ -3,22 +3,22 @@
 <!-- BEGIN: step1 -->
 <div class="well">
 	<p>
-		<i class="fa fa-info fa-lg">&nbsp;</i> {LANG.lostactive_noactive}:
+		<em class="fa fa-info fa-lg">&nbsp;</em> {LANG.lostactive_noactive}:
 	</p>
 	<ul class="nv-list-item">
 		<li>
-			<i class="fa fa-angle-right">&nbsp;</i> {LANG.lostactive_info1}
+			<em class="fa fa-angle-right">&nbsp;</em> {LANG.lostactive_info1}
 		</li>
 		<li>
-			<i class="fa fa-angle-right">&nbsp;</i> {LANG.lostactive_info2}
+			<em class="fa fa-angle-right">&nbsp;</em> {LANG.lostactive_info2}
 		</li>
 	</ul>
 </div>
 <form id="lostpassForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<i class="fa fa-quote-left">&nbsp;</i> 
+		<em class="fa fa-quote-left">&nbsp;</em> 
 		{DATA.info} 
-		<i class="fa fa-quote-right">&nbsp;</i>
+		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
 		<label for="userField_iavim" class="col-sm-4 control-label">{LANG.field}<span class="text-danger"> (*)</span>:</label>
@@ -34,7 +34,7 @@
 		<div class="col-sm-4">
 			<label class="control-label">
 				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-				&nbsp;<i class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</i>
+				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</em>
 			</label>
 		</div>
 	</div>
@@ -49,9 +49,9 @@
 <!-- BEGIN: step2 -->
 <form id="lostpassForm" action="{FORM2_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<i class="fa fa-quote-left">&nbsp;</i> 
+		<em class="fa fa-quote-left">&nbsp;</em> 
 		{DATA.info} 
-		<i class="fa fa-quote-right">&nbsp;</i>
+		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="alert alert-info">
 		{LANG.lostpass_question}: <strong>{QUESTION}</strong>
