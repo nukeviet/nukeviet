@@ -199,7 +199,7 @@ $(document).ready(function() {
 		buttonImageOnly : true
 	});
 	$("#btn_upload").click(function() {
-		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 850, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 550, 520, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){
