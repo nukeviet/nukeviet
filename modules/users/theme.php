@@ -715,6 +715,10 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 	{
 		$xtpl->parse( 'main.photo' );
 	}
+	else
+	{
+		$xtpl->parse( 'main.add_photo' );
+	}
 	
 	// Parse custom fields
 	if( ! empty( $array_field_config ) )

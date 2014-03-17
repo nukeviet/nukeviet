@@ -219,3 +219,7 @@
 #users .change-question .input, #users .edit-info .input, #users .reg .input {
 	width: 300px
 }
+
+#users .change-question .input-min, #users .edit-info .input-min, #users .reg .input-min {
+	width: 200px
+}
