@@ -51,4 +51,3 @@
 					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}">{BREADCRUMBS.title}</a></li><!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
-				<div class="row">

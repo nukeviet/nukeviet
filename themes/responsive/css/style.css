@@ -270,6 +270,9 @@ header{
 	top: 0;
 	left: 0;
 }
+.nv-block-banners img{
+	max-width: 100%!important;
+}
 .nv-block-rss li{
 	border-bottom: 1px #dadada solid;
 }
