@@ -8,7 +8,8 @@ div.nav {
 
 ul.nav li {
 	float: left;
-	position: relative
+	position: relative;
+	list-style: none;
 }
 
 ul.nav li a {
@@ -20,7 +21,7 @@ ul.nav li a {
 	padding: 0 10px 0 0
 }
 
-ul.nav li a:hover, ul.nav li.current a {
+ul.nav li a:hover, ul.nav li.active a {
 	background: url(../images/nav_r.jpg) no-repeat top right
 }
 
@@ -28,11 +29,11 @@ ul.nav li.hover a, ul.nav li.hover a:hover {
 	background: url(../images/nav_hover_r.jpg) no-repeat top right
 }
 
-ul.nav li.hover a span, ul.nav a:hover span, ul.nav li.current a:hover span {
+ul.nav li.hover a span, ul.nav a:hover span, ul.nav li.active a:hover span {
 	background: url(../images/nav_hover_l.jpg) no-repeat
 }
 
-ul.nav li.current a span {
+ul.nav li.active a span {
 	background: url(../images/nav_l.jpg) no-repeat;
 	color: #fff
 }
@@ -52,7 +53,7 @@ ul.nav strong {
 	padding: 0 4px 0 0
 }
 
-ul.nav li.current strong {
+ul.nav li.active strong {
 	color: red
 }
 
