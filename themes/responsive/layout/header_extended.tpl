@@ -21,7 +21,7 @@
 							<div id="search">
 								<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 									<div class="input-group">
-										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}">
+										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
 										<span class="input-group-btn">
 											<button class="btn btn-info" type="submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
 										</span>
