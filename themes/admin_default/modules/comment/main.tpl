@@ -74,7 +74,7 @@
 			<td colspan="3"><em class="icon-check icon-large">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; <em class="icon-check-empty icon-large">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a><span style="width:100px;display:inline-block">&nbsp;</span><em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a><em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a><em class="icon-trash icon-large">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a></td>
 			<td colspan="3" class="center">
 			<!-- BEGIN: generate_page -->
-			<div class="generate_page">
+			<div class="center">
 				{GENERATE_PAGE}
 			</div>
 			<!-- END: generate_page -->

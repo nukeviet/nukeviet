@@ -25,7 +25,7 @@
 	</tbody>
 </table>
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="center">
 	{CONTENTS.generate_page}
 </div>
 <!-- END: generate_page -->

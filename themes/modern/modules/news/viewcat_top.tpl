@@ -49,7 +49,7 @@
 </div>
 
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="acenter">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
