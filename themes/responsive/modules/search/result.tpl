@@ -15,7 +15,7 @@
 <p>{RESULT.content}</p>
 <!-- END: result -->
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="text-center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
