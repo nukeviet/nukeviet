@@ -55,6 +55,31 @@ else
 }
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
+if( defined( 'NV_CONFIG_DIR' ) )
+{
+    $server_name = preg_replace( '/^[a-z]+\:\/\//i', '',  isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : ( isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : '' ) );
+    if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php' ) )
+    {
+        require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php';
+        $db_config['dbname'] = $db_config['dbsite'];
+        $global_config['my_domains'] = $server_name;
+    }
+
+    // Thu muc uploads
+    define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
+
+    // Thu muc files
+    define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
+}
+else
+{
+    // Thu muc uploads
+    define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+
+    // Thu muc files
+    define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+}
+
 // Xac dinh IP cua client
 require NV_ROOTDIR . '/includes/class/ips.class.php';
 $ips = new ips();
@@ -150,47 +175,12 @@ define( 'NV_USER_AGENT', $nv_Request->user_agent );
 require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php';
 
-if( defined( 'NV_CONFIG_DIR' ) )
+$domains = explode( ',', $global_config['my_domains'] );
+if( ! in_array( NV_SERVER_NAME, $domains ) )
 {
-	if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php' ) )
-	{
-		require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php';
-		$db_config['dbname'] = $db_config['dbsite'];
-		$global_config['allow_sitelangs'] = explode( ',', $global_config['allow_sitelangs'] );
-	}
-	else
-	{
-		$domains = explode( ',', strtolower( $global_config['my_domains'] ) );
-		if( ! in_array( NV_SERVER_NAME, $domains ) )
-		{
-			$global_config['site_logo'] = 'images/logo.png';
-			$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-			trigger_error( $lang_global['error_404_content'], 256 );
-		}
-		$db_config['dbname'] = $db_config['dbsystem'];
-	}
-
-	// Thu muc uploads
-	define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
-
-	// Thu muc files
-	define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
-}
-else
-{
-	$domains = explode( ',', strtolower( $global_config['my_domains'] ) );
-	if( ! in_array( NV_SERVER_NAME, $domains ) )
-	{
-		$global_config['site_logo'] = 'images/logo.png';
-		$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-		trigger_error( $lang_global['error_404_content'], 256 );
-	}
-
-	// Thu muc uploads
-	define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
-
-	// Thu muc files
-	define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+    $global_config['site_logo'] = 'images/logo.png';
+    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+    nv_info_die( $global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], '', '', '', '' );
 }
 
 // Xac dinh duong dan thuc den thu muc upload
