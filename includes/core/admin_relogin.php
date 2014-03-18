@@ -74,8 +74,8 @@ if( defined( 'NV_IS_ADMIN' ) )
 
 				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
 				{
-					$server_name = preg_replace( '/^www\./e', '', nv_getenv( 'HTTP_HOST' ) );
-					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/www\./e' ), array( '', '' ), $redirect );
+					$server_name = preg_replace( '/^www\./', '', nv_getenv( 'HTTP_HOST' ) );
+					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/www\./' ), array( '', '' ), $redirect );
 					if( ! preg_match( '/^' . preg_quote( $server_name ) . '\/' . preg_quote( NV_ADMINDIR ) . '/', $nohttp_redirect ) )
 					{
 						Header( 'Location: ' . $redirect );

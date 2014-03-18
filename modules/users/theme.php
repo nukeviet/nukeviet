@@ -715,6 +715,10 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 	{
 		$xtpl->parse( 'main.photo' );
 	}
+	else
+	{
+		$xtpl->parse( 'main.add_photo' );
+	}
 	
 	// Parse custom fields
 	if( ! empty( $array_field_config ) )
@@ -1302,6 +1306,7 @@ function nv_avatar( $array )
 	$xtpl = new XTemplate( 'avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
+	$xtpl->assign( 'MODULE_FILE', $module_file );
 	
 	$xtpl->assign( 'NV_AVATAR_WIDTH', $global_config['avatar_width'] );
 	$xtpl->assign( 'NV_AVATAR_HEIGHT', $global_config['avatar_height'] );

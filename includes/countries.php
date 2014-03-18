@@ -431,7 +431,7 @@ function nv_getCountry_from_cookie( $ip )
 	if( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) $cookie_domain = $_SERVER['SERVER_NAME'];
 	else $cookie_domain = $_SERVER['HTTP_HOST'];
 
-	$cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
+	$cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
 	$cookie_domain = preg_match( '/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain ) ? '.' . $cookie_domain : '';
 
 	setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )$global_config['cookie_secure'], ( bool )$global_config['cookie_httponly'] );

@@ -177,6 +177,9 @@ $(document).ready(function() {
 		$('#photo_delete').val('1');
 		$('#change-photo').show();
 	});
+	<!-- BEGIN: add_photo -->
+	$('#change-photo').show();
+	<!-- END: add_photo -->
 });
 </script>
 <!-- END: main -->

@@ -57,6 +57,12 @@ h1, h2, h3, h4, h5, h6{
 .fa-pointer{
 	cursor:pointer;
 }
+h3.sm{
+	font-size: 16px;
+}
+span.keyword{
+	background: yellow;
+}
 
 /* Header */
 header{
@@ -252,6 +258,49 @@ header{
 }
 .nv-list-item.xsm li{
 	padding:1px;
+}
+.nv-list-item.lg li{
+	padding:10px;
+}
+
+/* Block global */
+.nv-block-banners{
+	position: relative;
+	margin-bottom: 2px;
+}
+.nv-block-banners .link{
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.nv-block-banners img{
+	max-width: 100%!important;
+}
+.nv-block-rss li{
+	border-bottom: 1px #dadada solid;
+}
+.nv-block-rss li:last-child{
+	border: none;
+	padding-bottom: 0;
+}
+.nv-block-rss li:first-child{
+	padding-top: 0;
+}
+.nv-block-rss img{
+	padding: 4px;
+	line-height: 1.42857143;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	display: inline-block;
+	max-width: 100%;
+	height: auto;
+	position: relative;
+	top: 4px;
+	margin-right: 10px;
+	margin-bottom: 5px;	
 }
 
 /* Info die */

@@ -407,7 +407,7 @@ if( $checkss == $array_data['checkss'] )
 	}
 
 	// Check photo
-	if( $array_data['photo_delete'] )
+	if( $array_data['photo_delete'] or empty( $row['photo'] ) )
 	{
 		if( ! empty( $array_data['photo'] ) )
 		{
@@ -447,7 +447,7 @@ if( $checkss == $array_data['checkss'] )
 		}
 		
 		// Delete old photo
-		if( ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
+		if( $array_data['photo_delete'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
 		{
 			nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
 		}

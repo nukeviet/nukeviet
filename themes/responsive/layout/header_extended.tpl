@@ -21,7 +21,7 @@
 							<div id="search">
 								<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 									<div class="input-group">
-										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}">
+										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
 										<span class="input-group-btn">
 											<button class="btn btn-info" type="submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
 										</span>
@@ -46,9 +46,8 @@
 		<section>
 			<div class="container" id="body">
 				<!-- BEGIN: breadcrumbs -->
-				<ol class="breadcrumb">
-					<li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}">{LANG.Home}</a></li>
-					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}">{BREADCRUMBS.title}</a></li><!-- END: loop -->
+				<ol class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+					<li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
+					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
-				<div class="row">

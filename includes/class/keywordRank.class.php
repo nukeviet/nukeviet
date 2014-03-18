@@ -16,7 +16,7 @@ if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", 
 if( ! defined( 'NV_SERVER_NAME' ) )
 {
 	$_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-	$_server_name = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $_server_name );
+	$_server_name = preg_replace( '/^[a-zA-Z]+\:\/\//', '', $_server_name );
 	define( 'NV_SERVER_NAME', $_server_name );
 	unset( $_server_name );
 }
@@ -172,7 +172,7 @@ class keywordRank
 			$domain = $this->myDomain;
 		}
 
-		$domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $domain );
+		$domain = preg_replace( '/^[a-zA-Z]+\:\/\//', '', $domain );
 
 		$this->currentDomain = $domain;
 

@@ -106,7 +106,7 @@ $(document).ready(function() {
 			<input type="button" value="{GLANG.delete}" id="delall" /> <input type="button" value="{LANG.log_empty}" id="logempty" style="margin-right: 50px;" />
 			<!-- END: foot_delete -->
 			<!-- BEGIN: generate_page -->
-			<div class="generate_page">{GENERATE_PAGE}</div>
+			<div class="center">{GENERATE_PAGE}</div>
 			<!-- END: generate_page -->
 			</td>
 		</tr>
