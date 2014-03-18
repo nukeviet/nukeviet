@@ -145,16 +145,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 
 		nv_save_file_config_global();
-
-		if( $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] )
+		
+		$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
+		$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
+		$rewrite = nv_rewrite_change( $array_config_global );
+		if( empty( $rewrite[0] ) )
 		{
-			$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
-			$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
-			$rewrite = nv_rewrite_change( $array_config_global );
-			if( empty( $rewrite[0] ) )
-			{
-				$errormess .= sprintf( $lang_module['err_writable'], $rewrite[1] );
-			}
+			$errormess .= sprintf( $lang_module['err_writable'], $rewrite[1] );
 		}
 	}
 	else

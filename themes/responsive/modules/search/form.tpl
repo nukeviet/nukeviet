@@ -3,6 +3,8 @@
 <div id="search-form">
 	<p><em>{LANG.info_title}</em></p>
 	<form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form" class="form-inline">
+		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 		<div class="m-bottom">
 			<div class="form-group">
 				<label class="sr-only" for="search_query">{LANG.key_title}</label>
@@ -32,6 +34,7 @@
 				{LANG.logic_or}
 			</label>			
 		</div>
+		<input type="hidden" name="page" value="{PAGE}"/>
 	</form>
 	<!-- BEGIN: search_engine_unique_ID -->
 	<div class="text-center search_adv">
@@ -75,10 +78,7 @@ $("#form_search").submit(function() {
 	if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
 		return $("#form_search [name=q]").select(), !1
 	}
-	a = $(this).serialize();
-	b = $(this).attr("action");
-	window.location.href = b + "&" + a;
-	return !1
+	return true;
 });
 //]]>
 </script>

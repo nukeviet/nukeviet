@@ -28,9 +28,16 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	$is_search = true;
 
 	$search['key'] = nv_substr( $nv_Request->get_title( 'q', 'get', '', 0 ), 0, NV_MAX_SEARCH_LENGTH );
-	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
 	$search['mod'] = $nv_Request->get_title( 'm', 'get', 'all', $search['mod'] );
+	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
 	$search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
+
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode( $search['key'] ) . '&m=' . urlencode( $search['mod'] ) . '&l=' . $search['logic'] . '&page=' . $search['page'], true );
+	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	{
+		header( 'Location:' . $base_url_rewrite );
+		die();
+	}
 
 	if( $search['logic'] != 1 ) $search['logic'] = 0;
 	if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
@@ -89,6 +96,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 $contents = search_main_theme( $is_search, $search, $array_mod );
 
 $page_title = $module_info['custom_title'];
+
 if( ! empty( $search['key'] ) )
 {
 	$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];
@@ -97,6 +105,7 @@ if( ! empty( $search['key'] ) )
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $search['page'];
 	}
 }
+
 $key_words = $description = 'no';
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
