@@ -69,8 +69,8 @@ function nv_is_myreferer( $referer = '' )
 	if( empty( $referer ) ) $referer = urldecode( nv_getenv( 'HTTP_REFERER' ) );
 	if( empty( $referer ) ) return 2;
 
-	$server_name = preg_replace( '/^[w]+\./e', '', nv_getenv( 'HTTP_HOST' ) );
-	$referer = preg_replace( array( '/^[a-zA-Z]+\:\/\/([w]+\.)?/e', '/^[w]+\./e' ), '', $referer );
+	$server_name = preg_replace( '/^[w]+\./', '', nv_getenv( 'HTTP_HOST' ) );
+	$referer = preg_replace( array( '/^[a-zA-Z]+\:\/\/([w]+\.)?/', '/^[w]+\./' ), '', $referer );
 
 	if( preg_match( '/^' . nv_preg_quote( $server_name ) . '/', $referer ) ) return 1;
 
@@ -1247,7 +1247,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 	if( $total_pages == 1 ) return '';
 
-	// Round down page 
+	// Round down page
 	$on_page = @floor( $start_item / $per_page ) + 1;
 
 	if( ! is_array( $base_url ) )
@@ -1271,7 +1271,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 		{
 			$href = ( $i - 1 ) * $per_page;
 			$href = $href ? $base_url . $amp . $href : $base_url;
-			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";			
+			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 		}
 
@@ -1283,7 +1283,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 				{
 					$page_string .= '<li class="disabled"><span>...</span></li>';
 				}
-				
+
 				$init_page_min = ( $on_page > 4 ) ? $on_page : 5;
 				$init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
 
@@ -1294,7 +1294,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 					$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 					$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 				}
-				
+
 				if( $on_page < $total_pages - 4 )
 				{
 					$page_string .= '<li class="disabled"><span>...</span></li>';
@@ -1391,7 +1391,7 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 				{
 					$page_string .= '<li class="disabled"><span>...</span></li>';
 				}
-				
+
 				$init_page_min = ( $on_page > 4 ) ? $on_page : 5;
 				$init_page_max = ( $on_page < $total_pages - 4 ) ? $on_page : $total_pages - 4;
 
