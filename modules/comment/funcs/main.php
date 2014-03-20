@@ -78,7 +78,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 
 		$contents = nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url );
 		include NV_ROOTDIR . '/includes/header.php';
-		echo $contents;
+		echo nv_site_theme( $contents, false );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
 	else
@@ -86,6 +86,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 		die( 'Stop!!!' );
 	}
 }
+
 Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 die();
 
