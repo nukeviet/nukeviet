@@ -32,15 +32,28 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
 	$search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
 
-	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode( $search['key'] ) . '&m=' . urlencode( $search['mod'] ) . '&l=' . $search['logic'] . '&page=' . $search['page'], true );
+    if( $search['logic'] != 1 ) $search['logic'] = 0;
+    if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
+
+	$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode( $search['key'] );
+    if( $search['mod'] != 'all' )
+    {
+        $base_url_rewrite .= '&m=' . urlencode( $search['mod'] );
+    }
+    if( $search['logic'] != 1 )
+    {
+        $base_url_rewrite .= '&l=' . urlencode( $search['logic'] );
+    }
+    if( $search['page'] > 0 )
+    {
+        $base_url_rewrite .= '&page=' . urlencode( $search['page'] );
+    }
+	$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
 	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 	{
 		header( 'Location:' . $base_url_rewrite );
 		die();
 	}
-
-	if( $search['logic'] != 1 ) $search['logic'] = 0;
-	if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
 
 	if( ! empty( $search['key'] ) )
 	{
