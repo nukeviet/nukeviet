@@ -8,8 +8,7 @@
  * @Createdate 12/31/2009 0:51
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
@@ -1040,8 +1039,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		$url_link = $_SERVER['REQUEST_URI'];
 		$in = strpos( $url_link, '&page' );
 
-		if( $in != 0 )
-			$url_link = substr( $url_link, 0, $in );
+		if( $in != 0 ) $url_link = substr( $url_link, 0, $in );
 
 		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
 

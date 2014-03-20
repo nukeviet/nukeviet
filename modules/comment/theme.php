@@ -22,10 +22,6 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 
 	$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
-	$xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
-	$xtpl->assign( 'THEME_CSS', nv_html_css() );
-	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 
 	$xtpl->assign( 'MODULE_COMM', $module );
@@ -41,8 +37,13 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 		$xtpl->assign( 'OPTION', array(
 			'key' => $i,
 			'title' => $lang_module['sortcomm_' . $i],
-			'selected' => $i == $sortcomm ? ' selected="selected"' : ''
 		) );
+		
+		if( $i == $sortcomm )
+		{
+			$xtpl->parse( 'main.sortcomm.active' );
+		}
+		
 		$xtpl->parse( 'main.sortcomm' );
 	}
 
@@ -92,7 +93,6 @@ function nv_comment_theme( $module, $comment_array, $is_delete )
 	$xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	$k = 0;
 	foreach( $comment_array['comment'] as $comment_array_i )
 	{
 		$comment_array_i['post_time'] = nv_date( 'd/m/Y H:i', $comment_array_i['post_time'] );
@@ -105,8 +105,6 @@ function nv_comment_theme( $module, $comment_array, $is_delete )
 		{
 			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
 		}
-
-		$comment_array_i['bg'] = ( $k % 2 ) ? ' bg' : '';
 
 		$xtpl->assign( 'COMMENT', $comment_array_i );
 
@@ -121,7 +119,6 @@ function nv_comment_theme( $module, $comment_array, $is_delete )
 		}
 
 		$xtpl->parse( 'main.detail' );
-		++$k;
 	}
 
 	if( ! empty( $comment_array['page'] ) )
