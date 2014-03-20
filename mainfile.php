@@ -354,19 +354,26 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 // Cap nhat Country moi
 if( ! empty( $newCountry ) )
 {
-	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
-	{
-		$time_del = NV_CURRENTTIME - 604800;
-		$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
-		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
-		$array_ip_file = array();
-		while( $row = $result->fetch() )
-		{
-			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-		}
-		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
-	}
-	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+    try
+    {
+    	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+    	{
+    		$time_del = NV_CURRENTTIME - 604800;
+    		$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
+    		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
+    		$array_ip_file = array();
+    		while( $row = $result->fetch() )
+    		{
+    			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+    		}
+    		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+    	}
+    	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+    }
+    catch( PDOException $e )
+    {
+      trigger_error( $e->getMessage() );
+    }
 }
 
 if( defined( 'NV_ADMIN' ) )
