@@ -6,11 +6,6 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-function nv_sortcomm(base_url_comm) {
-	var new_sort = document.getElementById('sortcomm').options[document.getElementById('sortcomm').selectedIndex].value;
-	document.location = base_url_comm + '&sortcomm=' + new_sort;
-}
-
 function sendcommment(module, area, id, allowed, newscheckss, gfx_count) {
 	var commentname = document.getElementById('commentname');
 	var commentemail = document.getElementById('commentemail_iavim');

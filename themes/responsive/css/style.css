@@ -26,7 +26,13 @@
 }
 
 /* Global */
+html{
+	height: 100%;
+}
 body{
+	height: 100%;
+	padding: 0;
+	margin: 0;
 	font-size:12px;
 	background:#ccc url('../images/bg.png') repeat;
 }
