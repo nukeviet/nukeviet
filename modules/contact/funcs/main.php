@@ -104,6 +104,9 @@ $fpart = isset( $array_op[0] ) ? $array_op[0] : 0;
 $fpart = $nv_Request->get_int( 'fpart', 'post,get', $fpart );
 $ftitle = nv_substr( $nv_Request->get_title( 'ftitle', 'post,get', '', 1 ), 0, 250 );
 
+$full = isset( $array_op[1] ) ? $array_op[1] : 1;
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+
 if( ! empty( $array_rows ) )
 {
 	$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
@@ -192,6 +195,25 @@ if( ! empty( $array_rows ) )
 			}
 		}
 	}
+    else
+    {
+    	$base_url_rewrite = $base_url;
+        if( isset( $array_op[0] ) AND isset( $array_rows[$fpart] ) )
+        {
+            $base_url_rewrite .= '&amp;' . NV_OP_VARIABLE . '=' . $fpart;
+            if( isset( $array_op[1] ) AND $array_op[1] == 0 )
+            {
+                $base_url_rewrite .= '/0';
+            }
+        }
+        $base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+        if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+        {
+            header( 'Location:' . $base_url_rewrite );
+            die();
+        }
+        $canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( $base_url, true);
+    }
 }
 
 $bodytext = '';
@@ -218,11 +240,10 @@ $array_content = array(
 );
 
 $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $contents = call_user_func( 'main_theme', $array_content, $array_rows, $base_url, $checkss );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme( $contents, $full );
 include NV_ROOTDIR . '/includes/footer.php';
 
 ?>
