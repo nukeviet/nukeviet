@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div id="idcomment">
+<div id="idcomment" class="nv-fullbg">
 	<div class="row">
 		<hr />
 		<div class="col-xs-6 text-left">

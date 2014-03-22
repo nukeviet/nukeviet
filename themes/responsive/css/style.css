@@ -69,6 +69,10 @@ h3.sm{
 span.keyword{
 	background: yellow;
 }
+.nv-fullbg{
+	min-height: 100%;
+	background: #fff;
+}
 
 /* Header */
 header{
