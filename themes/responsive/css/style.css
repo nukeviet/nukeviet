@@ -73,6 +73,9 @@ span.keyword{
 	min-height: 100%;
 	background: #fff;
 }
+a.btn{
+	color: #fff;
+}
 
 /* Header */
 header{
