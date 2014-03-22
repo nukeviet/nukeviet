@@ -56,7 +56,7 @@
 </div>
 <div class="footer">
 	<div class="refresh">
-		<a href="#" title="{LANG.refresh}"><img alt="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
+		<a href="#" title="{LANG.refresh}"><em class="icon-refresh icon-large icon-pointer">&nbsp;</em></a>
 	</div>
 	<div class="filetype">
 		<select name="imgtype" class="vchange">
@@ -91,7 +91,7 @@
 		</div>
 		<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
 		</div>
-		<div style="float:left;margin-left:5px;">
+		<div style="float:left;margin:0 5px;">
 			{LANG.upload_otherurl}: <input type="text" name="imgurl"/>
 		</div>
 		<div style="margin-top:10px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>

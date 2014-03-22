@@ -31,7 +31,8 @@
 				<!-- BEGIN: stat2 -->
 				<option value="{K}">{V}</option>
 				<!-- END: stat2 -->
-			</select><input type="button" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
+			</select> 
+			<input type="button" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
 		</tr>
 	</tbody>
 </table>

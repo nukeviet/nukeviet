@@ -19,7 +19,8 @@
 					<!-- BEGIN: topicsid -->
 					<option value="{TOPICSID.key}">{TOPICSID.title}</option>
 					<!-- END: topicsid -->
-				</select><input name="update" type="button" value="{LANG.save}" /></td>
+				</select> 
+				<input name="update" type="button" value="{LANG.save}" /></td>
 			</tr>
 		</tfoot>
 		<tbody>

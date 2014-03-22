@@ -25,7 +25,7 @@
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <em class="icon-refresh icon-large" onclick="get_alias();">&nbsp;</em></td>
+							<td><input class="w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias();">&nbsp;</em></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>
@@ -59,7 +59,8 @@
 								<!-- BEGIN: rowstopic -->
 								<option value="{topicid}" {sl}>{topic_title}</option>
 								<!-- END: rowstopic -->
-							</select><input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
+							</select> 
+							<input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 						</tr>
 					</tbody>
 				</table>

@@ -82,7 +82,7 @@
 						<label for="nv_seccode">{N_CAPTCHA}:</label>
 						<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="captcha"/>
 						<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-						<em class="icon-refresh icon-large" onclick="nv_change_captcha();">&nbsp;</em>
+						<em class="icon-refresh icon-large icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
 					</p>
 					<!-- END: captcha -->
 					<div id="smb">
