@@ -29,3 +29,9 @@
 /uploads/about/*.jpg
 /uploads/banners/*.jpg
 /uploads/page/*.jpg
+
+# Allow default file
+!/uploads/banners/bongoaigiao.jpg
+!/uploads/banners/vinades.jpg
+!/uploads/banners/vndads___05.jpg
+!/uploads/banners/webnhanh_vn.gif
