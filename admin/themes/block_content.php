@@ -14,7 +14,7 @@ $functionid = $nv_Request->get_int( 'func', 'get' );
 $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
 
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get', $global_config['site_theme'] );
-if( ! preg_match( $global_config['check_theme'], $selectthemes ) )
+if( ! ( preg_match( $global_config['check_theme'], $selectthemes ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes ) ) )
 {
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 }

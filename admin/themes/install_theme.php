@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				$theme = '';
 				foreach( $list as $file_i )
 				{
-					if( preg_match( '/^(?!admin\_|mobile\_)([a-zA-Z0-9\-\_]+)\/(theme\.php|config\.ini)$/', $file_i['filename'], $m ) )
+					if( preg_match( '/^(?!admin\_)([a-zA-Z0-9\-\_]+)\/(theme\.php|config\.ini)$/', $file_i['filename'], $m ) )
 					{
 						++$check_number;
 					}

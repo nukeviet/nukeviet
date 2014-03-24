@@ -239,7 +239,7 @@ if( file_exists( $filename ) )
 					$selectthemes = '';
 					foreach( $ziplistContent as $file_i )
 					{
-						if( preg_match( '/^(?!admin\_|mobile\_)([a-zA-Z0-9\-\_]+)\/config.ini$/', $file_i['filename'], $m ) )
+						if( preg_match( '/^(?!admin\_)([a-zA-Z0-9\-\_]+)\/config.ini$/', $file_i['filename'], $m ) )
 						{
 							$selectthemes = $m[1];
 							break;

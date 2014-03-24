@@ -39,6 +39,18 @@
 					<!-- END: site_theme -->
 				</select></td>
 			</tr>
+			<!-- BEGIN: mobile_theme -->
+			<tr>
+				<td><strong>{LANG.mobile_theme}</strong></td>
+				<td>
+				<select name="mobile_theme">
+					<option value="">&nbsp;</option>
+					<!-- BEGIN: loop -->
+					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
+					<!-- END: loop -->
+				</select></td>
+			</tr>
+			<!-- END: mobile_theme -->
 			<tr>
 				<td><strong>{LANG.default_module}</strong></td>
 				<td>
