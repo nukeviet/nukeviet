@@ -19,7 +19,7 @@
 		<tbody>
 			<tr>
 				<td><strong>{LANG.server}</strong></td>
-				<td><input class="w250" type="text" name="ftp_server" value="{VALUE.ftp_server}" /><span>{LANG.port}</span><input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
+				<td><input class="w250" type="text" name="ftp_server" value="{VALUE.ftp_server}" /> <span> {LANG.port} </span> <input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.username}</strong></td>

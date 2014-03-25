@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $theme = $nv_Request->get_title( 'theme', 'post', '', 1 );
 $theme = trim( $theme );
-if( preg_match( $global_config['check_theme'], $theme ) and file_exists( NV_ROOTDIR . '/themes/' . $theme ) && $global_config['site_theme'] != $theme && $theme != 'default' )
+if( ( preg_match( $global_config['check_theme'], $theme ) OR preg_match( $global_config['check_theme_mobile'], $theme ) ) and file_exists( NV_ROOTDIR . '/themes/' . $theme ) && $global_config['site_theme'] != $theme && $theme != 'default' )
 {
 	$check_exit_mod = false;
 	$lang_module_array = array();

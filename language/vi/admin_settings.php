@@ -28,6 +28,7 @@ $lang_module['optActive_site'] = 'Kích hoạt khu vực ngoài site';
 $lang_module['optActive_admin'] = 'Kích hoạt khu vực admin';
 $lang_module['sitename'] = 'Tên gọi của site';
 $lang_module['theme'] = 'Giao diện mặc định';
+$lang_module['mobile_theme'] = 'Giao diện mặc định cho Mobile';
 $lang_module['themeadmin'] = 'Giao diện người quản trị';
 $lang_module['default_module'] = 'Module mặc định trên trang chủ';
 $lang_module['description'] = 'Mô tả của site';

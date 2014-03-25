@@ -17,6 +17,8 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['plan_title'] = 'Khối quảng cáo';
+$lang_module['plan_info'] = 'Thông tin';
 $lang_module['main_title'] = 'Danh sách các khối quảng cáo';
 $lang_module['main_page_info'] = 'Quảng cáo là một hình thức tăng lượng truy cập đến website của bạn. Nếu bạn quan tâm đến tiện ích này, chúng tôi sẽ cung cấp đến bạn các khối quảng cáo dưới đây';
 $lang_module['title'] = 'Tiêu đề';

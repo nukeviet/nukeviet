@@ -68,7 +68,8 @@
 					<!-- BEGIN: action -->
 					<option value="{ACTION.value}">{ACTION.title}</option>
 					<!-- END: action -->
-				</select><input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
+				</select> 
+				<input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
 			</tr>
 		</tfoot>
 	</table>
