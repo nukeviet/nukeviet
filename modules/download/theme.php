@@ -58,11 +58,20 @@ function theme_main_download( $array_cats, $list_cats, $download_config )
 			$items = $cat['items'];
 			#parse the first items
 			$thefirstcat = current( $items );
+			
 			$xtpl->assign( 'itemcat', $thefirstcat );
 			if( ! empty( $thefirstcat['imagesrc'] ) )
 			{
 				$xtpl->parse( 'main.catbox.itemcat.image' );
 			}
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $thefirstcat['id'] );
+				$xtpl->assign( 'DEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+				$xtpl->parse( 'main.catbox.itemcat.adminlink' );
+			}
+			
 			$xtpl->parse( 'main.catbox.itemcat' );
 			foreach( $items as $item )
 			{
