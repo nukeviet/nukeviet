@@ -12,7 +12,7 @@
 	<colgroup>
 		<col class="w50">
 		<col span="3">
-		<col class="w100">
+		<col class="w150">
 	</colgroup>
 	<thead>
 		<tr class="center">
@@ -111,17 +111,17 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.title}</strong></td>
-				<td><input type="text" name="title" id="title" class="txt-full" value="{DATA.title}"/></td>
+				<td><input type="text" name="title" id="title" class="w300" value="{DATA.title}"/></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.link}</strong></td>
-				<td><input type="text" name="link" class="txt-full" value="{DATA.link}" id="link"/></td>
+				<td><input type="text" name="link" class="w300" value="{DATA.link}" id="link"/></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.note}</strong></td>
-				<td><input type="text" name="note" class="txt-full" value="{DATA.note}"/></td>
+				<td><input type="text" name="note" class="w300" value="{DATA.note}"/></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
@@ -156,7 +156,7 @@
 			<tr>
 				<td><strong>{LANG.add_type_active}</strong></td>
 				<td>
-				<select name="active_type" class="txt-full">
+				<select name="active_type" class="w300">
 					<!-- BEGIN: active_type -->
 					<option value="{ACTIVE_TYPE.key}"{ACTIVE_TYPE.selected}>{ACTIVE_TYPE.title}</option>
 					<!-- END: active_type -->
@@ -165,7 +165,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.add_type_css}</strong></td>
-				<td><input class="txt-full" type="text" name="css" value="{DATA.css}"/></td>
+				<td><input class="w300" type="text" name="css" value="{DATA.css}"/></td>
 				<td>{LANG.add_type_css_info}</td>
 			</tr>
 		</tbody>
