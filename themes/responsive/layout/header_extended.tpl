@@ -5,7 +5,6 @@
 	<noscript>
 		<div class="alert alert-danger">{LANG.nojs}</div>
 	</noscript>
-	[THEME_ERROR_INFO]
 	<div id="wraper">
 		<header>
 			<div class="container">
@@ -51,3 +50,5 @@
 					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
+				[THEME_ERROR_INFO]
+				
