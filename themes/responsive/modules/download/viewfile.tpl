@@ -187,8 +187,8 @@
 	<!-- END: disablerating -->
 
 	<!-- BEGIN: is_admin -->
-	<div class="more">
-		<div class="text-right right">
+	<div class="alert alert-info">
+		<div class="text-right pull-right">
 			<a href="{ROW.edit_link}">{GLANG.edit}</a> &divide; <a href="{ROW.del_link}" onclick="nv_del_row(this,{ROW.id});return false;">{GLANG.delete}</a>
 		</div>
 		{LANG.file_admin}:

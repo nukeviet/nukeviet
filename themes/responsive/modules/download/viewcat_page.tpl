@@ -19,7 +19,7 @@
 		<p>
 			{itemcat.introtext}
 		</p>
-		<p class="aright">
+		<p class="pull-right">
 			<a href="{itemcat.more_link}">{LANG.readmore}...</a>
 		</p>
 	</div>

@@ -75,18 +75,6 @@
 	padding-right: 5px
 }
 
-.block_download .more .right {
-	color: #666;
-	float: right;
-	font: bold 11px/27px arial, verdana, sans-serif;
-	white-space: nowrap
-}
-
-.block_download .more a {
-	color: #df300b;
-	text-decoration: none
-}
-
 .block_download .rating {
 	margin: 2px 10px 10px;
 	padding: 3px
