@@ -11,7 +11,7 @@
 			<div class="col-xs-6">{VOTING.title}</div>
 			<div class="col-xs-6">
 				<div class="progress">
-					<div class="progress-bar" role="progressbar" aria-valuenow="{WIDTH}" aria-valuemin="0" aria-valuemax="100" style="width: {WIDTH}%;">{WIDTH}%</div>
+					<div class="progress-bar" role="progressbar" aria-valuenow="{WIDTH}" aria-valuemin="0" aria-valuemax="100" style="width: {WIDTH}%;"><span class="text-danger">{WIDTH}%</span></div>
 				</div>
 			</div>
 		</div>
