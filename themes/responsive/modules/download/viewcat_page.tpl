@@ -12,14 +12,14 @@
 		</div>
 		<!-- END: image -->
 		<h4><a href="{itemcat.more_link}">{itemcat.title}</a></h4>
-		<p class="small">
+		<small>
 			<span class="glyphicon glyphicon-zoom-in"></span> {LANG.viewcat_view_hits} {itemcat.view_hits}
 			<span class="count-down"><span class="glyphicon glyphicon-download-alt"></span> {LANG.viewcat_download_hits} {itemcat.download_hits}</span>
-		</p>
+		</small>
 		<p>
 			{itemcat.introtext}
 		</p>
-		<p class="aright">
+		<p class="pull-right">
 			<a href="{itemcat.more_link}">{LANG.readmore}...</a>
 		</p>
 	</div>
@@ -41,7 +41,7 @@
 <div class="panel panel-default">
 	<div class="clearfix panel-body">
 		<!-- BEGIN: is_admin -->
-		<div class="right">
+		<div class="pull-right">
 			(<a href="{listpostcat.edit_link}">{GLANG.edit}</a>)
 		</div>
 		<!-- END: is_admin -->

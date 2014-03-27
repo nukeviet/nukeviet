@@ -3,7 +3,7 @@
 	<div class="panel-heading">{ROW.title}</div>
 	<div class="panel-body">
 	<!-- BEGIN: is_image -->
-	<div class="image" style="padding-top:8px">
+	<div class="image">
 		<a  title="{ROW.title}" href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img alt="{ROW.title}"src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" /></a>
 	</div>
 	<!-- END: is_image -->
@@ -16,77 +16,53 @@
 		<em class="glyphicon glyphicon-th"></em> {LANG.listing_details}
 	</div>
 	<div class="panel panel-default">
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.title}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.file_title}:</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.version}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.file_version}:</div>
-		</div>
-		
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.author_name}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.author_name}:</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.author_url}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.author_url}:</div>
-		</div>
-		
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.catname}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.bycat2}:</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.uploadtime}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.uploadtime}:</div>
-		</div>
-
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.updatetime}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.updatetime}:</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.user_name}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.user_name}:</div>
-		</div>
-		
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.copyright}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.copyright}:</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.filesize}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.filesize}:</div>
-		</div>
-		
-		<div class="row gray">
-			<div class="col-md-9 col-md-push-3">{ROW.view_hits}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.view_hits}:</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-9 col-md-push-3" id="download_hits">{ROW.download_hits}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.download_hits}:</div>
-		</div>
-
-		<!-- BEGIN: comment_allow -->
-		<div class="row">
-			<div class="col-md-9 col-md-push-3">{ROW.comment_hits}</div>
-			<div class="col-md-3 col-md-pull-9">{LANG.comment_hits}:</div>
-		</div>
-		<!-- END: comment_allow -->
+		<dl class="dl-horizontal">
+			<dt>{LANG.file_title}:</dt>
+			<dd>{ROW.title}</dd>
+			
+			<dt>{LANG.file_version}:</dt>
+			<dd>{ROW.version}</dd>
+			
+			<dt>{LANG.author_name}:</dt>
+			<dd>{ROW.author_name}</dd>
+			
+			<dt>{LANG.author_url}:</dt>
+			<dd>{ROW.author_url}</dd>
+			
+			<dt>{LANG.bycat2}:</dt>
+			<dd>{ROW.catname}</dd>
+			
+			<dt>{LANG.uploadtime}:</dt>
+			<dd>{ROW.uploadtime}</dd>
+			
+			<dt>{LANG.updatetime}:</dt>
+			<dd>{ROW.updatetime}</dd>
+			
+			<dt>{LANG.user_name}:</dt>
+			<dd>{ROW.user_name}</dd>
+			
+			<dt>{LANG.copyright}:</dt>
+			<dd>{ROW.copyright}</dd>
+			
+			<dt>{LANG.filesize}:</dt>
+			<dd>{ROW.filesize}</dd>
+			
+			<dt>{LANG.view_hits}:</dt>
+			<dd>{ROW.view_hits}</dd>
+			
+			<dt>{LANG.download_hits}:</dt>
+			<dd id="download_hits">{ROW.download_hits}</dd>
+			
+			<!-- BEGIN: comment_allow -->
+			<dt>{LANG.comment_hits}:</dt>
+			<dd>{ROW.comment_hits}</dd>
+			<!-- END: comment_allow -->
+		</dl>
 	</div>
 	
 	<div class="info_download">
 		<!-- BEGIN: report -->
-		<div class="right report">
+		<div class="report pull-right">
 			<a href="javascript:void(0);" onclick="nv_link_report({ROW.id});">{LANG.report}</a>
 		</div>
 		<!-- END: report -->
@@ -187,8 +163,8 @@
 	<!-- END: disablerating -->
 
 	<!-- BEGIN: is_admin -->
-	<div class="more">
-		<div class="text-right right">
+	<div class="alert alert-info">
+		<div class="text-right pull-right">
 			<a href="{ROW.edit_link}">{GLANG.edit}</a> &divide; <a href="{ROW.del_link}" onclick="nv_del_row(this,{ROW.id});return false;">{GLANG.delete}</a>
 		</div>
 		{LANG.file_admin}:

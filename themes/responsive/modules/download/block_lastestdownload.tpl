@@ -4,7 +4,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<a href="{loop.link}">{loop.title}</a>
-			<span class="small_date">{loop.updatetime}</span>
+			<em>{loop.updatetime}</em>
 		</li>
 		<!-- END: loop -->
 </div>
