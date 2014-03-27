@@ -40,3 +40,22 @@
 	margin-bottom: 6px;
 	display: block;
 }
+
+.category {
+	width: 100%;
+}
+
+.category .glyphicon { 
+	margin-right:10px; 
+}
+
+.category .panel-body {
+	padding:0px; 
+}
+.category .panel-body table tr td {
+	padding-left: 15px
+}
+
+.category .panel-body .table {
+	margin-bottom: 0px;
+}
