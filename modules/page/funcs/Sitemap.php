@@ -11,7 +11,7 @@
 if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $url = array();
-$cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_Sitemap_" . NV_CACHE_PREFIX . ".cache";
+$cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . NV_LANG_DATA . '_' . $module_name . '_Sitemap_' . NV_CACHE_PREFIX . '.cache';
 $pa = NV_CURRENTTIME - 7200;
 
 if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
@@ -20,14 +20,14 @@ if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile )
 }
 else
 {
-	$sql = "SELECT alias,add_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE status=1";
+	$sql = 'SELECT alias,add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
 	$result = $db->query( $sql );
 
 	while( list( $alias, $publtime ) = $result->fetch( 3 ) )
 	{
-		$url[] = array( //
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias . $global_config['rewrite_exturl'], //
-			'publtime' => $publtime //
+		$url[] = array(
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias . $global_config['rewrite_exturl'],
+			'publtime' => $publtime
 		);
 	}
 

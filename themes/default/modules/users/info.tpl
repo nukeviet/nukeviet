@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script src="{NV_BASE_SITEURL}js/admin.js" type="text/javascript"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -81,10 +82,11 @@
 			</dl>
 			<dl class="clearfix gray">
 				<dd class="fl">
-					<label> {LANG.avata} (80x80) </label>
+					<label> {LANG.avata} </label>
 				</dd>
 				<dt class="fr">
-					<input type="file" class="txt" name="avatar" />
+					<input type="text" class="txt" id="avatar" name="avatar" value="{DATA.photo}" />
+					<input type="button" value="{LANG.avata_chosen}" id="btn_upload" />
 				</dt>
 			</dl>
 			<dl class="clearfix">
@@ -116,7 +118,7 @@
 						<!-- END: required -->
 					</label>
 					<br>
-					<i>{FIELD.description}</i>
+					<em>{FIELD.description}</em>
 				</dt>
 				<dd class="fr">
 					<!-- BEGIN: textbox -->
@@ -173,6 +175,12 @@
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true
 		});
-	}); 
-</script>
+		
+		$("#btn_upload").click(function() {
+			nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 850, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+			return false;
+		});
+	});
+
+	</script>
 <!-- END: main -->

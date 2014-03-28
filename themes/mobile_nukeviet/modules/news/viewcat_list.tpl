@@ -9,6 +9,9 @@
 		<!-- BEGIN: adminlink -->
 		{ADMINLINK}
 		<!-- END: adminlink -->
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
 	</li>
 	<!-- END: viewcatloop -->
 </ul>

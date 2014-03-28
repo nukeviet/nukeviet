@@ -8,13 +8,13 @@
 			<td colspan="2">
 			<div style="position:absolute;right:20px">
 				<!-- BEGIN: edit -->
-				<a class="button1" href="{EDIT_HREF}"><span><span>{EDIT_NAME}</span></span></a>
+				<a class="button button-h" href="{EDIT_HREF}">{EDIT_NAME}</a>
 				<!-- END: edit -->
 				<!-- BEGIN: suspend -->
-				<a class="button1" href="{SUSPEND_HREF}"><span><span>{SUSPEND_NAME}</span></span></a>
+				<a class="button button-h" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
 				<!-- END: suspend -->
 				<!-- BEGIN: del -->
-				<a class="button1" href="{DEL_HREF}"><span><span>{DEL_NAME}</span></span></a>
+				<a class="button button-h" href="{DEL_HREF}">{DEL_NAME}</a>
 				<!-- END: del -->
 			</div><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION} </td>
 		</tr>

@@ -64,7 +64,7 @@
 		if ("all" == b) {
 			return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
 		}
-		var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+		var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
 		{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
 
 		window.location.href = b;
@@ -81,7 +81,7 @@
 		customSearchControl.execute(a);
 	});
 	$("#form_search").submit(function() {
-		var a = $("#form_search [name=q]").val(), a = formatStringAsUriComponent(a), b;
+		var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
 		$("#form_search [name=q]").val(a);
 		if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
 			return $("#form_search [name=q]").select(), !1

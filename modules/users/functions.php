@@ -63,4 +63,16 @@ function validUserLog( $array_user, $remember, $opid )
 	$nv_Request->set_Cookie( 'nvloginhash', $user, $live_cookie_time );
 }
 
+
+//global config
+$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+$result = $db->query( $sql );
+$global_config['avatar_width'] = $result->fetchColumn();
+$result->closeCursor();
+
+$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+$result = $db->query( $sql );
+$global_config['avatar_height'] = $result->fetchColumn();
+$result->closeCursor();
+
 ?>

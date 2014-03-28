@@ -8,9 +8,6 @@
  * @Createdate Thu, 12 Sep 2013 04:07:53 GMT
  */
 
-if ( defined( 'NV_CLASS_SQL_DB_PHP' ) ) return;
-define( 'NV_CLASS_SQL_DB_PHP', true );
-
 /**
  * extends for PDO
  */
@@ -48,6 +45,10 @@ class sql_db extends pdo
 		if( in_array( $config['dbtype'], $AvailableDrivers ) AND in_array( $config['dbtype'], $aray_type ) )
 		{
 			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
+			if( !empty ( $config['dbport'] ) )
+			{
+				$dsn .= ';port=' . $config['dbport'];
+			}
 			$driver_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		}
 		elseif( $config['dbtype'] == 'oci' )

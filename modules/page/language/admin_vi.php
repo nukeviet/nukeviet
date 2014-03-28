@@ -40,9 +40,7 @@ $lang_module['image'] = 'Hình minh họa';
 $lang_module['imagealt'] = 'Chú thích cho hình';
 $lang_module['socialbutton'] = 'Các công cụ Like';
 $lang_module['socialbuttonnote'] = 'Hiển thị các công cụ Like facebook, G+, Twitter';
-$lang_module['activecomm'] = 'Kích hoạt chức năng bình luận';
-$lang_module['activecomm_0'] = 'Không kích hoạt';
-$lang_module['activecomm_1'] = 'Sử dụng chức năng bình luận của facebook';
+$lang_module['activecomm'] = 'Cho phép thảo luận ';
 $lang_module['facebookAppID'] = 'Facebook App ID';
 $lang_module['facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
 

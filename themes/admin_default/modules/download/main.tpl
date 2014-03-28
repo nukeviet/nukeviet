@@ -35,12 +35,16 @@
 			<td> {ROW.download_hits} </td>
 			<td> {ROW.comment_hits} </td>
 			<td class="center"><input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status} onclick="nv_chang_file_status({ROW.id})" /></td>
-			<td class="center"><a class="edit_icon" href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_file_del({ROW.id});">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id});">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: row -->
 	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="8">
+				<p><a class="button button-h" href="{ADD_NEW_FILE}">{LANG.file_addfile}</a></p>
+			</td>
+		</tr>
+	</tfoot>
 </table>
-<div style="margin-top:8px">
-	<a class="button1" href="{ADD_NEW_FILE}"><span><span>{LANG.file_addfile}</span></span></a>
-</div>
 <!-- END: main -->

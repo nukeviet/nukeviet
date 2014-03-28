@@ -19,7 +19,6 @@ $arr_item = array();
 $sp = '&nbsp;&nbsp;&nbsp;';
 $sp_title = '';
 
-//
 $post['mid'] = $nv_Request->get_int( 'mid', 'get', 0 );
 $post['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 $post['parentid'] = $nv_Request->get_int( 'parentid', 'get', 0 );
@@ -207,17 +206,6 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 			{
 				nv_fix_cat_order( $post['mid'] );
 
-				$arr_block = array();
-
-				$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'];
-				$result = $db->query( $sql );
-				while( $row = $result->fetch() )
-				{
-					$arr_block[] = $row['id'];
-				}
-
-				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $post['mid'] );
-
 				if( $post['parentid'] != 0 )
 				{
 					$arr_item_menu = array();
@@ -293,27 +281,6 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 				if( $post['mid'] != $mid_old )
 				{
 					nv_fix_cat_order( $mid_old );
-
-					$arr_block = array();
-					$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid=" . $post['mid'];
-					$result = $db->query( $sql );
-					while( $row = $result->fetch() )
-					{
-						$arr_block[] = $row['id'];
-					}
-
-					$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item= '" . implode( ',', $arr_block ) . "' WHERE id=" . $post['mid'];
-					$db->query( $sql );
-
-					$arr_block = array();
-					$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid= " . $mid_old;
-					$result = $db->query( $sql );
-					while( $row = $result->fetch() )
-					{
-						$arr_block[] = $row['id'];
-					}
-
-					$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item='" . implode( ',', $arr_block ) . "' WHERE id=" . $mid_old );
 				}
 
 				if( $post['parentid'] != 0 )

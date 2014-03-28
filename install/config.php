@@ -17,7 +17,7 @@ $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['prefix'] = 'nv4';
-$db_config['persistent'] = true;
+$db_config['persistent'] = false;
 $db_config['collation'] = 'utf8_general_ci';
 // mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
@@ -31,7 +31,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '4.0.00';// NukeViet 4.0 Develop
+$global_config['version'] = '4.0.01 Testing';// NukeViet 4.0 Closebeta 2
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';

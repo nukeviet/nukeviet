@@ -44,7 +44,7 @@
 					<td><input class="fixwidthinput" type="text" name="last_ip" value="" maxlength="100" /></td>
 				</tr>
 				<tr>
-					<td colspan="4" class="center"><input type="submit" name="submit" value="{LANG.search}"/><input type="button" class="reset" value="{LANG.reset}"/></td>
+					<td colspan="4" class="center"><input type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
 				</tr>
 			</tbody>
 		</table>

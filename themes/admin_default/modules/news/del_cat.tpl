@@ -9,13 +9,13 @@
 				<input type="hidden" name="catid" value="{CATID}" />
 				<input type="hidden" name="delallcheckss" value="{DELALLCHECKSS}" />
 				<div class="center">
-					<b>{TITLE}</b>
+					<strong>{TITLE}</strong>
 					<br />
 					<br />
 					<input name="delcatandrows" type="submit" value="{LANG.delcatandrows}" />
 					<br />
 					<br />
-					<b>{LANG.delcat_msg_rows_move}</b>:
+					<strong>{LANG.delcat_msg_rows_move}</strong>:
 					<select name="catidnews">
 						<!-- BEGIN: catidnews -->
 						<option value="{CATIDNEWS.key}">{CATIDNEWS.title}</option>

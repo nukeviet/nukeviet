@@ -85,7 +85,7 @@ if( ! empty( $del_array ) )
 	$count = sizeof( $del_array );
 	if( $count )
 	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['comment_delete'] . ' ' . $lang_module['comment_topic'], ' ' . implode( ', ', $artitle ), $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['permissions_del_content'], implode( ', ', $artitle ), $admin_info['userid'] );
 	}
 	if( ! empty( $no_del_array ) )
 	{

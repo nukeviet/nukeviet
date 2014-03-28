@@ -13,20 +13,20 @@
 	<tbody>
 	<!-- BEGIN: loop -->
 		<tr>
-			<td><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}"><b>{DATA.login}</b></a></td>
+			<td><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}"><strong>{DATA.login}</strong></a></td>
 			<td>{DATA.email}</td>
 			<td>{DATA.lev}</td>
 			<td>{DATA.position}</td>
 			<td>{DATA.is_suspend}</td>
 			<td>
 			<!-- BEGIN: edit -->
-			<a class="edit_icon" href="{EDIT_HREF}">{EDIT_NAME}</a>
+			<em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_HREF}">{EDIT_NAME}</a>
 			<!-- END: edit -->
 			<!-- BEGIN: suspend -->
-			&nbsp;-&nbsp;<a class="edit_icon" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+			&nbsp;-&nbsp;<em class="icon-edit icon-large">&nbsp;</em> <a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
 			<!-- END: suspend -->
 			<!-- BEGIN: del -->
-			&nbsp;-&nbsp;<a class="delete_icon" href="{DEL_HREF}">{DEL_NAME}</a>
+			&nbsp;-&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a href="{DEL_HREF}">{DEL_NAME}</a>
 			<!-- END: del -->
 			</td>
 		</tr>

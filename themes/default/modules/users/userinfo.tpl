@@ -22,7 +22,7 @@
 		<div class="uimg">
 			<img src="{SRC_IMG}" alt="" />
 			<br />
-			<span style="font-size:11px; color:#999">{LANG.img_size_title}</span>
+			<span style="font-size:11px; color:#999; display: block; text-align: center">{LANG.img_size_title}</span>
 		</div>
 		{LANG.account2}: <strong>{USER.username}</strong> ({USER.email})
 		<br />

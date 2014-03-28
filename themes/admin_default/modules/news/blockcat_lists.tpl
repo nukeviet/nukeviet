@@ -3,7 +3,8 @@
 	<colgroup>
 		<col span="2" class="w50">
 		<col span="2">
-		<col span="2" class="w100">
+		<col class="w100">
+		<col class="w150">
 	</colgroup>
 	<thead>
 		<tr>
@@ -24,7 +25,7 @@
 				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 				<!-- END: weight -->
 			</select></td>
-			<td class="center"><b>{ROW.bid}</b></td>
+			<td class="center"><strong>{ROW.bid}</strong></td>
 			<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 			<td class="center">
 			<select id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault');">
@@ -39,8 +40,8 @@
 				<!-- END: number -->
 			</select></td>
 			<td class="center">
-				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_del_block_cat({ROW.bid})">{GLANG.delete}</a>
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_block_cat({ROW.bid})">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

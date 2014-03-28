@@ -44,7 +44,7 @@ if( ! empty( $module_info['admins'] ) )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
 		{
-			$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, comments) VALUES (' . $userid_i . ', 0, 1, 1, 1, 1, 1, 1)' );
+			$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $userid_i . ', 0, 1, 1, 1, 1, 1)' );
 			$is_refresh = true;
 		}
 	}
@@ -74,11 +74,10 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'view', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
 
 $submenu['cat'] = $lang_module['categories'];
 $submenu['content'] = $lang_module['content_add'];
-$submenu['comment'] = $lang_module['comment'];
 
 if( $NV_IS_ADMIN_MODULE )
 {

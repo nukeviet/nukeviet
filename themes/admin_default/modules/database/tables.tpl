@@ -27,7 +27,8 @@
 					<!-- BEGIN: ext -->
 					<option value="{KEY}">{VAL}</option>
 					<!-- END: ext -->
-				</select><input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" /></td>
+				</select> 
+				<input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" /></td>
 			</tr>
 		</tfoot>
 		<tbody>

@@ -45,7 +45,7 @@
 		<tr>
 			<td><strong>{LANG.googleplus_add}: </strong></td>
 			<td><input class="w200" name="new_profile" id="new_profile" type="text" maxlength="255" /></td>
-			<td colspan="2"><input class="w250" name="new_title" id="new_title" type="text" maxlength="255" /><input name="Button1" type="button" value="{LANG.submit}" onclick="nv_add_googleplus();return;" /></td>
+			<td colspan="2"><input class="w250" name="new_title" id="new_title" type="text" maxlength="255" /> <input name="Button1" type="button" value="{LANG.submit}" onclick="nv_add_googleplus();return;" /></td>
 		</tr>
 	</tfoot>
 	<tbody>
@@ -58,8 +58,8 @@
 				<!-- END: weight -->
 			</select></td>
 			<td class="center">{ROW.idprofile}</td>
-			<td><input name="hidden_{ROW.gid}" id="hidden_{ROW.gid}" type="hidden" value="{ROW.title}" /><input type="text" name="title_{ROW.gid}" id="title_{ROW.gid}" value="{ROW.title}" class="w250" /><input type="button" onclick="nv_save_title({ROW.gid});" value="{GLANG.save}" /></td>
-			<td class="center"><a class="delete_icon" href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
+			<td><input name="hidden_{ROW.gid}" id="hidden_{ROW.gid}" type="hidden" value="{ROW.title}" /><input type="text" name="title_{ROW.gid}" id="title_{ROW.gid}" value="{ROW.title}" class="w250" /> <input type="button" onclick="nv_save_title({ROW.gid});" value="{GLANG.save}" /></td>
+			<td class="center"><em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: googleplus -->
 	</tbody>

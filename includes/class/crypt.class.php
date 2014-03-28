@@ -8,9 +8,6 @@
  * @Createdate 2-6-2010 21:16
  */
 
-if( defined( 'NV_CLASS_CRYPT' ) ) return;
-define( 'NV_CLASS_CRYPT', true );
-
 class nv_Crypt
 {
 	private $_func;

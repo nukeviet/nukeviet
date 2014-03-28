@@ -135,7 +135,7 @@ if( ! empty( $savecat ) )
 		}
 		else
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid;
+			$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid );
 			$msg_lg = 'edit_tags';
 		}
 

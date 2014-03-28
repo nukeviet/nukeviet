@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/ddlevelsmenu-topbar.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/ddlevelsmenu-sidebar.css" />
 <script src="{NV_BASE_SITEURL}js/jquery/ddlevelsmenu.js" type="text/javascript"></script>
-<div id="ddtopmenubar" class="mattblackmenu">
+<div id="ddtopmenubar{MENUID}" class="mattblackmenu">
 	<ul>
 		<!-- BEGIN: loopcat1 -->
 		<li>
@@ -22,7 +22,7 @@
 		<!-- END: loopcat1 -->
 	</ul>
 </div>
-<script type="text/javascript">ddlevelsmenu.setup("ddtopmenubar", "topbar")</script>
+<script type="text/javascript">ddlevelsmenu.setup("ddtopmenubar{MENUID}", "topbar")</script>
 <!-- BEGIN: cat2 -->
 <ul id="ddsubmenu{nu}" class="ddsubmenustyle">
 	<!-- BEGIN: loopcat2 -->

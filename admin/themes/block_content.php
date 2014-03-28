@@ -13,12 +13,16 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 $functionid = $nv_Request->get_int( 'func', 'get' );
 $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
 
-$selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get,cookie', $global_config['site_theme'] );
+$selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get', $global_config['site_theme'] );
+if( ! ( preg_match( $global_config['check_theme'], $selectthemes ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes ) ) )
+{
+	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+}
 
 $row = array(
 	'bid' => 0,
 	'theme' => '',
-	'module' => 'global',
+	'module' => 'theme',
 	'file_name' => '',
 	'title' => '',
 	'link' => '',
@@ -64,6 +68,11 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
+	if( empty( $blockredirect ) )
+	{
+		$blockredirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
+	}
+
 	$error = array();
 	$list_file_name = $nv_Request->get_title( 'file_name', 'post', '', 0 );
 	$array_file_name = explode( '|', $list_file_name );
@@ -75,26 +84,33 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$path_file_php = $path_file_ini = $path_file_lang = '';
 
 	unset( $matches );
-	preg_match( $global_config['check_block_module'], $row['file_name'], $matches );
+	if( $module == 'theme' )
+	{
+		preg_match( $global_config['check_block_theme'], $row['file_name'], $matches );
+	}
+	else
+	{
+		preg_match( $global_config['check_block_module'], $row['file_name'], $matches );
+	}
 
 	if( isset( $array_file_name[1] ) )
 	{
-		if( $module == 'global' and file_exists( NV_ROOTDIR . '/includes/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
+		if( $module == 'theme' and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
 		{
-			$path_file_php = NV_ROOTDIR . '/includes/blocks/' . $file_name;
-			$path_file_ini = NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
+			$path_file_php = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name;
+			$path_file_ini = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
 
-			if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php' ) )
 			{
-				$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name;
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php' ) )
 			{
-				$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name;
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . '/language/en/block.' . $file_name ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php' ) )
 			{
-				$path_file_lang = NV_ROOTDIR . '/language/en/block.' . $file_name;
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
 			}
 		}
 		elseif( isset( $site_mods[$module] ) )
@@ -161,10 +177,10 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$row['groups_view'] = ( string )$who_view;
 	}
 
-	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and preg_match( $global_config['check_block_global'], $row['file_name'] ) ) ? 1 : 0;
-	$array_funcid = $nv_Request->get_array( 'func_id', 'post' );
+	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) OR preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) ) ) ? 1 : 0;
+	$array_funcid_post = $nv_Request->get_array( 'func_id', 'post' );
 
-	if( empty( $all_func ) and empty( $array_funcid ) )
+	if( empty( $all_func ) and empty( $array_funcid_post ) )
 	{
 		$error[] = $lang_module['block_no_func'];
 	}
@@ -255,28 +271,55 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	else
 	{
-		if( $all_func and preg_match( $global_config['check_block_global'], $row['file_name'] ) )
+		$array_funcid_module = array();
+		foreach ( $site_mods as $mod => $_arr_mod )
 		{
-			$array_funcid = array();
-			$func_result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-
-			while( list( $func_id_i ) = $func_result->fetch( 3 ) )
+			foreach ( $_arr_mod['funcs'] as $_func => $_row )
 			{
-				$array_funcid[] = $func_id_i;
+				if( $_row['show_func'] )
+				{
+					$array_funcid_module[$_row['func_id']] = $mod;
+				}
 			}
 		}
-		elseif( ! empty( $row['module'] ) and isset( $site_mods[$row['module']] ) and ! preg_match( $global_config['check_block_global'], $row['file_name'] ) )
+
+		if( $all_func )
 		{
-			$array_funcid_module = array();
-			$sth = $db->prepare( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 AND in_module= :in_module ORDER BY in_module ASC, subweight ASC' );
-			$sth->bindParam( ':in_module', $row['module'], PDO::PARAM_STR );
-			$sth->execute();
-			while( list( $func_id_i ) = $sth->fetch( 3 ) )
+			$array_funcid = array_keys( $array_funcid_module );
+		}
+		elseif( preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) )
+		{
+			$array_funcid = array_intersect( $array_funcid_post, array_keys( $array_funcid_module ) );
+		}
+		else
+		{
+			$array_in_module = array();
+			if( $module == 'theme' )
 			{
-				$array_funcid_module[] = $func_id_i;
+				if( preg_match( $global_config['check_block_theme'], $row['file_name'], $matches ) )
+				{
+					foreach ($site_mods as $mod => $row_i)
+					{
+						if( $row_i['module_file'] == $matches[1] )
+						{
+							$array_in_module[] = $mod;
+						}
+					}
+				}
+			}
+			elseif( isset( $site_mods[$module] ) )
+			{
+				$array_in_module[] = $module;
 			}
 
-			$array_funcid = array_intersect( $array_funcid, $array_funcid_module );
+			$array_funcid = array();
+			foreach ($array_funcid_module as $func_id => $mod)
+			{
+				if( in_array( $mod, $array_in_module ) AND in_array( $func_id, $array_funcid_post ) )
+				{
+					$array_funcid[] = $func_id;
+				}
+			}
 		}
 
 		if( is_array( $array_funcid ) )
@@ -406,11 +449,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 				nv_del_moduleCache( 'themes' );
 
-				if( empty( $blockredirect ) )
-				{
-					$blockredirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
-				}
-
 				// Chuyen huong
 				$xtpl->assign( 'BLOCKREDIRECT', nv_base64_decode( $blockredirect ) );
 				$xtpl->parse( 'blockredirect' );
@@ -464,7 +502,7 @@ if( $row['bid'] != 0 ) // Canh bao tach block khoi nhom
 
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
 $xtpl->assign( 'BLOCKREDIRECT', $blockredirect );
-$xtpl->assign( 'GLOBAL_SELECTED', ( $row['module'] == 'global' ) ? ' selected="selected"' : '' );
+$xtpl->assign( 'THEME_SELECTED', ( $row['module'] == 'theme' ) ? ' selected="selected"' : '' );
 
 $sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
@@ -554,7 +592,7 @@ $add_block_module = array( 1 => $lang_module['add_block_all_module'], 0 => $lang
 $i = 1;
 foreach( $add_block_module as $b_key => $b_value )
 {
-	$showsdisplay = ( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) and $b_key == 1 ) ? ' style="display:none"' : '';
+	$showsdisplay = ( ! preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) and $b_key == 1 ) ? ' style="display:none"' : '';
 
 	$xtpl->assign( 'I', $i );
 	$xtpl->assign( 'SHOWSDISPLAY', $showsdisplay );
@@ -609,41 +647,6 @@ while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 
 		$xtpl->parse( 'main.loopfuncs' );
 	}
-}
-
-$load_block_config = false;
-
-if( preg_match( $global_config['check_block_module'], $row['file_name'], $matches ) )
-{
-	if( $row['module'] == 'global' and file_exists( NV_ROOTDIR . '/includes/blocks/' . $row['file_name'] ) and file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
-	{
-		$load_block_config = true;
-	}
-	elseif( isset( $site_mods[$row['module']] ) )
-	{
-		$module_file = $site_mods[$row['module']]['module_file'];
-
-		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $row['file_name'] ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
-		{
-			$load_block_config = true;
-		}
-
-		if( ! preg_match( $global_config['check_block_global'], $row['file_name'] ) )
-		{
-
-			$xtpl->assign( 'HIDEFUNCLIST', $row['module'] );
-			$xtpl->parse( 'main.hidefunclist' );
-		}
-	}
-}
-
-if( $load_block_config )
-{
-	$xtpl->parse( 'main.load_block_config' );
-}
-else
-{
-	$xtpl->parse( 'main.hide_block_config' );
 }
 
 $page_title = '&nbsp;&nbsp;' . $lang_module['blocks'] . ': Theme ' . $selectthemes;

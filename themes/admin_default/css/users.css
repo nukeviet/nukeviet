@@ -1,4 +1,4 @@
-#users .search {
+﻿#users .search {
 	border-left: 4px solid #1F7BE5;
 	padding: 10px 20px
 }
@@ -55,11 +55,6 @@
 #pageContent dl {
 	padding: 4px;
 	background: #FFF
-}
-
-#pageContent input {
-	padding: 2px;
-	font: 400 12px Tahoma, Arial, Verdana, sans-serif
 }
 
 #pageContent input[type=text].txt {

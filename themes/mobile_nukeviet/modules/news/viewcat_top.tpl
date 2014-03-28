@@ -3,7 +3,12 @@
 <!-- BEGIN: image -->
 <a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a>
 <!-- END: image -->
-<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+<h3>
+	<a href="{CONTENT.link}">{CONTENT.title}</a>
+	<!-- BEGIN: newday -->
+	<span class="icon_new"></span>
+	<!-- END: newday -->
+</h3>
 <p>
 	{CONTENT.hometext}
 </p>
@@ -18,6 +23,9 @@
 	<!-- BEGIN: catcontentloop -->
 	<li>
 		<a href="{CONTENT.link}">{CONTENT.title}</a>
+		<!-- BEGIN: newday -->
+		<span class="icon_new"></span>
+		<!-- END: newday -->
 	</li>
 	<!-- END: catcontentloop -->
 </ul>

@@ -34,8 +34,6 @@ require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
 	require_once NV_ROOTDIR . '/' . $file_config_temp;
-	// Bat dau phien lam viec cua MySQL
-	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 }
 
 $contents = '';
@@ -331,10 +329,24 @@ elseif( $step == 3 )
 }
 elseif( $step == 4 )
 {
-	$nextstep = 1;
+	$nextstep = 0;
 	$title = $lang_module['check_server'];
 
 	$array_resquest = array();
+	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
+	if ( class_exists( 'PDO' ) )
+	{
+		$PDODrivers = PDO::getAvailableDrivers();
+		foreach($PDODrivers as $_driver)
+		{
+			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
+			{
+				$array_resquest['pdo_support'] = $lang_module['compatible'];
+				$nextstep = 1;
+				break;
+			}
+		}
+	}
 	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 
 	foreach( $array_resquest_key as $key )
@@ -344,21 +356,6 @@ elseif( $step == 4 )
 		if( ! $sys_info[$key] )
 		{
 			$nextstep = 0;
-		}
-	}
-
-	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
-
-	if ( class_exists( 'PDO' ) )
-	{
-		$PDODrivers = PDO::getAvailableDrivers();
-		foreach($PDODrivers as $_driver)
-		{
-			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
-			{
-				$array_resquest['pdo_support'] = $lang_module['compatible'];
-				break;
-			}
 		}
 	}
 
@@ -393,6 +390,7 @@ elseif( $step == 5 )
 	$db_config['dbuname'] = $nv_Request->get_string( 'dbuname', 'post', $db_config['dbuname'] );
 	$db_config['dbpass'] = $nv_Request->get_string( 'dbpass', 'post', $db_config['dbpass'] );
 	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', $db_config['prefix'] );
+	$db_config['dbport'] = $nv_Request->get_string( 'dbport', 'post', $db_config['dbport'] );
 	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
 	$db_config['num_table'] = 0;
 	$db_config['create_db'] = 1;
@@ -419,6 +417,8 @@ elseif( $step == 5 )
 			$db_config['dbsystem'] = $db_config['dbuname'];
 		}
 
+		// Bat dau phien lam viec cua MySQL
+		require_once NV_ROOTDIR . '/includes/class/db.class.php';
 		$db = new sql_db( $db_config );
 
 		if( empty( $db->connect ) )
@@ -660,6 +660,8 @@ elseif( $step == 6 )
 
 	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 
+	// Bat dau phien lam viec cua MySQL
+	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 	$db = new sql_db( $db_config );
 	if( ! empty( $db->error ) )
 	{
@@ -745,9 +747,9 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_users_info (userid) VALUES (" . $userid . ")" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, data) VALUES(1, " . $userid . ", '0')" );
 
-					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote( $global_config['site_email'] ) . ")" );
-					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'error_send_email', " . $db->quote( $global_config['site_email'] ) . ")" );
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote( NV_SITE_TIMEZONE_NAME ) . ")" );
+                    $db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote( $global_config['site_email'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_send_email', " . $db->quote( $global_config['site_email'] ) . ")" );
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "')" );
 
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'my_domains', " . $db->quote( NV_SERVER_NAME ) . ")" );
@@ -841,6 +843,32 @@ elseif( $step == 6 )
 						file_put_contents( NV_ROOTDIR . '/robots.txt', $contents, LOCK_EX );
 					}
 
+					define( 'NV_IS_MODADMIN', true );
+
+					$module_name = 'upload';
+					$lang_global['mod_upload'] = 'upload';
+					$global_config['upload_logo'] = '';
+
+					define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+					define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/upload/functions.php';
+
+					$real_dirlist = array();
+					foreach( $allow_upload_dir as $dir )
+					{
+						$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+					}
+					foreach( $real_dirlist as $dirname )
+					{
+						try
+						{
+							$array_dirname[$dirname] = $db->insert_id( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did" );
+						}
+						catch (PDOException $e)
+						{
+							trigger_error( $e->getMessage() );
+						}
+					}
 					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}

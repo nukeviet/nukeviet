@@ -337,24 +337,30 @@ function nv_getCountry( $ip )
 		}
 	}
 
-	if( defined( 'NV_CLASS_SQL_DB_PHP' ) and defined( 'NV_CURRENTTIME' ) )
+	if( defined( 'NV_CONFIG_GLOBALTABLE' ) )
 	{
 		global $db, $db_config;
+        try
+        {
+            if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', " . $ip_file . ", " . NV_CURRENTTIME . ")" ) )
+            {
+                $time_del = NV_CURRENTTIME - 604800;
+                $db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
 
-		if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', " . $ip_file . ", " . NV_CURRENTTIME . ")" ) )
-		{
-			$time_del = NV_CURRENTTIME - 604800;
-			$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
+                $array_ip_file = array();
+                $result = $db->query( 'SELECT ip_from, ip_to, country FROM ' . $db_config['prefix'] . '_ipcountry WHERE ip_file=' . $ip_file );
+                while( $row = $result->fetch() )
+                {
+                    $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+                }
 
-			$array_ip_file = array();
-			$result = $db->query( 'SELECT ip_from, ip_to, country FROM ' . $db_config['prefix'] . '_ipcountry WHERE ip_file=' . $ip_file );
-			while( $row = $result->fetch() )
-			{
-				$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-			}
-
-			file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
-		}
+                file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+            }
+        }
+        catch( PDOException $e )
+        {
+          trigger_error( $e->getMessage() );
+        }
 	}
 	else
 	{
@@ -431,7 +437,7 @@ function nv_getCountry_from_cookie( $ip )
 	if( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) $cookie_domain = $_SERVER['SERVER_NAME'];
 	else $cookie_domain = $_SERVER['HTTP_HOST'];
 
-	$cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
+	$cookie_domain = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/^([w]{3})\./' ), array( '', '' ), $cookie_domain );
 	$cookie_domain = preg_match( '/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain ) ? '.' . $cookie_domain : '';
 
 	setcookie( $global_config['cookie_prefix'] . '_ctr', $codecountry, $livecookietime, '/', $cookie_domain, ( bool )$global_config['cookie_secure'], ( bool )$global_config['cookie_httponly'] );

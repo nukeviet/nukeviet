@@ -23,7 +23,7 @@
 	</thead>
 	<tfoot>
 		<tr class="right">
-			<td colspan="8"><a class="edit_icon block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="add_icon block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="delete_icon delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width:100px;display:inline-block">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+			<td colspan="8"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="icon-plus-sign icon-large">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width:100px;display:inline-block">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
 		</tr>
 	</tfoot>
 	<tbody>
@@ -49,11 +49,11 @@
 			{LANG.add_block_all_module}
 			<!-- END: all_func -->
 			<!-- BEGIN: func_inmodule -->
-			<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=blocks_func&amp;func={FUNCID_INLIST}&amp;module={FUNC_INMODULE}"><span style="font-weight:bold">{FUNC_INMODULE}</span>: {FUNCNAME_INLIST}</a>
+			<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=blocks_func&amp;func={FUNCID_INLIST}&amp;module={FUNC_INMODULE}"><span style="font-weight:bold">{FUNC_INMODULE}</span>: {FUNCNAME_INLIST}</a>
 			<br />
 			<!-- END: func_inmodule -->
 			</td>
-			<td class="center"><a class="edit_icon block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp; <a class="delete_icon delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
 			<td><input type="checkbox" name="idlist" value="{ROW.bid}"/></td>
 		</tr>
 		<!-- END: loop -->
@@ -65,7 +65,7 @@
 		$("a.block_content").click(function() {
 			var bid = parseInt($(this).attr("title"));
 			Shadowbox.open({
-				content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&bid=' + bid + '&blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
+				content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&selectthemes={SELECTTHEMES}&bid=' + bid + '&blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
 				player : "html",
 				height : 450,
 				width : 780
@@ -79,31 +79,31 @@
 			var bid = $(this).attr("title");
 			$.ajax({
 				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_change_order_group",
+				url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_change_order_group",
 				data : "order=" + order + "&bid=" + bid,
 				success : function(data) {
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
+					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 				}
 			});
 		});
 		$("select[name=module]").change(function() {
 			var module = $(this).val();
-			window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_func&module=" + module;
+			window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_func&module=" + module;
 		});
 		$("a.delete").click(function() {
 			var bid = parseInt($(this).attr("title"));
 			if (bid > 0 && confirm("{LANG.block_delete_per_confirm}")) {
-				$.post("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=blocks_del", "bid=" + bid, function(theResponse) {
+				$.post("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=blocks_del", "bid=" + bid, function(theResponse) {
 					alert(theResponse);
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
+					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 				});
 			}
 		});
 		$("a.block_weight").click(function() {
 			if (confirm("{LANG.block_weight_confirm}")) {
-				$.post("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=blocks_reset_order", "checkss={CHECKSS}", function(theResponse) {
+				$.post("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=blocks_reset_order", "checkss={CHECKSS}", function(theResponse) {
 					alert(theResponse);
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
+					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 				});
 			}
 		});
@@ -119,11 +119,11 @@
 			if (confirm("{LANG.block_delete_confirm}")) {
 				$.ajax({
 					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_del_group",
+					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_del_group",
 					data : "list=" + list,
 					success : function(data) {
 						alert(data);
-						window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
+						window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 					}
 				});
 			}
@@ -144,11 +144,11 @@
 			var bid = $(this).attr("title");
 			$.ajax({
 				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_change_pos",
+				url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_change_pos",
 				data : "bid=" + bid + "&pos=" + pos,
 				success : function(data) {
 					alert(data);
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
+					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 				}
 			});
 		});

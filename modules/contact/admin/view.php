@@ -69,25 +69,30 @@ if( isset( $contact_allowed['reply'][$row['cid']] ) )
 	$xtpl->parse( 'main.reply' );
 }
 
-if( $row['is_reply'] and ! empty( $row['reply_content'] ) )
+if( $row['is_reply'] )
 {
-	$sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval( $row['reply_aid'] );
-	$adm_row = $db->query( $sql )->fetch();
-
-	$reply_name = $adm_row['admin_fullname'];
-	if( empty( $reply_name ) )
+	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id=' . $id );
+	while( $row = $result->fetch() )
 	{
-		$reply_name = $adm_row['admin_login'];
+		$sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval( $row['reply_aid'] );
+		$adm_row = $db->query( $sql )->fetch();
+
+		$reply_name = $adm_row['admin_fullname'];
+		if( empty( $reply_name ) )
+		{
+			$reply_name = $adm_row['admin_login'];
+		}
+		$reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval( $row['reply_aid'] ) . '">' . $reply_name . '</a>';
+
+		$adm_row['reply_name'] = $reply_name;
+		$adm_row['reply_time'] = nv_date( 'H:i d/m/Y', $row['reply_time'] );
+		$adm_row['sender_name'] = $sender_name;
+		$adm_row['reply_content'] = $row['reply_content'];
+
+		$xtpl->assign( 'REPLY', $adm_row );
+
+		$xtpl->parse( 'main.data_reply' );
 	}
-	$reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval( $row['reply_aid'] ) . '">' . $reply_name . '</a>';
-
-	$adm_row['reply_name'] = $reply_name;
-	$adm_row['reply_time'] = nv_date( 'H:i d/m/Y', $row['reply_time'] );
-	$adm_row['sender_name'] = $sender_name;
-
-	$xtpl->assign( 'REPLY', $adm_row );
-
-	$xtpl->parse( 'main.data_reply' );
 }
 
 $xtpl->parse( 'main' );

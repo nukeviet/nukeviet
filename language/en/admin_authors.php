@@ -6,7 +6,7 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -136,5 +136,17 @@ $lang_module['add_error_choose'] = 'Error: You did not appoint a member to the a
 $lang_module['add_error_exist'] = 'Error: This user is an administrator';
 $lang_module['add_error_notexist'] = 'Error: This member does not exist';
 $lang_module['add_error_diff'] = 'An undefined error occurred';
+$lang_module['is_suspend2'] = 'Suspended';
+$lang_module['username_noactive'] = 'Error: Acount: %s is not enabled, you will need to activate this account before adding site administrator';
+$lang_module['adminrelogin_max'] = 'Filed admin if the wrong type is entered, then the system will deprive admin access and ejected homepage';
+$lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
+$lang_module['action_account'] = 'Members account';
+$lang_module['action_account_nochange'] = 'Keep members account';
+$lang_module['action_account_suspend'] = 'Lock member account';
+$lang_module['action_account_del'] = 'Delete member account';
+$lang_module['module_admin'] = 'Module system powers';
+$lang_module['number'] = 'No.';
+$lang_module['module'] = 'Module name';
+$lang_module['custom_title'] = 'Title';
 
 ?>

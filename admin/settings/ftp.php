@@ -135,13 +135,14 @@ if( $sys_info['ftp_support'] )
 
 		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
 
-		$db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
 		foreach( $array_config as $config_name => $config_value )
 		{
 			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
 			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 			$sth->execute();
 		}
+		
 		if( empty( $error ) )
 		{
 			nv_save_file_config_global();

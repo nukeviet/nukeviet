@@ -3,27 +3,6 @@
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
-/**
- * This file was added automatically by CKEditor builder.
- * You may re-use it at any time to build CKEditor again.
- *
- * If you would like to build CKEditor online again
- * (for example to upgrade), visit one the following links:
- *
- * (1) http://ckeditor.com/builder
- *     Visit online builder to build CKEditor from scratch.
- *
- * (2) http://ckeditor.com/builder/3f69a1cfdcace25ec66026c004caaea0
- *     Visit online builder to build CKEditor, starting with the same setup as before.
- *
- * (3) http://ckeditor.com/builder/download/3f69a1cfdcace25ec66026c004caaea0
- *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
- *
- * NOTE:
- *    This file is not used by CKEditor, you may remove it.
- *    Changing this file will not change your CKEditor configuration.
- */
-
 var CKBUILDER_CONFIG = {
 	skin: 'moono',
 	preset: 'full',
@@ -64,6 +43,7 @@ var CKBUILDER_CONFIG = {
 		'googledocs' : 1,
 		'horizontalrule' : 1,
 		'htmlwriter' : 1,
+		'iframe' : 1,
 		'image2' : 1,
 		'indent' : 1,
 		'indentblock' : 1,
@@ -99,18 +79,11 @@ var CKBUILDER_CONFIG = {
 		'toolbar' : 1,
 		'undo' : 1,
 		'widget' : 1,
-		'wysiwygarea' : 1
+		'wysiwygarea' : 1,
+		'youtube' : 1
 	},
 	languages : {
-		'ar' : 1,
-		'cs' : 1,
-		'de' : 1,
 		'en' : 1,
-		'fr' : 1,
-		'ja' : 1,
-		'ru' : 1,
-		'tr' : 1,
 		'vi' : 1,
-		'zh-cn' : 1
 	}
 };

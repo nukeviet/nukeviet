@@ -160,7 +160,7 @@
 #users .uinfo .uimg img {
 	border: #CCC 1px solid;
 	padding: 2px;
-	width: 80px
+	max-width: 80px
 }
 
 #users .con {

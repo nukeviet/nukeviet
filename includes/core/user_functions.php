@@ -149,10 +149,10 @@ function nv_blocks_content( $sitecontent )
 				'block_config' => $block_config
 			);
 		}
+		$_result->closeCursor();
 
 		if( isset( $cache[$module_info['funcs'][$op]['func_id']] ) ) $blocks = $cache[$module_info['funcs'][$op]['func_id']];
 
-		$_result->closeCursor();
 		$cache = serialize( $cache );
 		nv_set_cache( $cache_file, $cache );
 
@@ -178,13 +178,13 @@ function nv_blocks_content( $sitecontent )
 				$blockTitle = $_row['blockTitle'];
 				$content = '';
 
-				if( $_row['module'] == 'global' and file_exists( NV_ROOTDIR . '/includes/blocks/' . $_row['file_name'] ) )
+				if( $_row['module'] == 'theme' and file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'] ) )
 				{
-					include NV_ROOTDIR . '/includes/blocks/' . $_row['file_name'] ;
+					include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'];
 				}
 				elseif( isset( $site_mods[$_row['module']]['module_file'] ) and ! empty( $site_mods[$_row['module']]['module_file'] ) and file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'] ) )
 				{
-					include NV_ROOTDIR . '/modules/' . $site_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'] ;
+					include NV_ROOTDIR . '/modules/' . $site_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'];
 				}
 				unset( $block_config );
 
@@ -612,14 +612,26 @@ function nv_html_site_js()
  */
 function nv_admin_menu()
 {
-	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head;
+	global $lang_global, $admin_info, $module_info, $module_name, $db, $my_head, $global_config;
 
-	$block_theme = 'default';
+	if( $module_info['theme'] == $module_info['template'] and file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $module_info['template'];
+	}
+	elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/system/admin_toolbar.tpl" ) )
+	{
+		$block_theme = $global_config['site_theme'];
+	}
+	else
+	{
+		$block_theme = 'default';
+	}
 
 	$xtpl = new XTemplate( 'admin_toolbar.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/system' );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'ADMIN_INFO', $admin_info );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'TEMPLATE', $block_theme );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
 	$xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id'] );
 
@@ -640,6 +652,8 @@ function nv_admin_menu()
 		$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 		$xtpl->parse( 'main.is_modadmin' );
 	}
+
+	$xtpl->parse( 'main.lev' . $admin_info['level'] );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );

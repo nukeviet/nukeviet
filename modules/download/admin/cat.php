@@ -38,7 +38,7 @@ function nv_FixWeightCat( $parentid = 0 )
  */
 function nv_del_cat( $catid )
 {
-	global $db, $module_data, $admin_info;
+	global $db, $module_name, $module_data, $admin_info;
 
 	$sql = 'SELECT parentid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
 	list( $p, $title ) = $db->query( $sql )->fetch( 3 );
@@ -55,7 +55,7 @@ function nv_del_cat( $catid )
 	if( ! empty( $ids ) )
 	{
 		$ids = implode( ',', $ids );
-		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid IN (' . $ids . ')';
+		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id IN (' . $ids . ')';
 		$db->query( $sql );
 
 		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid IN (' . $ids . ')';
@@ -74,6 +74,8 @@ function nv_del_cat( $catid )
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id=' . $catid;
 	$db->query( $sql );
+
+    nv_del_moduleCache( $module_name );
 
 	nv_insert_logs( NV_LANG_DATA, $module_data, 'Delete Category', $title, $admin_info['userid'] );
 }
@@ -173,7 +175,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 			$data_insert['description'] = $array['description'];
 			$data_insert['groups_view'] = $array['groups_view'];
 			$data_insert['groups_download'] = $array['groups_download'];
-			
+
 			$catid = $db->insert_id( $sql, 'id', $data_insert );
 
 			if( ! $catid )
@@ -382,7 +384,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE id!=' . $catid . ' AND alias= :alias' );
 				$stmt->bindParam( ':alias', $array['alias'], PDO::PARAM_STR );
 				$stmt->execute();
-				
+
 				$count = $stmt->fetchColumn();
 				if( $count )
 				{

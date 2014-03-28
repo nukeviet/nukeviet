@@ -97,7 +97,7 @@
 						<!-- END: required -->
 					</label>
 					<br>
-					<i>{FIELD.description}</i>
+					<em>{FIELD.description}</em>
 				</dt>
 				<dd class="fr">
 					<!-- BEGIN: textbox -->

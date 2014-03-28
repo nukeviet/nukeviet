@@ -73,7 +73,8 @@ function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = 
  */
 function nv_add_editor_js()
 {
-	return '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js"></script>';
+	global $global_config;
+	return '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
 
 ?>

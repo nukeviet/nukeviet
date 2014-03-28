@@ -23,7 +23,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td style="color:red"><b>{LANG.autoinstall_theme_error_warning_overwrite}</b></td>
+			<td style="color:red"><strong>{LANG.autoinstall_theme_error_warning_overwrite}</strong></td>
 		</tr>
 	</tbody>
 </table>
@@ -41,7 +41,7 @@
 			if (confirm("{LANG.autoinstall_theme_error_warning_overwrite}")) {
 				$("#message").show();
 				$("#step1").html("");
-				$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function() {
+				$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&overwrite={OVERWRITE}", function() {
 					$("#message").hide();
 				});
 			}
@@ -72,7 +72,7 @@
 		$("input[name=checkfile]").click(function() {
 			$("#message").show();
 			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
 				$("#message").hide();
 			});
 		});
@@ -116,7 +116,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td class="center" style="color:green"><strong>{LANG.autoinstall_theme_unzip_success}</strong>
+			<td class="center" style="color:green"><strong>{NV_REDIRECT_LANG}</strong>
 			<br />
 			<br />
 			<a href="{NV_REDIRECT}" title="{LANG.autoinstall_theme_unzip_setuppage}">{LANG.autoinstall_theme_unzip_setuppage}</a></td>
@@ -129,7 +129,6 @@
 	function redirect_page() {
 		parent.location = "{NV_REDIRECT}";
 	}
-
 	//]]>
 </script>
 <!-- END: complete -->

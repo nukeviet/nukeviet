@@ -174,7 +174,6 @@ function is_array(mixed_var) {
 	return ( mixed_var instanceof Array );
 }
 
-// strip_tags('<p>Kevin</p> <b>van</b> <i>Zonneveld</i>', '<i><b>');
 function strip_tags(str, allowed_tags) {
 	var key = '', allowed = false;
 	var matches = [];
@@ -554,7 +553,7 @@ function nv_DigitalClock(div_id) {
 
 function nv_search_submit(search_query, search_button, minlength, maxlength) {
 	var query = document.getElementById(search_query);
-	var format_query = formatStringAsUriComponent(query.value);
+	var format_query = strip_tags(query.value);
 	var allowed = (format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
 	if (!allowed) {
 		query.value = format_query;
@@ -677,6 +676,22 @@ function NewWindow(mypage, myname, w, h, scroll) {
 	TopPosition = (screen.height) ? (screen.height - h) / 2 : 0;
 	settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars=' + scroll + ',resizable'
 	win = window.open(mypage, myname, settings)
+}
+
+function nv_setIframeHeight(iframeId) {
+	var ifDoc, ifRef = document.getElementById(iframeId);
+	try {
+		ifDoc = ifRef.contentWindow.document.documentElement;
+	} catch( e ) {
+		try {
+			ifDoc = ifRef.contentDocument.documentElement;
+		} catch(ee) {
+		}
+	}
+	if (ifDoc) {
+		ifRef.height = 1;
+		ifRef.height = ifDoc.scrollHeight;
+	}
 }
 
 nv_check_timezone();

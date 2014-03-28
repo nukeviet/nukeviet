@@ -8,22 +8,8 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-if( defined( 'NV_CLASS_IPS_PHP' ) ) return;
-define( 'NV_CLASS_IPS_PHP', true );
-
-/**
- * ips
- *
- * @package
- * @author
- * @copyright anhtunguyen
- * @version 2009
- * @access public
- */
 class ips
 {
-	public $server_ip;
 	public $client_ip;
 	public $forward_ip;
 	public $remote_addr;
@@ -133,10 +119,7 @@ class ips
 		{
 			return $clientip;
 		}
-		elseif( $_SERVER['SERVER_NAME'] == 'localhost' )
-		{
-			return '127.0.0.1';
-		}
+		else
 		{
 			return 'none';
 		}
@@ -224,6 +207,11 @@ class ips
 					return $ip;
 				}
 			}
+		}
+
+		if( $_SERVER['SERVER_NAME'] == 'localhost' )
+		{
+			return '127.0.0.1';
 		}
 		return 'none';
 	}

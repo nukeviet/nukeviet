@@ -126,7 +126,7 @@
 </script>
 <!-- BEGIN: newMods -->
 <div style="text-align:left;">
-	<a id="newModList" class="button1" href="#"><span><span>{LANG.moduleNote2_link}</span></span></a>
+	<a id="newModList" class="button button-h" href="#">{LANG.moduleNote2_link}</a>
 </div>
 <script type="text/javascript">
 	//<![CDATA[

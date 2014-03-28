@@ -57,12 +57,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_site['site_email'] = $site_email;
 	}
 
-	$error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
-	if( nv_check_valid_email( $error_send_email ) == '' )
-	{
-		$array_config_site['error_send_email'] = $error_send_email;
-	}
-
 	$preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
 	$array_config_site['date_pattern'] = nv_substr( $nv_Request->get_title( 'date_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
 	$array_config_site['time_pattern'] = nv_substr( $nv_Request->get_title( 'time_pattern', 'post', '', 0, $preg_replace ), 0, 255 );
@@ -96,7 +90,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
 				$dm = preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $dm );
-				$dm = nv_check_domain( strtolower( $dm ) );
+				$dm = nv_check_domain( nv_strtolower( $dm ) );
 				if( ! empty( $dm ) )
 				{
 					$array_config_global['my_domains'][] = $dm;
@@ -133,6 +127,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array_config_global['rewrite_op_mod'] = '';
 		}
 
+        $error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
+        if( nv_check_valid_email( $error_send_email ) == '' )
+        {
+            $array_config_global['error_send_email'] = $error_send_email;
+        }
+
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
 		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
 
@@ -145,16 +145,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 
 		nv_save_file_config_global();
-
-		if( $global_config['rewrite_optional'] != $array_config_global['rewrite_optional'] )
+		
+		$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
+		$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
+		$rewrite = nv_rewrite_change( $array_config_global );
+		if( empty( $rewrite[0] ) )
 		{
-			$array_config_global['rewrite_endurl'] = $global_config['rewrite_endurl'];
-			$array_config_global['rewrite_exturl'] = $global_config['rewrite_exturl'];
-			$rewrite = nv_rewrite_change( $array_config_global );
-			if( empty( $rewrite[0] ) )
-			{
-				$errormess .= sprintf( $lang_module['err_writable'], $rewrite[1] );
-			}
+			$errormess .= sprintf( $lang_module['err_writable'], $rewrite[1] );
 		}
 	}
 	else
@@ -189,6 +186,8 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
+    $xtpl->parse( 'main.error_send_email' );
+
 	$result = $db->query( "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'" );
 	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{

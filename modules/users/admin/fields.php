@@ -335,9 +335,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
 					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
-					" . $dataform['show_profile'] . ", '" . $dataform['class'] . "', '" . serialize( $language ) . "', :default_value)";
+					" . $dataform['show_profile'] . ", :class, '" . serialize( $language ) . "', :default_value)";
 
 				$data_insert = array();
+                $data_insert['class'] = $dataform['class'];
 				$data_insert['default_value'] = $dataform['default_value'];
 				$dataform['fid'] = $db->insert_id( $sql, 'fid', $data_insert );
 				if( $dataform['fid'] )
@@ -381,15 +382,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				show_register = '" . $dataform['show_register'] . "',
 				user_editable = '" . $dataform['user_editable_save'] . "',
 				show_profile = '" . $dataform['show_profile'] . "',
-				class = '" . $dataform['class'] . "',
+				class = :class,
 				language='" . serialize( $language ) . "',
 				default_value= :default_value
 				WHERE fid = " . $dataform['fid'];
 
 			$stmt = $db->prepare( $query ) ;
+            $stmt->bindParam( ':class', $dataform['class'], PDO::PARAM_STR );
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
 			$stmt->execute();
-			$save = $db->query( $query );
+			$save = $stmt->rowCount();
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
 			{
 				$type_date = '';

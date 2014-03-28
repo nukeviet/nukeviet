@@ -2,7 +2,7 @@
 <table class="tab1">
 	<tbody>
 		<tr>
-			<td class="center"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="button1"><span><span>{LANG.add_row_title}</span></span></a></td>
+			<td class="center"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="button button-h">{LANG.add_row_title}</a></td>
 		</tr>
 	</tbody>
 </table>
@@ -24,7 +24,7 @@
 	<tbody>
 		<!-- BEGIN: row -->
 		<tr>
-			<td>{ROW.full_name}</td>
+			<td><a href="{ROW.url_part}" target="_blank">{ROW.full_name}</a></td>
 			<td>{ROW.email}</td>
 			<td>{ROW.phone}</td>
 			<td>{ROW.fax}</td>
@@ -35,8 +35,8 @@
 				<!-- END: status -->
 			</select></td>
 			<td class="center">
-				<i class="icon-edit icon-large">&nbsp;</i> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; 
-				<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_row_del('{ROW.id}')">{GLANG.delete}</a>
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del('{ROW.id}')">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: row -->

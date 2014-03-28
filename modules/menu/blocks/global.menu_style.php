@@ -28,7 +28,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		$html .= "	<td>" . $lang_block['menu'] . "</td>";
 		$html .= "	<td><select name=\"menuid\">\n";
 
-		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module . "_menu ORDER BY id DESC";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module . " ORDER BY id DESC";
 		$list = nv_db_cache( $sql, 'id', $module );
 		foreach( $list as $l )
 		{
@@ -291,6 +291,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				$xtpl->parse( 'main.loopcat1' );
 			}
 		}
+		$xtpl->assign( 'MENUID', $block_config['bid'] );
 		$xtpl->parse( 'main' );
 
 		return $xtpl->text( 'main' );
@@ -376,7 +377,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 				}
 			}
 		}
-
+		$xtpl->assign( 'MENUID', $block_config['bid'] );
 		$xtpl->parse( 'main' );
 		return ( $xtpl->text( 'main' ) );
 	}

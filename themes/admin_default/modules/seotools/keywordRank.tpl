@@ -77,20 +77,20 @@
 		</dd>
 		<dd class="fl">
 			<div id="fsubmit">
-				<a id="keywordRankCheck" class="button1" href="#"><span><span>{LANG.check}</span></span></a>
+				<a id="keywordRankCheck" class="button button-h" href="#">{LANG.check}</a>
 			</div>
-			<div id="load_img"></div>
+			<div id="load_img">&nbsp;</div>
 		</dd>
 	</dl>
 </div>
 <br />
 <br />
-<div id="keywordRankResult"></div>
+<div id="keywordRankResult">&nbsp;</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
 		$("#keywordRankCheck").click(function() {
-			var keyword = $("#keyword").attr('value');
+			var keyword = $("#keyword").val();
 			keyword = formatStringAsUriComponent(keyword);
 			$("#keyword").attr('value', keyword);
 			if (keyword.length < 3 || keyword.length > 60) {
@@ -105,9 +105,9 @@
 			$("#accuracy").attr('disabled', 'disabled');
 			$("#fsubmit").hide();
 			$("#load_img").html('<p style="text-align:center;"><img alt="" src="{NV_BASE_SITEURL}images/load.gif" width="16" height="16" /></p>');
-			$("#keywordRankResult").text("").load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
-			return false
-		})
+			$("#keywordRankResult").text("").load("index.php?{NV_NAME_VARIABLE}=seotools&{NV_OP_VARIABLE}=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
+			return false;
+		});
 	});
 	//]]>
 </script>

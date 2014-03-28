@@ -45,7 +45,7 @@ $lang_global['usernamelong'] = 'Tên tài khoản &ldquo;<strong>%1$s</strong>&r
 $lang_global['usernameadjective'] = 'Tên tài khoản &ldquo;<strong>%1$s</strong>&rdquo; quá ngắn. Ít nhất phải có &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['unick_type_1'] = 'Tài khoản chỉ được sử dụng chữ số';
 $lang_global['unick_type_2'] = 'Tài khoản chỉ được sử dụng chữ số và chữ cái';
-$lang_global['unick_type_3'] = 'Tài khoản chỉ được sử dụng chữ số, chữ cái, và các ký tự sau nằm giữa: gạch ngan, gạch dưới, cách trống';
+$lang_global['unick_type_3'] = 'Tài khoản chỉ được sử dụng chữ số, chữ cái, và các ký tự sau nằm giữa: gạch ngang, gạch dưới, cách trống';
 $lang_global['unick_type_4'] = 'Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt';
 
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
@@ -70,7 +70,7 @@ $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$
 $lang_global['admin_page'] = 'Quản lý site';
 $lang_global['admin_module_sector'] = 'Quản lý module';
 $lang_global['adminlogin'] = 'Đăng nhập quản trị hệ thống';
-$lang_global['module_for_admin'] = 'Khu vực chỉ dành cho <i>Người quản trị</i>';
+$lang_global['module_for_admin'] = 'Khu vực chỉ dành cho <em>Người quản trị</em>';
 $lang_global['in_groups'] = 'Nhóm thành viên';
 $lang_global['username'] = 'Tài khoản';
 $lang_global['password'] = 'Mật khẩu';

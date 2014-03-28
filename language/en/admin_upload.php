@@ -6,7 +6,7 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -97,7 +97,6 @@ $lang_module['imagewith'] = 'If the image width';
 $lang_module['logowith'] = 'The width of the logo';
 $lang_module['logosize3'] = 'Using the original logo size, maximum size of the logo';
 $lang_module['fileimage'] = 'image';
-
 $lang_module['uploadconfig'] = 'Upload Configuration';
 $lang_module['uploadconfig_ban_ext'] = 'Forbidden Extensions';
 $lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
@@ -110,5 +109,27 @@ $lang_module['mild_mode'] = 'Medium';
 $lang_module['lite_mode'] = 'Low';
 $lang_module['none_mode'] = 'None';
 $lang_module['upload_checking_note'] = 'Your server does not support some functions defined file types. If you chose "Strong", you will not be able to upload files to your host';
+$lang_module['rename_error_folder'] = 'Error: System can not rename folder';
+$lang_module['configlogo'] = 'Configuringf insert logo';
+$lang_module['altimage'] = 'Note for image';
+$lang_module['nv_max_width_height'] = 'Maximum size file upload';
+$lang_module['nv_auto_resize'] = 'Automatically resize larger image';
+$lang_module['thumbconfig'] = 'Configuring thumbnail';
+$lang_module['thumb_width_height'] = 'Thumbnail size';
+$lang_module['thumb_note'] = 'Thumbnail image will be used in place using small image size will not change the existing file';
+$lang_module['thumb_type'] = 'resize according plan';
+$lang_module['thumb_type_1'] = 'resize according width';
+$lang_module['thumb_type_2'] = 'resize according height';
+$lang_module['thumb_type_3'] = 'resize according two dimensions';
+$lang_module['thumb_type_4'] = 'resize and crop image according size';
+$lang_module['thumb_quality'] = 'Resize image quality';
+$lang_module['thumb_dir'] = 'Folder';
+$lang_module['thumb_dir_default'] = 'Default configuration';
+$lang_module['search'] = 'Search';
+$lang_module['order0'] = 'Sort by date new';
+$lang_module['order1'] = 'Sort by date old';
+$lang_module['order2'] = 'Sort by file name';
+$lang_module['searchdir'] = 'Search in folder';
+$lang_module['searchkey'] = 'Search key';
 
 ?>

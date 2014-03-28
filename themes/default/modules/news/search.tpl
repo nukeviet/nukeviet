@@ -44,8 +44,7 @@
 				</tr>
 				<tr>
 					<td class="cltxt"> {LANG.finter_title} : </td>
-					<td><input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/> {LANG.to_date} <input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" /></td>
-					<td class="cltxt"><img src="{NV_BASE_SITEURL}images/refresh.png" onclick="remove_text()" style="cursor:pointer"/></td>
+					<td><input class="datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" type="text"/> {LANG.to_date} <input class="datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" type="text" /></td>
 				</tr>
 				<tr>
 					<td class="cltxt">&nbsp;</td>
@@ -79,7 +78,7 @@
 	</div>
 	<!-- BEGIN: noneresult -->
 	<div class="result-content">
-		{LANG.search_none} : "<b>{KEY}</b>" {LANG.search_in_module} <b>{INMOD}</b>
+		{LANG.search_none} : "<strong>{KEY}</strong>" {LANG.search_in_module} <strong>{INMOD}</strong>
 	</div>
 	<!-- END: noneresult -->
 	<div class="cl-result">
@@ -109,14 +108,14 @@
 		<!-- END: pages_result -->
 	</div>
 	<div class="cl-info">
-		<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
+		<em>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
 		<br />
-		{LANG.info_adv} </i>
+		{LANG.info_adv} </em>
 	</div>
 </div>
 <div class="result-frame">
 	<div>
-		<b>{LANG.search_adv_internet} :</b>
+		<strong>{LANG.search_adv_internet} :</strong>
 	</div>
 	<div align="center">
 		<form method="get" action="http://www.google.com/search" target="_top">

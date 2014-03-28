@@ -32,71 +32,46 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 
 	if( $nv_Request->isset_request( 'activelang', 'get' ) and $checksess == md5( 'activelang_' . $keylang . session_id() ) and preg_match( '/^[a-z]{2}$/', $keylang ) )
 	{
-		$activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
-		$allow_sitelangs = $global_config['allow_sitelangs'];
-
-		if( $activelang )
+        if( empty( $global_config['idsite'] ) )
 		{
-			$allow_sitelangs[] = $keylang;
-		}
-		elseif( $keylang != $global_config['site_lang'] )
-		{
-			$allow_sitelangs = array_diff( $allow_sitelangs, array( $keylang ) );
-		}
+		    $activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
+            $allow_sitelangs = $global_config['allow_sitelangs'];
 
-		$allow_sitelangs = array_unique( $allow_sitelangs );
+            if( $activelang )
+            {
+                $allow_sitelangs[] = $keylang;
+            }
+            elseif( $keylang != $global_config['site_lang'] )
+            {
+                $allow_sitelangs = array_diff( $allow_sitelangs, array( $keylang ) );
+            }
 
-		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'" );
-		$sth->bindValue( ':config_value', implode( ',', $allow_sitelangs ), PDO::PARAM_STR );
-		$sth->execute();
+            $allow_sitelangs = array_unique( $allow_sitelangs );
 
-		$temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
+            $sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'" );
+            $sth->bindValue( ':config_value', implode( ',', $allow_sitelangs ), PDO::PARAM_STR );
+            $sth->execute();
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], ' langkey : ' . $keylang . ' [ ' . $temp . ' ]', $admin_info['userid'] );
-		if( empty( $global_config['idsite'] ) )
-		{
+            $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
+
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], ' langkey : ' . $keylang . ' [ ' . $temp . ' ]', $admin_info['userid'] );
+
 			nv_save_file_config_global();
+
+            $xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+            $xtpl->parse( 'activelang' );
+            $contents = $xtpl->text( 'activelang' );
+
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_admin_theme( $contents );
+            include NV_ROOTDIR . '/includes/footer.php';
+            exit();
 		}
-		else
-		{
-			$row = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site WHERE idsite=' . $global_config['idsite'] )->fetch();
-
-			$array_domains = array_map( 'trim', explode( ',', $row['parked_domains'] ) );
-			$array_domains[] = NV_SERVER_NAME;
-			$array_domains[] = $row['domain'];
-			$array_domains = array_unique( $array_domains );
-			foreach( $array_domains as $domains )
-			{
-				if( ! empty( $domains ) )
-				{
-					$content_config = "<?php\n\n";
-					$content_config .= NV_FILEHEAD . "\n\n";
-					$content_config .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
-					$content_config .= "{\n";
-					$content_config .= "\tdie( 'Stop!!!' );\n";
-					$content_config .= "}\n\n";
-
-					$content_config .= "\$db_config['dbsite'] = '" . $db_config['dbsite'] . "';\n";
-					$content_config .= "\$global_config['idsite'] = " . $global_config['idsite'] . ";\n";
-					$content_config .= "\$global_config['site_dir'] = '" . $global_config['site_dir'] . "';\n";
-					$content_config .= "\$global_config['allow_sitelangs'] = '" . nv_unhtmlspecialchars( implode( ',', $allow_sitelangs ) ) . "';\n";
-					$content_config .= "\n";
-					$content_config .= "?>";
-
-					file_put_contents( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $domains . '.php', $content_config, LOCK_EX );
-				}
-			}
-			nv_delete_all_cache();
-		}
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-
-		$xtpl->parse( 'activelang' );
-		$contents = $xtpl->text( 'activelang' );
-
-		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_admin_theme( $contents );
-		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
+        else
+        {
+            Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=site&' . NV_OP_VARIABLE . '=edit&idsite=' . $global_config['idsite'] );
+            die();
+        }
 	}
 	elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
 	{

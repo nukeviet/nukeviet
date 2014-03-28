@@ -24,7 +24,7 @@
 		<tfoot>
 			<tr>
 				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></td>
-				<td colspan="5"><a class="delete_icon" href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');">{LANG.bt_del_row_title}</a> &nbsp; <a class="delete_icon" href="javascript:void(0)" onclick="nv_delall_submit();">{LANG.delall}</a></td>
+				<td colspan="5"><em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');">{LANG.bt_del_row_title}</a> &nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0)" onclick="nv_delall_submit();">{LANG.delall}</a></td>
 			</tr>
 		</tfoot>
 		<tbody>

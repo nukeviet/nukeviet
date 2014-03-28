@@ -6,7 +6,7 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -55,5 +55,13 @@ $lang_global['login_error_password'] = 'Error: Password has not announced or dec
 $lang_global['login_error_security'] = 'Error: Security Code not valid ! (Only Latin alphabet. Must have %1$s characters)';
 $lang_global['error_zlib_support'] = 'Error: Your server does not support zlib extension, You need contact your hosting provider to enable the zlib extension.';
 $lang_global['error_zip_extension'] = 'Error: Your server does not support ZIP extension, You need contact your hosting provider to enable the ZIP extension.';
+$lang_global['mod_seotools'] = 'SEO tool';
+$lang_global['mod_subsite'] = 'Subsite manage';
+$lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done the data will not be stored';
+$lang_global['timeoutsess_nouser'] = 'You did not use the site';
+$lang_global['timeoutsess_click'] = 'Click here to remain logged';
+$lang_global['timeoutsess_timeout'] = 'Timeout';
+$lang_global['length_characters'] = 'Length characters';
+$lang_global['length_suggest_max'] = 'Should enter maximum %s characters';
 
 ?>

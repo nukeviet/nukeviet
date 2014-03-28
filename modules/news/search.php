@@ -40,7 +40,7 @@ if( $all_page )
 	{
 		$content = $hometext . $bodytext;
 
-		$url = $link . $array_cat_alias[$catid] . '/' . $alias . '-' . $id;
+		$url = $link . $array_cat_alias[$catid] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 
 		$result_array[] = array(
 			'link' => $url,

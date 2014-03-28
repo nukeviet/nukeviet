@@ -172,7 +172,7 @@ $info = '';
 $array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
 $checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
-//Thay doi cau hoi - cau tra loi du phong
+// Thay doi cau hoi - cau tra loi du phong
 if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 {
 	$oldpassword = $row['password'];
@@ -282,13 +282,12 @@ else
 	$custom_fields = $result->fetch();
 }
 
-//Thay doi thong tin khac
+// Thay doi thong tin khac
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 
 $array_data['username'] = $row['username'];
 $array_data['email'] = $row['email'];
-$array_data['photo'] = $row['photo'];
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
 $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) ) ) ? 1 : 0;
@@ -296,11 +295,14 @@ $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! em
 if( $checkss == $array_data['checkss'] )
 {
 	$error = array();
+	
 	$array_data['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
+	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
 	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
-
+	$array_data['photo_delete'] = $nv_Request->get_int( 'photo_delete', 'post', 0 );
+	
 	if( $array_data['allowloginchange'] )
 	{
 		$array_data['username'] = nv_substr( $nv_Request->get_title( 'username', 'post', '', 1 ), 0, NV_UNICKMAX );
@@ -374,14 +376,16 @@ if( $checkss == $array_data['checkss'] )
 					" . NV_CURRENTTIME . ",
 					'',
 					'',
-					:checknum )";
+					:checknum,
+					'' )";
 
 				$data_insert = array();
 				$data_insert['md5_username'] = $md5_username;
 				$data_insert['email_new'] = $email_new;
 				$data_insert['checknum'] = $checknum;
-				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
 
+				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
+				
 				if( $userid_check > 0 )
 				{
 					$subject = $lang_module['email_active'];
@@ -402,66 +406,89 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
+	// Check photo
+	if( $array_data['photo_delete'] or empty( $row['photo'] ) )
+	{
+		if( ! empty( $array_data['photo'] ) )
+		{
+			$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $array_data['photo'];
+			
+			if( ! file_exists( $tmp_photo ) )
+			{
+				$array_data['photo'] = '';
+				$error[] = $lang_module['avata_news_not_exists'];
+			}
+			else
+			{
+				$new_photo_name = $array_data['photo'];
+				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
+				
+				$new_photo_name2 = $new_photo_name;
+				$i = 1;
+				while( file_exists( $new_photo_path . $new_photo_name2 ) )
+				{
+					$new_photo_name2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $new_photo_name );
+					++ $i;
+				}
+				$new_photo = $new_photo_path . $new_photo_name2;
+				
+				if( nv_copyfile( $tmp_photo, $new_photo ) )
+				{
+					$array_data['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
+				}
+				else
+				{
+					$array_data['photo'] = '';
+					$error[] = $lang_module['avata_news_copy_error'];
+				}
+				
+				nv_deletefile( $tmp_photo );
+			}			
+		}
+		
+		// Delete old photo
+		if( $array_data['photo_delete'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
+		{
+			nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
+		}
+	}
+	else
+	{
+		$array_data['photo'] = $row['photo'];
+		
+		if( ! empty( $array_data['photo'] ) )
+		{
+			if( ! file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
+			{
+				$array_data['photo'] = '';
+				$error[] = $lang_module['avata_old_not_exists'];
+			}
+		}
+	}
+
 	$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET
 		username= :username,
 		md5username= :md5username,
 		email= :email,
 		full_name= :full_name,
 		gender= :gender,
+		photo= :photo,
 		birthday= :birthday,
 		view_mail= :view_mail
 		WHERE userid=' . $user_info['userid'] );
+
+	$md5username = nv_md5safe( $array_data['username'] );
+	$photo = nv_unhtmlspecialchars( $array_data['photo'] );
+	
 	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
-	$stmt->bindParam( ':md5username', nv_md5safe( $array_data['username'] ), PDO::PARAM_STR );
-	$stmt->bindParam( ':email', $array_data['username'], PDO::PARAM_STR );
+	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
+	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
 	$stmt->bindParam( ':full_name', $array_data['full_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
+	$stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
 	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
 	$stmt->bindParam( ':view_mail', $array_data['view_mail'], PDO::PARAM_STR );
 	$stmt->execute();
-
-	if( isset( $_FILES['avatar'] ) and is_uploaded_file( $_FILES['avatar']['tmp_name'] ) )
-	{
-		require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
-
-		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'] );
-		$upload_info = $upload->save_file( $_FILES['avatar'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
-
-		@unlink( $_FILES['avatar']['tmp_name'] );
-
-		if( empty( $upload_info['error'] ) )
-		{
-			@chmod( $upload_info['name'], 0644 );
-			if( ! empty( $array_data['photo'] ) and is_file( NV_ROOTDIR . '/' . $array_data['photo'] ) )
-			{
-				@nv_deletefile( NV_ROOTDIR . '/' . $array_data['photo'] );
-			}
-
-			$image = $upload_info['name'];
-			$basename = $upload_info['basename'];
-			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $user_info['userid'] . '\2', $basename );
-
-			require_once NV_ROOTDIR . '/includes/class/image.class.php' ;
-
-			$_image = new image( $image, 80, 80 );
-			$_image->resizeXY( 80, 80 );
-			$_image->save( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, $basename );
-			$file_name = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename;
-			if( file_exists( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name . '/' . $basename ) )
-			{
-				//@chmod($file_name, 0644);
-				$file_name = str_replace( NV_ROOTDIR . '/', '', $file_name );
-				@nv_deletefile( $upload_info['name'] );
-			}
-			$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $user_info['userid'] );
-			$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR );
-			$stmt->execute();
-		}
-		else
-		{
-			$error[] = $lang_module['avata'];
-		}
-	}
 
 	$info = $lang_module['editinfo_ok'];
 	$sec = 3;
@@ -509,10 +536,14 @@ else
 	$array_data['gender'] = $row['gender'];
 	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
 	$array_data['view_mail'] = intval( $row['view_mail'] );
+	$array_data['photo'] = $row['photo'];
+	$array_data['photo_delete'] = 0;
 }
 
+// Checked viewmail
 $array_data['view_mail'] = $array_data['view_mail'] ? ' selected="selected"' : '';
 
+// Gender data
 $array_data['gender_array'] = array();
 $array_data['gender_array']['N'] = array(
 	'value' => 'N',
@@ -529,6 +560,19 @@ $array_data['gender_array']['F'] = array(
 	'title' => $lang_module['female'],
 	'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' )
 );
+
+// Check photo path
+if( ! empty( $array_data['photo'] ) )
+{
+	if( file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
+	{
+		$array_data['photo'] = NV_BASE_SITEURL . $array_data['photo'];
+	}
+	else
+	{
+		$array_data['photo'] = '';
+	}
+}
 
 $contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
 

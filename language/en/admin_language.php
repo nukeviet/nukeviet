@@ -6,7 +6,7 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
+* @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -84,5 +84,6 @@ $lang_module['nv_lang_check_title'] = 'Check the language has not been translate
 $lang_module['countries'] = 'Language by country';
 $lang_module['countries_name'] = 'Country';
 $lang_module['nv_admin_sl3'] = 'Select a language';
+$lang_module['nv_lang_native_name'] = 'Indigenous languages';
 
 ?>
