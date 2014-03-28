@@ -537,15 +537,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if( $error == "" )
 		{
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] );
+
 			foreach( $id_block_content as $bid_i )
 			{
 				$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
 			}
-
-			$id_block_content[] = 0;
-
-			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] . " AND bid NOT IN (" . implode( ",", $id_block_content ) . ")" );
-
+			
 			foreach( $array_block_cat_module as $bid_i )
 			{
 				nv_news_fix_block( $bid_i );
