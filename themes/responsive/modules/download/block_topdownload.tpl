@@ -5,7 +5,7 @@
 		<p class="item">
 			<a href="{loop.link}">{loop.title}</a>
 			<br/>
-			<span class="small_txt"><span class="glyphicon glyphicon-download-alt"></span> {LANG.download_hits}: {loop.download_hits}</span>
+			<span class="glyphicon glyphicon-download-alt"></span> {LANG.download_hits}: {loop.download_hits}
 		</p>
 	</li>
 	<!-- END: loop -->

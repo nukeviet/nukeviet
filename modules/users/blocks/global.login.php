@@ -54,7 +54,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 
 		if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
 		{
-
 			$in_group = "<a title='" . $lang_global['in_groups'] . "' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>" . $lang_global['in_groups'] . "</a>";
 			$xtpl->assign( 'in_group', $in_group );
 		}
