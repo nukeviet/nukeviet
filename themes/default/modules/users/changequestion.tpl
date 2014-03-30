@@ -25,8 +25,8 @@
 <!-- BEGIN: step1 -->
 <form id="changeQuestionForm" action="{FORM1_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<em class="fa fa-quote-left">&nbsp;</em> 
-		{DATA.info} 
+		<em class="fa fa-quote-left">&nbsp;</em>
+		{DATA.info}
 		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
@@ -38,7 +38,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />
-			<input type="submit" name="submit" value="{LANG.changequestion_submit1}" class="btn btn-primary"/>	
+			<input type="submit" name="submit" value="{LANG.changequestion_submit1}" class="btn btn-primary"/>
 		</div>
 	</div>
 </form>
@@ -46,17 +46,17 @@
 <!-- BEGIN: step2 -->
 <script type="text/javascript">
 function question_change() {
-	var question_option = document.getElementById( 'question' ).options[document.getElementById('question').selectedIndex].value;
-	document.getElementById('question').value = '0';
-	document.getElementById('your_question').value = question_option;
-	document.getElementById('your_question').focus();
+	var question_option = $("#question").val();
+	$("#question").val('0');
+	$("#your_question").val(question_option);
+	$("#your_question").focus();
 	return;
 }
 </script>
 <form id="changeQuestionForm" action="{FORM2_ACTION}" method="post" role="form" class="form-horizontal m-bottom">
 	<div class="m-bottom">
-		<em class="fa fa-quote-left">&nbsp;</em> 
-		{DATA.info} 
+		<em class="fa fa-quote-left">&nbsp;</em>
+		{DATA.info}
 		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">

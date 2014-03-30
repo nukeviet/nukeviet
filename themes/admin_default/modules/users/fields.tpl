@@ -29,7 +29,7 @@
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 			<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
 			<td>
-				<em class="icon-edit icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp; 
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;
 				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 			</td>
 		</tr>
@@ -290,32 +290,26 @@
 
 	function nv_chang_field(fid) {
 		var nv_timer = nv_settimeout_disable('id_weight_' + fid, 5000);
-		var new_vid = document.getElementById( 'id_weight_' + fid ).options[document.getElementById('id_weight_' + fid).selectedIndex].value;
-		nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&changeweight=1&fid=' + fid + '&new_vid=' + new_vid + '&num=' + nv_randomPassword(8), '', 'nv_chang_field_result');
-		return;
-	}
-
-	function nv_chang_field_result(res) {
-		if (res != 'OK') {
-			alert(nv_is_change_act_confirm[2]);
-		}
-		clearTimeout(nv_timer);
-		nv_show_list_field();
+		var new_vid = $('#id_weight_' + fid).val();
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'changeweight=1&fid=' + fid + '&new_vid=' + new_vid, function(res) {
+			if (res != 'OK') {
+				alert(nv_is_change_act_confirm[2]);
+			}
+			clearTimeout(nv_timer);
+			nv_show_list_field();
+		});
 		return;
 	}
 
 	function nv_del_field(fid) {
 		if (confirm(nv_is_del_confirm[0])) {
-			nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&del=1&fid=' + fid, '', 'nv_del_field_result');
-		}
-		return false;
-	}
-
-	function nv_del_field_result(res) {
-		if (res == 'OK') {
-			nv_show_list_field();
-		} else {
-			alert(nv_is_del_confirm[2]);
+			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid, function(res) {
+				if (res == 'OK') {
+					nv_show_list_field();
+				} else {
+					alert(nv_is_del_confirm[2]);
+				}
+			});
 		}
 		return false;
 	}
@@ -431,7 +425,7 @@
 		nv_load_current_date();
 	});
 	$("select[name=choicetypes]").change(function() {
-		nv_users_check_choicetypes(this)
+		nv_users_check_choicetypes(this);
 	});
 	$(".datepicker").datepicker({
 		showOn : "both",
@@ -450,7 +444,7 @@
 		} else {
 			$("#choiceitems").hide();
 			$("#choicesql").show();
-			nv_load_sqlchoice('module', '')
+			nv_load_sqlchoice('module', '');
 		}
 	}
 
@@ -468,7 +462,10 @@
 			var table_selected = (choicesql_table == "" || choicesql_table == undefined ) ? '{SQL_DATA_CHOICE.1}' : choicesql_table;
 			getval = "&module=" + module_selected + "&table=" + table_selected;
 		}
-		nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected + '&num=' + nv_randomPassword(8), 'choicesql_' + choice_name_select, '');
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'choicesql=1&choice=' + choice_name_select + getval + '&choice_seltected=' + choice_seltected, function(res) {
+			$('#choicesql_' + choice_name_select).html(res);
+
+		});
 	}
 </script>
 <!-- END: load -->
@@ -483,24 +480,21 @@
 <!-- BEGIN: choicesql -->
 <select onchange="nv_load_sqlchoice( '{choicesql_next}', '' )" name="{choicesql_name}">
 	<!-- BEGIN: loop -->
-	<option{SQL.sl} value="{SQL.key}">
-		{SQL.val}</option>
-		<!-- END: loop -->
+	<option {SQL.sl} value="{SQL.key}">{SQL.val}</option>
+	<!-- END: loop -->
 </select>
 <!-- END: choicesql -->
 <!-- BEGIN: column -->
 {LANG.field_options_choicesql_key}:
 <select name="choicesql_column_key" id="choicesql_column_key">
 	<!-- BEGIN: loop1 -->
-	<option{SQL.sl_key} value="{SQL.key}">
-		{SQL.val}</option>
-		<!-- END: loop1 -->
+	<option {SQL.sl_key} value="{SQL.key}">{SQL.val}</option>
+	<!-- END: loop1 -->
 </select>
 {LANG.field_options_choicesql_val}:
 <select name="choicesql_column_val" id="choicesql_column_val">
 	<!-- BEGIN: loop2 -->
-	<option{SQL.sl_val} value="{SQL.key}">
-		{SQL.val}</option>
-		<!-- END: loop2 -->
+	<option {SQL.sl_val} value="{SQL.key}">{SQL.val}</option>
+	<!-- END: loop2 -->
 </select>
 <!-- END: column -->

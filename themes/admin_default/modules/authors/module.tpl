@@ -36,25 +36,4 @@
 		</tbody>
 	</table>
 </div>
-<!-- BEGIN: script -->
-<script type="text/javascript">
-	function nv_chang_weight(mid) {
-		var nv_timer = nv_settimeout_disable('id_weight_' + mid, 5000);
-		var new_vid = document.getElementById( 'id_weight_' + mid ).options[document.getElementById('id_weight_' + mid).selectedIndex].value;
-		nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&changeweight=' + mid + '&new_vid=' + new_vid + '&num=' + nv_randomPassword(8), 'main_module');
-		return;
-	}
-
-	function nv_chang_act(mid, act) {
-		if (confirm(nv_is_change_act_confirm[0])) {
-			var nv_timer = nv_settimeout_disable('change_act_' + act + '_' + mid, 5000);
-			nv_ajax("post", script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=module&changact=' + act + '&mid=' + mid + '&num=' + nv_randomPassword(8));
-		} else {
-			var sl = document.getElementById('change_act_' + act + '_' + mid);
-			sl.checked = (sl.checked == true) ? false : true;
-		}
-		return;
-	}
-</script>
-<!-- END: script -->
 <!-- END: main -->
