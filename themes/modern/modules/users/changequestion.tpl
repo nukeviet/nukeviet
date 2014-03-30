@@ -59,10 +59,10 @@
 	<!-- BEGIN: step2 -->
 	<script type="text/javascript">
 		function question_change() {
-			var question_option = document.getElementById( 'question' ).options[document.getElementById('question').selectedIndex].value;
-			document.getElementById('question').value = '0';
-			document.getElementById('your_question').value = question_option;
-			document.getElementById('your_question').focus();
+			var question_option = $("#question").val();
+			$("#question").val('0');
+			$("#your_question").val(question_option);
+			$("#your_question").focus();
 			return;
 		}
 	</script>

@@ -110,25 +110,5 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	var items = '{NEW_ITEM_NUM}';
-	$(document).ready(function() {
-		$("#publ_date,#exp_date").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-	});
-	function nv_vote_add_item(mess) {
-		items++;
-		var newitem = '<tr>';
-		newitem += '	<td class="right">' + mess + ' ' + items + '</td>';
-		newitem += '	<td><input class="w300" type="text" value="" name="answervotenews[]"></td>';
-		newitem += '	<td><input class="w350" type="text" value="" name="urlvotenews[]"></td>';
-		newitem += '	</tr>';
-		$("#items").append(newitem);
-	}
 </script>
 <!-- END: main -->

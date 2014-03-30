@@ -1,9 +1,8 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
 	function nv_check_form(OForm) {
-		var f_method = document.getElementById( 'f_method' ).options[document.getElementById('f_method').selectedIndex].value;
-		var f_value = document.getElementById('f_value').value;
-
+		var f_method = $("#f_method").val();
+		var f_value = $("#f_value").val();
 		if (f_method != '' && f_value != '') {
 			OForm.submit();
 		}

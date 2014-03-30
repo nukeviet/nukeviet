@@ -1,59 +1,48 @@
 <!-- BEGIN: main -->
-<div class="clear"></div>
 <!-- BEGIN: catbox -->
-<div class="box-border-shadow m-bottom">
-	<div class="cat-box-header">
-		<div class="cat-nav">
-			<a title="{catbox.title}" class="current-cat" href="{catbox.link}">{catbox.title}</a>
-			<!-- BEGIN: subcatbox -->
-			<!-- BEGIN: listsubcat -->
-			<a title="{listsubcat.title}" href="{listsubcat.link}">{listsubcat.title}</a>
-			<!-- END: listsubcat -->
-			<!-- BEGIN: more -->
-			<a class="more d-more" title="{LANG.categories_viewall}" href="{MORE}">{LANG.categories_viewall}</a>
-			<!-- END: more -->
-			<!-- END: subcatbox -->
-		</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title">
+		<a title="{catbox.title}" href="{catbox.link}">{catbox.title}</a> 
+		<!-- BEGIN: subcatbox -->
+		<!-- BEGIN: listsubcat -->
+		<span class="divider">></span> <a title="{listsubcat.title}" href="{listsubcat.link}">{listsubcat.title}</a>
+		<!-- END: listsubcat -->
+		<!-- BEGIN: more -->
+		<em class="pull-right"><small><a title="{LANG.categories_viewall}" href="{MORE}">{LANG.categories_viewall}</a></small></em>
+		<!-- END: more -->
+		<!-- END: subcatbox -->
+		</h4>
 	</div>
-	<div class="cat-news clearfix">
-		<div class="news-full">
+	<div class="panel-body">
 			<!-- BEGIN: itemcat -->
-			<div class="content-box clearfix">
-				<div class="m-bottom">
+				<div>
 					<h4><a title="{itemcat.title}" href="{itemcat.more_link}">{itemcat.title}</a></h4>
-					<p class="small">
-						{LANG.author_name}: {itemcat.author_name} - {LANG.view_hits}: {itemcat.view_hits} - {LANG.download_hits}: {itemcat.download_hits}
-					</p>
+					<small class="note"><span class="glyphicon glyphicon-user"></span> {LANG.author_name}: {itemcat.author_name} - <span class="glyphicon glyphicon-zoom-in"></span> {LANG.view_hits}: {itemcat.view_hits} - <span class="glyphicon glyphicon-download-alt"></span> {LANG.download_hits}: {itemcat.download_hits}</small>
 				</div>
 				<!-- BEGIN: image -->
-				<a title="{itemcat.title}" href="{itemcat.more_link}"> <img class="s-border fl left" style="width:120px" src="{itemcat.imagesrc}" alt="{itemcat.title}"/> </a>
+				<div class="col-xs-6 col-md-3">
+					<a class="thumbnail" title="{itemcat.title}" href="{itemcat.more_link}"> <img src="{itemcat.imagesrc}" alt="{itemcat.title}"/> </a>
+				</div>
 				<!-- END: image -->
-				<p>
-					{itemcat.introtext}
-				</p>
+				<p>{itemcat.introtext}</p>
 				<!-- BEGIN: adminlink -->
-				<p style="text-align : right;">
-					{ADMINLINK}
+				<p class="text-right">
+					<a href="{EDIT}">{GLANG.edit}</a> &divide; <a href="{DEL}" onclick="nv_del_row(this,{itemcat.id});return false;">{GLANG.delete}</a>
 				</p>
 				<!-- END: adminlink -->
-				<div class="aright">
-					<a title="{LANG.readmore}" class="more" href="{itemcat.more_link}">{LANG.readmore}</a>
+				<div class="text-right">
+					<a title="{LANG.readmore}" href="{itemcat.more_link}">{LANG.readmore}</a> <span class="glyphicon glyphicon-chevron-right"></span>
 				</div>
-			</div>
 			<!-- END: itemcat -->
-		</div>
-		<div class="ot-news-full">
-			<!-- BEGIN: related -->
-			<ul>
-				<!-- BEGIN: loop -->
-				<li>
-					<a title="{loop.title}" href="{loop.more_link}">{loop.title}</a>
-				</li>
-				<!-- END: loop -->
-			</ul>
-			<!-- END: related -->
-		</div>
 	</div>
+	<!-- BEGIN: related -->
+	<ul class="list-group">
+		<!-- BEGIN: loop -->
+		<li class="list-group-item"><a title="{loop.title}" href="{loop.more_link}">{loop.title}</a></li>
+		<!-- END: loop -->
+	</ul>
+	<!-- END: related -->
 </div>
 <!-- END: catbox -->
 <!-- END: main -->

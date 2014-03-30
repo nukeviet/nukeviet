@@ -1,7 +1,9 @@
 <!-- BEGIN: main -->
-<div style="padding:4px;">
+<div class="upload_block">
 	<!-- BEGIN: have -->
-	<a href="{LINK_UP}">{LANG.upload}</a>
+	<a href="{LINK_UP}">
+		<span class="fa fa-upload fa-3x"></span><br />{LANG.upload}
+	</a>
 	<!-- END: have -->
 </div>
 <!-- END: main -->
