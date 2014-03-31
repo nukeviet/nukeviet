@@ -28,8 +28,8 @@
 $('ul.slimmenu').slimmenu(
 {
 	collapserTitle: 'Main Menu',
-	easingEffect:'easeOutQuint',
-	animSpeed: 50,
+	easingEffect:'easeInOutQuint',
+	animSpeed: 'medium',
 	indentChildren: true,
 	childrenIndenter: '&raquo;'
 });

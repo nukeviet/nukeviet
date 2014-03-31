@@ -134,7 +134,8 @@ ul.slimmenu li > ul {
     top: 100%;
     z-index: 999;
     width: 100%;
-    margin-left: -40px;
+    padding: 0;
+    margin: 0;
 }
 ul.slimmenu li > ul > li ul {
     display: none;
