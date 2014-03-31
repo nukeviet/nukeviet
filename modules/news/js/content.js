@@ -1,23 +1,21 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC ( contact@vinades.vn )
- * @Copyright ( C ) 2013 VINADES.,JSC. All rights reserved
+ * @Copyright ( C ) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 9 - 8 - 2013 15 : 40
  */
 
 function create_keywords() {
 	var content = strip_tags(document.getElementById('keywords').value);
 	if (content != '') {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&content=' + encodeURIComponent(content), '', 'res_keywords');
-	}
-	return false;
-}
-
-function res_keywords(res) {
-	if (res != "n/a") {
-		document.getElementById('keywords').value = res;
-	} else {
-		document.getElementById('keywords').value = '';
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&nocache=' + new Date().getTime(), 'content=' + encodeURIComponent(content), function(res) {
+			if (res != "n/a") {
+				document.getElementById('keywords').value = res;
+			} else {
+				document.getElementById('keywords').value = '';
+			}
+		});
 	}
 	return false;
 }
@@ -29,6 +27,7 @@ function split(val) {
 function extractLast(term) {
 	return split(term).pop();
 }
+
 
 $("#titlelength").html($("#idtitle").val().length);
 $("#idtitle").bind("keyup paste", function() {
@@ -43,7 +42,7 @@ $("#description").bind("keyup paste", function() {
 $(document).ready(function() {
 	$("input[name='catids[]']").click(function() {
 		var catid = $("input:radio[name=catid]:checked").val();
-		var $radios_catid = $("input:radio[name=catid]");
+		var radios_catid = $("input:radio[name=catid]");
 		var catids = [];
 		$("input[name='catids[]']").each(function() {
 			if ($(this).prop('checked')) {
@@ -52,7 +51,7 @@ $(document).ready(function() {
 			} else {
 				$("#catright_" + $(this).val()).hide();
 				if ($(this).val() == catid) {
-					$radios_catid.filter("[value=" + catid + "]").prop("checked", false);
+					radios_catid.filter("[value=" + catid + "]").prop("checked", false);
 				}
 			}
 		});
@@ -63,7 +62,7 @@ $(document).ready(function() {
 			};
 			catid = parseInt($("input:radio[name=catid]:checked").val() + "");
 			if (!catid) {
-				alert(content_checkcatmsg);
+				radios_catid.filter("[value=" + catids[0] + "]").prop("checked", true);
 			}
 		}
 	});

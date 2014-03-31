@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -17,8 +18,8 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-$theme_list = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme'] );
-$theme_mobile_list = nv_scandir( NV_ROOTDIR . "/themes/", $global_config['check_theme_mobile'] );
+$theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
+$theme_mobile_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
 $theme_list = array_merge( $theme_list, $theme_mobile_list );
 
 $i = 1;
@@ -29,15 +30,13 @@ $errorconfig = array();
 $array_site_cat_theme = array();
 if( $global_config['idsite'] )
 {
-	$result = $db->sql_query( "SELECT theme FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
-	$row = $db->sql_fetch_assoc( $result );
-	if( ! empty( $row['theme'] ) )
+	$theme = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+	if( ! empty( $theme ) )
 	{
-		$array_site_cat_theme = explode( ',', $row['theme'] );
+		$array_site_cat_theme = explode( ',', $theme );
 
-		$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
-		$result = $db->sql_query( $sql );
-		while( list( $theme ) = $db->sql_fetchrow( $result ) )
+		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
+		while( list( $theme ) = $result->fetch( 3 ) )
 		{
 			$array_site_cat_theme[] = $theme;
 		}
@@ -47,7 +46,6 @@ if( $global_config['idsite'] )
 
 foreach( $theme_list as $value )
 {
-	// Load thumbnail image
 	if( ! $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $value . '/config.ini' ) )
 	{
 		$errorconfig[] = $value;
@@ -95,7 +93,7 @@ foreach( $theme_list as $value )
 		$xtpl->parse( 'main.loop.link_active' );
 		$dash++;
 	}
-	if( defined( "NV_IS_GODADMIN" ) )
+	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$dash++;
 		$xtpl->parse( 'main.loop.link_delete' );

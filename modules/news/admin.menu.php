@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2013 VINADES.,JSC. All rights reserved
- * @createdate 07/30/2013 10:27
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 07/30/2013 10:27
  */
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
@@ -21,10 +22,10 @@ if( ! function_exists('nv_news_array_cat_admin') )
 		global $db;
 
 		$array_cat_admin = array();
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_admins` ORDER BY `userid` ASC";
-		$result = $db->sql_query( $sql );
+		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins ORDER BY userid ASC';
+		$result = $db->query( $sql );
 
-		while( $row = $db->sql_fetchrow( $result ) )
+		while( $row = $result->fetch() )
 		{
 			$array_cat_admin[$row['userid']][$row['catid']] = $row;
 		}
@@ -43,7 +44,7 @@ if( ! empty( $module_info['admins'] ) )
 	{
 		if( ! isset( $array_cat_admin[$userid_i] ) )
 		{
-			$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_admins` (`userid`, `catid`, `admin`, `add_content`, `pub_content`, `edit_content`, `del_content`, `comment`) VALUES ('" . $userid_i . "', '0', '1', '1', '1', '1', '1', '1')" );
+			$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $userid_i . ', 0, 1, 1, 1, 1, 1)' );
 			$is_refresh = true;
 		}
 	}
@@ -73,11 +74,10 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'comment', 'edit_comment', 'active_comment', 'del_comment', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'view', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
 
 $submenu['cat'] = $lang_module['categories'];
 $submenu['content'] = $lang_module['content_add'];
-$submenu['comment'] = $lang_module['comment'];
 
 if( $NV_IS_ADMIN_MODULE )
 {

@@ -1,22 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
 if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
-$xtpl = new XTemplate( 'delete.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'GLANG', $lang_global );
-
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
-$page_title = $language_array[$dirlang]['name'] . ": " . $lang_module['nv_admin_read'];
 
-if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . session_id() ) )
+if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'deleteallfile' . session_id() ) )
 {
 	if( ! empty( $dirlang ) )
 	{
@@ -61,7 +57,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 				$array_filename[] = $arrcrt[1];
 			}
 
-			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', "/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_" . $dirlang . "\.php$/" );
+			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/' );
 
 			foreach( $blocks as $file_i )
 			{
@@ -90,10 +86,20 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 
 		if( $err == 0 )
 		{
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "_file` DROP `author_" . $dirlang . "`" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `lang_" . $dirlang . "`" );
-			$db->sql_query( "ALTER TABLE `" . NV_LANGUAGE_GLOBALTABLE . "` DROP `update_" . $dirlang . "`" );
-
+			$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE );
+			if( isset( $columns_array['lang_' . $dirlang] ) )
+			{
+				try
+				{
+					$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . '_file DROP author_' . $dirlang );
+					$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP lang_' . $dirlang );
+					$db->query( 'ALTER TABLE ' . NV_LANGUAGE_GLOBALTABLE . ' DROP update_' . $dirlang );
+				}
+				catch( PDOException $e )
+				{
+				  trigger_error( $e->getMessage() );
+				}
+			}
 			$contents = $lang_module['nv_lang_deleteok'];
 		}
 		else
@@ -103,7 +109,11 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_delete'], $dirlang . ' --> ' . $language_array[$dirlang]['name'], $admin_info['userid'] );
 
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting' );
+		$xtpl = new XTemplate( 'delete.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'GLANG', $lang_global );
+
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setting' );
 		$xtpl->assign( 'INFO', $contents );
 
 		if( ! empty( $array_filename ) )
@@ -122,13 +132,15 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( "deleteallfile" . sess
 
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
-
+		
+		$page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
+		
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_admin_theme( $contents );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
 
-Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '' );
+Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 
 ?>

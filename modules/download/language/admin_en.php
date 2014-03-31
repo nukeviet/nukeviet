@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -21,7 +22,7 @@ $lang_module['config_is_addfile'] = 'Allow add file';
 $lang_module['config_is_uploadfile'] = 'Allow upload file';
 $lang_module['config_allowfiletype'] = 'Allow file type';
 $lang_module['config_maxfilesize'] = 'Maximum file size';
-$lang_module['config_maxfilebyte'] = 'byte';
+$lang_module['config_maxfilemb'] = 'MB';
 $lang_module['config_maxfilesizesys'] = 'Upload limit';
 $lang_module['config_uploadedfolder'] = 'Processed file\'s folder';
 $lang_module['config_queuefolder'] = 'Preprocess file\'s folder';
@@ -94,30 +95,7 @@ $lang_module['report_check_error'] = 'Broken link found. Press OK to fix';
 $lang_module['report_check_error2'] = 'Error: File not exists. Press OK to delete this report';
 $lang_module['report_delete'] = 'Delete';
 $lang_module['file_gourl'] = 'Access';
-$lang_module['comment'] = 'Manage comment';
-$lang_module['comment_of_file'] = 'Comment on file &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['comment_of_file2'] = 'Comment on file';
-$lang_module['comment_of_file3'] = 'All comments';
-$lang_module['comment_st0'] = 'Pre process comments';
-$lang_module['comment_st1'] = 'Active comments';
-$lang_module['comment_st2'] = 'Inactive comments';
-$lang_module['comment_empty'] = 'Empty';
-$lang_module['comment_empty0'] = 'Empty';
-$lang_module['comment_empty2'] = 'Empty';
-$lang_module['comment_status0'] = 'Preprocess';
-$lang_module['comment_status1'] = 'Active';
-$lang_module['comment_status2'] = 'Inactive';
-$lang_module['comment_post_ip'] = 'IP';
-$lang_module['comment_post_email'] = 'Email';
-$lang_module['comment_post_name'] = 'Name';
-$lang_module['comment_edit'] = 'Edit comment';
-$lang_module['comment_edit_error1'] = 'Error: Empty title';
-$lang_module['comment_edit_error2'] = 'Error: Empty content';
-$lang_module['comment_subject'] = 'Subject';
-$lang_module['comment_content'] = 'Content';
-$lang_module['comment_admin_reply'] = 'Admin note';
 $lang_module['file_who_autocomment'] = 'Auto comment';
-$lang_module['download_comment'] = 'Manage comment';
 $lang_module['download_report'] = 'Error report';
 $lang_module['download_filemanager'] = 'Manage file';
 $lang_module['download_editfile'] = 'Edit file';

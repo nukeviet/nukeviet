@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -12,11 +13,20 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
-$sql = "SELECT alias FROM `" . NV_PREFIXLANG . "_" . $module_data . "_tags` WHERE `alias` LIKE '%" . $db->dblikeescape( $q ) . "%' OR `keywords` LIKE '%" . $db->dblikeescape( $q ) . "%' ORDER BY `alias` ASC LIMIT 50";
-$result = $db->sql_query( $sql );
+$db->sqlreset()
+	->select('alias')
+	->from( NV_PREFIXLANG . '_' . $module_data . '_tags')
+	->where( 'alias LIKE :alias OR keywords LIKE :keywords' )
+	->order( 'alias ASC' )
+	->limit( 50 );
+
+$sth = $db->prepare( $db->sql() );
+$sth->bindValue( ':alias','%' . $q . '%', PDO::PARAM_STR );
+$sth->bindValue( ':keywords','%' . $q . '%', PDO::PARAM_STR );
+$sth->execute();
 
 $array_data = array();
-while( list( $alias ) = $db->sql_fetchrow( $result, 1 ) )
+while( list( $alias ) = $sth->fetch( 3 ) )
 {
 	$array_data[] = str_replace('-', ' ', $alias) ;
 }

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -31,9 +32,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
 	$array_config['who_upload'] = $nv_Request->get_int( 'who_upload', 'post', 0 );
 	$array_config['groups_upload'] = $nv_Request->get_typed_array( 'groups_upload', 'post', 'int' );
-	$array_config['who_autocomment'] = $nv_Request->get_int( 'who_autocomment', 'post', 0 );
-	$array_config['groups_autocomment'] = $nv_Request->get_typed_array( 'groups_autocomment', 'post', 'int' );
-	$array_config['maxfilesize'] = $nv_Request->get_int( 'maxfilesize', 'post', 0 );
+	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
 	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
 	$array_config['temp_dir'] = $nv_Request->get_title( 'temp_dir', 'post', '' );
@@ -57,23 +56,20 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$array_config['groups_upload'] = ( ! empty( $array_config['groups_upload'] ) ) ? implode( ',', $array_config['groups_upload'] ) : '';
 
-	if( ! in_array( $array_config['who_autocomment'], array_keys( $array_who_upload ) ) )
-	{
-		$array_config['who_autocomment'] = 0;
-	}
-
-	$array_config['groups_autocomment'] = ( ! empty( $array_config['groups_autocomment'] ) ) ? implode( ',', $array_config['groups_autocomment'] ) : '';
-
 	if( $array_config['maxfilesize'] <= 0 or $array_config['maxfilesize'] > NV_UPLOAD_MAX_FILESIZE )
 	{
 		$array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 	}
+    else
+    {
+        $array_config['maxfilesize'] = intval( $array_config['maxfilesize'] * 1048576 );
+    }
 
 	$array_config['upload_filetype'] = ( ! empty( $array_config['upload_filetype'] ) ) ? implode( ',', $array_config['upload_filetype'] ) : '';
 
-	if( ! preg_match( "/^[a-zA-Z][a-zA-Z0-9\_]*$/", $array_config['upload_dir'] ) )
+	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['upload_dir'] ) )
 	{
-		$array_config['upload_dir'] = "files";
+		$array_config['upload_dir'] = 'files';
 	}
 	else
 	{
@@ -82,18 +78,18 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['upload_dir'] );
 			if( $mkdir[0] == 0 )
 			{
-				$array_config['upload_dir'] = "files";
+				$array_config['upload_dir'] = 'files';
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
 
-	if( ! preg_match( "/^[a-zA-Z][a-zA-Z0-9\_]*$/", $array_config['temp_dir'] ) )
+	if( ! preg_match( '/^[a-zA-Z][a-zA-Z0-9\_]*$/', $array_config['temp_dir'] ) )
 	{
-		$array_config['temp_dir'] = "temp";
+		$array_config['temp_dir'] = 'temp';
 	}
 	else
 	{
@@ -102,21 +98,23 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['temp_dir'] );
 			if( $mkdir[0] == 0 )
 			{
-				$array_config['temp_dir'] = "temp";
+				$array_config['temp_dir'] = 'temp';
 			}
 			else
 			{
-				$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_dir` (`did`, `dirname`, `time`) VALUES (NULL, '" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
 
+	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
 	{
 		if( $config_name != 'readme' )
 		{
-			$query = "REPLACE INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config` VALUES (" . $db->dbescape( $config_name ) . "," . $db->dbescape( $config_value ) . ")";
-			$db->sql_query( $query );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
 	}
 
@@ -134,7 +132,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 	die();
 }
 
@@ -144,8 +142,6 @@ $array_config['groups_addfile'] = '';
 $array_config['is_upload'] = 0;
 $array_config['who_upload'] = 0;
 $array_config['groups_upload'] = '';
-$array_config['who_autocomment'] = 0;
-$array_config['groups_autocomment'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
 $array_config['upload_dir'] = 'files';
@@ -161,26 +157,26 @@ if( file_exists( $readme_file ) )
 	$array_config['readme'] = nv_htmlspecialchars( $array_config['readme'] );
 }
 
-$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
-$result = $db->sql_query( $sql );
-while( list( $c_config_name, $c_config_value ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
+$result = $db->query( $sql );
+while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 {
 	$array_config[$c_config_name] = $c_config_value;
 }
 
-$array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? " checked=\"checked\"" : "";
-$array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? " checked=\"checked\"" : "";
-$array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? " checked=\"checked\"" : "";
-$array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? " checked=\"checked\"" : "";
+$array_config['is_addfile'] = ! empty( $array_config['is_addfile'] ) ? ' checked="checked"' : '';
+$array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? ' checked="checked"' : '';
+$array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
+$array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
 
 $who_addfile = $array_config['who_addfile'];
 $array_config['who_addfile'] = array();
 foreach( $array_who_upload as $key => $who )
 {
-	$array_config['who_addfile'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_addfile ? " selected=\"selected\"" : "" //
+	$array_config['who_addfile'][$key] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_addfile ? ' selected="selected"' : ''
 	);
 }
 
@@ -188,21 +184,10 @@ $who_upload = $array_config['who_upload'];
 $array_config['who_upload'] = array();
 foreach( $array_who_upload as $key => $who )
 {
-	$array_config['who_upload'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_upload ? " selected=\"selected\"" : "" //
-	);
-}
-
-$who_autocomment = $array_config['who_autocomment'];
-$array_config['who_autocomment'] = array();
-foreach( $array_who_upload as $key => $who )
-{
-	$array_config['who_autocomment'][$key] = array( //
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_autocomment ? " selected=\"selected\"" : "" //
+	$array_config['who_upload'][$key] = array(
+		'key' => $key,
+		'title' => $who,
+		'selected' => $key == $who_upload ? ' selected="selected"' : ''
 	);
 }
 
@@ -212,10 +197,10 @@ if( ! empty( $array_exts ) )
 {
 	foreach( $array_exts as $ext => $mime )
 	{
-		$array_config['upload_filetype'][$ext] = array( //
-			'ext' => $ext, //
-			'title' => $ext . " (mime: " . $mime . ")", //
-			'checked' => ( in_array( $ext, $upload_filetype ) ) ? " checked=\"checked\"" : "" //
+		$array_config['upload_filetype'][$ext] = array(
+			'ext' => $ext,
+			'title' => $ext . ' (mime: ' . $mime . ')',
+			'checked' => ( in_array( $ext, $upload_filetype ) ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -226,10 +211,10 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array_config['groups_addfile'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_addfile ) ? " checked=\"checked\"" : "" //
+		$array_config['groups_addfile'][$key] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_addfile ) ? ' checked="checked"' : ''
 		);
 	}
 }
@@ -240,33 +225,19 @@ if( ! empty( $groups_list ) )
 {
 	foreach( $groups_list as $key => $title )
 	{
-		$array_config['groups_upload'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_upload ) ? " checked=\"checked\"" : "" //
+		$array_config['groups_upload'][$key] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_upload ) ? ' checked="checked"' : ''
 		);
 	}
 }
-
-$groups_autocomment = ! empty( $array_config['groups_autocomment'] ) ? explode( ',', $array_config['groups_autocomment'] ) : array();
-$array_config['groups_autocomment'] = array();
-if( ! empty( $groups_list ) )
-{
-	foreach( $groups_list as $key => $title )
-	{
-		$array_config['groups_autocomment'][$key] = array( //
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_autocomment ) ? " checked=\"checked\"" : "" //
-		);
-	}
-}
-
+$array_config['maxfilesize'] = number_format( $array_config['maxfilesize']/1048576, 2);
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', NV_UPLOAD_MAX_FILESIZE );
+$xtpl->assign( 'NV_UPLOAD_MAX_FILESIZE', nv_convertfromBytes( NV_UPLOAD_MAX_FILESIZE ) );
 
 foreach( $array_config['upload_filetype'] as $filetype )
 {
@@ -304,22 +275,6 @@ if( ! empty( $array_config['groups_upload'] ) )
 		$xtpl->parse( 'main.group_empty.groups_upload' );
 	}
 	$xtpl->parse( 'main.group_empty' );
-}
-
-foreach( $array_config['who_autocomment'] as $who )
-{
-	$xtpl->assign( 'WHO_AUTOCOMMENT', $who );
-	$xtpl->parse( 'main.who_autocomment' );
-}
-
-if( ! empty( $array_config['groups_autocomment'] ) )
-{
-	foreach( $array_config['groups_autocomment'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_AUTOCOMMENT', $group );
-		$xtpl->parse( 'main.group2.groups_autocomment' );
-	}
-	$xtpl->parse( 'main.group2' );
 }
 
 $xtpl->parse( 'main' );

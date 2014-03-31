@@ -3,11 +3,11 @@
 <div id="wrapper">
 	<header id="header">
 		<div class="logo">
-			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
+			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
 		</div>
 		<div class="logout">
-			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span>{NV_GO_CLIENTSECTOR}</span></a>
-			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span class="exit">{NV_LOGOUT}</span></a>
+			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span><em class="icon-home icon-large">&nbsp;</em> {NV_GO_CLIENTSECTOR}</span></a>
+			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span><em class="icon-power-off icon-large">&nbsp;</em> {NV_LOGOUT}</span></a>
 		</div>
 		<!-- BEGIN: langdata -->
 		<div class="lang">
@@ -26,7 +26,7 @@
 		<ul>
 			<!-- BEGIN: top_menu_loop -->
 			<li>
-				<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}</a>
+				<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}</a>
 				<!-- BEGIN: submenu -->
 				<ul>
 					<!-- BEGIN: submenu_loop -->
@@ -62,96 +62,79 @@
 	</div>
 
 	<section id="middle">
+		<div id="contentwrapper">
+			<div id="container">
+				<div id="info_tab">
+					<span id="cs_menu" onclick="ver_menu_click()"><em class="icon-circle-arrow-left icon-large">&nbsp;</em></span>
+					<!-- BEGIN: empty_page_title -->
+					<span class="cell_left">{PAGE_TITLE}</span>
+					<!-- END: empty_page_title -->
 
-		<div id="container">
-			<div id="info_tab">
-				<span id="cs_menu" class="small" onclick="ver_menu_click()">&nbsp;</span>
-				<!-- BEGIN: empty_page_title -->
-				<span class="cell_left">{PAGE_TITLE}</span>
-				<!-- END: empty_page_title -->
-
-				<!-- BEGIN: select_option -->
-				<span class="cell_right">
-					<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
-						<option value="">{PLEASE_SELECT}</option>
-						<!-- BEGIN: select_option_loop -->
-						<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
-						<!-- END: select_option_loop -->
-					</select> </span>
-				<!-- END: select_option -->
-				<!-- BEGIN: site_mods -->
-				<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
-				<!-- END: site_mods -->
-				<div class="clearfix"></div>
-			</div>
-			<div id="contentmod">
-				{THEME_ERROR_INFO}
-				{MODULE_CONTENT}
-				<div class="clearfix">
-					&nbsp;
+					<!-- BEGIN: select_option -->
+					<span class="cell_right">
+						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+							<option value="">{PLEASE_SELECT}</option>
+							<!-- BEGIN: select_option_loop -->
+							<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
+							<!-- END: select_option_loop -->
+						</select> </span>
+					<!-- END: select_option -->
+					<!-- BEGIN: site_mods -->
+					<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
+					<!-- END: site_mods -->
+					<div class="clearfix"></div>
 				</div>
+				<div id="contentmod">
+					{THEME_ERROR_INFO}
+					{MODULE_CONTENT}
+					<div class="clearfix">
+						&nbsp;
+					</div>
+				</div>
+				<!-- #content-->
 			</div>
-			<!-- #content-->
-		</div>
-		<!-- #container-->
+			<!-- #container-->
 
-		<aside id="left_menu" class="ddsmoothmenu-v">
-			<ul id="ver_menu">
-				<!-- BEGIN: menu_loop -->
-				<li>
-					<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
-					<!-- BEGIN: submenu -->
-					<ul>
-						<!-- BEGIN: submenu_loop -->
-						<li>
-							<a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-						</li>
-						<!-- END: submenu_loop -->
-					</ul>
-					<!-- END: submenu -->
-				</li>
-				<!-- BEGIN: current -->
-				<li>
-					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-				</li>
-				<!-- END: current -->
-				<!-- END: menu_loop -->
-			</ul>
-		</aside>
-		<!-- #left_menu -->
+			<aside id="left_menu" class="ddsmoothmenu-v">
+				<ul id="ver_menu">
+					<!-- BEGIN: menu_loop -->
+					<li>
+						<a {MENU_CURRENT} href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+						<!-- BEGIN: submenu -->
+						<ul>
+							<!-- BEGIN: submenu_loop -->
+							<li>
+								<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+							</li>
+							<!-- END: submenu_loop -->
+						</ul>
+						<!-- END: submenu -->
+					</li>
+					<!-- BEGIN: current -->
+					<li>
+						<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+					</li>
+					<!-- END: current -->
+					<!-- END: menu_loop -->
+				</ul>
+			</aside>
+			<!-- #left_menu -->
+		</div>
+		<!-- #contentwrapper-->
 	</section>
 	<!-- #middle-->
 
 	<footer id="footer">
 		<div class="copyright">
-			<!-- BEGIN: nv_queries -->
-			{NV_DB_NUM_QUERIES}: [COUNT_SHOW_QUERIES] <a href="#queries" onclick="nv_show_hidden('div_hide',2);">{NV_SHOW_QUERIES}</a>
+			<!-- BEGIN: memory_time_usage -->
+			[MEMORY_TIME_USAGE]
 			<br/>
-			<!-- END: nv_queries -->
+			<!-- END: memory_time_usage -->
 			<strong>{NV_COPYRIGHT}</strong>
 		</div>
 		<div class="imgstat">
 			<a title="NUKEVIET CMS" href="http://nukeviet.vn" target="_blank"><img alt="NUKEVIET CMS" src="{NV_BASE_SITEURL}images/banner_nukeviet_88x15.jpg" width="88" height="15" /></a>
 			<br/>
-		</div>
-		<div id="div_hide" class="clearfix" style="visibility:hidden;display:none;">
-			<!-- BEGIN: nv_show_queries -->
-			<table id="queries" class="tab1">
-				<caption> {NV_SHOW_QUERIES} </caption>
-				<colgroup>
-					<col style="width:18px"/>
-					<col />
-				</colgroup>
-				<tbody>
-					<!-- BEGIN: nv_show_queries_loop -->
-					<tr>
-						<td class="{NV_FIELD1}">&nbsp;</td>
-						<td> {NV_FIELD} </td>
-					</tr>
-					<!-- END: nv_show_queries_loop -->
-				</tbody>
-			</table>
-			<!-- END: nv_show_queries -->
 		</div>
 	</footer>
 	<!-- #footer -->

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -20,19 +21,6 @@ $lang_module['nocatpage'] = 'Lỗi không có chủ đề';
 $lang_module['other'] = 'Các tin khác';
 $lang_module['detail'] = 'Chi tiết tin';
 $lang_module['more'] = 'Xem tiếp...';
-$lang_module['comment'] = 'Ý kiến bạn đọc';
-$lang_module['comment_login'] = 'Bạn cần đăng nhập thành viên để sử dụng chức năng này';
-$lang_module['comment_success'] = 'Bình luận thành công';
-$lang_module['comment_unsuccess'] = 'Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
-$lang_module['comment_title'] = 'Gửi bình luận của bạn';
-$lang_module['comment_view'] = 'Xem phản hồi';
-$lang_module['comment_send'] = 'Gửi phản hồi';
-$lang_module['comment_name'] = 'Tên của bạn';
-$lang_module['comment_email'] = 'Email';
-$lang_module['comment_content'] = 'Nội dung';
-$lang_module['comment_seccode'] = 'Mã an toàn';
-$lang_module['comment_submit'] = 'Gửi bình luận';
-$lang_module['comment_timeout'] = 'Bạn đã bình chọn vui lòng đợi %s phút sau để có gửi bình luận.';
 $lang_module['sendmail'] = 'Gửi bài viết qua email';
 $lang_module['sendmail_subject'] = 'Bạn nhận được một tin nhắn từ: ';
 $lang_module['sendmail_name'] = 'Tên của bạn';

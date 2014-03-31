@@ -1,19 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/27/2010 4:6
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-require NV_ROOTDIR . '/includes/class/flood.class.php';
+require ( NV_ROOTDIR . '/includes/class/flood.class.php' );
 
 $rules = array( '60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300'] );
 
-$flb = new FloodBlocker( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, $client_info['ip'] );
+$flb = new FloodBlocker( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, NV_CLIENT_IP );
 
 if( $flb->is_blocker )
 {

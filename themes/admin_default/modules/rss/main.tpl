@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: add -->
 <div style="margin-top:8px;position:absolute;right:10px;">
-	<a class="button1" href="{EDIT_URL}" title="{GLANG.edit}"><span><span>{GLANG.edit}</span></span></a>
+	<a class="button button-h" href="{EDIT_URL}" title="{GLANG.edit}">{GLANG.edit}</a>
 </div>
 <div style="margin-bottom:20px;">
 	{DATA}

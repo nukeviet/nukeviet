@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.public}:</td>
-					<td><input title="{LANG.public}" type="checkbox" name="public" value="1"{DATA.public} /></td>
+					<td><input title="{LANG.publics}" type="checkbox" name="publics" value="1"{DATA.publics} /></td>
 				</tr>
 				<!-- BEGIN: siteus -->
 				<tr>
@@ -41,7 +41,7 @@
 			{CONTENT}
 		</div>
 		<input type="hidden" name="save" value="1" />
-		<input name="submit" type="submit" value="{LANG.save}" />
+		<p class="center"><input name="submit" type="submit" class="button" value="{LANG.save}" /></p>
 	</form>
 </div>
 <script type="text/javascript">
@@ -64,7 +64,7 @@
 			return alert("{LANG.title_empty}"), $("input[name=title]").select(), false
 		}
 		if ( typeof (CKEDITOR) !== 'undefined') {
-			$("textarea[name=content]").val(CKEDITOR.instances.content.getData());
+			$("textarea[name=content]").val(CKEDITOR.instances.users_content.getData());
 		}
 		var a = $(this).serialize(), b = $(this).attr("action");
 		$("input[name=submit]").attr("disabled", "disabled");
@@ -112,7 +112,8 @@
 			<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
 			<td>
 			<!-- BEGIN: action -->
-			<a class="edit_icon" href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a>&nbsp;-&nbsp;<a class="delete_icon" class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+			<em class="icon-edit icon-large">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
+			<em class="icon-trash icon-large">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 			<!-- END: action -->
 			</td>
 		</tr>
@@ -214,7 +215,7 @@
 			<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 			<td>
 			<!-- BEGIN: delete -->
-			<a class="delete_icon" class="del" href="{LOOP.userid}">{LANG.exclude_user2}</a>
+			<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 			<!-- END: delete -->
 			</td>
 		</tr>
@@ -223,11 +224,11 @@
 </table>
 <script type="text/javascript">
 	//<![CDATA[
-	$("a.del").click(function() {
+	$("a.delete").click(function() {
 		$.ajax({
 			type : "POST",
 			url : "{MODULE_URL}={OP}",
-			data : "gid={GID}&exclude=" + $(this).attr("href"),
+			data : "gid={GID}&exclude=" + $(this).attr("title"),
 			success : function(a) {
 				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a)
 			}

@@ -13,7 +13,7 @@
 <!-- END: loopimg -->
 <div class="clearfix"></div>
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
@@ -30,13 +30,7 @@
 	});
 
 	$(".imgcontent").dblclick(function() {
-		if ($("input[name=CKEditorFuncNum]").val() > 0 || $("input[name=area]").val() != "") {
-			insertvaluetofield()
-		} else if (window.top.opener != null) {
-			window.top.opener.SetUrl(nv_base_siteurl + $("span#foldervalue").attr("title") + "/" + $("input[name=selFile]").val());
-			window.top.close();
-			window.top.opener.focus();
-		}
+		insertvaluetofield()
 	});
 
 	$(".imgcontent").contextMenu("contextMenu", {

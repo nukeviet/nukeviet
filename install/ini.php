@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/28/2009 20:8
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/28/2009 20:8
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -48,7 +49,6 @@ if( $sys_info['ini_set_support'] )
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 $sys_info['php_support'] = ( PHP_VERSION >= 5.2 ) ? 1 : 0;
 
-$sys_info['mysql_support'] = ( extension_loaded( 'mysql' ) and function_exists( 'mysql_connect' ) ) ? 1 : 0;
 $sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
 $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;

@@ -1,24 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-6-2010 21:16
  */
 
-if( defined( 'NV_CLASS_CRYPT' ) ) return;
-define( 'NV_CLASS_CRYPT', true );
-
-/**
- * nv_Crypt
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright Nguyen Anh Tu
- * @version 2010
- * @access public
- */
 class nv_Crypt
 {
 	private $_func;

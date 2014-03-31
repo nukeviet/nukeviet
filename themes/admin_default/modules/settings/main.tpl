@@ -4,7 +4,7 @@
 	<blockquote class="error"> {ERROR} </blockquote>
 </div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<table class="tab1">
 		<col class="w250" />
 		<col />
@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.site_logo}</strong></td>
-				<td><input type="text" class="w350" name="site_logo" id="site_logo" value="{VALUE.site_logo}" /><input class="w100" type="button" value="{LANG.browse_image}" name="selectimg"/></td>
+				<td><input type="text" class="w350" name="site_logo" id="site_logo" value="{VALUE.site_logo}" /> <input type="button" value="{LANG.browse_image}" name="selectimg"/></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.theme}</strong></td>
@@ -39,6 +39,18 @@
 					<!-- END: site_theme -->
 				</select></td>
 			</tr>
+			<!-- BEGIN: mobile_theme -->
+			<tr>
+				<td><strong>{LANG.mobile_theme}</strong></td>
+				<td>
+				<select name="mobile_theme">
+					<option value="">&nbsp;</option>
+					<!-- BEGIN: loop -->
+					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
+					<!-- END: loop -->
+				</select></td>
+			</tr>
+			<!-- END: mobile_theme -->
 			<tr>
 				<td><strong>{LANG.default_module}</strong></td>
 				<td>
@@ -67,7 +79,7 @@
 			var path = "";
 			var currentpath = "images";
 			var type = "image";
-			nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+			nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 			return false;
 		});
 	});

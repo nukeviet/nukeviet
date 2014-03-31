@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 11/6/2010, 20:9
  */
 
@@ -30,7 +31,7 @@ function nv_referer_update()
 		$log_current = mktime( 0, 0, 0, date( 'n', NV_CURRENTTIME ), date( 'j', NV_CURRENTTIME ), date( 'Y', NV_CURRENTTIME ) );
 
 		$content = '[' . date( 'r', NV_CURRENTTIME ) . ']';
-		$content .= ' [' . $client_info['ip'] . ']';
+		$content .= ' [' . NV_CLIENT_IP . ']';
 		$content .= ' [' . $client_info['referer'] . ']';
 		$content .= ' [' . $client_info['selfurl'] . ']';
 		$content .= "\r\n";
@@ -80,18 +81,18 @@ function nv_referer_update()
 			file_put_contents( $log_path . '/' . $log_current . '.' . NV_LOGS_EXT, $content, FILE_APPEND );
 			file_put_contents( $tmp, NV_CURRENTTIME . '|' . $md5 );
 
-			$sth = $db->prepare( 'UPDATE `' . NV_REFSTAT_TABLE . '` SET
+			$sth = $db->prepare( 'UPDATE ' . NV_REFSTAT_TABLE . ' SET
 				total=total+1,
 				month' . date( 'm', NV_CURRENTTIME ) . '=month' . date( 'm', NV_CURRENTTIME ) . '+1,
 				last_update=' . NV_CURRENTTIME . '
-				WHERE `host`= :host' );
+				WHERE host= :host' );
 			$sth->bindParam( ':host', $host, PDO::PARAM_STR );
 			$update = $sth->execute();
 
 			if( empty( $update ) )
 			{
-				$sth = $db->prepare( 'INSERT INTO `' . NV_REFSTAT_TABLE . '`
-					(`host`, `total`, `month' . date( 'm', NV_CURRENTTIME ) . '`, `last_update`)
+				$sth = $db->prepare( 'INSERT INTO ' . NV_REFSTAT_TABLE . '
+					(host, total, month' . date( 'm', NV_CURRENTTIME ) . ', last_update)
 					VALUES ( :host, 1, 1,' . NV_CURRENTTIME . ')' );
 				$sth->bindParam( ':host', $host, PDO::PARAM_STR );
 				$sth->execute();
@@ -111,14 +112,14 @@ function nv_referer_update()
 
 					if( ! empty( $key ) )
 					{
-						$sth = $db->prepare( 'UPDATE `' . NV_SEARCHKEYS_TABLE . '` SET total=total+1 WHERE `id`= :id  AND `search_engine`= :search_engine' );
+						$sth = $db->prepare( 'UPDATE ' . NV_SEARCHKEYS_TABLE . ' SET total=total+1 WHERE id= :id AND search_engine= :search_engine' );
 						$sth->bindParam( ':id', $id, PDO::PARAM_STR );
 						$sth->bindParam( ':search_engine', $nv_Request->search_engine, PDO::PARAM_STR );
 						$update = $sth->execute();
 
 						if( empty( $update ) )
 						{
-							$sth = $db->prepare( 'INSERT INTO `' . NV_SEARCHKEYS_TABLE . '` VALUES ( :id, :key, 1, :search_engine)' );
+							$sth = $db->prepare( 'INSERT INTO ' . NV_SEARCHKEYS_TABLE . ' VALUES ( :id, :key, 1, :search_engine)' );
 							$sth->bindParam( ':id', $id, PDO::PARAM_STR );
 							$sth->bindParam( ':key', $key, PDO::PARAM_STR );
 							$sth->bindParam( ':search_engine', $nv_Request->search_engine, PDO::PARAM_STR );

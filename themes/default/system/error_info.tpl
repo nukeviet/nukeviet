@@ -1,14 +1,9 @@
 <!-- BEGIN: error_info -->
-<table summary="{TPL_E_CAPTION}" class="tab1" style="border-color:#FF0000;">
-	<caption>{TPL_E_CAPTION}</caption>
-	<col width="16px" />
+<div class="alert alert-warning alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>{TPL_E_CAPTION}</strong>
 	<!-- BEGIN: error_item -->
-	<tbody {TPL_E_CLASS}>
-		<tr>
-			<td><img alt="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" /></td>
-			<td>{TPL_E_ERRNO}: {TPL_E_MESS}</td>
-		</tr>
-		</tbody>
-		<!-- END: error_item -->
-</table>
+	<p><img alt="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" /> {TPL_E_ERRNO}: {TPL_E_MESS}</p>
+	<!-- END: error_item -->
+</div>
 <!-- END: error_info -->

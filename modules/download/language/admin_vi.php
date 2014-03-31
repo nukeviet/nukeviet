@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -21,7 +22,7 @@ $lang_module['config_is_addfile'] = 'Cho phép thêm file';
 $lang_module['config_is_uploadfile'] = 'Cho phép upload file lên server';
 $lang_module['config_allowfiletype'] = 'Loại file được cho phép tải lên';
 $lang_module['config_maxfilesize'] = 'Dung lượng tối đa của file';
-$lang_module['config_maxfilebyte'] = 'byte';
+$lang_module['config_maxfilemb'] = 'MB';
 $lang_module['config_maxfilesizesys'] = 'Giới hạn tải lên hệ thống của bạn là';
 $lang_module['config_uploadedfolder'] = 'Thư mục chứa những file đã được kiểm duyệt';
 $lang_module['config_queuefolder'] = 'Thư mục chứa những file chờ kiểm duyệt';
@@ -94,30 +95,8 @@ $lang_module['report_check_error'] = 'Hệ thống phát hiện link hỏng đ�
 $lang_module['report_check_error2'] = 'Lỗi: File không tồn tại. Hãy click OK để xóa báo cáo này hoặc CANCEL để thôi';
 $lang_module['report_delete'] = 'Xóa báo cáo lỗi';
 $lang_module['file_gourl'] = 'Truy cập';
-$lang_module['comment'] = 'Quản lý bình luận';
-$lang_module['comment_of_file'] = 'Danh sách các bình luận cho file &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['comment_of_file2'] = 'Bình luận cho file';
-$lang_module['comment_of_file3'] = 'Tất cả bình luận';
-$lang_module['comment_st0'] = 'Bình luận đang đợi duyệt';
-$lang_module['comment_st1'] = 'Bình luận đang hiệu lực';
-$lang_module['comment_st2'] = 'Bình luận đang bị đình chỉ';
-$lang_module['comment_empty'] = 'Rất tiếc là chưa có bình luận nào thuộc file này';
-$lang_module['comment_empty0'] = 'Rất tiếc là chưa có bình luận nào đang đợi duyệt';
-$lang_module['comment_empty2'] = 'Không có bình luận nào bị đình chỉ';
-$lang_module['comment_status0'] = 'Đợi duyệt';
-$lang_module['comment_status1'] = 'Hiệu lực';
-$lang_module['comment_status2'] = 'Đình chỉ';
-$lang_module['comment_post_ip'] = 'IP';
-$lang_module['comment_post_email'] = 'Email';
-$lang_module['comment_post_name'] = 'Tên';
-$lang_module['comment_edit'] = 'Sửa bình luận';
-$lang_module['comment_edit_error1'] = 'Lỗi: Bình luận chưa có tiêu đề';
-$lang_module['comment_edit_error2'] = 'Lỗi: Bình luận chưa có nội dung';
-$lang_module['comment_subject'] = 'Tiêu đề';
-$lang_module['comment_content'] = 'Nội dung';
-$lang_module['comment_admin_reply'] = 'Ghi chú của admin';
+$lang_module['file_delurl'] = 'Xóa file';
 $lang_module['file_who_autocomment'] = 'Ai được tự động đăng thảo luận';
-$lang_module['download_comment'] = 'Quản lý comment';
 $lang_module['download_report'] = 'Báo cáo lỗi';
 $lang_module['download_filemanager'] = 'Quản lý file';
 $lang_module['download_editfile'] = 'Sửa file';

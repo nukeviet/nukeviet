@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td class="right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp;<img src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias('cat', {catid});" alt="" height="16" /></td>
+					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="right"><strong>Title Site: </strong></td>
@@ -53,7 +53,7 @@
 				</tr>
 				<tr>
 					<td class="right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="w500" type="text" name="image" id="image" value="{image}"/><input type="button" value="Browse server" name="selectimg"/></td>
+					<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 				</tr>
 				<tr>
 					<td class="right">

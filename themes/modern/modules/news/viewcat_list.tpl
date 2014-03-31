@@ -18,17 +18,21 @@
 		<!-- BEGIN: viewcatloop -->
 		<tr>
 			<td> {NUMBER} </td>
-			<td><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-			<!-- BEGIN: adminlink -->
-			<span class="aright"> {ADMINLINK} </span>
-			<!-- END: adminlink -->
+			<td>
+				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
+				<!-- BEGIN: adminlink -->
+				<span class="aright"> {ADMINLINK} </span>
+				<!-- END: adminlink -->
 			</td>
 		</tr>
 		<!-- END: viewcatloop -->
 	</tbody>
 </table>
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="acenter">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->

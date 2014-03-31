@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:38
  */
 
@@ -14,20 +15,14 @@ $res = false;
 
 if( ! empty( $id ) )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', "id " . $id, $admin_info['userid'] );
+	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_cronjob_del', 'id ' . $id, $admin_info['userid'] );
 
-	$sql = "SELECT `act` FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id`=" . $id . " AND `is_sys`=0";
-	$result = $db->sql_query( $sql );
-
-	if( $db->sql_numrows( $result ) == 1 )
+	$sql = 'SELECT COUNT(*) FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $id . ' AND is_sys=0';
+	if( $db->query( $sql )->fetchColumn() )
 	{
-		$sql = "DELETE FROM `" . NV_CRONJOBS_GLOBALTABLE . "` WHERE `id` = " . $id;
-		$res = $db->sql_query( $sql );
+		$res = $db->exec( 'DELETE FROM ' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id = ' . $id );
 
-		$db->sql_query( "LOCK TABLE " . NV_CRONJOBS_GLOBALTABLE . " WRITE" );
-		$db->sql_query( "REPAIR TABLE " . NV_CRONJOBS_GLOBALTABLE );
-		$db->sql_query( "OPTIMIZE TABLE " . NV_CRONJOBS_GLOBALTABLE );
-		$db->sql_query( "UNLOCK TABLE " . NV_CRONJOBS_GLOBALTABLE );
+		$db->query( 'OPTIMIZE TABLE ' . NV_CRONJOBS_GLOBALTABLE );
 	}
 }
 

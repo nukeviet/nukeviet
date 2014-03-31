@@ -1,7 +1,8 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author  VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-13-2010 15:24
  */
 
@@ -40,15 +41,35 @@ var nv_error_email = "Error: You haven't fill your email address or email addres
 var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
-var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
 
-//contact
+var nv_required ="This field is required.";
+var nv_remote = "Please fix this field.";
+var nv_email = "Please enter a valid email address.";
+var nv_url = "Please enter a valid URL.";
+var nv_date = "Please enter a valid date.";
+var nv_dateISO = "Please enter a valid date (ISO).";
+var nv_number = "Please enter a valid number.";
+var nv_digits = "Please enter only digits.";
+var nv_creditcard = "Please enter a valid credit card number.";
+var nv_equalTo = "Please enter the same value again.";
+var nv_accept = "Please enter a value with a valid extension.";
+var nv_maxlength = "Please enter no more than {0} characters.";
+var nv_minlength = "Please enter at least {0} characters.";
+var nv_rangelength = "Please enter a value between {0} and {1} characters long.";
+var nv_range = "Please enter a value between {0} and {1}.";
+var nv_max = "Please enter a value less than or equal to {0}.";
+var nv_min = "Please enter a value greater than or equal to {0}.";
+
+// Contact
 var nv_fullname = "Full name entered is not valid.";
 var nv_title = "Title not valid.";
 var nv_content = "The content is not empty.";
 var nv_code = "Capcha not valid.";
 
-//ErrorMessage
+// Message before unload
+var nv_msgbeforeunload = "The data is unsaved. You will lose all data if you leave this page. Do you want to leave?";
+
+// ErrorMessage
 var NVJL = [];
 NVJL.errorRequest = "There was an error with the request.";
 NVJL.errortimeout = "The request timed out.";

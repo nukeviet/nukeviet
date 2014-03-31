@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/12/2010 12:25
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', "/^form\_([a-zA-Z0-9\_\-]+)\.php$/" );
-$forms = preg_replace( "/^form\_([a-zA-Z0-9\_\-]+)\.php$/", "\\1", $forms );
+$forms = nv_scandir( NV_ROOTDIR . '/modules/' . $module_name . '/forms', '/^form\_([a-zA-Z0-9\_\-]+)\.php$/' );
+$forms = preg_replace( '/^form\_([a-zA-Z0-9\_\-]+)\.php$/', '\\1', $forms );
 
 $error = '';
 
@@ -41,13 +42,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( ! empty( $description ) ) $description = defined( 'NV_EDITOR' ) ? nv_nl2br( $description, '' ) : nv_nl2br( nv_htmlspecialchars( $description ), '<br />' );
 
-		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_plans` VALUES (NULL, " . $db->dbescape( $blang ) . ", " . $db->dbescape( $title ) . ",
-			" . $db->dbescape( $description ) . ", " . $db->dbescape( $form ) . ", " . $width . ", " . $height . ", 1)";
-
-		$id = $db->sql_query_insert_id( $sql );
+		$_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE. '_plans (blang, title, description, form, width, height, act) VALUES ( :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1)';
+		$data_insert = array();
+		$data_insert['blang'] = $blang;
+		$data_insert['title'] = $title;
+		$data_insert['description'] = $description;
+		$data_insert['form'] = $form;
+		$id = $db->insert_id( $_sql, 'id', $data_insert );
 
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid'] );
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_plan&id=' . $id );
 		die();
 	}
 }
@@ -72,7 +76,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_plan'];
-$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_plan';
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
 $contents['form'] = array( $lang_module['form'], 'form', $forms, $form );

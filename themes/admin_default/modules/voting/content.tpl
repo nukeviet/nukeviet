@@ -4,6 +4,9 @@
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <form id="votingcontent" method="post" action="{FORM_ACTION}">
 	<table class="tab1">
 		<tbody>
@@ -60,11 +63,11 @@
 			</tr>
 			<tr>
 				<td>{LANG.voting_maxoption}</td>
-				<td><input type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt required" /></td>
+				<td><input type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/></td>
 			</tr>
 			<tr>
 				<td>{LANG.voting_question}</td>
-				<td><input type="text" name="question" size="60" value="{DATA.question}" class="txt required" /></td>
+				<td><input type="text" name="question" size="60" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
 			</tr>
 			<tr>
 				<td>{LANG.voting_link}</td>
@@ -101,26 +104,11 @@
 		<input type="submit" name="submit" value="{LANG.voting_confirm}" />
 	</div>
 </form>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	var items = '{NEW_ITEM_NUM}';
-	$("#publ_date,#exp_date").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true
-	});
-
-	function nv_vote_add_item(mess) {
-		items++;
-		var newitem = "<tr>";
-		newitem += "	<td class=\"right\">" + mess + " " + items + "</td>";
-		newitem += "	<td><input class=\"w300\" type=\"text\" value=\"\" name=\"answervotenews[]\"></td>";
-		newitem += "	<td><input class=\"w350\" type=\"text\" value=\"\" name=\"urlvotenews[]\"></td>";
-		newitem += "	</tr>";
-		$("#items").append(newitem);
-	}
 </script>
 <!-- END: main -->

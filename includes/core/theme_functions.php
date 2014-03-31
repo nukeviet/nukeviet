@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/13/2010 20:00
  */
 
@@ -98,25 +99,33 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
 
+	// Get theme 
+	$template = '';
+
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
+		$template = $global_config['admin_theme'];
 	}
 	elseif( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . '/themes/admin_default/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
+		$template = 'admin_default';
 	}
 	elseif( isset( $global_config['module_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system';
+		$template = $global_config['module_theme'];
 	}
 	elseif( isset( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/info_die.tpl' ) )
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+		$template = $global_config['site_theme'];
 	}
 	else
 	{
 		$tpl_path = NV_ROOTDIR . '/themes/default/system';
+		$template = 'default';
 	}
 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
@@ -125,6 +134,11 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
+	$xtpl->assign( 'LANG', $lang_global );
+	$xtpl->assign( 'TEMPLATE', $template );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	
 	if( isset( $size[1] ) )
 	{
 		if( $size[0] > 490 )
@@ -163,6 +177,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->parse( 'main' );
 
 	$global_config['mudim_active'] = 0;
+	
 	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
 	include NV_ROOTDIR . '/includes/footer.php';
@@ -191,6 +206,10 @@ function nv_xmlOutput( $content, $lastModified )
 		$tidy->parseString( $content, $tidy_options, 'utf8' );
 		$tidy->cleanRepair();
 		$content = ( string )$tidy;
+	}
+	else
+	{
+		$content = trim( $content );
 	}
 
 	@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $lastModified ) . ' GMT' );
@@ -438,11 +457,11 @@ function nv_xmlSitemapIndex_generate()
 	{
 		foreach( $global_config['allow_sitelangs'] as $lang )
 		{
-			$sql = "SELECT m.title FROM `" . $db_config['prefix'] . '_' . $lang . "_modules` AS m LEFT JOIN `" . $db_config['prefix'] . '_' . $lang . "_modfuncs` AS f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
-			$result = $db->sql_query( $sql );
-			while( list( $modname ) = $db->sql_fetchrow( $result, 1 ) )
+			$sql = "SELECT m.title FROM " . $db_config['prefix'] . '_' . $lang . "_modules m LEFT JOIN " . $db_config['prefix'] . '_' . $lang . "_modfuncs f ON m.title=f.in_module WHERE m.act = 1 AND m.groups_view='0' AND f.func_name = 'Sitemap' ORDER BY m.weight, f.subweight";
+			$result = $db->query( $sql );
+			while( list( $modname ) = $result->fetch( 3 ) )
 			{
-				$link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . $lang . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=Sitemap";
+				$link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=Sitemap';
 				$row = $xml->addChild( 'sitemap' );
 				$row->addChild( 'loc', $link );
 			}
@@ -456,7 +475,7 @@ function nv_xmlSitemapIndex_generate()
 		{
 			if( isset( $values['funcs'] ) and isset( $values['funcs']['Sitemap'] ) )
 			{
-				$link = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $modname . "&amp;" . NV_OP_VARIABLE . "=Sitemap";
+				$link = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname . '&amp;' . NV_OP_VARIABLE . '=Sitemap';
 				$row = $xml->addChild( 'sitemap' );
 				$row->addChild( 'loc', $link );
 			}

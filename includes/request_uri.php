@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 5, 2011 11:29:47 AM
  */
 
@@ -23,12 +24,12 @@ $base_siteurl_quote = nv_preg_quote( $base_siteurl );
 
 $request_uri = preg_replace( '/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI'] );
 
-if( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
+if( $global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] AND preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
 {
 	$_GET[NV_NAME_VARIABLE] = 'page';
 	$_GET[NV_OP_VARIABLE] = $matches[1];
 }
-elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/]+)(' . nv_preg_quote( $global_config['rewrite_endurl'] ) . '|' . nv_preg_quote( $global_config['rewrite_exturl'] ) . ')$/i', $request_uri, $matches ) )
+elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/\+]+)(' . nv_preg_quote( $global_config['rewrite_endurl'] ) . '|' . nv_preg_quote( $global_config['rewrite_exturl'] ) . ')$/i', $request_uri, $matches ) )
 {
 	if( $matches[2] == $global_config['rewrite_exturl'] ) define( 'NV_REWRITE_EXTURL', true );
 
@@ -38,21 +39,21 @@ elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/]+)(' . nv_pre
 	{
 		$_GET[NV_LANG_VARIABLE] = $request_uri_array[0];
 
-		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
+		if( isset( $request_uri_array[1]{0} ) )
 		{
 			$_GET[NV_NAME_VARIABLE] = $request_uri_array[1];
 
-			if( isset( $request_uri_array[2] ) and ! empty( $request_uri_array[2] ) )
+			if( isset( $request_uri_array[2]{0} ) )
 			{
 				$_GET[NV_OP_VARIABLE] = $request_uri_array[2];
 			}
 		}
 	}
-	elseif( ! empty( $request_uri_array[0] ) )
+	elseif( isset( $request_uri_array[0]{0} ) )
 	{
 		$_GET[NV_NAME_VARIABLE] = $request_uri_array[0];
 
-		if( isset( $request_uri_array[1] ) and ! empty( $request_uri_array[1] ) )
+		if( isset( $request_uri_array[1]{0} ) )
 		{
 			$lop = strlen( $request_uri_array[0] ) + 1;
 			$_GET[NV_OP_VARIABLE] = substr( $matches[1], $lop );

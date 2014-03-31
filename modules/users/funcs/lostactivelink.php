@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -63,23 +64,24 @@ if( $checkss == $data['checkss'] )
 				$exp = NV_CURRENTTIME - 86400;
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
+					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :userField AND regdate>' . $exp;
 				}
 				else
 				{
-					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` WHERE `username`=" . $db->dbescape( $data['userField'] ) . " AND `regdate`>" . $exp;
+					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE username= :userField AND regdate>' . $exp;
 				}
-				$result = $db->sql_query( $sql );
-				$numrows = $db->sql_numrows( $result );
-				if( $numrows == 1 )
+				$stmt = $db->prepare( $sql ) ;
+				$stmt->bindParam( ':userField', $data['userField'], PDO::PARAM_STR );
+				$stmt->execute();
+				$row = $stmt->fetch();
+
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostactivelink_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
 
 					$question = $row['question'];
 
@@ -98,7 +100,7 @@ if( $checkss == $data['checkss'] )
 						$nv_Request->unset_request( 'lostactivelink_seccode', 'session' );
 
 						$contents = user_info_exit( $info );
-						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+						$contents .= '<meta http-equiv="refresh" content="15;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
@@ -118,16 +120,18 @@ if( $checkss == $data['checkss'] )
 							$checknum = md5( $checknum );
 
 							$subject = $lang_module['lostactive_mailtitle'];
-							$message = sprintf( $lang_module['lostactive_active_info'], $row['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $row['userid'] . "&checknum=" . $checknum, $row['username'], $row['email'], $password_new, nv_date( "H:i d/m/Y", $row['regdate'] + 86400 ) );
-							$message .= "<br /><br />------------------------------------------------<br /><br />";
+							$message = sprintf( $lang_module['lostactive_active_info'], $row['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $row['userid'] . '&checknum=' . $checknum, $row['username'], $row['email'], $password_new, nv_date( 'H:i d/m/Y', $row['regdate'] + 86400 ) );
+							$message .= '<br /><br />------------------------------------------------<br /><br />';
 							$message .= nv_EncString( $message );
 							$ok = nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
 
 							if( $ok )
 							{
 								$password = $crypt->hash( $password_new );
-								$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_reg` SET `password`=" . $db->dbescape( $password ) . ", `checknum`=" . $db->dbescape( $checknum ) . " WHERE `userid`=" . $row['userid'];
-								$db->sql_query( $sql );
+								$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg SET password= :password, checknum= :checknum WHERE userid=' . $row['userid'] );
+								$stmt->bindParam( ':password', $password, PDO::PARAM_STR );
+								$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
+								$stmt->execute();
 								$info = sprintf( $lang_module['lostactivelink_send'], $row['email'] );
 							}
 							else
@@ -136,7 +140,7 @@ if( $checkss == $data['checkss'] )
 							}
 
 							$contents = user_info_exit( $info );
-							$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";
+							$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
@@ -176,12 +180,12 @@ if( $checkss == $data['checkss'] )
 if( $step == 2 )
 {
 	$data['step'] = 2;
-	$data['info'] = empty( $error ) ? $lang_module['step2'] : "<span style=\"color:#fb490b;\">" . $error . "</span>";
+	$data['info'] = empty( $error ) ? $lang_module['step2'] : '<span style="color:#fb490b;">' . $error . '</span>';
 }
 else
 {
 	$data['step'] = 1;
-	$data['info'] = empty( $error ) ? $lang_module['step1'] : "<span style=\"color:#fb490b;\">" . $error . "</span>";
+	$data['info'] = empty( $error ) ? $lang_module['step1'] : '<span style="color:#fb490b;">' . $error . '</span>';
 }
 
 $contents = user_lostactivelink( $data, $question );

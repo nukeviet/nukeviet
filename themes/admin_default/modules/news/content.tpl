@@ -4,7 +4,13 @@
 	{error}
 </div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post">
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
 	<div class="gray">
 		<table style="margin-bottom:0; width: 100%">
 			<tr>
@@ -15,11 +21,11 @@
 					<tbody>
 						<tr>
 							<td><strong>{LANG.name}</strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="w400" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="w350" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w400" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/><input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /></td>
+							<td><input class="w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias();">&nbsp;</em></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>
@@ -53,7 +59,8 @@
 								<!-- BEGIN: rowstopic -->
 								<option value="{topicid}" {sl}>{topic_title}</option>
 								<!-- END: rowstopic -->
-							</select><input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
+							</select> 
+							<input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 						</tr>
 					</tbody>
 				</table>
@@ -63,7 +70,7 @@
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_homeimg}</strong></td>
-							<td><input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="Browse server" name="selectimg"/></td>
+							<td><input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
@@ -86,7 +93,7 @@
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td>							<textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+							<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
 						</tr>
 					</tbody>
 				</table></td>
@@ -111,7 +118,7 @@
 						<div class="message_body">
 							<p>
 								{LANG.content_tag_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a>
-							</p>							<textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
+							</p><textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
 						</div>
 					</li>
 					<li>
@@ -228,6 +235,7 @@
 		</table>
 	</div>
 	<div class="gray center">
+		<br />
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status -->
@@ -237,30 +245,37 @@
 		<input name="status0" type="submit" value="{LANG.save_temp}" />
 		<input name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
+		<br />
+		<br />
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-	$("input[name=selectimg]").click(function() {
-		var area = "homeimg";
-		var alt = "homeimgalt";
-		var path = "{UPLOADS_DIR_USER}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-	//]]>
+//<![CDATA[
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+$("input[name=selectimg]").click(function() {
+	var area = "homeimg";
+	var alt = "homeimgalt";
+	var path = "{UPLOADS_DIR_USER}";
+	var currentpath = "{UPLOAD_CURRENT}";
+	var type = "image";
+	nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+});
+//]]>
 </script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}modules/news/js/content.js"></script>
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
-	//<![CDATA[
-	$("#idtitle").change(function() {
-		get_alias();
-	});
-	//]]>
+//<![CDATA[
+$("#idtitle").change(function() {
+	get_alias();
+});
+//]]>
 </script>
 <!-- END: getalias -->
 <!-- END:main -->

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
@@ -16,7 +17,7 @@ if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
  */
 function referer()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list, $total;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $cts, $total;
 
 	$xtpl = new XTemplate( 'referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -68,7 +69,7 @@ function referer()
  */
 function allreferers()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $cts, $host_list;
 
 	$xtpl = new XTemplate( 'allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -120,7 +121,7 @@ function allreferers()
  */
 function allbots()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $bot_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $bot_list, $cts;
 
 	$xtpl = new XTemplate( 'allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -172,7 +173,7 @@ function allbots()
  */
 function allos()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $os_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $os_list, $cts;
 
 	$xtpl = new XTemplate( 'allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -224,7 +225,7 @@ function allos()
  */
 function allbrowsers()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $browsers_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $browsers_list, $cts;
 
 	$xtpl = new XTemplate( 'allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -277,7 +278,7 @@ function allbrowsers()
  */
 function allcountries()
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $countries_list, $cts;
 
 	$xtpl = new XTemplate( 'allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -329,7 +330,7 @@ function allcountries()
  */
 function main()
 {
-	global $module_info, $global_config, $module_name, $module_file, $db, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
+	global $module_info, $module_name, $module_file, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 

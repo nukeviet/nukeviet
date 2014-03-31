@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -34,9 +35,9 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/' );
 
-		$sql = "SELECT `c_type`, `c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE (`c_type`='day' AND `c_val`='" . date( 'd', NV_CURRENTTIME ) . "') OR (`c_type`='month' AND `c_val`='" . date( 'M', NV_CURRENTTIME ) . "') OR (`c_type`='total' AND `c_val`='hits')";
-		$query = $db->sql_query( $sql );
-		while( list( $c_type, $c_count ) = $db->sql_fetchrow( $query ) )
+		$sql = "SELECT c_type, c_count FROM " . NV_COUNTER_TABLE . " WHERE (c_type='day' AND c_val='" . date( 'd', NV_CURRENTTIME ) . "') OR (c_type='month' AND c_val='" . date( 'M', NV_CURRENTTIME ) . "') OR (c_type='total' AND c_val='hits')";
+		$query = $db->query( $sql );
+		while( list( $c_type, $c_count ) = $query->fetch( 3 ) )
 		{
 			if( $c_type == 'day' )
 			{
@@ -52,15 +53,15 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			}
 		}
 
-		$sql = "SELECT `uid`, `full_name` FROM `" . NV_SESSIONS_GLOBALTABLE . "` WHERE `onl_time` >= " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
-		$query = $db->sql_query( $sql );
+		$sql = "SELECT userid, full_name FROM " . NV_SESSIONS_GLOBALTABLE . " WHERE onl_time >= " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
+		$query = $db->query( $sql );
 
 		$count_online = $users = $bots = $guests = 0;
-		while( $row = $db->sql_fetchrow( $query ) )
+		while( $row = $query->fetch() )
 		{
 			++$count_online;
 
-			if( $row['uid'] != 0 )
+			if( $row['userid'] != 0 )
 			{
 				++$users;
 			}

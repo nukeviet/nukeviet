@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -28,7 +29,7 @@ if( defined( 'NV_SYSTEM' ) )
 			$lang_module = $temp_lang_module;
 		}
 
-		$sql = "SELECT id, title, alias, parentid FROM `" . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories` WHERE parentid=0 ORDER BY weight";
+		$sql = "SELECT id, title, alias, parentid FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_categories WHERE parentid=0 ORDER BY weight";
 		$list = nv_db_cache( $sql, '', $module );
 
 		$key = nv_substr( $nv_Request->get_title( 'q', 'post', '', 1 ), 0, NV_MAX_SEARCH_LENGTH );

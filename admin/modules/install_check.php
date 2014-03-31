@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -99,7 +100,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $array_file['folder'] ) and ! file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
 				{
 					$cp = '';
-					$e = explode( "/", $array_file['filename'] );
+					$e = explode( '/', $array_file['filename'] );
 
 					foreach( $e as $p )
 					{
@@ -145,7 +146,7 @@ if( file_exists( $filename ) )
 				if( ! empty( $dir_name ) )
 				{
 					$cp = '';
-					$e = explode( "/", $dir_name );
+					$e = explode( '/', $dir_name );
 
 					foreach( $e as $p )
 					{
@@ -260,7 +261,7 @@ if( file_exists( $filename ) )
 		}
 		else
 		{
-			$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup' );
+			$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup' );
 			$xtpl->parse( 'complete.ok' );
 		}
 

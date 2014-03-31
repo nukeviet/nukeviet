@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-10-2010 17:30
  */
 
@@ -12,11 +13,11 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $mod = $nv_Request->get_title( 'mod', 'post' );
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( 'NO_' . $mod );
 
-$sql = 'SELECT `in_menu` FROM `' . NV_MODULES_TABLE . '` WHERE `title`=' . $db->dbescape( $mod );
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-
-if( $numrows != 1 )
+$sth = $db->prepare( 'SELECT in_menu FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
+$sth->bindParam( ':title', $mod, PDO::PARAM_STR );
+$sth->execute();
+$row = $sth->fetch();
+if( empty( $row ) )
 {
 	die( 'NO_' . $mod );
 }
@@ -27,7 +28,6 @@ $include_file = NV_ROOTDIR . '/modules/' . $modfile . '/funcs/main.php';
 
 if( file_exists( $include_file ) and filesize( $include_file ) != 0 )
 {
-	$row = $db->sql_fetchrow( $result );
 	$in_menu = $row['in_menu'] ? 0 : 1;
 }
 else
@@ -35,8 +35,9 @@ else
 	$in_menu = 0;
 }
 
-$sql = 'UPDATE `' . NV_MODULES_TABLE . '` SET `in_menu`=' . $in_menu . ' WHERE `title`=' . $db->dbescape( $mod );
-$db->sql_query( $sql );
+$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET in_menu=' . $in_menu . ' WHERE title= :title');
+$sth->bindParam( ':title', $mod, PDO::PARAM_STR );
+$sth->execute();
 
 nv_del_moduleCache( 'modules' );
 

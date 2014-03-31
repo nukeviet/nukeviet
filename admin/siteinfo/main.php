@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:5
  */
 
@@ -143,7 +144,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 	$arr_mod = array_keys( $site_mods );
 	$module_name = $arr_mod[0];
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
@@ -166,12 +167,12 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$field[] = array(
 			'key' => $lang_module['version_news'], //
-			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( "d/m/Y H:i", strtotime( $new_version->date ) ) )
+			'value' => sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, nv_date( 'd/m/Y H:i', strtotime( $new_version->date ) ) )
 		);
 
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
 		{
-			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=webtools&amp;" . NV_OP_VARIABLE . "=checkupdate" );
+			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
 		}
 	}
 

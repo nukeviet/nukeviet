@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -42,15 +43,22 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $bid == 0 )
 	{
-		list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat`" ) );
+		$weight = $db->query( "SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat" )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `description`, `image`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES (NULL, 0, 4, " . $db->dbescape( $title ) . ", " . $db->dbescape( $alias ) . ", " . $db->dbescape( $description ) . ", " . $db->dbescape( $image ) . ", " . $db->dbescape( $weight ) . ", " . $db->dbescape( $keywords ) . ", UNIX_TIMESTAMP(), UNIX_TIMESTAMP())";
-
-		if( $db->sql_query_insert_id( $sql ) )
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_block_cat (adddefault, numbers, title, alias, description, image, weight, keywords, add_time, edit_time) VALUES (0, 4, :title , :alias, :description, :image, :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+		$data_insert = array();
+		$data_insert['title'] = $title;
+		$data_insert['alias'] = $alias;
+		$data_insert['description'] = $description;
+		$data_insert['image'] = $image;
+		$data_insert['weight'] = $weight;
+		$data_insert['keywords'] = $keywords;
+		
+		if( $db->insert_id( $sql, 'bid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 			die();
 		}
 		else
@@ -60,12 +68,18 @@ if( ! empty( $savecat ) )
 	}
 	else
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` SET `title`=" . $db->dbescape( $title ) . ", `alias` = " . $db->dbescape( $alias ) . ", `description`=" . $db->dbescape( $description ) . ", `image`= " . $db->dbescape( $image ) . ", `keywords`= " . $db->dbescape( $keywords ) . ", `edit_time`=UNIX_TIMESTAMP() WHERE `bid` =" . $bid;
-		if( $db->exec( $sql ) )
+		$stmt = $db->prepare( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_block_cat SET title= :title, alias = :alias, description= :description, image= :image, keywords= :keywords, edit_time=" . NV_CURRENTTIME . " WHERE bid =" . $bid );
+		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
+		$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $description, PDO::PARAM_STR );
+		$stmt->bindParam( ':image', $image, PDO::PARAM_STR );
+		$stmt->bindParam( ':keywords', $keywords, PDO::PARAM_STR );
+		$stmt->execute();
+		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-			die();
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			die('den day');
 		}
 		else
 		{
@@ -77,7 +91,7 @@ if( ! empty( $savecat ) )
 $bid = $nv_Request->get_int( 'bid', 'get', 0 );
 if( $bid > 0 )
 {
-	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->sql_fetchrow( $db->sql_query( "SELECT `bid`, `title`, `alias`, `description`, `image`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` where `bid`=" . $bid . "" ) );
+	list( $bid, $title, $alias, $description, $image, $keywords ) = $db->query( "SELECT bid, title, alias, description, image, keywords FROM " . NV_PREFIXLANG . "_" . $module_data . "_block_cat where bid=" . $bid )->fetch( 3 );
 	$lang_module['add_block_cat'] = $lang_module['edit_block_cat'];
 }
 

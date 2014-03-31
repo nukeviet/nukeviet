@@ -14,7 +14,12 @@
 		<!-- BEGIN: image -->
 		<a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a>
 		<!-- END: image -->
-		<h4><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+		<h4>
+			<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
+		</h4>
 		<p>
 			{CONTENT.hometext}
 		</p>
@@ -34,6 +39,9 @@
 			<li>
 				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 				<span class="small">{CONTENT.publtime}</span>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
 			</li>
 			<!-- END: catcontentloop -->
 		</ul>
@@ -41,7 +49,7 @@
 </div>
 
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="acenter">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->

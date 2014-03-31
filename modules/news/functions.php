@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 0:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 0:51
  */
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 if( ! in_array( $op, array( 'viewcat', 'detail' ) ) )
@@ -36,11 +37,10 @@ $parentid = 0;
 $alias_cat_url = isset( $array_op[0] ) ? $array_op[0] : '';
 $array_mod_title = array();
 
-$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_cat` ORDER BY `order` ASC';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $list = nv_db_cache( $sql, 'catid', $module_name );
 foreach( $list as $l )
 {
-	$l['alias'] = $db->unfixdb( $l['alias'] );
 	$global_array_cat[$l['catid']] = $l;
 	$global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
 	if( $alias_cat_url == $l['alias'] )
@@ -100,7 +100,6 @@ unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );
 $module_info['submenu'] = 0;
 
 $page = 1;
-$per_page_comment = 5;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
 $count_op = sizeof( $array_op );
@@ -109,9 +108,9 @@ if( ! empty( $array_op ) and $op == 'main' )
 	if( $catid == 0 )
 	{
 		$contents = $lang_module['nocatpage'] . $array_op[0];
-		if( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == 'page-' )
+		if( isset( $array_op[0] ) and substr( $array_op[0], 0, 5 ) == 'page-' )
 		{
-			$page = intval( substr( $array_op[1], 5 ) );
+			$page = intval( substr( $array_op[0], 5 ) );
 		}
 		elseif( ! empty( $alias_cat_url ) )
 		{

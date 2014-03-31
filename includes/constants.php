@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -113,7 +114,7 @@ define( 'NV_SEND_ERRORS_LIST', E_USER_ERROR );
 //Danh sach cac loi se gui den email
 
 //Phan dau cua trang
-define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 3.x\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) " . gmdate( "Y" ) . " VINADES.,JSC. All rights reserved\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
+define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) " . gmdate( "Y" ) . " VINADES.,JSC. All rights reserved\n * @License GNU/GPL version 2 or any later version\n * @Createdate " . gmdate( "D, d M Y H:i:s" ) . " GMT\n */" );
 
 // Phien ban giao dien tu cao den thap - it nhat phai co hai kieu mac dinh khong duoc it hon
 define( 'NV_THEME_TYPE', 'd,t' );
@@ -122,8 +123,8 @@ $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op_file'] = '/^([a-zA-Z0-9\-\_]+)\.php$/';
-$global_config['check_block_global'] = '/^global\.([a-zA-Z0-9\-\_]+)\.php$/';
 $global_config['check_block_module'] = '/^(global|module)\.([a-zA-Z0-9\-\_]+)\.php$/';
+$global_config['check_block_theme'] = '/^([a-zA-Z0-9\-]+)\.([a-zA-Z0-9\-\_]+)\.php$/';
 $global_config['check_theme'] = '/^(?!admin\_|mobile\_)([a-zA-Z0-9\-\_]+)$/';
 $global_config['check_theme_mobile'] = '/^(mobile)\_[a-zA-Z0-9\-\_]+$/';
 $global_config['check_theme_admin'] = '/^(admin)\_[a-zA-Z0-9\-\_]+$/';

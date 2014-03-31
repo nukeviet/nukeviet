@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<script src="{NV_BASE_SITEURL}js/admin.js" type="text/javascript"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -84,7 +85,7 @@
 					<label> {LANG.gender} </label>
 				</dt>
 				<dd class="fl">
-					<select name="gender">
+					<select name="gender" class="input">
 						<!-- BEGIN: gender_option -->
 						<option value="{GENDER.value}"{GENDER.selected}>{GENDER.title}</option>
 						<!-- END: gender_option -->
@@ -93,10 +94,20 @@
 			</dl>
 			<dl class="clearfix">
 				<dt class="fl">
-					<label> {LANG.avata} (80x80) </label>
+					<label> {LANG.avata} </label>
 				</dt>
 				<dd class="fl">
-					<input type="file" name="avatar" />
+					<!-- BEGIN: photo -->
+					<div id="current-photo">
+						<img src="{DATA.photo}" alt="{DATA.username}" class="s-border"/><br />
+						<input type="hidden" name="photo_delete" id="photo_delete" value="{DATA.photo_delete}"/>
+						<a href="javascript:void(0);" id="current-photo-btn">{LANG.avata_delete}</a>
+					</div>
+					<!-- END: photo -->
+					<div id="change-photo" class="hide">
+						<input type="text" id="avatar" name="avatar" value="" class="input input-min"/>
+						<input type="button" value="{LANG.avata_chosen}" id="btn_upload" class="button-2"/>
+					</div>
 				</dd>
 			</dl>
 			<dl class="clearfix">
@@ -112,7 +123,7 @@
 					<label> {LANG.showmail} </label>
 				</dt>
 				<dd class="fl">
-					<select name="view_mail">
+					<select name="view_mail" class="input">
 						<option value="0">{LANG.no}</option>
 						<option value="1"{DATA.view_mail}>{LANG.yes}</option>
 					</select>
@@ -129,9 +140,9 @@
 						<!-- END: required -->
 					</label>
 					<br>
-					<i>{FIELD.description}</i>
+					<em>{FIELD.description}</em>
 				</dt>
-				<dd class="fr">
+				<dd class="fl">
 					<!-- BEGIN: textbox -->
 					<input class="{FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 					<!-- END: textbox -->
@@ -175,17 +186,31 @@
 	</form>
 </div>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#frm').validate();
-		$(".datepicker").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-	}); 
+//<![CDATA[
+$(document).ready(function() {
+	$('#frm').validate();
+	$(".datepicker").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true
+	});
+	$("#btn_upload").click(function() {
+		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 550, 520, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		return false;
+	});
+	$('#current-photo-btn').click(function(){
+		$('#current-photo').hide();
+		$('#photo_delete').val('1');
+		$('#change-photo').show();
+	});
+	<!-- BEGIN: add_photo -->
+	$('#change-photo').show();
+	<!-- END: add_photo -->
+}); 
+//]]>
 </script>
 <!-- END: main -->

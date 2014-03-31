@@ -9,7 +9,7 @@
 	<blockquote class="error"><span>{ERROR}</span></blockquote>
 </div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_ftp">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_ftp">
 	<table class="tab1">
 		<tfoot>
 			<tr>
@@ -19,7 +19,7 @@
 		<tbody>
 			<tr>
 				<td><strong>{LANG.server}</strong></td>
-				<td><input class="w250" type="text" name="ftp_server" value="{VALUE.ftp_server}" /><span>{LANG.port}</span><input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
+				<td><input class="w250" type="text" name="ftp_server" value="{VALUE.ftp_server}" /> <span> {LANG.port} </span> <input type="text" value="{VALUE.ftp_port}" name="ftp_port" style="width: 30px;"/></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.username}</strong></td>
@@ -31,7 +31,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.ftp_path}</strong></td>
-				<td><input class="w250" type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" /><input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
+				<td><input class="w250" type="text" name="ftp_path" id="ftp_path_iavim" value="{VALUE.ftp_path}" /> <input type="button" id="autodetectftp" value="{LANG.ftp_auto_detect_root}"/></td>
 			</tr>
 		</tbody>
 	</table>

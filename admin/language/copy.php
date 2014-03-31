@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -12,12 +13,12 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['nv_admin_copy'];
 
 $array_lang_exit = array();
-$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $db->sql_fetch_assoc( $result ) )
+foreach ( $columns_array as $row )
 {
-	if( substr( $row['field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
 		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
@@ -29,7 +30,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 if( empty( $array_lang_exit ) )
 {
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
@@ -45,9 +46,9 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 	$newslang = $nv_Request->get_title( 'newslang', 'post', '' );
 	$typelang = $nv_Request->get_title( 'typelang', 'post', '' );
 
-	if( $typelang == "-vi" )
+	if( $typelang == '-vi' )
 	{
-		$typelang = "-";
+		$typelang = '-';
 		$replace_lang_vi = true;
 	}
 	else
@@ -61,27 +62,30 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 
 		if( $replace_lang_vi == true )
 		{
-			nv_copyfile( NV_ROOTDIR . "/js/language/vi.js", NV_ROOTDIR . "/js/language/" . $newslang . ".js" );
-			$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $newslang . "`=`author_vi`" );
-			$query = "SELECT `id`, `lang_vi` FROM `" . NV_LANGUAGE_GLOBALTABLE . "`";
-			$result = $db->sql_query( $query );
+			nv_copyfile( NV_ROOTDIR . '/js/language/vi.js', NV_ROOTDIR . '/js/language/' . $newslang . '.js' );
+			$db->query( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $newslang . '=author_vi' );
 
-			while( list( $id, $author_lang ) = $db->sql_fetchrow( $result ) )
+			$query = 'SELECT id, lang_vi FROM ' . NV_LANGUAGE_GLOBALTABLE;
+			$result = $db->query( $query );
+			while( list( $id, $author_lang ) = $result->fetchrow( 3 ) )
 			{
 				$author_lang = nv_EncString( $author_lang );
-				$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $newslang . "` ='" . $author_lang . "' WHERE `id` = '" . $id . "'" );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $newslang . ' = :author_lang WHERE id = ' . $id );
+				$sth->bindParam( ':author_lang', $author_lang, PDO::PARAM_STR );
+				$sth->execute();
+
 			}
 		}
 		elseif( isset( $language_array[$typelang] ) )
 		{
-			nv_copyfile( NV_ROOTDIR . "/js/language/" . $typelang . ".js", NV_ROOTDIR . "/js/language/" . $newslang . ".js" );
-			$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "_file` SET `author_" . $newslang . "`=`author_" . $typelang . "`" );
-			$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $newslang . "`=`lang_" . $typelang . "`" );
+			nv_copyfile( NV_ROOTDIR . '/js/language/' . $typelang . '.js', NV_ROOTDIR . '/js/language/' . $newslang . '.js' );
+			$db->query( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $newslang . '=author_' . $typelang );
+			$db->query( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $newslang . '=lang_' . $typelang );
 		}
 
 		$nv_Request->set_Cookie( 'dirlang', $newslang, NV_LIVE_COOKIE_TIME );
 
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface' );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=interface' );
 
 		$xtpl->parse( 'copyok' );
 		$contents = $xtpl->text( 'copyok' );
@@ -93,7 +97,7 @@ if( $nv_Request->isset_request( 'newslang,typelang,checksess', 'post' ) and $nv_
 }
 $lang_array_file = array();
 
-$lang_array_file_temp = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
+$lang_array_file_temp = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 foreach( $lang_array_file_temp as $value )
 {
 	if( file_exists( NV_ROOTDIR . '/language/' . $value . '/global.php' ) )
@@ -120,7 +124,7 @@ foreach( $language_array as $key => $value )
 	}
 }
 
-if( in_array( "vi", $array_lang_exit ) )
+if( in_array( 'vi', $array_lang_exit ) )
 {
 	$xtpl->assign( 'NAME', $language_array['vi']['name'] );
 	$xtpl->parse( 'main.typelang' );

@@ -1,10 +1,11 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
@@ -21,12 +22,12 @@ $lang_module['database_info'] = 'General information about the database &ldquo;<
 $lang_module['tables_info'] = 'Tables of database &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_caption'] = 'Table information &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['table_row_caption'] = 'Table field information &ldquo;<strong>%s</strong>&rdquo;';
-$lang_module['db_host_info'] = 'Mysql server';
-$lang_module['db_sql_version'] = 'Mysql version';
-$lang_module['db_proto_info'] = 'Mysql TCP/IP version';
-$lang_module['server'] = 'Mysql server name';
+$lang_module['db_host_info'] = 'Server';
+$lang_module['db_sql_version'] = 'Version';
+$lang_module['db_proto_info'] = 'TCP/IP version';
+$lang_module['server'] = 'Server name';
 $lang_module['db_dbname'] = 'Database name';
-$lang_module['db_uname'] = 'Username mysql';
+$lang_module['db_uname'] = 'Username';
 $lang_module['db_charset'] = 'Charset';
 $lang_module['db_collation'] = 'Collation';
 $lang_module['db_time_zone'] = 'Time zone';

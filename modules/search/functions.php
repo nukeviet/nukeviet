@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -20,13 +21,10 @@ function LoadModulesSearch()
 {
 	global $site_mods, $global_config;
 
-	$pathmodule = NV_ROOTDIR . '/modules';
-	$folder = nv_scandir( $pathmodule, $global_config['check_module'] );
 	$arrayfolder = array();
 	foreach( $site_mods as $mod => $arr_mod )
 	{
-		$pathserch = $pathmodule . '/' . $arr_mod['module_file'] . '/search.php';
-		if( file_exists( $pathserch ) )
+		if( file_exists( NV_ROOTDIR . '/modules/' . $arr_mod['module_file'] . '/search.php' ) )
 		{
 			$arrayfolder[$mod] = array(
 				'module_name' => $mod,
@@ -76,12 +74,9 @@ function nv_substr_clean( $string, $mode = 'lr' )
  */
 function BoldKeywordInStr( $str, $keyword, $logic )
 {
-	global $db;
-
 	$str = nv_br2nl( $str );
 	$str = nv_nl2br( $str, ' ' );
 	$str = nv_unhtmlspecialchars( strip_tags( trim( $str ) ) );
-	$str = $db->unfixdb( $str );
 
 	$pos = false;
 

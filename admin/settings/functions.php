@@ -1,16 +1,17 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 1:58
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $allow_func = array( 'main', 'smtp' );
-if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
+if( defined( 'NV_IS_GODADMIN' ) OR ( defined( 'NV_IS_SPADMIN' ) AND $global_config['idsite'] > 0 ) )
 {
 	$allow_func[] = 'system';
 }
@@ -23,14 +24,15 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'cronjobs_edit';
 	$allow_func[] = 'cronjobs_del';
 	$allow_func[] = 'cronjobs_act';
+	$allow_func[] = 'plugin';
 	$allow_func[] = 'variables';
 	$allow_func[] = 'cdn';
 }
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_settings']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_settings']
 );
 
 unset( $page_title, $select_options );
@@ -63,23 +65,23 @@ function nv_admin_add_theme( $contents )
 
 	foreach( $contents['run_file'][2] as $run )
 	{
-		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'RUN_FILE', array( 'key' => $run, 'selected' => $contents['run_file'][3] == $run ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.run_file' );
 	}
 
 	for( $i = 0; $i < 24; ++$i )
 	{
-		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'HOUR', array( 'key' => $i, 'selected' => $i == $contents['hour'][1] ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.hour' );
 	}
 
 	for( $i = 0; $i < 60; ++$i )
 	{
-		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected=\'selected\'' : '' ) );
+		$xtpl->assign( 'MIN', array( 'key' => $i, 'selected' => $i == $contents['min'][1] ? ' selected="selected"' : '' ) );
 		$xtpl->parse( 'main.min' );
 	}
 
-	$xtpl->assign( 'DELETE', ! empty( $contents['del'][1] ) ? " checked=\"checked\"" : "" );
+	$xtpl->assign( 'DELETE', ! empty( $contents['del'][1] ) ? ' checked="checked"' : '' );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -93,7 +95,7 @@ function nv_admin_add_theme( $contents )
  */
 function main_theme( $contents )
 {
-	if( empty( $contents ) ) return "";
+	if( empty( $contents ) ) return '';
 
 	global $global_config, $module_file;
 

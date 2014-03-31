@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -12,11 +13,11 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $array_site_cat_module = array();
 if( $global_config['idsite'] )
 {
-	$result = $db->sql_query( 'SELECT module FROM `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site_cat` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . $db_config['prefix'] . '_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=' . $global_config['idsite'] );
-	$row = $db->sql_fetch_assoc( $result );
-	if( ! empty( $row['module'] ) )
+	$_module = $db->query( 'SELECT module FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+
+	if( ! empty( $_module ) )
 	{
-		$array_site_cat_module = explode( ',', $row['module'] );
+		$array_site_cat_module = explode( ',', $_module );
 	}
 }
 
@@ -38,25 +39,36 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 		$author = '';
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
-		if( empty( $array_site_cat_module ) OR in_array( $modfile_i, $array_site_cat_module ) )
+		if( empty( $array_site_cat_module ) OR in_array( $modfile, $array_site_cat_module ) )
 		{
-			$ok = $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_setup_modules` (`title`, `is_sysmod`, `virtual`, `module_file`, `module_data`, `mod_version`, `addtime`, `author`, `note`) VALUES (" . $db->dbescape( $title ) . ", '0', '0', " . $db->dbescape( $modfile ) . ", " . $db->dbescape( $module_data ) . ", " . $db->dbescape( $mod_version ) . ", '" . NV_CURRENTTIME . "', " . $db->dbescape( $author ) . ", " . $db->dbescape( $note ) . ")" );
-			if( $ok )
+			try
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' "' . $module_data . '"', '', $admin_info['userid'] );
-				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5( $title . session_id() . $global_config['sitekey'] ) );
-				die();
+				$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ( :title, 0, 0, :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)' );
+				$sth->bindParam( ':title', $title, PDO::PARAM_STR );
+				$sth->bindParam( ':module_file', $modfile, PDO::PARAM_STR );
+				$sth->bindParam( ':module_data', $module_data, PDO::PARAM_STR );
+				$sth->bindParam( ':mod_version', $mod_version, PDO::PARAM_STR );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+				if( $sth->execute() )
+				{
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' ' . $module_data, '', $admin_info['userid'] );
+					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5( $title . session_id() . $global_config['sitekey'] ) );
+					die();
+				}
+			}
+			catch (PDOException $e)
+			{
+				trigger_error( $e->getMessage() );
 			}
 		}
 	}
 }
 
-$sql = 'SELECT `title` FROM `' . $db_config['prefix'] . '_setup_modules` WHERE `virtual`=1 ORDER BY `addtime` ASC';
-$result = $db->sql_query( $sql );
 
 $page_title = $lang_module['vmodule_add'];
 
-
+$xtpl = new XTemplate( 'vmodule.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 if( $error )
 {
 	$lang_module['vmodule_blockquote'] = $lang_module['vmodule_exit'];
@@ -74,10 +86,10 @@ $xtpl->assign( 'CHECKSS', md5( session_id() . 'addmodule' ) );
 $xtpl->assign( 'TITLE', $title );
 $xtpl->assign( 'NOTE', $note );
 
-while( list( $modfile_i ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_modules WHERE virtual=1 ORDER BY addtime ASC';
+$result = $db->query( $sql );
+while( list( $modfile_i ) = $result->fetch( 3 ) )
 {
-	$modfile_i = $db->unfixdb( $modfile_i );
-
 	if( in_array( $modfile_i, $modules_site ) )
 	{
 		if( ! empty( $array_site_cat_module ) AND ! in_array( $modfile_i, $array_site_cat_module ) )

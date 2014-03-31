@@ -15,7 +15,7 @@
 	<colgroup>
 		<col class="w50">
 		<col span="3" />
-		<col class="w100">
+		<col class="w150">
 	</colgroup>
 	<thead>
 		<tr class="center">
@@ -40,7 +40,10 @@
 			<td><a href="{ROW.link_view}" title="{ROW.title}"><strong>{ROW.title}</strong></a></td>
 			<td> {ROW.menu_item} </td>
 			<td> {ROW.description} </td>
-			<td class="center"><a class="edit_icon" href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a></td>
+			<td class="center">
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop1 -->
 	</tbody>

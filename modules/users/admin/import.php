@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 - 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
@@ -38,8 +39,8 @@ function nv_read_data_from_excel( $file_name )
 	$user_field['active'] = array( 'col' => 12, 'title' => ( isset( $lang_module['active_users'] ) ) ? $lang_module['active_users'] : 'active' );
 
 	$col = 13;
-	$result_field = $db->sql_query( "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "_field` ORDER BY `weight` ASC" );
-	while( $row_field = $db->sql_fetch_assoc( $result_field ) )
+	$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+	while( $row_field = $result_field->fetch() )
 	{
 		$language = unserialize( $row_field['language'] );
 		$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row_field['field'];
@@ -85,10 +86,10 @@ if( $step == 1 )
 {
 	if( file_exists( NV_ROOTDIR . '/includes/class/PHPExcel.php' ) )
 	{
-		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
+		$lang_module['import_note'] = sprintf( $lang_module['import_note'], NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=export&amp;example=1", SYSTEM_UPLOADS_DIR . '/' . $module_name );
 
 		$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 

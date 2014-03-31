@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -76,6 +77,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_name = $global_config['rewrite_op_mod'];
 	}
 
+	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
 		$module_info = $site_mods[$module_name];
@@ -101,7 +103,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh cac $op, $array_op
 			$array_op = array();
 
-			if( ! preg_match( '/^[a-z0-9\-\_\/]+$/i', $op ) )
+			if( ! preg_match( '/^[a-z0-9\-\_\/\+]+$/i', $op ) )
 			{
 				Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 				die();
@@ -127,6 +129,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
+					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+					die();
 				}
 				if( $drag_block )
 				{
@@ -153,32 +157,31 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh giao dien chung
 			$is_mobile = false;
 			$theme_type = '';
-
-			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $module_info['mobile'] ) and file_exists( NV_ROOTDIR . '/themes/' . $module_info['mobile'] . '/theme.php' ) )
+            $_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
+			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 			{
-				$global_config['module_theme'] = $module_info['mobile'];
+				$global_config['module_theme'] = $_theme;
 				$is_mobile = true;
 				$theme_type = $global_config['array_theme_type'][1];
 			}
-			elseif( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/theme.php' ) )
-			{
-				$global_config['module_theme'] = $module_info['theme'];
-				$theme_type = $global_config['array_theme_type'][0];
-			}
-			elseif( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/theme.php' ) )
-			{
-				$global_config['module_theme'] = $global_config['site_theme'];
-				$theme_type = $global_config['array_theme_type'][0];
-			}
-			elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
-			{
-				$global_config['module_theme'] = 'default';
-				$theme_type = $global_config['array_theme_type'][0];
-			}
 			else
-			{
-				trigger_error( 'Error! Does not exist themes default', 256 );
-			}
+    		{
+                $_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
+    			if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
+    			{
+    				$global_config['module_theme'] = $_theme;
+    				$theme_type = $global_config['array_theme_type'][0];
+    			}
+    			elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
+    			{
+    				$global_config['module_theme'] = 'default';
+    				$theme_type = $global_config['array_theme_type'][0];
+    			}
+    			else
+    			{
+    				trigger_error( 'Error! Does not exist themes default', 256 );
+    			}
+            }
 
 			// Xac lap lai giao kieu giao dien hien tai
 			if( $theme_type != $global_config['current_theme_type'] )
@@ -189,9 +192,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			unset( $theme_type );
 
 			// Xac dinh layout funcs cua module
-			$sql = 'SELECT f.func_name, t.layout FROM `' . NV_MODFUNCS_TABLE . '` AS f INNER JOIN `' . NV_PREFIXLANG . '_modthemes` AS t ON f.func_id=t.func_id WHERE f.in_module =' . $db->dbescape_string( $module_name ) . ' AND t.theme=' . $db->dbescape_string( $global_config['module_theme'] );
-			$cache_file = NV_LANG_DATA . '_modules_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
-
+			$cache_file = NV_LANG_DATA . '_modules_' . md5( $module_name . '_' . $global_config['module_theme'] ) . '_' . NV_CACHE_PREFIX . '.cache';
 			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
 			{
 				$module_info['layout_funcs'] = unserialize( $cache );
@@ -199,12 +200,18 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			else
 			{
 				$module_info['layout_funcs'] = array();
-				$result = $db->sql_query( $sql );
-				while( $row = $db->sql_fetch_assoc( $result ) )
+				$sth = $db->prepare( 'SELECT f.func_name, t.layout FROM ' . NV_MODFUNCS_TABLE . ' f
+					INNER JOIN ' . NV_PREFIXLANG . '_modthemes t ON f.func_id=t.func_id
+					WHERE f.in_module = :module AND t.theme= :theme' );
+				$sth->bindParam( ':module', $module_name, PDO::PARAM_STR );
+				$sth->bindParam( ':theme', $global_config['module_theme'], PDO::PARAM_STR );
+				$sth->execute();
+				while( $row = $sth->fetch() )
 				{
-					$module_info['layout_funcs'][$db->unfixdb( $row['func_name'] )] = $db->unfixdb( $row['layout'] );
+					$module_info['layout_funcs'][$row['func_name']] = $row['layout'];
 				}
-				$db->sql_freeresult( $result );
+				$sth->closeCursor();
+
 				$cache = serialize( $module_info['layout_funcs'] );
 				nv_set_cache( $cache_file, $cache );
 			}
@@ -270,13 +277,16 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		}
 		elseif( isset( $module_info['funcs']['main'] ) )
 		{
-			$db->sql_query( 'UPDATE `' . NV_MODULES_TABLE . '` SET `act`=2 WHERE `title`=' . $db->dbescape( $module_name ) );
+			$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE title= :title' );
+			$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
+			$sth->execute();
+
 			nv_del_moduleCache( 'modules' );
 		}
 	}
 	else
 	{
-		$sql = 'SELECT * FROM `' . NV_MODFUNCS_TABLE . '` AS f, `' . NV_MODULES_TABLE . '` AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight';
+		$sql = 'SELECT * FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight';
 		$list = nv_db_cache( $sql, '', 'modules' );
 
 		foreach( $list as $row )

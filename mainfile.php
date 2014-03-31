@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -54,20 +55,46 @@ else
 }
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
+if( defined( 'NV_CONFIG_DIR' ) )
+{
+    $server_name = preg_replace( '/^[a-z]+\:\/\//i', '',  isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : ( isset( $_SERVER['SERVER_NAME'] ) ? $_SERVER['SERVER_NAME'] : '' ) );
+    if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php' ) )
+    {
+        require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php';
+        $db_config['dbname'] = $db_config['dbsite'];
+        $global_config['my_domains'] = $server_name;
+    }
+
+    // Thu muc uploads
+    define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
+
+    // Thu muc files
+    define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
+}
+else
+{
+    // Thu muc uploads
+    define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+
+    // Thu muc files
+    define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+}
+
 // Xac dinh IP cua client
 require NV_ROOTDIR . '/includes/class/ips.class.php';
 $ips = new ips();
-$client_info['ip'] = $ips->remote_ip;
-if( $client_info['ip'] == 'none' ) die( 'Error: Your IP address is not correct' );
-// Neu khong co IP
 // define( 'NV_SERVER_IP', $ips->server_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
 define( 'NV_REMOTE_ADDR', $ips->remote_addr );
-define( 'NV_CLIENT_IP', $client_info['ip'] );
+define( 'NV_CLIENT_IP', $ips->remote_ip );
+
+// Neu khong co IP
+if( NV_CLIENT_IP == 'none' ) die( 'Error: Your IP address is not correct' );
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
+$client_info['country'] = nv_getCountry_from_cookie( NV_CLIENT_IP );
+$client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
@@ -94,7 +121,7 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 require NV_ROOTDIR . '/includes/class/xtemplate.class.php';
 
 // IP Ban
-if( nv_is_banIp( $client_info['ip'] ) ) trigger_error( 'Hi and Good-bye!!!', 256 );
+if( nv_is_banIp( NV_CLIENT_IP ) ) trigger_error( 'Hi and Good-bye!!!', 256 );
 
 // Chan proxy
 if( $global_config['proxy_blocker'] != 0 )
@@ -113,7 +140,7 @@ if( defined( 'NV_SYSTEM' ) )
 
 // Ket noi voi class xu ly request
 require NV_ROOTDIR . '/includes/class/request.class.php';
-$nv_Request = new Request( $global_config, $client_info['ip'] );
+$nv_Request = new Request( $global_config, NV_CLIENT_IP );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
 // vd: mydomain1.com
@@ -130,7 +157,6 @@ define( 'NV_MY_DOMAIN', $nv_Request->my_current_domain );
 define( 'NV_HEADERSTATUS', $nv_Request->headerstatus );
 // vd: HTTP/1.0
 
-define( 'NV_USER_AGENT', $nv_Request->user_agent );
 define( 'NV_BASE_SITEURL', $nv_Request->base_siteurl . '/' );
 // vd: /ten_thu_muc_chua_site/
 
@@ -143,62 +169,22 @@ define( 'NV_DOCUMENT_ROOT', $nv_Request->doc_root );
 define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_SERVER_NAME ) );
 // Hau to cua file cache
 
+define( 'NV_USER_AGENT', $nv_Request->user_agent );
+
 // Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
 require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php';
 
-if( defined( 'NV_CONFIG_DIR' ) )
+$domains = explode( ',', $global_config['my_domains'] );
+if( ! in_array( NV_SERVER_NAME, $domains ) )
 {
-	if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php' ) )
-	{
-		require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . NV_SERVER_NAME . '.php';
-		$db_config['dbname'] = $db_config['dbsite'];
-		$global_config['allow_sitelangs'] = explode( ',', $global_config['allow_sitelangs'] );
-	}
-	else
-	{
-		$domains = explode( ',', strtolower( $global_config['my_domains'] ) );
-		if( ! in_array( NV_SERVER_NAME, $domains ) )
-		{
-			$global_config['site_logo'] = 'images/logo.png';
-			$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-			trigger_error( $lang_global['error_404_content'], 256 );
-		}
-		$db_config['dbname'] = $db_config['dbsystem'];
-	}
-
-	// Thu muc uploads
-	define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
-
-	// Thu muc files
-	define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
-}
-else
-{
-	$domains = explode( ',', strtolower( $global_config['my_domains'] ) );
-	if( ! in_array( NV_SERVER_NAME, $domains ) )
-	{
-		$global_config['site_logo'] = 'images/logo.png';
-		$global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-		trigger_error( $lang_global['error_404_content'], 256 );
-	}
-
-	$db_config['dbsystem'] = $db_config['dbname'];
-
-	// Thu muc uploads
-	define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
-
-	// Thu muc files
-	define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+    $global_config['site_logo'] = 'images/logo.png';
+    $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
+    nv_info_die( $global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], '', '', '', '' );
 }
 
 // Xac dinh duong dan thuc den thu muc upload
 define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR );
-
-if( NV_LANG_DATA == 'vi' )
-{
-	require NV_ROOTDIR . '/includes/core/amlich.php';
-}
 
 // vd: /ten_thu_muc_chua_site/
 $global_config['cookie_path'] = $nv_Request->cookie_path;
@@ -232,15 +218,11 @@ $client_info['is_myreferer'] = $nv_Request->referer_key;
 // trang dang xem
 $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_uri;
 
-// HTTP_USER_AGENT
-$client_info['agent'] = $nv_Request->user_agent;
-
-if( preg_match( '/^[0-9]{10,}$/', $nv_Request->get_string( 'nocache', 'get', '' ) ) and // Xac dinh co phai AJAX hay khong
-	$client_info['is_myreferer'] === 1 )
-	define( 'NV_IS_AJAX', true );
+// Xac dinh co phai AJAX hay khong
+if( preg_match( '/^[0-9]{10,}$/', $nv_Request->get_string( 'nocache', 'get', '' ) ) and $client_info['is_myreferer'] === 1 ) define( 'NV_IS_AJAX', true );
 
 // Chan truy cap neu HTTP_USER_AGENT == 'none'
-if( NV_USER_AGENT == 'none' )
+if( NV_USER_AGENT == 'none' and NV_ANTI_AGENT )
 {
 	trigger_error( 'We\'re sorry. The software you are using to access our website is not allowed. Some examples of this are e-mail harvesting programs and programs that will copy websites to your hard drive. If you feel you have gotten this message in error, please send an e-mail addressed to admin. Your I.P. address has been logged. Thanks.', 256 );
 }
@@ -304,6 +286,15 @@ require NV_ROOTDIR . '/includes/class/crypt.class.php';
 $crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
 
+if( isset( $nv_plugin_area[1] ) )
+{
+    // Kết nối với các plugin Trước khi kết nối CSDL
+    foreach ( $nv_plugin_area[1] as $_fplugin )
+    {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
+
 // Bat dau phien lam viec cua MySQL
 require NV_ROOTDIR . '/includes/class/db.class.php';
 $db = new sql_db( $db_config );
@@ -335,7 +326,7 @@ define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-$sql = "SELECT `lang`, `module`, `config_name`, `config_value` FROM `" . NV_CONFIG_GLOBALTABLE . "` WHERE `lang`='" . NV_LANG_DATA . "' OR (`lang`='sys' AND `module`='site') ORDER BY `module` ASC";
+$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' OR (lang='sys' AND module='site') ORDER BY module ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )
 {
@@ -363,19 +354,26 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 // Cap nhat Country moi
 if( ! empty( $newCountry ) )
 {
-	if( $db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_ipcountry` VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
-	{
-		$time_del = NV_CURRENTTIME - 604800;
-		$db->sql_query( "DELETE FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "' AND `country`='ZZ' AND `time` < " . $time_del );
-		$result = $db->sql_query( "SELECT `ip_from`, `ip_to`, `country` FROM `" . $db_config['prefix'] . "_ipcountry` WHERE `ip_file`='" . $newCountry['ip_file'] . "'" );
-		$array_ip_file = array();
-		while( $row = $db->sql_fetch_assoc( $result ) )
-		{
-			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-		}
-		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
-	}
-	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+    try
+    {
+    	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
+    	{
+    		$time_del = NV_CURRENTTIME - 604800;
+    		$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
+    		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
+    		$array_ip_file = array();
+    		while( $row = $result->fetch() )
+    		{
+    			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
+    		}
+    		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+    	}
+    	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
+    }
+    catch( PDOException $e )
+    {
+      trigger_error( $e->getMessage() );
+    }
 }
 
 if( defined( 'NV_ADMIN' ) )
@@ -475,5 +473,14 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_ADMIN' ) )
 unset( $nv_check_update );
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
+
+if( isset( $nv_plugin_area[2] ) )
+{
+    // Kết nối với các plugin Trước khi gọi các module
+    foreach ( $nv_plugin_area[2] as $_fplugin )
+    {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
 
 ?>

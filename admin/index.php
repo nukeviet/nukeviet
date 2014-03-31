@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/30/2009 6:18
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/30/2009 6:18
  */
 
 define( 'NV_ADMIN', true );
@@ -53,8 +54,8 @@ elseif( file_exists( NV_ROOTDIR . '/language/en/admin_global.php' ) )
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
 $admin_mods = array();
-$result = $db->sql_query( 'SELECT * FROM `' . $db_config['dbsystem'] . '`.`' . NV_AUTHORS_GLOBALTABLE . '_module` WHERE `act_' . $admin_info['level'] . '` = 1 ORDER BY `weight` ASC' );
-while( $row = $db->sql_fetch_assoc( $result ) )
+$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_AUTHORS_GLOBALTABLE . '_module WHERE act_' . $admin_info['level'] . ' = 1 ORDER BY weight ASC' );
+while( $row = $result->fetch() )
 {
 	$row['custom_title'] = isset( $lang_global[$row['lang_key']] ) ? $lang_global[$row['lang_key']] : $row['module'];
 	$admin_mods[$row['module']] = $row;
@@ -75,9 +76,8 @@ if( ! empty( $module_name ) )
 	$site_mods = nv_site_mods();
 	if( empty( $site_mods ) and $module_name != 'language' )
 	{
-		$sql = "SELECT `setup` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `lang`='" . NV_LANG_DATA . "' LIMIT 1";
-		$result = $db->sql_query( $sql );
-		list( $setup ) = $db->sql_fetchrow( $result );
+		$sql = "SELECT setup FROM " . $db_config['prefix'] . "_setup_language WHERE lang='" . NV_LANG_DATA . "'";
+		$setup = $db->query( $sql )->fetchColumn();
 		if( empty( $setup ) )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language' );
@@ -187,11 +187,11 @@ if( ! empty( $module_name ) )
 			}
 			elseif( isset( $site_mods[$module_name] ) )
 			{
-				$admin_menu_mods[$module_name] = $site_mods[$module_name]['custom_title'];
+				$admin_menu_mods[$module_name] = $site_mods[$module_name]['admin_title'];
 			}
 			foreach( $site_mods as $key => $value )
 			{
-				if( $value['admin_file'] ) $admin_menu_mods[$key] = $value['custom_title'];
+				if( $value['admin_file'] ) $admin_menu_mods[$key] = $value['admin_title'];
 			}
 			require $include_file;
 			exit();
@@ -203,7 +203,10 @@ if( ! empty( $module_name ) )
 	}
 	elseif( isset( $site_mods[$module_name] ) and $op == 'main' )
 	{
-		$db->sql_query( 'UPDATE `' . NV_MODULES_TABLE . '` SET `admin_file`=0 WHERE `title`=' . $db->dbescape( $module_name ) );
+		$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name' );
+		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
+		$sth->execute();
+
 		nv_del_moduleCache( 'modules' );
 	}
 }

@@ -4,7 +4,12 @@
 <!-- BEGIN: image -->
 <a href="{NEWSTOP.link}"><img class="fl" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a>
 <!-- END: image -->
-<h3><a href="{NEWSTOP.link}">{NEWSTOP.title}</a></h3>
+<h3>
+	<a href="{NEWSTOP.link}">{NEWSTOP.title}</a>
+	<!-- BEGIN: newday -->
+	<span class="icon_new"></span>
+	<!-- END: newday -->	
+</h3>
 <p>
 	{NEWSTOP.hometext}
 </p>
@@ -35,7 +40,12 @@
 		<div class="clear"></div>
 		<div class="cbox">
 			<!-- BEGIN: content -->
-			<h3><a href="{CONTENT.link}">{CONTENT.title}</a></h3>
+			<h3>
+				<a href="{CONTENT.link}">{CONTENT.title}</a>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
+			</h3>
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}"><img class="fl" src="{HOMEIMG01}" width="{IMGWIDTH01}" /></a>
 			<!-- END: image -->

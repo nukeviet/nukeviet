@@ -3,7 +3,8 @@
 	<colgroup>
 		<col class="w50">
 		<col span="2">
-		<col span="2" class="w100">
+		<col class="w50">
+		<col class="w150">
 	</colgroup>
 	<thead>
 		<tr class="center">
@@ -21,7 +22,10 @@
 			<td><a href="{ROW.link}">{ROW.alias}</a></td>
 			<td>{ROW.keywords}</td>
 			<td class="center">{ROW.numnews}</td>
-			<td class="center"><a class="edit_icon" href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;-&nbsp;<a class="delete_icon" href="javascript:void(0);" onclick="nv_del_tags({ROW.tid})">{GLANG.delete}</a></td>
+			<td class="center">
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_tags({ROW.tid})">{GLANG.delete}</a>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

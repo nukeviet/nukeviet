@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 5/12/2010, 1:34
  */
 
-if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
 $xtpl = new XTemplate( 'robots.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -19,7 +19,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 
-$cache_file = NV_ROOTDIR . "/" . NV_DATADIR . "/robots.php";
+$cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
@@ -50,42 +50,36 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	if( empty( $global_config['check_rewrite_file'] ) )
 	{
 		$rbcontents = array();
-		$rbcontents[] = "User-agent: *";
+		$rbcontents[] = 'User-agent: *';
 
 		foreach( $robots_data as $key => $value )
 		{
 			if( $value == 0 )
 			{
-				$rbcontents[] = "Disallow: " . $key;
+				$rbcontents[] = 'Disallow: ' . $key;
 			}
 		}
 
-		$rbcontents[] = "Sitemap: " . $global_config['site_url'] . "/index.php/SitemapIndex" . $global_config['rewrite_endurl'];
+		$rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php/SitemapIndex' . $global_config['rewrite_endurl'];
 
 		$rbcontents = implode( "\n", $rbcontents );
 
-		if( is_writable( NV_ROOTDIR . "/robots.txt" ) )
+		if( is_writable( NV_ROOTDIR . '/robots.txt' ) )
 		{
-			file_put_contents( NV_ROOTDIR . "/robots.txt", $rbcontents, LOCK_EX );
+			file_put_contents( NV_ROOTDIR . '/robots.txt', $rbcontents, LOCK_EX );
 			$redirect = true;
 		}
 		else
 		{
 			$xtpl->assign( 'TITLE', $lang_module['robots_error_writable'] );
-			$xtpl->assign( 'CONTENT', str_replace( array(
-				'\n',
-				'\t'
-			), array(
-				"<br />",
-				"&nbsp;&nbsp;&nbsp;&nbsp;"
-			), nv_htmlspecialchars( $rbcontents ) ) );
+			$xtpl->assign( 'CONTENT', str_replace( array( '\n', '\t' ), array( '<br />', '&nbsp;&nbsp;&nbsp;&nbsp;' ), nv_htmlspecialchars( $rbcontents ) ) );
 			$xtpl->parse( 'main.nowrite' );
 		}
 	}
 
 	if( $redirect )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 		exit();
 	}
 }
@@ -119,21 +113,17 @@ $robots_other[''] = 0;
 $files = scandir( NV_ROOTDIR, true );
 sort( $files );
 $contents = array();
-$contents[] = "User-agent: *";
+$contents[] = 'User-agent: *';
 $number = 0;
 foreach( $files as $file )
 {
-	if( ! preg_match( "/^\.(.*)$/", $file ) )
+	if( ! preg_match( '/^\.(.*)$/', $file ) )
 	{
-		if( is_dir( NV_ROOTDIR . '/' . $file ) )
-			$file = "/" . $file . "/";
+		if( is_dir( NV_ROOTDIR . '/' . $file ) ) $file = '/' . $file . '/';
 		else
-			$file = "/" . $file;
+			$file = '/' . $file;
 
-		$data = array(
-			'number' => ++$number,
-			'filename' => $file
-		);
+		$data = array( 'number' => ++$number, 'filename' => $file );
 
 		$type = isset( $robots_data[$file] ) ? $robots_data[$file] : 1;
 
@@ -142,7 +132,7 @@ foreach( $files as $file )
 			$option = array(
 				'value' => $i,
 				'title' => $lang_module['robots_type_' . $i],
-				'selected' => ($type == $i) ? ' selected="selected"' : ''
+				'selected' => ( $type == $i ) ? ' selected="selected"' : ''
 			);
 
 			$xtpl->assign( 'OPTION', $option );
@@ -155,10 +145,7 @@ foreach( $files as $file )
 }
 foreach( $robots_other as $file => $value )
 {
-	$data = array(
-		'number' => ++$number,
-		'filename' => $file
-	);
+	$data = array( 'number' => ++$number, 'filename' => $file );
 	$xtpl->assign( 'DATA', $data );
 
 	for( $i = 0; $i < 2; $i++ )
@@ -166,7 +153,7 @@ foreach( $robots_other as $file => $value )
 		$option = array(
 			'value' => $i,
 			'title' => $lang_module['robots_type_' . $i],
-			'selected' => ($value == $i) ? ' selected="selected"' : ''
+			'selected' => ( $value == $i ) ? ' selected="selected"' : ''
 		);
 
 		$xtpl->assign( 'OPTION', $option );
@@ -183,4 +170,5 @@ $page_title = $lang_module['robots'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
 ?>

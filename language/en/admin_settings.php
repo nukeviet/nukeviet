@@ -1,10 +1,11 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2013 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
@@ -176,5 +177,37 @@ $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detect
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
 $lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
+$lang_module['rewrite_op_mod'] = 'Remove module name in the url';
+$lang_module['security'] = 'Setup security';
+$lang_module['is_flood_blocker'] = 'Active anti-flood';
+$lang_module['max_requests_60'] = 'The maximum number of requests per minute';
+$lang_module['max_requests_300'] = 'The maximum number of requests in 5 minute';
+$lang_module['nv_anti_iframe'] = 'Anti-Iframe';
+$lang_module['nv_anti_agent'] = 'Check and block computer if the agent does not exist';
+$lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
+$lang_module['captcha_num'] = 'Number characters of captcha';
+$lang_module['captcha_size'] = 'Size of captcha';
+$lang_module['variables'] = 'Setup cookie session';
+$lang_module['live_cookie_time'] = 'The lifetime of the cookie';
+$lang_module['live_session_time'] = 'The lifetime of the session';
+$lang_module['live_session_time0'] = '=0 exist when closing the browser';
+$lang_module['cookie_secure'] = 'cookie secure';
+$lang_module['cookie_httponly'] = 'cookie httponly';
+$lang_module['banip_title_add'] = 'Add IP block';
+$lang_module['banip_title_edit'] = 'Edit IP block';
+$lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
+$lang_module['cdn_download'] = 'Download javascript, css';
+
+$lang_module['plugin'] = 'Configuration Plugin';
+$lang_module['plugin_info'] = 'php file plugin implementation is contained in the &ldquo;<strong>includes/plugin/</strong>&rdquo;. The plugin will always run when the system is activated';
+$lang_module['plugin_file'] = 'Executable File';
+$lang_module['plugin_area'] = 'Area';
+$lang_module['plugin_area_1'] = 'Before the database connection';
+$lang_module['plugin_area_2'] = 'Before run the module';
+$lang_module['plugin_area_3'] = 'Website content before sending to the browser';
+$lang_module['plugin_number'] = 'Order Number';
+$lang_module['plugin_func'] = 'Aunction';
+$lang_module['plugin_add'] = 'Add a plugin';
+$lang_module['plugin_file_delete'] = 'Deleted from the system';
 
 ?>

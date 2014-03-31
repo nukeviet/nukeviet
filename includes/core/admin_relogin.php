@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2010
- * @createdate 1/10/2010 9:3
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 1/10/2010 9:3
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -40,9 +41,10 @@ if( defined( 'NV_IS_ADMIN' ) )
 						require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
 					}
 
-					$result = $db->sql_query( 'SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM `' . NV_AUTHORS_GLOBALTABLE . '` AS t1 INNER JOIN `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` AS t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $admin_info['admin_id'] . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1' );
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
+					$result = $db->query( 'SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $admin_info['admin_id'] . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1' );
+					$row = $result->fetch();
+					$result->closeCursor();
+
 					if( ! $crypt->validate( $nv_password, $row['admin_pass'] ) )
 					{
 						$error = $lang_global['incorrect_password'];
@@ -72,8 +74,8 @@ if( defined( 'NV_IS_ADMIN' ) )
 
 				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
 				{
-					$server_name = preg_replace( '/^www\./e', '', nv_getenv( 'HTTP_HOST' ) );
-					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/www\./e' ), array( '', '' ), $redirect );
+					$server_name = preg_replace( '/^www\./', '', nv_getenv( 'HTTP_HOST' ) );
+					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/www\./' ), array( '', '' ), $redirect );
 					if( ! preg_match( '/^' . preg_quote( $server_name ) . '\/' . preg_quote( NV_ADMINDIR ) . '/', $nohttp_redirect ) )
 					{
 						Header( 'Location: ' . $redirect );
@@ -104,10 +106,11 @@ if( defined( 'NV_IS_ADMIN' ) )
 			}
 			$xtpl = new XTemplate( 'relogin.tpl', $dir_template );
 
+			$xtpl->assign( 'NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS );
 			$xtpl->assign( 'CHARSET', $global_config['site_charset'] );
 			$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 			$xtpl->assign( 'PAGE_TITLE', $lang_global['admin_page'] );
-			$xtpl->assign( 'CSS', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/login.css' );
+			$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 			$xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 			$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -28,7 +29,7 @@ $lang_module['site_timezone'] = 'Múi giờ của site';
 $lang_module['server_configs_info'] = 'Cấu hình máy chủ';
 $lang_module['server_phpversion'] = 'Phiên bản PHP';
 $lang_module['server_phpos'] = 'Hệ điều hành máy chủ';
-$lang_module['server_mysqlversion'] = 'Phiên bản MySQL';
+$lang_module['server_databaseversion'] = 'Phiên bản Database';
 $lang_module['configuration_php'] = 'Cấu hình PHP';
 $lang_module['directive'] = 'Chỉ thị';
 $lang_module['local_value'] = 'Giá trị khu vực';

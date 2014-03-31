@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
@@ -41,7 +42,7 @@ $lang_module['note'] = 'Ghi chú';
 $lang_module['result'] = 'Kết quả';
 $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
-$lang_module['mysql_support'] = 'Hỗ trợ MySQL';
+$lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
 $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';
@@ -116,8 +117,8 @@ $lang_module['admin_repass'] = 'Nhập lại mật khẩu';
 $lang_module['admin_repass_note'] = 'Nhập lại mật khẩu.';
 $lang_module['success'] = 'Bạn đã cài đặt thành công!';
 $lang_module['congratulations'] = 'Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. Bạn cần đăng nhập vào khu vực quản trị để tiến hành các bước cấu hình site.';
-$lang_module['notesupport'] = 'Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href="http://nukeviet.vn" target="_blank"><b>diễn đàn Nukeviet.VN</b></a>.';
-$lang_module['noteuploads'] = '<b>Chú ý:</b> Hãy <b>CHMOD thư mục uploads</b> trên webroot và các thư mục con nằm trong nó ở chế độ 777. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
+$lang_module['notesupport'] = 'Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href="http://nukeviet.vn" target="_blank"><strong>diễn đàn Nukeviet.VN</strong></a>.';
+$lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ 777. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
 $lang_module['thanks'] = 'Xin cảm ơn và chúc thành công!';
 $lang_module['gohome'] = 'Xem trang chủ';
 $lang_module['goadmin'] = 'Đăng nhập trang quản trị';

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -19,9 +20,9 @@ elseif( ! defined( 'NV_IS_USER' ) )
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
-$sql = "SELECT `password` FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $user_info['userid'];
-$query = $db->sql_query( $sql );
-list( $oldpassword ) = $db->sql_fetchrow( $query );
+$sql = 'SELECT password FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
+$query = $db->query( $sql );
+$oldpassword = $query->fetchColumn();
 
 $page_title = $mod_title = $lang_module['change_pass'];
 $key_words = $module_info['keywords'];
@@ -58,8 +59,9 @@ if( $checkss == $array_data['checkss'] )
 	{
 		$new_password = $crypt->hash( $array_data['new_password'] );
 
-		$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `password`=" . $db->dbescape( $new_password ) . " WHERE `userid`=" . $user_info['userid'];
-		$db->sql_query( $sql );
+		$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET password= :password WHERE userid=' . $user_info['userid'] );
+		$stmt->bindParam( ':password', $new_password, PDO::PARAM_STR );
+		$stmt->execute();
 
 		$contents = user_info_exit( $lang_module['change_pass_ok'] );
 		$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . "\" />";

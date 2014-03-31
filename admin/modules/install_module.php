@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -67,7 +68,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 					}
 
 					$info['filefolder'][] = $list[$i]['filename'];
-					$info['filelist'][] = '[' . $j . "] " . $list[$i]['filename'] . " " . $bytes;
+					$info['filelist'][] = '[' . $j . '] ' . $list[$i]['filename'] . ' ' . $bytes;
 				}
 			}
 			else

@@ -1,10 +1,5 @@
 <?php
 
-//if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
-// When developing uncomment the line below, re-comment before making public
-//error_reporting(E_ALL);
-
 /**
  * XTemplate PHP templating engine
  *
@@ -1356,9 +1351,9 @@ class XTemplate
 				{
 					case 'HTML':
 					case 'html':
-						$retval = '<b>[XTemplate]</b><ul>' . nl2br( str_replace( '* ', '<li>', str_replace( " *\n", "</li>\n", $this->_error ) ) ) . '</ul>';
+						$retval = '<strong>[XTemplate]</strong><ul>' . nl2br( str_replace( '* ', '<li>', str_replace( " *\n", "</li>\n", $this->_error ) ) ) . '</ul>';
 						break;
-	
+
 					default:
 						$retval = '[XTemplate] ' . str_replace( ' *\n', "\n", $this->_error );
 						break;
@@ -1646,13 +1641,13 @@ class XTemplate
 				$file = $this->tpldir . DIRECTORY_SEPARATOR . $file;
 			}
 		}
-		
+
 		// NukeViet fix error path file
 		$path_file = $file;
 		if ( defined( 'NV_ROOTDIR' ) ){
 			$path_file = str_replace( "\\", "/", $path_file );
 			$path_file = str_replace( NV_ROOTDIR . "/", "", $path_file );
-		}		
+		}
 
 		$file_text = '';
 
@@ -1702,7 +1697,7 @@ class XTemplate
 					$this->_set_error( "[" . $path_file . "] does not exist" );
 					if ( $this->output_type == 'HTML' )
 					{
-						$file_text = "<b>__XTemplate fatal error: file [$path_file] does not exist in the include path__</b>";
+						$file_text = "<strong>__XTemplate fatal error: file [$path_file] does not exist in the include path__</strong>";
 					}
 				} elseif ( $this->debug && $this->output_type == 'HTML' )
 				{
@@ -1715,7 +1710,7 @@ class XTemplate
 				$this->_set_error( "[" . $path_file . "] does not exist" );
 				if ( $this->output_type == 'HTML' )
 				{
-					$file_text .= "<b>__XTemplate fatal error: file [$path_file] does not exist__</b>";
+					$file_text .= "<strong>__XTemplate fatal error: file [$path_file] does not exist__</strong>";
 				}
 
 			} elseif ( ! is_readable( $file ) )
@@ -1724,7 +1719,7 @@ class XTemplate
 				$this->_set_error( "[" . $path_file . "] is not readable" );
 				if ( $this->output_type == 'HTML' )
 				{
-					$file_text .= "<b>__XTemplate fatal error: file [$path_file] is not readable__</b>";
+					$file_text .= "<strong>__XTemplate fatal error: file [$path_file] is not readable__</strong>";
 				}
 			}
 

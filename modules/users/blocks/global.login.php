@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 18:6
  */
 
@@ -53,7 +54,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 
 		if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
 		{
-
 			$in_group = "<a title='" . $lang_global['in_groups'] . "' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>" . $lang_global['in_groups'] . "</a>";
 			$xtpl->assign( 'in_group', $in_group );
 		}
@@ -93,7 +93,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
 				$assigns['title'] = ucfirst( $server );
 				$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
-				$assigns['img_width'] = $assigns['img_height'] = 16;
+				$assigns['img_width'] = $assigns['img_height'] = 24;
 
 				$xtpl->assign( 'OPENID', $assigns );
 				$xtpl->parse( 'main.openid.server' );

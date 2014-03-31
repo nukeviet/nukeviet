@@ -12,6 +12,8 @@
 <div id="id_form_search" class="box-border-shadow content-box clearfix">
 	<h3 class="title-search"> {LANG.info_title} </h3>
 	<form action="{DATA.action}" name="form_search" method="get" id="form_search">
+		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 		<div class="form">
 			<div class="clearfix rows">
 				<label> {LANG.key_title}: </label>
@@ -35,6 +37,7 @@
 			</div>
 			<!-- END: search_engine_unique_ID -->
 		</div>
+		<input type="hidden" name="page" value="{PAGE}"/>
 	</form>
 </div>
 <script type="text/javascript">
@@ -44,7 +47,7 @@
 		if ("all" == b) {
 			return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
 		}
-		var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = formatStringAsUriComponent(a);
+		var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
 		{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
 		window.location.href = b;
 		return !1
@@ -60,15 +63,12 @@
 		customSearchControl.execute(a);
 	});
 	$("#form_search").submit(function() {
-		var a = $("#form_search [name=q]").val(), a = formatStringAsUriComponent(a), b;
+		var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
 		$("#form_search [name=q]").val(a);
 		if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
 			return $("#form_search [name=q]").select(), !1
 		}
-		a = $(this).serialize();
-		b = $(this).attr("action");
-		window.location.href = b + "&" + a;
-		return !1
+		return true;
 	});
 	//]]>
 </script>

@@ -24,7 +24,8 @@
 						<!-- BEGIN: bid -->
 						<option value="{BID.key}"{BID.selected}>{BID.title}</option>
 						<!-- END: bid -->
-					</select><input type="hidden" name ="checkss" value="{CHECKSESS}" /><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					</select> 
+					<input type="hidden" name ="checkss" value="{CHECKSESS}" /><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>

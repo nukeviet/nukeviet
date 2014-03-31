@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -27,6 +28,7 @@ $lang_module['optActive_site'] = 'Kích hoạt khu vực ngoài site';
 $lang_module['optActive_admin'] = 'Kích hoạt khu vực admin';
 $lang_module['sitename'] = 'Tên gọi của site';
 $lang_module['theme'] = 'Giao diện mặc định';
+$lang_module['mobile_theme'] = 'Giao diện mặc định cho Mobile';
 $lang_module['themeadmin'] = 'Giao diện người quản trị';
 $lang_module['default_module'] = 'Module mặc định trên trang chủ';
 $lang_module['description'] = 'Mô tả của site';
@@ -43,6 +45,7 @@ $lang_module['is_flood_blocker'] = 'Kích hoạt tính năng chống flood';
 $lang_module['max_requests_60'] = 'Số requests tối đa trong 1 phút';
 $lang_module['max_requests_300'] = 'Số requests tối đa trong 5 phút';
 $lang_module['nv_anti_iframe'] = 'Chống IFRAME';
+$lang_module['nv_anti_agent'] = 'Kiểm tra và chặn các máy tính nếu agent không có';
 $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử dụng trong hệ thống';
 
 $lang_module['captcha_type'] = 'Loại captcha';
@@ -201,5 +204,18 @@ $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số n�
 $lang_module['ftp_error_support'] = 'Máy chủ của bạn hiện đang chặn hoặc không hỗ trợ thư viện FTP, hãy liên hệ với nhà cung cấp để được kích hoạt.';
 $lang_module['cdn_url'] = 'Hosting CDN cho javascript, css';
 $lang_module['cdn_download'] = 'Download các file javascript, css';
+
+$lang_module['plugin'] = 'Thiết lập Plugin';
+$lang_module['plugin_info'] = 'Plugin thi phải là file php được chứa trong thư mục &ldquo;<strong>includes/plugin/</strong>&rdquo;. Các Plugin này sẽ luôn luôn chạy cùng hệ thống khi được kích hoạt';
+$lang_module['plugin_file'] = 'File thực thi';
+$lang_module['plugin_area'] = 'Khu vực';
+$lang_module['plugin_area_1'] = 'Trước khi kết nối CSDL';
+$lang_module['plugin_area_2'] = 'Trước khi gọi các module';
+$lang_module['plugin_area_3'] = 'Trước khi website gửi nội dung tới trình duyệt';
+$lang_module['plugin_number'] = 'Số thứ tự';
+$lang_module['plugin_func'] = 'Chức năng';
+$lang_module['plugin_add'] = 'Thêm plugin';
+$lang_module['plugin_file_delete'] = 'Xóa khỏi hệ thống';
+
 
 ?>

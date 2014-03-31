@@ -1,10 +1,11 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
@@ -28,7 +29,7 @@ $lang_module['site_timezone'] = 'Time zone';
 $lang_module['server_configs_info'] = 'Server informations';
 $lang_module['server_phpversion'] = 'PHP version';
 $lang_module['server_phpos'] = 'OS server';
-$lang_module['server_mysqlversion'] = 'MySQL Version';
+$lang_module['server_databaseversion'] = 'Database Version';
 $lang_module['configuration_php'] = 'PHP informations';
 $lang_module['directive'] = 'Directive';
 $lang_module['local_value'] = 'Value';

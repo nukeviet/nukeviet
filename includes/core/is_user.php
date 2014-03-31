@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/29/2009 4:15
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/29/2009 4:15
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -23,17 +24,14 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
-		$query = 'SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
-			`view_mail`, `remember`, `in_groups`, `last_login` AS `current_login`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_openid`, `password`
-			FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid` = ' . intval( $user_info['userid'] ) . ' AND `active`=1 LIMIT 1';
-		$result = $db->sql_query( $query );
+		$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
+			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password
+			FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval( $user_info['userid'] ) . ' AND active=1';
 
-		if( $db->sql_numrows( $result ) == 1 )
+		$user_info = $db->query( $_sql )->fetch();
+		if( ! empty( $user_info ) )
 		{
 			define( 'NV_IS_USER', true );
-
-			$user_info = $db->sql_fetch_assoc( $result );
-			$db->sql_freeresult( $result );
 
 			if( empty( $user_info['full_name'] ) ) $user_info['full_name'] = $user_info['username'];
 
@@ -65,17 +63,14 @@ else
 			{
 				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $user['checknum'] ) )
 				{
-					$query = 'SELECT `userid`, `username`, `email`, `full_name`, `gender`, `photo`, `birthday`, `regdate`,
-						`view_mail`, `remember`, `in_groups`, `checknum`, `last_agent` AS `current_agent`, `last_ip` AS `current_ip`, `last_login` AS `current_login`,
-						`last_openid` AS `current_openid`, `password`, `question`, `answer`
-						FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '` WHERE `userid` = ' . $user['userid'] . ' AND `active`=1 LIMIT 1';
-					$result = $db->sql_query( $query );
+					$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
+						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
+						last_openid AS current_openid, password, question, answer
+						FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
-					if( $db->sql_numrows( $result ) == 1 )
+					$user_info = $db->query( $_sql )->fetch();
+					if( ! empty( $user_info ) )
 					{
-						$user_info = $db->sql_fetch_assoc( $result );
-						$db->sql_freeresult( $result );
-
 						if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and 						//checknum
 						isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and 						//user_agent
 						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
@@ -96,18 +91,19 @@ else
 
 							if( ! empty( $user_info['current_openid'] ) )
 							{
-								$query = 'SELECT `openid`, `email` FROM `' . $db_config['dbsystem'] . '`.`' . NV_USERS_GLOBALTABLE . '_openid` WHERE `opid`=' . $db->dbescape( $user_info['current_openid'] ) . ' LIMIT 1';
-								$result = $db->sql_query( $query );
+								$sth = $db->prepare( 'SELECT openid, email FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid' );
+								$sth->bindParam( ':current_openid', $user_info['current_openid'], PDO::PARAM_STR );
+								$sth->execute();
+								$row = $sth->fetch();
 
-								if( $db->sql_numrows( $result ) != 1 )
+								if( empty( $row ) )
 								{
 									$user_info = array();
 								}
 								else
 								{
-									list( $user_info['openid_id'], $user_info['openid_email'] ) = $db->sql_fetchrow( $result );
-
-									$db->sql_freeresult( $result );
+									$user_info['openid_id'] = $row['openid'];
+									$user_info['openid_email'] = $row['email'];
 
 									$user_info['openid_server'] = parse_url( $user_info['openid_id'] );
 									$user_info['openid_server'] = preg_replace( '/^([w]{3})\./', '', $user_info['openid_server']['host'] );
@@ -130,7 +126,7 @@ else
 		}
 	}
 
-	unset( $user, $strlen, $query, $result );
+	unset( $user, $strlen, $_sql );
 }
 
 ?>

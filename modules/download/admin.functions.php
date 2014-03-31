@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 2:29
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 2:29
  */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat', 'comment' );
+$allow_func = array( 'main', 'add', 'filequeue', 'report', 'config', 'cat' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
@@ -94,10 +95,10 @@ function nv_listcats( $parentid, $m = 0 )
 {
 	global $db, $module_data;
 
-	$sql = 'SELECT * FROM `' . NV_PREFIXLANG . '_' . $module_data . '_categories` ORDER BY `parentid`, `weight` ASC';
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories ORDER BY parentid, weight ASC';
+	$result = $db->query( $sql );
 	$list = array();
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$list[$row['parentid']][] = array(
 			'id' => ( int )$row['id'],

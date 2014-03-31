@@ -34,14 +34,17 @@
 			<div class="clear"></div>
 		</div>
 		<!-- BEGIN: openid -->
-		<div class="box-border content-box fr acenter">
-			<img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
-			<div style="margin-bottom:10px;">
-				{DATA.openid_info}
+		<div class="openid fr">
+			<div class="box-border content-box acenter">
+				<img style="margin-left:10px;vertical-align:middle;" alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
+				<div style="margin-bottom:10px;">
+					{DATA.openid_info}
+				</div>
+				<!-- BEGIN: server -->
+				<a title="{OPENID.title}" href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
+				<!-- END: server -->
 			</div>
-			<!-- BEGIN: server -->
-			<a title="{OPENID.title}" href="{OPENID.href}"><img style="margin-left: 10px;margin-right:2px;vertical-align:middle;" alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" />{OPENID.title}</a>
-			<!-- END: server -->
+			<div class="clear"></div>
 		</div>
 		<!-- END: openid -->
 	</form>

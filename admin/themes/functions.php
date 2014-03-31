@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 1:58
  */
 
@@ -11,9 +12,9 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 
 $menu_top = array(
-	"title" => $module_name,
-	"module_file" => "",
-	"custom_title" => $lang_global['mod_themes']
+	'title' => $module_name,
+	'module_file' => '',
+	'custom_title' => $lang_global['mod_themes']
 );
 
 define( 'NV_IS_FILE_THEMES', true );

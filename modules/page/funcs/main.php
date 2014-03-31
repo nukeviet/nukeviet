@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -13,61 +14,57 @@ $contents = '';
 
 if( $id )
 {
-	$cache_file = NV_LANG_DATA . "_" . $module_name . "_" . $module_info['template'] . "_" . $id . "_" . NV_CACHE_PREFIX . ".cache";
-	// Cache tung giao dien
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND id=' . $id;
+	$row = $db->query( $sql )->fetch();
 
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], true );
+	if( ! empty( $array_op ) AND $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 	{
-		$cache = unserialize( $cache );
-		$page_title = $mod_title = $cache['page_title'];
-		$key_words = $cache['keywords'];
-		$contents = $cache['contents'];
+		Header( 'Location: ' . $base_url_rewrite );
+		die();
+	}
+
+	if( ! empty( $row['image'] ) && ! nv_is_url( $row['image'] ) )
+	{
+		$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['image'];
+	}
+	$row['add_time'] = nv_date( 'H:i T l, d/m/Y', $row['add_time'] );
+	$row['edit_time'] = nv_date( 'H:i T l, d/m/Y', $row['edit_time'] );
+
+	$module_info['layout_funcs'][$op_file] = !empty( $row['layout_func'] ) ? $row['layout_func'] : $module_info['layout_funcs'][$op_file];
+
+	if( ! empty( $row['keywords'] ) )
+	{
+		$key_words = $row['keywords'];
 	}
 	else
 	{
-		$cache = array();
+		$key_words = nv_get_keywords( $row['bodytext'] );
 
-		$sql = "SELECT `id`,`title`,`alias`,`bodytext`,`keywords`,`add_time`,`edit_time` FROM `" . NV_PREFIXLANG . "_" . $module_data . "` WHERE `status`=1 AND `id`=" . $id;
-		$query = $db->sql_query( $sql );
-		$row = $db->sql_fetchrow( $query );
-
-		$row['add_time'] = nv_date( "H:i T l, d/m/Y", $row['add_time'] );
-		$row['edit_time'] = nv_date( "H:i T l, d/m/Y", $row['edit_time'] );
-		$contents = $cache['contents'] = nv_page_main( $row, $ab_links );
-		$cache['bodytext'] = strip_tags( $row['bodytext'] );
-		$cache['bodytext'] = nv_clean60( $cache['bodytext'], 300 );
-
-		$page_title = $mod_title = $cache['page_title'] = $row['title'];
-
-		if( ! empty( $row['keywords'] ) )
+		if( empty( $key_words ) )
 		{
-			$key_words = $cache['keywords'] = $row['keywords'];
-		}
-		else
-		{
-			$key_words = nv_get_keywords( $row['bodytext'] );
-
-			if( empty( $key_words ) )
-			{
-				$key_words = nv_unhtmlspecialchars( $row['title'] );
-				$key_words = strip_punctuation( $key_words );
-				$key_words = trim( $key_words );
-				$key_words = nv_strtolower( $key_words );
-				$key_words = preg_replace( "/[ ]+/", ",", $key_words );
-			}
-
-			$cache['keywords'] = $key_words;
-
-			$query = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "` SET `keywords`=" . $db->dbescape( $key_words ) . " WHERE `id` =" . $id;
-			$db->sql_query( $query );
+			$key_words = nv_unhtmlspecialchars( $row['title'] );
+			$key_words = strip_punctuation( $key_words );
+			$key_words = trim( $key_words );
+			$key_words = nv_strtolower( $key_words );
+			$key_words = preg_replace( '/[ ]+/', ',', $key_words );
 		}
 
-		$cache['alias'] = $row['alias'];
-
-		//Dung cho Block
-		$cache = serialize( $cache );
-		nv_set_cache( $cache_file, $cache );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET keywords= :keywords WHERE id =' . $id );
+		$stmt->bindParam( ':keywords', $keywords, PDO::PARAM_STR, strlen( $keywords ) );
+		$stmt->execute();
 	}
+
+	$page_title = $mod_title = $row['title'];
+	$description = $row['description'];
+	$id_profile_googleplus = $row['gid'];
+
+	// comment
+	define( 'NV_COMM_ID', $id );
+	define( 'NV_COMM_ALLOWED', $row['activecomm'] );
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
+	$contents = nv_page_main( $row, $ab_links );
 }
 else
 {

@@ -219,3 +219,46 @@
 #users .change-question .input, #users .edit-info .input, #users .reg .input {
 	width: 300px
 }
+
+#users .change-question .input-min, #users .edit-info .input-min, #users .reg .input-min {
+	width: 200px
+}
+
+/* Login */
+#loginForm .login{
+	width: 30%;
+}
+#loginForm .openid{
+	width: 70%;
+}
+
+/* UPLOAD AND CROP AVATAR */
+.users-avupload{
+	margin:0 auto;
+	background:#fff;
+	width: 500px;
+	height: 500px;
+}
+.users-avupload .upload-button{
+	cursor:pointer;
+	color:#00a8ff;
+	margin: 80px 0 0 0;
+}
+.users-avupload .upload-button span{
+	font-size:16px;
+}
+.users-avupload .img-area{
+	text-align:center;
+	margin-bottom:10px;
+}
+.users-avupload .img-area img{
+	width:100%;
+	display: none;
+}
+.users-avupload .info{
+	display:none;
+}
+.users-avupload .icon-stack{
+	padding:0 5px;
+	display:inline-block;
+}

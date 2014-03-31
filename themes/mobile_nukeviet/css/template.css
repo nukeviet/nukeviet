@@ -326,3 +326,18 @@ img.fl {
 .fiximg img {
 	max-width: 100% !important
 }
+
+.icon_new{
+	background: url('../images/news/new.gif') no-repeat;
+	display: inline-block;
+	width: 33px;
+	height: 15px;
+}
+
+.icon_new_small{
+	background: url('../images/squared-blue.png') no-repeat 0 6px;
+}
+
+.icon_list{
+	background: url(../images/arrow_left_orange.png) no-repeat 0 6px;
+}

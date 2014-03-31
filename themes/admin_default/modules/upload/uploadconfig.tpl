@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<table class="tab1">
 		<col style="width: 230px"/>
 		<col />
@@ -13,7 +13,7 @@
 		<tbody>
 			<tr>
 				<td><strong>{LANG.nv_max_width_height}</strong></td>
-				<td><input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/><input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize} </td>
+				<td><input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/> <input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize} </td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.nv_max_size}:</strong></td>

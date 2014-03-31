@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form name="install_module" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
+<form name="install_module" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
@@ -7,7 +7,7 @@
 				<td><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/><input type="file" name="modulefile"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /><input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
+				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
 			</tr>
 		</tbody>
 	</table>
@@ -78,7 +78,7 @@
 	$(function() {
 		$("input[name=checkfile]").click(function() {
 			$("#filelist").html('<div style="text-align:center"><strong>{LANG.autoinstall_package_processing}</strong><br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></div>');
-			$("#filelist").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check");
+			$("#filelist").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check");
 		});
 	});
 </script>

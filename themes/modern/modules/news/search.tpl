@@ -31,10 +31,9 @@
 		</div>
 		<div class="rows clearfix">
 			<label>{LANG.finter_title} :</label>
-			<input class="input datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text"/>
+			<input class="input datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" type="text"/>
 			{LANG.to_date}
-			<input class="input datepicker" name="from_date" id="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" readonly="readonly" type="text" />
-			<img src="{NV_BASE_SITEURL}images/refresh.png" onclick="remove_text()" style="cursor:pointer; vertical-align:middle;" alt="Empty Calendar form"/>
+			<input class="input datepicker" name="from_date" id="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" type="text" />
 		</div>
 		<div class="rows clearfix">
 			<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
@@ -63,7 +62,7 @@
 	<h3 class="title-search">{LANG.search_on} {TITLE_MOD}</h3>
 	<!-- BEGIN: noneresult -->
 	<div class="result-content">
-		{LANG.search_none} : "<b>{KEY}</b>" {LANG.search_in_module} <b>{INMOD}</b>
+		{LANG.search_none} : "<strong>{KEY}</strong>" {LANG.search_in_module} <strong>{INMOD}</strong>
 	</div>
 	<!-- END: noneresult -->
 	<!-- BEGIN: result -->
@@ -88,14 +87,14 @@
 	</div>
 	<!-- END: pages_result -->
 	<div class="cl-info">
-		<i>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
+		<em>{LANG.search_sum_title} {NUMRECORD} {LANG.result_title}
 		<br />
-		{LANG.info_adv} </i>
+		{LANG.info_adv} </em>
 	</div>
 </div>
 <div class="result-frame">
 	<div>
-		<b>{LANG.search_adv_internet} :</b>
+		<strong>{LANG.search_adv_internet} :</strong>
 	</div>
 	<div align="center">
 		<form method="get" action="http://www.google.com/search" target="_top">

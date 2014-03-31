@@ -1,7 +1,8 @@
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 27/01/2011, 9:36
  */
 
@@ -104,33 +105,34 @@ function pathList(a, b) {
 }
 
 function insertvaluetofield() {
-	var a = $("input[name=CKEditorFuncNum]").val(), b = $("input[name=area]").val();
+	var b = $("input[name=area]").val();
 	var c = $("input[name=selFile]").val();
 	var e = $("img[title='" + c + "']").attr("name").split("|");
 	f = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
 	d = nv_siteroot + f + "/" + c;
-	if (a > 0) {
-		$("span#foldervalue").attr("title");
-		window.opener.CKEDITOR.tools.callFunction(a, d, function() {
-			// Get the reference to a dialog window.
-			var dialog = this.getDialog();
-			// Check if this is the Image dialog window.
-			if (dialog.getName() == 'image') {
-				// Get the reference to a text field that holds the "alt" attribute.
-				var element = dialog.getContentElement('info', 'txtAlt');
-				// Assign the new value.
-				if (element)
-					element.setValue($("img[title='" + c + "']").attr("alt"));
-			}
-		});
-		window.close();
-	}
 	if (b != "") {
 		$("#" + b, opener.document).val(d);
 		b = $("input[name=alt]").val();
 		if (b != "") {
 			$("#" + b, opener.document).val($("img[title='" + c + "']").attr("alt"));
 		}
+		window.close();
+	} else {
+		var a = $("input[name=CKEditorFuncNum]").val();
+		$("span#foldervalue").attr("title");
+		window.opener.CKEDITOR.tools.callFunction(a, d, function() {
+			// Get the reference to a dialog window.
+			var dialog = this.getDialog();
+			// Check if this is the Image dialog window.
+			if (dialog.getName() == 'image2') {
+				// Get the reference to a text field that holds the "alt" attribute.
+				var element = dialog.getContentElement('info', 'alt');
+				// Assign the new value.
+				if (element)
+					element.setValue($("img[title='" + c + "']").attr("alt"));
+			}
+		});
+
 		window.close();
 	}
 }

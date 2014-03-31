@@ -33,7 +33,11 @@
 			<td>{ROW.publ_date}</td>
 			<td>{ROW.exp_date}</td>
 			<td class="center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
-			<td><a class="search_icon" href="{ROW.view}">{CONTENTS.view}</a> &nbsp; <a class="edit_icon" href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; <a class="delete_icon" href="{ROW.delfile}">{CONTENTS.del}</a></td>
+			<td>
+				<em class="icon-search icon-large">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
+				<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
+				<em class="icon-trash icon-large">&nbsp;</em> <a href="{ROW.delfile}" id="delete_banners">{CONTENTS.del}</a>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>
@@ -41,7 +45,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$('a[class=delete_icon]').click(function(event) {
+		$('a[id=delete_banners]').click(function(event) {
 			event.preventDefault();
 			if (confirm('{LANG.file_del_confirm}')) {
 				var href = $(this).attr('href') + "&nocache=" + new Date().getTime();

@@ -1,10 +1,11 @@
 <?php
 
 /**
-* @Project NUKEVIET 3.x
+* @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
@@ -55,7 +56,7 @@ $lang_global['relogin_error_info'] = '%1$s. Please enter your password in the bo
 $lang_global['admin_page'] = 'Administration';
 $lang_global['admin_module_sector'] = 'Module Management';
 $lang_global['adminlogin'] = 'Login to Administration';
-$lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <i>Administrators Only.</i>';
+$lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <em>Administrators Only.</em>';
 $lang_global['username'] = 'Username';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
@@ -76,7 +77,6 @@ $lang_global['regdate'] = 'Register date';
 $lang_global['online'] = 'Online';
 $lang_global['hits'] = 'Total';
 $lang_global['viewstats'] = 'View counter statistics';
-$lang_global['db_num_queries'] = 'Connections to database';
 $lang_global['last_login'] = 'Last login';
 $lang_global['current_login'] = 'This session';
 $lang_global['your_account'] = 'Account';
@@ -132,7 +132,6 @@ $lang_global['lang_en'] = 'English';
 $lang_global['option'] = 'Option';
 $lang_global['value'] = 'value';
 $lang_global['reviews'] = 'Reviews';
-$lang_global['show_queries'] = 'List of queries';
 $lang_global['add'] = 'Add';
 $lang_global['edit'] = 'Edit';
 $lang_global['delete'] = 'Delete';
@@ -250,5 +249,15 @@ $lang_global['ftp_err_rawlist'] = 'Error: Unable to determine the directory list
 $lang_global['ftp_err_list_detail'] = 'Error: Unrecognized parameter files, folders';
 $lang_global['ftp_err_fget'] = 'Error: Can not read the text file';
 $lang_global['ftp_err_NVbuffet'] = 'Error: Missing class NVbuffer';
+$lang_global['unick_type_1'] = 'Account used only numbers';
+$lang_global['unick_type_2'] = 'Account used only numbers and letters';
+$lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
+$lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
+$lang_global['upass_type_1'] = 'Password should combin number and letter';
+$lang_global['upass_type_2'] = 'Password should combin number and letter, have special characters';
+$lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
+$lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
+$lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
+$lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 
 ?>

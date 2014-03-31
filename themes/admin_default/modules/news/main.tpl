@@ -37,7 +37,7 @@
 	<label><em>{LANG.search_note}</em></label>
 </form>
 
-<form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
+<form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
 	<table class="tab1">
 		<thead>
 			<tr>
@@ -68,7 +68,8 @@
 					<!-- BEGIN: action -->
 					<option value="{ACTION.value}">{ACTION.title}</option>
 					<!-- END: action -->
-				</select><input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
+				</select> 
+				<input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
 			</tr>
 		</tfoot>
 	</table>

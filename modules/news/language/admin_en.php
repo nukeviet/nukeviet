@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -20,7 +21,6 @@ $lang_module['categories'] = 'Categories';
 $lang_module['topics'] = 'Topics';
 $lang_module['topics_error_title'] = 'Error: You do not enter the event title';
 $lang_module['sources'] = 'Sources';
-$lang_module['comments'] = 'Comments';
 $lang_module['save'] = 'Save';
 $lang_module['action'] = 'Submit';
 $lang_module['move'] = 'Move';
@@ -47,6 +47,7 @@ $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';
 $lang_module['inhome'] = 'Home';
 $lang_module['numlinks'] = 'Number of link';
+$lang_module['newday'] = 'Show new icon (day)';
 $lang_module['description'] = 'Description';
 $lang_module['keywords'] = 'Keyword';
 $lang_module['content_list'] = 'List of articles';
@@ -78,8 +79,6 @@ $lang_module['setting_imagefull'] = 'The size of the image under article preambl
 $lang_module['setting_per_page'] = 'Number of article and article preamble are shown';
 $lang_module['setting_st_links'] = 'Number of article are only shown link';
 $lang_module['setting_idf_df'] = 'Default';
-$lang_module['setting_setcomm'] = 'Set default comment';
-$lang_module['setting_auto_postcomm'] = 'Auto post comment';
 $lang_module['setting_copyright'] = 'Copyright';
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
@@ -116,8 +115,6 @@ $lang_module['content_homeimg'] = 'Illustrate image for Introduction';
 $lang_module['content_homeimgalt'] = 'A comment about this image';
 $lang_module['content_hometext'] = 'Short introduction';
 $lang_module['content_notehome'] = '(Visible every one)';
-$lang_module['content_keywords'] = 'Search keyword';
-$lang_module['content_keywords_note'] = 'To be automatic, copy fully article content into box below and click';
 $lang_module['content_clickhere'] = 'Click here';
 $lang_module['content_showmore'] = '(Show more)';
 $lang_module['content_notetime'] = '(date/month/year hour:minute)';
@@ -152,32 +149,6 @@ $lang_module['addtoblock'] = 'Add content to block';
 $lang_module['delete_from_block'] = 'Delete block\'s article';
 $lang_module['error_del_content'] = 'Error: System can\'t delete all block\'s article, please try agian';
 $lang_module['msgnocheck'] = 'No topic selected';
-$lang_module['comment'] = 'Comment';
-$lang_module['activecomm'] = 'Activate comment';
-$lang_module['emailcomm'] = 'Display email';
-$lang_module['comment_edit'] = 'Edit';
-$lang_module['comment_edit_title'] = 'Edit comment';
-$lang_module['comment_edit_active'] = 'Activate';
-$lang_module['comment_edit_delete'] = 'Del comment';
-$lang_module['comment_delete'] = 'Delete';
-$lang_module['comment_funcs'] = 'Function';
-$lang_module['comment_email'] = 'Email';
-$lang_module['comment_topic'] = 'Topic';
-$lang_module['comment_content'] = 'Content';
-$lang_module['comment_status'] = 'Status';
-$lang_module['comment_delete_title'] = 'Delete';
-$lang_module['comment_delete_confirm'] = 'Confirm';
-$lang_module['comment_delete_yes'] = 'Yes';
-$lang_module['comment_delete_no'] = 'No';
-$lang_module['comment_delete_accept'] = 'Accept';
-$lang_module['comment_delete_unsuccess'] = 'Error:Delete fail';
-$lang_module['comment_delete_success'] = 'Delete succesfully';
-$lang_module['comment_enable'] = 'Enable';
-$lang_module['comment_disable'] = 'Desable';
-$lang_module['comment_checkall'] = 'Check all';
-$lang_module['comment_uncheckall'] = 'Uncheck all';
-$lang_module['comment_nocheck'] = 'Please select at least one comment to make';
-$lang_module['comment_update_success'] = 'Update successful';
 $lang_module['block'] = 'Blocks';
 $lang_module['adddefaultblock'] = 'Select the default when creating article';
 $lang_module['module_logo'] = 'Logo module';
@@ -234,5 +205,25 @@ $lang_module['config_source_link'] = 'Show link of information source';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
 $lang_module['search_status'] = 'Status';
+$lang_module['checkall'] = 'Check all';
+$lang_module['uncheckall'] = 'Uncheck all';
+$lang_module['viewdescription'] = 'Show describes when view topic';
+$lang_module['viewdescription_0'] = 'No display';
+$lang_module['viewdescription_1'] = 'Display in page 1 of topic';
+$lang_module['viewdescription_2'] = 'Display in all page of topic';
+$lang_module['content_tag'] = 'Tags';
+$lang_module['content_tag_note'] = 'To generate automatically, copy the entire contents of the article in the box below and click';
+$lang_module['allowed_rating_point'] = 'Showing reviews on google if article have points';
+$lang_module['no_allowed_rating'] = 'No display';
+$lang_module['facebookAppID'] = 'Facebook App ID';
+$lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
+$lang_module['socialbutton'] = 'Display Like facebook, G+, Twitter tools when view aricle';
+$lang_module['tags'] = 'Tags manage';
+$lang_module['add_tags'] = 'Add tag';
+$lang_module['edit_tags'] = 'Edit tag';
+$lang_module['alias_search'] = 'Show the different tags, use the search function to display more results';
+$lang_module['googleplus'] = 'authentication Google+ (copyright)';
+$lang_module['googleplus_1'] = 'Not use';
+$lang_module['googleplus_0'] = 'According configuration copyright of module';
 
 ?>

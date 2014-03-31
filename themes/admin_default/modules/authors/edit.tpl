@@ -3,7 +3,6 @@
 	<blockquote {CLASS}><span>{INFO}</span></blockquote>
 </div>
 <form method="post" action="{ACTION}">
-	<!-- BEGIN: position -->
 	<table class="tab1 fixtab">
 		<colgroup>
 			<col class="w200">
@@ -17,6 +16,7 @@
 			</tr>
 		</tfoot>
 		<tbody>
+			<!-- BEGIN: position -->
 			<tr>
 				<td> {POSITION0}: </td>
 				<td><sup class="required"> &lowast; </sup></td>
@@ -127,6 +127,6 @@
 	</tbody>
 </table>
 <br/>
-<a class="button2" href="{EDIT_HREF}"><span><span>{EDIT_NAME}</span></span></a>
-<a class="button2" href="{HOME_HREF}"><span><span>{HOME_NAME}</span></span></a>
+<a class="button button-h" href="{EDIT_HREF}">{EDIT_NAME}</a>
+<a class="button button-h" href="{HOME_HREF}">{HOME_NAME}</a>
 <!-- END: edit_resuilt -->

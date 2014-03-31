@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
  */
 
@@ -188,7 +189,7 @@ function nv_step_4( $array_resquest, $array_support, $nextstep )
 
 function nv_step_5( $db_config, $nextstep )
 {
-	global $lang_module, $step;
+	global $lang_module, $step, $PDODrivers;
 
 	$xtpl = new XTemplate( 'step5.tpl', NV_ROOTDIR . '/install/tpl/' );
 	$xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
@@ -197,6 +198,34 @@ function nv_step_5( $db_config, $nextstep )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATADASE', $db_config );
 	$xtpl->assign( 'ACTIONFORM', NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
+
+	$lang_pdo = array();
+	$lang_pdo['pdo_cubrid'] = 'Cubrid';
+	$lang_pdo['pdo_dblib'] = 'FreeTDS / Microsoft SQL Server / Sybase';
+	$lang_pdo['pdo_firebird'] = 'Firebird';
+	$lang_pdo['pdo_ibm'] = 'IBM DB2 ';
+	$lang_pdo['pdo_informix'] = 'IBM Informix Dynamic Server';
+	$lang_pdo['pdo_mysql'] = 'MySQL 5.x / MariaDB';
+	$lang_pdo['pdo_oci'] = 'Oracle';
+	$lang_pdo['pdo_odbc'] = 'ODBC v3 (IBM DB2, unixODBC and win32 ODBC)';
+	$lang_pdo['pdo_pgsql'] = 'PostgreSQL';
+	$lang_pdo['pdo_sqlite'] = ' SQLite 3 and SQLite 2 ';
+	$lang_pdo['pdo_sqlsrv'] = 'Microsoft SQL Server / SQL Azure';
+	$lang_pdo['pdo_4d'] = '4D';
+
+	foreach ($PDODrivers as $value)
+	{
+		if( file_exists( NV_ROOTDIR . '/install/action_' . $value . '.php' ) )
+		{
+			$array_dbtype = array();
+			$array_dbtype['value'] = $value;
+			$array_dbtype['selected'] = ( $db_config['dbtype'] == $value ) ? ' selected="selected"' : '';
+			$array_dbtype['text'] = (isset( $lang_pdo['pdo_' . $value] )) ? $lang_pdo['pdo_' . $value] : $value;
+			
+			$xtpl->assign( 'DBTYPE', $array_dbtype );
+			$xtpl->parse( 'step.dbtype' );
+		}
+	}
 
 	if( $db_config['num_table'] > 0 )
 	{

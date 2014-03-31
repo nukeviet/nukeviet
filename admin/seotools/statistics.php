@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -41,9 +42,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$googleAnalyticsMethod['googleAnalyticsMethod'] = 'classic';
 	}
 
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name" );
 	foreach( $array_config_global as $config_name => $config_value )
 	{
-		$sth = $db->prepare( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', :config_name, :config_value)" );
 		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
 		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 		$sth->execute();
@@ -51,7 +52,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	nv_delete_all_cache( false );
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();
 }
 
@@ -61,7 +62,7 @@ $array_config_global['online_upd'] = ( $global_config['online_upd'] ) ? ' checke
 $array_config_global['statistic'] = ( $global_config['statistic'] ) ? ' checked="checked"' : '';
 $array_config_global['googleAnalyticsID'] = $global_config['googleAnalyticsID'];
 
-$xtpl = new XTemplate( 'statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '' );
+$xtpl = new XTemplate( 'statistics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -73,7 +74,7 @@ sort( $timezone_array );
 foreach( $timezone_array as $site_timezone_i )
 {
 	$xtpl->assign( 'TIMEZONEOP', $site_timezone_i );
-	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? "selected='selected'" : "" );
+	$xtpl->assign( 'TIMEZONESELECTED', ( $site_timezone_i == $global_config['statistics_timezone'] ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 	$xtpl->parse( 'main.timezone' );
 }
@@ -94,6 +95,7 @@ foreach( $googleAnalyticsMethod as $key => $title )
 }
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
 include NV_ROOTDIR . '/includes/footer.php';

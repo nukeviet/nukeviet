@@ -1,41 +1,18 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/8/2010 6:35
  */
-
-if( defined( 'NV_CLASS_REQUEST' ) ) return;
-define( 'NV_CLASS_REQUEST', true );
 
 if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if( ! defined( 'NV_LIVE_SESSION_TIME' ) ) define( 'NV_LIVE_SESSION_TIME', 0 );
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( '/[\/]+$/', '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 if( ! defined( 'NV_ADMINDIR' ) ) define( 'NV_ADMINDIR', 'admin' );
 if( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'admin/editors' );
-
-if( ! function_exists( 'color_hex2rgb' ) )
-{
-
-	/**
-	 * color_hex2rgb()
-	 *
-	 * @param mixed $hex
-	 * @return
-	 */
-	function color_hex2rgb( $hex )
-	{
-		if( preg_match( '/[^0-9ABCDEFabcdef]/', $hex[1] ) ) return $hex[0];
-		$color = $hex[1];
-		$l = strlen( $color );
-		if( $l != 3 and $l != 6 ) return $hex[0];
-		$l = $l / 3;
-		return 'rgb(' . ( hexdec( substr( $color, 0, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 1 * $l, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 2 * $l, 1 * $l ) ) ) . ');';
-	}
-
-}
 
 /**
  * Request
@@ -329,7 +306,7 @@ class Request
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'SERVER_NAME', 'HTTP_HOST' ) ) );
+		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
 		$_SERVER['SERVER_PORT'] = $this->get_Env( 'SERVER_PORT' );
 		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( 'SERVER_PROTOCOL' );
 		$this->base_siteurl = $base_siteurl;
@@ -553,6 +530,26 @@ class Request
 		$this->session_id = $session_id;
 	}
 
+	private function chr_hexdec_callback( $m )
+	{
+		return chr( hexdec( $m[1] ) );
+	}
+
+	private function chr_callback( $m )
+	{
+		return chr( $m[1] );
+	}
+
+	private function color_hex2rgb_callback( $hex )
+	{
+		if( preg_match( '/[^0-9ABCDEFabcdef]/', $hex[1] ) ) return $hex[0];
+		$color = $hex[1];
+		$l = strlen( $color );
+		if( $l != 3 and $l != 6 ) return $hex[0];
+		$l = $l / 3;
+		return 'rgb(' . ( hexdec( substr( $color, 0, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 1 * $l, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 2 * $l, 1 * $l ) ) ) . ');';
+	}
+
 	/**
 	 * Request::unhtmlentities()
 	 *
@@ -567,9 +564,9 @@ class Request
 		$value = preg_replace( "/%([a-z0-9]{2})/i", "&#x\\1;", $value );
 		$value = str_ireplace( array( '&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', '' ), '', $value );
 		$search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
-		$value = preg_replace_callback( $search, function ( $m ) { return chr( hexdec( $m[1] ) );}, $value );
+		$value = preg_replace_callback( $search, array( $this, 'chr_hexdec_callback' ), $value );
 		$search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
-		$value = preg_replace_callback( $search, function ( $m ) { return chr( $m[1] );}, $value );
+		$value = preg_replace_callback( $search, array( $this, 'chr_callback' ), $value );
 		$search = array( '&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C' );
 		$value = str_ireplace( $search, '<', $value );
 		return $value;
@@ -622,7 +619,7 @@ class Request
 
 				if( ! empty( $this->disablecomannds ) and preg_match( '#(' . implode( '|', $this->disablecomannds ) . ')(\s*)\((.*?)\)#si', $value ) ) continue;
 
-				$attrSubSet[1] = preg_replace_callback( '/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', 'color_hex2rgb', $attrSubSet[1] );
+				$attrSubSet[1] = preg_replace_callback( '/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', array( $this, 'color_hex2rgb_callback' ), $attrSubSet[1] );
 			}
 			elseif( $attrSubSet[1] !== '0' )
 			{
@@ -655,7 +652,7 @@ class Request
 					$width = ( $width > 0 ) ? $width : 480;
 					$height = ( $height > 0 ) ? $height : 360;
 
-					$ojwplayer = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="' . $height . '" width="' . $width . '"><param name="movie" value="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf" /><param name="wmode" value="transparent" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value="file=http://www.youtube.com/watch?v=' . $vid . '" /><embed allowfullscreen="true" allowscriptaccess="always" flashvars="file=http://www.youtube.com/watch?v=' . $vid . '" height="' . $height . '" width="' . $width . '" src="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf"></embed></object>';
+					$ojwplayer = '<object height="' . $height . '" width="' . $width . '"><param name="movie" value="//www.youtube.com/v/' . $vid . '?rel=0&amp;hl=pt_BR&amp;version=3" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed allowfullscreen="true" allowscriptaccess="always" height="' . $height . '" src="//www.youtube.com/v/' . $vid . '?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3" type="application/x-shockwave-flash" width="' . $width . '"></embed></object>';
 					$source = str_replace( $_m, $ojwplayer, $source );
 				}
 

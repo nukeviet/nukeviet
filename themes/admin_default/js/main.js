@@ -63,14 +63,17 @@ jQuery(document).ready(function() {
 		contentsource : "markup"
 	});
 
-	$('form').change(function() {
+	$('form.confirm-reload').change(function() {
 		$(window).bind('beforeunload', function() {
-			return '{MSGBEFOREUNLOAD}';
+			return nv_msgbeforeunload;
 		});
 	});
 	$('form').submit(function() {
 		$(window).unbind();
 	});
+	
+	// Modify table caption
+	$('table.tab1 caption').prepend(' &nbsp; <em class="icon-double-angle-right">&nbsp;</em> ');
 });
 
 function ver_menu_click() {
@@ -78,15 +81,13 @@ function ver_menu_click() {
 		$('#ver_menu').hide({
 			direction : "horizontal"
 		}, 500);
-		$('#left_menu').css("width", "0px").css("left", "0px");
-		$('#middle').css("margin-left", "0px");
-		$('#cs_menu').removeClass("small").addClass("lage");
+		$('#contentwrapper').css("margin-left", "0px");
+		$('#cs_menu i').removeClass("icon-circle-arrow-left").addClass("icon-circle-arrow-right");
 	} else {
-		$('#middle').css("margin-left", "200px");
-		$('#left_menu').css("width", "200px").css("left", "-200px");
+		$('#contentwrapper').css("margin-left", "226px");
 		$('#ver_menu').show({
 			direction : "horizontal"
 		}, 500);
-		$('#cs_menu').removeClass("lage").addClass("small");
+		$('#cs_menu i').removeClass("icon-circle-arrow-right").addClass("icon-circle-arrow-left");
 	}
 }

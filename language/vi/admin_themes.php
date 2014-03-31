@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -27,13 +28,13 @@ $lang_module['block_title'] = 'Tên block';
 $lang_module['block_link'] = 'URL của tên block';
 $lang_module['block_file_path'] = 'Lấy nội dung từ file';
 $lang_module['block_global_apply'] = 'Áp dụng cho tất cả';
-$lang_module['block_type_global'] = 'Block của hệ thống';
+$lang_module['block_type_global'] = 'Block của giao diện';
 $lang_module['block_select_type'] = '-=Hãy chọn dạng=-';
 $lang_module['block_tpl'] = 'Template';
 $lang_module['block_pos'] = 'Vị trí';
 $lang_module['block_groupbl'] = 'Thuộc nhóm';
 $lang_module['block_leavegroup'] = 'Tách ra khỏi nhóm và tạo nhóm mới';
-$lang_module['block_group_notice'] = 'Lưu ý: <br />Nếu thay đổi một block thuộc 1 nhóm thì sẽ thay đổi toàn bộ các block khác thuộc nhóm đó. <br/>Nếu không muốn thay đổi các block khác cùng nhóm thì hãy tách block ra thành nhóm mới bằng cách đánh dấu vào mục <i>Tách ra khỏi nhóm và tạo nhóm mới</i>.';
+$lang_module['block_group_notice'] = 'Lưu ý: <br />Nếu thay đổi một block thuộc 1 nhóm thì sẽ thay đổi toàn bộ các block khác thuộc nhóm đó. <br/>Nếu không muốn thay đổi các block khác cùng nhóm thì hãy tách block ra thành nhóm mới bằng cách đánh dấu vào mục <em>Tách ra khỏi nhóm và tạo nhóm mới</em>.';
 $lang_module['block_group_block'] = 'Nhóm';
 $lang_module['block_no_more_func'] = 'Nếu check chọn Bỏ ra khỏi nhóm thì chỉ được chọn 1 function';
 $lang_module['block_no_func'] = 'Hãy chọn ít nhất là 1 function';
@@ -105,11 +106,12 @@ $lang_module['autoinstall_theme_checkfile'] = 'KIỂM TRA !';
 $lang_module['autoinstall_theme_installdone'] = 'TIẾN HÀNH CÀI ĐẶT...';
 $lang_module['autoinstall_theme_error_invalidfile'] = 'Lỗi: File zip không hợp lệ';
 $lang_module['autoinstall_theme_error_invalidfile_back'] = 'Quay lại';
-$lang_module['autoinstall_package_processing'] = ' xin chờ quá trình thực hiện hoàn thành...';
+$lang_module['autoinstall_package_processing'] = ' Xin chờ quá trình thực hiện hoàn thành...';
 $lang_module['autoinstall_theme_error_uploadfile'] = 'Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại hoặc chmod thư mục tmp';
 $lang_module['autoinstall_theme_unzip_abort'] = 'Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ.';
 $lang_module['autoinstall_theme_permission_folder'] = 'Việc cài đặt tự động không thể tiếp tục hệ thống không tạo được các thư mục';
-$lang_module['autoinstall_theme_unzip_success'] = 'Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang thiết lập layout cho giao diện.';
+$lang_module['autoinstall_theme_success_setupblocks'] = 'Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang quản lý block của  giao diện.';
+$lang_module['autoinstall_theme_success_setuplayout'] = 'Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang trang thiết lập layout cho giao diện.';
 $lang_module['autoinstall_theme_error_movefile'] = 'Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ di chuyển các file sau khi giải nén';
 $lang_module['autoinstall_theme_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['autoinstall_theme_unzip_filelist'] = 'Danh sách file đã giải nén';

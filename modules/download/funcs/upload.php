@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:30
  */
 
@@ -100,15 +101,17 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 
 	$alias = change_alias( $array['title'] );
 
-	$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '` WHERE `alias`=' . $db->dbescape( $alias );
-	$result = $db->sql_query( $sql );
-	list( $is_exists ) = $db->sql_fetchrow( $result );
+	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE alias= :alias' );
+	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$stmt->execute();
+	$is_exists = $stmt->fetchColumn();
 
 	if( ! $is_exists )
 	{
-		$sql = 'SELECT COUNT(*) FROM `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` WHERE `title`=' . $db->dbescape( $array['title'] );
-		$result = $db->sql_query( $sql );
-		list( $is_exists ) = $db->sql_fetchrow( $result );
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE title= :title' );
+		$stmt->bindParam( ':title', $array['title'], PDO::PARAM_STR );
+		$stmt->execute();
+		$is_exists = $stmt->fetchColumn();
 	}
 
 	if( ! nv_capcha_txt( $seccode ) )
@@ -247,26 +250,39 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 				$array['linkdirect'] = nv_nl2br( $array['linkdirect'], '<br />' );
 
-				$sql = 'INSERT INTO `' . NV_PREFIXLANG . '_' . $module_data . '_tmp` VALUES (
- NULL,
- ' . $array['catid'] . ',
- ' . $db->dbescape( $array['title'] ) . ',
- ' . $db->dbescape( $array['description'] ) . ',
- ' . $db->dbescape( $array['introtext'] ) . ',
- ' . NV_CURRENTTIME . ',
- ' . $array['user_id'] . ',
- ' . $db->dbescape( $array['user_name'] ) . ',
- ' . $db->dbescape( $array['author_name'] ) . ',
- ' . $db->dbescape( $array['author_email'] ) . ',
- ' . $db->dbescape( $array['author_url'] ) . ',
- ' . $db->dbescape( $fileupload ) . ',
- ' . $db->dbescape( $array['linkdirect'] ) . ',
- ' . $db->dbescape( $array['version'] ) . ',
- ' . $array['filesize'] . ',
- ' . $db->dbescape( $fileimage ) . ',
- ' . $db->dbescape( $array['copyright'] ) . ')';
+				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (catid, title, description, introtext, uploadtime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, copyright) VALUES (
+					 ' . $array['catid'] . ',
+					 :title,
+					 :description,
+					 :introtext,
+					 ' . NV_CURRENTTIME . ',
+					 ' . $array['user_id'] . ',
+					 :user_name,
+					 :author_name,
+					 :author_email,
+					 :author_url,
+					 :fileupload,
+					 :linkdirect,
+					 :version,
+					 ' . $array['filesize'] . ',
+					 :fileimage,
+					 :copyright)';
 
-				if( ! $db->sql_query_insert_id( $sql ) )
+				$data_insert = array();
+				$data_insert['title'] = $array['title'];
+				$data_insert['description'] = $array['description'];
+				$data_insert['introtext'] = $array['introtext'];
+				$data_insert['user_name'] = $array['user_name'];
+				$data_insert['author_name'] = $array['author_name'];
+				$data_insert['author_email'] = $array['author_email'];
+				$data_insert['author_url'] = $array['author_url'];
+				$data_insert['fileupload'] = $fileupload;
+				$data_insert['linkdirect'] = $array['linkdirect'];
+				$data_insert['version'] = $array['version'];
+				$data_insert['fileimage'] = $fileimage;
+				$data_insert['fileimage'] = $array['copyright'];
+
+				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 				{
 					$is_error = true;
 					$error = $lang_module['upload_error3'];

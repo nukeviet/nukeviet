@@ -30,9 +30,10 @@
 		<tr>
 			<td class="center">
 			<!-- BEGIN: reply -->
-			<a class="button1" href="{URL_REPLY}"><span><span>{LANG.send_title}</span></span></a>
+			<a class="button button-h" href="{URL_REPLY}">{LANG.send_title}</a>
 			<!-- END: reply -->
-			<a class="button1" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});"><span><span>{GLANG.delete}</span></span></a><a class="button1" href="{DATA.url_back}"><span><span>{LANG.back_title}</span></span></a></td>
+			<a class="button button-h" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
+			<a class="button button-h" href="{DATA.url_back}">{LANG.back_title}</a></td>
 		</tr>
 	</tbody>
 </table>
@@ -50,10 +51,10 @@
 		</tr>
 		<tr>
 			<td>{LANG.reply_user_send_title}</td>
-			<td>{REPLY.sender_name} &lt;{DATA.sender_email}&gt;</td>
+			<td>{REPLY.reply_time}</td>
 		</tr>
 		<tr>
-			<td colspan="2">{DATA.reply_content}</td>
+			<td colspan="2">{REPLY.reply_content}</td>
 		</tr>
 	</tbody>
 </table>
