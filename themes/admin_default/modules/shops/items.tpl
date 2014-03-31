@@ -29,7 +29,7 @@
 	<label><em>{SEARCH_NOTE}</em></label>
 </form>
 <form name="block_list">
-	<table class="tab1 tab2">
+	<table class="tab1">
 		<thead>
 			<tr>
 				<td  align="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>

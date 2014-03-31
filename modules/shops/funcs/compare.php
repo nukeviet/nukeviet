@@ -109,7 +109,7 @@ if( ! empty( $array_id ) )
 				'product_discounts' => $product_discounts,
 				'money_unit' => $money_unit,
 				'showprice' => $showprice,
-				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id,
+				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'link_order' => $link . 'setcart&amp;id=' . $id,
 				'source_id' => $source_id,
 				'note' => $note,

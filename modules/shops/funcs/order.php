@@ -12,41 +12,41 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 if( ! defined( 'NV_IS_USER' ) )
 {
-	$redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart";
-	Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $redirect ) );
+	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart';
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $redirect ) );
 	die();
 }
-$contents = "";
+$contents = '';
 
-$link1 = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
+$link1 = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 $action = 0;
 $post_order = $nv_Request->get_int( 'postorder', 'post', 0 );
 $error = array();
 
 $data_order = array(
-	"user_id" => $user_info["userid"],
-	"order_name" => ( ! empty( $user_info["full_name"] ) ) ? $user_info["full_name"] : $user_info["username"],
-	"order_email" => $user_info["email"],
-	"order_address" => '',
-	"order_phone" => '',
-	"order_note" => "",
-	"listid" => "",
-	"listnum" => "",
-	"listprice" => "",
-	"admin_id" => 0,
-	"shop_id" => 0,
-	"who_is" => 0,
-	"unit_total" => $pro_config['money_unit'],
-	"order_total" => 0,
-	"order_time" => NV_CURRENTTIME
+	'user_id' => $user_info['userid'],
+	'order_name' => ( ! empty( $user_info['full_name'] ) ) ? $user_info['full_name'] : $user_info['username'],
+	'order_email' => $user_info['email'],
+	'order_address' => '',
+	'order_phone' => '',
+	'order_note' => '',
+	'listid' => '',
+	'listnum' => '',
+	'listprice' => '',
+	'admin_id' => 0,
+	'shop_id' => 0,
+	'who_is' => 0,
+	'unit_total' => $pro_config['money_unit'],
+	'order_total' => 0,
+	'order_time' => NV_CURRENTTIME
 );
 
 if( $post_order == 1 )
 {
-	$listid = "";
-	$listnum = "";
-	$listprice = "";
+	$listid = '';
+	$listnum = '';
+	$listprice = '';
 	$i = 0;
 	$total = 0;
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
@@ -65,9 +65,9 @@ if( $post_order == 1 )
 			}
 			else
 			{
-				$listid .= "|" . $pro_id;
-				$listnum .= "|" . $info['num'];
-				$listprice .= "|" . $info['price'];
+				$listid .= '|' . $pro_id;
+				$listnum .= '|' . $info['num'];
+				$listprice .= '|' . $info['price'];
 			}
 			$total = $total + ( ( int )$info['num'] * ( double )$info['price'] );
 			++$i;
@@ -87,7 +87,7 @@ if( $post_order == 1 )
 	$data_order['order_total'] = $total;
 
 	if( empty( $data_order['order_name'] ) ) $error['order_name'] = $lang_module['order_name_err'];
-	elseif( nv_check_valid_email( $data_order['order_email'] ) != "" ) $error['order_email'] = $lang_module['order_email_err'];
+	elseif( nv_check_valid_email( $data_order['order_email'] ) != '' ) $error['order_email'] = $lang_module['order_email_err'];
 	elseif( empty( $data_order['order_phone'] ) ) $error['order_phone'] = $lang_module['order_phone_err'];
 	elseif( empty( $data_order['order_address'] ) ) $error['order_address'] = $lang_module['order_address_err'];
 	elseif( $check == 0 ) $error['order_check'] = $lang_module['order_check_err'];
@@ -137,7 +137,7 @@ if( $post_order == 1 )
 			$order_code2 = vsprintf( $pro_config['format_order_id'], $order_id );
 			if( $order_code != $order_code2 )
 			{
-				$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET order_code= :order_code WHERE order_id=" . $order_id );
+				$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET order_code= :order_code WHERE order_id=' . $order_id );
 				$stmt->bindParam( ':order_code', $order_code2, PDO::PARAM_STR );
 				$stmt->execute();
 			}
@@ -147,9 +147,9 @@ if( $post_order == 1 )
 			$data_order['order_code'] = $order_code2;
 
 			// Thong tin san pham dat hang
-			$listid = explode( "|", $data_order['listid'] );
-			$listnum = explode( "|", $data_order['listnum'] );
-			$listprice = explode( "|", $data_order['listprice'] );
+			$listid = explode( '|', $data_order['listid'] );
+			$listnum = explode( '|', $data_order['listnum'] );
+			$listprice = explode( '|', $data_order['listprice'] );
 			$data_pro = array();
 			$temppro = array();
 			$i = 0;
@@ -159,7 +159,7 @@ if( $post_order == 1 )
 				if( empty( $listprice[$i] ) ) $listprice[$i] = 0;
 				if( empty( $listnum[$i] ) ) $listnum[$i] = 0;
 
-				$temppro[$proid] = array( "price" => $listprice[$i], "num" => $listnum[$i] );
+				$temppro[$proid] = array( 'price' => $listprice[$i], 'num' => $listnum[$i] );
 
 				$arrayid[] = $proid;
 				++$i;
@@ -167,31 +167,31 @@ if( $post_order == 1 )
 
 			if( ! empty( $arrayid ) )
 			{
-				$templistid = implode( ",", $arrayid );
+				$templistid = implode( ',', $arrayid );
 
-				$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status =1";
+				$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
 				$result = $db->query( $sql );
 
 				while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
 				{
 					$data_pro[] = array(
-						"id" => $id,
-						"publtime" => $publtime,
-						"title" => $title,
-						"alias" => $alias,
-						"product_note" => $note,
-						"hometext" => $hometext,
-						"product_price" => $temppro[$id]['price'],
-						"product_unit" => $unit,
-						"money_unit" => $money_unit,
-						"product_number" => $temppro[$id]['num']
+						'id' => $id,
+						'publtime' => $publtime,
+						'title' => $title,
+						'alias' => $alias,
+						'product_note' => $note,
+						'hometext' => $hometext,
+						'product_price' => $temppro[$id]['price'],
+						'product_unit' => $unit,
+						'money_unit' => $money_unit,
+						'product_number' => $temppro[$id]['num']
 					);
 				}
 			}
 
 			$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
-			$email_contents = call_user_func( "email_new_order", $data_order, $data_pro );
+			$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
 
 			nv_sendmail( array( $global_config['site_name'], $global_config['site_email'] ), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
 
@@ -199,7 +199,7 @@ if( $post_order == 1 )
 			$checkss = md5( $order_id . $global_config['sitekey'] . session_id() );
 			unset( $_SESSION[$module_data . '_cart'] );
 
-			Header( "Location: " . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payment&order_id=" . $order_id . "&checkss=" . $checkss );
+			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss );
 
 			$action = 1;
 		}
@@ -219,9 +219,9 @@ if( $action == 0 )
 
 	if( ! empty( $arrayid ) )
 	{
-		$listid = implode( ",", $arrayid );
+		$listid = implode( ',', $arrayid );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $listid . ") AND t1.status =1";
+		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
 		$result = $db->query( $sql );
 
 		while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $unit, $money_unit ) = $result->fetch( 3 ) )
@@ -240,7 +240,7 @@ if( $action == 0 )
 			}
 			else//no image
 			{
-				$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+				$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 			}
 
 			if( $pro_config['active_price'] == '0' )
@@ -249,20 +249,20 @@ if( $action == 0 )
 			}
 
 			$data_content[] = array(
-				"id" => $id,
-				"publtime" => $publtime,
-				"title" => $title,
-				"alias" => $alias,
-				"note" => $note,
-				"hometext" => $hometext,
-				"homeimgalt" => $homeimgalt,
-				"homeimgthumb" => $thumb,
-				"product_price" => $product_price,
-				"product_discounts" => $product_discounts,
-				"product_unit" => $unit,
-				"money_unit" => $money_unit,
-				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id,
-				"num" => $_SESSION[$module_data . '_cart'][$id]['num']
+				'id' => $id,
+				'publtime' => $publtime,
+				'title' => $title,
+				'alias' => $alias,
+				'note' => $note,
+				'hometext' => $hometext,
+				'homeimgalt' => $homeimgalt,
+				'homeimgthumb' => $thumb,
+				'product_price' => $product_price,
+				'product_discounts' => $product_discounts,
+				'product_unit' => $unit,
+				'money_unit' => $money_unit,
+				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'num' => $_SESSION[$module_data . '_cart'][$id]['num']
 			);
 			++$i;
 		}
@@ -270,12 +270,12 @@ if( $action == 0 )
 
 	if( $i == 0 )
 	{
-		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cart", true ) );
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true ) );
 		exit();
 	}
 	else
 	{
-		$contents = call_user_func( "uers_order", $data_content, $data_order, $error );
+		$contents = call_user_func( 'uers_order', $data_content, $data_order, $error );
 	}
 }
 

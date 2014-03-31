@@ -22,7 +22,7 @@
 		<td>{ROW.code}</td>
 		<td>{ROW.currency}</td>
 		<td>{ROW.exchange}</td>
-		<td align="center"><span class="edit_icon"><a href="{ROW.link_edit}" title="">{LANG.edit}</a></span>&nbsp; <span class="delete_icon"><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></span></td>
+		<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <em class="icon-trash icon-large">&nbsp;</em><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
 		</tr>
 	<!-- END: row -->
 	</tbody>>
@@ -73,7 +73,7 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: data -->
 

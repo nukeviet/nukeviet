@@ -15,7 +15,7 @@
 			<td><input type="checkbox" class="ck" value="{id}" /></td>
 			<td>{title}</td>
 			<td>{note}</td>
-			<td align="center"><span class="edit_icon"><a href="{link_edit}" title="">{LANG.edit}</a></span>&nbsp; <span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span></td>
+			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{link_edit}" title="">{LANG.edit}</a>&nbsp; <em class="icon-trash icon-large">&nbsp;</em><a href="{link_del}" class="delete" title="">{LANG.del}</a></td>
 		</tr>
 	<!-- END: row -->
 	</tbody>
@@ -71,7 +71,7 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: data -->
 <form action="" method="post">

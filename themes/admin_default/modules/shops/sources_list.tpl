@@ -26,7 +26,7 @@
 			</select></td>
 			<td>{ROW.title}</td>
 			<td>{ROW.link}</td>
-			<td align="center"><span class="edit_icon"><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=sources&amp;sourceid={ROW.sourceid}#edit">{GLANG.edit}</a></span> &nbsp;-&nbsp; <span class="delete_icon"><a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></span></td>
+			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=sources&amp;sourceid={ROW.sourceid}#edit">{GLANG.edit}</a> &nbsp;-&nbsp; <em class="icon-trash icon-large">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>
