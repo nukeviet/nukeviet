@@ -1,5 +1,12 @@
-ul.slimmenu { background: #aaaaaa; width: 100% }
-ul.slimmenu li { text-align: left; width: 234px }
+ul.slimmenu { 
+	background: #aaaaaa; 
+	width: 100% 
+}
+
+ul.slimmenu li { 
+	text-align: left; 
+	width: 234px 
+}
 
 .menu-collapser {
     position: relative;
