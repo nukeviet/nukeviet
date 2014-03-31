@@ -243,7 +243,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 		{
 			$block_theme = "default";
 		}
-		$block_theme = 'responsive';
+
 		$xtpl = new XTemplate( $style . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
