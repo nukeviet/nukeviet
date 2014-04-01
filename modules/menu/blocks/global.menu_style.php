@@ -233,7 +233,9 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 	 */
 	function nv_style_type( $style, $list_cats, $block_config )
 	{
-		global $module_info;
+		global $module_info, $my_head;
+		
+		$my_head .= "<link rel=\"stylesheet\" type=\"text/css\"	href=\"" . NV_BASE_SITEURL . "/themes/" . $module_info['template'] . "/css/menu.css\" />";
 
 		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/menu/' . $style . '.tpl' ) )
 		{
@@ -260,6 +262,7 @@ if( ! nv_function_exists( 'nv_menu_site' ) )
 					$html_content = nv_sub_menu( $style, $list_cats, $cat['subcats'] );
 					$xtpl->assign( 'HTML_CONTENT', $html_content );
 					$xtpl->parse( 'main.loopcat1.cat2' );
+					$xtpl->parse( 'main.loopcat1.expand' );
 				}
 				$xtpl->parse( 'main.loopcat1' );
 			}
