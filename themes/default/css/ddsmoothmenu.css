@@ -127,7 +127,8 @@
 	position: absolute;
 	top: 0;
 	visibility: hidden;
-	width: 170px
+	width: 170px;
+	background-color: #f9f9f9;	
 }
 
 * html .ddsmoothmenu-v ul li {

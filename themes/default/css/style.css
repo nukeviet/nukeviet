@@ -37,7 +37,7 @@ body{
 	background:#ccc url('../images/bg.png') repeat;
 }
 a, a:link, a:active, a:visited{
-	color:#00a8ff;
+	color:##0E73E6;
 }
 a:hover{
 	text-decoration:none;
