@@ -1,35 +1,14 @@
 <!-- BEGIN: main -->
-<div class="content online">
-	<p>
-		<span><img src="{IMG_PATH}images/online/users.png" width="16" height="16" alt="{LANG.online}" /></span><span>{LANG.online} :
-			{COUNT_ONLINE}</span>
-	</p>
-	<!-- BEGIN: users -->
-	<p>
-		<span class="item"><strong>&bull;</strong>{LANG.users} : {COUNT_USERS}</span>
-	</p>
-	<!-- END: users -->
-	<!-- BEGIN: bots -->
-	<p>
-		<span class="item"><strong>&bull;</strong>{LANG.bots} : {COUNT_BOTS}</span>
-	</p>
-	<!-- END: bots -->
-	<!-- BEGIN: guests -->
-	<p>
-		<span class="item"><strong>&bull;</strong>{LANG.guests} : {COUNT_GUESTS}</span>
-	</p>
-	<!-- END: guests -->
-	<hr/>
-	<p>
-		<span><img src="{IMG_PATH}images/online/today.png" width="16" height="16" alt="{LANG.today}" />{LANG.today} :
-			{COUNT_DAY}</span>
-	</p>
-	<p>
-		<span><img src="{IMG_PATH}images/online/month.png" width="16" height="16" alt="{LANG.current_month}" />{LANG.current_month}
-			: {COUNT_MONTH}</span>
-	</p>
-	<p>
-		<span><img src="{IMG_PATH}images/online/hits.png" width="16" height="16" alt="{LANG.hits}" />{LANG.hits} : <strong>{COUNT_ALL}</strong></span>
-	</p>
-</div>
+<ul class="nv-list-item">
+	<li><em class="fa fa-bolt fa-lg">&nbsp;</em> {LANG.online} <span class="pull-right">{COUNT_ONLINE}</span></li>
+	<!-- BEGIN: users --><li><em class="fa fa-user fa-lg">&nbsp;</em> {LANG.users} <span class="pull-right">{COUNT_USERS}</span></li><!-- END: users -->
+	<!-- BEGIN: bots --><li><em class="fa fa-magic fa-lg">&nbsp;</em> {LANG.bots} <span class="pull-right">{COUNT_BOTS}</span></li><!-- END: bots -->
+	<!-- BEGIN: guests --><li><em class="fa fa-bullseye fa-lg">&nbsp;</em> {LANG.guests} <span class="pull-right">{COUNT_GUESTS}</span></li><!-- END: guests -->
+</ul>
+<div class="nv-hr">&nbsp;</div>
+<ul class="nv-list-item">
+	<li><em class="fa fa-filter fa-lg">&nbsp;</em> {LANG.today} <span class="pull-right">{COUNT_DAY}</span></li>
+	<li><em class="fa fa-calendar-o fa-lg">&nbsp;</em> {LANG.current_month} <span class="pull-right">{COUNT_MONTH}</span></li>
+	<li><em class="fa fa-bars fa-lg">&nbsp;</em> {LANG.hits} <span class="pull-right">{COUNT_ALL}</span></li>
+</ul>
 <!-- END: main -->

@@ -9,16 +9,13 @@
 function create_keywords() {
 	var content = strip_tags(document.getElementById('keywords').value);
 	if (content != '') {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&content=' + encodeURIComponent(content), '', 'res_keywords');
-	}
-	return false;
-}
-
-function res_keywords(res) {
-	if (res != "n/a") {
-		document.getElementById('keywords').value = res;
-	} else {
-		document.getElementById('keywords').value = '';
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&nocache=' + new Date().getTime(), 'content=' + encodeURIComponent(content), function(res) {
+			if (res != "n/a") {
+				document.getElementById('keywords').value = res;
+			} else {
+				document.getElementById('keywords').value = '';
+			}
+		});
 	}
 	return false;
 }
@@ -30,6 +27,7 @@ function split(val) {
 function extractLast(term) {
 	return split(term).pop();
 }
+
 
 $("#titlelength").html($("#idtitle").val().length);
 $("#idtitle").bind("keyup paste", function() {

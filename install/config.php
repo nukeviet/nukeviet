@@ -56,7 +56,7 @@ $global_config['lang_multi'] = 1;
 $global_config['lang_geo'] = 0;
 $global_config['site_lang'] = 'en';
 $global_config['engine_allowed'] = array();
-$global_config['site_theme'] = 'modern';
+$global_config['site_theme'] = 'default';
 $global_config['gfx_chk'] = 3;
 
 $global_config['nv_unick_type'] = 4;

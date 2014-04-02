@@ -1,11 +1,10 @@
 <!-- BEGIN: main -->
-<div class="sliver2">
-	<ul class="l-down">
+<div>
+	<ul class="list_item">
 		<!-- BEGIN: loop -->
 		<li>
 			<a href="{loop.link}">{loop.title}</a>
-			<br />
-			<span class="small_txt">{loop.updatetime}</span>
+			<em>{loop.updatetime}</em>
 		</li>
 		<!-- END: loop -->
 </div>

@@ -1,56 +1,37 @@
 <!-- BEGIN: main -->
-<div id="users">
-	<h2 class="line padding_0" style="margin-bottom:5px">{LANG.user_info}</h2>
-	<div class="uinfo">
-
-		<div class="uimg">
-			<img src="{SRC_IMG}" alt="" />
-			<br />
-			<span style="font-size:11px; color:#999">{LANG.img_size_title}</span>
-		</div>
-		{LANG.account2}: <strong>{USER.username}</strong>
-		<!-- BEGIN: viewemail -->
-		({USER.email})
-		<!-- END: viewemail -->
-		<br />
-		{LANG.last_login}: {USER.last_login}
-		<br />
-
-		<div class="clear"></div>
-		<div class="content">
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.name}:
-				</dt>
-				<dd class="fl">
-					{USER.full_name}
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl" style="width:48%;">
-					{LANG.birthday}:
-				</dt>
-				<dd class="fl">
-					{USER.birthday}
-				</dd>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.gender}:
-				</dt>
-				<dd class="fl">
-					{USER.gender}
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl" style="width:48%;">
-					{LANG.regdate}:
-				</dt>
-				<dd class="fl">
-					{USER.regdate}
-				</dd>
-			</dl>
-		</div>
+<h2>{LANG.user_info}</h2>
+<div class="row m-bottom">
+	<div class="col-sm-3 text-center">
+		<p><img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail"/></p>
+		{LANG.img_size_title}
 	</div>
+	<div class="col-sm-9">
+		<ul class="nv-list-item">
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong><!-- BEGIN: viewemail --> ({USER.email})<!-- END: viewemail --></li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.last_login}: {USER.last_login}</li>
+		</ul>
+	</div>
+</div>
+<div class="table-responsive">
+	<table class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th>{LANG.name}</th>
+				<td>{USER.full_name}</td>
+			</tr>
+			<tr>
+				<th>{LANG.birthday}</th>
+				<td>{USER.birthday}</td>
+			</tr>
+			<tr>
+				<th>{LANG.gender}</th>
+				<td>{USER.gender}</td>
+			</tr>
+			<tr>
+				<th>{LANG.regdate}</th>
+				<td>{USER.regdate}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 <!-- END: main -->
