@@ -855,10 +855,6 @@ function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 
-	$script = nv_html_site_js();
-	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-
 	$script .= "<script type=\"text/javascript\">\n";
 	$script .= " $(document).ready(function(){\n";
 	$script .= " $(\"#sendmailForm\").validate();\n";

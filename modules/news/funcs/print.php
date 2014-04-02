@@ -95,9 +95,11 @@ if( $id > 0 and $catid > 0 )
 				"position" => $content['imgposition']
 			);
 		}
+
+		$page_title = $content['title'];
 		$contents = call_user_func( "news_print", $result );
 		include NV_ROOTDIR . '/includes/header.php';
-		echo $contents;
+		echo nv_site_theme( $contents, false );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
