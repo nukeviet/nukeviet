@@ -48,7 +48,7 @@ div.news_column div.header a {
 	font-weight: normal;
 	height: 28px;
 	line-height: 34px;
-	padding: 0 0 0 10px
+	padding: 0 0 0 20px
 }
 
 div.news_column div.header {
@@ -80,7 +80,7 @@ div.news_column div.header a.current span span {
 }
 
 div.news_column div.items {
-	padding: 4px;
+	padding: 5px;
 }
 
 div.news_column div.border_r {
@@ -107,7 +107,7 @@ div.news_column div.items h3 a:hover {
 }
 
 div.news_column div.items img {
-	border: 1px solid #ccc;
+	border: 1px solid #e2e2e2;
 	float: left;
 	margin-right: 8px;
 	padding: 2px
