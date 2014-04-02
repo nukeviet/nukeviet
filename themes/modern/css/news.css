@@ -146,3 +146,134 @@
 .icon_list{
 	background: url(../images/bullet-orange.png) 2px 13px no-repeat;
 }
+
+#print {
+	margin: 0 auto;
+	text-align: left;
+	width: 800px;
+}
+
+#print a, a:active, a:focus, a:visited {
+	color: #4D5764;
+	text-decoration: none;
+}
+
+#print h1 {
+	font-size: 160%
+}
+
+#print h2 {
+	font-size: 150%
+}
+
+#print a:hover {
+	text-decoration: underline;
+}
+
+#print h1, h2, p {
+	margin: 0;
+	padding: 0;
+}
+
+#print #header {
+	height: 100%;
+	margin-bottom: 10px;
+	line-height: 40px;
+	border-bottom: 2px solid #DC0312;
+}
+
+#print #header h2 {
+	float: left;
+	display: inline;
+}
+
+#print #header p {
+	float: right;
+	display: inline;
+}
+
+#print #content #hometext {
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+
+#print #content #bodytext {
+	text-align: justify;
+}
+
+#print #content ul.control {
+	margin: 0;
+	display: block;
+	padding: 7px 0 19px 0;
+}
+
+#print #content ul.control li {
+	display: inline;
+	float: left;
+	list-style: none;
+	font-size: 95%;
+}
+
+#print #content ul.control li a {
+	padding: 0 2px;
+}
+
+#print #content ul.control li a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#print #content .time {
+	color: #333;
+}
+
+#print #content #imghome {
+	padding: 4px;
+	margin: 0 auto;
+	display: block;
+	text-align: center;
+}
+
+#print #content #imghome p {
+	font-weight: normal
+}
+
+#print #content .copyright {
+	background: #66CCFF;
+	padding: 4px;
+	width: 100%;
+}
+
+#print #content #author {
+	text-align: right;
+}
+
+#print #footer {
+	margin-top: 10px;
+	border-top: 2px solid #DC0312;
+}
+
+#print #footer #url {
+	line-height: 20px;
+	font-size: 100%;
+	display: block;
+	border-bottom: 2px solid #4D5764;
+}
+
+#print #footer .copyright {
+	float: left;
+	display: inline;
+	padding: 5px 0;
+}
+
+#print #footer #contact {
+	float: right;
+	display: inline;
+	padding: 5px 0;
+}
+
+#print #footer #contact a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
