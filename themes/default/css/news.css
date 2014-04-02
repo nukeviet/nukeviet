@@ -32,8 +32,8 @@ div.two_column {
 }
 
 div.news_column {
-	border-bottom: 2px solid #e8e8e8;
-	margin-bottom: 10px
+	border: #dcdcdc 1px solid;	
+	margin-bottom: 20px
 }
 
 div.news_column div.fixedwidth {
@@ -42,29 +42,30 @@ div.news_column div.fixedwidth {
 }
 
 div.news_column div.header a {
-	color: #3b3b3b;
+	color: #868686;
 	display: block;
 	float: left;
 	font-weight: normal;
 	height: 28px;
-	line-height: 20px;
+	line-height: 34px;
 	padding: 0 0 0 10px
 }
 
 div.news_column div.header {
-	background: url(../images/news_cat_header.png) repeat-x;
-	border-bottom: 1px solid #ccc;
+	background-color: #F5F5F5;
+	height: 40px;
+	border-bottom: #dcdcdc 1px solid;
 	padding: 4px 0 0 4px
 }
 
 div.news_column div.header a.current {
-	background: url(../images/news_arrow_down.png) no-repeat center 100%;
+	
 	font-weight: bold;
 	padding: 0
 }
 
 div.news_column div.header a.current span {
-	background: url(../images/news_cat_r.png) no-repeat top right;
+	
 	cursor: pointer;
 	display: block;
 	float: left;
@@ -73,8 +74,8 @@ div.news_column div.header a.current span {
 }
 
 div.news_column div.header a.current span span {
-	background: url(../images/news_cat_l.png) no-repeat;
-	color: #fff;
+	
+	color: #333333;
 	padding: 0 0 0 6px
 }
 
@@ -389,7 +390,8 @@ img.s-border {
 	background: #fff;
 	border: 1px solid #d8d8d8;
 	margin-right: 5px;
-	padding: 4px
+	padding: 4px;
+	float: left
 }
 
 .aright {
