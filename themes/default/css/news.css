@@ -400,7 +400,7 @@ img.s-border {
 
 #hot-news {
 	background: #fff url(../images/hot-news-shadow.png) 50% bottom no-repeat;
-	padding-bottom: 19px
+	padding-bottom: 19px;
 }
 
 #hot-news .box-border {
@@ -422,7 +422,8 @@ img.s-border {
 	background: url(../images/dot.png) left 2px repeat-x;
 	border-top: 1px solid #dadada;
 	list-style-type: none;
-	margin: 0
+	margin: 0;
+	display: block
 }
 
 #hot-news ul.other-news li {
