@@ -349,6 +349,11 @@ header{
 	}
 }
 @media (min-height: 500px){
+	
+	.container {
+		width:100%;
+	}
+	
 	.nv-infodie{
 		height:500px;
 		top:50%;
@@ -358,6 +363,11 @@ header{
 
 /* Responsive theme */
 @media (max-width: 768px){
+	
+	.container {
+		width:100%;
+	}
+	
 	#banner img{
 		height:100%;
 		width:auto;
@@ -365,6 +375,11 @@ header{
 	}
 }
 @media (max-width: 992px){
+	
+	.container {
+		width:100%;
+	}
+	
 	#header{
 		height:190px;
 	}
@@ -372,6 +387,7 @@ header{
 		width:100%;
 		text-align:center;
 		padding:10px 0;
+		
 	}
 	#header .pull-right{
 		width:100%;
@@ -418,7 +434,7 @@ header{
 }
 @media (min-width: 768px){
 	#wraper{
-		width: 730px;
+		width: 100%;
 	}
 }
 @media (min-width: 992px){
