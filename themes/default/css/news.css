@@ -32,13 +32,8 @@ div.two_column {
 }
 
 div.news_column {
-	border: #dcdcdc 1px solid;	
+	border: #dcdcdc 1px solid;
 	margin-bottom: 20px
-}
-
-div.news_column div.fixedwidth {
-	float: left;
-	width: 68%
 }
 
 div.news_column div.header a {
@@ -59,13 +54,13 @@ div.news_column div.header {
 }
 
 div.news_column div.header a.current {
-	
+
 	font-weight: bold;
 	padding: 0
 }
 
 div.news_column div.header a.current span {
-	
+
 	cursor: pointer;
 	display: block;
 	float: left;
@@ -74,7 +69,7 @@ div.news_column div.header a.current span {
 }
 
 div.news_column div.header a.current span span {
-	
+
 	color: #333333;
 	padding: 0 0 0 6px
 }
@@ -111,16 +106,6 @@ div.news_column div.items img {
 	float: left;
 	margin-right: 8px;
 	padding: 2px
-}
-
-div.news_column ul.related {
-	float: left;
-	padding: 4px;
-	text-align: justify
-}
-
-div.news_column ul.fixedwidth {
-	width: 28%
 }
 
 div.span-25 ul.related {
@@ -557,17 +542,17 @@ ul.list-number li {
 	padding-bottom: 5px
 }
 
-.icon_new{
+.icon_new {
 	background: url('../images/news/new.gif') no-repeat;
 	display: inline-block;
 	width: 33px;
 	height: 15px;
 }
 
-.icon_new_small{
+.icon_new_small {
 	background: url('../images/squared-blue.png') no-repeat 0 6px;
 }
 
-.icon_list{
+.icon_list {
 	background: url(../images/arrow_left_orange.png) no-repeat 0 6px;
 }
