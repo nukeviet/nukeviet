@@ -117,7 +117,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	 */
 	function nv_relates_product( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head;
+		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head, $db;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
