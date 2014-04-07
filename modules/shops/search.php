@@ -13,10 +13,10 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )
 	->from( $db_config['prefix'] . '_' . $m_values['module_data'] . '_rows' )
-	->where( "(" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . " 
-		OR " . nv_like_logic( 'product_code', $dbkeyword, $logic ) . " 
-		OR " . nv_like_logic( NV_LANG_DATA . '_bodytext', $dbkeyword, $logic ) . " 
-		OR " . nv_like_logic( NV_LANG_DATA . '_hometext', $dbkeyword, $logic ) . ") 
+	->where( "(" . nv_like_logic( NV_LANG_DATA . '_title', $dbkeyword, $logic ) . "
+		OR " . nv_like_logic( 'product_code', $dbkeyword, $logic ) . "
+		OR " . nv_like_logic( NV_LANG_DATA . '_bodytext', $dbkeyword, $logic ) . "
+		OR " . nv_like_logic( NV_LANG_DATA . '_hometext', $dbkeyword, $logic ) . ")
 		AND ( publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") )" );
 
 $all_page = $db->query( $db->sql() )->fetchColumn();
@@ -44,10 +44,10 @@ if( $all_page )
 		$catid = explode( ',', $listcatid );
 		$catid = end( $catid );
 
-		$url = $link . $array_cat_alias[$catid]['alias'] . '/' . $alias . '-' . $id;
+		$url = $link . $array_cat_alias[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 
 		$result_array[] = array(
-			'link' => $url, 
+			'link' => $url,
 			'title' => BoldKeywordInStr( $tilterow, $key, $logic ),
 			'content' => BoldKeywordInStr( $content, $key, $logic )
 		);

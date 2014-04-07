@@ -14,7 +14,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 {
 	/**
 	 * GetCatidInChild()
-	 * 
+	 *
 	 * @param mixed $catid
 	 * @return
 	 */
@@ -35,7 +35,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 	}
 	/**
 	 * getgroup_ckhtml()
-	 * 
+	 *
 	 * @param mixed $data_group
 	 * @param mixed $pid
 	 * @param integer $catid
@@ -71,7 +71,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 
 	/**
 	 * nv_pro_group()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -130,6 +130,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 		}
 
 		$xtpl = new XTemplate( "block.group.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
+		$array_cat =  array();
 		$array_cat = GetCatidInChild( $catid );
 		$contents_temp_none = $contents_temp_chid = "";
 

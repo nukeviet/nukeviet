@@ -33,7 +33,7 @@ if( $save == 1 and intval( $data_content['transaction_status'] ) == - 1 )
 	$payment = '';
 	$userid = $admin_info['userid'];
 
-	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', " . NV_CURRENTTIME . ", '" . $payment_amount . "', '" . $payment_data . "')" );
 
 	if( $transaction_id > 0 )
 	{
@@ -242,7 +242,7 @@ if( $result->rowCount() )
 		}
 		if( $row['userid'] > 0 )
 		{
-			$username = $db->query( 'SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
+			$username = $db->query( 'SELECT username FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
 			$row['payment'] = $username;
 			$row['link_user'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=edit&userid=' . $row['userid'];
 		}

@@ -89,7 +89,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				"product_discounts" => $product_discounts,
 				"product_unit" => $unit,
 				"money_unit" => $money_unit,
-				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id,
+				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
 				"num" => $number,
 				"link_remove" => $link . "remove&id=" . $id
 			);

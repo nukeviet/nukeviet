@@ -41,7 +41,7 @@
 <script type="text/javascript">
 	var url_back = '{url_back}';
 	var url_change_weight = '{url_change}';
-	var url_active = '{url_active}'; 
+	var url_active = '{url_active}';
 </script>
 <div style="background:#F0F0F0;padding:10px; font-weight:bold">
 	{LANG.paymentcaption}
@@ -63,7 +63,7 @@
 			<td>{DATA_PM.paymentname}</td>
 			<td>{DATA_PM.domain}</td>
 			<td align="center"><input type="checkbox" name="{DATA_PM.payment}" id="{DATA_PM.payment}" {DATA_PM.active} onclick="ChangeActive(this,url_active)"/></td>
-			<td align="center"><span class="edit_icon"><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></span></td>
+			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></td>
 		</tr>
 		<!-- END: paymentloop -->
 	</tbody>
@@ -89,7 +89,7 @@
 			<td align="center">{ODATA_PM.STT}</td>
 			<td>{ODATA_PM.paymentname}</td>
 			<td>{ODATA_PM.domain}</td>
-			<td align="center"><span class="edit_icon"><a href="{ODATA_PM.link_edit}#edit">{LANG.payment_integrat}</a></span></td>
+			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ODATA_PM.link_edit}#edit">{LANG.payment_integrat}</a></td>
 		</tr>
 		<!-- END: opaymentloop -->
 	</tbody>
@@ -103,7 +103,7 @@
 		var type = "image";
 		nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", "850", "400", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
-	}); 
+	});
 </script>
 <!-- BEGIN: guide -->
 <div class="infoalert">

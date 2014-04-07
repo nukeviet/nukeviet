@@ -39,7 +39,7 @@
 				<option value="{VIEWGROUP.key}"{VIEWGROUP.selected}>{VIEWGROUP.title}</option>
 				<!-- END: viewgroup -->
 			</select></td>
-			<td align="right"><a class="edit_icon" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=group&amp;groupid={ROW.groupid}&amp;parentid={ROW.parentid}#edit">{GLANG.edit}</a> &nbsp; - <a class="delete_icon" href="javascript:void(0);" onclick="nv_del_group({ROW.groupid})">{GLANG.delete}</a></td>
+			<td align="right"><em class="icon-edit icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=group&amp;groupid={ROW.groupid}&amp;parentid={ROW.parentid}#edit">{GLANG.edit}</a> &nbsp; - <em class="icon-trash icon-large">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_group({ROW.groupid})">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>

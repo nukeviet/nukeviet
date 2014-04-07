@@ -352,7 +352,7 @@ function nv_show_cat_list( $parentid = 0 )
  * @param integer $lev
  * @return
  */
-function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
+function nv_fix_group_order( $parentid = 0, $sort = 0, $lev = 0 )
 {
 	global $db, $db_config, $module_data;
 
@@ -375,13 +375,13 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 	}
 	foreach( $array_group_order as $groupid_i )
 	{
-		++$order;
+		++$sort;
 		++$weight;
 
-		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group SET weight=' . $weight . ', order=' . $order . ', lev=' . $lev . ' WHERE groupid=' . $groupid_i;
+		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group SET weight=' . $weight . ', sort=' . $sort . ', lev=' . $lev . ' WHERE groupid=' . $groupid_i;
 		$db->query( $sql );
 
-		$order = nv_fix_group_order( $groupid_i, $order, $lev );
+		$sort = nv_fix_group_order( $groupid_i, $sort, $lev );
 	}
 
 	$numsubgroup = $weight;
@@ -400,7 +400,7 @@ function nv_fix_group_order( $parentid = 0, $order = 0, $lev = 0 )
 		$sql .= " WHERE groupid=" . intval( $parentid );
 		$db->query( $sql );
 	}
-	return $order;
+	return $sort;
 }
 
 /**
