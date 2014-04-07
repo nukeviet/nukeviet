@@ -32,13 +32,8 @@ div.two_column {
 }
 
 div.news_column {
-	border: #dcdcdc 1px solid;	
+	border: #dcdcdc 1px solid;
 	margin-bottom: 20px
-}
-
-div.news_column div.fixedwidth {
-	float: left;
-	width: 68%
 }
 
 div.news_column div.header a {
@@ -48,7 +43,7 @@ div.news_column div.header a {
 	font-weight: normal;
 	height: 28px;
 	line-height: 34px;
-	padding: 0 0 0 10px
+	padding: 0 0 0 20px
 }
 
 div.news_column div.header {
@@ -59,13 +54,13 @@ div.news_column div.header {
 }
 
 div.news_column div.header a.current {
-	
+
 	font-weight: bold;
 	padding: 0
 }
 
 div.news_column div.header a.current span {
-	
+
 	cursor: pointer;
 	display: block;
 	float: left;
@@ -74,13 +69,13 @@ div.news_column div.header a.current span {
 }
 
 div.news_column div.header a.current span span {
-	
+
 	color: #333333;
 	padding: 0 0 0 6px
 }
 
 div.news_column div.items {
-	padding: 4px;
+	padding: 5px;
 }
 
 div.news_column div.border_r {
@@ -107,20 +102,10 @@ div.news_column div.items h3 a:hover {
 }
 
 div.news_column div.items img {
-	border: 1px solid #ccc;
+	border: 1px solid #e2e2e2;
 	float: left;
 	margin-right: 8px;
 	padding: 2px
-}
-
-div.news_column ul.related {
-	float: left;
-	padding: 4px;
-	text-align: justify
-}
-
-div.news_column ul.fixedwidth {
-	width: 28%
 }
 
 div.span-25 ul.related {
@@ -400,7 +385,7 @@ img.s-border {
 
 #hot-news {
 	background: #fff url(../images/hot-news-shadow.png) 50% bottom no-repeat;
-	padding-bottom: 19px
+	padding-bottom: 19px;
 }
 
 #hot-news .box-border {
@@ -422,7 +407,8 @@ img.s-border {
 	background: url(../images/dot.png) left 2px repeat-x;
 	border-top: 1px solid #dadada;
 	list-style-type: none;
-	margin: 0
+	margin: 0;
+	display: block
 }
 
 #hot-news ul.other-news li {
@@ -556,17 +542,17 @@ ul.list-number li {
 	padding-bottom: 5px
 }
 
-.icon_new{
+.icon_new {
 	background: url('../images/news/new.gif') no-repeat;
 	display: inline-block;
 	width: 33px;
 	height: 15px;
 }
 
-.icon_new_small{
+.icon_new_small {
 	background: url('../images/squared-blue.png') no-repeat 0 6px;
 }
 
-.icon_list{
+.icon_list {
 	background: url(../images/arrow_left_orange.png) no-repeat 0 6px;
 }

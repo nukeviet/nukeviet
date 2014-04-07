@@ -569,6 +569,7 @@ ul,
 ol {
   margin-top: 0;
   margin-bottom: 10px;
+  list-style: none;
 }
 ul ul,
 ol ul,
@@ -744,7 +745,7 @@ pre code {
 }
 @media (min-width: 992px) {
   .container {
-    width: 950px;
+    width: 100%;
   }
 }
 @media (min-width: 1200px) {
@@ -3959,7 +3960,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #555555;
+  color: #777777;
   background-color: #e7e7e7;
 }
 .navbar-default .navbar-nav > .disabled > a,
@@ -4017,7 +4018,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   color: #333333;
 }
 .navbar-inverse {
-  background-color: #222222;
+  background: #222222;
   border-color: #080808;
 }
 .navbar-inverse .navbar-brand {
@@ -4765,6 +4766,8 @@ a.list-group-item-danger.active:focus {
   border-bottom: 1px solid transparent;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
+  font-size: 14px;
+  font-weight: bold;
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;
@@ -5632,6 +5635,7 @@ button.close {
 .modal-footer:after {
   clear: both;
 }
+
 .center-block {
   display: block;
   margin-left: auto;
