@@ -12,12 +12,13 @@
 		{MODULE_CONTENT}
 		[BOTTOM]
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-3 col-sm-push-3">
+        [RIGHT]
+    </div>
+	<div class="col-sm-3 col-sm-pull-3">
 		[LEFT]
 	</div>
-	<div class="col-sm-3">
-		[RIGHT]
-	</div>
+	
 </div>
 <div class="row">
 	<div class="col-md-12">
