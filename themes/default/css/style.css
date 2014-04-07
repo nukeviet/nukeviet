@@ -20,9 +20,36 @@
 	src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/roboto-700.woff') format('woff');
 }
 
-/* Fix bootstrap when tidy enabled */
+/* Fix bootstrap */
+.clear {
+	clear: both
+}
+
+.fl {
+	float: left
+}
+
+.fr {
+	float: right
+}
+
+ul, ol {
+  list-style: none;
+}
+
+.panel-heading {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .input-group-btn{
 	font-size:14px!important;
+}
+
+.well {
+	padding: 8px;
+	line-height: 18px;
+	text-align: justify
 }
 
 /* Global */
@@ -33,7 +60,6 @@ body{
 	height: 100%;
 	padding: 0;
 	margin: 0;
-	font-size:12px;
 	background:#ccc url('../images/bg.png') repeat;
 }
 a, a:link, a:active, a:visited{
@@ -280,6 +306,7 @@ header{
 .nv-block-banners{
 	position: relative;
 	margin-bottom: 2px;
+	text-align: center;
 }
 .nv-block-banners .link{
 	position: absolute;
@@ -341,7 +368,6 @@ header{
 		width: 100%;
 	}
 	div.news_column ul.related {
-
 		padding: 4px;
 		text-align: justify;
 		clear:both
@@ -364,7 +390,6 @@ header{
 		margin-left: -250px;
 	}
 	div.news_column ul.related {
-
 		padding: 4px;
 		text-align: justify
 	}
@@ -468,7 +493,6 @@ header{
 		width: 100%;
 	}
 	div.news_column ul.related {
-		float: left;
 		padding: 4px;
 		text-align: justify
 	}
@@ -482,11 +506,13 @@ header{
 	}
 }
 @media (min-width: 992px){
+	.container {
+		width: 100%;
+	}
 	#wraper{
 		width: 950px;
 	}
 	div.news_column ul.related {
-		float: left;
 		padding: 4px;
 		text-align: justify
 	}
@@ -504,7 +530,6 @@ header{
 		width: 1150px;
 	}
 	div.news_column ul.related {
-		float: left;
 		padding: 4px;
 		text-align: justify
 	}
@@ -516,4 +541,8 @@ header{
 		float: left;
 		width: 68%
 	}
+}
+ul.other-news{
+	padding-left: 0px;
+	margin-left: 0px;
 }
