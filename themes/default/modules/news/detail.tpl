@@ -11,7 +11,7 @@
     }(document, 'script', 'facebook-jssdk'));
 </script>
 <!-- END: facebookjssdk -->
-<div class="news_column" style="padding:0 !important;margin:0 !important;">
+<div class="news_column detail">
 	<div id="news_detail">
 		<h1>{DETAIL.title}</h1>
 		<div class="time">{DETAIL.publtime}</div>

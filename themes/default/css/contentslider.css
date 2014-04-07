@@ -1,7 +1,7 @@
 .sliderwrapper {
 	height: 200px;
+	width: 320px;
 	overflow: hidden;
-	position: relative
 }
 
 .sliderwrapper .contentdiv {

@@ -9,6 +9,10 @@
 	background: #f9fbfd
 }
 
+#topnews ul.lastest-news {
+	padding: 0
+}
+
 #topnews ul.lastest-news li {
 	text-indent: 10px
 }
@@ -33,7 +37,11 @@ div.two_column {
 
 div.news_column {
 	border: #dcdcdc 1px solid;
-	margin-bottom: 20px
+	margin-top: 10px;
+}
+
+div.detail {
+	padding: 8px
 }
 
 div.news_column div.header a {
@@ -107,6 +115,9 @@ div.news_column div.items img {
 	margin-right: 8px;
 	padding: 2px
 }
+div.news_column ul.related{
+	float: left;
+}
 
 div.span-25 ul.related {
 	width: 100%
@@ -126,8 +137,9 @@ div.news_column ul.related a {
 	padding-left: 6px
 }
 
-#hometext {
-	font-weight: bold
+#hometext h2 {
+	font-weight: bold;
+	font-size: 14px
 }
 
 #news_detail h1 {
