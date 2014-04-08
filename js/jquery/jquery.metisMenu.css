@@ -1,7 +1,7 @@
 .arrow {
 	float: right;
 	margin: -32px 12px 0;
-	padding: 3px;
+	padding: 4px 8px 4px 8px;
 	color: #fff;
 	cursor: pointer;
 }
@@ -61,6 +61,7 @@
 	background-image: linear-gradient(to right, #333333 10px, #222222 10px);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff222222', GradientType=1);
+	margin: -14px;
 }
 .sidebar-nav ul {
 	padding: 0;

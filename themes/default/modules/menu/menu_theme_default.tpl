@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="navbar navbar-default navbar-static-top" role="navigation">
+<div class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
 			<span class="sr-only">&nbsp;</span>
