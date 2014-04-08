@@ -51,6 +51,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		global $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $db;
 		$module = $block_config['module'];
 		$show_no_image = $module_config[$module]['show_no_image'];
+		$blockwidth = $module_config[$module]['blockwidth'];
 
 		$db->sqlreset()
 			->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime' )
@@ -95,6 +96,8 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				{
 					$l['thumb'] = '';
 				}
+				
+				$l['blockwidth'] = $blockwidth;
 
 				$xtpl->assign( 'ROW', $l );
 				if( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
