@@ -15,12 +15,12 @@
 <div class="clearfix">
 	<aside class="sidebar">
 		<nav class="sidebar-nav">
-			<ul id="menu">
+			<ul id="menu_{MENUID}">
 				<!-- BEGIN: loopcat1 -->
 					<li>
 						<a title="{CAT1.note}" href="{CAT1.link}"{CAT1.target}>{CAT1.title}</a>
 						<!-- BEGIN: expand -->
-						<span class="glyphicon glyphicon-resize-full arrow" id="expand"></span>
+						<span class="arrow" id="expand">+</span>
 						<!-- END: expand -->
 						
 						<!-- BEGIN: cat2 -->
@@ -34,11 +34,9 @@
 		</nav>
 	</aside>
 </div>
-
 <script>
 $(function () {
-	$('#menu').metisMenu();
-	$('#menu2').metisMenu({
+	$('#menu_{MENUID}').metisMenu({
         toggle: false
     });
 });
