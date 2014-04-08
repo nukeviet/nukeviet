@@ -13,7 +13,7 @@
 	</div>
 	<!-- END: introtext -->
 	<div class="detail">
-		<em class="glyphicon glyphicon-th"></em> {LANG.listing_details}
+		<em class="fa fa-tasks">&nbsp;</em> {LANG.listing_details}
 	</div>
 	<div class="panel panel-default">
 		<dl class="dl-horizontal">
@@ -66,21 +66,22 @@
 			<a href="javascript:void(0);" onclick="nv_link_report({ROW.id});">{LANG.report}</a>
 		</div>
 		<!-- END: report -->
-		<em class="glyphicon glyphicon-save"></em> {LANG.download_detail}
+		<em class="fa fa-download">&nbsp;</em> {LANG.download_detail}
 	</div>
 	<!-- BEGIN: download_allow -->
+		<!-- BEGIN: fileupload -->
 		<div class="panel panel-default download">
 			<div class="hidden">
-				<iframe name="idown"></iframe>
+				<iframe name="idown">&nbsp;</iframe>
 			</div>
-			<!-- BEGIN: fileupload -->
+			
 			<div class="panel-heading">
 				{LANG.download_fileupload} {SITE_NAME}:
 			</div>
 			
 			<div class="panel-body">
 				<!-- BEGIN: row -->
-					<span class="glyphicon glyphicon-paperclip"></span>&nbsp;&nbsp;<a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
+					<em class="fa fa-link">&nbsp;</em>&nbsp;<a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
 				<!-- END: row -->
 			</div>
 		</div>
@@ -94,22 +95,26 @@
 			
 			<div class="panel-body">
 				<!-- BEGIN: row -->
-					<span class="glyphicon glyphicon-link"></span>&nbsp;&nbsp;<a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a>
+					<span class="fa fa-link">&nbsp;</span>&nbsp;<a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a>
 				<!-- END: row -->
 			</div>
 		</div>
 		<!-- END: linkdirect -->
 	<!-- END: download_allow -->
-	<!-- BEGIN: download_not_allow -->
-	<div class="download not_allow">
-		{ROW.download_info}
+	
+	
+	<div class="download">
+		<div class="alert alert-danger">
+			{ROW.download_info}
+		</div>
 	</div>
-	<!-- END: download_not_allow -->
+	
 	<div class="detail">
-		<span class="glyphicon glyphicon-star-empty"></span>&nbsp;&nbsp;{LANG.file_rating}
+		<span class="fa fa-info">&nbsp;</span>&nbsp;&nbsp;{LANG.file_rating}
 	</div>
 
-	<div class="rating clearfix">
+	<div class="panel panel-default">
+		<div class="panel-body">
 		<div id="stringrating">
 			{LANG.rating_question}
 		</div>
@@ -121,6 +126,7 @@
 			<input class="hover-star" type="radio" value="5" title="{LANG.file_rating5}" style="vertical-align: middle" />
 			<span id="hover-test" style="margin-left:20px">{LANG.file_rating_note}</span>
 		</div>
+	</div>
 	</div>
 
 	<script type="text/javascript">
@@ -163,7 +169,7 @@
 	<!-- END: disablerating -->
 
 	<!-- BEGIN: is_admin -->
-	<div class="alert alert-info">
+	<div class="well well-sm">
 		<div class="text-right pull-right">
 			<a href="{ROW.edit_link}">{GLANG.edit}</a> &divide; <a href="{ROW.del_link}" onclick="nv_del_row(this,{ROW.id});return false;">{GLANG.delete}</a>
 		</div>
@@ -173,6 +179,6 @@
 	</div>
 </div>
 <!-- BEGIN: comment -->
-<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 <!-- END: comment -->
 <!-- END: main -->
