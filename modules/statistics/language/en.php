@@ -41,5 +41,3 @@ $lang_module['bot'] = 'Search Engines';
 $lang_module['referer'] = 'Referer';
 $lang_module['refererbymonth'] = 'Referer by month';
 $lang_module['refererbymonth2'] = 'Statistics from site path %s by the months of the year% d';
-
-?>

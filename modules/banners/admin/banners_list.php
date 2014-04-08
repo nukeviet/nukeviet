@@ -85,5 +85,3 @@ $content = call_user_func( "nv_b_list_theme", $contents );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -38,5 +38,3 @@ $lang_module['logic_and'] = 'All words';
 $lang_module['logic_or'] = 'At least 1 word';
 $lang_module['searchQueryError'] = 'The keyword must content at least %s characters';
 $lang_module['chooseModule'] = 'Select the search section';
-
-?>

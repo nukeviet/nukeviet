@@ -37,5 +37,3 @@ else
 
 nv_xmlSitemap_generate( $url );
 die();
-
-?>

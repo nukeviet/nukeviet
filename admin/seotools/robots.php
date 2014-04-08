@@ -39,8 +39,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$content_config .= NV_FILEHEAD . "\n\n";
 	$content_config .= "if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );\n\n";
 	$content_config .= "\$cache = '" . serialize( $robots_data ) . "';\n\n";
-	$content_config .= "\$cache_other = '" . serialize( $robots_other ) . "';\n\n";
-	$content_config .= "?>";
+	$content_config .= "\$cache_other = '" . serialize( $robots_other ) . "';";
 
 	file_put_contents( $cache_file, $content_config, LOCK_EX );
 
@@ -170,5 +169,3 @@ $page_title = $lang_module['robots'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -181,5 +181,3 @@ $contents = theme_main_download( $array_cats, $list_cats, $download_config );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

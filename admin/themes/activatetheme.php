@@ -33,5 +33,3 @@ else
 {
 	echo $lang_module['theme_created_activate_layout'];
 }
-
-?>

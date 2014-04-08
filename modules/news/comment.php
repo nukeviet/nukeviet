@@ -25,5 +25,3 @@ foreach( $array_catid as $catid_i )
 	$db->query( $query );
 }
 // Het Cap nhat lai so luong comment duoc kich hoat
-
-?>

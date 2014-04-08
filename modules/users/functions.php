@@ -74,5 +74,3 @@ $sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTA
 $result = $db->query( $sql );
 $global_config['avatar_height'] = $result->fetchColumn();
 $result->closeCursor();
-
-?>

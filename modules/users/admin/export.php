@@ -323,5 +323,3 @@ elseif( $step == 2 and $nv_Request->isset_request( $module_data . '_export_filen
 	$download->download_file();
 	exit();
 }
-
-?>

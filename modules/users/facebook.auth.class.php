@@ -131,5 +131,3 @@ class FaceBookAuth
 		return $return;
 	}
 }
-
-?>

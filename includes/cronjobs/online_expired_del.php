@@ -37,5 +37,3 @@ function cron_online_expired_del()
 	}
 	return true;
 }
-
-?>

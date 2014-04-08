@@ -83,5 +83,3 @@ function nv_stat_update()
 
 nv_stat_update();
 $nv_Request->set_Session( 'statistic_' . NV_LANG_DATA, NV_CURRENTTIME );
-
-?>

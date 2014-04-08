@@ -74,5 +74,3 @@ $lang_module['stats_views_country'] = 'Theo quốc gia';
 $lang_module['stats_views_month'] = 'Tháng';
 $lang_module['stats_views_select'] = 'Hãy chọn';
 $lang_module['stats_views_ads'] = 'Quảng cáo';
-
-?>

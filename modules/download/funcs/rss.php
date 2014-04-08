@@ -75,5 +75,3 @@ if( ! empty( $list_cats ) )
 
 nv_rss_generate( $channel, $items );
 die();
-
-?>

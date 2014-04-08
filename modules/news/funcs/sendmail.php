@@ -118,5 +118,3 @@ if( $id > 0 and $catid > 0 )
 }
 Header( 'Location: ' . $global_config['site_url'] );
 exit();
-
-?>

@@ -240,5 +240,3 @@ function nv_news_get_bodytext( $bodytext )
 	$bodytext = str_replace( '&nbsp;', ' ', $bodytext );
 	return preg_replace( '/[ ]+/', ' ', $bodytext );
 }
-
-?>

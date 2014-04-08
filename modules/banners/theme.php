@@ -204,5 +204,3 @@ function cledit_theme( $contents )
 	$xtpl->parse( 'cledit' );
 	return $xtpl->text( 'cledit' );
 }
-
-?>

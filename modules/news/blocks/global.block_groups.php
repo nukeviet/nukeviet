@@ -133,5 +133,3 @@ if( defined( 'NV_SYSTEM' ) )
 		$content = nv_block_news_groups( $block_config );
 	}
 }
-
-?>

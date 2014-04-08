@@ -1965,5 +1965,3 @@ function nv_site_mods()
 	}
 	return $site_mods;
 }
-
-?>

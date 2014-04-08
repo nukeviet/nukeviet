@@ -826,5 +826,3 @@ elseif( $array_post_user['addcontent'] )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

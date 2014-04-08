@@ -57,8 +57,7 @@ function nv_save_file_admin_config()
 	$content_config .= "\$array_adminip = array();\n";
 	$content_config .= $content_config_ip . "\n";
 	$content_config .= "\$adv_admins = array();\n";
-	$content_config .= $content_config_user . "\n";
-	$content_config .= "?>";
+	$content_config .= $content_config_user;
 
 	return file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/admin_config.php', $content_config, LOCK_EX );
 }
@@ -392,5 +391,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

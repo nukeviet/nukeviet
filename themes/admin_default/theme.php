@@ -324,4 +324,3 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	return $sitecontent;
 }
-?>

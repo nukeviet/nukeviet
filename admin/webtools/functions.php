@@ -31,5 +31,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 }
 
 define( 'NV_IS_FILE_WEBTOOLS', true );
-
-?>

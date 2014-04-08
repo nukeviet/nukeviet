@@ -98,5 +98,3 @@ $lang_module['search_noresult'] = 'No data suitable to your requirements!';
 $lang_module['upload_files_log'] = 'Post new file';
 $lang_module['error_not_permission_title'] = 'Sorry, You do not have permission to view document this!';
 $lang_module['error_not_permission_content'] = 'Administrator is not allow you to access access to the contents of the document. Please Contact us to be decode reply';
-
-?>

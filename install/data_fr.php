@@ -911,5 +911,3 @@ if( $result->fetchColumn() )
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
 }
-
-?>

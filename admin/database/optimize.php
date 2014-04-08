@@ -45,5 +45,3 @@ $content = sprintf( $lang_module['optimize_result'], implode( ', ', $tabs ), $to
 include NV_ROOTDIR . '/includes/header.php';
 echo $content;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

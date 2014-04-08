@@ -61,5 +61,3 @@ function nv_getAllowed()
 }
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-?>

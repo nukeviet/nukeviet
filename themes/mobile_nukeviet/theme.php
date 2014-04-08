@@ -125,5 +125,3 @@ function nv_site_theme( $contents )
 
 	return $sitecontent;
 }
-
-?>

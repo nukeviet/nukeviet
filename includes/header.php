@@ -60,5 +60,3 @@ if( strpos( NV_USER_AGENT, 'MSIE' ) !== false )
 }
 
 ob_start();
-
-?>

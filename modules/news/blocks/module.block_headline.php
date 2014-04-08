@@ -143,5 +143,3 @@ function nv_block_headline()
 }
 
 $content = nv_block_headline();
-
-?>

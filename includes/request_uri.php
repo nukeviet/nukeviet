@@ -104,5 +104,3 @@ else
 	}
 }
 unset( $base_siteurl, $request_uri, $request_uri_array, $matches, $lop );
-
-?>

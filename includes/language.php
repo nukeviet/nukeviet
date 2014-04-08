@@ -96,5 +96,3 @@ else
 	define( 'NV_LANG_DATA', $site_lang );
 	unset( $cookie, $site_lang );
 }
-
-?>

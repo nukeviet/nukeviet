@@ -263,5 +263,3 @@ $lang_global['ftp_err_rawlist'] = 'Lỗi: Không thể xác định danh sách t
 $lang_global['ftp_err_list_detail'] = 'Lỗi: Không nhận dạng được tham số của các tệp, thư mục';
 $lang_global['ftp_err_fget'] = 'Lỗi: Không thể đọc được nội dung tệp';
 $lang_global['ftp_err_NVbuffet'] = 'Lỗi: Thiếu lớp NVbuffer';
-
-?>

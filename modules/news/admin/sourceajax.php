@@ -37,5 +37,3 @@ header( 'Content-type: application/json' );
 ob_start( 'ob_gzhandler' );
 echo json_encode( $array_data );
 exit();
-
-?>

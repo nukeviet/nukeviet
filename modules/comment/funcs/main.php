@@ -89,5 +89,3 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 
 Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 die();
-
-?>

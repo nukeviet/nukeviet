@@ -40,5 +40,3 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id),
  UNIQUE KEY vid (vid,title)
 ) ENGINE=MyISAM";
-
-?>

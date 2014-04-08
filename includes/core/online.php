@@ -50,5 +50,3 @@ function nv_online_upd()
 }
 
 nv_online_upd();
-
-?>

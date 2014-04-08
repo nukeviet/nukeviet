@@ -49,4 +49,3 @@ $lang_module['layout_default'] = 'Mặc định';
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
-?>

@@ -67,5 +67,3 @@ else
 }
 echo $newname;
 exit();
-
-?>

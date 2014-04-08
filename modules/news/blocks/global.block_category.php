@@ -113,5 +113,3 @@ if( defined( 'NV_SYSTEM' ) )
 		$content = nv_news_category( $block_config );
 	}
 }
-
-?>

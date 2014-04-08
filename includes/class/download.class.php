@@ -511,5 +511,3 @@ class download
 		exit();
 	}
 }
-
-?>

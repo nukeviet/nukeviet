@@ -335,5 +335,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_menu_site( $block_config );
 }
-
-?>

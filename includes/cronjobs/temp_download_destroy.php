@@ -50,5 +50,3 @@ function cron_auto_del_temp_download()
 
 	return $result;
 }
-
-?>

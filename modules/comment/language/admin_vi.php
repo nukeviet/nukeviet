@@ -80,5 +80,3 @@ $lang_module['sortcomm'] = 'Sắp xếp bình luận theo';
 $lang_module['sortcomm_0'] = 'Mới trước';
 $lang_module['sortcomm_1'] = 'Cũ trước';
 $lang_module['sortcomm_2'] = 'Like nhiều trước';
-
-?>

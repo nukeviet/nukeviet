@@ -69,5 +69,3 @@ if( defined( 'NV_IS_GZIP' ) )
 
 echo $contents;
 exit();
-
-?>

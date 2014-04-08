@@ -25,5 +25,3 @@ $lang_block['type'] = 'Kiểu menu';
 $lang_block['m_type1'] = 'Nav_bar';
 $lang_block['m_type2'] = 'Vertical';
 $lang_block['m_type3'] = 'Treeview';
-
-?>

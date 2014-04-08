@@ -435,5 +435,3 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   PRIMARY KEY (pid),
   UNIQUE KEY plugin_file (plugin_file)
 ) ENGINE=MyISAM";
-
-?>

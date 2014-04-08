@@ -136,5 +136,3 @@ $lang_module['del_content'] = 'Delete Post';
 $lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['rating_average'] = 'Ranking';
 $lang_module['rating_count'] = 'vote';
-
-?>

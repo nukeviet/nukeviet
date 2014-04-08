@@ -387,5 +387,3 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

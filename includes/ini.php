@@ -109,5 +109,3 @@ if( $sys_info['zlib_support'] )
 		$sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
 	}
 }
-
-?>

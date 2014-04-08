@@ -231,5 +231,3 @@ class ips
 		return $proxy;
 	}
 }
-
-?>

@@ -85,5 +85,3 @@ $lang_module['nv_check_type_2'] = 'Kiểm tra tất cả';
 $lang_module['nv_lang_check_title'] = 'Kiểm tra các ngôn ngữ chưa được dịch';
 $lang_module['countries'] = 'Ngôn ngữ theo quốc gia';
 $lang_module['countries_name'] = 'Tên quốc gia';
-
-?>

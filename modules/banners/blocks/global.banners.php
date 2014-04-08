@@ -161,5 +161,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_global_banners( $block_config );
 }
-
-?>

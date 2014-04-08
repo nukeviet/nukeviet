@@ -25,5 +25,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['robots'] = $lang_module['robots'];
 }
-
-?>

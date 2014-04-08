@@ -118,5 +118,3 @@ $lang_module['siteinfo_users_send'] = 'Uncheck files';
 $lang_module['siteinfo_eror'] = 'Errors report';
 $lang_module['siteinfo_comment'] = 'Comments';
 $lang_module['siteinfo_comment_pending'] = 'Uncheck comments';
-
-?>

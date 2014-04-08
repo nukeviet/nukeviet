@@ -105,5 +105,3 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		$content = $xtpl->text( 'main' );
 	}
 }
-
-?>

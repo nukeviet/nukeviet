@@ -73,5 +73,3 @@ if( $number > 0 )
 {
 	$pendinginfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment_pending'], 'value' => $number );
 }
-
-?>
