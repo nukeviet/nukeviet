@@ -20,5 +20,3 @@ else
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users' );
 	exit();
 }
-
-?>

@@ -328,5 +328,3 @@ function nv_dump_restore( $file )
 	}
 	return true;
 }
-
-?>

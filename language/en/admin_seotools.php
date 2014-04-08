@@ -125,5 +125,3 @@ $lang_module['rpc_message'] = 'Message';
 $lang_module['rpc_ping'] = 'PING when updating data';
 $lang_module['rpc_ping_page'] = 'PING article';
 $lang_module['rpc_finish'] = 'Complete PING process, you may want to transfer the management page article?';
-
-?>

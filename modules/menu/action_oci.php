@@ -74,4 +74,3 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	BEGIN
 	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . ';';
-?>

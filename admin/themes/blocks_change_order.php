@@ -42,5 +42,3 @@ else
 {
 	echo 'ERROR';
 }
-
-?>

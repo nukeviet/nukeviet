@@ -254,5 +254,3 @@ $lang_module['file_not_writable'] = 'Error: System could not write file %1$s';
 $lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
 $lang_module['lang_multi'] = 'Multi-language website';
 $lang_module['lang_multi_note'] = 'If you have plans to build a multi-language site, you should select this feature';
-
-?>

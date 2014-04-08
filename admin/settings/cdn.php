@@ -136,5 +136,3 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
 }
-
-?>

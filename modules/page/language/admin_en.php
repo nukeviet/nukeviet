@@ -48,5 +48,3 @@ $lang_module['layout_default'] = 'Default';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
 $lang_module['googleplus_1'] = 'Not use';
 $lang_module['googleplus_0'] = 'Follow configure of module';
-
-?>

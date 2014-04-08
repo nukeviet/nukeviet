@@ -186,5 +186,3 @@ function nv_create_table_sys( $lang )
 
 	return $sql_create_table;
 }
-
-?>

@@ -148,5 +148,3 @@ $lang_module['module_admin'] = 'Module system powers';
 $lang_module['number'] = 'No.';
 $lang_module['module'] = 'Module name';
 $lang_module['custom_title'] = 'Title';
-
-?>

@@ -54,5 +54,3 @@ $lang_module['warning'] = 'Note: selectable must smaller than available';
 $lang_module['voting_error_content'] = 'Notice: you should input Vote content and all answer question';
 $lang_module['voting_answer'] = 'The response options';
 $lang_module['voting_link'] = 'Link to Page';
-
-?>

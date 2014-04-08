@@ -164,5 +164,3 @@ function nv_like_logic( $field, $dbkeyword, $logic )
 	}
 	return $return;
 }
-
-?>

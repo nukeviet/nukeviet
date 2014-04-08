@@ -20,5 +20,3 @@ else
 {
 	$allow_func = array( 'main', 'reply', 'del', 'view' );
 }
-
-?>

@@ -63,5 +63,3 @@ $lang_global['timeoutsess_click'] = 'Click here to remain logged';
 $lang_global['timeoutsess_timeout'] = 'Timeout';
 $lang_global['length_characters'] = 'Length characters';
 $lang_global['length_suggest_max'] = 'Should enter maximum %s characters';
-
-?>

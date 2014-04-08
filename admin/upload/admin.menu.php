@@ -19,5 +19,3 @@ if( defined( 'NV_IS_SPADMIN' ) )
 		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
 	}
 }
-
-?>

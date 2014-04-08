@@ -20,5 +20,3 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['add_time'] = 'Được thêm vào';
 $lang_module['edit_time'] = 'Sửa chữa lần cuối';
 $lang_module['not_found'] = 'Thật tiếc!!! Chủ đề bạn cần tìm không tồn tại';
-
-?>

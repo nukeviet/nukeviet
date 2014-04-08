@@ -67,5 +67,3 @@ $lang_module['mudim_active_admin'] = 'Active in admin control panel';
 $lang_module['mudim_showpanel'] = 'Display mudim control panel';
 $lang_module['mudim_method'] = 'Typing default';
 $lang_module['mudim_displaymode'] = 'Display type';
-
-?>

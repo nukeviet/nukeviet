@@ -209,5 +209,3 @@ $lang_module['plugin_number'] = 'Order Number';
 $lang_module['plugin_func'] = 'Aunction';
 $lang_module['plugin_add'] = 'Add a plugin';
 $lang_module['plugin_file_delete'] = 'Deleted from the system';
-
-?>

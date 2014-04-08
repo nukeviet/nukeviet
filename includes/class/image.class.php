@@ -859,5 +859,3 @@ class image
 		$this->is_destroy = true;
 	}
 }
-
-?>

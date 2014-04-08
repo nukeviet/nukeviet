@@ -201,5 +201,3 @@ class Array2XML
 		die();
 	}
 }
-
-?>

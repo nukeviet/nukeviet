@@ -27,5 +27,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'package_theme_module';
 	$allow_func[] = 'getfile';
 }
-
-?>

@@ -225,5 +225,3 @@ $lang_module['alias_search'] = 'Show the different tags, use the search function
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
 $lang_module['googleplus_1'] = 'Not use';
 $lang_module['googleplus_0'] = 'According configuration copyright of module';
-
-?>

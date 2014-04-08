@@ -91,5 +91,3 @@ function sendcontact( $url )
 
 	return $xtpl->text( 'main' );
 }
-
-?>

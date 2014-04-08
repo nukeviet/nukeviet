@@ -940,5 +940,3 @@ function nv_imageResize( $origX, $origY, $maxX, $maxY )
 	}
 	return $return;
 }
-
-?>

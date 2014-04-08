@@ -1140,5 +1140,3 @@ if( $result->fetchColumn() )
 
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
-
-?>

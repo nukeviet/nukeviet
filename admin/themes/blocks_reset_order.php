@@ -126,5 +126,3 @@ else
 {
 	echo 'ERROR';
 }
-
-?>

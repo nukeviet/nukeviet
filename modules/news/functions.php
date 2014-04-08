@@ -154,5 +154,3 @@ if( ! empty( $array_op ) and $op == 'main' )
 		sort( $array_mod_title, SORT_NUMERIC );
 	}
 }
-
-?>

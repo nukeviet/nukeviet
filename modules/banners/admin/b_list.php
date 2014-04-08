@@ -144,5 +144,3 @@ foreach ( $rows as $row )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_b_list_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

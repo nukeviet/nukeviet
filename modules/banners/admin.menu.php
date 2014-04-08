@@ -16,5 +16,3 @@ $submenu['plans_list'] = $lang_module['plans_list'];
 $submenu['add_plan'] = $lang_module['add_plan'];
 $submenu['banners_list'] = $lang_module['banners_list'];
 $submenu['add_banner'] = $lang_module['add_banner'];
-
-?>

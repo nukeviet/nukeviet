@@ -67,5 +67,3 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

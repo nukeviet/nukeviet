@@ -34,5 +34,3 @@ $lang_module['goback'] = 'Back';
 $lang_module['voting_total'] = 'Total';
 $lang_module['voting_counter'] = 'Voting count';
 $lang_module['voting_pubtime'] = 'From';
-
-?>

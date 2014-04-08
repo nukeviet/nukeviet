@@ -23,5 +23,3 @@ $lang_module['stt'] = 'Order';
 $lang_module['module_title'] = 'Title';
 $lang_module['enable_title'] = 'Enable';
 $lang_module['disable_title'] = 'Disable';
-
-?>

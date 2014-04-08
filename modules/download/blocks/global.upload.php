@@ -86,5 +86,3 @@ if( defined( 'NV_SYSTEM' ) )
 		}
 	}
 }
-
-?>

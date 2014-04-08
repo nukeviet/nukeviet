@@ -38,5 +38,3 @@ $contents = nv_info_pl_theme( $contents );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

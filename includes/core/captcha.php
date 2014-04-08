@@ -103,5 +103,3 @@ else
 	imagedestroy( $image );
 	die();
 }
-
-?>

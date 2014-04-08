@@ -321,5 +321,3 @@ $lang_module['read_error'] = "Lỗi khi đọc file %1\$s, Hệ thống không c
 $lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần kiểm tra lại cột : %2\$s Cột này cần là : %3\$s. Vì vậy hệ thống bị dừng lại !";
 $lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
 $lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
-
-?>

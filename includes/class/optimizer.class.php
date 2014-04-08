@@ -603,5 +603,3 @@ class optimezer
 		return '>' . preg_replace( '/^\\s+|\\s+$/', ' ', $m[1] ) . '<';
 	}
 }
-
-?>

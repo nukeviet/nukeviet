@@ -396,5 +396,3 @@ $contents .= call_user_func( 'setup_modules', $array_head, $array_modules, $arra
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

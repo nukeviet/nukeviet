@@ -32,5 +32,3 @@ While( $row = $result->fetch() )
 		'alias' => $row['alias']
 	);
 }
-
-?>

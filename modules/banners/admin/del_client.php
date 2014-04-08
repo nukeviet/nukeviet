@@ -61,5 +61,3 @@ $db->query( 'OPTIMIZE TABLE ' . NV_BANNERS_GLOBALTABLE. '_clients' );
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK|client_list|client_list';
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

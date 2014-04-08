@@ -327,5 +327,3 @@ $bots = array(
 		'allowed' => 1
 	)
 );
-
-?>

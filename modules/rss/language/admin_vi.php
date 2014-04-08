@@ -19,5 +19,3 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['content'] = 'Nội dung thông báo';
 $lang_module['save'] = 'Lưu bài viết';
-
-?>

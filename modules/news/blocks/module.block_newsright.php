@@ -72,5 +72,3 @@ if( $i )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

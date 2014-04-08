@@ -173,5 +173,3 @@ function nv_strtoupper( $string )
 
 	return strtr( $string, $utf8_lookup['strtoupper'] );
 }
-
-?>

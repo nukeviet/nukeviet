@@ -82,5 +82,3 @@ $lang_module['add_type_css'] = 'Tên lớp CSS.';
 $lang_module['add_type_css_info'] = 'Tên class (CSS) để xác định giao diện menu này.';
 $lang_module['add_error_module'] = 'Lỗi: Không có module nào được chỉ định';
 $lang_module['add_error_module_exist'] = 'Lỗi: Module không tồn tại';
-
-?>

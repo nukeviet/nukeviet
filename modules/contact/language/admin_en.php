@@ -63,5 +63,3 @@ $lang_module['admin_send2mail_title'] = 'Send to email';
 $lang_module['delall'] = 'Delete all';
 $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
-
-?>

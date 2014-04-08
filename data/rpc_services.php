@@ -92,5 +92,3 @@ $services[] = array( 'weblogUpdates.ping', 'Livedoor.com', 'http://rpc.reader.li
 $services[] = array( 'weblogUpdates.ping', 'Newsgator.com', 'http://services.newsgator.com/ngws/xmlrpcping.aspx' );
 $services[] = array( 'weblogUpdates.ping', 'Feedblitz.com', 'http://www.feedblitz.com/f/f.fbz?XmlPing' );
 $services[] = array( 'weblogUpdates.ping', 'Bloglines.com', 'http://www.bloglines.com/ping' );
-
-?>

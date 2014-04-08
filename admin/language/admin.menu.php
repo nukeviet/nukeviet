@@ -26,5 +26,3 @@ if( empty( $global_config['idsite'] ) )
 		$submenu['setting'] = $lang_global['mod_settings'];
 	}
 }
-
-?>

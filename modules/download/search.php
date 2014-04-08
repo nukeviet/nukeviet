@@ -78,4 +78,3 @@ if( ! empty( $list_cats ) )
 		}
 	}
 }
-?>

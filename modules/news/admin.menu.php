@@ -118,5 +118,3 @@ if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/admins.php' )
 	$submenu['admins'] = $lang_module['admin'];
 	$allow_func[] = 'admins';
 }
-
-?>

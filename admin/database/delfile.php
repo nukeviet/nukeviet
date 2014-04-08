@@ -40,5 +40,3 @@ else
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

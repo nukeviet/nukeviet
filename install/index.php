@@ -287,7 +287,7 @@ elseif( $step == 2 )
 		$i = 0;
 		for( $ip_file = 0; $ip_file <= 255; $ip_file++ )
 		{
-			if( file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array();\n\n?>", LOCK_EX ) )
+			if( file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array();", LOCK_EX ) )
 			{
 				++$i;
 			}
@@ -1025,10 +1025,7 @@ function nv_save_file_config()
 			$content .= "\$global_config['ftp_check_login'] = '" . $global_config['ftp_check_login'] . "';\n";
 		}
 
-		$content .= "\n";
-		$content .= "?>";
-
-		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, $content, LOCK_EX );
+		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, trim( $content ), LOCK_EX );
 
 		return true;
 	}
@@ -1037,5 +1034,3 @@ function nv_save_file_config()
 		return false;
 	}
 }
-
-?>

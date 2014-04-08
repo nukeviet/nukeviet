@@ -232,5 +232,3 @@ $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_min_max_value'] = '%1$s cần nhập từ %2$s đến %3$s';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
-
-?>

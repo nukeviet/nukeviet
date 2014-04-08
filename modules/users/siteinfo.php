@@ -29,5 +29,3 @@ if( $number > 0 )
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
 	);
 }
-
-?>

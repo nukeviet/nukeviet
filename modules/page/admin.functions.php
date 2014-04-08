@@ -13,5 +13,3 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 $allow_func = array( 'main', 'content', 'alias', 'change_status', 'change_weight', 'del' );
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-?>

@@ -94,5 +94,3 @@ else
 unset( $site_timezone );
 
 define( 'NV_SITE_TIMEZONE_OFFSET', date( 'Z' ) );
-
-?>

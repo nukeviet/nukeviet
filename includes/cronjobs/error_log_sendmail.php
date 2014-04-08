@@ -41,5 +41,3 @@ function cron_auto_sendmail_error_log()
 
 	return $result;
 }
-
-?>

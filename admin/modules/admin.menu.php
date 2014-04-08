@@ -25,5 +25,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'install_check';
 	$allow_func[] = 'getfile';
 }
-
-?>

@@ -33,5 +33,3 @@ nv_CreateXML_bannerPlan();
 include NV_ROOTDIR . '/includes/header.php';
 echo $return . '|act_' . $id;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
