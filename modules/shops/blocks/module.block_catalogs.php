@@ -83,5 +83,3 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 }
 
 $content = nv_pro_catalogs();
-
-?>

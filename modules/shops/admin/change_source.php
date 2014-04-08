@@ -46,5 +46,3 @@ if( $mod == 'weight' and $new_vid > 0 )
 include NV_ROOTDIR . '/includes/header.php';
 echo $content;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

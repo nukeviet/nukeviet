@@ -41,5 +41,3 @@ if( ! empty( $payment ) )
 include NV_ROOTDIR . '/includes/header.php';
 echo $content;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -97,15 +97,15 @@ if( $keyword != "" )
 
 if( ( $price1 >= 0 and $price2 > 0 ) )
 {
-	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct BETWEEN " . $price1 . " AND " . $price2 . " ";
+	$search .= " AND product_price-(t1.product_discounts/100)*product_price BETWEEN " . $price1 . " AND " . $price2 . " ";
 }
 elseif( $price2 == - 1 and $price1 >= 0 )
 {
-	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct >= " . $price1 . " ";
+	$search .= " AND product_price-(t1.product_discounts/100)*product_price >= " . $price1 . " ";
 }
 elseif( $price1 == - 1 and $price2 > 0 )
 {
-	$search .= " HAVING product_saleproduct-(t1.product_discounts/100)*product_saleproduct < " . $price2 . " ";
+	$search .= " AND product_price-(t1.product_discounts/100)*product_price < " . $price2 . " ";
 }
 
 if( ! empty( $typemoney ) )
@@ -148,7 +148,6 @@ $table_exchange = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange )->where( "t1.status =1 " . $search . " " . $show_price );
-
 $all_page = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( "t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1." . NV_LANG_DATA . "_address, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice, t2.exchange " . $sql_i )->order( $order_by )->limit( $per_page )->offset( $page );
@@ -208,5 +207,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

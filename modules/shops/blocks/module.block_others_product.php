@@ -17,17 +17,20 @@ if( ! function_exists( 'nv_others_product' ) )
 	 *
 	 * @return
 	 */
-	function nv_others_product()
+	function nv_others_product( $block_config )
 	{
-		global $op;
+		global $op, $global_config, $pro_config;
 
+		$module = $block_config['module'];
+		
 		if( $op == 'detail' )
 		{
-			global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config, $id, $catid, $pro_config;
+			global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
 
 			$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 			$xtpl->assign( 'LANG', $lang_module );
 			$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $module_info['template'] );
+			$xtpl->assign( 'WIDTH', $pro_config['blockwidth'] );
 
 			$db->sqlreset()
 				->select( 'id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias ,addtime, homeimgfile, homeimgthumb, product_price, product_discounts, money_unit, showprice' )
@@ -55,7 +58,7 @@ if( ! function_exists( 'nv_others_product' ) )
 				}
 				else //no image
 				{
-					$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+					$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
 				}
 
 				$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$listcatid_i]['alias'] . '/' . $alias_i . '-' . $id_i . $global_config['rewrite_exturl'] );
@@ -92,6 +95,4 @@ if( ! function_exists( 'nv_others_product' ) )
 	}
 }
 
-$content = nv_others_product();
-
-?>
+$content = nv_others_product( $block_config );

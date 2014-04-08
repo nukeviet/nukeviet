@@ -32,5 +32,3 @@ while( $row = $result->fetch() )
 		'alias' => $row[NV_LANG_DATA . '_alias'],
 	);
 }
-
-?>

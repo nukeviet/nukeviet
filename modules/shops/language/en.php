@@ -324,5 +324,3 @@ $lang_module['displays_price_desc'] = 'Price reduced';
 $lang_module['displays_product'] = 'Sort by: ';
 $lang_module['compare'] = 'Compare';
 $lang_module['num0'] = "Compare number is greater than or equal to 2";
-
-?>

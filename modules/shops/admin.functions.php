@@ -775,5 +775,3 @@ function GetCatidInChild( $catid )
 	}
 	return array_unique( $array_cat );
 }
-
-?>

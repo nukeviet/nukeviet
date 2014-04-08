@@ -1556,5 +1556,3 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

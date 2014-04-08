@@ -14,5 +14,3 @@ $numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments where m
 
 $query = 'UPDATE ' . $db_config['prefix'] . '_' . $mod_info['module_data'] . '_rows SET hitscm=' . $numf . ' WHERE id=' . $row['id'];
 $db->query( $query );
-
-?>

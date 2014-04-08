@@ -362,5 +362,3 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
 		);
 	}
 }
-
-?>

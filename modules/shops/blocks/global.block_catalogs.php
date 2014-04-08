@@ -198,5 +198,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_pro_catalogs( $block_config );
 }
-
-?>

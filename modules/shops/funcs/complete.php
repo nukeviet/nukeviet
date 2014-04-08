@@ -35,5 +35,3 @@ if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $paymen
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

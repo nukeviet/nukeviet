@@ -318,5 +318,3 @@ $lang_module['noneprice'] = 'Prix doit être plus de';
 $lang_module['search_adv'] = 'Recherche avancée';
 $lang_module['money_thousand'] = 'mille';
 $lang_module['money_million'] = 'million';
-
-?>

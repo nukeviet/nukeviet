@@ -389,5 +389,3 @@ function GetGroupidInParent( $groupid, $check_inhome = 0 )
 	}
 	return array_unique( $array_group );
 }
-
-?>

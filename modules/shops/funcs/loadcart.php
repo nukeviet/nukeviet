@@ -76,5 +76,3 @@ switch ( $type )
 		echo $content;
 		break;
 }
-
-?>

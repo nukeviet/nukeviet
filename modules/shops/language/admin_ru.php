@@ -221,5 +221,3 @@ $lang_module['exchange'] = "Цены";
 $lang_module['money_add'] = "Добавить валюты";
 $lang_module['money_edit'] = "Это денежная единица";
 $lang_module['money_compare'] = "Против";
-
-?>

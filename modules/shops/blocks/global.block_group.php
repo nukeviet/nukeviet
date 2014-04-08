@@ -58,7 +58,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 							$xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 						}
 					}
-					$contents_temp .= "<li><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $xtitle_i . "" . $groupinfo_i['title'] . " (" . $groupinfo_i['numpro'] . ")" . "</a></li>";
+					$contents_temp .= "<li><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $xtitle_i . "" . $groupinfo_i['title'] . " <span class=\"badge pull-right\">" . $groupinfo_i['numpro'] . "</span>" . "</a></li>";
 					if( $groupinfo_i['numsubgroup'] > 0 )
 					{
 						$contents_temp .= getgroup_ckhtml( $data_group, $groupid_i );
@@ -138,8 +138,8 @@ if( ! function_exists( 'nv_pro_group' ) )
 		{
 			if( $groupinfo_i['parentid'] == 0 && $groupinfo_i['cateid'] == 0 )
 			{
-				$contents_temp_none .= "<ul>";
-				$contents_temp_none .= "<li class=\"parent\"><a href=\"" . $groupinfo_i['link'] . "\">" . $groupinfo_i['title'] . "</a></li>";
+				$contents_temp_none .= "<ul class=\"nav nav-pills nav-stacked\">";
+				$contents_temp_none .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . "\">" . $groupinfo_i['title'] . "</a></li>";
 				if( $groupinfo_i['numsubgroup'] > 0 )
 				{
 					$contents_temp_none .= getgroup_ckhtml( $data_group, $groupid_i );
@@ -148,8 +148,8 @@ if( ! function_exists( 'nv_pro_group' ) )
 			}
 			elseif( $groupinfo_i['parentid'] == 0 && in_array( $groupinfo_i['cateid'], $array_cat ) && $catid > 0 )
 			{
-				$contents_temp_chid .= "<ul>";
-				$contents_temp_chid .= "<li class=\"parent\"><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $groupinfo_i['title'] . "</a></li>";
+				$contents_temp_chid .= "<ul class=\"nav nav-pills nav-stacked\">";
+				$contents_temp_chid .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $groupinfo_i['title'] . "</a></li>";
 				if( $groupinfo_i['numsubgroup'] > 0 )
 				{
 					$contents_temp_chid .= getgroup_ckhtml( $data_group, $groupid_i, $catid );
@@ -170,5 +170,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_pro_group( $block_config );
 }
-
-?>

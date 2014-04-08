@@ -206,5 +206,3 @@ class NL_Checkout
 	}
 
 }
-
-?>

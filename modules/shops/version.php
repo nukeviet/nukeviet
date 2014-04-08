@@ -21,5 +21,3 @@ $module_version = array(
 	'note' => '', // Ghi chu
 	'uploads_dir' => array( $module_name, $module_name . '/temp_pic', $module_name . '/source', $module_name . '/' . date( 'Y_m' ) )
 );
-
-?>

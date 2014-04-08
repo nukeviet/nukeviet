@@ -340,4 +340,3 @@ $lang_module['4star'] = '4 sao';
 $lang_module['3star'] = '3 sao';
 $lang_module['2star'] = '2 sao';
 $lang_module['1star'] = '1 sao';
-?>

@@ -3,7 +3,7 @@
 	<ul>
 		<!-- BEGIN: loop -->
 		<li class="clearfix {bg}">
-			<a href="{link}" title="{title}"><img src="{src_img}" alt=""/></a>
+			<a href="{link}" title="{title}"><img src="{src_img}" alt="{title}" class="img-thumbnail" width="{WIDTH}"/></a>
 			<br />
 			<a href="{link}" title="{title}">{title}</a>
 			<br />
