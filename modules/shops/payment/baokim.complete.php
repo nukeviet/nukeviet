@@ -77,5 +77,3 @@ else
 {
 	$contents = $lang_module['payment_erorr'];
 }
-
-?>

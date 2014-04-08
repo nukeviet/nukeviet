@@ -99,5 +99,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_unhtmlspecialchars( $contents_msg );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

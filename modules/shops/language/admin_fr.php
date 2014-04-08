@@ -338,5 +338,3 @@ $lang_module['block_error_name'] = 'Erreur: Nom de block ne doit pas être vide'
 $lang_module['block_error_alias'] = 'Erreur: ce alias existe déjà, entrez un autre';
 $lang_module['source_title'] = 'Nom de fabricant';
 $lang_module['source_error_title'] = 'Erreur: Mande de nom de fabricant';
-
-?>

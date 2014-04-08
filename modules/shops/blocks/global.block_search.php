@@ -120,5 +120,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_search_product( $block_config );
 }
-
-?>

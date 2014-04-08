@@ -149,7 +149,7 @@ if( $op == 'main' )
  */
 function GetDataIn( $result, $catid )
 {
-	global $global_array_cat, $module_name, $db, $link, $module_info;
+	global $global_array_cat, $module_name, $db, $link, $module_info, $global_config;
 	$data_content = array();
 	$data = array();
 	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
@@ -185,7 +185,7 @@ function GetDataIn( $result, $catid )
 			'product_discounts' => $product_discounts,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id,
+			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -207,7 +207,7 @@ function GetDataIn( $result, $catid )
  */
 function GetDataInGroup( $result, $groupid )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat;
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -245,7 +245,7 @@ function GetDataInGroup( $result, $groupid )
 			'product_discounts' => $product_discounts,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id,
+			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -362,5 +362,3 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
 		);
 	}
 }
-
-?>

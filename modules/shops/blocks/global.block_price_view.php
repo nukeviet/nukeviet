@@ -151,5 +151,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_view_product_price( $block_config );
 }
-
-?>

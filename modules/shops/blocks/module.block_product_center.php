@@ -64,7 +64,7 @@ if( ! function_exists( 'nv_product_center' ) )
 
 		foreach( $array as $row )
 		{
-			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'];
+			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
@@ -97,5 +97,3 @@ if( ! function_exists( 'nv_product_center' ) )
 }
 
 $content = nv_product_center( $block_config );
-
-?>

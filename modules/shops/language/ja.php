@@ -320,6 +320,3 @@ $lang_module['noneprice'] = '価格は？より大きくなければならない
 $lang_module['search_adv'] = '高度な検索';
 $lang_module['money_thousand'] = '千';
 $lang_module['money_million'] = '億';
-
-
-?>

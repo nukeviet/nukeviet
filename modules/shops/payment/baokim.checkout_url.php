@@ -23,5 +23,3 @@ $transaction_info = $data['order_note'];
 $nl = new NL_Checkout( $payment_config['checkout_url'], $payment_config['merchant_site'], $payment_config['secure_pass'] );
 $url = $nl->buildCheckoutUrl( $return_url, $receiver, $transaction_info, $order_code, $price_vn );
 $url .= "&key_refer=5c429fb7cc74299b5d1e53fb0906b8cb";
-
-?>

@@ -10,3 +10,4 @@
 		<!-- END: loop -->
 	</tbody>
 </table>
+<!-- END: main -->

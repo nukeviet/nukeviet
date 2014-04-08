@@ -277,5 +277,3 @@ $lang_module['finter_title'] = "Время";
 $lang_module['source_title'] = "Источник";
 $lang_module['keywords'] = "Ключевые слова";
 $lang_module['search_reset'] = "Очистить";
-
-?>

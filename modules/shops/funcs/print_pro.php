@@ -55,5 +55,3 @@ $contents = print_product( $data_content, $data_unit, $page_title );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

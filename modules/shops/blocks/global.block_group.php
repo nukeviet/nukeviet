@@ -170,5 +170,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_pro_group( $block_config );
 }
-
-?>

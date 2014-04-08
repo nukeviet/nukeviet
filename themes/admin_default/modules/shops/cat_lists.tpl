@@ -47,11 +47,11 @@
 				<!-- END: numlinks -->
 			</select></td>
 			<td class="center">
-				<a class="add_icon" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;catid={ROW.catid}&amp;parentid={ROW.parentid}">{LANG.content_add}</a>
-				&nbsp; - 
-				<a class="edit_icon" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=cat&amp;catid={ROW.catid}&amp;parentid={ROW.parentid}#edit">{GLANG.edit}</a>
-				&nbsp; - 
-				<a class="delete_icon" href="javascript:void(0);" onclick="nv_del_cat({ROW.catid})">{GLANG.delete}</a>
+				<em class="icon-plus icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;catid={ROW.catid}&amp;parentid={ROW.parentid}">{LANG.content_add}</a>
+				&nbsp;
+				<em class="icon-edit icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=cat&amp;catid={ROW.catid}&amp;parentid={ROW.parentid}#edit">{GLANG.edit}</a>
+				&nbsp;
+				<em class="icon-trash icon-large">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_cat({ROW.catid})">{GLANG.delete}</a>
 			</td>
 		</tr>
 		<!-- END: loop -->

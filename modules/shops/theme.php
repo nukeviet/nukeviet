@@ -1448,7 +1448,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
  */
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $lang_module, $global_array_cat;
+	global $module_file, $module_info, $lang_module, $global_array_cat, $global_config;
 
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -1463,7 +1463,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		foreach( $array_content as $value )
 		{
 			$catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
+			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl'];
 
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
@@ -1556,5 +1556,3 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

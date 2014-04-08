@@ -8,7 +8,9 @@
 
 function sendrating(id, point, newscheckss) {
 	if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
-		nv_ajax('post', nv_siteroot + 'index.php', nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&id=' + id + '&checkss=' + newscheckss + '&point=' + point, 'stringrating', '');
+		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
+			$("#stringrating").html(res);
+		});
 	}
 }
 
@@ -19,19 +21,16 @@ function remove_text() {
 
 function nv_del_content(id, checkss, base_adminurl) {
 	if (confirm(nv_is_del_confirm[0])) {
-		nv_ajax('post', base_adminurl + 'index.php', nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&id=' + id + '&checkss=' + checkss, '', 'nv_del_content_result');
-	}
-	return false;
-}
-
-function nv_del_content_result(res) {
-	var r_split = res.split("_");
-	if (r_split[0] == 'OK') {
-		window.location.href = strHref;
-	} else if (r_split[0] == 'ERR') {
-		alert(r_split[1]);
-	} else {
-		alert(nv_is_del_confirm[2]);
+		$.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
+			var r_split = res.split("_");
+			if (r_split[0] == 'OK') {
+				window.location.href = strHref;
+			} else if (r_split[0] == 'ERR') {
+				alert(r_split[1]);
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+		});
 	}
 	return false;
 }
@@ -99,35 +98,15 @@ function tabview_aux(TabViewId, id) {
 
 //----- Functions ------
 
-function SetCookieForTabView(cookieName, cookieValue, nDays) {
-	var today = new Date();
-	var expire = new Date();
-	if (nDays == null || nDays == 0)
-		nDays = 1;
-	expire.setTime(today.getTime() + 3600000 * 24 * nDays);
-	document.cookie = cookieName + "=" + escape(cookieValue) + ";expires=" + expire.toGMTString();
-}
-
-function ReadCookie(cookieName) {
-	var theCookie = "" + document.cookie;
-	var ind = theCookie.indexOf(cookieName);
-	if (ind == -1 || cookieName == "")
-		return "";
-	var ind1 = theCookie.indexOf(';', ind);
-	if (ind1 == -1)
-		ind1 = theCookie.length;
-	return unescape(theCookie.substring(ind + cookieName.length + 1, ind1));
-}
-
 function tabview_switch(TabViewId, id) {
 	tabview_aux(TabViewId, id);
-	SetCookieForTabView('tvID', id, 36);
+	nv_setCookie('tvID', id, 36);
 }
 
 function tabview_initialize(TabViewId) {
-	tvID2 = ReadCookie('tvID');
+	tvID2 = nv_getCookie('tvID');
 	if (tvID2 == -1 || tvID2 == "") {
-		SetCookieForTabView('tvID', 1, 36);
+		nv_setCookie('tvID', 1, 36);
 		tabview_aux(TabViewId, 1);
 	} else {
 		tabview_aux(TabViewId, tvID2);
@@ -150,7 +129,6 @@ function cartorder(a_ob) {
 					strText = strText.replace('#@#', '_');
 					intIndexOfMatch = strText.indexOf('#@#');
 				}
-				//alert(strText);
 				alert_msg(strText);
 				linkloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 				$("#cart_" + nv_module_name).load(linkloadcart);
@@ -285,45 +263,34 @@ function onsubmitsearch1() {
 }
 
 function nv_chang_price() {
-	var newsort = document.getElementById( 'sort' ).options[document.getElementById('sort').selectedIndex].value;
-	nv_ajax("post", nv_siteroot + "index.php", nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=main&changesprice=1&sort=" + newsort, "", "nv_re_chang_price");
-};
-
-function nv_re_chang_price(res) {
-	if (res != 'OK') {
-		alert(res);
-	} else {
-		window.location.href = window.location.href;
-	}
-
-	return;
+	var newsort = $("#sort").val();
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'changesprice=1&sort=' + newsort, function(res) {
+		if (res != 'OK') {
+			alert(res);
+		} else {
+			window.location.href = window.location.href;
+		}
+	});
 }
 
 function nv_compare(a) {
 	nv_settimeout_disable("compare_" + a, 5E3);
-
-	nv_ajax("post", nv_siteroot + "index.php", nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=compare&compare=1&id=" + a, "", "nv_compare_res");
-};
-
-function nv_compare_res(res) {
-	res = res.split("[NV3]");
-	if (res[0] != 'OK') {
-		$("#compare_" + res[2]).removeAttr("checked");
-		alert(res[1]);
-
-	}
-	return;
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compare=1&id=' + a, function(res) {
+		res = res.split("[NV3]");
+		if (res[0] != 'OK') {
+			$("#compare_" + res[2]).removeAttr("checked");
+			alert(res[1]);
+		}
+	});
 }
 
 function nv_compare_click() {
-	nv_ajax("post", nv_siteroot + "index.php", nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=compare&compareresult=1", "", "nv_compare_click_result");
-};
-
-function nv_compare_click_result(res) {
-	if (res != 'OK') {
-		alert(res);
-	} else {
-		window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=compare";
-	}
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compareresult=1', function(res) {
+		if (res != 'OK') {
+			alert(res);
+		} else {
+			window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=compare";
+		}
+	});
 	return;
 }
