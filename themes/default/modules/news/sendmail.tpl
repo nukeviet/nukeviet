@@ -15,7 +15,7 @@
 
 <div id="sendmail">
 	<!-- BEGIN: content -->
-	<div class="news_column panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<h1 class="text-center">{LANG.sendmail}</h1>
 			<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal" role="form">
