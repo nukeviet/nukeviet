@@ -81,13 +81,13 @@
 		<!-- END: source -->
 		<!-- END: author -->
 		<!-- BEGIN: copyright -->
-		<p class="copyright">
+		<div class="alert alert-info copyright">
 			{COPYRIGHT}
-		</p>
+		</div>
 		<!-- END: copyright -->
 		
 		<!-- BEGIN: adminlink -->
-		<p class="text-right">
+		<p class="text-center adminlink">
 			{ADMINLINK}
 		</p>
 		<!-- END: adminlink -->
