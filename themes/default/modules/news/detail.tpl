@@ -12,15 +12,15 @@
 </script>
 <!-- END: facebookjssdk -->
 <div class="news_column panel panel-default">
-  <div class="panel-body">
+	<div class="panel-body">
 		<h2>{DETAIL.title}</h2>
 		<em class="pull-left time">{DETAIL.publtime}</em>
 		<ul class="list-inline pull-right">
 			<!-- BEGIN: allowed_send -->
-			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
+			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_send -->
 			<!-- BEGIN: allowed_print -->
-			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_print -->
 			<!-- BEGIN: allowed_save -->
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
