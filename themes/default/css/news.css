@@ -166,7 +166,7 @@ div.news_column ul.related a {
 	width: 800px;
 }
 
-#print a, a:active, a:focus, a:visited {
+#print a, #print a:active, #print a:focus, #print a:visited {
 	color: #4D5764;
 	text-decoration: none;
 }

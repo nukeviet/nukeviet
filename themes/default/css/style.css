@@ -63,7 +63,7 @@ body{
 	background:#ccc url('../images/bg.png') repeat;
 }
 a, a:link, a:active, a:visited{
-	color:##0E73E6;
+	color: #0E73E6;
 }
 a:hover{
 	text-decoration:none;
@@ -76,6 +76,7 @@ h1, h2, h3, h4, h5, h6{
 	margin-top:0;
 	margin-bottom:10px;
 	font-family: 'Roboto', sans-serif;
+	line-height: 22px;
 }
 .m-bottom{
 	margin-bottom:10px!important;
