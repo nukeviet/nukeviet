@@ -389,24 +389,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a > 1 )
 				{
-					if( $viewcat == "viewcat_main_right" )
-					{
-						$xtpl->assign( 'BG', ' bg' );
-					}
-					elseif( $viewcat == "viewcat_main_left" )
-					{
-						$xtpl->assign( 'BG', ' bg_l' );
-					}
-					else
-					{
-						$xtpl->assign( 'BORDER', 'border_b ' );
-					}
-					$xtpl->assign( 'WCT', 'fixedwidth ' );
+					$xtpl->assign( 'WCT', 'col-md-8 ' );
 				}
 				else
 				{
-					$xtpl->assign( 'WCT', 'fullwidth noborder ' );
-					$xtpl->assign( 'BG', '' );
+					$xtpl->assign( 'WCT', '' );
 				}
 
 				$xtpl->set_autoreset();
