@@ -523,13 +523,16 @@ function viewcat_two_column( $array_content, $array_catpage )
 					if ( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->parse( 'main.loopcat.other.newday' );
+						$xtpl->assign( 'CLASS', 'icon_new_small' );
+					}
+					else 
+					{
+						$xtpl->assign( 'CLASS', 'icon_list' );	
 					}
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
 			}
-
-			$xtpl->assign( 'FLOAT', $a % 2 ? ' fr' : ' fl' );
 
 			if( $a % 2 )
 			{
