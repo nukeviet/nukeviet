@@ -1,34 +1,32 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: viewdescription -->
 <div class="news_column">
-	<div class="items clearfix">
-		<h1>{CONTENT.title}</h1>
+	<div class="alert alert-info clearfix">
+		<h3>{CONTENT.title}</h3>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+		<img alt="{CONTENT.title}" id="imghome" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left" />
 		<!-- END: image -->
-		<h2>{CONTENT.description}</h2>
+		<p class="text-justify">{CONTENT.description}</p>
 	</div>
 </div>
+
 <!-- END: viewdescription -->
-<table class="table-list-news">
-	<tbody>
-		<!-- BEGIN: viewcatloop -->
-		<tr>
-			<td> {NUMBER} </td>
-			<td><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-			<!-- BEGIN: adminlink -->
-			<span style="padding-left:10px"> {ADMINLINK} </span>
-			<!-- END: adminlink -->
+
+<div class="list-group">
+	<!-- BEGIN: viewcatloop -->
+	<a href="{CONTENT.link}" title="{CONTENT.title}" class="list-group-item">
+		<h4 class="list-group-item-heading">
+			<span class="label label-default">{NUMBER}</span>&nbsp;&nbsp;{CONTENT.title}
 			<!-- BEGIN: newday -->
 			<span class="icon_new"></span>
 			<!-- END: newday -->
-			</td>
-		</tr>
-		<!-- END: viewcatloop -->
-	</tbody>
-</table>
+		</h4>
+	</a>
+	<!-- END: viewcatloop -->
+</div>
+
 <!-- BEGIN: generate_page -->
-<div class="acenter">
+<div class="text-center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
