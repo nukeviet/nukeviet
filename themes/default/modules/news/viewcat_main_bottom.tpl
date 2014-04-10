@@ -6,10 +6,10 @@
 			<ul class="list-inline" style="margin: 0">
 				<li><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></li>
 				<!-- BEGIN: subcatloop -->
-				<li><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
+				<li class="hidden-xs"><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></li>
+				<li class="pull-right hidden-xs"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></li>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
