@@ -108,7 +108,7 @@ if( $id > 0 and $catid > 0 )
 				"action" => "" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sendmail/" . $global_array_cat[$catid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'] //
 			);
 			
-			$page_title = $content['title'];
+			$page_title = $title;
 			$contents = sendmail_themme( $sendmail );
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_site_theme( $contents, false );

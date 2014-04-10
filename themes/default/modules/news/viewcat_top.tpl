@@ -1,52 +1,53 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: viewdescription -->
 <div class="news_column">
-	<div class="items clearfix">
-		<h1>{CONTENT.title}</h1>
+	<div class="alert alert-info clearfix">
+		<h3>{CONTENT.title}</h3>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" id="imghome" class="img-thumbnail pull-left" />
 		<!-- END: image -->
-		<h2>{CONTENT.description}</h2>
+		<p class="text-justify">{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->
 <div class="news_column">
-	<div class="news-content bordersilver white clearfix">
-		<!-- BEGIN: catcontent -->
-		<div class="items border_b clearfix">
-			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" /></a>
-			<!-- END: image -->
-			<h3>
-				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
-				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
-				<!-- END: newday -->
-			</h3>
-			<p>
-				{CONTENT.hometext}
-			</p>
-			<!-- BEGIN: adminlink -->
-			<p style="text-align : right;">
-				{ADMINLINK}
-			</p>
-			<!-- END: adminlink -->
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<!-- BEGIN: catcontent -->
+				<!-- BEGIN: image -->
+				<a href="{CONTENT.link}" title="{CONTENT.title}"><img id="imghome" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left" /></a>
+				<!-- END: image -->
+				<h3>
+					<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+					<!-- BEGIN: newday -->
+					<span class="icon_new"></span>
+					<!-- END: newday -->
+				</h3>
+				<p class="text-justify">
+					{CONTENT.hometext}
+				</p>
+				<!-- BEGIN: adminlink -->
+				<p class="text-right">
+					{ADMINLINK}
+				</p>
+				<!-- END: adminlink -->
+				<hr />
+			<!-- END: catcontent -->
+			<ul class="related">
+				<!-- BEGIN: catcontentloop -->
+				<li>
+					<em class="fa fa-angle-right">&nbsp;</em><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+					<!-- BEGIN: newday -->
+					<span class="icon_new"></span>
+					<!-- END: newday -->
+				</li>
+				<!-- END: catcontentloop -->
+			</ul>
 		</div>
-		<!-- END: catcontent -->
-		<ul class="related">
-			<!-- BEGIN: catcontentloop -->
-			<li>
-				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
-				<!-- END: newday -->
-			</li>
-			<!-- END: catcontentloop -->
-		</ul>
 	</div>
 </div>
 <!-- BEGIN: generate_page -->
-<div class="acenter">
+<div class="text-center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->

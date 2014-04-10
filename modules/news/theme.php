@@ -389,24 +389,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a > 1 )
 				{
-					if( $viewcat == "viewcat_main_right" )
-					{
-						$xtpl->assign( 'BG', ' bg' );
-					}
-					elseif( $viewcat == "viewcat_main_left" )
-					{
-						$xtpl->assign( 'BG', ' bg_l' );
-					}
-					else
-					{
-						$xtpl->assign( 'BORDER', 'border_b ' );
-					}
-					$xtpl->assign( 'WCT', 'fixedwidth ' );
+					$xtpl->assign( 'WCT', 'col-md-8 ' );
 				}
 				else
 				{
-					$xtpl->assign( 'WCT', 'fullwidth noborder ' );
-					$xtpl->assign( 'BG', '' );
+					$xtpl->assign( 'WCT', '' );
 				}
 
 				$xtpl->set_autoreset();
@@ -536,13 +523,16 @@ function viewcat_two_column( $array_content, $array_catpage )
 					if ( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->parse( 'main.loopcat.other.newday' );
+						$xtpl->assign( 'CLASS', 'icon_new_small' );
+					}
+					else 
+					{
+						$xtpl->assign( 'CLASS', 'icon_list' );	
 					}
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
 			}
-
-			$xtpl->assign( 'FLOAT', $a % 2 ? ' fr' : ' fl' );
 
 			if( $a % 2 )
 			{
