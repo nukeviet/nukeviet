@@ -14,8 +14,7 @@
 			</ul>
 		</div>
 
-		<!--<div class="{WCT}{BORDER}items clearfix">-->
-			<div class="panel-body">
+		<div class="panel-body">
 			<div class="row">
 				<div class="{WCT}">
 					<!-- BEGIN: image -->
@@ -43,8 +42,8 @@
 				</div>
 				<!-- END: related -->
 			</div>
+		</div>
 	</div>
-</div>
 </div>
 <!-- END: listcat -->
 <!-- END: main -->
