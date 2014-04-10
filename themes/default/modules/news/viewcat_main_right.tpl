@@ -9,7 +9,7 @@
 				<li><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></li>
+				<li class="pull-right"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></li>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
