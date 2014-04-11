@@ -1,0 +1,26 @@
+/* CSS Document */
+
+.demo{
+	width:500px;
+	height:auto;
+	display:block;
+	padding:10px;
+	text-align:justify;
+	
+	
+	border-style: solid;
+border-width: 33px 35px 37px 37px;
+-moz-border-image: url(images.jpg) 68 79 71 84;
+-webkit-border-image: url(images.jpg) 68 79 71 84;
+-o-border-image: url(images.jpg) 68 79 71 84;
+border-image:url(images/images.jpg) 68 79 71 84;}
+
+#zom1{
+	transform:scale(2,2);
+	background-color:#3FF;
+	width:300px;
+	height:300px;
+	display:block;
+	position:absolute;
+	top:0;
+	left:0;}
