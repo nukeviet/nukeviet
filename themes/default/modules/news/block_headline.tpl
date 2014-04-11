@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
 <link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
 <link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/contentslider.css" />
-<div id="topnews" class="clearfix" style="display:none">
-	<div class="indent row">
+<div id="topnews" class="panel panel-default clearfix" style="display:none">
+	<div class="row">
 		<!-- BEGIN: hots_news_img -->
 		<div class="col-md-6">
 			<div id="slider1" class="sliderwrapper">
