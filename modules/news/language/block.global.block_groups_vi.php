@@ -20,5 +20,3 @@ $lang_translator['langtype'] = 'lang_block';
 $lang_block['blockid'] = 'Nhóm tin liên quan';
 $lang_block['numrow'] = 'Số bài hiển thị';
 $lang_block['type'] = 'Cách thức hiển thị';
-
-?>

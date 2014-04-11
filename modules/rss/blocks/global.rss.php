@@ -222,5 +222,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_global_rss( $block_config );
 }
-
-?>

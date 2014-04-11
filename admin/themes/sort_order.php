@@ -129,5 +129,3 @@ $db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
 $db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 die( 'OK_' . $func_id );
-
-?>

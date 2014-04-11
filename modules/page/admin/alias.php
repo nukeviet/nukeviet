@@ -29,5 +29,3 @@ if( $stmt->fetchColumn() )
 include NV_ROOTDIR . '/includes/header.php';
 echo $alias;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

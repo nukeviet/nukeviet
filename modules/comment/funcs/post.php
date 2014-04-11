@@ -114,5 +114,3 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

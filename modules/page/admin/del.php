@@ -41,5 +41,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

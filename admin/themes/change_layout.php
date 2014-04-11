@@ -41,5 +41,3 @@ else
 }
 
 nv_del_moduleCache( 'themes' );
-
-?>

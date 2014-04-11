@@ -444,5 +444,3 @@ function nv_getCountry_from_cookie( $ip )
 
 	return $country;
 }
-
-?>

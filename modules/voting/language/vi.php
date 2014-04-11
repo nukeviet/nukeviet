@@ -34,5 +34,3 @@ $lang_module['goback'] = 'Quay lại';
 $lang_module['voting_total'] = 'Tổng số';
 $lang_module['voting_counter'] = 'lượt';
 $lang_module['voting_pubtime'] = 'Tính từ';
-
-?>

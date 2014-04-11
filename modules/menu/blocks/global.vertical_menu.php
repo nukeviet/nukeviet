@@ -32,5 +32,3 @@ if( ! empty( $nv_vertical_menu ) )
 
 	$content .= "</div>\n";
 }
-
-?>

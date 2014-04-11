@@ -1,40 +1,48 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: listcat -->
 <div class="news_column">
-	<div class="news-content bordersilver white clearfix">
-		<div class="header clearfix">
-			<a title="{CAT.title}" class="current" href="{CAT.link}"><span><span>{CAT.title}</span></span></a>
-			<!-- BEGIN: subcatloop -->
-			<a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a>
-			<!-- END: subcatloop -->
-			<!-- BEGIN: subcatmore -->
-			<a title="{MORE.title}" href="{MORE.link}">{MORE.title}</a>
-			<!-- END: subcatmore -->
+	<div class="panel panel-default clearfix">
+		<div class="panel-heading">
+			<ul class="list-inline" style="margin: 0">
+				<li><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></li>
+				<!-- BEGIN: subcatloop -->
+				<li class="hidden-xs"><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
+				<!-- END: subcatloop -->
+				<!-- BEGIN: subcatmore -->
+				<li class="pull-right hidden-xs"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></li>
+				<!-- END: subcatmore -->
+			</ul>
 		</div>
-		<div class="clear"></div>
-		<div class="{WCT}{BORDER}items clearfix">
-			<h3>
-				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
-				<!-- END: newday -->
-			</h3>
-			<!-- BEGIN: image -->
-			<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" /></a>
-			<!-- END: image -->
-			<p>
-				{CONTENT.hometext}
-			</p>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="{WCT}">
+					<!-- BEGIN: image -->
+					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" id="imghome" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left" /></a>
+					<!-- END: image -->
+					
+					<h3>
+						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+						<!-- BEGIN: newday -->
+						<span class="icon_new"></span>
+						<!-- END: newday -->
+					</h3>
+					<p class="text-justify">{CONTENT.hometext}</p>
+				</div>
+				
+				<!-- BEGIN: related -->
+				<div class="col-md-4">
+					<ul class="related">
+						<!-- BEGIN: loop -->
+						<li class="{CLASS}">
+							<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
+						</li>
+						<!-- END: loop -->
+					</ul>
+				</div>
+				<!-- END: related -->
+			</div>
 		</div>
-		<!-- BEGIN: related -->
-		<ul class="related fixedwidth">
-			<!-- BEGIN: loop -->
-			<li class="{CLASS}">
-				<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
-			</li>
-			<!-- END: loop -->
-		</ul>
-		<!-- END: related -->
 	</div>
 </div>
 <!-- END: listcat -->

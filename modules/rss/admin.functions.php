@@ -13,5 +13,3 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 define( 'NV_IS_RSS_ADMIN', true );
 
 $allow_func = array( 'main' );
-
-?>

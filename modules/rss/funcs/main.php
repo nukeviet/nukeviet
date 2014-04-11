@@ -87,5 +87,3 @@ $contents = nv_rss_main_theme( $array );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -230,5 +230,3 @@ $lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng c
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
-
-?>

@@ -64,5 +64,3 @@ else
 {
 	echo $lang_module['block_front_delete_error'];
 }
-
-?>

@@ -46,5 +46,3 @@ if( $id > 0 and in_array( $point, $array_point ) and $checkss == md5( $id . $cli
 }
 
 die( $lang_module['rating_error1'] );
-
-?>

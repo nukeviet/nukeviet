@@ -136,5 +136,3 @@ $lang_module['order2'] = 'Sắp xếp theo tên file';
 
 $lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
 $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
-
-?>

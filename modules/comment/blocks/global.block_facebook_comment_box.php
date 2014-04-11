@@ -91,5 +91,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_facebook_comment_box_blocks( $block_config );
 }
-
-?>

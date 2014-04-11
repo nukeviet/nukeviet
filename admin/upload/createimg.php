@@ -49,5 +49,3 @@ nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], 
 
 echo $file;
 exit();
-
-?>

@@ -72,5 +72,3 @@ foreach( $list_cats as $cat )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

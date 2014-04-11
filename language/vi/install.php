@@ -254,5 +254,3 @@ $lang_module['updatemod_title_update'] = 'Nâng cấp module "%s"';
 $lang_module['updatemod_title_upgrade'] = 'Cập nhật module "%s"';
 $lang_module['updatemod_notexist'] = 'Bạn chưa cài đặt module này lên hệ thống do đó không có công việc nào cần thực hiện, đơn giản hãy xóa gói cập nhật này để website hoạt động trở lại';
 $lang_module['updatemod_notcertified'] = 'Module này chưa được chứng nhận do đó hệ thống có thể sẽ không kiểm soát được những rủi ro có thể gặp phải.';
-
-?>

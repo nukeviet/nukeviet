@@ -131,5 +131,3 @@ $lang_module['order1'] = 'Sort by date old';
 $lang_module['order2'] = 'Sort by file name';
 $lang_module['searchdir'] = 'Search in folder';
 $lang_module['searchkey'] = 'Search key';
-
-?>

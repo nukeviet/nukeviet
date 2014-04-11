@@ -264,5 +264,3 @@ $global_config['mudim_active'] = 0;
 include NV_ROOTDIR . '/includes/header.php';
 $xtpl->out( 'main' );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

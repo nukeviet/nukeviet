@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <form action="{FORMACTION}" method="post">
 	<p class="input-group">
-	  <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+	  <span class="input-group-addon"><em class="fa fa-search">&nbsp;</em></span>
 	  <input type="text" name="q" value="{keyvalue}" class="form-control" placeholder="{LANG.search_key}">
 	</p>
 	<p>

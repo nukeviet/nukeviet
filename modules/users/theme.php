@@ -1339,5 +1339,3 @@ function nv_avatar( $array )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-	
-?>

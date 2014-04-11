@@ -63,5 +63,3 @@ $lang_module['admin_send2mail_title'] = 'Gửi liên hệ tới email';
 $lang_module['delall'] = 'Xóa tất cả';
 $lang_module['siteinfo_new'] = 'Liên hệ chưa đọc';
 $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn';
-
-?>

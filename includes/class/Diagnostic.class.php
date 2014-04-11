@@ -458,5 +458,3 @@ class Diagnostic
 		return $this->getInfo( $time );
 	}
 }
-
-?>

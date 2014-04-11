@@ -361,5 +361,3 @@ class CJzip
 
 $CJzip = new CJzip();
 $CJzip->loadFile();
-
-?>

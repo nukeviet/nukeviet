@@ -41,5 +41,3 @@ function cron_del_ip_logs()
 
 	return $result;
 }
-
-?>

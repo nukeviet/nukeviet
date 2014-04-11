@@ -37,5 +37,3 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	$allow_func[] = 'logs';
 	$submenu['logs'] = $lang_module['logs_title'];
 }
-
-?>

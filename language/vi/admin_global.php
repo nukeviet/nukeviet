@@ -66,5 +66,3 @@ $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 
 $lang_global['length_characters'] = 'Số ký tự';
 $lang_global['length_suggest_max'] = 'Nên nhập tối đa %s ký tự';
-
-?>

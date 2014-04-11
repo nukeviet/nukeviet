@@ -42,5 +42,3 @@ while( $row = $result->fetch() )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

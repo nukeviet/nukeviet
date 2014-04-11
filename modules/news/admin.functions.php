@@ -767,4 +767,3 @@ function redriect( $msg1 = '', $msg2 = '', $nv_redirect )
 	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
-?>

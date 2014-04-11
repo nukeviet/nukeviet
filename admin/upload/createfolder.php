@@ -38,5 +38,3 @@ else
 {
 	die( 'ERROR_' . $n_dir[1] );
 }
-
-?>

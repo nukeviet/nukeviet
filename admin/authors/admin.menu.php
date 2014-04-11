@@ -33,5 +33,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'module';
 	$allow_func[] = 'config';
 }
-
-?>

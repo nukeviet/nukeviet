@@ -299,5 +299,3 @@ function nv_clean60( $string, $num = 60 )
 	}
 	return $string;
 }
-
-?>

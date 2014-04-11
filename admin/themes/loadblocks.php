@@ -73,5 +73,3 @@ elseif( isset( $site_mods[$module]['module_file'] ) )
 		}
 	}
 }
-
-?>

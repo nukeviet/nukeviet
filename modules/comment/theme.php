@@ -129,5 +129,3 @@ function nv_comment_theme( $module, $comment_array, $is_delete )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

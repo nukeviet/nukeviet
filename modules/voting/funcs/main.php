@@ -212,5 +212,3 @@ else
 	echo nv_site_theme( $contents, false );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

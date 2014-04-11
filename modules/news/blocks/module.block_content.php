@@ -28,5 +28,3 @@ $xtpl->assign( 'LINK_ADD_CONTENT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARI
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

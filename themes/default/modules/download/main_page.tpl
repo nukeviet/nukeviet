@@ -18,7 +18,11 @@
 			<!-- BEGIN: itemcat -->
 				<div>
 					<h4><a title="{itemcat.title}" href="{itemcat.more_link}">{itemcat.title}</a></h4>
-					<small class="note"><span class="glyphicon glyphicon-user"></span> {LANG.author_name}: {itemcat.author_name} - <span class="glyphicon glyphicon-zoom-in"></span> {LANG.view_hits}: {itemcat.view_hits} - <span class="glyphicon glyphicon-download-alt"></span> {LANG.download_hits}: {itemcat.download_hits}</small>
+					<ul class="list-inline">
+						<li><em class="fa fa-user">&nbsp;</em> {LANG.author_name}: {itemcat.author_name}</li>
+						<li><em class="fa fa-eye">&nbsp;</em> {LANG.view_hits}: {itemcat.view_hits}</li>
+						<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits}: {itemcat.download_hits}</li>	
+					</ul>
 				</div>
 				<!-- BEGIN: image -->
 				<div class="col-xs-6 col-md-3">
@@ -32,7 +36,7 @@
 				</p>
 				<!-- END: adminlink -->
 				<div class="text-right">
-					<a title="{LANG.readmore}" href="{itemcat.more_link}">{LANG.readmore}</a> <span class="glyphicon glyphicon-chevron-right"></span>
+					<a title="{LANG.readmore}" href="{itemcat.more_link}">{LANG.readmore}</a> <em class="fa fa-sign-out">&nbsp;</em>
 				</div>
 			<!-- END: itemcat -->
 	</div>

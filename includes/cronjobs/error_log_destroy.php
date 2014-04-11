@@ -109,5 +109,3 @@ function cron_auto_del_error_log()
 	clearstatcache();
 	return $result;
 }
-
-?>

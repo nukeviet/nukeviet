@@ -85,5 +85,3 @@ $lang_module['countries'] = 'Language by country';
 $lang_module['countries_name'] = 'Country';
 $lang_module['nv_admin_sl3'] = 'Select a language';
 $lang_module['nv_lang_native_name'] = 'Indigenous languages';
-
-?>

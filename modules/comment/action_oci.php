@@ -53,5 +53,3 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_cid ON " . $db_config['prefix'] . "_" . $lang . "_comments(module,area,id) TABLESPACE USERS";
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_cposttime ON " . $db_config['prefix'] . "_" . $lang . "_comments(post_time) TABLESPACE USERS";
-
-?>

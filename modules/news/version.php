@@ -23,5 +23,3 @@ $module_version = array(
 	'uploads_dir' => array( $module_name, $module_name . '/source', $module_name . '/temp_pic', $module_name . '/topics' ),
 	'files_dir' => array( $module_name . '/topics' )
 );
-
-?>

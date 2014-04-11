@@ -136,5 +136,3 @@ $contents = list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -110,5 +110,3 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		imagedestroy( $my_img );
 	}
 }
-
-?>

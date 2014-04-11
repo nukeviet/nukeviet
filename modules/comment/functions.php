@@ -78,5 +78,3 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 	}
 	return array( 'comment' => $comment_array, 'page' => $generate_page );
 }
-
-?>

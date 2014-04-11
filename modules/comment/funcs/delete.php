@@ -50,5 +50,3 @@ if( $cid > 0 AND $checkss == md5( $cid . '_' . $session_id ) )
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

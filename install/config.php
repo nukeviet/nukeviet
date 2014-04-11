@@ -347,5 +347,3 @@ $nv_parse_ini_timezone = array(
 	'Pacific/Tongatapu' => array( 'winter_offset' => 46800, 'summer_offset' => 46800 ),
 	'Pacific/Kiritimati' => array( 'winter_offset' => 50400, 'summer_offset' => 50400 )
 );
-
-?>

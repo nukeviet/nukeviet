@@ -161,5 +161,3 @@ $contents = nv_show_list_stat_theme( $contents );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

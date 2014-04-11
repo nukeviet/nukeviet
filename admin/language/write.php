@@ -218,8 +218,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 			}
 			if( $numrows )
 			{
-				$content_lang .= "\n";
-				$content_lang .= "?>";
 				$number_bytes = file_put_contents( $include_lang, $content_lang, LOCK_EX );
 				if( empty( $number_bytes ) )
 				{
@@ -331,5 +329,3 @@ else
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main&dirlang=' . $dirlang );
 	die();
 }
-
-?>

@@ -155,5 +155,3 @@ $lang_module['log_empty_log'] = 'Xóa toàn bộ nhật kí hệ thống';
 $lang_module['update_package_detected'] = 'Phát hiện có gói cập nhật, website sẽ tạm ngưng hoạt động. Hãy thực hiện một trong hai công việc sau trước khi website có thể hoạt động trở lại.';
 $lang_module['update_package_delete'] = 'Xóa gói cập nhật';
 $lang_module['update_package_do'] = 'Thực hiện cập nhật';
-
-?>

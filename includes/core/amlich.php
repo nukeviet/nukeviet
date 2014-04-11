@@ -299,5 +299,3 @@ function alhn()
 	$arr[2] = $CAN[( $arr[2] + 6 ) % 10] . ' ' . $CHI[( $arr[2] + 8 ) % 12];
 	return 'Âm lịch: ngày ' . $arr[0] . ' tháng ' . $arr[1] . ' năm ' . $arr[2];
 }
-
-?>

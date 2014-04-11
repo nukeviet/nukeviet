@@ -52,5 +52,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

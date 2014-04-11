@@ -42,5 +42,3 @@ function nv_rss_main_theme( $array )
 
 	return $array;
 }
-
-?>

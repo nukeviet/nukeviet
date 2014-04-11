@@ -623,5 +623,3 @@ function setup_modules( $array_head, $array_modules, $array_virtual_head, $array
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

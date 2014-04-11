@@ -155,5 +155,3 @@ if( ! empty( $admin_cookie ) )
 }
 
 unset( $admin_cookie, $admin_online );
-
-?>

@@ -54,6 +54,7 @@ function nv_block_headline()
 				->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 				->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+				->where( 'bid=' . $array_bid['bid'] )
 				->order( 't2.weight ASC' )
 				->limit( $array_bid['number'] );
 
@@ -137,12 +138,8 @@ function nv_block_headline()
 	$my_footer .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
 	$my_footer .= '$(document).ready(function(){var b=["' . implode( '","', $images ) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
 	$my_footer .= "\n//]]>\n</script>\n";
-	$my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/contentslider.css\" />\n";
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 $content = nv_block_headline();
-
-?>

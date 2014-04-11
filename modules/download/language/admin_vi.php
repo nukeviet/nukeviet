@@ -119,5 +119,3 @@ $lang_module['siteinfo_users_send'] = 'Số file chờ kiểm duyệt';
 $lang_module['siteinfo_eror'] = 'Số báo cáo lỗi được gửi tới';
 $lang_module['siteinfo_comment'] = 'Số bình luận được gửi tới';
 $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ kiểm duyệt';
-
-?>

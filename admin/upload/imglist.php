@@ -169,5 +169,3 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 }
 
 exit();
-
-?>

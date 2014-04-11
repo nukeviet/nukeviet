@@ -510,5 +510,3 @@ foreach ($ar as $_s)
 {
 	$sql_create_module[] = 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_counter (c_type, c_val, c_count, last_update) VALUES ' . $_s;
 }
-
-?>

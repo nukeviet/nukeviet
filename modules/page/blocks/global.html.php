@@ -60,5 +60,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_global_html( $block_config );
 }
-
-?>
