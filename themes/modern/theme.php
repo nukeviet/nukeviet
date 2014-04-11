@@ -253,5 +253,3 @@ function nv_site_theme( $contents, $full = true )
 
 	return $sitecontent;
 }
-
-?>

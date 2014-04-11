@@ -36,5 +36,3 @@ if( defined( 'NV_COMM_ID' ) )
 		}
 	}
 }
-
-?>

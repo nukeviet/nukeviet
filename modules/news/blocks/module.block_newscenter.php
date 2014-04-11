@@ -97,5 +97,3 @@ foreach( $list as $row )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

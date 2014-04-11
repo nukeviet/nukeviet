@@ -15,5 +15,3 @@ $submenu['filequeue'] = $lang_module['download_filequeue'];
 $submenu['report'] = $lang_module['download_report'];
 $submenu['cat'] = $lang_module['download_catmanager'];
 $submenu['config'] = $lang_module['download_config'];
-
-?>

@@ -38,5 +38,3 @@ $lang_module['logic_and'] = 'Cả cụm từ';
 $lang_module['logic_or'] = 'Tối thiểu 1 từ';
 $lang_module['searchQueryError'] = 'Bạn cần nhập từ khóa tìm kiếm có số ký tự tối thiểu là %s';
 $lang_module['chooseModule'] = 'Hãy chọn Khu vực tìm kiếm';
-
-?>

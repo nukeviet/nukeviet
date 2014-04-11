@@ -18,5 +18,3 @@
  */
 $proxy = array();
 //$proxy[] = array('HTTP','222.220.229.194',8909,'login','pass');
-
-?>

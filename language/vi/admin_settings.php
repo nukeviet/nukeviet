@@ -216,6 +216,3 @@ $lang_module['plugin_number'] = 'Số thứ tự';
 $lang_module['plugin_func'] = 'Chức năng';
 $lang_module['plugin_add'] = 'Thêm plugin';
 $lang_module['plugin_file_delete'] = 'Xóa khỏi hệ thống';
-
-
-?>

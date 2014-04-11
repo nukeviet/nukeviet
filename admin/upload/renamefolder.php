@@ -65,5 +65,3 @@ else
 {
 	die( 'ERROR_' . $lang_module['rename_error_folder'] );
 }
-
-?>

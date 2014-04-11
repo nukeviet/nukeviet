@@ -141,5 +141,3 @@ function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
 
 	return $list;
 }
-
-?>

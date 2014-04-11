@@ -70,5 +70,3 @@ else
 	// Rewrite site url
 	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\"#"] = "\\1\\2" . $global_config['rewrite_endurl'] . "\"";
 }
-
-?>

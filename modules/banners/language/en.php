@@ -72,5 +72,3 @@ $lang_module['stats_views_country'] = 'Country';
 $lang_module['stats_views_month'] = 'Month';
 $lang_module['stats_views_select'] = 'Please select';
 $lang_module['stats_views_ads'] = 'Advertise';
-
-?>

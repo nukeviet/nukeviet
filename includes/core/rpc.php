@@ -226,5 +226,3 @@ function nv_rpcXMLCreate( $webtitle, $webhome, $linkpage, $webrss = '', $method 
 
 	return $xml->saveXML();
 }
-
-?>

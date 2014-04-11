@@ -7,16 +7,12 @@
  */
 
 function nv_login_info(containerid) {
-	/*	alert(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=logininfo' + '&num=' + nv_randomPassword( 8 ));
-	 return false;*/
-	nv_ajax("get", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=logininfo' + '&num=' + nv_randomPassword(8), '', containerid);
+	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime());
 	return false;
 }
 
-//  ---------------------------------------
-
 function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, gfx_chk, login_id, pass_id, sec_id, button_id) {
-	var request_query = nv_fc_variable + '=logininfo&save=1';
+	var request_query = 'save=1';
 
 	var login = document.getElementById(login_id);
 	var error;
@@ -53,40 +49,29 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
 		request_query += '&seccode=' + sec.value;
 	}
 	var nv_timer = nv_settimeout_disable(button_id, 5000);
-	nv_ajax("post", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners', request_query + '&num=' + nv_randomPassword(8), '', 'nv_cl_login_submit_res');
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime(), request_query, function(res) {
+		if (res == 'OK') {
+			window.location.href = window.location.href;
+			return false;
+		}
+		alert(nv_login_failed);
+		nv_login_info(res);
+	});
 	return false;
 }
-
-//  ---------------------------------------
-
-function nv_cl_login_submit_res(res) {
-	if (res == 'OK') {
-		window.location.href = window.location.href;
-		return false;
-	}
-	alert(nv_login_failed);
-	nv_login_info(res);
-	return false;
-}
-
-//  ---------------------------------------
 
 function nv_cl_info(containerid) {
-	nv_ajax("get", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=clinfo' + '&num=' + nv_randomPassword(8), '', containerid);
+	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=clinfo&nocache=' + new Date().getTime());
 	return false;
 }
-
-//  ---------------------------------------
 
 function nv_cl_edit(containerid) {
-	nv_ajax("get", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners&' + nv_fc_variable + '=cledit' + '&num=' + nv_randomPassword(8), '', containerid);
+	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit' + '&nocache=' + new Date().getTime());
 	return false;
 }
 
-//  ---------------------------------------
-
 function nv_cl_edit_save(full_name, email, website, location, yim, phone, fax, mobile, pass, re_pass, button_id) {
-	var request_query = nv_fc_variable + '=cledit&save=1';
+	var request_query = 'save=1';
 	request_query += '&full_name=' + rawurlencode(strip_tags(trim(document.getElementById(full_name).value.replace(/[\s]{2,}/g, ' '))));
 	request_query += '&email=' + rawurlencode(strip_tags(document.getElementById(email).value.replace(/[^a-zA-Z0-9\_\-\.\@]/g, '')));
 	request_query += '&website=' + rawurlencode(strip_tags(trim(document.getElementById(website).value.replace(/[^a-zA-Z0-9\:\#\!\:\.\?\+\=\&\%\@\-\/\,]/g, ''))));
@@ -100,23 +85,18 @@ function nv_cl_edit_save(full_name, email, website, location, yim, phone, fax, m
 	request_query += '&num=' + nv_randomPassword(8);
 
 	var nv_timer = nv_settimeout_disable(button_id, 5000);
-	nv_ajax("post", nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=banners', request_query, '', 'nv_cl_edit_save_res');
-	return false;
-}
-
-//  ---------------------------------------
-
-function nv_cl_edit_save_res(res) {
-	var r_split = res.split("|");
-	if (r_split[0] == 'OK') {
-		nv_cl_info(r_split[1]);
-	} else {
-		var error = r_split[0].replace(/\&[l|r]dquo\;/g, '');
-		alert(error);
-		if (r_split[1]) {
-			var nif = document.getElementById(r_split[1]);
-			nif.focus();
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit&nocache=' + new Date().getTime(), request_query, function(res) {
+		var r_split = res.split("|");
+		if (r_split[0] == 'OK') {
+			nv_cl_info(r_split[1]);
+		} else {
+			var error = r_split[0].replace(/\&[l|r]dquo\;/g, '');
+			alert(error);
+			if (r_split[1]) {
+				var nif = document.getElementById(r_split[1]);
+				nif.focus();
+			}
 		}
-	}
+	});
 	return false;
 }

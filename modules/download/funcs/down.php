@@ -165,5 +165,3 @@ if( $is_zip )
 }
 $download->download_file();
 exit();
-
-?>

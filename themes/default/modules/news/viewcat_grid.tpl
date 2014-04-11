@@ -1,37 +1,31 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: viewdescription -->
 <div class="news_column">
-	<div class="items clearfix">
-		<h1>{CONTENT.title}</h1>
+	<div class="alert alert-info clearfix">
+		<h3>{CONTENT.title}</h3>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" />
+		<img alt="{CONTENT.title}" id="imghome" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left" />
 		<!-- END: image -->
-		<h2>{CONTENT.description}</h2>
+		<p class="text-justify">{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->
-<div class="news_grid">
-	<!-- BEGIN: viewcatloop -->
-	<div class="item fl" style="width: 33%">
-		<div class="item_content">
-			<a title="{CONTENT.title}" href="{CONTENT.link}"> <img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" /> </a>
-			<h2>
-				<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
-				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
-				<!-- END: newday -->
-			</h2>
-			<!-- BEGIN: adminlink -->
-			<span class="admintab"> {ADMINLINK} </span>
-			<!-- END: adminlink -->
+
+<!-- BEGIN: viewcatloop -->
+<div class="col-sm-6 col-md-4">
+	<div class="thumbnail" style="min-height: 190px;max-height: 190px;">
+		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
+		<div class="caption text-center">
+			<h4><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h4>
+			<span>{ADMINLINK}</span>
 		</div>
 	</div>
-	<!-- END: viewcatloop -->
-	<div class="clear"></div>
 </div>
+<!-- END: viewcatloop -->
+<div class="clear"></div>
 
 <!-- BEGIN: generate_page -->
-<div class="acenter">
+<div class="text-center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->

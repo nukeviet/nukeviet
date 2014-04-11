@@ -24,5 +24,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$submenu['ftp'] = $lang_module['ftp_config'];
 	$submenu['variables'] = $lang_module['variables'];
 }
-
-?>

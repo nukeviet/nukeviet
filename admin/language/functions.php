@@ -85,5 +85,3 @@ function nv_admin_add_field_lang( $dirlang )
 		}
 	}
 }
-
-?>

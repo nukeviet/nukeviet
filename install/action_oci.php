@@ -663,5 +663,3 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
     BEGIN
       SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN.nextval INTO :new.pid FROM DUAL;
     END TNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN;';
-
-?>

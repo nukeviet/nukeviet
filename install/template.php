@@ -301,5 +301,3 @@ function nv_step_7( $finish )
 	$xtpl->parse( 'step' );
 	return $xtpl->text( 'step' );
 }
-
-?>

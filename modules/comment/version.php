@@ -22,5 +22,3 @@ $module_version = array(
 	'uploads_dir' => array(),
 	'note' => ''
 );
-
-?>

@@ -47,5 +47,3 @@ function cron_ref_expired_del()
 
 	return $result;
 }
-
-?>

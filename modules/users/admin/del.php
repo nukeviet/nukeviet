@@ -70,5 +70,3 @@ else
 	nv_sendmail( $global_config['site_email'], $email, $subject, $message );
 	die( 'OK' );
 }
-
-?>

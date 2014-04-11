@@ -1,111 +1,75 @@
 <!-- BEGIN: main -->
-<div id="users">
-	<h2 class="line padding_0" style="margin-bottom:5px">{LANG.user_info}</h2>
-	<div style="padding-bottom:10px">
-		<div class="utop">
-			<span class="topright"> <a href="{URL_HREF}editinfo">{LANG.editinfo}</a> <strong>&middot;</strong> <a href="{URL_HREF}changepass">{LANG.changepass_title}</a> <strong>&middot;</strong> <a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a>
-				<!-- BEGIN: allowopenid -->
-				<strong>&middot;</strong> <a href="{URL_HREF}openid">{LANG.openid_administrator}</a>
-				<!-- END: allowopenid -->
-				<!-- BEGIN: regroups -->
-				<strong>&middot;</strong><a href="{URL_HREF}regroups">{LANG.in_group}</a>
-				<!-- END: regroups -->
-				<!-- BEGIN: logout -->
-				<strong>&middot;</strong> <a href="{URL_HREF}logout">{LANG.logout_title}</a>
-				<!-- END: logout -->
-			</span>
-		</div>
-		<div class="clear"></div>
+<ul class="nav nav-tabs m-bottom">
+	<li class="active"><a href="{URL_HREF}main">{LANG.user_info}</a></li>
+	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
+	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
+	<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>
+	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
+	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
+	<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
+</ul>
+<h2>{LANG.user_info}</h2>
+<div class="row m-bottom">
+	<div class="col-md-3 text-center">
+		<img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail m-bottom"/><br />
+		{LANG.img_size_title}
 	</div>
-	<div class="uinfo">
-
-		<div class="uimg">
-			<img src="{SRC_IMG}" alt="" />
-			<br />
-			<span style="font-size:11px; color:#999; display: block; text-align: center">{LANG.img_size_title}</span>
-		</div>
-		{LANG.account2}: <strong>{USER.username}</strong> ({USER.email})
-		<br />
-		{USER.current_mode}
-		<br />
-		{LANG.current_login}: {USER.current_login}
-		<br />
-		{LANG.ip}: {USER.current_ip}
-
-		<div class="clear"></div>
-		<!-- BEGIN: change_login_note -->
-		<div id="info" style="padding-top:10px;padding-bottom:5px">
-			<strong>&raquo; {USER.change_name_info}</strong>
-		</div>
-		<!-- END: change_login_note -->
-		<!-- BEGIN: pass_empty_note -->
-		<div id="info" style="padding-top:10px;padding-bottom:5px">
-			<strong>&raquo; {USER.pass_empty_note}</strong>
-		</div>
-		<!-- END: pass_empty_note -->
-		<!-- BEGIN: question_empty_note -->
-		<div id="info" style="padding-top:10px;padding-bottom:5px">
-			<strong>&raquo; {USER.question_empty_note}</strong>
-		</div>
-		<!-- END: question_empty_note -->
-		<div class="content">
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.name}:
-				</dt>
-				<dd class="fl">
-					{USER.full_name}
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl" style="width:48%;">
-					{LANG.birthday}:
-				</dt>
-				<dd class="fl">
-					{USER.birthday}
-				</dd>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.gender}:
-				</dt>
-				<dd class="fl">
-					{USER.gender}
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl" style="width:48%;">
-					{LANG.showmail}:
-				</dt>
-				<dd class="fl">
-					{USER.view_mail}
-				</dd>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.regdate}:
-				</dt>
-				<dd class="fl">
-					{USER.regdate}
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl" style="width:48%;">
-					{LANG.st_login2}:
-				</dt>
-				<dd class="fl">
-					{USER.st_login}
-				</dd>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl" style="width:48%;">
-					{LANG.last_login}:
-				</dt>
-				<dd class="fl">
-					{USER.last_login}
-				</dd>
-			</dl>
-		</div>
+	<div class="col-md-9">
+		<ul class="nv-list-item xsm">
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {USER.current_mode}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
+			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
+		</ul>
 	</div>
+</div>
+<!-- BEGIN: change_login_note -->
+<div class="alert alert-danger">
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.change_name_info}
+</div>
+<!-- END: change_login_note -->
+<!-- BEGIN: pass_empty_note -->
+<div class="alert alert-danger">
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.pass_empty_note}
+</div>
+<!-- END: pass_empty_note -->
+<!-- BEGIN: question_empty_note -->
+<div class="alert alert-danger">
+	<em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.question_empty_note}
+</div>
+<!-- END: question_empty_note -->
+<div class="table-responsive">
+	<table class="table table-bordered table-striped">
+		<tbody>
+			<tr>
+				<th>{LANG.name}</th>
+				<td>{USER.full_name}</td>
+			</tr>
+			<tr>
+				<th>{LANG.birthday}</th>
+				<td>{USER.birthday}</td>
+			</tr>
+			<tr>
+				<th>{LANG.gender}</th>
+				<td>{USER.gender}</td>
+			</tr>
+			<tr>
+				<th>{LANG.showmail}</th>
+				<td>{USER.view_mail}</td>
+			</tr>
+			<tr>
+				<th>{LANG.regdate}</th>
+				<td>{USER.regdate}</td>
+			</tr>
+			<tr>
+				<th>{LANG.st_login2}</th>
+				<td>{USER.st_login}</td>
+			</tr>
+			<tr>
+				<th>{LANG.last_login}</th>
+				<td>{USER.last_login}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 <!-- END: main -->

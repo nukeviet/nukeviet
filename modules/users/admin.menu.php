@@ -57,5 +57,3 @@ if( defined( 'NV_IS_SPADMIN' ) AND empty( $global_config['idsite'] ) )
 		$allow_func[] = 'export';
 	}
 }
-
-?>

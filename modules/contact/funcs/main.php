@@ -250,5 +250,3 @@ $contents = call_user_func( 'main_theme', $array_content, $array_rows, $base_url
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents, $full );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

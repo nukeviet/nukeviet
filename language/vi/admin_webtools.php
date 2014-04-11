@@ -69,5 +69,3 @@ $lang_module['mudim_active_admin'] = 'Kích hoạt khu vực admin';
 $lang_module['mudim_showpanel'] = 'Hiển thị bảng điều khiển Mudim';
 $lang_module['mudim_method'] = 'Kiểu gõ mặc định';
 $lang_module['mudim_displaymode'] = 'Hiển thị công cụ dưới dạng';
-
-?>

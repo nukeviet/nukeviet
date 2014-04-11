@@ -8,31 +8,38 @@
 
 function nv_del_content(vid, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
-		nv_ajax('post', script_name, nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&vid=' + vid + '&checkss=' + checkss, '', 'nv_del_content_result');
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'vid=' + vid + '&checkss=' + checkss, function(res) {
+			var r_split = res.split("_");
+			if (r_split[0] == 'OK') {
+				window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
+			} else if (r_split[0] == 'ERR') {
+				alert(r_split[1]);
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+		});
 	}
 	return false;
 }
 
-function nv_del_content_result(res) {
-	var r_split = res.split("_");
-	if (r_split[0] == 'OK') {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
-	} else if (r_split[0] == 'ERR') {
-		alert(r_split[1]);
-	} else {
-		alert(nv_is_del_confirm[2]);
-	}
-	return false;
-}
-
-function nv_vote_additem(mess) {
+function nv_vote_add_item(mess) {
 	items++;
-	var nclass = (items % 2 == 0) ? " class=\"second\"" : "";
-	var newitem = "<tbody" + nclass + "><tr>";
-	newitem += "	<td style=\"text-align:right\">" + mess + " " + items + "</td>";
-	newitem += "	<td><input type=\"text\" value=\"\" name=\"answervotenews[]\" style=\"width:300px\"></td>";
-	newitem += "	<td><input type=\"text\" value=\"\" name=\"urlvotenews[]\" style=\"width:350px\"></td>";
-	newitem += "	</tr>";
-	newitem += "</tbody>";
+	var newitem = '<tr>';
+	newitem += '	<td class="right">' + mess + ' ' + items + '</td>';
+	newitem += '	<td><input class="w300" type="text" value="" name="answervotenews[]"></td>';
+	newitem += '	<td><input class="w350" type="text" value="" name="urlvotenews[]"></td>';
+	newitem += '	</tr>';
 	$("#items").append(newitem);
 }
+
+$(document).ready(function() {
+	$("#publ_date,#exp_date").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true
+	});
+});

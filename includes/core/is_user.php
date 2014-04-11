@@ -128,5 +128,3 @@ else
 
 	unset( $user, $strlen, $_sql );
 }
-
-?>

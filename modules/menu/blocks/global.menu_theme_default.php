@@ -179,5 +179,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_menu_theme_default( $block_config );
 }
-
-?>

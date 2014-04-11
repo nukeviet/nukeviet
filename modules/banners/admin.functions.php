@@ -862,5 +862,3 @@ function nv_main_theme( $contents )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

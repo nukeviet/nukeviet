@@ -12,5 +12,3 @@ if( ! defined( 'NV_IS_MOD_MENU' ) ) die( 'Stop!!!' );
 
 header( "location:" . $global_config['site_url'] );
 exit();
-
-?>

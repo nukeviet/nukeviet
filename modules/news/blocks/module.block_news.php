@@ -146,5 +146,3 @@ if( defined( 'NV_SYSTEM' ) )
 		$content = nv_news_block_news( $block_config, $mod_data );
 	}
 }
-
-?>

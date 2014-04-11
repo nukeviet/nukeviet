@@ -76,5 +76,3 @@ else
 {
 	die( 'error request !' );
 }
-
-?>

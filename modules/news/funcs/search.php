@@ -191,5 +191,3 @@ $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

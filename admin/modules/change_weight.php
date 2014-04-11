@@ -50,5 +50,3 @@ nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module: '
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -501,5 +501,3 @@ function nv_xmlSitemapIndex_generate()
 
 	nv_xmlOutput( $contents, $lastModified );
 }
-
-?>

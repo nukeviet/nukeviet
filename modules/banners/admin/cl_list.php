@@ -40,5 +40,3 @@ while( $row = $result->fetch() )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_cl_list_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

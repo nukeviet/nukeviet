@@ -83,10 +83,7 @@ foreach ( $rows as $row )
 
 	$xtpl->parse( 'main.loop' );
 }
-if( ! defined( 'NV_IS_AJAX' ) )
-{
-	$xtpl->parse( 'main.script' );
-}
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
@@ -99,5 +96,3 @@ if( ! defined( 'NV_IS_AJAX' ) )
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

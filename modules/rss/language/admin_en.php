@@ -19,5 +19,3 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['content'] = 'Content';
 $lang_module['save'] = 'Save';
-
-?>

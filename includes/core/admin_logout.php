@@ -36,5 +36,3 @@ else
 }
 
 nv_info_die( $global_config['site_description'], $lang_global['admin_logout_title'], $info );
-
-?>

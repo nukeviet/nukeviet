@@ -146,3 +146,203 @@
 .icon_list{
 	background: url(../images/bullet-orange.png) 2px 13px no-repeat;
 }
+
+#print {
+	margin: 0 auto;
+	text-align: left;
+	width: 800px;
+}
+
+#print a, a:active, a:focus, a:visited {
+	color: #4D5764;
+	text-decoration: none;
+}
+
+#print h1 {
+	font-size: 160%
+}
+
+#print h2 {
+	font-size: 150%
+}
+
+#print a:hover {
+	text-decoration: underline;
+}
+
+#print h1, h2, p {
+	margin: 0;
+	padding: 0;
+}
+
+#print #header {
+	height: 100%;
+	margin-bottom: 10px;
+	line-height: 40px;
+	border-bottom: 2px solid #DC0312;
+}
+
+#print #header h2 {
+	float: left;
+	display: inline;
+}
+
+#print #header p {
+	float: right;
+	display: inline;
+}
+
+#print #content #hometext {
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-align: justify;
+}
+
+#print #content #bodytext {
+	text-align: justify;
+}
+
+#print #content ul.control {
+	margin: 0;
+	display: block;
+	padding: 7px 0 19px 0;
+}
+
+#print #content ul.control li {
+	display: inline;
+	float: left;
+	list-style: none;
+	font-size: 95%;
+}
+
+#print #content ul.control li a {
+	padding: 0 2px;
+}
+
+#print #content ul.control li a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#print #content .time {
+	color: #333;
+}
+
+#print #content #imghome {
+	padding: 4px;
+	margin: 0 auto;
+	display: block;
+	text-align: center;
+}
+
+#print #content #imghome p {
+	font-weight: normal
+}
+
+#print #content .copyright {
+	background: #66CCFF;
+	padding: 4px;
+	width: 100%;
+}
+
+#print #content #author {
+	text-align: right;
+}
+
+#print #footer {
+	margin-top: 10px;
+	border-top: 2px solid #DC0312;
+}
+
+#print #footer #url {
+	line-height: 20px;
+	font-size: 100%;
+	display: block;
+	border-bottom: 2px solid #4D5764;
+}
+
+#print #footer .copyright {
+	float: left;
+	display: inline;
+	padding: 5px 0;
+}
+
+#print #footer #contact {
+	float: right;
+	display: inline;
+	padding: 5px 0;
+}
+
+#print #footer #contact a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#sendmail .form label {
+	width: 150px;
+	float: left;
+}
+
+#sendmail .form label.error {
+	float: none;
+	color: red;
+	padding-left: .5em;
+	vertical-align: top;
+}
+
+#sendmail .form input, .form textarea {
+	width: 250px;
+	float: right;
+	border: 1px solid #ccc;
+}
+
+#sendmail .form input:hover, .form textarea:hover {
+	border: 1px solid #999;
+}
+
+#sendmail .form textarea {
+	height: 100px;
+}
+
+#sendmail .form div {
+	margin: 0 0 10px 0;
+}
+
+#sendmail img {
+	padding: 0 2px;
+}
+
+#sendmail .resfresh1 {
+	padding-top: 6px;
+	cursor: pointer;
+}
+
+#sendmail .form div.submit {
+	text-align: center;
+	margin: 0 auto;
+}
+
+#sendmail .form div.submit input {
+	width: 80px;
+	float: none;
+}
+
+#sendmail ul {
+	color: #ff0000;
+}
+
+#sendmail h1 {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 110%;
+	margin-bottom: 10px;
+}
+
+#sendmail input {
+	color: #000;
+}
+
+#sendmail em {
+	color: #ff0000;
+}

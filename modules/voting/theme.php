@@ -66,5 +66,3 @@ function voting_result( $voting )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

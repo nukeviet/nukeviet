@@ -579,5 +579,3 @@ $contents = user_info( $array_data, $array_field_config, $custom_fields, $info )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

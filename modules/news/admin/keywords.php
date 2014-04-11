@@ -16,5 +16,3 @@ $keywords = nv_get_keywords( $content );
 include NV_ROOTDIR . '/includes/header.php';
 echo $keywords;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

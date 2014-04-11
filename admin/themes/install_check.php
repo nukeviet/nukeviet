@@ -453,5 +453,3 @@ if( file_exists( $filename ) )
 		}
 	}
 }
-
-?>

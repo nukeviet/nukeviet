@@ -40,5 +40,3 @@ if( $flb->is_blocker )
 }
 
 unset( $rules, $flb );
-
-?>

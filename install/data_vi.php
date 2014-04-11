@@ -219,8 +219,8 @@ $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_bloc
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 $sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
 $sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', '', '[LEFT]', 0, 1, '0', 1, 2, '') );
-$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'orange', '[RIGHT]', 0, 1, '0', 1, 1, '') );
+$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', 'no_title', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, '0', 1, 1, '') );
 $sth->execute( array(5, 'default', 'users', 'global.login.php', 'Đăng nhập thành viên', '', '', '[RIGHT]', 0, 1, '0', 1, 2, '') );
 $sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '0', 1, 3, '') );
 $sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Tin nổi bật', '', 'no_title', '[TOP]', 0, 1, '0', 0, 1, '') );
@@ -898,7 +898,7 @@ while( list( $id, $run_func ) = $result->fetch( 3 ) )
 	$db->query( 'UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote( $cron_name ) . ' WHERE id=' . $id );
 }
 
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'modern' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'" );
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'" );
 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
 if( $result->fetchColumn() )
@@ -1140,5 +1140,3 @@ if( $result->fetchColumn() )
 
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
-
-?>

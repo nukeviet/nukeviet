@@ -146,5 +146,3 @@ $contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( N
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

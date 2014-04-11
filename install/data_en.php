@@ -805,7 +805,7 @@ while( list( $id, $run_func ) = $result->fetch( 3 ) )
 	$db->query( 'UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote( $cron_name ) . ' WHERE id=' . $id );
 }
 
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'modern' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'" );
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'" );
 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
 if( $result->fetchColumn() )
@@ -946,5 +946,3 @@ if( $result->fetchColumn() )
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
 }
-
-?>

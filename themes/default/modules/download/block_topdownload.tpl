@@ -1,16 +1,13 @@
 <!-- BEGIN: main -->
-<div class="sliver2">
-	<ul class="top-down">
-		<!-- BEGIN: loop -->
-		<li>
-			<span class="numbers">{loop.order}</span>
-			<p class="item">
-				<a href="{loop.link}">{loop.title}</a>
-				<br/>
-				<span class="small_txt">{LANG.download_hits}: {loop.download_hits}</span>
-			</p>
-		</li>
-		<!-- END: loop -->
-	</ul>
-</div>
+<ul class="list_item">
+	<!-- BEGIN: loop -->
+	<li>
+		<p class="item">
+			<a href="{loop.link}">{loop.title}</a>
+			<br/>
+			<em class="fa fa-download"></em> {LANG.download_hits}: {loop.download_hits}
+		</p>
+	</li>
+	<!-- END: loop -->
+</ul>
 <!-- END: main -->

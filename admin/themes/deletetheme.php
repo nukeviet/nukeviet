@@ -85,5 +85,3 @@ else
 {
 	echo $lang_module['theme_created_delete_current_theme'];
 }
-
-?>

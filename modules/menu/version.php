@@ -19,5 +19,3 @@ $module_version = array(
 	'author' => 'VINADES (contact@vinades.vn)',
 	'note' => ''
 );
-
-?>

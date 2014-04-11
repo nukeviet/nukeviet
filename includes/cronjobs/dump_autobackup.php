@@ -76,5 +76,3 @@ function cron_dump_autobackup()
 
 	return $result;
 }
-
-?>

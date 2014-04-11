@@ -1,12 +1,12 @@
 <!-- BEGIN: main  -->
-<ul class="list_item">
+<ul class="nv-list-item nv-block-rss lg">
 	<!-- BEGIN: loop -->
 	<li class="{DATA.class}">
-		<a {DATA.target} title="{DATA.title}" href="{DATA.link}"><strong>{DATA.text}</strong></a>
-		<br />
+		<h3 class="sm"><a {DATA.target} title="{DATA.title}" href="{DATA.link}">{DATA.text}</a></h3>
 		<!-- BEGIN: pubDate -->
-		<em>{DATA.pubDate}</em>
-		<br />
+		<p class="text-muted">
+			<em class="fa fa-calendar">&nbsp;</em> <em>{DATA.pubDate}</em>
+		</p>
 		<!-- END: pubDate -->
 		<!-- BEGIN: description -->
 		{DATA.description}

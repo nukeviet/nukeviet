@@ -88,5 +88,3 @@ elseif( strpos( $_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS' ) !== false )
 			$sys_info['supports_rewrite'] = "rewrite_mode_apache";
 	}
 }
-
-?>

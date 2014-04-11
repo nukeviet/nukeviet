@@ -539,5 +539,3 @@ if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 }
 
 $global_config['upload_logo'] = nv_unhtmlspecialchars( $global_config['upload_logo'] );
-
-?>

@@ -134,5 +134,3 @@ $lang_module['rpc_message'] = "Thông tin";
 $lang_module['rpc_ping'] = "PING khi cập nhật dữ liệu";
 $lang_module['rpc_ping_page'] = "PING bài viết";
 $lang_module['rpc_finish'] = "Hoàn thành quá trình PING, bạn có muốn chuyển về trang quản lý bài viết ?";
-
-?>

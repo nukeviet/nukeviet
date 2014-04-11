@@ -135,5 +135,3 @@ function nv_admin_edit_result( $result )
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

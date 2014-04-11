@@ -112,5 +112,3 @@ else
 {
 	trigger_error( 'error checksess', 256 );
 }
-
-?>

@@ -188,5 +188,3 @@ $utf8_lookup = array(
 	)
 );
 // @formatter:on
-
-?>

@@ -102,5 +102,3 @@ else
 {
 	echo 'ERROR';
 }
-
-?>

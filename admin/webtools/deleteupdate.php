@@ -66,5 +66,3 @@ if( $contents == '' ) $contents = 'OK';
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
