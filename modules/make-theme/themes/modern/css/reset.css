@@ -1,0 +1,191 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent
+}
+
+body {
+	line-height: 1
+}
+
+ol, ul {
+	list-style: none
+}
+
+blockquote, q {
+	quotes: none
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none
+}
+
+:focus {
+	outline: 0
+}
+
+ins, a {
+	text-decoration: none
+}
+
+del {
+	text-decoration: line-through
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+	color: #111
+}
+
+h1 {
+	font-size: 3em;
+	line-height: 1;
+	margin-bottom: 0.5em
+}
+
+h2 {
+	font-size: 2em;
+	margin-bottom: 0.75em
+}
+
+h3 {
+	font-size: 1.5em;
+	line-height: 1;
+	margin-bottom: 1em
+}
+
+h4 {
+	font-size: 1.2em;
+	line-height: 1.25;
+	margin-bottom: 1.25em
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+	margin-bottom: 1.5em
+}
+
+h6 {
+	font-size: 1em;
+	font-weight: bold
+}
+
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
+	margin: 0
+}
+
+p {
+	margin: 0 0 1em
+}
+
+p img.left {
+	float: left;
+	margin: 1.5em 1.5em 1.5em 0;
+	padding: 0
+}
+
+p img.right {
+	float: right;
+	margin: 1.5em 0 1.5em 1.5em
+}
+
+a:focus, a:hover {
+	color: #000
+}
+
+blockquote {
+	margin: 1.5em;
+	color: #666;
+	font-style: italic
+}
+
+strong, dfn, dl dt, th {
+	font-weight: bold
+}
+
+em, dfn, tfoot {
+	font-style: italic
+}
+
+sup, sub {
+	line-height: 0
+}
+
+abbr, acronym {
+	border-bottom: 1px dotted #666
+}
+
+address {
+	margin: 0 0 1.5em;
+	font-style: italic
+}
+
+del {
+	color: #666
+}
+
+pre {
+	margin: 1.5em 0;
+	white-space: pre
+}
+
+pre, code, tt {
+	font: 1em 'andale mono', 'lucida console', monospace;
+	line-height: 1.5
+}
+
+li ul, li ol {
+	margin: 0 1.5em
+}
+
+ul, ol {
+	margin: 0 1.5em 1.5em 1.5em
+}
+
+ul {
+	list-style: disc
+}
+
+ol {
+	list-style: decimal
+}
+
+dl {
+	margin: 0 0 1.5em 0
+}
+
+dd {
+	margin-left: 1.5em
+}
+
+table {
+	margin-bottom: 1.4em;
+	width: 100%
+}
+
+thead th {
+	background: #c3d9ff
+}
+
+th, td, caption {
+	padding: 4px 10px 4px 5px
+}
+
+tr.even td {
+	background: #e5ecf9
+}
+
+caption {
+	background: #eee
+}

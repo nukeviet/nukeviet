@@ -1,0 +1,65 @@
+#form_search .rows, #form_search div.title {
+	margin-bottom: 10px
+}
+
+.result-frame .result-content {
+	font: normal 13px arial, verdana, sans-serif;
+	margin-bottom: 20px;
+	text-align: justify
+}
+
+.result-frame .result-title {
+	font: bold 13px arial, verdana, sans-serif;
+	margin-bottom: 3px
+}
+
+.result-mod {
+	border-bottom: #CCC 1px solid;
+	font: bold 12px/24px arial, verdana, sans-serif;
+	margin-bottom: 10px
+}
+
+.result-mod .cl-viewall {
+	float: right;
+	font: bold 12px/24px arial, verdana, sans-serif;
+	text-align: right
+}
+
+.result-mod .cl-viewall a, .result-frame .result-title a {
+	color: #069;
+	text-decoration: none
+}
+
+.sea-frame {
+	background: #F0F0F0;
+	border: #CCC 1px solid;
+	margin: 10px auto;
+	padding: 10px;
+	text-align: center
+}
+
+.sea-frame .error {
+	color: red
+}
+
+.sea-frame .form {
+	margin: auto;
+	padding: 10px;
+	width: 380px
+}
+
+.sea-frame .intxt {
+	display: block;
+	width: 260px
+}
+
+.sea-frame .title {
+	color: #069;
+	font-weight: bold;
+	margin: auto
+}
+
+.result-mod .cl-viewall a:hover, .result-frame .result-title a:hover {
+	color: #F60;
+	text-decoration: none
+}

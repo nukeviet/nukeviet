@@ -1,0 +1,75 @@
+.headline {
+	margin-right: 10px;
+	width: 310px
+}
+
+.sliderwrapper {
+	height: 200px;
+	overflow: hidden;
+	position: relative
+}
+
+.sliderwrapper .contentdiv {
+	background: #fff;
+	height: 210px;
+	left: 0;
+	padding: 5px;
+	position: absolute;
+	top: 0;
+	visibility: hidden;
+	width: 300px
+}
+
+.sliderwrapper .contentdiv img {
+	border: 1px solid #dbe3e9;
+	height: 188px;
+	padding: 2px;
+	width: 293px
+}
+
+.sliderwrapper .contentdiv h3 {
+	background: url(../images/transparent.png) repeat-x;
+	bottom: 8px;
+	font-size: 14px;
+	left: 4px;
+	padding: 5px;
+	position: absolute;
+	width: 293px
+}
+
+.sliderwrapper .contentdiv h3 a {
+	color: #fff
+}
+
+.sliderwrapper .contentdiv h3 a:hover {
+	color: #911E03
+}
+
+.pagination {
+	background: #fff;
+	padding: 2px 0;
+	text-align: right;
+	width: 100%
+}
+
+.pagination a {
+	color: #999;
+	font-size: 11px;
+	font-weight: normal;
+	padding: 0 5px
+}
+
+.pagination a:hover, .pagination a.selected {
+	background-color: #ccc;
+	color: #333
+}
+
+.pagination a.prev {
+	background: url(../images/prev.png) no-repeat 4px 4px;
+	width: 6px
+}
+
+.pagination a.next {
+	background: url(../images/next.png) no-repeat 4px 4px;
+	width: 6px
+}

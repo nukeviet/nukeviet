@@ -1,0 +1,50 @@
+.icons {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	height: 16px;
+	padding: 0 0 0 16px
+}
+
+.icon-about {
+	background-image: url(../images/icons/lightbulb.png)
+}
+
+.icon-news {
+	background-image: url(../images/icons/newspaper.png)
+}
+
+.icon-download {
+	background-image: url(../images/icons/box_down.png)
+}
+
+.icon-contact {
+	background-image: url(../images/icons/page.png)
+}
+
+.icon-statistics {
+	background-image: url(../images/icons/statistics.png)
+}
+
+.icon-weblinks {
+	background-image: url(../images/icons/link.png)
+}
+
+.icon-logout {
+	background-image: url(../images/icons/logout.png)
+}
+
+.icon-module {
+	background-image: url(../images/icons/module.png)
+}
+
+.icon-drag {
+	background-image: url(../images/icons/icon-drag.png)
+}
+
+.icon-sitemanager {
+	background-image: url(../images/icons/sitemanager.gif)
+}
+
+.icon-users, .icon-forum {
+	background-image: url(../images/icons/group.png)
+}
