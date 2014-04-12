@@ -55,5 +55,3 @@ if( defined( 'NV_SYSTEM' ) )
 		$content = $xtpl->text( 'main' );
 	}
 }
-
-?>

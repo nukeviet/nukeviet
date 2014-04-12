@@ -97,5 +97,3 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 }
 
 $content = nv_message_page( $block_config );
-
-?>

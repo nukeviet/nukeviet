@@ -642,5 +642,3 @@ function main()
 
 	return $xtpl->text( 'main' );
 }
-
-?>

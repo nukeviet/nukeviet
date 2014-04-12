@@ -24,5 +24,3 @@ if( ! empty( $array_op ) )
 		$op = "result";
 	}
 }
-
-?>

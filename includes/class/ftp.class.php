@@ -602,5 +602,3 @@ class NVftp
 		return $mode;
 	}
 }
-
-?>

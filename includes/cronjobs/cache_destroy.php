@@ -41,5 +41,3 @@ function cron_auto_del_cache()
 
 	return $result;
 }
-
-?>

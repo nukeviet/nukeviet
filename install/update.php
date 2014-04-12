@@ -2026,5 +2026,3 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 include NV_ROOTDIR . '/includes/header.php';
 echo $NvUpdate->template( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

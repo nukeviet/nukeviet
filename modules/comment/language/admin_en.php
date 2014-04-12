@@ -76,5 +76,3 @@ $lang_module['sortcomm'] = 'Sort comments by';
 $lang_module['sortcomm_0'] = 'New above';
 $lang_module['sortcomm_1'] = 'Old above';
 $lang_module['sortcomm_2'] = 'Like';
-
-?>

@@ -125,5 +125,3 @@ class nv_Crypt
 		}
 	}
 }
-
-?>

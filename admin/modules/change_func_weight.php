@@ -43,5 +43,3 @@ nv_del_moduleCache( 'modules' );
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK|show_funcs';
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

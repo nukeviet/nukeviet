@@ -33,5 +33,3 @@ nv_del_moduleCache( 'modules' );
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $mod;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

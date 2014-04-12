@@ -119,5 +119,3 @@ function nv_strtoupper( $string )
 
 	return mb_strtoupper( $string, $global_config['site_charset'] );
 }
-
-?>

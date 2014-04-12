@@ -7,14 +7,15 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-sm-4 col-md-3">
+    <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
+        [TOP]
+        {MODULE_CONTENT}
+        [BOTTOM]
+    </div>
+	<div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
 		[LEFT]
 	</div>
-	<div class="col-sm-8 col-md-9">
-		[TOP]
-		{MODULE_CONTENT}
-		[BOTTOM]
-	</div>
+	
 </div>
 <div class="row">
 	<div class="col-md-12">

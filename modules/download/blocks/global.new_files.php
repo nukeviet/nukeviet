@@ -118,5 +118,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_bdown_news( $block_config );
 }
-
-?>

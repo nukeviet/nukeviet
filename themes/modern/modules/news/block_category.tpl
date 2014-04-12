@@ -1,5 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ddsmoothmenu.css" />
+<link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/ddsmoothmenu.css" />
+<link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/ddsmoothmenu-v.css" />
 <script type="text/javascript"	src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
 <script type="text/javascript">
 	ddsmoothmenu.init({

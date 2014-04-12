@@ -37,5 +37,3 @@ function cron_auto_check_version()
 
 	return true;
 }
-
-?>

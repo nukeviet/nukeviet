@@ -63,5 +63,3 @@ $contents = clinfo_theme( $contents, $manament );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

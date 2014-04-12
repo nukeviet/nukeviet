@@ -94,5 +94,3 @@ header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $createTime ) . " GMT" );
 header( "expires: " . gmdate( "D, d M Y H:i:s", $expTme ) . " GMT" );
 
 print_r( $contents );
-
-?>

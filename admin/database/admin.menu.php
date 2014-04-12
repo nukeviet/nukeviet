@@ -15,5 +15,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['setting'] = $lang_global['mod_settings'];
 }
-
-?>

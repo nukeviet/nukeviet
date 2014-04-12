@@ -20,5 +20,3 @@ $lang_translator['langtype'] = 'lang_block';
 $lang_block['blockid'] = 'Group related news';
 $lang_block['numrow'] = 'Number aricle';
 $lang_block['type'] = 'Dipslay type';
-
-?>

@@ -192,5 +192,3 @@ if( $nv_Request->isset_request( 'fdownload', 'get' ) )
 	}
 	exit();
 }
-
-?>

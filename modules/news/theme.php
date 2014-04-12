@@ -389,24 +389,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a > 1 )
 				{
-					if( $viewcat == "viewcat_main_right" )
-					{
-						$xtpl->assign( 'BG', ' bg' );
-					}
-					elseif( $viewcat == "viewcat_main_left" )
-					{
-						$xtpl->assign( 'BG', ' bg_l' );
-					}
-					else
-					{
-						$xtpl->assign( 'BORDER', 'border_b ' );
-					}
-					$xtpl->assign( 'WCT', 'fixedwidth ' );
+					$xtpl->assign( 'WCT', 'col-md-8 ' );
 				}
 				else
 				{
-					$xtpl->assign( 'WCT', 'fullwidth noborder ' );
-					$xtpl->assign( 'BG', '' );
+					$xtpl->assign( 'WCT', '' );
 				}
 
 				$xtpl->set_autoreset();
@@ -536,13 +523,16 @@ function viewcat_two_column( $array_content, $array_catpage )
 					if ( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->parse( 'main.loopcat.other.newday' );
+						$xtpl->assign( 'CLASS', 'icon_new_small' );
+					}
+					else 
+					{
+						$xtpl->assign( 'CLASS', 'icon_list' );	
 					}
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
 			}
-
-			$xtpl->assign( 'FLOAT', $a % 2 ? ' fr' : ' fl' );
 
 			if( $a % 2 )
 			{
@@ -855,10 +845,6 @@ function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 
-	$script = nv_html_site_js();
-	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-	$script .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-
 	$script .= "<script type=\"text/javascript\">\n";
 	$script .= " $(document).ready(function(){\n";
 	$script .= " $(\"#sendmailForm\").validate();\n";
@@ -1053,4 +1039,3 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	$xtpl->parse( 'results' );
 	return $xtpl->text( 'results' );
 }
-?>

@@ -46,5 +46,3 @@ while( $row = $result->fetch() )
 }
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-?>

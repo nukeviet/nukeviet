@@ -69,5 +69,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		echo $lang_module['checkchmod_success'];
 	}
 }
-
-?>

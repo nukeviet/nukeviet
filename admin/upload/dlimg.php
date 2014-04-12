@@ -29,5 +29,3 @@ else
 {
 	echo 'file not exist !';
 }
-
-?>

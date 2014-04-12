@@ -91,5 +91,3 @@ Header( 'Content-type: image/jpg' );
 imagejpeg( $image, null, 80 );
 imagedestroy( $image );
 die();
-
-?>

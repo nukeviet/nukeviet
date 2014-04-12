@@ -155,5 +155,3 @@ $lang_module['pendingInfo'] = 'Pending job from the module';
 $lang_module['update_package_detected'] = 'Detects updated package, the website will temporarily stop working. Please perform the following tasks either before the website will be active again.';
 $lang_module['update_package_delete'] = 'Delete the update package';
 $lang_module['update_package_do'] = 'Update';
-
-?>

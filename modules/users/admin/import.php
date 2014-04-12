@@ -174,5 +174,3 @@ elseif( $step == 2 )
 		die( "OK_COMPLETE" );
 	}
 }
-
-?>

@@ -76,5 +76,3 @@ function nv_add_editor_js()
 	global $global_config;
 	return '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
 }
-
-?>

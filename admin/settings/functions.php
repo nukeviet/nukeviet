@@ -132,5 +132,3 @@ function main_theme( $contents )
 
 	return $xtpl->text( 'main' );
 }
-
-?>

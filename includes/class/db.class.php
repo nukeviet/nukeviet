@@ -494,5 +494,3 @@ class sql_db extends pdo
 		return $return;
 	}
 }
-
-?>

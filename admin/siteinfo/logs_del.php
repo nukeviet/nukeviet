@@ -56,5 +56,3 @@ nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang
 
 echo $contents;
 exit();
-
-?>

@@ -313,5 +313,3 @@ $lang_module['read_error'] = 'Error reading file %1$s, the system does not updat
 $lang_module['read_error_field'] = 'Error reading file %1$s, you need to check column: %2$s column should be: %3$s. So the system is stopped!';
 $lang_module['read_error_memory_limit'] = 'Error: The system can not read the data, please check your data files only to about 2,000 lines per file or you must configure the php.ini file memory_limit value (128MB read about 2,000 lines)';
 $lang_module['read_ignore'] = 'Read the incorrect data standards';
-
-?>

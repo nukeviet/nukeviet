@@ -106,5 +106,3 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 }
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-?>

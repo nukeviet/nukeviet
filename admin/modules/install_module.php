@@ -123,5 +123,3 @@ else
 	echo( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

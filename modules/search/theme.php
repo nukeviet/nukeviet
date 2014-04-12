@@ -123,5 +123,3 @@ function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

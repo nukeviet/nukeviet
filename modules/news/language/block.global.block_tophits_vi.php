@@ -19,5 +19,3 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['number_day'] = 'Số ngày gần nhất đăng bài';
 $lang_block['numrow'] = 'Số bài hiển thị';
-
-?>

@@ -48,5 +48,3 @@ else
 {
 	echo $lang_module['delfile_error'];
 }
-
-?>

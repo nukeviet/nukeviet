@@ -1389,5 +1389,3 @@ class Request
 	}
 
 }
-
-?>

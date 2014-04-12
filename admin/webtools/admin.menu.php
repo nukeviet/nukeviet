@@ -20,5 +20,3 @@ if( empty( $global_config['idsite'] ) )
 		$submenu['mudim'] = $lang_module['mudim'];
 	}
 }
-
-?>

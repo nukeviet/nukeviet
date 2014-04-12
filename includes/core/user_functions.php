@@ -695,5 +695,3 @@ function nv_groups_list_pub()
 
 	return $groups;
 }
-
-?>

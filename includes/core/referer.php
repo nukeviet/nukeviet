@@ -133,5 +133,3 @@ function nv_referer_update()
 }
 
 nv_referer_update();
-
-?>

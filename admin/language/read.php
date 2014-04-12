@@ -288,5 +288,3 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . sessio
 }
 
 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-
-?>

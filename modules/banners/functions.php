@@ -92,5 +92,3 @@ if( ! empty( $bncl ) )
 unset( $bncl );
 
 define( 'NV_IS_MOD_BANNERS', true );
-
-?>

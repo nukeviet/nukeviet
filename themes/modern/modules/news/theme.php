@@ -1103,4 +1103,3 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	$xtpl->parse( 'results' );
 	return $xtpl->text( 'results' );
 }
-?>

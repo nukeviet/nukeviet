@@ -18,5 +18,3 @@ $menu_top = array(
 );
 
 define( 'NV_IS_FILE_THEMES', true );
-
-?>

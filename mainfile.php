@@ -366,7 +366,7 @@ if( ! empty( $newCountry ) )
     		{
     			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
     		}
-    		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
+    		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");", LOCK_EX );
     	}
     	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
     }
@@ -482,5 +482,3 @@ if( isset( $nv_plugin_area[2] ) )
         include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
     }
 }
-
-?>

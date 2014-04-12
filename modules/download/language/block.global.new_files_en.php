@@ -21,5 +21,3 @@ $lang_block['title_length'] = 'Title length';
 $lang_block['numrow'] = 'Number file display';
 $lang_block['class_name'] = 'Class name for';
 $lang_block['img_bullet'] = 'Image of list';
-
-?>

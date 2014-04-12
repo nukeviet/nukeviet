@@ -310,5 +310,3 @@ function nv_show_tab_theme( $contents )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

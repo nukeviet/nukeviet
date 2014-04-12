@@ -630,5 +630,3 @@ $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_question
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

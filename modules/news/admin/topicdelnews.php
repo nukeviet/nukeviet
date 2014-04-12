@@ -20,5 +20,3 @@ foreach( $id as $value )
 }
 
 echo $lang_module['topic_delete_success'];
-
-?>

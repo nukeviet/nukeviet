@@ -81,5 +81,3 @@ function nv_page_main( $row, $ab_links )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

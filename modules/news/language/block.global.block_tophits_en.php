@@ -19,5 +19,3 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['number_day'] = 'Number day most recent post';
 $lang_block['numrow'] = 'Number aricle';
-
-?>

@@ -101,5 +101,3 @@ $lang_module['description'] = 'Description';
 $lang_module['funcs_alias'] = 'Alias';
 $lang_module['vmodule_exit'] = 'Error: Module you have put in the system.';
 $lang_module['change_fun_alias'] = 'Rename alias "%s" of module "%s"';
-
-?>

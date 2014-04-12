@@ -18,5 +18,3 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['numrow'] = 'Number aricle';
-
-?>

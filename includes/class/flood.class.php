@@ -112,5 +112,3 @@ class FloodBlocker
 		if( empty( $this->is_blocker ) ) file_put_contents( $logfile, serialize( $info ) );
 	}
 }
-
-?>

@@ -130,5 +130,3 @@ if( defined( 'NV_IS_ADMIN' ) )
 		}
 	}
 }
-
-?>

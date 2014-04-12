@@ -91,5 +91,3 @@ function nv_siteinfo_getmodules()
 
 	return $array_modules;
 }
-
-?>
