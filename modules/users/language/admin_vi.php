@@ -281,6 +281,7 @@ $lang_module['field_text'] = 'Miêu tả';
 $lang_module['field_add_choice'] = 'Thêm lựa chọn';
 $lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơn Max Date';
 $lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơn Max Value';
+$lang_module['field_error'] = 'Trường dữ liệu đã có';
 $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
