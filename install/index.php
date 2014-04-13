@@ -104,8 +104,12 @@ elseif( $step == 2 )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
-
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
+			if( NV_SESSION_SAVE_PATH != '' )
+			{
+				$list_valid[] = NV_SESSION_SAVE_PATH;
+			}
+			
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
 			if( $ftp_root === false )
@@ -123,8 +127,12 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR, NV_DATADIR . '/ip_files' );
-
+	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR, NV_DATADIR . '/ip_files' );
+	if( NV_SESSION_SAVE_PATH != '' )
+	{
+		$array_dir[] = NV_SESSION_SAVE_PATH;
+	}
+	
 	// Them vao cac file trong thu muc data va file cau hinh tam
 	$array_file_data = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, '/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/' );
 	foreach( $array_file_data as $file_i )
@@ -181,7 +189,11 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', 'themes', NV_TEMP_DIR );
+				if( NV_SESSION_SAVE_PATH != '' )
+				{
+					$check_files[] = NV_SESSION_SAVE_PATH;
+				}				
 
 				$list_files = ftp_nlist( $conn_id, '.' );
 

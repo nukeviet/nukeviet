@@ -54,7 +54,6 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 		'caption' => $lang_module['chmod'],
 		'field' => array(
 			array( 'key' => NV_DATADIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_DATADIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_SESSION_SAVE_PATH, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_LOGS_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_CACHEDIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_CACHEDIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_UPLOADS_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_UPLOADS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
@@ -71,6 +70,10 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 			array( 'key' => NV_FILES_DIR . '/css', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) )
 		)
 	);
+	if( NV_SESSION_SAVE_PATH != '' )
+	{
+		$info['chmod']['field'] = array( 'key' => NV_SESSION_SAVE_PATH, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
+	}	
 }
 
 $xtpl = new XTemplate( 'system_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
