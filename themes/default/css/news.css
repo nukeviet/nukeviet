@@ -97,8 +97,11 @@ div.span-25 ul.related li {
 
 div.news_column ul.related a {
 	color: #3b3b3b;
-	display: inline-block;
 	padding-left: 6px
+}
+
+div.news_column ul.related a:hover{
+	color: #004175
 }
 
 .icon_new {
@@ -277,3 +280,7 @@ div.news_column ul.related a {
 	text-decoration: none;
 	cursor: pointer;
 }
+.bodytext {
+	word-break: break-word
+}
+
