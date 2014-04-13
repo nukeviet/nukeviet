@@ -316,6 +316,10 @@ header{
 }
 .nv-block-banners img{
 	max-width: 100%!important;
+	height:auto;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 .nv-block-rss li{
 	border-bottom: 1px #dadada solid;
@@ -546,4 +550,7 @@ header{
 ul.other-news{
 	padding-left: 0px;
 	margin-left: 0px;
+}
+.img-thumbnail{
+	height:auto !important
 }
