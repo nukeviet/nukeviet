@@ -64,7 +64,8 @@ div.news_column .imgalt{
 }
 
 div.news_column div.items p, div.news_column #hometext, div.news_column div.bodytext, #news_detail h1, p.copyright {
-	text-align: justify
+	text-align: justify;
+	margin-bottom: 10px;
 }
 
 div.news_column div.copyright {
@@ -187,7 +188,7 @@ div.news_column ul.related a:hover{
 }
 
 #print h1, h2, p {
-	margin: 0;
+	margin: 0 0 6px 0;
 	padding: 0;
 }
 
