@@ -1,0 +1,110 @@
+.banner_plan {
+	background: #FFF;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	padding: 5px
+}
+
+.detail {
+	display: block;
+	float: right
+}
+
+.module_info {
+	font: normal 13px/18px Arial, Verdana, sans-serif;
+	margin-bottom: 10px;
+	padding: 10px 0 5px
+}
+
+.plan_content {
+	margin-bottom: 10px;
+	padding: 5px 0 5px 5px
+}
+
+.plan_title {
+	background: #F0F0F0;
+	padding: 5px 0
+}
+
+.plan_title a {
+	color: #cb0000;
+	font-weight: 700;
+	text-decoration: none
+}
+
+.cledit input[type=text], .cledit input[type=password], #client_login, #client_login input[type=text], #client_login input[type=password], #clinfo div.value {
+	float: right;
+	position: relative
+}
+
+#client_login {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	margin-top: 15px;
+	padding: 5px;
+	width: 350px
+}
+
+#client_login input[type=text], #client_login input[type=password] {
+	width: 250px
+}
+
+#client_login input[type=text].captcha {
+	width: 100px
+}
+
+#client_login label, .cledit label {
+	float: left;
+	position: relative
+}
+
+#clinfo {
+	background: #FFF;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 5px
+}
+
+#clinfo div.value, #clinfo div.deact, #clinfo div.act {
+	font: normal 13px/30px Arial, Verdana, sans-serif
+}
+
+#clinfo div.deact, #clinfo div.act {
+	clear: both;
+	padding: 0 5px
+}
+
+#clinfo div.deact {
+	background: #FFF
+}
+
+#clinfo div.act {
+	background: #F0F0F0
+}
+
+#clinfo div.value {
+	width: 300px
+}
+
+.cledit {
+	background: #F0F0F0;
+	border: 1px solid #DADADA;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 5px
+}
+
+.cledit input[type=text], .cledit input[type=password] {
+	width: 280px
+}
+
+.plan_title a:hover {
+	color: #0943ae;
+	text-decoration: underline
+}
+
+#client_login div.lt, .cledit div.lt {
+	clear: both;
+	height: 24px
+}
