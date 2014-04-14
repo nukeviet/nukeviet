@@ -52,6 +52,12 @@ if( $catid > 0 )
 			$db->query( $sql );
 			$content = 'OK_' . $parentid;
 		}
+		elseif( $mod == 'newday' and $new_vid >= 0 and $new_vid <= 10 )
+		{
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET newday=' . $new_vid . ' WHERE catid=' . $catid ;
+			$db->query( $sql );
+			$content = 'OK_' . $parentid;
+		}
 		elseif( $mod == 'viewcat' and $nv_Request->isset_request( 'new_vid', 'post' ) )
 		{
 			$viewcat = $nv_Request->get_title( 'new_vid', 'post' );
@@ -72,5 +78,3 @@ if( $catid > 0 )
 include NV_ROOTDIR . '/includes/header.php';
 echo $content;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

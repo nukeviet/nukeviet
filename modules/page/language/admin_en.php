@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -35,5 +35,16 @@ $lang_module['saveok'] = 'Update successfully';
 $lang_module['alias'] = 'Static Link';
 $lang_module['keywords'] = 'keywords';
 $lang_module['feature'] = 'Feature';
-
-?>
+$lang_module['description'] = 'Description';
+$lang_module['image'] = 'Image';
+$lang_module['imagealt'] = 'Image note';
+$lang_module['socialbutton'] = 'Social button';
+$lang_module['socialbuttonnote'] = 'Display Like facebook, G+, Twitter';
+$lang_module['activecomm'] = 'Allow comment';
+$lang_module['facebookAppID'] = 'Facebook App ID';
+$lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
+$lang_module['layout_func'] = 'Layout';
+$lang_module['layout_default'] = 'Default';
+$lang_module['googleplus'] = 'authentication Google+ (copyright)';
+$lang_module['googleplus_1'] = 'Not use';
+$lang_module['googleplus_0'] = 'Follow configure of module';

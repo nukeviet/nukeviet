@@ -253,7 +253,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			$data_insert['full_name'] = $reg_attribs['full_name'];
 			$data_insert['gender'] = $reg_attribs['gender'];
 			$data_insert['your_question'] = $your_question;
-			$data_insert['answer'] = $reg_attribs['answer'];
+			$data_insert['answer'] = $array_register['answer'];
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( ! $userid )
@@ -630,5 +630,3 @@ $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_question
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

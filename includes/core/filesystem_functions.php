@@ -709,7 +709,7 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
 	}
 	else
 	{
-		$array_cmd_dir[] = '<b>' . $dir . ' --> no chmod 777 </b>';
+		$array_cmd_dir[] = '<strong>' . $dir . ' --> no chmod 777 </strong>';
 	}
 }
 
@@ -940,5 +940,3 @@ function nv_imageResize( $origX, $origY, $maxX, $maxY )
 	}
 	return $return;
 }
-
-?>

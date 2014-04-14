@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td class="right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <i class="icon-refresh icon-large" onclick="get_alias('cat', {catid});">&nbsp;</i></td>
+					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="right"><strong>Title Site: </strong></td>

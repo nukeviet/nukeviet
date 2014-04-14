@@ -51,7 +51,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 	function nv_bdown_news( $block_config )
 	{
-		global $db, $module_info, $site_mods;
+		global $db, $module_info, $site_mods, $global_config;
 
 		$module = $block_config['module'];
 		$file = $site_mods[$module]['module_file'];
@@ -74,7 +74,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 			$db->sqlreset()
 				->select( 'id, catid, title, alias, updatetime' )
 				->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] )
-				->where( 'status AND catid IN (' . implode( ',', array_keys( $list_cat ) ) )
+				->where( 'status AND catid IN (' . implode( ',', array_keys( $list_cat ) ) . ')' )
 				->order( 'updatetime DESC' )
 				->limit( $block_config['numrow'] );
 
@@ -95,7 +95,7 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 
 				foreach( $list as $row )
 				{
-					$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $list_cat[$row['catid']] . '/' . $row['alias'];
+					$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $list_cat[$row['catid']] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 
 					$row['updatetime'] = nv_date( 'd/m/Y', $row['updatetime'] );
 					$row['stitle'] = nv_clean60( $row['title'], $block_config['title_length'] );
@@ -118,5 +118,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_bdown_news( $block_config );
 }
-
-?>

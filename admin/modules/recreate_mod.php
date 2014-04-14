@@ -22,5 +22,3 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -100,7 +100,6 @@ unset( $result, $catid_i, $parentid_i, $title_i, $alias_i );
 $module_info['submenu'] = 0;
 
 $page = 1;
-$per_page_comment = 5;
 $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
 $count_op = sizeof( $array_op );
@@ -109,9 +108,9 @@ if( ! empty( $array_op ) and $op == 'main' )
 	if( $catid == 0 )
 	{
 		$contents = $lang_module['nocatpage'] . $array_op[0];
-		if( isset( $array_op[1] ) and substr( $array_op[1], 0, 5 ) == 'page-' )
+		if( isset( $array_op[0] ) and substr( $array_op[0], 0, 5 ) == 'page-' )
 		{
-			$page = intval( substr( $array_op[1], 5 ) );
+			$page = intval( substr( $array_op[0], 5 ) );
 		}
 		elseif( ! empty( $alias_cat_url ) )
 		{
@@ -155,5 +154,3 @@ if( ! empty( $array_op ) and $op == 'main' )
 		sort( $array_mod_title, SORT_NUMERIC );
 	}
 }
-
-?>

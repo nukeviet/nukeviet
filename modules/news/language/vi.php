@@ -21,19 +21,6 @@ $lang_module['nocatpage'] = 'Lỗi không có chủ đề';
 $lang_module['other'] = 'Các tin khác';
 $lang_module['detail'] = 'Chi tiết tin';
 $lang_module['more'] = 'Xem tiếp...';
-$lang_module['comment'] = 'Ý kiến bạn đọc';
-$lang_module['comment_login'] = 'Bạn cần đăng nhập thành viên để sử dụng chức năng này';
-$lang_module['comment_success'] = 'Bình luận thành công';
-$lang_module['comment_unsuccess'] = 'Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
-$lang_module['comment_title'] = 'Gửi bình luận của bạn';
-$lang_module['comment_view'] = 'Xem phản hồi';
-$lang_module['comment_send'] = 'Gửi phản hồi';
-$lang_module['comment_name'] = 'Tên của bạn';
-$lang_module['comment_email'] = 'Email';
-$lang_module['comment_content'] = 'Nội dung';
-$lang_module['comment_seccode'] = 'Mã an toàn';
-$lang_module['comment_submit'] = 'Gửi bình luận';
-$lang_module['comment_timeout'] = 'Bạn đã bình chọn vui lòng đợi %s phút sau để có gửi bình luận.';
 $lang_module['sendmail'] = 'Gửi bài viết qua email';
 $lang_module['sendmail_subject'] = 'Bạn nhận được một tin nhắn từ: ';
 $lang_module['sendmail_name'] = 'Tên của bạn';
@@ -149,5 +136,3 @@ $lang_module['error_addcontent'] = 'Lỗi: Bạn chưa được cấp quyền đ
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng';
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
-
-?>

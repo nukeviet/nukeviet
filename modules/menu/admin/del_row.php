@@ -29,17 +29,6 @@ if( $db->exec( $sql ) )
 	nv_del_moduleCache( $module_name );
 	nv_fix_cat_order( $mid );
 
-	// Cap nhat cho bo menu
-	$arr_block = array();
-	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid= ' . $mid;
-	$result = $db->query( $sql );
-	while( $row = $result->fetch() )
-	{
-		$arr_block[] = $row['id'];
-	}
-	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_menu SET menu_item= '" . implode( ',', $arr_block ) . "' WHERE id=" . $mid;
-	$db->query( $sql );
-
 	// Cap nhat cho menu cha
 	if( $parentid > 0 )
 	{
@@ -63,5 +52,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

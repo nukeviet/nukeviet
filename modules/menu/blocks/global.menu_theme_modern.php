@@ -123,7 +123,7 @@ if( ! nv_function_exists( 'nv_menu_theme_modern' ) )
 			}
 		}
 
-		if( $module_name != 'news' and empty( $array_cat_menu ) )
+		if( $module_name != 'news' and empty( $array_cat_menu ) and isset( $site_mods['news'] ) )
 		{
 			$sql = 'SELECT catid, parentid, title, alias FROM ' . NV_PREFIXLANG . '_news_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', 'news' );
@@ -182,5 +182,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_menu_theme_modern( $block_config );
 }
-
-?>

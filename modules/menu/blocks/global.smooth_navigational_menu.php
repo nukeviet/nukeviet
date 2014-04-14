@@ -216,5 +216,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_smooth_navigational_menu( $block_config );
 }
-
-?>

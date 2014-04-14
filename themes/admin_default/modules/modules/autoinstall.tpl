@@ -33,7 +33,7 @@
 			var method = $("select[name=installtype]").val();
 			if (method != 0) {
 				$("#step1").slideUp();
-				$("#content").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=" + method);
+				$("#content").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=" + method);
 				$("#content").slideDown();
 			} else {
 				alert("{LANG.autoinstall_error_nomethod}");

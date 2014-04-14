@@ -1,6 +1,6 @@
 <!-- BEGIN: empty -->
 <div class="center">
-	<b>{LANG.nv_lang_error_exit}</b>
+	<strong>{LANG.nv_lang_error_exit}</strong>
 </div>
 <meta http-equiv="Refresh" content="3;URL={URL}" />
 <!-- END: empty -->
@@ -24,9 +24,9 @@
 			<td>{ROW.langsitename}</td>
 			<td class="center">{ROW.author}</td>
 			<td class="center">{ROW.createdate}</td>
-			<td class="center"><a class="edit_icon" href="{ROW.url_edit}" title="{LANG.nv_admin_edit}">{LANG.nv_admin_edit}</a>
+			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}" title="{LANG.nv_admin_edit}">{LANG.nv_admin_edit}</a>
 			<!-- BEGIN: write -->
-			- <a class="default_icon" href="{ROW.url_export}" title="{LANG.nv_admin_write}">{LANG.nv_admin_write}</a>
+			- <em class="icon-sun icon-large">&nbsp;</em> <a href="{ROW.url_export}" title="{LANG.nv_admin_write}">{LANG.nv_admin_write}</a>
 			<!-- END: write -->
 			</td>
 		</tr>

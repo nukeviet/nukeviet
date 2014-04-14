@@ -5,7 +5,7 @@
 		<!-- BEGIN: bullet -->
 		<img style="vertical-align:middle" src="{CONFIG.img_bullet}" alt="{ROW.title}"/>
 		<!-- END: bullet -->
-		<a href="{ROW.link}" title="{ROW.title}">{ROW.stitle}</a> - <span style="color:#666;font-size:11px">{ROW.updatetime}</span>
+		<a href="{ROW.link}" title="{ROW.title}">{ROW.stitle}</a> - <em>{ROW.updatetime}</em>
 	</li>
 	<!-- END: loop -->
 </ul>

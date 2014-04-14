@@ -14,7 +14,12 @@
 		<!-- BEGIN: image -->
 		<a href="{CONTENT.link}" title="{CONTENT.title}"><img class="s-border fl left" alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}"/></a>
 		<!-- END: image -->
-		<h4><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+		<h4>
+			<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
+		</h4>
 		<p>
 			{CONTENT.hometext}
 		</p>
@@ -47,13 +52,16 @@
 		<li>
 			<a href="{RELATED.link}" title="{RELATED.title}">{RELATED.title}</a>
 			<span class="small date">({RELATED.publtime})</span>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
 </div>
 <!-- END: related -->
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="acenter">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->

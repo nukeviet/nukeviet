@@ -69,7 +69,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				$info = $keywordRank->process( $keyword, $lang, $accuracy, $from, $myDomain );
 
 				$put_contents = serialize( $info );
-				@file_put_contents( $tempFile, $put_contents );
+				file_put_contents( $tempFile, $put_contents );
 			}
 
 			if( ! empty( $info ) )
@@ -152,5 +152,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

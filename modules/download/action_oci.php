@@ -24,11 +24,14 @@ if( $count )
 	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_categories cascade constraints PURGE';
 	$sql_drop_module[] = 'drop SEQUENCE SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT';
 
-	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments cascade constraints PURGE';
-	$sql_drop_module[] = 'drop SEQUENCE SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN';
-
 	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_report cascade constraints PURGE';
 	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_config cascade constraints PURGE';
+
+	$query = $db->query( "select count(*) from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_comments" ) . "'" );
+	if( $query->fetchColumn() )
+	{
+		$sql_drop_module[] = "DELETE FROM " . $db_config["prefix"] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
+	}
 }
 
 $sql_create_module = $sql_drop_module;
@@ -139,33 +142,6 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CAT;';
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments (
-	 id NUMBER(8,0) DEFAULT NULL,
-	 fid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	 subject VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	 post_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_email VARCHAR2(60 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_ip VARCHAR2(45 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	 content VARCHAR2(4000 CHAR) DEFAULT NULL,
-	 admin_reply VARCHAR2(255 CHAR) DEFAULT NULL,
-	 admin_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	 status NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 primary key (id)
-	)";
-
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN';
-$sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN
- BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
- FOR EACH ROW WHEN (new.id is null)
-	BEGIN
-	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.id FROM DUAL;
-	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN;';
-
-
-$sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_comments_fid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(fid) TABLESPACE USERS";
-
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_report (
 	 fid NUMBER(8,0) DEFAULT NULL,
 	 post_ip VARCHAR2(45 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -190,12 +166,17 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('upload_filetype', 'doc,xls,zip,rar')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('upload_dir', 'files')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('temp_dir', 'temp')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('who_autocomment', '0')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('groups_autocomment', '')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('who_addfile', '0')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('groups_addfile', '')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_zip', '1')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_resume', '1')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('max_speed', '0')";
 
-?>
+// Comments
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '3')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";

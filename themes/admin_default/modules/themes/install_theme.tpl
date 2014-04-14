@@ -15,7 +15,7 @@
 <table class="tab1 fixtab">
 	<tbody>
 		<tr>
-			<td><b>{LANG.autoinstall_theme_uploadedfile}</b><span style="color:red;font-weight:bold">{FILENAME}</span> - {LANG.autoinstall_theme_uploadedfilesize}<span style="color:red;font-weight:bold">{FILESIZE}</span></td>
+			<td><strong>{LANG.autoinstall_theme_uploadedfile}</strong><span style="color:red;font-weight:bold">{FILENAME}</span> - {LANG.autoinstall_theme_uploadedfilesize}<span style="color:red;font-weight:bold">{FILESIZE}</span></td>
 		</tr>
 	</tbody>
 </table>
@@ -32,9 +32,11 @@
 		<col style="width:50%" />
 		<tbody>
 			<!-- BEGIN: loop -->
-			<td>{FILE.stt}</td>
-			<td>{FILE.filename}</td>
-			<td>{FILE.size}</td>
+			<tr>
+				<td>{FILE.stt}</td>
+				<td>{FILE.filename}</td>
+				<td>{FILE.size}</td>
+			</tr>
 			<!-- END: loop -->
 		</tbody>
 	</table>
@@ -67,7 +69,7 @@
 		$("input[name=checkfile]").click(function() {
 			$("#message").show();
 			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
 				$("#message").hide();
 			});
 		});
@@ -76,7 +78,7 @@
 </script>
 <!-- END: autoinstall_theme_uploadedfile -->
 <!-- BEGIN: main -->
-<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
+<form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tbody>
 			<tr>
@@ -84,7 +86,7 @@
 				<td><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/><input type="file" name="themefile"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /><input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
+				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
 			</tr>
 		</tbody>
 	</table>

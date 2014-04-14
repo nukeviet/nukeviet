@@ -1,9 +1,8 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
 	function nv_check_form(OForm) {
-		var f_method = document.getElementById( 'f_method' ).options[document.getElementById('f_method').selectedIndex].value;
-		var f_value = document.getElementById('f_value').value;
-
+		var f_method = $("#f_method").val();
+		var f_value = $("#f_value").val();
 		if (f_method != '' && f_value != '') {
 			OForm.submit();
 		}
@@ -58,8 +57,8 @@
 				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 				<td> {CONTENT_TD.regdate} </td>
 				<td>
-					<i class="icon-edit icon-large">&nbsp;</i> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
-					<i class="icon-trash icon-large">&nbsp;</i> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
+					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: xusers -->

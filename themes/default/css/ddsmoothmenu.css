@@ -78,7 +78,7 @@
 .rightarrowclass {
 	position: absolute;
 	right: 5px;
-	top: 6px
+	top: 11px
 }
 
 .ddshadow {
@@ -107,18 +107,19 @@
 }
 
 .ddsmoothmenu-v ul li a {
-	border-bottom: 1px solid #fff;
-	border-right: 1px solid #fff;
+	border-bottom: 1px solid #dcdcdc;
+	width: auto;
 	color: #FFF;
 	display: block;
 	overflow: auto;
-	padding: 6px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-bottom: 10px;
 	text-decoration: none
 }
 
-.ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {
-	background: #f2f2f2;
-	color: #4a4a4a
+.ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {	
+	color: #4a4a4a;
 }
 
 .ddsmoothmenu-v ul li ul {
@@ -126,7 +127,8 @@
 	position: absolute;
 	top: 0;
 	visibility: hidden;
-	width: 170px
+	width: 170px;
+	background-color: #f9f9f9;	
 }
 
 * html .ddsmoothmenu-v ul li {

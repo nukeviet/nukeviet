@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -35,5 +35,3 @@ $lang_module['sendcontactok'] = 'Thank you! We will reply as soon as possible.';
 $lang_module['sendinfo'] = 'This email sent by contact function at website %1$s.<br />Sender information<br /><strong>Name</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>IP</strong>: %4$s<br /><strong>Sent to</strong>: %5$s';
 $lang_module['phone'] = 'Phone number';
 $lang_module['sendinfo2'] = 'This message is sent by Contact function from website %1$s.<br />Sender informations<br /><strong>Full name</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>Telephone</strong>: %4$s<br /><strong>IP</strong>: %5$s<br /><strong>Receiver</strong>: %6$s';
-
-?>

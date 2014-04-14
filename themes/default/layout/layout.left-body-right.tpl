@@ -1,33 +1,31 @@
 <!-- BEGIN: main -->
-{FILE "header.tpl"}
-<div class="contentwrapper">
-	[HEADER]
-	<div class="span-5">
-		[LEFT]
+{FILE "header_only.tpl"}
+{FILE "header_extended.tpl"}
+<div class="row">
+	<div class="col-md-12">
+		[HEADER]
 	</div>
-	<div class="span-13 contentcolumn">
-		<!-- BEGIN: mod_title -->
-        <div class="breadcrumbs">
-            <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                <a title="{LANG.Home}" href="{NV_BASE_SITEURL}" itemprop="url"><span itemprop="title" class="home">{LANG.Home}</span></a>
-            </div>
-            <!-- BEGIN: breakcolumn -->
-            <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                › <a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}" itemprop="url"><span itemprop="title">{BREAKCOLUMN.title}</span></a>
-            </div>
-            <!-- END: breakcolumn -->
-            <div class="clear"></div>
-        </div>
-		<!-- END: mod_title -->
-		[TOP]
-		{MODULE_CONTENT}
-		[BOTTOM]
-	</div>
-	<div class="span-6 last">
-		[RIGHT]
-	</div>
-	<div class="clear"></div>
-	[FOOTER]
 </div>
-{FILE "footer.tpl"}
+<div class="row">
+    <div class="col-sm-6 col-md-7 col-sm-push-3 col-md-push-2 ">
+        [TOP]
+        {MODULE_CONTENT}
+        [BOTTOM]
+    </div>
+    
+    <div class="col-sm-3 col-md-3 col-sm-push-3 col-md-push-2 ">
+        [RIGHT]
+    </div>
+    
+	<div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10">
+		[LEFT]
+	</div>	
+</div>
+<div class="row">
+	<div class="col-md-12">
+		[FOOTER]
+	</div>
+</div>
+{FILE "footer_extended.tpl"}
+{FILE "footer_only.tpl"}
 <!-- END: main -->

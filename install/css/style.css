@@ -147,7 +147,7 @@ h1#install_title {
 	padding-right: 22px;
 	margin-left: 20px;
 	background: url(../images/blank_step_icon.png) right center no-repeat;
-	font-size: 14px;
+	font-size: 13px;
 	font-family: Segoe UI, Tahoma, sans-serif
 }
 
@@ -421,4 +421,16 @@ div.infoerror a {
 
 .iload {
 	background: url('../images/load.gif') no-repeat 5px center
+}
+
+.w120{
+	width: 120px;
+}
+
+.w150{
+	width: 150px;
+}
+
+.w200{
+	width: 200px;
 }

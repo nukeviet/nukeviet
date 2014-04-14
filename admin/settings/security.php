@@ -71,8 +71,6 @@ function nv_save_file_banip()
 	$content_config .= "\n";
 	$content_config .= "\$array_banip_admin = array();\n";
 	$content_config .= $content_config_admin;
-	$content_config .= "\n";
-	$content_config .= "?>";
 
 	$write = file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php', $content_config, LOCK_EX );
 
@@ -391,5 +389,3 @@ $page_title = $lang_module['security'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

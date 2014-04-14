@@ -647,4 +647,19 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_GOOGLEPLUS.nextval INTO :new.gid FROM DUAL;
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_GOOGLEPLUS;';
 
-?>
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
+    pid NUMBER(5,0) DEFAULT NULL,
+    plugin_file VARCHAR2(255 CHAR) NOT NULL ENABLE,
+    plugin_area NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
+    weight NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
+    primary key (pid),
+    CONSTRAINT unv_plugin_file UNIQUE (plugin_file)
+)";
+
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN';
+$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN
+  BEFORE INSERT  ON ' . $db_config['prefix'] . '_plugin
+  FOR EACH ROW WHEN (new.pid is null)
+    BEGIN
+      SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN.nextval INTO :new.pid FROM DUAL;
+    END TNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN;';

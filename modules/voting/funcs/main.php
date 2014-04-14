@@ -209,8 +209,6 @@ else
 
 	$contents = voting_result( $voting );
 	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
+	echo nv_site_theme( $contents, false );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

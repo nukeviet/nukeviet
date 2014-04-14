@@ -101,5 +101,3 @@ $lang_module['delete_module_info2'] = 'Có %d module ảo được tạo ra từ
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
 $lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
 $lang_module['description'] = 'Mô tả';
-
-?>

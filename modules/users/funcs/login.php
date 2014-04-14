@@ -147,7 +147,8 @@ function openidLogin_Res1( $attribs )
 	$stmt = $db->prepare( 'SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.opid= :opid
 		AND a.email= :email
-		AND a.userid=b.userid' );
+		AND a.userid=b.userid'
+	);
 	$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 	$stmt->execute();
@@ -203,7 +204,8 @@ function openidLogin_Res1( $attribs )
 	$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 	$stmt->execute();
 	$nv_row = $stmt->fetch();
-	if( !empty( $nv_row ) )
+	
+	if( ! empty( $nv_row ) )
 	{
 		$login_allowed = false;
 
@@ -279,6 +281,7 @@ function openidLogin_Res1( $attribs )
 		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
+	
 	if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 	{
 		$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' ;
@@ -291,7 +294,8 @@ function openidLogin_Res1( $attribs )
 		$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 		$stmt->execute();
 		$row = $stmt->fetch();
-		if( !empty( $row ) )
+		
+		if( ! empty( $row ) )
 		{
 			if( $global_config['allowuserreg'] == 2 )
 			{
@@ -321,7 +325,7 @@ function openidLogin_Res1( $attribs )
 							:regdate,
 							:question,
 							:answer,
-							'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
+							'', 1, 1, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
 						$data_insert = array();
 						$data_insert['username'] = $row['username'];
@@ -360,7 +364,7 @@ function openidLogin_Res1( $attribs )
 						$info = $lang_module['account_active_ok'] . "<br /><br />\n";
 						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_home'] . '</a>]';
-						$contents .= user_info_exit( $info );
+						$contents = user_info_exit( $info );
 						$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 
 						include NV_ROOTDIR . '/includes/header.php';
@@ -375,7 +379,7 @@ function openidLogin_Res1( $attribs )
 					}
 				}
 
-				$page_title = $mod_title = $lang_module['openid_active_title'];
+				$page_title = $mod_title = $lang_module['openid_activate_account'];
 				$key_words = $module_info['keywords'];
 
 				$lang_module['login_info'] = sprintf( $lang_module['openid_active_confirm_info'], $email );
@@ -404,9 +408,12 @@ function openidLogin_Res1( $attribs )
 	}
 
 	$contents = '';
+	$page_title = $lang_module['openid_login'];
+	
 	if( $option == 3 )
 	{
 		$error = '';
+		
 		if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		{
 			$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
@@ -528,14 +535,15 @@ function openidLogin_Res1( $attribs )
 				:full_name,
 				:gender,
 				'', 0, " . NV_CURRENTTIME . ",
-				'', '', '', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite']."
+				'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
 				)";
+			
 			$data_insert = array();
 			$data_insert['username'] = $reg_attribs['username'];
 			$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
 			$data_insert['email'] = $reg_attribs['email'];
 			$data_insert['full_name'] = $reg_attribs['full_name'];
-			$data_insert[''] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' ); // code Error
+			$data_insert['gender'] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' );
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( ! $userid )
@@ -854,5 +862,3 @@ $contents .= user_login( $gfx_chk, $array_login );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

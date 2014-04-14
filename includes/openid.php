@@ -61,5 +61,3 @@ $openid_servers['facebook'] = array( //
 		'gender' => 'person/gender' //
 	) //
 );
-
-?>

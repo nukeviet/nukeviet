@@ -49,32 +49,25 @@ else
 
 	require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 
-	if( $global_config['nv_auto_resize'] )
-	{
-		$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'] );
-	}
-	else
-	{
-		$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-	}
+	$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
 	if( isset( $_FILES['upload']['tmp_name'] ) and is_uploaded_file( $_FILES['upload']['tmp_name'] ) )
 	{
-		$upload_info = $upload->save_file( $_FILES['upload'], NV_ROOTDIR . '/' . $path, false );
+		$upload_info = $upload->save_file( $_FILES['upload'], NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize'] );
 	}
 	else
 	{
 		$urlfile = trim( $nv_Request->get_string( 'fileurl', 'post' ) );
-		$upload_info = $upload->save_urlfile( $urlfile, NV_ROOTDIR . '/' . $path, false );
+		$upload_info = $upload->save_urlfile( $urlfile, NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize'] );
 	}
 
 	if( ! empty( $upload_info['error'] ) )
 	{
 		$error = $upload_info['error'];
 	}
-	elseif( $upload_info['is_img'] and $global_config['nv_auto_resize'] )
+	elseif( preg_match( '#image\/[x\-]*([a-z]+)#', $upload_info['mime'] ) )
 	{
-		if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
+		if( $global_config['nv_auto_resize'] AND ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
 		{
 			require_once NV_ROOTDIR . '/includes/class/image.class.php';
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
@@ -92,7 +85,7 @@ else
 			nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'] );
 			$error = sprintf( $lang_global['error_upload_max_user_size'], NV_UPLOAD_MAX_FILESIZE );
 		}
-		elseif( $upload_info['is_img'] )
+		else
 		{
 			if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
 			{
@@ -220,5 +213,3 @@ else
 }
 
 exit();
-
-?>

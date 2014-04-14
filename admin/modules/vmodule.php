@@ -39,7 +39,7 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 		$author = '';
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
-		if( empty( $array_site_cat_module ) OR in_array( $modfile_i, $array_site_cat_module ) )
+		if( empty( $array_site_cat_module ) OR in_array( $modfile, $array_site_cat_module ) )
 		{
 			try
 			{
@@ -107,5 +107,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

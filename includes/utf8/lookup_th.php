@@ -28,5 +28,3 @@ $utf8_lookup_lang = array(
 );
 
 // @formatter:on
-
-?>

@@ -19,6 +19,7 @@ if( $submit )
 {
 	$array_config = array();
 	$array_config['site_theme'] = nv_substr( $nv_Request->get_title( 'site_theme', 'post', '', 1 ), 0, 255 );
+    $array_config['mobile_theme'] = nv_substr( $nv_Request->get_title( 'mobile_theme', 'post', '', 1 ), 0, 255 );
 	$array_config['site_name'] = nv_substr( $nv_Request->get_title( 'site_name', 'post', '', 1 ), 0, 255 );
 	$array_config['switch_mobi_des'] = $nv_Request->get_int( 'switch_mobi_des', 'post', 0 );
 	$site_logo = $nv_Request->get_title( 'site_logo', 'post' );
@@ -82,8 +83,7 @@ if( $submit )
 	}
 	else
 	{
-		$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . "
- 			WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
+		$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' OR lang='" . NV_LANG_DATA . "' ORDER BY module ASC";
 		$result = $db->query( $sql );
 
 		while( list( $c_module, $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
@@ -103,6 +103,9 @@ if( $submit )
 $theme_array = array();
 $theme_array_file = nv_scandir( NV_ROOTDIR . '/themes', $global_config['check_theme'] );
 
+$mobile_theme_array = array();
+$mobile_theme_array_file = nv_scandir( NV_ROOTDIR . '/themes', $global_config['check_theme_mobile'] );
+
 $sql = 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0';
 $result = $db->query( $sql );
 while( list( $theme ) = $result->fetch( 3 ) )
@@ -111,6 +114,10 @@ while( list( $theme ) = $result->fetch( 3 ) )
 	{
 		$theme_array[] = $theme;
 	}
+    elseif( in_array( $theme, $mobile_theme_array_file ) )
+    {
+        $mobile_theme_array[] = $theme;
+    }
 }
 
 $global_config['disable_site_content'] = nv_br2nl( $global_config['disable_site_content'] );
@@ -160,6 +167,17 @@ foreach( $theme_array as $folder )
 	$xtpl->parse( 'main.site_theme' );
 }
 
+if( ! empty( $mobile_theme_array ) )
+{
+    foreach( $mobile_theme_array as $folder )
+    {
+        $xtpl->assign( 'SELECTED', ( $global_config['mobile_theme'] == $folder ) ? ' selected="selected"' : '' );
+        $xtpl->assign( 'SITE_THEME', $folder );
+        $xtpl->parse( 'main.mobile_theme.loop' );
+    }
+    $xtpl->parse( 'main.mobile_theme' );
+}
+
 foreach( $module_array as $mod )
 {
 	$xtpl->assign( 'SELECTED', ( $global_config['site_home_module'] == $mod['title'] ) ? ' selected="selected"' : '' );
@@ -196,5 +214,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

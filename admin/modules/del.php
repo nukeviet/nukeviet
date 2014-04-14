@@ -23,9 +23,13 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 	if( intval( $is_sysmod ) != 1 )
 	{
 		$contents = 'OK_' . $modname;
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid'] );
 
 		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ) )
 		{
+			$module_name_action = $module_name;
+			$module_name = $modname;
+
 			$lang = NV_LANG_DATA;
 			$sql_drop_module = array();
 
@@ -46,6 +50,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 					}
 				}
 			}
+			$module_name = $module_name_action;
 		}
 
 		// Xoa du lieu tai bang nvx_vi_blocks
@@ -131,7 +136,6 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 			}
 		}
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid'] );
 		nv_delete_all_cache();
 	}
 }
@@ -141,5 +145,3 @@ nv_fix_module_weight();
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -8,8 +8,7 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
 $sql_drop_module = array();
 $query = $db->query( "select table_name from all_tables WHERE table_name LIKE '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_%" ) . "'" );
@@ -22,6 +21,12 @@ $query = $db->query( "select sequence_name from user_sequences WHERE sequence_na
 while( $row = $query->fetch() )
 {
 	$sql_drop_module[] = 'drop SEQUENCE ' . $row['sequence_name'];
+}
+
+$query = $db->query( "select count(*) from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_comments" ) . "'" );
+if( $query->fetchColumn() )
+{
+	$sql_drop_module[] = "DELETE FROM " . $db_config["prefix"] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
 }
 $sql_create_module = $sql_drop_module;
 
@@ -42,6 +47,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 subcatid VARCHAR2(255 CHAR) DEFAULT NULL,
 	 inhome NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 numlinks NUMBER(3,0) DEFAULT 3 NOT NULL ENABLE,
+	 newday NUMBER(3,0) DEFAULT 2 NOT NULL ENABLE,
 	 keywords VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 add_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
@@ -131,31 +137,6 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	BEGIN
 	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT.nextval INTO :new.bid FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_BCAT;';
-
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_comments (
-	 cid NUMBER(8,0) DEFAULT NULL,
-	 id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	 content VARCHAR2(4000 CHAR) NOT NULL ENABLE,
-	 post_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	 userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	 post_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_email VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 post_ip VARCHAR2(15 CHAR) DEFAULT '' NOT NULL ENABLE,
-	 status NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 primary key (cid)
-)";
-
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN';
-
-$sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN
- BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_comments
- FOR EACH ROW WHEN (new.cid is null)
-	BEGIN
-	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN.nextval INTO :new.cid FROM DUAL;
-	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_CMEN;';
-
-$sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_cid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(id) TABLESPACE USERS";
-$sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_cposttime ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_comments(post_time) TABLESPACE USERS";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_block (
 	 bid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
@@ -252,7 +233,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 pub_content NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 edit_content NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 del_content NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 comments NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_admins UNIQUE (userid,catid)
 )";
 
@@ -286,21 +266,26 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'per_page', '20')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'st_links', '10')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'homewidth', '100')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'homeheight', '150')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'blockwidth', '52')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'blockheight', '75')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'imagefull', '460')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'copyright', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'showhometext', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'timecheckstatus', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'config_source', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'show_no_image', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_rating_point', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'facebookappid', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'socialbutton', '1')";
-?>
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_alias', '0')";
+
+// Comments
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '3')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";

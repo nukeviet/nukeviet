@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 		nv_save_file_config_global();
 	}
 
-	if( in_array( 'clearsession', $deltype ) )
+	if( in_array( 'clearsession', $deltype ) AND NV_SESSION_SAVE_PATH != '' )
 	{
 		$ssDir = NV_ROOTDIR . "/" . NV_SESSION_SAVE_PATH;
 		$files = nv_clear_files( $ssDir, NV_SESSION_SAVE_PATH );
@@ -177,5 +177,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

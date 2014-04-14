@@ -14,5 +14,3 @@ $config_geo = array();
 $config_geo['AD'] = 'vi';
 $config_geo['AE'] = 'vi';
 $config_geo['AF'] = 'vi';
-
-?>

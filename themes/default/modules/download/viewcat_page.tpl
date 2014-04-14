@@ -1,60 +1,66 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: listsubcat -->
-<div class="box-border-shadow m-bottom">
-	<div class="cat-nav">
-		<a class="{listsubcat.current}" href="{listsubcat.link}">{listsubcat.title}</a>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title"><a href="{listsubcat.link}">{listsubcat.title}</a></h4>
 	</div>
 	<!-- BEGIN: itemcat -->
-	<div class="content-box clearfix download">
+	<div class="panel-body">
 		<!-- BEGIN: image -->
-		<a href="{itemcat.more_link}"> <img src="{itemcat.imagesrc}" alt="{itemcat.title}" style="width:120px;height:107px" class="s-border left fl" /> </a>
+		<div class="col-xs-6 col-md-2">
+			<a href="{itemcat.more_link}"> <img src="{itemcat.imagesrc}" alt="{itemcat.title}" class="img-thumbnail" /> </a>
+		</div>
 		<!-- END: image -->
 		<h4><a href="{itemcat.more_link}">{itemcat.title}</a></h4>
-		<p class="small">
-			<span class="count-comments">{LANG.viewcat_view_hits} {itemcat.view_hits}</span>
-			<span class="count-down">{LANG.viewcat_download_hits} {itemcat.download_hits}</span>
-		</p>
+		<small>
+			<em class="fa fa-eye">&nbsp;</em> {LANG.viewcat_view_hits} {itemcat.view_hits}
+			<span class="count-down"><em class="fa fa-download">&nbsp;</em> {LANG.viewcat_download_hits} {itemcat.download_hits}</span>
+		</small>
 		<p>
 			{itemcat.introtext}
 		</p>
-		<p class="aright">
-			<a class="more" href="{itemcat.more_link}">{LANG.readmore}</a>
+		<p class="pull-right">
+			<a href="{itemcat.more_link}">{LANG.readmore}...</a>
 		</p>
-		<div class="clear"></div>
-		<!-- BEGIN: related -->
-		<ul class="other-down">
-			<!-- BEGIN: loop -->
-			<li class="clearfix">
-				<a href="{loop.more_link}">{loop.title}</a>
-				<span class="small">- {LANG.viewcat_download_hits} {loop.download_hits}</span>
-			</li>
-			<!-- END: loop -->
-		</ul>
-		<!-- END: related -->
 	</div>
+	<!-- BEGIN: related -->
+	<ul class="list-group">
+		<!-- BEGIN: loop -->
+		<li class="list-group-item">
+			<a href="{loop.more_link}">{loop.title}</a>
+			<div class="right"><em class="fa fa-download">&nbsp;</em> {LANG.viewcat_download_hits} {loop.download_hits}</div>
+		</li>
+		<!-- END: loop -->
+	</ul>
+	<!-- END: related -->
 	<!-- END: itemcat -->
 </div>
 <!-- END: listsubcat -->
+
 <!-- BEGIN: listpostcat -->
-<div class="box-border m-bottom down-o">
-	<div class="clearfix content-box">
+<div class="panel panel-default">
+	<div class="clearfix panel-body">
 		<!-- BEGIN: is_admin -->
-		<div class="fr">
-			(<a href="{listpostcat.edit_link}" class="r_down">{GLANG.edit}</a>)
+		<div class="pull-right">
+			(<a href="{listpostcat.edit_link}">{GLANG.edit}</a>)
 		</div>
 		<!-- END: is_admin -->
 		<!-- BEGIN: image -->
-		<img src="{listpostcat.imagesrc}" alt="{listpostcat.title}" class="s-border left fl" style="width:60px;height:54px"/>
+  		<div class="col-xs-6 col-md-2">
+			<a href="{listpostcat.more_link}"><img src="{listpostcat.imagesrc}" alt="{listpostcat.title}" class="img-thumbnail" /></a>
+		</div>
 		<!-- END: image -->
 		<h4><a title="{listpostcat.title}" href="{listpostcat.more_link}">{listpostcat.title}</a></h4>
 		<p>
 			{listpostcat.introtext}
 		</p>
-		<div class="clear"></div>
-		<div class="info small">
-			{LANG.uploadtime}: {listpostcat.uploadtime} <span class="count-comments">{LANG.view_hits} {listpostcat.view_hits}</span>
-			<span class="count-down">{LANG.download_hits} {listpostcat.download_hits}</span>
-		</div>
+	</div>
+	<div class="panel-footer">
+		<ul class="list-inline">
+			<li><em class="fa fa-upload">&nbsp;</em> {LANG.uploadtime}: {listpostcat.uploadtime}</li>
+			<li><em class="fa fa-eye">&nbsp;</em> {LANG.view_hits} {listpostcat.view_hits}</li>
+			<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits} {listpostcat.download_hits}</li>	
+		</ul>
 	</div>
 </div>
 <!-- END: listpostcat -->

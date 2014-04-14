@@ -28,5 +28,3 @@ $menu_top = array(
 );
 
 define( 'NV_IS_FILE_SEOTOOLS', true );
-
-?>

@@ -17,7 +17,7 @@ $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['prefix'] = 'nv4';
-$db_config['persistent'] = true;
+$db_config['persistent'] = false;
 $db_config['collation'] = 'utf8_general_ci';
 // mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
@@ -31,7 +31,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '4.0.00';// NukeViet 4.0 Develop
+$global_config['version'] = '4.0.01 Testing';// NukeViet 4.0 Closebeta 2
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -56,7 +56,7 @@ $global_config['lang_multi'] = 1;
 $global_config['lang_geo'] = 0;
 $global_config['site_lang'] = 'en';
 $global_config['engine_allowed'] = array();
-$global_config['site_theme'] = 'modern';
+$global_config['site_theme'] = 'default';
 $global_config['gfx_chk'] = 3;
 
 $global_config['nv_unick_type'] = 4;
@@ -82,7 +82,7 @@ define( 'NV_UNICKMIN', 4 );
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption, video, source, track' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );
@@ -347,5 +347,3 @@ $nv_parse_ini_timezone = array(
 	'Pacific/Tongatapu' => array( 'winter_offset' => 46800, 'summer_offset' => 46800 ),
 	'Pacific/Kiritimati' => array( 'winter_offset' => 50400, 'summer_offset' => 50400 )
 );
-
-?>

@@ -17,7 +17,7 @@ if( ! defined( 'NV_DATADIR' ) ) define( 'NV_DATADIR', 'data' );
 if( ! defined( 'NV_SERVER_NAME' ) )
 {
 	$_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-	$_server_name = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $_server_name );
+	$_server_name = preg_replace( '/^[a-zA-Z]+\:\/\//', '', $_server_name );
 	define( 'NV_SERVER_NAME', $_server_name );
 	unset( $_server_name );
 }
@@ -458,5 +458,3 @@ class Diagnostic
 		return $this->getInfo( $time );
 	}
 }
-
-?>

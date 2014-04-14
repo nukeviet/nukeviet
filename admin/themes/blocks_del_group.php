@@ -74,5 +74,3 @@ if( ! empty( $array_expression ) )
 }
 
 echo $lang_module['block_delete_success'];
-
-?>

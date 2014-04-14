@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['filesize'] = 0;
 		if( ! empty( $array['fileupload'] ) )
 		{
-			$fileupload = $array['fileupload'];
+			$fileupload = array_unique( $array['fileupload'] );
 			$array['fileupload'] = array();
 			foreach( $fileupload as $file )
 			{
@@ -147,7 +147,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		if( ! empty( $array['linkdirect'] ) and empty( $array['fileupload'] ) )
 		{
-			$array['filesize'] = $nv_Request->get_int( 'filesize', 'post', 0 );
+			$array['filesize'] = $nv_Request->get_float( 'filesize', 'post', 0 );
+            $array['filesize'] = intval( $array['filesize'] * 1048576 );
 		}
 
 		$alias = change_alias( $array['title'] );
@@ -274,6 +275,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				{
 					$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
 				}
+
+                nv_del_moduleCache( $module_name );
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download_editfile'], $array['title'], $admin_info['userid'] );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 				exit();
@@ -453,12 +456,20 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		$array['description'] = "<textarea style=\"width:100%; height:300px\" name=\"description\" id=\"description\">" . $array['description'] . "</textarea>";
 	}
+    $array['id'] = $id;
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
 	$upload_dir = $result->fetchColumn();
 
-	if( ! $array['filesize'] ) $array['filesize'] = '';
+	if( empty( $array['filesize'] ) )
+	{
+	    $array['filesize'] = '';
+    }
+    else
+    {
+        $array['filesize'] = number_format( $array['filesize']/1048576, 2);
+    }
 
 	$xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
@@ -573,6 +584,8 @@ if( $nv_Request->isset_request( 'changestatus', 'post' ) )
 	$status = $row['status'] ? 0 : 1;
 
 	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE id=' . $id );
+
+    nv_del_moduleCache( $module_name );
 	die( 'OK' );
 }
 
@@ -587,9 +600,11 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$row = $db->query( $query )->fetch();
 	if( empty( $row ) ) die( 'NO' );
 
-	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE fid=' . $id );
+	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid=' . $id );
 	$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id );
+
+    nv_del_moduleCache( $module_name );
 
 	nv_insert_logs( NV_LANG_DATA, $module_data, $lang_module['download_filequeue_del'], $row['title'], $admin_info['userid'] );
 	die( 'OK' );
@@ -700,5 +715,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

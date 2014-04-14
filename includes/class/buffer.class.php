@@ -174,5 +174,3 @@ class NVbuffer
 		return false;
 	}
 }
-
-?>

@@ -12,6 +12,13 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['edit_title'];
 
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+$my_footer .= "<script type=\"text/javascript\">\n";
+$my_footer .= "Shadowbox.init({\n";
+$my_footer .= "});\n";
+$my_footer .= "</script>\n";
+
 $userid = $nv_Request->get_int( 'userid', 'get', 0 );
 
 $sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
@@ -107,6 +114,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
 	$_user['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
 	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
+	$_user['photo'] = nv_substr( $nv_Request->get_title( 'photo', 'post', '', 1 ), 0, 255 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
 	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
@@ -193,7 +201,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				{
 					if( nv_deletefile( NV_ROOTDIR . '/' . $photo ) )
 					{
-						$photo = '';
+						$_user['photo'] = '';
 					}
 				}
 			}
@@ -227,7 +235,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				email=" . $db->quote( $_user['email'] ) . ",
 				full_name=" . $db->quote( $_user['full_name'] ) . ",
 				gender=" . $db->quote( $_user['gender'] ) . ",
-				photo=" . $db->quote( $photo ) . ",
+				photo=" . $db->quote( nv_unhtmlspecialchars( $_user['photo'] ) ) . ",
 				birthday=" . $_user['birthday'] . ",
 				sig=" . $db->quote( $_user['sig'] ) . ",
 				question=" . $db->quote( $_user['question'] ) . ",
@@ -242,34 +250,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid'] );
-
-			if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
-			{
-				@require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
-
-				$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-				$upload_info = $upload->save_file( $_FILES['photo'], NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, false );
-
-				@unlink( $_FILES['photo']['tmp_name'] );
-				if( empty( $upload_info['error'] ) )
-				{
-					require_once NV_ROOTDIR . '/includes/class/image.class.php' ;
-					$_image = new image( $upload_info['name'], 80, 80 );
-					$_image->resizeXY( 80, 80 );
-					$_image->save( NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_name, $upload_info['basename'] );
-
-					@chmod( $upload_info['name'], 0644 );
-					if( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
-					{
-						@nv_deletefile( NV_ROOTDIR . '/' . $photo );
-					}
-
-					$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
-
-					$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo=' . $db->quote( $file_name ) . ' WHERE userid=' . $userid;
-					$db->query( $sql );
-				}
-			}
 
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 			exit();
@@ -521,5 +501,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

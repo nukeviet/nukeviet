@@ -40,5 +40,3 @@ Header( 'Content-type: image/png' );
 imagepng( $image );
 ImageDestroy( $image );
 die();
-
-?>

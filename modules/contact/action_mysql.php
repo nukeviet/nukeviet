@@ -14,6 +14,7 @@ $sql_drop_module = array();
 
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply";
 
 $sql_create_module = $sql_drop_module;
 
@@ -43,13 +44,18 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  sender_ip varchar(15) NOT NULL,
  is_read tinyint(1) unsigned NOT NULL DEFAULT '0',
  is_reply tinyint(1) unsigned NOT NULL DEFAULT '0',
- reply_content text,
- reply_time int(11) unsigned NOT NULL DEFAULT '0',
- reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  KEY sender_name (sender_name)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply (
+ rid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+ id mediumint(8) unsigned NOT NULL DEFAULT '0',
+ reply_content text,
+ reply_time int(11) unsigned NOT NULL DEFAULT '0',
+ reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
+ PRIMARY KEY (rid),
+ KEY id (id)
+) ENGINE=MyISAM";
 
-?>
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";

@@ -87,5 +87,3 @@ if( $module_info['rss'] )
 }
 nv_rss_generate( $channel, $items );
 die();
-
-?>

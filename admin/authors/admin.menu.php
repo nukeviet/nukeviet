@@ -23,6 +23,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $global_conf
 	$allow_func[] = 'add';
 	$allow_func[] = 'suspend';
 	$allow_func[] = 'del';
+    $submenu['add'] = $lang_module['menuadd'];
 }
 
 if( defined( 'NV_IS_GODADMIN' ) )
@@ -32,5 +33,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$allow_func[] = 'module';
 	$allow_func[] = 'config';
 }
-
-?>

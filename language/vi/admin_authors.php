@@ -150,5 +150,3 @@ $lang_module['module_admin'] = 'Quyền hạn module hệ thống';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';
-
-?>

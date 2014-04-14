@@ -396,5 +396,3 @@ else
 {
 	die( $filename );
 }
-
-?>

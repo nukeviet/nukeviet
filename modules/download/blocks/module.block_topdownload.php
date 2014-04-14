@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-global $db, $module_name, $module_data, $module_info, $module_file, $lang_module, $list_cats;
+global $db, $module_name, $module_data, $module_info, $module_file, $lang_module, $list_cats, $global_config;
 
 $path = NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file;
 if( ! file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/block_topdownload.tpl' ) )
@@ -33,7 +33,7 @@ $i = 1;
 while( $row = $result->fetch() )
 {
 	$catalias = $list_cats[$row['catid']]['alias'];
-	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $row['alias'];
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 	$row['order'] = $i;
 	$xtpl->assign( 'loop', $row );
 	$xtpl->parse( 'main.loop' );
@@ -42,5 +42,3 @@ while( $row = $result->fetch() )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

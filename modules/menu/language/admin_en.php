@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Apr 15, 2011, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Apr 15, 2011, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -82,5 +82,3 @@ $lang_module['add_type_css_info'] = 'Class name (CSS) to define the menu interfa
 $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
 $lang_module['error_menu_block'] = 'Error: Enter name of menu block';
-
-?>

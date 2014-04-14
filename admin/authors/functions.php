@@ -135,26 +135,3 @@ function nv_admin_edit_result( $result )
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-/**
- * nv_check_add_admin()
- *
- * @return
- */
-function nv_check_add_admin()
-{
-	global $lang_module, $module_name, $global_config;
-
-	if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $global_config['spadmin_add_admin'] == 1 ) )
-	{
-		$xtpl = new XTemplate( 'badd.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/authors' );
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add' );
-		$xtpl->parse( 'main' );
-		return $xtpl->text( 'main' );
-	}
-
-	return '';
-}
-
-?>

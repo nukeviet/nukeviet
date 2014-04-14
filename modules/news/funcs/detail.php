@@ -119,9 +119,18 @@ if( $allowed )
 		$redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
 	}
+
+
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	{
+		Header( 'Location: ' . $base_url_rewrite );
+		die();
+	}
+
 	if( $catid != $news_contents['catid'] )
 	{
-		$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+		$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
 	}
 
 	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
@@ -142,9 +151,10 @@ if( $allowed )
 
 	$related_new_array = array();
 	$db->sqlreset()
-		->select( 'id, title, alias, publtime' )
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		->where( 't1.status=1 AND t1.publtime > ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
 		->order( 'id ASC' )
 		->limit( $st_links );
 
@@ -154,8 +164,9 @@ if( $allowed )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 		$related_new_array[] = array(
 			'title' => $row['title'],
-			'time' => nv_date( 'd/m/Y', $row['publtime'] ),
-			'link' => $link
+			'time' => $row['publtime'],
+			'link' => $link,
+			'newday' => $row['newday']
 		);
 	}
 	$related->closeCursor();
@@ -165,9 +176,10 @@ if( $allowed )
 	$related_array = array();
 
 	$db->sqlreset()
-		->select('id, title, alias, publtime')
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		->where( 't1.status=1 AND t1.publtime < ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
 		->order( 'id DESC' )
 		->limit( $st_links );
 
@@ -177,8 +189,9 @@ if( $allowed )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 		$related_array[] = array(
 			'title' => $row['title'],
-			'time' => nv_date( 'd/m/Y', $row['publtime'] ),
-			'link' => $link
+			'time' => $row['publtime'],
+			'link' => $link,
+			'newday' => $row['newday']
 		);
 	}
 	$related->closeCursor();
@@ -193,9 +206,10 @@ if( $allowed )
 		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
 
 		$db->sqlreset()
-			->select( 'id, catid, title, alias, publtime' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
-			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
+			->select( 't1.id, t1.catid, t1.title, t1.alias, t1.publtime, t2.newday' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+			->where( 't1.status=1 AND t1.topicid = ' . $news_contents['topicid'] . ' AND t1.id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
 
@@ -207,33 +221,14 @@ if( $allowed )
 			$topic_array[] = array(
 				'title' => $row['title'],
 				'link' => $link,
-				'time' => nv_date( 'd/m/Y', $row['publtime'] ),
+				'time' => $row['publtime'],
+				'newday' => $row['newday'],
 				'topiclink' => $topiclink,
 				'topictitle' => $topic_title
 			);
 		}
 		$topic->closeCursor();
 		unset( $topic, $rows );
-	}
-
-	// Check: comment
-	$commentenable = 0;
-	$news_contents['comment'] = '';
-	if( $news_contents['allowed_comm'] )
-	{
-		if( $module_config[$module_name]['activecomm'] == 1 )
-		{
-			$comment_array = nv_comment_module( $news_contents['id'], 0 );
-			$news_contents['comment'] = comment_theme( $comment_array );
-		}
-		if( $news_contents['allowed_comm'] == 1 or ( $news_contents['allowed_comm'] == 2 and defined( 'NV_IS_USER' ) ) )
-		{
-			$commentenable = 1;
-		}
-		elseif( $news_contents['allowed_comm'] == 2 )
-		{
-			$commentenable = 2;
-		}
 	}
 
 	if( $news_contents['allowed_rating'] )
@@ -271,7 +266,13 @@ if( $allowed )
 		$array_keyword[] = $row;
 		$key_words[] = $row['keyword'];
 	}
-	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $commentenable );
+
+	// comment
+	define( 'NV_COMM_ID', $news_contents['id'] );
+	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+
+	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
 	$id_profile_googleplus = $news_contents['gid'];
 
 	$page_title = $news_contents['title'];
@@ -286,5 +287,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
 			if( ! empty( $lang_value ) )
 			{
-				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value WHERE id= :id' );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value, update_' . $typelang . '= ' . NV_CURRENTTIME . ' WHERE id= :id' );
 				$sth->bindParam( ':id', $id, PDO::PARAM_INT );
 				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 				$sth->execute();
@@ -172,7 +172,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 
 	if( $check_type == 0 )
 	{
-		$array_where[] = "lang_" . $typelang . "=''";
+		$array_where[] = "update_" . $typelang . "=0";
 	}
 	elseif( $check_type == 1 )
 	{
@@ -246,5 +246,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -58,8 +58,11 @@ if( $sys_info['ftp_support'] )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
-
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
+			if( NV_SESSION_SAVE_PATH != '' )
+			{
+				$list_valid[] = NV_SESSION_SAVE_PATH;
+			}
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
 			if( $ftp_root === false )
@@ -104,8 +107,11 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR );
-
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', 'themes', NV_TEMP_DIR );
+				if( NV_SESSION_SAVE_PATH != '' )
+				{
+					$check_files[] = NV_SESSION_SAVE_PATH;
+				}
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 
 				$a = 0;
@@ -135,13 +141,14 @@ if( $sys_info['ftp_support'] )
 
 		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
 
-		$db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
 		foreach( $array_config as $config_name => $config_value )
 		{
 			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
 			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 			$sth->execute();
 		}
+		
 		if( empty( $error ) )
 		{
 			nv_save_file_config_global();
@@ -172,5 +179,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

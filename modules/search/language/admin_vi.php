@@ -23,5 +23,3 @@ $lang_module['stt'] = 'STT';
 $lang_module['module_title'] = 'Tiêu đề';
 $lang_module['enable_title'] = 'Bật';
 $lang_module['disable_title'] = 'Tắt';
-
-?>

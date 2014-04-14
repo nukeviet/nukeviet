@@ -675,5 +675,3 @@ class UrlGetContents
 		return '';
 	}
 }
-
-?>

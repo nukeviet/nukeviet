@@ -61,5 +61,3 @@ if( ! empty( $result ) )
 }
 
 die();
-
-?>

@@ -53,5 +53,3 @@ function phpinfo_array( $option = 1, $return = false )
 
 	return ( $return === false ) ? print_r( $pi ) : $pi;
 }
-
-?>

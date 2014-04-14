@@ -163,7 +163,7 @@ ul.spec li {
 	width: 300px
 }
 
-.upload-form .error, .comment-form .error {
+.upload-form .error {
 	color: red;
 	display: block;
 	font-size: 11px

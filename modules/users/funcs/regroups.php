@@ -10,6 +10,8 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
+$page_title = $lang_module['in_group'];
+
 $recomplete = false;
 
 if( $global_config['allowuserpublic'] == 0 )
@@ -93,5 +95,3 @@ else
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

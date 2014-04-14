@@ -6,7 +6,7 @@
 <!-- END: error -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<form action="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<table class="tab1">
 		<tfoot>
 			<tr>
@@ -28,7 +28,7 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.live_session_time}</strong></td>
-				<td><input class="required digits" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" style="width: 50px; text-align: right"/> ({GLANG.min}) <i>{LANG.live_session_time0}</i></td>
+				<td><input class="required digits" type="text" name="nv_live_session_time" value="{NV_LIVE_SESSION_TIME}" style="width: 50px; text-align: right"/> ({GLANG.min}) <em>{LANG.live_session_time0}</em></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.cookie_secure}</strong></td>

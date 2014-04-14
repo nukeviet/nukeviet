@@ -74,8 +74,8 @@ if( defined( 'NV_IS_ADMIN' ) )
 
 				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
 				{
-					$server_name = preg_replace( '/^www\./e', '', nv_getenv( 'HTTP_HOST' ) );
-					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//e', '/www\./e' ), array( '', '' ), $redirect );
+					$server_name = preg_replace( '/^www\./', '', nv_getenv( 'HTTP_HOST' ) );
+					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/www\./' ), array( '', '' ), $redirect );
 					if( ! preg_match( '/^' . preg_quote( $server_name ) . '\/' . preg_quote( NV_ADMINDIR ) . '/', $nohttp_redirect ) )
 					{
 						Header( 'Location: ' . $redirect );
@@ -106,10 +106,11 @@ if( defined( 'NV_IS_ADMIN' ) )
 			}
 			$xtpl = new XTemplate( 'relogin.tpl', $dir_template );
 
+			$xtpl->assign( 'NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS );
 			$xtpl->assign( 'CHARSET', $global_config['site_charset'] );
 			$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 			$xtpl->assign( 'PAGE_TITLE', $lang_global['admin_page'] );
-			$xtpl->assign( 'CSS', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/login.css' );
+			$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 			$xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 			$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
@@ -129,5 +130,3 @@ if( defined( 'NV_IS_ADMIN' ) )
 		}
 	}
 }
-
-?>

@@ -11,8 +11,8 @@
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $theme = $nv_Request->get_title( 'theme', 'post', '', 1 );
-
-if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) ) && $global_config['site_theme'] != trim( $theme ) && trim( $theme ) != 'default' )
+$theme = trim( $theme );
+if( ( preg_match( $global_config['check_theme'], $theme ) OR preg_match( $global_config['check_theme_mobile'], $theme ) ) and file_exists( NV_ROOTDIR . '/themes/' . $theme ) && $global_config['site_theme'] != $theme && $theme != 'default' )
 {
 	$check_exit_mod = false;
 	$lang_module_array = array();
@@ -48,7 +48,7 @@ if( ! empty( $theme ) and file_exists( NV_ROOTDIR . '/themes/' . trim( $theme ) 
 	else
 	{
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $theme, $admin_info['userid'] );
-		$result = nv_deletefile( NV_ROOTDIR . '/themes/' . trim( $theme ), true );
+		$result = nv_deletefile( NV_ROOTDIR . '/themes/' . $theme, true );
 
 		if( ! empty( $result[0] ) )
 		{
@@ -85,5 +85,3 @@ else
 {
 	echo $lang_module['theme_created_delete_current_theme'];
 }
-
-?>

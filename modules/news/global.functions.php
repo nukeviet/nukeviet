@@ -88,58 +88,6 @@ function nv_set_status_module()
 }
 
 /**
- * nv_comment_module()
- *
- * @param mixed $id
- * @param mixed $page
- * @return
- */
-function nv_comment_module( $id, $page )
-{
-	global $db, $module_name, $module_data, $global_config, $module_config, $per_page_comment, $db_config;
-	$comment_array = array();
-
-	$db->sqlreset()
-		->select( 'COUNT(*)' )
-		->from( NV_PREFIXLANG . '_' . $module_data . '_comments a' )
-		->join( 'LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )
-		->where( 'a.id= ' . $id . ' AND a.status=1' );
-
-	$all_page = $db->query( $db->sql() )->fetchColumn();
-
-	$db->select( 'a.content, a.post_time, a.post_name, a.post_email, b.userid, b.email, b.full_name, b.photo, b.view_mail' )
-		->order( 'a.cid DESC' )
-		->limit( $per_page_comment )
-		->offset( $page );
-
-	$result = $db->query( $db->sql() );
-
-	while( list( $content, $post_time, $post_name, $post_email, $userid, $user_email, $user_full_name, $photo, $view_mail ) = $result->fetch( 3 ) )
-	{
-		if( $userid > 0 )
-		{
-			$post_email = $user_email;
-			$post_name = $user_full_name;
-		}
-		$post_email = ( $module_config[$module_name]['emailcomm'] and $view_mail ) ? $post_email : '';
-		$comment_array[] = array(
-			'content' => $content,
-			'post_time' => $post_time,
-			'userid' => $userid,
-			'post_name' => $post_name,
-			'post_email' => $post_email,
-			'photo' => $photo
-		);
-	}
-	$result->closeCursor();
-	unset( $row, $result );
-
-	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=comment&amp;id=' . $id . '&checkss=' . md5( $id . session_id() . $global_config['sitekey'] );
-	$generate_page = nv_generate_page( $base_url, $all_page, $per_page_comment, $page, true, true, 'nv_urldecode_ajax', 'showcomment' );
-	return array( 'comment' => $comment_array, 'page' => $generate_page );
-}
-
-/**
  * nv_del_content_module()
  *
  * @param mixed $id
@@ -191,7 +139,7 @@ function nv_del_content_module( $id )
 		{
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' WHERE id = ' . $id );
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id );
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_comments WHERE id = ' . $id );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id );
 
 			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')' );
@@ -237,7 +185,7 @@ function nv_archive_content_module( $id, $listcatid )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<i class=\"icon-edit icon-large\">&nbsp;</i> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
+	$link = "<em class=\"fa fa-edit\">&nbsp;<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></em>";
 	return $link;
 }
 
@@ -250,7 +198,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<i class=\"icon-trash icon-large\">&nbsp;</i> <a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
+	$link = "<em class=\"fa fa-trash-o\">&nbsp;<a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a></em>";
 	return $link;
 }
 
@@ -292,5 +240,3 @@ function nv_news_get_bodytext( $bodytext )
 	$bodytext = str_replace( '&nbsp;', ' ', $bodytext );
 	return preg_replace( '/[ ]+/', ' ', $bodytext );
 }
-
-?>

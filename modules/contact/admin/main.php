@@ -31,14 +31,7 @@ if( ! empty( $contact_allowed['view'] ) )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
 		->where( 'cid IN (' . $in . ')' );
 
-	list($all_page) = $db->query( $db->sql() )->fetchColumn();
-
-	$db->select( '*' )
-		->order('id DESC')
-		->limit( $per_page )
-		->offset( $page );
-
-	$result = $db->query( $db->sql() );
+	$all_page = $db->query( $db->sql() )->fetchColumn();
 
 	if( $all_page )
 	{
@@ -46,6 +39,13 @@ if( ! empty( $contact_allowed['view'] ) )
 
 		$a = 0;
 		$currday = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
+
+		$db->select( '*' )
+			->order('id DESC')
+			->limit( $per_page )
+			->offset( $page );
+
+		$result = $db->query( $db->sql() );
 
 		while( $row = $result->fetch() )
 		{
@@ -109,5 +109,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

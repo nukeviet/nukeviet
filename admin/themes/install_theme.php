@@ -40,11 +40,11 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			if( $status['status'] == 'ok' )
 			{
 				$list = $zip->listContent();
-				$theme = $list[0]['filename'];
 
+				$theme = '';
 				foreach( $list as $file_i )
 				{
-					if( $file_i['filename'] == $theme . 'theme.php' or $file_i['filename'] == $theme . 'config.ini' )
+					if( preg_match( '/^(?!admin\_)([a-zA-Z0-9\-\_]+)\/(theme\.php|config\.ini)$/', $file_i['filename'], $m ) )
 					{
 						++$check_number;
 					}
@@ -68,32 +68,19 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				$xtpl->assign( 'OP', $op );
 
 				$sizeof = sizeof( $list );
-
-				for( $i = 0, $j = 1; $i < $sizeof; ++$i, ++$j )
+				for( $i = 0, $j = 1; $i < $sizeof; ++$i )
 				{
 					if( ! $list[$i]['folder'] )
 					{
-						$bytes = nv_convertfromBytes( $list[$i]['size'] );
+						$file = array(
+							'stt' => ++$j,
+							'filename' => $list[$i]['filename'],
+							'size' => nv_convertfromBytes( $list[$i]['size'] )
+						);
+						$xtpl->assign( 'FILE', $file );
+						$xtpl->parse( 'autoinstall_theme_uploadedfile.loop' );
 					}
-					else
-					{
-						$bytes = '';
-						$validfolder[] = $list[$i]['filename'];
-					}
-
-					$filelist[] = array(
-						'stt' => $j,
-						'filename' => $list[$i]['filename'],
-						'size' => $bytes
-					);
 				}
-
-				foreach( $filelist as $i => $file )
-				{
-					$xtpl->assign( 'FILE', $file );
-					$xtpl->parse( 'autoinstall_theme_uploadedfile.loop' );
-				}
-
 				$xtpl->parse( 'autoinstall_theme_uploadedfile' );
 				$contents = $xtpl->text( 'autoinstall_theme_uploadedfile' );
 			}
@@ -126,5 +113,3 @@ else
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

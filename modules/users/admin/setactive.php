@@ -47,5 +47,3 @@ if( empty( $level ) or $admin_info['level'] < $level )
 	nv_insert_logs( NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid'] );
 	echo "OK";
 }
-
-?>

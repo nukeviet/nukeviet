@@ -19,7 +19,7 @@ $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $arr['id'] != 0 )
 {
-	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $arr['id'];
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $arr['id'];
 	$result = $db->query( $sql );
 	$arr = $result->fetch();
 
@@ -38,14 +38,14 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	$query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id=' . $id;
+	$query = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
 	$result = $db->query( $query );
 
 	if( ! $result->fetchColumn() ) die( 'NO_' . $id );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_about', 'aboutid ' . $id, $admin_info['userid'] );
 
-	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_menu WHERE id = ' . $id;
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id;
 	if( $db->exec( $sql ) )
 	{
 		nv_del_moduleCache( $module_name );
@@ -71,7 +71,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	elseif( $arr_menu['id'] == 0 )
 	{
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_menu (title,menu_item, description) VALUES ( :title, '', :description )";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (title, description) VALUES ( :title, :description )";
 		$data_insert = array();
 		$data_insert['title'] = $arr_menu['title'];
 		$data_insert['description'] = $arr_menu['description'];
@@ -88,7 +88,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 	else
 	{
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_menu SET title= :title, description = :description WHERE id =' . $arr_menu['id'] );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title, description = :description WHERE id =' . $arr_menu['id'] );
 		$stmt->bindParam( ':title', $arr_menu['title'], PDO::PARAM_STR );
 		$stmt->bindParam( ':description', $arr_menu['description'], PDO::PARAM_STR );
 		if( $stmt->execute() )
@@ -107,7 +107,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 // List menu
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( NV_PREFIXLANG . '_' . $module_data . '_menu' );
+	->from( NV_PREFIXLANG . '_' . $module_data );
 
 $all_page = $db->query( $db->sql() )->fetchColumn();
 
@@ -132,30 +132,21 @@ else
 	$a = 0;
 	while( $row = $query2->fetch() )
 	{
-		$arr_items = array();
-		$b = 0;
-		if( $row['menu_item'] != '' )
-		{
-			$arr_item = explode( ',', $row['menu_item'] );
-			foreach( $arr_item as $key => $val )
-			{
-				$arr_items[] = $arr_menu_item[$val];
-				$b = $b + 1;
-			}
-			$item = implode( '&nbsp;&nbsp; ', $arr_items );
-		}
-		else
-		{
-			$item = '';
-		}
+        $arr_items = array();
+        $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE mid = " . $row['id'] . " ORDER BY sort ASC";
+        $result = $db->query( $sql );
+        while( list( $title_i ) = $result->fetch( 3 ) )
+        {
+            $arr_items[] = $title_i;
+        }
 
 		++$a;
 		$array[$row['id']] = array(
 			'id' => $row['id'],
 			'nb' => $a,
 			'title' => $row['title'],
-			'menu_item' => $item,
-			'num' => $b,
+			'menu_item' => implode( '&nbsp;&nbsp; ', $arr_items ),
+			'num' => sizeof( $arr_items ),
 			'link_view' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_menu&amp;mid=' . $row['id'],
 			'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;add=1&amp;id=' . $row['id'],
 			'description' => $row['description']
@@ -227,5 +218,3 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

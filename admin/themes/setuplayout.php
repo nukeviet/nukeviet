@@ -176,9 +176,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		else
 		{
 			$layout_name = ( isset( $array_layout_func_default[$in_module][$func_name] ) ) ? $array_layout_func_default[$in_module][$func_name] : $layoutdefault;
-			$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes
-			(func_id, layout, theme) VALUES
-			(:func_id, :layout, :theme)' );
+			$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_modthemes (func_id, layout, theme) VALUES (:func_id, :layout, :theme)' );
 			$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 			$sth->bindParam( ':layout', $layout_name, PDO::PARAM_STR );
 			$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -253,5 +251,3 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

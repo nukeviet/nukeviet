@@ -51,7 +51,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );
 				$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET check_num = :check_num, last_login = ' . $current_login . ', last_ip = :last_ip, last_agent = :last_agent WHERE id=' . $id );
-				$stmt->bindValue( ':check_num', $check_num, PDO::PARAM_STR );
+				$stmt->bindValue( ':check_num', $checknum, PDO::PARAM_STR );
 				$stmt->bindValue( ':last_ip', NV_CLIENT_IP, PDO::PARAM_STR );
 				$stmt->bindValue( ':last_agent', NV_USER_AGENT, PDO::PARAM_STR );
 
@@ -100,5 +100,3 @@ $contents = logininfo_theme( $contents );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

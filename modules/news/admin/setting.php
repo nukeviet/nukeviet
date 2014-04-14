@@ -27,17 +27,15 @@ if( ! empty( $savesetting ) )
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
 
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
-	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
-	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
-	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
-	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
-	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
+
+	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$array_config['socialbutton'] = $nv_Request->get_int( 'socialbutton', 'post', 0 );
 	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
+	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 
 	if( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
 	{
@@ -124,32 +122,9 @@ for( $i = 0; $i <= 6; ++$i )
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'AUTO_POSTCOMM', $module_config[$module_name]['auto_postcomm'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'EMAILCOMM', $module_config[$module_name]['emailcomm'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'MODULE_LOGO', $module_logo );
-
-// Thao luan mac dinh khi tao bai viet moi
-while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
-{
-	$xtpl->assign( 'SETCOMM', array(
-		'key' => $comm_i,
-		'title' => $title_i,
-		'selected' => $comm_i == $module_config[$module_name]['setcomm'] ? ' selected="selected"' : ''
-	) );
-	$xtpl->parse( 'main.setcomm' );
-}
-
-// Show points rating article on google
-for( $i = 0; $i <= 2; ++$i )
-{
-	$xtpl->assign( 'ACTIVECOMM', array(
-		'key' => $i,
-		'title' => $lang_module['activecomm_' . $i],
-		'selected' => $i == $module_config[$module_name]['activecomm'] ? ' selected="selected"' : ''
-	) );
-	$xtpl->parse( 'main.activecomm' );
-}
 
 $array_structure_image = array();
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_name;
@@ -307,5 +282,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

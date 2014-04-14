@@ -64,7 +64,7 @@ if( ! empty( $list_cats ) )
 			$rimages = ( ! empty( $homeimgfile ) ) ? '<img src="' . NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . $homeimgfile . '" width="100" align="left" border="0">' : '';
 			$items[] = array(
 				'title' => $title,
-				'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias,
+				'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$cid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'guid' => $module_name . '_' . $id,
 				'description' => $rimages . $hometext,
 				'pubdate' => $publtime
@@ -75,5 +75,3 @@ if( ! empty( $list_cats ) )
 
 nv_rss_generate( $channel, $items );
 die();
-
-?>

@@ -152,7 +152,7 @@ else
 	$row['image'] = '';
 	$row['layout_func'] = '';
 	$row['bodytext'] = '';
-	$row['activecomm'] = 0;
+	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;
 	$row['gid'] = 0;
 }
@@ -213,12 +213,18 @@ if( sizeof( $_grows ) )
 	$xtpl->parse( 'main.googleplus' );
 }
 
-for( $i = 0; $i <= 1; ++$i )
+$array_allowed_comm = array(
+	$lang_global['no'],
+	$lang_global['who_view0'],
+	$lang_global['who_view1']
+);
+
+foreach ($array_allowed_comm as $key => $title)
 {
 	$xtpl->assign( 'ACTIVECOMM', array(
-		'key' => $i,
-		'title' => $lang_module['activecomm_' . $i],
-		'selected' => ( $i == $row['activecomm'] ) ? ' selected="selected"' : ''
+		'key' => $key,
+		'title' => $title,
+		'selected' => ( $key == $row['activecomm'] ) ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.activecomm' );
 }
@@ -237,5 +243,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

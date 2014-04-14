@@ -48,5 +48,3 @@ function cron_siteDiagnostic_update()
 
 	return true;
 }
-
-?>

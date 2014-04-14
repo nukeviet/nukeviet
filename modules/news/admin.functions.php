@@ -276,7 +276,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$xtpl->parse( 'main.cat_title' );
 	}
 
-	$sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
+	$sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
 	$rowall = $db->query( $sql )->fetchAll( 3 );
 	$num = sizeof( $rowall );
 	$a = 1;
@@ -287,7 +287,7 @@ function nv_show_cat_list( $parentid = 0 )
 
 	foreach ($rowall as $row)
 	{
-		list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks ) = $row;
+		list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday ) = $row;
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )
 		{
 			$check_show = 1;
@@ -314,17 +314,17 @@ function nv_show_cat_list( $parentid = 0 )
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or (isset( $array_cat_admin[$admin_id][$catid] ) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1) )
 			{
 				$func_cat_disabled = false;
-				$admin_funcs[] = "<i class=\"icon-plus icon-large\">&nbsp;</i> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a>\n";
+				$admin_funcs[] = "<em class=\"icon-plus icon-large\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a>\n";
 			}
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or ($parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 			{
 				$func_cat_disabled = false;
-				$admin_funcs[] = "<i class=\"icon-edit icon-large\">&nbsp;</i> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a>\n";
+				$admin_funcs[] = "<em class=\"icon-edit icon-large\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a>\n";
 			}
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or ($parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 			{
 				$weight_disabled = false;
-				$admin_funcs[] = "<i class=\"icon-trash icon-large\">&nbsp;</i> <a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a>";
+				$admin_funcs[] = "<em class=\"icon-trash icon-large\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a>";
 			}
 
 			$xtpl->assign( 'ROW', array(
@@ -363,6 +363,9 @@ function nv_show_cat_list( $parentid = 0 )
 
 				$xtpl->assign( 'NUMLINKS', $numlinks );
 				$xtpl->parse( 'main.data.loop.title_numlinks' );
+				
+				$xtpl->assign( 'NEWDAY', $newday );
+				$xtpl->parse( 'main.data.loop.title_newday' );
 			}
 			else
 			{
@@ -398,6 +401,17 @@ function nv_show_cat_list( $parentid = 0 )
 					$xtpl->parse( 'main.data.loop.numlinks.loop' );
 				}
 				$xtpl->parse( 'main.data.loop.numlinks' );
+				
+				for( $i = 0; $i <= 10; ++$i )
+				{
+					$xtpl->assign( 'NEWDAY', array(
+						'key' => $i,
+						'title' => $i,
+						'selected' => $i == $newday ? ' selected="selected"' : ''
+					) );
+					$xtpl->parse( 'main.data.loop.newday.loop' );
+				}
+				$xtpl->parse( 'main.data.loop.newday' );
 			}
 
 			if( $numsubcat )
@@ -753,4 +767,3 @@ function redriect( $msg1 = '', $msg2 = '', $nv_redirect )
 	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
-?>

@@ -41,5 +41,3 @@ $lang_module['bot'] = 'Máy chủ tìm kiếm';
 $lang_module['referer'] = 'Đường dẫn đến site';
 $lang_module['refererbymonth'] = 'Đường dẫn đến site theo tháng';
 $lang_module['refererbymonth2'] = 'Thống kê Đường dẫn từ site %s theo các tháng của năm %d';
-
-?>

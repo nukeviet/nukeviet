@@ -79,5 +79,3 @@ class CheckUrl
 		return false;
 	}
 }
-
-?>

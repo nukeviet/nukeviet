@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
-global $module_name, $lang_module, $module_data, $nv_Request, $list_cats, $module_file, $db;
+global $module_name, $lang_module, $module_data, $list_cats, $module_file, $db, $global_config;
 
 $xtpl = new XTemplate( 'block_lastestdownload.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -25,7 +25,7 @@ $result = $db->query( $db->sql() );
 while( $row = $result->fetch() )
 {
 	$catalias = $list_cats[$row['catid']]['alias'];
-	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $row['alias'];
+	$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 	$row['updatetime'] = date( 'd/m/Y h:i', $row['uploadtime'] );
 	$xtpl->assign( 'loop', $row );
 	$xtpl->parse( 'main.loop' );
@@ -33,5 +33,3 @@ while( $row = $result->fetch() )
 
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
-
-?>

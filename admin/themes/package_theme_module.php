@@ -12,24 +12,6 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['autoinstall_method_packet'];
 
-/**
- * getDirectoryTree()
- *
- * @param mixed $outerDir
- * @param mixed $basepath
- * @return
- */
-function getDirectoryTree( $outerDir, $basepath )
-{
-	$dirs = array_diff( scandir( $outerDir ), array( '.', '..' ) );
-	$dir_array = array();
-
-	foreach( $dirs as $d )
-		$dir_array[] = is_dir( $outerDir . '/' . $d ) ? getDirectoryTree( $outerDir . '/' . $d, $filters ) : $dir_array[] = $basepath . $d;
-
-	return $dir_array;
-}
-
 $xtpl = new XTemplate( 'package_theme_module.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -127,5 +109,3 @@ else
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
 }
-
-?>

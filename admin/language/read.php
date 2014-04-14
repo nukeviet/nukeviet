@@ -76,7 +76,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 		$sth->execute();
 		list( $idfile, $langtype ) = $sth->fetch( 3 );
 
-		if( intval( $idfile ) == 0 )
+		if( empty( $idfile ) )
 		{
 			$langtype = isset( $lang_translator['langtype'] ) ? strip_tags( $lang_translator['langtype'] ) : 'lang_module';
 
@@ -114,9 +114,8 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 			$author = var_export( $lang_translator_save, true );
 			try
 				{
-				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET lang_' . $dirlang . '= :author WHERE idfile= :idfile' );
-				$sth->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
-				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . '_file SET author_' . $dirlang . '= :author WHERE idfile= ' . $idfile );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR, strlen( $author ) );
 				$sth->execute();
 			}
 			catch (PDOException $e)
@@ -178,14 +177,23 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 
 			if( $read_type == 0 or $read_type == 1 )
 			{
-				$sth_is->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
-				$sth_is->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
-				$sth_is->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
-				$sth_is->execute();
-
-				if( $read_type == 0 AND !$sth_is->rowCount() )
+				try
 				{
-					$check_type_update = true;
+					$sth_is->bindParam( ':idfile', $idfile, PDO::PARAM_INT );
+					$sth_is->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
+					$sth_is->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+					$sth_is->execute();
+					if( $read_type == 0 AND ! $sth_is->rowCount() )
+					{
+						$check_type_update = true;
+					}
+				}
+				catch( PDOException $e )
+				{
+					if( $read_type == 0 )
+					{
+						$check_type_update = true;
+					}
 				}
 			}
 
@@ -280,5 +288,3 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . sessio
 }
 
 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-
-?>

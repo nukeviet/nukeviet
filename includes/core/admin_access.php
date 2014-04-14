@@ -214,5 +214,3 @@ function nv_admin_checkdata( $adm_session_value )
 
 	return $admin_info;
 }
-
-?>

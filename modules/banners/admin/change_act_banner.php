@@ -16,7 +16,7 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id . ' AND actIN (0,1,3)';
+$sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id . ' AND act IN (0,1,3)';
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) ) die( 'Stop!!!' );
 
@@ -33,5 +33,3 @@ nv_CreateXML_bannerPlan();
 include NV_ROOTDIR . '/includes/header.php';
 echo $return . '|act_' . $id;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

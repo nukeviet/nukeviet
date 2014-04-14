@@ -28,5 +28,3 @@ $return = $db->exec( $sql ) ? 'OK' : 'NO';
 include NV_ROOTDIR . '/includes/header.php';
 echo $return . '|act_' . $id . '|' . $id . '|client_info';
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -77,6 +77,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 		$sth->execute();
 	}
+	
+	//cau hinh kich thuoc avatar
+	$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'" );
+	$stmt->bindParam( ':content', $array_config['avatar_width'], PDO::PARAM_STR );
+	$stmt->execute();
+	
+	$array_config['avatar_height'] = $nv_Request->get_int( 'avatar_height', 'post', 120 );
+	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'" );
+	$stmt->bindParam( ':content', $array_config['avatar_height'], PDO::PARAM_STR );
+	$stmt->execute();	
 
 	$array_config['deny_email'] = $nv_Request->get_title( 'deny_email', 'post', '', 1 );
 
@@ -154,7 +165,7 @@ if( ! empty( $openid_servers ) )
 		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
 	}
 }
-$sql = "SELECT config, content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple'";
+$sql = "SELECT config, content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
 $result = $db->query( $sql );
 while( list( $config, $content ) = $result->fetch( 3 ) )
 {
@@ -270,15 +281,18 @@ foreach( $array_registertype as $id => $titleregister )
 $nv_files = @scandir( NV_ROOTDIR );
 foreach( $nv_files as $value )
 {
-	if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+	if( is_dir( NV_ROOTDIR . '/' . $value ) )
 	{
-		$array = array(
-			'id' => $value,
-			'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
-			'value' => $value
-		);
-		$xtpl->assign( 'DIR_FORUM', $array );
-		$xtpl->parse( 'main.dir_forum' );
+		if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+		{
+			$array = array(
+				'id' => $value,
+				'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
+				'value' => $value
+			);
+			$xtpl->assign( 'DIR_FORUM', $array );
+			$xtpl->parse( 'main.dir_forum' );
+		}
 	}
 }
 
@@ -328,5 +342,3 @@ $page_title = $lang_module['config'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

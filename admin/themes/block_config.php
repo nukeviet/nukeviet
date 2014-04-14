@@ -14,35 +14,37 @@ $contents = '';
 
 $file_name = $nv_Request->get_string( 'file_name', 'get' );
 
-if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], $file_name ) )
+if( ! empty( $file_name ) )
 {
 	$module = $nv_Request->get_string( 'module', 'get', '' );
+	$selectthemes = $nv_Request->get_string( 'selectthemes', 'get', '' );
 
 	// Xac dinh ton tai cua block
 	$path_file_php = $path_file_ini = $path_file_lang = '';
-	unset( $matches );
 
-	preg_match( $global_config['check_block_module'], $file_name, $matches );
-
-	if( $module == 'global' and file_exists( NV_ROOTDIR . '/includes/blocks/' . $file_name ) and file_exists( NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
+	if( $module == 'theme' and ( preg_match( $global_config['check_theme'], $selectthemes, $mtheme ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes, $mtheme ) ) and preg_match( $global_config['check_block_theme'], $file_name, $matches ) AND file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name ) )
 	{
-		$path_file_php = NV_ROOTDIR . '/includes/blocks/' . $file_name;
-		$path_file_ini = NV_ROOTDIR . '/includes/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
+		if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
+		{
+			$path_file_php = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name;
+			$path_file_ini = NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini';
 
-		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name ) )
-		{
-			$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/block.' . $file_name;
+			if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_INTERFACE . '.php';
+			}
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_' . NV_LANG_DATA . '.php';
+			}
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/themes/' . $selectthemes . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
+			}
 		}
-		elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name ) )
-		{
-			$path_file_lang = NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/block.' . $file_name;
-		}
-		elseif( file_exists( NV_ROOTDIR . '/language/en/block.' . $file_name ) )
-		{
-			$path_file_lang = NV_ROOTDIR . '/language/en/block.' . $file_name;
-		}
+		//die($path_file_php .'=--->'. $path_file_ini .'=--->'. $path_file_lang);
 	}
-	elseif( isset( $site_mods[$module] ) )
+	elseif( isset( $site_mods[$module] ) AND preg_match( $global_config['check_block_module'], $file_name, $matches ))
 	{
 		$module_file = $site_mods[$module]['module_file'];
 
@@ -64,6 +66,10 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 				$path_file_lang = NV_ROOTDIR . '/modules/' . $module_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
 			}
 		}
+	}
+	else
+	{
+		die();
 	}
 
 	if( ! empty( $path_file_php ) and ! empty( $path_file_ini ) )
@@ -143,5 +149,3 @@ if( ! empty( $file_name ) and preg_match( $global_config['check_block_module'], 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

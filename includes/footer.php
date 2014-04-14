@@ -11,7 +11,7 @@
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 unset( $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
-global $db, $nv_Request;
+global $db, $nv_Request, $nv_plugin_area;
 
 $contents = ob_get_contents();
 ob_end_clean();
@@ -25,6 +25,15 @@ if( ! defined( 'NV_IS_AJAX' ) )
 	}
 }
 $db = null;
+
+if( isset( $nv_plugin_area[3] ) )
+{
+    // Kết nối với các plugin Trước khi website gửi nội dung tới trình duyệt
+    foreach ( $nv_plugin_area[3] as $_fplugin )
+    {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
+    }
+}
 
 //Nen trang
 if( defined( 'NV_IS_GZIP' ) )
@@ -60,5 +69,3 @@ if( defined( 'NV_IS_GZIP' ) )
 
 echo $contents;
 exit();
-
-?>

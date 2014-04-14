@@ -12,7 +12,12 @@
 <div class="box-border-shadow m-bottom t-news">
 	<!-- BEGIN: content -->
 	<div class="content-box clearfix">
-		<h4><a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a></h4>
+		<h4>
+			<a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
+		</h4>
 		<!-- BEGIN: image -->
 		<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img class="s-border fl left" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}"/></a>
 		<!-- END: image -->
@@ -35,6 +40,9 @@
 			<li>
 				<a title="{NEWSTOP.title}" href="{NEWSTOP.link}">{NEWSTOP.title}</a>
 				<span class="small">{NEWSTOP.publtime}</span>
+				<!-- BEGIN: newday -->
+				<span class="icon_new"></span>
+				<!-- END: newday -->
 			</li>
 			<!-- END: other -->
 		</ul>
@@ -51,7 +59,12 @@
 		<div class="content-box news-cat-two-column">
 			<!-- BEGIN: content -->
 			<div class="m-bottom">
-				<h4><a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+				<h4>
+					<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+					<!-- BEGIN: newday -->
+					<span class="icon_new"></span>
+					<!-- END: newday -->
+				</h4>
 				<p class="small">
 					{LANG.pubtime}: {CONTENT.publtime} - {LANG.view}: {CONTENT.hitstotal} - {LANG.total_comment}: {CONTENT.hitscm}
 				</p>
@@ -75,6 +88,9 @@
 				<!-- BEGIN: other -->
 				<li>
 					<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+					<!-- BEGIN: newday -->
+					<span class="icon_new"></span>
+					<!-- END: newday -->
 				</li>
 				<!-- END: other -->
 			</ul>

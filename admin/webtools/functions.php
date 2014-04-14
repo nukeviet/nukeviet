@@ -10,12 +10,11 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'sitemapPing', 'siteDiagnostic', 'keywordRank' );
+$allow_func = array( 'main' );
 if( empty( $global_config['idsite'] ) )
 {
-	$allow_func[] = 'clearsystem';
 	$allow_func[] = 'checkupdate';
-	$allow_func[] = 'rpc';
+	$allow_func[] = 'clearsystem';
 	$allow_func[] = 'config';
 	$allow_func[] = 'mudim';
 }
@@ -32,5 +31,3 @@ if( defined( 'NV_IS_GODADMIN' ) )
 }
 
 define( 'NV_IS_FILE_WEBTOOLS', true );
-
-?>

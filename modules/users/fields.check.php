@@ -179,5 +179,3 @@ foreach( $array_field_config as $row_f )
 		$query_field[$row_f['field']] = $db->quote( $value );
 	}
 }
-
-?>

@@ -56,7 +56,7 @@
 </div>
 <div class="footer">
 	<div class="refresh">
-		<a href="#" title="{LANG.refresh}"><img alt="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
+		<a href="#" title="{LANG.refresh}"><em class="icon-refresh icon-large icon-pointer">&nbsp;</em></a>
 	</div>
 	<div class="filetype">
 		<select name="imgtype" class="vchange">
@@ -77,7 +77,7 @@
 		</select>
 	</div>
 	<div class="search">
-		<a href="#" title="{LANG.search}"><img alt="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
+		<a href="#" title="{LANG.search}"><em class="icon-search icon-large">&nbsp;</em></a>
 	</div>
 	<div class="uploadForm" style="display:none">
 		<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">
@@ -91,7 +91,7 @@
 		</div>
 		<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
 		</div>
-		<div style="float:left;margin-left:5px;">
+		<div style="float:left;margin:0 5px;">
 			{LANG.upload_otherurl}: <input type="text" name="imgurl"/>
 		</div>
 		<div style="margin-top:10px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>
@@ -227,7 +227,7 @@
 	LANG.errorEmptyY = "{LANG.errorEmptyY}";
 
 	var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
-	var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
+	var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
 	//]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/upload.js"></script>

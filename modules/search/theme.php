@@ -26,9 +26,13 @@ function search_main_theme( $is_search, $search, $array_modul )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
 	$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
+	$xtpl->assign( 'PAGE', 0 );
+	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
 
-	$search['action'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
-	$search['action'] .= "&page=0";
+	$search['action'] = NV_BASE_SITEURL . "index.php";
 	$search['andChecked'] = $search['logic'] == 1 ? " checked=\"checked\"" : "";
 	$search['orChecked'] = $search['logic'] == 1 ? "" : " checked=\"checked\"";
 
@@ -119,5 +123,3 @@ function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

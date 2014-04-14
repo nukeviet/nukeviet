@@ -103,7 +103,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh cac $op, $array_op
 			$array_op = array();
 
-			if( ! preg_match( '/^[a-z0-9\-\_\/]+$/i', $op ) )
+			if( ! preg_match( '/^[a-z0-9\-\_\/\+]+$/i', $op ) )
 			{
 				Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 				die();
@@ -157,32 +157,31 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh giao dien chung
 			$is_mobile = false;
 			$theme_type = '';
-
-			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $module_info['mobile'] ) and file_exists( NV_ROOTDIR . '/themes/' . $module_info['mobile'] . '/theme.php' ) )
+            $_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
+			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 			{
-				$global_config['module_theme'] = $module_info['mobile'];
+				$global_config['module_theme'] = $_theme;
 				$is_mobile = true;
 				$theme_type = $global_config['array_theme_type'][1];
 			}
-			elseif( ! empty( $module_info['theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/theme.php' ) )
-			{
-				$global_config['module_theme'] = $module_info['theme'];
-				$theme_type = $global_config['array_theme_type'][0];
-			}
-			elseif( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/theme.php' ) )
-			{
-				$global_config['module_theme'] = $global_config['site_theme'];
-				$theme_type = $global_config['array_theme_type'][0];
-			}
-			elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
-			{
-				$global_config['module_theme'] = 'default';
-				$theme_type = $global_config['array_theme_type'][0];
-			}
 			else
-			{
-				trigger_error( 'Error! Does not exist themes default', 256 );
-			}
+    		{
+                $_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
+    			if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
+    			{
+    				$global_config['module_theme'] = $_theme;
+    				$theme_type = $global_config['array_theme_type'][0];
+    			}
+    			elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
+    			{
+    				$global_config['module_theme'] = 'default';
+    				$theme_type = $global_config['array_theme_type'][0];
+    			}
+    			else
+    			{
+    				trigger_error( 'Error! Does not exist themes default', 256 );
+    			}
+            }
 
 			// Xac lap lai giao kieu giao dien hien tai
 			if( $theme_type != $global_config['current_theme_type'] )
@@ -314,5 +313,3 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 }
 
 nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-
-?>

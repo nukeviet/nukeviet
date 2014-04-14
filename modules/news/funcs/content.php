@@ -754,12 +754,12 @@ elseif( defined( 'NV_IS_USER' ) )
 
 		if( $array_row_i['is_edit_content'] )
 		{
-			$array_link_content[] = "<span class=\"edit_icon\"><a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a></span>";
+			$array_link_content[] = "<em class=\"icon-edit icon-large\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
 		}
 
 		if( $array_row_i['is_del_content'] )
 		{
-			$array_link_content[] = "<span class=\"delete_icon\"><a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a></span>";
+			$array_link_content[] = "<em class=\"icon-trash icon-large\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a>";
 		}
 
 		if( ! empty( $array_link_content ) )
@@ -826,5 +826,3 @@ elseif( $array_post_user['addcontent'] )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

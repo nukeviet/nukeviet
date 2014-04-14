@@ -502,5 +502,3 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_c
  ('country', 'ZW', 0, 0),
  ('country', 'ZZ', 0, 0),
  ('country', 'unkown', 0, 0)";
-
-?>

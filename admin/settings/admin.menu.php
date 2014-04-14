@@ -19,9 +19,8 @@ $submenu['smtp'] = $lang_module['smtp_config'];
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['security'] = $lang_module['security'];
+	$submenu['plugin'] = $lang_module['plugin'];
 	$submenu['cronjobs'] = $lang_global['mod_cronjobs'];
 	$submenu['ftp'] = $lang_module['ftp_config'];
 	$submenu['variables'] = $lang_module['variables'];
 }
-
-?>

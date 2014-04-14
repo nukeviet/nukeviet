@@ -135,7 +135,7 @@ if( ! empty( $savecat ) )
 		}
 		else
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid;
+			$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid );
 			$msg_lg = 'edit_tags';
 		}
 
@@ -204,5 +204,3 @@ $page_title = $lang_module['tags'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

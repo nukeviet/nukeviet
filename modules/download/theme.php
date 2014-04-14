@@ -58,11 +58,20 @@ function theme_main_download( $array_cats, $list_cats, $download_config )
 			$items = $cat['items'];
 			#parse the first items
 			$thefirstcat = current( $items );
+			
 			$xtpl->assign( 'itemcat', $thefirstcat );
 			if( ! empty( $thefirstcat['imagesrc'] ) )
 			{
 				$xtpl->parse( 'main.catbox.itemcat.image' );
 			}
+			
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $thefirstcat['id'] );
+				$xtpl->assign( 'DEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+				$xtpl->parse( 'main.catbox.itemcat.adminlink' );
+			}
+			
 			$xtpl->parse( 'main.catbox.itemcat' );
 			foreach( $items as $item )
 			{
@@ -193,41 +202,6 @@ function view_file( $row, $download_config )
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
 	$my_head .= "<link href=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
-	$my_head .= "$(document).ready(function(){
- $('#commentForm').validate({
- submitHandler: function() { nv_send_comment(); },
- rules: {
- comment_uname: {
- required: true,
- rangelength: [3, 60]
- },
- 
- comment_uemail: {
- required: true,
- email: true
- },
- 
- comment_subject: {
- required: true,
- rangelength: [3, 200]
- },
- 
- comment_content: {
- required: true,
- rangelength: [3, 1000]
- },
- 
- comment_seccode: {
- required: true,
- minlength: " . NV_GFX_NUM . "
- }
- }
-			});
- });";
-	$my_head .= " </script>\n";
 
 	$xtpl = new XTemplate( 'viewfile.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -249,11 +223,6 @@ function view_file( $row, $download_config )
 	if( ! empty( $row['description'] ) )
 	{
 		$xtpl->parse( 'main.introtext' );
-	}
-
-	if( ! empty( $row['comment_allow'] ) )
-	{
-		$xtpl->parse( 'main.comment_allow' );
 	}
 
 	if( $row['is_download_allow'] )
@@ -309,71 +278,14 @@ function view_file( $row, $download_config )
 		$xtpl->parse( 'main.is_admin' );
 	}
 
-	if( $row['comment_allow'] )
+	if( defined( 'NV_COMM_URL' ) )
 	{
-		if( $row['is_comment_allow'] )
-		{
-			$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getcomment' );
-			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-			$xtpl->assign( 'CAPTCHA_MAXLENGTH', NV_GFX_NUM );
-
-			$xtpl->parse( 'main.comment_allow2.is_comment_allow' );
-		}
-		$xtpl->parse( 'main.comment_allow2' );
+		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->parse( 'main.comment' );
 	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
-}
-
-/**
- * show_comment()
- *
- * @param mixed $array
- * @param mixed $generate_page
- * @return
- */
-function show_comment( $array, $generate_page )
-{
-	global $module_info, $module_name, $module_file, $lang_module, $lang_global, $global_config;
-	if( ! empty( $array ) )
-	{
-		$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/' );
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'GLANG', $lang_global );
-		foreach( $array as $row )
-		{
-			if( ! empty( $row['photo'] ) && file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
-			{
-				$row['photo'] = NV_BASE_SITEURL . $row['photo'];
-			}
-			else
-			{
-				$row['photo'] = NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/images/users/no_avatar.jpg";
-			}
-
-			$xtpl->assign( 'ROW', $row );
-
-			if( defined( 'NV_IS_MODADMIN' ) )
-			{
-				$xtpl->parse( 'main.if_not_empty.detail.is_admin' );
-			}
-			$xtpl->parse( 'main.if_not_empty.detail' );
-		}
-
-		if( ! empty( $generate_page ) )
-		{
-			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-			$xtpl->parse( 'main.if_not_empty.generate_page' );
-		}
-		$xtpl->parse( 'main.if_not_empty' );
-		$xtpl->parse( 'main' );
-		return $xtpl->text( 'main' );
-	}
-	else
-	{
-		return "&nbsp;";
-	}
 }
 
 /**
@@ -475,5 +387,3 @@ function theme_upload( $array, $list_cats, $download_config, $error )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

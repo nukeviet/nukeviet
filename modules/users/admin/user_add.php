@@ -67,12 +67,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
-	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
-	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
-	$stmt->execute();
-	$query_error_username = $stmt->fetchColumn();
-
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
 	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
 	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
@@ -459,5 +453,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

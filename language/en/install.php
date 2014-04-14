@@ -6,7 +6,7 @@
 * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jun 29, 2010, 02:24:00 AM
+* @Createdate Jun 29, 2010, 02:24:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -111,8 +111,8 @@ $lang_module['admin_repass'] = 'Re-enter password';
 $lang_module['admin_repass_note'] = 'Repeat password. It must match the password above!';
 $lang_module['success'] = 'Setup successful!';
 $lang_module['congratulations'] = 'Congratulation! Nukeviet installation is successful. Please Login to administration to configure your site.';
-$lang_module['notesupport'] = 'All technical support, please contact <a href="http://nukeviet.vn" target="_blank"><b>forum Nukeviet.VN</b></a>.';
-$lang_module['noteuploads'] = '<b>Note:</b> Please <b>CHMOD uploads and it\'s sub folders</b> in webroot by 777 to enable files can be upload to host.';
+$lang_module['notesupport'] = 'All technical support, please contact <a href="http://nukeviet.vn" target="_blank"><strong>forum Nukeviet.VN</strong></a>.';
+$lang_module['noteuploads'] = '<strong>Note:</strong> Please <strong>CHMOD uploads and it\'s sub folders</strong> in webroot by 777 to enable files can be upload to host.';
 $lang_module['thanks'] = 'Thanks!';
 $lang_module['gohome'] = 'Go to home page';
 $lang_module['goadmin'] = 'Go to admin page';
@@ -251,5 +251,6 @@ $lang_module['updatemod_title_upgrade'] = 'Update module "%s"';
 $lang_module['updatemod_notexist'] = 'You did not install this module on system so that do not have any work to execute, you should delete this updating pack to website run back';
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
 $lang_module['file_not_writable'] = 'Error: System could not write file %1$s';
-
-?>
+$lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
+$lang_module['lang_multi'] = 'Multi-language website';
+$lang_module['lang_multi_note'] = 'If you have plans to build a multi-language site, you should select this feature';

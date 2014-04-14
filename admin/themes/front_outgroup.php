@@ -63,5 +63,3 @@ else
 {
 	echo $lang_module['block_front_outgroup_cancel'];
 }
-
-?>

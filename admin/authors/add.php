@@ -40,7 +40,7 @@ if( $nv_Request->get_int( 'result', 'get', 0 ) )
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) )
 {
-	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
+	$userid = $nv_Request->get_title( 'userid', 'post', 0 );
 	$lev = $nv_Request->get_int( 'lev', 'post', 0 );
 	$editor = $nv_Request->get_title( 'editor', 'post' );
 	$allow_files_type = $nv_Request->get_array( 'allow_files_type', 'post', array() );
@@ -50,14 +50,21 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 	$modules = $nv_Request->get_array( 'modules', 'post', array() );
 	$position = $nv_Request->get_title( 'position', 'post', '', 1 );
 
-	if( ! $userid ) die( $lang_module['add_error_choose'] );
+	if( preg_match('/^([0-9]+)$/', $userid ) )
+	{
+        $sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $userid );
+    }
+    else
+    {
+        $md5username = nv_md5safe( $userid );
+        $sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote( $md5username );
+    }
+    list( $userid, $username, $active ) = $db->query( $sql )->fetch( 3 );
+    if( empty( $userid ) ) die( $lang_module['add_error_choose'] );
 
 	$sql = 'SELECT COUNT(*) FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $userid;
 	$count = $db->query( $sql )->fetchColumn();
 	if( $count ) die( $lang_module['add_error_exist'] );
-
-	$sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
-	list( $userid, $username, $active ) = $db->query( $sql )->fetch( 3 );
 
 	if( empty( $userid ) ) die( $lang_module['add_error_notexist'] );
 	if( empty( $position ) ) die( $lang_module['position_incorrect'] );
@@ -265,5 +272,3 @@ $contents = $xtpl->text( 'add' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -427,4 +427,11 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
 	UNIQUE KEY idprofile (idprofile)
 ) ENGINE=MyISAM";
 
-?>
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
+  pid tinyint(4) NOT NULL AUTO_INCREMENT,
+  plugin_file varchar(50) NOT NULL,
+  plugin_area tinyint(4) NOT NULL,
+  weight tinyint(4) NOT NULL,
+  PRIMARY KEY (pid),
+  UNIQUE KEY plugin_file (plugin_file)
+) ENGINE=MyISAM";

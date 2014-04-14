@@ -196,7 +196,7 @@ class CJzip
 
 		if( $this->file['contenttype'] == 'css' and $this->root == true )
 		{
-			$data = preg_replace_callback( '/url\(([^\)]+)\)/', array( $this, 'changeCssURL' ), $data );
+			$data = preg_replace_callback( "/url[\s]*\([\s]*[\'\"]*([^\'\"\)]+)[\'\"]*[\s]*\)/", array( $this, 'changeCssURL' ), $data );
 		}
 
 		if( $this->encoding != 'none' )
@@ -361,5 +361,3 @@ class CJzip
 
 $CJzip = new CJzip();
 $CJzip->loadFile();
-
-?>

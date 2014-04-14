@@ -125,7 +125,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
 		->limit( $per_page )
-		->offset( $page );
+		->offset( $pages );
 
 	$result = $db->query( $db->sql() );
 
@@ -191,5 +191,3 @@ $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
