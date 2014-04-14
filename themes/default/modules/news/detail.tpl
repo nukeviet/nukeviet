@@ -68,6 +68,11 @@
 		<div class="bodytext">
 			{DETAIL.bodytext}
 		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(".bodytext img").toggleClass('img-thumbnail');
+			});
+		</script>
 		<!-- BEGIN: author -->
 		<!-- BEGIN: name -->
 		<p class="text-right">
