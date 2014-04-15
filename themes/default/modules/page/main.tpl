@@ -44,7 +44,9 @@
 	<a rel="shadowbox" href="{CONTENT.image}"><img src="{CONTENT.image}" width="500" /></a>
 </div>
 <!-- END: image -->
-{CONTENT.bodytext}
+<div id="bodytext">
+	{CONTENT.bodytext}
+</div>
 <div class="clear">
 	<!-- BEGIN: comment -->
 	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
@@ -58,4 +60,9 @@
 	<!-- END: loop -->
 </ul>
 <!-- END: other -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#bodytext img").toggleClass('img-thumbnail');
+	});
+</script>
 <!-- END: main -->
