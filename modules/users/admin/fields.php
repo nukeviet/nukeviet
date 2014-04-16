@@ -129,6 +129,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 }
 
 //ADD
+$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
 $field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -303,6 +304,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( $dataform['choicetypes'] == 'field_choicetypes_text' )
 		{
+			$dataform['sql_choices'] = '';
+			
 			$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
 			$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
 			$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
@@ -408,8 +411,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$stmt = $db->prepare( $query ) ;
             $stmt->bindParam( ':class', $dataform['class'], PDO::PARAM_STR );
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
-			$stmt->execute();
-			$save = $stmt->rowCount();
+			$save = $stmt->execute();
+			
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
 			{
 				$type_date = '';
@@ -602,7 +605,6 @@ else
 		}
 	}
 
-	$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
 		$text_fields = 1;
