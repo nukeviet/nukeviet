@@ -6,7 +6,8 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function sendrating(id, point, newscheckss) {
+function sendrating(id, point, newscheckss) 
+{
 	if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
 		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
 			$("#stringrating").html(res);
