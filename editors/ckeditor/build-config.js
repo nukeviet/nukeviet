@@ -84,6 +84,6 @@ var CKBUILDER_CONFIG = {
 	},
 	languages : {
 		'en' : 1,
-		'vi' : 1,
+		'vi' : 1
 	}
 };
