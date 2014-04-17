@@ -88,7 +88,7 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 					$xtpl->assign( 'ID', $data_row_i['id'] );
 					$xtpl->assign( 'LINK', $data_row_i['link_pro'] );
 					$xtpl->assign( 'TITLE', $data_row_i['title'] );
-					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 25 ) );
+					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 40 ) );
 					$xtpl->assign( 'IMG_SRC', $data_row_i['homeimgthumb'] );
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
@@ -205,7 +205,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 					$xtpl->assign( 'ID', $data_row_i['id'] );
 					$xtpl->assign( 'LINK', $data_row_i['link_pro'] );
 					$xtpl->assign( 'TITLE', $data_row_i['title'] );
-					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 25 ) );
+					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 40 ) );
 					$xtpl->assign( 'IMG_SRC', $data_row_i['homeimgthumb'] );
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
@@ -303,8 +303,6 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-	$num_view = $pro_config['per_row'];
-
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
 	if( ( ! isset( $op ) OR $op != 'detail' ) && $pro_config['show_displays'] == 1 )
 	{
@@ -324,30 +322,23 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
+        $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'LINK', $data_row['link_pro'] );
 			$xtpl->assign( 'TITLE', $data_row['title'] );
-			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'IMG_SRC', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$xtpl->parse( 'main.items.break' );
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+            
+			$xtpl->assign( 'num', $num_row );
+            
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -1448,7 +1439,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
  */
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $lang_module, $global_array_cat, $global_config;
+	global $module_file, $module_info, $lang_module, $global_array_cat;
 
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -1463,7 +1454,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		foreach( $array_content as $value )
 		{
 			$catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl'];
+			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
 
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
@@ -1556,3 +1547,5 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
+
+?>
