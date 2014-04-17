@@ -83,9 +83,8 @@ $lang_module['setting'] = 'Configuration';
 $lang_module['setting_indexfile'] = 'Showing methode on main page';
 $lang_module['setting_homesite'] = 'Image size on main page';
 $lang_module['setting_hometext'] = 'Show short description on product details view';
-$lang_module['setting_per_page'] = 'Number of products on 1 page [A]';
-$lang_module['setting_per_row'] = 'Number of products on 1 line (grid showing) [B]';
-$lang_module['setting_per_note'] = 'Attention: [A] is divisible by [B]';
+$lang_module['setting_per_page'] = 'Number of products on 1 page';
+$lang_module['setting_per_row'] = 'Number of products on 1 line (grid showing)';
 $lang_module['setting_per_note_home'] = 'Including Main page';
 $lang_module['setting_idf_df'] = 'Defaut';
 $lang_module['setting_allow_all'] = 'All';
@@ -344,3 +343,5 @@ $lang_module['site_key'] = 'SITE KEY';
 $lang_module['module_regis'] = 'Use the support';
 $lang_module['siteinfo_exptime'] = 'Products to expire';
 $lang_module['product'] = 'products';
+
+?>

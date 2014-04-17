@@ -83,9 +83,8 @@ $lang_module['setting'] = 'Cấu hình module';
 $lang_module['setting_indexfile'] = 'Phương án thể hiện trang chủ';
 $lang_module['setting_homesite'] = 'Kích thước của hình tại trang chủ';
 $lang_module['setting_hometext'] = 'Hiển thị phần giới thiệu gắn gọn khi xem chi tiết sản phẩm';
-$lang_module['setting_per_page'] = 'Số sản phẩm được hiển thị trong một trang [A]';
-$lang_module['setting_per_row'] = 'Số sản phẩm được hiển thị trên một hàng (hiển thị dạng lưới) [B]';
-$lang_module['setting_per_note'] = 'Chú ý chọn [B] sao cho [A] chia hết cho [B]';
+$lang_module['setting_per_page'] = 'Số sản phẩm được hiển thị trong một trang';
+$lang_module['setting_per_row'] = 'Số sản phẩm được hiển thị trên một hàng (hiển thị dạng lưới)';
 $lang_module['setting_per_note_home'] = 'Bao gồm cả trang chủ';
 $lang_module['setting_idf_df'] = 'Mặc định';
 $lang_module['setting_allow_all'] = 'Tất cả';
@@ -341,3 +340,5 @@ $lang_module['group_of'] = 'của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
+
+?>

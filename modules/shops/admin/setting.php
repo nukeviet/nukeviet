@@ -102,6 +102,13 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
+// Số sản phẩm hiển thị trên một dòng
+for( $i = 3; $i <= 4; $i++ )
+{
+    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
+    $xtpl->parse( 'main.per_row' );
+}
+
 $check_view = array(
 	"view_home_all" => "",
 	"view_home_cat" => "",
@@ -209,3 +216,5 @@ $contents .= $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
+?>
