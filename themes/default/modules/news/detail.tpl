@@ -91,7 +91,7 @@
 			{ADMINLINK}
 		</p>
 		<!-- END: adminlink -->
-		
+		<hr />
 		<div class="row">
 			<div class="col-md-6">
 				<!-- BEGIN: keywords -->
