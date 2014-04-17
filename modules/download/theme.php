@@ -219,6 +219,11 @@ function view_file( $row, $download_config )
 		$xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
 		$xtpl->parse( 'main.is_image' );
 	}
+    
+    if( ! empty( $row['download_info'] ) )
+    {
+        $xtpl->parse( 'main.download_info' );
+    }
 
 	if( ! empty( $row['description'] ) )
 	{
