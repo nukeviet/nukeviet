@@ -34,6 +34,10 @@
       vertical-align: middle;
 }
 
+#category .image{
+    margin: 0 10px 10px 0;
+}
+
 .msgshow {
 	background: #F5F5F5;
 	padding: 20px;
