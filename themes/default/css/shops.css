@@ -15,13 +15,23 @@
 	margin-bottom: 4px;
 }
 
-#products .col-sm-6 .thumbnail{
+#products .col-sm-6 .thumbnail, #category .col-sm-6 .thumbnail{
 	padding-top: 10px;
 }
 
 #products .col-sm-6 .label-default{
 	margin-bottom: 10px;
 	display: inline-block;
+}
+
+#category .col-sm-6 .price{
+    height: 38px;
+    margin-top: 5px;
+}
+
+#category .col-sm-6 .price .money{
+      display: block;
+      vertical-align: middle;
 }
 
 .msgshow {
@@ -39,6 +49,13 @@
 	width: 300px; 
 	max-width: 300px; !important;
 	padding: 10px;
+}
+
+.pages {
+    display: inline-block;
+    float: right;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 /* Custom controls */
@@ -126,6 +143,11 @@
 .others_product ul li span.time {
 	color: #c0c0c0;
 	font-size: 11px
+}
+
+.page-header{
+    padding-bottom: 8px;
+    margin: 0 0 18px;
 }
 
 /*********************/
@@ -293,13 +315,6 @@ a.pro_detail:hover, a.pro_order:hover {
 	border: 1px solid #ff0000;
 	padding: 3px;
 	text-transform: uppercase;
-}
-
-.pages {
-	display: inline-block;
-	float: right;
-	margin-bottom: 5px;
-	margin-top: 5px;
 }
 
 .pages a {

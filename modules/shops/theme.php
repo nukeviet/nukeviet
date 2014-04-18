@@ -517,8 +517,6 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
 
-	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-
 	if( $pro_config['show_compare'] == 1 )
 	{
 		if( isset( $_SESSION['array_id'] ) )
@@ -550,7 +548,8 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	if( ! empty( $data_content['data'] ) )
 	{
 		$i = 1;
-		$num_view = $pro_config['per_row'];
+		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content['data'] as $data_row )
 		{
 			$xtpl->assign( 'id', $data_row['id'] );
@@ -561,6 +560,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
+            
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -585,20 +585,11 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 					$xtpl->parse( 'main.grid_rows.contact' );
 				}
 			}
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+
+			$xtpl->assign( 'num', $num_row );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			if( $i % $num_view == 0 ) $xtpl->parse( 'main.grid_rows.end_row' );
+
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
