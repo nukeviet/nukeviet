@@ -395,29 +395,21 @@ function view_search_all( $data_content, $html_pages = "" )
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
+        $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'LINK', $data_row['link_pro'] );
 			$xtpl->assign( 'TITLE', $data_row['title'] );
-			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'IMG_SRC', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$xtpl->parse( 'main.items.break' );
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+			$xtpl->assign( 'num', $num_row );
+            
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -531,7 +523,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 		{
 			$xtpl->assign( 'id', $data_row['id'] );
 			$xtpl->assign( 'title_pro', $data_row['title'] );
-			$xtpl->assign( 'title_pro0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'title_pro0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );

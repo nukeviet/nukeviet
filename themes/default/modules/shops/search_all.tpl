@@ -1,95 +1,92 @@
 <!-- BEGIN: form -->
-<div class="clear"></div>
-<form action="{NV_BASE_SITEURL}" method="get" name="frm_search" style="background:#F5F5F5" onsubmit="return onsubmitsearch1();">
-	<table width="100%">
-		<tr>
-			<td width="50">{LANG.price1} :</td>
-			<td><input id="price11" type="text" value="{value_price1}" name="price1" style="text-align:center" class="txt-full"></td>
-			<td width="50">{LANG.price2} :</td>
-			<td><input id="price21" size="20" type="text" value="{value_price2}" name="price2" style="text-align:center" class="txt-full"></td>
-			<td width="80" align="right">
-			<select name="typemoney" id="typemoney1" class="txt-full">
-				<option value="0">{LANG.moneyunit}</option>
-				<!-- BEGIN: typemoney -->
-				<option {ROW.selected} value="{ROW.code}">{ROW.currency}</option>
-				<!-- END: typemoney -->
-			</select></td>
-		</tr>
-	</table>
-	<table width="100%">
-		<tr>
-			<td>
-			<select name="cata" style="width:100%" id="cata1">
-				<option value="0">{LANG.allcatagories}</option>
-				<!-- BEGIN: loopcata -->
-				<option {ROW.selected} value="{ROW.catid}">{ROW.xtitle}</option>
-				<!-- END: loopcata -->
-			</select></td>
-			<td>
-			<select name="sourceid" style="width:100%" id="sourceid1">
-				<option value="0">{LANG.source_title}</option>
-				<!-- BEGIN: loopsource -->
-				<option {ROW.selected} value="{ROW.sourceid}">{ROW.title}</option>
-				<!-- END: loopsource -->
-			</select></td>
-		</tr>
-	</table>
-	<table width="100%">
-		<tr>
-			<td width="60">{LANG.keyword} :</td>
-			<td><input id="keyword1" type="text" value="{value_keyword}" name="keyword" style="width:98%"></td>
-			<td width="80" align="right"><input type="button" class="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()"></td>
-		</tr>
-	</table>
-</form>
+<div id="formsearch">
+    <form action="{NV_BASE_SITEURL}" method="get" name="frm_search" onsubmit="return onsubmitsearch1();">
+        <div class="row">
+            <div class="col-xs-6 col-md-4">
+                <strong>{LANG.price1}</strong><input id="price11" type="text" value="{value_price1}" name="price1" class="form-control">
+            </div>
+            <div class="col-xs-6 col-md-4">
+                <strong>{LANG.price1}</strong><input id="price21" size="20" type="text" value="{value_price2}" name="price2" class="form-control">
+            </div>
+            <div class="col-xs-6 col-md-4">
+                &nbsp;
+                <select name="typemoney" id="typemoney1" class="form-control">
+                    <option value="0">{LANG.moneyunit}</option>
+                    <!-- BEGIN: typemoney -->
+                    <option {ROW.selected} value="{ROW.code}">{ROW.currency}</option>
+                    <!-- END: typemoney -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-6">
+                <select name="cata" id="cata1" class="form-control">
+                    <option value="0">{LANG.allcatagories}</option>
+                    <!-- BEGIN: loopcata -->
+                    <option {ROW.selected} value="{ROW.catid}">{ROW.xtitle}</option>
+                    <!-- END: loopcata -->
+                </select>
+            </div>
+            <div class="col-xs-6">
+                <select name="sourceid" id="sourceid1" class="form-control">
+                    <option value="0">{LANG.source_title}</option>
+                    <!-- BEGIN: loopsource -->
+                    <option {ROW.selected} value="{ROW.sourceid}">{ROW.title}</option>
+                    <!-- END: loopsource -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>{LANG.keyword}</label>
+            <input id="keyword1" type="text" value="{value_keyword}" name="keyword" class="form-control">
+        </div>
+        
+        <div class="row text-center">
+            <input type="button" class="btn btn-primary" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()">
+        </div>
+    </form>
+</div>
 <!-- END: form -->
 <!-- BEGIN: main -->
-<div class="clear"></div>
-<div id="products" class="clearfix" style="margin-top:5px">
+<div id="products">
 	<!-- BEGIN: items -->
-	<div class="items" style="width:{pwidth}%">
-		<div class="items_content">
-			<p class="content_top">
-				<a href="{LINK}" class="tip_trigger"> <img src="{IMG_SRC}" alt="" style="max-height:{height}px;max-width:{width}px;"/>
-				<!-- BEGIN: tooltip -->
-				<span class="tip"><strong>{TITLE}</strong>
-					<br />
-					<img src="{IMG_SRC}" style="max-width:{width}px;">{hometext}</span>
-				<!-- END: tooltip -->
-				</a>
-				<br />
-				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span>
-				<br />
-			</p>
-			<!-- BEGIN: adminlink -->
-			<div class="shops-center">
-				{ADMINLINK}
-			</div>
-			<!-- END: adminlink -->
-			<!-- BEGIN: price -->
-			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span>
-				<!-- BEGIN: discounts -->
-				<span class="money">{product_discounts} {money_unit}</span>
-				<!-- END: discounts -->
-			</p>
-			<!-- END: price -->
-			<!-- BEGIN: contact -->
-			<p class="content_price">
-				{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-			</p>
-			<!-- END: contact -->
-			<div class="clearfix">
-				<!-- BEGIN: order -->
-				<a href="javascript:void(0)" id="{ID}" title="{TITLE}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
-				<!-- END: order -->
-				<a href="{LINK}" title="{TITLE}" class="pro_detail" >{LANG.detail_product}</a>
+    <div class="col-sm-6 col-md-{num}">
+        <div class="thumbnail">
+            <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-toggle="tooltip" data-placement="bottom" rel="tooltip" data-html="true" title="<img class='img-thumbnail pull-left' style='margin: 0 5px 5px 0;' src='{IMG_SRC}' width='{width}' /><p class='text-justify'><strong>{TITLE}</strong><br />{hometext}</p><div class='clearfix'></div>" class="img-thumbnail custom_tooltip" style="max-height:{height}px;max-width:{width}px;"></a>
+            <div class="caption text-center">
+                <h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>
+
+    			<!-- BEGIN: adminlink -->
+    			<p>{ADMINLINK}</p>
+    			<!-- END: adminlink -->
+    			
+                <!-- BEGIN: price -->
+                <p class="price">
+                    <span class="{class_money}">{product_price} {money_unit}</span>
+                    <!-- BEGIN: discounts -->
+                    <br />
+                    <span class="money">{product_discounts} {money_unit}</span>
+                    <!-- END: discounts -->
+                </p>
+                <!-- END: price -->
+                
+                <!-- BEGIN: contact -->
+                <p class="price">
+                    {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
+                </p>
+                <!-- END: contact -->
+                
+                <div class="clearfix">
+                    <!-- BEGIN: order -->
+                    <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+                    <!-- END: order -->
+                    <a href="{LINK}" title="{TITLE}" ><button type="button" class="btn btn-primary btn-xs">{LANG.detail_product}</button></a>
+                </div>
 			</div>
 		</div>
 	</div>
-	<!-- BEGIN: break -->
-	<div style="clear:both"></div>
-	<!-- END: break -->
 	<!-- END: items -->
 </div>
 <!-- BEGIN: pages -->
@@ -99,6 +96,8 @@
 <!-- END: pages -->
 <div class="msgshow" id="msgshow"></div>
 <!-- BEGIN: tooltip_js -->
-<script type="text/javascript">tooltip_shop();</script>
+<script type="text/javascript">
+    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+</script>
 <!-- END: tooltip_js -->
 <!-- END: main -->

@@ -24,7 +24,7 @@
 	display: inline-block;
 }
 
-#category .col-sm-6 .price{
+.price{
     height: 38px;
     margin-top: 5px;
 }
@@ -60,6 +60,14 @@
     float: right;
     margin-bottom: 5px;
     margin-top: 5px;
+}
+
+#formsearch{
+    margin-top: 10px;
+}
+
+#formsearch .row{
+    margin-bottom: 10px;
 }
 
 /* Custom controls */
