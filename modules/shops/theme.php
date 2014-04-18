@@ -1012,7 +1012,6 @@ function cart_product( $data_content, $array_error_number )
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
 
 			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
-			$xtpl->assign( 'bg', $bg );
 
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
 

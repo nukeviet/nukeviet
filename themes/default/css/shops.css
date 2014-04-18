@@ -162,6 +162,30 @@
     margin: 0 0 18px;
 }
 
+/* CART */
+div.step_bar a.step {
+    display: block;
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    background: url('../images/shops/star.png') no-repeat left center;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+div.step_bar a.step span {
+    display: block;
+    width: 32px;
+    height: 32px;
+    float: left;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: #039;
+}
+
 /*********************/
 
 
@@ -467,29 +491,7 @@ table.rows tr.bgtop {
 	line-height: 22px;
 }
 
-/* CART */
-div.step_bar a.step {
-	display: block;
-	float: left;
-	height: 32px;
-	line-height: 32px;
-	font-size: 12px;
-	font-weight: 700;
-	background: url('../images/shops/star.png') no-repeat left center;
-	padding-left: 10px;
-	margin-right: 10px;
-}
 
-div.step_bar a.step span {
-	display: block;
-	width: 32px;
-	height: 32px;
-	float: left;
-	text-align: center;
-	font-weight: 700;
-	font-size: 13px;
-	color: #039;
-}
 
 .share a {
 	padding: 0px;
