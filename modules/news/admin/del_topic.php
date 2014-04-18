@@ -14,7 +14,8 @@ $topicid = $nv_Request->get_int( 'topicid', 'post', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'post' );
 
 $contents = 'NO_' . $topicid;
-list( $topicid, $thumbnail ) = $db->query( 'SELECT topicid, thumbnail FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . intval( $topicid ) )->fetch( 3 );
+
+list( $topicid, $image ) = $db->query( 'SELECT topicid, image FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid=' . intval( $topicid ) )->fetch( 3 );
 if( $topicid > 0 )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_topic', 'topicid ' . $topicid, $admin_info['userid'] );
@@ -51,9 +52,9 @@ if( $topicid > 0 )
 		if( $db->exec( $query ) )
 		{
 			nv_fix_topic();
-			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $thumbnail ) )
+			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image ) )
 			{
-				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $thumbnail );
+				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image );
 			}
 			$contents = 'OK_' . $topicid;
 		}
