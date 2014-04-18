@@ -28,7 +28,7 @@
                 <!-- END: adminlink -->
                 
                 <!-- BEGIN: price -->
-                <p>
+                <p class="price">
                     <span class="{class_money}">{product_price} {money_unit}</span>
                     <!-- BEGIN: discounts -->
                     <br />
@@ -38,7 +38,7 @@
                 <!-- END: price -->
                 
                 <!-- BEGIN: contact -->
-                <p class="content_price">
+                <p class="price">
                     {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
                 </p>
                 <!-- END: contact -->

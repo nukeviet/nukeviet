@@ -200,6 +200,8 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
+                $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+                
 				foreach( $data_row['data'] as $data_row_i )
 				{
 					$xtpl->assign( 'ID', $data_row_i['id'] );
@@ -238,20 +240,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 						}
 					}
 
-					$pwidth = ( int )( 100 / $num_view );
-
-					if( $i % $pro_config['per_row'] == 0 )
-					{
-						$xtpl->parse( 'main.catalogs.items.break' );
-						$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-						$i = 0;
-					}
-					else
-					{
-						$pwidth = ( int )( 100 / $num_view );
-					}
-
-					$xtpl->assign( 'pwidth', $pwidth );
+					$xtpl->assign( 'num', $num_row );
 
 					if( $pro_config['active_order'] == '1' )
 					{
@@ -260,7 +249,6 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 							$xtpl->parse( 'main.catalogs.items.order' );
 						}
 					}
-					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
 
 					if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row_i['product_code'] ) )
 					{
