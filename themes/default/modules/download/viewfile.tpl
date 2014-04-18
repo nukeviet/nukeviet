@@ -102,12 +102,13 @@
 		<!-- END: linkdirect -->
 	<!-- END: download_allow -->
 	
-	
+	<!-- BEGIN: download_info -->
 	<div class="download">
 		<div class="alert alert-danger">
 			{ROW.download_info}
 		</div>
 	</div>
+	<!-- END: download_info -->
 	
 	<div class="detail">
 		<span class="fa fa-info">&nbsp;</span>&nbsp;&nbsp;{LANG.file_rating}
