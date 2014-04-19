@@ -1155,9 +1155,16 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 			$xtpl->assign( 'DATA_PAYMENT', $value );
 			$xtpl->parse( 'main.actpay.payment.paymentloop' );
 		}
+
 		$xtpl->parse( 'main.actpay.payment' );
 	}
-	$xtpl->assign( 'intro_pay', $intro_pay );
+
+    if( ! empty( $intro_pay) )
+    {
+        $xtpl->assign( 'intro_pay', $intro_pay );
+        $xtpl->parse( 'main.intro_pay' );   
+    }
+    
 	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
 	$xtpl->assign( 'url_finsh', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
 	$xtpl->assign( 'url_print', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );

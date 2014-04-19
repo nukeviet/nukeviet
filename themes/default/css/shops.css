@@ -194,6 +194,16 @@ div.step_bar a.step_current{
     color: red;
 }
 
+.block .payment_info{
+    margin: 10px 0 10px 0;
+}
+
+.block .payment_info .payment_items{ 
+    text-align:center; 
+    margin-right:2px; 
+    display:inline-block
+}
+
 /*********************/
 
 
