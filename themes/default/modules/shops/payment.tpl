@@ -35,7 +35,7 @@
                     <span>{DATA.order_code}</span>
                     <br>
                     <span class="payment">{DATA.transaction_name}</span>
-                    <a href="{url_print}" title="" id="click_print" class="btn btn-success" style="margin-top:5px"><span>{LANG.order_print}</span></a>
+                    <a href="{url_print}" title="" id="click_print" class="btn btn-success hidden-xs" style="margin-top:5px"><em class="fa fa-print">&nbsp;&nbsp;{LANG.order_print}</em></a>
                 </div>
             </div>
         </div>

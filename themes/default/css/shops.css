@@ -166,6 +166,43 @@
     margin: 0 0 18px;
 }
 
+/* PRINT */
+#print{
+    padding: 10px;    
+}
+
+#print table.rows2 {
+    width: 100%;
+    border: none;
+    margin-bottom: 10px;
+}
+
+#print table.rows {
+    width: 100%;
+    border: 1px solid #F5F5F5;
+}
+
+#print table.rows td {
+    padding: 5px;
+    border: 1px solid #F5F5F5;    
+}
+
+#print table.rows td img {
+    width: 60px;
+    padding: 2px;
+    border: 1px solid #ebebeb;
+    vertical-align: middle;
+}
+
+#print table.rows tr.bg {
+    background: #f3f3f3;
+}
+
+#print table.rows tr.bgtop {
+    background: #CCCCCC;
+    line-height: 22px;
+}
+
 /* CART */
 div.step_bar a.step {
     display: block;
