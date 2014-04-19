@@ -186,6 +186,10 @@ div.step_bar a.step span {
     color: #039;
 }
 
+div.step_bar a.step_current{
+    color: red;
+}
+
 /*********************/
 
 
