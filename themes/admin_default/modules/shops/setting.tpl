@@ -21,7 +21,13 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_row}</strong></td>
-				<td><input type="text" value="{DATA.per_row}" style="width: 40px;" name="per_row" /> {LANG.setting_per_note}</td>
+				<td>
+				    <select name="per_row">
+				        <!-- BEGIN: per_row -->
+				        <option value="{PER_ROW.value}" {PER_ROW.selected}>{PER_ROW.value}</option>
+				        <!-- END: per_row -->
+				    </select>
+				</td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_hometext}</strong></td>

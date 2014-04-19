@@ -70,10 +70,11 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		}
 	}
 
+    $page_title = $data['order_code'];
 	$contents = call_user_func( "print_pay", $data, $data_pro );
 
 	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
+	echo nv_site_theme( $contents, false );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
 else

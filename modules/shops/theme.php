@@ -83,12 +83,14 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
+                $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+                
 				foreach( $data_row['data'] as $data_row_i )
 				{
 					$xtpl->assign( 'ID', $data_row_i['id'] );
 					$xtpl->assign( 'LINK', $data_row_i['link_pro'] );
 					$xtpl->assign( 'TITLE', $data_row_i['title'] );
-					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 25 ) );
+					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 40 ) );
 					$xtpl->assign( 'IMG_SRC', $data_row_i['homeimgthumb'] );
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
@@ -121,20 +123,7 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 						}
 					}
 
-					$pwidth = ( int )( 100 / $num_view );
-
-					if( $i % $pro_config['per_row'] == 0 )
-					{
-						$xtpl->parse( 'main.catalogs.items.break' );
-						$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-						$i = 0;
-					}
-					else
-					{
-						$pwidth = ( int )( 100 / $num_view );
-					}
-
-					$xtpl->assign( 'pwidth', $pwidth );
+					$xtpl->assign( 'num', $num_row );
 
 					if( $pro_config['active_order'] == '1' )
 					{
@@ -200,12 +189,14 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
+                $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+                
 				foreach( $data_row['data'] as $data_row_i )
 				{
 					$xtpl->assign( 'ID', $data_row_i['id'] );
 					$xtpl->assign( 'LINK', $data_row_i['link_pro'] );
 					$xtpl->assign( 'TITLE', $data_row_i['title'] );
-					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 25 ) );
+					$xtpl->assign( 'TITLE0', nv_clean60( $data_row_i['title'], 40 ) );
 					$xtpl->assign( 'IMG_SRC', $data_row_i['homeimgthumb'] );
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
@@ -238,20 +229,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 						}
 					}
 
-					$pwidth = ( int )( 100 / $num_view );
-
-					if( $i % $pro_config['per_row'] == 0 )
-					{
-						$xtpl->parse( 'main.catalogs.items.break' );
-						$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-						$i = 0;
-					}
-					else
-					{
-						$pwidth = ( int )( 100 / $num_view );
-					}
-
-					$xtpl->assign( 'pwidth', $pwidth );
+					$xtpl->assign( 'num', $num_row );
 
 					if( $pro_config['active_order'] == '1' )
 					{
@@ -260,7 +238,6 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 							$xtpl->parse( 'main.catalogs.items.order' );
 						}
 					}
-					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
 
 					if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_row_i['product_code'] ) )
 					{
@@ -303,8 +280,6 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-	$num_view = $pro_config['per_row'];
-
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
 	if( ( ! isset( $op ) OR $op != 'detail' ) && $pro_config['show_displays'] == 1 )
 	{
@@ -324,30 +299,23 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
+        $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'LINK', $data_row['link_pro'] );
 			$xtpl->assign( 'TITLE', $data_row['title'] );
-			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'IMG_SRC', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$xtpl->parse( 'main.items.break' );
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+            
+			$xtpl->assign( 'num', $num_row );
+            
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -427,29 +395,21 @@ function view_search_all( $data_content, $html_pages = "" )
 	if( ! empty( $data_content ) )
 	{
 		$i = 1;
+        $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'LINK', $data_row['link_pro'] );
 			$xtpl->assign( 'TITLE', $data_row['title'] );
-			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'TITLE0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'IMG_SRC', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$xtpl->parse( 'main.items.break' );
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+			$xtpl->assign( 'num', $num_row );
+            
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -526,8 +486,6 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
 
-	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? " show-product-code" : "" );
-
 	if( $pro_config['show_compare'] == 1 )
 	{
 		if( isset( $_SESSION['array_id'] ) )
@@ -559,17 +517,19 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	if( ! empty( $data_content['data'] ) )
 	{
 		$i = 1;
-		$num_view = $pro_config['per_row'];
+		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+        
 		foreach( $data_content['data'] as $data_row )
 		{
 			$xtpl->assign( 'id', $data_row['id'] );
 			$xtpl->assign( 'title_pro', $data_row['title'] );
-			$xtpl->assign( 'title_pro0', nv_clean60( $data_row['title'], 25 ) );
+			$xtpl->assign( 'title_pro0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
+            
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -594,20 +554,11 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 					$xtpl->parse( 'main.grid_rows.contact' );
 				}
 			}
-			$pwidth = ( int )( 100 / $num_view );
-			if( $i % $pro_config['per_row'] == 0 )
-			{
-				$pwidth = 100 - ( ( int )( 100 / $num_view ) ) * ( $i - 1 );
-				$i = 0;
-			}
-			else
-			{
-				$pwidth = ( int )( 100 / $num_view );
-			}
-			$xtpl->assign( 'pwidth', $pwidth );
+
+			$xtpl->assign( 'num', $num_row );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			if( $i % $num_view == 0 ) $xtpl->parse( 'main.grid_rows.end_row' );
+
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -1061,7 +1012,6 @@ function cart_product( $data_content, $array_error_number )
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
 
 			$bg = ( $i % 2 == 0 ) ? "class=\"bg\"" : "";
-			$xtpl->assign( 'bg', $bg );
 
 			if( $pro_config['active_price'] == '1' ) $xtpl->parse( 'main.rows.price2' );
 
@@ -1205,9 +1155,16 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 			$xtpl->assign( 'DATA_PAYMENT', $value );
 			$xtpl->parse( 'main.actpay.payment.paymentloop' );
 		}
+
 		$xtpl->parse( 'main.actpay.payment' );
 	}
-	$xtpl->assign( 'intro_pay', $intro_pay );
+
+    if( ! empty( $intro_pay) )
+    {
+        $xtpl->assign( 'intro_pay', $intro_pay );
+        $xtpl->parse( 'main.actpay.intro_pay' );   
+    }
+    
 	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
 	$xtpl->assign( 'url_finsh', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
 	$xtpl->assign( 'url_print', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );
@@ -1329,13 +1286,12 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'URL_DEL_BACK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history" );
 		if( intval( $data_row['transaction_status'] ) == - 1 )
 		{
-			$xtpl->assign( 'text_no_remove', "" );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
-			$xtpl->parse( 'main.rows.remove' );
+            $xtpl->parse( 'main.rows.remove' );
 		}
 		else
 		{
-			$xtpl->assign( 'text_no_remove', '' );
+            $xtpl->parse( 'main.rows.no_remove' );
 		}
 		$xtpl->assign( 'link', $data_row['link'] );
 
@@ -1448,7 +1404,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
  */
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $lang_module, $global_array_cat, $global_config;
+	global $module_file, $module_info, $lang_module, $global_array_cat;
 
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -1462,8 +1418,9 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	{
 		foreach( $array_content as $value )
 		{
-			$catid_i = ( $catid > 0 ) ? $catid : end( explode( ",", $value['listcatid'] ) );
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl'];
+		    $listcatid = explode( ",", $value['listcatid'] );
+			$catid_i = ( $catid > 0 ) ? $catid : end( $listcatid );
+			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
 
 			$xtpl->assign( 'LINK', $url );
 			$xtpl->assign( 'TITLEROW', BoldKeywordInStr( $value['title'], $key ) );
@@ -1556,3 +1513,5 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
+
+?>

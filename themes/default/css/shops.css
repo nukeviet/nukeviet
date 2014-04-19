@@ -1,6 +1,248 @@
-﻿#products {
-	background: #fff;
+﻿table.table tr.bg {
+    background: #FBF9F9;
 }
+
+.money {
+	color: #CC3300;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.discounts_money {
+	color: #000000;
+	font-weight: normal;
+	text-decoration: line-through;
+	padding: 5px;
+}
+
+#search_form_shops .form-group{
+	margin-bottom: 4px;
+}
+
+#products .col-sm-6 .thumbnail, #category .col-sm-6 .thumbnail{
+	padding-top: 10px;
+}
+
+#products .col-sm-6 .label-default{
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+.price{
+    height: 38px;
+    margin-top: 5px;
+}
+
+#category .col-sm-6 .price .money{
+      display: block;
+      vertical-align: middle;
+}
+
+.image{
+    margin: 0 10px 10px 0;
+}
+
+.msgshow {
+	background: #F5F5F5;
+	padding: 20px;
+	border: 4px solid #C7C7C7;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	display: none;
+	z-index: 10020 !important;
+}
+
+.tooltip-inner {
+	width: 300px; 
+	max-width: 300px; !important;
+	padding: 10px;
+}
+
+.pages {
+    display: inline-block;
+    float: right;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#formsearch{
+    margin-top: 10px;
+}
+
+#formsearch .row{
+    margin-bottom: 10px;
+}
+
+/* Custom controls */
+#product_center{
+	position: relative;
+}
+#product_center .crsl-nav{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#product_center .crsl-items:after{
+	display: block;
+	clear: both;
+	content: '';
+}
+
+#product_center .crsl-items img{
+    margin: 0 auto 6px auto;
+}
+
+#product_center .previous, #product_center .next{
+	position: absolute;
+	top: 50%;
+	width: 40px;
+	height: 40px;
+	margin-top: -20px;
+	text-indent: -10000px;
+	color: #FFF;
+	background: rgba(0, 0, 0, .80) url(../images/shops/previous-next.png) no-repeat 0 0;
+	z-index: 10;
+	/* border radius */
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+	/* transition */
+	-webkit-transition: background .2s ease-out;
+	-moz-transition: background .2s ease-out;
+	-o-transition: background .2s ease-out;
+	transition: background .2s ease-out;
+}
+#product_center .previous:hover, #product_center .next:hover{
+	background-color: rgba(0,0,0, .95);
+}
+#product_center .previous{
+	left: 0;
+	background-position: 0 0;
+}
+#product_center .next{
+	right: 0;
+	background-position: 100% 0;
+}
+#product_center .crsl-item{
+	margin-bottom: 0;
+}
+
+.caption h3{
+    line-height: 22px;
+    height: 40px;   
+}
+
+/* BLOCK OTHER PRODUCT */
+.others_product ul{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.others_product ul li {
+	list-style: none;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.others_product ul li img {
+	margin: 5px;
+}
+
+.others_product ul li.bg {
+	background: #FFFFF0;
+}
+
+.others_product ul li span.time {
+	color: #c0c0c0;
+	font-size: 11px
+}
+
+.page-header{
+    padding-bottom: 8px;
+    margin: 0 0 18px;
+}
+
+/* PRINT */
+#print{
+    padding: 10px;    
+}
+
+#print table.rows2 {
+    width: 100%;
+    border: none;
+    margin-bottom: 10px;
+}
+
+#print table.rows {
+    width: 100%;
+    border: 1px solid #F5F5F5;
+}
+
+#print table.rows td {
+    padding: 5px;
+    border: 1px solid #F5F5F5;    
+}
+
+#print table.rows td img {
+    width: 60px;
+    padding: 2px;
+    border: 1px solid #ebebeb;
+    vertical-align: middle;
+}
+
+#print table.rows tr.bg {
+    background: #f3f3f3;
+}
+
+#print table.rows tr.bgtop {
+    background: #CCCCCC;
+    line-height: 22px;
+}
+
+/* CART */
+div.step_bar a.step {
+    display: block;
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    background: url('../images/shops/star.png') no-repeat left center;
+    padding-left: 10px;
+    margin-right: 10px;
+}
+
+div.step_bar a.step span {
+    display: block;
+    width: 32px;
+    height: 32px;
+    float: left;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: #039;
+}
+
+div.step_bar a.step_current{
+    color: red;
+}
+
+.block .payment_info{
+    margin: 10px 0 10px 0;
+}
+
+.block .payment_info .payment_items{ 
+    text-align:center; 
+    margin-right:2px; 
+    display:inline-block
+}
+
+/*********************/
+
 
 #products .items {
 	float: left;
@@ -29,19 +271,6 @@
 
 #products .items .items_content .content_price {
 	height: 15px;
-}
-
-.money {
-	color: #CC3300;
-	font-weight: bold;
-	padding: 5px;
-}
-
-.discounts_money {
-	color: #000000;
-	font-weight: normal;
-	text-decoration: line-through;
-	padding: 5px;
 }
 
 .time_up {
@@ -176,13 +405,6 @@ a.pro_detail:hover, a.pro_order:hover {
 	text-transform: uppercase;
 }
 
-.pages {
-	display: inline-block;
-	float: right;
-	margin-bottom: 5px;
-	margin-top: 5px;
-}
-
 .pages a {
 	color: #000000;
 	border: 1px solid #ebebeb;
@@ -315,38 +537,12 @@ table.rows td img.imgpro {
 	vertical-align: middle;
 }
 
-table.rows tr.bg {
-	background: #f3f3f3;
-}
-
 table.rows tr.bgtop {
 	background: #CCE6FF;
 	line-height: 22px;
 }
 
-/* CART */
-div.step_bar a.step {
-	display: block;
-	float: left;
-	height: 32px;
-	line-height: 32px;
-	font-size: 12px;
-	font-weight: 700;
-	background: url('../images/shops/star.png') no-repeat left center;
-	padding-left: 10px;
-	margin-right: 10px;
-}
 
-div.step_bar a.step span {
-	display: block;
-	width: 32px;
-	height: 32px;
-	float: left;
-	text-align: center;
-	font-weight: 700;
-	font-size: 13px;
-	color: #039;
-}
 
 .share a {
 	padding: 0px;
@@ -395,10 +591,6 @@ div.step_bar a.step span {
 	color: #0080c0;
 	font-size: 16px;
 	font-weight: 700;
-}
-
-.block_cart {
-	padding: 5px;
 }
 
 /* TAB */
@@ -537,30 +729,6 @@ div.TabView div.Pages div.Page {
 	padding: 2px;
 }
 
-/* BLOCK OTHER PRODUCT */
-.others_product ul li {
-	list-style: none;
-	padding: 5px;
-	text-align: center;
-}
-
-.others_product ul li img {
-	padding: 2px;
-	border: 1px solid #eeeeee;
-	width: 60px;
-	margin-right: 5px;
-	background: #FFFFFF
-}
-
-.others_product ul li.bg {
-	background: #FFFFF0;
-}
-
-.others_product ul li span.time {
-	color: #c0c0c0;
-	font-size: 11px
-}
-
 .block-nobg .title_adv {
 	background: url('../images/dot_gray.gif') repeat-x center;
 }
@@ -626,17 +794,6 @@ div.TabView div.Pages div.Page {
 	padding: 0px 10px;
 	font-size: 14px;
 	text-transform: uppercase;
-}
-
-.msgshow {
-	background: #F5F5F5;
-	padding: 20px;
-	border: 4px solid #C7C7C7;
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	display: none;
-	z-index: 10020 !important;
 }
 
 /* TOOLTIP */
