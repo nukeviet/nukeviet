@@ -1162,7 +1162,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
     if( ! empty( $intro_pay) )
     {
         $xtpl->assign( 'intro_pay', $intro_pay );
-        $xtpl->parse( 'main.intro_pay' );   
+        $xtpl->parse( 'main.actpay.intro_pay' );   
     }
     
 	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
@@ -1286,13 +1286,12 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'URL_DEL_BACK', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history" );
 		if( intval( $data_row['transaction_status'] ) == - 1 )
 		{
-			$xtpl->assign( 'text_no_remove', "" );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
-			$xtpl->parse( 'main.rows.remove' );
+            $xtpl->parse( 'main.rows.remove' );
 		}
 		else
 		{
-			$xtpl->assign( 'text_no_remove', '' );
+            $xtpl->parse( 'main.rows.no_remove' );
 		}
 		$xtpl->assign( 'link', $data_row['link'] );
 
@@ -1514,3 +1513,5 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
+
+?>
