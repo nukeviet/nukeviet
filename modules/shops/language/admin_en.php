@@ -343,5 +343,3 @@ $lang_module['site_key'] = 'SITE KEY';
 $lang_module['module_regis'] = 'Use the support';
 $lang_module['siteinfo_exptime'] = 'Products to expire';
 $lang_module['product'] = 'products';
-
-?>

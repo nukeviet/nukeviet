@@ -340,5 +340,3 @@ $lang_module['group_of'] = 'của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
-
-?>
