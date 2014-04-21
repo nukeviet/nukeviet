@@ -4,7 +4,7 @@
 	<div class="alert alert-info clearfix">
 		<h3>{TOPPIC_TITLE}</h3>
 		<!-- BEGIN: image -->
-		<img alt="{TOPPIC_TITLE}" id="imghome" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left" />
+		<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
 		<p class="text-justify">{TOPPIC_DESCRIPTION}</p>
 	</div>
@@ -15,7 +15,7 @@
 <div class="news_column panel panel-default">
 	<div class="panel-body">
 		<!-- BEGIN: homethumb -->
-		<a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" id="imghome" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left" /></a>
+		<a href="{TOPIC.link}" title="{TOPIC.title}"><img alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}" class="img-thumbnail pull-left imghome" /></a>
 		<!-- END: homethumb -->
 		<h3><a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a></h3>
 		<p>
