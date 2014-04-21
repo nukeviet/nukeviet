@@ -91,7 +91,7 @@
 			{ADMINLINK}
 		</p>
 		<!-- END: adminlink -->
-		
+		<hr />
 		<div class="row">
 			<div class="col-md-6">
 				<!-- BEGIN: keywords -->
@@ -220,6 +220,11 @@
 	<!-- END: related -->
 </div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".bodytext img").toggleClass('img-thumbnail');
+	});
+</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
 <div id="no_permission">

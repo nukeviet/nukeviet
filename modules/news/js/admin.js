@@ -24,7 +24,7 @@ function nv_chang_cat(catid, mod) {
 
 function nv_show_list_cat(parentid) {
 	if (document.getElementById('module_show_list')) {
-		$('#module_show_list').load(script_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_cat&parentid=' + parentid + '&nocache=' + new Date().getTime());
+		$('#module_show_list').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_cat&parentid=' + parentid + '&nocache=' + new Date().getTime());
 	}
 	return;
 }
@@ -82,7 +82,7 @@ function nv_chang_topic(topicid, mod) {
 
 function nv_show_list_topic() {
 	if (document.getElementById('module_show_list')) {
-		$('#module_show_list').load(script_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_topic&nocache=' + new Date().getTime());
+		$('#module_show_list').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_topic&nocache=' + new Date().getTime());
 	}
 	return;
 }
@@ -131,7 +131,7 @@ function nv_chang_sources(sourceid, mod) {
 
 function nv_show_list_source() {
 	if (document.getElementById('module_show_list')) {
-		$('#module_show_list').load(script_name + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_source&nocache=' + new Date().getTime());
+		$('#module_show_list').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_source&nocache=' + new Date().getTime());
 	}
 	return;
 }

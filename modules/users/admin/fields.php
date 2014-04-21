@@ -129,6 +129,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 }
 
 //ADD
+$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 $error = '';
 $field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -172,7 +173,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	else
 	{
 		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
+		
+		// Kiểm tra trùng trường dữ liệu
+		$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
+		$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
+		{
+			$error = $lang_module['field_error'];
+		}
 	}
+
 	$language[NV_LANG_DATA] = array( $dataform['title'], $dataform['description'] );
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
@@ -202,7 +213,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$dataform['min_length'] = $nv_Request->get_int( 'min_length', 'post', 255 );
 		$dataform['max_length'] = $nv_Request->get_int( 'max_length', 'post', 255 );
 		$dataform['default_value'] = $nv_Request->get_title( 'default_value', 'post', '' );
-		$dataform['field_choices'] = '';
+
+		if( $dataform['min_length'] >= $dataform['max_length'] )
+		{
+			$error = $lang_module['field_number_error'];
+		}
+		else 
+		{
+			$dataform['field_choices'] = '';
+		}
 	}
 	elseif( $dataform['field_type'] == 'number' )
 	{
@@ -285,6 +304,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		if( $dataform['choicetypes'] == 'field_choicetypes_text' )
 		{
+			$dataform['sql_choices'] = '';
+			
 			$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
 			$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
 			$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
@@ -371,7 +392,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		elseif( $dataform['max_length'] <= 4294967296 )
 		{
 			$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET";
-			if( $text_fields = 1 )
+			if( $text_fields == 1 )
 			{
 				$query .= " field_choices='" . $dataform['field_choices'] . "', match_type='" . $dataform['match_type'] . "',
 				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
@@ -390,8 +411,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$stmt = $db->prepare( $query ) ;
             $stmt->bindParam( ':class', $dataform['class'], PDO::PARAM_STR );
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
-			$stmt->execute();
-			$save = $stmt->rowCount();
+			$save = $stmt->execute();
+			
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
 			{
 				$type_date = '';
@@ -584,7 +605,6 @@ else
 		}
 	}
 
-	$text_fields = $number_fields = $date_fields = $choice_fields = $choice_type_sql = $choice_type_text = 0;
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
 		$text_fields = 1;

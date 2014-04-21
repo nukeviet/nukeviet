@@ -22,7 +22,11 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	$allowzip[] = $dir . '/modules/index.html';
 	$allowzip[] = $dir . '/themes/index.html';
 	$allowzip[] = $dir . '/' . NV_EDITORSDIR . '/index.html';
-	$dir_no_scan = array( NV_ROOTDIR . '/' . 'install', NV_ROOTDIR . '/' . NV_ADMINDIR, NV_ROOTDIR . '/' . NV_UPLOADS_DIR, NV_ROOTDIR . '/' . NV_FILES_DIR, NV_ROOTDIR . '/' . NV_LOGS_DIR, NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH, NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_ROOTDIR . '/' . NV_DATADIR, NV_ROOTDIR . '/' . NV_CACHEDIR );
+	$dir_no_scan = array( NV_ROOTDIR . '/' . 'install', NV_ROOTDIR . '/' . NV_ADMINDIR, NV_ROOTDIR . '/' . NV_UPLOADS_DIR, NV_ROOTDIR . '/' . NV_FILES_DIR, NV_ROOTDIR . '/' . NV_LOGS_DIR, NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_ROOTDIR . '/' . NV_DATADIR, NV_ROOTDIR . '/' . NV_CACHEDIR );
+	if( NV_SESSION_SAVE_PATH != '' )
+	{
+		$dir_no_scan[] = NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH;
+	}	
 	$error = array();
 	//Ten thu muc luu data
 	$stack[] = $dir;
