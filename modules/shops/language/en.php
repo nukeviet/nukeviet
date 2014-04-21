@@ -289,6 +289,7 @@ $lang_module['group_title'] = 'Category';
 $lang_module['product_code'] = 'Product code';
 $lang_module['detail_product_address'] = 'Place to sell';
 $lang_module['detail_source'] = 'Manufacturer';
+$lang_module['add_source_other'] = 'View all product this source';
 $lang_module['detail_product_discounts'] = 'Discounts';
 $lang_module['detail_promotional'] = 'Promotion';
 $lang_module['detail_warranty'] = 'The warranty';

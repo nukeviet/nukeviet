@@ -60,60 +60,6 @@ function share_buzz() {
 	window.open("http://buzz.yahoo.com/buzz?publisherurn=DanTri&targetUrl=" + encodeURIComponent(u));
 }
 
-//JavaScript Document
-//Copyright (C) 2005 Ilya S. Lyubinskiy. All rights reserved.
-//Technical support: http://www.php-development.ru/
-
-//----- Auxiliary -------------------------------------------------------------
-function tabview_aux(TabViewId, id) {
-	var TabView = document.getElementById(TabViewId);
-	// ----- Tabs -----
-	var Tabs = TabView.firstChild;
-	while (Tabs.className != "Tabs")
-	Tabs = Tabs.nextSibling;
-	var Tab = Tabs.firstChild;
-	var i = 0;
-	do {
-		if (Tab.tagName == "A") {
-			i++;
-			Tab.href = "javascript:tabview_switch('" + TabViewId + "', " + i + ");";
-			Tab.className = (i == id) ? "Active" : "";
-			Tab.blur();
-		}
-	} while (Tab = Tab.nextSibling);
-	// ----- Pages -----
-	var Pages = TabView.firstChild;
-	while (Pages.className != 'Pages')
-	Pages = Pages.nextSibling;
-	var Page = Pages.firstChild;
-	var i = 0;
-	do {
-		if (Page.className == 'Page') {
-			i++;
-			//if (Pages.offsetHeight) Page.style.height = (Pages.offsetHeight-2)+"px";
-			//Page.style.overflow = "auto";
-			Page.style.display = (i == id) ? 'block' : 'none';
-		}
-	} while (Page = Page.nextSibling);
-}
-
-//----- Functions ------
-
-function tabview_switch(TabViewId, id) {
-	tabview_aux(TabViewId, id);
-	nv_setCookie('tvID', id, 36);
-}
-
-function tabview_initialize(TabViewId) {
-	tvID2 = nv_getCookie('tvID');
-	if (tvID2 == -1 || tvID2 == "") {
-		nv_setCookie('tvID', 1, 36);
-		tabview_aux(TabViewId, 1);
-	} else {
-		tabview_aux(TabViewId, tvID2);
-	}
-}
-
 /*javascript user*/
 function cartorder(a_ob) {
 	var id = $(a_ob).attr("id");
@@ -168,24 +114,6 @@ function cartorder_detail(a_ob) {
 function alert_msg(msg) {
 	$('#msgshow').html(msg);
 	$('#msgshow').show('slide').delay(3000).hide('slow');
-}
-
-function tooltip_shop() {
-	$(".tip_trigger").hover(function() {
-		tip = $(this).find(".tip");
-		tip.show().fadeIn(2000);
-	}, function() {
-		tip.hide();
-	}).mousemove(function(a) {
-		var x = a.pageX + 10;
-		var y = a.pageY + 10;
-		var tipw = tip.outerWidth(), tiph = tip.outerHeight(), x = (x + tipw > $(document).scrollLeft() + $(window).width()) ? x - tipw - (10 * 2) : x;
-		y = (y + tiph > $(document).scrollTop() + $(window).height()) ? $(document).scrollTop() + $(window).height() - tiph - 10 : y;
-		tip.css({
-			top : y,
-			left : x
-		});
-	});
 }
 
 function checknum() {
