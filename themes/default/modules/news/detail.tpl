@@ -17,7 +17,7 @@
 		<em class="pull-left time">{DETAIL.publtime}</em>
 		<ul class="list-inline pull-right">
 			<!-- BEGIN: allowed_send -->
-			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','650','500','no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_send -->
 			<!-- BEGIN: allowed_print -->
 			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
