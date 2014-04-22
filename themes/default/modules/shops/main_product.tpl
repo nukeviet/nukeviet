@@ -45,6 +45,10 @@
                 </p>
                 <!-- END: contact -->
                 
+                <!-- BEGIN: compare -->
+                <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
+                <!-- END: compare -->
+                
                 <div class="clearfix">
                     <!-- BEGIN: order -->
                     <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>

@@ -38,6 +38,10 @@
                             {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
                         </p>
                         <!-- END: contact -->
+                        
+                        <!-- BEGIN: compare -->
+                        <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
+                        <!-- END: compare -->
     					
                         <div class="clearfix">
                             <!-- BEGIN: order -->

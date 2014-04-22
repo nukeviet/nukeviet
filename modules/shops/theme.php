@@ -144,6 +144,28 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
+
+                    // So sanh san pham
+                    if( $pro_config['show_compare'] == 1 )
+                    {
+                        if( isset( $_SESSION['array_id'] ) )
+                        {
+                            $array_id = $_SESSION['array_id'];
+                            $array_id = unserialize( $array_id );
+                        }
+                        else
+                        {
+                            $array_id = array();
+                        }
+                        $xtpl->parse( 'main.catalogs.items.compare' );
+                    }
+        
+                    if( ! empty( $array_id ) )
+                    {
+                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+                        $xtpl->assign( 'ch', $ch );
+                    }
+
 					$xtpl->parse( 'main.catalogs.items' );
 					++$i;
 				}
@@ -249,6 +271,28 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
+                    
+                    // So sanh san pham
+                    if( $pro_config['show_compare'] == 1 )
+                    {
+                        if( isset( $_SESSION['array_id'] ) )
+                        {
+                            $array_id = $_SESSION['array_id'];
+                            $array_id = unserialize( $array_id );
+                        }
+                        else
+                        {
+                            $array_id = array();
+                        }
+                        $xtpl->parse( 'main.catalogs.items.compare' );
+                    }
+        
+                    if( ! empty( $array_id ) )
+                    {
+                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+                        $xtpl->assign( 'ch', $ch );
+                    }
+                    
 					$xtpl->parse( 'main.catalogs.items' );
 					++$i;
 				}
@@ -359,10 +403,32 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
+            
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.items.compare' );
+            }
+
+            if( ! empty( $array_id ) )
+            {
+                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+                $xtpl->assign( 'ch', $ch );
+            }
 
 			$xtpl->parse( 'main.items' );
 			++$i;
 		}
+
 		if( ! empty( $html_pages ) )
 		{
 			$xtpl->assign( 'generate_page', $html_pages );
@@ -448,6 +514,27 @@ function view_search_all( $data_content, $html_pages = "" )
 				$xtpl->parse( 'main.items.adminlink' );
 			}
 
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.items.compare' );
+            }
+
+            if( ! empty( $array_id ) )
+            {
+                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+                $xtpl->assign( 'ch', $ch );
+            }
+
 			$xtpl->parse( 'main.items' );
 			++$i;
 		}
@@ -485,19 +572,6 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'catid', $data_content['id'] );
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
-
-	if( $pro_config['show_compare'] == 1 )
-	{
-		if( isset( $_SESSION['array_id'] ) )
-		{
-			$array_id = $_SESSION['array_id'];
-			$array_id = unserialize( $array_id );
-		}
-		else
-		{
-			$array_id = array();
-		}
-	}
 
 	if( $pro_config['show_displays'] == 1 )
 	{
@@ -578,15 +652,26 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.grid_rows.adminlink' );
 			}
+            
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.grid_rows.compare' );
+            }
 
 			if( ! empty( $array_id ) )
 			{
 				$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
 				$xtpl->assign( 'ch', $ch );
-			}
-			if( $pro_config['show_compare'] == 1 )
-			{
-				$xtpl->parse( 'main.grid_rows.compare' );
 			}
 
 			$xtpl->parse( 'main.grid_rows' );
