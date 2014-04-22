@@ -174,7 +174,6 @@ $lang_module['facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="htt
 $lang_module['socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
 $lang_module['block'] = 'Các nhóm tin';
 $lang_module['adddefaultblock'] = 'Chọn mặc định khi tạo bài viết';
-$lang_module['module_logo'] = 'Logo tại module khi giao diện hỗ trợ thay thế logo';
 $lang_module['source_logo'] = 'Logo nguồn tin';
 $lang_module['topic_page'] = 'Tin tức thuộc nhóm tin liên quan';
 $lang_module['topic_del'] = 'Xóa khỏi dòng sự kiện';

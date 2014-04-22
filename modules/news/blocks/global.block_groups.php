@@ -88,15 +88,15 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				{
 					$l['thumb'] = $l['homeimgfile'];
 				}
-				elseif( $show_no_image )
+				elseif( ! empty( $show_no_image ) )
 				{
-					$l['thumb'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/no_image.gif';
+					$l['thumb'] = NV_BASE_SITEURL . $show_no_image;
 				}
 				else
 				{
 					$l['thumb'] = '';
 				}
-				
+
 				$l['blockwidth'] = $blockwidth;
 
 				$xtpl->assign( 'ROW', $l );

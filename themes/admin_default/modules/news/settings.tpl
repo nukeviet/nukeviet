@@ -49,10 +49,6 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.show_no_image}</strong></td>
-				<td><input type="checkbox" value="1" name="show_no_image"{SHOW_NO_IMAGE}/></td>
-			</tr>
-			<tr>
 				<td><strong>{LANG.showhometext}</strong></td>
 				<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 			</tr>
@@ -83,8 +79,8 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.module_logo}</strong></td>
-				<td><input name="module_logo" id="module_logo" value="{MODULE_LOGO}" style="width:340px;" type="text"/> <input value="{GLANG.browse_image}" name="selectimg" type="button" /></td>
+				<td><strong>{LANG.show_no_image}</strong></td>
+				<td><input name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" style="width:340px;" type="text"/> <input value="{GLANG.browse_image}" name="selectimg" type="button" /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.config_source}</strong></td>
@@ -109,7 +105,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$("input[name=selectimg]").click(function() {
-		var area = "module_logo";
+		var area = "show_no_image";
 		var type = "image";
 		var path = "{PATH}";
 		var currentpath = "{CURRENTPATH}";
