@@ -242,9 +242,16 @@
 		<input name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input name="status0" type="submit" value="{LANG.save_temp}" />
+		<input name="status4" type="submit" value="{LANG.save_temp}" />
 		<input name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
+        <!-- BEGIN:status1 -->
+		<input name="status4" type="submit" value="{LANG.save_temp}" />
+		<input name="status6" type="submit" value="{LANG.save_send_admin}" />
+            <!-- BEGIN:status0 -->
+            <input name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+            <!-- END:status0 -->
+		<!-- END:status1 -->
 		<br />
 		<br />
 	</div>
