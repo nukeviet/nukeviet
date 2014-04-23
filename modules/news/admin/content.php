@@ -294,7 +294,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$array_cat_check_content = $array_cat_edit_content;
 	}
-    elseif( $rowcontent['status'] == 6 )
+    elseif( $rowcontent['status'] == 0 )
 	{
 		$array_cat_check_content = $array_censor_content;
         $message_error_show = $lang_module['permissions_sendspadmin_error'];
