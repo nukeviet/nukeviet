@@ -66,9 +66,9 @@ if( isset( $array_op[1] ) )
 			{
 				$item['src'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image )//no image
+			elseif( ! empty( $show_no_image ) )//no image
 			{
-				$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['src'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -150,9 +150,9 @@ else
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image )//no image
+			elseif( ! empty( $show_no_image ) )//no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{

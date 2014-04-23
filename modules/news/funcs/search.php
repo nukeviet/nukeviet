@@ -147,9 +147,9 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		{
 			$img_src = $homeimgfile;
 		}
-		elseif( $show_no_image ) //no image
+		elseif( ! empty( $show_no_image ) ) //no image
 		{
-			$img_src = '';
+			$img_src = NV_BASE_SITEURL . $show_no_image;
 		}
 		else
 		{

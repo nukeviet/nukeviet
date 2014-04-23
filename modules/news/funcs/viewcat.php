@@ -80,9 +80,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image ) //no image
+			elseif( ! empty( $show_no_image ) ) //no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -135,7 +135,7 @@ if( empty( $contents ) )
 			->order( 't1.id DESC' )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
-			
+
 		$result = $db->query( $db->sql() );
 		while( $item = $result->fetch() )
 		{
@@ -151,9 +151,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image ) //no image
+			elseif( !empty( $show_no_image ) ) //no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -198,9 +198,9 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					elseif( $show_no_image ) //no image
+					elseif( ! empty( $show_no_image ) ) //no image
 					{
-						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+						$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 					}
 					else
 					{
@@ -251,9 +251,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image ) //no image
+			elseif( ! empty( $show_no_image ) ) //no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -295,9 +295,9 @@ if( empty( $contents ) )
 				{
 					$item['imghome'] = $item['homeimgfile'];
 				}
-				elseif( $show_no_image ) //no image
+				elseif( ! empty( $show_no_image ) ) //no image
 				{
-					$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+					$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 				}
 				else
 				{
@@ -346,9 +346,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image ) //no image
+			elseif( !empty( $show_no_image ) ) //no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
