@@ -8,3 +8,6 @@
  * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
+$lang_module['show_logo'] = 'Show Logo in banner';
+$lang_module['show_site_name'] = 'Show description of the site in bannner';
+$lang_module['save'] = 'Save configuration';

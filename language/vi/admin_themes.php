@@ -160,3 +160,6 @@ $lang_module['block_weight'] = 'Thiết lập lại vị trí các block';
 $lang_module['block_weight_confirm'] = 'Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Thông báo: Gói giao diện bạn cài đặt đã tồn tại các file, bạn có chắc chắn thực hiện tiếp quá trình cài đặt để ghi đè các file này';
 $lang_module['autoinstall_theme_overwrite'] = 'Thực hiện';
+
+$lang_module['config'] = 'Thiết lập giao diện';
+$lang_module['config_not_exit'] = 'Giao diện %s không có chức năng cấu hình';

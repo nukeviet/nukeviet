@@ -39,21 +39,6 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 					{
 						++$check_edit;
 					}
-					else
-					{
-						if( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
-						{
-							++$check_edit;
-						}
-						elseif( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and ( $status == 0 or $status = 2 ) )
-						{
-							++$check_edit;
-						}
-						elseif( $status == 0 and $post_id == $admin_id )
-						{
-							++$check_edit;
-						}
-					}
 				}
 			}
 			if( $check_edit == sizeof( $arr_catid ) )
@@ -104,3 +89,5 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 
 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 die();
+
+?>

@@ -20,9 +20,11 @@
 							<div id="search">
 								<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 									<div class="input-group">
-										<input type="text" class="form-control" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
+										<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
+										<input type="hidden" name="{NV_NAME_VARIABLE}" value="search" />
+										<input type="text" class="form-control" name="q" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
 										<span class="input-group-btn">
-											<button class="btn btn-info" type="submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
+											<button class="btn btn-info" type="submit" id="topmenu_search_submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
 										</span>
 									</div>
 								</form>
@@ -51,4 +53,3 @@
 				</ol>
 				<!-- END: breadcrumbs -->
 				[THEME_ERROR_INFO]
-				

@@ -16,7 +16,7 @@
 		
 		<div class="panel-body">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" id="imghome" src="{HOMEIMG}" width="{IMGWIDTH}" class="img-thumbnail pull-left" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h3>
 				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>

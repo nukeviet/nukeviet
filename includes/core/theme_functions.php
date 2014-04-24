@@ -99,7 +99,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	if( empty( $page_title ) ) $page_title = $global_config['site_description'];
 
-	// Get theme 
+	// Get theme
 	$template = '';
 
 	if( defined( 'NV_ADMIN' ) and isset( $global_config['admin_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/info_die.tpl' ) )
@@ -138,7 +138,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
-	
+
 	if( isset( $size[1] ) )
 	{
 		if( $size[0] > 490 )
@@ -177,7 +177,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->parse( 'main' );
 
 	$global_config['mudim_active'] = 0;
-	
+
 	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
 	include NV_ROOTDIR . '/includes/footer.php';
@@ -275,7 +275,7 @@ function nv_rss_generate( $channel, $items )
 	$channel['lang'] = $global_config['site_lang'];
 	$channel['copyright'] = $global_config['site_name'];
 	$channel['docs'] = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true );
-	$channel['generator'] = 'Nukeviet Version 3.X';
+	$channel['generator'] = 'Nukeviet Version 4';
 
 	if( preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN . NV_BASE_SITEURL ) . '(.+)$/', $channel['link'], $matches ) )
 	{

@@ -73,9 +73,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image ) //no image
+			elseif( ! empty( $show_no_image ) ) //no image
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -86,7 +86,7 @@ if( empty( $contents ) )
 			$array_catpage[] = $item;
 			$end_publtime = $item['publtime'];
 		}
-		
+
 		$db->sqlreset()
 			->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal, t2.newday')
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
@@ -145,9 +145,9 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					elseif( $show_no_image )
+					elseif( ! empty( $show_no_image ) )
 					{
-						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+						$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 					}
 					else
 					{
@@ -199,9 +199,9 @@ if( empty( $contents ) )
 					{
 						$item['imghome'] = $item['homeimgfile'];
 					}
-					elseif( $show_no_image )
+					elseif( !empty( $show_no_image ) )
 					{
-						$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+						$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 					}
 					else
 					{
@@ -250,9 +250,9 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image )
+			elseif( !empty( $show_no_image ) )
 			{
-				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
