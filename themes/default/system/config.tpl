@@ -31,7 +31,7 @@
                     <label>{LANG.background}</label>
                     <input type="text" value="{CONFIG_THEME_BODY.background_color}" name="body_background_color" id="picker_body_background" style="width: 80px" />
                     <input type="text" id="body_bg_image" value="{CONFIG_THEME_BODY.background_image}" name="body_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-                    <button name="selectimg"><em class="icon-folder-open">&nbsp;</em></button>
+                    <button onclick="nv_open_filemanage( 'body_bg_image' )"><em class="icon-folder-open">&nbsp;</em></button>
                     <input type="text" value="{CONFIG_THEME_BODY.background_repeat}" name="body_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
                     <input type="text" value="{CONFIG_THEME_BODY.background_position}" name="body_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" />
                     <br />
@@ -56,6 +56,34 @@
                     <textarea name="body_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_BODY.customcss}</textarea><br />
                 </td>
 			</tr>
+			<tr>
+			    <td>{LANG.config_content}</td>
+			    <td>
+                    <label>{LANG.margin}</label>
+                    <input type="text" name="content_margin" value="{CONFIG_THEME_CONTENT.margin}" placeholder="{LANG.margin_all}" style="width: 80px" />
+                    <input type="text" name="content_margin_top" value="{CONFIG_THEME_CONTENT.margin_top}" placeholder="{LANG.margin_top}" style="width: 80px" />
+                    <input type="text" name="content_margin_bottom" value="{CONFIG_THEME_CONTENT.margin_bottom}" placeholder="{LANG.margin_bottom}" style="width: 80px" />
+                    <input type="text" name="content_margin_left" value="{CONFIG_THEME_CONTENT.margin_left}" placeholder="{LANG.margin_left}" style="width: 80px" />
+                    <input type="text" name="content_margin_right" value="{CONFIG_THEME_CONTENT.margin_right}" placeholder="{LANG.margin_right}" style="width: 80px" />
+                    <br />
+                    
+                    <label>{LANG.padding}</label>
+                    <input type="text" name="content_padding" value="{CONFIG_THEME_CONTENT.padding}" placeholder="{LANG.padding_all}" style="width: 80px" />
+                    <input type="text" name="content_padding_top" value="{CONFIG_THEME_CONTENT.padding_top}" placeholder="{LANG.padding_top}" style="width: 80px" />
+                    <input type="text" name="content_padding_bottom" value="{CONFIG_THEME_CONTENT.padding_bottom}" placeholder="{LANG.padding_bottom}" style="width: 80px" />
+                    <input type="text" name="content_padding_left" value="{CONFIG_THEME_CONTENT.padding_left}" placeholder="{LANG.padding_left}" style="width: 80px" />
+                    <input type="text" name="content_padding_right" value="{CONFIG_THEME_CONTENT.padding_right}" placeholder="{LANG.padding_right}" style="width: 80px" />
+                    <br />
+                    
+                    <label>{LANG.size}</label>
+                    <input type="text" name="content_width" value="{CONFIG_THEME_CONTENT.width}" placeholder="{LANG.size_width}" style="width: 80px" />
+                    <input type="text" name="content_height" value="{CONFIG_THEME_CONTENT.height}" placeholder="{LANG.size_height}" style="width: 80px" />
+                    <br />
+                    
+                    <label>{LANG.customcss}</label>
+                    <textarea name="content_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_CONTENT.customcss}</textarea><br />
+			    </td>
+			</tr>
 		</tbody>
 	</table>
 </form>
@@ -66,10 +94,11 @@
     $(document).ready(function() {
         $('#picker_body_color').css({'background-color' : $('#picker_body_color').val()});
         $('#picker_body_background').css({'background-color' : $('#picker_body_background').val()});
+        $('#picker_content_background').css({'background-color' : $('#picker_content_background').val()});
              
     });
     
-    $('#picker_body_color, #picker_body_background').colpick({
+    $('#picker_body_color, #picker_body_background, #picker_content_background').colpick({
         layout:'hex',
         submit:0,
         colorScheme:'dark',
@@ -81,14 +110,14 @@
         $(this).colpickSetColor(this.value);
     });
     
-    $("input[name=selectimg]").click(function() {
-        var area = "body_bg_image";
+    function nv_open_filemanage( area )
+    {
         var alt = "backgroundimgalt";
         var path = "{UPLOADS_DIR}";
         var type = "image";
         nv_open_browse_file(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
         return false;
-    });
+    }
 //]]>
 </script>
 <!-- END:main -->

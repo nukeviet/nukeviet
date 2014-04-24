@@ -10,6 +10,7 @@
 
 $lang_module['config_general'] = 'Thiết lập chung';
 $lang_module['config_allpages'] = 'Toàn trang';
+$lang_module['config_content'] = 'Nội dung';
 
 $lang_module['color'] = 'Màu chữ';
 $lang_module['font_size'] = 'Kích thước';
@@ -33,6 +34,9 @@ $lang_module['padding_top'] = 'Padding top';
 $lang_module['padding_bottom'] = 'Padding bottom';
 $lang_module['padding_left'] = 'Padding left';
 $lang_module['padding_right'] = 'Padding right';
+$lang_module['size'] = 'Kích thước';
+$lang_module['size_width'] = 'Rộng';
+$lang_module['size_height'] = 'Cao';
 $lang_module['customcss'] = 'CSS tùy chỉnh';
 
 $lang_module['save'] = 'Lưu cấu hình';

@@ -15,7 +15,7 @@ $propety = array();
 
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-    // Css propety for body
+    // Css property for body
 	$property['color'] = $nv_Request->get_string( 'body_color', 'post', '' );
 	$property['font_size'] = $nv_Request->get_string( 'body_font_size', 'post', '' );
     $property['font_family'] = $nv_Request->get_string( 'body_font_family', 'post', '' );
@@ -38,8 +38,23 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['padding_left'] = $nv_Request->get_string( 'body_padding_left', 'post', '' );
     $property['padding_right'] = $nv_Request->get_string( 'body_padding_right', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'body_customcss', 'post', '' );
-
     $config_theme['body'] = $property;
+    
+    // Css property for content
+    $property['margin'] = $nv_Request->get_string( 'content_margin', 'post', '' );
+    $property['margin_top'] = $nv_Request->get_string( 'content_margin_top', 'post', '' );
+    $property['margin_bottom'] = $nv_Request->get_string( 'content_margin_bottom', 'post', '' );
+    $property['margin_left'] = $nv_Request->get_string( 'content_margin_left', 'post', '' );
+    $property['margin_right'] = $nv_Request->get_string( 'content_margin_right', 'post', '' );
+    $property['padding'] = $nv_Request->get_string( 'content_padding', 'post', '' );
+    $property['padding_top'] = $nv_Request->get_string( 'content_padding_top', 'post', '' );
+    $property['padding_bottom'] = $nv_Request->get_string( 'content_padding_bottom', 'post', '' );
+    $property['padding_left'] = $nv_Request->get_string( 'content_padding_left', 'post', '' );
+    $property['padding_right'] = $nv_Request->get_string( 'content_padding_right', 'post', '' );
+    $property['width'] = $nv_Request->get_string( 'content_width', 'post', '' );
+    $property['height'] = $nv_Request->get_string( 'content_height', 'post', '' );
+    $property['customcss'] = $nv_Request->get_textarea( 'content_customcss', 'post', '' );
+    $config_theme['content'] = $property;
     
 	$config_value = serialize( $config_theme );
 
@@ -91,6 +106,7 @@ $xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
 $config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
 $config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
+$xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

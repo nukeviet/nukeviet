@@ -47,6 +47,7 @@ function CustomStyle()
     }
     
     $property = SetProperties( 'body', $config_theme['body'] );
+    $property .= SetProperties( '#wraper', $config_theme['content'] );
     
     return $property;
 }
