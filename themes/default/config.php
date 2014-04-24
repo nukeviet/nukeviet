@@ -23,6 +23,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
     $property['font_style'] = $nv_Request->get_bool( 'body_font_italic', 'post', 0 );
     $property['font_style'] = $property['font_style'] ? 'italic' : '';
+    $property['background_color'] = $nv_Request->get_string( 'body_background_color', 'post', '' );
+    $property['background_image'] = $nv_Request->get_string( 'body_background_image', 'post', '' );
+    $property['background_repeat'] = $nv_Request->get_string( 'body_background_repeat', 'post', '' );
+    $property['background_position'] = $nv_Request->get_string( 'body_background_position', 'post', '' );
     $property['margin'] = $nv_Request->get_string( 'body_margin', 'post', '' );
     $property['margin_top'] = $nv_Request->get_string( 'body_margin_top', 'post', '' );
     $property['margin_bottom'] = $nv_Request->get_string( 'body_margin_bottom', 'post', '' );
@@ -77,6 +81,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
+$xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
 
 $config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
 $config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';

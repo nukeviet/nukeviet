@@ -22,6 +22,7 @@ function SetProperties( $tag, $property_array )
             if( ! empty( $property ) and ! empty( $value ) )
             {
                 $property = str_replace( '_', '-', $property );
+                if( $property == 'background-image' ) $value = "url('" . $value . "')";
                 $css .= $property . ':' . $value . ';';
             }
         }
