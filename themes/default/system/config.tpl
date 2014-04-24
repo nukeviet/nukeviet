@@ -45,11 +45,11 @@
                     <br />
                     
                     <label>{LANG.padding}</label>
-                    <input type="text" name="body_padding" placeholder="{LANG.padding_all}" style="width: 80px" />
-                    <input type="text" name="body_padding_top" placeholder="{LANG.padding_top}" style="width: 80px" />
-                    <input type="text" name="body_padding_bottom" placeholder="{LANG.padding_bottom}" style="width: 80px" />
-                    <input type="text" name="body_padding_left" placeholder="{LANG.padding_left}" style="width: 80px" />
-                    <input type="text" name="body_padding_right" placeholder="{LANG.padding_right}" style="width: 80px" />
+                    <input type="text" name="body_padding" value="{CONFIG_THEME_BODY.padding}" placeholder="{LANG.padding_all}" style="width: 80px" />
+                    <input type="text" name="body_padding_top" value="{CONFIG_THEME_BODY.padding_top}" placeholder="{LANG.padding_top}" style="width: 80px" />
+                    <input type="text" name="body_padding_bottom" value="{CONFIG_THEME_BODY.padding_bottom}" placeholder="{LANG.padding_bottom}" style="width: 80px" />
+                    <input type="text" name="body_padding_left" value="{CONFIG_THEME_BODY.padding_left}" placeholder="{LANG.padding_left}" style="width: 80px" />
+                    <input type="text" name="body_padding_right" value="{CONFIG_THEME_BODY.padding_right}" placeholder="{LANG.padding_right}" style="width: 80px" />
                     <br />
                     
                     <label>{LANG.customcss}</label>

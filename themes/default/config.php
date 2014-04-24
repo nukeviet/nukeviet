@@ -32,6 +32,11 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['margin_bottom'] = $nv_Request->get_string( 'body_margin_bottom', 'post', '' );
     $property['margin_left'] = $nv_Request->get_string( 'body_margin_left', 'post', '' );
     $property['margin_right'] = $nv_Request->get_string( 'body_margin_right', 'post', '' );
+    $property['padding'] = $nv_Request->get_string( 'body_padding', 'post', '' );
+    $property['padding_top'] = $nv_Request->get_string( 'body_padding_top', 'post', '' );
+    $property['padding_bottom'] = $nv_Request->get_string( 'body_padding_bottom', 'post', '' );
+    $property['padding_left'] = $nv_Request->get_string( 'body_padding_left', 'post', '' );
+    $property['padding_right'] = $nv_Request->get_string( 'body_padding_right', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'body_customcss', 'post', '' );
 
     $config_theme['body'] = $property;
