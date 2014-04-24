@@ -32,3 +32,10 @@
 .list-funcs td:hover {
 	background-color: #f4f4f4 !important
 }
+
+.config_theme .tab1 label{
+    text-align: right;
+    display: inline-block;
+    width: 130px;
+    margin-bottom: 10px;
+}
