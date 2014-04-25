@@ -86,7 +86,7 @@
 				<td><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/><input type="file" name="themefile"/></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
+				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.back}" /></td>
 			</tr>
 		</tbody>
 	</table>
