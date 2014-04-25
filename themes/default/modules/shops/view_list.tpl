@@ -14,7 +14,7 @@
         </select>
     </div>
     <!-- END: displays -->
-    <div class="clear"></div>
+    <div class="clear">&nbsp;</div>
 
 	<!-- BEGIN: row -->
 	<div class="panel panel-default">
@@ -22,7 +22,7 @@
     		<div class="pull-left">
     			<a title="{title_pro}" href="{link_pro}"> <img class="img-thumbnail image" src="{img_pro}" alt="{title_pro}" width="{width}"/> </a>
     		</div>
-    		<p>
+    		<div>
     			<strong><a title="{title_pro}" href="{link_pro}">{title_pro}</a></strong>
     			<br />
     			<!-- BEGIN: product_code -->
@@ -45,7 +45,7 @@
     				<!-- END: contact -->
     			</span>
     			<p class="text-justify">{intro}</p>
-    		</p>
+    		</div>
     
     		<div class="pull-right">
     			<!-- BEGIN: adminlink -->
@@ -53,7 +53,7 @@
     			<!-- END: adminlink -->
     			
                 <!-- BEGIN: compare -->
-                <span class="compare"><input type="checkbox" value="{id}"{ch}  onclick="nv_compare({id});" id="compare_{id}"/> <input type="button" value="{LANG.compare}" name="compare" class="btn btn-success btn-xs" onclick="nv_compare_result();"/> </span>
+                <input type="checkbox" value="{id}"{ch} onclick="nv_compare({id});" id="compare_{id}"/> <input type="button" value="{LANG.compare}" name="compare" class="btn btn-success btn-xs" onclick="nv_compare_click();"/>
                 <!-- END: compare -->
                 
     			<!-- BEGIN: order -->
