@@ -39,6 +39,25 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['padding_right'] = $nv_Request->get_string( 'body_padding_right', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'body_customcss', 'post', '' );
     $config_theme['body'] = $property;
+    unset( $property );
+    
+    // Css property for link
+    $property['color'] = $nv_Request->get_string( 'link_a_color', 'post', '' );
+    $property['font_weight'] = $nv_Request->get_bool( 'link_a_font_weight', 'post', 0 );
+    $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
+    $property['font_style'] = $nv_Request->get_bool( 'link_a_font_italic', 'post', 0 );
+    $property['font_style'] = $property['font_style'] ? 'italic' : '';
+    $config_theme['a_link'] = $property;
+    unset( $property );
+    
+    // Css property for link (hover)
+    $property['color'] = $nv_Request->get_string( 'link_a_hover_color', 'post', '' );
+    $property['font_weight'] = $nv_Request->get_bool( 'link_a_hover_font_weight', 'post', 0 );
+    $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
+    $property['font_style'] = $nv_Request->get_bool( 'link_a_hover_font_italic', 'post', 0 );
+    $property['font_style'] = $property['font_style'] ? 'italic' : '';
+    $config_theme['a_link_hover'] = $property;
+    unset( $property );
     
     // Css property for content
     $property['margin'] = $nv_Request->get_string( 'content_margin', 'post', '' );
@@ -55,6 +74,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['height'] = $nv_Request->get_string( 'content_height', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'content_customcss', 'post', '' );
     $config_theme['content'] = $property;
+    unset( $property );
     
 	$config_value = serialize( $config_theme );
 
@@ -105,7 +125,14 @@ $xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
 
 $config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
 $config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
+$config_theme['a_link']['font_weight'] = ( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
+$config_theme['a_link']['font_style'] = ( $config_theme['a_link']['font_style'] ) ? ' checked="checked"' : '';
+$config_theme['a_link_hover']['font_weight'] = ( $config_theme['a_link_hover']['font_weight'] ) ? ' checked="checked"' : '';
+$config_theme['a_link_hover']['font_style'] = ( $config_theme['a_link_hover']['font_style'] ) ? ' checked="checked"' : '';
+
 $xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
+$xtpl->assign( 'CONFIG_THEME_A_LINK', $config_theme['a_link'] );
+$xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
 $xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
 
 $xtpl->parse( 'main' );

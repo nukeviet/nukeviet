@@ -52,12 +52,24 @@
                     <input type="text" name="body_padding_right" value="{CONFIG_THEME_BODY.padding_right}" placeholder="{LANG.padding_right}" style="width: 80px" />
                     <br />
                     
+                    <label>{LANG.link}</label>
+                    <input type="text" value="{CONFIG_THEME_A_LINK.color}" name="link_a_color" id="picker_link_color" style="width: 80px" placeholder="{LANG.color}" />
+                    <input type="checkbox" name="link_a_font_weight" {CONFIG_THEME_A_LINK.font_weight} /><strong>{LANG.font_style_bold}</strong>
+                    <input type="checkbox" name="link_a_font_italic" {CONFIG_THEME_A_LINK.font_style} /><em>{LANG.font_style_italic}</em>
+                    <br />
+                    
+                    <label>{LANG.link} (hover)</label>
+                    <input type="text" value="{CONFIG_THEME_A_LINK_HOVER.color}" name="link_a_hover_color" id="picker_link_hover_color" style="width: 80px" placeholder="{LANG.color}" />
+                    <input type="checkbox" name="link_a_hover_font_weight" {CONFIG_THEME_A_LINK_HOVER.font_weight} /><strong>{LANG.font_style_bold}</strong>
+                    <input type="checkbox" name="link_a_hover_font_italic" {CONFIG_THEME_A_LINK_HOVER.font_style} /><em>{LANG.font_style_italic}</em>
+                    <br />
+                    
                     <label>{LANG.customcss}</label>
                     <textarea name="body_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_BODY.customcss}</textarea><br />
                 </td>
 			</tr>
 			<tr>
-			    <td>{LANG.config_content}</td>
+			    <td><strong>{LANG.config_content}</strong></td>
 			    <td>
                     <label>{LANG.margin}</label>
                     <input type="text" name="content_margin" value="{CONFIG_THEME_CONTENT.margin}" placeholder="{LANG.margin_all}" style="width: 80px" />
@@ -95,10 +107,11 @@
         $('#picker_body_color').css({'background-color' : $('#picker_body_color').val()});
         $('#picker_body_background').css({'background-color' : $('#picker_body_background').val()});
         $('#picker_content_background').css({'background-color' : $('#picker_content_background').val()});
-             
+        $('#picker_link_color').css({'background-color' : $('#picker_link_color').val()});
+        $('#picker_link_hover_color').css({'background-color' : $('#picker_link_hover_color').val()});     
     });
     
-    $('#picker_body_color, #picker_body_background, #picker_content_background').colpick({
+    $('#picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color').colpick({
         layout:'hex',
         submit:0,
         colorScheme:'dark',

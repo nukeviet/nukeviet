@@ -37,6 +37,7 @@ $lang_module['padding_right'] = 'Padding right';
 $lang_module['size'] = 'Kích thước';
 $lang_module['size_width'] = 'Rộng';
 $lang_module['size_height'] = 'Cao';
+$lang_module['link'] = 'Liên kết';
 $lang_module['customcss'] = 'CSS tùy chỉnh';
 
 $lang_module['save'] = 'Lưu cấu hình';
