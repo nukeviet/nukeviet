@@ -47,10 +47,10 @@ function nv_site_theme( $contents, $full = true )
         require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config_default.php';
     }
     
-    //if( ! file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css"))
-    //{
+    if( ! file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css"))
+    {
          file_put_contents( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css", CustomStyle() );
-    //}
+    }
     
     $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css\" />\n";
 

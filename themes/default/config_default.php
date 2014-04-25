@@ -12,28 +12,36 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function SetProperties( $tag, $property_array )
 {
-    if( empty( $tag ) ) return $css;
-    $css = '';
+    $css = $line = '';
+    if( empty( $tag ) ) return '';
     
-    foreach( $property_array as $property => $value )
+    if( is_array( $property_array ) )
     {
-        if( $property != 'customcss' )
+        foreach( $property_array as $property => $value )
         {
-            if( ! empty( $property ) and ! empty( $value ) )
+            if( $property != 'customcss' )
             {
-                $property = str_replace( '_', '-', $property );
-                if( $property == 'background-image' ) $value = "url('" . $value . "')";
-                $css .= $property . ':' . $value . ';';
+                if( ! empty( $property ) and ! empty( $value ) )
+                {
+                    $property = str_replace( '_', '-', $property );
+                    if( $property == 'background-image' ) $value = "url('" . $value . "')";
+                    $css .= $property . ':' . $value . ';';
+                }
+            }
+            elseif( ! empty( $value ) )
+            {
+                $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
+                $css .= $value;
             }
         }
-        elseif( ! empty( $value ) )
-        {
-            $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
-            $css .= $value;
-        }
+        $line .= $css == '' ? '' : $tag . '{' . $css . '}';
     }
-    $line = $css == '' ? '' : PHP_EOL . $tag . '{' . $css . '}';
-    
+    else
+    {
+        $css .= $property_array;
+        $line .= $css == '' ? '' : $css;
+    }
+
     return $line;
 }
 
@@ -51,6 +59,9 @@ function CustomStyle()
     $property .= SetProperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
     $property .= SetProperties( 'a:hover', $config_theme['a_link_hover'] );
     $property .= SetProperties( '#wraper', $config_theme['content'] );
+    $property .= SetProperties( '#header', $config_theme['header'] );
+    $property .= SetProperties( '#footer', $config_theme['footer'] );
+    $property .= SetProperties( 'generalcss', $config_theme['generalcss'] );
     
     return $property;
 }

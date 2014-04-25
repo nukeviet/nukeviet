@@ -38,6 +38,9 @@ $lang_module['size'] = 'Kích thước';
 $lang_module['size_width'] = 'Rộng';
 $lang_module['size_height'] = 'Cao';
 $lang_module['link'] = 'Liên kết';
+$lang_module['header'] = 'Đầu trang';
+$lang_module['footer'] = 'Chân trang';
+$lang_module['generalcss_note'] = 'Soạn thảo css vào đây';
 $lang_module['customcss'] = 'CSS tùy chỉnh';
 
 $lang_module['save'] = 'Lưu cấu hình';
