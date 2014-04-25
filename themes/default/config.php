@@ -39,6 +39,25 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['padding_right'] = $nv_Request->get_string( 'body_padding_right', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'body_customcss', 'post', '' );
     $config_theme['body'] = $property;
+    unset( $property );
+    
+    // Css property for link
+    $property['color'] = $nv_Request->get_string( 'link_a_color', 'post', '' );
+    $property['font_weight'] = $nv_Request->get_bool( 'link_a_font_weight', 'post', 0 );
+    $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
+    $property['font_style'] = $nv_Request->get_bool( 'link_a_font_italic', 'post', 0 );
+    $property['font_style'] = $property['font_style'] ? 'italic' : '';
+    $config_theme['a_link'] = $property;
+    unset( $property );
+    
+    // Css property for link (hover)
+    $property['color'] = $nv_Request->get_string( 'link_a_hover_color', 'post', '' );
+    $property['font_weight'] = $nv_Request->get_bool( 'link_a_hover_font_weight', 'post', 0 );
+    $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
+    $property['font_style'] = $nv_Request->get_bool( 'link_a_hover_font_italic', 'post', 0 );
+    $property['font_style'] = $property['font_style'] ? 'italic' : '';
+    $config_theme['a_link_hover'] = $property;
+    unset( $property );
     
     // Css property for content
     $property['margin'] = $nv_Request->get_string( 'content_margin', 'post', '' );
@@ -55,6 +74,52 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['height'] = $nv_Request->get_string( 'content_height', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'content_customcss', 'post', '' );
     $config_theme['content'] = $property;
+    unset( $property );
+    
+    // Css property for header
+    $property['background_color'] = $nv_Request->get_string( 'header_background_color', 'post', '' );
+    $property['background_image'] = $nv_Request->get_string( 'header_background_image', 'post', '' );
+    $property['background_repeat'] = $nv_Request->get_string( 'header_background_repeat', 'post', '' );
+    $property['background_position'] = $nv_Request->get_string( 'header_background_position', 'post', '' );
+    $property['margin'] = $nv_Request->get_string( 'header_margin', 'post', '' );
+    $property['margin_top'] = $nv_Request->get_string( 'header_margin_top', 'post', '' );
+    $property['margin_bottom'] = $nv_Request->get_string( 'header_margin_bottom', 'post', '' );
+    $property['margin_left'] = $nv_Request->get_string( 'header_margin_left', 'post', '' );
+    $property['margin_right'] = $nv_Request->get_string( 'header_margin_right', 'post', '' );
+    $property['padding'] = $nv_Request->get_string( 'header_padding', 'post', '' );
+    $property['padding_top'] = $nv_Request->get_string( 'header_padding_top', 'post', '' );
+    $property['padding_bottom'] = $nv_Request->get_string( 'header_padding_bottom', 'post', '' );
+    $property['padding_left'] = $nv_Request->get_string( 'header_padding_left', 'post', '' );
+    $property['padding_right'] = $nv_Request->get_string( 'header_padding_right', 'post', '' );
+    $property['width'] = $nv_Request->get_string( 'header_width', 'post', '' );
+    $property['height'] = $nv_Request->get_string( 'header_height', 'post', '' );
+    $property['customcss'] = $nv_Request->get_textarea( 'header_customcss', 'post', '' );
+    $config_theme['header'] = $property;
+    unset( $property );
+    
+    // Css property for footer
+    $property['background_color'] = $nv_Request->get_string( 'footer_background_color', 'post', '' );
+    $property['background_image'] = $nv_Request->get_string( 'footer_background_image', 'post', '' );
+    $property['background_repeat'] = $nv_Request->get_string( 'footer_background_repeat', 'post', '' );
+    $property['background_position'] = $nv_Request->get_string( 'footer_background_position', 'post', '' );
+    $property['margin'] = $nv_Request->get_string( 'footer_margin', 'post', '' );
+    $property['margin_top'] = $nv_Request->get_string( 'footer_margin_top', 'post', '' );
+    $property['margin_bottom'] = $nv_Request->get_string( 'footer_margin_bottom', 'post', '' );
+    $property['margin_left'] = $nv_Request->get_string( 'footer_margin_left', 'post', '' );
+    $property['margin_right'] = $nv_Request->get_string( 'footer_margin_right', 'post', '' );
+    $property['padding'] = $nv_Request->get_string( 'footer_padding', 'post', '' );
+    $property['padding_top'] = $nv_Request->get_string( 'footer_padding_top', 'post', '' );
+    $property['padding_bottom'] = $nv_Request->get_string( 'footer_padding_bottom', 'post', '' );
+    $property['padding_left'] = $nv_Request->get_string( 'footer_padding_left', 'post', '' );
+    $property['padding_right'] = $nv_Request->get_string( 'footer_padding_right', 'post', '' );
+    $property['width'] = $nv_Request->get_string( 'footer_width', 'post', '' );
+    $property['height'] = $nv_Request->get_string( 'footer_height', 'post', '' );
+    $property['customcss'] = $nv_Request->get_textarea( 'footer_customcss', 'post', '' );
+    $config_theme['footer'] = $property;
+    unset( $property );
+    
+    // General css
+    $config_theme['generalcss'] = $nv_Request->get_textarea( 'generalcss', 'post', '' );
     
 	$config_value = serialize( $config_theme );
 
@@ -105,8 +170,18 @@ $xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
 
 $config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
 $config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
+$config_theme['a_link']['font_weight'] = ( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
+$config_theme['a_link']['font_style'] = ( $config_theme['a_link']['font_style'] ) ? ' checked="checked"' : '';
+$config_theme['a_link_hover']['font_weight'] = ( $config_theme['a_link_hover']['font_weight'] ) ? ' checked="checked"' : '';
+$config_theme['a_link_hover']['font_style'] = ( $config_theme['a_link_hover']['font_style'] ) ? ' checked="checked"' : '';
+
 $xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
+$xtpl->assign( 'CONFIG_THEME_A_LINK', $config_theme['a_link'] );
+$xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
 $xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
+$xtpl->assign( 'CONFIG_THEME_HEADER', $config_theme['header'] );
+$xtpl->assign( 'CONFIG_THEME_FOOTER', $config_theme['footer'] );
+$xtpl->assign( 'CONFIG_THEME_GENERCSS', $config_theme['generalcss'] );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
