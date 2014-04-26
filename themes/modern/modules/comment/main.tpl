@@ -17,7 +17,7 @@
 						<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
 						<!-- END: sortcomm -->
 					</select>
-					<a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">+ {LANG.comment_send}</a>
+					<a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">+ {LANG.comment_hide_show}</a>
 				</div>
 				<h3>{LANG.comment}</h3>
 				<div class="clear"></div>
