@@ -8,9 +8,10 @@
  * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
-$lang_module['config_general'] = 'Thiết lập chung';
-$lang_module['config_allpages'] = 'Toàn trang';
-$lang_module['config_content'] = 'Nội dung';
+$lang_module['general'] = 'Thiết lập chung';
+$lang_module['allpages'] = 'Toàn trang';
+$lang_module['content'] = 'Nội dung';
+$lang_module['block'] = 'Khối block';
 
 $lang_module['color'] = 'Màu chữ';
 $lang_module['font_size'] = 'Kích thước';
@@ -18,7 +19,7 @@ $lang_module['font_family'] = 'Phông chữ';
 $lang_module['font_style'] = 'Kiểu chữ';
 $lang_module['font_style_bold'] = 'Đậm';
 $lang_module['font_style_italic'] = 'Nghiêng';
-$lang_module['background'] = 'Nền trang';
+$lang_module['background'] = 'Nền';
 $lang_module['background_imgage'] = 'Đường dẫn ảnh';
 $lang_module['background_imgage_repeat'] = 'Repeat';
 $lang_module['background_imgage_postion'] = 'Vị trí';
@@ -40,7 +41,13 @@ $lang_module['size_height'] = 'Cao';
 $lang_module['link'] = 'Liên kết';
 $lang_module['header'] = 'Đầu trang';
 $lang_module['footer'] = 'Chân trang';
-$lang_module['generalcss_note'] = 'Soạn thảo css vào đây';
+$lang_module['border'] = 'Đường viền';
+$lang_module['style'] = 'Giao diện';
+$lang_module['radius'] = 'Bo góc';
+$lang_module['heading'] = 'Tiêu đề';
 $lang_module['customcss'] = 'CSS tùy chỉnh';
+
+$lang_module['block_note'] = 'Thiết lập chung cho các thành phần block (Block giao diện, khối chuyên mục tin tức,...)';
+$lang_module['general_css_note'] = 'Soạn thảo nội dung css vào đây';
 
 $lang_module['save'] = 'Lưu cấu hình';

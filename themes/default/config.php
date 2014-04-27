@@ -8,7 +8,7 @@
  * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
-if ( !defined( 'NV_IS_FILE_THEMES' ) )	die( 'Stop!!! 123' );
+if ( !defined( 'NV_IS_FILE_THEMES' ) )	die( 'Stop!!!' );
 
 $config_theme = array();
 $propety = array();
@@ -117,6 +117,36 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['customcss'] = $nv_Request->get_textarea( 'footer_customcss', 'post', '' );
     $config_theme['footer'] = $property;
     unset( $property );
+	
+   // Css property for footer
+    $property['background_color'] = $nv_Request->get_string( 'block_background_color', 'post', '' );
+    $property['background_image'] = $nv_Request->get_string( 'block_background_image', 'post', '' );
+    $property['background_repeat'] = $nv_Request->get_string( 'block_background_repeat', 'post', '' );
+    $property['background_position'] = $nv_Request->get_string( 'block_background_position', 'post', '' );
+    $property['margin'] = $nv_Request->get_string( 'block_margin', 'post', '' );
+    $property['margin_top'] = $nv_Request->get_string( 'block_margin_top', 'post', '' );
+    $property['margin_bottom'] = $nv_Request->get_string( 'block_margin_bottom', 'post', '' );
+    $property['margin_left'] = $nv_Request->get_string( 'block_margin_left', 'post', '' );
+    $property['margin_right'] = $nv_Request->get_string( 'block_margin_right', 'post', '' );
+    $property['padding'] = $nv_Request->get_string( 'block_padding', 'post', '' );
+    $property['padding_top'] = $nv_Request->get_string( 'block_padding_top', 'post', '' );
+    $property['padding_bottom'] = $nv_Request->get_string( 'block_padding_bottom', 'post', '' );
+    $property['padding_left'] = $nv_Request->get_string( 'block_padding_left', 'post', '' );
+    $property['padding_right'] = $nv_Request->get_string( 'block_padding_right', 'post', '' );
+	$property['border_color'] = $nv_Request->get_string( 'block_border_color', 'post', '' );
+	$property['border_style'] = $nv_Request->get_string( 'block_border_style', 'post', '' );
+	$property['border_width'] = $nv_Request->get_string( 'block_border_width', 'post', '' );
+	$property['border_radius'] = $nv_Request->get_string( 'block_border_radius', 'post', '' );
+    $property['customcss'] = $nv_Request->get_textarea( 'block_customcss', 'post', '' );
+    $config_theme['block'] = $property;
+    unset( $property );
+	
+    $property['background_color'] = $nv_Request->get_string( 'block_heading_background_color', 'post', '' );
+    $property['background_image'] = $nv_Request->get_string( 'block_heading_background_image', 'post', '' );
+    $property['background_repeat'] = $nv_Request->get_string( 'block_heading_background_repeat', 'post', '' );
+    $property['background_position'] = $nv_Request->get_string( 'block_heading_background_position', 'post', '' );
+    $config_theme['block_heading'] = $property;
+    unset( $property );
     
     // General css
     $config_theme['generalcss'] = $nv_Request->get_textarea( 'generalcss', 'post', '' );
@@ -168,6 +198,29 @@ $xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
 $xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
 
+// List style border
+$boder_style = array(
+	'none' => 'None',
+	'solid' => 'Solid',
+	'dotted' => 'Dotted',
+	'dashed' => 'Dashed',
+	'double' => 'Double',
+	'groove' => 'Groove',
+	'ridge' => 'Ridge',
+	'inset' => 'Inset',
+	'outset' => 'Outset',
+	'hidden' => 'Hidden');
+	
+foreach( $boder_style as $key => $value )
+{
+	$xtpl->assign( 'BLOCK_BORDER_STYLE', array(
+		'key' => $key,
+		'value' => $value,
+		'selected' => ( $config_theme['block']['border_style'] == $key ) ? ' selected="selected"' : ''
+	) );
+	$xtpl->parse( 'main.block_border_style' );
+}
+
 $config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
 $config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
 $config_theme['a_link']['font_weight'] = ( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
@@ -181,6 +234,8 @@ $xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
 $xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
 $xtpl->assign( 'CONFIG_THEME_HEADER', $config_theme['header'] );
 $xtpl->assign( 'CONFIG_THEME_FOOTER', $config_theme['footer'] );
+$xtpl->assign( 'CONFIG_THEME_BLOCK', $config_theme['block'] );
+$xtpl->assign( 'CONFIG_THEME_BLOCK_HEADING', $config_theme['block_heading'] );
 $xtpl->assign( 'CONFIG_THEME_GENERCSS', $config_theme['generalcss'] );
 
 $xtpl->parse( 'main' );
