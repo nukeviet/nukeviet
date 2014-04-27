@@ -73,6 +73,7 @@ $lang_module['auto_postcomm_1'] = 'Không kiểm duyệt';
 $lang_module['auto_postcomm_2'] = 'Kiểm duyệt nếu không là thành viên';
 
 $lang_module['adminscomm'] = 'Admin quản lý bình luận';
+$lang_module['view_comm'] = 'Ai được phép xem comment';
 $lang_module['allowed_comm'] = 'Ai được phép đăng comment';
 $lang_module['allowed_comm_item'] = 'Theo cấu hình bài viết';
 

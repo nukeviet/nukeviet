@@ -21,9 +21,11 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
 	$id = $nv_Request->get_int( 'id', 'post' );
 	$allowed_comm = $nv_Request->get_int( 'allowed', 'post' );
+	$view_comm = $nv_Request->get_int( 'view', 'post,get', 0 );
+
 	$checkss = $nv_Request->get_string( 'checkss', 'post' );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . $global_config['sitekey'] ) )
+	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $view_comm . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		// Kiểm tra quyền đăng bình luận
 		$allowed = intval( $module_config[$module]['allowed_comm'] );

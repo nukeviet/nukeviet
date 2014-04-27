@@ -46,7 +46,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 		{
 			$db->order( 'a.cid ASC' );
 		}
-		elseif( $sortcomm == 1 )
+		elseif( $sortcomm == 2 )
 		{
 			$db->order( 'a.likes DESC, a.cid DESC' );
 		}

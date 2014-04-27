@@ -6,7 +6,7 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-function sendcommment(module, area, id, allowed, newscheckss, gfx_count) {
+function sendcommment(module, area, id, view, allowed, newscheckss, gfx_count) {
 	var commentname = document.getElementById('commentname');
 	var commentemail = document.getElementById('commentemail_iavim');
 	var commentseccode = document.getElementById('commentseccode_iavim');
@@ -27,7 +27,7 @@ function sendcommment(module, area, id, allowed, newscheckss, gfx_count) {
 	} else {
 		var sd = document.getElementById('buttoncontent');
 		sd.disabled = true;
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + commentseccode.value + '&content=' + encodeURIComponent(commentcontent), function(res) {
+		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&view=' + view + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + commentseccode.value + '&content=' + encodeURIComponent(commentcontent), function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
 				document.location = document.location;

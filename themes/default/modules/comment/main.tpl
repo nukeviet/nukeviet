@@ -52,7 +52,7 @@
 				</div>
 			</div>
 			<div class="form-group text-center">
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{VIEW_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
 			</div>
 		</form>
