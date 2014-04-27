@@ -61,6 +61,9 @@ function CustomStyle()
     $property .= SetProperties( '#wraper', $config_theme['content'] );
     $property .= SetProperties( '#header', $config_theme['header'] );
     $property .= SetProperties( '#footer', $config_theme['footer'] );
+	$property .= SetProperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+	$property .= SetProperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+	// Không nên thay đổi "generalcss"
     $property .= SetProperties( 'generalcss', $config_theme['generalcss'] );
     
     return $property;

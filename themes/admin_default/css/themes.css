@@ -103,3 +103,8 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  {
     border: 1px solid #ddd;
     padding: 5px;
 }
+.tab_content .note {
+	font-style: italic;
+	display: block;
+	margin-bottom: 10px	
+}
