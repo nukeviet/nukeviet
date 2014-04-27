@@ -47,8 +47,8 @@ function sendcommment(module, area, id, view, allowed, newscheckss, gfx_count) {
 
 function nv_feedback(cid, post_name) {
 	$("#commentpid").val(cid);
-	$("#commentcontent").val("@" + post_name + " ");
 	$("#commentcontent").focus();
+	$("#commentcontent").val("@" + post_name + " ");
 }
 
 function nv_like(cid, checkss, like) {
