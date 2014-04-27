@@ -210,33 +210,36 @@ $boder_style = array(
 	'inset' => 'Inset',
 	'outset' => 'Outset',
 	'hidden' => 'Hidden');
-	
-foreach( $boder_style as $key => $value )
+
+if( isset( $module_config['themes'][$selectthemes] ) )
 {
-	$xtpl->assign( 'BLOCK_BORDER_STYLE', array(
-		'key' => $key,
-		'value' => $value,
-		'selected' => ( $config_theme['block']['border_style'] == $key ) ? ' selected="selected"' : ''
-	) );
-	$xtpl->parse( 'main.block_border_style' );
+	foreach( $boder_style as $key => $value )
+	{
+		$xtpl->assign( 'BLOCK_BORDER_STYLE', array(
+			'key' => $key,
+			'value' => $value,
+			'selected' => ( $config_theme['block']['border_style'] == $key ) ? ' selected="selected"' : ''
+		) );
+		$xtpl->parse( 'main.block_border_style' );
+	}
+	
+	$config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
+	$config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
+	$config_theme['a_link']['font_weight'] = ( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
+	$config_theme['a_link']['font_style'] = ( $config_theme['a_link']['font_style'] ) ? ' checked="checked"' : '';
+	$config_theme['a_link_hover']['font_weight'] = ( $config_theme['a_link_hover']['font_weight'] ) ? ' checked="checked"' : '';
+	$config_theme['a_link_hover']['font_style'] = ( $config_theme['a_link_hover']['font_style'] ) ? ' checked="checked"' : '';
+	
+	$xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
+	$xtpl->assign( 'CONFIG_THEME_A_LINK', $config_theme['a_link'] );
+	$xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
+	$xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
+	$xtpl->assign( 'CONFIG_THEME_HEADER', $config_theme['header'] );
+	$xtpl->assign( 'CONFIG_THEME_FOOTER', $config_theme['footer'] );
+	$xtpl->assign( 'CONFIG_THEME_BLOCK', $config_theme['block'] );
+	$xtpl->assign( 'CONFIG_THEME_BLOCK_HEADING', $config_theme['block_heading'] );
+	$xtpl->assign( 'CONFIG_THEME_GENERCSS', $config_theme['generalcss'] );	
 }
-
-$config_theme['body']['font_weight'] = ( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';   
-$config_theme['body']['font_style'] = ( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
-$config_theme['a_link']['font_weight'] = ( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
-$config_theme['a_link']['font_style'] = ( $config_theme['a_link']['font_style'] ) ? ' checked="checked"' : '';
-$config_theme['a_link_hover']['font_weight'] = ( $config_theme['a_link_hover']['font_weight'] ) ? ' checked="checked"' : '';
-$config_theme['a_link_hover']['font_style'] = ( $config_theme['a_link_hover']['font_style'] ) ? ' checked="checked"' : '';
-
-$xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
-$xtpl->assign( 'CONFIG_THEME_A_LINK', $config_theme['a_link'] );
-$xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
-$xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
-$xtpl->assign( 'CONFIG_THEME_HEADER', $config_theme['header'] );
-$xtpl->assign( 'CONFIG_THEME_FOOTER', $config_theme['footer'] );
-$xtpl->assign( 'CONFIG_THEME_BLOCK', $config_theme['block'] );
-$xtpl->assign( 'CONFIG_THEME_BLOCK_HEADING', $config_theme['block_heading'] );
-$xtpl->assign( 'CONFIG_THEME_GENERCSS', $config_theme['generalcss'] );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
