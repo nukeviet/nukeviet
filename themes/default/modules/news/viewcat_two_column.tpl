@@ -89,14 +89,14 @@
 
 <script type="text/javascript">
 $(window).load(function(){
-    $.each( $('.panel-body'), function(k,v){
+    $.each( $('.news_column .panel-body'), function(k,v){
         if( k % 2 == 0 )
         {
-            var height1 = $($('.panel-body')[k]).height();
-            var height2 = $($('.panel-body')[k+1]).height();
+            var height1 = $($('.news_column .panel-body')[k]).height();
+            var height2 = $($('.news_column .panel-body')[k+1]).height();
             var height = ( height1 > height2 ? height1 : height2 );
-            $($('.panel-body')[k]).height( height );
-            $($('.panel-body')[k+1]).height( height );
+            $($('.news_column .panel-body')[k]).height( height );
+            $($('.news_column .panel-body')[k+1]).height( height );
         }
     });
 });

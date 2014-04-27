@@ -36,6 +36,23 @@ function nv_site_theme( $contents, $full = true )
 	{
 		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.css\" />\n";
 	}
+    
+    // Style config
+    if ( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_theme_' . $global_config['module_theme'] . '.php' ) )
+    {
+        require NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_theme_' . $global_config['module_theme'] . '.php';
+    }
+    else
+    {
+        require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config_default.php';
+    }
+    
+    if( ! file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css"))
+    {
+         file_put_contents( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css", CustomStyle() );
+    }
+    
+    $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css\" />\n";
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );

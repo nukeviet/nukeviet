@@ -17,7 +17,7 @@
 					<!-- END: sortcomm -->
 				</ul>
 			</div>
-			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_send}</a></span>
+			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_hide_show}</a></span>
 		</div>
 	</div>
 	<div id="showcomment">
