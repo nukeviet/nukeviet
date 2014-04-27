@@ -4,11 +4,12 @@
 
 <div class="container">
     <ul class="tabs">
-        <li><a href="#tab1">{LANG.config_allpages}</a></li>
-        <li><a href="#tab2">{LANG.config_content}</a></li>
+        <li><a href="#tab1">{LANG.allpages}</a></li>
+        <li><a href="#tab2">{LANG.content}</a></li>
+        <li><a href="#tab6">{LANG.block}</a></li>
         <li><a href="#tab3">{LANG.header}</a></li>
         <li><a href="#tab4">{LANG.footer}</a></li>
-        <li><a href="#tab5">{LANG.customcss}</a></li>
+        <li><a href="#tab5">CSS</a></li>
     </ul>
     <div class="tab_container">
     <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
@@ -161,9 +162,57 @@
         </div>
         
         <div id="tab5" class="tab_content">
-            <label style="width: 100%; text-align: left"><em>{LANG.generalcss_note}</em></label>
+            <label style="width: 100%; text-align: left"><em>{LANG.general_css_note}</em></label>
             <textarea name="generalcss" style="width: 100%; height: 300px">{CONFIG_THEME_GENERCSS}</textarea>
         </div>
+        
+        <div id="tab6" class="tab_content">
+        	<span class="note">{LANG.block_note}</span>
+        	
+            <label>{LANG.background}</label>
+            <input type="text" value="{CONFIG_THEME_BLOCK.background_color}" name="block_background_color" id="picker_block_header_bg" style="width: 80px" />
+            <input type="text" id="block_bg_image" value="{CONFIG_THEME_BLOCK.background_image}" name="block_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
+            <button onclick="nv_open_filemanage( 'block_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <input type="text" value="{CONFIG_THEME_BLOCK.background_repeat}" name="block_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
+            <input type="text" value="{CONFIG_THEME_BLOCK.background_position}" name="block_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" /><br />
+            
+            <label>{LANG.margin}</label>
+            <input type="text" name="block_margin" value="{CONFIG_THEME_BLOCK.margin}" placeholder="{LANG.margin_all}" style="width: 80px" />
+            <input type="text" name="block_margin_top" value="{CONFIG_THEME_BLOCK.margin_top}" placeholder="{LANG.margin_top}" style="width: 80px" />
+            <input type="text" name="block_margin_bottom" value="{CONFIG_THEME_BLOCK.margin_bottom}" placeholder="{LANG.margin_bottom}" style="width: 80px" />
+            <input type="text" name="block_margin_left" value="{CONFIG_THEME_BLOCK.margin_left}" placeholder="{LANG.margin_left}" style="width: 80px" />
+            <input type="text" name="block_margin_right" value="{CONFIG_THEME_BLOCK.margin_right}" placeholder="{LANG.margin_right}" style="width: 80px" />
+            <br />
+            
+            <label>{LANG.padding}</label>
+            <input type="text" name="block_padding" value="{CONFIG_THEME_BLOCK.padding}" placeholder="{LANG.padding_all}" style="width: 80px" />
+            <input type="text" name="block_padding_top" value="{CONFIG_THEME_BLOCK.padding_top}" placeholder="{LANG.padding_top}" style="width: 80px" />
+            <input type="text" name="block_padding_bottom" value="{CONFIG_THEME_BLOCK.padding_bottom}" placeholder="{LANG.padding_bottom}" style="width: 80px" />
+            <input type="text" name="block_padding_left" value="{CONFIG_THEME_BLOCK.padding_left}" placeholder="{LANG.padding_left}" style="width: 80px" />
+            <input type="text" name="block_padding_right" value="{CONFIG_THEME_BLOCK.padding_right}" placeholder="{LANG.padding_right}" style="width: 80px" />
+            <br />
+            
+            <label>{LANG.border}</label>
+            <input type="text" value="{CONFIG_THEME_BLOCK.border_color}" name="block_border_color" id="picker_block_background" style="width: 80px" />
+            <select name="block_border_style">
+            	<option value="">&nbsp;</option>
+            	<!-- BEGIN: block_border_style -->
+            	<option value="{BLOCK_BORDER_STYLE.key}" {BLOCK_BORDER_STYLE.selected}>{BLOCK_BORDER_STYLE.value}</option>
+            	<!-- END: block_border_style -->
+            </select>
+            <input type="text" name="block_border_width" value="{CONFIG_THEME_BLOCK.border_width}" placeholder="{LANG.size_width}" style="width: 80px" />
+            <input type="text" name="block_border_radius" value="{CONFIG_THEME_BLOCK.border_radius}" placeholder="{LANG.radius}" style="width: 80px" /><br />
+            
+            <label>{LANG.heading}</label>
+            <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_color}" name="block_heading_background_color" id="picker_block_header_bg" style="width: 80px" />
+            <input type="text" id="block_heading_bg_image" value="{CONFIG_THEME_BLOCK_HEADING.background_image}" name="block_heading_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
+            <button onclick="nv_open_filemanage( 'block_heading_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_repeat}" name="block_heading_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
+            <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_position}" name="block_heading_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" /><br />
+            
+            <label>{LANG.customcss}</label>
+            <textarea name="block_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_BLOCK.customcss}</textarea><br />
+		</div>
         
         <label style="width: 150px; margin-bottom: 20px">&nbsp;</label>
         <input type="submit" name="submit" value="{LANG.save}" />    
@@ -182,6 +231,8 @@
         $('#picker_link_hover_color').css({'background-color' : $('#picker_link_hover_color').val()});
         $('#picker_header_background').css({'background-color' : $('#picker_header_background').val()});
         $('#picker_footer_background').css({'background-color' : $('#picker_footer_background').val()});
+        $('#picker_block_background').css({'background-color' : $('#picker_block_background').val()});
+        $('#picker_block_header_bg').css({'background-color' : $('#picker_block_header_bg').val()});
         
         //Default Action
         $(".tab_content").hide(); //Hide all content
@@ -200,7 +251,7 @@
     
     });
     
-    $('#picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background').colpick({
+    $('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background, #picker_block_background').colpick({
         layout:'hex',
         submit:0,
         colorScheme:'dark',
