@@ -332,6 +332,7 @@ $lang_module['displays_price_asc'] = 'Giá tăng dần';
 $lang_module['displays_price_desc'] = 'Giá giảm dần';
 $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['compare'] = 'So sánh';
+$lang_module['compare_empty_items'] = 'Không có sản phẩm nào được chọn';
 $lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 
 $lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
