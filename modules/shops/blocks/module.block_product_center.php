@@ -14,15 +14,15 @@ if( ! function_exists( 'nv_product_center' ) )
 {
 	/**
 	 * nv_product_center()
-	 * 
+	 *
 	 * @return
 	 */
 	function nv_product_center( $block_config )
 	{
 		global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config, $pro_config, $global_config;
-		
+
 		$module = $block_config['module'];
-		
+
 		$num_view = 5;
 		$num = 30;
 		$array = array();
@@ -33,8 +33,8 @@ if( ! function_exists( 'nv_product_center' ) )
 		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 		$xtpl->assign( 'NUMVIEW', $num_view );
 
-		$cache_file = NV_LANG_DATA . "_" . $module_name . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
-		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+		$cache_file = NV_LANG_DATA . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
+		if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 		{
 			$array = unserialize( $cache );
 		}
@@ -59,7 +59,7 @@ if( ! function_exists( 'nv_product_center' ) )
 
 			$array = nv_db_cache( $db->sql(), 'id', $module_name );
 			$cache = serialize( $array );
-			nv_set_cache( $cache_file, $cache );
+			nv_set_cache( $module_name, $cache_file, $cache );
 		}
 
 		foreach( $array as $row )
