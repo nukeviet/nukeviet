@@ -117,7 +117,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['photo'] = nv_substr( $nv_Request->get_title( 'photo', 'post', '', 1 ), 0, 255 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
-	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
+	$_user['birthday'] = $nv_Request->get_title( 'birthday', 'post' );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 	$_user['delpic'] = $nv_Request->get_int( 'delpic', 'post', 0 );
 

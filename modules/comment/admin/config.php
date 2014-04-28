@@ -18,6 +18,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_na
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
+	$array_config['view_comm'] = $nv_Request->get_int( 'view_comm', 'post', 0 );
 	$array_config['allowed_comm'] = $nv_Request->get_int( 'allowed_comm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
 	$array_config['sortcomm'] = $nv_Request->get_int( 'sortcomm', 'post', 0 );
@@ -103,6 +104,13 @@ if( ! empty( $mod_name ) )
 			'selected' => $comm_i == $module_config[$mod_name]['allowed_comm'] ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.config.allowed_comm' );
+
+		$xtpl->assign( 'OPTION', array(
+			'key' => $comm_i,
+			'title' => $title_i,
+			'selected' => $comm_i == $module_config[$mod_name]['view_comm'] ? ' selected="selected"' : ''
+		) );
+		$xtpl->parse( 'main.config.view_comm' );
 	}
 
 	// Thao luan mac dinh khi tao bai viet moi
@@ -143,6 +151,7 @@ else
 		$row['mod_name'] = $mod_name;
 		$row['admin_title'] = $admin_title;
 		$row['allowed_comm'] = $array_allowed_comm[$module_config[$mod_name]['allowed_comm']];
+		$row['view_comm'] = $array_allowed_comm[$module_config[$mod_name]['view_comm']];
 		$row['auto_postcomm'] = $lang_module['auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']];
 		$row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'check-empty';
 		$row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'check-empty';

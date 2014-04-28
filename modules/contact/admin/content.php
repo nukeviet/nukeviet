@@ -17,23 +17,30 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
-
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS, true );
-	file_put_contents( $content_file, $bodytext );
+
+	if ( isset( $module_config[$module_name]['bodytext'] ) )
+	{
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'bodytext' AND lang = '" . NV_LANG_DATA . "' AND module=:module" );
+	}
+	else
+	{
+		$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . NV_LANG_DATA . "', :module, 'bodytext', :config_value)" );
+	}
+
+	$sth->bindParam( ':module', $module_name, PDO::PARAM_STR );
+	$sth->bindParam( ':config_value', $bodytext, PDO::PARAM_STR, strlen( $bodytext ) );
+	$sth->execute();
+
+	nv_del_moduleCache( 'settings' );
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 	die();
 }
 
-$bodytext = '';
-if( file_exists( $content_file ) )
-{
-	$bodytext = file_get_contents( $content_file );
-	$bodytext = nv_editor_br2nl( $bodytext );
-}
+$bodytext = ( isset( $module_config[$module_name]['bodytext'] ) ) ? nv_editor_br2nl( $module_config[$module_name]['bodytext'] ) : '';
 
 $is_edit = $nv_Request->get_int( 'is_edit', 'get', 0 );
 if( empty( $bodytext ) ) $is_edit = 1;

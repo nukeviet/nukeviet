@@ -56,7 +56,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
-	$_user['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 1 ), 0, 10 );
+	$_user['birthday'] = $nv_Request->get_title( 'birthday', 'post' );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
 
 	$md5username = nv_md5safe( $_user['username'] );

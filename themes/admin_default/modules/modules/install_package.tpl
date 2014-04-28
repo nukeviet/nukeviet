@@ -15,7 +15,7 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.autoinstall_back}" /></td>
+				<td colspan="2" class="center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" /> <input name="back" type="button" value="{LANG.back}" /></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="center"><p id="message" style="color:red;display:none"></p></td>

@@ -222,15 +222,13 @@ if( ! empty( $array_rows ) )
 }
 
 $bodytext = '';
-$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
-
 if( isset( $array_rows[$fpart] ) and ! empty( $array_rows[$fpart]['note'] ) )
 {
 	$bodytext = $array_rows[$fpart]['note'];
 }
-elseif( file_exists( $content_file ) )
+elseif( isset( $module_config[$module_name]['bodytext'] ) )
 {
-	$bodytext = file_get_contents( $content_file );
+	$bodytext = $module_config[$module_name]['bodytext'];
 }
 
 $array_content = array(
