@@ -434,7 +434,7 @@ function nv_search_submit(search_query, search_button, minlength, maxlength) {
 	} else {
 		var sbutton = document.getElementById(search_button);
 		sbutton.disabled = true;
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=search&q=' + rawurlencode(format_query);
+		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=seek&q=' + rawurlencode(format_query);
 	}
 	return false;
 }

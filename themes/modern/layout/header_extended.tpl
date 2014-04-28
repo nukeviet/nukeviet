@@ -18,7 +18,7 @@
 					<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 						<div class="q-search fr">
 							<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
-							<input type="hidden" name="{NV_NAME_VARIABLE}" value="search" />
+							<input type="hidden" name="{NV_NAME_VARIABLE}" value="seek" />
 							<input type="text" class="txt-qs" name="q" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" /><input type="submit" class="submit-qs" value="" name="submit" id="topmenu_search_submit"/>
 						</div>
 					</form>
