@@ -502,7 +502,7 @@ function nv_check_valid_pass( $pass, $max, $min )
 		}
 	}
 
-	$password_simple = $db->query ( "SELECT content FROM " . $db_config ['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'" )->fetchColumn();
+	$password_simple = $db->query ( "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'" )->fetchColumn();
 	$password_simple = explode ( '|', $password_simple );
 	if( in_array ( $pass, $password_simple ) )
 	{
@@ -703,7 +703,7 @@ function nv_set_allow( $who, $groups )
 function nv_groups_add_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
-	$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
+	$query = $db->query( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
 	if( $query->fetchColumn() )
 	{
 		try

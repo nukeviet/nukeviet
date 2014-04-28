@@ -34,7 +34,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 	}
 	$_where .= ' AND a.id= ' . $id . ' AND a.status=1';
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
 
 	$all_page = $db->query( $db->sql() )->fetchColumn();
 	if( $all_page )

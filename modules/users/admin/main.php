@@ -85,7 +85,7 @@ $per_page = 30;
 
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE )
+	->from( NV_USERS_GLOBALTABLE )
 	->where( $_where );
 
 	$all_page = $db->query( $db->sql() )->fetchColumn();

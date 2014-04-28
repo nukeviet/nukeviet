@@ -15,7 +15,7 @@ $page_title = $lang_module['user_add'];
 $groups_list = nv_groups_list();
 
 $array_field_config = array();
-$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
+$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -62,25 +62,25 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$md5username = nv_md5safe( $_user['username'] );
 
 	// Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username' );
 	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_username = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
 	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_reg  chưa.
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' );
 	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email_reg = $stmt->fetchColumn();
 
 	// Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_openid chưa.
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE email= :email' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE email= :email' );
 	$stmt->bindParam( ':email', $_user['email'], PDO::PARAM_STR );
 	$stmt->execute();
 	$query_error_email_openid = $stmt->fetchColumn();
@@ -156,7 +156,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
 
-			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
+			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
 				username, md5username, password, email, full_name, gender, birthday, sig, regdate,
 				question, answer, passlostkey, view_mail,
 				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
@@ -192,7 +192,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			if( $userid )
 			{
 				$query_field['userid'] = $userid;
-				$db->query( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
+				$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', 'userid ' . $userid, $admin_info['userid'] );
 				if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
@@ -210,7 +210,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 						$file_name = str_replace( NV_ROOTDIR . '/', '', $upload_info['name'] );
 
-						$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid );
+						$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid );
 						$stmt->bindParam( ':file_name', $file_name, PDO::PARAM_STR, strlen( $file_name) );
 						$stmt->execute();
 					}

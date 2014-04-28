@@ -198,7 +198,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		}
 	}
 }
-$from .= ' LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
+$from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$from_catid = array();

@@ -40,7 +40,7 @@ else
 		if( preg_match( '/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches ) ) $md5 = $matches[2];
 		if( ! empty( $md5 ) )
 		{
-			$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username = :md5' );
+			$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username = :md5' );
 			$stmt->bindParam( ':md5', $md5, PDO::PARAM_STR );
 			$stmt->execute();
 			$item = $stmt->fetch();
@@ -110,7 +110,7 @@ else
 
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
-			->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE )
+			->from( NV_USERS_GLOBALTABLE )
 			->where( 'active=1' );
 
 		$all_page = $db->query( $db->sql() )->fetchColumn();

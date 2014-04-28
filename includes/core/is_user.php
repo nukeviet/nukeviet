@@ -26,7 +26,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 	{
 		$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
 			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password
-			FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval( $user_info['userid'] ) . ' AND active=1';
+			FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval( $user_info['userid'] ) . ' AND active=1';
 
 		$user_info = $db->query( $_sql )->fetch();
 		if( ! empty( $user_info ) )
@@ -66,7 +66,7 @@ else
 					$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
 						last_openid AS current_openid, password, question, answer
-						FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
+						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
 					$user_info = $db->query( $_sql )->fetch();
 					if( ! empty( $user_info ) )
@@ -91,7 +91,7 @@ else
 
 							if( ! empty( $user_info['current_openid'] ) )
 							{
-								$sth = $db->prepare( 'SELECT openid, email FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid' );
+								$sth = $db->prepare( 'SELECT openid, email FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :current_openid' );
 								$sth->bindParam( ':current_openid', $user_info['current_openid'], PDO::PARAM_STR );
 								$sth->execute();
 								$row = $sth->fetch();
