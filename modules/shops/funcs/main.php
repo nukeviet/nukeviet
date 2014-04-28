@@ -62,7 +62,7 @@ if( empty( $contents ) )
 		// Fetch Limit
 		$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'inhome=1 AND status =1 ' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, ' . NV_LANG_DATA . '_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice' )->order( $orderby )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
@@ -112,7 +112,7 @@ if( empty( $contents ) )
 			exit();
 		}
 
-		$html_pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$html_pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 	}
 	elseif( $pro_config['home_view'] == 'view_home_cat' )
 	{

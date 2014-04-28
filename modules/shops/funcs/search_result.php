@@ -24,8 +24,8 @@ $price2_temp = $nv_Request->get_string( 'price2', 'get', '' );
 $typemoney = $nv_Request->get_string( 'typemoney', 'get', '' );
 $cataid = $nv_Request->get_int( 'cata', 'get', 0 );
 $sid = $nv_Request->get_int( 'sid', 'get', 0 );
-$page = $nv_Request->get_int( 'page', 'get', 0 );
-$all_page = 0;
+$page = $nv_Request->get_int( 'page', 'get', 1 );
+$num_items = 0;
 if( $price1_temp == '' ) $price1 = - 1;
 else
 	$price1 = floatval( $price1_temp );
@@ -148,13 +148,13 @@ $table_exchange = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange )->where( "t1.status =1 " . $search . " " . $show_price );
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( "t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1." . NV_LANG_DATA . "_address, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice, t2.exchange " . $sql_i )->order( $order_by )->limit( $per_page )->offset( $page );
+$db->select( "t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1." . NV_LANG_DATA . "_address, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice, t2.exchange " . $sql_i )->order( $order_by )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid;
-$html_pages = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$html_pages = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
 

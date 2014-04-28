@@ -17,16 +17,16 @@ $xtpl = new XTemplate( "order.tpl", NV_ROOTDIR . "/themes/" . $global_config['mo
 $xtpl->assign( 'LANG', $lang_module );
 
 $per_page = 20;
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op;
 $count = 0;
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $table_name );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( '*' )->order( 'order_id DESC' )->limit( $per_page )->offset( $page );
+$db->select( '*' )->order( 'order_id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $query = $db->query( $db->sql() );
 while( $row = $query->fetch() )
 {
@@ -93,7 +93,7 @@ while( $row = $query->fetch() )
 $xtpl->assign( 'URL_CHECK_PAYMENT', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=checkpayment" );
 $xtpl->assign( 'URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=or_del" );
 $xtpl->assign( 'URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-$xtpl->assign( 'PAGES', nv_generate_page( $base_url, $all_page, $per_page, $page ) );
+$xtpl->assign( 'PAGES', nv_generate_page( $base_url, $num_items, $per_page, $page ) );
 
 $xtpl->parse( 'main.data' );
 $xtpl->parse( 'main' );

@@ -30,7 +30,7 @@ $from_date = $nv_Request->get_title( 'from_date', 'get', '', 1 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 1 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = $nv_Request->get_int( 'choose', 'get', 1 );
-$pages = $nv_Request->get_int( 'page', 'get', 0 );
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
@@ -102,7 +102,7 @@ if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 
 	$numRecord = $db->query( $db->sql() )->fetchColumn();
 
-	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )->order( 'id DESC' )->limit( $per_pages )->offset( $pages );
+	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )->order( 'id DESC' )->limit( $per_pages )->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 

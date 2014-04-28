@@ -149,15 +149,15 @@ if( empty( $contents ) )
 
 		$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( $where . ' AND status =1 ' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, ' . NV_LANG_DATA . '_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice' )->order( $orderby )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 		$result = $db->query( $db->sql() );
 
 		$data_content = GetDataIn( $result, $catid );
-		$data_content['count'] = $all_page;
+		$data_content['count'] = $num_items;
 
-		$pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 		if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 		{

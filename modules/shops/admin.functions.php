@@ -610,14 +610,14 @@ function nv_show_sources_list()
 
 	$num = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources ORDER BY weight ASC" )->rowCount();
 	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sources";
-	$all_page = ( $num > 1 ) ? $num : 1;
+	$num_items = ( $num > 1 ) ? $num : 1;
 	$per_page = 15;
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
 	if( $num > 0 )
 	{
 		$a = 0;
-		$db->sqlreset()->select( '*' )->from( $db_config['prefix'] . "_" . $module_data . "_sources" )->order( 'weight' )->limit( $per_page )->offset( $page );
+		$db->sqlreset()->select( '*' )->from( $db_config['prefix'] . "_" . $module_data . "_sources" )->order( 'weight' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 		$result = $db->query( $db->sql() );
 
 		while( $row = $result->fetch() )
@@ -644,7 +644,7 @@ function nv_show_sources_list()
 		}
 		$result->closeCursor();
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 		if( $generate_page )
 		{

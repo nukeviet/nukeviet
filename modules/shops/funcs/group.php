@@ -32,14 +32,14 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . "_" . $module_data . "_rows" )->where( "(group_id='" . $groupid . "' OR group_id REGEXP '^" . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\$') AND status =1" );
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( "id, listcatid, publtime, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_hometext, " . NV_LANG_DATA . "_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice" )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 $result = $db->query( $db->sql() );
 
 $data_content = GetDataInGroup( $result, $groupid );
-$data_content['count'] = $all_page;
+$data_content['count'] = $num_items;
 
 if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 {
@@ -47,7 +47,7 @@ if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 	exit();
 }
 
-$pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+$pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 if( $page > 1 )
 {

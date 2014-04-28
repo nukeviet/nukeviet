@@ -89,7 +89,7 @@ if( $data['active_payment'] == '1' )
 
 	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
-	$all_page = $result->rowCount();
+	$num_items = $result->rowCount();
 
 	while( $row = $result->fetch() )
 	{

@@ -65,7 +65,7 @@ if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 
 $from = $db_config['prefix'] . '_' . $module_data . '_rows AS a LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' AS b ON a.user_id=b.userid';
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 
 if( $checkss == md5( session_id() ) )
@@ -140,7 +140,7 @@ if( $checkss == md5( session_id() ) )
 	}
 }
 
-$all_page = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn();
+$num_items = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn();
 
 $xtpl = new XTemplate( 'items.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -203,7 +203,7 @@ $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 $ord_sql = ( $ordername == 'title' ? NV_LANG_DATA . '_title' : $ordername ) . ' ' . $order;
-$db->sqlreset()->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, status , edittime, publtime, exptime, product_number, product_price, product_discounts, money_unit, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( $page );
+$db->sqlreset()->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, status , edittime, publtime, exptime, product_number, product_price, product_discounts, money_unit, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
@@ -285,7 +285,7 @@ while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 
 $xtpl->assign( 'ACTION_CHECKSESS', md5( $global_config['sitekey'] . session_id() ) );
 
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 if( ! empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
