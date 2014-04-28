@@ -115,16 +115,16 @@ $stmt = $db->prepare( $db->sql()) ;
 $stmt->bindParam( 1, $data_val, PDO::PARAM_STR, strlen( $data_val ) );
 $stmt->execute();
 
-$all_page = $stmt->fetchColumn();
-if( empty( $all_page ) ) die( 'Wrong URL' );
+$num_items = $stmt->fetchColumn();
+if( empty( $num_items ) ) die( 'Wrong URL' );
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 50;
 
 $db->where( '*' )
 	->order( 'click_time DESC' )
 	->limit( $per_page )
-	->offset( $page );
+	->offset( ( $page - 1 ) * $per_page );
 
 $result = $db->query( $db->sql() );
 
@@ -154,7 +154,7 @@ if( ! empty( $replacement ) )
 
 $contents['caption'] = $caption;
 $contents['thead'] = array( $lang_module['click_date'], $lang_module['click_ip'], $lang_module['click_country'], $lang_module['click_browse'], $lang_module['click_os'], $lang_module['click_ref'] );
-$contents['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic' );
+$contents['generate_page'] = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'statistic' );
 
 $contents = nv_show_list_stat_theme( $contents );
 

@@ -139,15 +139,14 @@ if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue 
 	$db->where( $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'" );
 }
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 30;
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
-$all_page = ( $all_page ) ? $all_page : 1;
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( '*' )
 	->limit( $per_page )
-	->offset( $page );
+	->offset( ( $page - 1 ) * $per_page );
 
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
@@ -169,7 +168,7 @@ while( $row = $result->fetch() )
 	);
 }
 
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];

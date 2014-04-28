@@ -1086,7 +1086,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		$in = strpos( $url_link, '&page' );
+
 		if( strpos( $url_link, '&page=' ) > 0)
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );

@@ -32,7 +32,7 @@ if( $topicid > 0 )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 		->where( 'status=1 AND topicid = ' . $topicid );
 
-	$all_page = $db->query( $db->sql() )->fetchColumn();
+	$num_items = $db->query( $db->sql() )->fetchColumn();
 
 	$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 		->order( 'publtime DESC' )
@@ -95,7 +95,7 @@ if( $topicid > 0 )
 	unset( $result, $row, $arr_listcatid );
 
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topicalias;
-	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 	if( ! empty( $topic_image ) )
 	{

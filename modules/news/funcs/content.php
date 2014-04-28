@@ -704,7 +704,7 @@ elseif( defined( 'NV_IS_USER' ) )
 		->from( NV_PREFIXLANG . "_" . $module_data . "_rows" )
 		->where( "admin_id= " . $user_info['userid'] );
 
-	$all_page = $db->query( $db->sql() )->fetchColumn();
+	$num_items = $db->query( $db->sql() )->fetchColumn();
 
 	$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 		->order( 'id DESC' )
@@ -801,7 +801,7 @@ elseif( defined( 'NV_IS_USER' ) )
 
 	$contents .= "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
 
-	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 	if( ! empty( $generate_page ) )
 	{

@@ -36,11 +36,11 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 
 	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
 
-	$all_page = $db->query( $db->sql() )->fetchColumn();
-	if( $all_page )
+	$num_items = $db->query( $db->sql() )->fetchColumn();
+	if( $num_items )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( $page );
+		$db->select( 'a.cid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
 
 		if( $sortcomm == 1 )
 		{
@@ -70,7 +70,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 		$result->closeCursor();
 		unset( $row, $result );
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page_comment, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page_comment, $page );
 	}
 	else
 	{

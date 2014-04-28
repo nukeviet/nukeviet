@@ -109,23 +109,23 @@ $db->sqlreset()
 	->select( 'COUNT(*)' )
 	->from( NV_PREFIXLANG . '_' . $module_data );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $error2 = '';
 
-if( ! $all_page )
+if( empty( $num_items ) )
 {
 	$error2 = $lang_module['data_no'];
 }
 else
 {
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$per_page = 20;
 
 	$db->select( '*' )
 		->order( 'id DESC' )
 		->limit( $per_page )
-		->offset( $page );
+		->offset( ( $page - 1 ) * $per_page );
 	$query2 = $db->query( $db->sql() );
 
 	$array = array();
@@ -154,7 +154,7 @@ else
 	}
 
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-	$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 }
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );

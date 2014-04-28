@@ -77,7 +77,7 @@ else
 		//danh sach thanh vien
 		$orderby = $nv_Request->get_string( 'orderby', 'get', 'username' );
 		$sortby = $nv_Request->get_string( 'sortby', 'get', 'DESC' );
-		$page = $nv_Request->get_int( 'page', 'get', 0 );
+		$page = $nv_Request->get_int( 'page', 'get', 1 );
 
 		// Kiem tra du lieu hop chuan
 		if( ( ! empty( $orderby ) and ! in_array( $orderby, array( 'username', 'gender', 'regdate' ) ) ) or ( ! empty( $sortby ) and ! in_array( $sortby, array( 'DESC', 'ASC' ) ) ) )
@@ -113,12 +113,12 @@ else
 			->from( NV_USERS_GLOBALTABLE )
 			->where( 'active=1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'userid, username, md5username, full_name, photo, gender, regdate' )
 			->order( $orderby . ' ' . $sortby )
 			->limit( $per_page )
-			->offset( $page );
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 
@@ -157,12 +157,12 @@ else
 		}
 
 		// Tieu de khi phan trang
-		if( $page > 0 )
+		if( $page > 1 )
 		{
 			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . sprintf( $lang_module['page'], ceil( $page / $per_page ) );
 		}
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 		unset( $result, $item );
 

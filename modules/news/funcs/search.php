@@ -49,7 +49,7 @@ $key = $nv_Request->get_title( 'q', 'get' );
 $key = strip_punctuation( nv_unhtmlspecialchars( str_replace( '+', ' ', $key ) ) );
 $key = nv_substr( $key , 0, NV_MAX_SEARCH_LENGTH );
 
-$pages = $nv_Request->get_int( 'page', 'get', 0 );
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
 $from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
@@ -129,7 +129,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
 		->limit( $per_page )
-		->offset( $pages );
+		->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 

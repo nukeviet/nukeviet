@@ -24,7 +24,7 @@ $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/
 
 $page_title = $lang_module['logs_title'];
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 30;
 $data = array();
 $array_userid = array();
@@ -176,9 +176,9 @@ if( $check_like )
 	$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
 }
 $sth->execute();
-$all_page = $sth->fetchColumn();
+$num_items = $sth->fetchColumn();
 
-$db->select( '*' )->limit( $per_page )->offset( $page );
+$db->select( '*' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 if( $order['lang']['order'] != 'NO' )
 {
@@ -353,7 +353,7 @@ if( $logs_del )
 	$xtpl->parse( 'main.foot_delete' );
 	$xtpl->parse( 'main.head_delete' );
 }
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 if( ! empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
