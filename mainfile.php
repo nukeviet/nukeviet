@@ -64,20 +64,15 @@ if( defined( 'NV_CONFIG_DIR' ) )
         $db_config['dbname'] = $db_config['dbsite'];
         $global_config['my_domains'] = $server_name;
     }
-
-    // Thu muc uploads
     define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
-
-    // Thu muc files
     define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
+    define( 'NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir'] );
 }
 else
 {
-    // Thu muc uploads
     define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
-
-    // Thu muc files
     define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+    define( 'SYSTEM_CACHEDIR', NV_CACHEDIR );
 }
 
 // Xac dinh IP cua client

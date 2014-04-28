@@ -1802,8 +1802,8 @@ function nv_site_mods()
 {
 	global $admin_info, $user_info, $admin_info, $global_config, $db;
 
-	$cache_file = NV_LANG_DATA . '_modules_sitemods_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
+	if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
 	{
 		$site_mods = unserialize( $cache );
 	}
@@ -1851,7 +1851,7 @@ function nv_site_mods()
 				$site_mods[$m_title]['alias'][$f_name] = $f_alias;
 			}
 			$cache = serialize( $site_mods );
-			nv_set_cache( $cache_file, $cache );
+			nv_set_cache( 'modules', $cache_file, $cache );
 			unset( $cache, $result );
 		}
 		catch( PDOException $e )

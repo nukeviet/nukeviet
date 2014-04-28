@@ -21,9 +21,9 @@ function nv_block_headline()
 
 	$array_bid_content = array();
 
-	$cache_file = NV_LANG_DATA . '_' . $module_name . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
+	$cache_file = NV_LANG_DATA . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
 
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 	{
 		$array_bid_content = unserialize( $cache );
 	}
@@ -73,7 +73,7 @@ function nv_block_headline()
 			$array_bid_content[$i]['content'] = $array_content;
 		}
 		$cache = serialize( $array_bid_content );
-		nv_set_cache( $cache_file, $cache );
+		nv_set_cache( $module_name, $cache_file, $cache );
 	}
 
 	$xtpl = new XTemplate( 'block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );

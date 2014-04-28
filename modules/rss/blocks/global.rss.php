@@ -106,10 +106,10 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 	{
 		global $global_config;
 		$array_data = array();
-		$cache_file = NV_LANG_DATA . "_rss_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . "_" . md5( $url ) . "_" . NV_CACHE_PREFIX . ".cache";
 		if( file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $cache_file ) and filemtime( NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file ) > NV_CURRENTTIME - 1200 )
 		{
-			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+			if( ( $cache = nv_get_cache( 'rss', $cache_file ) ) != false )
 			{
 				$array_data = unserialize( $cache );
 			}
@@ -150,7 +150,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 				}
 			}
 			$cache = serialize( $array_data );
-			nv_set_cache( $cache_file, $cache );
+			nv_set_cache( 'rss', $cache_file, $cache );
 		}
 		return $array_data;
 	}
