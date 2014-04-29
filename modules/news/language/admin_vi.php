@@ -51,6 +51,7 @@ $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
 $lang_module['numlinks'] = 'Số liên kết';
 $lang_module['newday'] = 'Icon tin mới (ngày)';
+$lang_module['hitstotal'] = 'Số lượt xem';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
 
@@ -234,5 +235,6 @@ $lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng c
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
-
+$lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
+$lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 ?>

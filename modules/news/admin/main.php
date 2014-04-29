@@ -269,11 +269,11 @@ $db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $data = array();
-while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $username ) = $result->fetch( 3 ) )
+while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$title = nv_clean60( $title );
@@ -344,6 +344,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'publtime' => $publtime,
 		'status' => $lang_module['status_' . $status],
 		'username' => $username,
+		'hitstotal' => $hitstotal,
 		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs ) );
 }
 $array_list_action = array(

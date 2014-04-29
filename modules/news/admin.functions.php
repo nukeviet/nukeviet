@@ -745,7 +745,7 @@ function GetCatidInParent( $catid )
  * @param mixed $nv_redirect
  * @return
  */
-function redriect( $msg1 = '', $msg2 = '', $nv_redirect )
+function redriect( $msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '' )
 {
 	global $global_config, $module_file, $module_name;
 	$xtpl = new XTemplate( 'redriect.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -758,6 +758,12 @@ function redriect( $msg1 = '', $msg2 = '', $nv_redirect )
 	$xtpl->assign( 'NV_REDIRECT', $nv_redirect );
 	$xtpl->assign( 'MSG1', $msg1 );
 	$xtpl->assign( 'MSG2', $msg2 );
+
+	if( ! empty( $autoSaveKey ) )
+	{
+		$xtpl->assign( 'AUTOSAVEKEY', $autoSaveKey );
+		$xtpl->parse( 'main.removelocalstorage' );
+	}
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );

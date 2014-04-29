@@ -12,7 +12,7 @@ if( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_site_theme( $contents, $full = true )
 {
-	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info;
+	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config;
 
 	// Determine tpl file, check exists tpl file
 	if( ! $full )
@@ -38,10 +38,27 @@ function nv_site_theme( $contents, $full = true )
 	}
 
     // Style config
-    if ( file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
-    {
-	    $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css\" />\n";
-    }
+    if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
+	{
+		if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+    	{
+			$config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
+		    $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
+		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
+		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
+		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
+		    $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
+		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
+			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+		    $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
+
+		    file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
+
+			unset( $config_theme, $css_content );
+    	}
+	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
+	}
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );

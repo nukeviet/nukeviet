@@ -109,11 +109,20 @@ $(document).ready(function() {
 			});
 		}
 	});
-
-	$("#keywords").bind("keydown", function(event) {
+    
+	$("#keywords-search").bind("keydown", function(event) {
 		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
 			event.preventDefault();
 		}
+        if(event.keyCode==13){
+            var keywords_add= $("#keywords-search").val();
+            if( keywords_add != '' ){
+                nv_add_element( 'keywords', keywords_add, keywords_add );
+                $(this).val('');
+            }
+            return false;
+    	}
+        
 	}).autocomplete({
 		source : function(request, response) {
 			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
@@ -128,22 +137,61 @@ $(document).ready(function() {
 			}
 		},
 		focus : function() {
-			// prevent value inserted on focus
-			return false;
+		  //no action
 		},
 		select : function(event, ui) {
-			var terms = split(this.value);
-			// remove the current input
-			terms.pop();
-			// add the selected item
-			terms.push(ui.item.value);
 			// add placeholder to get the comma-and-space at the end
-			terms.push("");
-			this.value = terms.join(", ");
-			return false;
+            nv_add_element( 'keywords', ui.item.value, ui.item.value );
+            $(this).val('');
+            return false;
 		}
 	});
-
+    $("#keywords-search").blur(function() {
+		// add placeholder to get the comma-and-space at the end
+        var keywords_add= $("#keywords-search").val();
+        if( keywords_add != '' ){
+            nv_add_element( 'keywords', keywords_add, keywords_add );
+            $(this).val('');
+        }
+        return false;
+	});
+    $("#keywords-search").bind("keyup", function(event) {
+		var keywords_add= $("#keywords-search").val();
+        if(keywords_add.search(',') > 0 )
+        {
+            keywords_add = keywords_add.replace(",", "");
+            nv_add_element( 'keywords', keywords_add, keywords_add );
+            $(this).val('');
+        }
+        return false;
+	});
+        
+    
+    $("#bids-search").bind("keydown", function(event) {
+		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
+			event.preventDefault();
+		}
+	}).autocomplete({
+		source : function(request, response) {
+			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=blocksajax", {
+				term : extractLast(request.term)
+			}, response);
+		},
+		search : function() {
+			// custom minLength
+			var term = extractLast(this.value);
+			if (term.length < 2) {
+				return false;
+			}
+		},
+		select : function(event, ui) {
+			// add placeholder to get the comma-and-space at the end
+            nv_add_element( 'bids', ui.item.key, ui.item.value );
+            $(this).val('');
+            return false;
+		}
+	});
+    
 	// hide message_body after the first one
 	$(".message_list .message_body:gt(1)").hide();
 
@@ -168,3 +216,9 @@ $(document).ready(function() {
 		return false;
 	});
 });
+
+function nv_add_element( idElment, key, value ){
+   var html = "<span title=\"" + value + "\" class=\"uiToken removable\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
+    $("#" + idElment).append( html );
+	return false;
+}
