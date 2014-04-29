@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/colpick.css">
 
 <div class="container">
+	<p><em>{LANG.note}</em></p>
     <ul class="tabs">
         <li><a href="#tab1">{LANG.allpages}</a></li>
         <li><a href="#tab2">{LANG.content}</a></li>
