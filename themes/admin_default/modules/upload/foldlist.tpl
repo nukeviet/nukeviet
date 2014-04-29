@@ -31,6 +31,8 @@
 <span style="display:none" id="rename_file" title="{RENAME_FILE}"></span>
 <span style="display:none" id="delete_file" title="{DELETE_FILE}"></span>
 <span style="display:none" id="move_file" title="{MOVE_FILE}"></span>
+<span style="display:none" id="crop_file" title="{CROP_FILE}"></span>
+<span style="display:none" id="rotate_file" title="{ROTATE_FILE}"></span>
 
 <script type="text/javascript">
 	//<![CDATA[

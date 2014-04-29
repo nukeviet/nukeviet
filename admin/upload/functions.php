@@ -18,7 +18,7 @@ $menu_top = array(
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo' );
+$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg' );
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {
@@ -81,6 +81,8 @@ function nv_check_allow_upload_dir( $dir )
 				$level['rename_file'] = true;
 				$level['delete_file'] = true;
 				$level['move_file'] = true;
+                $level['crop_file'] = true;
+                $level['rotate_file'] = true;
 			}
 		}
 		elseif( isset( $arr_dir[1] ) and ! empty( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) )
@@ -109,6 +111,8 @@ function nv_check_allow_upload_dir( $dir )
 				$level['rename_file'] = true;
 				$level['delete_file'] = true;
 				$level['move_file'] = true;
+                $level['crop_file'] = true;
+                $level['rotate_file'] = true;
 			}
 		}
 
