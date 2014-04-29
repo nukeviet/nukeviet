@@ -44,12 +44,12 @@
 			
 			<div class="form-group form-inline">
 				<div class="col-md-4">{LANG.from_date}</div>
-	  			<div class="col-md-8"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px;" maxlength="10" type="text"/></div>
+	  			<div class="col-md-8"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
 			</div>
 			
 			<div class="form-group form-inline">
 				<div class="col-md-4">{LANG.to_date}</div>
-	  			<div class="col-md-8"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px" maxlength="10" type="text" /></div>
+	  			<div class="col-md-8"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
 			</div>
 			
 			<div class="form-group form-inline">
@@ -81,35 +81,33 @@
 	<div class="panel-body">
 		<h3 class="text-center"><em class="fa fa-filter">&nbsp;</em>{LANG.search_on} {TITLE_MOD}</h3><hr />
 		<!-- BEGIN: noneresult -->
-		<p>
-			<em>{LANG.search_none} : <strong class="label label-info">{KEY}</strong> {LANG.search_in_module} <strong>{INMOD}</strong></em>
-		</p>
+		<p><em>{LANG.search_none} : <strong class="label label-info">{KEY}</strong> {LANG.search_in_module} <strong>{INMOD}</strong></em></p>
 		<!-- END: noneresult -->
-		<div class="cl-result">
-			<!-- BEGIN: result -->
-			<h3><a href="{LINK}">{TITLEROW}</a></h3>
-			<div class="text-justify">
-				<p>
-					<!-- BEGIN: result_img -->
-					<img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" class="img-thumbnail pull-left" style="margin: 0 5px 5px 0" />
-					<!-- END: result_img -->
-					{CONTENT}
-				</p>
-			</div>
-			<div class="text-right">
-				{AUTHOR}
-			</div>
-			<div class="text-right">
-				<strong>{LANG.source_title}:</strong> <span>{SOURCE}</span>
-			</div>
-			<hr />
-			<!-- END: result -->
-			<!-- BEGIN: pages_result -->
-			<div class="text-center">
-				{VIEW_PAGES}
-			</div>
-			<!-- END: pages_result -->
+		
+		<!-- BEGIN: result -->
+		<h3><a href="{LINK}">{TITLEROW}</a></h3>
+		<div class="text-justify">
+			<p>
+				<!-- BEGIN: result_img -->
+				<img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" class="img-thumbnail pull-left" style="margin: 0 5px 5px 0" />
+				<!-- END: result_img -->
+				{CONTENT}
+			</p>
 		</div>
+		<div class="text-right">
+			{AUTHOR}
+		</div>
+		<div class="text-right">
+			<strong>{LANG.source_title}:</strong> <span>{SOURCE}</span>
+		</div>
+		<hr />
+		<!-- END: result -->
+		<!-- BEGIN: pages_result -->
+		<div class="text-center">
+			{VIEW_PAGES}
+		</div>
+		<!-- END: pages_result -->
+		
 		<div class="alert alert-info">
 			<p><em>{LANG.search_sum_title} <strong>{NUMRECORD}</strong> {LANG.result_title}
 			<br />

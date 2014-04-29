@@ -4,7 +4,7 @@
 	<div class="alert alert-info clearfix">
 		<h3>{CONTENT.title}</h3>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" id="imghome" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left" />
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
 		<p class="text-justify">{CONTENT.description}</p>
 	</div>
@@ -16,7 +16,7 @@
 	<div class="panel panel-default clearfix">
 		<div class="panel-body">
 			<!-- BEGIN: image -->
-			<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" id="imghome" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left" /></a>
+			<a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h3>
 				<a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
@@ -60,7 +60,7 @@
 				<!-- END: newday -->
 			</h3>
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" id="imghome" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<p class="text-justify">
 				{CONTENT.hometext}
@@ -86,4 +86,20 @@
 <!-- END: clear -->
 <!-- END: loopcat -->
 <div class="clear"></div>
+
+<script type="text/javascript">
+$(window).load(function(){
+    $.each( $('.news_column .panel-body'), function(k,v){
+        if( k % 2 == 0 )
+        {
+            var height1 = $($('.news_column .panel-body')[k]).height();
+            var height2 = $($('.news_column .panel-body')[k+1]).height();
+            var height = ( height1 > height2 ? height1 : height2 );
+            $($('.news_column .panel-body')[k]).height( height );
+            $($('.news_column .panel-body')[k+1]).height( height );
+        }
+    });
+});
+</script>
+
 <!-- END: main -->

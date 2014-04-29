@@ -78,11 +78,11 @@ function set_reg_attribs( $attribs )
 			$username2 = $username . str_pad( $i, 2, '0', STR_PAD_LEFT );
 		}
 
-		$query = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username='" . md5( nv_md5safe( $username2 ) ) . "'";
+		$query = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username='" . nv_md5safe( $username2 ) . "'";
 		$userid = $db->query( $query )->fetchColumn();
 		if( ! $userid )
 		{
-			$query = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE md5username='" . md5( nv_md5safe( $username2 ) ) . "'";
+			$query = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . "_reg WHERE md5username='" . nv_md5safe( $username2 ) . "'";
 			$userid = $db->query( $query )->fetchColumn();
 			if( ! $userid )
 			{
@@ -144,7 +144,7 @@ function openidLogin_Res1( $attribs )
 	}
 	$opid = $crypt->hash( $attribs['id'] );
 
-	$stmt = $db->prepare( 'SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid a, ' . NV_USERS_GLOBALTABLE . ' b
+	$stmt = $db->prepare( 'SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM ' . NV_USERS_GLOBALTABLE . '_openid a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.opid= :opid
 		AND a.email= :email
 		AND a.userid=b.userid'
@@ -184,7 +184,7 @@ function openidLogin_Res1( $attribs )
 		}
 		else
 		{
-			$query = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_id;
+			$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_id;
 			$row = $db->query( $query )->fetch();
 			if( ! empty( $row ) )
 			{
@@ -200,11 +200,11 @@ function openidLogin_Res1( $attribs )
 		die();
 	}
 
-	$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
+	$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :email' );
 	$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 	$stmt->execute();
 	$nv_row = $stmt->fetch();
-	
+
 	if( ! empty( $nv_row ) )
 	{
 		$login_allowed = false;
@@ -253,7 +253,7 @@ function openidLogin_Res1( $attribs )
 		}
 		if( $login_allowed )
 		{
-			$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :id, :opid, :email )' );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :id, :opid, :email )' );
 			$stmt->bindParam( ':id', $attribs['id'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid',$opid , PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
@@ -281,7 +281,7 @@ function openidLogin_Res1( $attribs )
 		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
-	
+
 	if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 	{
 		$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email' ;
@@ -294,7 +294,7 @@ function openidLogin_Res1( $attribs )
 		$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 		$stmt->execute();
 		$row = $stmt->fetch();
-		
+
 		if( ! empty( $row ) )
 		{
 			if( $global_config['allowuserreg'] == 2 )
@@ -311,7 +311,7 @@ function openidLogin_Res1( $attribs )
 					{
 						$reg_attribs = set_reg_attribs( $attribs );
 
-						$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
+						$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
 							username, md5username, password, email, full_name, gender, photo, birthday, regdate,
 							question, answer, passlostkey, view_mail, remember, in_groups,
 							active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
@@ -345,17 +345,17 @@ function openidLogin_Res1( $attribs )
 							die();
 						}
 
-						$stmt = $db->prepare( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid= :userid' );
+						$stmt = $db->prepare( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid= :userid' );
 						$stmt->bindParam( ':userid', $row['userid'], PDO::PARAM_STR );
 						$stmt->execute();
 
-						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
+						$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
 						$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
 						$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 						$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 						$stmt->execute();
 
-						$query = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+						$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 						$result = $db->query( $query );
 						$row = $result->fetch();
 
@@ -409,11 +409,11 @@ function openidLogin_Res1( $attribs )
 
 	$contents = '';
 	$page_title = $lang_module['openid_login'];
-	
+
 	if( $option == 3 )
 	{
 		$error = '';
-		
+
 		if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		{
 			$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
@@ -444,7 +444,7 @@ function openidLogin_Res1( $attribs )
 				{
 					$error = $lang_global['loginincorrect'];
 
-					$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
+					$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
 					$row = $db->query( $sql )->fetch();
 					if( ! empty( $row ) )
 					{
@@ -457,7 +457,7 @@ function openidLogin_Res1( $attribs )
 							else
 							{
 								$error = '';
-								$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid, :email )' );
+								$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid, :email )' );
 								$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
 								$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 								$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
@@ -523,7 +523,7 @@ function openidLogin_Res1( $attribs )
 
 		if( $option == 2 )
 		{
-			$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "
+			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
 				(username, md5username, password, email, full_name, gender, photo, birthday,
 				regdate, question, answer, passlostkey,
 				view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
@@ -537,7 +537,7 @@ function openidLogin_Res1( $attribs )
 				'', 0, " . NV_CURRENTTIME . ",
 				'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
 				)";
-			
+
 			$data_insert = array();
 			$data_insert['username'] = $reg_attribs['username'];
 			$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
@@ -552,12 +552,12 @@ function openidLogin_Res1( $attribs )
 				die();
 			}
 
-			$query = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
+			$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
 			$result = $db->query( $query );
 			$row = $result->fetch();
 			$result->closeCursor();
 
-			$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid , :email)' );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid , :email)' );
 			$stmt->bindParam( ':openid', $reg_attribs['openid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
@@ -801,7 +801,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		{
 			$error = $lang_global['loginincorrect'];
 
-			$sql = "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
+			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
 			$row = $db->query( $sql )->fetch();
 			if( ! empty( $row ) )
 			{

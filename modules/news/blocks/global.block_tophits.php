@@ -72,9 +72,9 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			{
 				$imgurl = $homeimgfile;
 			}
-			elseif( $show_no_image ) // no image
+			elseif( !empty( $show_no_image ) ) // no image
 			{
-				$imgurl = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$imgurl = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{

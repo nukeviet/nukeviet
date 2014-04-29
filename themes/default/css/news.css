@@ -47,7 +47,7 @@ div.news_column .socialicon{
 	margin: -8px 0 -8px 0;
 }
 
-div.news_column #imghome{
+div.news_column .imghome{
 	margin: 0 10px 0 0;	
 }
 
@@ -232,14 +232,14 @@ div.news_column ul.related a:hover{
 	color: #333;
 }
 
-#print #content #imghome {
+#print #content .imghome {
 	padding: 4px;
 	margin: 0 auto;
 	display: block;
 	text-align: center;
 }
 
-#print #content #imghome p {
+#print #content .imghome p {
 	font-weight: normal
 }
 

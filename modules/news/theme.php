@@ -525,9 +525,9 @@ function viewcat_two_column( $array_content, $array_catpage )
 						$xtpl->parse( 'main.loopcat.other.newday' );
 						$xtpl->assign( 'CLASS', 'icon_new_small' );
 					}
-					else 
+					else
 					{
-						$xtpl->assign( 'CLASS', 'icon_list' );	
+						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
@@ -980,7 +980,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	return $xtpl->text( 'main' );
 }
 
-function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
+function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $catid )
 {
 	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
@@ -1023,9 +1023,14 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		$in = strpos( $url_link, '&page' );
-
-		if( $in != 0 ) $url_link = substr( $url_link, 0, $in );
+		if( strpos( $url_link, '&page=' ) > 0)
+		{
+			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );
+		}
+		elseif( strpos( $url_link, '?page=' ) > 0)
+		{
+			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
+		}
 
 		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
 

@@ -39,7 +39,7 @@ $xtpl->assign( 'FORM_ACTION', $action );
 
 $sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
-	INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2
+	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
 	ON t1.admin_id = t2.userid
 	WHERE t1.lev!=0 AND t1.is_suspend=0';
 $result = $db->query( $sql );

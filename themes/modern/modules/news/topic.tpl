@@ -10,7 +10,7 @@
 <!-- END: topicdescription -->
 <!-- BEGIN: topic -->
 <div class="box-border-shadow m-bottom listz-news">
-	<div class="content-box">
+	<div class="content-box clearfix">
 		<!-- BEGIN: homethumb -->
 		<a href="{TOPIC.link}" title="{TOPIC.title}"><img class="s-border fl left" alt="{TOPIC.alt}" src="{TOPIC.src}" width="{TOPIC.width}"/></a>
 		<!-- END: homethumb -->

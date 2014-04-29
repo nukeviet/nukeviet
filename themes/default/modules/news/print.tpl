@@ -20,7 +20,7 @@
 		<div class="clear"></div>
 		<div id="hometext">
 			<!-- BEGIN: image -->
-			<div id="imghome" class="pull-left">
+			<div class="pull-left imghome">
 				<img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" class="img-thumbnail" />
 				<!-- BEGIN: note -->
 				<p>
@@ -32,7 +32,7 @@
 			{CONTENT.hometext}
 		</div>
 		<!-- BEGIN: imagefull -->
-		<div id="imghome">
+		<div class="imghome">
 			<img alt="{CONTENT.image.alt}" src="{CONTENT.image.src}" width="{CONTENT.image.width}" class="img-thumbnail" />
 			<!-- BEGIN: note -->
 			<p>

@@ -151,7 +151,6 @@ $lang_module['error_del_content'] = 'Error: System can\'t delete all block\'s ar
 $lang_module['msgnocheck'] = 'No topic selected';
 $lang_module['block'] = 'Blocks';
 $lang_module['adddefaultblock'] = 'Select the default when creating article';
-$lang_module['module_logo'] = 'Logo module';
 $lang_module['source_logo'] = 'Source logo';
 $lang_module['topic_page'] = 'Topic page';
 $lang_module['topic_del'] = 'Topic del';

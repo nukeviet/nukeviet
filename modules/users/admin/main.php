@@ -80,19 +80,19 @@ if( ! empty( $methodvalue ) )
 }
 
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 30;
 
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE )
+	->from( NV_USERS_GLOBALTABLE )
 	->where( $_where );
 
-	$all_page = $db->query( $db->sql() )->fetchColumn();
+	$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( '*' )
 	->limit( $per_page )
-	->offset( $page );
+	->offset( ( $page - 1 ) * $per_page );
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
 	$db->order( $orderby . ' ' . $ordertype);
@@ -182,7 +182,7 @@ if( ! empty( $admin_in ) )
 	}
 }
 
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];

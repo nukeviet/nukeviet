@@ -21,7 +21,6 @@ if( ! empty( $savesetting ) )
 	$array_config['st_links'] = $nv_Request->get_int( 'st_links', 'post', 0 );
 	$array_config['homewidth'] = $nv_Request->get_int( 'homewidth', 'post', 0 );
 	$array_config['homeheight'] = $nv_Request->get_int( 'homeheight', 'post', 0 );
-	$array_config['show_no_image'] = $nv_Request->get_int( 'show_no_image', 'post', 0 );
 	$array_config['blockwidth'] = $nv_Request->get_int( 'blockwidth', 'post', 0 );
 	$array_config['blockheight'] = $nv_Request->get_int( 'blockheight', 'post', 0 );
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
@@ -32,19 +31,19 @@ if( ! empty( $savesetting ) )
 
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$array_config['socialbutton'] = $nv_Request->get_int( 'socialbutton', 'post', 0 );
-	$array_config['module_logo'] = $nv_Request->get_title( 'module_logo', 'post', '', 0 );
+	$array_config['show_no_image'] = $nv_Request->get_title( 'show_no_image', 'post', '', 0 );
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
 	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 
-	if( ! nv_is_url( $array_config['module_logo'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['module_logo'] ) )
+	if( ! nv_is_url( $array_config['show_no_image'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['show_no_image'] ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
-		$array_config['module_logo'] = substr( $array_config['module_logo'], $lu );
+		$array_config['show_no_image'] = substr( $array_config['show_no_image'], $lu );
 	}
-	elseif( ! nv_is_url( $array_config['module_logo'] ) )
+	else
 	{
-		$array_config['module_logo'] = $global_config['site_logo'];
+		$array_config['show_no_image'] = '';
 	}
 
 	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
@@ -61,9 +60,6 @@ if( ! empty( $savesetting ) )
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	die();
 }
-
-$module_logo = ( isset( $module_config[$module_name]['module_logo'] ) ) ? $module_config[$module_name]['module_logo'] : $global_config['site_logo'];
-$module_logo = ( ! nv_is_url( $module_logo ) ) ? NV_BASE_SITEURL . $module_logo : $module_logo;
 
 $xtpl = new XTemplate( 'settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -121,10 +117,9 @@ for( $i = 0; $i <= 6; ++$i )
 
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'SHOW_NO_IMAGE', $module_config[$module_name]['show_no_image'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'MODULE_LOGO', $module_logo );
+$xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
 
 $array_structure_image = array();
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_name;

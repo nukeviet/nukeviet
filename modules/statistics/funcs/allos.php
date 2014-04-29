@@ -16,11 +16,11 @@ $mod_title = $lang_module['os'];
 
 $sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='os' AND c_count!=0";
 $result = $db->query( $sql );
-list( $all_page, $max ) = $result->fetch( 3 );
+list( $num_items, $max ) = $result->fetch( 3 );
 
-if( $all_page )
+if( $num_items )
 {
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$per_page = 50;
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'];
 
@@ -30,7 +30,7 @@ if( $all_page )
 		->where( "c_type='os' AND c_count!=0" )
 		->order( 'c_count DESC' )
 		->limit( $per_page )
-		->offset( $page );
+		->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 
@@ -47,7 +47,7 @@ if( $all_page )
 		$cts['thead'] = array( $lang_module['os'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $os_list;
 		$cts['max'] = $max;
-		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$cts['generate_page'] = nv_generate_page( $base_url, $num_items, $per_page, $page );
 	}
 	if( $page > 1 )
 	{

@@ -39,17 +39,17 @@ function nv_check_username_change( $login )
 		return sprintf( $lang_module['account_deny_name'], $login );
 	}
 
-	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
+	$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
 	$result = $db->query( $sql );
 	$deny_name = $result->fetchColumn();
 	$result->closeCursor();
 
 	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
+	$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['account_registered_name'], $login );
 
-	$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
+	$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['account_registered_name'], $login );
 
 	return '';
@@ -68,7 +68,7 @@ function nv_check_email_change( $email )
 	$error = nv_check_valid_email( $email );
 	if( $error != '' ) return preg_replace( '/\&(l|r)dquo\;/', '', strip_tags( $error ) );
 
-	$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
+	$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
 	$result = $db->query( $sql );
 	$deny_email = $result->fetchColumn();
 	$result->closeCursor();
@@ -81,17 +81,17 @@ function nv_check_email_change( $email )
 	$pattern = implode( ".?", $pattern );
 	$pattern = "^" . $pattern . "@" . $right . "$";
 
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
 	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
 	$stmt->execute();
 	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email RLIKE :pattern' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email RLIKE :pattern' );
 	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
 	$stmt->execute();
 	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
-	$stmt = $db->prepare( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
+	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
 	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
 	$stmt->execute();
 	if( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
@@ -100,7 +100,7 @@ function nv_check_email_change( $email )
 }
 
 $array_field_config = array();
-$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
+$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -163,7 +163,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	}
 }
 
-$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
+$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
 $query = $db->query( $sql );
 $row = $query->fetch();
 
@@ -235,7 +235,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 			}
 			else
 			{
-				$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '
+				$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . '
 					SET question= :question, answer= :answer
 					WHERE userid=' . $user_info['userid'] );
 				$stmt->bindParam( ':question', $array_data['your_question'], PDO::PARAM_STR );
@@ -260,7 +260,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	{
 		$array_data['questions'] = array();
 		$array_data['questions'][] = $lang_module['select_question'];
-		$sql = "SELECT title FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+		$sql = "SELECT title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 		$result = $db->query( $sql );
 		while( $row = $result->fetch() )
 		{
@@ -277,7 +277,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 }
 else
 {
-	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
+	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
 	$result = $db->query( $sql );
 	$custom_fields = $result->fetch();
 }
@@ -357,7 +357,7 @@ if( $checkss == $array_data['checkss'] )
 			$checknum = md5( $checknum . $email_new );
 			$md5_username = nv_md5safe( $array_data['username'] );
 
-			$stmt = $db->prepare( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE md5username= :md5username' );
+			$stmt = $db->prepare( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE md5username= :md5username' );
 			$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 			$stmt->execute();
 			$error_email_change = nv_check_email_change( $email_new );
@@ -367,7 +367,7 @@ if( $checkss == $array_data['checkss'] )
 			}
 			else
 			{
-				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
+				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
 					:md5_username,
 					'',
@@ -466,7 +466,7 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
-	$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' SET
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET
 		username= :username,
 		md5username= :md5username,
 		email= :email,
@@ -507,7 +507,7 @@ if( $checkss == $array_data['checkss'] )
 		require NV_ROOTDIR . '/modules/users/fields.check.php';
 		if( empty( $error ) )
 		{
-			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $user_info['userid'] );
+			$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $user_info['userid'] );
 			$contents = user_info_exit( $info );
 			$contents .= '<meta http-equiv="refresh" content="' . $sec . ';url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 

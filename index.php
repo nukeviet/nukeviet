@@ -192,8 +192,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			unset( $theme_type );
 
 			// Xac dinh layout funcs cua module
-			$cache_file = NV_LANG_DATA . '_modules_' . md5( $module_name . '_' . $global_config['module_theme'] ) . '_' . NV_CACHE_PREFIX . '.cache';
-			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+			$cache_file = NV_LANG_DATA . '_' . md5( $module_name . '_' . $global_config['module_theme'] ) . '_' . NV_CACHE_PREFIX . '.cache';
+			if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
 			{
 				$module_info['layout_funcs'] = unserialize( $cache );
 			}
@@ -213,7 +213,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$sth->closeCursor();
 
 				$cache = serialize( $module_info['layout_funcs'] );
-				nv_set_cache( $cache_file, $cache );
+				nv_set_cache( 'modules', $cache_file, $cache );
 			}
 
 			// Doc file cau hinh giao dien

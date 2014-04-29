@@ -140,7 +140,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$height = $upload_info['img_info'][1];
 			}
 		}
-		if( $file_ext = 'swf' )
+		if( $file_ext == 'swf' )
 		{
 			if( isset( $_FILES['imageforswf'] ) and is_uploaded_file( $_FILES['imageforswf']['tmp_name'] ) )
 			{
@@ -210,7 +210,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$stmt->bindParam( ':click_url', $click_url, PDO::PARAM_STR );
 			$stmt->bindParam( ':target', $target, PDO::PARAM_STR );
 			$stmt->execute();
-			
+
 			if( $pid_old != $pid )
 			{
 				nv_fix_banner_weight( $pid );

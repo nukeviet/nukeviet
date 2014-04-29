@@ -57,7 +57,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 		{
 			$a_l = implode( ',', $a_l );
 
-			$sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (' . $a_l . ')';
+			$sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (' . $a_l . ')';
 			$result = $db->query( $sql );
 
 			while( $row = $result->fetch() )
@@ -222,15 +222,13 @@ if( ! empty( $array_rows ) )
 }
 
 $bodytext = '';
-$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
-
 if( isset( $array_rows[$fpart] ) and ! empty( $array_rows[$fpart]['note'] ) )
 {
 	$bodytext = $array_rows[$fpart]['note'];
 }
-elseif( file_exists( $content_file ) )
+elseif( isset( $module_config[$module_name]['bodytext'] ) )
 {
-	$bodytext = file_get_contents( $content_file );
+	$bodytext = $module_config[$module_name]['bodytext'];
 }
 
 $array_content = array(

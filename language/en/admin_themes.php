@@ -90,7 +90,7 @@ $lang_module['autoinstall_method_install'] = 'Installing themes on the system';
 $lang_module['autoinstall_method_packet'] = 'Pack Theme';
 $lang_module['autoinstall_method_packet_module'] = 'Pack by module';
 $lang_module['autoinstall_continue'] = 'Next';
-$lang_module['autoinstall_back'] = 'Back';
+$lang_module['back'] = 'Back';
 $lang_module['autoinstall_error_nomethod'] = 'Empty setup type!';
 $lang_module['autoinstall_theme_select_file'] = 'Please select packages for installation:';
 $lang_module['autoinstall_theme_error_nofile'] = 'Error: Please select the file to install';
@@ -160,3 +160,6 @@ $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
 $lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
 $lang_module['autoinstall_theme_success_setupblocks'] = 'The installation process is successful. The system will automatically transfer you to the page of the block management interface.';
 $lang_module['autoinstall_theme_success_setuplayout'] = 'The installation process is successful. The system will automatically transfer you to the page layout settings interface.';
+
+$lang_module['config'] = 'Set Theme';
+$lang_module['config_not_exit'] = 'Theme %s not configured';
