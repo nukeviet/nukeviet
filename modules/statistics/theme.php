@@ -69,11 +69,11 @@ function referer()
  */
 function allreferers()
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $cts, $host_list;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $cts, $host_list;
 
 	$xtpl = new XTemplate( 'allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $host_list ) )
 		{
@@ -121,11 +121,11 @@ function allreferers()
  */
 function allbots()
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $bot_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $bot_list, $cts;
 
 	$xtpl = new XTemplate( 'allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $bot_list ) )
 		{
@@ -173,11 +173,11 @@ function allbots()
  */
 function allos()
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $os_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $os_list, $cts;
 
 	$xtpl = new XTemplate( 'allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $os_list ) )
 		{
@@ -225,11 +225,11 @@ function allos()
  */
 function allbrowsers()
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $browsers_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $browsers_list, $cts;
 
 	$xtpl = new XTemplate( 'allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $browsers_list ) )
 		{
@@ -278,11 +278,11 @@ function allbrowsers()
  */
 function allcountries()
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $all_page, $countries_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $countries_list, $cts;
 
 	$xtpl = new XTemplate( 'allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $countries_list ) )
 		{

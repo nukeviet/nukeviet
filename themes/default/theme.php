@@ -23,7 +23,7 @@ function nv_site_theme( $contents, $full = true )
 	{
 		$layout_file = 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl';
 	}
-	
+
 	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file ) )
 	{
 		nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -37,21 +37,27 @@ function nv_site_theme( $contents, $full = true )
 		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.css\" />\n";
 	}
 
+    // Style config
+    if ( file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+    {
+	    $css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css\" />\n";
+    }
+
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	// System variables
 	$xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
 	$xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
-	
+
 	// Module contents
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
-	
+
 	// Header variables
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
@@ -112,7 +118,7 @@ function nv_site_theme( $contents, $full = true )
 		{
 			$theme_stat_img .= "<a title=\"" . $lang_global['viewstats'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics\"><img alt=\"" . $lang_global['viewstats'] . "\" src=\"" . NV_BASE_SITEURL . "index.php?second=statimg&amp;p=" . nv_genpass() . "\" width=\"88\" height=\"31\" /></a>\n";
 		}
-		
+
 		$xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
 
 		// Change theme types
@@ -146,7 +152,7 @@ function nv_site_theme( $contents, $full = true )
 		$arr_home['index'] = array( 'custom_title' => $lang_global['Home'], 'in_menu' => 1 );
 		$footer_menu = array_merge( $arr_home, $site_mods );
 		$footer_menu_size = sizeof( $footer_menu );
-		
+
 		$a = 0;
 		foreach( $footer_menu as $modname => $modvalues )
 		{
@@ -197,10 +203,10 @@ function nv_site_theme( $contents, $full = true )
 			++ $a;
 		}
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
-	
+
 	// Only full theme
 	if( $full )
 	{

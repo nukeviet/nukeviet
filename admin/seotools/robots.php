@@ -103,7 +103,10 @@ else
 	$robots_data['/mainfile.php'] = 0;
 	$robots_data['/modules/'] = 0;
 	$robots_data['/robots.php'] = 0;
-	$robots_data['/' . NV_SESSION_SAVE_PATH . '/'] = 0;
+	if( NV_SESSION_SAVE_PATH != '' )
+	{
+		$robots_data['/' . NV_SESSION_SAVE_PATH . '/'] = 0;
+	}
 	$robots_data['/tmp/'] = 0;
 	$robots_data['/web.config'] = 0;
 }

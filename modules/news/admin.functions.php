@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 12/31/2009 2:29
  */
- 
+
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) )
 	die( 'Stop!!!' );
 
@@ -363,7 +363,7 @@ function nv_show_cat_list( $parentid = 0 )
 
 				$xtpl->assign( 'NUMLINKS', $numlinks );
 				$xtpl->parse( 'main.data.loop.title_numlinks' );
-				
+
 				$xtpl->assign( 'NEWDAY', $newday );
 				$xtpl->parse( 'main.data.loop.title_newday' );
 			}
@@ -401,7 +401,7 @@ function nv_show_cat_list( $parentid = 0 )
 					$xtpl->parse( 'main.data.loop.numlinks.loop' );
 				}
 				$xtpl->parse( 'main.data.loop.numlinks' );
-				
+
 				for( $i = 0; $i <= 10; ++$i )
 				{
 					$xtpl->assign( 'NEWDAY', array(
@@ -583,9 +583,9 @@ function nv_show_sources_list()
 
 	$num = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
-	$all_page = ($num > 1) ? $num : 1;
+	$num_items = ($num > 1) ? $num : 1;
 	$per_page = 15;
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
 	$xtpl = new XTemplate( 'sources_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -598,7 +598,7 @@ function nv_show_sources_list()
 			->from( NV_PREFIXLANG . '_' . $module_data . '_sources' )
 			->order( 'weight' )
 			->limit( $per_page )
-			->offset( $page );
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 		while( $row = $result->fetch() )
@@ -624,7 +624,7 @@ function nv_show_sources_list()
 		}
 		$result->closeCursor();
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );

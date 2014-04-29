@@ -57,7 +57,7 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ')' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( 'publtime DESC' )
@@ -79,9 +79,9 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 			{
 				$item['src'] = $item['homeimgfile'];
 			}
-			elseif( $show_no_image )//no image
+			elseif( ! empty( $show_no_image ) )//no image
 			{
-				$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+				$item['src'] = $show_no_image;
 			}
 			else
 			{
@@ -114,7 +114,7 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 
 		unset( $query, $row, $arr_listcatid );
 
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 		if( ! empty( $image_tag ) )
 		{

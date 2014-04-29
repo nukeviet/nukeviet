@@ -16,9 +16,9 @@ $db->sqlreset()
 	->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_bodytext c ON (r.id=c.id)' )
 	->where('(' . nv_like_logic( 'r.title', $dbkeyword, $logic ) . ' OR ' . nv_like_logic( 'r.hometext', $dbkeyword, $logic ) . ') OR ' . nv_like_logic( 'c.bodytext', $dbkeyword, $logic ) . '	AND r.status= 1' );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
-if( $all_page )
+if( $num_items )
 {
 	$array_cat_alias = array();
 	$array_cat_alias[0] = 'other';
@@ -34,7 +34,7 @@ if( $all_page )
 
 	$db->select( 'r.id, r.title, r.alias, r.catid, r.hometext, c.bodytext' )
 		->limit( $limit )
-		->offset( $pages );
+		->offset( ( $page - 1 ) * $limit );
 	$result = $db->query( $db->sql() );
 	while( list( $id, $tilterow, $alias, $catid, $hometext, $bodytext ) = $result->fetch( 3 ) )
 	{

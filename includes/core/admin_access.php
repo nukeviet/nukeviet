@@ -156,7 +156,7 @@ function nv_admin_checkdata( $adm_session_value )
 		b.username AS username, b.email AS email, b.full_name AS full_name, b.view_mail AS view_mail, b.regdate AS regdate,
 		b.sig AS sig, b.gender AS gender, b.photo AS photo, b.birthday AS birthday, b.in_groups AS in_groups, b.last_openid AS last_openid,
 		b.password AS password, b.question AS question, b.answer AS answer
-		FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' b
+		FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.admin_id = ' . $array_admin['admin_id'] . '
 		AND a.lev!=0
 		AND a.is_suspend=0

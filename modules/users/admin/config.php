@@ -80,12 +80,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	
 	//cau hinh kich thuoc avatar
 	$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'" );
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'" );
 	$stmt->bindParam( ':content', $array_config['avatar_width'], PDO::PARAM_STR );
 	$stmt->execute();
 	
 	$array_config['avatar_height'] = $nv_Request->get_int( 'avatar_height', 'post', 120 );
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'" );
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'" );
 	$stmt->bindParam( ':content', $array_config['avatar_height'], PDO::PARAM_STR );
 	$stmt->execute();	
 
@@ -97,7 +97,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_email'] = implode( '|', $array_config['deny_email'] );
 	}
 
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'" );
 	$stmt->bindParam( ':content', $array_config['deny_email'], PDO::PARAM_STR, strlen( $array_config['deny_email'] ) );
 	$stmt->execute();
 
@@ -107,7 +107,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 		$array_config['deny_name'] = implode( '|', $array_config['deny_name'] );
 	}
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'" );
 	$stmt->bindParam( ':content', $array_config['deny_name'], PDO::PARAM_STR, strlen( $array_config['deny_name'] ) );
 	$stmt->execute();
 
@@ -120,7 +120,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		asort($array_config['password_simple']);
 		$array_config['password_simple'] = implode( '|', $array_config['password_simple'] );
 	}
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'" );
 	$stmt->bindParam( ':content', $array_config['password_simple'], PDO::PARAM_STR, strlen( $array_config['password_simple'] ) );
 	$stmt->execute();
 
@@ -131,7 +131,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$access_admin['access_delus'] = $nv_Request->get_typed_array( 'access_delus', 'post', 'bool' );
 	$access_admin['access_passus'] = $nv_Request->get_typed_array( 'access_passus', 'post', 'bool' );
 	$access_admin['access_groups'] = $nv_Request->get_typed_array( 'access_groups', 'post', 'bool' );
-	$sql = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config SET content='" . serialize( $access_admin ) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
+	$sql = "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content='" . serialize( $access_admin ) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
 	$db->query( $sql );
 
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid'] );
@@ -165,7 +165,7 @@ if( ! empty( $openid_servers ) )
 		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
 	}
 }
-$sql = "SELECT config, content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
+$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
 $result = $db->query( $sql );
 while( list( $config, $content ) = $result->fetch( 3 ) )
 {

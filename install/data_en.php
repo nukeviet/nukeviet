@@ -18,9 +18,9 @@ $sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337,
 $sth->execute( array('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', 'online, statistics', '0', 1, 5, 1, 1, '', 0, 0) );
 $sth->execute( array('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 6, 1, 1, '', 1, 0) );
 $sth->execute( array('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 7, 1, 1, '', 0, 0) );
-$sth->execute( array('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 0, 8, 1, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 0, 8, 1, 1, '', 0, 0) );
 $sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 0, 9, 1, 1, '', 0, 0) );
-$sth->execute( array('rss', 'rss', 'rss', 'Rss', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0, 0) );
 $sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 11, 1, 1, '', 0, 0) );
 $sth->execute( array('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '0', 0, 12, 1, 1, '', 0, 0) );
 
@@ -34,7 +34,7 @@ $sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 2, '') );
 $sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 3, '') );
 $sth->execute( array(9, 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
 $sth->execute( array(10, 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
-$sth->execute( array(11, 'rss', 'feed', 'Rss', 'news', 0, 0, 0, '') );
+$sth->execute( array(11, 'rss', 'rss', 'Rss', 'news', 0, 0, 0, '') );
 $sth->execute( array(12, 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '') );
 $sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 0, 4, '') );
 $sth->execute( array(14, 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
@@ -68,9 +68,8 @@ $sth->execute( array(41, 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0,
 $sth->execute( array(42, 'main', 'main', 'Main', 'banners', 1, 0, 3, '') );
 $sth->execute( array(43, 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
 $sth->execute( array(44, 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
-$sth->execute( array(45, 'adv', 'adv', 'Adv', 'search', 0, 0, 0, '') );
-$sth->execute( array(46, 'main', 'main', 'Main', 'search', 1, 0, 1, '') );
-$sth->execute( array(47, 'main', 'main', 'Main', 'rss', 1, 0, 1, '') );
+$sth->execute( array(46, 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
+$sth->execute( array(47, 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
 $sth->execute( array(48, 'regroups', 'regroups', 'Regroups', 'users', 1, 0, 11, '') );
 $sth->execute( array(50, 'memberlist', 'memberlist', 'Member List', 'users', 1, 1, 12, '') );
 $sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 7, '') );

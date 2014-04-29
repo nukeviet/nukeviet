@@ -73,7 +73,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			}
 			else
 			{
-				$error = $lang_module['autoinstall_module_error_invalidfile'] . ' <a href="javascript:history.go(-1)">' . $lang_module['autoinstall_module_error_invalidfile_back'] . '</a>';
+				$error = $lang_module['autoinstall_module_error_invalidfile'] . ' <a href="javascript:history.go(-1)">' . $lang_module['back'] . '</a>';
 			}
 		}
 		else

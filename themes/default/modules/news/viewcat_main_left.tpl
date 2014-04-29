@@ -31,7 +31,7 @@
 				
 				<div class="{WCT}">
 					<!-- BEGIN: image -->
-					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" id="imghome" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left" /></a>
+					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
 					<!-- END: image -->
 					
 					<h3>

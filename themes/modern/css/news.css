@@ -170,7 +170,7 @@
 	text-decoration: underline;
 }
 
-#print h1, h2, p {
+#print h1, #print h2, #print p {
 	margin: 0;
 	padding: 0;
 }

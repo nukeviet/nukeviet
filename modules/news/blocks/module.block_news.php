@@ -41,8 +41,8 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		$show_no_image = $module_config[$module]['show_no_image'];
 		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 20;
 
-		$cache_file = NV_LANG_DATA . '_' . $module . '_block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
-		if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+		$cache_file = NV_LANG_DATA . '__block_news_' . $numrow . '_' . NV_CACHE_PREFIX . '.cache';
+		if( ( $cache = nv_get_cache( $module, $cache_file ) ) != false )
 		{
 			$array_block_news = unserialize( $cache );
 		}
@@ -73,9 +73,9 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				{
 					$imgurl = $homeimgfile;
 				}
-				elseif( $show_no_image ) //no image
+				elseif( !empty( $show_no_image ) ) //no image
 				{
-					$imgurl = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+					$imgurl = NV_BASE_SITEURL . $show_no_image;
 				}
 				else
 				{
@@ -90,7 +90,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				);
 			}
 			$cache = serialize( $array_block_news );
-			nv_set_cache( $cache_file, $cache );
+			nv_set_cache( $module, $cache_file, $cache );
 		}
 
 		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news/block_news.tpl' ) )

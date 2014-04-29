@@ -502,7 +502,7 @@ function nv_check_valid_pass( $pass, $max, $min )
 		}
 	}
 
-	$password_simple = $db->query ( "SELECT content FROM " . $db_config ['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'" )->fetchColumn();
+	$password_simple = $db->query ( "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='password_simple'" )->fetchColumn();
 	$password_simple = explode ( '|', $password_simple );
 	if( in_array ( $pass, $password_simple ) )
 	{
@@ -703,7 +703,7 @@ function nv_set_allow( $who, $groups )
 function nv_groups_add_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
-	$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
+	$query = $db->query( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
 	if( $query->fetchColumn() )
 	{
 		try
@@ -1231,24 +1231,21 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
  * @param string $base_url
  * @param integer $num_items
  * @param integer $per_page
- * @param integer $start_item
+ * @param integer $on_page
  * @param bool $add_prevnext_text
  * @param bool $onclick
  * @param string $js_func_name
  * @param string $containerid
  * @return
  */
-function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page' )
+function nv_generate_page( $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page' )
 {
 	global $lang_global;
 
 	// Round up total page
 	$total_pages = ceil( $num_items / $per_page );
 
-	if( $total_pages == 1 ) return '';
-
-	// Round down page
-	$on_page = @floor( $start_item / $per_page ) + 1;
+	if( $total_pages < 2 ) return '';
 
 	if( ! is_array( $base_url ) )
 	{
@@ -1269,8 +1266,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 		for( $i = 1; $i <= $init_page_max; ++$i )
 		{
-			$href = ( $i - 1 ) * $per_page;
-			$href = $href ? $base_url . $amp . $href : $base_url;
+			$href = ( $i > 1 ) ? $base_url . $amp . $i : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 		}
@@ -1289,8 +1285,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 				for( $i = $init_page_min - 1; $i < $init_page_max + 2; ++$i )
 				{
-					$href = ( $i - 1 ) * $per_page;
-					$href = $href ? $base_url . $amp . $href : $base_url;
+					$href = ( $i > 1 ) ? $base_url . $amp . $i : $base_url;
 					$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 					$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 				}
@@ -1307,8 +1302,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 			for( $i = $total_pages - 2; $i < $total_pages + 1; ++$i )
 			{
-				$href = ( $i - 1 ) * $per_page;
-				$href = $href ? $base_url . $amp . $href : $base_url;
+				$href = ( $i > 1 ) ? $base_url . $amp . $i : $base_url;
 				$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 				$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 			}
@@ -1318,8 +1312,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 	{
 		for( $i = 1; $i < $total_pages + 1; ++$i )
 		{
-			$href = ( $i - 1 ) * $per_page;
-			$href = $href ? $base_url . $amp . $href : $base_url;
+			$href = ( $i > 1 ) ? $base_url . $amp . $i : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li' . ( $i == $on_page ? ' class="active"' : '' ) . '><a' . ( $i == $on_page ? ' href="#"' : ' ' . $href ) . '>' . $i . '</a></li>';
 		}
@@ -1329,7 +1322,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 	{
 		if( $on_page > 1 )
 		{
-			$href = ( $on_page - 2 ) * $per_page;
+			$href = $on_page - 1;
 			$href = $href ? $base_url . $amp . $href : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
@@ -1341,8 +1334,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $start_item, $add_p
 
 		if( $on_page < $total_pages )
 		{
-			$href = $on_page * $per_page;
-			$href = $href ? $base_url . $amp . $href : $base_url;
+			$href = ( $on_page ) ? $base_url . $amp . $on_page : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
 		}
@@ -1802,8 +1794,8 @@ function nv_site_mods()
 {
 	global $admin_info, $user_info, $admin_info, $global_config, $db;
 
-	$cache_file = NV_LANG_DATA . '_modules_sitemods_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
+	if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
 	{
 		$site_mods = unserialize( $cache );
 	}
@@ -1851,7 +1843,7 @@ function nv_site_mods()
 				$site_mods[$m_title]['alias'][$f_name] = $f_alias;
 			}
 			$cache = serialize( $site_mods );
-			nv_set_cache( $cache_file, $cache );
+			nv_set_cache( 'modules', $cache_file, $cache );
 			unset( $cache, $result );
 		}
 		catch( PDOException $e )

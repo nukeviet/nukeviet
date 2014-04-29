@@ -60,9 +60,9 @@ if( ! empty( $key ) )
 	$sth->bindParam( ':keyword3', $keyword, PDO::PARAM_STR );
 }
 $sth->execute();
-$all_page = $sth->fetchColumn();
+$num_items = $sth->fetchColumn();
 
-if( ! empty( $all_page ) )
+if( ! empty( $num_items ) )
 {
 	$download_config = nv_mod_down_config();
 
@@ -124,7 +124,7 @@ if( ! empty( $all_page ) )
 			$array[$row['id']]['comment_hits'] = ( int )$row['comment_hits'];
 		}
 	}
-	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 	$contents = theme_viewcat_download( $array, $download_config, '', $generate_page );
 	if( $page > 1 )

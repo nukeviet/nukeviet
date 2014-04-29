@@ -39,7 +39,7 @@ function nv_read_data_from_excel( $file_name )
 	$user_field['active'] = array( 'col' => 12, 'title' => ( isset( $lang_module['active_users'] ) ) ? $lang_module['active_users'] : 'active' );
 
 	$col = 13;
-	$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+	$result_field = $db->query( "SELECT * FROM " . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
 	while( $row_field = $result_field->fetch() )
 	{
 		$language = unserialize( $row_field['language'] );

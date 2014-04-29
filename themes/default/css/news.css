@@ -47,7 +47,7 @@ div.news_column .socialicon{
 	margin: -8px 0 -8px 0;
 }
 
-div.news_column #imghome{
+div.news_column .imghome{
 	margin: 0 10px 0 0;	
 }
 
@@ -64,7 +64,8 @@ div.news_column .imgalt{
 }
 
 div.news_column div.items p, div.news_column #hometext, div.news_column div.bodytext, #news_detail h1, p.copyright {
-	text-align: justify
+	text-align: justify;
+	margin-bottom: 10px;
 }
 
 div.news_column div.copyright {
@@ -97,8 +98,11 @@ div.span-25 ul.related li {
 
 div.news_column ul.related a {
 	color: #3b3b3b;
-	display: inline-block;
 	padding-left: 6px
+}
+
+div.news_column ul.related a:hover{
+	color: #004175
 }
 
 .icon_new {
@@ -184,7 +188,7 @@ div.news_column ul.related a {
 }
 
 #print h1, h2, p {
-	margin: 0;
+	margin: 0 0 6px 0;
 	padding: 0;
 }
 
@@ -228,14 +232,14 @@ div.news_column ul.related a {
 	color: #333;
 }
 
-#print #content #imghome {
+#print #content .imghome {
 	padding: 4px;
 	margin: 0 auto;
 	display: block;
 	text-align: center;
 }
 
-#print #content #imghome p {
+#print #content .imghome p {
 	font-weight: normal
 }
 
@@ -277,3 +281,7 @@ div.news_column ul.related a {
 	text-decoration: none;
 	cursor: pointer;
 }
+.bodytext {
+	word-break: break-word
+}
+

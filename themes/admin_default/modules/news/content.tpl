@@ -93,7 +93,7 @@
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:12px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+							<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
 						</tr>
 					</tbody>
 				</table></td>
@@ -242,9 +242,16 @@
 		<input name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input name="status0" type="submit" value="{LANG.save_temp}" />
+		<input name="status4" type="submit" value="{LANG.save_temp}" />
 		<input name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
+        <!-- BEGIN:status1 -->
+		<input name="status4" type="submit" value="{LANG.save_temp}" />
+		<input name="status6" type="submit" value="{LANG.save_send_admin}" />
+            <!-- BEGIN:status0 -->
+            <input name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+            <!-- END:status0 -->
+		<!-- END:status1 -->
 		<br />
 		<br />
 	</div>
