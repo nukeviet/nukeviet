@@ -74,7 +74,7 @@ if( $row['is_reply'] )
 	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id=' . $id );
 	while( $row = $result->fetch() )
 	{
-		$sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval( $row['reply_aid'] );
+		$sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval( $row['reply_aid'] );
 		$adm_row = $db->query( $sql )->fetch();
 
 		$reply_name = $adm_row['admin_fullname'];

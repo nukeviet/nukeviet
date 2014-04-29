@@ -39,7 +39,7 @@ function viewcat_grid_new( $array_catpage, $catid )
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
-		
+
 		if ( $newday >= NV_CURRENTTIME )
 		{
 			$xtpl->parse( 'main.viewcatloop.newday' );
@@ -84,12 +84,12 @@ function viewcat_list_new( $array_catpage, $catid, $page )
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
-		
+
 		if ( $newday >= NV_CURRENTTIME )
 		{
 			$xtpl->parse( 'main.viewcatloop.newday' );
 		}
-		
+
 		$xtpl->set_autoreset();
 		$xtpl->parse( 'main.viewcatloop' );
 	}
@@ -121,12 +121,12 @@ function viewcat_page_new( $array_catpage, $array_cat_other )
 			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
-		
+
 		if ( $newday >= NV_CURRENTTIME )
 		{
 			$xtpl->parse( 'main.viewcatloop.newday' );
 		}
-		
+
 		$xtpl->set_autoreset();
 		$xtpl->parse( 'main.viewcatloop' );
 		++$a;
@@ -175,12 +175,12 @@ function viewcat_top( $array_catcontent )
 					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_catcontent_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.adminlink' );
 				}
-				
+
 				if ( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.catcontent.newday' );
 				}
-				
+
 				$xtpl->parse( 'main.catcontent' );
 			}
 			else
@@ -270,9 +270,9 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'CLASS', 'icon_new_small' );
 					}
-					else 
+					else
 					{
-						$xtpl->assign( 'CLASS', 'icon_list' );				
+						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
 					$xtpl->assign( 'OTHER', $array_row_i );
 					$xtpl->parse( 'main.listcat.related.loop' );
@@ -801,8 +801,15 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	if( $numRecord > $per_pages ) // show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		$in = strpos( $url_link, '&page' );
-		if( $in != 0 ) $url_link = substr( $url_link, 0, $in );
+		if( strpos( $url_link, '&page=' ) > 0)
+		{
+			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );
+		}
+		elseif( strpos( $url_link, '?page=' ) > 0)
+		{
+			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
+		}
+
 		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );

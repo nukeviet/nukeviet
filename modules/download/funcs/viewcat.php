@@ -50,7 +50,7 @@ $db->sqlreset()
 	->from( NV_PREFIXLANG . '_' . $module_data )
 	->where( 'catid=' . $c['id'] . ' AND status=1' );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' )
 	->order( 'uploadtime DESC' )
@@ -99,7 +99,7 @@ while( $row = $result->fetch() )
 	}
 }
 
-$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 if( $page > 1 )
 {
@@ -155,7 +155,7 @@ if( ! empty( $subcats ) )
 }
 
 // Chuyen huong neu khong co noi dung gi
-if( empty( $all_page ) and empty( $subs ) )
+if( empty( $num_items ) and empty( $subs ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();

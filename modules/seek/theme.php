@@ -80,15 +80,15 @@ function search_main_theme( $is_search, $search, $array_modul )
  * @param mixed $search
  * @param mixed $is_generate_page
  * @param mixed $limit
- * @param mixed $all_page
+ * @param mixed $num_items
  * @return
  */
-function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $all_page )
+function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $num_items )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
 	$xtpl = new XTemplate( 'result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'SEARCH_RESULT_NUM', $all_page );
+	$xtpl->assign( 'SEARCH_RESULT_NUM', $num_items );
 	$xtpl->assign( 'MODULE_CUSTOM_TITLE', $mod_custom_title );
 	$xtpl->assign( 'HIDDEN_KEY', $search['key'] );
 
@@ -104,7 +104,7 @@ function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $
 
 	if( $is_generate_page )
 	{
-		$generate_page = nv_generate_page( $base_url, $all_page, $limit, $search['page'] );
+		$generate_page = nv_generate_page( $base_url, $num_items, $limit, $search['page'] );
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
@@ -113,7 +113,7 @@ function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $
 	}
 	else
 	{
-		if( $all_page > $limit )
+		if( $num_items > $limit )
 		{
 			$xtpl->assign( 'MORE', $base_url );
 			$xtpl->parse( 'main.more' );

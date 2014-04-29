@@ -20,13 +20,13 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	if( $set_view_page )
 	{
-		$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_page_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+		$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_page_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
 	}
 	else
 	{
-		$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+		$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
 	}
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 	{
 		$contents = $cache;
 	}
@@ -57,7 +57,7 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
 			->where( 'status=1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 't1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
@@ -115,7 +115,7 @@ if( empty( $contents ) )
 			$array_cat_other[] = $item;
 		}
 
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		$contents = viewcat_page_new( $array_catpage, $array_cat_other, $generate_page );
 	}
 	elseif( $viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom' )
@@ -128,7 +128,7 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
 			->where( 'status=1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 't1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
@@ -218,7 +218,7 @@ if( empty( $contents ) )
 			unset( $array_catid );
 		}
 
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		$contents = viewcat_top( $array_catcontent, $generate_page );
 		$contents .= call_user_func( 'viewsubcat_main', $viewcat, $array_cat_other );
 	}
@@ -323,7 +323,7 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
 			->where( 't1.status=1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 't1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
@@ -359,7 +359,7 @@ if( empty( $contents ) )
 		}
 
 		$viewcat = 'viewcat_grid_new';
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, $generate_page );
 	}
 	elseif( $viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old' ) // Xem theo tieu de
@@ -371,7 +371,7 @@ if( empty( $contents ) )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
 			->where( 't1.status=1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 't1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
@@ -387,13 +387,13 @@ if( empty( $contents ) )
 		}
 
 		$viewcat = 'viewcat_list_new';
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		$contents = call_user_func( $viewcat, $array_catpage, $catid, ( $page - 1 ) * $per_page, $generate_page );
 	}
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
-		nv_set_cache( $cache_file, $contents );
+		nv_set_cache( $module_name, $cache_file, $contents );
 	}
 }
 

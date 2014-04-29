@@ -44,7 +44,7 @@ if( isset( $array_op[1] ) )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight' )
 			->order( 't2.weight ASC' )
@@ -103,7 +103,7 @@ if( isset( $array_op[1] ) )
 
 		unset( $query, $row, $arr_listcatid );
 
-		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		if( ! empty( $image_group ) )
 		{
 			$image_group = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $image_group;

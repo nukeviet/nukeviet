@@ -149,7 +149,7 @@ else
 	$from = NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' r';
 }
 $where = '';
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 {
@@ -198,7 +198,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		}
 	}
 }
-$from .= ' LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
+$from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$from_catid = array();
@@ -250,7 +250,7 @@ foreach( $array_status_view as $key => $val )
 }
 $i = 5;
 $search_per_page = array();
-while( $i <= 1000 )
+while( $i <= 500 )
 {
 	$search_per_page[] = array( 'page' => $i, 'selected' => ( $i == $per_page ) ? ' selected="selected"' : '' );
 	$i = $i + 5;
@@ -267,9 +267,9 @@ $ord_sql = ' r.' . $ordername . ' ' . $order;
 
 $db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( $page );
+$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $data = array();
@@ -368,7 +368,7 @@ while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
 	$action[] = array( 'value' => $catid_i, 'title' => $title_i );
 }
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );

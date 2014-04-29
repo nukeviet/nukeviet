@@ -27,7 +27,7 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 		{
 			if( ! empty( $opid ) and ( empty( $user_info['current_openid'] ) or ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] != $opid ) ) )
 			{
-				$stmt = $db->prepare( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid' );
+				$stmt = $db->prepare( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid' );
 				$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 				$stmt->execute();
 			}
@@ -88,7 +88,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 							$opid = $crypt->hash( $openid );
 
-							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid' );
+							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid' );
 							$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 							$stmt->execute();
 							$count = $stmt->fetchColumn();
@@ -99,7 +99,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								die();
 							}
 
-							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email' );
+							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email' );
 							$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 							$stmt->execute();
 							$count = $stmt->fetchColumn();
@@ -112,7 +112,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 							if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 							{
-								$query = 'SELECT COUNT(*) AS count FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email';
+								$query = 'SELECT COUNT(*) AS count FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email';
 								if( $global_config['allowuserreg'] == 2 )
 								{
 									$query .= ' AND regdate>' . ( NV_CURRENTTIME - 86400 );
@@ -129,7 +129,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 								}
 							}
 
-							$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
+							$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
 							$stmt->bindParam( ':openid', $openid, PDO::PARAM_STR );
 							$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 							$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
@@ -191,7 +191,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 					$opid = $crypt->hash( $openid );
 
-					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid ' );
+					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid ' );
 					$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 					$stmt->execute();
 					$count = $stmt->fetchColumn();
@@ -202,7 +202,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						die();
 					}
 
-					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ' );
+					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ' );
 					$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 					$stmt->execute();
 					$count = $stmt->fetchColumn();
@@ -215,7 +215,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 					if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 					{
-						$query = 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email ';
+						$query = 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email ';
 						if( $global_config['allowuserreg'] == 2 )
 						{
 							$query .= ' AND regdate>' . ( NV_CURRENTTIME - 86400 );
@@ -232,7 +232,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 						}
 					}
 
-					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
+					$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
 					$stmt->bindParam( ':openid', $openid, PDO::PARAM_STR );
 					$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 					$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
@@ -257,7 +257,7 @@ if( $nv_Request->isset_request( 'server', 'get' ) )
 
 $data = array();
 $data['openid_list'] = array();
-$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $user_info['userid'];
+$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $user_info['userid'];
 $query = $db->query( $sql );
 while( $row = $query->fetch() )
 {

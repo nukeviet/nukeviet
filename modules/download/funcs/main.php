@@ -68,7 +68,7 @@ if( $nv_Request->isset_request( 'rating', 'post' ) )
 					$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET rating_detail= :rating_detail WHERE id=' . $id );
 					$stmt->bindParam( ':rating_detail', $rating_detail, PDO::PARAM_STR );
 					$stmt->execute();
-					
+
 				}
 
 				if( $total and $click )
@@ -117,9 +117,9 @@ foreach( $list_cats as $value )
 			->from( NV_PREFIXLANG . '_' . $module_data )
 			->where( $in . ' AND status=1 ' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		if( $all_page )
+		if( $num_items )
 		{
 			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' );
 			$db->order( 'uploadtime DESC' );

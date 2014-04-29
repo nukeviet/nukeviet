@@ -64,11 +64,11 @@ if( $checkss == $data['checkss'] )
 				$exp = NV_CURRENTTIME - 86400;
 				if( empty( $check_email ) )
 				{
-					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :userField AND regdate>' . $exp;
+					$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :userField AND regdate>' . $exp;
 				}
 				else
 				{
-					$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE username= :userField AND regdate>' . $exp;
+					$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE username= :userField AND regdate>' . $exp;
 				}
 				$stmt = $db->prepare( $sql ) ;
 				$stmt->bindParam( ':userField', $data['userField'], PDO::PARAM_STR );
@@ -128,7 +128,7 @@ if( $checkss == $data['checkss'] )
 							if( $ok )
 							{
 								$password = $crypt->hash( $password_new );
-								$stmt = $db->prepare( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg SET password= :password, checknum= :checknum WHERE userid=' . $row['userid'] );
+								$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_reg SET password= :password, checknum= :checknum WHERE userid=' . $row['userid'] );
 								$stmt->bindParam( ':password', $password, PDO::PARAM_STR );
 								$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
 								$stmt->execute();

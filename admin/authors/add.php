@@ -52,12 +52,12 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 
 	if( preg_match('/^([0-9]+)$/', $userid ) )
 	{
-        $sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $userid );
+        $sql = 'SELECT userid, username, active FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $userid );
     }
     else
     {
         $md5username = nv_md5safe( $userid );
-        $sql = 'SELECT userid, username, active FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote( $md5username );
+        $sql = 'SELECT userid, username, active FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=' . $db->quote( $md5username );
     }
     list( $userid, $username, $active ) = $db->query( $sql )->fetch( 3 );
     if( empty( $userid ) ) die( $lang_module['add_error_choose'] );

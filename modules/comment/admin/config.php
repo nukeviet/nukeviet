@@ -68,7 +68,7 @@ if( ! empty( $mod_name ) )
 		$adminscomm = explode( ',', $module_config[$mod_name]['adminscomm'] );
 
 		$admins_module_name = array_map( 'intval', $admins_module_name );
-		$_sql = 'SELECT userid, username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode( ',', $admins_module_name ) . ')';
+		$_sql = 'SELECT userid, username, full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode( ',', $admins_module_name ) . ')';
 		$_query = $db->query( $_sql );
 
 		while( $row = $_query->fetch() )

@@ -22,7 +22,7 @@ if( ! empty( $contact_allowed['view'] ) )
 {
 	$in = implode( ',', array_keys( $contact_allowed['view'] ) );
 
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
@@ -31,9 +31,9 @@ if( ! empty( $contact_allowed['view'] ) )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
 		->where( 'cid IN (' . $in . ')' );
 
-	$all_page = $db->query( $db->sql() )->fetchColumn();
+	$num_items = $db->query( $db->sql() )->fetchColumn();
 
-	if( $all_page )
+	if( $num_items )
 	{
 		$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;t=2' );
 
@@ -43,7 +43,7 @@ if( ! empty( $contact_allowed['view'] ) )
 		$db->select( '*' )
 			->order('id DESC')
 			->limit( $per_page )
-			->offset( $page );
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 
@@ -84,7 +84,7 @@ if( ! empty( $contact_allowed['view'] ) )
 			$xtpl->parse( 'main.data.row' );
 		}
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 		if( ! empty( $generate_page ) )
 		{
@@ -94,7 +94,7 @@ if( ! empty( $contact_allowed['view'] ) )
 	}
 }
 
-if( empty( $all_page ) )
+if( empty( $num_items ) )
 {
 	$xtpl->parse( 'main.empty' );
 }

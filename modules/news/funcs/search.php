@@ -45,8 +45,11 @@ function BoldKeywordInStr( $str, $keyword )
 	return $str;
 }
 
-$key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 0 ), 0, NV_MAX_SEARCH_LENGTH );
-$pages = $nv_Request->get_int( 'page', 'get', 0 );
+$key = $nv_Request->get_title( 'q', 'get' );
+$key = strip_punctuation( nv_unhtmlspecialchars( str_replace( '+', ' ', $key ) ) );
+$key = nv_substr( $key , 0, NV_MAX_SEARCH_LENGTH );
+
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
 $from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
@@ -54,8 +57,6 @@ $check_num = $nv_Request->get_title( 'choose', 'get', 1, 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
-
-$key = strip_punctuation( nv_unhtmlspecialchars( $key ) );
 
 $array_cat_search = array();
 
@@ -76,6 +77,9 @@ $tbl_src = '';
 
 if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 {
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q='. $key , true );
+	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
+
 	$dbkey = $db->dblikeescape( $key );
 
 	if( $check_num == 1 )
@@ -125,12 +129,11 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
 		->limit( $per_page )
-		->offset( $pages );
+		->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 
 	$array_content = array();
-	$url_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=';
 	$show_no_image = $module_config[$module_name]['show_no_image'];
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
@@ -168,7 +171,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		);
 	}
 
-	$contents .= search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
+	$contents .= search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $catid );
 }
 
 if( empty( $key ) )

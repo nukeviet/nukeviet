@@ -18,21 +18,21 @@ if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
 
-	$query = 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
+	$query = 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
 	$numrows = $db->query( $query )->fetchColumn();
 	if( $numrows != 1 ) die( 'NO' );
 
-	$query = 'SELECT fid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
+	$query = 'SELECT fid FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid!=' . $fid . ' ORDER BY weight ASC';
 	$result = $db->query( $query );
 	$weight = 0;
 	while( $row = $result->fetch() )
 	{
 		++$weight;
 		if( $weight == $new_vid ) ++$weight;
-		$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'];
+		$sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'];
 		$db->query( $sql );
 	}
-	$sql = 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
+	$sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $new_vid . ' WHERE fid=' . $fid;
 	$db->query( $sql );
 	die( 'OK' );
 }
@@ -162,7 +162,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$language = array();
 	if( $dataform['fid'] )
 	{
-		$dataform_old = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $dataform['fid'] )->fetch();
+		$dataform_old = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $dataform['fid'] )->fetch();
 		$dataform['field_type'] = $dataform_old['field_type'];
 		if( ! empty( $dataform['language'] ) )
 		{
@@ -175,7 +175,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
 		
 		// Kiểm tra trùng trường dữ liệu
-		$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
+		$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
 		$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
 		$stmt->execute();
 		if( $stmt->fetchColumn() )
@@ -344,10 +344,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 			if(  $dataform['max_length'] <= 4294967296 and ! empty( $dataform['field'] ) and ! empty( $dataform['title'] ) AND !isset( $_columns_array[$dataform['field']] ) )
 			{
-				$weight = $db->query( 'SELECT MAX(weight) FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field' )->fetchColumn();
+				$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_USERS_GLOBALTABLE . '_field' )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
-				$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field
+				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_field
 					(field, weight, field_type, field_choices, sql_choices, match_type,
 					match_regex, func_callback, min_length, max_length,
 					required, show_register, user_editable,
@@ -385,13 +385,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						$type_date = 'LONGTEXT NOT NULL';
 					}
-					$save = $db->exec( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
+					$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
 				}
 			}
 		}
 		elseif( $dataform['max_length'] <= 4294967296 )
 		{
-			$query = "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field SET";
+			$query = "UPDATE " . NV_USERS_GLOBALTABLE . "_field SET";
 			if( $text_fields == 1 )
 			{
 				$query .= " field_choices='" . $dataform['field_choices'] . "', match_type='" . $dataform['match_type'] . "',
@@ -436,7 +436,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				{
 					$type_date = 'LONGTEXT NOT NULL';
 				}
-				$save = $db->exec( "ALTER TABLE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
+				$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
 			}
 		}
 		if( $save )
@@ -453,19 +453,19 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 
-	list( $fid, $field, $weight ) = $db->query( 'SELECT fid, field, weight FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch( 3 );
+	list( $fid, $field, $weight ) = $db->query( 'SELECT fid, field, weight FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch( 3 );
 
 	if( $fid and ! empty( $field ) )
 	{
-		$query1 = 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
-		$query2 = 'ALTER TABLE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info DROP ' . $field;
+		$query1 = 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
+		$query2 = 'ALTER TABLE ' . NV_USERS_GLOBALTABLE . '_info DROP ' . $field;
 		if( $db->query( $query1 ) and $db->query( $query2 ) )
 		{
-			$query = 'SELECT fid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
+			$query = 'SELECT fid FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
 			$result = $db->query( $query );
 			while( $row = $result->fetch() )
 			{
-				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
+				$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
 				++$weight;
 			}
 			die( 'OK' );
@@ -501,7 +501,7 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 if( $nv_Request->isset_request( 'qlist', 'get' ) )
 {
 	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC';
+	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC';
 	$_rows = $db->query( $sql )->fetchAll();
 	$num = sizeof( $_rows );
 	if( $num )
@@ -544,7 +544,7 @@ else
 	{
 		if( $fid )
 		{
-			$dataform = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch();
+			$dataform = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch();
 
 			if( $dataform['user_editable'] == 'never' )
 			{

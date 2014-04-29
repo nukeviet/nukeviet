@@ -21,7 +21,7 @@ $my_footer .= "</script>\n";
 
 $userid = $nv_Request->get_int( 'userid', 'get', 0 );
 
-$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
@@ -68,7 +68,7 @@ while( $row_gru = $result_gru->fetch() )
 }
 
 $array_field_config = array();
-$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
+$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -135,19 +135,19 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $error_xemail;
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote( nv_md5safe( $_user['username'] ) ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote( nv_md5safe( $_user['username'] ) ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_username_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
-	elseif( $db->query( 'SELECT userid FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
+	elseif( $db->query( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote( $_user['email'] ) )->fetchColumn() )
 	{
 		$error = $lang_module['edit_error_email_exist'];
 	}
@@ -228,7 +228,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				}
 			}
 
-			$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+			$db->query( "UPDATE " . NV_USERS_GLOBALTABLE . " SET
 				username=" . $db->quote( $_user['username'] ) . ",
 				md5username='" . nv_md5safe( $_user['username'] ) . "',
 				password=" . $db->quote( $password ) . ",
@@ -246,7 +246,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			if( ! empty( $array_field_config ) )
 			{
-				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $userid );
+				$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $userid );
 			}
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid'] );
@@ -264,7 +264,7 @@ else
 	$_user['in_groups'] = $array_old_groups;
 	if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_br2nl( $_user['sig'] );
 
-	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid;
+	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid;
 	$result = $db->query( $sql );
 	$custom_fields = $result->fetch();
 }

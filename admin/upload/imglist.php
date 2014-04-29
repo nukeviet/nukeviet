@@ -20,7 +20,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		nv_filesListRefresh( $path );
 	}
 
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$type = $nv_Request->get_string( 'type', 'get', 'file' );
 	$order = $nv_Request->get_int( 'order', 'get', 0 );
 
@@ -50,7 +50,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			->from( NV_UPLOAD_GLOBALTABLE . '_file' )
 			->where( $_where );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( '*' );
 		if( $order == 1 )
@@ -93,7 +93,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		$sth->bindParam( ':keyword2', $keyword, PDO::PARAM_STR );
 		$sth->execute();
 
-		$all_page = $sth->fetchColumn();
+		$num_items = $sth->fetchColumn();
 
 		$db->select( 't1.*, t2.dirname' );
 		if( $order == 1 )
@@ -111,12 +111,12 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 		$base_url .= '&amp;q=' . $q;
 	}
 
-	if( $all_page )
+	if( $num_items )
 	{
 		$xtpl = new XTemplate( 'listimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
-		$db->limit( $per_page )->offset( $page );
+		$db->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 		$sth = $db->prepare( $db->sql() );
 		if( $check_like )
 		{
@@ -153,9 +153,9 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$xtpl->assign( 'NV_CURRENTTIME', NV_CURRENTTIME );
 			$xtpl->parse( 'main.imgsel' );
 		}
-		if( $all_page > $per_page )
+		if( $num_items > $per_page )
 		{
-			$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page, true, true, 'nv_urldecode_ajax', 'imglist' );
+			$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'imglist' );
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 			$xtpl->parse( 'main.generate_page' );
 		}

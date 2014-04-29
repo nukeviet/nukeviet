@@ -114,7 +114,7 @@ if( $step == 1 )
 	$objComment->setWidth( '220pt' )->setHeight( '20pt' );
 
 	$user_field_info = array();
-	$result_field = $db->query( "SELECT * FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
+	$result_field = $db->query( "SELECT * FROM " . NV_USERS_GLOBALTABLE . "_field ORDER BY weight ASC" );
 	while( $row_field = $result_field->fetch() )
 	{
 		$language = unserialize( $row_field['language'] );
@@ -148,10 +148,10 @@ if( $step == 1 )
 
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
-			->from( $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " t1, " . NV_USERS_GLOBALTABLE . "_info t2" )
+			->from( NV_USERS_GLOBALTABLE . " t1, " . NV_USERS_GLOBALTABLE . "_info t2" )
 			->where( 't1.userid=t2.userid AND t1.userid>' . $id_export);
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( '*' )->order( 't1.userid ASC' )->limit( $limit_export_data );
 
@@ -268,7 +268,7 @@ if( $step == 1 )
 
 	$export_filename = $nv_Request->get_string( $module_data . '_export_filename', 'session', '' );
 
-	if( $id_export == 0 and $all_page <= $limit_export_data )
+	if( $id_export == 0 and $num_items <= $limit_export_data )
 	{
 		$file_name = change_alias( $page_title );
 		$result = "OK_COMPLETE";

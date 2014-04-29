@@ -11,7 +11,7 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array(
-	'name' => 'Rss',
+	'name' => 'Rss Feeds',
 	'modfuncs' => 'main',
 	'is_sysmod' => 1,
 	'virtual' => 0,

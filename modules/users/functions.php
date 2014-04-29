@@ -44,7 +44,7 @@ function validUserLog( $array_user, $remember, $opid )
 
 	$user = nv_base64_encode( serialize( $user ) );
 
-	$stmt = $db->prepare( "UPDATE " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " SET
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET
 		checknum = :checknum,
 		last_login = " . NV_CURRENTTIME . ",
 		last_ip = :last_ip,
@@ -65,12 +65,12 @@ function validUserLog( $array_user, $remember, $opid )
 
 
 //global config
-$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
 $result = $db->query( $sql );
 $global_config['avatar_width'] = $result->fetchColumn();
 $result->closeCursor();
 
-$sql = "SELECT content FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
 $result = $db->query( $sql );
 $global_config['avatar_height'] = $result->fetchColumn();
 $result->closeCursor();

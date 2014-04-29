@@ -30,7 +30,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	$search['key'] = nv_substr( $nv_Request->get_title( 'q', 'get', '', 0 ), 0, NV_MAX_SEARCH_LENGTH );
 	$search['mod'] = $nv_Request->get_title( 'm', 'get', 'all', $search['mod'] );
 	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
-	$search['page'] = $nv_Request->get_int( 'page', 'get', 0 );
+	$search['page'] = $nv_Request->get_int( 'page', 'get', 1 );
 
     if( $search['logic'] != 1 ) $search['logic'] = 0;
     if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
@@ -88,7 +88,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 		foreach( $mods as $m_name => $m_values )
 		{
 			$pages = $search['page'];
-			$all_page = 0;
+			$num_items = 0;
 			$key = $search['key'];
 			$dbkeyword = $db->dblikeescape( $search['key'] );
 			$logic = $search['logic'] ? 'AND' : 'OR';
@@ -96,9 +96,9 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 			$result_array = array();
 			include NV_ROOTDIR . '/modules/' . $m_values['module_file'] . '/search.php' ;
 
-			if( ! empty( $all_page ) and ! empty( $result_array ) )
+			if( ! empty( $num_items ) and ! empty( $result_array ) )
 			{
-				$search['content'] .= search_result_theme( $result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $all_page );
+				$search['content'] .= search_result_theme( $result_array, $m_name, $m_values['custom_title'], $search, $is_generate_page, $limit, $num_items );
 			}
 		}
 

@@ -21,7 +21,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 	$view_comm = $nv_Request->get_int( 'view', 'post,get', 0 );
 	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get', 0 );
 	$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
 	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $view_comm . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
