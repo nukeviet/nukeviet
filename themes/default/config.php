@@ -207,22 +207,6 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$config_value = serialize( $config_theme );
 
-	function nv_var_exportxxxxxxxx( $var_array )
-{
-	$ct = preg_replace( '/[\s\t\r\n]+/', ' ', var_export( $var_array, true ) );
-	return $ct;
-	$ct = str_replace( "', ), '", "'), '", $ct );
-	$ct = str_replace( 'array ( ', 'array(', $ct );
-	$ct = str_replace( ' => ', '=>', $ct );
-	$ct = str_replace( '\', ), ), )', '\')))', $ct );
-	$ct = str_replace( '\', ), )', '\'))', $ct );
-	$ct = preg_replace( "/\'\, \)+$/", "')", $ct );
-	return $ct;
-}
-
-$sss = var_export( $config_theme, true );
-die($sss);
-
 	if ( isset( $module_config['themes'][$selectthemes] ) )
 	{
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='themes'" );
