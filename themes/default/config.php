@@ -203,7 +203,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     unset( $property );
 
     // General css
-    $config_theme['generalcss'] = $nv_Request->get_textarea( 'generalcss', 'post', '' );
+    $config_theme['generalcss'] = nv_unhtmlspecialchars( $nv_Request->get_textarea( 'generalcss', 'post', '' ) );
 
 	$config_value = serialize( $config_theme );
 
