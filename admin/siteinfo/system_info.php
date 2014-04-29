@@ -54,7 +54,6 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 		'caption' => $lang_module['chmod'],
 		'field' => array(
 			array( 'key' => NV_DATADIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_DATADIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_CACHEDIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_CACHEDIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_UPLOADS_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_UPLOADS_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_TEMP_DIR, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
@@ -67,13 +66,24 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 			array( 'key' => NV_LOGS_DIR . '/ip_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_LOGS_DIR . '/ref_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_LOGS_DIR . '/voting_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_FILES_DIR . '/css', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) )
+			array( 'key' => NV_FILES_DIR . '/css', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 		)
 	);
+	if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR ) )
+	{
+		while( ( $modname = readdir( $dh ) ) !== false )
+		{
+			if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
+			{
+				$info['chmod']['field'][] = array( 'key' => NV_CACHEDIR . '/' .$modname, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
+			}
+		}
+		closedir( $dh );
+	}
 	if( NV_SESSION_SAVE_PATH != '' )
 	{
-		$info['chmod']['field'] = array( 'key' => NV_SESSION_SAVE_PATH, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
-	}	
+		$info['chmod']['field'][] = array( 'key' => NV_SESSION_SAVE_PATH, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
+	}
 }
 
 $xtpl = new XTemplate( 'system_info.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
