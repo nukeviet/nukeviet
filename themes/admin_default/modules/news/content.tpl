@@ -105,9 +105,25 @@
 							<cite>{LANG.content_block}:</cite>
 						</p>
 						<div style="width: 260px; overflow: auto; text-align:left; margin:auto">
-							<table>
-								{row_block}
-							</table>
+							<div class="clearfix uiTokenizer uiInlineTokenizer">
+                                <div id="bids" class="tokenarea">
+                                    <!-- BEGIN: default -->
+                                    <span class="uiToken removable" onclick="$(this).remove();" title="{BLOCKS.title}">
+                                        {BLOCKS.title}
+                                        <input type="hidden" autocomplete="off" name="bids[]" value="{BLOCKS.bid}" />
+                                        <a class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
+                                    </span>
+                                    <!-- END: default -->
+                                </div>
+                                <div class="uiTypeahead">
+                                    <div class="wrap">
+                                        <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+                                        <div class="innerWrap">
+                                            <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="inputtext textInput" placeholder="" style="width: 100%;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</li>
 					<!-- END:block_cat -->
@@ -115,11 +131,25 @@
 						<p class="message_head">
 							<cite>{LANG.content_tag}:</cite>
 						</p>
-						<div class="message_body">
-							<p>
-								{LANG.content_tag_note} <a onclick="create_keywords();" href="javascript:void(0);">{LANG.content_clickhere}</a>
-							</p><textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 240px;">{rowcontent.keywords}</textarea>
-						</div>
+						<div class="clearfix uiTokenizer uiInlineTokenizer">
+                            <div id="keywords" class="tokenarea">
+                                <!-- BEGIN: keywords -->
+                                <span class="uiToken removable" onclick="$(this).remove();" title="{KEYWORDS}">
+                                    {KEYWORDS}
+                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
+                                    <a class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
+                                </span>
+                                <!-- END: keywords -->
+                            </div>
+                            <div class="uiTypeahead">
+                                <div class="wrap">
+                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+                                    <div class="innerWrap">
+                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="inputtext textInput" placeholder="" style="width: 100%;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</li>
 					<li>
 						<p class="message_head">
