@@ -214,22 +214,22 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$order_by = 'regdate ' . $orderregdate;
 		}
 
-		$page = $nv_Request->get_int( 'page', 'get', 0 );
+		$page = $nv_Request->get_int( 'page', 'get', 1 );
 		$per_page = 10;
 
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
-			->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE );
+			->from( NV_USERS_GLOBALTABLE );
 		if( ! empty( $array_where ) )
 		{
 			$db->where( implode( ' AND ', $array_where ) );
 		}
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'userid, username, email, regdate' )
 			->limit( $per_page )
-			->offset( $page );
+			->offset( ( $page - 1 ) * $per_page );
 		if( ! empty( $order_by ) )
 		{
 			$db->order( $order_by );
@@ -246,7 +246,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			);
 		}
 
-		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 	}
 
 	if( ! empty( $array_user ) )

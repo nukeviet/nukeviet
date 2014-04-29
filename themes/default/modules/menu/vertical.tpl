@@ -34,7 +34,7 @@
 		</nav>
 	</aside>
 </div>
-<script>
+<script type="text/javascript">
 $(function () {
 	$('#menu_{MENUID}').metisMenu({
         toggle: false

@@ -71,6 +71,7 @@ $lang_module['auto_postcomm_1'] = 'No censorship';
 $lang_module['auto_postcomm_2'] = 'Nensorship if not member';
 $lang_module['adminscomm'] = 'Admin manage comments';
 $lang_module['allowed_comm'] = 'Who post comment';
+$lang_module['view_comm'] = 'Who view comment';
 $lang_module['allowed_comm_item'] = 'Follow aricle configure';
 $lang_module['sortcomm'] = 'Sort comments by';
 $lang_module['sortcomm_0'] = 'New above';

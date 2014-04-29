@@ -151,7 +151,6 @@ $lang_module['error_del_content'] = 'Error: System can\'t delete all block\'s ar
 $lang_module['msgnocheck'] = 'No topic selected';
 $lang_module['block'] = 'Blocks';
 $lang_module['adddefaultblock'] = 'Select the default when creating article';
-$lang_module['module_logo'] = 'Logo module';
 $lang_module['source_logo'] = 'Source logo';
 $lang_module['topic_page'] = 'Topic page';
 $lang_module['topic_del'] = 'Topic del';
@@ -205,6 +204,8 @@ $lang_module['config_source_link'] = 'Show link of information source';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
 $lang_module['search_status'] = 'Status';
+$lang_module['hitstotal'] = 'Number view';
+
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
 $lang_module['viewdescription'] = 'Show describes when view topic';

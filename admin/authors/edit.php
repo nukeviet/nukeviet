@@ -70,7 +70,7 @@ if( $row['lev'] == 3 )
 	}
 }
 
-$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
+$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id;
 $row_user = $db->query( $sql )->fetch();
 
 if( empty( $row['files_level'] ) )

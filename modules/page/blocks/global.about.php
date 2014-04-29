@@ -23,15 +23,15 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 		global $global_config, $site_mods, $db, $module_name;
 		$module = $block_config['module'];
 
-		if( ! isset( $site_mods[$module] ) ) return "";
+		if( ! isset( $site_mods[$module] ) ) return '';
 
-		if( $module_name == $module ) return "";
+		if( $module_name == $module ) return '';
 
 		$is_show = false;
 
-		$pattern = "/^" . NV_LANG_DATA . "\_" . $module . "\_([a-zA-z0-9\_\-]+)\_([0-9]+)\_" . NV_CACHE_PREFIX . "\.cache$/i";
+		$pattern = '/^' . NV_LANG_DATA . '\_([a-zA-z0-9\_\-]+)\_([0-9]+)\_' . NV_CACHE_PREFIX . '\.cache$/i';
 
-		$cache_files = nv_scandir( NV_ROOTDIR . "/" . NV_CACHEDIR, $pattern );
+		$cache_files = nv_scandir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module, $pattern );
 
 		if( ( $count = sizeof( $cache_files ) ) >= 1 )
 		{
@@ -39,10 +39,10 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 			--$num;
 			$cache_file = $cache_files[$num];
 
-			if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+			if( ( $cache = nv_get_cache( $module, $cache_file ) ) != false )
 			{
 				$cache = unserialize( $cache );
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $cache['alias'] . $global_config['rewrite_exturl'];
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $cache['alias'] . $global_config['rewrite_exturl'];
 				$title = $cache['page_title'];
 				$bodytext = strip_tags( $cache['bodytext'] );
 
@@ -52,13 +52,13 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 
 		if( ! $is_show )
 		{
-			$sql = "SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . " WHERE status=1 ORDER BY rand() DESC";
+			$sql = 'SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . ' WHERE status=1 ORDER BY rand() DESC';
 
 			if( ( $query = $db->query( $sql ) ) !== false )
 			{
 				if( ( $row = $query->fetch() ) !== false )
 				{
-					$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'] . $global_config['rewrite_exturl'];
+					$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
 					$title = $row['title'];
 					$bodytext = strip_tags( $row['bodytext'] );
 					$bodytext = nv_clean60( $bodytext, 300 );
@@ -80,7 +80,7 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 			}
 			else
 			{
-				$block_theme = "default";
+				$block_theme = 'default';
 			}
 
 			$xtpl = new XTemplate( 'block.about.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/page' );
@@ -92,7 +92,7 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 			return $xtpl->text( 'main' );
 		}
 
-		return "";
+		return '';
 	}
 }
 

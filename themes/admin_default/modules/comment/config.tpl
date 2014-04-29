@@ -7,6 +7,7 @@
 			<td>{LANG.mod_name}</td>
 			<td>{LANG.activecomm}</td>
 			<td>{LANG.allowed_comm}</td>
+			<td>{LANG.view_comm}</td>
 			<td>{LANG.auto_postcomm}</td>
 			<td>{LANG.emailcomm}</td>
 			<td>{LANG.funcs}</td>
@@ -19,6 +20,7 @@
 			<td>{ROW.admin_title}</td>
 			<td class="center"><em class="icon-{ROW.activecomm} icon-large">&nbsp;</em></td>
 			<td>{ROW.allowed_comm}</td>
+			<td>{ROW.view_comm}</td>
 			<td>{ROW.auto_postcomm}</td>
 			<td class="center"><em class="icon-{ROW.emailcomm} icon-large">&nbsp;</em></td>
 			<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mod_name={ROW.mod_name}">{LANG.edit}</a></td>
@@ -52,6 +54,15 @@
 					<!-- BEGIN: allowed_comm -->
 					<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 					<!-- END: allowed_comm -->
+				</select></td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.view_comm}</strong></td>
+				<td>
+				<select name="view_comm">
+					<!-- BEGIN: view_comm -->
+					<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+					<!-- END: view_comm -->
 				</select></td>
 			</tr>
 			<tr>

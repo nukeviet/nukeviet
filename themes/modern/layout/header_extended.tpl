@@ -17,7 +17,9 @@
 					<a title="View RSS" href="{THEME_RSS_INDEX_HREF}" class="rss fr">Rss Feed</a>
 					<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
 						<div class="q-search fr">
-							<input type="text" class="txt-qs" name="topmenu_search_query" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" /><input type="submit" class="submit-qs" value="" name="topmenu_search_submit" id="topmenu_search_submit"/>
+							<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
+							<input type="hidden" name="{NV_NAME_VARIABLE}" value="seek" />
+							<input type="text" class="txt-qs" name="q" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" /><input type="submit" class="submit-qs" value="" name="submit" id="topmenu_search_submit"/>
 						</div>
 					</form>
 					<div class="clear"></div>
@@ -25,7 +27,14 @@
 			</div>
 			<div class="header">
 				<div class="logo">
-					<a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" height="84" /> <strong>{THEME_LOGO_TITLE}</strong></a>
+					<a title="{THEME_LOGO_TITLE}" href="{THEME_SITE_HREF}">
+						<!-- BEGIN: show_logo -->
+						<img src="{LOGO_SRC}" alt="{THEME_LOGO_TITLE}" height="84" />
+						<!-- END: show_logo -->
+						<!-- BEGIN: show_site_name -->
+						<strong>{THEME_LOGO_TITLE}</strong>
+						<!-- END: show_site_name -->
+					</a>
 				</div>
 				<div class="topadv">
 					[TOPADV]

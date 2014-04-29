@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-if( defined( 'NV_IS_GODADMIN' ) )
+if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['list_row'] = $lang_module['list_row_title'];
 	$submenu['content'] = $lang_module['content'];

@@ -11,10 +11,10 @@
 if( ! defined( 'NV_IS_MOD_DOWNLOAD' ) ) die( 'Stop!!!' );
 
 $url = array();
-$cacheFile = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . NV_LANG_DATA . '_' . $module_name . '_Sitemap_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = NV_LANG_DATA . '_Sitemap_' . NV_CACHE_PREFIX . '.cache';
 $pa = NV_CURRENTTIME - 7200;
 
-if( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
+if( ( $cache = nv_get_cache( $module_name, $cacheFile ) ) != false and filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $cacheFile ) >= $pa )
 {
 	$url = unserialize( $cache );
 }
@@ -40,7 +40,7 @@ else
 	}
 
 	$cache = serialize( $url );
-	nv_set_cache( $cacheFile, $cache );
+	nv_set_cache( $module_name, $cacheFile, $cache );
 }
 
 nv_xmlSitemap_generate( $url );

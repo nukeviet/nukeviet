@@ -173,7 +173,7 @@ header{
 }
 
 #search{
-	float:left;
+	float:right;
 	width:300px;
 }
 #search input[type="text"]{

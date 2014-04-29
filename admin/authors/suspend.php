@@ -38,7 +38,7 @@ if( $row['lev'] == 1 or ( ! defined( 'NV_IS_GODADMIN' ) and $row['lev'] == 2 ) )
 	die();
 }
 
-$row_user = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id )->fetch();
+$row_user = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id )->fetch();
 $susp_reason = array();
 $last_reason = array();
 
@@ -219,7 +219,7 @@ else
 	$ads = array_unique( $ads );
 	$ads = "'" . implode( "','", $ads ) . "'";
 
-	$result2 = $db->query( 'SELECT userid, username, full_name FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')' );
+	$result2 = $db->query( 'SELECT userid, username, full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')' );
 
 	$ads = array();
 	while( $row2 = $result2->fetch() )

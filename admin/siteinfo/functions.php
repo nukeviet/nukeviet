@@ -54,7 +54,7 @@ function nv_siteinfo_getlang()
 function nv_siteinfo_getuser()
 {
 	global $db_config;
-	$sql = 'SELECT userid, username FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
+	$sql = 'SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
 	$result = nv_db_cache( $sql, 'userid' );
 	$array_user = array();
 

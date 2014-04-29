@@ -15,7 +15,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 {
 	$userid = $nv_Request->get_int( 'userid', 'post', 0 );
 
-	$sql = 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $userid;
+	$sql = 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $userid;
 	if( $db->exec( $sql ) )
 	{
 		die( 'OK' );
@@ -28,7 +28,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 {
 	$userid = $nv_Request->get_int( 'userid', 'get', 0 );
 
-	$sql = 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $userid;
+	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $userid;
 	$row = $db->query( $sql )->fetch();
 	if( empty( $row ) )
 	{
@@ -36,7 +36,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		die();
 	}
 
-	$sql = "INSERT INTO " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " (
+	$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
 		username, md5username, password, email, full_name, gender, photo, birthday,
 		regdate, question,
 		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		:question,
 		:answer,
 		'', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
-	
+
 	$data_insert = array();
 	$data_insert['username'] = $row['username'];
 	$data_insert['md5_username'] = nv_md5safe( $row['username'] );
@@ -66,14 +66,14 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 		$query_field = array();
 		$query_field['userid'] = $userid;
-		$result_field = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
+		$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
 		while( $row_f = $result_field->fetch() )
 		{
 			$query_field[$row_f['field']] = ( isset( $users_info[$row_f['field']] ) ) ? $users_info[$row_f['field']] : $db->quote( $row_f['default_value'] );
 		}
-		if( $db->exec( 'INSERT INTO ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
+		if( $db->exec( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
 		{
-			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
+			$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid'] );
 			$full_name = ( ! empty( $row['full_name'] ) ) ? $row['full_name'] : $row['username'];
@@ -85,7 +85,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		}
 		else
 		{
-			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] );
+			$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] );
 		}
 	}
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting' );
@@ -128,7 +128,7 @@ if( $ordertype != 'ASC' ) $ordertype = 'DESC';
 
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . '_reg' );
+	->from( NV_USERS_GLOBALTABLE . '_reg' );
 
 if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
 {
@@ -139,15 +139,14 @@ if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue 
 	$db->where( $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'" );
 }
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $per_page = 30;
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
-$all_page = ( $all_page ) ? $all_page : 1;
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( '*' )
 	->limit( $per_page )
-	->offset( $page );
+	->offset( ( $page - 1 ) * $per_page );
 
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
@@ -169,7 +168,7 @@ while( $row = $result->fetch() )
 	);
 }
 
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $head_tds = array();
 $head_tds['userid']['title'] = $lang_module['userid'];

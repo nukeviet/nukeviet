@@ -16,9 +16,9 @@ if( ! defined( 'NV_IS_MOD_COMMENT' ) ) die( 'Stop!!!' );
  * @param mixed $array_data
  * @return
  */
-function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url )
+function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
 {
-	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $admin_info, $user_info, $lang_global;
+	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $admin_info, $user_info, $lang_global, $client_info;
 
 	$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -27,6 +27,7 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 	$xtpl->assign( 'MODULE_COMM', $module );
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
+	$xtpl->assign( 'VIEW_COMM', $view_comm );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'BASE_URL_COMM', $base_url );
@@ -37,13 +38,14 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 		$xtpl->assign( 'OPTION', array(
 			'key' => $i,
 			'title' => $lang_module['sortcomm_' . $i],
+			'selected' => ( $i == $sortcomm ) ?  ' selected="selected"' : '',
 		) );
-		
+
 		if( $i == $sortcomm )
 		{
 			$xtpl->parse( 'main.sortcomm.active' );
 		}
-		
+
 		$xtpl->parse( 'main.sortcomm' );
 	}
 
@@ -79,6 +81,12 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
 		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
 		$xtpl->parse( 'main.allowed_comm' );
+	}
+	elseif( $form_login )
+	{
+		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
+		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['comment_login'] . '</a>' );
+		$xtpl->parse( 'main.form_login' );
 	}
 
 	$xtpl->parse( 'main' );

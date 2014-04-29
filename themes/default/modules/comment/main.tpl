@@ -17,7 +17,7 @@
 					<!-- END: sortcomm -->
 				</ul>
 			</div>
-			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_send}</a></span>
+			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_hide_show}</a></span>
 		</div>
 	</div>
 	<div id="showcomment">
@@ -52,7 +52,7 @@
 				</div>
 			</div>
 			<div class="form-group text-center">
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{VIEW_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
 			</div>
 		</form>

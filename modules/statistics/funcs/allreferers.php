@@ -16,11 +16,11 @@ $mod_title = $lang_module['referer'];
 
 $sql = 'SELECT COUNT(*), SUM(total), MAX(total) FROM ' . NV_REFSTAT_TABLE;
 $result = $db->query( $sql );
-list( $all_page, $total, $max ) = $result->fetch( 3 );
+list( $num_items, $total, $max ) = $result->fetch( 3 );
 
-if( $all_page )
+if( $num_items )
 {
-	$page = $nv_Request->get_int( 'page', 'get', 0 );
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$per_page = 50;
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allreferers'];
 
@@ -30,7 +30,7 @@ if( $all_page )
 		->where( 'total!=0' )
 		->order( 'total DESC' )
 		->limit( $per_page )
-		->offset( $page );
+		->offset( ( $page - 1 ) * $per_page );
 	$result = $db->query( $db->sql() );
 
 	$host_list = array();
@@ -47,7 +47,7 @@ if( $all_page )
 		$cts['thead'] = array( $lang_module['referer'], $lang_module['hits'], $lang_module['last_visit'] );
 		$cts['rows'] = $host_list;
 		$cts['max'] = $max;
-		$cts['generate_page'] = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		$cts['generate_page'] = nv_generate_page( $base_url, $num_items, $per_page, $page );
 	}
 	if( $page > 1 )
 	{

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['comment'];
 
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $module = $nv_Request->get_title( 'module', 'get' );
 $per_page = $nv_Request->get_int( 'per_page', 'get', 20 );
 $stype = $nv_Request->get_string( 'stype', 'get', '' );
@@ -93,11 +93,11 @@ foreach( $site_mod_comm as $module_i => $row )
 
 $i = 15;
 $search_per_page = array();
-while( $i < 1000 )
+while( $i < 100 )
 {
 	$i = $i + 5;
 
-	$xtpl->assign( 'OPTION', array( 'page' => $i, 'selected' => ( $i == $per_page ) ? ' selected="selected"' : '' ) );
+	$xtpl->assign( 'OPTION', array( 'page' => $i, 'selected' => ( $i == $page ) ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.per_page' );
 }
 
@@ -189,11 +189,11 @@ if( strpos( $sql, ':post_email' ) )
 	$sth->bindValue( ':post_email', '%' . $from['q'] . '%', PDO::PARAM_STR );
 }
 $sth->execute();
-$all_page = $sth->fetchColumn();
+$num_items = $sth->fetchColumn();
 
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
-$db->select( 'cid, module, id, content, userid, post_name, post_email, status' )->order( 'cid DESC' )->limit( $per_page )->offset( $page );
+$db->select( 'cid, module, id, content, userid, post_name, post_email, status' )->order( 'cid DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $sql = $db->sql();
 $sth = $db->prepare( $sql );
 if( strpos( $sql, ':content' ) )

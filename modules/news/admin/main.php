@@ -34,10 +34,9 @@ $val_cat_content = array();
 $val_cat_content[] = array(
 	'value' => 0,
 	'selected' => ( $catid == 0 ) ? ' selected="selected"' : '',
-	'title' => $lang_module['search_cat_all']
-);
+	'title' => $lang_module['search_cat_all'] );
 $array_cat_view = array();
-
+$check_declined = false;
 foreach( $global_array_cat as $catid_i => $array_value )
 {
 	$lev_i = $array_value['lev'];
@@ -69,6 +68,10 @@ foreach( $global_array_cat as $catid_i => $array_value )
 			$check_cat = true;
 		}
 	}
+	if( isset( $array_cat_admin[$admin_id] ) && $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
+	{
+		$check_declined = true;
+	}
 	if( $check_cat )
 	{
 		$xtitle_i = '';
@@ -90,8 +93,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$val_cat_content[] = array(
 			'value' => $catid_i,
 			'selected' => $sl,
-			'title' => $xtitle_i
-		);
+			'title' => $xtitle_i );
 		$array_cat_view[] = $catid_i;
 	}
 }
@@ -106,19 +108,25 @@ $array_search = array(
 	'bodytext' => $lang_module['search_bodytext'],
 	'author' => $lang_module['search_author'],
 	'admin_id' => $lang_module['search_admin'],
-	'sourcetext' => $lang_module['sources']
-);
-$array_in_rows = array( 'title', 'bodytext', 'author', 'sourcetext' );
-$array_in_ordername = array( 'title', 'publtime', 'exptime' );
+	'sourcetext' => $lang_module['sources'] );
+$array_in_rows = array(
+	'title',
+	'bodytext',
+	'author',
+	'sourcetext' );
+$array_in_ordername = array(
+	'title',
+	'publtime',
+	'exptime' );
 $array_status_view = array(
 	'-' => '---',
-	'0' => $lang_module['status_0'],
+	'5' => $lang_module['status_5'],
 	'1' => $lang_module['status_1'],
-	'2' => $lang_module['status_2'],
-	'3' => $lang_module['status_3'],
+	'0' => $lang_module['status_0'],
+	'6' => $lang_module['status_6'],
 	'4' => $lang_module['status_4'],
-	'5' => $lang_module['status_5']
-);
+	'2' => $lang_module['status_2'],
+	'3' => $lang_module['status_3'] );
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -141,7 +149,7 @@ else
 	$from = NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' r';
 }
 $where = '';
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 {
@@ -190,7 +198,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		}
 	}
 }
-$from .= ' LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
+$from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
 if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$from_catid = array();
@@ -214,16 +222,14 @@ $global_array_cat[0] = array(
 	'subcatid' => 0,
 	'numlinks' => 3,
 	'description' => '',
-	'keywords' => ''
-);
+	'keywords' => '' );
 $search_type = array();
 foreach( $array_search as $key => $val )
 {
 	$search_type[] = array(
 		'key' => $key,
 		'value' => $val,
-		'selected' => ( $key == $stype ) ? ' selected="selected"' : ''
-	);
+		'selected' => ( $key == $stype ) ? ' selected="selected"' : '' );
 }
 $a = 0;
 foreach( $array_status_view as $key => $val )
@@ -240,12 +246,11 @@ foreach( $array_status_view as $key => $val )
 	$search_status[] = array(
 		'key' => $key,
 		'value' => $val,
-		'selected' => $sl
-	);
+		'selected' => $sl );
 }
 $i = 5;
 $search_per_page = array();
-while( $i <= 1000 )
+while( $i <= 500 )
 {
 	$search_per_page[] = array( 'page' => $i, 'selected' => ( $i == $per_page ) ? ' selected="selected"' : '' );
 	$i = $i + 5;
@@ -260,21 +265,15 @@ $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $or
 
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
-$db->sqlreset()
-	->select( 'COUNT(*)' )
-	->from( $from )
-	->where( $where );
+$db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, u.username' )
-	->order( 'r.' . $ordername . ' ' . $order )
-	->limit( $per_page )
-	->offset( $page );
+$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $data = array();
-while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $username ) = $result->fetch( 3 ) )
+while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$title = nv_clean60( $title );
@@ -345,16 +344,15 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'publtime' => $publtime,
 		'status' => $lang_module['status_' . $status],
 		'username' => $username,
-		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
-	);
+		'hitstotal' => $hitstotal,
+		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs ) );
 }
 $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'waiting' => $lang_module['status_action_0']
-);
+	'waiting' => $lang_module['status_action_0'] );
 //chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
@@ -362,12 +360,16 @@ if( defined( 'NV_IS_ADMIN_MODULE' ) )
 	$array_list_action['addtoblock'] = $lang_module['addtoblock'];
 	$array_list_action['addtotopics'] = $lang_module['addtotopics'];
 }
+elseif( $check_declined ) // neu co quyen duyet bai thi
+{
+	$array_list_action['declined'] = $lang_module['declined'];
+}
 $action = array();
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
 	$action[] = array( 'value' => $catid_i, 'title' => $title_i );
 }
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -423,3 +425,5 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
+
+?>

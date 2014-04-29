@@ -91,10 +91,10 @@ function nv_blocks_content( $sitecontent )
 
 	$_posReal = array_combine( $_posReal[0], $_posReal[3] );
 
-	$cache_file = NV_LANG_DATA . '_themes_' . $global_config['module_theme'] . '_' . $module_name . '_' . NV_CACHE_PREFIX . '.cache';
+	$cache_file = NV_LANG_DATA . '_' . $global_config['module_theme'] . '_' . $module_name . '_' . NV_CACHE_PREFIX . '.cache';
 	$blocks = array();
 
-	if( ( $cache = nv_get_cache( $cache_file ) ) !== false )
+	if( ( $cache = nv_get_cache( 'themes', $cache_file ) ) !== false )
 	{
 		$cache = unserialize( $cache );
 		if( isset( $cache[$module_info['funcs'][$op]['func_id']] ) ) $blocks = $cache[$module_info['funcs'][$op]['func_id']];
@@ -154,7 +154,7 @@ function nv_blocks_content( $sitecontent )
 		if( isset( $cache[$module_info['funcs'][$op]['func_id']] ) ) $blocks = $cache[$module_info['funcs'][$op]['func_id']];
 
 		$cache = serialize( $cache );
-		nv_set_cache( $cache_file, $cache );
+		nv_set_cache( 'themes', $cache_file, $cache );
 
 		unset( $cache, $in, $block_config, $blockTitle );
 	}
