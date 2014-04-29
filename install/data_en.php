@@ -216,6 +216,7 @@ $sth->execute( array(17, 'default', 'menu', 'global.menu_theme_default.php', 'gl
 $sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 3. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 3. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 $sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
+$sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight (bid, func_id, weight) VALUES (?, ?, ?)' );
@@ -746,6 +747,40 @@ $sth->execute( array(20, 25, 1) );
 $sth->execute( array(20, 17, 1) );
 $sth->execute( array(20, 22, 1) );
 $sth->execute( array(20, 19, 1) );
+
+$sth->execute( array(21, 2, 1) );
+$sth->execute( array(21, 36, 1) );
+$sth->execute( array(21, 39, 1) );
+$sth->execute( array(21, 42, 1) );
+$sth->execute( array(21, 43, 1) );
+$sth->execute( array(21, 27, 1) );
+$sth->execute( array(21, 5, 1) );
+$sth->execute( array(21, 6, 1) );
+$sth->execute( array(21, 7, 1) );
+$sth->execute( array(21, 13, 1) );
+$sth->execute( array(21, 15, 1) );
+$sth->execute( array(21, 16, 1) );
+$sth->execute( array(21, 47, 1) );
+$sth->execute( array(21, 46, 1) );
+$sth->execute( array(21, 33, 1) );
+$sth->execute( array(21, 32, 1) );
+$sth->execute( array(21, 30, 1) );
+$sth->execute( array(21, 29, 1) );
+$sth->execute( array(21, 31, 1) );
+$sth->execute( array(21, 28, 1) );
+$sth->execute( array(21, 34, 1) );
+$sth->execute( array(21, 24, 1) );
+$sth->execute( array(21, 20, 1) );
+$sth->execute( array(21, 21, 1) );
+$sth->execute( array(21, 26, 1) );
+$sth->execute( array(21, 23, 1) );
+$sth->execute( array(21, 18, 1) );
+$sth->execute( array(21, 25, 1) );
+$sth->execute( array(21, 17, 1) );
+$sth->execute( array(21, 22, 1) );
+$sth->execute( array(21, 19, 1) );
+$sth->execute( array(21, 48, 1) );
+
 $sth->execute( array(16, 35, 1) );
 $sth->execute( array(10, 35, 1) );
 $sth->execute( array(11, 35, 2) );
