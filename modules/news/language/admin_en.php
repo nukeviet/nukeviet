@@ -204,6 +204,8 @@ $lang_module['config_source_link'] = 'Show link of information source';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
 $lang_module['search_status'] = 'Status';
+$lang_module['hitstotal'] = 'Number view';
+
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
 $lang_module['viewdescription'] = 'Show describes when view topic';
