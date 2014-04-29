@@ -109,11 +109,20 @@ $(document).ready(function() {
 			});
 		}
 	});
-
+    
 	$("#keywords-search").bind("keydown", function(event) {
 		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
 			event.preventDefault();
 		}
+        if(event.keyCode==13){
+            var keywords_add= $("#keywords-search").val();
+            if( keywords_add != '' ){
+                nv_add_element( 'keywords', keywords_add, keywords_add );
+                $(this).val('');
+            }
+            return false;
+    	}
+        
 	}).autocomplete({
 		source : function(request, response) {
 			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
@@ -209,7 +218,7 @@ $(document).ready(function() {
 });
 
 function nv_add_element( idElment, key, value ){
-   var html = "<span title=\"" + value + "\"  onclick=\"$(this).remove();\" class=\"uiToken removable\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
+   var html = "<span title=\"" + value + "\" class=\"uiToken removable\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";
     $("#" + idElment).append( html );
 	return false;
 }

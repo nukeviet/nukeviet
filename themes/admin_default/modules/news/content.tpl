@@ -108,10 +108,10 @@
 							<div class="clearfix uiTokenizer uiInlineTokenizer">
                                 <div id="bids" class="tokenarea">
                                     <!-- BEGIN: default -->
-                                    <span class="uiToken removable" onclick="$(this).remove();" title="{BLOCKS.title}">
+                                    <span class="uiToken removable" title="{BLOCKS.title}">
                                         {BLOCKS.title}
                                         <input type="hidden" autocomplete="off" name="bids[]" value="{BLOCKS.bid}" />
-                                        <a class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
+                                        <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
                                     </span>
                                     <!-- END: default -->
                                 </div>
@@ -134,10 +134,10 @@
 						<div class="clearfix uiTokenizer uiInlineTokenizer">
                             <div id="keywords" class="tokenarea">
                                 <!-- BEGIN: keywords -->
-                                <span class="uiToken removable" onclick="$(this).remove();" title="{KEYWORDS}">
+                                <span class="uiToken removable" title="{KEYWORDS}">
                                     {KEYWORDS}
                                     <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
-                                    <a class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
+                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
                                 </span>
                                 <!-- END: keywords -->
                             </div>
