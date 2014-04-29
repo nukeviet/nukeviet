@@ -255,7 +255,7 @@
 	});
 	$("input[name=searchUser]").click(function() {
 		var a = $(this).prev().attr("id");
-		nv_open_browse_file("{MODULE_URL}=getuserid&area=" + a + "&filtersql={FILTERSQL}", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse("{MODULE_URL}=getuserid&area=" + a + "&filtersql={FILTERSQL}", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false
 	});
 	$("input[name=addUser]").click(function() {

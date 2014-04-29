@@ -199,7 +199,7 @@ $(document).ready(function() {
 		buttonImageOnly : true
 	});
 	$("#btn_upload").click(function() {
-		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 550, 520, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){
@@ -210,7 +210,7 @@ $(document).ready(function() {
 	<!-- BEGIN: add_photo -->
 	$('#change-photo').show();
 	<!-- END: add_photo -->
-}); 
+});
 //]]>
 </script>
 <!-- END: main -->

@@ -17,10 +17,10 @@
 		<em class="pull-left time">{DETAIL.publtime}</em>
 		<ul class="list-inline pull-right">
 			<!-- BEGIN: allowed_send -->
-			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','650','500','no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_send -->
 			<!-- BEGIN: allowed_print -->
-			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
+			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_print -->
 			<!-- BEGIN: allowed_save -->
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
@@ -39,7 +39,7 @@
 	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 	          })();
 	        </script>
-	
+
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	    </div>
@@ -85,7 +85,7 @@
 			{COPYRIGHT}
 		</div>
 		<!-- END: copyright -->
-		
+
 		<!-- BEGIN: adminlink -->
 		<p class="text-center adminlink">
 			{ADMINLINK}
@@ -148,7 +148,7 @@
 							}
 						}
 					});
-			
+
 					$('.hover-star').rating('select', '{NUMBERRATING}');
 				</script>
 				<!-- BEGIN: disablerating -->
@@ -160,7 +160,7 @@
 				<!-- END: allowed_rating -->
 			</div>
 		</div>
-	
+
 	<!-- BEGIN: comment -->
 	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 	<!-- END: comment -->
