@@ -74,7 +74,7 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'view', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'view', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'keywords', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat', 'blocksajax' );
 
 $submenu['cat'] = $lang_module['categories'];
 $submenu['content'] = $lang_module['content_add'];

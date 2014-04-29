@@ -260,7 +260,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	{
 		$array_cat_pub_content[] = $catid_i;
 	}
-    if( $check_censor_content )//nguoi kiem duyet
+	if( $check_censor_content ) //nguoi kiem duyet
 	{
 		$array_censor_content[] = $catid_i;
 	}
@@ -285,7 +285,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	elseif( $nv_Request->isset_request( 'status4', 'post' ) ) $rowcontent['status'] = 4; //luu tam
 	else  $rowcontent['status'] = 6; //gui, cho bien tap
 
-    $message_error_show = $lang_module['permissions_pub_error'];
+	$message_error_show = $lang_module['permissions_pub_error'];
 	if( $rowcontent['status'] == 1 )
 	{
 		$array_cat_check_content = $array_cat_pub_content;
@@ -294,10 +294,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$array_cat_check_content = $array_cat_edit_content;
 	}
-    elseif( $rowcontent['status'] == 0 )
+	elseif( $rowcontent['status'] == 0 )
 	{
 		$array_cat_check_content = $array_censor_content;
-        $message_error_show = $lang_module['permissions_sendspadmin_error'];
+		$message_error_show = $lang_module['permissions_sendspadmin_error'];
 	}
 	else
 	{
@@ -385,7 +385,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
 	$rowcontent['gid'] = $nv_Request->get_int( 'gid', 'post', 0 );
 
-	$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '' );
+	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
+    $rowcontent['keywords'] = implode(", ", $rowcontent['keywords'] );
+    
 	if( $rowcontent['keywords'] == '' )
 	{
 		if( $rowcontent['hometext'] != '' )
@@ -995,11 +997,22 @@ if( sizeof( $array_block_cat_module ) )
 {
 	foreach( $array_block_cat_module as $bid_i => $bid_title )
 	{
-		$ch = in_array( $bid_i, $id_block_content ) ? ' checked="checked"' : '';
-		$shtm .= "<tr><td><input class=\"news_checkbox\" type=\"checkbox\" name=\"bids[]\" value=\"" . $bid_i . "\"" . $ch . " />" . $bid_title . "</td></tr>\n";
+		if( in_array( $bid_i, $id_block_content ) )
+		{
+			$xtpl->assign( 'BLOCKS', array( 'title' => $bid_title, 'bid' => $bid_i ) );
+			$xtpl->parse( 'main.block_cat.default' );
+		}
 	}
-	$xtpl->assign( 'row_block', $shtm );
 	$xtpl->parse( 'main.block_cat' );
+}
+$keywords_array = explode( ",", $rowcontent['keywords'] );
+if( sizeof( $keywords_array ) )
+{
+	foreach( $keywords_array as $keywords )
+	{
+		$xtpl->assign( 'KEYWORDS', $keywords );
+		$xtpl->parse( 'main.keywords' );
+	}
 }
 
 $archive_checked = ( $rowcontent['archive'] ) ? ' checked="checked"' : '';
@@ -1023,7 +1036,7 @@ if( ! empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-if( defined( 'NV_IS_ADMIN_MODULE' ) || !empty( $array_pub_content ) ) //toan quyen module
+if( defined( 'NV_IS_ADMIN_MODULE' ) || ! empty( $array_pub_content ) ) //toan quyen module
 {
 	if( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
 	{
@@ -1046,9 +1059,9 @@ else
 	{
 		if( ! empty( $array_censor_content ) ) // neu co quyen duyet bai thi
 		{
-            $xtpl->parse( 'main.status1.status0' );
+			$xtpl->parse( 'main.status1.status0' );
 		}
-        $xtpl->parse( 'main.status1' );
+		$xtpl->parse( 'main.status1' );
 	}
 }
 if( empty( $rowcontent['alias'] ) )
