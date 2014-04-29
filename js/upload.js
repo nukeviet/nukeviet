@@ -275,7 +275,6 @@ function filedelete() {
 		}
 	});
 }
-
 function fileMouseup(a) {
 	$(".imgsel").removeClass("imgsel");
 	$(a).addClass("imgsel");
@@ -301,6 +300,12 @@ function fileMouseup(a) {
 	if ($("span#delete_file").attr("title") == "1") {
 		e += '<li id="filedelete"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.upload_delfile + '</li>'
 	}
+    if ($("span#crop_file").attr("title") == "1") {
+		e += '<li id="cropfile"><img style="margin-right:5px" src="' + ICON.filecrop + '"/>' + LANG.crop + '</li>'
+	}
+	if ($("span#rotate_file").attr("title") == "1") {
+		e += '<li id="rotatefile"><img style="margin-right:5px" src="' + ICON.filerotate + '"/>' + LANG.rotate + '</li>'
+	}
 	e += "</ul>";
 	$("div#contextMenu").html(e)
 }
@@ -323,6 +328,8 @@ function folderClick(a) {
 		$("span#rename_file").attr("title", $(a).is(".rename_file") ? "1" : "0");
 		$("span#delete_file").attr("title", $(a).is(".delete_file") ? "1" : "0");
 		$("span#move_file").attr("title", $(a).is(".move_file") ? "1" : "0");
+		$("span#crop_file").attr("title", $(a).is(".crop_file") ? "1" : "0");
+		$("span#rotate_file").attr("title", $(a).is(".rotate_file") ? "1" : "0");
 		$("span.folder").css("color", "");
 		$(a).css("color", "red");
 		if ($(a).is(".view_dir")) {
@@ -406,6 +413,28 @@ function searchfile() {
 	return false;
 }
 
+function cropfile() {
+	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
+	var c = $("img[title='" + a + "']").attr("name").split("|");
+	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
+	var win = null;
+	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
+	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
+	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
+	win = window.open(nv_module_url + 'cropimg&path=' + b + "&file=" + a, 'addlogo', settings);
+}
+
+function rotatefile() {
+	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
+	var c = $("img[title='" + a + "']").attr("name").split("|");
+	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
+	var win = null;
+	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
+	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
+	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
+	win = window.open(nv_module_url + 'rotateimg&path=' + b + "&file=" + a, 'addlogo', settings);
+}
+
 var ICON = [];
 ICON.select = nv_siteroot + 'js/contextmenu/icons/select.png';
 ICON.download = nv_siteroot + 'js/contextmenu/icons/download.png';
@@ -414,6 +443,8 @@ ICON.create = nv_siteroot + 'js/contextmenu/icons/copy.png';
 ICON.move = nv_siteroot + 'js/contextmenu/icons/move.png';
 ICON.rename = nv_siteroot + 'js/contextmenu/icons/rename.png';
 ICON.filedelete = nv_siteroot + 'js/contextmenu/icons/delete.png';
+ICON.filecrop = nv_siteroot + 'js/contextmenu/icons/crop.png';
+ICON.filerotate = nv_siteroot + 'js/contextmenu/icons/rotate.png';
 
 $(".vchange").change(function() {
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
