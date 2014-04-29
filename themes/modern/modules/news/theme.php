@@ -8,8 +8,7 @@
  * @Createdate 12/31/2009 0:51
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_NEWS' ) )	die( 'Stop!!!' );
 
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
