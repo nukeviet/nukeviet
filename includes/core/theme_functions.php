@@ -501,3 +501,38 @@ function nv_xmlSitemapIndex_generate()
 
 	nv_xmlOutput( $contents, $lastModified );
 }
+
+function nv_css_setproperties( $tag, $property_array )
+{
+    $css = $line = '';
+    if( empty( $tag ) ) return '';
+
+    if( is_array( $property_array ) )
+    {
+        foreach( $property_array as $property => $value )
+        {
+            if( $property != 'customcss' )
+            {
+                if( ! empty( $property ) and ! empty( $value ) )
+                {
+                    $property = str_replace( '_', '-', $property );
+                    if( $property == 'background-image' ) $value = "url('" . $value . "')";
+                    $css .= $property . ':' . $value . ';';
+                }
+            }
+            elseif( ! empty( $value ) )
+            {
+                $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
+                $css .= $value;
+            }
+        }
+        $line .= $css == '' ? '' : $tag . '{' . $css . '}';
+    }
+    else
+    {
+        $css .= $property_array;
+        $line .= $css == '' ? '' : $css;
+    }
+
+    return $line;
+}

@@ -58,7 +58,7 @@
 .sidebar-nav {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 	background-image: -webkit-linear-gradient(left, color-stop(#333333 10px), color-stop(#222222 10px));
-	background-image: linear-gradient(to right, #333333 10px, #222222 10px);
+	background-image: linear-gradient(to right, #0855A1 10px, #043C72 10px);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff222222', GradientType=1);
 	margin: -14px;
@@ -73,7 +73,7 @@
 }
 .sidebar-nav ul a {
 	padding: 10px 20px;
-	color: #aaa;
+	color: #e2e2e2;
 	border-top: 1px solid rgba(0, 0, 0, 0.3);
 	box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
 	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
