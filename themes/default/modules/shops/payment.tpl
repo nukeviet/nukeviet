@@ -7,22 +7,22 @@
                     <div class="col-md-4"><strong>{LANG.order_name}:</strong></div>
                     <div class="col-md-8">{DATA.order_name}</div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-4"><strong>{LANG.order_email}:</strong></div>
                     <div class="col-md-8">{DATA.order_email}</div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-4"><strong>{LANG.order_phone}:</strong></div>
                     <div class="col-md-8">{DATA.order_phone}</div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-4"><strong>{LANG.order_address}:</strong></div>
                     <div class="col-md-8">{DATA.order_address}</div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-4"><strong>{LANG.order_date}:</strong></div>
                     <div class="col-md-8">{dateup} {LANG.order_moment} {moment}</div>
@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="table-responsive">
     	<table class="table table-hover">
     	    <thead>
@@ -54,7 +54,7 @@
     			<th class="text-right">{LANG.cart_unit}</td>
     		</tr>
     		</thead>
-    		
+
     		<tbody>
     		<!-- BEGIN: loop -->
     		<tr {bg}>
@@ -70,7 +70,7 @@
     		</tbody>
     	</table>
 	</div>
-	
+
     <div class="row">
         <div class="col-xs-6">
             <!-- BEGIN: order_note -->
@@ -79,11 +79,11 @@
         </div>
         <div class="col-xs-6 text-right">
             <!-- BEGIN: price3 -->
-            {LANG.cart_total}: <strong id="total">{order_total}</strong> {unit}            
+            {LANG.cart_total}: <strong id="total">{order_total}</strong> {unit}
             <!-- END: price3 -->
         </div>
     </div>
-	
+
 	<!-- BEGIN: actpay -->
 	<hr />
     <div class="text-center">
@@ -98,7 +98,7 @@
 	<!-- END: payment -->
 	</div>
 	<!-- END: actpay -->
-	
+
     <!-- BEGIN: intro_pay -->
     <div class="alert alert-info">
         {intro_pay}
@@ -114,9 +114,9 @@
 		$('#click_print').click(function(event) {
 			var href = $(this).attr("href");
 			event.preventDefault();
-			NewWindow(href, '', '640', '500', 'yes');
+			nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
 			return false;
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

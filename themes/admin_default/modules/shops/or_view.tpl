@@ -135,7 +135,7 @@
 		});
 		$('#click_print').click(function(event) {
 			event.preventDefault();
-			NewWindow('{LINK_PRINT}', '', '640', '300', 'yes');
+			nv_open_browse('{LINK_PRINT}', '', 640, 300, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
 			return false;
 		});
 		$('#click_pay').click(function(event) {
@@ -152,6 +152,6 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->
