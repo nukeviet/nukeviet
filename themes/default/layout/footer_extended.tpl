@@ -11,15 +11,7 @@
 						</div>
 						<div class="col-xs-12 col-sm-12 col-md-6">
 							<div class="panel-body">
-								<ul class="menu">
-									<!-- BEGIN: footer_menu -->
-									<li>
-										<a href="{FOOTER_MENU.link}"{FOOTER_MENU.current}>{FOOTER_MENU.title}</a>
-										<!-- BEGIN: defis --><span>|</span><!-- END: defis -->
-									</li>
-									<!-- END: footer_menu -->
-									<li class="top"><a href="#" id="bttop"><em class="fa fa-angle-up">&nbsp;</em></a><li>
-								</ul>
+								[MENU_FOOTER]
 								<!-- BEGIN: theme_type -->
 								<div class="theme-change">
 									{LANG.theme_type_select}:

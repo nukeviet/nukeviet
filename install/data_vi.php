@@ -11,19 +11,19 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array('about', 'page', 'about', 'Giới thiệu', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0, 0) );
-$sth->execute( array('news', 'news', 'news', 'Tin Tức', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 2, 1, 1, '', 1, 0) );
-$sth->execute( array('users', 'users', 'users', 'Thành viên', 'Tài khoản', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 3, 1, 1, '', 0, 0) );
-$sth->execute( array('contact', 'contact', 'contact', 'Liên hệ', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 4, 1, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Thống kê', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', 'truy cập, online, statistics', '0', 1, 5, 1, 1, '', 0, 0) );
-$sth->execute( array('voting', 'voting', 'voting', 'Thăm dò ý kiến', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 6, 1, 1, '', 1, 0) );
-$sth->execute( array('banners', 'banners', 'banners', 'Quảng cáo', '', 1270400000, 1, 1 , '', 'mobile_nukeviet', '', '', '0', 0, 7, 1, 1, '', 0, 0) );
-$sth->execute( array('seek', 'seek', 'seek', 'Tìm kiếm', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 0, 8, 1, 1, '', 0, 0) );
-$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 0, 9, 1, 1, '', 0, 0) );
-$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0, 0) );
-$sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 11, 1, 1, '', 0, 0) );
-$sth->execute( array('comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', 1279366705, 1, 1, '', '', '', '', '0', 0, 12, 1, 1, '', 0, 0) );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array('about', 'page', 'about', 'Giới thiệu', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, '', 0, 0) );
+$sth->execute( array('news', 'news', 'news', 'Tin Tức', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 2, 1, '', 1, 0) );
+$sth->execute( array('users', 'users', 'users', 'Thành viên', 'Tài khoản', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 3, 1, '', 0, 0) );
+$sth->execute( array('contact', 'contact', 'contact', 'Liên hệ', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 4, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Thống kê', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', 'truy cập, online, statistics', '0', 5, 1, '', 0, 0) );
+$sth->execute( array('voting', 'voting', 'voting', 'Thăm dò ý kiến', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 6, 1, '', 1, 0) );
+$sth->execute( array('banners', 'banners', 'banners', 'Quảng cáo', '', 1270400000, 1, 1 , '', 'mobile_nukeviet', '', '', '0', 7, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'Tìm kiếm', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 8, 1, '', 0, 0) );
+$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 9, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 10, 1, '', 0, 0) );
+$sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 11, 1, '', 0, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', 1279366705, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -231,11 +231,11 @@ $sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Thăm 
 $sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Bộ đếm', '', '', '[RIGHT]', 0, 1, '0', 1, 4, '') );
 $sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '0', 0, 5, '') );
 $sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Quảng cáo top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(16, 'modern', 'menu', 'global.menu_theme_modern.php', 'global menu theme modern', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(17, 'default', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
+$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:14:"module_in_menu";a:5:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";}}') );
+$sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
 $sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:274:"© Copyright NukeViet 3. All right reserved.<br  />Xây dựng trên nền tảng <a href="http://nukeviet.vn/" title="Mã nguồn mở NukeViet">Mã nguồn mở NukeViet</a>. <a href="http://vinades.vn/" title="Thiết kế web">Thiết kế website</a> bởi VINADES.,JSC";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
-$sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
+$sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
 $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );

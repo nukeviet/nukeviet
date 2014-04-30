@@ -128,7 +128,7 @@ function nv_site_theme( $contents, $full = true )
 		$a = 0;
 		foreach( $site_mods as $modname => $modvalues )
 		{
-			if( ! empty( $modvalues['in_menu'] ) )
+			if( in_array($modname, $config_theme['module_in_menu']) )
 			{
 				if( $home == 1 && $a == 0 )
 				{
