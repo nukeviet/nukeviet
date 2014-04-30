@@ -18,7 +18,7 @@
 										<!-- BEGIN: defis --><span>|</span><!-- END: defis -->
 									</li>
 									<!-- END: footer_menu -->
-									<li class="top"><a href="#" id="totop"><em class="fa fa-angle-up">&nbsp;</em></a><li>
+									<li class="top"><a href="#" id="bttop"><em class="fa fa-angle-up">&nbsp;</em></a><li>
 								</ul>
 								<!-- BEGIN: theme_type -->
 								<div class="theme-change">
