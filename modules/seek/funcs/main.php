@@ -17,7 +17,7 @@ $search = array(
 	'len_key' => 0,
 	'mod' => 'all',
 	'logic' => 1, //OR
-	'page' => 0,
+	'page' => 1,
 	'is_error' => false,
 	'errorInfo' => '',
 	'content' => ''
@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
     {
         $base_url_rewrite .= '&l=' . urlencode( $search['logic'] );
     }
-    if( $search['page'] > 0 )
+    if( $search['page'] > 1 )
     {
         $base_url_rewrite .= '&page=' . urlencode( $search['page'] );
     }
@@ -87,7 +87,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 
 		foreach( $mods as $m_name => $m_values )
 		{
-			$pages = $search['page'];
+			$page = $search['page'];
 			$num_items = 0;
 			$key = $search['key'];
 			$dbkeyword = $db->dblikeescape( $search['key'] );
@@ -113,6 +113,7 @@ $page_title = $module_info['custom_title'];
 if( ! empty( $search['key'] ) )
 {
 	$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];
+
 	if( $search['page'] > 1 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $search['page'];
