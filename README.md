@@ -12,8 +12,7 @@ NukeViet fully supports multi-languages for internationalization and localizatio
 
 Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikipedia.org/wiki/NukeViet
 
-NukeViet official website
-=
+=NukeViet official website=
   - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
   - NukeViet official Coding: http://code.nukeviet.vn
   - Theme, Module and more add-ons for NukeViet: http://nukeviet.vn/vi/store/
@@ -25,8 +24,7 @@ NukeViet official website
   - NukeViet Education Center: http://nukeviet.edu.vn
   - NukeViet SaaS: http://nukeviet.com (testing)
 
-Community:
-=
+=Community=
   - NukeViet Fanpage: http://facebook.com/nukeviet
   - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
   - http://twitter.com/nukeviet
