@@ -12,6 +12,29 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 {
+	function nv_menu_theme_default_config( $module, $data_block, $lang_block )
+	{
+		global $site_mods;
+
+		$html = "\n";
+		foreach( $site_mods as $modname => $modvalues )
+		{
+			$checked = in_array( $modname, $data_block['module_in_menu'] ) ? ' checked="checked"' : '';
+			$html .= '<div style="float: left" class="w150"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div>';
+		}
+
+		return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
+	}
+
+	function nv_menu_theme_default_submit( $module, $lang_block )
+	{
+		global $nv_Request;
+		$return = array();
+		$return['error'] = array();
+		$return['config']['module_in_menu'] = $nv_Request->get_typed_array( 'module_in_menu', 'post', 'string' );
+		return $return;
+	}
+
 	/**
 	 * nv_menu_theme_default()
 	 *
@@ -43,7 +66,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 
 		foreach( $site_mods as $modname => $modvalues )
 		{
-			if( ! empty( $modvalues['in_menu'] ) and ! empty( $modvalues['funcs'] ) )
+			if( in_array( $modname, $block_config['module_in_menu'] ) AND ! empty( $modvalues['funcs'] ) )
 			{
 				$array_menu = array(
 					'title' => $modvalues['custom_title'],
