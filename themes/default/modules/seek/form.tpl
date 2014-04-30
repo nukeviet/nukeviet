@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="cse"></div>
-<div id="search-form">
+<div id="search-form" class="text-center">
 	<p><em>{LANG.info_title}</em></p>
 	<form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form" class="form-inline">
 		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
