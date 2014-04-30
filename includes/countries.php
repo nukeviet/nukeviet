@@ -242,140 +242,6 @@ $countries = array(
 );
 
 /**
- * nv_ParseIP()
- *
- * @param string $ip
- * @return
- */
-function nv_ParseIP( $ip )
-{
-	if( $ip == '127.0.0.1' || $ip == '0.0.0.1' ) return 'localhost';
-
-	if( ! function_exists( 'fsockopen' ) ) return false;
-
-	if( ! $fp = @fsockopen( 'whois.arin.net', 43, $errno, $errstr, 10 ) ) return false;
-
-	if( @fwrite( $fp, $ip . "\r\n" ) === false )
-	{
-		@fclose( $fp );
-		return false;
-	}
-
-	$response = '';
-	while( ! @feof( $fp ) )
-	{
-		$response .= @fgets( $fp, 4096 );
-	}
-	@fclose( $fp );
-
-	$extra = '';
-	$nextServer = '';
-
-	if( preg_match( '/' . preg_quote( 'nic.ad.jp' ) . '/', $response ) )
-	{
-		$nextServer = 'whois.nic.ad.jp';
-		$extra = "/e";
-	}
-	elseif( preg_match( '/' . preg_quote( 'whois.registro.br' ) . '/', $response ) ) $nextServer = 'whois.registro.br';
-	elseif( preg_match( '/' . preg_quote( 'whois.apnic.net' ) . '/', $response ) ) $nextServer = 'whois.apnic.net';
-	elseif( preg_match( '/' . preg_quote( 'ripe.net' ) . '/', $response ) ) $nextServer = 'whois.ripe.net';
-	elseif( preg_match( '/' . preg_quote( 'afrinic.net' ) . '/', $response ) ) $nextServer = 'whois.afrinic.net';
-	elseif( preg_match( '/' . preg_quote( 'LACNIC' ) . '/', $response ) ) $nextServer = 'whois.lacnic.net';
-
-	if( ! empty( $nextServer ) )
-	{
-		$response = '';
-		if( ! $fp = @fsockopen( $nextServer, 43, $errno, $errstr, 10 ) ) return false;
-
-		if( @fwrite( $fp, $ip . $extra . "\r\n" ) === false )
-		{
-			@fclose( $fp );
-			return false;
-		}
-
-		while( ! @feof( $fp ) )
-		{
-			$response .= @fgets( $fp, 4096 );
-		}
-		@fclose( $fp );
-	}
-
-	return $response;
-}
-
-/**
- * nv_getCountry()
- *
- * @param string $ip
- * @return
- */
-function nv_getCountry( $ip )
-{
-	global $countries, $newCountry;
-
-	$code = 'ZZ';
-	$numbers = preg_split( '/\./', $ip );
-	$ip_file = $numbers[0];
-	$ip_from = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 );
-	$ip_to = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + 65535;
-
-	$result = nv_ParseIP( $ip );
-
-	if( preg_match( '/^\x20*country\x20*:\x20*([A-Z]{2})/im', $result, $arr ) )
-	{
-		$code = strtoupper( $arr[1] );
-
-		if( ! isset( $countries[$code] ) ) $code = 'ZZ';
-
-		if( $code != 'ZZ' and preg_match( '/inetnum[\s\n\t\r]*\:[\s\n\t\r]*([0-9\.]+)[\s\n\t\r]*\-[\s\n\t\r]*([0-9\.]+)[\s\n\t\r]*/', $result, $arrip ) )
-		{
-			$numbers = preg_split( '/\./', $arrip[1] );
-			$ip_file = $numbers[0];
-			$ip_from = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
-			$numbers = preg_split( '/\./', $arrip[2] );
-			$ip_to = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
-		}
-	}
-
-	if( defined( 'NV_CONFIG_GLOBALTABLE' ) )
-	{
-		global $db, $db_config;
-        try
-        {
-            if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $ip_from . ", " . $ip_to . ", '" . $code . "', " . $ip_file . ", " . NV_CURRENTTIME . ")" ) )
-            {
-                $time_del = NV_CURRENTTIME - 604800;
-                $db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file=" . $ip_file . " AND country='ZZ' AND time < " . $time_del );
-
-                $array_ip_file = array();
-                $result = $db->query( 'SELECT ip_from, ip_to, country FROM ' . $db_config['prefix'] . '_ipcountry WHERE ip_file=' . $ip_file );
-                while( $row = $result->fetch() )
-                {
-                    $array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-                }
-
-                file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");\n\n?>", LOCK_EX );
-            }
-        }
-        catch( PDOException $e )
-        {
-          trigger_error( $e->getMessage() );
-        }
-	}
-	else
-	{
-		$newCountry = array(
-			'ip_file' => $ip_file,
-			'ip_from' => $ip_from,
-			'ip_to' => $ip_to,
-			'code' => $code
-		);
-	}
-
-	return $code;
-}
-
-/**
  * nv_getCountry_from_file()
  *
  * @param string $ip
@@ -399,13 +265,8 @@ function nv_getCountry_from_file( $ip )
 				if( $key <= $code and $value[0] >= $code ) return $value[1];
 			}
 		}
-
-		return nv_getCountry( $ip );
 	}
-	else
-	{
-		return 'ZZ';
-	}
+	return 'ZZ';
 }
 
 /**
