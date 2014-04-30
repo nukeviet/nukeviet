@@ -82,7 +82,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
-		else
+		elseif( $global_config['lang_multi'] )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_new'] . ' ' . $lang_module['nv_lang_data'], ' langkey : ' . $keylang, $admin_info['userid'] );
 
@@ -228,6 +228,13 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $contents );
+			include NV_ROOTDIR . '/includes/footer.php';
+			exit();
+		}
+		else
+		{
+			include NV_ROOTDIR . '/includes/header.php';
+			echo nv_admin_theme( $lang_module['nv_data_note'] );
 			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
