@@ -10,7 +10,7 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
-$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 $sth->execute( array('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, '', 0, 0) );
 $sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 2, 1, '', 1, 0) );
 $sth->execute( array('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 3, 1, '', 0, 0) );
