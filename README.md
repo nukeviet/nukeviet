@@ -1,5 +1,4 @@
-Introduction
-===
+#Introduction about NukeViet
 NukeViet is the first opensource CMS in Vietnam. The lastest version - NukeViet 3 coding ground up support lastest web technologies, include reponsive web design (use xHTML, CSS 3, XTemplate), jQuery, Ajax...) enables you to build websites and online applications rapidly.
 
 With it own core libraries built in, NukeViet 3.0 is cross platforms and frameworks independent. By basic knowledge of PHP and MySQL, you can easily extend NukeViet for your purposes.
@@ -12,7 +11,7 @@ NukeViet fully supports multi-languages for internationalization and localizatio
 
 Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikipedia.org/wiki/NukeViet
 
-=NukeViet official website=
+##NukeViet official website
   - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
   - NukeViet official Coding: http://code.nukeviet.vn
   - Theme, Module and more add-ons for NukeViet: http://nukeviet.vn/vi/store/
@@ -24,7 +23,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
   - NukeViet Education Center: http://nukeviet.edu.vn
   - NukeViet SaaS: http://nukeviet.com (testing)
 
-=Community=
+##Community
   - NukeViet Fanpage: http://facebook.com/nukeviet
   - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
   - http://twitter.com/nukeviet
@@ -33,8 +32,7 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
 
 
 
-Nukeviet Centre for Research and Development
-===
+##Nukeviet Centre for Research and Development
 VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
 
 Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
