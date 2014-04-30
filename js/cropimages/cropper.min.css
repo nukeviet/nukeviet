@@ -1,0 +1,153 @@
+
+.cropper-container {
+    -moz-user-select: none;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    position: relative;
+}
+.cropper-container .cropper-modal {
+    background: none repeat scroll 0 0 #000000;
+    height: 100%;
+    left: 0;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.cropper-container .cropper-dragger {
+    height: 80%;
+    left: 10%;
+    position: absolute;
+    top: 10%;
+    width: 80%;
+}
+.cropper-container .cropper-preview {
+    -moz-box-sizing: border-box;
+    border-color: rgba(51, 102, 255, 0.8);
+    border-style: solid;
+    border-width: 1px;
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+.cropper-container .cropper-dashed {
+    background-color: #3366FF;
+    display: block;
+    font-size: 0;
+    height: 100%;
+    line-height: 0;
+    opacity: 0.5;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+.cropper-container .dashed-h {
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom: 1px dashed #FFFFFF;
+    border-top: 1px dashed #FFFFFF;
+    height: 33.3%;
+    left: 0;
+    top: 33.3%;
+}
+.cropper-container .dashed-v {
+    background-color: rgba(0, 0, 0, 0);
+    border-left: 1px dashed #FFFFFF;
+    border-right: 1px dashed #FFFFFF;
+    left: 33.3%;
+    top: 0;
+    width: 33.3%;
+}
+.cropper-container .cropper-face, .cropper-container .cropper-line, .cropper-container .cropper-point {
+    display: block;
+    font-size: 0;
+    height: 100%;
+    line-height: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+.cropper-container .cropper-face {
+    background-color: #FFFFFF;
+    cursor: move;
+    left: 0;
+    opacity: 0.1;
+    top: 0;
+}
+.cropper-container .cropper-line {
+    background-color: #3366FF;
+    opacity: 0.1;
+}
+.cropper-container .line-e {
+    cursor: e-resize;
+    right: -2px;
+    top: 0;
+    width: 4px;
+}
+.cropper-container .line-n {
+    cursor: n-resize;
+    height: 4px;
+    left: 0;
+    top: -2px;
+}
+.cropper-container .line-w {
+    cursor: w-resize;
+    left: -2px;
+    top: 0;
+    width: 4px;
+}
+.cropper-container .line-s {
+    bottom: -2px;
+    cursor: s-resize;
+    height: 4px;
+    left: 0;
+}
+.cropper-container .cropper-point {
+    background-color: #3366FF;
+    height: 4px;
+    opacity: 0.8;
+    width: 4px;
+}
+.cropper-container .point-e {
+    cursor: e-resize;
+    right: -2px;
+    top: 49%;
+}
+.cropper-container .point-n {
+    cursor: n-resize;
+    left: 49%;
+    top: -2px;
+}
+.cropper-container .point-w {
+    cursor: w-resize;
+    left: -2px;
+    top: 49%;
+}
+.cropper-container .point-s {
+    bottom: -2px;
+    cursor: s-resize;
+    left: 49%;
+}
+.cropper-container .point-ne {
+    cursor: ne-resize;
+    right: -2px;
+    top: -2px;
+}
+.cropper-container .point-nw {
+    cursor: nw-resize;
+    left: -2px;
+    top: -2px;
+}
+.cropper-container .point-sw {
+    bottom: -2px;
+    cursor: sw-resize;
+    left: -2px;
+}
+.cropper-container .point-se {
+    bottom: -2px;
+    cursor: se-resize;
+    right: -2px;
+}
+.cropper-hidden {
+    display: none !important;
+}

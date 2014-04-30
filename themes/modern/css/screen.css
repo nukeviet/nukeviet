@@ -1091,3 +1091,9 @@ ul.list-number li, ul.list_item li {
 	width: 100%;
 	z-index: 1000
 }
+
+.fb-like
+{
+	height: 30px;
+	margin-right: 50px;
+}

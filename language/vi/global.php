@@ -52,12 +52,12 @@ $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai
 $lang_global['passwordlong'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; quá dài. Giới hạn ở mức &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['passwordadjective'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; quá ngắn. Ít nhất phải có &ldquo;<strong>%2$d</strong>&rdquo; ký tự';
 $lang_global['passwordsincorrect'] = 'Mật khẩu &ldquo;<strong>%1$s</strong>&rdquo; và &ldquo;<strong>%2$s</strong>&rdquo; khác nhau. Hãy khai báo lại';
-$lang_global['re_password_empty'] = 'Bạn chưa viết lại mật khẩu vào ô mật khẩu thứ hai';
+$lang_global['re_password_empty'] = 'Bạn chưa viết lại mật khẩu vào ô nhập lại mật khẩu';
 $lang_global['upass_type_1'] = 'Mật khẩu cần kết hợp số và chữ';
 $lang_global['upass_type_2'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có ký tự đặc biệt';
 $lang_global['upass_type_3'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA';
 $lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA, có ký tự đặc biệt';
-$lang_global['upass_type_simple'] = 'Mật khẩu sử dụng là mật khẩu dễ đoán, cần nhập mật khâu phức tạp hơn';
+$lang_global['upass_type_simple'] = 'Mật khẩu bạn đã sử dụng là mật khẩu dễ đoán, cần nhập mật khẩu phức tạp hơn';
 
 $lang_global['securitycodeincorrect'] = 'Mã chống spam không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên tài khoản hoặc Mật khẩu truy cập';

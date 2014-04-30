@@ -61,6 +61,12 @@
 			},
 			filedelete : function() {
 				filedelete()
+			},
+            cropfile : function() {
+				cropfile()
+			},
+			rotatefile : function() {
+				rotatefile()
 			}
 		}
 	});

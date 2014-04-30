@@ -16,7 +16,7 @@
 		<h1>{CONTENT.title}</h1>
 		<span class="small">{LANG.add_time}: {CONTENT.add_time}</span>
 		<!-- BEGIN: socialbutton -->
-			<div style="margin-right: 50px;"  class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
+			<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 			<div class="g-plusone" data-size="medium"></div>
 			<script type="text/javascript">
 			  window.___gcfg = {lang: nv_sitelang};

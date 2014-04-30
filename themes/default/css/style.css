@@ -554,3 +554,9 @@ ul.other-news{
 .img-thumbnail{
 	height:auto !important
 }
+
+.fb-like
+{
+	height: 30px;
+	margin-right: 50px;
+}

@@ -519,13 +519,6 @@ function nv_html_site_js()
 	}
 	if( defined( 'NV_IS_DRAG_BLOCK' ) )
 	{
-		if( ! defined( 'SHADOWBOX' ) )
-		{
-			$return .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-			$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-			$return .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-			define( 'SHADOWBOX', true );
-		}
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
 		$return .= '<script type="text/javascript">
@@ -554,18 +547,11 @@ function nv_html_site_js()
 						$("a.block_content").click(function(){
 							var bid = $(this).attr("name");
 							var tag = $(this).attr("id");
-							Shadowbox.open(
-							{
-								content : "<iframe src=\'' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect+"\' style=\'width:780px;height:450px\'></iframe>",
-								player : "html",
-								height : 450,
-								width : 780
-							}
-						 );
-	 		});
+							nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
+				 		});
 
-	 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
-	 		var post_order = false;
+				 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
+				 		var post_order = false;
 						$(".column").sortable({
 							connectWith: \'.column\',
 							opacity: 0.8,

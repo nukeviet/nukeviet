@@ -2,10 +2,10 @@
 <h1>{DETAIL.title}</h1>
 <span class="smll">{DETAIL.publtime}</span>
 <!-- BEGIN: allowed_send -->
-<a rel="nofollow" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','500','400','no');return false"><img src="{IMG_DIR}email.png"/></a>
+<a rel="nofollow" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',500,400,'resizable=no,scrollbars=no,toolbar=no,location=no,status=no');return false"><img src="{IMG_DIR}email.png"/></a>
 <!-- END: allowed_send -->
 <!-- BEGIN: allowed_print -->
-<a href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><img src="{IMG_DIR}print.png"/></a>
+<a href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><img src="{IMG_DIR}print.png"/></a>
 <!-- END: allowed_print -->
 <!-- BEGIN: allowed_save -->
 <a class="savefile" href="{URL_SAVEFILE}"><img src="{IMG_DIR}save.png"/></a>
