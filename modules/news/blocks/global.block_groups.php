@@ -16,17 +16,28 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 	function nv_block_config_news_groups( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
+
+		$html_input = '';
 		$html = '';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_block['blockid'] . '</td>';
 		$html .= '<td><select name="config_blockid">';
+		$html .= '<option value="0"> -- </option>';
 		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block_cat ORDER BY weight ASC';
 		$list = nv_db_cache( $sql, '', $module );
 		foreach( $list as $l )
 		{
-			$html .= '<option value="' . $l['bid'] . '" ' . ( ( $data_block['blockid'] == $l['bid'] ) ? ' selected="selected"' : '' ) . '>' . $l['title'] . '</option>';
+			$html_input .= '<input type="hidden" id="config_blockid_' . $l['bid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module]['alias']['groups'] . '/' . $l['alias'] . '" />';
+			$html .= '<option alt="' . $linksite . '" value="' . $l['bid'] . '" ' . ( ( $data_block['blockid'] == $l['bid'] ) ? ' selected="selected"' : '' ) . '>' . $l['title'] . '</option>';
 		}
 		$html .= '</select>';
+		$html .= $html_input;
+		$html .= '<script type="text/javascript">';
+		$html .= '	$("select[name=config_blockid]").change(function() {';
+		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
+		$html .= '		$("input[name=link]").val($("#config_blockid_" + $("select[name=config_blockid]").val()).val());';
+		$html .= '	});';
+		$html .= '</script>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_block['numrow'] . '</td>';

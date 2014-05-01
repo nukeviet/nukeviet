@@ -55,13 +55,12 @@ if( ! empty( $setmodule ) )
 			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
-			$in_menu = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			try
 			{
 				$sth = $db->prepare( "INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)
+					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
+					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $weight . ", 1, '',1)
 				" );
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modrow['module_file'], PDO::PARAM_STR );

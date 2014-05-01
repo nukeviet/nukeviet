@@ -109,6 +109,8 @@ function nv_set_cache( $module_name, $filename, $content )
 {
 	if( empty( $filename ) or ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
 
+	nv_mkdir( NV_ROOTDIR . '/' . NV_CACHEDIR, $module_name );
+
 	return nv_gz_put_contents( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename, $content );
 }
 
@@ -149,8 +151,6 @@ function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
 				++$a;
 			}
 			$result->closeCursor();
-
-			nv_mkdir( NV_ROOTDIR . '/' . NV_CACHEDIR, $modname );
 
 			$cache = serialize( $list );
 			nv_set_cache( $modname, $cache_file, $cache );

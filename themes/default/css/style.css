@@ -3,7 +3,7 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
 /* Font */
@@ -37,11 +37,6 @@ ul, ol {
   list-style: none;
 }
 
-.panel-heading {
-  font-size: 14px;
-  font-weight: bold;
-}
-
 .input-group-btn{
 	font-size:14px!important;
 }
@@ -67,7 +62,7 @@ a, a:link, a:active, a:visited{
 }
 a:hover{
 	text-decoration:none;
-	color:#5bc0de;
+	color:#065db0;
 }
 iframe{
 	border:0;
@@ -364,6 +359,11 @@ header{
 	display: table-cell;
 	vertical-align: middle;
 }
+
+.panel-body h3 {
+	color: #0066cc;
+}
+
 .nv-infodie .logo{
 	max-width: 90%!important;
 }
@@ -559,4 +559,36 @@ ul.other-news{
 {
 	height: 30px;
 	margin-right: 50px;
+}
+
+
+.navbar-inverse {
+	background-color: #0855A1;
+	border-color: #043C72;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	color: #FFFFFF;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	color: #ffffff;
+	background-color: #043C72;
+}
+
+.list-inline .hidden-xs a {
+	color: #848484
+}
+.list-inline .hidden-xs a : hover {
+	color: #0066cc
+}
+div.news_column .panel-heading {
+	font-size: 14px;
+	font-weight: bold;
+}
+.panel-heading {
+	border-bottom: 1px solid rgba(0, 0, 0, 0);
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	padding: 10px;
 }

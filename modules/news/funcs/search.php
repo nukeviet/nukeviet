@@ -49,7 +49,7 @@ $key = $nv_Request->get_title( 'q', 'get' );
 $key = strip_punctuation( nv_unhtmlspecialchars( str_replace( '+', ' ', $key ) ) );
 $key = nv_substr( $key , 0, NV_MAX_SEARCH_LENGTH );
 
-$pages = $nv_Request->get_int( 'page', 'get', 1 );
+$page = $nv_Request->get_int( 'page', 'get', 1 );
 $from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
@@ -171,7 +171,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		);
 	}
 
-	$contents .= search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $catid );
+	$contents .= search_result_theme( $key, $numRecord, $per_pages, $page, $array_content, $catid );
 }
 
 if( empty( $key ) )
@@ -181,9 +181,9 @@ if( empty( $key ) )
 else
 {
 	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'];
-	if( $pages > 1)
+	if( $page > 2)
 	{
-		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $pages;
+		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
 	$page_title .=' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }

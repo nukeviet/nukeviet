@@ -11,7 +11,7 @@
 if( ! defined( 'NV_MAINFILE' ) )
 	die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,page,comment' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 
 function nv_create_table_news( $lang_data, $module_data, $catid )
 {
@@ -58,9 +58,7 @@ function nv_create_table_sys( $lang )
 	 	 description VARCHAR2(255 CHAR) DEFAULT '',
 		 keywords VARCHAR2(4000 CHAR) DEFAULT '',
 		 groups_view VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-		 in_menu NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 weight NUMBER(3,0) DEFAULT 1 NOT NULL ENABLE,
-		 submenu NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 act NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 admins VARCHAR2(255 CHAR) DEFAULT '',
 		 rss NUMBER(3,0) DEFAULT 1 NOT NULL ENABLE,
@@ -112,7 +110,6 @@ function nv_create_table_sys( $lang )
 		 func_custom_name VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 in_module VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 show_func NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-		 in_submenu NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 subweight NUMBER(5,0) DEFAULT 1 NOT NULL ENABLE,
 		 setting VARCHAR2(255 CHAR) DEFAULT NULL,
 		 primary key (func_id),
@@ -165,18 +162,18 @@ function nv_create_table_sys( $lang )
 		 CONSTRAINT cnv_" . $lang . "modthemes_func_id UNIQUE (func_id,layout,theme)
 	 )";
 
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('news', 'news', 'news', 'News', '',1270400000, 1, 1, '', '', '', '', '0', 1, 2, 1, 1, '', 1, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 1, 5, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('contact', 'contact', 'contact', 'Contact', '',1275351337, 1, 1, '', '', '', '', '0', 1, 6, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '0', 1, 7, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '0', 0, 8, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('banners', 'banners', 'banners', 'Banners', '',1270400000, 1,1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 0, 10, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('comment', 'comment', 'comment', 'Comment', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 12, 1, 1, '', 0, 0)";
-	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES ('page', 'page', 'page', 'page', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, , '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('news', 'news', 'news', 'News', '',1270400000, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 5, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('contact', 'contact', 'contact', 'Contact', '',1275351337, 1, 1, '', '', '', '', '0', 6, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '0', 7, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '0', 8, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('banners', 'banners', 'banners', 'Banners', '',1270400000, 1,1, '', '', '', '', '0', 9, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 10, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279360267, 1, 1, '', '', '', '', '0', 11, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('comment', 'comment', 'comment', 'Comment', '', 1279360267, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
+	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('page', 'page', 'page', 'page', '', 1279360267, 1, 1, '', '', '', '', '0', 11, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_logo', 'images/logo.png')";

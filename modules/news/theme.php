@@ -980,7 +980,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	return $xtpl->text( 'main' );
 }
 
-function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $catid )
+function search_result_theme( $key, $numRecord, $per_pages, $page, $array_content, $catid )
 {
 	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
@@ -1032,7 +1032,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
 
-		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
+		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $page );
 
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );

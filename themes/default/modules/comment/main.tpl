@@ -65,7 +65,6 @@
 		<!-- END: allowed_comm -->
 		<!-- BEGIN: form_login-->
 		<div class="alert alert-danger fade in">
-			<em data-dismiss="alert" aria-hidden="true" class="fa fa-times fa-fix fa-pointer pull-right fa-lg">&nbsp;</em>
 			{COMMENT_LOGIN}
 		</div>
 		<!-- END: form_login -->
