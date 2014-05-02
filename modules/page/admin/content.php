@@ -106,38 +106,45 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$publtime = NV_CURRENTTIME;
 		}
 
-		$sth = $db->prepare( $_sql );
-		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
-		$sth->bindParam( ':alias', $row['alias'], PDO::PARAM_STR );
-		$sth->bindParam( ':image', $row['image'], PDO::PARAM_STR );
-		$sth->bindParam( ':imagealt', $row['imagealt'], PDO::PARAM_STR );
-		$sth->bindParam( ':description', $row['description'], PDO::PARAM_STR );
-		$sth->bindParam( ':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen( $row['bodytext'] ) );
-		$sth->bindParam( ':keywords', $row['keywords'], PDO::PARAM_STR );
-		$sth->bindParam( ':socialbutton', $row['socialbutton'], PDO::PARAM_INT );
-		$sth->bindParam( ':activecomm', $row['activecomm'], PDO::PARAM_INT );
-		$sth->bindParam( ':facebookappid', $row['facebookappid'], PDO::PARAM_STR );
-		$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
-		$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
-		$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
-		$sth->execute();
-
-		if( $sth->rowCount() )
+		try
 		{
-			if( $id )
+			$sth = $db->prepare( $_sql );
+			$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
+			$sth->bindParam( ':alias', $row['alias'], PDO::PARAM_STR );
+			$sth->bindParam( ':image', $row['image'], PDO::PARAM_STR );
+			$sth->bindParam( ':imagealt', $row['imagealt'], PDO::PARAM_STR );
+			$sth->bindParam( ':description', $row['description'], PDO::PARAM_STR );
+			$sth->bindParam( ':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen( $row['bodytext'] ) );
+			$sth->bindParam( ':keywords', $row['keywords'], PDO::PARAM_STR );
+			$sth->bindParam( ':socialbutton', $row['socialbutton'], PDO::PARAM_INT );
+			$sth->bindParam( ':activecomm', $row['activecomm'], PDO::PARAM_INT );
+			$sth->bindParam( ':facebookappid', $row['facebookappid'], PDO::PARAM_STR );
+			$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
+			$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
+			$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
+			$sth->execute();
+
+			if( $sth->rowCount() )
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit', 'ID: ' . $id, $admin_info['userid'] );
+				if( $id )
+				{
+					nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit', 'ID: ' . $id, $admin_info['userid'] );
+				}
+				else
+				{
+					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
+				}
+
+				nv_del_moduleCache( $module_name );
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
+				die();
 			}
 			else
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
+				$error = $lang_module['errorsave'];
 			}
-
-			nv_del_moduleCache( $module_name );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
-			die();
 		}
-		else
+		catch( PDOException $e )
 		{
 			$error = $lang_module['errorsave'];
 		}
