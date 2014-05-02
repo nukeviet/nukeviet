@@ -153,8 +153,8 @@
 	</table>
 	<div style="padding:10px;text-align:center">
 		<input type="hidden" name="bid" value="{ROW.bid}" />
+		<input type="button" onclick="window.close()" value="{LANG.back}" />
 		<input type="submit" name="confirm" value="{LANG.block_confirm}" />
-		<input type="button" onclick="window.parent.Shadowbox.close()" value="{LANG.back}" />
 	</div>
 </form>
 
