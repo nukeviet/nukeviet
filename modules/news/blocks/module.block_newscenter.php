@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db;
+global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db, $module_config;
 
 $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 $xtpl->assign( 'lang', $lang_module );
@@ -65,6 +65,10 @@ foreach( $list as $row )
 		{
 			$row['imgsource'] = $row['homeimgfile'];
 		}
+		elseif( ! empty( $module_config[$module_name]['show_no_image'] ) )
+		{
+			$row['imgsource'] =  NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
+		}
 		else
 		{
 			$row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
@@ -85,6 +89,10 @@ foreach( $list as $row )
 		elseif( $row['homeimgthumb'] == 3 )
 		{
 			$row['imgsource'] = $row['homeimgfile'];
+		}
+		elseif( ! empty( $module_config[$module_name]['show_no_image'] ) )
+		{
+			$row['imgsource'] =  NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'];
 		}
 		else
 		{
