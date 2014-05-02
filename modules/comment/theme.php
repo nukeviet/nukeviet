@@ -41,11 +41,6 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 			'selected' => ( $i == $sortcomm ) ?  ' selected="selected"' : '',
 		) );
 
-		if( $i == $sortcomm )
-		{
-			$xtpl->parse( 'main.sortcomm.active' );
-		}
-
 		$xtpl->parse( 'main.sortcomm' );
 	}
 
