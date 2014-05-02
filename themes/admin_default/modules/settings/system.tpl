@@ -66,9 +66,9 @@
 			<!-- BEGIN: rewrite_optional -->
 			<tr>
 				<td><strong>{LANG.rewrite_optional}</strong></td>
-				<td><input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} /></td>
+				<td><input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} onchange="show_rewrite_op();"/></td>
 			</tr>
-			<tr>
+			<tr id="tr_rewrite_op_mod">
 				<td><strong>{LANG.rewrite_op_mod}</strong></td>
 				<td>
 				<select name="rewrite_op_mod">
@@ -125,5 +125,17 @@
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
 	});
+
+	function show_rewrite_op() {
+		if( $("input[name=rewrite_optional]").is(":checked") )
+		{
+			$('#tr_rewrite_op_mod').show();
+		}
+		else {
+			$('#tr_rewrite_op_mod').hide();
+		}
+	}
+
+	show_rewrite_op();
 </script>
 <!-- END: main -->
