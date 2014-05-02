@@ -171,5 +171,9 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/block_content.js"></script>
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->
-<script type="text/javascript">parent.location = "{BLOCKREDIRECT}";</script>
+<script type="text/javascript">
+	window.opener.location.href = '{BLOCKREDIRECT}';
+	window.opener.focus();
+	window.close();
+</script>
 <!-- END: blockredirect -->
