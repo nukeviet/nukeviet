@@ -77,3 +77,9 @@ $lang_module['sortcomm'] = 'Sort comments by';
 $lang_module['sortcomm_0'] = 'New above';
 $lang_module['sortcomm_1'] = 'Old above';
 $lang_module['sortcomm_2'] = 'Like';
+
+$lang_module['captcha'] = 'Captcha display method';
+$lang_module['captcha_0'] = 'Hide';
+$lang_module['captcha_1'] = 'If not a user';
+$lang_module['captcha_2'] = 'If not the manager comment';
+$lang_module['captcha_3'] = 'Display at all';

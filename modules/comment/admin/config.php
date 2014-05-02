@@ -12,6 +12,13 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $mod_name = $nv_Request->get_title( 'mod_name', 'post,get', '' );
 
+$captcha_array = array(
+	0 => $lang_module['captcha_0'],
+	1 => $lang_module['captcha_1'],
+	2 => $lang_module['captcha_2'],
+	3 => $lang_module['captcha_3']
+);
+
 if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_name] ) )
 {
 	$array_config = array();
@@ -22,6 +29,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_na
 	$array_config['allowed_comm'] = $nv_Request->get_int( 'allowed_comm', 'post', 0 );
 	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
 	$array_config['sortcomm'] = $nv_Request->get_int( 'sortcomm', 'post', 0 );
+	$array_config['captcha'] = $nv_Request->get_int( 'captcha', 'post', 0 );
 
 	$admins_mod_name = explode( ',', $site_mods[$mod_name]['admins'] );
 	$admins_module_name = explode( ',', $site_mods[$module_name]['admins'] );
@@ -135,6 +143,16 @@ if( ! empty( $mod_name ) )
 		$xtpl->parse( 'main.config.sortcomm' );
 	}
 
+	// Thao luan mac dinh khi tao bai viet moi
+	while( list( $i, $title_i ) = each( $captcha_array ) )
+	{
+		$xtpl->assign( 'OPTION', array(
+			'key' => $i,
+			'title' => $title_i,
+			'selected' => $i == $module_config[$mod_name]['captcha'] ? ' selected="selected"' : ''
+		) );
+		$xtpl->parse( 'main.config.captcha' );
+	}
 	$xtpl->parse( 'main.config' );
 
 	$page_title = sprintf( $lang_module['config_mod_name'], $site_mods[$mod_name]['custom_title'] );
