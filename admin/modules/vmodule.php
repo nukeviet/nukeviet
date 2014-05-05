@@ -72,7 +72,7 @@ $xtpl = new XTemplate( 'vmodule.tpl', NV_ROOTDIR . '/themes/' . $global_config['
 if( $error )
 {
 	$lang_module['vmodule_blockquote'] = $lang_module['vmodule_exit'];
-	$xtpl->assign( 'CLASSERROR', 'error' );
+	$xtpl->parse( 'main.error' );
 }
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
