@@ -54,7 +54,7 @@ if( $num_items )
 	}
 }
 
-$contents = allbrowsers();
+$contents = nv_theme_statistics_allbrowsers( $num_items, $browsers_list, $cts );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

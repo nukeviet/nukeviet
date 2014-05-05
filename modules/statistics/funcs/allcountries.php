@@ -55,7 +55,7 @@ if( $num_items )
 	}
 }
 
-$contents = allcountries();
+$contents = nv_theme_statistics_allcountries( $num_items, $countries_list, $cts );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
