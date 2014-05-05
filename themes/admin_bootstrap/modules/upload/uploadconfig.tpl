@@ -8,27 +8,27 @@
 			<col />
 			<tfoot>
 				<tr>
-					<td colspan="2" class="center"><input type="submit" value="{LANG.pubdate}" name="submit"/></td>
+					<td colspan="2" class="text-center"><input type="submit" value="{LANG.pubdate}" name="submit" class="btn btn-primary" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td><strong>{LANG.nv_max_width_height}</strong></td>
-					<td><input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/> x <input class="digits" style="width:40px; text-align: right" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/> <input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize} </td>
+					<td><input class="form-control w100 pull-left" type="text" value="{NV_MAX_WIDTH}" name="nv_max_width" maxlength="4"/><span class="pull-left text-middle">&nbsp; x &nbsp;</span><input class="form-control pull-left w100" type="text" value="{NV_MAX_HEIGHT}" name="nv_max_height" maxlength="4"/> <span class="pull-left text-middle"><input type="checkbox" style="margin-left:40px;" name="nv_auto_resize" value="1" {NV_AUTO_RESIZE}/>{LANG.nv_auto_resize}</span> </td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.nv_max_size}:</strong></td>
 					<td>
-					<select name="nv_max_size">
+					<select name="nv_max_size" class="form-control w200 pull-left">
 						<!-- BEGIN: size -->
 						<option value="{SIZE.key}"{SIZE.selected}>{SIZE.title}</option>
 						<!-- END: size -->
-					</select> ({LANG.sys_max_size}: {SYS_MAX_SIZE}) </td>
+					</select><span class="pull-left text-middle">&nbsp; ({LANG.sys_max_size}: {SYS_MAX_SIZE}) </span></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.upload_checking_mode}:</strong></td>
 					<td>
-					<select name="upload_checking_mode">
+					<select name="upload_checking_mode" class="form-control w100">
 						<!-- BEGIN: upload_checking_mode -->
 						<option value="{UPLOAD_CHECKING_MODE.key}"{UPLOAD_CHECKING_MODE.selected}>{UPLOAD_CHECKING_MODE.title}</option>
 						<!-- END: upload_checking_mode -->
