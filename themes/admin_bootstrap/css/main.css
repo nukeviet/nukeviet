@@ -1,0 +1,632 @@
+﻿/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+ Base styles: opinionated defaults
+ ========================================================================== */
+
+html, button, input, select, textarea {
+	color: #222;
+}
+
+body {
+	font-size: 1em;
+	line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight: h5bp.com/i
+ * These selection rule sets have to be separate.
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+::selection {
+	background: #b3d4fc;
+	text-shadow: none;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+	resize: vertical;
+}
+
+/* ==========================================================================
+ Chrome Frame prompt
+ ========================================================================== */
+.chromeframe {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	z-index: 9999;
+	background: #ffff00;
+	color: #000;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center;
+}
+
+/* ==========================================================================
+ NukeViet's custom styles
+ ========================================================================== */
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../font/opensans.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../font/opensans-bold.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(../font/opensans-italic.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(../font/opensans-bolditalic.woff) format('woff');
+}
+
+html {
+	background: #F0F0F0 url(../images/background.png);
+}
+
+body, input, button, select {
+	font-family: arial, sans-serif;
+	font-size:12px;
+	font-weight:400;
+	line-height:18px;
+}
+
+a{
+	color: #0074a2;
+	text-decoration:none;
+	-webkit-transition-property: border,background,color;
+	-moz-transition-property: border,background,color;
+	transition-property: border,background,color;
+	-webkit-transition-duration: .05s;
+	-moz-transition-duration: .05s;
+	transition-duration: .05s;
+	-webkit-transition-timing-function: ease-in-out;
+	-moz-transition-timing-function: ease-in-out;
+	transition-timing-function: ease-in-out;
+}
+
+a:hover, a:active, a:focus {
+	color: #2ea2cc;
+}
+
+a.link {
+	font-weight: 700;
+	text-decoration: underline !important
+}
+
+a.link:hover {
+	text-decoration: none !important
+}
+
+.left {
+	text-align: left
+}
+
+.center {
+	text-align: center
+}
+
+.right {
+	text-align: right
+}
+
+.top {
+	vertical-align: top;
+}
+
+input.txt-full, select.txt-full, textarea.txt-full {
+	width: 98%
+}
+
+input.txt-half, select.txt-half, textarea.txt-half {
+	width: 49%
+}
+
+#wrapper {
+	margin: 0 auto;
+}
+
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF;
+}
+
+.red {
+	color: red
+}
+
+.m-bottom{
+	margin-bottom:10px;
+}
+
+.icon-pointer{
+	cursor: pointer;
+}
+
+/* Heading
+ -----------------------------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6{
+	margin-top:0;
+	margin-bottom:10px;
+	font-family: 'Roboto', sans-serif;
+	line-height: 22px;
+}
+
+/* Header
+ -----------------------------------------------------------------------------*/
+#header {
+	height: 52px;
+	background: #000;
+}
+
+#header div.lang {
+	display: inline;
+	text-align: center;
+	float: right;
+	padding: 12px 5px;
+	color: #FFFFFF
+}
+
+#header div.lang select {
+	border: 1px solid #5B5B5B;
+	padding: 2px;
+	background: #FFFFFF
+}
+
+#header div.logo {
+	display: inline;
+	padding: 0 0 0 10px;
+	width: 250px;
+	height: 50px;
+	top: 0;
+	left: 0
+}
+
+#header div.logout {
+	height: 27px;
+	float: right;
+	padding: 10px;
+	text-align: right
+}
+
+#header .bthome {
+	background: #262626;
+	border: 1px solid #2E2E2E;
+	line-height: 24px;
+	padding: 0px 10px;
+	display: inline-block;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 11px
+}
+
+#header .bthome:hover {
+	background: #454545;
+	color: #FFFFFF
+}
+
+/* Middle
+ -----------------------------------------------------------------------------*/
+#middle {
+	background:#F2F2F2 url('../images/content-bg.png') repeat-y 0px;
+}
+
+#contentwrapper{
+	margin-left: 226px;
+	height: 1%;
+	position: relative;
+	background-color: #F2F2F2;
+}
+
+#contentwrapper:after{
+	content: '';
+	clear: both;
+	display: table;
+}
+
+#container {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+	margin-right: -100%;
+	padding-top:7px;
+}
+
+#contentmod {
+	padding: 5px;
+	background-color: #fff;
+	margin-bottom:10px;
+}
+
+#top_message {
+	background: #d7d7d7 url('../images/top_message_bg.jpg') repeat-x left top;
+	height: 28px;
+	margin-bottom:2px;
+}
+
+#top_message div.clock {
+	float: left;
+}
+
+#top_message div.clock label {
+	display: inline-block;
+	font: bold 11px/27px Arial, Verdana, sans-serif;
+	line-height: 27px;
+	padding: 0 0 0 10px
+}
+
+#top_message div.clock label span {
+	display: inline-block;
+	font: bold 11px/27px Arial, Verdana, sans-serif;
+	line-height: 27px;
+	padding: 0 10px 0 0
+}
+
+#top_message div.clock_container {
+	float: right;
+	margin-right: 5px;
+	white-space: nowrap
+}
+
+#top_message div.info {
+	float: left;
+	font: normal 11px/27px Tahoma, Verdana, sans-serif;
+	line-height: 24px;
+	margin-left: 5px
+}
+
+#info_tab {
+	background-color: #F2F2F2;
+	font: bold 11px/22px Arial, Verdana, sans-serif;
+	height: 20px;
+	line-height: 20px;
+	margin-bottom:7px;
+}
+
+#info_tab #cs_menu{
+	width: 20px;
+	float: left;
+	cursor: pointer;
+	text-align:center;
+}
+
+#info_tab .cell_left {
+	font-size: 14px;
+	color: #993300;
+	float: left;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#info_tab .cell_right {
+	float: right;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+/* left_menu
+ -----------------------------------------------------------------------------*/
+#left_menu {
+	float: left;
+	width: 200px;
+	position: relative;
+	left: -226px;
+	padding: 5px 21px 10px 5px;
+}
+
+/* Footer
+ -----------------------------------------------------------------------------*/
+#footer {
+	height: 50px;
+	border-top: 3px solid #FF6600;
+}
+
+#footer div.copyright {
+	color: #4b4b4b;
+	font: normal 11px/15px Arial, Verdana, sans-serif;
+	margin: 7px 10px 7px 10px;
+	padding: 0;
+	float: left
+}
+
+#footer div.imgstat {
+	margin: 13px 10px 5px 0px;
+	padding: 0;
+	text-align: right;
+	width: 100px;
+	float: right
+}
+
+/* Block quote
+ -----------------------------------------------------------------------------*/
+div.quote {
+	background: #F0F0F0;
+	border-bottom: 1px solid #E6E6E6;
+	border-top: 1px solid #E6E6E6;
+	margin: 10px 0px 10px 0px;
+	padding: 4px 10px 4px 10px;
+	position: relative
+}
+
+div.quote blockquote {
+	background: #F0F0F0 url('../images/top-quote.gif') no-repeat left top;
+	color: #333;
+	font: 12px Arial, Helvetica, sans-serif;
+	margin: 2px;
+	padding: 3px;
+	text-indent: 23px
+}
+
+div.quote blockquote span {
+	background: transparent url('../images/bottom-quote.gif') no-repeat bottom right;
+	display: inline-block;
+	width: 97%
+}
+
+/* ==========================================================================
+ Helper classes
+ ========================================================================== */
+
+/*
+ * Image replacement
+ */
+
+.ir {
+	background-color: transparent;
+	border: 0;
+	overflow: hidden;
+	/* IE 6/7 fallback */
+	*text-indent: -9999px;
+}
+
+.ir:before {
+	content: "";
+	display: block;
+	width: 0;
+	height: 150%;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+	display: none !important;
+	visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+	clip: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	position: static;
+	width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+	visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    `contenteditable` attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+
+.clearfix:before, .clearfix:after {
+	content: " "; /* 1 */
+	display: table; /* 2 */
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+	*zoom: 1;
+}
+
+/* ==========================================================================
+ Print styles.
+ Inlined to avoid required HTTP connection: h5bp.com/r
+ ========================================================================== */
+
+@media print {
+	* {
+		background: transparent !important;
+		color: #000 !important; /* Black prints faster: h5bp.com/s */
+		box-shadow: none !important;
+		text-shadow: none !important;
+	}
+
+	a, a:visited {
+		text-decoration: underline;
+	}
+
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+
+	/*
+	 * Don't show links for images, or javascript/internal links
+	 */
+
+	.ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+		content: "";
+	}
+
+	pre, blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
+
+	thead {
+		display: table-header-group; /* h5bp.com/t */
+	}
+
+	tr, img {
+		page-break-inside: avoid;
+	}
+
+	img {
+		max-width: 100% !important;
+	}
+
+	@page {
+		margin: 0.5cm;
+	}
+
+	p, h2, h3 {
+		orphans: 3;
+		widows: 3;
+	}
+
+	h2, h3 {
+		page-break-after: avoid;
+	}
+}
+#mudimPanel{left:0 !important}
+
+
+/*--------------------------*/
+table caption{
+	background: url('../images/arrows/export-16.png') no-repeat;
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: 'Roboto',sans-serif;
+	line-height: 22px;
+	padding: 0px 0 5px 20px;
+}
+
+sup.required {
+	color: #F00
+}
+
+.w20 {
+	width: 20px
+}
+
+.w50 {
+	width: 50px
+}
+
+.w100 {
+	width: 100px
+}
+
+.w150 {
+	width: 150px
+}
+
+.w200 {
+	width: 200px
+}
+
+.w250 {
+	width: 250px
+}
+
+.w300 {
+	width: 300px
+}
+
+.w350 {
+	width: 350px
+}
+
+.w400 {
+	width: 400px
+}
+
+.w500 {
+	width: 500px
+}
+
+.text-middle{
+	height: 32px; line-height: 32px;
+}

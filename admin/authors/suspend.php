@@ -272,8 +272,8 @@ else
 
 if( ! empty( $contents['change_suspend'] ) )
 {
-	$class = ( $contents['change_suspend']['new_suspend_is_error'] ) ? ' class="error"' : '';
-	$xtpl->assign( 'CLASS', ( $contents['change_suspend']['new_suspend_is_error'] ) ? ' class="error"' : '' );
+	$class = ( $contents['change_suspend']['new_suspend_is_error'] ) ? ' class="alert alert-danger"' : ' class="alert alert-info"';
+	$xtpl->assign( 'CLASS', ( $contents['change_suspend']['new_suspend_is_error'] ) ? ' class="alert alert-danger"' : ' class="alert alert-info"' );
 	$xtpl->assign( 'NEW_SUSPEND_CAPTION', $contents['change_suspend']['new_suspend_caption'] );
 	$xtpl->assign( 'ACTION', $contents['change_suspend']['new_suspend_action'] );
 
