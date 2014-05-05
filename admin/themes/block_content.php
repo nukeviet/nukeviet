@@ -440,7 +440,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 						$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
 						$sth->execute();
-						$weight = $sth->fetchColumn;
+						$weight = $sth->fetchColumn();
 						$weight = intval( $weight ) + 1;
 
 						$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
