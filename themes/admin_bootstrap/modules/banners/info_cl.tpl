@@ -5,18 +5,20 @@
 	<a class="button button-h" href="{CONTENTS.add.0}">{CONTENTS.add.1}</a>
 	<a class="button button-h" href="javascript:void(0);" onclick="{CONTENTS.del.0}">{CONTENTS.del.1}</a>
 </div>
-<table class="tab1">
-	<caption>{CONTENTS.caption}</caption>
-	<colgroup>
-		<col style="width:50%;white-space:nowrap" />
-	</colgroup>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td>{ROW.0}:</td>
-			<td>{ROW.1}</td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{CONTENTS.caption}</caption>
+		<colgroup>
+			<col style="width:50%;white-space:nowrap" />
+		</colgroup>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td>{ROW.0}:</td>
+				<td>{ROW.1}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <!-- END: main -->

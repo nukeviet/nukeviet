@@ -29,54 +29,56 @@
 			</p>
 		</form>
 	</div>
-	<table class="tab1">
-		<caption>{TABLE_CAPTION}</caption>
-		<thead>
-			<tr>
-				<!-- BEGIN: head_td -->
-				<td><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></td>
-				<!-- END: head_td -->
-				<td class="center"><strong>{LANG.memberlist_active}</strong></td>
-				<td><strong>{LANG.funcs}</strong></td>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="7">
-				<!-- BEGIN: exportfile -->
-				<input type="button" value="{LANG.export}" name="data_export"/>
-				<!-- END: exportfile -->
-				<!-- BEGIN: generate_page -->
-				{GENERATE_PAGE}
-				<!-- END: generate_page -->
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<!-- BEGIN: xusers -->
-			<tr>
-				<td> {CONTENT_TD.userid} </td>
-				<td>
-				<!-- BEGIN: is_admin -->
-				<img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
-				<!-- END: is_admin -->
-				{CONTENT_TD.username} </td>
-				<td> {CONTENT_TD.full_name} </td>
-				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
-				<td> {CONTENT_TD.regdate} </td>
-				<td class="center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
-				<td style="white-space: nowrap">
-				<!-- BEGIN: edit -->
-				&nbsp;&nbsp; <em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
-				<!-- END: edit -->
-				<!-- BEGIN: del -->
-				&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
-				<!-- END: del -->
-				</td>
-			</tr>
-			<!-- END: xusers -->
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{TABLE_CAPTION}</caption>
+			<thead>
+				<tr>
+					<!-- BEGIN: head_td -->
+					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
+					<!-- END: head_td -->
+					<td class="center"><strong>{LANG.memberlist_active}</strong></th>
+					<th><strong>{LANG.funcs}</strong></th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="7">
+					<!-- BEGIN: exportfile -->
+					<input type="button" value="{LANG.export}" name="data_export"/>
+					<!-- END: exportfile -->
+					<!-- BEGIN: generate_page -->
+					{GENERATE_PAGE}
+					<!-- END: generate_page -->
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- BEGIN: xusers -->
+				<tr>
+					<td> {CONTENT_TD.userid} </td>
+					<td>
+					<!-- BEGIN: is_admin -->
+					<img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
+					<!-- END: is_admin -->
+					{CONTENT_TD.username} </td>
+					<td> {CONTENT_TD.full_name} </td>
+					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
+					<td> {CONTENT_TD.regdate} </td>
+					<td class="center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
+					<td style="white-space: nowrap">
+					<!-- BEGIN: edit -->
+					&nbsp;&nbsp; <em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
+					<!-- END: edit -->
+					<!-- BEGIN: del -->
+					&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+					<!-- END: del -->
+					</td>
+				</tr>
+				<!-- END: xusers -->
+			</tbody>
+		</table>
+	</div>
 </div>
 <script type="text/javascript">
 	function nv_data_export(set_export) {

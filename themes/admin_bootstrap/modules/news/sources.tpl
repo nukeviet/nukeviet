@@ -16,33 +16,35 @@
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="sourceid" value="{sourceid}" />
 	<input name="savecat" type="hidden" value="1" />
-	<table class="tab1">
-		<caption>{LANG.add_sources}</caption>
-		<tfoot>
-			<tr>
-				<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<tr>
-				<td class="right"><strong>{LANG.name}: </strong></td>
-				<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" /></td>
-			</tr>
-			<tr>
-				<td class="right"><strong>{LANG.link}: </strong></td>
-				<td><input class="w500" name="link" type="text" value="{link}" maxlength="255" /></td>
-			</tr>
-			<tr>
-				<td class="right"><strong>{LANG.source_logo}: </strong></td>
-				<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
-				<!-- BEGIN: logo -->
-				<br />
-				<img src="{logo}"/></td>
-				<!-- END: logo -->
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.add_sources}</caption>
+			<tfoot>
+				<tr>
+					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td class="right"><strong>{LANG.name}: </strong></td>
+					<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" /></td>
+				</tr>
+				<tr>
+					<td class="right"><strong>{LANG.link}: </strong></td>
+					<td><input class="w500" name="link" type="text" value="{link}" maxlength="255" /></td>
+				</tr>
+				<tr>
+					<td class="right"><strong>{LANG.source_logo}: </strong></td>
+					<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
+					<!-- BEGIN: logo -->
+					<br />
+					<img src="{logo}"/></td>
+					<!-- END: logo -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<br />
 </form>
 <script type="text/javascript">

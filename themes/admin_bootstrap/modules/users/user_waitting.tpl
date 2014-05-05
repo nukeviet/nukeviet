@@ -31,38 +31,40 @@
 			</p>
 		</form>
 	</div>
-	<table class="tab1">
-		<caption>{TABLE_CAPTION}</caption>
-		<thead>
-			<tr>
-				<!-- BEGIN: head_td -->
-				<td><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></td>
-				<!-- END: head_td -->
-				<td><strong>{LANG.funcs}</strong></td>
-			</tr>
-		</thead>
-		<!-- BEGIN: generate_page -->
-		<tfoot>
-			<tr>
-				<td colspan="8"> {GENERATE_PAGE} </td>
-			</tr>
-		</tfoot>
-		<!-- END: generate_page -->
-		<tbody>
-			<!-- BEGIN: xusers -->
-			<tr>
-				<td> {CONTENT_TD.userid} </td>
-				<td> {CONTENT_TD.username} </td>
-				<td> {CONTENT_TD.full_name} </td>
-				<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
-				<td> {CONTENT_TD.regdate} </td>
-				<td>
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
-				</td>
-			</tr>
-			<!-- END: xusers -->
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{TABLE_CAPTION}</caption>
+			<thead>
+				<tr>
+					<!-- BEGIN: head_td -->
+					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
+					<!-- END: head_td -->
+					<th><strong>{LANG.funcs}</strong></th>
+				</tr>
+			</thead>
+			<!-- BEGIN: generate_page -->
+			<tfoot>
+				<tr>
+					<td colspan="8"> {GENERATE_PAGE} </td>
+				</tr>
+			</tfoot>
+			<!-- END: generate_page -->
+			<tbody>
+				<!-- BEGIN: xusers -->
+				<tr>
+					<td> {CONTENT_TD.userid} </td>
+					<td> {CONTENT_TD.username} </td>
+					<td> {CONTENT_TD.full_name} </td>
+					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
+					<td> {CONTENT_TD.regdate} </td>
+					<td>
+						<em class="icon-edit icon-large">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
+						<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+					</td>
+				</tr>
+				<!-- END: xusers -->
+			</tbody>
+		</table>
+	</div>
 </div>
 <!-- END: main -->

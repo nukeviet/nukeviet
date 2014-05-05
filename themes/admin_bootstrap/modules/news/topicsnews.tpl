@@ -1,29 +1,31 @@
 <!-- BEGIN: main -->
 <div id="module_show_list">
 	<!-- BEGIN: data -->
-	<table class="tab1">
-		<thead>
-			<tr>
-				<td class="w20">&nbsp;</td>
-				<td>{LANG.name}</td>
-				<td class="w100">&nbsp;</td>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td><input type="checkbox" name="newsid" value="{ROW.id}"/></td>
-				<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-				<td class="center">{ROW.delete}</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<td class="w20">&nbsp;</th>
+					<th>{LANG.name}</th>
+					<td class="w100">&nbsp;</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td><input type="checkbox" name="newsid" value="{ROW.id}"/></td>
+					<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+					<td class="center">{ROW.delete}</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
 	<!-- END: data -->
 	<!-- BEGIN: empty -->
 	<div class="quote">

@@ -17,82 +17,84 @@
 		<input type="hidden" name ="catid" value="{catid}" />
 		<input type="hidden" name ="parentid_old" value="{parentid}" />
 		<input name="savecat" type="hidden" value="1" />
-		<table class="tab1">
-			<caption>{caption}</caption>
-			<tbody>
-				<tr>
-					<td class="right"><strong>{LANG.name}: </strong></td>
-					<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
-				</tr>
-				<tr>
-					<td class="right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
-				</tr>
-				<tr>
-					<td class="right"><strong>Title Site: </strong></td>
-					<td><input class="w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
-				</tr>
-				<tr>
-					<td class="right"><strong>{LANG.cat_sub}: </strong></td>
-					<td>
-					<select name="parentid">
-						<!-- BEGIN: cat_listsub -->
-						<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
-						<!-- END: cat_listsub -->
-					</select></td>
-				</tr>
-				<tr>
-					<td class="right"><strong>{LANG.keywords}: </strong></td>
-					<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
-				</tr>
-				<tr>
-					<td class="right">
-					<br />
-					<strong>{LANG.description} </strong></td>
-					<td ><textarea class="w500" id="description"  name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
-				</tr>
-				<tr>
-					<td class="right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
-				</tr>
-				<tr>
-					<td class="right">
-					<br />
-					<strong>{GLANG.who_view} </strong></td>
-					<td>
-					<div class="message_body">
-						<select class="w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
-							<!-- BEGIN: who_views -->
-							<option value="{who_views.value}" {who_views.selected}>{who_views.title}</option>
-							<!-- END: who_views -->
-						</select>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<caption>{caption}</caption>
+				<tbody>
+					<tr>
+						<td class="right"><strong>{LANG.name}: </strong></td>
+						<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+					</tr>
+					<tr>
+						<td class="right"><strong>{LANG.alias}: </strong></td>
+						<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+					</tr>
+					<tr>
+						<td class="right"><strong>Title Site: </strong></td>
+						<td><input class="w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
+					</tr>
+					<tr>
+						<td class="right"><strong>{LANG.cat_sub}: </strong></td>
+						<td>
+						<select name="parentid">
+							<!-- BEGIN: cat_listsub -->
+							<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
+							<!-- END: cat_listsub -->
+						</select></td>
+					</tr>
+					<tr>
+						<td class="right"><strong>{LANG.keywords}: </strong></td>
+						<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+					</tr>
+					<tr>
+						<td class="right">
 						<br />
-						<div id="groups_list" style="{hidediv}">
-							{GLANG.groups_view}:
-							<table style="margin-bottom:8px; width:250px;">
-								<tr>
-									<td>
-									<!-- BEGIN: groups_views -->
-									<p>
-										<input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}
-									</p>
-									<!-- END: groups_views -->
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div></td>
-				</tr>
-				<tr>
-					<td class="right"><strong>{LANG.viewdescription}: </strong></td>
-					<td>
-					<!-- BEGIN: viewdescription -->
-					<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;
-					<!-- END: viewdescription -->
-					</td>
-				</tr>
-			</tbody>
-		</table>
+						<strong>{LANG.description} </strong></td>
+						<td ><textarea class="w500" id="description"  name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+					</tr>
+					<tr>
+						<td class="right"><strong>{LANG.content_homeimg}</strong></td>
+						<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+					</tr>
+					<tr>
+						<td class="right">
+						<br />
+						<strong>{GLANG.who_view} </strong></td>
+						<td>
+						<div class="message_body">
+							<select class="w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
+								<!-- BEGIN: who_views -->
+								<option value="{who_views.value}" {who_views.selected}>{who_views.title}</option>
+								<!-- END: who_views -->
+							</select>
+							<br />
+							<div id="groups_list" style="{hidediv}">
+								{GLANG.groups_view}:
+								<table style="margin-bottom:8px; width:250px;">
+									<tr>
+										<td>
+										<!-- BEGIN: groups_views -->
+										<p>
+											<input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}
+										</p>
+										<!-- END: groups_views -->
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div></td>
+					</tr>
+					<tr>
+						<td class="right"><strong>{LANG.viewdescription}: </strong></td>
+						<td>
+						<!-- BEGIN: viewdescription -->
+						<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;
+						<!-- END: viewdescription -->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<br />
 		<div class="center">
 			<input name="submit1" type="submit" value="{LANG.save}" />
