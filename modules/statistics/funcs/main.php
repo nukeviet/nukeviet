@@ -14,8 +14,6 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$contents = '';
-
 $current_month_num = date( 'n', NV_CURRENTTIME );
 $current_year = date( 'Y', NV_CURRENTTIME );
 $current_day = date( 'j', NV_CURRENTTIME );
@@ -264,7 +262,7 @@ $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
 $ctso['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
-$contents = main();
+$contents = nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';

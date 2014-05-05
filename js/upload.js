@@ -287,9 +287,13 @@ function fileMouseup(a) {
 	}
 	e += '<li id="download"><img style="margin-right:5px" src="' + ICON.download + '"/>' + LANG.download + '</li>';
 	e += '<li id="filepreview"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.preview + '</li>';
-	if ($.inArray(a, array_images) !== -1 && $("span#create_file").attr("title") == "1") {
-		e += '<li id="fileaddlogo"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.addlogo + '</li>';
-		e += '<li id="create"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.upload_createimage + '</li>'
+	if ($.inArray(a, array_images) !== -1){
+		if($("span#create_file").attr("title") == "1") {
+			e += '<li id="fileaddlogo"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.addlogo + '</li>';
+			e += '<li id="create"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.upload_createimage + '</li>'
+			e += '<li id="cropfile"><img style="margin-right:5px" src="' + ICON.filecrop + '"/>' + LANG.crop + '</li>'
+			e += '<li id="rotatefile"><img style="margin-right:5px" src="' + ICON.filerotate + '"/>' + LANG.rotate + '</li>'
+		}
 	}
 	if ($("span#move_file").attr("title") == "1") {
 		e += '<li id="move"><img style="margin-right:5px" src="' + ICON.move + '"/>' + LANG.move + '</li>'
@@ -299,12 +303,6 @@ function fileMouseup(a) {
 	}
 	if ($("span#delete_file").attr("title") == "1") {
 		e += '<li id="filedelete"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.upload_delfile + '</li>'
-	}
-    if ($("span#crop_file").attr("title") == "1") {
-		e += '<li id="cropfile"><img style="margin-right:5px" src="' + ICON.filecrop + '"/>' + LANG.crop + '</li>'
-	}
-	if ($("span#rotate_file").attr("title") == "1") {
-		e += '<li id="rotatefile"><img style="margin-right:5px" src="' + ICON.filerotate + '"/>' + LANG.rotate + '</li>'
 	}
 	e += "</ul>";
 	$("div#contextMenu").html(e)

@@ -5,25 +5,27 @@
 	<a class="button button-h" href="{CONTENTS.add.0}">{CONTENTS.add.1}</a>
 	<a class="button button-h" href="javascript:void(0);" onclick="{CONTENTS.del.0}">{CONTENTS.del.1}</a>
 </div>
-<table class="tab1">
-	<caption>{CONTENTS.caption}</caption>
-	<colgroup>
-		<col style="width:50%;white-space:nowrap" />
-	</colgroup>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<!-- BEGIN: t1 -->
-			<td>{ROW.0}:</td>
-			<td>{ROW.1}</td>
-			<!-- END: t1 -->
-			<!-- BEGIN: t2 -->
-			<td colspan="2">{ROW.0}:</td>
-			<!-- END: t2 -->
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{CONTENTS.caption}</caption>
+		<colgroup>
+			<col style="width:50%;white-space:nowrap" />
+		</colgroup>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<!-- BEGIN: t1 -->
+				<td>{ROW.0}:</td>
+				<td>{ROW.1}</td>
+				<!-- END: t1 -->
+				<!-- BEGIN: t2 -->
+				<td colspan="2">{ROW.0}:</td>
+				<!-- END: t2 -->
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <!-- BEGIN: description -->
 <div style="border:1px solid #dadada;margin:10px 0px 0px 0px;padding:10px">
 	<div>

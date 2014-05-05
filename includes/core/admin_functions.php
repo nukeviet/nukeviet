@@ -272,6 +272,9 @@ function nv_save_file_config_global()
 	$global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
 	$global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
 
+	$global_config['rewrite_endurl'] = $config_variable['rewrite_endurl'];
+	$global_config['rewrite_exturl'] = $config_variable['rewrite_exturl'];
+
 	if( $config_variable['check_rewrite_file'] )
 	{
 		require NV_ROOTDIR . '/includes/rewrite.php';

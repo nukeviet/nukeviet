@@ -5,37 +5,39 @@
 	<a class="button button-h" href="javascript:void(0);" onclick="{CONTENTS.act.0}">{CONTENTS.act.1}</a>
 	<!-- END: act -->
 </div>
-<table class="tab1">
-	<caption>{CONTENTS.caption}</caption>
-	<col span="2" style="width:50%;white-space:nowrap" />
-	<tbody>
-		<!-- BEGIN: loop1 -->
-		<tr>
-			<td>{ROW1.0}:</td>
-			<td>{ROW1.1}</td>
-		</tr>
-		<!-- END: loop1 -->
-	</tbody>
-</table>
-<table class="tab1">
-	<caption>{CONTENTS.stat.0}</caption>
-	<tbody>
-		<tr>
-			<td> {CONTENTS.stat.1}:
-			<select name="{CONTENTS.stat.2}" id="{CONTENTS.stat.2}">
-				<!-- BEGIN: stat1 -->
-				<option value="{K}">{V}</option>
-				<!-- END: stat1 -->
-			</select>
-			<select name="{CONTENTS.stat.4}" id="{CONTENTS.stat.4}">
-				<!-- BEGIN: stat2 -->
-				<option value="{K}">{V}</option>
-				<!-- END: stat2 -->
-			</select> 
-			<input type="button" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
-		</tr>
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{CONTENTS.caption}</caption>
+		<col span="2" style="width:50%;white-space:nowrap" />
+		<tbody>
+			<!-- BEGIN: loop1 -->
+			<tr>
+				<td>{ROW1.0}:</td>
+				<td>{ROW1.1}</td>
+			</tr>
+			<!-- END: loop1 -->
+		</tbody>
+	</table>
+	<table class="tab1">
+		<caption>{CONTENTS.stat.0}</caption>
+		<tbody>
+			<tr>
+				<td> {CONTENTS.stat.1}:
+				<select name="{CONTENTS.stat.2}" id="{CONTENTS.stat.2}">
+					<!-- BEGIN: stat1 -->
+					<option value="{K}">{V}</option>
+					<!-- END: stat1 -->
+				</select>
+				<select name="{CONTENTS.stat.4}" id="{CONTENTS.stat.4}">
+					<!-- BEGIN: stat2 -->
+					<option value="{K}">{V}</option>
+					<!-- END: stat2 -->
+				</select> 
+				<input type="button" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 <div id="{CONTENTS.containerid}"></div>
 <script type="text/javascript">
 	$(function() {

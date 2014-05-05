@@ -50,57 +50,59 @@
 </form>
 
 <br/>
-<table class="tab1">
-	<colgroup>
-		<col class="w50" />
-		<col class="center" />
-		<col class="center" />
-		<col class="w200" />
-		<col class="w50" />
-		<col class="w150" />
-	</colgroup>
-	<thead>
-		<tr class="center">
-			<td>&nbsp;</td>
-			<td>{LANG.mod_name}</td>
-			<td>{LANG.content}</td>
-			<td>{LANG.email}</td>
-			<td>{LANG.status}</td>
-			<td>{LANG.funcs}</td>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<td colspan="3">
-				<em class="icon-check icon-large">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
-				<em class="icon-check-empty icon-large">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
-				<span style="width:100px;display:inline-block">&nbsp;</span> 
-				<em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
-				<em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
-				<em class="icon-trash icon-large">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
-			</td>
-			<td colspan="3" class="center">
-			<!-- BEGIN: generate_page -->
-			<div class="center">
-				{GENERATE_PAGE}
-			</div>
-			<!-- END: generate_page -->
-			</td>
-		</tr>
-	</tfoot>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td class="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
-			<td>{ROW.module}</td>
-			<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
-			<td>{ROW.email}</td>
-			<td class="center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
-			<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="icon-trash icon-large">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w50" />
+			<col class="center" />
+			<col class="center" />
+			<col class="w200" />
+			<col class="w50" />
+			<col class="w150" />
+		</colgroup>
+		<thead>
+			<tr class="center">
+				<th>&nbsp;</th>
+				<th>{LANG.mod_name}</th>
+				<th>{LANG.content}</th>
+				<th>{LANG.email}</th>
+				<th>{LANG.status}</th>
+				<th>{LANG.funcs}</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+					<em class="icon-check icon-large">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
+					<em class="icon-check-empty icon-large">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
+					<span style="width:100px;display:inline-block">&nbsp;</span> 
+					<em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
+					<em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
+					<em class="icon-trash icon-large">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
+				</td>
+				<td colspan="3" class="center">
+				<!-- BEGIN: generate_page -->
+				<div class="center">
+					{GENERATE_PAGE}
+				</div>
+				<!-- END: generate_page -->
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
+				<td>{ROW.module}</td>
+				<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
+				<td>{ROW.email}</td>
+				<td class="center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
+				<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="icon-trash icon-large">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>

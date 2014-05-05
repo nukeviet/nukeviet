@@ -11,13 +11,13 @@
 if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
 
 /**
- * referer()
+ * nv_theme_statistics_referer()
  *
  * @return
  */
-function referer()
+function nv_theme_statistics_referer( $cts, $total )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $cts, $total;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -63,13 +63,13 @@ function referer()
 }
 
 /**
- * allreferers()
+ * nv_theme_statistics_allreferers()
  *
  * @return
  */
-function allreferers()
+function nv_theme_statistics_allreferers( $num_items, $cts, $host_list )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $cts, $host_list;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -115,13 +115,13 @@ function allreferers()
 }
 
 /**
- * allbots()
+ * nv_theme_statistics_allbots()
  *
  * @return
  */
-function allbots()
+function nv_theme_statistics_allbots( $num_items, $bot_list, $cts )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $bot_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -167,13 +167,13 @@ function allbots()
 }
 
 /**
- * allos()
+ * nv_theme_statistics_allos()
  *
  * @return
  */
-function allos()
+function nv_theme_statistics_allos( $num_items, $os_list, $cts )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $os_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -219,13 +219,13 @@ function allos()
 }
 
 /**
- * allbrowsers()
+ * nv_theme_statistics_allbrowsers()
  *
  * @return
  */
-function allbrowsers()
+function nv_theme_statistics_allbrowsers( $num_items, $browsers_list, $cts )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $browsers_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -272,13 +272,13 @@ function allbrowsers()
 }
 
 /**
- * allcountries()
+ * nv_theme_statistics_allcountries()
  *
  * @return
  */
-function allcountries()
+function nv_theme_statistics_allcountries( $num_items, $countries_list, $cts )
 {
-	global $module_info, $module_file, $lang_module, $lang_global, $module_name, $num_items, $countries_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
 	$xtpl = new XTemplate( 'allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -324,13 +324,13 @@ function allcountries()
 }
 
 /**
- * main()
+ * nv_theme_statistics_main()
  *
  * @return
  */
-function main()
+function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh )
 {
-	global $module_info, $module_name, $module_file, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
+	global $module_info, $module_name, $module_file, $lang_module, $lang_global;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -376,7 +376,6 @@ function main()
 	{
 		if( ! empty( $m['count'] ) )
 		{
-			$contents .= $m['count'] . "<br />";
 			$proc = ceil( ( $m['count'] / $ctsm['max'] ) * 100 );
 			$m['count'] = number_format( $m['count'] );
 			$xtpl->assign( 'M', $m );

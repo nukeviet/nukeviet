@@ -1,60 +1,62 @@
 <!-- BEGIN: main -->
-<table class="tab1">
-	<thead>
-		<tr>
-			<td colspan="7"> {LANG.block_select_module}:
-			<select name="module">
-				<option value="">{LANG.block_select_module}</option>
-				<!-- BEGIN: module -->
-				<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
-				<!-- END: module -->
-			</select> {LANG.block_func}
-			<select name="function">
-				<option value="">{LANG.block_select_function}</option>
-				<!-- BEGIN: function -->
-				<option value="{FUNCTION.key}"{FUNCTION.selected}>{FUNCTION.title}</option>
-				<!-- END: function -->
-			</select></td>
-		</tr>
-		<tr>
-			<td>{LANG.block_sort}</td>
-			<td>{LANG.block_pos}</td>
-			<td>{LANG.block_title}</td>
-			<td>{LANG.block_file}</td>
-			<td class="center">{LANG.block_active}</td>
-			<td class="center">{LANG.functions}</td>
-			<td>&nbsp;</td>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr class="aright">
-			<td colspan="7"><em class="icon-plus-sign icon-large">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
-		</tr>
-	</tfoot>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td>
-			<select class="order" title="{ROW.bid}">
-				<!-- BEGIN: order -->
-				<option value="{ORDER.key}"{ORDER.selected}>{ORDER.key}</option>
-				<!-- END: order -->
-			</select></td>
-			<td>
-			<select name="listpos" title="{ROW.bid}">
-				<!-- BEGIN: position -->
-				<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
-				<!-- END: position -->
-			</select></td>
-			<td>{ROW.title}</td>
-			<td>{ROW.module} {ROW.file_name}</td>
-			<td class="center">{ROW.active}</td>
-			<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
-			<td class="center"><label><input type="checkbox" name="idlist" value="{ROW.bid}"/></label></td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<td colspan="7"> {LANG.block_select_module}:
+				<select name="module">
+					<option value="">{LANG.block_select_module}</option>
+					<!-- BEGIN: module -->
+					<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
+					<!-- END: module -->
+				</select> {LANG.block_func}
+				<select name="function">
+					<option value="">{LANG.block_select_function}</option>
+					<!-- BEGIN: function -->
+					<option value="{FUNCTION.key}"{FUNCTION.selected}>{FUNCTION.title}</option>
+					<!-- END: function -->
+				</select></th>
+			</tr>
+			<tr>
+				<th>{LANG.block_sort}</th>
+				<th>{LANG.block_pos}</th>
+				<th>{LANG.block_title}</th>
+				<th>{LANG.block_file}</th>
+				<td class="center">{LANG.block_active}</th>
+				<td class="center">{LANG.functions}</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr class="aright">
+				<td colspan="7"><em class="icon-plus-sign icon-large">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td>
+				<select class="order" title="{ROW.bid}">
+					<!-- BEGIN: order -->
+					<option value="{ORDER.key}"{ORDER.selected}>{ORDER.key}</option>
+					<!-- END: order -->
+				</select></td>
+				<td>
+				<select name="listpos" title="{ROW.bid}">
+					<!-- BEGIN: position -->
+					<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
+					<!-- END: position -->
+				</select></td>
+				<td>{ROW.title}</td>
+				<td>{ROW.module} {ROW.file_name}</td>
+				<td class="center">{ROW.active}</td>
+				<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
+				<td class="center"><label><input type="checkbox" name="idlist" value="{ROW.bid}"/></label></td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {

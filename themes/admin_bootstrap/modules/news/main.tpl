@@ -38,43 +38,45 @@
 </form>
 
 <form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
-	<table class="tab1">
-		<thead>
-			<tr class="center">
-				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
-				<td><a href="{base_url_name}">{LANG.name}</a></td>
-				<td><a href="{base_url_publtime}">{LANG.content_publ_date}</a></td>
-				<td>{LANG.status}</td>
-				<td>{LANG.content_admin}</td>
-				<td>{LANG.hitstotal}</td>
-				<td>&nbsp;</td>
-			</tr>
-		</thead>
-		<tbody class="center">
-			<!-- BEGIN: loop -->
-			<tr>
-				<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
-				<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-				<td>{ROW.publtime}</td>
-				<td>{ROW.status}</td>
-				<td>{ROW.username}</td>
-				<td>{ROW.hitstotal}</td>
-				<td>{ROW.feature}</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-		<tfoot>
-			<tr class="left">
-				<td colspan="7">
-				<select name="action" id="action">
-					<!-- BEGIN: action -->
-					<option value="{ACTION.value}">{ACTION.title}</option>
-					<!-- END: action -->
-				</select>
-				<input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr class="center">
+					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+					<th><a href="{base_url_name}">{LANG.name}</a></th>
+					<th><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
+					<th>{LANG.status}</th>
+					<th>{LANG.content_admin}</th>
+					<th>{LANG.hitstotal}</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody class="center">
+				<!-- BEGIN: loop -->
+				<tr>
+					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+					<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+					<td>{ROW.publtime}</td>
+					<td>{ROW.status}</td>
+					<td>{ROW.username}</td>
+					<td>{ROW.hitstotal}</td>
+					<td>{ROW.feature}</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+			<tfoot>
+				<tr class="left">
+					<td colspan="7">
+					<select name="action" id="action">
+						<!-- BEGIN: action -->
+						<option value="{ACTION.value}">{ACTION.title}</option>
+						<!-- END: action -->
+					</select>
+					<input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </form>
 <!-- BEGIN: generate_page -->
 <br />

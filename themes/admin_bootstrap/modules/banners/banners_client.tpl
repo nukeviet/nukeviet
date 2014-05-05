@@ -5,8 +5,10 @@
 </div>
 <!-- END: info -->
 <!-- BEGIN: empty -->
-<table class="tab1">
-	<caption>{CONTENTS.caption}</caption>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{CONTENTS.caption}</caption>
+	</table>
+</div>
 <!-- END: empty -->
 <!-- END: main -->
