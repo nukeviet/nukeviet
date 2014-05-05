@@ -1,17 +1,16 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: complete -->
-<div class="quote">
-	<blockquote class="error"><span>{LANG.setup_updated_layout}</span></blockquote>
-</div>
+<div class="well">{LANG.setup_updated_layout}</div>
 <!-- END: complete -->
 <form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" name="setuplayout">
-	<table class="tab2">
+<div class="table-responsive">
+	<table class="table table-bordered">
 		<tr>
 			<!-- BEGIN: loop -->
-			<td style="vertical-align:top"><strong>{MOD_NAME_TITLE}</strong><div class="hr"></div>
+			<td style="vertical-align:top"><strong>{MOD_NAME_TITLE}</strong><hr />
 			<!-- BEGIN: func -->
-			<span style="display:inline-block;width:150px">{FUNC_ARR_VAL.1}</span>
-			<select name="func[{FUNC_ARR_VAL.0}]" class="function">
+			<span style="display:inline-block;width:150px" class="pull-left">{FUNC_ARR_VAL.1}</span>
+			<select name="func[{FUNC_ARR_VAL.0}]" class="form-control function w200">
 				<!-- BEGIN: option -->
 				<option value="{OPTION.key}"{OPTION.selected}>{OPTION.key}</option>
 				<!-- END: option -->
@@ -32,8 +31,9 @@
 			<!-- END: fixend -->
 		</tr>
 		<tr>
-			<td colspan="3" class="center"><input name="save" type="submit" value="{LANG.setup_save_layout}"/></td>
+			<td colspan="3" class="center"><input name="save" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/></td>
 		</tr>
 	</table>
+</div>
 </form>
 <!-- END: main -->

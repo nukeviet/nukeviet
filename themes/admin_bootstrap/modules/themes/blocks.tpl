@@ -3,8 +3,8 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<td colspan="8"> {LANG.block_select_module}
-				<select name="module">
+				<th colspan="8"> <span class="pull-left text-middle">{LANG.block_select_module}&nbsp;&nbsp;</span>
+				<select name="module" class="form-control w200">
 					<option value="">{LANG.block_select_module}</option>
 					<!-- BEGIN: module -->
 					<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
@@ -23,21 +23,21 @@
 			</tr>
 		</thead>
 		<tfoot>
-			<tr class="right">
-				<td colspan="8"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="icon-plus-sign icon-large">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width:100px;display:inline-block">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+			<tr class="text-right">
+				<td colspan="8"><em class="fa fa-edit">&nbsp;</em> <a class="block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="fa fa-plus-circle">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; <em class="fa fa-trash-o">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width:100px;display:inline-block">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
 			</tr>
 		</tfoot>
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
 				<td>
-				<select class="order" title="{ROW.bid}">
+				<select class="form-control" title="{ROW.bid}">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 					<!-- END: weight -->
 				</select></td>
 				<td>
-				<select name="listpos" title="{ROW.bid}">
+				<select name="listpos" title="{ROW.bid}" class="form-control">
 					<!-- BEGIN: position -->
 					<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
 					<!-- END: position -->
