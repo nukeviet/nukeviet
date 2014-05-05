@@ -35,6 +35,7 @@
 					<textarea id="commentcontent" class="form-control" cols="60" rows="3" placeholder="{LANG.comment_content}"></textarea>
 				</div>
 			</div>
+			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
 				<label class="col-xs-3">{LANG.comment_seccode}</label>
 				<div class="col-xs-4">
@@ -45,8 +46,9 @@
 					<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
 				</div>
 			</div>
+			<!-- END: captcha -->
 			<div class="form-group text-center">
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{VIEW_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{VIEW_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
 			</div>
 		</form>
@@ -65,9 +67,9 @@
 	</div>
 </div>
 <script type="text/javascript">
-$("#sort").click(function() {
+$("#sort").change(function() {
 	var key = $('#sort').val();
 	window.location='{BASE_URL_COMM}&sortcomm=' + key;
-});	
+});
 </script>
 <!-- END: main -->

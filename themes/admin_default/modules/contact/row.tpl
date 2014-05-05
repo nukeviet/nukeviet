@@ -12,7 +12,7 @@
 		<tbody>
 			<tr>
 				<td><strong>{LANG.part_row_title}</strong></td>
-				<td><input class="w150" type="text" name="full_name" value="{DATA.full_name}"/></td>
+				<td><input class="w150" type="text" name="full_name" value="{DATA.full_name}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"/></td>
 			</tr>
 			<tr>
 				<td><strong>{GLANG.phonenumber}</strong></td>
@@ -24,7 +24,7 @@
 			</tr>
 			<tr>
 				<td><strong>{GLANG.email}</strong></td>
-				<td><input class="w150" type="text" name="email" value="{DATA.email}"/></td>
+				<td><input class="w150" type="email" oninvalid="setCustomValidity( nv_email )" oninput="setCustomValidity('')" name="email" value="{DATA.email}"/></td>
 			</tr>
 			<tr>
 				<td colspan="2">

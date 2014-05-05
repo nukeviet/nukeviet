@@ -153,8 +153,8 @@
 	</table>
 	<div style="padding:10px;text-align:center">
 		<input type="hidden" name="bid" value="{ROW.bid}" />
+		<input type="button" onclick="window.close()" value="{LANG.back}" />
 		<input type="submit" name="confirm" value="{LANG.block_confirm}" />
-		<input type="button" onclick="window.parent.Shadowbox.close()" value="{LANG.back}" />
 	</div>
 </form>
 
@@ -171,5 +171,9 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/block_content.js"></script>
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->
-<script type="text/javascript">parent.location = "{BLOCKREDIRECT}";</script>
+<script type="text/javascript">
+	window.opener.location.href = '{BLOCKREDIRECT}';
+	window.opener.focus();
+	window.close();
+</script>
 <!-- END: blockredirect -->

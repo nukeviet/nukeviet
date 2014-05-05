@@ -19,7 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['edit_title'] = 'Preview';
 $lang_module['add_row_title'] = 'Add department';
-$lang_module['list_row_title'] = 'List of departments';
+$lang_module['department_title'] = 'List of departments';
 $lang_module['err_row_title'] = 'Not exists';
 $lang_module['part_row_title'] = 'Department';
 $lang_module['email_row_title'] = 'Email';
@@ -63,3 +63,4 @@ $lang_module['admin_send2mail_title'] = 'Send to email';
 $lang_module['delall'] = 'Delete all';
 $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
+$lang_module['url_for_iframe'] = 'Url for iframe';

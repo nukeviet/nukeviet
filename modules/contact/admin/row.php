@@ -14,12 +14,12 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $id )
 {
-	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $id;
 	$frow = $db->query( $sql )->fetch();
 
 	if( empty( $frow ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
 		die();
 	}
 
@@ -140,13 +140,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (full_name, phone, fax, email, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :note, :admins, 1)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, phone, fax, email, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :note, :admins, 1)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
@@ -163,7 +163,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
 			nv_del_moduleCache( $module_name );
 		}
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=list_row' );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
 		die();
 	}
 }

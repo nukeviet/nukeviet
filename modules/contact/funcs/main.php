@@ -26,7 +26,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	$email_list = array();
 
-	$sql = 'SELECT email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id =' . $cid;
+	$sql = 'SELECT email, admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id =' . $cid;
 	$result = $db->query( $sql );
 	list( $email, $admins ) = $result->fetch( 3 );
 
@@ -80,8 +80,8 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT id, full_name, phone, fax, email, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE act=1';
-$array_rows = nv_db_cache( $sql, 'id' );
+$sql = 'SELECT id, full_name, phone, fax, email, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1';
+$array_department = nv_db_cache( $sql, 'id' );
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
@@ -107,7 +107,7 @@ $ftitle = nv_substr( $nv_Request->get_title( 'ftitle', 'post,get', '', 1 ), 0, 2
 $full = isset( $array_op[1] ) ? $array_op[1] : 1;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
-if( ! empty( $array_rows ) )
+if( ! empty( $array_department ) )
 {
 	$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
@@ -146,7 +146,7 @@ if( ! empty( $array_rows ) )
 		{
 			$error = $lang_module['error_content'];
 		}
-		elseif( ! isset( $array_rows[$fpart] ) )
+		elseif( ! isset( $array_department[$fpart] ) )
 		{
 			$error = $lang_module['error_part'];
 		}
@@ -176,11 +176,11 @@ if( ! empty( $array_rows ) )
 
 				if( empty( $fphone ) )
 				{
-					$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_rows[$fpart]['full_name'] );
+					$fcon .= sprintf( $lang_module['sendinfo'], $website, $fname, $femail, $client_info['ip'], $array_department[$fpart]['full_name'] );
 				}
 				else
 				{
-					$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_rows[$fpart]['full_name'] );
+					$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_department[$fpart]['full_name'] );
 				}
 
 				nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
@@ -198,8 +198,11 @@ if( ! empty( $array_rows ) )
     else
     {
     	$base_url_rewrite = $base_url;
-        if( isset( $array_op[0] ) AND isset( $array_rows[$fpart] ) )
+        if( isset( $array_op[0] ) AND isset( $array_department[$fpart] ) )
         {
+        	$array_department_i = $array_department[$fpart];
+        	$array_department = array( $fpart => $array_department_i );
+
             $base_url_rewrite .= '&amp;' . NV_OP_VARIABLE . '=' . $fpart;
             if( isset( $array_op[1] ) AND $array_op[1] == 0 )
             {
@@ -222,19 +225,23 @@ if( ! empty( $array_rows ) )
 }
 
 $bodytext = '';
-if( isset( $array_rows[$fpart] ) and ! empty( $array_rows[$fpart]['note'] ) )
+if( isset( $array_department[$fpart] ) and ! empty( $array_department[$fpart]['note'] ) )
 {
-	$bodytext = $array_rows[$fpart]['note'];
+	$bodytext = $array_department[$fpart]['note'];
 }
 elseif( isset( $module_config[$module_name]['bodytext'] ) )
 {
 	$bodytext = $module_config[$module_name]['bodytext'];
 }
 
+if( ! empty( $bodytext ) )
+{
+	$lang_module['note'] = $bodytext;
+}
+
 $array_content = array(
 	'error' => $error,
 	'fpart' => $fpart,
-	'bodytext' => $bodytext,
 	'fname' => $fname,
 	'femail' => $femail,
 	'fcon' => $fcon,
@@ -243,7 +250,7 @@ $array_content = array(
 );
 
 $checkss = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$contents = call_user_func( 'main_theme', $array_content, $array_rows, $base_url, $checkss );
+$contents = contact_main_theme( $array_content, $array_department, $base_url, $checkss );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents, $full );

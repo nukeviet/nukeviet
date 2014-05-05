@@ -10,12 +10,12 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$xtpl = new XTemplate( 'list_row.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl = new XTemplate( 'department.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $a = 0;
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows ORDER BY full_name';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY full_name';
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
@@ -55,7 +55,7 @@ $xtpl->assign( 'URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-$page_title = $lang_module['list_row_title'];
+$page_title = $lang_module['department_title'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
