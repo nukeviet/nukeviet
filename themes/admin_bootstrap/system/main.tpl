@@ -12,7 +12,7 @@
 		<!-- BEGIN: langdata -->
 		<div class="lang">
 			<strong>{NV_LANGDATA}</strong>:
-			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control w200">
 				<!-- BEGIN: option -->
 				<option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
 				<!-- END: option -->
