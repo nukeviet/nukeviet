@@ -1,7 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote">
-	<blockquote class="error"><span id="message">{LANG.xcopyblock_notice}</span></blockquote>
-</div>
+<div class="alert alert-info"><span id="message">{LANG.xcopyblock_notice}</span></div>
 <form name="copy_block" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="tab1">
 		<tfoot>
