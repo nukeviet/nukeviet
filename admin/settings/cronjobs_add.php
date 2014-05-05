@@ -72,7 +72,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$data = array();
 			$data['run_file'] = $run_file;
 			$data['run_func'] = $run_func;
-			$$data['params'] = $params;
+			$data['params'] = $params;
 			$data['cron_name'] = $cron_name;
 			$id = $db->insert_id( $_sql, 'id', $data );
 
