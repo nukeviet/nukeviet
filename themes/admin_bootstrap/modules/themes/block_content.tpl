@@ -135,20 +135,21 @@
 					<br />
 					<label><input type="button" name="checkallmod" value="{LANG.block_check}" style="margin-bottom:5px"/></label></td>
 					<td>
-					<div class="list-funcs">
-						<table class="tab1">
-							<tbody>
-								<!-- BEGIN: loopfuncs -->
-								<tr class="funclist" id="idmodule_{M_TITLE}">
-									<td style="font-weight:bold; white-space:nowrap"><input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> {M_CUSTOM_TITLE} </td>
-									<!-- BEGIN: fuc -->
-									<td style="white-space:nowrap"><label><input type="checkbox"{SELECTED} name="func_id[]" value="{FUNCID}" /> {FUNCNAME}</label></td>
-									<!-- END: fuc -->
-								</tr>
-								<!-- END: loopfuncs -->
-							</tbody>
-						</table>
-					</div></td>
+						<div class="list-funcs">
+							<table class="table table-striped table-bordered table-hover">
+								<tbody>
+									<!-- BEGIN: loopfuncs -->
+									<tr class="funclist" id="idmodule_{M_TITLE}">
+										<td style="font-weight:bold; white-space:nowrap"><input {M_CHECKED} type="checkbox" value="{M_TITLE}" class="checkmodule"/> {M_CUSTOM_TITLE} </td>
+										<!-- BEGIN: fuc -->
+										<td style="white-space:nowrap"><label><input type="checkbox"{SELECTED} name="func_id[]" value="{FUNCID}" /> {FUNCNAME}</label></td>
+										<!-- END: fuc -->
+									</tr>
+									<!-- END: loopfuncs -->
+								</tbody>
+							</table>
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>

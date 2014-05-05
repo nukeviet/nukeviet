@@ -49,50 +49,52 @@
 					</tr>
 				</tbody>
 			</table>
-		</form>
-	</div>
-	<div id="resultdata"></div>
-	<script type="text/javascript">
-		//<![CDATA[
-		$(document).ready(function() {
-			$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-				showOn : "both",
-				dateFormat : "dd.mm.yy",
-				changeMonth : true,
-				changeYear : true,
-				showOtherMonths : true,
-				buttonText : '',
-				showButtonPanel : true,
-				showOn : 'focus'
-			});
-			$("#formgetuid").submit(function() {
-				var a = $(this).attr("action");
-				b = $(this).serialize();
-				a = a + "&" + b + "&submit";
-				$("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
-				$.ajax({
-					type : "GET",
-					url : a,
-					success : function(c) {
-						$("#resultdata").html(c);
-						$("#formgetuid input, #formgetuid select").removeAttr("disabled")
-					}
-				});
-				return !1
-			});
-			$(".reset").click(function() {
-				$("[type=text]").val('');
-				$("select[name=gender]").val('');
-				$("#resultdata").html('');
-				return !1
-			});
+		</div>
+	</form>
+</div>
+<div id="resultdata"></div>
+<script type="text/javascript">
+	//<![CDATA[
+	$(document).ready(function() {
+		$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
+			showOn : "both",
+			dateFormat : "dd.mm.yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonText : '',
+			showButtonPanel : true,
+			showOn : 'focus'
 		});
-		//]]>
-	</script>
-	<!--  END: main  -->
-	<!-- BEGIN: resultdata -->
-	<!-- BEGIN: data -->
-	<table class="tab1">
+		$("#formgetuid").submit(function() {
+			var a = $(this).attr("action");
+			b = $(this).serialize();
+			a = a + "&" + b + "&submit";
+			$("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
+			$.ajax({
+				type : "GET",
+				url : a,
+				success : function(c) {
+					$("#resultdata").html(c);
+					$("#formgetuid input, #formgetuid select").removeAttr("disabled")
+				}
+			});
+			return !1
+		});
+		$(".reset").click(function() {
+			$("[type=text]").val('');
+			$("select[name=gender]").val('');
+			$("#resultdata").html('');
+			return !1
+		});
+	});
+	//]]>
+</script>
+<!--  END: main  -->
+<!-- BEGIN: resultdata -->
+<!-- BEGIN: data -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
 			<col class="w50">
 			<col class="w100">
@@ -131,30 +133,31 @@
 			<!-- END: row -->
 		</tbody>
 	</table>
-	<script type="text/javascript">
-		//<![CDATA[
-		function nv_close_pop(userid) {
-			$("#{AREA}", opener.document).val(userid);
-			window.close();
-		}
-	
-	
-		$("thead a,.generatePage a").click(function() {
-			var a = $(this).attr("href");
-			$("#resultdata").load(a);
-			return !1
-		});
-		//]]>
-	</script>
-	<!-- END: data -->
-	<!-- BEGIN: nodata -->
-	<table class="tab1">
+</div>
+<script type="text/javascript">
+	//<![CDATA[
+	function nv_close_pop(userid) {
+		$("#{AREA}", opener.document).val(userid);
+		window.close();
+	}
+
+	$("thead a,.generatePage a").click(function() {
+		var a = $(this).attr("href");
+		$("#resultdata").load(a);
+		return !1
+	});
+	//]]>
+</script>
+<!-- END: data -->
+<!-- BEGIN: nodata -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
 				<td class="center"> {LANG.noresult} </td>
 			</tr>
 		</tbody>
-			</table>
-		</div>
+	</table>
+</div>
 <!-- END: nodata -->
 <!-- END: resultdata -->

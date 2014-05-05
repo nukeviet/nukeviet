@@ -35,7 +35,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption>{LANG.list_admin_row_title}</caption>
 			<thead>
 				<tr>
@@ -60,7 +60,7 @@
 				<!-- END: admin -->
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<tr>
 				<td class="center"><input name="submit1" type="submit" value="{GLANG.submit}" /></td>
 			</tr>

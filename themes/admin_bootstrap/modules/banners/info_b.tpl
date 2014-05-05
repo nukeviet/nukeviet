@@ -18,7 +18,7 @@
 			<!-- END: loop1 -->
 		</tbody>
 	</table>
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<caption>{CONTENTS.stat.0}</caption>
 		<tbody>
 			<tr>
@@ -32,7 +32,7 @@
 					<!-- BEGIN: stat2 -->
 					<option value="{K}">{V}</option>
 					<!-- END: stat2 -->
-				</select> 
+				</select>
 				<input type="button" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
 			</tr>
 		</tbody>
@@ -56,6 +56,6 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

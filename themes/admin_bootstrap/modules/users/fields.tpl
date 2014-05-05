@@ -37,27 +37,29 @@
 			<!-- END: loop -->
 		</tbody>
 	</table>
-	<!-- END: data -->
-	<!-- BEGIN: load -->
-	<div id="module_show_list"></div>
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-	<!-- BEGIN: error -->
-	<div class="quote">
-		<blockquote class="error">
-			<p>
-				<span>{ERROR}</span>
-			</p></blockquote>
-	</div>
-	<!-- END: error -->
-	<form action="{FORM_ACTION}" method="post" id="ffields">
-		<table class="tab1">
+</div>
+<!-- END: data -->
+<!-- BEGIN: load -->
+<div id="module_show_list"></div>
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- BEGIN: error -->
+<div class="quote">
+	<blockquote class="error">
+		<p>
+			<span>{ERROR}</span>
+		</p></blockquote>
+</div>
+<!-- END: error -->
+<form action="{FORM_ACTION}" method="post" id="ffields">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {CAPTIONFORM} </caption>
 			<colgroup>
 				<col class="w250" />
@@ -122,7 +124,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1" id="textfields" {DATAFORM.display_textfields}>
+		<table class="table table-striped table-bordered table-hover" id="textfields" {DATAFORM.display_textfields}>
 			<caption>{LANG.field_options_text}</caption>
 			<colgroup>
 				<col class="w250" />
@@ -153,8 +155,8 @@
 				</tr>
 			</tbody>
 		</table>
-	
-		<table class="tab1" id="numberfields" {DATAFORM.display_numberfields}>
+
+		<table class="table table-striped table-bordered table-hover" id="numberfields" {DATAFORM.display_numberfields}>
 			<caption>{LANG.field_options_number}</caption>
 			<colgroup>
 				<col class="w250" />
@@ -175,8 +177,8 @@
 				</tr>
 			</tbody>
 		</table>
-	
-		<table class="tab1" id="datefields" {DATAFORM.display_datefields}>
+
+		<table class="table table-striped table-bordered table-hover" id="datefields" {DATAFORM.display_datefields}>
 			<caption>{LANG.field_options_date}</caption>
 			<colgroup>
 				<col class="w250" />
@@ -193,7 +195,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1" id="choicetypes" {DATAFORM.display_choicetypes} >
+		<table class="table table-striped table-bordered table-hover" id="choicetypes" {DATAFORM.display_choicetypes} >
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -214,7 +216,7 @@
 				</th>
 			</tr>
 		</table>
-		<table class="tab1 center" id="choicesql" {DATAFORM.display_choicesql} >
+		<table class="table table-striped table-bordered table-hover" id="choicesql" {DATAFORM.display_choicesql} >
 			<caption>{LANG.field_options_choicesql}</caption>
 			<colgroup>
 				<col class="w250" />
@@ -235,7 +237,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1" id="choiceitems" {DATAFORM.display_choiceitems} >
+		<table class="table table-striped table-bordered table-hover" id="choiceitems" {DATAFORM.display_choiceitems} >
 			<caption>{LANG.field_options_choice}</caption>
 			<colgroup>
 				<col class="w250" />
@@ -264,8 +266,8 @@
 				</tr>
 				<!-- END: loop_field_choice -->
 			</tbody>
-	</table>
-</div>
+		</table>
+	</div>
 	<div style="margin-left: 350px;">
 		<input type="hidden" value="{DATAFORM.fid}" name="fid">
 		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
