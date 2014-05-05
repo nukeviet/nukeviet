@@ -1,0 +1,175 @@
+﻿.ddsmoothmenu {
+	background: #7a7a7a;
+	background: -moz-linear-gradient(top, #7a7a7a 0%, #666666 2%, #5a5a5a 5%, #575757 27%, #484848 90%, #484848 95%, #595959 98%, #444444 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7a7a7a), color-stop(2%,#666666), color-stop(5%,#5a5a5a), color-stop(27%,#575757), color-stop(90%,#484848), color-stop(95%,#484848), color-stop(98%,#595959), color-stop(100%,#444444));
+	background: -webkit-linear-gradient(top, #7a7a7a 0%,#666666 2%,#5a5a5a 5%,#575757 27%,#484848 90%,#484848 95%,#595959 98%,#444444 100%);
+	background: -o-linear-gradient(top, #7a7a7a 0%,#666666 2%,#5a5a5a 5%,#575757 27%,#484848 90%,#484848 95%,#595959 98%,#444444 100%);
+	background: -ms-linear-gradient(top, #7a7a7a 0%,#666666 2%,#5a5a5a 5%,#575757 27%,#484848 90%,#484848 95%,#595959 98%,#444444 100%);
+	background: linear-gradient(to bottom, #7a7a7a 0%,#666666 2%,#5a5a5a 5%,#575757 27%,#484848 90%,#484848 95%,#595959 98%,#444444 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7a7a7a', endColorstr='#444444',GradientType=0 );	
+	display:block;
+	font-weight:700;
+	padding:2px;
+}
+.ddsmoothmenu ul {
+	z-index: 100;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.ddsmoothmenu ul li {
+	position: relative;
+	display: inline;
+	float: left;
+	border-left: 1px solid #666;
+	border-right: 1px solid #3B3B3B;
+}
+.ddsmoothmenu ul li a {
+	display: block;
+	color: #ccc;
+	padding: 6px 10px;
+	text-decoration: none;
+}
+* html .ddsmoothmenu ul li a {
+	display: inline-block;
+}
+.ddsmoothmenu ul li a:link, .ddsmoothmenu ul li a:visited {
+	color: #ccc;
+}
+.ddsmoothmenu ul li a.selected, .ddsmoothmenu ul li a:hover {
+	background: #2E2E2E;
+	color: #FFF;
+}
+.ddsmoothmenu ul li ul {
+	position: absolute;
+	left: -3000px;
+	display: none;
+	visibility: hidden;
+	background: #333;
+}
+.ddsmoothmenu ul li ul li {
+	display: list-item;
+	float: none;
+}
+.ddsmoothmenu ul li ul li ul {
+	top: 0;
+}
+.ddsmoothmenu ul li ul li a {
+	font: normal 13px Arial;
+	min-width: 160px;
+	padding: 8px;
+	margin: 0;
+	border-top-width: 0;
+	border-bottom: 1px solid gray;
+}
+* html .ddsmoothmenu {
+	height: 1%;
+}
+.downarrowclass {
+	position: absolute;
+	top: 12px;
+	right: 7px;
+}
+.rightarrowclass {
+	position: absolute;
+	top: 6px;
+	right: 5px;
+}
+.ddshadow {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	background-color: #ccc;
+}
+.toplevelshadow {
+	margin: 5px 0 0 5px;
+	opacity: 0.8;
+}
+.ddcss3support .ddshadow.toplevelshadow {
+	margin: 0;
+}
+.ddcss3support .ddshadow {
+	background-color: transparent;
+	box-shadow: 5px 5px 5px #aaa;
+	-moz-box-shadow: 5px 5px 5px #aaa;
+	-webkit-box-shadow: 5px 5px 5px #aaa;
+}
+
+/* Vertical Menu */
+.ddsmoothmenu-v ul {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	list-style-type: none;
+	font-weight:700;
+	background:#fff;
+}
+.ddsmoothmenu-v ul li {
+	position: relative;
+	float: none;
+	margin-bottom:1px;
+	border: 1px solid #C6C6C6;
+	line-height: 25px;
+	background:#e6e6e6;
+}
+.ddsmoothmenu-v ul li:last-child{
+	margin-bottom:0px;
+}
+.ddsmoothmenu-v ul li a {
+	display: block;
+	overflow: auto;
+	color: #333;
+	text-decoration: none;
+	padding-left:6px;
+}
+.ddsmoothmenu-v ul li a:link, .ddsmoothmenu-v ul li a:visited, .ddsmoothmenu-v ul li a:active {
+	color: #333;
+}
+.ddsmoothmenu-v ul li a.selected, .ddsmoothmenu-v ul li a:hover {
+	color: #cb0000;
+	background: #F5F5F5;
+}
+.ddsmoothmenu-v ul li a.subcurrent, .ddsmoothmenu-v ul li a.subactive {
+	text-align:right;
+	padding-right:6px;
+	font-weight:400;
+	background:#f3f3f3;
+	border-left:5px #f5c7c7 solid;
+}
+.ddsmoothmenu-v ul li a.subactive {
+	color:#cb0000;
+}
+.ddsmoothmenu-v ul li ul {
+	position: absolute;
+	width: 185px;
+	top: 0;
+	font-weight: normal;
+	visibility: hidden;
+}
+* html .ddsmoothmenu-v ul li {
+	float: left;
+	height: 1%;
+}
+* html .ddsmoothmenu-v ul li a {
+	height: 1%;
+}
+.ddsmoothmenu-v ul li:first-child a{
+	background:#ffd9d9;
+	color:#333;
+}
+.ddsmoothmenu-v ul li:first-child a:hover{
+	color:#369;
+}
+.ddsmoothmenu-v ul li ul li:first-child a{
+	background:inherit;
+	color:inherit;
+}
+.ddsmoothmenu-v ul li ul li:first-child a:hover{
+	color: #cb0000;
+	background: #F5F5F5;
+}
+.ddsmoothmenu-v .rightarrowclass{
+	top:9px;
+}
