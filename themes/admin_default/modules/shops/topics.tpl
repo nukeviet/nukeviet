@@ -8,7 +8,7 @@
 		<tr>
 			<td width="120px"><strong>{LANG.content_cat}</strong></td>
 			<td>
-			<select name="catid" style="width:300px" onChange="changecatid (this)">
+			<select class="form-control" name="catid" style="width:300px" onChange="changecatid (this)">
 				<!-- BEGIN: rowscat -->
 				<option value="{catid_i}" {select} >{xtitle_i} {title_i}</option>
 				<!-- END: rowscat -->
@@ -19,18 +19,18 @@
 <table class="tab1" style="margin-bottom:0">
 	<thead>
 		<tr>
-			<td width="30px" align="center">{LANG.weight}</td>
+			<td width="30px" class="text-center">{LANG.weight}</td>
 			<td><strong>{LANG.topic_title}</strong></td>
 			<td><strong>{LANG.topic_sub}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.function}</strong></td>
+			<td width="120px" class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<!-- BEGIN: listrow -->
 	<tr {bg}>
-		<td align="center"> {ROW.slect_weight} </td>
+		<td class="text-center"> {ROW.slect_weight} </td>
 		<td>{ROW.title}</td>
 		<td>{ROW.keywords}</td>
-		<td align="center"><span class="edit_icon"><a href="{ROW.link_edit}" title="">{LANG.edit}</a></span>&nbsp; <span class="delete_icon"><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></span></td>
+		<td class="text-center"><span class="edit_icon"><a href="{ROW.link_edit}" title="">{LANG.edit}</a></span>&nbsp; <span class="delete_icon"><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></span></td>
 	</tr>
 	<!-- END: listrow -->
 	<tfoot>
@@ -39,16 +39,16 @@
 		</tr>
 	</tfoot>
 </table>
-<form action="" method="post"><input name="save" type="hidden" value="1" />
+<form class="form-inline" action="" method="post"><input name="save" type="hidden" value="1" />
 	<table summary="{DATA.caption}" class="tab1">
 		<caption>{DATA.caption}</caption>
 		<tr>
 			<td align="right" width="180px"><strong>{LANG.topic_title}: </strong></td>
-			<td><input style="width:50%" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
+			<td><input class="form-control" style="width:50%" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 		</tr>
 		<tr>
 			<td align="right"><strong>{LANG.alias}: </strong></td>
-			<td><input style="width:50%" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
+			<td><input class="form-control" style="width:50%" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
 		</tr>
 		<tr>
 			<td align="right"><strong>{LANG.topic_sub}: </strong>
@@ -58,7 +58,7 @@
 		</tr>
 	</table>
 	<br>
-	<center><input name="submit" type="submit" value="{LANG.prounit_save}" />
+	<center><input class="btn btn-primary" name="submit" type="submit" value="{LANG.prounit_save}" />
 	</center>
 </form>
 <script type="text/javascript">

@@ -1,18 +1,18 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
-<table class="tab1">
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<td width="10px" align="center">&nbsp;</td>
+			<td width="10px" class="text-center">&nbsp;</td>
 			<td><strong>{LANG.money_name}</strong></td>
 			<td><strong>{LANG.currency}</strong></td>
 			<td><strong>{LANG.exchange}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.function}</strong></td>
+			<td width="120px" class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tfoot>
 		<tr>
-			<td colspan="5"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> | <a href="#" id="delall">{LANG.prounit_del_select}</a></td>
+			<td colspan="5"><i class="fa fa-check-square-o">&nbsp;</i><a href="#" id="checkall">{LANG.prounit_select}</a> -<i class="fa fa-square-o">&nbsp;</i><a href="#" id="uncheckall">{LANG.prounit_unselect}</a> - <i class="fa fa-trash-o">&nbsp;</i><a href="#" id="delall">{LANG.prounit_del_select}</a></td>
 		</tr>
 	</tfoot>
 	<tbody>
@@ -22,10 +22,10 @@
 		<td>{ROW.code}</td>
 		<td>{ROW.currency}</td>
 		<td>{ROW.exchange}</td>
-		<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <em class="icon-trash icon-large">&nbsp;</em><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
-		</tr>
+		<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
+	</tr>
 	<!-- END: row -->
-	</tbody>>
+	</tbody>
 </table>
 <script type='text/javascript'>
 	$(function() {
@@ -77,14 +77,14 @@
 </script>
 <!-- END: data -->
 
-<form action="" method="post"><input name="savecat" type="hidden" value="1" />
-	<table class="tab1">
+<form class="form-inline" action="" method="post"><input name="savecat" type="hidden" value="1" />
+	<table class="table table-striped table-bordered table-hover">
 		<caption>{DATA.caption}</caption>
 		<tbody>
 			<tr>
 				<td align="right" width="150px"><strong>{LANG.money_name}: </strong></td>
 				<td>
-				<select name="code">
+				<select class="form-control" name="code">
 					<!-- BEGIN: money -->
 					<option value="{DATAMONEY.value}"{DATAMONEY.selected}>{DATAMONEY.title}</option>
 					<!-- END: money -->
@@ -92,17 +92,17 @@
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.currency}: </strong></td>
-				<td><input style="width: 600px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
+				<td><input class="form-control" style="width: 600px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.exchange}: </strong></td>
-				<td><input style="width: 600px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
+				<td><input class="form-control" style="width: 600px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
 			</tr>
 		</tbody>
 	</table>
 	<br>
-	<div class="center">
-		<input name="submit" type="submit" value="{LANG.prounit_save}" />
+	<div class="text-center">
+		<input class="btn btn-primary" name="submit" type="submit" value="{LANG.prounit_save}" />
 	</div>
 </form>
 <!-- END: main -->

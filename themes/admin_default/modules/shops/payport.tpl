@@ -3,8 +3,8 @@
 <div style="background:#F0F0F0;padding:10px; font-weight:bold">
 	{EDITPAYMENT}
 </div>
-<form action="" method="post">
-	<table class="tab1">
+<form class="form-inline" action="" method="post">
+	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
 				<td>{LANG.paymentname}</td>
@@ -26,11 +26,11 @@
 			<!-- END: config -->
 			<tr>
 				<td>{LANG.images_button}</td>
-				<td><input style="width:400px" type="text" name="images_button" id="homeimg" value="{DATA.images_button}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/></td>
+				<td><input class="form-control" style="width:400px" type="text" name="images_button" id="homeimg" value="{DATA.images_button}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/></td>
 			</tr>
 			<tr>
 				<td><input name="payment" value="{DATA.payment}" type="hidden"></td>
-				<td><input type="submit" value="{LANG.save}" name="saveconfigpaymentedit"></td>
+				<td><input class="btn btn-primary" type="submit" value="{LANG.save}" name="saveconfigpaymentedit"></td>
 			<tr>
 		</tbody>
 	</table>
@@ -43,27 +43,25 @@
 	var url_change_weight = '{url_change}';
 	var url_active = '{url_active}';
 </script>
-<div style="background:#F0F0F0;padding:10px; font-weight:bold">
-	{LANG.paymentcaption}
-</div>
-<table id="edit" class="tab1">
+<table id="edit" class="table table-striped table-bordered table-hover">
+	<caption>{LANG.paymentcaption}</caption>
 	<thead>
 		<tr>
-			<td width="50" align="center"><strong>{LANG.weight}</strong></td>
+			<td width="50" class="text-center"><strong>{LANG.weight}</strong></td>
 			<td><strong>{LANG.paymentname}</strong></td>
 			<td><strong>{LANG.domain}</strong></td>
-			<td align="center"><strong>{LANG.active}</strong></td>
-			<td align="center"><strong>{LANG.function}</strong></td>
+			<td class="text-center"><strong>{LANG.active}</strong></td>
+			<td class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tbody>
 		<!-- BEGIN: paymentloop -->
 		<tr>
-			<td align="center">{DATA_PM.slect_weight}</td>
+			<td class="text-center">{DATA_PM.slect_weight}</td>
 			<td>{DATA_PM.paymentname}</td>
 			<td>{DATA_PM.domain}</td>
-			<td align="center"><input type="checkbox" name="{DATA_PM.payment}" id="{DATA_PM.payment}" {DATA_PM.active} onclick="ChangeActive(this,url_active)"/></td>
-			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></td>
+			<td class="text-center"><input type="checkbox" name="{DATA_PM.payment}" id="{DATA_PM.payment}" {DATA_PM.active} onclick="ChangeActive(this,url_active)"/></td>
+			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{DATA_PM.link_edit}#edit">{LANG.edit}</a></td>
 		</tr>
 		<!-- END: paymentloop -->
 	</tbody>
@@ -71,25 +69,23 @@
 <!-- END: listpay -->
 
 <!-- BEGIN: olistpay -->
-<div style="background:#F0F0F0;padding:10px; font-weight:bold">
-	{LANG.paymentcaption_other}
-</div>
-<table id="edit" class="tab1">
+<table id="edit" class="table table-striped table-bordered table-hover">
+	<caption>{LANG.paymentcaption_other}</caption>
 	<thead>
 		<tr>
-			<td align="center" width="50"><strong>{LANG.setting_stt}</strong></td>
+			<td class="text-center" width="50"><strong>{LANG.setting_stt}</strong></td>
 			<td><strong>{LANG.paymentname}</strong></td>
 			<td><strong>{LANG.domain}</strong></td>
-			<td align="center"><strong>{LANG.function}</strong></td>
+			<td class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tbody>
 		<!-- BEGIN: opaymentloop -->
 		<tr>
-			<td align="center">{ODATA_PM.STT}</td>
+			<td class="text-center">{ODATA_PM.STT}</td>
 			<td>{ODATA_PM.paymentname}</td>
 			<td>{ODATA_PM.domain}</td>
-			<td align="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ODATA_PM.link_edit}#edit">{LANG.payment_integrat}</a></td>
+			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ODATA_PM.link_edit}#edit">{LANG.payment_integrat}</a></td>
 		</tr>
 		<!-- END: opaymentloop -->
 	</tbody>

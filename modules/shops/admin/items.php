@@ -63,7 +63,7 @@ if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 	$ordername = 'id';
 }
 
-$from = $db_config['prefix'] . '_' . $module_data . '_rows AS a LEFT JOIN ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' AS b ON a.user_id=b.userid';
+$from = $db_config['prefix'] . '_' . $module_data . '_rows AS a LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' AS b ON a.user_id=b.userid';
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
@@ -81,7 +81,7 @@ if( $checkss == md5( session_id() ) )
 	}
 	elseif( $stype == 'admin_id' and ! empty( $q ) )
 	{
-		$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
 		$array_admin_id = array();
 		while( list( $admin_id ) = $result->fetch( 3 ) )
@@ -92,7 +92,7 @@ if( $checkss == md5( session_id() ) )
 	}
 	elseif( ! empty( $q ) )
 	{
-		$sql = "SELECT userid FROM " . $db_config['dbsystem'] . "." . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
 
 		$array_admin_id = array();

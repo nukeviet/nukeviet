@@ -77,17 +77,17 @@
 						<tr bgcolor="#B5D6FD">
 							<td>&nbsp;</td>
 							<td>{LANG.name}</td>
-							<td width="50" align="center">{LANG.order_product_number}</td>
+							<td width="50" class="text-center">{LANG.order_product_number}</td>
 							<td width="80" align="right">{LANG.order_product_price}</td>
-							<td width="40" align="center">{LANG.order_product_unit}</td>
+							<td width="40" class="text-center">{LANG.order_product_unit}</td>
 						</tr>
 						<!-- BEGIN: loop -->
 						<tr>
 							<td>{tt}</td>
 							<td>{product_name}</td>
-							<td width="50" align="center">{product_number}</td>
+							<td width="50" class="text-center">{product_number}</td>
 							<td width="80" align="right">{product_price}</td>
-							<td width="40" align="center">{product_unit}</td>
+							<td width="40" class="text-center">{product_unit}</td>
 						</tr>
 						<!-- END: loop -->
 					</table>

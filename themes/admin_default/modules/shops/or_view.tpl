@@ -26,7 +26,7 @@
 					<td>{dateup} {LANG.order_moment} {moment}</td>
 				</tr>
 			</table></td>
-			<td width="100px" valign="top" align="center">
+			<td width="100px" valign="top" class="text-center">
 			<div class="order_code">
 				{LANG.order_code}
 				<br>
@@ -36,13 +36,13 @@
 			</div></td>
 		</tr>
 	</table>
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
 				<td width="30px">{LANG.order_no_products}</td>
 				<td>{LANG.order_products_name}</td>
 				<td>{LANG.content_product_code}</td>
-				<td align="center" width="60px">{LANG.order_product_numbers}</td>
+				<td class="text-center" width="60px">{LANG.order_product_numbers}</td>
 				<td>{LANG.order_product_unit}</td>
 				<td align="right">{LANG.order_product_price} ({unit})</td>
 			</tr>
@@ -50,10 +50,10 @@
 		<tbody>
 		<!-- BEGIN: loop -->
 			<tr>
-				<td align="center">{pro_no}</td>
+				<td class="text-center">{pro_no}</td>
 				<td class="prd"><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></td>
 				<td><strong>{product_code}</strong></td>
-				<td class="amount" align="center">{product_number}</td>
+				<td class="amount" class="text-center">{product_number}</td>
 				<td class="unit">{product_unit}</td>
 				<td class="money" align="right"><strong>{product_price}</strong></td>
 			</tr>
@@ -78,10 +78,10 @@
 		</tr>
 	</table>
 </div>
-<div class="center">
-	<form action="" method="post" name="fpost" id="post"><input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
+<div class="text-center">
+	<form class="form-inline" action="" method="post" name="fpost" id="post"><input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
 		<!-- BEGIN: onsubmit -->
-		<input type="submit" value="{LANG.order_submit}" id="click_submit">
+		<input class="btn btn-primary" type="submit" value="{LANG.order_submit}" id="click_submit">
 		<!-- END: onsubmit -->
 		<!-- BEGIN: onpay -->
 		<input type="button" value="{LANG.order_submit_pay}" id="click_pay">
@@ -90,10 +90,10 @@
 	</form>
 </div>
 <!-- BEGIN: transaction -->
-<table class="tab1">
+<table class="table table-striped table-bordered table-hover">
 	<caption>{LANG.history_transaction}</caption>
 	<thead>
-		<tr align="center">
+		<tr class="text-center">
 			<td width="30px">&nbsp;</td>
 			<td>{LANG.payment_time}</td>
 			<td>{LANG.user_payment}</td>

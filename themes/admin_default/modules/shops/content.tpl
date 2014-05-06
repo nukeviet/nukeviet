@@ -11,35 +11,35 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <script type="text/javascript">var inrow = '{inrow}';</script>
-<form action="" enctype="multipart/form-data" method="post">
+<form class="form-inline" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" value="1" name="save">
 	<input type="hidden" value="{rowcontent.id}" name="id">
 	<div class="gray">
 		<table width="100%" style="margin-bottom:0">
 			<tr>
 				<td valign="top">
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td width="120px"><strong>{LANG.name} <span class="require">(*)</span></strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="txt-full" /></td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="form-control" /></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="txt-half" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255"/><input type="button" value="GET" onclick="get_alias();" style="font-size:11px"  /></td>
+							<td><input class="form-control txt-half" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255"/> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.content_product_code}: </strong></td>
-							<td><input class="txt-full" name="product_code" type="text" value="{rowcontent.product_code}" maxlength="255"/></td>
+							<td><input class="form-control" name="product_code" type="text" value="{rowcontent.product_code}" maxlength="255"/></td>
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1" style="margin-bottom:0">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td width="120px"><strong>{LANG.content_cat} <span class="require">(*)</span></strong></td>
 							<td>
-							<select name="catid" style="width:300px" onchange="nv_getgroup(this)">
+							<select class="form-control" name="catid" style="width:300px" onchange="nv_getgroup(this)">
 								<!-- BEGIN: rowscat -->
 								<option value="{catid_i}" {select} >{xtitle_i} {title_i}</option>
 								<!-- END: rowscat -->
@@ -47,13 +47,13 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1" style="margin-bottom:0">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_homeimg}</strong></td>
 						</tr>
 						<tr>
-							<td><input style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/><input type="button" onclick="nv_add_otherimage();" value="{LANG.add_otherimage}"></td>
+							<td><input class="form-control" style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/><input type="button" onclick="nv_add_otherimage();" value="{LANG.add_otherimage}"></td>
 						</tr>
 					</tbody>
 					<tbody id="otherimage">
@@ -66,68 +66,68 @@
 							<td> {LANG.content_homeimgalt} </td>
 						</tr>
 						<tr>
-							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" /></td>
+							<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" /></td>
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1" style="margin-bottom:0">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_hometext} <span class="require">(*)</span></strong> {LANG.content_notehome}</td>
 						</tr>
 						<tr>
-							<td><textarea class="textareas" name="hometext" style="width: 98%; height:100px">{rowcontent.hometext}</textarea></td>
+							<td><textarea class="form-control" rows="4" name="hometext" style="width:98%">{rowcontent.hometext}</textarea></td>
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tr>
 						<td width="110px"><strong>{LANG.content_product_number}</strong></td>
 						<td>
 						<!-- BEGIN: edit -->
-						<strong>{rowcontent.product_number}</strong> + <input type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" />
+						<strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" />
 						<!-- END: edit -->
 						<!-- BEGIN: add -->
-						<input type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" />
+						<input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" />
 						<!-- END: add -->
-						<select name="product_unit">
+						<select class="form-control" name="product_unit">
 							<!-- BEGIN: rowunit -->
 							<option value="{uid}" {uch}>{utitle}</option>
 							<!-- END: rowunit -->
 						</select></td>
 						<td align="right"><strong>{LANG.content_product_product_price}</strong></td>
-						<td><input type="text" maxlength="50" value="{rowcontent.product_price}" name="product_price" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_money"/>
-						<select name="money_unit">
+						<td><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_price}" name="product_price" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_money"/>
+						<select class="form-control" name="money_unit">
 							<!-- BEGIN: money_unit -->
 							<option value="{MON.code}" {MON.select}>{MON.currency}</option>
 							<!-- END: money_unit -->
 						</select></td>
 						<td align="right"><strong>{LANG.content_product_discounts}</strong></td>
-						<td><input type="text" maxlength="3" value="{rowcontent.product_discounts}" name="product_discounts" style="width: 20px;" /><strong>%</strong></td>
+						<td><input class="form-control" type="text" maxlength="3" value="{rowcontent.product_discounts}" name="product_discounts" style="width: 20px;" /><strong>%</strong></td>
 					</tr>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tr>
 						<td width="110px"><strong>{LANG.content_product_address}</strong></td>
-						<td><input type="text" maxlength="255" value="{rowcontent.address}" name="address" style="width:98%;"/></td>
+						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.address}" name="address" style="width:98%;"/></td>
 					</tr>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tr>
 						<td width="110px"><strong>{LANG.content_sourceid}</strong></td>
 						<td>
-						<select name="sourceid" style="width: 300px;">
+						<select class="form-control" name="sourceid" style="width: 300px;">
 							{sourceid}
-						</select><input type="text" maxlength="255" id="AjaxSourceText" value="{rowcontent.sourcetext}" name="sourcetext" style="width:225px;"></td>
+						</select><input class="form-control" type="text" maxlength="255" id="AjaxSourceText" value="{rowcontent.sourcetext}" name="sourcetext" style="width:225px;"></td>
 					</tr>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_note}</strong></td>
 						</tr>
 						<tr>
-							<td><textarea class="textareas" rows="4" name="note" style="width:98%">{rowcontent.note}</textarea></td>
+							<td><textarea class="form-control" rows="4" name="note" style="width:98%">{rowcontent.note}</textarea></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.content_warranty}</strong></td>
@@ -146,7 +146,7 @@
 				<td valign="top" style="width: 280px">
 				<div style="margin-left:4px;">
 					<!-- BEGIN:listgroup -->
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_group}</strong></td>
@@ -161,7 +161,7 @@
 					</table>
 					<!-- END:listgroup -->
 					<!-- BEGIN:block_cat -->
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_block}</strong></td>
@@ -175,7 +175,7 @@
 						</tbody>
 					</table>
 					<!-- END:block_cat -->
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td style="line-height:16px"><strong>{LANG.content_keywords}</strong>
@@ -187,25 +187,25 @@
 							</tr>
 						</tbody>
 					</table>
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_publ_date}</strong><span class="timestamp">{LANG.content_notetime}</span></td>
 							</tr>
 							<tr>
 								<td>
-									<input name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-									<select name="phour">
+									<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+									<select class="form-control" name="phour">
 										{phour}
 									</select> :
-									<select name="pmin">
+									<select class="form-control" name="pmin">
 										{pmin}
 									</select><input type="button" value="{LANG.del}" style="font-size:11px" onclick="clearobval('publ_date')" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_exp_date}</strong><span class="timestamp">{LANG.content_notetime}</span></td>
@@ -213,12 +213,12 @@
 							<tr>
 								<td>
 								<div>
-									<input name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-									<select name="ehour">
+									<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+									<select class="form-control" name="ehour">
 										{ehour}
 									</select>
 									:
-									<select name="emin">
+									<select class="form-control" name="emin">
 										{emin}
 									</select>
 									<input type="button" value="{LANG.del}" style="font-size:11px;" onclick="clearobval('exp_date')" />
@@ -230,7 +230,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<table class="tab1">
+					<table class="table table-striped table-bordered table-hover">
 						<tbody>
 							<tr>
 								<td><strong>{LANG.content_extra}</strong></td>
@@ -243,7 +243,7 @@
 								</div>
 								<div style="margin-bottom: 2px;">
 									<label>{LANG.content_allowed_comm}</label>
-									<select name="allowed_comm">
+									<select class="form-control" name="allowed_comm">
 										{allowed_comm}
 									</select>
 								</div>
@@ -274,7 +274,7 @@
 		</table>
 	</div>
 	<div class="gray">
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
 					<td><strong>{LANG.content_bodytext} <span class="require">(*)</span></strong>{LANG.content_bodytext_note}</td>
@@ -290,11 +290,11 @@
 	</div>
 	<div class="gray center">
 		<!-- BEGIN:status -->
-		<input name="statussave" type="submit" value="{LANG.save}" />
+		<input class="btn btn-primary" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input name="status0" type="submit" value="{LANG.save_temp}" />
-		<input name="status1" type="submit" value="{LANG.publtime}" />
+		<input class="btn btn-primary" name="status0" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
 	</div>
 </form>
