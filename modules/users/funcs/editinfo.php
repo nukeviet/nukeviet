@@ -120,6 +120,7 @@ while( $row_field = $result_field->fetch() )
 	}
 	$array_field_config[] = $row_field;
 }
+
 if( defined( 'NV_EDITOR' ) )
 {
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
