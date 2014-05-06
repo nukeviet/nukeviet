@@ -118,6 +118,6 @@
 	</table>
 </div>
 <br/>
-<a class="button button-h" href="{EDIT_HREF}">{EDIT_NAME}</a>
-<a class="button button-h" href="{HOME_HREF}">{HOME_NAME}</a>
+<a class="btn btn-default" href="{EDIT_HREF}">{EDIT_NAME}</a>
+<a class="btn btn-default" href="{HOME_HREF}">{HOME_NAME}</a>
 <!-- END: edit_resuilt -->

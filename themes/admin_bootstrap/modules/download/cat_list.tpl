@@ -37,7 +37,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="5">
-						<p><a class="button button-h" href="{ADD_NEW_CAT}">{LANG.addcat_titlebox}</a></p>
+						<p><a class="btn btn-default" href="{ADD_NEW_CAT}">{LANG.addcat_titlebox}</a></p>
 					</td>
 				</tr>
 			</tfoot>

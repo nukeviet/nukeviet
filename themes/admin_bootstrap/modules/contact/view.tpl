@@ -26,19 +26,23 @@
 			</tr>
 		</tbody>
 	</table>
+</div>
+<div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
 				<td class="text-center">
 				<!-- BEGIN: reply -->
-				<a class="button button-h" href="{URL_REPLY}">{LANG.send_title}</a>
+				<a class="btn btn-default" href="{URL_REPLY}">{LANG.send_title}</a>
 				<!-- END: reply -->
-				<a class="button button-h" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
-				<a class="button button-h" href="{DATA.url_back}">{LANG.back_title}</a></td>
+				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
+				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a></td>
 			</tr>
 		</tbody>
 	</table>
-	<!-- BEGIN: data_reply -->
+</div>
+<!-- BEGIN: data_reply -->
+<div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<caption>Re: {DATA.title}</caption>
 		<col class="w150"/>
