@@ -8,7 +8,7 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<td colspan="2">{CONTENTS.0}</th>
+				<th colspan="2">{CONTENTS.0}</th>
 				<th>{CONTENTS.1}</th>
 			</tr>
 		</thead>

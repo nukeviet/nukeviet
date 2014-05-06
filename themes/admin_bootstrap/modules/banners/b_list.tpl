@@ -7,7 +7,7 @@
 		<!-- END: nv_banner_weight -->
 		<colgroup>
 			<col span="5">
-			<col class="w50">
+			<col class="w100">
 			<col class="w200">
 		</colgroup>
 		<thead>
