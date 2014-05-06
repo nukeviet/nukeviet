@@ -13,13 +13,13 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center">{ROW.vid}</td>
+				<td class="text-center">{ROW.vid}</td>
 				<td>{ROW.question}</td>
 				<td>{ROW.totalvote} {LANG.voting_totalcm}</td>
-				<td class="center">{ROW.status}</td>
-				<td class="center">
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_content({ROW.vid}, '{ROW.checksess}')">{GLANG.delete}</a>
+				<td class="text-center">{ROW.status}</td>
+				<td class="text-center">
+					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_content({ROW.vid}, '{ROW.checksess}')">{GLANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->
