@@ -51,7 +51,8 @@
 						<!-- BEGIN: nv_unickmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unickmin -->
-					</select> ->
+					</select>
+					<span class="text-middle"> -> </span>
 					<select name="nv_unickmax" class="form-control text-right">
 						<!-- BEGIN: nv_unickmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
@@ -74,7 +75,8 @@
 						<!-- BEGIN: nv_upassmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upassmin -->
-					</select> ->
+					</select>
+					<span class="text-middle"> -> </span>
 					<select name="nv_upassmax" class="form-control text-right">
 						<!-- BEGIN: nv_upassmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
@@ -101,11 +103,11 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.facebook_client_id}</strong></td>
-					<td><input type="text" class="form-control txt-half" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
+					<td><input type="text" class="form-control" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.facebook_client_secret}</strong></td>
-					<td><input type="text" class="form-control txt-half" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
+					<td><input type="text" class="form-control" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
 				</tr>
 			<tbody>
 		</table>
@@ -117,7 +119,7 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit"></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary w100" type="submit" value="{LANG.save}" name="submit"></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -137,7 +139,7 @@
 				<tr>
 					<td>{LANG.dir_forum}</td>
 					<td>
-					<select class="form-control" name="dir_forum">
+					<select class="form-control w200" name="dir_forum">
 						<option value="">&nbsp;</option>
 						<!-- BEGIN: dir_forum -->
 						<option value="{DIR_FORUM.id}"{DIR_FORUM.select}> {DIR_FORUM.value}</option>
@@ -188,15 +190,15 @@
 				</tr>
 				<tr>
 					<td>{LANG.deny_email}</td>
-					<td><textarea name="deny_email" rows="7" cols="70">{DATA.deny_email}</textarea></td>
+					<td><textarea name="deny_email" rows="7" cols="70" class="form-control">{DATA.deny_email}</textarea></td>
 				</tr>
 				<tr>
 					<td>{LANG.deny_name}</td>
-					<td><textarea name="deny_name" rows="7" cols="70">{DATA.deny_name}</textarea></td>
+					<td><textarea name="deny_name" rows="7" cols="70" class="form-control">{DATA.deny_name}</textarea></td>
 				</tr>
 				<tr>
 					<td>{LANG.password_simple}</td>
-					<td><textarea name="password_simple" rows="7" cols="70">{DATA.password_simple}</textarea></td>
+					<td><textarea name="password_simple" rows="7" cols="70" class="form-control">{DATA.password_simple}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
