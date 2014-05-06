@@ -62,7 +62,7 @@ if( ! empty( $list_cats ) )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
 		$db->select( 'alias,title,description, introtext, catid' )
-			->limit($limit)->offset($pages);
+			->limit($limit)->offset($page);
 
 		$tmp_re = $db->query( $db->sql() );
 		while( list( $alias, $tilterow, $content, $introtext, $catid ) = $tmp_re->fetch( 3 ) )

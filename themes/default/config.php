@@ -10,60 +10,6 @@
 
 if ( !defined( 'NV_IS_FILE_THEMES' ) )	die( 'Stop!!!' );
 
-function SetProperties( $tag, $property_array )
-{
-    $css = $line = '';
-    if( empty( $tag ) ) return '';
-
-    if( is_array( $property_array ) )
-    {
-        foreach( $property_array as $property => $value )
-        {
-            if( $property != 'customcss' )
-            {
-                if( ! empty( $property ) and ! empty( $value ) )
-                {
-                    $property = str_replace( '_', '-', $property );
-                    if( $property == 'background-image' ) $value = "url('" . $value . "')";
-                    $css .= $property . ':' . $value . ';';
-                }
-            }
-            elseif( ! empty( $value ) )
-            {
-                $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
-                $css .= $value;
-            }
-        }
-        $line .= $css == '' ? '' : $tag . '{' . $css . '}';
-    }
-    else
-    {
-        $css .= $property_array;
-        $line .= $css == '' ? '' : $css;
-    }
-
-    return $line;
-}
-
-function CustomStyle( $config_theme )
-{
-    global $module_config, $global_config;
-    $property = '';
-
-    $property .= SetProperties( 'body', $config_theme['body'] );
-    $property .= SetProperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
-    $property .= SetProperties( 'a:hover', $config_theme['a_link_hover'] );
-    $property .= SetProperties( '#wraper', $config_theme['content'] );
-    $property .= SetProperties( '#header', $config_theme['header'] );
-    $property .= SetProperties( '#footer', $config_theme['footer'] );
-	$property .= SetProperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
-	$property .= SetProperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
-	// Không nên thay đổi "generalcss"
-    $property .= SetProperties( 'generalcss', $config_theme['generalcss'] );
-
-    return $property;
-}
-
 $config_theme = array();
 $propety = array();
 
@@ -221,10 +167,11 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->execute();
 
 	nv_del_moduleCache( 'settings' );
-
-	$css_content = CustomStyle( $config_theme );
-
-    file_put_contents( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css", $css_content );
+	
+	if( file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" ) )
+	{
+		nv_deletefile( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" );
+	}
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&rand=' . nv_genpass() );
 	die();

@@ -55,7 +55,7 @@ if( $num_items )
 	}
 }
 
-$contents = allos();
+$contents = nv_theme_statistics_allos( $num_items, $os_list, $cts );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -51,6 +51,7 @@ $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
 $lang_module['numlinks'] = 'Số liên kết';
 $lang_module['newday'] = 'Icon tin mới (ngày)';
+$lang_module['hitstotal'] = 'Số lượt xem';
 $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
 
@@ -127,8 +128,8 @@ $lang_module['content_topic'] = 'Thuộc dòng sự kiện';
 $lang_module['content_homeimg'] = 'Hình minh họa';
 $lang_module['content_homeimgalt'] = 'Chú thích cho hình';
 $lang_module['content_hometext'] = 'Giới thiệu ngắn gọn';
-$lang_module['content_notehome'] = '(Hiển thị đối với mọi đối tượng)';
-$lang_module['content_tag'] = 'Các tag cho bài viêt';
+$lang_module['content_notehome'] = '(Hiển thị đối với mọi đối tượng kể cả khi không được phân quyền)';
+$lang_module['content_tag'] = 'Các tag cho bài viết';
 $lang_module['content_tag_note'] = 'Để tạo tự động, hãy copy toàn bộ nội dung bài viết vào ô trống dưới đây và bấm';
 $lang_module['content_clickhere'] = 'vào đây';
 $lang_module['content_showmore'] = '(Mở rộng để xem chi tiết)';
@@ -234,5 +235,6 @@ $lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng c
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
-
+$lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
+$lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 ?>

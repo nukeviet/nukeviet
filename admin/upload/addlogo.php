@@ -57,24 +57,22 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->addlogo( $upload_logo, '', '', $config_logo );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
-
-		$createImage->resizeXY( 80, 80 );
-		$createImage->save( NV_ROOTDIR . '/' . NV_FILES_DIR . '/images', md5( $path . '/' . $file ), 75 );
-		$create_Image_info = $createImage->create_Image_info;
-
 		$createImage->close();
 
 		if( isset( $array_dirname[$path] ) )
 		{
-			$did = $array_dirname[$path];
+			if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
+			{
+				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] . '/' . $file );
+			}
+
 			$info = nv_getFileInfo( $path, $file );
-			$info['userid'] = $admin_info['userid'];
-			$db->query( "REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
-							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
+
+			$did = $array_dirname[$path];
+			$db->query( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ", srcheight=" . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = '" . $file . "'" );
 		}
 
-		die( 'OK#' . basename( $create_Image_info['src'] ) );
+		die( 'OK#' . basename( $file ) );
 	}
 	else
 	{

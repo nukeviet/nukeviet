@@ -96,7 +96,15 @@
 					<!-- END: sortcomm -->
 				</select></td>
 			</tr>
-
+			<tr>
+				<td><strong>{LANG.captcha}</strong></td>
+				<td>
+				<select name="captcha">
+					<!-- BEGIN: captcha -->
+					<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+					<!-- END: captcha -->
+				</select></td>
+			</tr>
 			<tr>
 				<td><strong>{LANG.adminscomm}</strong></td>
 				<td>

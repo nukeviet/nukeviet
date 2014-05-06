@@ -426,8 +426,6 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
-				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
 				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 
@@ -459,8 +457,6 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
-				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
 				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 
@@ -492,8 +488,6 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 			$xtpl->assign( 'ROW', array(
 				'mod' => $mod,
 				'values' => $values,
-				'inmenu_checked' => $values['in_menu'][0] ? ' checked="checked"' : '',
-				'submenu_checked' => $values['submenu'][0] ? ' checked="checked"' : '',
 				'act_disabled' => ( isset( $values['act'][2] ) and $values['act'][2] == 1 ) ? ' disabled="disabled"' : ''
 			) );
 

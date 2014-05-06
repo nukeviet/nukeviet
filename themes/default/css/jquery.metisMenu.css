@@ -1,0 +1,97 @@
+.arrow {
+	float: right;
+	margin: -32px 12px 0;
+	padding: 4px 8px 4px 8px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.fa.arrow:before {
+	content: "\f104";
+}
+
+.active > a > .fa.arrow:before {
+	content: "\f107";
+}
+
+.plus-times {
+	float: right;
+}
+
+.fa.plus-times:before {
+	content: "\f067";
+}
+
+.active > a > .fa.plus-times {
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.plus-minus {
+	float: right;
+}
+
+.fa.plus-minus:before {
+	content: "\f067";
+}
+
+.active > a > .fa.plus-minus:before {
+	content: "\f068";
+}
+
+.sidebar {
+	display: block;
+	float: left;
+	width: 100%;
+	background: #333;
+}
+.content {
+	display: block;
+	overflow: hidden;
+	width: auto;
+}
+
+.sidebar-nav {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+	background-image: -webkit-linear-gradient(left, color-stop(#333333 10px), color-stop(#222222 10px));
+	background-image: linear-gradient(to right, #0855A1 10px, #043C72 10px);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff222222', GradientType=1);
+	margin: -9px;
+}
+.sidebar-nav ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.sidebar-nav ul li, .sidebar-nav ul a{
+	display: block;
+}
+.sidebar-nav ul a {
+	padding: 10px 20px;
+	color: #e2e2e2;
+	border-top: 1px solid rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
+	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+}
+.sidebar-nav ul a:hover, .sidebar-nav ul a:focus, .sidebar-nav ul a:active {
+	color: #fff;
+	text-decoration: none;
+}
+.sidebar-nav ul ul a {
+	padding: 10px 30px;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+.sidebar-nav ul ul a:hover, .sidebar-nav ul ul a:focus, .sidebar-nav ul ul a:active {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+.sidebar-nav-item {
+	padding-left: 5px;
+}
+.sidebar-nav-item-icon {
+	padding-right: 5px;
+}

@@ -115,6 +115,7 @@ class ips
 		{
 			$clientip = $this->nv_getenv( 'HTTP_COMING_FROM' );
 		}
+
 		if( $this->nv_validip( $clientip ) )
 		{
 			return $clientip;
@@ -177,36 +178,15 @@ class ips
 	{
 		if( $this->client_ip != 'none' )
 		{
-			$client_ips = explode( ',', $this->client_ip );
-			foreach( $client_ips as $ip )
-			{
-				if( $this->nv_validip( trim( $ip ) ) )
-				{
-					return $ip;
-				}
-			}
+			return $this->client_ip;
 		}
 		if( $this->forward_ip != 'none' )
 		{
-			$forward_ips = explode( ',', $this->forward_ip );
-			foreach( $forward_ips as $ip )
-			{
-				if( $this->nv_validip( trim( $ip ) ) )
-				{
-					return $ip;
-				}
-			}
+			return $this->forward_ip;
 		}
 		if( $this->remote_addr != 'none' )
 		{
-			$remote_ips = explode( ',', $this->remote_addr );
-			foreach( $remote_ips as $ip )
-			{
-				if( $this->nv_validip( trim( $ip ) ) )
-				{
-					return $ip;
-				}
-			}
+			return $this->remote_addr;
 		}
 
 		if( $_SERVER['SERVER_NAME'] == 'localhost' )

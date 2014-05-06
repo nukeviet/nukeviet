@@ -18,9 +18,9 @@ function nv_chang_status(vid) {
 	return;
 }
 
-function nv_row_del(vid) {
+function nv_del_department(vid) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_row&nocache=' + new Date().getTime(), 'id=' + vid, function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_department&nocache=' + new Date().getTime(), 'id=' + vid, function(res) {
 			if (res == 'OK') {
 				window.location.href = strHref;
 			} else {

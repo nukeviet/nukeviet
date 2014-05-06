@@ -42,19 +42,16 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 
 			$timeout = $nv_Request->get_int( $module_name . '_timeout', 'cookie', 0 );
 
-			if( defined( 'NV_IS_ADMIN' ) )
-			{
-				$userid = $admin_info['userid'];
-				$name = $admin_info['username'];
-				$email = $admin_info['email'];
-				$status = 1;
-				$timeout = 0;
-			}
-			elseif( defined( 'NV_IS_USER' ) )
+			if( defined( 'NV_IS_USER' ) )
 			{
 				$userid = $user_info['userid'];
 				$name = $user_info['username'];
 				$email = $user_info['email'];
+				if( defined( 'NV_IS_ADMIN' ) )
+				{
+					$status = 1;
+					$timeout = 0;
+				}
 			}
 			else
 			{
@@ -63,7 +60,33 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 				$email = $nv_Request->get_title( 'email', 'post', '' );
 			}
 
-			if( ! nv_capcha_txt( $code ) )
+			$captcha = intval( $module_config[$module]['captcha'] );
+			$show_captcha = true;
+			if( $captcha == 0 )
+			{
+				$show_captcha = false;
+			}
+			elseif( $captcha == 1 AND defined( 'NV_IS_USER' ) )
+			{
+				$show_captcha = false;
+			}
+			elseif( $captcha == 2 AND defined( 'NV_IS_MODADMIN' ) )
+			{
+				if( defined( 'NV_IS_SPADMIN' ) )
+				{
+					$show_captcha = false;
+				}
+				else
+				{
+					$adminscomm = explode( ',', $module_config[$module]['adminscomm'] );
+					if( in_array( $admin_info['admin_id'], $adminscomm ) )
+					{
+						$show_captcha = false;
+					}
+				}
+			}
+
+			if( $show_captcha AND ! nv_capcha_txt( $code ) )
 			{
 				$contents = 'ERR_' . $lang_global['securitycodeincorrect'];
 			}

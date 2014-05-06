@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,search,news,contact,about,voting,rss,menu,page,comment' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 
 function nv_create_table_news( $lang_data, $module_data, $catid )
 {
@@ -57,9 +57,7 @@ function nv_create_table_sys( $lang )
 	 	 description varchar(255) DEFAULT '',
 		 keywords text,
 		 groups_view varchar(255) NOT NULL,
-		 in_menu tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 weight tinyint(3) unsigned NOT NULL DEFAULT '1',
-		 submenu tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 act tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 admins varchar(255) DEFAULT '',
 		 rss tinyint(4) NOT NULL DEFAULT '1',
@@ -148,19 +146,19 @@ function nv_create_table_sys( $lang )
 		 UNIQUE KEY func_id (func_id,layout,theme)
 	 ) ENGINE=MyISAM";
 
- 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss, gid) VALUES
-		('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '0', 1, 1, 1, 1, '', 0, 0),
-		('news', 'news', 'news', 'News', '',1270400000, 1, 1, '', '', '', '', '0', 1, 2, 1, 1, '', 1, 0),
-		('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '0', 1, 5, 1, 1, '', 0, 0),
-		('contact', 'contact', 'contact', 'Contact', '',1275351337, 1, 1, '', '', '', '', '0', 1, 6, 1, 1, '', 0, 0),
-		('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '0', 1, 7, 1, 1, '', 0, 0),
-		('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '0', 0, 8, 1, 1, '', 0, 0),
-		('banners', 'banners', 'banners', 'Banners', '',1270400000, 1,1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
-		('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', '', '', '', '0', 0, 10, 1, 1, '', 0, 0),
-		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '0', 0, 9, 1, 1, '', 0, 0),
-		('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0),
-		('comment', 'comment', 'comment', 'Comment', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 12, 1, 1, '', 0, 0),
-		('page', 'page', 'page', 'page', '', 1279360267, 1, 1, '', '', '', '', '0', 0, 11, 1, 1, '', 0, 0)";
+ 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES
+		('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, '', 0, 0),
+		('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 2, 1, '', 1, 0),
+		('users', 'users', 'users', 'Users', 'Users', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 3, 1, '', 0, 0),
+		('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 4, 1, '', 0, 0),
+		('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', '', '0', 5, 1, '', 0, 0),
+		('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 6, 1, '', 1, 0),
+		('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 7, 1, '', 0, 0),
+		('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 8, 1, '', 0, 0),
+		('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 9, 1, '', 0, 0),
+		('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 10, 1, '', 0, 0),
+		('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 11, 1, '', 0, 0),
+		('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x'),
@@ -177,7 +175,8 @@ function nv_create_table_sys( $lang )
 		('" . $lang . "', 'global', 'autologosize3', '30'),
 		('" . $lang . "', 'global', 'autologomod', ''),
 		('" . $lang . "', 'global', 'cronjobs_next_time', '" . NV_CURRENTTIME . "'),
-		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!')";
+		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
+		('" . $lang . "', 'seotools', 'prcservice', '')";
 
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";
 

@@ -26,8 +26,8 @@ function nv_vote_add_item(mess) {
 	items++;
 	var newitem = '<tr>';
 	newitem += '	<td class="right">' + mess + ' ' + items + '</td>';
-	newitem += '	<td><input class="w300" type="text" value="" name="answervotenews[]"></td>';
-	newitem += '	<td><input class="w350" type="text" value="" name="urlvotenews[]"></td>';
+	newitem += '	<td><input class="form-control" type="text" value="" name="answervotenews[]"></td>';
+	newitem += '	<td><input class="form-control" type="text" value="" name="urlvotenews[]"></td>';
 	newitem += '	</tr>';
 	$("#items").append(newitem);
 }

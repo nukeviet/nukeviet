@@ -19,7 +19,7 @@ function nv_getAllowed()
 {
 	global $module_data, $db, $admin_info;
 
-	$sql = "SELECT id,full_name,admins FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows";
+	$sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
 	$result = $db->query( $sql );
 
 	$contact_allowed = array(
@@ -39,13 +39,13 @@ function nv_getAllowed()
 		}
 
 		$admins = $row['admins'];
-		$admins = array_map( "trim", explode( ";", $admins ) );
+		$admins = array_map( 'trim', explode( ';', $admins ) );
 
 		foreach( $admins as $a )
 		{
-			if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $a ) )
+			if( preg_match( '/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $a ) )
 			{
-				$admins2 = array_map( "intval", explode( "/", $a ) );
+				$admins2 = array_map( 'intval', explode( '/', $a ) );
 
 				if( $admins2[0] == $admin_info['admin_id'] )
 				{

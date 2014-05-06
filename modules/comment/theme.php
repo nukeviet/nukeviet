@@ -41,11 +41,6 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 			'selected' => ( $i == $sortcomm ) ?  ' selected="selected"' : '',
 		) );
 
-		if( $i == $sortcomm )
-		{
-			$xtpl->parse( 'main.sortcomm.active' );
-		}
-
 		$xtpl->parse( 'main.sortcomm' );
 	}
 
@@ -53,13 +48,7 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 
 	if( $allowed_comm )
 	{
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$xtpl->assign( 'NAME', $admin_info['full_name'] );
-			$xtpl->assign( 'EMAIL', $admin_info['email'] );
-			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
-		}
-		elseif( defined( 'NV_IS_USER' ) )
+		if( defined( 'NV_IS_USER' ) )
 		{
 			$xtpl->assign( 'NAME', $user_info['full_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
@@ -72,14 +61,48 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 			$xtpl->assign( 'DISABLED', '' );
 		}
 
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
+		$captcha = intval( $module_config[$module]['captcha'] );
+		$show_captcha = true;
+		if( $captcha == 0 )
+		{
+			$show_captcha = false;
+		}
+		elseif( $captcha == 1 AND defined( 'NV_IS_USER' ) )
+		{
+			$show_captcha = false;
+		}
+		elseif( $captcha == 2 AND defined( 'NV_IS_MODADMIN' ) )
+		{
+			if( defined( 'NV_IS_SPADMIN' ) )
+			{
+				$show_captcha = false;
+			}
+			else
+			{
+				$adminscomm = explode( ',', $module_config[$module]['adminscomm'] );
+				if( in_array( $admin_info['admin_id'], $adminscomm ) )
+				{
+					$show_captcha = false;
+				}
+			}
+		}
+
+		if( $show_captcha )
+		{
+			$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
+			$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
+			$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
+			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
+			$xtpl->parse( 'main.allowed_comm.captcha' );
+		}
+		else
+		{
+			$xtpl->assign( 'GFX_NUM', 0 );
+		}
 		$xtpl->parse( 'main.allowed_comm' );
 	}
 	elseif( $form_login )

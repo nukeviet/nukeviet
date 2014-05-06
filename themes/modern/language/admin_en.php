@@ -10,4 +10,5 @@
 
 $lang_module['show_logo'] = 'Show Logo in banner';
 $lang_module['show_site_name'] = 'Show description of the site in bannner';
-$lang_module['save'] = 'Save configuration';
+$lang_module['module_in_menu'] = 'module in menu';
+$lang_module['save'] = 'Save';

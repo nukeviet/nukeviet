@@ -55,7 +55,7 @@ if( $num_items )
 	}
 }
 
-$contents = allreferers();
+$contents = nv_theme_statistics_allreferers( $num_items, $cts, $host_list );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

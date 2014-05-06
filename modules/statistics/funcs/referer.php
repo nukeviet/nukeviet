@@ -74,7 +74,7 @@ if( $total )
 	$cts['total'] = array( $lang_global['total'], number_format( $total ) );
 }
 
-$contents = referer();
+$contents = nv_theme_statistics_referer( $cts, $total );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

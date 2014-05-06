@@ -31,7 +31,7 @@ if( $cid > 0 AND $checkss == md5( $cid . '_' . $session_id ) )
 		{
 			$is_delete = true;
 		}
-		else
+		elseif( defined( 'NV_IS_MODADMIN' ) )
 		{
 			$adminscomm = explode( ',', $module_config[$module]['adminscomm'] );
 			if( in_array( $admin_info['admin_id'], $adminscomm ) )

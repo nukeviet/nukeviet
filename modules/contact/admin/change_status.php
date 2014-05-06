@@ -14,7 +14,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $id = $nv_Request->get_int( 'id', 'post', 0 );
 
-$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $id;
 $id = $db->query( $sql )->fetchColumn();
 
 if( empty( $id ) ) die( 'NO' );
@@ -22,7 +22,7 @@ if( empty( $id ) ) die( 'NO' );
 $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;
 
-$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET act=' . $new_status . ' WHERE id=' . $id );
+$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET act=' . $new_status . ' WHERE id=' . $id );
 
 nv_del_moduleCache( $module_name );
 

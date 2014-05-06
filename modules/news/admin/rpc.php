@@ -11,17 +11,17 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Ket noi ngon ngu
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_webtools.php' ) )
+if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_webtools.php';
+	require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_webtools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_webtools.php';
+	require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_webtools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/language/en/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/en/admin_webtools.php';
+	require NV_ROOTDIR . '/language/en/admin_seotools.php';
 }
 
 $page_title = $lang_module['rpc'];
@@ -35,7 +35,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
 		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
 
-		$prcservice = ( isset( $module_config['webtools']['prcservice'] ) ) ? $module_config['webtools']['prcservice'] : "";
+		$prcservice = ( isset( $module_config['seotools']['prcservice'] ) ) ? $module_config['seotools']['prcservice'] : "";
 		$prcservice = ( ! empty( $prcservice ) ) ? explode( ',', $prcservice ) : array();
 
 		if( $news_contents['id'] > 0 and ! empty( $prcservice ) )
@@ -58,7 +58,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					if( empty( $getdata ) )
 					{
 						$page_title = $lang_module['rpc'] . ": " . $news_contents['title'];
-						$xtpl = new XTemplate( 'rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/webtools' );
+						$xtpl = new XTemplate( 'rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools' );
 						$xtpl->assign( 'LANG', $lang_module );
 						$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 						$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );

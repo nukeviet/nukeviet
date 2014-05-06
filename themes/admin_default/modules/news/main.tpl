@@ -40,12 +40,13 @@
 <form name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
 	<table class="tab1">
 		<thead>
-			<tr>
-				<td class="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
+			<tr class="center">
+				<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
 				<td><a href="{base_url_name}">{LANG.name}</a></td>
-				<td class="center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></td>
-				<td class="center">{LANG.status}</td>
+				<td><a href="{base_url_publtime}">{LANG.content_publ_date}</a></td>
+				<td>{LANG.status}</td>
 				<td>{LANG.content_admin}</td>
+				<td>{LANG.hitstotal}</td>
 				<td>&nbsp;</td>
 			</tr>
 		</thead>
@@ -57,18 +58,19 @@
 				<td>{ROW.publtime}</td>
 				<td>{ROW.status}</td>
 				<td>{ROW.username}</td>
+				<td>{ROW.hitstotal}</td>
 				<td>{ROW.feature}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
 		<tfoot>
 			<tr class="left">
-				<td colspan="6">
+				<td colspan="7">
 				<select name="action" id="action">
 					<!-- BEGIN: action -->
 					<option value="{ACTION.value}">{ACTION.title}</option>
 					<!-- END: action -->
-				</select> 
+				</select>
 				<input type="button" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
 			</tr>
 		</tfoot>

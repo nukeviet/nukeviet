@@ -16,7 +16,7 @@
 	<!-- END: loop -->
 	<br />
 	<!-- END: theme_type -->
-	Powered by NukeViet 3.3.
+	Powered by NukeViet 4
 </div>
 </body>
 </html>

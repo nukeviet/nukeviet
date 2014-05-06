@@ -7,10 +7,30 @@
 	</div>
 	<!-- END: error -->
 	<!-- BEGIN: form -->
-	<div class="alert alert-info fade in">
-		<em data-dismiss="alert" aria-hidden="true" class="fa fa-times fa-fix fa-pointer pull-right fa-lg">&nbsp;</em>
+	<div class="well">
 		{LANG.note}
 	</div>
+	<!-- BEGIN: department -->
+		<div class="panel panel-default">
+			<div class="panel-heading">{LANG.department}: {DEPARTMENT.full_name}</div>
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>{LANG.phone}</td>
+						<td>{DEPARTMENT.phone}</td>
+					</tr>
+					<tr>
+						<td>{LANG.fax}</td>
+						<td>{DEPARTMENT.fax}</td>
+					</tr>
+					<tr>
+						<td>{LANG.email}</td>
+						<td>{DEPARTMENT.email}</td>
+					</tr>
+				</tbody>
+	  		</table>
+		</div>
+	<!-- END: department -->
 	<form id="fcontact" method="post" action="{ACTION_FILE}" onsubmit="return sendcontact('{NV_GFX_NUM}');">
 		<div class="form-group">
 			<label for="ftitle">{LANG.title}</label>
@@ -65,10 +85,5 @@
 		</div>
 	</form>
 	<!-- END: form -->
-	<!-- BEGIN: bodytext -->
-	<div class="well">
-		{CONTENT.bodytext}
-	</div>
-	<!-- END: bodytext -->
 </div>
 <!-- END: main -->

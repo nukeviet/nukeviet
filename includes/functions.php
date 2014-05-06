@@ -1824,8 +1824,6 @@ function nv_site_mods()
 						'description' => $row['description'],
 						'keywords' => $row['keywords'],
 						'groups_view' => $row['groups_view'],
-						'in_menu' => $row['in_menu'],
-						'submenu' => $row['submenu'],
 						'is_modadmin' => false,
 						'admins' => $row['admins'],
 						'rss' => $row['rss'],

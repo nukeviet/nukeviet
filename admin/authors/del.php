@@ -216,12 +216,12 @@ $page_title = $lang_module['nv_admin_del'];
 // Parse content
 $xtpl = new XTemplate( 'del.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
-$class = $contents['is_error'] ? ' class="error"' : '';
+$class = $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"';
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'CHECKSS', $checkss );
 
-$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
+$xtpl->assign( 'CLASS', $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"' );
 $xtpl->assign( 'TITLE', $contents['title'] );
 $xtpl->assign( 'ACTION', $contents['action'] );
 $xtpl->assign( 'CHECKED', $contents['sendmail'] ? ' checked="checked"' : '' );

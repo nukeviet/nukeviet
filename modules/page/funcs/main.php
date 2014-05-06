@@ -23,6 +23,7 @@ if( $id )
 		Header( 'Location: ' . $base_url_rewrite );
 		die();
 	}
+	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
 
 	if( ! empty( $row['image'] ) && ! nv_is_url( $row['image'] ) )
 	{

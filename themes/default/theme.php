@@ -12,7 +12,7 @@ if( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_site_theme( $contents, $full = true )
 {
-	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info;
+	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config;
 
 	// Determine tpl file, check exists tpl file
 	if( ! $full )
@@ -38,10 +38,33 @@ function nv_site_theme( $contents, $full = true )
 	}
 
     // Style config
-    if ( file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
-    {
-	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css\" />\n";
-    }
+    if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
+	{
+		if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+    	{
+			$config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
+		    $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
+		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
+		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
+		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
+		    $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
+		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
+			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+		    $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
+
+		    file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
+
+			unset( $config_theme, $css_content );
+    	}
+	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
+
+		$module_in_menu = unserialize( $module_config['themes'][$global_config['module_theme'] . '_in_menu'] );
+	}
+	else
+	{
+		$module_in_menu = array();
+	}
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );
@@ -146,61 +169,6 @@ function nv_site_theme( $contents, $full = true )
 				$xtpl->parse( 'main.theme_type.loop' );
 			}
 			$xtpl->parse( 'main.theme_type' );
-		}
-
-		// Footer Menu
-		$arr_home['index'] = array( 'custom_title' => $lang_global['Home'], 'in_menu' => 1 );
-		$footer_menu = array_merge( $arr_home, $site_mods );
-		$footer_menu_size = sizeof( $footer_menu );
-
-		$a = 0;
-		foreach( $footer_menu as $modname => $modvalues )
-		{
-			if( ! empty( $modvalues['in_menu'] ) )
-			{
-				if( $home == 1 and $a == 0 )
-				{
-					$module_current = ' class="current"';
-				}
-				elseif( $modname == $module_name and $home != 1 )
-				{
-					$module_current = ' class="current"';
-				}
-				else
-				{
-					$module_current = '';
-				}
-
-				if( $modname == 'index' )
-				{
-					$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-				}
-				else
-				{
-					$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname;
-				}
-
-				$aryay_menu = array(
-					'title' => $modvalues['custom_title'],
-					'class' => $modname,
-					'current' => $module_current,
-					'link' => $link
-				);
-
-				$xtpl->assign( 'FOOTER_MENU', $aryay_menu );
-
-				if( $a <= 5 )
-				{
-					if( $a < 5 and $a < $footer_menu_size )
-					{
-						$xtpl->parse( 'main.footer_menu.defis' );
-					}
-
-					$xtpl->parse( 'main.footer_menu' );
-				}
-			}
-
-			++ $a;
 		}
 	}
 
