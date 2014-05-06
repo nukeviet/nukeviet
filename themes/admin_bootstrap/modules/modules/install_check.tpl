@@ -86,7 +86,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"><strong style="color:red">{LANG.autoinstall_module_error_warning_permission_folder}</strong></td>
+				<td class="text-center"><strong style="color:red">{LANG.autoinstall_module_error_warning_permission_folder}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
@@ -102,7 +102,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"><strong style="color:red">{LANG.autoinstall_module_error_movefile}</strong></td>
+				<td class="text-center"><strong style="color:red">{LANG.autoinstall_module_error_movefile}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
@@ -118,10 +118,10 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"><strong class="text-success">{LANG.autoinstall_module_unzip_success}</strong></td>
+				<td class="text-center"><strong class="text-success">{LANG.autoinstall_module_unzip_success}</strong></td>
 			</tr>
 			<tr>
-				<td class="center"><a href="{URL_GO}" title="{LANG.autoinstall_module_unzip_setuppage}">{LANG.autoinstall_module_unzip_setuppage}</a></td>
+				<td class="text-center"><a href="{URL_GO}" title="{LANG.autoinstall_module_unzip_setuppage}">{LANG.autoinstall_module_unzip_setuppage}</a></td>
 			</tr>
 		</tbody>
 	</table>

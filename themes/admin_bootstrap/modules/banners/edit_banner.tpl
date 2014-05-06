@@ -105,7 +105,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="center">
+	<div class="text-center">
 		<input type="submit" value="{CONTENTS.submit}" />
 	</div>
 </form>

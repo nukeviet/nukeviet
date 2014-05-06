@@ -21,24 +21,24 @@
 			<caption>{LANG.add_topic}</caption>
 			<tfoot>
 				<tr>
-					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="right"><strong>{LANG.name}: </strong></td>
+					<td class="text-right"><strong>{LANG.name}: </strong></td>
 					<td><input style="width: 650px" name="title" id="idtitle" type="text" value="{DATA.title}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.alias}: </strong></td>
+					<td class="text-right"><strong>{LANG.alias}: </strong></td>
 					<td><input style="width: 600px" name="alias" id="idalias" type="text" value="{DATA.alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('topics', {DATA.topicid});">&nbsp;</em></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.content_homeimg}:</strong></td>
+					<td class="text-right"><strong>{LANG.content_homeimg}:</strong></td>
 					<td><input style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" /></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.keywords}: </strong></td>
+					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
 					<td><input style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>

@@ -63,7 +63,7 @@
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="checksessseting" value="{CHECKSESSSETING}" />
-	<div class="center">
+	<div class="text-center">
 		<input type="submit" value="{LANG.nv_admin_edit_save}" class="btn btn-primary" />
 	</div>
 </form>

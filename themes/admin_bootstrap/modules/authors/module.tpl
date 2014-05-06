@@ -23,9 +23,9 @@
 				</select></td>
 				<td>{ROW.module}</td>
 				<td>{ROW.custom_title}</td>
-				<td class="center"><input id="change_act_1_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 1);" type="checkbox" value="1" {CHANG_ACT.1} /></td>
-				<td class="center"><input id="change_act_2_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 2);" type="checkbox" value="1" {CHANG_ACT.2} /></td>
-				<td class="center"><input id="change_act_3_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 3);" type="checkbox" value="1" {CHANG_ACT.3} /></td>
+				<td class="text-center"><input id="change_act_1_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 1);" type="checkbox" value="1" {CHANG_ACT.1} /></td>
+				<td class="text-center"><input id="change_act_2_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 2);" type="checkbox" value="1" {CHANG_ACT.2} /></td>
+				<td class="text-center"><input id="change_act_3_{ROW.mid}" onclick="nv_chang_act('{ROW.mid}', 3);" type="checkbox" value="1" {CHANG_ACT.3} /></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

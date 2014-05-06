@@ -5,7 +5,7 @@
 		<thead>
 			<tr>
 				<!-- BEGIN: head -->
-				<td>{HEAD}</td>
+				<th>{HEAD}</th>
 				<!-- END: head -->
 			</tr>
 		</thead>
@@ -30,7 +30,7 @@
 		<thead>
 			<tr>
 				<!-- BEGIN: vhead -->
-				<td>{VHEAD}</td>
+				<th>{VHEAD}</th>
 				<!-- END: vhead -->
 			</tr>
 		</thead>

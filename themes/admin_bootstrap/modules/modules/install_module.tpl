@@ -55,10 +55,10 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"> {LANG.autoinstall_module_uploadedfile} <strong style="color:red">{INFO.filename}</strong> - {LANG.autoinstall_module_uploadedfilesize} <strong style="color:red">{INFO.filesize}</strong></td>
+				<td class="text-center"> {LANG.autoinstall_module_uploadedfile} <strong style="color:red">{INFO.filename}</strong> - {LANG.autoinstall_module_uploadedfilesize} <strong style="color:red">{INFO.filesize}</strong></td>
 			</tr>
 			<tr>
-				<td class="center"> {LANG.autoinstall_module_uploaded_filenum} <strong style="color:red">{INFO.filenum}</strong></td>
+				<td class="text-center"> {LANG.autoinstall_module_uploaded_filenum} <strong style="color:red">{INFO.filenum}</strong></td>
 			</tr>
 		</tbody>
 	</table>
@@ -67,7 +67,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"><strong>{LANG.autoinstall_module_checkfile_notice}</strong>
+				<td class="text-center"><strong>{LANG.autoinstall_module_checkfile_notice}</strong>
 				<br />
 				<br />
 				<input type="button" name="checkfile" value="{LANG.autoinstall_module_checkfile}" class="btn btn-primary"/></td>

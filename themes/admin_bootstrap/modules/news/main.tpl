@@ -41,7 +41,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
-				<tr class="center">
+				<tr class="text-center">
 					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
 					<th><a href="{base_url_name}">{LANG.name}</a></th>
 					<th><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
@@ -51,11 +51,11 @@
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
-			<tbody class="center">
+			<tbody class="text-center">
 				<!-- BEGIN: loop -->
 				<tr>
 					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
-					<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+					<td class="text-left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
 					<td>{ROW.publtime}</td>
 					<td>{ROW.status}</td>
 					<td>{ROW.username}</td>
@@ -65,7 +65,7 @@
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
-				<tr class="left">
+				<tr class="text-left">
 					<td colspan="7">
 					<select name="action" id="action">
 						<!-- BEGIN: action -->
@@ -80,7 +80,7 @@
 </form>
 <!-- BEGIN: generate_page -->
 <br />
-<p class="center">
+<p class="text-center">
 	{GENERATE_PAGE}
 </p>
 <!-- END: generate_page -->

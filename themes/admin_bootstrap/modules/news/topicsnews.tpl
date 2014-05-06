@@ -12,15 +12,15 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+					<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="fa fa-trash-o">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
 					<td><input type="checkbox" name="newsid" value="{ROW.id}"/></td>
-					<td class="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-					<td class="center">{ROW.delete}</td>
+					<td class="text-left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+					<td class="text-center">{ROW.delete}</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

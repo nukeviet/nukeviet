@@ -29,7 +29,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<!-- BEGIN: reply -->
 				<a class="button button-h" href="{URL_REPLY}">{LANG.send_title}</a>
 				<!-- END: reply -->

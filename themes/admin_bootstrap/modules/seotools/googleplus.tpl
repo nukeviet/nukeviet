@@ -52,7 +52,7 @@
 		<tbody>
 			<!-- BEGIN: googleplus -->
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<select id="id_weight_{ROW.gid}" onchange="nv_chang_googleplus({ROW.gid});">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>

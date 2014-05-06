@@ -7,7 +7,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td colspan="2" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_add" type="submit" value="{DATA.submit}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_add" type="submit" value="{DATA.submit}" class="btn btn-primary" /></td>
 				</tr>
 			</tfoot>
 			<tbody>

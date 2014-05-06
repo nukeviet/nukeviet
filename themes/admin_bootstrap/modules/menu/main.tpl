@@ -19,7 +19,7 @@
 			<col class="w150">
 		</colgroup>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th><strong>{LANG.number}</strong></th>
 				<th><strong>{LANG.name_block}</strong></th>
 				<th><strong>{LANG.menu}</strong></th>
@@ -37,13 +37,13 @@
 		<tbody>
 			<!-- BEGIN: loop1 -->
 			<tr>
-				<td class="center"> {ROW.nb} </td>
+				<td class="text-center"> {ROW.nb} </td>
 				<td><a href="{ROW.link_view}" title="{ROW.title}"><strong>{ROW.title}</strong></a></td>
 				<td> {ROW.menu_item} </td>
 				<td> {ROW.description} </td>
-				<td class="center">
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a>
+				<td class="text-center">
+					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id},{ROW.num});">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop1 -->
@@ -66,16 +66,16 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="right"><strong>{LANG.name_block}: </strong></td>
+					<td class="text-right"><strong>{LANG.name_block}: </strong></td>
 					<td><input style="width: 650px" name="title" type="text" value="{DATAFORM.title}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.menu_description}: </strong></td>
+					<td class="text-right"><strong>{LANG.menu_description}: </strong></td>
 					<td><input style="width: 650px" name="description" type="text" value="{DATAFORM.description}" maxlength="255" /></td>
 				</tr>
 			</tbody>

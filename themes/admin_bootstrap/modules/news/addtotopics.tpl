@@ -14,7 +14,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td class="center"><input name="checkall" type="checkbox"/></td>
+					<td class="text-center"><input name="checkall" type="checkbox"/></td>
 					<td>
 					<select name="topicsid">
 						<!-- BEGIN: topicsid -->
@@ -27,7 +27,7 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td class="center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
+					<td class="text-center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
 					<td>{ROW.title}</td>
 				</tr>
 				<!-- END: loop -->

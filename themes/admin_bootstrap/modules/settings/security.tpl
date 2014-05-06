@@ -116,7 +116,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<caption> {LANG.banip} </caption>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th>{LANG.banip_ip}</th>
 				<th>{LANG.banip_mask}</th>
 				<th>{LANG.banip_area}</th>

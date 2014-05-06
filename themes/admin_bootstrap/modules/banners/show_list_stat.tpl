@@ -27,7 +27,7 @@
 	</table>
 </div>
 <!-- BEGIN: generate_page -->
-<div class="center">
+<div class="text-center">
 	{CONTENTS.generate_page}
 </div>
 <!-- END: generate_page -->

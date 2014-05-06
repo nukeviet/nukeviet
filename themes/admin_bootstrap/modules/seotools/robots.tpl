@@ -38,7 +38,7 @@
 				<!-- END: loop -->
 				<!-- BEGIN: other -->
 				<tr>
-					<td class="center">{DATA.number}</td>
+					<td class="text-center">{DATA.number}</td>
 					<td><input class="form-control" type="text" value="{DATA.filename}" name="fileother[{DATA.number}]" /></td>
 					<td><select name="optionother[{DATA.number}]" class="form-control">
 						<!-- BEGIN: option -->

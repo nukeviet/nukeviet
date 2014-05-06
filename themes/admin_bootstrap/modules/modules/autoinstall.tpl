@@ -17,7 +17,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2" class="center"><input name="method" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input name="method" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
 				</tr>
 			</tbody>
 		</table>

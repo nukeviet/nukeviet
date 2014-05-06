@@ -2,7 +2,7 @@
 <br />
 <br />
 <br />
-<p class="center">
+<p class="text-center">
 	{INFO}
 </p>
 <meta http-equiv="Refresh" content="1;URL={URL}" />

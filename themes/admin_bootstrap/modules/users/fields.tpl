@@ -3,7 +3,7 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<td style="width:60px;">{LANG.weight}</th>
 				<th>{LANG.field_id}</th>
 				<th>{LANG.field_title}</th>
@@ -17,7 +17,7 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<select id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
@@ -26,12 +26,12 @@
 				<th>{ROW.field}</th>
 				<th>{ROW.field_lang}</th>
 				<th>{ROW.field_type} </th>
-				<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></th>
-				<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></th>
-				<td class="center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></th>
+				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></th>
+				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></th>
+				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></th>
 				<th>
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<em class="fa fa-edit">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 				</th>
 			</tr>
 			<!-- END: loop -->
@@ -244,7 +244,7 @@
 				<col span="3"/>
 			</colgroup>
 			<thead>
-				<tr class="center">
+				<tr class="text-center">
 					<th>{LANG.field_number}</th>
 					<th>{LANG.Value}</th>
 					<th>{LANG.field_text}</th>
@@ -258,7 +258,7 @@
 			</tfoot>
 			<tbody>
 				<!-- BEGIN: loop_field_choice -->
-				<tr class="center">
+				<tr class="text-center">
 					<td>{FIELD_CHOICES.number}</td>
 					<td><input class="w100 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" /></td>
 					<td><input class="w350" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
@@ -278,7 +278,7 @@
 	var items = '{FIELD_CHOICES_NUMBER}';
 	function nv_choice_fields_additem() {
 		items++;
-		var newitem = '<tr class="center">';
+		var newitem = '<tr class="text-center">';
 		newitem += '	<td>' + items + '</td>';
 		newitem += '	<td><input class="w100 validalphanumeric" type="text" value="" name="field_choice[' + items + ']"></td>';
 		newitem += '	<td><input clas="w350" type="text" value="" name="field_choice_text[' + items + ']"></td>';

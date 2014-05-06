@@ -26,16 +26,16 @@
 				<td>
 				<!-- BEGIN: t3 -->
 				<div class="stat2">
-					<div class="left"></div>
-					<div class="center" style="width:{WIDTH}px;"></div>
-					<div class="right"></div>
+					<div class="text-left"></div>
+					<div class="text-center" style="width:{WIDTH}px;"></div>
+					<div class="text-right"></div>
 					<div class="text">
 						{ROW.1}%
 					</div>
 				</div>
 				<!-- END: t3 -->
 				</td>
-				<td class="right">{ROW.2}</td>
+				<td class="text-right">{ROW.2}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

@@ -37,7 +37,7 @@
 					<!-- BEGIN: head_td -->
 					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
 					<!-- END: head_td -->
-					<td class="center"><strong>{LANG.memberlist_active}</strong></th>
+					<td class="text-center"><strong>{LANG.memberlist_active}</strong></th>
 					<th><strong>{LANG.funcs}</strong></th>
 				</tr>
 			</thead>
@@ -65,13 +65,13 @@
 					<td> {CONTENT_TD.full_name} </td>
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
-					<td class="center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
+					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
 					<td style="white-space: nowrap">
 					<!-- BEGIN: edit -->
-					&nbsp;&nbsp; <em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
+					&nbsp;&nbsp; <em class="fa fa-edit">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
 					<!-- END: edit -->
 					<!-- BEGIN: del -->
-					&nbsp;&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+					&nbsp;&nbsp; <em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 					<!-- END: del -->
 					</td>
 				</tr>

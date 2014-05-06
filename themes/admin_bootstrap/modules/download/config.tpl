@@ -9,7 +9,7 @@
 				</colgroup>
 				<tfoot>
 					<tr>
-						<td class="center" colspan="2"><input type="submit" name="submit" value="{LANG.config_confirm}" /></td>
+						<td class="text-center" colspan="2"><input type="submit" name="submit" value="{LANG.config_confirm}" /></td>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -71,7 +71,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.config_maxfilesize}</td>
-						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="right"/> {LANG.config_maxfilemb}
+						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="text-right"/> {LANG.config_maxfilemb}
 						<br />
 						{LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE}</td>
 					</tr>

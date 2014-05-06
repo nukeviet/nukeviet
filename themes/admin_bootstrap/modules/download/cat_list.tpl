@@ -14,8 +14,8 @@
 					<th> {LANG.category_cat_sort} </th>
 					<th> {LANG.category_cat_name} </th>
 					<th> {LANG.category_cat_parent} </th>
-					<td class="center"> {LANG.category_cat_active} </th>
-					<td class="center"> {LANG.category_cat_feature} </th>
+					<td class="text-center"> {LANG.category_cat_active} </th>
+					<td class="text-center"> {LANG.category_cat_feature} </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,8 +29,8 @@
 					</select></td>
 					<td><strong><a href="{ROW.titlelink}">{ROW.title}</a></strong>{ROW.numsub} </td>
 					<td> {ROW.parentid} </td>
-					<td class="center"><input type="checkbox" name="active" id="change_status{ROW.id}" value="1"{ROW.status} onclick="nv_chang_status({ROW.id});" /></td>
-					<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({ROW.id});">{GLANG.delete}</a></td>
+					<td class="text-center"><input type="checkbox" name="active" id="change_status{ROW.id}" value="1"{ROW.status} onclick="nv_chang_status({ROW.id});" /></td>
+					<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({ROW.id});">{GLANG.delete}</a></td>
 				</tr>
 				<!-- END: row -->
 			</tbody>
