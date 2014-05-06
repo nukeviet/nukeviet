@@ -171,8 +171,8 @@ else
 		$row['allowed_comm'] = $array_allowed_comm[$module_config[$mod_name]['allowed_comm']];
 		$row['view_comm'] = $array_allowed_comm[$module_config[$mod_name]['view_comm']];
 		$row['auto_postcomm'] = $lang_module['auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']];
-		$row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'check-empty';
-		$row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'check-empty';
+		$row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
+		$row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.list.loop' );
 	}
