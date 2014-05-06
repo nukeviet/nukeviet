@@ -20,11 +20,11 @@
 		</colgroup>
 		<thead>
 			<tr class="text-center">
-				<th><strong>{LANG.number}</strong></th>
-				<th><strong>{LANG.name_block}</strong></th>
-				<th><strong>{LANG.menu}</strong></th>
-				<th><strong>{LANG.menu_description}</strong></th>
-				<th><strong>{LANG.action}</strong></th>
+				<th>{LANG.number}</th>
+				<th>{LANG.name_block}</th>
+				<th>{LANG.menu}</th>
+				<th>{LANG.menu_description}</th>
+				<th>{LANG.action}</th>
 			</tr>
 		</thead>
 		<!-- BEGIN: generate_page -->

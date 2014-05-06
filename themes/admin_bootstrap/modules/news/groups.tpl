@@ -5,9 +5,7 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
+<div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -19,21 +17,21 @@
 			<caption>{LANG.add_block_cat}</caption>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.name}: </strong></td>
-					<td><input class="w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+					<td><input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
-					<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="right top">
@@ -43,7 +41,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+					<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 				</tr>
 			</tbody>
 		</table>

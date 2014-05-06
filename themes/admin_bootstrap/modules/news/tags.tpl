@@ -1,19 +1,17 @@
 <!-- BEGIN: main -->
-<form action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
+<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
 	<label><em>{LANG.search_note}</em></label>
 	<br />
 	{LANG.search_key}:
-	<input id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
-	<input type="submit" value="{LANG.search}" /><br /><br />
+	<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
+	<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br /><br />
 </form>
 <div id="module_show_list">
 	{TAGS_LIST}
 </div>
 <br />
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
+<div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -25,17 +23,17 @@
 			<caption>{LANG.add_tags}</caption>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> {GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> {GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
-					<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="right top">
@@ -45,7 +43,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+					<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 				</tr>
 			</tbody>
 		</table>

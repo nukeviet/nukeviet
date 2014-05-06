@@ -3,10 +3,10 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<th style="width:60px;">{LANG.weight}</th>
+				<th class="w100">{LANG.weight}</th>
 				<th>{LANG.name}</th>
 				<th>{LANG.link}</th>
-				<th style="width:120px;"> &nbsp;</th>
+				<th class="w150"> &nbsp;</th>
 			</tr>
 		</thead>
 		<!-- BEGIN: generate_page -->
@@ -20,7 +20,7 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">
-				<select id="id_weight_{ROW.sourceid}" onchange="nv_chang_sources('{ROW.sourceid}','weight');">
+				<select class="form-control" id="id_weight_{ROW.sourceid}" onchange="nv_chang_sources('{ROW.sourceid}','weight');">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 					<!-- END: weight -->

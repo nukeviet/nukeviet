@@ -20,31 +20,6 @@
  NukeViet's custom styles
  ========================================================================== */
 
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(../font/opensans.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../font/opensans-bold.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(../font/opensans-italic.woff) format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 700;
-  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(../font/opensans-bolditalic.woff) format('woff');
-}
-
 html {
 	background: #F0F0F0 url(../images/background.png);
 }
@@ -81,30 +56,6 @@ a.link {
 
 a.link:hover {
 	text-decoration: none !important
-}
-
-.left {
-	text-align: left
-}
-
-.center {
-	text-align: center
-}
-
-.right {
-	text-align: right
-}
-
-.top {
-	vertical-align: top;
-}
-
-input.txt-full, select.txt-full, textarea.txt-full {
-	width: 98%
-}
-
-input.txt-half, select.txt-half, textarea.txt-half {
-	width: 49%
 }
 
 #wrapper {
@@ -325,33 +276,6 @@ h1, h2, h3, h4, h5, h6{
 	width: 100px;
 	float: right
 }
-
-/* Block quote
- -----------------------------------------------------------------------------*/
-div.quote {
-	background: #F0F0F0;
-	border-bottom: 1px solid #E6E6E6;
-	border-top: 1px solid #E6E6E6;
-	margin: 10px 0px 10px 0px;
-	padding: 4px 10px 4px 10px;
-	position: relative
-}
-
-div.quote blockquote {
-	background: #F0F0F0 url('../images/top-quote.gif') no-repeat left top;
-	color: #333;
-	font: 12px Arial, Helvetica, sans-serif;
-	margin: 2px;
-	padding: 3px;
-	text-indent: 23px
-}
-
-div.quote blockquote span {
-	background: transparent url('../images/bottom-quote.gif') no-repeat bottom right;
-	display: inline-block;
-	width: 97%
-}
-
 
 #mudimPanel{
 	left:0 !important

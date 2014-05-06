@@ -14,7 +14,7 @@ $mod = $nv_Request->get_title( 'mod', 'post' );
 
 if( empty( $mod ) or ! preg_match( $global_config['check_module'], $mod ) ) die( 'NO_' . $mod );
 
-$sth = $db->prepare( 'SELECT act, in_menu FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
+$sth = $db->prepare( 'SELECT act, module_file FROM ' . NV_MODULES_TABLE . ' WHERE title= :title' );
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 $row = $sth->fetch();
@@ -24,16 +24,13 @@ if( empty( $row ) )
 }
 
 $act = intval( $row['act'] );
-$in_menu = intval( $row['in_menu'] );
 
 if( $act == 2 )
 {
-	if( ! is_dir( NV_ROOTDIR . '/modules/' . $mod ) )
+	if( ! is_dir( NV_ROOTDIR . '/modules/' . $row['module_file'] ) )
 	{
 		die( 'NO_' . $mod );
 	}
-
-	$in_menu = 0;
 }
 
 $act = ( $act != 1 ) ? 1 : 0;
@@ -42,7 +39,7 @@ if( $act == 0 and $mod == $global_config['site_home_module'] )
 	die( 'NO_' . $mod );
 }
 
-$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET in_menu=' . $in_menu . ', act=' . $act . ' WHERE title= :title');
+$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET act=' . $act . ' WHERE title= :title');
 $sth->bindParam( ':title', $mod, PDO::PARAM_STR );
 $sth->execute();
 

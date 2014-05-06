@@ -10,12 +10,12 @@
 		<col span="6" style="white-space: nowrap;" />
 		<thead>
 			<tr>
-				<td class="text-center">{LANG.weight}</th>
-				<th>{LANG.name}</th>
-				<td class="text-center">{LANG.inhome}</th>
-				<th>{LANG.viewcat_page}</th>
-				<td class="text-center">{LANG.numlinks}</th>
-				<td class="text-center">{LANG.newday}</th>
+				<th class="text-center">{LANG.weight}</th>
+				<th class="text-center">{LANG.name}</th>
+				<th class="text-center">{LANG.inhome}</th>
+				<th class="text-center">{LANG.viewcat_page}</th>
+				<th class="text-center">{LANG.numlinks}</th>
+				<th class="text-center">{LANG.newday}</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -27,7 +27,7 @@
 				{STT}
 				<!-- END: stt -->
 				<!-- BEGIN: weight -->
-				<select id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
+				<select class="form-control" id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
 					<!-- BEGIN: loop -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 					<!-- END: loop -->
@@ -44,7 +44,7 @@
 				{INHOME}
 				<!-- END: disabled_inhome -->
 				<!-- BEGIN: inhome -->
-				<select id="id_inhome_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','inhome');">
+				<select class="form-control" id="id_inhome_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','inhome');">
 					<!-- BEGIN: loop -->
 					<option value="{INHOME.key}"{INHOME.selected}>{INHOME.title}</option>
 					<!-- END: loop -->
@@ -56,7 +56,7 @@
 				{VIEWCAT}
 				<!-- END: disabled_viewcat -->
 				<!-- BEGIN: viewcat -->
-				<select id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
+				<select class="form-control" id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
 					<!-- BEGIN: loop -->
 					<option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
 					<!-- END: loop -->
@@ -68,7 +68,7 @@
 				{NUMLINKS}
 				<!-- END: title_numlinks -->
 				<!-- BEGIN: numlinks -->
-				<select id="id_numlinks_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','numlinks');">
+				<select class="form-control" id="id_numlinks_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','numlinks');">
 					<!-- BEGIN: loop -->
 					<option value="{NUMLINKS.key}"{NUMLINKS.selected}>{NUMLINKS.title}</option>
 					<!-- END: loop -->
@@ -80,7 +80,7 @@
 				{NEWDAY}
 				<!-- END: title_newday -->
 				<!-- BEGIN: newday -->
-				<select id="id_newday_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','newday');">
+				<select class="form-control" id="id_newday_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','newday');">
 					<!-- BEGIN: loop -->
 					<option value="{NEWDAY.key}"{NEWDAY.selected}>{NEWDAY.title}</option>
 					<!-- END: loop -->

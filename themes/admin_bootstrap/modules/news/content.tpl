@@ -10,22 +10,22 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
+<form class="form-inline" role="form" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
 	<div class="gray">
 		<table style="margin-bottom:0; width: 100%">
 			<tr>
 				<td class="top">
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<col class="w200" />
 					<col />
 					<tbody>
 						<tr>
 							<td><strong>{LANG.name}</strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="w350" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control w350" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias();">&nbsp;</em></td>
+							<td><input class="form-control w350" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias();">&nbsp;</em></td>
 						</tr>
 						<tr>
 							<td class="top" style="line-height:18px"><strong>{LANG.content_cat}</strong>
@@ -33,7 +33,7 @@
 							</td>
 							<td class="top">
 							<div style="padding:4px; height:130px;background:#FFFFFF; overflow:auto; border: 1px solid #CCCCCC">
-								<table class="tab1">
+								<table class="table table-striped table-bordered table-hover">
 									<col span="2" style="width:50%">
 									<tbody>
 										<!-- BEGIN: catid -->
@@ -48,38 +48,38 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td class="top"><strong>{LANG.content_topic}</strong></td>
 						</tr>
 						<tr>
 							<td>
-							<select class="w300" name="topicid">
+							<select class="form-control w300" name="topicid">
 								<!-- BEGIN: rowstopic -->
 								<option value="{topicid}" {sl}>{topic_title}</option>
 								<!-- END: rowstopic -->
-							</select> 
-							<input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
+							</select>
+							<input class="form-control w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<col class="w200" />
 					<col />
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_homeimg}</strong></td>
-							<td><input style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+							<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
-							<td><input type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:98%" /></td>
+							<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:98%" /></td>
 						</tr>
 						<tr>
 							<td>{LANG.imgposition}</td>
 							<td>
-							<select name="imgposition">
+							<select class="form-control" name="imgposition">
 								<!-- BEGIN: looppos -->
 								<option value="{id_imgposition}" {posl}>{title_imgposition}</option>
 								<!-- END: looppos -->
@@ -87,7 +87,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
@@ -119,7 +119,7 @@
                                     <div class="wrap">
                                         <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
                                         <div class="innerWrap">
-                                            <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="inputtext textInput" placeholder="" style="width: 100%;" />
+                                            <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="form-control inputtext textInput" placeholder="" style="width: 100%;" />
                                         </div>
                                     </div>
                                 </div>
@@ -145,7 +145,7 @@
                                 <div class="wrap">
                                     <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
                                     <div class="innerWrap">
-                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="inputtext textInput" placeholder="" style="width: 100%;" />
+                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control inputtext textInput" placeholder="" style="width: 100%;" />
                                     </div>
                                 </div>
                             </div>
@@ -156,12 +156,12 @@
 							<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 						</p>
 						<div class="message_body center">
-							<input name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-							<select name="phour">
+							<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
+							<select class="form-control" name="phour">
 								{phour}
 							</select>
 							:
-							<select name="pmin">
+							<select class="form-control" name="pmin">
 								{pmin}
 							</select>
 						</div>
@@ -171,12 +171,12 @@
 							<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
 						</p>
 						<div class="message_body center">
-							<input name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
-							<select name="ehour">
+							<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
+							<select class="form-control" name="ehour">
 								{ehour}
 							</select>
 							:
-							<select name="emin">
+							<select class="form-control" name="emin">
 								{emin}
 							</select>
 							<div style="margin-top: 5px;">
@@ -196,7 +196,7 @@
 							</div>
 							<div style="margin-bottom: 2px;">
 								<label> {LANG.content_allowed_comm} </label>
-								<select name="allowed_comm">
+								<select class="form-control" name="allowed_comm">
 									{allowed_comm}
 								</select>
 							</div>
@@ -223,7 +223,7 @@
 		</table>
 	</div>
 	<div class="gray">
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
 					<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
@@ -236,16 +236,16 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<col class="w200" />
 			<col />
 			<tbody>
 				<tr>
 					<td><strong>{LANG.content_author}</strong></td>
-					<td><input type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:225px; margin-right: 50px;" />
+					<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.author}" name="author" style="width:225px; margin-right: 50px;" />
 					<!-- BEGIN: googleplus -->
 					{LANG.googleplus}
-					<select name="gid">
+					<select class="form-control" name="gid">
 						<!-- BEGIN: gid -->
 						<option value="{GOOGLEPLUS.gid}"{GOOGLEPLUS.selected}>{GOOGLEPLUS.title}</option>
 						<!-- END: gid -->
@@ -255,7 +255,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.content_sourceid}</strong></td>
-					<td><input type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width: 98%;" /></td>
+					<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width: 98%;" /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.content_copyright}</strong></td>
@@ -269,17 +269,17 @@
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status -->
-		<input name="statussave" type="submit" value="{LANG.save}" />
+		<input class="btn btn-primary" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input name="status4" type="submit" value="{LANG.save_temp}" />
-		<input name="status1" type="submit" value="{LANG.publtime}" />
+		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
         <!-- BEGIN:status1 -->
-		<input name="status4" type="submit" value="{LANG.save_temp}" />
-		<input name="status6" type="submit" value="{LANG.save_send_admin}" />
+		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary" name="status6" type="submit" value="{LANG.save_send_admin}" />
             <!-- BEGIN:status0 -->
-            <input name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+            <input class="btn btn-primary" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
             <!-- END:status0 -->
 		<!-- END:status1 -->
 		<br />

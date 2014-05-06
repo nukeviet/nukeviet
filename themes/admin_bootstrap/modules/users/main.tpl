@@ -1,29 +1,25 @@
 <!-- BEGIN: main -->
 <div id="users">
 	<!-- BEGIN: is_forum -->
-	<div class="quote">
-		<blockquote class="error">
-			<span>{LANG.modforum}</span>
-		</blockquote>
-	</div>
+	<div class="alert alert-warning">{LANG.modforum}</div>
 	<!-- END: is_forum -->
 	<div style="padding-top:10px;">
-		<form action="{FORM_ACTION}" method="get">
+		<form class="form-inline" action="{FORM_ACTION}" method="get">
 			<input name="{NV_NAME_VARIABLE}" type="hidden" value="{MODULE_NAME}" />
 			<span><strong>{LANG.search_type}:</strong></span>
-			<select name="method" id="f_method">
+			<select class="form-control" name="method" id="f_method">
 				<option value="">---</option>
 				<!-- BEGIN: method -->
 				<option value="{METHODS.key}"{METHODS.selected}>{METHODS.value}</option>
 				<!-- END: method -->
 			</select>
-			<input type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
-			<select name="usactive">
+			<input class="form-control" type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
+			<select class="form-control" name="usactive">
 				<!-- BEGIN: usactive -->
 				<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
 				<!-- END: usactive -->
 			</select>
-			<input name="search" type="submit" value="{LANG.submit}" />
+			<input class="btn btn-primary" name="search" type="submit" value="{LANG.submit}" />
 			<p>
 				{LANG.search_note}
 			</p>
@@ -37,15 +33,15 @@
 					<!-- BEGIN: head_td -->
 					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
 					<!-- END: head_td -->
-					<td class="text-center"><strong>{LANG.memberlist_active}</strong></th>
-					<th><strong>{LANG.funcs}</strong></th>
+					<td class="text-center"><strong>{LANG.memberlist_active}</th>
+					<th>{LANG.funcs}</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<td colspan="7">
 					<!-- BEGIN: exportfile -->
-					<input type="button" value="{LANG.export}" name="data_export"/>
+					<input type="button" class="btn btn-primary" value="{LANG.export}" name="data_export"/>
 					<!-- END: exportfile -->
 					<!-- BEGIN: generate_page -->
 					{GENERATE_PAGE}
