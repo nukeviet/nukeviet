@@ -4,15 +4,15 @@
 		<caption>{TABLE_CAPTION}</caption>
 		<colgroup>
 			<col span="2" />
-			<col class="w100" />
+			<col class="w150" />
 			<col class="w150" />
 		</colgroup>
 		<thead>
 			<tr>
 				<th> {LANG.file_title} </th>
 				<th> {LANG.category_cat_parent} </th>
-				<td class="text-center"> {LANG.file_update} </th>
-				<td class="text-center"> {LANG.file_feature} </th>
+				<th class="text-center"> {LANG.file_update} </th>
+				<th class="text-center"> {LANG.file_feature} </th>
 			</tr>
 		</thead>
 		<tbody>

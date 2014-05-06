@@ -14,15 +14,15 @@
 					<th> {LANG.category_cat_sort} </th>
 					<th> {LANG.category_cat_name} </th>
 					<th> {LANG.category_cat_parent} </th>
-					<td class="text-center"> {LANG.category_cat_active} </th>
-					<td class="text-center"> {LANG.category_cat_feature} </th>
+					<th class="text-center"> {LANG.category_cat_active} </th>
+					<th class="text-center"> {LANG.category_cat_feature} </th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- BEGIN: row -->
 				<tr>
 					<td>
-					<select name="weight" id="weight{ROW.id}" onchange="nv_chang_weight({ROW.id});">
+					<select name="weight" id="weight{ROW.id}" onchange="nv_chang_weight({ROW.id});" class="form-control w100">
 						<!-- BEGIN: weight -->
 						<option value="{WEIGHT.pos}"{WEIGHT.selected}>{WEIGHT.pos}</option>
 						<!-- END: weight -->

@@ -1,11 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<p>
-			<span>{ERROR}</span>
-		</p></blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
 	<div class="table-responsive">
@@ -13,20 +8,20 @@
 			<tbody>
 				<tr>
 					<td> {LANG.category_cat_name} </td>
-					<td><input class="w300" type="text" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.title}" name="title" id="title" maxlength="100" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.alias} </td>
-					<td><input class="w300" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="100" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.alias}" name="alias" id="alias" maxlength="100" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.description} </td>
-					<td><input class="w300" type="text" value="{DATA.description}" name="description" maxlength="255" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.description}" name="description" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.category_cat_parent} </td>
 					<td>
-					<select name="parentid">
+					<select name="parentid" class="form-control w200">
 						<!-- BEGIN: parentid -->
 						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
 						<!-- END: parentid -->
@@ -35,7 +30,7 @@
 				<tr>
 					<td style="vertical-align:top"> {LANG.who_view} </td>
 					<td>
-					<select name="who_view">
+					<select name="who_view" class="form-control w200">
 						<!-- BEGIN: who_view -->
 						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
 						<!-- END: who_view -->
@@ -54,7 +49,7 @@
 				<tr>
 					<td style="vertical-align:top"> {LANG.who_download} </td>
 					<td>
-					<select name="who_download">
+					<select name="who_download" class="form-control w200">
 						<!-- BEGIN: who_download -->
 						<option value="{WHO_DOWNLOAD.key}"{WHO_DOWNLOAD.selected}>{WHO_DOWNLOAD.title}</option>
 						<!-- END: who_download -->
@@ -71,7 +66,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" /></td>
+					<td colspan="2"><input type="submit" name="submit" value="{LANG.cat_save}" class="btn btn-primary" /></td>
 				</tr>
 			</tbody>
 		</table>
