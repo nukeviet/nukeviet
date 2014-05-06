@@ -37,8 +37,8 @@
 					<!-- BEGIN: head_td -->
 					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
 					<!-- END: head_td -->
-					<td class="text-center"><strong>{LANG.memberlist_active}</strong></th>
-					<th><strong>{LANG.funcs}</strong></th>
+					<td class="text-center"><strong>{LANG.memberlist_active}</th>
+					<th>{LANG.funcs}</th>
 				</tr>
 			</thead>
 			<tfoot>

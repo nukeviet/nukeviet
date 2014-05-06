@@ -108,7 +108,7 @@
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.fields} </caption>
 			<colgroup>
 				<col class="w300"/>
@@ -165,7 +165,7 @@
 		</table>
 		<!-- END: field -->
 		<!-- BEGIN: changepass -->
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.edit_password_note} </caption>
 			<colgroup>
 				<col style="width:325px"/>
@@ -182,8 +182,8 @@
 				</tr>
 			</tbody>
 		</table>
+		<!-- END: changepass -->
 	</div>
-	<!-- END: changepass -->
 	<div class="text-center">
 		<input type="submit" name="confirm" value="{LANG.edit_title}" />
 	</div>
@@ -210,7 +210,7 @@
 			buttonImageOnly : true
 		});
 	});
-	
+
 	$("input[id=btn_upload]").click(function() {
 		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", "850", "500", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false

@@ -15,7 +15,7 @@
 		<table style="margin-bottom:0; width: 100%">
 			<tr>
 				<td class="top">
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<col class="w200" />
 					<col />
 					<tbody>
@@ -33,7 +33,7 @@
 							</td>
 							<td class="top">
 							<div style="padding:4px; height:130px;background:#FFFFFF; overflow:auto; border: 1px solid #CCCCCC">
-								<table class="tab1">
+								<table class="table table-striped table-bordered table-hover">
 									<col span="2" style="width:50%">
 									<tbody>
 										<!-- BEGIN: catid -->
@@ -48,7 +48,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td class="top"><strong>{LANG.content_topic}</strong></td>
@@ -59,12 +59,12 @@
 								<!-- BEGIN: rowstopic -->
 								<option value="{topicid}" {sl}>{topic_title}</option>
 								<!-- END: rowstopic -->
-							</select> 
+							</select>
 							<input class="w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<col class="w200" />
 					<col />
 					<tbody>
@@ -87,7 +87,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<table class="tab1">
+				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
@@ -223,7 +223,7 @@
 		</table>
 	</div>
 	<div class="gray">
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
 					<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
@@ -236,7 +236,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<col class="w200" />
 			<col />
 			<tbody>

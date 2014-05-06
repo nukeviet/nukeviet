@@ -104,7 +104,7 @@
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.fields} </caption>
 			<colgroup>
 				<col class="w300"/>
@@ -158,8 +158,8 @@
 				<!-- END: loop -->
 			</tbody>
 		</table>
+		<!-- END: field -->
 	</div>
-	<!-- END: field -->
 	<div class="text-center">
 		<input type="submit" name="confirm" value="{LANG.member_add}" />
 	</div>

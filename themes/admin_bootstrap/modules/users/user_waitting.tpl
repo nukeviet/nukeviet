@@ -39,7 +39,7 @@
 					<!-- BEGIN: head_td -->
 					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
 					<!-- END: head_td -->
-					<th><strong>{LANG.funcs}</strong></th>
+					<th>{LANG.funcs}</th>
 				</tr>
 			</thead>
 			<!-- BEGIN: generate_page -->
