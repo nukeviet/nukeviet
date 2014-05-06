@@ -15,17 +15,19 @@
 				</tr>
 			</tfoot>
 		</table>
-	</form>
-	<!-- END: edit -->
-	<!-- BEGIN: data -->
-	<table class="tab1">
-		<tbody>
-			<tr>
-				<td class="center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button button-h">{GLANG.edit}</a></td>
-			</tr>
-		</tbody>
-		</table>
 	</div>
+</form>
+<!-- END: edit -->
+<!-- BEGIN: data -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+	<tbody>
+		<tr>
+			<td class="center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button button-h">{GLANG.edit}</a></td>
+		</tr>
+	</tbody>
+	</table>
+</div>
 {DATA}
 <!-- END: data -->
 <!-- END: main -->

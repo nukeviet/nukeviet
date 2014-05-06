@@ -41,14 +41,10 @@
 				<!-- END: row -->
 			</tbody>
 		</table>
-	</form>
-	<!-- BEGIN: generate_page -->
-	<table class="tab1">
-		<tr>
-			<td class="center">{GENERATE_PAGE}</td>
-		</tr>
-		</table>
 	</div>
+</form>
+<!-- BEGIN: generate_page -->
+	<div class="text-center">{GENERATE_PAGE}</div>
 <!-- END: generate_page -->
 <!-- END: data -->
 <!-- END: main -->

@@ -26,7 +26,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
 				<td class="center">
@@ -39,7 +39,7 @@
 		</tbody>
 	</table>
 	<!-- BEGIN: data_reply -->
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<caption>Re: {DATA.title}</caption>
 		<col class="w150"/>
 		<col />

@@ -5,35 +5,37 @@
 <!-- BEGIN: read -->
 <br />
 {LANG.read_note}
-<table id="table_field_read" class="tab1">
-	<colgroup>
-		<col style="width: 35px" />
-		<col span="2" />
-	</colgroup>
-	<thead>
-		<tr>
-			<td>&nbsp;</td>
-			<td><strong>{LANG.read_filename}</strong></td>
-			<td><strong>{LANG.read_filesite}</strong></td>
-		</tr>
-	</thead>
-	<tfoot>
-		<tr>
-			<td colspan="3"><input name="submitfiledata" type="button"
-			value="{LANG.read_submit}" /></td>
-		</tr>
-	</tfoot>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td><input type="checkbox" name="readfiledata[]"
-			value="{DATA.file_name_base64}"></td>
-			<td>{DATA.file_name}</td>
-			<td>{DATA.file_size}</td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table id="table_field_read" class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col style="width: 35px" />
+			<col span="2" />
+		</colgroup>
+		<thead>
+			<tr>
+				<td>&nbsp;</td>
+				<td><strong>{LANG.read_filename}</strong></td>
+				<td><strong>{LANG.read_filesite}</strong></td>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="3"><input name="submitfiledata" type="button"
+				value="{LANG.read_submit}" /></td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td><input type="checkbox" name="readfiledata[]"
+				value="{DATA.file_name_base64}"></td>
+				<td>{DATA.file_name}</td>
+				<td>{DATA.file_size}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <script type="text/javascript">
 	//<![CDATA[
 	function nv_readfiledata(listfile) {

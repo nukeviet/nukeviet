@@ -28,7 +28,7 @@
 				<!-- END: access -->
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.access_register} </caption>
 			<colgroup>
 				<col style="width: 320px;" />
@@ -92,7 +92,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption>{LANG.facebook_config}</caption>
 			<colgroup>
 				<col style="width: 320px;" />
@@ -109,7 +109,7 @@
 				</tr>
 			<tbody>
 		</table>
-		<table class="tab1">
+		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.access_other} </caption>
 			<colgroup>
 				<col style="width: 320px;" />
@@ -124,7 +124,7 @@
 				<tr>
 					<td>{LANG.avatar_size}</td>
 					<td>
-						<input type="text" class="txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x 
+						<input type="text" class="txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
 						<input type="text" class="txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
 					</td>
 				</tr>

@@ -12,7 +12,7 @@
 		var block = '{LANG.block}';
 		var block2 = '{LANG.block2}';
 	</script>
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
 			<col class="w50">
 			<col span="3" />
@@ -50,17 +50,20 @@
 		</tbody>
 	</table>
 	<!-- END: table -->
-	<!-- END: first -->
-	<!-- BEGIN: main -->
-	<!-- BEGIN: error -->
-	<div class="quote">
-		<blockquote class="error"><span>{ERROR}</span></blockquote>
-	</div>
-	<!-- END: error -->
-	<form action="{FORM_ACTION}" method="post">
-		<input type="hidden" name ="id" value="{DATAFORM.id}" />
-		<input name="save" type="hidden" value="1" />
-		<table class="tab1">
+</div>
+<!-- END: first -->
+
+<!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="quote">
+	<blockquote class="error"><span>{ERROR}</span></blockquote>
+</div>
+<!-- END: error -->
+<form action="{FORM_ACTION}" method="post">
+	<input type="hidden" name ="id" value="{DATAFORM.id}" />
+	<input name="save" type="hidden" value="1" />
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
 					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>

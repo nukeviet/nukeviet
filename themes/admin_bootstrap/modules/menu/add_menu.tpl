@@ -48,17 +48,19 @@
 			<!-- END: loop1 -->
 		</tbody>
 	</table>
-	<!-- END: table -->
-	<!-- BEGIN: error -->
-	<div class="quote">
-		<blockquote class="error"><span>{ERROR}</span></blockquote>
-	</div>
-	<!-- END: error -->
-	<form id="edit" action="{FORM_ACTION}" method="post">
-		<input type="hidden" name="id" value="{DATA.id}">
-		<input type="hidden" name="mid" value="{DATA.mid}">
-		<input type="hidden" name="pa" value="{DATA.parentid}">
-		<table class="tab1">
+</div>
+<!-- END: table -->
+<!-- BEGIN: error -->
+<div class="quote">
+	<blockquote class="error"><span>{ERROR}</span></blockquote>
+</div>
+<!-- END: error -->
+<form id="edit" action="{FORM_ACTION}" method="post">
+	<input type="hidden" name="id" value="{DATA.id}">
+	<input type="hidden" name="mid" value="{DATA.mid}">
+	<input type="hidden" name="pa" value="{DATA.parentid}">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
 				<col class="w150" />
 				<col class="w300" />
@@ -171,7 +173,6 @@
 				</tr>
 			</tbody>
 	</table>
-</div>
-	<br/>
+	</div>
 </form>
 <!-- END: main -->

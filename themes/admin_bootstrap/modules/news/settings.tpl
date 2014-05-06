@@ -102,22 +102,24 @@
 				</tr>
 			</tbody>
 		</table>
-	</form>
-	<script type="text/javascript">
-		//<![CDATA[
-		$("input[name=selectimg]").click(function() {
-			var area = "show_no_image";
-			var type = "image";
-			var path = "{PATH}";
-			var currentpath = "{CURRENTPATH}";
-			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
-		//]]>
-	</script>
-	<!-- BEGIN: admin_config_post -->
-	<form action="{FORM_ACTION}" method="post">
-		<table class="tab1">
+	</div>
+</form>
+<script type="text/javascript">
+	//<![CDATA[
+	$("input[name=selectimg]").click(function() {
+		var area = "show_no_image";
+		var type = "image";
+		var path = "{PATH}";
+		var currentpath = "{CURRENTPATH}";
+		nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+	//]]>
+</script>
+<!-- BEGIN: admin_config_post -->
+<form action="{FORM_ACTION}" method="post">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
 			<caption>{LANG.group_content}</caption>
 			<thead>
 				<tr class="center">

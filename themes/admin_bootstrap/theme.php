@@ -122,33 +122,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/bootstrap.min.css' ) )
-	{
-		$xtpl->assign( 'NV_CSS_ADMIN_THEME', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/bootstrap.min.css' );
-	}
-	else
-	{
-		$xtpl->assign( 'NV_CSS_ADMIN_THEME', NV_BASE_SITEURL . 'themes/default/css/bootstrap.min.css' );
-	}
-	
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/js/bootstrap.min.js' ) )
-	{
-		$xtpl->assign( 'NV_JS_ADMIN_THEME', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/js/bootstrap.min.js' );
-	}
-	else
-	{
-		$xtpl->assign( 'NV_JS_ADMIN_THEME', NV_BASE_SITEURL . 'themes/default/js/bootstrap.min.js' );
-	}
-	
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/font-awesome.min.css' ) )
-	{
-		$xtpl->assign( 'NV_CSS_ADMIN_FONT', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/font-awesome.min.css' );
-	}
-	else
-	{
-		$xtpl->assign( 'NV_CSS_ADMIN_FONT', NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
-	}
-
 	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' ) )
 	{
 		$xtpl->assign( 'NV_CSS_MODULE_THEME', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' );
