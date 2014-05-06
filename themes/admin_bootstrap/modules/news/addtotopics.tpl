@@ -16,7 +16,7 @@
 				<tr>
 					<td class="text-center"><input name="checkall" type="checkbox"/></td>
 					<td>
-					<select name="topicsid">
+					<select class="form-control" name="topicsid">
 						<!-- BEGIN: topicsid -->
 						<option value="{TOPICSID.key}">{TOPICSID.title}</option>
 						<!-- END: topicsid -->

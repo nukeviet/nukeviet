@@ -1,18 +1,12 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<colgroup>
-			<col class="w50">
-			<col span="2">
-			<col class="w50">
-			<col class="w150">
-		</colgroup>
 		<thead>
-			<tr class="text-center">
-				<th>{LANG.number}</th>
-				<th>{LANG.alias}</th>
-				<th>{LANG.keywords}</th>
-				<th>{LANG.numlinks}</th>
+			<tr>
+				<th class="text-center">{LANG.number}</th>
+				<th class="text-center">{LANG.alias}</th>
+				<th class="text-center">{LANG.keywords}</th>
+				<th class="text-center">{LANG.numlinks}</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>

@@ -12,7 +12,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="3"><span> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="fa fa-trash-o">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+					<td colspan="3"><i class="fa fa-check-square-o">&nbsp;</i> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <i class="fa fa-square-o ">&nbsp;</i> <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <i class="fa fa-trash-o">&nbsp;</i> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -28,11 +28,7 @@
 	</div>
 	<!-- END: data -->
 	<!-- BEGIN: empty -->
-	<div class="quote">
-		<blockquote>
-			<span>{LANG.topic_nonews}</span>
-		</blockquote>
-	</div>
+	<div class="alert alert-warning">{LANG.topic_nonews}</div>
 	<!-- END: empty -->
 </div>
 <script type="text/javascript">

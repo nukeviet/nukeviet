@@ -6,12 +6,10 @@
 
 <div id="edit">
 	<!-- BEGIN: error -->
-	<div class="quote">
-		<blockquote class="error"><span>{ERROR}</span></blockquote>
-	</div>
+	<div class="alert alert-warning">{ERROR}</div>
 	<!-- END: error -->
 	<!-- BEGIN: content -->
-	<form action="{NV_BASE_ADMINURL}index.php" method="post">
+	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="post">
 		<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 		<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 		<input type="hidden" name ="catid" value="{catid}" />
@@ -23,20 +21,20 @@
 				<tbody>
 					<tr>
 						<td class="text-right"><strong>{LANG.name}: </strong></td>
-						<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+						<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.alias}: </strong></td>
-						<td><input class="w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>Title Site: </strong></td>
-						<td><input class="w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
+						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.cat_sub}: </strong></td>
 						<td>
-						<select name="parentid">
+						<select class="form-control" name="parentid">
 							<!-- BEGIN: cat_listsub -->
 							<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
 							<!-- END: cat_listsub -->
@@ -44,7 +42,7 @@
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.keywords}: </strong></td>
-						<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+						<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 					</tr>
 					<tr>
 						<td class="text-right">
@@ -54,7 +52,7 @@
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+						<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 					</tr>
 					<tr>
 						<td class="text-right">
@@ -62,7 +60,7 @@
 						<strong>{GLANG.who_view} </strong></td>
 						<td>
 						<div class="message_body">
-							<select class="w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
+							<select class="form-control w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
 								<!-- BEGIN: who_views -->
 								<option value="{who_views.value}" {who_views.selected}>{who_views.title}</option>
 								<!-- END: who_views -->
@@ -97,7 +95,7 @@
 		</div>
 		<br />
 		<div class="text-center">
-			<input name="submit1" type="submit" value="{LANG.save}" />
+			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" />
 		</div>
 	</form>
 </div>

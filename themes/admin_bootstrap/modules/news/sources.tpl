@@ -5,11 +5,7 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<span>{ERROR}</span>
-	</blockquote>
-</div>
+<div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
 <form enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -21,21 +17,21 @@
 			<caption>{LANG.add_sources}</caption>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.name}: </strong></td>
-					<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.link}: </strong></td>
-					<td><input class="w500" name="link" type="text" value="{link}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="link" type="text" value="{link}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.source_logo}: </strong></td>
-					<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
+					<td><input class="form-control w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
 					<!-- BEGIN: logo -->
 					<br />
 					<img src="{logo}"/></td>

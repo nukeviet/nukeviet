@@ -2,7 +2,7 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
-			<col span="2" class="w50">
+			<col span="2" class="w100">
 			<col span="2">
 			<col class="w100">
 			<col class="w150">
@@ -21,7 +21,7 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">
-				<select id="id_weight_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','weight');">
+				<select class="form-control" id="id_weight_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','weight');">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 					<!-- END: weight -->
@@ -29,13 +29,13 @@
 				<td class="text-center"><strong>{ROW.bid}</strong></td>
 				<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 				<td class="text-center">
-				<select id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault');">
+				<select class="form-control" id="id_adddefault_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','adddefault');">
 					<!-- BEGIN: adddefault -->
 					<option value="{ADDDEFAULT.key}"{ADDDEFAULT.selected}>{ADDDEFAULT.title}</option>
 					<!-- END: adddefault -->
 				</select></td>
 				<td class="text-center">
-				<select id="id_numlinks_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','numlinks');">
+				<select class="form-control" id="id_numlinks_{ROW.bid}" onchange="nv_chang_block_cat('{ROW.bid}','numlinks');">
 					<!-- BEGIN: number -->
 					<option value="{NUMBER.key}"{NUMBER.selected}>{NUMBER.title}</option>
 					<!-- END: number -->

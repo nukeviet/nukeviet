@@ -4,15 +4,15 @@
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
-					<td class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
-					<td style="width:60px;">{LANG.weight}</th>
+					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+					<th class="w100">{LANG.weight}</th>
 					<th>{LANG.name}</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tfoot>
-				<tr class="text-left">
-					<td colspan="5"><input type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
+				<tr>
+					<td colspan="5"><input class="btn btn-primary" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -20,7 +20,7 @@
 				<tr>
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-center">
-					<select id="id_weight_{ROW.id}" onchange="nv_chang_block({BID},{ROW.id},'weight');">
+					<select class="form-control" id="id_weight_{ROW.id}" onchange="nv_chang_block({BID},{ROW.id},'weight');">
 						<!-- BEGIN: weight -->
 						<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 						<!-- END: weight -->

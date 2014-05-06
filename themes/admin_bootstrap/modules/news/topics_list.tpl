@@ -2,7 +2,7 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
-			<col class="w50">
+			<col class="w100">
 			<col span="2">
 			<col class="w150">
 		</colgroup>
@@ -11,14 +11,14 @@
 				<th>{LANG.weight}</th>
 				<th>{LANG.name}</th>
 				<th>{LANG.description}</th>
-				<td class="text-center">&nbsp;</th>
+				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">
-				<select id="id_weight_{ROW.topicid}" onchange="nv_chang_topic('{ROW.topicid}','weight');">
+				<select class="form-control" id="id_weight_{ROW.topicid}" onchange="nv_chang_topic('{ROW.topicid}','weight');">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 					<!-- END: weight -->
