@@ -36,14 +36,14 @@
 					<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right top">
+					<td>
 					<br />
 					<strong>{LANG.description}</strong></td>
-					<td><textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+					<td><textarea class="w500 form-control" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info"/></td>
 				</tr>
 			</tbody>
 		</table>

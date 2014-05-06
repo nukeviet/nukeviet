@@ -13,16 +13,16 @@
 						<strong>{TITLE}</strong>
 						<br />
 						<br />
-						<input class="btn btn-primary" name="delcatandrows" type="submit" value="{LANG.delcatandrows}" />
+						<input class="btn btn-warning" name="delcatandrows" type="submit" value="{LANG.delcatandrows}" />
 						<br />
 						<br />
-						<strong>{LANG.delcat_msg_rows_move}</strong>:
-						<select class="form-control" name="catidnews">
+						<strong>{LANG.delcat_msg_rows_move}</strong>:<br />
+						<select class="form-control w300" name="catidnews" style="display: inline-block; text-align: center">
 							<!-- BEGIN: catidnews -->
 							<option value="{CATIDNEWS.key}">{CATIDNEWS.title}</option>
 							<!-- END: catidnews -->
 						</select>
-						<input class="btn btn-primary" name="movecat" type="submit" value="{LANG.action}" onclick="return nv_check_movecat(this.form, '{LANG.delcat_msg_rows_noselect}')"/>
+						<br /><br /><input class="btn btn-primary" name="movecat" type="submit" value="{LANG.action}" onclick="return nv_check_movecat(this.form, '{LANG.delcat_msg_rows_noselect}')"/>
 					</div>
 				</form></td>
 			</tr>

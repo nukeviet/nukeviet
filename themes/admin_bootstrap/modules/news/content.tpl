@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="newserror">
-	{error}
-</div>
+<div class="alert alert-danger">{error}</div>
 <!-- END: error -->
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
@@ -15,13 +13,13 @@
 		<table style="margin-bottom:0; width: 100%">
 			<tr>
 				<td class="top">
-				<table class="table table-striped table-bordered table-hover">
+				<table class="table table-striped table-bordered">
 					<col class="w200" />
 					<col />
 					<tbody>
 						<tr>
 							<td><strong>{LANG.name}</strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control w350" /> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control w350" /><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
@@ -70,7 +68,7 @@
 					<tbody>
 						<tr>
 							<td><strong>{LANG.content_homeimg}</strong></td>
-							<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+							<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 						</tr>
 						<tr>
 							<td>{LANG.content_homeimgalt}</td>
@@ -156,7 +154,7 @@
 							<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 						</p>
 						<div class="message_body center">
-							<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
+							<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
 							<select class="form-control" name="phour">
 								{phour}
 							</select>
@@ -171,7 +169,7 @@
 							<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
 						</p>
 						<div class="message_body center">
-							<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" readonly="readonly" type="text"/>
+							<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
 							<select class="form-control" name="ehour">
 								{ehour}
 							</select>

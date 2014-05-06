@@ -6,7 +6,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td style="text-align: center;" colspan="2"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting" /></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -21,11 +21,11 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_homesite}</strong></td>
-					<td><input class= "form-control" type="text" value="{DATA.homewidth}" name="homewidth" /> x <input class= "form-control" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
+					<td><input class= "form-control" type="text" value="{DATA.homewidth}" name="homewidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_thumbblock}</strong></td>
-					<td><input class= "form-control" type="text" value="{DATA.blockwidth}" name="blockwidth" /> x <input class= "form-control" type="text" value="{DATA.blockheight}" name="blockheight" /></td>
+					<td><input class= "form-control" type="text" value="{DATA.blockwidth}" name="blockwidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.blockheight}" name="blockheight" /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_imagefull}</strong></td>
@@ -55,7 +55,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.facebookAppID}</strong></td>
-					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/>{LANG.facebookAppIDNote}</td>
+					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.socialbutton}</strong></td>

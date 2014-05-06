@@ -23,25 +23,25 @@
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.name}: </strong></td>
-					<td><input class="form-control" style="width: 650px" name="title" id="idtitle" type="text" value="{DATA.title}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="title" id="idtitle" type="text" value="{DATA.title}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="form-control" style="width: 600px" name="alias" id="idalias" type="text" value="{DATA.alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('topics', {DATA.topicid});">&nbsp;</em></td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{DATA.alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('topics', {DATA.topicid});">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}:</strong></td>
-					<td><input class="form-control" style="width: 550px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" /></td>
+					<td><input class="form-control pull-left w500" style="margin-right: 5px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
-					<td><input class="form-control" style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right top">
+					<td class="text-right">
 					<br />
 					<strong>{LANG.description}</strong></td>
-					<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
+					<td><textarea class="form-control w500" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
