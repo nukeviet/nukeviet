@@ -14,7 +14,7 @@
 		{DATA}
 	</div>
 	<br />
-	<div class="text-center"><input name="submit1" type="submit" value="{LANG.save}" />
+	<div class="text-center"><input name="submit1" type="submit" value="{LANG.save}" class="btn btn-primary" />
 	</div>
 </form>
 <!-- END: edit -->

@@ -280,7 +280,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				$data_insert['linkdirect'] = $array['linkdirect'];
 				$data_insert['version'] = $array['version'];
 				$data_insert['fileimage'] = $fileimage;
-				$data_insert['fileimage'] = $array['copyright'];
+				$data_insert['copyright'] = $array['copyright'];
 
 				if( ! $db->insert_id( $sql, 'id', $data_insert ) )
 				{

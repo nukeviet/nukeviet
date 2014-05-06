@@ -9,7 +9,7 @@
 				</colgroup>
 				<tfoot>
 					<tr>
-						<td class="text-center" colspan="2"><input type="submit" name="submit" value="{LANG.config_confirm}" /></td>
+						<td class="text-center" colspan="2"><input type="submit" name="submit" value="{LANG.config_confirm}" class="btn btn-primary" /></td>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -20,7 +20,7 @@
 					<tr>
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
-						<select name="who_addfile">
+						<select name="who_addfile" class="form-control w200">
 							<!-- BEGIN: who_addfile -->
 							<option value="{WHO_ADDFILE.key}"{WHO_ADDFILE.selected}> {WHO_ADDFILE.title}</option>
 							<!-- END: who_addfile -->
@@ -43,7 +43,7 @@
 					<tr>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
-						<select name="who_upload">
+						<select name="who_upload" class="form-control w200">
 							<!-- BEGIN: who_upload -->
 							<option value="{WHO_UPLOAD.key}"{WHO_UPLOAD.selected}> {WHO_UPLOAD.title}</option>
 							<!-- END: who_upload -->
@@ -71,17 +71,15 @@
 					</tr>
 					<tr>
 						<td>{LANG.config_maxfilesize}</td>
-						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="text-right"/> {LANG.config_maxfilemb}
-						<br />
-						{LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE}</td>
+						<td><input name="maxfilesize" value="{DATA.maxfilesize}" type="text" maxlength="10" class="pull-left form-control w200"/><span class="text-middle"> {LANG.config_maxfilemb}. {LANG.config_maxfilesizesys} {NV_UPLOAD_MAX_FILESIZE} </span></td>
 					</tr>
 					<tr>
 						<td>{LANG.config_uploadedfolder}</td>
-						<td><input name="upload_dir" value="{DATA.upload_dir}" type="text" maxlength="100" /></td>
+						<td><input name="upload_dir" value="{DATA.upload_dir}" type="text" maxlength="100" class="form-control w200" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.config_queuefolder}</td>
-						<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" /></td>
+						<td><input name="temp_dir" value="{DATA.temp_dir}" type="text" maxlength="100" class="form-control w200" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_resume}</td>
@@ -89,7 +87,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.max_speed}</td>
-						<td><input name="max_speed" value="{DATA.max_speed}" type="text" style="width:50px" maxlength="4" /> {LANG.kb_sec} </td>
+						<td><input name="max_speed" value="{DATA.max_speed}" type="text" class="form-control w100 pull-left" maxlength="4" /><span class="text-middle"> {LANG.kb_sec} </span></td>
 					</tr>
 					<tr>
 						<td>{LANG.is_zip}</td>
@@ -97,7 +95,7 @@
 					</tr>
 					<tr>
 						<td class="top">{LANG.zip_readme}</td>
-						<td><textarea name="readme" cols="20" rows="5" class="txt-full">{DATA.readme}</textarea></td>
+						<td><textarea name="readme" cols="20" rows="5" class="form-control">{DATA.readme}</textarea></td>
 					</tr>
 				</tbody>
 			</table>

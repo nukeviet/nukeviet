@@ -14,8 +14,8 @@
 			<tr>
 				<th> {LANG.file_title} </th>
 				<th> {LANG.category_cat_parent} </th>
-				<td class="text-center"> {LANG.report_post_time} </th>
-				<td class="text-center"> {LANG.file_feature} </th>
+				<th class="text-center"> {LANG.report_post_time} </th>
+				<th class="text-center"> {LANG.file_feature} </th>
 			</tr>
 		</thead>
 		<tbody>

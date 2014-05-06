@@ -4,8 +4,8 @@
 		<colgroup>
 			<col span="2" />
 			<col class="w150" />
-			<col span="4" class="w50" />
-			<col class="w100" />
+			<col span="4" class="w100" />
+			<col class="w150" />
 		</colgroup>
 		<thead>
 			<tr class="text-center">

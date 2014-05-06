@@ -3,12 +3,7 @@
 <div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<p>
-			<span>{ERROR}</span>
-		</p></blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
@@ -32,12 +27,12 @@
 				<tr>
 					<td> {LANG.account} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 required" value="{DATA.username}" name="username" id="username_iavim"  /></td>
+					<td><input class="w300 required form-control" value="{DATA.username}" name="username" id="username_iavim"  /></td>
 				</tr>
 				<tr>
 					<td> {LANG.email} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
+					<td><input class="w300 email required form-control" value="{DATA.email}" name="email" id="email_iavim" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
@@ -87,7 +82,7 @@
 				</tr>
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.sig} </td>
-					<td><textarea name="sig" cols="70" rows="5" style="width:300px">{DATA.sig}</textarea></td>
+					<td><textarea name="sig" cols="70" rows="5" style="width:300px" class="form-control">{DATA.sig}</textarea></td>
 				</tr>
 				<!-- BEGIN: group -->
 				<tr>

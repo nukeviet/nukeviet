@@ -28,7 +28,7 @@
 			<!-- BEGIN: loop1 -->
 			<tr>
 				<td class="text-center">
-				<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');">
+				<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');" class="form-control w100">
 					<!-- BEGIN: weight -->
 					<option value="{stt}" {select}>{stt}</option>
 					<!-- END: weight -->
@@ -51,9 +51,7 @@
 </div>
 <!-- END: table -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form id="edit" action="{FORM_ACTION}" method="post">
 	<input type="hidden" name="id" value="{DATA.id}">
@@ -68,14 +66,14 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td colspan="3" class="text-center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td colspan="3" class="text-center"><input name="submit1" type="submit" value="{LANG.save}" class="btn btn-primary w100" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td><strong>{LANG.name_block}</strong></td>
 					<td>
-					<select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');">
+					<select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');" class="form-control w200">
 						<!-- BEGIN: loop -->
 						<option value="{key}" {select}>{val}</option>
 						<!-- END: loop -->
@@ -85,7 +83,7 @@
 				<tr>
 					<td><strong>{LANG.cats}</strong></td>
 					<td>
-					<select name="parentid" id="parentid">
+					<select name="parentid" id="parentid" class="form-control w200">
 						<!-- BEGIN: cat -->
 						<option value="{cat.key}" {selected}>{cat.title}</option>
 						<!-- END: cat -->
@@ -95,14 +93,14 @@
 				<tr>
 					<td><strong>{LANG.chomodule}</strong></td>
 					<td>
-					<select name="module_name" id="module_name_{module.key}" onchange="nv_link('{module.key}');">
+					<select name="module_name" id="module_name_{module.key}" onchange="nv_link('{module.key}');" class="form-control w200">
 						<option value="0">{LANG.cho_module}</option>
 						<!-- BEGIN: module -->
 						<option value="{module.key}"{module.selected}>{module.title}</option>
 						<!-- END: module -->
 					</select><span id="thu">
 						<!-- BEGIN: link -->
-						<select name="op" id="item_name_{item.alias}" onchange="nv_link1('{item.alias}','{item.module}');">
+						<select name="op" id="item_name_{item.alias}" onchange="nv_link1('{item.alias}','{item.module}');" class="form-control w200">
 							<option value="">{LANG.item_menu}</option>
 							<!-- BEGIN: item -->
 							<option value="{item.alias}"{item.selected}>{item.title}</option>
@@ -114,23 +112,23 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.title}</strong></td>
-					<td><input type="text" name="title" id="title" class="w300" value="{DATA.title}"/></td>
+					<td><input type="text" name="title" id="title" class="w300 form-control" value="{DATA.title}"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.link}</strong></td>
-					<td><input type="text" name="link" class="w300" value="{DATA.link}" id="link"/></td>
+					<td><input type="text" name="link" class="w300 form-control" value="{DATA.link}" id="link"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.note}</strong></td>
-					<td><input type="text" name="note" class="w300" value="{DATA.note}"/></td>
+					<td><input type="text" name="note" class="w300 form-control" value="{DATA.note}"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top"><strong> {LANG.who_view}</strong></td>
 					<td>
-					<select name="who_view">
+					<select name="who_view" class="form-control w200">
 						<!-- BEGIN: who_view -->
 						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
 						<!-- END: who_view -->
@@ -149,7 +147,7 @@
 				<tr>
 					<td><strong>{LANG.target}</strong></td>
 					<td>
-					<select name="target">
+					<select name="target" class="form-control w200">
 						<!-- BEGIN: target -->
 						<option value="{target.key}"{target.selected}>{target.title}</option>
 						<!-- END: target -->
@@ -159,7 +157,7 @@
 				<tr>
 					<td><strong>{LANG.add_type_active}</strong></td>
 					<td>
-					<select name="active_type" class="w300">
+					<select name="active_type" class="w300 form-control">
 						<!-- BEGIN: active_type -->
 						<option value="{ACTIVE_TYPE.key}"{ACTIVE_TYPE.selected}>{ACTIVE_TYPE.title}</option>
 						<!-- END: active_type -->
@@ -168,7 +166,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.add_type_css}</strong></td>
-					<td><input class="w300" type="text" name="css" value="{DATA.css}"/></td>
+					<td><input class="w300 form-control" type="text" name="css" value="{DATA.css}"/></td>
 					<td>{LANG.add_type_css_info}</td>
 				</tr>
 			</tbody>
