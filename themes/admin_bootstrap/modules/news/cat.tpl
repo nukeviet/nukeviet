@@ -21,15 +21,15 @@
 				<tbody>
 					<tr>
 						<td class="text-right"><strong>{LANG.name}: </strong></td>
-						<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+						<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>Title Site: </strong></td>
-						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max}</td>
+						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.cat_sub}: </strong></td>
@@ -48,11 +48,11 @@
 						<td class="text-right">
 						<br />
 						<strong>{LANG.description} </strong></td>
-						<td ><textarea class="w500" id="description"  name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+						<td ><textarea class="w500 form-control" id="description"  name="description" cols="100" rows="5">{description}</textarea><span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
+						<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td class="text-right">

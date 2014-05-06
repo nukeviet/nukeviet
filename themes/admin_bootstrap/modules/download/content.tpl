@@ -1,12 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<p>
-			<span>{ERROR}</span>
-		</p>
-	</blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<div class="table-responsive">
@@ -14,12 +8,12 @@
 			<tbody>
 				<tr>
 					<td class="w250"> {LANG.file_title} </td>
-					<td><input class="w300" type="text" value="{DATA.title}" name="title" id="title"/></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.title}" name="title" id="title"/></td>
 				</tr>
 				<tr>
 					<td> {LANG.category_cat_parent} </td>
 					<td>
-					<select name="catid">
+					<select name="catid" class="form-control w200">
 						<!-- BEGIN: catid -->
 						<option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
 						<!-- END: catid -->
@@ -27,18 +21,18 @@
 				</tr>
 				<tr>
 					<td> {LANG.file_author_name} </td>
-					<td><input class="w300" type="text" value="{DATA.author_name}" name="author_name" id="author_name" maxlength="100" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.author_name}" name="author_name" id="author_name" maxlength="100" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_author_email} </td>
-					<td><input class="w300" type="text" value="{DATA.author_email}" name="author_email" id="author_email" maxlength="60" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.author_email}" name="author_email" id="author_email" maxlength="60" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_author_homepage} </td>
 					<td>
-						<input class="w300" type="text" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" /> 
-						<input type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" /> 
-						<input type="button" value="{LANG.file_gourl}" id="go_author_url" onclick="nv_gourl('author_url',0, 'go_author_url');" /></td>
+						<input class="w300 form-control pull-left" style="margin-right: 5px" type="text" value="{DATA.author_url}" name="author_url" id="author_url" maxlength="255" /> 
+						<input class="btn btn-info pull-left" style="margin-right: 5px" type="button" value="{LANG.file_checkUrl}" id="check_author_url" onclick="nv_checkfile('author_url',0, 'check_author_url');" /> 
+						<input class="btn btn-info pull-left" type="button" value="{LANG.file_gourl}" id="go_author_url" onclick="nv_gourl('author_url',0, 'go_author_url');" /></td>
 				</tr>
 				<tr>
 					<td style="vertical-align:top"> {LANG.file_myfile} </td>
@@ -46,9 +40,11 @@
 						<div id="fileupload_items">
 							<!-- BEGIN: fileupload -->
 							<div id="fileupload_item_{FILEUPLOAD.key}">
-								<input readonly="readonly" class="w300" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />&nbsp; <input type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" />&nbsp; 
-								<input type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />&nbsp; <input type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" /> 
-								<input type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
+								<input readonly="readonly" class="w300 form-control pull-left" type="text" value="{FILEUPLOAD.value}" name="fileupload[]" id="fileupload{FILEUPLOAD.key}" maxlength="255" />
+								&nbsp; <input class="btn btn-info" type="button" value="{LANG.file_selectfile}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload{FILEUPLOAD.key}&path={FILES_DIR}&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" /> 
+								&nbsp;<input class="btn btn-info" type="button" value="{LANG.file_checkUrl}" id= "check_fileupload{FILEUPLOAD.key}" onclick="nv_checkfile('fileupload{FILEUPLOAD.key}',1, 'check_fileupload{FILEUPLOAD.key}');" />
+								&nbsp; <input class="btn btn-info" type="button" value="{LANG.file_gourl}" id= "go_fileupload{FILEUPLOAD.key}" onclick="nv_gourl('fileupload{FILEUPLOAD.key}', 1, 'go_fileupload{FILEUPLOAD.key}');" /> 
+								&nbsp;<input class="btn btn-info" type="button" onclick="nv_delurl( {DATA.id}, {FILEUPLOAD.key} ); " value="{LANG.file_delurl}">
 							</div>
 							<!-- END: fileupload -->
 						</div>
@@ -61,7 +57,7 @@
 							var file_gourl = '{LANG.file_gourl}';
 							var file_delurl = '{LANG.file_delurl}';
 						</script>
-						<p><input type="button" value="{LANG.add_file_items}" onclick="nv_file_additem({DATA.id});" /> ({LANG.add_file_items_note})</p> 
+						<p style="margin-top: 10px"><input class="btn btn-default" type="button" value="{LANG.add_file_items}" onclick="nv_file_additem({DATA.id});" /> ({LANG.add_file_items_note})</p> 
 					</td>
 				</tr>
 				<tr>
@@ -70,41 +66,41 @@
 					(<em>{LANG.file_linkdirect_note}</em>) </td>
 					<td>
 						<div id="linkdirect_items">
-							<!-- BEGIN: linkdirect --><textarea name="linkdirect[]" id="linkdirect{LINKDIRECT.key}" style="width:300px;height:150px">{LINKDIRECT.value}</textarea>
-							&nbsp;<input type="button" value="{LANG.file_checkUrl}" id="check_linkdirect{LINKDIRECT.key}" onclick="nv_checkfile('linkdirect{LINKDIRECT.key}',0, 'check_linkdirect{LINKDIRECT.key}');" />
-							<br />
+							<!-- BEGIN: linkdirect --><textarea name="linkdirect[]" id="linkdirect{LINKDIRECT.key}" style="width:300px;height:150px" class="form-control pull-left">{LINKDIRECT.value}</textarea>
+							&nbsp;<input type="button" class="btn btn-default pull-left" value="{LANG.file_checkUrl}" id="check_linkdirect{LINKDIRECT.key}" onclick="nv_checkfile('linkdirect{LINKDIRECT.key}',0, 'check_linkdirect{LINKDIRECT.key}');" />
 							<!-- END: linkdirect -->
 						</div>
 						<script type="text/javascript">
 							var linkdirect_items = '{DATA.linkdirect_num}';
 						</script>
-						<p><input type="button" value="{LANG.add_linkdirect_items}" onclick="nv_linkdirect_additem();" /> ({LANG.add_linkdirect_items_note})</p>
+						<div class="clearfix">&nbsp;</div>
+						<p style="margin-top: 10px"><input type="button" class="btn btn-default" value="{LANG.add_linkdirect_items}" onclick="nv_linkdirect_additem();" /> ({LANG.add_linkdirect_items_note})</p>
 					</td>
 				</tr>
 				<tr>
 					<td> {LANG.file_size} </td>
-					<td><input type="text" class="w100 right" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /> {LANG.config_maxfilemb} </td>
+					<td><input type="text" class="w100 form-control pull-left" value="{DATA.filesize}" name="filesize" id="filesize" maxlength="11" /><span class="text-middle"> {LANG.config_maxfilemb} </span></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_version} </td>
-					<td><input class="w300" type="text" value="{DATA.version}" name="version" id="version" maxlength="20" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.version}" name="version" id="version" maxlength="20" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_image} </td>
 					<td>
-						<input class="w300" type="text" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" /> 
-						<input type="button" value="{LANG.file_selectfile}" name="selectimg" /> 
-						<input type="button" value="{LANG.file_checkUrl}" id="check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" /> 
-						<input type="button" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
+						<input class="w300 form-control pull-left" type="text" style="margin-right: 5px" value="{DATA.fileimage}" name="fileimage" id="fileimage" maxlength="255" /> 
+						<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_selectfile}" name="selectimg" /> 
+						<input type="button" class="btn btn-info pull-left" style="margin-right: 5px" value="{LANG.file_checkUrl}" id="check_fileimage" onclick="nv_checkfile('fileimage',1, 'check_fileimage');" /> 
+						<input type="button" class="btn btn-info pull-left" value="{LANG.file_gourl}" id= "go_fileimage" onclick="nv_gourl('fileimage',1, 'go_fileimage');" />
 					</td>
 				</tr>
 				<tr>
 					<td class="top"> {LANG.intro_title} </td>
-					<td><textarea name="introtext" style="width:300px;height:150px">{DATA.introtext}</textarea></td>
+					<td><textarea name="introtext" style="width:300px;height:150px" class="form-control">{DATA.introtext}</textarea></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_copyright} </td>
-					<td><input class="w300" type="text" value="{DATA.copyright}" name="copyright" id="copyright" maxlength="20" /></td>
+					<td><input class="w300 form-control" type="text" value="{DATA.copyright}" name="copyright" id="copyright" maxlength="20" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.file_allowcomment} </td>
@@ -113,7 +109,7 @@
 				<tr>
 					<td> {LANG.file_whocomment} </td>
 					<td>
-					<select name="who_comment">
+					<select name="who_comment" class="form-control w200">
 						<!-- BEGIN: who_comment -->
 						<option value="{WHO_COMMENT.key}"{WHO_COMMENT.selected}> {WHO_COMMENT.title}</option>
 						<!-- END: who_comment -->
@@ -133,7 +129,7 @@
 				<tr>
 					<td style="vertical-align:top"> {LANG.who_view} </td>
 					<td>
-					<select name="who_view">
+					<select name="who_view" class="form-control w200">
 						<!-- BEGIN: who_view -->
 						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
 						<!-- END: who_view -->
@@ -153,7 +149,7 @@
 				<tr>
 					<td style="vertical-align:top"> {LANG.who_download} </td>
 					<td>
-					<select name="who_download">
+					<select name="who_download" class="form-control w200">
 						<!-- BEGIN: who_download -->
 						<option value="{WHO_DOWNLOAD.key}"{WHO_DOWNLOAD.selected}>{WHO_DOWNLOAD.title}</option>
 						<!-- END: who_download -->
@@ -173,7 +169,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div style="textarea-align:center;padding-top:15px">
+	<div style="padding-top:15px">
 		{LANG.file_description}
 		<br />
 		{DATA.description}
@@ -182,7 +178,7 @@
 		<!-- BEGIN: is_del_report -->
 		<input name="is_del_report" value="1" type="checkbox"{DATA.is_del_report} /> {LANG.report_delete} &nbsp;&nbsp;
 		<!-- END: is_del_report -->
-		<input type="submit" name="submit" value="{LANG.confirm}" />
+		<input type="submit" name="submit" value="{LANG.confirm}" class="btn btn-primary" />
 	</div>
 </form>
 <script type="text/javascript">

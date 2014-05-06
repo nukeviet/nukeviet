@@ -55,9 +55,7 @@
 
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post">
 	<input type="hidden" name ="id" value="{DATAFORM.id}" />
@@ -66,17 +64,18 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td>&nbsp;</td>
+					<td><input name="submit1" type="submit" value="{LANG.save}" class="btn btn-primary w100" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.name_block}: </strong></td>
-					<td><input style="width: 650px" name="title" type="text" value="{DATAFORM.title}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="title" type="text" value="{DATAFORM.title}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.menu_description}: </strong></td>
-					<td><input style="width: 650px" name="description" type="text" value="{DATAFORM.description}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="description" type="text" value="{DATAFORM.description}" maxlength="255" /></td>
 				</tr>
 			</tbody>
 	</table>

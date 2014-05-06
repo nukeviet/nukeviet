@@ -17,11 +17,11 @@
 				<tbody>
 					<tr>
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
-						<td><input title="{LANG.title}" class="form-control txt" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
+						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.exp_time}:</td>
-						<td><input type="text" name="exp_time" class="form-control w150 datepicker" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
+						<td><input type="text" name="exp_time" class="form-control w150 datepicker pull-left" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
 					</tr>
 					<tr>
 						<td>{LANG.public}:</td>
@@ -43,7 +43,7 @@
 			{CONTENT}
 		</div>
 		<input type="hidden" name="save" value="1" />
-		<p class="text-center"><input name="submit" type="submit" class="button" value="{LANG.save}" /></p>
+		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
 	</form>
 </div>
 <script type="text/javascript">
@@ -84,7 +84,7 @@
 </script>
 <!-- END: add -->
 
-	<!-- BEGIN: list -->
+<!-- BEGIN: list -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<col class="w100" />
@@ -178,7 +178,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: addnew -->
 <div id="ablist">
-	<input name="addNew" type="button" value="{LANG.nv_admin_add}" />
+	<input name="addNew" type="button" value="{LANG.nv_admin_add}" class="btn btn-default" />
 </div>
 <!-- END: addnew -->
 <div class="myh3">
