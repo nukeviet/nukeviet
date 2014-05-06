@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
-	<table class="tab1">
+	<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
 				<td><strong>{LANG.checkContent}</strong></td>
@@ -9,7 +10,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="2" class="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;" /></td>
+				<td colspan="2" class="text-center"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -35,6 +36,7 @@
 			</tr>
 		</tbody>
 	</table>
+</div>
 </form>
 
 <!-- BEGIN: delfile -->

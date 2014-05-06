@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: loop1 -->
 <div id="{CONTAINERID}">
-	<p class="center">
+	<p class="text-center">
 		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading"/>
 	</p>
 </div>

@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="center">
+<div class="text-center">
 	<strong>{MSG1}</strong>
 	<br />
 	<br />

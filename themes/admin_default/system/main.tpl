@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 {FILE "header.tpl"}
-<div id="wrapper">
+<div id="container-fluid">
 	<header id="header">
 		<div class="logo">
 			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
@@ -12,7 +12,7 @@
 		<!-- BEGIN: langdata -->
 		<div class="lang">
 			<strong>{NV_LANGDATA}</strong>:
-			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control w200">
 				<!-- BEGIN: option -->
 				<option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
 				<!-- END: option -->
@@ -21,33 +21,37 @@
 		<!-- END: langdata -->
 	</header>
 	<!-- #header-->
-
-	<nav id="smoothmenu" class="ddsmoothmenu clearfix">
-		<ul>
-			<!-- BEGIN: top_menu_loop -->
-			<li>
-				<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}</a>
-				<!-- BEGIN: submenu -->
-				<ul>
-					<!-- BEGIN: submenu_loop -->
+	<div class="row">
+		<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
+					<span class="sr-only">&nbsp;</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="collapse navbar-collapse" id="menu-site-default">
+				<ul class="nav navbar-nav">
 					<li>
-						<a href="{SUBMENULINK}">{SUBMENUTITLE}</a>
+						<a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 					</li>
-					<!-- END: submenu_loop -->
+					<!-- BEGIN: top_menu_loop -->
+					<li class="{TOP_MENU_CURRENT}">
+						<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
+						<!-- BEGIN: submenu -->
+						<ul class="dropdown-menu">
+							<!-- BEGIN: submenu_loop --><li><a href="{SUBMENULINK}" title="{SUBMENUTITLE}">{SUBMENUTITLE}</a></li><!-- END: submenu_loop -->
+						</ul>
+						<!-- END: submenu -->
+					</li>
+					<!-- END: top_menu_loop -->
 				</ul>
-				<!-- END: submenu -->
-			</li>
-			<!-- END: top_menu_loop -->
-		</ul>
-	</nav>
-
-	<div id="top_message">
-		<div class="clock_container">
-			<div class="clock">
-				<label> <span id="digclock">{NV_DIGCLOCK}</span> </label>
 			</div>
 		</div>
-		<div class="info">
+	</div>
+	<div class="row hidden-xs" id="top_message">
+		<div class="col-sm-8 col-md-6">
 			<!-- BEGIN: hello_admin -->
 			{HELLO_ADMIN1}
 			<!-- END: hello_admin -->
@@ -58,21 +62,24 @@
 			{HELLO_ADMIN2}
 			<!-- END: hello_admin2 -->
 		</div>
-		<div class="clearfix"></div>
+		<div class="col-sm-4 col-md-6">
+			<div class="row text-right">
+				<span id="digclock">{NV_DIGCLOCK}</span>
+			</div>
+		</div>
 	</div>
 
 	<section id="middle">
 		<div id="contentwrapper">
 			<div id="container">
 				<div id="info_tab">
-					<span id="cs_menu" onclick="ver_menu_click()"><em class="icon-circle-arrow-left icon-large">&nbsp;</em></span>
 					<!-- BEGIN: empty_page_title -->
-					<span class="cell_left">{PAGE_TITLE}</span>
+					<h3 class="text-primary pull-left"><i onclick="ver_menu_click()" id="cs_menu" class="fa fa-arrow-circle-left">&nbsp;</i> {PAGE_TITLE}</h3>
 					<!-- END: empty_page_title -->
 
 					<!-- BEGIN: select_option -->
-					<span class="cell_right">
-						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+					<span class="pull-right">
+						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control w200 input-sm" style="margin-right: 5px">
 							<option value="">{PLEASE_SELECT}</option>
 							<!-- BEGIN: select_option_loop -->
 							<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
@@ -80,7 +87,7 @@
 						</select> </span>
 					<!-- END: select_option -->
 					<!-- BEGIN: site_mods -->
-					<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
+					<span class="pull-right" style="margin-right: 5px"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}"><em class="fa fa-globe">&nbsp;</em>{NV_GO_CLIENTMOD}</a></span>
 					<!-- END: site_mods -->
 					<div class="clearfix"></div>
 				</div>
@@ -139,11 +146,12 @@
 	</footer>
 	<!-- #footer -->
 </div>
-<!-- #wrapper -->
+<!-- #container-fluid -->
 <div id="timeoutsess" class="chromeframe">
 	{LANG_TIMEOUTSESS_NOUSER}, <a onclick="timeoutsesscancel();" href="#">{LANG_TIMEOUTSESS_CLICK}</a>. {LANG_TIMEOUTSESS_TIMEOUT}: <span id="secField"> 60 </span> {LANG_TIMEOUTSESS_SEC}
 </div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ddsmoothmenu.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
 <!-- BEGIN: ckeditor -->
 <script type="text/javascript">

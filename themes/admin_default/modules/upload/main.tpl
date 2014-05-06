@@ -56,28 +56,28 @@
 </div>
 <div class="footer">
 	<div class="refresh">
-		<a href="#" title="{LANG.refresh}"><em class="icon-refresh icon-large icon-pointer">&nbsp;</em></a>
+		<a href="#" title="{LANG.refresh}"><em class="fa fa-refresh text-middle">&nbsp;</em></a>
 	</div>
 	<div class="filetype">
-		<select name="imgtype" class="vchange">
+		<select name="imgtype" class="form-control w100 pull-left">
 			<option value="file"{SFILE}>{LANG.type_file}</option>
 			<option value="image"{SIMAGE}>{LANG.type_image}</option>
 			<option value="flash"{SFLASH}>{LANG.type_flash}</option>
 		</select>
 	</div>
 	<div class="authorFile">
-		<select name="author" class="vchange">
+		<select name="author" class="form-control w100 pull-left">
 			<option value="0">{LANG.author0}</option>
 			<option value="1">{LANG.author1}</option>
 		</select>
-		<select name="order" class="vchange">
+		<select name="order" class="form-control w150 pull-left">
 			<option value="0">{LANG.order0}</option>
 			<option value="1">{LANG.order1}</option>
 			<option value="2">{LANG.order2}</option>
 		</select>
 	</div>
 	<div class="search">
-		<a href="#" title="{LANG.search}"><em class="icon-search icon-large">&nbsp;</em></a>
+		<a href="#" title="{LANG.search}"><em class="fa fa-search text-middle">&nbsp;</em></a>
 	</div>
 	<div class="uploadForm" style="display:none">
 		<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">

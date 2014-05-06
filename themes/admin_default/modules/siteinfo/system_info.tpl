@@ -1,22 +1,22 @@
 <!-- BEGIN: main -->
-<table class="tab1">
-	<!-- BEGIN: textcap -->
-	<caption>{CAPTION}</caption>
-	<!-- END: textcap -->
-	<!-- BEGIN: urlcap -->
-	<caption>{CAPTION} <a href="{URL}" id="checkchmod" title="{LANG.checkchmod}">({LANG.checkchmod})</a><span id="wait"></span></caption>
-	<!-- END: urlcap -->
-	<col style="width: 50%" />
-	<col style="width: 50%" />
-	<tbody>
-	<!-- BEGIN: loop -->
-		<tr>
-			<td>{KEY}</td>
-			<td>{VALUE}</td>
-		</tr>
-	<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<!-- BEGIN: textcap -->
+		<caption>{CAPTION}</caption>
+		<!-- END: textcap -->
+		<!-- BEGIN: urlcap -->
+		<caption>{CAPTION} <a href="{URL}" id="checkchmod" title="{LANG.checkchmod}">({LANG.checkchmod})</a><span id="wait"></span></caption>
+		<!-- END: urlcap -->
+		<tbody>
+		<!-- BEGIN: loop -->
+			<tr>
+				<td>{KEY}</td>
+				<td>{VALUE}</td>
+			</tr>
+		<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <!-- END: main -->
 <!-- BEGIN: js -->
 <script type="text/javascript">

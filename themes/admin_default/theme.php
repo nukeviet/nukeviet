@@ -185,13 +185,14 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		{
 			if( ! empty( $v['custom_title'] ) )
 			{
-				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? " class=\"current\"" : "") );
+				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? 'current' : 'dropdown') );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
 				$array_submenu = nv_get_submenu( $m );
 
 				if( ! empty( $array_submenu ) )
 				{
+					$xtpl->parse( 'main.top_menu_loop.has_sub' );
 					foreach( $array_submenu as $mop => $submenu_i )
 					{
 						$xtpl->assign( 'SUBMENULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $mop );

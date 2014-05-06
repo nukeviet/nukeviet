@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+<div class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
 			<span class="sr-only">&nbsp;</span>
@@ -10,7 +10,7 @@
 	</div>
 	<div class="collapse navbar-collapse" id="menu-site-default">
 		<ul class="nav navbar-nav">
-			<li<!-- BEGIN: home_active --> class="active"<!-- END: home_active -->> 
+			<li<!-- BEGIN: home_active --> class="active"<!-- END: home_active -->>
 				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
