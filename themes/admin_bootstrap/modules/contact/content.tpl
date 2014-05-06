@@ -11,7 +11,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td class="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -23,7 +23,7 @@
 	<table class="table table-striped table-bordered table-hover">
 	<tbody>
 		<tr>
-			<td class="center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button button-h">{GLANG.edit}</a></td>
+			<td class="text-center"><a href="{URL_EDIT}" title="{GLANG.edit}" class="button button-h">{GLANG.edit}</a></td>
 		</tr>
 	</tbody>
 	</table>

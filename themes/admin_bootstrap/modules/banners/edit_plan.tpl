@@ -50,7 +50,7 @@
 	<div>
 		{DESCRIPTION}
 	</div>
-	<div style="padding-top:10px;" class="center">
+	<div style="padding-top:10px;" class="text-center">
 		<input type="submit" value="{CONTENTS.submit}" />
 	</div>
 </form>

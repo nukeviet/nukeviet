@@ -9,7 +9,7 @@
 					<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 					<input type="hidden" name="catid" value="{CATID}" />
 					<input type="hidden" name="delallcheckss" value="{DELALLCHECKSS}" />
-					<div class="center">
+					<div class="text-center">
 						<strong>{TITLE}</strong>
 						<br />
 						<br />

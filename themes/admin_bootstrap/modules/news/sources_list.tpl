@@ -19,7 +19,7 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<select id="id_weight_{ROW.sourceid}" onchange="nv_chang_sources('{ROW.sourceid}','weight');">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
@@ -27,9 +27,9 @@
 				</select></td>
 				<td>{ROW.title}</td>
 				<td>{ROW.link}</td>
-				<td class="center">
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a>
+				<td class="text-center">
+					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_source({ROW.sourceid})">{GLANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->

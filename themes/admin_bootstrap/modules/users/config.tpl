@@ -4,7 +4,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.access_caption} </caption>
 			<thead>
-				<tr class="center">
+				<tr class="text-center">
 					<th>{LANG.access_admin}</th>
 					<th>{LANG.access_addus}</th>
 					<th>{LANG.access_waiting}</th>
@@ -18,12 +18,12 @@
 				<!-- BEGIN: access -->
 				<tr>
 					<td><strong>{ACCESS.title}</strong></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_addus} value="1" name="access_addus[{ACCESS.id}]"></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_waiting} value="1" name="access_waiting[{ACCESS.id}]"></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_editus} value="1" name="access_editus[{ACCESS.id}]"></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_delus} value="1" name="access_delus[{ACCESS.id}]"></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_passus} value="1" name="access_passus[{ACCESS.id}]"></td>
-					<td class="center"><input type="checkbox" {ACCESS.checked_groups} value="1" name="access_groups[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_addus} value="1" name="access_addus[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_waiting} value="1" name="access_waiting[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_editus} value="1" name="access_editus[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_delus} value="1" name="access_delus[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_passus} value="1" name="access_passus[{ACCESS.id}]"></td>
+					<td class="text-center"><input type="checkbox" {ACCESS.checked_groups} value="1" name="access_groups[{ACCESS.id}]"></td>
 				</tr>
 				<!-- END: access -->
 			</tbody>
@@ -47,12 +47,12 @@
 				<tr>
 					<td>{LANG.nv_unick}</td>
 					<td>
-					<select name="nv_unickmin" class="right">
+					<select name="nv_unickmin" class="text-right">
 						<!-- BEGIN: nv_unickmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unickmin -->
 					</select> ->
-					<select name="nv_unickmax" class="right">
+					<select name="nv_unickmax" class="text-right">
 						<!-- BEGIN: nv_unickmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unickmax -->
@@ -70,12 +70,12 @@
 				<tr>
 					<td>{LANG.nv_upass}</td>
 					<td>
-					<select name="nv_upassmin" class="right">
+					<select name="nv_upassmin" class="text-right">
 						<!-- BEGIN: nv_upassmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upassmin -->
 					</select> ->
-					<select name="nv_upassmax" class="right">
+					<select name="nv_upassmax" class="text-right">
 						<!-- BEGIN: nv_upassmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upassmax -->
@@ -117,7 +117,7 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td class="center" colspan="2"><input type="submit" value="{LANG.save}" name="submit"></td>
+					<td class="text-center" colspan="2"><input type="submit" value="{LANG.save}" name="submit"></td>
 				</tr>
 			</tfoot>
 			<tbody>

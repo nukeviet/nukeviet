@@ -86,14 +86,14 @@ $(document).ready(function() {
 		<thead>
 			<tr>
 				<th><input type="checkbox" name="all" id="check_all"/></th>
-				<th class="center"><a href="{DATA_ORDER.lang.data.url}" title="{DATA_ORDER.lang.data.title}" class="{DATA_ORDER.lang.data.class}">{LANG.log_lang}</a></th>
+				<th class="text-center"><a href="{DATA_ORDER.lang.data.url}" title="{DATA_ORDER.lang.data.title}" class="{DATA_ORDER.lang.data.class}">{LANG.log_lang}</a></th>
 				<th><a href="{DATA_ORDER.module.data.url}" title="{DATA_ORDER.module.data.title}" class="{DATA_ORDER.module.data.class}">{LANG.log_module_name}</a></th>
 				<th> {LANG.log_name_key} </th>
 				<th> {LANG.log_note} </th>
 				<th> {LANG.log_username} </th>
 				<th><a href="{DATA_ORDER.time.data.url}" title="{DATA_ORDER.user.data.title}" class="{DATA_ORDER.time.data.class}">{LANG.log_time}</a></th>
 				<!-- BEGIN: head_delete -->
-				<th class="center"> {LANG.log_feature} </th>
+				<th class="text-center"> {LANG.log_feature} </th>
 				<!-- END: head_delete -->
 			</tr>
 		</thead>
@@ -101,14 +101,14 @@ $(document).ready(function() {
 			<!-- BEGIN: row -->
 			<tr>
 				<td><input type="checkbox" name="all" class="list" value="{DATA.id}"/></td>
-				<td class="center"> {DATA.lang} </td>
+				<td class="text-center"> {DATA.lang} </td>
 				<td> {DATA.module_name} </td>
 				<td> {DATA.name_key} </td>
 				<td> {DATA.note_action} </td>
 				<td> {DATA.username} </td>
 				<td> {DATA.time} </td>
 				<!-- BEGIN: delete -->
-				<td class="center"><em class="icon-trash icon-large">&nbsp;</em> <a href="{DEL_URL}" class="delete">{GLANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-trash-o">&nbsp;</em> <a href="{DEL_URL}" class="delete">{GLANG.delete}</a></td>
 				<!-- END: delete -->
 			</tr>
 			<!-- END: row -->
@@ -120,7 +120,7 @@ $(document).ready(function() {
 				<input type="button" value="{GLANG.delete}" id="delall" class="btn btn-primary" /> <input type="button" value="{LANG.log_empty}" id="logempty" class="btn btn-primary" />
 				<!-- END: foot_delete -->
 				<!-- BEGIN: generate_page -->
-				<div class="center">{GENERATE_PAGE}</div>
+				<div class="text-center">{GENERATE_PAGE}</div>
 				<!-- END: generate_page -->
 				</td>
 			</tr>

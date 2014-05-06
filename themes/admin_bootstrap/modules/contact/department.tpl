@@ -6,7 +6,7 @@
 			<col span="2" class="w100"/>
 		</colgroup>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th>{LANG.part_row_title}</th>
 				<th>{GLANG.email}</th>
 				<th>{GLANG.phonenumber}</th>
@@ -27,15 +27,15 @@
 				<td>{ROW.email}</td>
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
-				<td class="center">
+				<td class="text-center">
 				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');">
 					<!-- BEGIN: status -->
 					<option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
 					<!-- END: status -->
 				</select></td>
-				<td class="center">
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_department('{ROW.id}')">{GLANG.delete}</a>
+				<td class="text-center">
+					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_department('{ROW.id}')">{GLANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: row -->

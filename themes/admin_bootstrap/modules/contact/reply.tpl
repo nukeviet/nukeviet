@@ -10,7 +10,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>
 				<tr>
-					<td class="center"><input name="submit1" type="submit" value="{LANG.send_title}" /></td>
+					<td class="text-center"><input name="submit1" type="submit" value="{LANG.send_title}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>

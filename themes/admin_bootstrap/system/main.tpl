@@ -66,12 +66,12 @@
 			<div id="container">
 				<div id="info_tab">
 					<!-- BEGIN: empty_page_title -->
-					<h3 class="text-primary"><em class="fa fa-info-circle">&nbsp;</em>{PAGE_TITLE}</h3>
+					<h3 class="text-primary pull-left"><em class="fa fa-info-circle">&nbsp;</em>{PAGE_TITLE}</h3>
 					<!-- END: empty_page_title -->
 
 					<!-- BEGIN: select_option -->
-					<span class="cell_right">
-						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;">
+					<span class="pull-right">
+						<select name="select_options" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control w200 input-sm" style="margin-right: 5px">
 							<option value="">{PLEASE_SELECT}</option>
 							<!-- BEGIN: select_option_loop -->
 							<option value="{SELECT_VALUE}">{SELECT_NAME}</option>
@@ -79,7 +79,7 @@
 						</select> </span>
 					<!-- END: select_option -->
 					<!-- BEGIN: site_mods -->
-					<span class="cell_right"> <a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}">{NV_GO_CLIENTMOD}</a> </span>
+					<span class="pull-right" style="margin-right: 5px"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}"><em class="fa fa-globe">&nbsp;</em>{NV_GO_CLIENTMOD}</a></span>
 					<!-- END: site_mods -->
 					<div class="clearfix"></div>
 				</div>

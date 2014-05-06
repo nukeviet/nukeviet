@@ -54,14 +54,14 @@
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
 			<col class="w50" />
-			<col class="center" />
-			<col class="center" />
+			<col class="text-center" />
+			<col class="text-center" />
 			<col class="w200" />
 			<col class="w50" />
 			<col class="w150" />
 		</colgroup>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th>&nbsp;</th>
 				<th>{LANG.mod_name}</th>
 				<th>{LANG.content}</th>
@@ -78,11 +78,11 @@
 					<span style="width:100px;display:inline-block">&nbsp;</span> 
 					<em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
 					<em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
-					<em class="icon-trash icon-large">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
+					<em class="fa fa-trash-o">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
 				</td>
-				<td colspan="3" class="center">
+				<td colspan="3" class="text-center">
 				<!-- BEGIN: generate_page -->
-				<div class="center">
+				<div class="text-center">
 					{GENERATE_PAGE}
 				</div>
 				<!-- END: generate_page -->
@@ -92,12 +92,12 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
+				<td class="text-center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
 				<td>{ROW.module}</td>
 				<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
 				<td>{ROW.email}</td>
-				<td class="center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
-				<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="icon-trash icon-large">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
+				<td class="text-center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

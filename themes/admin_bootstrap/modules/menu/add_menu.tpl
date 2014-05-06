@@ -16,7 +16,7 @@
 			<col class="w150">
 		</colgroup>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th><strong>{LANG.number}</strong></th>
 				<th><strong>{LANG.title}</strong></th>
 				<th><strong>{LANG.link}</strong></th>
@@ -27,7 +27,7 @@
 		<tbody>
 			<!-- BEGIN: loop1 -->
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');">
 					<!-- BEGIN: weight -->
 					<option value="{stt}" {select}>{stt}</option>
@@ -40,9 +40,9 @@
 				</td>
 				<td>{ROW.link}</td>
 				<td>{ROW.name_block}</td>
-				<td class="center">
-					<em class="icon-edit icon-large">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
-					<em class="icon-trash icon-large">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
+				<td class="text-center">
+					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
+					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop1 -->
@@ -68,7 +68,7 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td colspan="3" class="center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td colspan="3" class="text-center"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -184,7 +184,7 @@
 		</table>
 	</div>
 	<!-- END: changepass -->
-	<div class="center">
+	<div class="text-center">
 		<input type="submit" name="confirm" value="{LANG.edit_title}" />
 	</div>
 </form>

@@ -37,7 +37,7 @@
 			</table>
 		</div>
 	</div>
-	<div class="center">
+	<div class="text-center">
 		<input name="submit" type="submit" value="{LANG.pubdate}" class="btn btn-primary" />
 	</div>
 </form>

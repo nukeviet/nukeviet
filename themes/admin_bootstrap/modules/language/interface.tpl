@@ -8,7 +8,7 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th>{LANG.nv_lang_nb}</th>
 				<th>{LANG.nv_lang_module}</th>
 				<th>{LANG.nv_lang_area}</th>

@@ -13,7 +13,7 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr class="fixbg">
-						<td colspan="4" class="center"><strong>{LANG.enter_key}</strong></td>
+						<td colspan="4" class="text-center"><strong>{LANG.enter_key}</strong></td>
 					</tr>
 					<tr>
 						<td> {LANG.username} </td>
@@ -45,7 +45,7 @@
 						<td><input class="fixwidthinput" type="text" name="last_ip" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
-						<td colspan="4" class="center"><input type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
+						<td colspan="4" class="text-center"><input type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -108,7 +108,7 @@
 				<th><a class="{ODER_USERNAME.class}" href="{ODER_USERNAME.url}" title="">{LANG.username}</a></th>
 				<th><a class="{ODER_EMAIL.class}" href="{ODER_EMAIL.url}" title="">{LANG.email}</a></th>
 				<th><a class="{ODER_REGDATE.class}" href="{ODER_REGDATE.url}" title="">{LANG.regdate}</a></th>
-				<td class="center"> {LANG.select} </th>
+				<td class="text-center"> {LANG.select} </th>
 			</tr>
 		</thead>
 		<!-- BEGIN: generate_page -->
@@ -128,7 +128,7 @@
 				<td> {ROW.username} </td>
 				<td> {ROW.email} </td>
 				<td> {ROW.regdate} </td>
-				<td class="center"><a title="" onclick="nv_close_pop('{ROW.userid}');" href="javascript:void(0);">{LANG.select}</a></td>
+				<td class="text-center"><a title="" onclick="nv_close_pop('{ROW.userid}');" href="javascript:void(0);">{LANG.select}</a></td>
 			</tr>
 			<!-- END: row -->
 		</tbody>
@@ -154,7 +154,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="center"> {LANG.noresult} </td>
+				<td class="text-center"> {LANG.noresult} </td>
 			</tr>
 		</tbody>
 	</table>

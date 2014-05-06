@@ -25,16 +25,16 @@
 			<caption>{LANG.add_tags}</caption>
 			<tfoot>
 				<tr>
-					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="right"><strong>{LANG.alias}: </strong></td>
+					<td class="text-right"><strong>{LANG.alias}: </strong></td>
 					<td><input class="w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> {GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max} </td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.keywords}: </strong></td>
+					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
 					<td><input class="w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
@@ -44,7 +44,7 @@
 					<td><textarea class="w500" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.content_homeimg}</strong></td>
+					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
 					<td><input class="w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg"/></td>
 				</tr>
 			</tbody>
@@ -71,7 +71,7 @@
 		return false;
 	});
 
-	var load_bar = '<p class="center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>';
+	var load_bar = '<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>';
 
 	function nv_search_tag(tid) {
 		$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10))

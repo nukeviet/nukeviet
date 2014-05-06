@@ -31,7 +31,7 @@
 	<table class="tab1 fixtab">
 		<tbody>
 			<tr>
-				<td class="center"><input type="button" name="install_content_overwrite" value="{LANG.autoinstall_theme_overwrite}"/></td>
+				<td class="text-center"><input type="button" name="install_content_overwrite" value="{LANG.autoinstall_theme_overwrite}"/></td>
 			</tr>
 		</tbody>
 	</table>
@@ -55,12 +55,12 @@
 	<table class="tab1 fixtab">
 		<tbody>
 			<tr>
-				<td class="center">{LANG.autoinstall_theme_cantunzip}</td>
+				<td class="text-center">{LANG.autoinstall_theme_cantunzip}</td>
 			</tr>
 		</tbody>
 		<tbody>
 			<tr>
-				<td class="center"><input type="button" name="checkfile" value="{LANG.autoinstall_theme_checkfile}"/></td>
+				<td class="text-center"><input type="button" name="checkfile" value="{LANG.autoinstall_theme_checkfile}"/></td>
 			</tr>
 		</tbody>
 	</table>
@@ -117,7 +117,7 @@
 	<table class="tab1 fixtab">
 		<tbody>
 			<tr>
-				<td class="center" style="color:green"><strong>{NV_REDIRECT_LANG}</strong>
+				<td class="text-center" style="color:green"><strong>{NV_REDIRECT_LANG}</strong>
 				<br />
 				<br />
 				<a href="{NV_REDIRECT}" title="{LANG.autoinstall_theme_unzip_setuppage}">{LANG.autoinstall_theme_unzip_setuppage}</a></td>

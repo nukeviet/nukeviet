@@ -16,9 +16,9 @@
 				<th>{LANG.block_pos}</th>
 				<th>{LANG.block_title}</th>
 				<th>{LANG.block_file}</th>
-				<td class="center">{LANG.block_active}</th>
+				<td class="text-center">{LANG.block_active}</th>
 				<th>{LANG.block_func_list}</th>
-				<td class="center">{LANG.functions}</th>
+				<td class="text-center">{LANG.functions}</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -44,7 +44,7 @@
 				</select></td>
 				<td>{ROW.title}</td>
 				<td>{ROW.module} {ROW.file_name}</td>
-				<td class="center">{ROW.active}</td>
+				<td class="text-center">{ROW.active}</td>
 				<td>
 				<!-- BEGIN: all_func -->
 				{LANG.add_block_all_module}
@@ -54,7 +54,7 @@
 				<br />
 				<!-- END: func_inmodule -->
 				</td>
-				<td class="center"><em class="icon-edit icon-large">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp; <em class="icon-trash icon-large">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a class="block_content" title="{ROW.bid}" href="javascript:void(0);">{GLANG.edit}</a> &nbsp;-&nbsp; <em class="fa fa-trash-o">&nbsp;</em> <a class="delete" title="{ROW.bid}" href="javascript:void(0);">{GLANG.delete}</a></td>
 				<td><input type="checkbox" name="idlist" value="{ROW.bid}"/></td>
 			</tr>
 			<!-- END: loop -->

@@ -6,7 +6,7 @@
 		<col style="width:50%" />
 		<tfoot>
 			<tr>
-				<td class="center" colspan="2"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/></td>
+				<td class="text-center" colspan="2"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary"/></td>
 			</tr>
 		</tfoot>
 		<tbody>

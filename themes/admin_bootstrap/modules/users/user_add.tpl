@@ -160,7 +160,7 @@
 		</table>
 	</div>
 	<!-- END: field -->
-	<div class="center">
+	<div class="text-center">
 		<input type="submit" name="confirm" value="{LANG.member_add}" />
 	</div>
 </form>

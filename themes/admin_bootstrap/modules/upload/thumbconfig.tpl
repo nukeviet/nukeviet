@@ -15,7 +15,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="4" class="center"><input type="submit" value="{LANG.pubdate}" name="submit" class="btn btn-primary"/></td>
+					<td colspan="4" class="text-center"><input type="submit" value="{LANG.pubdate}" name="submit" class="btn btn-primary"/></td>
 				</tr>
 			</tfoot>
 			<tbody>

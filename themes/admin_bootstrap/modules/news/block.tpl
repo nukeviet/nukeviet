@@ -18,8 +18,8 @@
 					</tr>
 				</thead>
 				<tfoot>
-					<tr class="left">
-						<td class="center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
+					<tr class="text-left">
+						<td class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></td>
 						<td>
 						<select name="bid">
 							<!-- BEGIN: bid -->
@@ -32,7 +32,7 @@
 				<tbody>
 					<!-- BEGIN: loop -->
 					<tr>
-						<td class="center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"{ROW.checked}/></td>
+						<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"{ROW.checked}/></td>
 						<td>{ROW.title}</td>
 					</tr>
 					<!-- END: loop -->

@@ -10,19 +10,19 @@
 		<col span="6" style="white-space: nowrap;" />
 		<thead>
 			<tr>
-				<td class="center">{LANG.weight}</th>
+				<td class="text-center">{LANG.weight}</th>
 				<th>{LANG.name}</th>
-				<td class="center">{LANG.inhome}</th>
+				<td class="text-center">{LANG.inhome}</th>
 				<th>{LANG.viewcat_page}</th>
-				<td class="center">{LANG.numlinks}</th>
-				<td class="center">{LANG.newday}</th>
+				<td class="text-center">{LANG.numlinks}</th>
+				<td class="text-center">{LANG.newday}</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center">
+				<td class="text-center">
 				<!-- BEGIN: stt -->
 				{STT}
 				<!-- END: stt -->
@@ -39,7 +39,7 @@
 				<span class="red">({NUMSUBCAT})</span>
 				<!-- END: numsubcat -->
 				</a></td>
-				<td class="center">
+				<td class="text-center">
 				<!-- BEGIN: disabled_inhome -->
 				{INHOME}
 				<!-- END: disabled_inhome -->
@@ -51,7 +51,7 @@
 				</select>
 				<!-- END: inhome -->
 				</td>
-				<td class="left">
+				<td class="text-left">
 				<!-- BEGIN: disabled_viewcat -->
 				{VIEWCAT}
 				<!-- END: disabled_viewcat -->
@@ -63,7 +63,7 @@
 				</select>
 				<!-- END: viewcat -->
 				</td>
-				<td class="center">
+				<td class="text-center">
 				<!-- BEGIN: title_numlinks -->
 				{NUMLINKS}
 				<!-- END: title_numlinks -->
@@ -75,7 +75,7 @@
 				</select>
 				<!-- END: numlinks -->
 				</td>
-				<td class="center">
+				<td class="text-center">
 				<!-- BEGIN: title_newday -->
 				{NEWDAY}
 				<!-- END: title_newday -->
@@ -87,7 +87,7 @@
 				</select>
 				<!-- END: newday -->
 				</td>
-				<td class="center">{ROW.adminfuncs}</td>
+				<td class="text-center">{ROW.adminfuncs}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

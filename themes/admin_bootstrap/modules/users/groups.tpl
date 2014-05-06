@@ -42,7 +42,7 @@
 				{CONTENT}
 			</div>
 			<input type="hidden" name="save" value="1" />
-			<p class="center"><input name="submit" type="submit" class="button" value="{LANG.save}" /></p>
+			<p class="text-center"><input name="submit" type="submit" class="button" value="{LANG.save}" /></p>
 		</form>
 	</div>
 	<script type="text/javascript">
@@ -87,7 +87,7 @@
 		<col class="w50" />
 		<col span="6"/>
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th> {LANG.weight} </th>
 				<th> {LANG.title} </th>
 				<th> {LANG.add_time} </th>
@@ -99,22 +99,22 @@
 		</thead>
 		<tbody>
 			<!-- BEGIN: loop -->
-			<tr class="center">
+			<tr class="text-center">
 				<th>
 				<select name="w_{GROUP_ID}" class="newWeight">
 					<!-- BEGIN: option -->
 					<option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
 					<!-- END: option -->
 				</select></th>
-				<td class="left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></th>
+				<td class="text-left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></th>
 				<th>{LOOP.add_time}</th>
 				<th>{LOOP.exp_time}</th>
 				<th>{LOOP.number}</th>
 				<th><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></th>
 				<th>
 				<!-- BEGIN: action -->
-				<em class="icon-edit icon-large">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
-				<em class="icon-trash icon-large">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+				<em class="fa fa-edit">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
+				<em class="fa fa-trash-o">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 				<!-- END: action -->
 				</th>
 			</tr>
@@ -216,7 +216,7 @@
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
 				<!-- BEGIN: delete -->
-				<em class="icon-trash icon-large">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+				<em class="fa fa-trash-o">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 				<!-- END: delete -->
 				</td>
 			</tr>

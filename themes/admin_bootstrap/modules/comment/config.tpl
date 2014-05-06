@@ -3,7 +3,7 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
-			<tr class="center">
+			<tr class="text-center">
 				<th>{LANG.weight}</th>
 				<th>{LANG.mod_name}</th>
 				<th>{LANG.activecomm}</th>
@@ -17,14 +17,14 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="center">{ROW.weight}</td>
+				<td class="text-center">{ROW.weight}</td>
 				<td>{ROW.admin_title}</td>
-				<td class="center"><em class="icon-{ROW.activecomm} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="icon-{ROW.activecomm} icon-large">&nbsp;</em></td>
 				<td>{ROW.allowed_comm}</td>
 				<td>{ROW.view_comm}</td>
 				<td>{ROW.auto_postcomm}</td>
-				<td class="center"><em class="icon-{ROW.emailcomm} icon-large">&nbsp;</em></td>
-				<td class="center"><em class="icon-edit icon-large">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mod_name={ROW.mod_name}">{LANG.edit}</a></td>
+				<td class="text-center"><em class="icon-{ROW.emailcomm} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mod_name={ROW.mod_name}">{LANG.edit}</a></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

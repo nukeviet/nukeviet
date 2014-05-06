@@ -21,20 +21,20 @@
 			<caption>{LANG.add_sources}</caption>
 			<tfoot>
 				<tr>
-					<td class="center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input name="submit1" type="submit" value="{LANG.save}" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="right"><strong>{LANG.name}: </strong></td>
+					<td class="text-right"><strong>{LANG.name}: </strong></td>
 					<td><input class="w500" name="title" type="text" value="{title}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.link}: </strong></td>
+					<td class="text-right"><strong>{LANG.link}: </strong></td>
 					<td><input class="w500" name="link" type="text" value="{link}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="right"><strong>{LANG.source_logo}: </strong></td>
+					<td class="text-right"><strong>{LANG.source_logo}: </strong></td>
 					<td><input class="w500" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg"/>
 					<!-- BEGIN: logo -->
 					<br />

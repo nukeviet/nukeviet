@@ -53,16 +53,16 @@
 					<td>{ADMIN.login}</td>
 					<td>{ADMIN.fullname}</td>
 					<td>{ADMIN.email}</td>
-					<td class="center"><input type="checkbox" name="view_level[]" value="{ADMIN.admid}"{ADMIN.view_level}{ADMIN.disabled} /></td>
-					<td class="center"><input type="checkbox" name="reply_level[]" value="{ADMIN.admid}"{ADMIN.reply_level}{ADMIN.disabled} /></td>
-					<td class="center"><input type="checkbox" name="obt_level[]" value="{ADMIN.admid}"{ADMIN.obt_level} /></td>
+					<td class="text-center"><input type="checkbox" name="view_level[]" value="{ADMIN.admid}"{ADMIN.view_level}{ADMIN.disabled} /></td>
+					<td class="text-center"><input type="checkbox" name="reply_level[]" value="{ADMIN.admid}"{ADMIN.reply_level}{ADMIN.disabled} /></td>
+					<td class="text-center"><input type="checkbox" name="obt_level[]" value="{ADMIN.admid}"{ADMIN.obt_level} /></td>
 				</tr>
 				<!-- END: admin -->
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover">
 			<tr>
-				<td class="center"><input name="submit1" type="submit" value="{GLANG.submit}" /></td>
+				<td class="text-center"><input name="submit1" type="submit" value="{GLANG.submit}" /></td>
 			</tr>
 		</table>
 	</div>

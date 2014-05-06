@@ -31,7 +31,7 @@
 			<!-- END: fixend -->
 		</tr>
 		<tr>
-			<td colspan="3" class="center"><input name="save" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/></td>
+			<td colspan="3" class="text-center"><input name="save" type="submit" value="{LANG.setup_save_layout}" class="btn btn-primary"/></td>
 		</tr>
 	</table>
 </div>
