@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
 <div style="height:27px;margin-top:3px;position:absolute;right:10px;text-align:right;">
-	<a class="button button-h" href="{CONTENTS.edit.0}">{CONTENTS.edit.1}</a>
-	<a class="button button-h" href="javascript:void(0);" onclick="{CONTENTS.act.0}">{CONTENTS.act.1}</a>
-	<a class="button button-h" href="{CONTENTS.add.0}">{CONTENTS.add.1}</a>
-	<a class="button button-h" href="javascript:void(0);" onclick="{CONTENTS.del.0}">{CONTENTS.del.1}</a>
+	<a class="btn btn-default btn-xs" href="{CONTENTS.edit.0}">{CONTENTS.edit.1}</a>
+	<a class="btn btn-default btn-xs" href="javascript:void(0);" onclick="{CONTENTS.act.0}">{CONTENTS.act.1}</a>
+	<a class="btn btn-default btn-xs" href="{CONTENTS.add.0}">{CONTENTS.add.1}</a>
+	<a class="btn btn-default btn-xs" href="javascript:void(0);" onclick="{CONTENTS.del.0}">{CONTENTS.del.1}</a>
 </div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">

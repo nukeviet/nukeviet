@@ -19,11 +19,11 @@
 			<tr>
 				<td class="text-center">{ROW.weight}</td>
 				<td>{ROW.admin_title}</td>
-				<td class="text-center"><em class="icon-{ROW.activecomm} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-{ROW.activecomm}">&nbsp;</em></td>
 				<td>{ROW.allowed_comm}</td>
 				<td>{ROW.view_comm}</td>
 				<td>{ROW.auto_postcomm}</td>
-				<td class="text-center"><em class="icon-{ROW.emailcomm} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-{ROW.emailcomm}">&nbsp;</em></td>
 				<td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mod_name={ROW.mod_name}">{LANG.edit}</a></td>
 			</tr>
 			<!-- END: loop -->
@@ -42,7 +42,7 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td style="text-align: center;" colspan="2"><input name="submit" type="submit" value="{LANG.save}" /></td>
+					<td class="text-center" colspan="2"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -53,7 +53,7 @@
 				<tr>
 					<td><strong>{LANG.allowed_comm}</strong></td>
 					<td>
-					<select name="allowed_comm">
+					<select name="allowed_comm" class="form-control w300">
 						<!-- BEGIN: allowed_comm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: allowed_comm -->
@@ -62,7 +62,7 @@
 				<tr>
 					<td><strong>{LANG.view_comm}</strong></td>
 					<td>
-					<select name="view_comm">
+					<select name="view_comm" class="form-control w300">
 						<!-- BEGIN: view_comm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: view_comm -->
@@ -71,7 +71,7 @@
 				<tr>
 					<td><strong>{LANG.setcomm}</strong></td>
 					<td>
-					<select name="setcomm">
+					<select name="setcomm" class="form-control w300">
 						<!-- BEGIN: setcomm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: setcomm -->
@@ -80,7 +80,7 @@
 				<tr>
 					<td><strong>{LANG.auto_postcomm}</strong></td>
 					<td>
-					<select name="auto_postcomm">
+					<select name="auto_postcomm" class="form-control w300">
 						<!-- BEGIN: auto_postcomm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: auto_postcomm -->
@@ -93,7 +93,7 @@
 				<tr>
 					<td><strong>{LANG.sortcomm}</strong></td>
 					<td>
-					<select name="sortcomm">
+					<select name="sortcomm" class="form-control w300">
 						<!-- BEGIN: sortcomm -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: sortcomm -->
@@ -102,7 +102,7 @@
 				<tr>
 					<td><strong>{LANG.captcha}</strong></td>
 					<td>
-					<select name="captcha">
+					<select name="captcha" class="form-control w300">
 						<!-- BEGIN: captcha -->
 						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 						<!-- END: captcha -->

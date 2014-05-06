@@ -43,7 +43,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="8">
-					<p><a class="button button-h" href="{ADD_NEW_FILE}">{LANG.file_addfile}</a></p>
+					<p><a class="btn btn-default" href="{ADD_NEW_FILE}">{LANG.file_addfile}</a></p>
 				</td>
 			</tr>
 		</tfoot>

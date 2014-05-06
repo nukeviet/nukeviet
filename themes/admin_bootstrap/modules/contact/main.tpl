@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: empty -->
-<div class="quote">
-	<blockquote><span>{LANG.no_row_contact}</span></blockquote>
-</div>
+<div class="alert alert-info">{LANG.no_row_contact}</div>
 <!-- END: empty -->
 <!-- BEGIN: data -->
 <form name="myform" id="myform" method="post" action="{FORM_ACTION}">
@@ -16,7 +14,7 @@
 			<thead>
 				<tr>
 					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th>
-					<td colspan="2">{LANG.name_user_send_title}</th>
+					<th colspan="2">{LANG.name_user_send_title}</th>
 					<th>{LANG.part_row_title}</th>
 					<th>{LANG.title_send_title}</th>
 					<th>&nbsp;</th>

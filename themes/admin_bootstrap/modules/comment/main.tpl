@@ -7,46 +7,50 @@
 	<br />
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
-	<label> {LANG.search_module}: </label>
-	<select name="module">
-		<!-- BEGIN: module -->
-		<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-		<!-- END: module -->
-	</select>
-
-	<label> {LANG.search_status}: </label>
-
-	<select name="sstatus">
-		<!-- BEGIN: search_status -->
-		<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-		<!-- END: search_status -->
-	</select>
-
-	<label> {LANG.search_per_page}: </label>
-	<select name="per_page">
-		<!-- BEGIN: per_page -->
-		<option value="{OPTION.page}" {OPTION.selected} >{OPTION.page}</option>
-		<!-- END: per_page -->
-	</select>
-	{LANG.from_date}:
-	<input name="from_date" id="from_date" value="{FROM.from_date}" style="width: 90px;" maxlength="10" type="text" />
-	{LANG.to_date}:
-	<input name="to_date" id="to_date" value="{FROM.to_date}" style="width: 90px;" maxlength="10" type="text" />
-
-	<br />
-	<br />
-	{LANG.search_key}:
-	<input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" style="width: 265px" />
-
-	<label> {LANG.search_type}: </label>
-	<select name="stype">
-		<!-- BEGIN: search_type -->
-		<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-		<!-- END: search_type -->
-	</select>
-	<input type="submit" value="{LANG.search}" />
-	<br />
-	<label><em>{LANG.search_note}</em></label>
+	<table>
+		<caption>{LANG.search_note}</caption>
+		<tr>
+			<td>{LANG.search_module}:</td>
+			<td>
+				<select name="module" class="form-control w200 pull-left" style="margin-bottom: 10px">
+					<!-- BEGIN: module -->
+					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+					<!-- END: module -->
+				</select>
+			</td>
+			<td>{LANG.search_status}:</td>
+			<td>
+				<select name="sstatus" class="form-control w200 pull-left" style="margin-bottom: 10px">
+					<!-- BEGIN: search_status -->
+					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+					<!-- END: search_status -->
+				</select>
+			</td>
+			<td>{LANG.search_per_page}:</td>
+			<td>
+				<select name="per_page" class="form-control w200 pull-left">
+					<!-- BEGIN: per_page -->
+					<option value="{OPTION.page}" {OPTION.selected} >{OPTION.page}</option>
+					<!-- END: per_page -->
+				</select>
+			</td>
+			<td><input name="from_date" id="from_date" value="{FROM.from_date}" class="form-control w100 pull-left" maxlength="10" type="text" placeholder="{LANG.from_date}" /></td>
+			<td><input name="to_date" id="to_date" value="{FROM.to_date}" class="form-control w100 pull-left" maxlength="10" type="text" placeholder="{LANG.to_date}" /></td>
+		</tr>
+		<tr>
+			<td>{LANG.search_key}:</td>
+			<td><input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control w200" /></td>	
+			<td>{LANG.search_type}:</td>
+			<td>
+				<select name="stype" class="form-control w200">
+					<!-- BEGIN: search_type -->
+					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+					<!-- END: search_type -->
+				</select>
+			</td>
+			<td><input type="submit" value="{LANG.search}" class="btn btn-info" /></td>
+		</tr>
+	</table>
 </form>
 
 <br/>
@@ -57,7 +61,7 @@
 			<col class="text-center" />
 			<col class="text-center" />
 			<col class="w200" />
-			<col class="w50" />
+			<col class="w100" />
 			<col class="w150" />
 		</colgroup>
 		<thead>
@@ -73,11 +77,11 @@
 		<tfoot>
 			<tr>
 				<td colspan="3">
-					<em class="icon-check icon-large">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
-					<em class="icon-check-empty icon-large">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
+					<em class="fa fa-check-square-o">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
+					<em class="fa fa-circle-o">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
 					<span style="width:100px;display:inline-block">&nbsp;</span> 
-					<em class="icon-ok-circle icon-large">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
-					<em class="icon-ok icon-large">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
+					<em class="fa fa-exclamation-circle">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
+					<em class="fa fa-external-link">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
 					<em class="fa fa-trash-o">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
 				</td>
 				<td colspan="3" class="text-center">
@@ -96,7 +100,7 @@
 				<td>{ROW.module}</td>
 				<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
 				<td>{ROW.email}</td>
-				<td class="text-center"><em class="icon-{ROW.status} icon-large">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-{ROW.status}">&nbsp;</em></td>
 				<td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 			</tr>
 			<!-- END: loop -->

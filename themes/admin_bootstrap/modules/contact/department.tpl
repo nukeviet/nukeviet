@@ -17,7 +17,7 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="6"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="button button-h">{LANG.add_row_title}</a></td>
+				<td colspan="6"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="btn btn-default">{LANG.add_row_title}</a></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -28,7 +28,7 @@
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
 				<td class="text-center">
-				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');">
+				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');" class="form-control w100">
 					<!-- BEGIN: status -->
 					<option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
 					<!-- END: status -->

@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: info -->
-<div class="quote">
-	<blockquote><span>{CONTENTS.info}</span></blockquote>
-</div>
+<div class="alert alert-info">{CONTENTS.info}</div>
 <!-- END: info -->
 <!-- BEGIN: empty -->
 <div class="table-responsive">

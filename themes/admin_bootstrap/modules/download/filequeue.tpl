@@ -28,6 +28,6 @@
 	</table>
 </div>
 <div style="margin-top:8px;">
-	<a class="button button-h" href="javascript:void(0);" onclick="nv_filequeue_alldel();">{LANG.download_alldel}</a>
+	<a class="btn btn-default" href="javascript:void(0);" onclick="nv_filequeue_alldel();">{LANG.download_alldel}</a>
 </div>
 <!-- END: main -->
