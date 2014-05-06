@@ -148,6 +148,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$dataform['user_editable_once'] = $nv_Request->get_int( 'user_editable_once', 'post', 0 );
 	$dataform['show_profile'] = $nv_Request->get_int( 'show_profile', 'post', 0 );
 	$dataform['class'] = nv_substr( $nv_Request->get_title( 'class', 'post', '', 0, $preg_replace ), 0, 50);
+	
 	if( $dataform['user_editable'] )
 	{
 		$dataform['user_editable_save'] = ( $dataform['user_editable_once'] ) ? 'once' : 'yes';
@@ -156,6 +157,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$dataform['user_editable_save'] = 'never';
 	}
+	
 	$dataform['field_type'] = nv_substr( $nv_Request->get_title( 'field_type', 'post', '', 0, $preg_replace ), 0, 50);
 
 	$save = 0;

@@ -124,7 +124,7 @@
 	</div>
 	<br />
 	<div style="text-align:center">
-		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" class="btn btn-primary" />
+		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" class="btn btn-info" />
 		<input type="submit" name="submit" value="{LANG.voting_confirm}" class="btn btn-primary" />
 	</div>
 </form>
