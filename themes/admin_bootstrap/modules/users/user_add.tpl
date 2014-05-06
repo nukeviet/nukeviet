@@ -1,10 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: is_forum -->
-<div class="quote">
-	<blockquote class="error">
-		<span>{LANG.modforum}</span>
-	</blockquote>
-</div>
+<div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
 <div class="quote">
@@ -24,48 +20,48 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
+<form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-inline" role="form">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
 					<td> {LANG.account} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 required" value="{DATA.username}" name="username" id="username_iavim" /></td>
+					<td><input type="text" class="form-control w300 required" value="{DATA.username}" name="username" id="username_iavim" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.email} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
+					<td><input type="text" class="form-control w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.password} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w150 required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" /></td>
+					<td><input class="form-control w150 required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w150 required password" type="password" name="password2" value="{DATA.password2}" /></td>
+					<td><input class="form-control w150 required password" type="password" name="password2" value="{DATA.password2}" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 required" type="text" value="{DATA.question}" name="question" /></td>
+					<td><input class="form-control w300 required" type="text" value="{DATA.question}" name="question" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
+					<td><input class="form-control w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.name} </td>
-					<td><input class="w300" type="text" value="{DATA.full_name}" name="full_name" /></td>
+					<td><input class="form-control w300" type="text" value="{DATA.full_name}" name="full_name" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
 					<td>
-					<select name="gender">
+					<select class="form-control" name="gender">
 						<!-- BEGIN: gender -->
 						<option value="{GENDER.key}"{GENDER.selected}>{GENDER.title}</option>
 						<!-- END: gender -->
@@ -77,7 +73,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" class="datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+					<td><input name="birthday" class="form-control datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -123,10 +119,10 @@
 					</td>
 					<td>
 					<!-- BEGIN: textbox -->
-					<input class="w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+					<input class="form-control w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
-					<input class="w100 datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+					<input class="form-control w100 datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
 					<!-- END: date -->
 					<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 					<!-- END: textarea -->
@@ -134,7 +130,7 @@
 					{EDITOR}
 					<!-- END: editor -->
 					<!-- BEGIN: select -->
-					<select name="custom_fields[{FIELD.field}]">
+					<select class="form-control" name="custom_fields[{FIELD.field}]">
 						<!-- BEGIN: loop -->
 						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
 						<!-- END: loop -->
@@ -147,7 +143,7 @@
 					<label for="lb_{FIELD_CHOICES.id}"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
 					<!-- END: checkbox -->
 					<!-- BEGIN: multiselect -->
-					<select name="custom_fields[{FIELD.field}][]" multiple="multiple">
+					<select class="form-control" name="custom_fields[{FIELD.field}][]" multiple="multiple">
 						<!-- BEGIN: loop -->
 						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
 						<!-- END: loop -->
@@ -161,7 +157,7 @@
 		<!-- END: field -->
 	</div>
 	<div class="text-center">
-		<input type="submit" name="confirm" value="{LANG.member_add}" />
+		<input class="btn btn-primary" type="submit" name="confirm" value="{LANG.member_add}" />
 	</div>
 </form>
 <script type="text/javascript">

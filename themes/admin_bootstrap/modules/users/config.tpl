@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="{FORM_ACTION}" method="post">
+<form  class="form-inline" role="form" action="{FORM_ACTION}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption> {LANG.access_caption} </caption>
@@ -38,7 +38,7 @@
 				<tr>
 					<td>{LANG.type_reg}</td>
 					<td>
-					<select name="allowuserreg">
+					<select class="form-control" name="allowuserreg">
 						<!-- BEGIN: registertype -->
 						<option value="{REGISTERTYPE.id}"{REGISTERTYPE.select}> {REGISTERTYPE.value}</option>
 						<!-- END: registertype -->
@@ -47,12 +47,12 @@
 				<tr>
 					<td>{LANG.nv_unick}</td>
 					<td>
-					<select name="nv_unickmin" class="text-right">
+					<select name="nv_unickmin" class="form-control text-right">
 						<!-- BEGIN: nv_unickmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unickmin -->
 					</select> ->
-					<select name="nv_unickmax" class="text-right">
+					<select name="nv_unickmax" class="form-control text-right">
 						<!-- BEGIN: nv_unickmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unickmax -->
@@ -61,7 +61,7 @@
 				<tr>
 					<td>{LANG.nv_unick_type}</td>
 					<td>
-					<select name="nv_unick_type">
+					<select class="form-control" name="nv_unick_type">
 						<!-- BEGIN: nv_unick_type -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_unick_type -->
@@ -70,12 +70,12 @@
 				<tr>
 					<td>{LANG.nv_upass}</td>
 					<td>
-					<select name="nv_upassmin" class="text-right">
+					<select name="nv_upassmin" class="form-control text-right">
 						<!-- BEGIN: nv_upassmin -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upassmin -->
 					</select> ->
-					<select name="nv_upassmax" class="text-right">
+					<select name="nv_upassmax" class="form-control text-right">
 						<!-- BEGIN: nv_upassmax -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upassmax -->
@@ -84,7 +84,7 @@
 				<tr>
 					<td>{LANG.nv_upass_type}</td>
 					<td>
-					<select name="nv_upass_type">
+					<select class="form-control" name="nv_upass_type">
 						<!-- BEGIN: nv_upass_type -->
 						<option value="{OPTION.id}"{OPTION.select}> {OPTION.value}</option>
 						<!-- END: nv_upass_type -->
@@ -101,11 +101,11 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.facebook_client_id}</strong></td>
-					<td><input type="text" class="txt-half" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
+					<td><input type="text" class="form-control txt-half" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.facebook_client_secret}</strong></td>
-					<td><input type="text" class="txt-half" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
+					<td><input type="text" class="form-control txt-half" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
 				</tr>
 			<tbody>
 		</table>
@@ -117,15 +117,15 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td class="text-center" colspan="2"><input type="submit" value="{LANG.save}" name="submit"></td>
+					<td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit"></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<tr>
 					<td>{LANG.avatar_size}</td>
 					<td>
-						<input type="text" class="txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
-						<input type="text" class="txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
+						<input type="text" class="form-control txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
+						<input type="text" class="form-control txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
 					</td>
 				</tr>
 				<!-- BEGIN: user_forum -->
@@ -137,7 +137,7 @@
 				<tr>
 					<td>{LANG.dir_forum}</td>
 					<td>
-					<select name="dir_forum">
+					<select class="form-control" name="dir_forum">
 						<option value="">&nbsp;</option>
 						<!-- BEGIN: dir_forum -->
 						<option value="{DIR_FORUM.id}"{DIR_FORUM.select}> {DIR_FORUM.value}</option>
@@ -147,7 +147,7 @@
 				<tr>
 					<td>{LANG.whoviewlistuser}</td>
 					<td>
-					<select name="whoviewuser">
+					<select class="form-control" name="whoviewuser">
 						<!-- BEGIN: whoviewlistuser -->
 						<option value="{WHOVIEW.id}"{WHOVIEW.select}> {WHOVIEW.value}</option>
 						<!-- END: whoviewlistuser -->

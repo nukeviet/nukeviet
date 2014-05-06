@@ -17,11 +17,11 @@
 				<tbody>
 					<tr>
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
-						<td><input title="{LANG.title}" class="txt" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
+						<td><input title="{LANG.title}" class="form-control txt" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.exp_time}:</td>
-						<td><input type="text" name="exp_time" class="w150 datepicker" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
+						<td><input type="text" name="exp_time" class="form-control w150 datepicker" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
 					</tr>
 					<tr>
 						<td>{LANG.public}:</td>
@@ -87,7 +87,7 @@
 	<!-- BEGIN: list -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<col class="w50" />
+		<col class="w100" />
 		<col span="6"/>
 		<thead>
 			<tr class="text-center">
@@ -103,23 +103,23 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr class="text-center">
-				<th>
-				<select name="w_{GROUP_ID}" class="newWeight">
+				<td>
+				<select name="w_{GROUP_ID}" class="form-control newWeight">
 					<!-- BEGIN: option -->
 					<option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
 					<!-- END: option -->
-				</select></th>
-				<td class="text-left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></th>
-				<th>{LOOP.add_time}</th>
-				<th>{LOOP.exp_time}</th>
-				<th>{LOOP.number}</th>
-				<th><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></th>
-				<th>
+				</select></td>
+				<td class="text-left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></td>
+				<td>{LOOP.add_time}</td>
+				<td>{LOOP.exp_time}</td>
+				<td>{LOOP.number}</td>
+				<td><input name="a_{GROUP_ID}" type="checkbox" class="act" value="1"{LOOP.act} /></td>
+				<td>
 				<!-- BEGIN: action -->
 				<em class="fa fa-edit">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
 				<em class="fa fa-trash-o">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
 				<!-- END: action -->
-				</th>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -252,7 +252,7 @@
 <!-- BEGIN: userlist -->
 <!-- BEGIN: adduser -->
 <div id="ablist">
-	{LANG.search_id}: <input title="{LANG.search_id}" class="txt" type="text" name="uid" id="uid" value="" maxlength="11" style="width:50px" />
+	{LANG.search_id}: <input title="{LANG.search_id}" class="form-control txt" type="text" name="uid" id="uid" value="" maxlength="11" style="width:50px" />
 	<input name="searchUser" type="button" value="{GLANG.search}" />
 	<input name="addUser" type="button" value="{LANG.addMemberToGroup}" />
 </div>

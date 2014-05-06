@@ -11,21 +11,19 @@
 </script>
 <div id="users">
 	<!-- BEGIN: is_forum -->
-	<div class="quote">
-		<blockquote class="error"><span>{LANG.modforum}</span></blockquote>
-	</div>
+	<div class="alert alert-warning">{LANG.modforum}</div>
 	<!-- END: is_forum -->
 	<div style="padding-top:10px;">
-		<form action="{FORM_ACTION}" method="post" onsubmit="nv_check_form(this);return false;">
+		<form class="form-inline" role="form" action="{FORM_ACTION}" method="post" onsubmit="nv_check_form(this);return false;">
 			<span><strong>{LANG.search_type}:</strong></span>
-			<select name="method" id="f_method">
+			<select class="form-control" name="method" id="f_method">
 				<option value="">---</option>
 				<!-- BEGIN: method -->
 				<option value="{METHODS.key}"{METHODS.selected}>{METHODS.value}</option>
 				<!-- END: method -->
 			</select>
-			<input type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
-			<input name='search' type="submit" value="{LANG.submit}" />
+			<input class="form-control" type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
+			<input class="btn btn-primary" name='search' type="submit" value="{LANG.submit}" />
 			<p>
 				{LANG.search_note}
 			</p>

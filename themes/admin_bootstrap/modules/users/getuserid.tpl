@@ -17,16 +17,16 @@
 					</tr>
 					<tr>
 						<td> {LANG.username} </td>
-						<td><input class="fixwidthinput" type="text" name="username" value="" maxlength="100" /></td>
+						<td><input class="form-control fixwidthinput" type="text" name="username" value="" maxlength="100" /></td>
 						<td> {LANG.full_name} </td>
-						<td><input class="fixwidthinput" type="text" name="full_name" value="" maxlength="100" /></td>
+						<td><input class="form-control fixwidthinput" type="text" name="full_name" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
 						<td> {LANG.email} </td>
-						<td><input class="fixwidthinput" type="text" name="email" value="" maxlength="100" /></td>
+						<td><input class="form-control fixwidthinput" type="text" name="email" value="" maxlength="100" /></td>
 						<td> {LANG.gender} </td>
 						<td>
-						<select name="gender" class="fixwidthinput">
+						<select name="gender" class="form-control fixwidthinput">
 							<!-- BEGIN: gender -->
 							<option value="{GENDER.key}">{GENDER.title}</option>
 							<!-- END: gender -->
@@ -34,18 +34,18 @@
 					</tr>
 					<tr>
 						<td> {LANG.regdate} </td>
-						<td> {LANG.from} <input class="txt" type="text" value="" name="regdatefrom" id="regdatefrom" style="width:90px" maxlength="100" /> {LANG.to} <input class="txt" type="text" value="" name="regdateto" id="regdateto" style="width:90px" maxlength="100" /></td>
+						<td> {LANG.from} <input class="form-control txt" type="text" value="" name="regdatefrom" id="regdatefrom" style="width:90px" maxlength="100" /> {LANG.to} <input class="form-control txt" type="text" value="" name="regdateto" id="regdateto" style="width:90px" maxlength="100" /></td>
 						<td> {LANG.sig} </td>
-						<td><input class="fixwidthinput" type="text" name="sig" value="" maxlength="100" /></td>
+						<td><input class="form-control fixwidthinput" type="text" name="sig" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
 						<td> {LANG.last_login} </td>
-						<td> {LANG.from} <input class="txt" type="text" value="" name="last_loginfrom" id="last_loginfrom" style="width:90px" maxlength="100" /> {LANG.to} <input class="txt" type="text" value="" name="last_loginto" id="last_loginto" style="width:90px" maxlength="100" /></td>
+						<td> {LANG.from} <input class="form-control txt" type="text" value="" name="last_loginfrom" id="last_loginfrom" style="width:90px" maxlength="100" /> {LANG.to} <input class="form-control txt" type="text" value="" name="last_loginto" id="last_loginto" style="width:90px" maxlength="100" /></td>
 						<td> {LANG.last_idlogin} </td>
-						<td><input class="fixwidthinput" type="text" name="last_ip" value="" maxlength="100" /></td>
+						<td><input class="form-control fixwidthinput" type="text" name="last_ip" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
-						<td colspan="4" class="text-center"><input type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
+						<td colspan="4" class="text-center"><input class="btn btn-primary" type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
 					</tr>
 				</tbody>
 			</table>

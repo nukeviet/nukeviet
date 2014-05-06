@@ -1,7 +1,5 @@
 <!-- BEGIN: main -->
-<div class="quote">
-	<blockquote><span>{LANG.import_note}</span></blockquote>
-</div>
+<div class="alert alert-warning">{LANG.import_note}</div>
 <!-- BEGIN: read -->
 <br />
 {LANG.read_note}
