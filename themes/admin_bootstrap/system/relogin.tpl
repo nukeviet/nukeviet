@@ -9,9 +9,10 @@
 		<meta name="copyright" content="Copyright (c) {SITE_NAME}" />
 		<meta name="robots" content="noindex, nofollow" />
 		<title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {PAGE_TITLE}</title>
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css" />
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/font-awesome.css" />
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{SITELANG}.js"></script>
 		<script type="text/javascript">
 			function nv_checkadminlogin_submit() {
@@ -47,11 +48,11 @@
 					<form class="loginform" method="post" onsubmit="return nv_checkadminlogin_submit();">
 						<p>
 							<label for="nv_password">{N_PASSWORD}:</label>
-							<input class="input-big" name="nv_password" type="password" id="password" />
+							<input class="form-control" name="nv_password" type="password" id="password" />
 						</p>
 						<input name="redirect" value="{REDIRECT}" type="hidden"/>
 						<input name="save" id="save" type="hidden" value="1" />
-						<input class="submitform button-h" type="submit" value="{N_SUBMIT}" />
+						<input class="submitform btn btn-primary" type="submit" value="{N_SUBMIT}" />
 					</form>
 					<p class="text-right" style="padding:10px;">
 						<a class="lostpass" href="javascript:void(0);" onclick="nv_admin_logout();">{NV_LOGOUT}</a>
