@@ -85,8 +85,6 @@ $array_setting_payment = array();
 
 if( $data['active_payment'] == '1' )
 {
-	$array_setting_payment = array();
-
 	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num_items = $result->rowCount();
@@ -187,6 +185,7 @@ if( ! empty( $error ) )
 if( ! empty( $array_setting_payment ) )
 {
 	$a = 0;
+	$all_page = sizeof( $array_setting_payment );
 	$payment = $nv_Request->get_string( 'payment', 'get', 0 );
 
 	foreach( $array_setting_payment as $value )

@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
 <script type="text/javascript">
 	var url_back = '{url_back}';
-	var url_change_weight = '{url_change}'; 
+	var url_change_weight = '{url_change}';
 </script>
-<table class="tab1" style="margin-bottom:0">
+<table class="table table-striped table-bordered table-hover" style="margin-bottom:0">
 	<tbody>
 		<tr>
 			<td width="120px"><strong>{LANG.content_cat}</strong></td>
@@ -16,7 +16,7 @@
 		</tr>
 	</tbody>
 </table>
-<table class="tab1" style="margin-bottom:0">
+<table class="table table-striped table-bordered table-hover" style="margin-bottom:0">
 	<thead>
 		<tr>
 			<td width="30px" class="text-center">{LANG.weight}</td>
@@ -35,13 +35,18 @@
 	<!-- END: listrow -->
 	<tfoot>
 		<tr>
-			<td colspan="5"></td>
+			<td colspan="5">&nbsp;</td>
 		</tr>
 	</tfoot>
 </table>
 <form class="form-inline" action="" method="post"><input name="save" type="hidden" value="1" />
-	<table summary="{DATA.caption}" class="tab1">
+	<table summary="{DATA.caption}" class="table table-striped table-bordered table-hover">
 		<caption>{DATA.caption}</caption>
+		<tfoot>
+			<tr>
+				<td colspan="2"><input class="btn btn-primary" name="submit" type="submit" value="{LANG.prounit_save}" /></td>
+			</tr>
+		</tfoot>
 		<tr>
 			<td align="right" width="180px"><strong>{LANG.topic_title}: </strong></td>
 			<td><input class="form-control" style="width:50%" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
@@ -58,15 +63,12 @@
 		</tr>
 	</table>
 	<br>
-	<center><input class="btn btn-primary" name="submit" type="submit" value="{LANG.prounit_save}" />
-	</center>
 </form>
 <script type="text/javascript">
 	function changecatid(ob) {
 		catid = $(ob).val();
 		window.location = '{LINK_CHANGE}' + catid;
 	}
-
 
 	$('a.delete').click(function(event) {
 		event.preventDefault();
@@ -81,6 +83,6 @@
 				}
 			});
 		}
-	}); 
+	});
 </script>
 <!-- END: main -->

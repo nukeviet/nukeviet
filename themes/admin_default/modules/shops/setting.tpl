@@ -96,15 +96,14 @@
 <script type="text/javascript">
 	var url_back = '{url_back}';
 	var url_change_weight = '{url_change}';
-	var url_active = '{url_active}'; 
+	var url_active = '{url_active}';
 </script>
-<div style="background:#F0F0F0;padding:10px; font-weight:bold">
-	{LANG.paymentcaption}
-</div>
-<table id="edit" class="tab1">
+
+<table id="edit" class="table table-striped table-bordered table-hover">
+	<caption>{LANG.paymentcaption}</caption>
 	<thead>
 		<tr>
-			<td width="50" class="text-center"><strong>{LANG.weight}</strong></td>
+			<td class="w100 text-center"><strong>{LANG.weight}</strong></td>
 			<td><strong>{LANG.paymentname}</strong></td>
 			<td><strong>{LANG.domain}</strong></td>
 			<td class="text-center"><strong>{LANG.active}</strong></td>

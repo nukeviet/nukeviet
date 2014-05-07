@@ -47,7 +47,7 @@
 	<caption>{LANG.paymentcaption}</caption>
 	<thead>
 		<tr>
-			<td width="50" class="text-center"><strong>{LANG.weight}</strong></td>
+			<td class="text-center w100"><strong>{LANG.weight}</strong></td>
 			<td><strong>{LANG.paymentname}</strong></td>
 			<td><strong>{LANG.domain}</strong></td>
 			<td class="text-center"><strong>{LANG.active}</strong></td>

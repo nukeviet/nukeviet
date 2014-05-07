@@ -742,7 +742,7 @@ function FormatNumber( $number, $decimals = 0, $thousand_separator = '&nbsp;', $
  */
 function drawselect_number( $select_name = "", $number_start = 0, $number_end = 1, $number_curent = 0, $func_onchange = "" )
 {
-	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
+	$html = "<select class=\"form-control\" name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	for( $i = $number_start; $i < $number_end; $i++ )
 	{
 		$select = ( $i == $number_curent ) ? "selected=\"selected\"" : "";
