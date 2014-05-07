@@ -3,7 +3,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<tr>
-				<td style="padding:10px"><strong>{LANG.setting_intro_pay}</strong><span style="font-style:italic">{LANG.document_payment_note}</span></td>
+				<td style="padding:10px"><strong>{LANG.setting_intro_pay}</strong><br /><span style="font-style:italic">{LANG.document_payment_note}</span></td>
 			</tr>
 			<tr>
 				<td>{edit_intro_pay}</td>

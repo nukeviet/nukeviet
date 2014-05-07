@@ -4,10 +4,8 @@
 </div>
 <br />
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{ERROR}</div>
+<div class="clear">&nbsp;</div>
 <!-- END: error -->
 <form class="form-inline" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php" method="post" id="edit">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -29,7 +27,7 @@
 				</tr>
 				<tr>
 					<td align="right"><strong>{LANG.source_logo}: </strong></td>
-					<td><input class="form-control" style="width:500px" type="text" name="logo" id="logo" value="{DATA.logo}"/> &nbsp; <input class="btn btn-info" style="width:100px" type="button" value="{GLANG.browse_image}" name="selectimg"/>
+					<td><input class="form-control" style="width:500px" type="text" name="logo" id="logo" value="{DATA.logo}"/> &nbsp; <input class="btn btn-info" type="button" value="{GLANG.browse_image}" name="selectimg"/>
 					<!-- BEGIN: logo -->
 					<br />
 					<img src="{DATA.logo}" style="max-width:200px"/>

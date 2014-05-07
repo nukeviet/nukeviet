@@ -360,8 +360,8 @@ function get_alias() {
 }
 
 function nv_add_otherimage() {
-	var newitem = "<tr><td><input class=\"txt\" value=\"\" name=\"otherimage[]\" id=\"otherimage_" + file_items + "\" style=\"width : 80%\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=otherimage_" + file_items + "&path=" + file_dir + "&type=file&currentpath=" + currentpath + "', 'NVImg', 850, 400, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" /></td></tr>";
+	var newitem = "<tr><td><input class=\"form-control\" value=\"\" name=\"otherimage[]\" id=\"otherimage_" + file_items + "\" style=\"width : 80%\" maxlength=\"255\" />";
+	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=otherimage_" + file_items + "&path=" + file_dir + "&type=file&currentpath=" + currentpath + "', 'NVImg', 850, 400, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" /></td></tr>";
 	$("#otherimage").append(newitem);
 	file_items++;
 }

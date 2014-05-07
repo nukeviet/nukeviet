@@ -1,8 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="error">
-	{error}
-</div>
+<div class="alert alert-danger">{error}</div>
 <!-- END: error -->
 
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -22,11 +20,11 @@
 					<tbody>
 						<tr>
 							<td width="120px"><strong>{LANG.name} <span class="require">(*)</span></strong></td>
-							<td><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="form-control" /></td>
+							<td><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="form-control" style="width: 400px" /></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.alias}: </strong></td>
-							<td><input class="form-control txt-half" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255"/> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
+							<td><input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" style="width: 400px" /> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.content_product_code}: </strong></td>
@@ -53,20 +51,20 @@
 							<td><strong>{LANG.content_homeimg}</strong></td>
 						</tr>
 						<tr>
-							<td><input class="form-control" style="width:400px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/><input type="button" onclick="nv_add_otherimage();" value="{LANG.add_otherimage}"></td>
+							<td><input class="form-control" style="width:400px; margin-right: 5px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input type="button" value="{LANG.browse_image}" name="selectimg" class="btn btn-info" style="margin-right: 5px" /><input type="button" class="btn btn-info" onclick="nv_add_otherimage();" value="{LANG.add_otherimage}"></td>
 						</tr>
 					</tbody>
 					<tbody id="otherimage">
 						<!-- BEGIN: otherimage -->
 						<tr>
-							<td><input class="txt" value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" style="width:80%" maxlength="255"><input value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
+							<td><input value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255"><input value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
 						</tr>
 						<!-- END: otherimage -->
 						<tr>
 							<td> {LANG.content_homeimgalt} </td>
 						</tr>
 						<tr>
-							<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:98%" /></td>
+							<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" name="homeimgalt" style="width:100%" /></td>
 						</tr>
 					</tbody>
 				</table>
@@ -127,19 +125,19 @@
 							<td><strong>{LANG.content_note}</strong></td>
 						</tr>
 						<tr>
-							<td><textarea class="form-control" rows="4" name="note" style="width:98%">{rowcontent.note}</textarea></td>
+							<td><textarea class="form-control" rows="4" name="note" style="width:100%">{rowcontent.note}</textarea></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.content_warranty}</strong></td>
 						</tr>
 						<tr>
-							<td><textarea class="textareas" name="warranty" style="width:98%; height:30px">{rowcontent.warranty}</textarea></td>
+							<td><textarea class="form-control" name="warranty" style="width:100%; height:50px">{rowcontent.warranty}</textarea></td>
 						</tr>
 						<tr>
 							<td><strong>{LANG.content_promotional}</strong></td>
 						</tr>
 						<tr>
-							<td><textarea class="textareas" name="promotional" style="width:98%;height:30px">{rowcontent.promotional}</textarea></td>
+							<td><textarea class="form-control" name="promotional" style="width:100%;height:50px">{rowcontent.promotional}</textarea></td>
 						</tr>
 					</tbody>
 				</table></td>
@@ -288,7 +286,7 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="gray center">
+	<div class="text-center" style="margin-top: 10px">
 		<!-- BEGIN:status -->
 		<input class="btn btn-primary" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->

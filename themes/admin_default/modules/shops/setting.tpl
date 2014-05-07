@@ -13,11 +13,11 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_homesite}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /> x <input class="form-control" type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
+				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /><span class="text-middle"> x </span><input class="form-control" type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_page}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /> {LANG.setting_per_note_home}</td>
+				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /><span class="text-middle"> {LANG.setting_per_note_home} </span></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_row}</strong></td>
@@ -68,11 +68,11 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.format_order_id}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.format_order_id}" style="width: 100px;" name="format_order_id" /> {LANG.format_order_id_note}</td>
+				<td><input class="form-control" type="text" value="{DATA.format_order_id}" style="width: 100px;" name="format_order_id" /><span class="text-middle"> {LANG.format_order_id_note} </span></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.format_code_id}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /> {LANG.format_order_id_note}</td>
+				<td><input class="form-control" type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /><span class="text-middle"> {LANG.format_order_id_note} </span></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
