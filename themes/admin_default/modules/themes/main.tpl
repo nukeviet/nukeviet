@@ -1,12 +1,11 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div id="edit"></div>
-<div class="quote">
-	<blockquote class="error"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></blockquote>
-</div>
+<div id="edit">&nbsp;</div>
+<div class="alert alert-danger"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></div>
 <!-- END: error -->
-<table class="tab1">
-	<tbody>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered">
+		<tbody>
 		<tr>
 			<!-- BEGIN: loop -->
 			<!-- BEGIN: active -->
@@ -51,7 +50,8 @@
 			<!-- END: loop -->
 		</tr>
 	</tbody>
-</table>
+	</table>
+</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {

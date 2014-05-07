@@ -34,22 +34,16 @@ function timeoutsessrun() {
 }
 
 
-jQuery(document).ready(function() {
+$(document).ready(function(){
+	$('#menu-site-default .dropdown').hover(function(){
+		$(this).addClass('open');
+	}, function(){
+		$(this).removeClass('open');
+	});
+
 	myTimerPage = setTimeout(function() {
 		timeoutsessrun();
 	}, nv_check_pass_mstime);
-
-	ddsmoothmenu.init({
-		arrowimages : {
-			down : ['downarrowclass', nv_siteroot + 'themes/admin_default/images/menu_down.png', 23],
-			right : ['rightarrowclass', nv_siteroot + 'themes/admin_default/images/menu_right.png']
-		},
-		zindexvalue : 8888,
-		mainmenuid : "smoothmenu",
-		orientation : 'h',
-		classname : 'ddsmoothmenu',
-		contentsource : "markup"
-	});
 
 	ddsmoothmenu.init({
 		arrowimages : {
@@ -71,9 +65,6 @@ jQuery(document).ready(function() {
 	$('form').submit(function() {
 		$(window).unbind();
 	});
-	
-	// Modify table caption
-	$('table.tab1 caption').prepend(' &nbsp; <em class="icon-double-angle-right">&nbsp;</em> ');
 });
 
 function ver_menu_click() {
@@ -81,13 +72,13 @@ function ver_menu_click() {
 		$('#ver_menu').hide({
 			direction : "horizontal"
 		}, 500);
-		$('#contentwrapper').css("margin-left", "0px");
-		$('#cs_menu i').removeClass("icon-circle-arrow-left").addClass("icon-circle-arrow-right");
+		$('#contentwrapper').css("margin-left", "5px");
+		$('#cs_menu').removeClass("fa-arrow-circle-left").addClass("fa-arrow-circle-right");
 	} else {
 		$('#contentwrapper').css("margin-left", "226px");
 		$('#ver_menu').show({
 			direction : "horizontal"
 		}, 500);
-		$('#cs_menu i').removeClass("icon-circle-arrow-right").addClass("icon-circle-arrow-left");
+		$('#cs_menu').removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-left");
 	}
 }

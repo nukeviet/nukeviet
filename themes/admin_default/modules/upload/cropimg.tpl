@@ -6,47 +6,30 @@
 		<title>{LANG.crop}</title>
 		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
+		<link type="text/css" href="{NV_BASE_SITEURL}js/cropimages/cropper.min.css" rel="stylesheet" />
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.draggable.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.watermarker.js"></script>
-		<style type="text/css">
-			div.watermark {
-				border: 1px dashed #000;
-			}
-
-			img.watermark:hover {
-				cursor: move;
-			}
-		</style>
-		<script type="text/javascript">
-			$().ready(function() {
-				$('#watermarked').Watermarker({
-					watermark_img : '{NV_BASE_SITEURL}themes/admin_default/images/transparent.png',
-					x : '{LOGOSITE.x}',
-					y : '{LOGOSITE.y}',
-					w : '{LOGOSITE.w}',
-					h : '{LOGOSITE.h}',
-					opacity : 1,
-					position : 'centercenter',
-					onChange : showCoords
-				});
-				$(window).scrollTop(9999);
-				$(window).scrollLeft(9999);
-			});
-
-			function showCoords(c) {
-				$('#x').val(c.x);
-				$('#y').val(c.y);
-				$('#w').val(c.w);
-				$('#h').val(c.h);
-			};
-
-			function addlogo(path, file) {
-				$.post('{NV_OP_URL}', 'path=' + path + '&file=' + file + '&x=' + $('#x').val() + '&y=' + $('#y').val() + '&w=' + $('#w').val() + '&h=' + $('#h').val(), function(theResponse) {
+		<script type="text/javascript" src="{NV_BASE_SITEURL}js/cropimages/cropper.min.js"></script>
+	</head>
+	<body>
+	<div id="infoimage">
+        <img class="cropper" src="{NV_BASE_SITEURL}{IMG_PATH}/{IMG_FILE}?{IMG_MTIME}" />
+        <hr />
+		X:
+		<input type="text" id="dataX1" name="dataX1" value="" style="width:30px;" readonly="readonly"/>
+		Y:
+		<input type="text" id="dataY1" name="dataY1" value="" style="width:30px;" readonly="readonly"/>
+		W:
+		<input type="text" id="dataX2" name="dataX2" value="" style="width:30px;" readonly="readonly"/>
+		H:
+		<input type="text" id="dataY2" name="dataY2" value="" style="width:30px;" readonly="readonly"/>
+		<input type="button" name="save" value="{LANG.addlogosave}" onclick="cropimg('{IMG_PATH}', '{IMG_FILE}')"/>
+		<br />         
+        <script>
+            $("#infoimage").css("width", $(".cropper").width());
+            $("#infoimage").css("height", $(".cropper").height());
+            function cropimg(path, file) {
+				$.post('{NV_OP_URL}', 'path=' + path + '&file=' + file + '&x=' + $('#dataX1').val() + '&y=' + $('#dataY1').val() + '&w=' + $('#dataX2').val() + '&h=' + $('#dataY2').val(), function(theResponse) {
 					var r_split = theResponse.split("#");
 					if (r_split[0] != 'OK') {
 						alert(r_split[1]);
@@ -56,21 +39,94 @@
 					}
 				});
 			}
-		</script>
-	</head>
-	<body>
-		<img src="{NV_BASE_SITEURL}{IMG_PATH}/{IMG_FILE}?{IMG_MTIME}" id="watermarked" />
-		<hr />
-		X:
-		<input type="text" id="x" name="x" value="" style="width:30px;" readonly="readonly"/>
-		Y:
-		<input type="text" id="y" name="y" value="" style="width:30px;" readonly="readonly"/>
-		W:
-		<input type="text" id="w" name="w" value="" style="width:30px;" readonly="readonly"/>
-		H:
-		<input type="text" id="h" name="h" value="" style="width:30px;" readonly="readonly"/>
-		<input type="button" name="save" value="{LANG.addlogosave}" onclick="addlogo('{IMG_PATH}', '{IMG_FILE}')"/>
-		<br />
+            $(function() {
+                var $image = $(".cropper"),
+                    $dataX1 = $("#dataX1"),
+                    $dataY1 = $("#dataY1"),
+                    $dataX2 = $("#dataX2"),
+                    $dataY2 = $("#dataY2"),
+                    $dataHeight = $("#dataHeight"),
+                    $dataWidth = $("#dataWidth");
+                $image.cropper({
+                    aspectRatio: 16 / 9,
+                    preview: ".extra-preview",
+                    done: function(data) {
+                        $dataX1.val(data.x1);
+                        $dataY1.val(data.y1);
+                        $dataX2.val(data.x2);
+                        $dataY2.val(data.y2);
+                        $dataHeight.val(data.height);
+                        $dataWidth.val(data.width);
+                    }
+                });
+
+                $("#enable").click(function() {
+                    $image.cropper("enable");
+                });
+
+                $("#disable").click(function() {
+                    $image.cropper("disable");
+                });
+
+                $("#free-ratio").click(function() {
+                    $image.cropper("setAspectRatio", "auto");
+                });
+
+                $("#get-data").click(function() {
+                    var data = $image.cropper("getData"),
+                        val = "";
+
+                    try {
+                        val = JSON.stringify(data);
+                    } catch (e) {
+                        console.log(data);
+                    }
+
+                    $("#get-data-input").val(val);
+                });
+
+                var $setDataX1 = $("#set-data-x1"),
+                    $setDataY1 = $("#set-data-y1"),
+                    $setDataWidth = $("#set-data-width"),
+                    $setDataHeight = $("#set-data-height"),
+                    $setDataX2 = $("#set-data-x2"),
+                    $setDataY2 = $("#set-data-y2");
+
+                $("#set-data").click(function() {
+                    var data = {
+                        x1: $setDataX1.val(),
+                        y1: $setDataY1.val(),
+                        width: $setDataWidth.val(),
+                        height: $setDataHeight.val(),
+                        x2: $setDataX2.val(),
+                        y2: $setDataY2.val()
+                    }
+
+                    $image.cropper("setData", data);
+                });
+
+                $("#set-aspect-ratio").click(function() {
+                    var val = $("#set-aspect-ratio-input").val(),
+                        aspectRatio = parseInt(val, 10);
+
+                    $image.cropper("setAspectRatio", aspectRatio);
+                });
+
+                $("#get-img-info").click(function() {
+                    var data = $image.cropper("getImgInfo"),
+                        val = "";
+
+                    try {
+                        val = JSON.stringify(data);
+                    } catch (e) {
+                        console.log(data);
+                    }
+
+                    $("#get-img-info-input").val(val);
+                });
+            });
+        </script>
+		</div>
 	</body>
 </html>
 <!-- END: main -->

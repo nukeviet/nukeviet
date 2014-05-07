@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: add -->
 <div style="margin-top:8px;position:absolute;right:10px;">
-	<a class="button button-h" href="{EDIT_URL}" title="{GLANG.edit}">{GLANG.edit}</a>
+	<a class="btn btn-default" href="{EDIT_URL}" title="{GLANG.edit}">{GLANG.edit}</a>
 </div>
 <div style="margin-bottom:20px;">
 	{DATA}
@@ -14,7 +14,7 @@
 		{DATA}
 	</div>
 	<br />
-	<div class="center"><input name="submit1" type="submit" value="{LANG.save}" />
+	<div class="text-center"><input name="submit1" type="submit" value="{LANG.save}" class="btn btn-primary" />
 	</div>
 </form>
 <!-- END: edit -->
