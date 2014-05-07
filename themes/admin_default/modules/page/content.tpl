@@ -22,7 +22,7 @@
 				</tr>
 				<tr>
 					<td class="text-right">{LANG.alias}</td>
-					<td><input class="w500 form-control" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="255" /> <em class="icon-refresh icon-large icon-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+					<td><input class="w500 form-control" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="255" /> <em class="fa fa-refresh fa-lg icon-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="text-right">{LANG.image}</td>

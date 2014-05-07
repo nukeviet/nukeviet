@@ -7,7 +7,7 @@
 <!-- BEGIN: error -->
 <div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php" method="post">
+<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="bid" value="{bid}" />
@@ -27,7 +27,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <em class="icon-refresh icon-large icon-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> &nbsp; <em class="fa fa-refresh fa-lg icon-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>

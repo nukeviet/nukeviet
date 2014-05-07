@@ -6,20 +6,6 @@
  * @Createdate 9 - 8 - 2013 15 : 40
  */
 
-function create_keywords() {
-	var content = strip_tags(document.getElementById('keywords').value);
-	if (content != '') {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=keywords&nocache=' + new Date().getTime(), 'content=' + encodeURIComponent(content), function(res) {
-			if (res != "n/a") {
-				document.getElementById('keywords').value = res;
-			} else {
-				document.getElementById('keywords').value = '';
-			}
-		});
-	}
-	return false;
-}
-
 function split(val) {
 	return val.split(/,\s*/);
 }
@@ -109,11 +95,12 @@ $(document).ready(function() {
 			});
 		}
 	});
-    
+
 	$("#keywords-search").bind("keydown", function(event) {
 		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
 			event.preventDefault();
 		}
+
         if(event.keyCode==13){
             var keywords_add= $("#keywords-search").val();
             if( keywords_add != '' ){
@@ -122,7 +109,7 @@ $(document).ready(function() {
             }
             return false;
     	}
-        
+
 	}).autocomplete({
 		source : function(request, response) {
 			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tagsajax", {
@@ -141,11 +128,14 @@ $(document).ready(function() {
 		},
 		select : function(event, ui) {
 			// add placeholder to get the comma-and-space at the end
-            nv_add_element( 'keywords', ui.item.value, ui.item.value );
-            $(this).val('');
+			if(event.keyCode!=13){
+	            nv_add_element( 'keywords', ui.item.value, ui.item.value );
+	            $(this).val('');
+	           }
             return false;
 		}
 	});
+
     $("#keywords-search").blur(function() {
 		// add placeholder to get the comma-and-space at the end
         var keywords_add= $("#keywords-search").val();
@@ -165,8 +155,8 @@ $(document).ready(function() {
         }
         return false;
 	});
-        
-    
+
+
     $("#bids-search").bind("keydown", function(event) {
 		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
 			event.preventDefault();
@@ -191,7 +181,7 @@ $(document).ready(function() {
             return false;
 		}
 	});
-    
+
 	// hide message_body after the first one
 	$(".message_list .message_body:gt(1)").hide();
 

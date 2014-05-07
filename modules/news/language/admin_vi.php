@@ -232,9 +232,9 @@ $lang_module['edit_tags']= 'Sửa Tags';
 $lang_module['tags_alias']= 'Lọc bỏ dấu tiếng việt, các ký tự khác a-z, 0-9, - trong Liên kết tĩnh của tags';
 $lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
 
-$lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
+$lang_module['googleplus'] = 'Xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
-$lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
+$lang_module['googleplus_0'] = 'Theo quyền tác giả của module';
 $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 ?>
