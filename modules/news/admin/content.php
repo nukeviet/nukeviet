@@ -387,7 +387,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords'] );
-    
+
 	if( $rowcontent['keywords'] == '' )
 	{
 		if( $rowcontent['hometext'] != '' )
@@ -1010,16 +1010,15 @@ if( sizeof( $array_block_cat_module ) )
 	}
 	$xtpl->parse( 'main.block_cat' );
 }
-$keywords_array = explode( ",", $rowcontent['keywords'] );
-if( sizeof( $keywords_array ) )
+if( ! empty( $rowcontent['keywords'] ) )
 {
+	$keywords_array = explode( ',', $rowcontent['keywords'] );
 	foreach( $keywords_array as $keywords )
 	{
 		$xtpl->assign( 'KEYWORDS', $keywords );
 		$xtpl->parse( 'main.keywords' );
 	}
 }
-
 $archive_checked = ( $rowcontent['archive'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'archive_checked', $archive_checked );
 $inhome_checked = ( $rowcontent['inhome'] ) ? ' checked="checked"' : '';

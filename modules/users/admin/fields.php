@@ -145,19 +145,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$dataform['required'] = $nv_Request->get_int( 'required', 'post', 0 );
 	$dataform['show_register'] = ( $dataform['required'] ) ? 1 : $nv_Request->get_int( 'show_register', 'post', 0 );
 	$dataform['user_editable'] = $nv_Request->get_int( 'user_editable', 'post', 0 );
-	$dataform['user_editable_once'] = $nv_Request->get_int( 'user_editable_once', 'post', 0 );
 	$dataform['show_profile'] = $nv_Request->get_int( 'show_profile', 'post', 0 );
 	$dataform['class'] = nv_substr( $nv_Request->get_title( 'class', 'post', '', 0, $preg_replace ), 0, 50);
-	
-	if( $dataform['user_editable'] )
-	{
-		$dataform['user_editable_save'] = ( $dataform['user_editable_once'] ) ? 'once' : 'yes';
-	}
-	else
-	{
-		$dataform['user_editable_save'] = 'never';
-	}
-	
+
 	$dataform['field_type'] = nv_substr( $nv_Request->get_title( 'field_type', 'post', '', 0, $preg_replace ), 0, 50);
 
 	$save = 0;
@@ -175,7 +165,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	else
 	{
 		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
-		
+
 		// Kiểm tra trùng trường dữ liệu
 		$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
 		$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
@@ -220,7 +210,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$error = $lang_module['field_number_error'];
 		}
-		else 
+		else
 		{
 			$dataform['field_choices'] = '';
 		}
@@ -307,7 +297,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		if( $dataform['choicetypes'] == 'field_choicetypes_text' )
 		{
 			$dataform['sql_choices'] = '';
-			
+
 			$field_choice_value = $nv_Request->get_array( 'field_choice', 'post' );
 			$field_choice_text = $nv_Request->get_array( 'field_choice_text', 'post' );
 			$field_choices = array_combine( array_map( 'strip_punctuation', $field_choice_value ), array_map( 'strip_punctuation', $field_choice_text ) );
@@ -357,7 +347,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
-					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable_save'] . "',
+					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
 					" . $dataform['show_profile'] . ", :class, '" . serialize( $language ) . "', :default_value)";
 
 				$data_insert = array();
@@ -403,7 +393,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				required = '" . $dataform['required'] . "',
 				sql_choices = '" . $dataform['sql_choices'] . "',
 				show_register = '" . $dataform['show_register'] . "',
-				user_editable = '" . $dataform['user_editable_save'] . "',
+				user_editable = '" . $dataform['user_editable'] . "',
 				show_profile = '" . $dataform['show_profile'] . "',
 				class = :class,
 				language='" . serialize( $language ) . "',
@@ -414,7 +404,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
             $stmt->bindParam( ':class', $dataform['class'], PDO::PARAM_STR );
 			$stmt->bindParam( ':default_value', $dataform['default_value'], PDO::PARAM_STR, strlen( $dataform['default_value'] ) );
 			$save = $stmt->execute();
-			
+
 			if( $save and $dataform['max_length'] != $dataform_old['max_length'] )
 			{
 				$type_date = '';
@@ -548,16 +538,6 @@ else
 		{
 			$dataform = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid )->fetch();
 
-			if( $dataform['user_editable'] == 'never' )
-			{
-				$dataform['user_editable'] = 0;
-				$dataform['user_editable_once'] = 0;
-			}
-			else
-			{
-				$dataform['user_editable_once'] = ( $dataform['user_editable'] == 'once' ) ? 1 : 0;
-				$dataform['user_editable'] = 1;
-			}
 			if( $dataform['field_type'] == 'editor' )
 			{
 				$array_tmp = explode( '@', $dataform['class'] );
@@ -588,7 +568,6 @@ else
 			$dataform['required'] = 0;
 			$dataform['show_profile'] = 1;
 			$dataform['user_editable'] = 1;
-			$dataform['user_editable_once'] = 0;
 			$dataform['show_register'] = 1;
 			$dataform['field_type'] = 'textbox';
 			$dataform['match_type'] = 'none';
@@ -679,7 +658,6 @@ else
 	$dataform['show_register'] = ( $dataform['show_register'] ) ? ' checked="checked"' : '';
 	$dataform['show_profile'] = ( $dataform['show_profile'] ) ? ' checked="checked"' : '';
 	$dataform['user_editable'] = ( $dataform['user_editable'] ) ? ' checked="checked"' : '';
-	$dataform['user_editable_once'] = ( $dataform['user_editable_once'] ) ? ' checked="checked"' : '';
 
 	$xtpl->assign( 'CAPTIONFORM', ( $fid ) ? $lang_module['captionform_edit'] . ': ' . $dataform['fieldid'] : $lang_module['captionform_add'] );
 	$xtpl->assign( 'DATAFORM', $dataform );

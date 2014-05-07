@@ -197,7 +197,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
 	max_length NUMBER(20,0) DEFAULT 0 NOT NULL ENABLE,
 	required NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	show_register NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	user_editable VARCHAR2(4000 CHAR) DEFAULT 'yes' NOT NULL ENABLE,
+	user_editable NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	show_profile NUMBER(3,0) DEFAULT 1 NOT NULL ENABLE,
 	class VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	language VARCHAR2(4000 CHAR) NOT NULL ENABLE,
@@ -267,24 +267,6 @@ $sql_create_table[] = "CREATE OR REPLACE TRIGGER TNV_USERS_FIELD_TYPE
 	  v_val := 'multiselect';
 	  end if;  :new.field_type := v_val;
 	END TNV_USERS_FIELD_TYPE;";
-
-$sql_create_table[] = "CREATE OR REPLACE TRIGGER TNV_USERS_EDITABLE
-	BEFORE INSERT OR UPDATE ON " . NV_USERS_GLOBALTABLE . "_field
-	FOR EACH ROW
-	DECLARE
-	  v_val " . NV_USERS_GLOBALTABLE . "_field.user_editable%TYPE;
-	  v_test " . NV_USERS_GLOBALTABLE . "_field.user_editable%TYPE;
-	BEGIN
-	  v_val := 'yes';
-	  v_test := TRIM(:new.user_editable);
-	  if v_test = '1' OR v_test = 'yes' THEN
-	  v_val := 'yes';
-	  elsif v_test = '2' OR v_test = 'once' THEN
-	  v_val := 'once';
-	  elsif v_test = '3' OR v_test = 'never' THEN
-	  v_val := 'never';
-	  end if;  :new.user_editable := v_val;
-	END TNV_USERS_EDITABLE;";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_info (
 	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,

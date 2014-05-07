@@ -25,7 +25,7 @@
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-lg icon-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>Title Site: </strong></td>

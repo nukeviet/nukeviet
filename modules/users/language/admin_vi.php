@@ -240,7 +240,6 @@ $lang_module['field_required'] = 'Trường dữ liệu bắt buộc';
 $lang_module['field_required_note'] = 'Nếu là trường bắt buộc sẽ được hiển thị trong quá trình đăng ký';
 $lang_module['field_show_register'] = 'Hiển thị khi đăng ký';
 $lang_module['field_user_editable'] = 'Thành viên có thể thay đổi';
-$lang_module['field_user_editable_once'] = 'Chỉ được thay đổi 1 lần';
 $lang_module['field_show_profile'] = 'Hiển thị tại trang thành viên';
 $lang_module['field_type'] = 'Loại dữ liệu';
 $lang_module['field_type_number'] = 'Số';

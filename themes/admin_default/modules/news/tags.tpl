@@ -36,9 +36,7 @@
 					<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td>
-					<br />
-					<strong>{LANG.description}</strong></td>
+					<td class="text-right"><strong>{LANG.description}</strong></td>
 					<td><textarea class="w500 form-control" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 				</tr>
 				<tr>
