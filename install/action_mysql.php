@@ -151,7 +151,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
 	max_length bigint(20) unsigned NOT NULL DEFAULT '0',
 	required tinyint(3) unsigned NOT NULL DEFAULT '0',
 	show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
-	user_editable enum('yes','once','never') NOT NULL DEFAULT 'yes',
+	user_editable tinyint(3) unsigned NOT NULL DEFAULT '0',
 	show_profile tinyint(4) NOT NULL DEFAULT '1',
 	class varchar(50) NOT NULL,
 	language text NOT NULL,

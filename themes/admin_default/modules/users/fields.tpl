@@ -4,14 +4,14 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr class="text-center">
-				<td style="width:60px;">{LANG.weight}</td>
-				<th>{LANG.field_id}</td>
-				<th>{LANG.field_title}</td>
-				<th>{LANG.field_type}</td>
-				<th>{LANG.field_show_register}</td>
-				<th>{LANG.field_required}</td>
-				<th>{LANG.field_show_profile}</td>
-				<th>&nbsp;</td>
+				<th class="100">{LANG.weight}</th>
+				<th>{LANG.field_id}</th>
+				<th>{LANG.field_title}</th>
+				<th>{LANG.field_type}</th>
+				<th>{LANG.field_show_register}</th>
+				<th>{LANG.field_required}</th>
+				<th>{LANG.field_show_profile}</th>
+				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,7 +30,7 @@
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
 				<td>
-					<em class="fa fa-edit">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> &nbsp;
+					<em class="fa fa-edit">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
 					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 				</td>
 			</tr>
@@ -40,7 +40,7 @@
 </div>
 <!-- END: data -->
 <!-- BEGIN: load -->
-<div id="module_show_list"></div>
+<div id="module_show_list">&nbsp;</div>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
@@ -57,7 +57,7 @@
 		</p></blockquote>
 </div>
 <!-- END: error -->
-<form  class="form-inline" role="form" action="{FORM_ACTION}" method="post" id="ffields">
+<form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption> {CAPTIONFORM} </caption>
@@ -91,10 +91,6 @@
 				<tr>
 					<td>{LANG.field_user_editable}</td>
 					<td><input name="user_editable" value="1" type="checkbox" {DATAFORM.user_editable}/></td>
-				</tr>
-				<tr>
-					<td>{LANG.field_user_editable_once}</td>
-					<td><input class="" name="user_editable_once" value="1" type="checkbox" {DATAFORM.user_editable_once}></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_show_profile}</td>
@@ -271,7 +267,7 @@
 	<div style="margin-left: 350px;">
 		<input type="hidden" value="{DATAFORM.fid}" name="fid">
 		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
-		<input class="w150" type="submit" value="{LANG.save}" name="submit">
+		<input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">
 	</div>
 </form>
 <script type="text/javascript">

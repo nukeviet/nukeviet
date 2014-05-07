@@ -100,7 +100,7 @@ function nv_check_email_change( $email )
 }
 
 $array_field_config = array();
-$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC' );
+$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
 while( $row_field = $result_field->fetch() )
 {
 	$language = unserialize( $row_field['language'] );
@@ -296,14 +296,14 @@ $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! em
 if( $checkss == $array_data['checkss'] )
 {
 	$error = array();
-	
+
 	$array_data['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
 	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$array_data['photo_delete'] = $nv_Request->get_int( 'photo_delete', 'post', 0 );
-	
+
 	if( $array_data['allowloginchange'] )
 	{
 		$array_data['username'] = nv_substr( $nv_Request->get_title( 'username', 'post', '', 1 ), 0, NV_UNICKMAX );
@@ -386,7 +386,7 @@ if( $checkss == $array_data['checkss'] )
 				$data_insert['checknum'] = $checknum;
 
 				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
-				
+
 				if( $userid_check > 0 )
 				{
 					$subject = $lang_module['email_active'];
@@ -413,7 +413,7 @@ if( $checkss == $array_data['checkss'] )
 		if( ! empty( $array_data['photo'] ) )
 		{
 			$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $array_data['photo'];
-			
+
 			if( ! file_exists( $tmp_photo ) )
 			{
 				$array_data['photo'] = '';
@@ -423,7 +423,7 @@ if( $checkss == $array_data['checkss'] )
 			{
 				$new_photo_name = $array_data['photo'];
 				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
-				
+
 				$new_photo_name2 = $new_photo_name;
 				$i = 1;
 				while( file_exists( $new_photo_path . $new_photo_name2 ) )
@@ -432,7 +432,7 @@ if( $checkss == $array_data['checkss'] )
 					++ $i;
 				}
 				$new_photo = $new_photo_path . $new_photo_name2;
-				
+
 				if( nv_copyfile( $tmp_photo, $new_photo ) )
 				{
 					$array_data['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
@@ -442,11 +442,11 @@ if( $checkss == $array_data['checkss'] )
 					$array_data['photo'] = '';
 					$error[] = $lang_module['avata_news_copy_error'];
 				}
-				
+
 				nv_deletefile( $tmp_photo );
-			}			
+			}
 		}
-		
+
 		// Delete old photo
 		if( $array_data['photo_delete'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
 		{
@@ -456,7 +456,7 @@ if( $checkss == $array_data['checkss'] )
 	else
 	{
 		$array_data['photo'] = $row['photo'];
-		
+
 		if( ! empty( $array_data['photo'] ) )
 		{
 			if( ! file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
@@ -480,7 +480,7 @@ if( $checkss == $array_data['checkss'] )
 
 	$md5username = nv_md5safe( $array_data['username'] );
 	$photo = nv_unhtmlspecialchars( $array_data['photo'] );
-	
+
 	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
 	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
