@@ -587,3 +587,12 @@ div.news_column .panel-heading {
 	border-top-right-radius: 3px;
 	padding: 10px;
 }
+table caption{
+	color: #0066CC
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: 'Roboto',sans-serif;
+	line-height: 22px;
+	padding: 0px 0 5px 2px;
+}
