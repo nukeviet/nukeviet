@@ -8,11 +8,11 @@
 		<tbody>
 			<tr>
 				<td>{LANG.paymentname}</td>
-				<td><input name="paymentname" value="{DATA.paymentname}" style="width: 400px;"></td>
+				<td><input name="paymentname" value="{DATA.paymentname}" class="form-control" style="width: 400px;"></td>
 			</tr>
 			<tr>
 				<td>{LANG.domain}</td>
-				<td><input name="domain" value="{DATA.domain}" style="width: 400px;"></td>
+				<td><input name="domain" value="{DATA.domain}" class="form-control" style="width: 400px;"></td>
 			</tr>
 			<tr>
 				<td>{LANG.active}</td>
@@ -21,12 +21,12 @@
 			<!-- BEGIN: config -->
 			<tr>
 				<td>{CONFIG_LANG}</td>
-				<td><input name="config[{CONFIG_NAME}]" value="{CONFIG_VALUE}" style="width: 400px;"></td>
+				<td><input name="config[{CONFIG_NAME}]" value="{CONFIG_VALUE}" class="form-control" style="width: 400px;"></td>
 			</tr>
 			<!-- END: config -->
 			<tr>
 				<td>{LANG.images_button}</td>
-				<td><input class="form-control" style="width:400px" type="text" name="images_button" id="homeimg" value="{DATA.images_button}"/><input type="button" value="{LANG.browse_image}" name="selectimg"/></td>
+				<td><input class="form-control" style="width:400px" type="text" name="images_button" id="homeimg" value="{DATA.images_button}"/><input type="button" value="{LANG.browse_image}" name="selectimg" class="btn btn-info" style="margin-left: 5px" /></td>
 			</tr>
 			<tr>
 				<td><input name="payment" value="{DATA.payment}" type="hidden"></td>
