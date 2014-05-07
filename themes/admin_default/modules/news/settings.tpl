@@ -50,6 +50,12 @@
 					</select></td>
 				</tr>
 				<tr>
+					<td><strong>{LANG.showtooltip}</strong></td>
+					<td>
+						<input type="checkbox" value="1" name="showtooltip"{SHOWTOOLTIP}/>
+					</td>
+				</tr>
+				<tr>
 					<td><strong>{LANG.showhometext}</strong></td>
 					<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 				</tr>

@@ -16,7 +16,7 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a></h4>
+			<h4><a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{CONTENT.imghome}' width='90' /><p class='text-justify'>{CONTENT.hometext}</p><div class='clearfix'></div>" href="{CONTENT.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
@@ -41,5 +41,11 @@ $(window).load(function(){
     });
 });
 </script>
+
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+</script>
+<!-- END: tooltip -->
 
 <!-- END: main -->

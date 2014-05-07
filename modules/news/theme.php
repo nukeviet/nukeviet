@@ -40,6 +40,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 150 );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
@@ -71,6 +72,11 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
 	}
+	
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->parse( 'main.tooltip' );
+	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -100,6 +106,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 150 );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
@@ -129,6 +136,11 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
+	}
+	
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -383,6 +395,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
+					$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 150 );
 					$xtpl->assign( 'OTHER', $array_row_i );
 					$xtpl->parse( 'main.listcat.related.loop' );
 				}
@@ -406,6 +419,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 			$xtpl->parse( 'main.listcat' );
 		}
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -493,7 +511,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$newday = $array_content_i['publtime'] + ( 86400 * $array_content_i['newday'] );
 			$array_content_i['hometext'] = nv_clean60( $array_content_i['hometext'], 200 );
 			$array_content_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_content_i['publtime'] );
-
+			
 			$xtpl->assign( 'CONTENT', $array_content_i );
 
 			if( $array_content_i['imghome'] != '' )
@@ -529,6 +547,9 @@ function viewcat_two_column( $array_content, $array_catpage )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
+					
+					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], 150 );
+					
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
@@ -542,6 +563,11 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$xtpl->parse( 'main.loopcat' );
 			++$a;
 		}
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	//Theo chu de
