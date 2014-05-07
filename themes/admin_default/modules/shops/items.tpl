@@ -59,7 +59,7 @@
 					</div></td>
 					<td class="text-center">{ROW.publtime}</td>
 					<td class="text-center">{ROW.status}</td>
-					<td class="aright require">{ROW.product_price} {ROW.money_unit}</td>
+					<td class="require">{ROW.product_price} {ROW.money_unit}</td>
 					<td class="text-center">{ROW.product_number}</td>
 					<td> {ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
 				</tr>
