@@ -79,9 +79,8 @@
 	</div>
 </form>
 <!-- BEGIN: generate_page -->
-<br />
-<p class="text-center">
+<div class="text-center">
 	{GENERATE_PAGE}
-</p>
+</div>
 <!-- END: generate_page -->
 <!-- END: main -->
