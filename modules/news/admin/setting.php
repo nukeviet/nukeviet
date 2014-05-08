@@ -27,6 +27,7 @@ if( ! empty( $savesetting ) )
 
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
+	$array_config['showtooltip'] = $nv_Request->get_int( 'showtooltip', 'post', 0 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
 
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
@@ -115,9 +116,9 @@ for( $i = 0; $i <= 6; ++$i )
 	$xtpl->parse( 'main.allowed_rating_point' );
 }
 
+$xtpl->assign( 'SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
 

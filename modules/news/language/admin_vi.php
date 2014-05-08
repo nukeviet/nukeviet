@@ -160,6 +160,7 @@ $lang_module['redircet_title'] = 'Thực hiện thành công thao tác';
 $lang_module['content_checkcat'] = 'Chủ đề chính cho bài viết';
 $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho bài viết.';
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
+$lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
 $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';

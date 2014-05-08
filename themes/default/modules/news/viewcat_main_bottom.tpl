@@ -9,7 +9,7 @@
 				<li class="hidden-xs"><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></li>
+				<li class="pull-right hidden-xs"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></li>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
@@ -21,7 +21,7 @@
 			<h3>
 				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
 				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
+				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
 			<p class="text-justify">
@@ -37,7 +37,7 @@
 			<ul class="related">
 				<!-- BEGIN: loop -->
 				<li class="{CLASS}">
-					<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
+					<a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{OTHER.imghome}' width='90' /><p class='text-justify'>{OTHER.hometext}</p><div class='clearfix'></div>" href="{OTHER.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{OTHER.title}</a>
 				</li>
 				<!-- END: loop -->
 			</ul>
@@ -46,4 +46,9 @@
 	</div>
 </div>
 <!-- END: listcat -->
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+</script>
+<!-- END: tooltip -->
 <!-- END: main -->

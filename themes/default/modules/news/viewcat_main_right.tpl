@@ -24,7 +24,7 @@
 					<h3>
 						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 						<!-- BEGIN: newday -->
-						<span class="icon_new"></span>
+						<span class="icon_new">&nbsp;</span>
 						<!-- END: newday -->
 					</h3>
 					<p class="text-justify">{CONTENT.hometext}</p>
@@ -35,7 +35,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a title="{OTHER.title}" href="{OTHER.link}">{OTHER.title}</a>
+							<a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{OTHER.imghome}' width='90' /><p class='text-justify'>{OTHER.hometext}</p><div class='clearfix'></div>" href="{OTHER.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
@@ -46,4 +46,11 @@
 	</div>
 </div>
 <!-- END: listcat -->
+
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+</script>
+<!-- END: tooltip -->
+
 <!-- END: main -->
