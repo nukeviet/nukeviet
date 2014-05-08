@@ -51,7 +51,7 @@ function nv_row_del(catid) {
 
 function nv_file_del(fid) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'del=1&id=' + fid, function(res) {
 			if (res == 'OK') {
 				window.location.href = window.location.href;
 			} else {
