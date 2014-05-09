@@ -731,6 +731,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_new_array as $key => $related_new_array_i )
 		{
+			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $related_new_array_i['time'] + ( 86400 * $related_new_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -748,6 +749,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_array as $related_array_i )
 		{
+			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $related_array_i['time'] + ( 86400 * $related_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -763,6 +765,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $topic_array as $key => $topic_array_i )
 		{
+			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $topic_array_i['time'] + ( 86400 * $topic_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -779,6 +782,12 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
 		$xtpl->parse( 'main.comment' );
+	}
+	
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
