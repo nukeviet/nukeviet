@@ -12,21 +12,5 @@
 		<!-- END: error_item -->
 		</tbody>
 	</table>
-	<br/>
-	<!-- END: error_info -->
-	
-	<table border="1" frame="lhs">
-		<tbody>
-			<tr>
-				<td>This table</td>
-				<td>will have</td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td>only the</td>
-				<td>left side framed.</td>
-			</tr>
-		</tbody>
-	</table>
 </div>
+<!-- END: error_info -->
