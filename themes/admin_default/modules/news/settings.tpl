@@ -53,6 +53,14 @@
 					<td><strong>{LANG.showtooltip}</strong></td>
 					<td>
 						<input type="checkbox" value="1" name="showtooltip"{SHOWTOOLTIP}/>
+						&nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_position}</span>
+						<select name="tooltip_position" class="form-control">
+							<!-- BEGIN: tooltip_position -->
+							<option value="{TOOLTIP_P.key}"{TOOLTIP_P.selected}>{TOOLTIP_P.title}</option>
+							<!-- END: tooltip_position -->
+						</select>
+						&nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_length}</span>
+						<input type="text" name="tooltip_length" class="form-control" value="{DATA.tooltip_length}" style="width: 100px" />
 					</td>
 				</tr>
 				<tr>

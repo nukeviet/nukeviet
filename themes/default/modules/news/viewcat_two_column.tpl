@@ -37,7 +37,7 @@
 		<ul class="related">
 			<!-- BEGIN: other -->
 			<li>
-				<a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{NEWSTOP.imghome}' width='90' /><p class='text-justify'>{NEWSTOP.hometext}</p><div class='clearfix'></div>" href="{NEWSTOP.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{NEWSTOP.title}</a>
+				<a class="show" href="{NEWSTOP.link}" data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" rel="tooltip">{NEWSTOP.title}</a>
 			</li>
 			<!-- END: other -->
 		</ul>
@@ -74,7 +74,7 @@
 			<ul class="related">
 				<!-- BEGIN: other -->
 				<li class="{CLASS}">
-					<a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{CONTENT.imghome}' width='90' /><p class='text-justify'>{CONTENT.hometext}</p><div class='clearfix'></div>" href="{CONTENT.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{CONTENT.title}</a>
+					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" rel="tooltip">{CONTENT.title}</a>
 				</li>
 				<!-- END: other -->
 			</ul>
@@ -104,7 +104,11 @@ $(window).load(function(){
 
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+$(document).ready(function() {$("[rel='tooltip']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
 </script>
 <!-- END: tooltip -->
 

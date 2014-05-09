@@ -16,13 +16,13 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{CONTENT.imghome}' width='90' /><p class='text-justify'>{CONTENT.hometext}</p><div class='clearfix'></div>" href="{CONTENT.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{CONTENT.title}</a></h4>
+			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" rel="tooltip">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
 </div>
 <!-- END: viewcatloop -->
-<div class="clear"></div>
+<div class="clear">&nbsp;</div>
 
 <!-- BEGIN: generate_page -->
 <div class="text-center">
@@ -44,7 +44,11 @@ $(window).load(function(){
 
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+$(document).ready(function() {$("[rel='tooltip']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
 </script>
 <!-- END: tooltip -->
 

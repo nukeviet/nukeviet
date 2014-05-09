@@ -172,15 +172,16 @@
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{TOPIC.title}" href="{TOPIC.link}">{TOPIC.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" rel="tooltip">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
-	<div class="clear"></div>
+	<div class="clear">&nbsp;</div>
 	<p class="text-right">
 		<a title="{TOPIC.topictitle}" href="{TOPIC.topiclink}">{LANG.more}</a>
 	</p>
@@ -192,27 +193,29 @@
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{RELATED_NEW.title}" href="{RELATED_NEW.link}">{RELATED_NEW.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" rel="tooltip">{RELATED_NEW.title}</a>
 			<em>({RELATED_NEW.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
 	<!-- END: related_new -->
 	<!-- BEGIN: related -->
-	<div class="clear"></div>
+	<div class="clear">&nbsp;</div>
 	<p>
 		<strong>{LANG.related}</strong>
 	</p>
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{RELATED.title}" href="{RELATED.link}">{RELATED.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" rel="tooltip">{RELATED.title}</a>
 			<em>({RELATED.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
@@ -223,6 +226,13 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".bodytext img").toggleClass('img-thumbnail');
+		<!-- BEGIN: tooltip -->
+		$("[rel='tooltip']").tooltip({
+			placement: "{TOOLTIP_POSITION}",
+			html: true,
+			title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+		});
+		<!-- END: tooltip -->
 	});
 </script>
 <!-- END: main -->

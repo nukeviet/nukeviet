@@ -28,6 +28,8 @@ if( ! empty( $savesetting ) )
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
 	$array_config['showtooltip'] = $nv_Request->get_int( 'showtooltip', 'post', 0 );
+	$array_config['tooltip_position'] = $nv_Request->get_string( 'tooltip_position', 'post', '' );
+	$array_config['tooltip_length'] = $nv_Request->get_int( 'tooltip_length', 'post', 0 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
 
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
@@ -71,6 +73,23 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'DATA', $module_config[$module_name] );
+
+$array_tooltip_position = array(
+	'top' => $lang_module['showtooltip_position_top'],
+	'bottom' => $lang_module['showtooltip_position_bottom'],
+	'left' => $lang_module['showtooltip_position_left'],
+	'right' => $lang_module['showtooltip_position_right']);
+
+// Vi tri hien thi tooltip
+foreach( $array_tooltip_position as $key => $val )
+{
+	$xtpl->assign( 'TOOLTIP_P', array(
+		'key' => $key,
+		'title' => $val,
+		'selected' => $key == $module_config[$module_name]['tooltip_position'] ? ' selected="selected"' : ''
+	) );
+	$xtpl->parse( 'main.tooltip_position' );
+}
 
 // Cach hien thi tren trang chu
 foreach( $array_viewcat_full as $key => $val )
