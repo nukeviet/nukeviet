@@ -37,7 +37,7 @@
 			<ul class="related">
 				<!-- BEGIN: loop -->
 				<li class="{CLASS}">
-					<a class="show" title="<img class='img-thumbnail pull-left margin_image' src='{OTHER.imghome}' width='90' /><p class='text-justify'>{OTHER.hometext}</p><div class='clearfix'></div>" href="{OTHER.link}" rel="tooltip" data-toggle="tooltip" data-html="true" data-placement="bottom">{OTHER.title}</a>
+					<a class="show" href="{OTHER.link}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" rel="tooltip">{OTHER.title}</a>
 				</li>
 				<!-- END: loop -->
 			</ul>
@@ -48,7 +48,11 @@
 <!-- END: listcat -->
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
+$(document).ready(function() {$("[rel='tooltip']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
 </script>
 <!-- END: tooltip -->
 <!-- END: main -->
