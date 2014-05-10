@@ -76,6 +76,7 @@ a.link:hover {
 
 .icon-pointer{
 	cursor: pointer;
+	margin-top:10px;
 }
 
 /* Heading
@@ -381,4 +382,8 @@ input[type=radio]:checked:before {
 	margin: 4px;
 	line-height: 16px;
 	background-color: #1e8cbe;
+}
+
+label {
+    font-weight: normal;
 }
