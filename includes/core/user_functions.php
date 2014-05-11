@@ -365,7 +365,7 @@ function nv_html_meta_tags()
 		}
 	}
 
-	$return .= "<meta name=\"generator\" content=\"NukeViet v3.x\" />\n";
+	$return .= "<meta name=\"generator\" content=\"NukeViet v4.x\" />\n";
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
 		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";

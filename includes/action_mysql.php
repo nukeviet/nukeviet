@@ -161,9 +161,9 @@ function nv_create_table_sys( $lang )
 		('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
-	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 3.x'),
+	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
 	 	('" . $lang . "', 'global', 'site_logo', 'images/logo.png'),
-	 	('" . $lang . "', 'global', 'site_description', 'NukeViet CMS 3.x Developed by VINADES.,JSC'),
+	 	('" . $lang . "', 'global', 'site_description', 'NukeViet CMS 4.x Developed by VINADES.,JSC'),
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
 	 	('" . $lang . "', 'global', 'mobile_theme', ''),
