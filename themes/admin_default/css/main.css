@@ -76,6 +76,7 @@ a.link:hover {
 
 .icon-pointer{
 	cursor: pointer;
+	margin-top:10px;
 }
 
 /* Heading
@@ -95,17 +96,9 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #header div.lang {
-	display: inline;
-	text-align: center;
 	float: right;
 	padding: 12px 5px;
-	color: #FFFFFF
-}
-
-#header div.lang select {
-	border: 1px solid #5B5B5B;
-	padding: 2px;
-	background: #FFFFFF
+	color: #FFF
 }
 
 #header div.logo {
@@ -118,19 +111,18 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #header div.logout {
-	height: 27px;
 	float: right;
-	padding: 10px;
+	padding: 12px;
 	text-align: right
 }
 
 #header .bthome {
 	background: #262626;
 	border: 1px solid #2E2E2E;
-	line-height: 24px;
+	line-height: 28px;
 	padding: 0px 10px;
 	display: inline-block;
-	color: #FFFFFF;
+	color: #FFF;
 	text-decoration: none;
 	font-weight: bold;
 	font-size: 11px
@@ -138,7 +130,7 @@ h1, h2, h3, h4, h5, h6{
 
 #header .bthome:hover {
 	background: #454545;
-	color: #FFFFFF
+	color: #FFF
 }
 
 /* Middle
@@ -381,4 +373,8 @@ input[type=radio]:checked:before {
 	margin: 4px;
 	line-height: 16px;
 	background-color: #1e8cbe;
+}
+
+label {
+    font-weight: normal;
 }
