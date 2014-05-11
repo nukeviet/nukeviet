@@ -12,17 +12,16 @@ if( ! defined( 'NV_IS_MOD_COMMENT' ) ) die( 'Stop!!!' );
 
 $module = $nv_Request->get_string( 'module', 'post,get' );
 
-if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
+// Kiểm tra module có được Sử dụng chức năng bình luận
+if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 {
-	// Kiểm tra module có được Sử dụng chức năng bình luận
-
 	$area = $nv_Request->get_int( 'area', 'post,get', 0 );
 	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
 	$allowed_comm = $nv_Request->get_title( 'allowed', 'post,get', 0 );
 	$checkss = $nv_Request->get_title( 'checkss', 'post,get' );
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
+	if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&view=' . $view_comm . '&allowed=' . $allowed_comm . '&checkss=' . $checkss;
 
@@ -40,7 +39,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 
 		$allowed_comm = nv_user_in_groups( $allowed );
 
-		if( ! ( $view_comm AND $allowed_comm ) AND ! defined( 'NV_IS_USER' ) )
+		if( ! ( $view_comm and $allowed_comm ) and ! defined( 'NV_IS_USER' ) )
 		{
 			$form_login = 1;
 		}

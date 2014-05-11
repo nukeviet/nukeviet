@@ -55,8 +55,8 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 		}
 		else
 		{
-			$xtpl->assign( 'NAME', $lang_module['comment_name'] );
-			$xtpl->assign( 'EMAIL', $lang_module['comment_email'] );
+			$xtpl->assign( 'NAME', '' );
+			$xtpl->assign( 'EMAIL', '' );
 			$xtpl->assign( 'DISABLED', '' );
 		}
 
