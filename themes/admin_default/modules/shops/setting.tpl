@@ -13,11 +13,11 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_homesite}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /><span class="text-middle"> x </span><input class="form-control" type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
+				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 60px;" name="homewidth" /><span class="text-middle"> x </span><input class="form-control" type="text" value="{DATA.homeheight}" style="width: 60px;" name="homeheight" /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_page}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /><span class="text-middle"> {LANG.setting_per_note_home} </span></td>
+				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 60px;" name="per_page" /><span class="text-middle"> {LANG.setting_per_note_home} </span></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_row}</strong></td>

@@ -43,25 +43,14 @@
 					<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
 				<tr>
-					<td valign="top" align="right">
-					<br />
-					<strong>{who_view}</strong></td>
+					<td align="right"><strong>{GLANG.groups_view}</strong></td>
 					<td>
-					<div class="message_body">
-						<select class="form-control" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
-							{who_view_html}
-						</select>
-						<br />
-						<div id="groups_list" style="{visibility}">
-							{groups_view}
-							<table style="margin-bottom:8px; width:250px;">
-								<col valign="top" width="150px" />
-								<tr>
-									<td> {groups_list_html} </td>
-								</tr>
-							</table>
+						<!-- BEGIN: groups_view -->
+						<div class="row">
+							<label><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.value}" {GROUPS_VIEW.checked} />{GROUPS_VIEW.title}</label>
 						</div>
-					</div></td>
+						<!-- END: groups_view -->
+					</td>
 				</tr>
 			</tbody>
 		</table>

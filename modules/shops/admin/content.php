@@ -59,7 +59,7 @@ $rowcontent = array(
 	'archive' => 1,
 	'product_code' => '',
 	'product_number' => 1,
-	'product_price' => 1,
+	'product_price' => 0,
 	'product_discounts' => 0,
 	'money_unit' => $pro_config['money_unit'],
 	'product_unit' => '',
@@ -69,7 +69,7 @@ $rowcontent = array(
 	'imgposition' => 0,
 	'copyright' => 0,
 	'inhome' => 1,
-	'allowed_comm' => $pro_config['setcomm'],
+	'allowed_comm' => $module_config[$module_name]['setcomm'],
 	'allowed_rating' => 1,
 	'ratingdetail' => '0',
 	'allowed_send' => 1,
@@ -192,7 +192,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['copyright'] = ( int )$nv_Request->get_bool( 'copyright', 'post' );
 	$rowcontent['inhome'] = ( int )$nv_Request->get_bool( 'inhome', 'post' );
 
-	$rowcontent['allowed_comm'] = $nv_Request->get_int( 'allowed_comm', 'post', 0 );
+	$_groups_post = $nv_Request->get_array( 'allowed_comm', 'post', array() );
+	$rowcontent['allowed_comm'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$rowcontent['allowed_rating'] = ( int )$nv_Request->get_bool( 'allowed_rating', 'post' );
 	$rowcontent['allowed_send'] = ( int )$nv_Request->get_bool( 'allowed_send', 'post' );
@@ -267,7 +268,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_product_unit'];
 	}
-	elseif( $rowcontent['product_price'] <= 0 )
+	elseif( $rowcontent['product_price'] <= 0 AND $rowcontent['showprice'] )
 	{
 		$error = $lang_module['error_product_price'];
 	}
@@ -377,7 +378,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 " . intval( $rowcontent['imgposition'] ) . ",
 				 " . intval( $rowcontent['copyright'] ) . ",
 				 " . intval( $rowcontent['inhome'] ) . ",
-				 " . intval( $rowcontent['allowed_comm'] ) . ",
+				 :allowed_comm,
 				 " . intval( $rowcontent['allowed_rating'] ) . ",
 				 :ratingdetail,
 				 " . intval( $rowcontent['allowed_send'] ) . ",
@@ -399,6 +400,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
 			$data_insert['otherimage'] = $rowcontent['otherimage'];
 			$data_insert['ratingdetail'] = $rowcontent['ratingdetail'];
+			$data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
 			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
@@ -479,7 +481,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 imgposition=" . intval( $rowcontent['imgposition'] ) . ",
 			 copyright=" . intval( $rowcontent['copyright'] ) . ",
 			 inhome=" . intval( $rowcontent['inhome'] ) . ",
-			 allowed_comm=" . intval( $rowcontent['allowed_comm'] ) . ",
+			 allowed_comm= :allowed_comm,
 			 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
 			 allowed_send=" . intval( $rowcontent['allowed_send'] ) . ",
 			 allowed_print=" . intval( $rowcontent['allowed_print'] ) . ",
@@ -513,6 +515,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':keywords', $rowcontent['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
 			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
+			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
 
 			if( $stmt->execute() )
 			{
@@ -536,7 +539,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid_i . "', '" . $rowcontent['id'] . "', '0')" );
 			}
-			
+
 			foreach( $array_block_cat_module as $bid_i )
 			{
 				nv_news_fix_block( $bid_i );
@@ -776,14 +779,17 @@ for( $i = 0; $i < 60; $i++ )
 }
 $xtpl->assign( 'emin', $select );
 
-// Allowed
-$select = "";
-while( list( $commid_i, $commid_title_i ) = each( $array_allowed_comm ) )
+// Allowed comm
+$allowed_comm = explode( ',', $rowcontent['allowed_comm'] );
+foreach( $groups_list as $_group_id => $_title )
 {
-	$comm_sl = ( $commid_i == $rowcontent['allowed_comm'] ) ? " selected=\"selected\"" : "";
-	$select .= "<option value=\"" . $commid_i . "\" " . $comm_sl . ">" . $commid_title_i . "</option>\n";
+	$xtpl->assign( 'ALLOWED_COMM', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $allowed_comm ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.allowed_comm' );
 }
-$xtpl->assign( 'allowed_comm', $select );
 
 // Source
 $select = "";

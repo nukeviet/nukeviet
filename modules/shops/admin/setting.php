@@ -26,13 +26,6 @@ if( ! empty( $data ) )
 	$data['homeheight'] = $temp[1];
 }
 
-$groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if( ! empty( $groups_list ) )
-{
-	$array_who[] = $lang_global['who_view3'];
-}
-
 $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
