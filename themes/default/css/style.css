@@ -46,6 +46,9 @@ ul, ol {
 	line-height: 18px;
 	text-align: justify
 }
+.navbar-default .navbar-nav>li>a{
+	color: #fff;
+}
 
 /* Global */
 html{
@@ -222,7 +225,7 @@ header{
 }
 #footer .footer-copyright .menu li.top{
 	padding:0 4px;
-	background:#777;
+	background:#428bca;
 	color:#fff;
 	-webkit-border-radius:2px;
 	margin-left:10px;
