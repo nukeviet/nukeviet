@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 {FILE "header.tpl"}
-<div id="container-fluid">
-	<header id="header">
+<div class="container-fluid">
+	<header id="header" class="row">
 		<div class="logo">
 			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
 		</div>
@@ -69,7 +69,7 @@
 		</div>
 	</div>
 
-	<section id="middle">
+	<section id="middle" class="row">
 		<div id="contentwrapper">
 			<div id="container">
 				<div id="info_tab">
@@ -131,7 +131,7 @@
 	</section>
 	<!-- #middle-->
 
-	<footer id="footer">
+	<footer id="footer" class="row">
 		<div class="copyright">
 			<!-- BEGIN: memory_time_usage -->
 			[MEMORY_TIME_USAGE]
