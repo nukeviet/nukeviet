@@ -10,9 +10,9 @@
 			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span><em class="icon-power-off icon-large">&nbsp;</em> {NV_LOGOUT}</span></a>
 		</div>
 		<!-- BEGIN: langdata -->
-		<div class="lang">
+		<div class="lang form-inline">
 			<strong>{NV_LANGDATA}</strong>:
-			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control w200">
+			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control input-sm">
 				<!-- BEGIN: option -->
 				<option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
 				<!-- END: option -->
