@@ -3,16 +3,15 @@
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
 </script>
-<strong><a href="{link_menu}">{LANG.menu}</a></strong>
 <!-- BEGIN: title -->
->> <strong><a href="{link_title}">{LANG.back}</a></strong>
+<strong><a href="{link_title}">{LANG.back}</a></strong> >>
 <!-- END: title -->
 <!-- BEGIN: table -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
 			<col class="w50">
-			<col span="3">
+			<col span="2">
 			<col class="w150">
 		</colgroup>
 		<thead>
@@ -20,7 +19,6 @@
 				<th>{LANG.number}</th>
 				<th>{LANG.title}</th>
 				<th>{LANG.link}</th>
-				<th>{LANG.name_block}</th>
 				<th>{LANG.action}</th>
 			</tr>
 		</thead>
@@ -39,7 +37,6 @@
 				<!-- END: sub -->
 				</td>
 				<td>{ROW.link}</td>
-				<td>{ROW.name_block}</td>
 				<td class="text-center">
 					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
@@ -59,6 +56,7 @@
 	<input type="hidden" name="pa" value="{DATA.parentid}">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
+			<caption>{FORM_CAPTION}</caption>
 			<colgroup>
 				<col class="w150" />
 				<col class="w300" />
@@ -126,21 +124,12 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td style="vertical-align:top"><strong> {LANG.who_view}</strong></td>
+					<td style="vertical-align:top"><strong> {GLANG.groups_view}</strong></td>
 					<td>
-					<select name="who_view" class="form-control w200">
-						<!-- BEGIN: who_view -->
-						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-						<!-- END: who_view -->
-					</select>
-					<!-- BEGIN: group_view_empty -->
-					<br />
-					<strong>{LANG.groups}</strong><div class="hr"></div>
 					<!-- BEGIN: groups_view -->
 					<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
 					<br />
 					<!-- END: groups_view -->
-					<!-- END: group_view_empty -->
 					</td>
 					<td>&nbsp;</td>
 				</tr>

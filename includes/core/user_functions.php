@@ -45,25 +45,6 @@ function nv_create_submenu()
 }
 
 /**
- * nv_setBlockAllowed()
- *
- * @param mixed $groups_view
- * @return
- */
-function nv_setBlockAllowed( $groups_view )
-{
-	global $user_info;
-
-	if( defined( 'NV_IS_SPADMIN' ) ) return true;
-
-	$groups_view = ( string )$groups_view;
-	if( $groups_view == '0' or ( $groups_view == '1' and defined( 'NV_IS_USER' ) ) or ( $groups_view == '2' and defined( 'NV_IS_MODADMIN' ) ) ) return true;
-	if( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) ) return true;
-
-	return false;
-}
-
-/**
  * nv_blocks_get_content()
  *
  * @return
@@ -172,7 +153,7 @@ function nv_blocks_content( $sitecontent )
 			}
 
 			//Kiem tra quyen xem block
-			if( in_array( $_row['position'], $array_position ) and nv_setBlockAllowed( $_row['groups_view'] ) )
+			if( in_array( $_row['position'], $array_position ) and nv_user_in_groups( $_row['groups_view'] ) )
 			{
 				$block_config = $_row['block_config'];
 				$blockTitle = $_row['blockTitle'];
@@ -585,8 +566,8 @@ function nv_html_site_js()
 						});
 						$(".column").disableSelection();
 					});
-					//]]>
-					</script>';
+				//]]>
+				</script>';
 	}
 	return $return;
 }
@@ -654,7 +635,7 @@ function nv_groups_list_pub()
 {
 	global $db, $db_config, $global_config;
 
-	$query = 'SELECT group_id, title, exp_time, publics FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+	$query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -675,7 +656,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
+		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 

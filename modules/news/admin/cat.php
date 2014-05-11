@@ -14,9 +14,10 @@ $page_title = $lang_module['categories'];
 
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $who_view, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', 0, '', '', 0 );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', 0, '', '', 0 );
 
 $groups_list = nv_groups_list();
+
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
 {
@@ -32,12 +33,8 @@ if( ! empty( $savecat ) )
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
 	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
-	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
-	$groups_view = '';
-
-	$groups = $nv_Request->get_typed_array( 'groups_view', 'post', 'int', array() );
-	$groups = array_intersect( $groups, array_keys( $groups_list ) );
-	$groups_view = implode( ',', $groups );
+	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+	$groups_view = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
@@ -66,8 +63,8 @@ if( ! empty( $savecat ) )
 		$viewcat = 'viewcat_page_new';
 		$subcatid = '';
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, who_view, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :who_view, :groups_view)";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, groups_view) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
 
 		$data_insert = array();
 		$data_insert['parentid'] = $parentid;
@@ -80,7 +77,6 @@ if( ! empty( $savecat ) )
 		$data_insert['subcatid'] = $subcatid;
 		$data_insert['keywords'] = $keywords;
 		$data_insert['admins'] = $admins;
-		$data_insert['who_view'] = $who_view;
 		$data_insert['groups_view'] = $groups_view;
 
 		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
@@ -108,7 +104,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, who_view= :who_view, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
 		$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_INT);
 		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
 		$stmt->bindParam( ':titlesite', $titlesite, PDO::PARAM_STR );
@@ -117,7 +113,6 @@ if( ! empty( $savecat ) )
 		$stmt->bindParam( ':viewdescription', $viewdescription, PDO::PARAM_STR );
 		$stmt->bindParam( ':keywords', $keywords, PDO::PARAM_STR );
 		$stmt->bindParam( ':description', $description, PDO::PARAM_STR );
-		$stmt->bindParam( ':who_view', $who_view, PDO::PARAM_STR );
 		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
 		$stmt->execute();
 
@@ -163,7 +158,6 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	$viewdescription = $global_array_cat[$catid]['viewdescription'];
 	$image = $global_array_cat[$catid]['image'];
 	$keywords = $global_array_cat[$catid]['keywords'];
-	$who_view = $global_array_cat[$catid]['who_view'];
 	$groups_view = $global_array_cat[$catid]['groups_view'];
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
@@ -183,6 +177,7 @@ else
 	$caption = $lang_module['add_cat'];
 	$array_in_cat = array();
 }
+
 $groups_view = explode( ',', $groups_view );
 
 $array_cat_list = array();
@@ -223,16 +218,6 @@ if( ! empty( $array_cat_list ) )
 				'title' => $title_i
 			);
 		}
-	}
-
-	$who_views = array();
-	foreach( $array_who_view as $k => $w )
-	{
-		$who_views[] = array(
-			'value' => $k,
-			'selected' => ( $who_view == $k ) ? ' selected="selected"' : '',
-			'title' => $w
-		);
 	}
 
 	$groups_views = array();
@@ -304,19 +289,11 @@ if( ! empty( $array_cat_list ) )
 		$xtpl->parse( 'main.content.cat_listsub' );
 	}
 
-	foreach( $who_views as $data )
-	{
-		$xtpl->assign( 'who_views', $data );
-		$xtpl->parse( 'main.content.who_views' );
-	}
-
 	foreach( $groups_views as $data )
 	{
 		$xtpl->assign( 'groups_views', $data );
 		$xtpl->parse( 'main.content.groups_views' );
 	}
-
-	$xtpl->assign( 'hidediv', $who_view == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
 
 	$xtpl->parse( 'main.content' );
 }

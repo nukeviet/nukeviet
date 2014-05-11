@@ -145,14 +145,7 @@ $(function() {
 	$("input.checkmodule").change(function() {
 		$("#idmodule_" + $(this).attr('value') + " input[name='func_id[]']:checkbox").prop("checked", $(this).prop('checked'));
 	});
-	$("select[name=who_view]").change(function() {
-		var groups = $("select[name=who_view]").val();
-		if (groups == 3) {
-			$("#groups_list").show();
-		} else {
-			$("#groups_list").hide();
-		}
-	});
+
 	$("input[name=confirm]").click(function() {
 		var leavegroup = $("input[name=leavegroup]").is(":checked") ? 1 : 0;
 		var all_func = $("input[name='all_func']:checked").val();
@@ -163,17 +156,6 @@ $(function() {
 			});
 			if (funcid.length < 1) {
 				alert(lang_block_no_func);
-				return false;
-			}
-		}
-		var who_view = $("select[name=who_view]").val();
-		if (who_view == 3) {
-			var grouplist = [];
-			$("input[name='groups_view[]']:checked").each(function() {
-				grouplist.push($(this).val());
-			});
-			if (grouplist.length < 1) {
-				alert(lang_block_error_nogroup);
 				return false;
 			}
 		}

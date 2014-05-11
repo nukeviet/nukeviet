@@ -34,7 +34,7 @@ if( empty( $row ) )
 	exit();
 }
 
-if( ! nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+if( ! nv_user_in_groups( $row['groups_view'] ) )
 {
 	$redirect = '<meta http-equiv="Refresh" content="4;URL=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
 	nv_info_die( $lang_module['error_not_permission_title'], $lang_module['error_not_permission_title'], $lang_module['error_not_permission_content'] . $redirect );
@@ -128,7 +128,7 @@ $row['is_download_allow'] = $list_cats[$row['catid']]['is_download_allow'];
 //neu danh muc cho phep tai file thi kiem tra tiep phan quyen tai file trong chi tiet file
 if( $row['is_download_allow'] == false )
 {
-	$row['is_download_allow'] = ( int )nv_set_allow( $row['who_download'], $row['groups_download'] );
+	$row['is_download_allow'] = ( int )nv_user_in_groups( $row['groups_download'] );
 }
 
 $session_files = array();
@@ -218,14 +218,7 @@ else
 	$row['linkdirect'] = array();
 	$session_files = array();
 
-	if( $list_cats[$row['catid']]['who_download'] == 2 )
-	{
-		$row['download_info'] = $lang_module['download_not_allow_info2'];
-	}
-	else
-	{
-		$row['download_info'] = sprintf( $lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register' );
-	}
+	$row['download_info'] = sprintf( $lang_module['download_not_allow_info1'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register' );
 }
 
 $session_files = serialize( $session_files );
@@ -253,7 +246,7 @@ if( ! in_array( $row['id'], $dfile ) )
 
 // comment
 define( 'NV_COMM_ID', $row['id'] );
-define( 'NV_COMM_ALLOWED', $row['comment_allow'] ? nv_set_allow( $row['who_comment'], $row['groups_comment'] ) : false );
+define( 'NV_COMM_ALLOWED', nv_user_in_groups( $row['groups_comment'] ) );
 require_once NV_ROOTDIR . '/modules/comment/comment.php';
 
 $row['rating_point'] = 0;

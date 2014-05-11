@@ -53,29 +53,32 @@
 				<tr>
 					<td><strong>{LANG.allowed_comm}</strong></td>
 					<td>
-					<select name="allowed_comm" class="form-control w300">
 						<!-- BEGIN: allowed_comm -->
-						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+						<div class="row">
+							<label><input name="allowed_comm[]" type="checkbox" value="{OPTION.value}" {OPTION.checked} />{OPTION.title}</label>
+						</div>
 						<!-- END: allowed_comm -->
-					</select></td>
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.view_comm}</strong></td>
 					<td>
-					<select name="view_comm" class="form-control w300">
 						<!-- BEGIN: view_comm -->
-						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+						<div class="row">
+							<label><input name="view_comm[]" type="checkbox" value="{OPTION.value}" {OPTION.checked} />{OPTION.title}</label>
+						</div>
 						<!-- END: view_comm -->
-					</select></td>
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setcomm}</strong></td>
 					<td>
-					<select name="setcomm" class="form-control w300">
 						<!-- BEGIN: setcomm -->
-						<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
+						<div class="row">
+							<label><input name="setcomm[]" type="checkbox" value="{OPTION.value}" {OPTION.checked} />{OPTION.title}</label>
+						</div>
 						<!-- END: setcomm -->
-					</select></td>
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.auto_postcomm}</strong></td>

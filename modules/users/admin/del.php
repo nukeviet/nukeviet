@@ -35,7 +35,7 @@ if( $global_config['idsite'] > 0 AND $idsite != $global_config['idsite'] )
 	die( 'NO' );
 }
 
-$query = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN (1,2,3) AND userid=' . $userid );
+$query = $db->query( 'SELECT COUNT(*) FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN (1,2,3) AND userid=' . $userid );
 if( $query->fetchColumn() )
 {
 	die( 'ERROR_' . $lang_module['delete_group_system'] );
@@ -50,8 +50,9 @@ else
 		die( 'NO' );
 	}
 
-	$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ')' );
-	$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid );
+	$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ')' );
+	$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=4' );
+	$db->query( 'DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid );
 	$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $userid );
 	$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid );
 

@@ -167,11 +167,7 @@
 		                        </div>
 		                	</div>
 						</li>
-					</ul>
-				</div>
-				<div class="col-sm-6 col-md-12">
-					<ul style="padding:4px; margin:0">
-						<li>
+<li>
 							<p class="message_head">
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
@@ -205,6 +201,25 @@
 								</div>
 							</div>
 						</li>
+					</ul>
+				</div>
+				<div class="col-sm-6 col-md-12">
+					<ul style="padding:4px; margin:0">
+						<li>
+							<p class="message_head">
+								<cite>{LANG.content_allowed_comm}:</cite>
+							</p>
+							<div class="message_body">
+								<!-- BEGIN: allowed_comm -->
+								<div class="row">
+									<label><input name="allowed_comm[]" type="checkbox" value="{ALLOWED_COMM.value}" {ALLOWED_COMM.checked} />{ALLOWED_COMM.title}</label>
+								</div>
+								<!-- END: allowed_comm -->
+								<!-- BEGIN: content_note_comm -->
+								<div class="alert alert-info">{LANG.content_note_comm}</div>
+								<!-- END: content_note_comm -->
+							</div>
+						</li>
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_extra}:</cite>
@@ -213,12 +228,6 @@
 								<div style="margin-bottom: 2px;">
 									<input type="checkbox" value="1" name="inhome" {inhome_checked}/>
 									<label> {LANG.content_inhome} </label>
-								</div>
-								<div style="margin-bottom: 2px;">
-									<label> {LANG.content_allowed_comm} </label>
-									<select class="form-control" name="allowed_comm">
-										{allowed_comm}
-									</select>
 								</div>
 								<div style="margin-bottom: 2px;">
 									<input type="checkbox" value="1" name="allowed_rating" {allowed_rating_checked}/>

@@ -59,12 +59,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 		 copyright VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 view_hits NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 		 download_hits NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-		 comment_allow NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-		 who_comment NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 groups_comment VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-		 who_view NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 groups_view VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
-		 who_download NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 groups_download VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 comment_hits NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 		 rating_detail VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -124,9 +120,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 		 title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 description VARCHAR2(4000 CHAR) DEFAULT '',
-		 who_view NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 groups_view VARCHAR2(255 CHAR) DEFAULT '',
-		 who_download NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 groups_download VARCHAR2(255 CHAR) DEFAULT '',
 		 weight NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 		 status NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
@@ -160,13 +154,11 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_addfile', '1')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_upload', '1')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('who_upload', '1')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('groups_upload', '')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('maxfilesize', '2097152')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('upload_filetype', 'doc,xls,zip,rar')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('upload_dir', 'files')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('temp_dir', 'temp')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('who_addfile', '0')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('groups_addfile', '')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_zip', '1')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES ('is_resume', '1')";
@@ -174,11 +166,11 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '3')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '6')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '4')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";

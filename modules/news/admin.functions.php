@@ -41,16 +41,11 @@ $array_viewcat_nosub = array(
 	'viewcat_grid_new' => $lang_module['viewcat_grid_new'],
 	'viewcat_grid_old' => $lang_module['viewcat_grid_old']
 );
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
+
 $array_allowed_comm = array(
 	$lang_global['no'],
-	$lang_global['who_view0'],
-	$lang_global['who_view1']
+	$lang_global['level6'],
+	$lang_global['level4']
 );
 
 define( 'NV_IS_FILE_ADMIN', true );

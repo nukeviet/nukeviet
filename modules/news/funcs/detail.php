@@ -12,26 +12,8 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $contents = '';
 $publtime = 0;
-$func_who_view = $global_array_cat[$catid]['who_view'];
-$allowed = false;
-if( $func_who_view == 0 )
-{
-	$allowed = true;
-}
-if( $func_who_view == 1 and defined( 'NV_IS_USER' ) )
-{
-	$allowed = true;
-}
-elseif( $func_who_view == 2 and defined( 'NV_IS_MODADMIN' ) )
-{
-	$allowed = true;
-}
-elseif( $func_who_view == 3 and defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $global_array_cat[$catid]['groups_view'] ) )
-{
-	$allowed = true;
-}
 
-if( $allowed )
+if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 {
 	$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id );
 	$news_contents = $query->fetch();
@@ -350,7 +332,7 @@ if( $allowed )
 }
 else
 {
-	$contents = no_permission( $func_who_view );
+	$contents = no_permission( $global_array_cat[$catid]['groups_view'] );
 }
 
 include NV_ROOTDIR . '/includes/header.php';

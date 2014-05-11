@@ -65,6 +65,18 @@ if( ! empty( $file_name ) )
 			{
 				$path_file_lang = NV_ROOTDIR . '/modules/' . $module_file . '/language/block.' . $matches[1] . '.' . $matches[2] . '_en.php';
 			}
+			elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_' . NV_LANG_INTERFACE . '.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_' . NV_LANG_INTERFACE . '.php';
+			}
+			elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_' . NV_LANG_DATA . '.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_' . NV_LANG_DATA . '.php';
+			}
+			elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_en.php' ) )
+			{
+				$path_file_lang = NV_ROOTDIR . '/modules/' . $module_file . '/language/block.config_en.php';
+			}
 		}
 	}
 	else

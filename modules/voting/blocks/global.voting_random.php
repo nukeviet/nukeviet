@@ -24,15 +24,13 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 
 		$content = '';
 
-		if( ! isset( $site_mods['voting'] ) ) return "";
+		if( ! isset( $site_mods['voting'] ) ) return '';
 
-		$sql = "SELECT vid, question, link, acceptcm, who_view, groups_view, publ_time, exp_time
- FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "
- WHERE act=1";
+		$sql = 'SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
 
 		$list = nv_db_cache( $sql, 'vid', 'voting' );
 
-		if( empty( $list ) ) return "";
+		if( empty( $list ) ) return '';
 
 		$allowed = array();
 		$is_update = array();
@@ -44,7 +42,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			{
 				$is_update[] = $row['vid'];
 			}
-			elseif( $row['publ_time'] <= NV_CURRENTTIME and nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+			elseif( $row['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups( $row['groups_view'] ) )
 			{
 				$allowed[$a] = $row;
 				++$a;
@@ -55,7 +53,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 		{
 			$is_update = implode( ',', $is_update );
 
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " SET act=0 WHERE vid IN (" . $is_update . ")";
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' SET act=0 WHERE vid IN (' . $is_update . ')';
 			$db->query( $sql );
 
 			nv_del_moduleCache( 'voting' );
@@ -67,12 +65,11 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			$rand = rand( 0, $a );
 			$current_voting = $allowed[$rand];
 
-			$sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows
- WHERE vid = " . $current_voting['vid'] . " ORDER BY id ASC";
+			$sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
 
 			$list = nv_db_cache( $sql, '', 'voting' );
 
-			if( empty( $list ) ) return "";
+			if( empty( $list ) ) return '';
 
 			include NV_ROOTDIR . '/modules/' . $site_mods['voting']['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
 
@@ -86,7 +83,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			}
 			else
 			{
-				$block_theme = "default";
+				$block_theme = 'default';
 			}
 
 			if( ! defined( 'SHADOWBOX' ) )
@@ -98,17 +95,17 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 			}
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\"></script>\n";
 
-			$action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
+			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 
-			$voting_array = array( //
-				"checkss" => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ), //
-				"accept" => ( int )$current_voting['acceptcm'], //
-				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
-				"vid" => $current_voting['vid'], //
-				"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
-				"action" => $action, //
-				"langresult" => $lang_module['voting_result'], //
-				"langsubmit" => $lang_module['voting_hits'] //
+			$voting_array = array(
+				'checkss' => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ),
+				'accept' => ( int )$current_voting['acceptcm'],
+				'errsm' => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'],
+				'vid' => $current_voting['vid'],
+				'question' => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
+				'action' => $action,
+				'langresult' => $lang_module['voting_result'],
+				'langsubmit' => $lang_module['voting_hits']
 			);
 
 			$xtpl = new XTemplate( 'global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file'] );

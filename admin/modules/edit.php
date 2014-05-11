@@ -96,30 +96,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 	if( $mod != $global_config['site_home_module'] )
 	{
-		$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
-
-		if( $who_view < 0 or $who_view > 3 ) $who_view = 0;
-
-		$groups_view = '';
-
-		if( $who_view == 3 )
-		{
-			$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
-			$groups_view = ! empty( $groups_view ) ? implode( ',', array_map( 'intval', $groups_view ) ) : '';
-		}
-		else
-		{
-			$groups_view = ( string )$who_view;
-		}
+		$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
+		$groups_view = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
 	}
 	else
 	{
 		$act = 1;
-		$who_view = 0;
-		$groups_view = '0';
+		$groups_view = '6';
 	}
 
-	if( $groups_view != '' and $custom_title != '' )
+	if( $custom_title != '' )
 	{
 		$array_layoutdefault = array();
 
@@ -219,17 +205,7 @@ else
 	$rss = $row['rss'];
 }
 
-$who_view = 3;
-$groups_view = array();
-
-if( $row['groups_view'] == '0' or $row['groups_view'] == '1' or $row['groups_view'] == '2' )
-{
-	$who_view = intval( $row['groups_view'] );
-}
-else
-{
-	$groups_view = array_map( 'intval', explode( ',', $row['groups_view'] ) );
-}
+$groups_view = explode( ',', $row['groups_view'] );
 
 if( empty( $custom_title ) ) $custom_title = $mod;
 
@@ -251,8 +227,11 @@ $data['mod_name'] = $mod;
 
 if( $mod != $global_config['site_home_module'] )
 {
-	$data['who_view'] = array( $lang_global['who_view'], array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] ), $who_view );
 	$data['groups_view'] = array( $lang_global['groups_view'], $groups_list, $groups_view );
+}
+else
+{
+	$data['groups_view'] = array();
 }
 $data['submit'] = $lang_global['submit'];
 
@@ -282,21 +261,8 @@ if( ! empty( $data['mobile'][2] ) )
 
 	$xtpl->parse( 'main.mobile' );
 }
-
-if( isset( $data['who_view'] ) )
+if( ! empty( $data['groups_view'] ) )
 {
-	foreach( $data['who_view'][1] as $k => $w )
-	{
-		$xtpl->assign( 'WHO_VIEW', array(
-			'key' => $k,
-			'selected' => $k == $data['who_view'][2] ? ' selected="selected"' : '',
-			'title' => $w
-		) );
-		$xtpl->parse( 'main.who_view.loop' );
-	}
-
-	$xtpl->assign( 'DISPLAY', $data['who_view'][2] == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
-
 	foreach( $data['groups_view'][1] as $group_id => $grtl )
 	{
 		$xtpl->assign( 'GROUPS_VIEW', array(
@@ -304,11 +270,9 @@ if( isset( $data['who_view'] ) )
 			'checked' => in_array( $group_id, $data['groups_view'][2] ) ? ' checked="checked"' : '',
 			'title' => $grtl
 		) );
-
-		$xtpl->parse( 'main.who_view.groups_view' );
+		$xtpl->parse( 'main.groups_view.loop' );
 	}
-
-	$xtpl->parse( 'main.who_view' );
+	$xtpl->parse( 'main.groups_view' );
 }
 
 $xtpl->assign( 'ACTIVE', ( $act == 1 ) ? ' checked="checked"' : '' );

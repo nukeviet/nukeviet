@@ -53,7 +53,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 {
 	global $module_data, $module_name, $module_info;
 
-	$sql = "SELECT id,title,alias,description,who_view,groups_view,who_download,groups_download, parentid
+	$sql = "SELECT id,title,alias,description,groups_view,groups_download, parentid
  FROM " . NV_PREFIXLANG . "_" . $module_data . "_categories WHERE status=1 ORDER BY parentid,weight ASC";
 
 	$list = nv_db_cache( $sql, 'id' );
@@ -64,13 +64,13 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 	{
 		foreach( $list as $row )
 		{
-			if( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+			if( nv_user_in_groups( $row['groups_view'] ) )
 			{
 				if( ! $row['parentid'] or isset( $list[$row['parentid']] ) )
 				{
 					$list2[$row['id']] = $list[$row['id']];
 					$list2[$row['id']]['name'] = $list[$row['id']]['title'];
-					$list2[$row['id']]['is_download_allow'] = ( int )nv_set_allow( $row['who_download'], $row['groups_download'] );
+					$list2[$row['id']]['is_download_allow'] = ( int )nv_user_in_groups( $row['groups_download'] );
 					$list2[$row['id']]['subcats'] = array();
 
 					if( $is_link )
@@ -126,7 +126,7 @@ function nv_mod_down_config()
 
 	if( $download_config['is_addfile'] )
 	{
-		$download_config['is_addfile_allow'] = nv_set_allow( $download_config['who_addfile'], $download_config['groups_addfile'] );
+		$download_config['is_addfile_allow'] = nv_user_in_groups( $download_config['groups_addfile'] );
 	}
 	else
 	{
@@ -135,7 +135,7 @@ function nv_mod_down_config()
 
 	if( $download_config['is_addfile_allow'] and $download_config['is_upload'] )
 	{
-		$download_config['is_upload_allow'] = nv_set_allow( $download_config['who_upload'], $download_config['groups_upload'] );
+		$download_config['is_upload_allow'] = nv_user_in_groups( $download_config['groups_upload'] );
 	}
 	else
 	{

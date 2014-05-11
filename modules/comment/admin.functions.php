@@ -17,11 +17,6 @@ if( defined( 'NV_IS_SPADMIN' ) )
 	$allow_func[] = 'config';
 }
 
-$array_setcomm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
-
-$array_allowed_comm = $array_setcomm;
-$array_allowed_comm[] = $lang_module['allowed_comm_item'];
-
 $site_mod_comm = array();
 $result = $db->query( 'SELECT title, module_file, module_data, custom_title, admin_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight' );
 while( $row = $result->fetch() )

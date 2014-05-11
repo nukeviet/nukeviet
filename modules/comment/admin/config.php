@@ -19,17 +19,32 @@ $captcha_array = array(
 	3 => $lang_module['captcha_3']
 );
 
+$groups_list = nv_groups_list();
+
 if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_name] ) )
 {
 	$array_config = array();
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
 	$array_config['auto_postcomm'] = $nv_Request->get_int( 'auto_postcomm', 'post', 0 );
 	$array_config['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
-	$array_config['view_comm'] = $nv_Request->get_int( 'view_comm', 'post', 0 );
-	$array_config['allowed_comm'] = $nv_Request->get_int( 'allowed_comm', 'post', 0 );
-	$array_config['setcomm'] = $nv_Request->get_int( 'setcomm', 'post', 0 );
 	$array_config['sortcomm'] = $nv_Request->get_int( 'sortcomm', 'post', 0 );
 	$array_config['captcha'] = $nv_Request->get_int( 'captcha', 'post', 0 );
+
+	$_groups_com = $nv_Request->get_array( 'allowed_comm', 'post', array() );
+	if( in_array(-1, $_groups_com) )
+	{
+		$array_config['allowed_comm'] = '-1';
+	}
+	else
+	{
+		$array_config['allowed_comm'] = ! empty( $_groups_com ) ? implode( ',', nv_groups_post( array_intersect( $_groups_com, array_keys( $groups_list ) ) ) ) : '';
+	}
+
+	$_groups_com = $nv_Request->get_array( 'view_comm', 'post', array() );
+	$array_config['view_comm'] = ! empty( $_groups_com ) ? implode( ',', nv_groups_post( array_intersect( $_groups_com, array_keys( $groups_list ) ) ) ) : '';
+
+	$_groups_com = $nv_Request->get_array( 'setcomm', 'post', array() );
+	$array_config['setcomm'] = ! empty( $_groups_com ) ? implode( ',', nv_groups_post( array_intersect( $_groups_com, array_keys( $groups_list ) ) ) ) : '';
 
 	$admins_mod_name = explode( ',', $site_mods[$mod_name]['admins'] );
 	$admins_module_name = explode( ',', $site_mods[$module_name]['admins'] );
@@ -104,30 +119,37 @@ if( ! empty( $mod_name ) )
 		$xtpl->parse( 'main.config.auto_postcomm' );
 	}
 
-	while( list( $comm_i, $title_i ) = each( $array_allowed_comm ) )
+	$array_allowed_comm =explode( ',', $module_config[$mod_name]['allowed_comm'] );
+	$array_view_comm = explode( ',', $module_config[$mod_name]['view_comm'] );
+	$array_setcomm = explode( ',', $module_config[$mod_name]['setcomm'] );
+
+	$xtpl->assign( 'OPTION', array(
+		'value' => -1,
+		'checked' => in_array( -1, $array_allowed_comm ) ? ' checked="checked"' : '',
+		'title' => $lang_module['allowed_comm_item']
+	) );
+	$xtpl->parse( 'main.config.allowed_comm' );
+
+	foreach( $groups_list as $_group_id => $_title )
 	{
 		$xtpl->assign( 'OPTION', array(
-			'key' => $comm_i,
-			'title' => $title_i,
-			'selected' => $comm_i == $module_config[$mod_name]['allowed_comm'] ? ' selected="selected"' : ''
+			'value' => $_group_id,
+			'checked' => in_array( $_group_id, $array_allowed_comm ) ? ' checked="checked"' : '',
+			'title' => $_title
 		) );
 		$xtpl->parse( 'main.config.allowed_comm' );
 
 		$xtpl->assign( 'OPTION', array(
-			'key' => $comm_i,
-			'title' => $title_i,
-			'selected' => $comm_i == $module_config[$mod_name]['view_comm'] ? ' selected="selected"' : ''
+			'value' => $_group_id,
+			'checked' => in_array( $_group_id, $array_view_comm ) ? ' checked="checked"' : '',
+			'title' => $_title
 		) );
 		$xtpl->parse( 'main.config.view_comm' );
-	}
 
-	// Thao luan mac dinh khi tao bai viet moi
-	while( list( $comm_i, $title_i ) = each( $array_setcomm ) )
-	{
 		$xtpl->assign( 'OPTION', array(
-			'key' => $comm_i,
-			'title' => $title_i,
-			'selected' => $comm_i == $module_config[$mod_name]['setcomm'] ? ' selected="selected"' : ''
+			'value' => $_group_id,
+			'checked' => in_array( $_group_id, $array_setcomm ) ? ' checked="checked"' : '',
+			'title' => $_title
 		) );
 		$xtpl->parse( 'main.config.setcomm' );
 	}
@@ -164,12 +186,36 @@ else
 	{
 		$admin_title = ( ! empty( $row_mod['admin_title'] ) ) ? $row_mod['admin_title'] : $row_mod['custom_title'];
 
+		$array_allowed_comm = ( ! empty( $module_config[$mod_name]['allowed_comm'] )) ? explode( ',', $module_config[$mod_name]['allowed_comm'] ) : array();
+		$array_view_comm = ( ! empty( $module_config[$mod_name]['view_comm'] )) ? explode( ',', $module_config[$mod_name]['view_comm'] ) : array();
+
+		if( in_array(-1, $array_allowed_comm) )
+		{
+			$allowed_comm = $lang_module['allowed_comm_item'];
+		}
+		else
+		{
+			$allowed_comm = array();
+			foreach( $array_allowed_comm as $_group_id )
+			{
+				$allowed_comm[] = $groups_list[$_group_id];
+			}
+			$allowed_comm = implode( '<br>', $allowed_comm );
+		}
+
+		$view_comm = array();
+		foreach( $array_view_comm as $_group_id )
+		{
+			$view_comm[] = $groups_list[$_group_id];
+		}
+		$view_comm = implode( '<br>', $view_comm );
+
 		$row = array();
 		$row['weight'] = ++$weight;
 		$row['mod_name'] = $mod_name;
 		$row['admin_title'] = $admin_title;
-		$row['allowed_comm'] = $array_allowed_comm[$module_config[$mod_name]['allowed_comm']];
-		$row['view_comm'] = $array_allowed_comm[$module_config[$mod_name]['view_comm']];
+		$row['allowed_comm'] =$allowed_comm;
+		$row['view_comm'] = $view_comm;
 		$row['auto_postcomm'] = $lang_module['auto_postcomm_' . $module_config[$mod_name]['auto_postcomm']];
 		$row['activecomm'] = $module_config[$mod_name]['activecomm'] ? 'check' : 'circle-o';
 		$row['emailcomm'] = $module_config[$mod_name]['emailcomm'] ? 'check' : 'circle-o';

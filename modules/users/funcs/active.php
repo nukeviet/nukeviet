@@ -91,6 +91,8 @@ if( $checknum == $row['checknum'] )
 		$userid = $db->insert_id( $sql, 'userid', $data_insert );
 		if( $userid )
 		{
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
+
 			$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 			$query_field = array();
 			$query_field['userid'] = $userid;
@@ -102,6 +104,7 @@ if( $checknum == $row['checknum'] )
 
 			if( $db->exec( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' ) )
 			{
+				$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 				$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid'] );
 				$check_update_user = true;
 

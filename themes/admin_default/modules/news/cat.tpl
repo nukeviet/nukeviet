@@ -57,30 +57,14 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{GLANG.who_view} </strong></td>
+						<strong>{GLANG.groups_view} </strong></td>
 						<td>
-						<div class="message_body">
-							<select class="form-control w250" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
-								<!-- BEGIN: who_views -->
-								<option value="{who_views.value}" {who_views.selected}>{who_views.title}</option>
-								<!-- END: who_views -->
-							</select>
-							<br />
-							<div id="groups_list" style="{hidediv}">
-								{GLANG.groups_view}:
-								<table style="margin-bottom:8px; width:250px;">
-									<tr>
-										<td>
-										<!-- BEGIN: groups_views -->
-										<p>
-											<input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}
-										</p>
-										<!-- END: groups_views -->
-										</td>
-									</tr>
-								</table>
+							<!-- BEGIN: groups_views -->
+							<div class="row">
+								<label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
 							</div>
-						</div></td>
+							<!-- END: groups_views -->
+						</td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.viewdescription}: </strong></td>

@@ -88,14 +88,14 @@
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 					<td>
-					<ul>
-						<!-- BEGIN: list -->
-						<li>
-							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} />
-							<span>{GROUP.title}</span>
-						</li>
-						<!-- END: list -->
-					</ul></td>
+						<div class="row checkbox">
+							<!-- BEGIN: list -->
+							<label class="col-sm-10">
+								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+							</label>
+							<!-- END: list -->
+						</div>
+					</td>
 				</tr>
 				<!-- END: group -->
 			</tbody>

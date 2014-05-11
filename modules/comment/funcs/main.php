@@ -18,49 +18,29 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 
 	$area = $nv_Request->get_int( 'area', 'post,get', 0 );
 	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
-	$view_comm = $nv_Request->get_int( 'view', 'post,get', 0 );
-	$allowed_comm = $nv_Request->get_int( 'allowed', 'post,get', 0 );
-	$checkss = $nv_Request->get_string( 'checkss', 'post,get' );
+	$allowed_comm = $nv_Request->get_title( 'allowed', 'post,get', 0 );
+	$checkss = $nv_Request->get_title( 'checkss', 'post,get' );
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $view_comm . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
+	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&view=' . $view_comm . '&allowed=' . $allowed_comm . '&checkss=' . $checkss;
 
 		// Kiểm tra quyền xem bình luận
 		$form_login = 0;
-		$view = intval( $module_config[$module]['view_comm'] );
-		if( $view == 3 )
-		{
-			// Quyền hạn xem bình luận theo bài viết
-			$view = $view_comm;
-		}
-		if( $view == 1 or ( $view == 2 and defined( 'NV_IS_USER' ) ) )
-		{
-			$view_comm = 1;
-		}
-		else
-		{
-			$view_comm = 0;
-		}
+		$view_comm = nv_user_in_groups( $module_config[$module]['view_comm'] );
 
 		// Kiểm tra quyền đăng bình luận
-		$allowed = intval( $module_config[$module]['allowed_comm'] );
-		if( $allowed == 3 )
+		$allowed = $module_config[$module]['allowed_comm'];
+		if( $allowed == '-1' )
 		{
 			// Quyền hạn đăng bình luận theo bài viết
 			$allowed = $allowed_comm;
 		}
-		if( $allowed == 1 or ( $allowed == 2 and defined( 'NV_IS_USER' ) ) )
-		{
-			$allowed_comm = 1;
-		}
-		else
-		{
-			$allowed_comm = 0;
-		}
 
-		if( ( $view == 2 OR $allowed == 2 ) AND ! defined( 'NV_IS_USER' ) )
+		$allowed_comm = nv_user_in_groups( $allowed );
+
+		if( ! ( $view_comm AND $allowed_comm ) AND ! defined( 'NV_IS_USER' ) )
 		{
 			$form_login = 1;
 		}
@@ -106,7 +86,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) )
 			$comment = '';
 		}
 
-		$contents = nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login );
+		$contents = nv_theme_comment_main( $module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents, false );
 		include NV_ROOTDIR . '/includes/footer.php';

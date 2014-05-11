@@ -52,7 +52,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 add_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 edit_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	 who_view NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 groups_view VARCHAR2(255 CHAR) DEFAULT NULL,
 	 primary key (catid),
 	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_cat_alias UNIQUE (alias)
@@ -214,15 +213,12 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 )";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_config_post (
-	 pid NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE ,
-	 member NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 group_id NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
+	 group_id NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	 addcontent NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 postcontent NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 editcontent NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 delcontent NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	 primary key (pid),
-	 CONSTRAINT cnv_" . $lang . "_" . $module_data . "_config UNIQUE (member,group_id)
+	 primary key (group_id)
 )";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_admins (
@@ -286,11 +282,11 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '3')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '2')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '6')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '4')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
-$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";

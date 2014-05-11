@@ -267,6 +267,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				exit();
 			}
 
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
+
 			$query_field = array();
 			$query_field['userid'] = $userid;
 			$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
@@ -575,7 +577,9 @@ if( $checkss == $array_register['checkss'] )
 
 				if( ! $userid )
 				{
-					$contents = user_info_exit( $lang_module['err_no_save_account'] );
+					$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
+
+										$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
 
 					include NV_ROOTDIR . '/includes/header.php';
