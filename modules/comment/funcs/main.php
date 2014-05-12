@@ -96,5 +96,5 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	}
 }
 
-Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true ) );
 die();
