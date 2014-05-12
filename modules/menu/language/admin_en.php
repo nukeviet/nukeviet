@@ -19,7 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['menu_manager'] = 'Menu management';
 $lang_module['type_menu_manager'] = 'Management menu type';
-$lang_module['rows'] = 'Add Menu';
+$lang_module['add_menu'] = 'Add Menu';
 $lang_module['edit_menu'] = 'Edit menu';
 $lang_module['menu_name'] = 'Menu name';
 $lang_module['menu_description'] = 'Description';
