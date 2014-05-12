@@ -30,7 +30,8 @@ function LoadModulesSearch()
 				'module_name' => $mod,
 				'module_file' => $arr_mod['module_file'],
 				'module_data' => $arr_mod['module_data'],
-				'custom_title' => $arr_mod['custom_title']
+				'custom_title' => $arr_mod['custom_title'],
+				'adv_search' => isset( $arr_mod['funcs']['search'] ) ? true : false,
 			);
 		}
 	}
