@@ -31,7 +31,7 @@
 			<!-- BEGIN: loop -->
 			<tr>
 				<td>
-				<select class="form-control" title="{ROW.bid}">
+				<select class="form-control order" title="{ROW.bid}">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 					<!-- END: weight -->
@@ -66,12 +66,7 @@
 	$(function() {
 		$("a.block_content").click(function() {
 			var bid = parseInt($(this).attr("title"));
-			Shadowbox.open({
-				content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&selectthemes={SELECTTHEMES}&bid=' + bid + '&blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
-				player : "html",
-				height : 450,
-				width : 780
-			});
+			nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&selectthemes={SELECTTHEMES}&bid=" + bid + "&blockredirect={BLOCKREDIRECT}", "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
 		});
 		$("select.order").change(function() {
 			$("select.order").attr({
