@@ -46,16 +46,13 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		$html .= '<td>' . $lang_block['showtooltip'] . '</td>';
 		$html .= '<td>';
 		$html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /><br /><br />';
+		$tooltip_position = array( 'top' => $lang_block['tooltip_position_top'], 'bottom' => $lang_block['tooltip_position_bottom'], 'left' => $lang_block['tooltip_position_left'], 'right' => $lang_block['tooltip_position_right'] );
 		$html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
-		$sel = $data_block['tooltip_position'] == 'top' ? 'selected="selected"' : '';
-		$html .= '<option value="top" ' . $sel . '>' . $lang_block['tooltip_position_top'] . '</option>';
-		$sel = $data_block['tooltip_position'] == 'bottom' ? 'selected="selected"' : '';
-		$html .= '<option value="bottom" ' . $sel . '>' . $lang_block['tooltip_position_bottom'] . '</option>';
-		$sel = $data_block['tooltip_position'] == 'left' ? 'selected="selected"' : '';
-		$html .= '<option value="left" ' . $sel . '>' . $lang_block['tooltip_position_left'] . '</option>';
-		$sel = $data_block['tooltip_position'] == 'right' ? 'selected="selected"' : '';
-		$html .= '<option value="right" ' . $sel . '>' . $lang_block['tooltip_position_right'] . '</option>';
-		$html .= '</select>';
+		foreach( $tooltip_position as $key => $value )
+		{
+			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
+		}
+		$html .= '</select>';		
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
