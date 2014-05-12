@@ -85,3 +85,5 @@ function nv_admin_add_field_lang( $dirlang )
 		}
 	}
 }
+
+$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );

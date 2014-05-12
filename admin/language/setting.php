@@ -130,7 +130,6 @@ while( $row = $result->fetch() )
 }
 
 $a = 0;
-$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 while( list( $key, $value ) = each( $language_array ) )
 {
 	$arr_lang_func = array();
