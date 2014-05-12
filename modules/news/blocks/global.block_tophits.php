@@ -131,7 +131,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 			if( ! $block_config['showtooltip'] )
 			{
-				$xtpl->assign( 'TITLE', 'title="' . $l['title'] . '"' );
+				$xtpl->assign( 'TITLE', 'title="' . $array_news['title'] . '"' );
 			}
 
 			$xtpl->parse( 'main.newloop' );
