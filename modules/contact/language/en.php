@@ -36,4 +36,5 @@ $lang_module['sendinfo'] = 'This email sent by contact function at website %1$s.
 $lang_module['sendinfo2'] = 'This message is sent by Contact function from website %1$s.<br />Sender informations<br /><strong>Full name</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>Telephone</strong>: %4$s<br /><strong>IP</strong>: %5$s<br /><strong>Receiver</strong>: %6$s';
 $lang_module['phone'] = 'Phone number';
 $lang_module['fax'] = 'Fax';
+$lang_module['note_s'] = 'Note';
 $lang_module['department'] = 'Department';

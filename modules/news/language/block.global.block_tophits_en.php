@@ -19,3 +19,10 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['number_day'] = 'Number day most recent post';
 $lang_block['numrow'] = 'Number aricle';
+$lang_block['showtooltip'] = 'Dipslay tooltip';
+$lang_block['tooltip_position'] = 'Position';
+$lang_block['tooltip_position_top'] = 'Top';
+$lang_block['tooltip_position_bottom'] = 'Bottom';
+$lang_block['tooltip_position_left'] = 'Left';
+$lang_block['tooltip_position_right'] = 'Right';
+$lang_block['tooltip_length'] = 'Length character';

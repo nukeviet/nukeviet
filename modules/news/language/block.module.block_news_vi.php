@@ -18,3 +18,10 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['numrow'] = 'Số bài hiển thị';
+$lang_block['showtooltip'] = 'Hiển thị tooltip';
+$lang_block['tooltip_position'] = 'Vị trí';
+$lang_block['tooltip_position_top'] = 'Trên';
+$lang_block['tooltip_position_bottom'] = 'Dưới';
+$lang_block['tooltip_position_left'] = 'Trái';
+$lang_block['tooltip_position_right'] = 'Phải';
+$lang_block['tooltip_length'] = 'Số ký tự';

@@ -17,7 +17,21 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 	{
 		$html = '<tr>';
 		$html .= '	<td>' . $lang_block['numrow'] . '</td>';
-		$html .= '	<td><input type="text" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
+		$html .= '	<td><input type="text" name="config_numrow" class="form-control w100" size="5" value="' . $data_block['numrow'] . '"/></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '<td>' . $lang_block['showtooltip'] . '</td>';
+		$html .= '<td>';
+		$html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /><br /><br />';
+		$tooltip_position = array( 'top' => $lang_block['tooltip_position_top'], 'bottom' => $lang_block['tooltip_position_bottom'], 'left' => $lang_block['tooltip_position_left'], 'right' => $lang_block['tooltip_position_right'] );
+		$html .= '<span class="text-middle pull-left">' . $lang_block['tooltip_position'] . '&nbsp;</span><select name="config_tooltip_position" class="form-control w100 pull-left">';
+		foreach( $tooltip_position as $key => $value )
+		{
+			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
+		}
+		$html .= '</select>';		
+		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
+		$html .= '</td>';
 		$html .= '</tr>';
 		return $html;
 	}
@@ -29,6 +43,9 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
+		$return['config']['showtooltip'] = $nv_Request->get_int( 'config_showtooltip', 'post', 0 );
+		$return['config']['tooltip_position'] = $nv_Request->get_string( 'config_tooltip_position', 'post', 0 );
+		$return['config']['tooltip_length'] = $nv_Request->get_string( 'config_tooltip_length', 'post', 0 );
 		return $return;
 	}
 
@@ -51,14 +68,14 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 			$array_block_news = array();
 
 			$db->sqlreset()
-				->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile' )
+				->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
 				->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
 				->where( 'status= 1' )
 				->order( 'publtime DESC' )
 				->limit( $numrow );
 			$result = $db->query( $db->sql() );
 
-			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
+			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext ) = $result->fetch( 3 ) )
 			{
 				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
 				if( $homeimgthumb == 1 ) //image thumb
@@ -86,7 +103,8 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 					'title' => $title,
 					'link' => $link,
 					'imgurl' => $imgurl,
-					'width' => $blockwidth
+					'width' => $blockwidth,
+					'hometext' => $hometext
 				);
 			}
 			$cache = serialize( $array_block_news );
@@ -102,17 +120,28 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 			$block_theme = 'default';
 		}
 		$xtpl = new XTemplate( 'block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news/' );
-		$a = 1;
+		
 		foreach( $array_block_news as $array_news )
 		{
+			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'] );
 			$xtpl->assign( 'blocknews', $array_news );
 			if( ! empty( $array_news['imgurl'] ) )
 			{
 				$xtpl->parse( 'main.newloop.imgblock' );
 			}
+			
+			if( ! $block_config['showtooltip'] )
+			{
+				$xtpl->assign( 'TITLE', 'title="' . $array_news['title'] . '"' );
+			}
+			
 			$xtpl->parse( 'main.newloop' );
-			$xtpl->assign( 'BACKGROUND', ( $a % 2 ) ? 'bg ' : '' );
-			++$a;
+		}
+		
+		if( $block_config['showtooltip'] )
+		{
+			$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
+			$xtpl->parse( 'main.tooltip' );
 		}
 
 		$xtpl->parse( 'main' );

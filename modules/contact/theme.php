@@ -53,13 +53,37 @@ function contact_main_theme( $array_content, $array_department, $base_url, $chec
 	{
 		foreach( $array_department as $value => $row )
 		{
-			$xtpl->assign( 'SELECT_NAME', $row['full_name'] );
-			$xtpl->assign( 'SELECT_VALUE', $value );
-			$xtpl->assign( 'SELECTED', ( $array_content['fpart'] == $value ) ? ' selected="selected"' : '' );
-			$xtpl->parse( 'main.form.select_option_loop' );
-
-			$xtpl->assign( 'DEPARTMENT', $row );
-			$xtpl->parse( 'main.form.department' );
+			if( ! empty( $row['phone'] ) OR ! empty( $row['fax'] ) OR ! empty( $row['email'] ) OR ! empty( $row['note'] ) )
+			{
+				$xtpl->assign( 'SELECT_NAME', $row['full_name'] );
+				$xtpl->assign( 'SELECT_VALUE', $value );
+				$xtpl->assign( 'SELECTED', ( $array_content['fpart'] == $value ) ? ' selected="selected"' : '' );
+				$xtpl->parse( 'main.form.select_option_loop' );
+	
+				$xtpl->assign( 'DEPARTMENT', $row );
+				
+				if( ! empty( $row['phone'] ) )
+				{
+					$xtpl->parse( 'main.form.department.phone' );
+				}
+				
+				if( ! empty( $row['fax'] ) )
+				{
+					$xtpl->parse( 'main.form.department.fax' );
+				}
+				
+				if( ! empty( $row['email'] ) )
+				{
+					$xtpl->parse( 'main.form.department.email' );
+				}
+				
+				if( ! empty( $row['note'] ) )
+				{
+					$xtpl->parse( 'main.form.department.note' );
+				}
+				
+				$xtpl->parse( 'main.form.department' );
+			}
 		}
 
 		$xtpl->parse( 'main.form' );
