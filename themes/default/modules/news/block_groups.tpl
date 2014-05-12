@@ -11,7 +11,7 @@
 			<!-- BEGIN: img -->
 			<a href="{ROW.link}" title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}" width="{ROW.blockwidth}" class="img-thumbnail pull-left"/></a>
 			<!-- END: img -->
-			<a class="show" href="{ROW.link}" data-content="{ROW.hometext}" data-img="{ROW.thumb}" rel="block_tooltip">{ROW.title}</a>
+			<a {TITLE} class="show" href="{ROW.link}" data-content="{ROW.hometext}" data-img="{ROW.thumb}" rel="block_tooltip">{ROW.title}</a>
 		</li>
 		<!-- END: loop -->
 	</ul>
