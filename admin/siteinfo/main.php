@@ -74,7 +74,7 @@ $xtpl->assign( 'LANG', $lang_module );
 // Kiem tra file nang cap tren he thong
 if( defined( 'NV_IS_GODADMIN' ) and file_exists( NV_ROOTDIR . '/install/update_data.php' ) )
 {
-	$xtpl->assign( 'URL_DELETE_PACKAGE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5( $global_config['sitekey'] . session_id() ) );
+	$xtpl->assign( 'URL_DELETE_PACKAGE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5( $global_config['sitekey'] . session_id() ) );
 	$xtpl->assign( 'URL_UPDATE', NV_BASE_SITEURL . 'install/update.php' );
 	$xtpl->parse( 'main.updateinfo' );
 }
@@ -172,11 +172,11 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
 		{
-			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
+			$info = sprintf( $lang_module['newVersion_info'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
 		}
 	}
 
-	$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
+	$xtpl->assign( 'ULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate' );
 	$xtpl->assign( 'CHECKVERSION', $lang_module['checkversion'] );
 
 	foreach( $field as $key => $value )

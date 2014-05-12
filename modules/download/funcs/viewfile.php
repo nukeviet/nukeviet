@@ -81,7 +81,7 @@ else
 
 if( defined( 'NV_IS_MODADMIN' ) and ! empty( $row['user_id'] ) and ! empty( $row['user_name'] ) )
 {
-	$row['user_name'] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['user_id'] . '">' . $row['user_name'] . '</a>';
+	$row['user_name'] = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $row['user_id'] . '">' . $row['user_name'] . '</a>';
 }
 if( empty( $row['user_name'] ) ) $row['user_name'] = $lang_module['unknown'];
 
