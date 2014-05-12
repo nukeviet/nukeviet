@@ -23,6 +23,8 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
 
+		$show_no_image = $module_config[$module_name]['show_no_image'];
+
 		if( defined( 'NV_IS_MODADMIN' ) or ( $news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ( $news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME ) ) )
 		{
 			$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session' );
@@ -81,6 +83,11 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
 					$meta_property['og:image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
 				}
+				elseif( !empty( $show_no_image ) )
+				{
+					$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
+				}
+
 				$news_contents['image'] = array(
 					'src' => $src,
 					'width' => $width,
@@ -88,6 +95,10 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					'note' => $news_contents['homeimgalt'],
 					'position' => $news_contents['imgposition']
 				);
+			}
+			elseif( ! empty( $show_no_image ) )
+			{
+				$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
 			}
 			if( $alias_url == $news_contents['alias'] )
 			{
@@ -222,7 +233,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'imghome' => $row['imghome']
 		);
 	}
-	$related->closeCursor();
 
 	$related->closeCursor();
 	unset( $related, $row );
@@ -235,7 +245,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 		$db->sqlreset()
 			->select( 't1.id, t1.catid, t1.title, t1.alias, t1.publtime, t2.newday, t1.homeimgfile, t1.homeimgthumb, t1.hometext' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
 			->where( 't1.status=1 AND t1.topicid = ' . $news_contents['topicid'] . ' AND t1.id != ' . $id )
 			->order( 'id DESC' )
@@ -244,26 +254,26 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		$topic = $db->query( $db->sql() );
 		while( $row = $topic->fetch() )
 		{
-		if( $row['homeimgthumb'] == 1 ) //image thumb
-		{
-			$row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
-		}
-		elseif( $item['homeimgthumb'] == 2 ) //image file
-		{
-			$row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
-		}
-		elseif( $item['homeimgthumb'] == 3 ) //image url
-		{
-			$row['imghome'] = $row['homeimgfile'];
-		}
-		elseif( ! empty( $show_no_image ) ) //no image
-		{
-			$row['imghome'] = NV_BASE_SITEURL . $show_no_image;
-		}
-		else
-		{
-			$row['imghome'] = '';
-		}
+			if( $row['homeimgthumb'] == 1 ) //image thumb
+			{
+				$row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 2 ) //image file
+			{
+				$row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$row['imghome'] = $row['homeimgfile'];
+			}
+			elseif( ! empty( $show_no_image ) ) //no image
+			{
+				$row['imghome'] = NV_BASE_SITEURL . $show_no_image;
+			}
+			else
+			{
+				$row['imghome'] = '';
+			}
 
 			$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'];
@@ -322,7 +332,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	define( 'NV_COMM_ID', $news_contents['id'] );
 	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
-
+	
 	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
 	$id_profile_googleplus = $news_contents['gid'];
 
