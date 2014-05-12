@@ -18,7 +18,7 @@ if( defined( 'NV_IS_SPADMIN' ) )
 }
 
 $site_mod_comm = array();
-$result = $db->query( 'SELECT title, module_file, module_data, custom_title, admin_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight' );
+$result = $db->query( 'SELECT title, module_file, module_data, custom_title, admin_title, admins FROM ' . NV_MODULES_TABLE . ' ORDER BY weight' );
 while( $row = $result->fetch() )
 {
 	$module_i = $row['title'];

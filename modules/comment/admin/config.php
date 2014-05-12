@@ -21,7 +21,7 @@ $captcha_array = array(
 
 $groups_list = nv_groups_list();
 
-if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_name] ) )
+if( $nv_Request->isset_request( 'submit', 'post' ) and isset( $site_mod_comm[$mod_name] ) )
 {
 	$array_config = array();
 	$array_config['emailcomm'] = $nv_Request->get_int( 'emailcomm', 'post', 0 );
@@ -46,7 +46,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_na
 	$_groups_com = $nv_Request->get_array( 'setcomm', 'post', array() );
 	$array_config['setcomm'] = ! empty( $_groups_com ) ? implode( ',', nv_groups_post( array_intersect( $_groups_com, array_keys( $groups_list ) ) ) ) : '';
 
-	$admins_mod_name = explode( ',', $site_mods[$mod_name]['admins'] );
+	$admins_mod_name = explode( ',', $site_mod_comm[$mod_name]['admins'] );
 	$admins_module_name = explode( ',', $site_mods[$module_name]['admins'] );
 	$admins_module_name = array_unique( array_merge( $admins_mod_name, $admins_module_name ) );
 
@@ -54,7 +54,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) AND isset( $site_mods[$mod_na
 	$adminscomm = array_intersect( $adminscomm, $admins_module_name );
 	$array_config['adminscomm'] = implode( ',', $adminscomm );
 
-	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' and module = :module_name and config_name = :config_name" );
 	$sth->bindParam( ':module_name', $mod_name, PDO::PARAM_STR );
 	foreach( $array_config as $config_name => $config_value )
 	{
@@ -76,6 +76,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
+
 if( ! empty( $mod_name ) )
 {
 	$xtpl->assign( 'MOD_NAME', $mod_name );
@@ -83,7 +84,7 @@ if( ! empty( $mod_name ) )
 	$xtpl->assign( 'ACTIVECOMM', $module_config[$mod_name]['activecomm'] ? ' checked="checked"' : '' );
 	$xtpl->assign( 'EMAILCOMM', $module_config[$mod_name]['emailcomm'] ? ' checked="checked"' : '' );
 
-	$admins_mod_name = explode( ',', $site_mods[$mod_name]['admins'] );
+	$admins_mod_name = explode( ',', $site_mod_comm[$mod_name]['admins'] );
 	$admins_module_name = explode( ',', $site_mods[$module_name]['admins'] );
 	$admins_module_name = array_unique( array_merge( $admins_mod_name, $admins_module_name ) );
 	if( ! empty( $admins_module_name ) )
@@ -177,10 +178,12 @@ if( ! empty( $mod_name ) )
 	}
 	$xtpl->parse( 'main.config' );
 
-	$page_title = sprintf( $lang_module['config_mod_name'], $site_mods[$mod_name]['custom_title'] );
+	$page_title = sprintf( $lang_module['config_mod_name'], $site_mod_comm[$mod_name]['custom_title'] );
 }
 else
 {
+	$page_title = $lang_module['config'];
+
 	$weight = 0;
 	foreach( $site_mod_comm as $mod_name => $row_mod )
 	{
@@ -222,10 +225,10 @@ else
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.list.loop' );
 	}
+	
 	$xtpl->parse( 'main.list' );
-
-	$page_title = $lang_module['config'];
 }
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
