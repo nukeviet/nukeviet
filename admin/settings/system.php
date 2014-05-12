@@ -215,7 +215,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	}
 	if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )
 	{
-		$xtpl->assign( 'CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=language&op&' . NV_OP_VARIABLE . '=countries' );
+		$xtpl->assign( 'CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=language&' . NV_OP_VARIABLE . '=countries' );
 		$xtpl->assign( 'CHECKED_LANG_GEO', ( $array_config_global['lang_geo'] == 1 ) ? ' checked ' : '' );
 
 		foreach( $allow_sitelangs as $lang_i )

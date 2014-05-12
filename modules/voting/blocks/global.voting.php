@@ -17,11 +17,11 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 	{
 		global $db, $language_array, $site_mods;
 		$html = '';
-		$html .= "<tr>";
-		$html .= "<td>" . $lang_block['vid'] . "</td>";
-		$html .= "<td><select name=\"config_vid\">\n";
+		$html .= '<tr>';
+		$html .= '<td>' . $lang_block['vid'] . '</td>';
+		$html .= '<td><select name="config_vid\>';
 
-		$sql = "SELECT vid, question,acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
+		$sql = "SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
 		$list = nv_db_cache( $sql, 'vid', $module );
 		foreach( $list as $l )
 		{
@@ -49,19 +49,19 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 
-		$sql = "SELECT vid, question, link, acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
+		$sql = "SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
 
 		$list = nv_db_cache( $sql, 'vid', 'voting' );
 		if( isset( $list[$block_config['vid']] ) )
 		{
 			$current_voting = $list[$block_config['vid']];
-			if( $current_voting['publ_time'] <= NV_CURRENTTIME and nv_set_allow( $current_voting['who_view'], $current_voting['groups_view'] ) )
+			if( $current_voting['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups( $current_voting['groups_view'] ) )
 			{
 				$sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows WHERE vid = " . $block_config['vid'] . " ORDER BY id ASC";
 
 				$list = nv_db_cache( $sql, '', 'voting' );
 
-				if( empty( $list ) ) return "";
+				if( empty( $list ) ) return '';
 
 				include NV_ROOTDIR . '/modules/' . $site_mods['voting']['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
 
@@ -75,7 +75,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 				}
 				else
 				{
-					$block_theme = "default";
+					$block_theme = 'default';
 				}
 
 				if( ! defined( 'SHADOWBOX' ) )
@@ -89,15 +89,15 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 
 				$action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
 
-				$voting_array = array( //
-					"checkss" => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ), //
-					"accept" => $current_voting['acceptcm'], //
-					"errsm" => $current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], $current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
-					"vid" => $current_voting['vid'], //
-					"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
-					"action" => $action, //
-					"langresult" => $lang_module['voting_result'], //
-					"langsubmit" => $lang_module['voting_hits'] //
+				$voting_array = array(
+					'checkss' => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ),
+					'accept' => $current_voting['acceptcm'],
+					'errsm' => $current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], $current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'],
+					'vid' => $current_voting['vid'],
+					'question' => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
+					'action' => $action,
+					'langresult' => $lang_module['voting_result'],
+					'langsubmit' => $lang_module['voting_hits']
 				);
 
 				$xtpl = new XTemplate( 'global.voting.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['voting']['module_file'] );

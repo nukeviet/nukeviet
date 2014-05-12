@@ -41,16 +41,11 @@ $array_viewcat_nosub = array(
 	'viewcat_grid_new' => $lang_module['viewcat_grid_new'],
 	'viewcat_grid_old' => $lang_module['viewcat_grid_old']
 );
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
+
 $array_allowed_comm = array(
 	$lang_global['no'],
-	$lang_global['who_view0'],
-	$lang_global['who_view1']
+	$lang_global['level6'],
+	$lang_global['level4']
 );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -582,7 +577,7 @@ function nv_show_sources_list()
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
 
 	$num = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
 	$num_items = ($num > 1) ? $num : 1;
 	$per_page = 15;
 	$page = $nv_Request->get_int( 'page', 'get', 1 );

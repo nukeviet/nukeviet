@@ -16,7 +16,7 @@ if( ! defined( 'NV_IS_MOD_COMMENT' ) ) die( 'Stop!!!' );
  * @param mixed $array_data
  * @return
  */
-function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
+function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
 {
 	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $admin_info, $user_info, $lang_global, $client_info;
 
@@ -27,7 +27,6 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 	$xtpl->assign( 'MODULE_COMM', $module );
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
-	$xtpl->assign( 'VIEW_COMM', $view_comm );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'BASE_URL_COMM', $base_url );
@@ -56,8 +55,8 @@ function nv_theme_comment_main( $module, $area, $id, $view_comm, $allowed_comm, 
 		}
 		else
 		{
-			$xtpl->assign( 'NAME', $lang_module['comment_name'] );
-			$xtpl->assign( 'EMAIL', $lang_module['comment_email'] );
+			$xtpl->assign( 'NAME', '' );
+			$xtpl->assign( 'EMAIL', '' );
 			$xtpl->assign( 'DISABLED', '' );
 		}
 

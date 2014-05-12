@@ -12,18 +12,18 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array('about', 'page', 'about', 'À propos', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, '', 0, 0) );
-$sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 2, 1, '', 1, 0) );
-$sth->execute( array('users', 'users', 'users', 'Compte d&#039;utilisateur', '', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 3, 1, '', 0, 0) );
-$sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistiques', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', 'online, statistics', '0', 5, 1, '', 0, 0) );
-$sth->execute( array('voting', 'voting', 'voting', 'Sondage', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 6, 1, '', 1, 0) );
-$sth->execute( array('banners', 'banners', 'banners', 'Publicité', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 7, 1, '', 0, 0) );
-$sth->execute( array('seek', 'seek', 'seek', 'Recherche', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 8, 1, '', 0, 0) );
-$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 9, 1, '', 0, 0) );
-$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 10, 1, '', 0, 0) );
-$sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 11, 1, '', 0, 0) );
-$sth->execute( array('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0) );
+$sth->execute( array('about', 'page', 'about', 'À propos', '', 1276333182, 1, 1, '', '', '', '', '6', 1, 1, '', 0, 0) );
+$sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
+$sth->execute( array('users', 'users', 'users', 'Compte d&#039;utilisateur', '', 1274080277, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
+$sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistiques', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0) );
+$sth->execute( array('voting', 'voting', 'voting', 'Sondage', '', 1275315261, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
+$sth->execute( array('banners', 'banners', 'banners', 'Publicité', '', 1270400000, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'Recherche', '', 1273474173, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
+$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
+$sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', '', '', '', '6', 11, 1, '', 0, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -199,27 +199,27 @@ $sth->execute( array(50, 'body', 'mobile_nukeviet') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
-$sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[LEFT]', 0, 1, '0', 1, 2, '') );
-$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'À Propos', '', 'orange', '[RIGHT]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(5, 'default', 'users', 'global.voting_random.php', 'Identification', '', '', '[RIGHT]', 0, 1, '0', 1, 2, '') );
-$sth->execute( array(6, 'default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '0', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, 1, '0', 0, 1, '') );
-$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, 1, '0', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '0', 0, 1, '') );
-$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'À Propos', '', 'no_title_html', '[RIGHT]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Identification', '', '', '[RIGHT]', 0, 1, '0', 1, 2, '') );
-$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '0', 1, 3, '') );
-$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[RIGHT]', 0, 1, '0', 1, 4, '') );
-$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '0', 0, 5, '') );
-$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Bannière Top', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 3. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
-$sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
-$sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '') );
-$sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '0', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '6', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
+$sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[LEFT]', 0, 1, '6', 1, 2, '') );
+$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'À Propos', '', 'orange', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(5, 'default', 'users', 'global.voting_random.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
+$sth->execute( array(6, 'default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
+$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'À Propos', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
+$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
+$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
+$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
+$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Bannière Top', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
+$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 3. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
+$sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
+$sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
@@ -285,18 +285,18 @@ $db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
 if( $result->fetchColumn() )
 {
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'News', '', 'News', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '2', '', '', 1280644983, 1280927178, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 0, 'Produits', '', 'Produits', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280644996, 1280644996, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (3, 0, 'Partenaires', '', 'Partenaires', '', '', 0, 3, 6, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280645023, 1280645023, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (4, 0, 'Recrutement', '', 'Recruitement', '', '', 0, 4, 7, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280649352, 1280649900, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (5, 1, 'News Interne', '', 'News-Interne', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280927318, 1280927318, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (6, 1, 'Nouvelles Technologies', '', 'Nouvelles-Technologies', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280927364, 1280927364, 0, '') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (7, 1, 'Espace presse', '', 'Espace-presse', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280928740, 1280928740, 0, '') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'News', '', 'News', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '2', '', '', 1280644983, 1280927178, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 0, 'Produits', '', 'Produits', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280644996, 1280644996, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (3, 0, 'Partenaires', '', 'Partenaires', '', '', 0, 3, 6, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280645023, 1280645023, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (4, 0, 'Recrutement', '', 'Recruitement', '', '', 0, 4, 7, 0, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280649352, 1280649900, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (5, 1, 'News Interne', '', 'News-Interne', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280927318, 1280927318, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (6, 1, 'Nouvelles Technologies', '', 'Nouvelles-Technologies', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280927364, 1280927364, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (7, 1, 'Espace presse', '', 'Espace-presse', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1280928740, 1280928740, '6') ");
 
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (1, 1, '1,2', 0, 1, '', 0, 1280645699, 1280751776, 1, 1280645640, 0, 2, 'Nukeviet 3.0', 'Nukeviet-3-0', 'NukeViet 3 est une nouvelle génération de Système de Gestion de Contenu développée par les Vietnamiens. Pour la première fois au Vietnam, un noyau de Open Source ouverte est investi professionnelement en financement, en ressources humaines et en temps. Le résultat est que 100% de ligne de code de NukeViet est écrit entièrement neuf. Nukeviet 3.0 utilise XHTML, CSS et jQuery avec Xtemplate permettant une application souple de Ajax, même au niveau de noyau.', 'nukeviet3.jpg', '', 1, 1, 2, 1, 2, 0, 0, 0) ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (2, 2, '2', 0, 1, '', 0, 1280645876, 1280751372, 1, 1280645820, 0, 2, 'NukeViet', 'NukeViet', 'NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke.', 'screenshot.jpg', '', 1, 1, 2, 1, 3, 0, 0, 0)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (3, 3, '3', 0, 1, '', 0, 1280646202, 1280751407, 1, 1280646180, 0, 2, 'VINADES', 'VINADES', 'Pour professionaliser la publication de NukeViet, l&#039;administration de NukeViet a décidé de créer une société spécialisant la gestion de NukeViet avec la raison sociale en vietnamien “Công ty cổ phần Phát triển Nguồn mở Việt Nam”, en anglais &quot;VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY&quot; et en abrégé VINADES.,JSC.', 'nangly.jpg', '', 1, 1, 2, 1, 3, 0, 0, 0)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (4, 4, '4', 0, 1, '', 0, 1280650419, 1280751748, 1, 1280650380, 0, 2, 'Recrutement et la formation des enseignants', 'Recrutement-et-la-formation-des-enseignants', 'A l’issue d’une série de consultations avec les organisations représentatives des personnels de l’éducation nationale et de l’enseignement supérieur sur la réforme du recrutement et de la formation des enseignants, le ministre de l’Éducation nationale et la ministre de l’Enseignement supérieur et de la Recherche apportent plusieurs éléments d’information complémentaires.', 'hoptac.jpg', '', 1, 1, 2, 1, 4, 0, 0, 0)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (1, 1, '1,2', 0, 1, '', 0, 1280645699, 1280751776, 1, 1280645640, 0, 2, 'Nukeviet 3.0', 'Nukeviet-3-0', 'NukeViet 3 est une nouvelle génération de Système de Gestion de Contenu développée par les Vietnamiens. Pour la première fois au Vietnam, un noyau de Open Source ouverte est investi professionnelement en financement, en ressources humaines et en temps. Le résultat est que 100% de ligne de code de NukeViet est écrit entièrement neuf. Nukeviet 3.0 utilise XHTML, CSS et jQuery avec Xtemplate permettant une application souple de Ajax, même au niveau de noyau.', 'nukeviet3.jpg', '', 1, 1, '6', 1, 2, 0, 0, 0) ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (2, 2, '2', 0, 1, '', 0, 1280645876, 1280751372, 1, 1280645820, 0, 2, 'NukeViet', 'NukeViet', 'NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke.', 'screenshot.jpg', '', 1, 1, '6', 1, 3, 0, 0, 0)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (3, 3, '3', 0, 1, '', 0, 1280646202, 1280751407, 1, 1280646180, 0, 2, 'VINADES', 'VINADES', 'Pour professionaliser la publication de NukeViet, l&#039;administration de NukeViet a décidé de créer une société spécialisant la gestion de NukeViet avec la raison sociale en vietnamien “Công ty cổ phần Phát triển Nguồn mở Việt Nam”, en anglais &quot;VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY&quot; et en abrégé VINADES.,JSC.', 'nangly.jpg', '', 1, 1, '6', 1, 3, 0, 0, 0)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (4, 4, '4', 0, 1, '', 0, 1280650419, 1280751748, 1, 1280650380, 0, 2, 'Recrutement et la formation des enseignants', 'Recrutement-et-la-formation-des-enseignants', 'A l’issue d’une série de consultations avec les organisations représentatives des personnels de l’éducation nationale et de l’enseignement supérieur sur la réforme du recrutement et de la formation des enseignants, le ministre de l’Éducation nationale et la ministre de l’Enseignement supérieur et de la Recherche apportent plusieurs éléments d’information complémentaires.', 'hoptac.jpg', '', 1, 1, '6', 1, 4, 0, 0, 0)" );
 
 	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_bodyhtml_1 VALUES (1, :bodyhtml, '', 1, 0, 1, 1, 1, 0)" );
 	$bodyhtml = "<p> Profiter les fruits de Open Source, mais chaque ligne de code de NukeViet est écrit manuellement. NukeViet 3 n&#039;utilise aucune plateforme. Cela signifie que Nukeviet 3 est complètement indépendant dans son développemnt. Il est très facile à lire, à comprendre le code de NukeViet pour programmer tout seul si vous avez les connaissances de base sur PHP et MySQL. NukeViet 3.0 est complètement ouvert et facile à apprendre pour tous ceux qui veulent étudier le code de NukeViet.</p><p> Hériter la simplicité de Nukeviet mais NukeViet 3 n&#039;oublie pas de se renouveller. Le système de Nukeviet 3 supporte le multi-noyau du module. Nous appelons cela la technologie de virtualisation de module. Cette technologie permet aux utilisateurs de créer automatiquement de milliers de modules sans toucher une seule ligne de code. Le module né de cette technologie est appelé module virtuel. Il est cloné à partir de n&#039;importe quel module du système de NukeViet si ce module-ci permet la création des modules virtuels.</p><p> NukeViet 3 prend en charge l&#039;installation automatique de modules, de blocks, de thèmes dans la section d&#039;administration, les utilisateurs peuvent installer le module sans faire de tâches complexes. NukeViet 3.0 permet également le paquetage des modules pour partager aux autres utilisateus.</p><p> Le multi-langage de NukeViet 3 est parfait avec le multi-langage de l&#039;interface et celui de données. NukeViet 3.0 supporte aux administrateurs de créer facilement de nouvelles langues pour le site. Le paquetage des fichiers de langue est également supporté pour faciliter la contribution du travai à la communauté.</p>";
@@ -357,7 +357,7 @@ if( $result->fetchColumn() )
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
 if( $result->fetchColumn() )
 {
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_voting VALUES (1, 'Qu&#039;est ce que NukeViet 3.0?', '', 1, 1, 0, '0', 1275318563, 0, 1)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_voting VALUES (1, 'Qu&#039;est ce que NukeViet 3.0?', '', 1, 1, '6', 1275318563, 0, 1)" );
 
 	$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_voting_rows VALUES (?, ?, ?, ?, ?)' );
 	$sth->execute( array(1, 1, 'Une code source de web tout neuve','', 0) );

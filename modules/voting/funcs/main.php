@@ -17,7 +17,7 @@ if( empty( $vid ) )
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 
-	$sql = "SELECT vid, question, link, acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE act=1 ORDER BY publ_time DESC";
+	$sql = 'SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
 	$allowed = array();
@@ -30,7 +30,7 @@ if( empty( $vid ) )
 		{
 			$is_update[] = $row['vid'];
 		}
-		elseif( $row['publ_time'] <= NV_CURRENTTIME and nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+		elseif( $row['publ_time'] <= NV_CURRENTTIME and nv_user_in_groups( $row['groups_view'] ) )
 		{
 			$allowed[$a] = $row;
 			++$a;
@@ -41,7 +41,7 @@ if( empty( $vid ) )
 	{
 		$is_update = implode( ',', $is_update );
 
-		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET act=0 WHERE vid IN (" . $is_update . ")";
+		$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET act=0 WHERE vid IN (' . $is_update . ')';
 		$db->query( $sql );
 
 		nv_del_moduleCache( $module_name );
@@ -52,22 +52,22 @@ if( empty( $vid ) )
 		$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 		foreach( $allowed as $current_voting )
 		{
-			$action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
-			$voting_array = array( //
-				"checkss" => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ), //
-				"accept" => ( int )$current_voting['acceptcm'], //
-				"errsm" => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'], //
-				"vid" => $current_voting['vid'], //
-				"question" => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>', //
-				"action" => $action, //
-				"langresult" => $lang_module['voting_result'], //
-				"langsubmit" => $lang_module['voting_hits'] //
+			$voting_array = array(
+				'checkss' => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ),
+				'accept' => ( int )$current_voting['acceptcm'],
+				'errsm' => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'],
+				'vid' => $current_voting['vid'],
+				'question' => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
+				'action' => $action,
+				'langresult' => $lang_module['voting_result'],
+				'langsubmit' => $lang_module['voting_hits']
 			);
 
 			$xtpl->assign( 'VOTING', $voting_array );
 
-			$sql = "SELECT id, vid, title, url FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . "_rows WHERE vid = " . $current_voting['vid'] . " ORDER BY id ASC";
+			$sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
 			$list = nv_db_cache( $sql, '', $module_name );
 
 			foreach( $list as $row )
@@ -102,37 +102,37 @@ else
 
 	if( $checkss != md5( $vid . $client_info['session_id'] . $global_config['sitekey'] ) or $vid <= 0 or $lid == '' )
 	{
-		header( "location:" . $global_config['site_url'] );
+		header( 'location:' . $global_config['site_url'] );
 		exit();
 	}
 
-	$sql = "SELECT vid, question,acceptcm, who_view, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $module_data . " WHERE act=1";
+	$sql = 'SELECT vid, question, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1';
 
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 
 	if( empty( $list ) or ! isset( $list[$vid] ) )
 	{
-		header( "location:" . $global_config['site_url'] );
+		header( 'location:' . $global_config['site_url'] );
 		exit();
 	}
 
 	$row = $list[$vid];
 	if( ( int )$row['exp_time'] < 0 or ( ( int )$row['exp_time'] > 0 and $row['exp_time'] < NV_CURRENTTIME ) )
 	{
-		header( "location:" . $global_config['site_url'] );
+		header( 'location:' . $global_config['site_url'] );
 		exit();
 	}
 
-	if( ! nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+	if( ! nv_user_in_groups( $row['groups_view'] ) )
 	{
-		header( "location:" . $global_config['site_url'] );
+		header( 'location:' . $global_config['site_url'] );
 		exit();
 	}
 
 	$difftimeout = 3600;
 	$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs';
-	$log_fileext = preg_match( "/[a-z]+/i", NV_LOGS_EXT ) ? NV_LOGS_EXT : 'log';
-	$pattern = "/^(.*)\." . $log_fileext . "$/i";
+	$log_fileext = preg_match( '/[a-z]+/i', NV_LOGS_EXT ) ? NV_LOGS_EXT : 'log';
+	$pattern = '/^(.*)\.' . $log_fileext . '$/i';
 	$logs = nv_scandir( $dir, $pattern );
 
 	if( ! empty( $logs ) )
@@ -149,7 +149,7 @@ else
 	}
 
 	$array_id = explode( ',', $lid );
-	$array_id = array_map( "intval", $array_id );
+	$array_id = array_map( 'intval', $array_id );
 	$array_id = array_diff( $array_id, array( 0 ) );
 	$count = sizeof( $array_id );
 
@@ -169,9 +169,9 @@ else
 		elseif( $count <= $acceptcm )
 		{
 			$in = implode( ',', $array_id );
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET hitstotal = hitstotal+1 WHERE vid ='" . $vid . "' AND id IN (" . $in . ")";
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET hitstotal = hitstotal+1 WHERE vid =' . $vid . ' AND id IN (' . $in . ')';
 			$db->query( $sql );
-			file_put_contents( $dir . "/" . $logfile, '', LOCK_EX );
+			file_put_contents( $dir . '/' . $logfile, '', LOCK_EX );
 			$note = $lang_module['okmsg'];
 		}
 		else
@@ -180,7 +180,7 @@ else
 		}
 	}
 
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE vid = " . $vid . " ORDER BY id ASC";
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE vid = ' . $vid . ' ORDER BY id ASC';
 	$result = $db->query( $sql );
 
 	$totalvote = 0;
@@ -192,19 +192,19 @@ else
 		$vrow[] = $row2;
 	}
 
-	$pubtime = nv_date( "l - d/m/Y H:i", $row['publ_time'] );
+	$pubtime = nv_date( 'l - d/m/Y H:i', $row['publ_time'] );
 	$lang = array(
-		"total" => $lang_module['voting_total'],
-		"counter" => $lang_module['voting_counter'],
-		"publtime" => $lang_module['voting_pubtime']
+		'total' => $lang_module['voting_total'],
+		'counter' => $lang_module['voting_counter'],
+		'publtime' => $lang_module['voting_pubtime']
 	);
 	$voting = array(
 		'question' => $row['question'],
-		"total" => $totalvote,
-		"pubtime" => $pubtime,
-		"row" => $vrow,
-		"lang" => $lang,
-		"note" => $note
+		'total' => $totalvote,
+		'pubtime' => $pubtime,
+		'row' => $vrow,
+		'lang' => $lang,
+		'note' => $note
 	);
 
 	$contents = voting_result( $voting );

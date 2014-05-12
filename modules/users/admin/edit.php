@@ -61,7 +61,7 @@ $_user = array();
 $groups_list = nv_groups_list();
 
 $array_old_groups = array();
-$result_gru = $db->query( 'SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid );
+$result_gru = $db->query( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid );
 while( $row_gru = $result_gru->fetch() )
 {
 	$array_old_groups[] = $row_gru['group_id'];
@@ -205,8 +205,15 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					}
 				}
 			}
-
-			$in_groups = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
+			$in_groups = array();
+			foreach ( $_user['in_groups'] as $_group_id )
+			{
+				if( $_group_id > 9 )
+				{
+					$in_groups[] = $_group_id;
+				}
+			}
+			$in_groups = array_intersect( $in_groups, array_keys( $groups_list ) );
 			$in_groups_hiden = array_diff( $array_old_groups, array_keys( $groups_list ) );
 			$in_groups = array_unique( array_merge( $in_groups, $in_groups_hiden ) );
 
@@ -341,15 +348,21 @@ else
 		$xtpl->parse( 'main.edit_user.photo' );
 	}
 
-	if( ! empty( $groups ) )
+	$a = 0;
+	foreach( $groups as $group )
 	{
-		foreach( $groups as $group )
+		if( $group['id'] > 9 )
 		{
 			$xtpl->assign( 'GROUP', $group );
 			$xtpl->parse( 'main.edit_user.group.list' );
+			++$a;
 		}
+	}
+	if( $a > 0 )
+	{
 		$xtpl->parse( 'main.edit_user.group' );
 	}
+
 	if( $access_passus )
 	{
 		$xtpl->parse( 'main.edit_user.changepass' );

@@ -57,14 +57,14 @@ if( ! nv_function_exists( 'nv_bdown_news' ) )
 		$file = $site_mods[$module]['module_file'];
 
 		// Lay thong tin phan quyen
-		$sql = 'SELECT id, alias, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_categories WHERE status=1';
+		$sql = 'SELECT id, alias, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_categories WHERE status=1';
 		$_tmp = nv_db_cache( $sql, 'id', $module );
 		$list_cat = array();
 		if( $_tmp )
 		{
 			foreach( $_tmp as $row )
 			{
-				if( nv_set_allow( $row['who_view'], $row['groups_view'] ) ) $list_cat[$row['id']] = $row['alias'];
+				if( nv_user_in_groups( $row['groups_view'] ) ) $list_cat[$row['id']] = $row['alias'];
 			}
 		}
 		unset( $_tmp, $sql );

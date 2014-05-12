@@ -38,15 +38,7 @@ $lang_global['admin_password_empty'] = 'Mật khẩu quản trị của bạn ch
 $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%s</strong>&rdquo; không chính xác. Hãy thử lại lần nữa';
 $lang_global['admin_password'] = 'Mật khẩu của bạn';
 $lang_global['admin_no_allow_func'] = 'Bạn không có quyền truy cập chức năng này';
-$lang_global['who_view'] = 'Quyền xem';
-$lang_global['who_view0'] = 'Tất cả';
-$lang_global['who_view1'] = 'Thành viên';
-$lang_global['who_view2'] = 'Quản trị';
-$lang_global['who_view3'] = 'Nhóm Thành viên';
-$lang_global['level1'] = 'Quản trị tối cao';
-$lang_global['level2'] = 'Điều hành chung';
-$lang_global['level3'] = 'Quản lý module';
-$lang_global['groups_view'] = 'Các nhóm được xem';
+
 $lang_global['block_modules'] = 'Block của modules';
 $lang_global['hello_admin1'] = 'Xin chào %1$s ! Lần đăng nhập Quản trị trước vào %2$s';
 $lang_global['hello_admin2'] = 'Tài khoản Quản trị: %1$s ! Bạn đã đăng nhập Quản trị cách đây %2$s';

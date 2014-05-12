@@ -34,7 +34,7 @@ if( defined( 'NV_SYSTEM' ) )
 			}
 			if( $download_config['is_addfile'] )
 			{
-				$download_config['is_addfile_allow'] = nv_set_allow( $download_config['who_addfile'], $download_config['groups_addfile'] );
+				$download_config['is_addfile_allow'] = nv_user_in_groups( $download_config['groups_addfile'] );
 			}
 			else
 			{
@@ -42,7 +42,7 @@ if( defined( 'NV_SYSTEM' ) )
 			}
 			if( $download_config['is_addfile_allow'] and $download_config['is_upload'] )
 			{
-				$download_config['is_upload_allow'] = nv_set_allow( $download_config['who_upload'], $download_config['groups_upload'] );
+				$download_config['is_upload_allow'] = nv_user_in_groups( $download_config['groups_upload'] );
 			}
 			else
 			{

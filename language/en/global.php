@@ -259,3 +259,11 @@ $lang_global['upass_type_3'] = 'Password should combin number and letter, have u
 $lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
 $lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
 $lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
+
+$lang_global['groups_view'] = 'Group viewed';
+$lang_global['level1'] = 'Super administrator';
+$lang_global['level2'] = 'General administrator';
+$lang_global['level3'] = 'Module administrator';
+$lang_global['level4'] = 'Member';
+$lang_global['level5'] = 'Guest';
+$lang_global['level6'] = 'All';

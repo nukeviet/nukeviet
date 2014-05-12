@@ -72,7 +72,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
 	}
-	
+
 	if( $module_config[$module_name]['showtooltip'] )
 	{
 		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
@@ -138,7 +138,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
 	}
-	
+
 	if( $module_config[$module_name]['showtooltip'] )
 	{
 		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
@@ -514,7 +514,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$newday = $array_content_i['publtime'] + ( 86400 * $array_content_i['newday'] );
 			$array_content_i['hometext'] = nv_clean60( $array_content_i['hometext'], 200 );
 			$array_content_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_content_i['publtime'] );
-			
+
 			$xtpl->assign( 'CONTENT', $array_content_i );
 
 			if( $array_content_i['imghome'] != '' )
@@ -550,9 +550,9 @@ function viewcat_two_column( $array_content, $array_catpage )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
-					
+
 					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], $module_config[$module_name]['tooltip_length'] );
-					
+
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
@@ -783,7 +783,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
 		$xtpl->parse( 'main.comment' );
 	}
-	
+
 	if( $module_config[$module_name]['showtooltip'] )
 	{
 		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
@@ -794,24 +794,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	return $xtpl->text( 'main' );
 }
 
-function no_permission( $func_who_view )
+function no_permission()
 {
 	global $module_info, $module_file, $lang_module;
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-
-	if( $func_who_view == 1 )
-	{
-		$no_permission = $lang_module['member_view'];
-	}
-	elseif( $func_who_view == 2 )
-	{
-		$no_permission = $lang_module['admin_view'];
-	}
-	elseif( $func_who_view == 3 )
-	{
-		$no_permission = $lang_module['group_view'];
-	}
 
 	$xtpl->assign( 'NO_PERMISSION', $no_permission );
 	$xtpl->parse( 'no_permission' );

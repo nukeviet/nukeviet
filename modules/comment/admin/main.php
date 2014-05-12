@@ -193,7 +193,7 @@ $num_items = $sth->fetchColumn();
 
 $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
-$db->select( 'cid, module, id, content, userid, post_name, post_email, status' )->order( 'cid DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$db->select( 'cid, module, area, id, content, userid, post_name, post_email, status' )->order( 'cid DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $sql = $db->sql();
 $sth = $db->prepare( $sql );
 if( strpos( $sql, ':content' ) )
@@ -210,11 +210,11 @@ if( strpos( $sql, ':post_email' ) )
 }
 $sth->execute();
 $array = array();
-while( list( $cid, $module, $id, $content, $userid, $post_name, $email, $status ) = $sth->fetch( 3 ) )
+while( list( $cid, $module, $area, $id, $content, $userid, $post_name, $email, $status ) = $sth->fetch( 3 ) )
 {
 	if( $userid > 0 )
 	{
-		$email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
+		$email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
 	}
 
 	$row = array(
@@ -223,7 +223,7 @@ while( list( $cid, $module, $id, $content, $userid, $post_name, $email, $status 
 		'email' => $email,
 		'content' => $content,
 		'module' => $module,
-		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $id,
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;area=' . $area . '&amp;id=' . $id,
 		'status' => ( $status == 1 ) ? 'check' : 'circle-o',
 		'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
 		'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid

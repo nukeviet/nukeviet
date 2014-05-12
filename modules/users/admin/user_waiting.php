@@ -63,6 +63,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	$userid = $db->insert_id( $sql, 'userid', $data_insert );
 	if( $userid )
 	{
+		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 		$query_field = array();
 		$query_field['userid'] = $userid;

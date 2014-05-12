@@ -135,11 +135,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				if( $drag_block )
 				{
 					define( 'NV_IS_DRAG_BLOCK', true );
-					$adm_data_lang = $nv_Request->get_string( 'data_lang', 'cookie' );
-					if( $adm_data_lang != NV_LANG_DATA )
+					$adm_int_lang = $nv_Request->get_string( 'int_lang', 'cookie' );
+					if( $adm_int_lang != NV_LANG_DATA )
 					{
 						$nv_Request->set_Cookie( 'int_lang', NV_LANG_DATA, NV_LIVE_COOKIE_TIME );
-						$nv_Request->set_Cookie( 'data_lang', NV_LANG_DATA, NV_LIVE_COOKIE_TIME );
 					}
 				}
 			}

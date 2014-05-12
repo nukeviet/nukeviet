@@ -113,21 +113,7 @@
 					<td><input class="w300 form-control" value="{DATA.copyright}" name="copyright" id="copyright" maxlength="20" /></td>
 				</tr>
 				<tr>
-					<td> {LANG.file_allowcomment} </td>
-					<td><input name="comment_allow" value="1" type="checkbox"{DATA.comment_allow} /></td>
-				</tr>
-				<tr>
 					<td> {LANG.file_whocomment} </td>
-					<td>
-					<select name="who_comment" class="form-control w200">
-						<!-- BEGIN: who_comment -->
-						<option value="{WHO_COMMENT.key}"{WHO_COMMENT.selected}> {WHO_COMMENT.title}</option>
-						<!-- END: who_comment -->
-					</select></td>
-				</tr>
-				<!-- BEGIN: group_empty -->
-				<tr>
-					<td>{LANG.groups_upload}</td>
 					<td>
 					<!-- BEGIN: groups_comment -->
 					<input name="groups_comment[]" value="{GROUPS_COMMENT.key}" type="checkbox"{GROUPS_COMMENT.checked} /> {GROUPS_COMMENT.title}
@@ -135,19 +121,8 @@
 					<!-- END: groups_comment -->
 					</td>
 				</tr>
-				<!-- END: group_empty -->
 				<tr>
-					<td style="vertical-align:top"> {LANG.who_view} </td>
-					<td>
-					<select name="who_view" class="form-control w200">
-						<!-- BEGIN: who_view -->
-						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-						<!-- END: who_view -->
-					</select></td>
-				</tr>
-				<!-- BEGIN: group_empty_view -->
-				<tr>
-					<td>{LANG.groups_upload}</td>
+					<td style="vertical-align:top"> {LANG.groups_view} </td>
 					<td>
 					<!-- BEGIN: groups_view -->
 					<input name="groups_view[]" value="{GROUPS_VIEW.key}" type="checkbox"{GROUPS_VIEW.checked} /> {GROUPS_VIEW.title}
@@ -155,19 +130,8 @@
 					<!-- END: groups_view -->
 					</td>
 				</tr>
-				<!-- END: group_empty_view -->
 				<tr>
-					<td style="vertical-align:top"> {LANG.who_download} </td>
-					<td>
-					<select name="who_download" class="form-control w200">
-						<!-- BEGIN: who_download -->
-						<option value="{WHO_DOWNLOAD.key}"{WHO_DOWNLOAD.selected}>{WHO_DOWNLOAD.title}</option>
-						<!-- END: who_download -->
-					</select></td>
-				</tr>
-				<!-- BEGIN: group_empty_download -->
-				<tr>
-					<td>{LANG.groups_upload}</td>
+					<td style="vertical-align:top"> {LANG.groups_download} </td>
 					<td>
 					<!-- BEGIN: groups_download -->
 					<input name="groups_download[]" value="{GROUPS_DOWNLOAD.key}" type="checkbox"{GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}
@@ -175,7 +139,6 @@
 					<!-- END: groups_download -->
 					</td>
 				</tr>
-				<!-- END: group_empty_download -->
 			</tbody>
 		</table>
 	</div>

@@ -769,24 +769,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	return $xtpl->text( 'main' );
 }
 
-function no_permission( $func_who_view )
+function no_permission()
 {
 	global $module_info, $module_file, $lang_module;
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-
-	if( $func_who_view == 1 )
-	{
-		$no_permission = $lang_module['member_view'];
-	}
-	elseif( $func_who_view == 2 )
-	{
-		$no_permission = $lang_module['admin_view'];
-	}
-	elseif( $func_who_view == 3 )
-	{
-		$no_permission = $lang_module['group_view'];
-	}
 
 	$xtpl->assign( 'NO_PERMISSION', $no_permission );
 	$xtpl->parse( 'no_permission' );
