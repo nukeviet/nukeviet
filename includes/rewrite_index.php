@@ -55,7 +55,7 @@ else
 {
 	// Rewrite search url
 	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=seek\&[amp;]*q\=([^\"]+)\"#"] = "\\1index.php/\\2/seek/q=\\3\"";
-	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q\=([^\"]+)\"#"] = "\\1index.php/\\2\\3/search/q=\\4\"";
+	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q\=([^\"]+)\"#"] = "\\1index.php/\\2/\\3/search/q=\\4\"";
 
 	// Rewrite tag url
 	$rewrite["#(\"" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=tag/([^\"]+)\"#"] = "\\1index.php/\\2/\\3/tag/\\4\"";

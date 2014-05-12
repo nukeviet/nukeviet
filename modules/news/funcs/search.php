@@ -58,6 +58,13 @@ $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
 
+$base_url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
+if( $base_url_rewrite != $_SERVER['REQUEST_URI'] )
+{
+	header( "Location: " . $base_url_rewrite );
+	die();
+}
+
 $array_cat_search = array();
 
 foreach( $global_array_cat as $arr_cat_i )
