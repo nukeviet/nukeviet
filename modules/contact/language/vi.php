@@ -36,4 +36,5 @@ $lang_module['sendinfo'] = 'Thư này được gửi thông qua tiện ích Liê
 $lang_module['sendinfo2'] = 'Thư này được gửi thông qua tiện ích Liên hệ tại website %1$s.<br />Thông tin về người gửi<br /><strong>Họ và tên</strong>: %2$s<br /><strong>E-mail</strong>: %3$s<br /><strong>Điện thoại</strong>: %4$s<br /><strong>IP</strong>: %5$s<br /><strong>Gửi đến bộ phận</strong>: %6$s';
 $lang_module['phone'] = 'Điện thoại';
 $lang_module['fax'] = 'Fax';
+$lang_module['note_s'] = 'Ghi chú';
 $lang_module['department'] = 'Bộ phận';

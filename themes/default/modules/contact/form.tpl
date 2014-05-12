@@ -7,7 +7,7 @@
 	</div>
 	<!-- END: error -->
 	<!-- BEGIN: form -->
-	<div class="well">
+	<div class="alert alert-info">
 		{LANG.note}
 	</div>
 	<!-- BEGIN: department -->
@@ -15,18 +15,30 @@
 			<div class="panel-heading">{LANG.department}: {DEPARTMENT.full_name}</div>
 			<table class="table">
 				<tbody>
+					<!-- BEGIN: phone -->
 					<tr>
 						<td>{LANG.phone}</td>
 						<td>{DEPARTMENT.phone}</td>
 					</tr>
+					<!-- END: phone -->
+					<!-- BEGIN: fax -->
 					<tr>
 						<td>{LANG.fax}</td>
 						<td>{DEPARTMENT.fax}</td>
 					</tr>
+					<!-- END: fax -->
+					<!-- BEGIN: email -->
 					<tr>
 						<td>{LANG.email}</td>
-						<td>{DEPARTMENT.email}</td>
+						<td><a href="mailto:{DEPARTMENT.email}">{DEPARTMENT.email}</a></td>
 					</tr>
+					<!-- END: email -->
+					<!-- BEGIN: note -->
+					<tr>
+						<td>{LANG.note_s}</td>
+						<td>{DEPARTMENT.note}</td>
+					</tr>
+					<!-- END: note -->
 				</tbody>
 	  		</table>
 		</div>
