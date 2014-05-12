@@ -53,26 +53,6 @@
 					<td>{LANG.keywords}:</td>
 					<td><input class="w300 form-control" name="keywords" id="keywords" type="text" value="{DATA.keywords}" maxlength="255" /> {LANG.keywords_info}</td>
 				</tr>
-				<!-- BEGIN: who_view -->
-				<tr>
-					<td>{DATA.who_view.0}:</td>
-					<td>
-					<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" class="form-control w200">
-						<!-- BEGIN: loop -->
-						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-						<!-- END: loop -->
-					</select></td>
-				</tr>
-				<tr>
-					<td>{DATA.groups_view.0}:</td>
-					<td>
-					<!-- BEGIN: groups_view -->
-					<p><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.key}"{GROUPS_VIEW.checked}/> {GROUPS_VIEW.title}
-					</p>
-					<!-- END: groups_view -->
-					</td>
-				</tr>
-				<!-- END: who_view -->
 				<tr>
 					<td>{GLANG.activate}:</td>
 					<td><input name="act" id="act" type="checkbox" value="1"{ACTIVE} /></td>
@@ -83,6 +63,17 @@
 					<td><input name="rss" id="rss" type="checkbox" value="1"{RSS} /></td>
 				</tr>
 				<!-- END: rss -->
+				<!-- BEGIN: groups_view -->
+				<tr>
+					<td>{DATA.groups_view.0}:</td>
+					<td>
+					<!-- BEGIN: loop -->
+					<p><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.key}"{GROUPS_VIEW.checked}/> {GROUPS_VIEW.title}
+					</p>
+					<!-- END: loop -->
+					</td>
+				</tr>
+				<!-- END: groups_view -->
 			</tbody>
 		</table>
 	</div>

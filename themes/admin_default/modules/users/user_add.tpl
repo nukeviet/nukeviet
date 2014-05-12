@@ -20,7 +20,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-inline" role="form">
+<form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-inline">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
@@ -87,14 +87,14 @@
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 					<td>
-					<ul>
-						<!-- BEGIN: list -->
-						<li>
-							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} />
-							<span>{GROUP.title}</span>
-						</li>
-						<!-- END: list -->
-					</ul></td>
+						<div class="row checkbox">
+							<!-- BEGIN: list -->
+							<label class="col-sm-10">
+								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+							</label>
+							<!-- END: list -->
+						</div>
+					</td>
 				</tr>
 				<!-- END: group -->
 			</tbody>

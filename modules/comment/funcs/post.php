@@ -20,21 +20,20 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
 	$id = $nv_Request->get_int( 'id', 'post' );
-	$allowed_comm = $nv_Request->get_int( 'allowed', 'post' );
-	$view_comm = $nv_Request->get_int( 'view', 'post,get', 0 );
+	$allowed_comm = $nv_Request->get_title( 'allowed', 'post' );
+	$checkss = $nv_Request->get_title( 'checkss', 'post' );
 
-	$checkss = $nv_Request->get_string( 'checkss', 'post' );
-
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $view_comm . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
+	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		// Kiểm tra quyền đăng bình luận
-		$allowed = intval( $module_config[$module]['allowed_comm'] );
-		if( $allowed == 3 )
+		$allowed = $module_config[$module]['allowed_comm'];
+		if( $allowed == '-1' )
 		{
 			// Quyền hạn đăng bình luận theo bài viết
 			$allowed = $allowed_comm;
 		}
-		if( $allowed == 1 or ( $allowed == 2 and defined( 'NV_IS_USER' ) ) )
+
+		if( nv_user_in_groups( $allowed ) )
 		{
 			$content = $nv_Request->get_title( 'content', 'post', '', 1 );
 			$code = $nv_Request->get_title( 'code', 'post', '' );

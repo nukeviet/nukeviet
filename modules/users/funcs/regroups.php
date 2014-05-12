@@ -33,7 +33,7 @@ else
 		$groups = $in_groups = array();
 
 		$array_old_groups = array();
-		$result_gru = $db->query( "SELECT group_id FROM " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
+		$result_gru = $db->query( "SELECT group_id FROM " . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
 		while( $row_gru = $result_gru->fetch() )
 		{
 			$array_old_groups[] = $row_gru['group_id'];

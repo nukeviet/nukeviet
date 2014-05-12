@@ -134,7 +134,7 @@ if( defined( 'NV_SYSTEM' ) )
 		else
 		{
 			$module_array_cat = array();
-			$sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
+			$sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $l )
 			{

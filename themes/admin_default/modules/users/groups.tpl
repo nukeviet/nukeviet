@@ -109,7 +109,7 @@
 					<option value="{NEWWEIGHT.value}"{NEWWEIGHT.selected}>{NEWWEIGHT.value}</option>
 					<!-- END: option -->
 				</select></td>
-				<td class="text-left"><a title="{LANG.users}" href="{MODULE_URL}={OP}&userlist={GROUP_ID}">{LOOP.title}</a></td>
+				<td class="text-left"><a title="{LANG.users}" href="{LOOP.link_userlist}">{LOOP.title}</a></td>
 				<td>{LOOP.add_time}</td>
 				<td>{LOOP.exp_time}</td>
 				<td>{LOOP.number}</td>
@@ -176,15 +176,15 @@
 <!-- END: list -->
 
 <!-- BEGIN: main -->
+<div class="myh3">
+	{GLANG.mod_groups}
+</div>
+<div id="pageContent"></div>
 <!-- BEGIN: addnew -->
 <div id="ablist">
 	<input name="addNew" type="button" value="{LANG.nv_admin_add}" class="btn btn-default" />
 </div>
 <!-- END: addnew -->
-<div class="myh3">
-	{GLANG.mod_groups}
-</div>
-<div id="pageContent"></div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
@@ -251,10 +251,10 @@
 
 <!-- BEGIN: userlist -->
 <!-- BEGIN: adduser -->
-<div id="ablist">
+<div id="ablist" class="form-inline">
 	{LANG.search_id}: <input title="{LANG.search_id}" class="form-control txt" type="text" name="uid" id="uid" value="" maxlength="11" style="width:50px" />
-	<input name="searchUser" type="button" value="{GLANG.search}" />
-	<input name="addUser" type="button" value="{LANG.addMemberToGroup}" />
+	<input class="btn btn-primary" name="addUser" type="button" value="{LANG.addMemberToGroup}" />
+	<input class="btn btn-success" name="searchUser" type="button" value="{GLANG.search}" />
 </div>
 <!-- END: adduser -->
 <div id="pageContent"></div>

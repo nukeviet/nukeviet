@@ -626,7 +626,7 @@ function nv_user_groups( $in_groups )
 
 	if( empty( $in_groups ) ) return '';
 
-	$query = 'SELECT group_id, title, exp_time, publics FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+	$query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return '';
@@ -649,47 +649,42 @@ function nv_user_groups( $in_groups )
 
 	if( $reload )
 	{
-		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
+		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 
-	if( empty( $groups ) ) return '';
-
-	return implode( ',', $groups );
+	return $groups;
 }
 
 /**
- * nv_is_in_groups()
+ * nv_user_in_groups()
  *
- * @param string $in_groups
- * @param string $groups
+ * @param string $groups_view
  * @return
  */
-function nv_is_in_groups( $in_groups, $groups )
+function nv_user_in_groups( $groups_view )
 {
-	if( empty( $groups ) || empty( $in_groups ) ) return false;
-
-	$in_groups = explode( ',', $in_groups );
-	$groups = explode( ',', $groups );
-
-	return ( array_intersect( $in_groups, $groups ) != array() );
-}
-
-/**
- * nv_set_allow()
- *
- * @param integer $who
- * @param string $groups
- * @return
- */
-function nv_set_allow( $who, $groups )
-{
-	global $user_info;
-
-	if( ! $who or ( $who == 1 and defined( 'NV_IS_USER' ) ) or ( $who == 2 and defined( 'NV_IS_ADMIN' ) ) ) return true;
-
-	if( $who == 3 and ! empty( $groups ) and defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups ) ) return true;
-
+	$groups_view = explode( ',', $groups_view );
+	if( in_array( 6, $groups_view ) )
+	{
+		return true;
+	}
+	elseif( defined( 'NV_IS_USER' ) )
+	{
+		if( in_array( 4, $groups_view ) )
+		{
+			return true;
+		}
+		else
+		{
+			global $user_info;
+			return ( array_intersect( $user_info['in_groups'], $groups_view ) != array() );
+		}
+	}
+	elseif( in_array( 5, $groups_view ) )
+	{
+		return true;
+	}
 	return false;
 }
 
@@ -708,20 +703,20 @@ function nv_groups_add_user( $group_id, $userid )
 	{
 		try
 		{
-			$db->query( "INSERT INTO " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, data) VALUES (" . $group_id . ", " . $userid . ", '" . $global_config['idsite'] . "')" );
-			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . $group_id );
+			$db->query( "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, data) VALUES (" . $group_id . ", " . $userid . ", '" . $global_config['idsite'] . "')" );
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . $group_id );
 			return true;
 		}
 		catch (PDOException $e)
 		{
 			if( $group_id <= 3 )
 			{
-				$data = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetchColumn();
+				$data = $db->query( 'SELECT data FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetchColumn();
 
 				$data = ( $data != '' ) ? explode( ',', $data ) : array();
 				$data[] = $global_config['idsite'];
 				$data = implode( ',', array_unique( array_map( 'intval', $data ) ) );
-				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
+				$db->query( "UPDATE " . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 				return true;
 			}
 		}
@@ -740,7 +735,7 @@ function nv_groups_del_user( $group_id, $userid )
 {
 	global $db, $db_config, $global_config;
 
-	$row = $db->query( 'SELECT data FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetch();
+	$row = $db->query( 'SELECT data FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ' AND userid=' . $userid )->fetch();
 	if( ! empty( $row ) )
 	{
 		$set_number = false;
@@ -758,14 +753,14 @@ function nv_groups_del_user( $group_id, $userid )
 			}
 			else
 			{
-				$db->query( "UPDATE " . $db_config['dbsystem'] . "." . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
+				$db->query( "UPDATE " . NV_GROUPS_GLOBALTABLE . "_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid );
 			}
 		}
 
 		if( $set_number )
 		{
-			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid );
-			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . $group_id );
+			$db->query( 'DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid );
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . $group_id );
 		}
 		return true;
 	}
@@ -1856,7 +1851,6 @@ function nv_site_mods()
 		{
 			$allowed = false;
 			$is_modadmin = false;
-			$groups_view = ( string )$row['groups_view'];
 
 			if( defined( 'NV_IS_SPADMIN' ) )
 			{
@@ -1872,19 +1866,7 @@ function nv_site_mods()
 			{
 				$allowed = true;
 			}
-			elseif( $groups_view == '0' )
-			{
-				$allowed = true;
-			}
-			elseif( $groups_view == '1' and defined( 'NV_IS_USER' ) )
-			{
-				$allowed = true;
-			}
-			elseif( $groups_view == '2' and defined( 'NV_IS_ADMIN' ) )
-			{
-				$allowed = true;
-			}
-			elseif( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) )
+			elseif( nv_user_in_groups( $row['groups_view'] ) )
 			{
 				$allowed = true;
 			}

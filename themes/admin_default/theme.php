@@ -185,7 +185,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		{
 			if( ! empty( $v['custom_title'] ) )
 			{
-				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? 'current' : 'dropdown') );
+				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? 'active' : 'dropdown') );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
 				$array_submenu = nv_get_submenu( $m );

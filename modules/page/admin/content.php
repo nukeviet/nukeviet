@@ -35,6 +35,7 @@ else
 $selectthemes = ( ! empty( $site_mods[$module_name]['theme'] ) ) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir( NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout'] );
 $error = '';
+$groups_list = nv_groups_list();
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -60,10 +61,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['keywords'] = nv_strtolower( $nv_Request->get_title( 'keywords', 'post', '', 0 ) );
 
 	$row['socialbutton'] = $nv_Request->get_int( 'socialbutton', 'post', 0 );
-	$row['activecomm'] = $nv_Request->get_int( 'activecomm', 'post', 0 );
 	$row['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$row['layout_func'] = $nv_Request->get_title( 'layout_func', 'post', '' );
 	$row['gid'] = $nv_Request->get_int( 'gid', 'post', 0 );
+
+	$_groups_post = $nv_Request->get_array( 'activecomm', 'post', array() );
+	$row['activecomm'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	if( empty( $row['title'] ) )
 	{
@@ -220,18 +223,13 @@ if( sizeof( $_grows ) )
 	$xtpl->parse( 'main.googleplus' );
 }
 
-$array_allowed_comm = array(
-	$lang_global['no'],
-	$lang_global['who_view0'],
-	$lang_global['who_view1']
-);
-
-foreach ($array_allowed_comm as $key => $title)
+$activecomm = explode( ',', $row['activecomm'] );
+foreach( $groups_list as $_group_id => $_title )
 {
 	$xtpl->assign( 'ACTIVECOMM', array(
-		'key' => $key,
-		'title' => $title,
-		'selected' => ( $key == $row['activecomm'] ) ? ' selected="selected"' : ''
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $activecomm ) ? ' checked="checked"' : '',
+		'title' => $_title
 	) );
 	$xtpl->parse( 'main.activecomm' );
 }

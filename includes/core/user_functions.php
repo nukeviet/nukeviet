@@ -45,25 +45,6 @@ function nv_create_submenu()
 }
 
 /**
- * nv_setBlockAllowed()
- *
- * @param mixed $groups_view
- * @return
- */
-function nv_setBlockAllowed( $groups_view )
-{
-	global $user_info;
-
-	if( defined( 'NV_IS_SPADMIN' ) ) return true;
-
-	$groups_view = ( string )$groups_view;
-	if( $groups_view == '0' or ( $groups_view == '1' and defined( 'NV_IS_USER' ) ) or ( $groups_view == '2' and defined( 'NV_IS_MODADMIN' ) ) ) return true;
-	if( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $groups_view ) ) return true;
-
-	return false;
-}
-
-/**
  * nv_blocks_get_content()
  *
  * @return
@@ -172,7 +153,7 @@ function nv_blocks_content( $sitecontent )
 			}
 
 			//Kiem tra quyen xem block
-			if( in_array( $_row['position'], $array_position ) and nv_setBlockAllowed( $_row['groups_view'] ) )
+			if( in_array( $_row['position'], $array_position ) and nv_user_in_groups( $_row['groups_view'] ) )
 			{
 				$block_config = $_row['block_config'];
 				$blockTitle = $_row['blockTitle'];
@@ -528,7 +509,7 @@ function nv_html_site_js()
 						$("a.delblock").click(function(){
 							var bid = $(this).attr("name");
 							if (confirm("' . $lang_global['block_delete_confirm'] . '")){
-								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
+								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
 									alert(theResponse);
 									window.location.href = "' . $client_info['selfurl'] . '";
 								});
@@ -538,7 +519,7 @@ function nv_html_site_js()
 						$("a.outgroupblock").click(function(){
 							var bid = $(this).attr("name");
 							if (confirm("' . $lang_global['block_outgroup_confirm'] . '")){
-								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_outgroup", "func_id=' . $module_info['funcs'][$op]['func_id'] . '&bid="+bid, function(theResponse){
+								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_outgroup", "func_id=' . $module_info['funcs'][$op]['func_id'] . '&bid="+bid, function(theResponse){
 									alert(theResponse);
 								});
 							}
@@ -547,7 +528,7 @@ function nv_html_site_js()
 						$("a.block_content").click(function(){
 							var bid = $(this).attr("name");
 							var tag = $(this).attr("id");
-							nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
+							nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
 				 		});
 
 				 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
@@ -560,7 +541,7 @@ function nv_html_site_js()
 									post_order = true;
 									var position = $(this).attr("id");
 									var order = $(this).sortable("serialize");
-									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
+									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
 					 					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
 										}
@@ -572,7 +553,7 @@ function nv_html_site_js()
 							stop: function() {
 								if(post_order == false){
 									var order = $(this).sortable("serialize");
-									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
+									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
 										if(theResponse=="OK_"+func_id){
 					 					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
 										}
@@ -585,8 +566,8 @@ function nv_html_site_js()
 						});
 						$(".column").disableSelection();
 					});
-					//]]>
-					</script>';
+				//]]>
+				</script>';
 	}
 	return $return;
 }
@@ -654,7 +635,7 @@ function nv_groups_list_pub()
 {
 	global $db, $db_config, $global_config;
 
-	$query = 'SELECT group_id, title, exp_time, publics FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+	$query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
 	$list = nv_db_cache( $query, '', 'users' );
 
 	if( empty( $list ) ) return array();
@@ -675,7 +656,7 @@ function nv_groups_list_pub()
 
 	if( $reload )
 	{
-		$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
+		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode( ',', $reload ) . ')' );
 		nv_del_moduleCache( 'users' );
 	}
 

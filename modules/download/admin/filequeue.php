@@ -25,11 +25,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	}
 
 	$groups_list = nv_groups_list();
-	$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-	if( ! empty( $groups_list ) )
-	{
-		$array_who[] = $lang_global['who_view3'];
-	}
 
 	$sql = "SELECT config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config WHERE config_name='upload_dir'";
 	$result = $db->query( $sql );
@@ -83,14 +78,16 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		$array['fileimage2'] = $nv_Request->get_title( 'fileimage2', 'post', '' );
 		$array['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
-		$array['comment_allow'] = $nv_Request->get_int( 'comment_allow', 'post', 0 );
-		$array['who_comment'] = $nv_Request->get_int( 'who_comment', 'post', 0 );
-		$array['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
 
-		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
-		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
-		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
-		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
+		$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+		$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+
+		$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
+		$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+
+		$_groups_post = $nv_Request->get_array( 'groups_comment', 'post', array() );
+		$array['groups_comment'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+
 		// Sort image
 		if( ! empty( $array['fileimage'] ) )
 		{
@@ -241,23 +238,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 			$array['description'] = nv_editor_nl2br( $array['description'] );
 			$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 
-			if( ! in_array( $array['who_comment'], array_keys( $array_who ) ) )
-			{
-				$array['who_comment'] = 0;
-			}
-			if( ! in_array( $array['who_view'], array_keys( $array_who ) ) )
-			{
-				$array['who_view'] = 0;
-			}
-			if( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
-			{
-				$array['who_download'] = 0;
-			}
-
-			$array['groups_comment'] = ( ! empty( $array['groups_comment'] ) ) ? implode( ',', $array['groups_comment'] ) : '';
-			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
-			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
-
 			if( $row['user_id'] )
 			{
 				$array['user_name'] = $row['user_name'];
@@ -339,8 +319,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				}
 			}
 
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, comment_allow, who_comment, groups_comment, who_view, groups_view, who_download, groups_download, comment_hits, rating_detail) VALUES (
-				 " . $array['catid'] . ", :title, :alias, :description, :introtext, " . $row['uploadtime'] . ", " . NV_CURRENTTIME . ", " . $row['user_id'] . ", :user_name, :author_name, :author_email, :author_url, :fileupload, :linkdirect, :version, " . $array['filesize'] . ", :fileimage, 1, :copyright, 0, 0, " . $array['comment_allow'] . ", " . $array['who_comment'] . ", :groups_comment, " . $array['who_view'] . ", :groups_view, " . $array['who_download'] . ", :groups_download, 0, '')";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (catid, title, alias, description, introtext, uploadtime, updatetime, user_id, user_name, author_name, author_email, author_url, fileupload, linkdirect, version, filesize, fileimage, status, copyright, view_hits, download_hits, groups_comment, groups_view, groups_download, comment_hits, rating_detail) VALUES (
+				 " . $array['catid'] . ", :title, :alias, :description, :introtext, " . $row['uploadtime'] . ", " . NV_CURRENTTIME . ", " . $row['user_id'] . ", :user_name, :author_name, :author_email, :author_url, :fileupload, :linkdirect, :version, " . $array['filesize'] . ", :fileimage, 1, :copyright, 0, 0, :groups_comment, :groups_view, :groups_download, 0, '')";
 
 			$data_insert = array();
 			$data_insert['title'] = $array['title'];
@@ -417,9 +397,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['fileimage'] = $row['fileimage'];
 		$array['fileimage2'] = '';
 		$array['copyright'] = $row['copyright'];
-		$array['comment_allow'] = 1;
-		$array['who_comment'] = $array['who_view'] = $array['who_download'] = 0;
-		$array['groups_comment'] = $array['groups_view'] = $array['groups_download'] = array();
+		$array['groups_view'] = $array['groups_download'] = '6';
+		$array['groups_comment'] = $module_config[$module_name]['setcomm'];
 
 		$array['fileupload'] = ! empty( $array['fileupload'] ) ? explode( '[NV]', $array['fileupload'] ) : array();
 		if( ! empty( $array['linkdirect'] ) )
@@ -437,6 +416,10 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 	if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
 	if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
+
+	$array['groups_comment'] = explode( ',', $array['groups_comment'] );
+	$array['groups_view'] = explode( ',', $array['groups_view'] );
+	$array['groups_download'] = explode( ',', $array['groups_download'] );
 
 	//Rebuild fileupload
 	if( ! empty( $array['fileupload'] ) )
@@ -496,19 +479,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		exit();
 	}
 
-	$array['comment_allow'] = $array['comment_allow'] ? ' checked="checked"' : '';
-
-	$who_comment = $array['who_comment'];
-	$array['who_comment'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_comment'][] = array(
-			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_comment ? ' selected="selected"' : ''
-		);
-	}
-
 	$groups_comment = $array['groups_comment'];
 	$array['groups_comment'] = array();
 	if( ! empty( $groups_list ) )
@@ -523,17 +493,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		}
 	}
 
-	$who_view = $array['who_view'];
-	$array['who_view'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_view'][] = array(
-			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_view ? ' selected="selected"' : ''
-		);
-	}
-
 	$groups_view = $array['groups_view'];
 	$array['groups_view'] = array();
 	if( ! empty( $groups_list ) )
@@ -546,17 +505,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 			);
 		}
-	}
-
-	$who_download = $array['who_download'];
-	$array['who_download'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_download'][] = array(
-			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_download ? ' selected="selected"' : ''
-		);
 	}
 
 	$groups_download = $array['groups_download'];
@@ -645,52 +593,21 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->parse( 'main.fileimage' );
 	}
 
-	foreach( $array['who_comment'] as $who )
+	foreach( $array['groups_comment'] as $group )
 	{
-		$xtpl->assign( 'WHO_COMMENT', $who );
-		$xtpl->parse( 'main.who_comment' );
+		$xtpl->assign( 'GROUPS_COMMENT', $group );
+		$xtpl->parse( 'main.groups_comment' );
 	}
 
-	if( ! empty( $array['groups_comment'] ) )
+	foreach( $array['groups_view'] as $group )
 	{
-		foreach( $array['groups_comment'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_COMMENT', $group );
-			$xtpl->parse( 'main.group_empty.groups_comment' );
-		}
-		$xtpl->parse( 'main.group_empty' );
+		$xtpl->assign( 'GROUPS_VIEW', $group );
+		$xtpl->parse( 'main.groups_view' );
 	}
-
-	foreach( $array['who_view'] as $who )
+	foreach( $array['groups_download'] as $group )
 	{
-		$xtpl->assign( 'WHO_VIEW', $who );
-		$xtpl->parse( 'main.who_view' );
-	}
-
-	if( ! empty( $array['groups_view'] ) )
-	{
-		foreach( $array['groups_view'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_VIEW', $group );
-			$xtpl->parse( 'main.group_empty_view.groups_view' );
-		}
-		$xtpl->parse( 'main.group_empty_view' );
-	}
-
-	foreach( $array['who_download'] as $who )
-	{
-		$xtpl->assign( 'WHO_DOWNLOAD', $who );
-		$xtpl->parse( 'main.who_download' );
-	}
-
-	if( ! empty( $array['groups_download'] ) )
-	{
-		foreach( $array['groups_download'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
-			$xtpl->parse( 'main.group_empty_download.groups_download' );
-		}
-		$xtpl->parse( 'main.group_empty_download' );
+		$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
+		$xtpl->parse( 'main.groups_download' );
 	}
 
 	$xtpl->parse( 'main' );

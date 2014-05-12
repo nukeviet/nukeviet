@@ -68,15 +68,18 @@ if( ! empty( $admin_cookie ) )
 	}
 
 	define( 'NV_IS_ADMIN', true );
+	$admin_info['in_groups'][] = 3;
 
 	if( $admin_info['level'] == 1 or $admin_info['level'] == 2 )
 	{
 		define( 'NV_IS_SPADMIN', true );
+		$admin_info['in_groups'][] = 2;
 	}
 
 	if( $admin_info['level'] == 1 AND $global_config['idsite'] == 0 )
 	{
 		define( 'NV_IS_GODADMIN', true );
+		$admin_info['in_groups'][] = 1;
 	}
 
 	if( ! defined( 'ADMIN_LOGIN_MODE' ) ) define( 'ADMIN_LOGIN_MODE', 3 );

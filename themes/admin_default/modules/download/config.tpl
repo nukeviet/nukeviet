@@ -20,20 +20,10 @@
 					<tr>
 						<td>{LANG.config_whoaddfile}</td>
 						<td>
-						<select name="who_addfile" class="form-control w200">
-							<!-- BEGIN: who_addfile -->
-							<option value="{WHO_ADDFILE.key}"{WHO_ADDFILE.selected}> {WHO_ADDFILE.title}</option>
-							<!-- END: who_addfile -->
-						</select>
-						<!-- BEGIN: group3 -->
-						<br />
-						{LANG.groups_upload}
-						<br />
-						<!-- BEGIN: groups_addfile -->
-						<input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
-						<br />
-						<!-- END: groups_addfile -->
-						<!-- END: group3 -->
+							<!-- BEGIN: groups_addfile -->
+							<input name="groups_addfile[]" value="{GROUPS_ADDFILE.key}" type="checkbox"{GROUPS_ADDFILE.checked} /> {GROUPS_ADDFILE.title}
+							<br />
+							<!-- END: groups_addfile -->
 						</td>
 					</tr>
 					<tr>
@@ -43,20 +33,10 @@
 					<tr>
 						<td>{LANG.config_whouploadfile}</td>
 						<td>
-						<select name="who_upload" class="form-control w200">
-							<!-- BEGIN: who_upload -->
-							<option value="{WHO_UPLOAD.key}"{WHO_UPLOAD.selected}> {WHO_UPLOAD.title}</option>
-							<!-- END: who_upload -->
-						</select>
-						<!-- BEGIN: group_empty -->
-						<br />
-						{LANG.groups_upload}
-						<br />
-						<!-- BEGIN: groups_upload -->
-						<input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}
-						<br />
-						<!-- END: groups_upload -->
-						<!-- END: group_empty -->
+							<!-- BEGIN: groups_upload -->
+							<input name="groups_upload[]" value="{GROUPS_UPLOAD.key}" type="checkbox"{GROUPS_UPLOAD.checked} /> {GROUPS_UPLOAD.title}
+							<br />
+							<!-- END: groups_upload -->
 						</td>
 					</tr>
 					<tr>

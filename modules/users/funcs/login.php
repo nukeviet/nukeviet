@@ -345,6 +345,8 @@ function openidLogin_Res1( $attribs )
 							die();
 						}
 
+						$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
+
 						$stmt = $db->prepare( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid= :userid' );
 						$stmt->bindParam( ':userid', $row['userid'], PDO::PARAM_STR );
 						$stmt->execute();
@@ -551,6 +553,8 @@ function openidLogin_Res1( $attribs )
 				openidLogin_Res0( $lang_module['err_no_save_account'] );
 				die();
 			}
+
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
 			$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
 			$result = $db->query( $query );

@@ -98,15 +98,6 @@
 					<td><input type="checkbox" name="active" value="1"{ROW.block_active}/> {LANG.block_yes}</td>
 				</tr>
 				<tr>
-					<td>{LANG.block_group}:</td>
-					<td>
-					<select class="w250 form-control" name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
-						<!-- BEGIN: who_view -->
-						<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-						<!-- END: who_view -->
-					</select></td>
-				</tr>
-				<tr id="groups_list" style="{SHOW_GROUPS_LIST}">
 					<td>{GLANG.groups_view}:</td>
 					<td>
 					<!-- BEGIN: groups_list -->

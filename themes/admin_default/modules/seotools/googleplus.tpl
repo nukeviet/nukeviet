@@ -31,7 +31,7 @@
 </div>
 <!-- END: module -->
 <div class="alert alert-info">{LANG.googleplusNote1}</div>
-<div class="table-responsive">
+<div class="table-responsive navbar-form">
 	<table class="table table-striped table-bordered table-hover">
 		<caption>{LANG.googleplus_list}</caption>
 		<thead>
@@ -44,8 +44,8 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td><strong>{LANG.googleplus_add}: </strong></td>
-				<td><input class="form-control" name="new_profile" id="new_profile" type="text" maxlength="255" /></td>
+				<td class="text-right"><strong>{LANG.googleplus_add}: </strong></td>
+				<td class="text-center"><input class="form-control" name="new_profile" id="new_profile" type="text" maxlength="255" /></td>
 				<td colspan="2"><input class="w250 form-control pull-left" name="new_title" id="new_title" type="text" maxlength="255" style="margin-right: 5px;" /> <input name="Button1" class="btn btn-info" type="button" value="{LANG.submit}" onclick="nv_add_googleplus();return;" /></td>
 			</tr>
 		</tfoot>
@@ -53,7 +53,7 @@
 			<!-- BEGIN: googleplus -->
 			<tr>
 				<td class="text-center">
-				<select id="id_weight_{ROW.gid}" onchange="nv_chang_googleplus({ROW.gid});">
+				<select class="form-control" id="id_weight_{ROW.gid}" onchange="nv_chang_googleplus({ROW.gid});">
 					<!-- BEGIN: weight -->
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 					<!-- END: weight -->

@@ -57,7 +57,7 @@ elseif( ! empty( $selectedmodule ) )
 
 if( empty( $func_id ) or empty( $selectedmodule ) )
 {
-	Header( 'Location: index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks' );
+	Header( 'Location: index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks' );
 	exit();
 }
 

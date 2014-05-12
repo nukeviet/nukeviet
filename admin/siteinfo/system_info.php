@@ -30,7 +30,7 @@ $info['website'] = array(
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$global_config['version'] .= '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate">' . $lang_module['checkversion'] . '</a>';
+	$global_config['version'] .= '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=checkupdate">' . $lang_module['checkversion'] . '</a>';
 }
 
 $info['server'] = array(
@@ -96,7 +96,7 @@ foreach( $info as $key => $if )
 
 	if( $key == 'chmod' )
 	{
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=checkchmod' );
+		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=checkchmod' );
 		$xtpl->parse( 'main.urlcap' );
 	}
 	else

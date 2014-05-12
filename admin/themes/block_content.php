@@ -53,6 +53,8 @@ if( $row['bid'] > 0 )
 	}
 }
 
+$groups_list = nv_groups_list();
+
 $xtpl = new XTemplate( 'block_content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -161,21 +163,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	$row['active'] = $nv_Request->get_int( 'active', 'post', 0 );
 
-	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
-
-	if( $who_view < 0 or $who_view > 3 ) $who_view = 0;
-
-	$groups_view = '';
-
-	if( $who_view == 3 )
-	{
-		$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
-		$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', array_map( 'intval', $groups_view ) ) : '';
-	}
-	else
-	{
-		$row['groups_view'] = ( string )$who_view;
-	}
+	$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
+	$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
 
 	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) OR preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) ) ) ? 1 : 0;
 	$array_funcid_post = $nv_Request->get_array( 'func_id', 'post' );
@@ -470,17 +459,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 }
 
-$who_view = 3;
-$groups_view = array();
-
-if( empty( $row['groups_view'] ) or $row['groups_view'] == '1' or $row['groups_view'] == '2' )
-{
-	$who_view = intval( $row['groups_view'] );
-}
-else
-{
-	$groups_view = array_map( 'intval', explode( ',', $row['groups_view'] ) );
-}
+$groups_view = explode( ',', $row['groups_view'] );
 
 $sql = 'SELECT func_id, func_custom_name, in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1 ORDER BY in_module ASC, subweight ASC';
 $func_result = $db->query( $sql );
@@ -551,23 +530,6 @@ for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 	) );
 	$xtpl->parse( 'main.position' );
 }
-
-$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
-
-$row['groups_view'] = intval( $row['groups_view'] );
-foreach( $array_who_view as $k => $w )
-{
-	$xtpl->assign( 'WHO_VIEW', array(
-		'key' => $k,
-		'selected' => ( $k == $row['groups_view'] ) ? ' selected="selected"' : '',
-		'title' => $w
-	) );
-	$xtpl->parse( 'main.who_view' );
-}
-
-$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? 'visibility:visible;display:table-row-group' : 'visibility:hidden;display:none' );
-
-$groups_list = nv_groups_list();
 
 foreach( $groups_list as $group_id => $grtl )
 {

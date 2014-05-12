@@ -27,7 +27,7 @@ if( $db->exec( $sql ) )
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
 
 	nv_del_moduleCache( $module_name );
-	nv_fix_cat_order( $mid );
+	menu_fix_order( $mid );
 
 	// Cap nhat cho menu cha
 	if( $parentid > 0 )

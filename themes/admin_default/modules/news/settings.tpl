@@ -137,7 +137,7 @@
 			<caption>{LANG.group_content}</caption>
 			<thead>
 				<tr class="text-center">
-					<th>{GLANG.who_view3}</th>
+					<th>{GLANG.mod_groups}</th>
 					<th>{LANG.group_addcontent}</th>
 					<th>{LANG.group_postcontent}</th>
 					<th>{LANG.group_editcontent}</th>
@@ -152,11 +152,11 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td><strong>{ROW.array_post_2}</strong><input type="hidden" value="{ROW.pid}" name="array_pid[]" /></td>
-					<td class="text-center"><input type="checkbox" value="1" name="array_addcontent[{ROW.pid}]"{ROW.addcontent}/></td>
-					<td class="text-center"><input type="checkbox" value="1" name="array_postcontent[{ROW.pid}]"{ROW.postcontent}/></td>
-					<td class="text-center"><input type="checkbox" value="1" name="array_editcontent[{ROW.pid}]"{ROW.editcontent}/></td>
-					<td class="text-center"><input type="checkbox" value="1" name="array_delcontent[{ROW.pid}]"{ROW.delcontent}/></td>
+					<td><strong>{ROW.group_title}</strong><input type="hidden" value="{ROW.group_id}" name="array_group_id[]" /></td>
+					<td class="text-center"><input type="checkbox" value="1" name="array_addcontent[{ROW.group_id}]"{ROW.addcontent}/></td>
+					<td class="text-center"><input type="checkbox" value="1" name="array_postcontent[{ROW.group_id}]"{ROW.postcontent}/></td>
+					<td class="text-center"><input type="checkbox" value="1" name="array_editcontent[{ROW.group_id}]"{ROW.editcontent}/></td>
+					<td class="text-center"><input type="checkbox" value="1" name="array_delcontent[{ROW.group_id}]"{ROW.delcontent}/></td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

@@ -27,14 +27,6 @@ if( $global_config['idsite'] )
 	}
 }
 
-if( ! defined( 'SHADOWBOX' ) )
-{
-	$my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-	$my_footer = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_footer .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-	define( 'SHADOWBOX', true );
-}
-
 foreach( $theme_array as $themes_i )
 {
 	if( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )

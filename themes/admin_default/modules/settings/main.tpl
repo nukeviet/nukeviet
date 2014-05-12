@@ -41,7 +41,7 @@
 				<td><strong>{LANG.mobile_theme}</strong></td>
 				<td>
 				<select name="mobile_theme" class="form-control w200">
-					<option value="">&nbsp;</option>
+					<option value="">{LANG.theme}</option>
 					<!-- BEGIN: loop -->
 					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
 					<!-- END: loop -->
