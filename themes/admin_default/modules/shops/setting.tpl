@@ -13,11 +13,11 @@
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_homesite}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 40px;" name="homewidth" /><span class="text-middle"> x </span><input class="form-control" type="text" value="{DATA.homeheight}" style="width: 40px;" name="homeheight" /></td>
+				<td><input class="form-control" type="text" value="{DATA.homewidth}" style="width: 60px;" name="homewidth" /><span class="text-middle"> x </span><input class="form-control" type="text" value="{DATA.homeheight}" style="width: 60px;" name="homeheight" /></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_page}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 40px;" name="per_page" /><span class="text-middle"> {LANG.setting_per_note_home} </span></td>
+				<td><input class="form-control" type="text" value="{DATA.per_page}" style="width: 60px;" name="per_page" /><span class="text-middle"> {LANG.setting_per_note_home} </span></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.setting_per_row}</strong></td>
@@ -96,15 +96,14 @@
 <script type="text/javascript">
 	var url_back = '{url_back}';
 	var url_change_weight = '{url_change}';
-	var url_active = '{url_active}'; 
+	var url_active = '{url_active}';
 </script>
-<div style="background:#F0F0F0;padding:10px; font-weight:bold">
-	{LANG.paymentcaption}
-</div>
-<table id="edit" class="tab1">
+
+<table id="edit" class="table table-striped table-bordered table-hover">
+	<caption>{LANG.paymentcaption}</caption>
 	<thead>
 		<tr>
-			<td width="50" class="text-center"><strong>{LANG.weight}</strong></td>
+			<td class="w100 text-center"><strong>{LANG.weight}</strong></td>
 			<td><strong>{LANG.paymentname}</strong></td>
 			<td><strong>{LANG.domain}</strong></td>
 			<td class="text-center"><strong>{LANG.active}</strong></td>

@@ -141,6 +141,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $a = 0;
 if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 {
+	$all_page = sizeof( $array_setting_payment );
 	foreach( $array_setting_payment as $value )
 	{
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];

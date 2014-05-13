@@ -24,10 +24,10 @@ $global_array_cat[0] = array(
 	'keywords' => ''
 );
 
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description, inhome, ' . NV_LANG_DATA . '_keywords, who_view, groups_view FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
+$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description, inhome, ' . NV_LANG_DATA . '_keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
 $result = $db->query( $sql );
 
-while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $who_view_i, $groups_view_i ) = $result->fetch( 3 ) )
+while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $groups_view_i ) = $result->fetch( 3 ) )
 {
 	$xtitle_i = '';
 	if( $lev_i > 0 )
@@ -54,7 +54,6 @@ while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $num
 		'description' => $description_i,
 		'inhome' => $inhome_i,
 		'keywords' => $keywords_i,
-		'who_view' => $who_view_i,
 		'groups_view' => $groups_view_i,
 		'lev' => $lev_i,
 		'name' => $xtitle_i
@@ -69,8 +68,6 @@ $array_viewcat_full = array(
 	'viewcat_page_gird' => $lang_module['viewcat_page_gird']
 );
 $array_viewcat_nosub = array( 'viewcat_page_list' => $lang_module['viewcat_page_list'], 'viewcat_page_gird' => $lang_module['viewcat_page_gird'] );
-$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
-$array_allowed_comm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
@@ -742,7 +739,7 @@ function FormatNumber( $number, $decimals = 0, $thousand_separator = '&nbsp;', $
  */
 function drawselect_number( $select_name = "", $number_start = 0, $number_end = 1, $number_curent = 0, $func_onchange = "" )
 {
-	$html = "<select name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
+	$html = "<select class=\"form-control\" name=\"" . $select_name . "\" onchange=\"" . $func_onchange . "\">";
 	for( $i = $number_start; $i < $number_end; $i++ )
 	{
 		$select = ( $i == $number_curent ) ? "selected=\"selected\"" : "";

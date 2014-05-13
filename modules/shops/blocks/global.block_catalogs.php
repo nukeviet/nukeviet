@@ -14,7 +14,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 {
 	/**
 	 * nv_block_config_product_catalogs_blocks()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -56,7 +56,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 	/**
 	 * nv_block_config_product_catalogs_blocks_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -74,7 +74,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 	/**
 	 * nv_pro_catalogs()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -109,7 +109,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 		if( $module != $module_name )
 		{
-			$sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, who_view, groups_view FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
+			$sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, groups_view FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
 
 			$list = nv_db_cache( $sql, "catid", $module );
 			foreach( $list as $row )
@@ -127,7 +127,6 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 					"description" => $row['description'],
 					"inhome" => $row['inhome'],
 					"keywords" => $row['keywords'],
-					"who_view" => $row['who_view'],
 					"groups_view" => $row['groups_view'],
 					'lev' => $row['lev']
 				);
@@ -164,7 +163,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 	/**
 	 * html_viewsub()
-	 * 
+	 *
 	 * @param mixed $list_sub
 	 * @param mixed $block_config
 	 * @return

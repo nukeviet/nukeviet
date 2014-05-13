@@ -133,7 +133,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		if( $module != $module_name )
 		{
-			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, who_view, groups_view FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
+			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
 
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
@@ -151,7 +151,6 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 					'description' => $row['description'],
 					'inhome' => $row['inhome'],
 					'keywords' => $row['keywords'],
-					'who_view' => $row['who_view'],
 					'groups_view' => $row['groups_view'],
 					'lev' => $row['lev']
 				);

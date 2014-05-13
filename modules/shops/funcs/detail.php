@@ -19,24 +19,6 @@ if( empty( $id ) )
 // Thiet lap quyen xem chi tiet
 $contents = '';
 $publtime = 0;
-$func_who_view = $global_array_cat[$catid]['who_view'];
-$allowed = false;
-if( $func_who_view == 0 )
-{
-	$allowed = true;
-}
-if( $func_who_view == 1 and defined( 'NV_IS_USER' ) )
-{
-	$allowed = true;
-}
-elseif( $func_who_view == 2 and defined( 'NV_IS_MODADMIN' ) )
-{
-	$allowed = true;
-}
-elseif( $func_who_view == 3 and ( ( defined( 'NV_IS_USER' ) and nv_is_in_groups( $user_info['in_groups'], $global_array_cat[$catid]['groups_view'] ) ) or defined( 'NV_IS_MODADMIN' ) ) )
-{
-	$allowed = true;
-}
 
 $sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $id . ' AND status=1' );
 $data_content = $sql->fetch();
@@ -52,7 +34,7 @@ $page_title = $data_content[NV_LANG_DATA . '_title'];
 $key_words = $data_content[NV_LANG_DATA . '_keywords'];
 $description = $data_content[NV_LANG_DATA . '_hometext'];
 
-if( $allowed )
+if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 {
 	$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
 	$db->query( $sql );
