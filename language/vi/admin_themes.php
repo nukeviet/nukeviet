@@ -28,7 +28,7 @@ $lang_module['block_title'] = 'Tên block';
 $lang_module['block_link'] = 'URL của tên block';
 $lang_module['block_file_path'] = 'Lấy nội dung từ file';
 $lang_module['block_global_apply'] = 'Áp dụng cho tất cả';
-$lang_module['block_type_global'] = 'Block của giao diện';
+$lang_module['block_type_theme'] = 'Block của giao diện';
 $lang_module['block_select_type'] = '-=Hãy chọn dạng=-';
 $lang_module['block_tpl'] = 'Template';
 $lang_module['block_pos'] = 'Vị trí';

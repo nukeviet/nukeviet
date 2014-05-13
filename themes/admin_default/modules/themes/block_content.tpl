@@ -45,7 +45,7 @@
 					<td>
 					<select name="module" class="form-control w200 pull-left" style="margin-right: 5px">
 						<option value="">{LANG.block_select_type}</option>
-						<option value="theme"{THEME_SELECTED}>{LANG.block_type_global}</option>
+						<option value="theme"{THEME_SELECTED}>{LANG.block_type_theme}</option>
 						<!-- BEGIN: module -->
 						<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
 						<!-- END: module -->

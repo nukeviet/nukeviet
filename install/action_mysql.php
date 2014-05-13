@@ -435,3 +435,12 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   PRIMARY KEY (pid),
   UNIQUE KEY plugin_file (plugin_file)
 ) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
+	 c_type varchar(100) NOT NULL,
+	 c_val varchar(100) NOT NULL,
+	 last_update int(11) NOT NULL DEFAULT '0',
+	 c_count int(11) unsigned NOT NULL DEFAULT '0',
+	 " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
+	 UNIQUE KEY c_type (c_type,c_val)
+) ENGINE=MyISAM";

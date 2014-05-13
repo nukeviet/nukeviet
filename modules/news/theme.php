@@ -977,7 +977,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . '?' );
+	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . 'index.php' );
 	$xtpl->assign( 'TO_DATE', $date_array['to_date'] );
 	$xtpl->assign( 'FROM_DATE', $date_array['from_date'] );
 	$xtpl->assign( 'KEY', $key );
@@ -1049,7 +1049,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $page, $array_conten
 	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		if( strpos( $url_link, '&page=' ) > 0)
+		if( strpos( $url_link, '&page=' ) > 0 )
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );
 		}

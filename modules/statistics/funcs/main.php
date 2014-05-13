@@ -24,7 +24,7 @@ $current_dayofweek = date( 'l', NV_CURRENTTIME );
 $max = 0;
 $total = 0;
 $year_list = array();
-$result = $db->query( "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='year' ORDER BY c_val" );
+$result = $db->query( "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' ORDER BY c_val" );
 while( list( $year, $count ) = $result->fetch( 3 ) )
 {
 	$year_list[$year] = $count;
@@ -65,7 +65,7 @@ $month_list2 = "'" . implode( "','", array_keys( $month_list2 ) ) . "'";
 $max = 0;
 $total = 0;
 
-$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='month' AND c_val IN (" . $month_list2 . ")";
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='month' AND c_val IN (" . $month_list2 . ")";
 $result = $db->query( $sql );
 while( list( $month, $count ) = $result->fetch( 3 ) )
 {
@@ -90,7 +90,7 @@ $max = 0;
 $total = 0;
 $day_list = array();
 
-$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='day' AND c_val <= " . $current_number_of_days . " ORDER BY c_val";
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='day' AND c_val <= " . $current_number_of_days . " ORDER BY c_val";
 $result = $db->query( $sql );
 while( list( $day, $count ) = $result->fetch( 3 ) )
 {
@@ -122,7 +122,7 @@ $dayofweek_list['Saturday'] = array( 'fullname' => $lang_global['saturday'], 'co
 
 $dayofweek_list2 = "'" . implode( "','", array_keys( $dayofweek_list ) ) . "'";
 
-$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='dayofweek' AND c_val IN (" . $dayofweek_list2 . ")";
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='dayofweek' AND c_val IN (" . $dayofweek_list2 . ")";
 $result = $db->query( $sql );
 
 $max = 0;
@@ -151,7 +151,7 @@ $max = 0;
 $total = 0;
 $hour_list = array();
 
-$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type='hour' ORDER BY c_val";
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='hour' ORDER BY c_val";
 $result = $db->query( $sql );
 while( list( $hour, $count ) = $result->fetch( 3 ) )
 {
@@ -173,7 +173,7 @@ $ctsh['total'] = array( $lang_global['total'], number_format( $total ) );
 // quoc gia
 $db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
-	->from( NV_COUNTER_TABLE )
+	->from( NV_COUNTER_GLOBALTABLE )
 	->where( "c_type='country' AND c_count!=0" )
 	->order( 'c_count DESC' )
 	->limit( 10 );
@@ -190,7 +190,7 @@ while( list( $country, $count, $last_visit ) = $result->fetch( 3 ) )
 	$total = $total + $count;
 }
 
-$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='country'" );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country'" );
 list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 
@@ -204,7 +204,7 @@ $ctsc['others'] = array( $lang_module['others'], number_format( $others ), $lang
 // trinh duyet
 $db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
-	->from( NV_COUNTER_TABLE )
+	->from( NV_COUNTER_GLOBALTABLE )
 	->where( "c_type='browser' AND c_count!=0" )
 	->order( 'c_count DESC' );
 $result = $db->query( $db->sql() );
@@ -220,7 +220,7 @@ while( list( $browser, $count, $last_visit ) = $result->fetch( 3 ) )
 	$total = $total + $count;
 }
 
-$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='browser'" );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='browser'" );
 list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 
@@ -234,7 +234,7 @@ $ctsb['others'] = array( $lang_module['others'], number_format( $others ), $lang
 // he dieu hanh
 $db->sqlreset()
 	->select( 'c_val,c_count, last_update' )
-	->from( NV_COUNTER_TABLE )
+	->from( NV_COUNTER_GLOBALTABLE )
 	->where( "c_type='os' AND c_count!=0" )
 	->order( 'c_count DESC' )
 	->limit( 10 );
@@ -251,7 +251,7 @@ while( list( $os, $count, $last_visit ) = $result->fetch( 3 ) )
 	$total = $total + $count;
 }
 
-$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='os'" );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os'" );
 list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 

@@ -60,21 +60,20 @@
 		</div>
 	</div>
 </form>
-
 <script type="text/javascript">
-	$(document).ready(function() {
-		$(".datepicker").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
+$(document).ready(function() {
+	$(".datepicker").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true
 	});
+	// Init google custom search
+});
 </script>
-
 <!-- END: main -->
 <!-- BEGIN: results -->
 <div class="panel panel-default">

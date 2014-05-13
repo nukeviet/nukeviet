@@ -114,7 +114,6 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'CHECKSESS', md5( session_id() ) );
 
-$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 foreach( $language_array as $key => $value )
 {
 	if( ! in_array( $key, $array_lang_exit ) and ! in_array( $key, $lang_array_file ) )

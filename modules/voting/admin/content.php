@@ -75,7 +75,7 @@ if( ! empty( $submit ) )
 		}
 	}
 	$rowvote = array(
-		'groups_view' => '',
+		'groups_view' => '6',
 		'publ_time' => $begindate,
 		'exp_time' => $enddate,
 		'acceptcm' => $maxoption,
@@ -192,7 +192,7 @@ else
 	else
 	{
 		$rowvote = array(
-			'groups_view' => '',
+			'groups_view' => '6',
 			'publ_time' => NV_CURRENTTIME,
 			'exp_time' => '',
 			'acceptcm' => 1,

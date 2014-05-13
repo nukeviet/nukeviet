@@ -311,13 +311,13 @@ define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
 define( 'NV_BANNERS_GLOBALTABLE', $db_config['prefix'] . '_banners' );
+define( 'NV_COUNTER_GLOBALTABLE', $db_config['prefix'] . '_counter' );
 
 define( 'NV_PREFIXLANG', $db_config['prefix'] . '_' . NV_LANG_DATA );
 define( 'NV_MODULES_TABLE', NV_PREFIXLANG . '_modules' );
 define( 'NV_BLOCKS_TABLE', NV_PREFIXLANG . '_blocks' );
 define( 'NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs' );
 
-define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 

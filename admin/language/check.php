@@ -41,16 +41,6 @@ if( empty( $array_lang_exit ) )
 	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
-$lang_array_file = array();
-
-$lang_array_file_temp = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
-foreach( $lang_array_file_temp as $value )
-{
-	if( file_exists( NV_ROOTDIR . '/language/' . $value . '/global.php' ) )
-	{
-		$lang_array_file[] = $value;
-	}
-}
 
 $language_array_source = array( 'vi', 'en' );
 

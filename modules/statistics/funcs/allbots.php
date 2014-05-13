@@ -14,7 +14,7 @@ $page_title = $lang_module['bot'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['bot'];
 
-$result = $db->query( "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='bot' AND c_count!=0" );
+$result = $db->query( "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='bot' AND c_count!=0" );
 list( $num_items, $max ) = $result->fetch( 3 );
 
 if( $num_items )
@@ -25,7 +25,7 @@ if( $num_items )
 
 	$db->sqlreset()
 		->select( 'c_val,c_count, last_update' )
-		->from( NV_COUNTER_TABLE )
+		->from( NV_COUNTER_GLOBALTABLE )
 		->where( "c_type='bot' AND c_count!=0" )
 		->order( 'c_count DESC' )
 		->limit( $per_page )
@@ -52,9 +52,8 @@ if( $num_items )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
+	$contents = nv_theme_statistics_allbots( $num_items, $bot_list, $cts );
 }
-
-$contents = nv_theme_statistics_allbots( $num_items, $bot_list, $cts );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
