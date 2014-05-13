@@ -9,8 +9,8 @@
             <!-- END: sorts -->
         </select>
     </div>
-    <!-- END: displays -->
     <div class="clearfix">&nbsp;</div>
+    <!-- END: displays -->
 
     <!-- BEGIN: items -->
     <div class="col-sm-6 col-md-{num}">

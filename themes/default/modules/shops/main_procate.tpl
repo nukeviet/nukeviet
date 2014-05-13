@@ -57,7 +57,7 @@
 	</div>
 	<!-- END: catalogs -->
 </div>
-<div class="msgshow" id="msgshow"></div>
+<div class="msgshow" id="msgshow">&nbsp;</div>
 <!-- BEGIN: tooltip_js -->
 <script type="text/javascript">
     $(document).ready(function() {$("[rel='tooltip']").tooltip();});

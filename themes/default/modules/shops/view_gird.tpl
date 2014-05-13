@@ -13,8 +13,8 @@
             <!-- END: sorts -->
         </select>
     </div>
+    <div class="clear">&nbsp;</div>
     <!-- END: displays -->
-    <div class="clear"></div>
     
 	<!-- BEGIN: grid_rows -->
     <div class="col-sm-6 col-md-{num}">
