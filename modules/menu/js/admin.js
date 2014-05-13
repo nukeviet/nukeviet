@@ -6,7 +6,7 @@
  * @Createdate 3 / 25 / 2010 18 : 6
  */
 
-function nv_link1(alias, module) {
+function nv_link_settitle(alias, module) {
 	var nv_timer = nv_settimeout_disable('item_name_' + alias, 2000);
 	var new_status = $("#item_name_" + alias).val();
 	if (new_status != 0) {
@@ -19,7 +19,7 @@ function nv_link1(alias, module) {
 	return;
 }
 
-function nv_link(module) {
+function nv_link_module(module) {
 	var nv_timer = nv_settimeout_disable('module_name_' + module, 2000);
 	var new_status = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].value;
 	var new_text = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].text;
@@ -28,7 +28,7 @@ function nv_link(module) {
 	if (new_status != 0) {
 		$('input#link').val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + new_status);
 		$('input#module').val(new_status);
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&nocache=' + new Date().getTime(), 'action=1&module=' + new_status, function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_module&nocache=' + new Date().getTime(), 'module=' + new_status, function(res) {
 			$('#thu').html(res);
 		});
 	} else {
@@ -37,10 +37,10 @@ function nv_link(module) {
 	}
 }
 
-function nv_link2(blog_menu) {
+function nv_link_menu(blog_menu) {
 	var nv_timer = nv_settimeout_disable('item_menu_' + blog_menu, 2000);
 	var new_status = document.getElementById('item_menu_' + blog_menu).options[document.getElementById('item_menu_' + blog_menu).selectedIndex].value;
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&nocache=' + new Date().getTime(), 'item=1&mid=' + new_status, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status, function(res) {
 		$('#parentid').html(res);
 	});
 }

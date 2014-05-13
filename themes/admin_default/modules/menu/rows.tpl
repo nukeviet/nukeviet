@@ -3,9 +3,14 @@
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
 </script>
-<!-- BEGIN: title -->
-<strong><a href="{link_title}">{LANG.back}</a></strong> >>
-<!-- END: title -->
+
+<ol class="breadcrumb">
+	<!-- BEGIN: breadcrumb -->
+		<li><a href="{BREADCRUMB.link}">{BREADCRUMB.title}</a></li>
+	<!-- END: breadcrumb -->
+	<li class="active">{BREADCRUMB_ACTIVE.title}</li>
+</ol>
+
 <!-- BEGIN: table -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
@@ -71,11 +76,12 @@
 				<tr>
 					<td><strong>{LANG.name_block}</strong></td>
 					<td>
-					<select name="item_menu" id="item_menu_{key}" onchange="nv_link2('{key}');" class="form-control w200">
-						<!-- BEGIN: loop -->
-						<option value="{key}" {select}>{val}</option>
-						<!-- END: loop -->
-					</select></td>
+						<select name="item_menu" id="item_menu_{key}" onchange="nv_link_menu('{key}');" class="form-control w200">
+							<!-- BEGIN: loop -->
+							<option value="{key}" {select}>{val}</option>
+							<!-- END: loop -->
+						</select>
+					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
@@ -91,21 +97,23 @@
 				<tr>
 					<td><strong>{LANG.chomodule}</strong></td>
 					<td>
-					<select name="module_name" id="module_name_{module.key}" onchange="nv_link('{module.key}');" class="form-control w200">
-						<option value="0">{LANG.cho_module}</option>
-						<!-- BEGIN: module -->
-						<option value="{module.key}"{module.selected}>{module.title}</option>
-						<!-- END: module -->
-					</select><span id="thu">
-						<!-- BEGIN: link -->
-						<select name="op" id="item_name_{item.alias}" onchange="nv_link1('{item.alias}','{item.module}');" class="form-control w200">
-							<option value="">{LANG.item_menu}</option>
-							<!-- BEGIN: item -->
-							<option value="{item.alias}"{item.selected}>{item.title}</option>
-							<!-- END: item -->
+						<select name="module_name" id="module_name_{module.key}" onchange="nv_link_module('{module.key}');" class="form-control w200">
+							<option value="0">{LANG.cho_module}</option>
+							<!-- BEGIN: module -->
+							<option value="{module.key}"{module.selected}>{module.title}</option>
+							<!-- END: module -->
 						</select>
-						<!-- END: link -->
-					</span></td>
+						<span id="thu">
+							<!-- BEGIN: link -->
+							<select name="op" id="item_name_{item.alias}" onchange="nv_link_settitle('{item.alias}','{item.module}');" class="form-control w200">
+								<option value="">{LANG.item_menu}</option>
+								<!-- BEGIN: item -->
+								<option value="{item.alias}"{item.selected}>{item.title}</option>
+								<!-- END: item -->
+							</select>
+							<!-- END: link -->
+						</span>
+					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
@@ -159,7 +167,7 @@
 					<td>{LANG.add_type_css_info}</td>
 				</tr>
 			</tbody>
-	</table>
+		</table>
 	</div>
 </form>
 <!-- END: main -->
