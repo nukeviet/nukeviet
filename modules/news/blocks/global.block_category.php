@@ -15,7 +15,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 
 	function nv_block_config_news_category( $module, $data_block, $lang_block )
 	{
-		$html = "<select name=\"config_title_length\">\n";
+		$html = "<select name=\"config_title_length\" class=\"form-control w200\">\n";
 		$html .= "<option value=\"\">" . $lang_block['title_length'] . "</option>\n";
 		for( $i = 0; $i < 100; ++$i )
 		{
