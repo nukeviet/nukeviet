@@ -78,3 +78,8 @@ $lang_module['add_type_css_info'] = 'Class name (CSS) to define the menu interfa
 $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
 $lang_module['error_menu_block'] = 'Error: Enter name of menu block';
+
+$lang_module['action_menu'] = 'Import form';
+$lang_module['action_menu_sys_1'] = 'Module name';
+$lang_module['action_menu_sys_2'] = 'Module name, submenu is catalogs or functions';
+$lang_module['action_menu_sys_3'] = 'Catalogs or functions in module';
