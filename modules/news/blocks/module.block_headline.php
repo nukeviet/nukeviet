@@ -161,6 +161,11 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					}
 					$lastest['homeimgfile'] = $images_url;
 					
+					if( ! $block_config['showtooltip'] )
+					{
+						$xtpl->assign( 'TITLE', 'title="' . $lastest['title'] . '"' );
+					}
+					
 					$lastest['hometext'] = nv_clean60( $lastest['hometext'], $block_config['tooltip_length'] );
 					$xtpl->assign( 'LASTEST', $lastest );
 					$xtpl->parse( 'main.loop_tabs_content.content.loop' );
