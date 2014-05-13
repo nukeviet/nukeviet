@@ -53,9 +53,9 @@ if( $num_items )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
-}
 
-$contents = nv_theme_statistics_allos( $num_items, $os_list, $cts );
+	$contents = nv_theme_statistics_allos( $num_items, $os_list, $cts );
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
