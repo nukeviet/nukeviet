@@ -12,7 +12,7 @@
 				</div>
 				<!-- END: loop -->
 			</div>
-			<div id="paginate-slider1" class="pagination"></div>
+			<div id="paginate-slider1" class="pagination">&nbsp;</div>
 		</div>
 		<!-- END: hots_news_img -->
 		<div id="tabs" class="col-md-6 tabs">
@@ -23,14 +23,14 @@
 				</li>
 				<!-- END: loop_tabs_title -->
 			</ul>
-			<div class="clear"></div>
+			<div class="clear">&nbsp;</div>
 			<!-- BEGIN: loop_tabs_content -->
 			<div id="tabs-{TAB_TITLE.id}">
 				<!-- BEGIN: content -->
 				<ul class="lastest-news">
 					<!-- BEGIN: loop -->
 					<li>
-						<a title="{LASTEST.title}" href="{LASTEST.link}">{LASTEST.title}</a>
+						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext}" data-img="{LASTEST.homeimgfile}" rel="block_headline_tooltip">{LASTEST.title}</a>
 					</li>
 					<!-- END: loop -->
 				</ul>
@@ -40,4 +40,13 @@
 		</div>
 	</div>
 </div>
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+$(document).ready(function() {$("[rel='block_headline_tooltip']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
+</script>
+<!-- END: tooltip -->
 <!-- END: main -->
