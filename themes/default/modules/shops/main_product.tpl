@@ -10,7 +10,7 @@
         </select>
     </div>
     <!-- END: displays -->
-    <div class="clearfix"></div>
+    <div class="clearfix">&nbsp;</div>
 
     <!-- BEGIN: items -->
     <div class="col-sm-6 col-md-{num}">
