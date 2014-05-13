@@ -90,7 +90,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 				{
 					$imgurl = $homeimgfile;
 				}
-				elseif( !empty( $show_no_image ) ) //no image
+				elseif( ! empty( $show_no_image ) ) //no image
 				{
 					$imgurl = NV_BASE_SITEURL . $show_no_image;
 				}

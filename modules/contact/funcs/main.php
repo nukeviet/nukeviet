@@ -80,7 +80,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT id, full_name, phone, fax, email, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1';
+$sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1';
 $array_department = nv_db_cache( $sql, 'id' );
 
 $page_title = $module_info['custom_title'];
