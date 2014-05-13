@@ -3,9 +3,9 @@
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
 			<span class="sr-only">&nbsp;</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
+			<span class="icon-bar">&nbsp;</span>
+			<span class="icon-bar">&nbsp;</span>
+			<span class="icon-bar">&nbsp;</span>
 		</button>
 	</div>
 	<div class="collapse navbar-collapse" id="menu-site-default">
