@@ -60,7 +60,7 @@ if( ! empty( $setmodule ) )
 			{
 				$sth = $db->prepare( "INSERT INTO " . NV_MODULES_TABLE . "
 					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $weight . ", 1, '',1)
+					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
 				" );
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modrow['module_file'], PDO::PARAM_STR );

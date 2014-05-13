@@ -36,7 +36,6 @@ function nv_list_menu()
 		$list[$row['id']] = array(
 			'id' => $row['id'],
 			'title' => $row['title'],
-			'description' => $row['description']
 		);
 	}
 
