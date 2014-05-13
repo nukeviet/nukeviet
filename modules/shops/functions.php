@@ -62,7 +62,7 @@ foreach( $list as $row )
 // Groups
 $global_array_group = array();
 
-$sql = 'SELECT groupid, parentid, cateid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, numpro FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
+$sql = 'SELECT groupid, parentid, cateid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, numpro FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
 
 $list = nv_db_cache( $sql, '', $module_name );
 foreach( $list as $row )
