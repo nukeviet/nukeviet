@@ -34,7 +34,7 @@ if( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'N
 // Thong ke
 if( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
-	if( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'session' ) )
+	if( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'cookie' ) )
 	{
 		require NV_ROOTDIR . '/includes/core/stat.php';
 	}

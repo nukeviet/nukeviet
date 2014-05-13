@@ -645,3 +645,12 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
     BEGIN
       SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN.nextval INTO :new.pid FROM DUAL;
     END TNV_' . strtoupper( $db_config['prefix'] ) . '_PLUGIN;';
+
+$sql_create_table[] = "CREATE TABLE " . $db_config["prefix"] . "_counter (
+	 c_type VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 c_val VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 last_update NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	 c_count NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	 " . NV_LANG_DATA . "_count NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	 CONSTRAINT cnv_counter UNIQUE (c_type,c_val)
+)";

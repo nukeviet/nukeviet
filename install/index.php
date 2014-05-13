@@ -863,6 +863,74 @@ elseif( $step == 6 )
 							trigger_error( $e->getMessage() );
 						}
 					}
+
+					// Data Counter
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'last', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)" );
+
+					$year = date( 'Y' );;
+					for( $i=0; $i < 9; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)" );
+						++$year;
+					}
+
+					$ar_tmp = explode(',', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec');
+					foreach( $ar_tmp as $month )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)" );
+					}
+
+					for( $i=1; $i < 32; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					$ar_tmp = explode(',', 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday');
+					foreach( $ar_tmp as $dayofweek )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)" );
+					}
+
+					for( $i=0; $i < 24; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					if( file_exists( NV_ROOTDIR . '/includes/bots.php' ) )
+					{
+						include NV_ROOTDIR . '/includes/bots.php' ;
+						foreach( $bots as $_bot => $v )
+						{
+							$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
+						}
+					}
+
+					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
+					foreach( $tmp_array as $_browser => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
+					}
+
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
+
+					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
+					foreach( $tmp_array as $_os => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', 'Unspecified', 0, 0, 0)" );
+
+					foreach( $countries as $_country => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote( $_country ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)" );
+
 					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}

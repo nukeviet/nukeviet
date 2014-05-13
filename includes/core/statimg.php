@@ -20,7 +20,7 @@ else
 	$online = 'Hits';
 }
 
-$hits = $db->query( "SELECT c_count FROM " . NV_COUNTER_TABLE . " WHERE c_type = 'total' AND c_val= 'hits'" )->fetchColumn();
+$hits = $db->query( "SELECT c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type = 'total' AND c_val= 'hits'" )->fetchColumn();
 
 $hits = str_pad( $hits, 8, '0', STR_PAD_LEFT );
 
