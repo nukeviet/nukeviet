@@ -50,14 +50,6 @@
 	font: 800 12px/20px Tahoma, Arial, Verdana, sans-serif
 }
 
-.down {
-	background: url('../images/arrows/down.png') no-repeat left center
-}
-
-.up {
-	background: url('../images/arrows/up.png') no-repeat left center
-}
-
 .error {
 	color: #EF3805;
 	font: 800 12px Tahoma, Arial, Verdana, sans-serif
