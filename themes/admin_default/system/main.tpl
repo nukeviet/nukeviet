@@ -48,15 +48,15 @@
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-horizontal">
 					<span class="sr-only">&nbsp;</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
+					<span class="icon-bar">&nbsp;</span>
+					<span class="icon-bar">&nbsp;</span>
+					<span class="icon-bar">&nbsp;</span>
 				</button>
 				<button id="left-menu-toggle" type="button" class="navbar-toggle" data-target="#left-menu">
 					<span class="sr-only">&nbsp;</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
+					<span class="icon-bar">&nbsp;</span>
+					<span class="icon-bar">&nbsp;</span>
+					<span class="icon-bar">&nbsp;</span>
 				</button>
 			</div>
 			<div class="collapse navbar-collapse" id="menu-horizontal">
