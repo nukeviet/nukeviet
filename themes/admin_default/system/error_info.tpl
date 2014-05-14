@@ -1,7 +1,7 @@
 <!-- BEGIN: error_info -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption> {TPL_E_CAPTION} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{TPL_E_CAPTION} </caption>
 		<col class="w20" />
 		<tbody>
 		<!-- BEGIN: error_item -->

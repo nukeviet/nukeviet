@@ -31,7 +31,7 @@
 	</div>
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{TABLE_CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{TABLE_CAPTION}</caption>
 			<thead>
 				<tr>
 					<!-- BEGIN: head_td -->
@@ -56,8 +56,8 @@
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
 					<td>
-						<em class="fa fa-edit">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
-						<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ACTIVATE_URL}">{LANG.awaiting_active}</a> &nbsp;
+						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_waiting_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 					</td>
 				</tr>
 				<!-- END: xusers -->

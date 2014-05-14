@@ -126,7 +126,7 @@
 <!-- BEGIN: add_result -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{TITLE}:</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{TITLE}:</caption>
 		<col span="2" class="top" style="width: 50%" />
 		<tbody>
 			<!-- BEGIN: loop -->

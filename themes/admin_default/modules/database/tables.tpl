@@ -2,7 +2,7 @@
 <form name="myform" method="post" action="{ACTION}" onsubmit="nv_chsubmit(this,'tables[]');return false;">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{CAPTIONS}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONS}</caption>
 			<thead>
 				<tr>
 					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'tables[]', 'check_all[]',this.checked);" /></th>

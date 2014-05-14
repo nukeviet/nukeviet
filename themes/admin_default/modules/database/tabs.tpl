@@ -3,7 +3,7 @@
 	<div class="col-md-6">
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption>{CAPTION}</caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
 				<col span="2" class="w200"/>
 				<tbody>
 					<!-- BEGIN: info -->
@@ -28,7 +28,7 @@
 
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{RCAPTION}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{RCAPTION}</caption>
 		<thead>
 			<tr>
 				<!-- BEGIN: column -->

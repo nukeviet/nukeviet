@@ -5,7 +5,7 @@
 <!-- BEGIN: suspend_info1 -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{SUSPEND_INFO}:</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{SUSPEND_INFO}:</caption>
 		<col span="2" style="width: 25%" />
 		<col style="width: 50%" />
 		<thead>

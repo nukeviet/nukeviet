@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CONTENTS.caption}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
 		<!-- BEGIN: nv_banner_weight -->
 		<col style="white-space:nowrap" />
 		<!-- END: nv_banner_weight -->
@@ -35,9 +35,9 @@
 				<td>{ROW.exp_date}</td>
 				<td class="text-center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
 				<td>
-					<em class="fa fa-search">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
-					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="{ROW.delfile}" id="delete_banners">{CONTENTS.del}</a>
+					<em class="fa fa-search fa-lg">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="{ROW.delfile}" id="delete_banners">{CONTENTS.del}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->

@@ -30,8 +30,8 @@
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
 				<td>
-					<em class="fa fa-edit">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -60,7 +60,7 @@
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption> {CAPTIONFORM} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -121,7 +121,7 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="textfields" {DATAFORM.display_textfields}>
-			<caption>{LANG.field_options_text}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_text}</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -153,7 +153,7 @@
 		</table>
 
 		<table class="table table-striped table-bordered table-hover" id="numberfields" {DATAFORM.display_numberfields}>
-			<caption>{LANG.field_options_number}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_number}</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -175,7 +175,7 @@
 		</table>
 
 		<table class="table table-striped table-bordered table-hover" id="datefields" {DATAFORM.display_datefields}>
-			<caption>{LANG.field_options_date}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_date}</caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
@@ -213,7 +213,7 @@
 			</tr>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="choicesql" {DATAFORM.display_choicesql} >
-			<caption>{LANG.field_options_choicesql}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choicesql}</caption>
 			<colgroup>
 				<col class="w250" />
 				<col span="2"/>
@@ -234,7 +234,7 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="choiceitems" {DATAFORM.display_choiceitems} >
-			<caption>{LANG.field_options_choice}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choice}</caption>
 			<colgroup>
 				<col class="w250" />
 				<col span="3"/>

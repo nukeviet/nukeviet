@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CONTENT.caption}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENT.caption}</caption>
 		<colgroup>
 			<col class="w150"/>
 			<col/>

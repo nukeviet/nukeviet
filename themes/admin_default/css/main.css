@@ -19,13 +19,27 @@
 /* ==========================================================================
  NukeViet's custom styles
  ========================================================================== */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(../../default/fonts/roboto-400.woff) format('woff');
+}
 
-html {
-	background: #F0F0F0 url(../images/background.png);
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(../../default/fonts/roboto-700.woff) format('woff');
+}
+
+html, body {
+	height: 100%;
+	background: #f1f1f1;
 }
 
 body, input, button, select {
-	font-family: arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size:12px;
 	font-weight:400;
 	line-height:18px;
@@ -79,6 +93,22 @@ a.link:hover {
 	margin-top:10px;
 }
 
+.nvwrap{
+	position: relative;
+	min-height: 100%;
+	height: auto;
+	background: #fff;
+}
+
+#left-menu-bg{
+	position: absolute;
+	width: 200px;
+	top: 52px;
+	bottom: 0;
+	left: 0;
+	background: #101010;
+	z-index: 0;
+}
 /* Heading
  -----------------------------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6{
@@ -92,7 +122,7 @@ h1, h2, h3, h4, h5, h6{
  -----------------------------------------------------------------------------*/
 #header {
 	height: 52px;
-	background: #000;
+	background: #101010;
 }
 
 #header div.logo {
@@ -211,50 +241,31 @@ h1, h2, h3, h4, h5, h6{
 
 /* Middle
  -----------------------------------------------------------------------------*/
-#middle {
-	background:#F2F2F2 url('../images/content-bg.png') repeat-y 0px;
-}
-
-#contentwrapper{
-	margin-left: 226px;
-	height: 1%;
+#middle{
 	position: relative;
-	background-color: #F2F2F2;
-}
-
-#contentwrapper:after{
-	content: '';
-	clear: both;
-	display: table;
 }
 
 #container {
-	width: 100%;
-	float: left;
-	overflow: hidden;
-	margin-right: -100%;
-	padding-top:7px;
+	margin-left: 200px;
+	height: 100%;
 }
 
 #contentmod {
-	padding: 5px;
-	background-color: #fff;
-	margin-bottom:10px;
-}
-
-#top_message {
-	background: #d7d7d7 url('../images/top_message_bg.jpg') repeat-x left top;
-	height: 28px;
-	margin-bottom:2px;
-	padding: 5px 20px 0 5px;
+	padding: 15px;
+	margin-bottom: 50px;
+	display: inline-block;
+	width: 100%;
 }
 
 #info_tab {
 	background-color: #F2F2F2;
-	font: bold 11px/22px Arial, Verdana, sans-serif;
-	height: 20px;
-	line-height: 20px;
-	margin-bottom:7px;
+	padding: 7px 15px;
+	min-height: 36px;
+}
+
+#info_tab h3{
+	margin-bottom: 0;
+	display: inline-block;
 }
 
 #info_tab #cs_menu{
@@ -278,26 +289,113 @@ h1, h2, h3, h4, h5, h6{
 	margin-right: 10px;
 }
 
-/* left_menu
+/* Left Menu
  -----------------------------------------------------------------------------*/
-#left_menu {
+#left-menu {
 	float: left;
+	padding-top: 40px;
 	width: 200px;
-	position: relative;
-	left: -226px;
-	padding: 5px 0 0 5px;
+}
+
+#left-menu .nav>li>a{
+	border-radius: 0;
+	color: #fff;
+}
+
+#left-menu .nav>li .arrow{
+	position: absolute;
+	right: 0;
+	top: 50%;
+	margin-top: -10px;
+	width: 0;
+	height: 0;
+	vertical-align: middle;
+	border-right: 10px solid;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	display: none;
+}
+
+#left-menu .nav>li>a:hover,#left-menu .nav>li>a:focus,#left-menu .nav>li.open>a{
+	background: #000;
+	color: #0074a2;
+}
+
+#left-menu .nav>li.open .arrow{
+	display: block;
+	border-right-color: #222;
+}
+
+#left-menu .nav>li.active .arrow{
+	display: block;
+	border-right-color: #fff!important;
+}
+
+#left-menu .nav>li.active a{
+	color: #fff;
+}
+
+#left-menu .nav>li.active>a:hover{
+	background: #428bca;
+}
+
+#left-menu .nav-stacked>li+li{
+	margin: 0;
+}
+
+#left-menu .nav>li a.subcurrent{
+	background: #222;
+	color: #999;
+}
+
+#left-menu .nav>li a.subcurrent:hover{
+	color: #0074a2;
+}
+
+#left-menu .nav>li a.subactive{
+	background: #222;
+	color: #fff;
+	font-weight: bold;	
+}
+
+#left-menu .dropdown-menu{
+	left: 100%;
+	top: 0;
+	border-radius: 0;
+	background: #222;
+	border: none;
+	margin: 0;
+}
+
+#left-menu .dropdown-menu>li>a{
+	color: #999;
+	padding: 5px 20px;
+}
+
+#left-menu .dropdown-menu>li>a:hover, #left-menu .dropdown-menu>li>a:focus{
+	background: inherit;
+	color: #0074a2;
 }
 
 /* Footer
  -----------------------------------------------------------------------------*/
 #footer {
+	position: absolute;
+	left: 5px;
+	right: 5px;
+	bottom: 0;
+	padding-left: 200px;
+}
+
+#footer .footer-content{
 	height: 50px;
 	border-top: 3px solid #FF6600;
 }
 
 #footer div.copyright {
 	color: #4b4b4b;
-	font: normal 11px/15px Arial, Verdana, sans-serif;
+	font-size: 11px;
+	line-height: 15px;
 	margin: 7px 10px 7px 10px;
 	padding: 0;
 	float: left
@@ -316,13 +414,12 @@ h1, h2, h3, h4, h5, h6{
 }
 
 table caption{
-	background: url('../images/arrows/export-16.png') no-repeat;
 	text-align: left;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: bold;
 	font-family: 'Roboto',sans-serif;
 	line-height: 22px;
-	padding: 0px 0 5px 20px;
+	padding: 0px 0 5px;
 }
 
 sup.required {

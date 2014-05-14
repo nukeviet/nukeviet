@@ -78,7 +78,7 @@
 	<!-- BEGIN: lang -->
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
 			<col class="w50"/>
 			<col class="w200"/>
 			<col/>

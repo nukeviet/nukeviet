@@ -10,4 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['menu'] = $lang_module['add_menu'];
+if( defined( 'NV_IS_SPADMIN' ) )
+{
+	$submenu['config'] = $lang_module['config'];
+}

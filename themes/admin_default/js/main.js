@@ -33,29 +33,32 @@ function timeoutsessrun() {
 	}, 1000);
 }
 
+var NV = {
+	menuBusy: false,
+	menuTimer: null,
+	menu: null,
+	openMenu: function(menu){
+		this.menuBusy = true;
+		this.menu = $(menu);
+		this.menuTimer = setTimeout( function(){ NV.menu.addClass('open'); }, 300 );
+	},
+	closeMenu: function(menu){
+		clearTimeout( this.menuTimer );
+		this.menuBusy = false;
+		this.menu = $(menu).removeClass('open');
+	},
+};
 
 $(document).ready(function(){
-	$('#menu-site-default .dropdown').hover(function(){
-		$(this).addClass('open');
+	$('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
+		NV.openMenu(this);
 	}, function(){
-		$(this).removeClass('open');
+		NV.closeMenu(this);
 	});
 
 	myTimerPage = setTimeout(function() {
 		timeoutsessrun();
 	}, nv_check_pass_mstime);
-
-	ddsmoothmenu.init({
-		arrowimages : {
-			down : ['downarrowclass', nv_siteroot + 'themes/admin_default/images/menu_down.png', 23],
-			right : ['rightarrowclass', nv_siteroot + 'themes/admin_default/images/menu_right.png']
-		},
-		zindexvalue : 999,
-		mainmenuid : "left_menu",
-		orientation : 'v',
-		classname : 'ddsmoothmenu-v',
-		contentsource : "markup"
-	});
 
 	$('form.confirm-reload').change(function() {
 		$(window).bind('beforeunload', function() {
@@ -69,19 +72,3 @@ $(document).ready(function(){
 	
 	$('.tip', $('#header')).tooltip();
 });
-
-function ver_menu_click() {
-	if ($('#ver_menu').is(':visible')) {
-		$('#ver_menu').hide({
-			direction : "horizontal"
-		}, 500);
-		$('#contentwrapper').css("margin-left", "5px");
-		$('#cs_menu').removeClass("fa-arrow-circle-left").addClass("fa-arrow-circle-right");
-	} else {
-		$('#contentwrapper').css("margin-left", "226px");
-		$('#ver_menu').show({
-			direction : "horizontal"
-		}, 500);
-		$('#cs_menu').removeClass("fa-arrow-circle-right").addClass("fa-arrow-circle-left");
-	}
-}

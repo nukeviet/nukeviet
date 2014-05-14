@@ -12,12 +12,10 @@
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/ddsmoothmenu.css">
 		<!-- BEGIN: css_module -->
 		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css">
 		<!-- END: css_module -->
 
-		<script type="text/javascript" src="{NV_JS_ADMIN_THEME}"></script>
 		<script type="text/javascript">
 			var nv_siteroot = '{NV_BASE_SITEURL}';
 			var nv_sitelang = '{NV_LANG_INTERFACE}';

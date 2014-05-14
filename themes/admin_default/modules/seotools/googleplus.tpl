@@ -2,7 +2,7 @@
 <!-- BEGIN: module -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{LANG.googleplus_module}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.googleplus_module}</caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.weight}</th>
@@ -33,7 +33,7 @@
 <div class="alert alert-info">{LANG.googleplusNote1}</div>
 <div class="table-responsive navbar-form">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{LANG.googleplus_list}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.googleplus_list}</caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.weight}</th>
@@ -60,7 +60,7 @@
 				</select></td>
 				<td class="text-center">{ROW.idprofile}</td>
 				<td><input name="hidden_{ROW.gid}" id="hidden_{ROW.gid}" type="hidden" value="{ROW.title}" /><input type="text" name="title_{ROW.gid}" id="title_{ROW.gid}" value="{ROW.title}" class="w250 form-control" /> <input type="button" onclick="nv_save_title({ROW.gid});" value="{GLANG.save}" class="btn btn-primary" /></td>
-				<td class="text-center"><em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_googleplus({ROW.gid})">{GLANG.delete}</a></td>
 			</tr>
 			<!-- END: googleplus -->
 		</tbody>

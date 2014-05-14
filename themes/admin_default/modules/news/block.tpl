@@ -10,7 +10,7 @@
 		<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption>{LANG.addtoblock}</caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.addtoblock}</caption>
 				<thead>
 					<tr>
 						<th class="w50 text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>

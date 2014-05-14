@@ -11,7 +11,7 @@
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption> {LANG.security} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.security} </caption>
 			<colgroup>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
@@ -60,7 +60,7 @@
 	
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption> {LANG.captcha} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.captcha} </caption>
 			<colgroup>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
@@ -114,7 +114,7 @@
 <!-- BEGIN: listip -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption> {LANG.banip} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.banip} </caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.banip_ip}</th>
@@ -133,7 +133,10 @@
 				<td class="text-center">{ROW.dbarea}</td>
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> - <em class="fa fa-trash-o">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a></td>
+				<td class="text-center">
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -157,7 +160,7 @@
 	<input type="hidden" name ="cid" value="{DATA.cid}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{BANIP_TITLE}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{BANIP_TITLE}</caption>
 			<colgroup>
 				<col style="width: 40%" />
 				<col style="width: 60%" />

@@ -67,7 +67,7 @@
 			<!-- BEGIN: photo -->
 			<p id="current-photo" class="pull-left text-center">
 				<img src="{DATA.photo}" alt="{DATA.username}" class="img-thumbnail m-bottom"/><br />
-				<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o">&nbsp;</em> {LANG.avata_delete}</span>
+				<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.avata_delete}</span>
 				<input type="hidden" name="photo_delete" id="photo_delete" value="{DATA.photo_delete}"/>
 			</p>
 			<!-- END: photo -->

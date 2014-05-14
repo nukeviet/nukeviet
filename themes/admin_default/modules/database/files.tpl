@@ -17,7 +17,10 @@
 				<td>{ROW.name}</td>
 				<td class="text-right">{ROW.filesize}</td>
 				<td class="text-right">{ROW.filetime}</td>
-				<td class="text-center"><em class="icon-download-alt icon-large">&nbsp;</em> <a title="{LANG.download}" href="{ROW.link_getfile}">{LANG.download}</a> - <em class="fa fa-trash-o">&nbsp;</em> <a title="{GLANG.delete}" onclick="return confirm(nv_is_del_confirm[0]);" href="{ROW.link_delete}">{GLANG.delete}</a></span></td>
+				<td class="text-center">
+					<em class="fa fa-download-alt fa-lg">&nbsp;</em> <a title="{LANG.download}" href="{ROW.link_getfile}">{LANG.download}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a title="{GLANG.delete}" onclick="return confirm(nv_is_del_confirm[0]);" href="{ROW.link_delete}">{GLANG.delete}</a>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CAPTION}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
 		<thead>
 			<tr>
 				<!-- BEGIN: head -->
@@ -26,7 +26,7 @@
 <!-- BEGIN: vmodule -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{VCAPTION}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{VCAPTION}</caption>
 		<thead>
 			<tr>
 				<!-- BEGIN: vhead -->

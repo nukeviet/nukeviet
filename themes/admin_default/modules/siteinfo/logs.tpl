@@ -108,7 +108,7 @@ $(document).ready(function() {
 				<td> {DATA.username} </td>
 				<td> {DATA.time} </td>
 				<!-- BEGIN: delete -->
-				<td class="text-center"><em class="fa fa-trash-o">&nbsp;</em> <a href="{DEL_URL}" class="delete">{GLANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="{DEL_URL}" class="delete">{GLANG.delete}</a></td>
 				<!-- END: delete -->
 			</tr>
 			<!-- END: row -->

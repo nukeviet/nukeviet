@@ -27,7 +27,7 @@
 	</div>
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{TABLE_CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{TABLE_CAPTION}</caption>
 			<thead>
 				<tr>
 					<!-- BEGIN: head_td -->
@@ -64,10 +64,10 @@
 					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
 					<td style="white-space: nowrap">
 					<!-- BEGIN: edit -->
-					&nbsp;&nbsp; <em class="fa fa-edit">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
+					&nbsp;&nbsp; <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
 					<!-- END: edit -->
 					<!-- BEGIN: del -->
-					&nbsp;&nbsp; <em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
+					&nbsp;&nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
 					<!-- END: del -->
 					</td>
 				</tr>

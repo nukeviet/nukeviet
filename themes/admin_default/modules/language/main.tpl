@@ -44,13 +44,13 @@
 				</td>
 				<td>
 				<!-- BEGIN: setup_delete -->
-				<em class="fa fa-trash-o">&nbsp;</em> <a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a onclick="return confirm(nv_is_del_confirm[0])" href="{DELETE}" title="{LANG.nv_setup_delete}">{LANG.nv_setup_delete}</a>
 				<!-- END: setup_delete -->
 				<!-- BEGIN: setup_note -->
 				{LANG.nv_setup}
 				<!-- END: setup_note -->
 				<!-- BEGIN: setup_new -->
-				<em class="fa fa-sun-o">&nbsp;</em> <a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
+				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="{INSTALL}" title="{LANG.nv_setup_new}">{LANG.nv_setup_new}</a>
 				<!-- END: setup_new -->
 				</td>
 			</tr>

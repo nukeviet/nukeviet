@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CAPTION}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
 		<col span="2" style="width: 50%" />
 		<tbody>
 			<!-- BEGIN: loop -->
