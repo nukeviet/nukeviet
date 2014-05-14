@@ -10,7 +10,7 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.nv_lang_show} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.nv_lang_show} </caption>
 			<colgroup>
 				<col class="w50">
 				<col class="w50">
@@ -52,7 +52,7 @@
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.nv_setting_read} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.nv_setting_read} </caption>
 			<!-- BEGIN: type -->
 			<tr>
 				<td><input name="read_type" value="{TYPE.key}" type="radio"{TYPE.checked} /> {TYPE.title}</td>

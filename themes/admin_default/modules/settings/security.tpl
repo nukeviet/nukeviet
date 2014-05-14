@@ -11,7 +11,7 @@
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.security} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.security} </caption>
 			<colgroup>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
@@ -60,7 +60,7 @@
 	
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.captcha} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.captcha} </caption>
 			<colgroup>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
@@ -114,7 +114,7 @@
 <!-- BEGIN: listip -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.banip} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.banip} </caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.banip_ip}</th>

@@ -11,7 +11,7 @@
 <!-- BEGIN: scontent -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.EngineInfo} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.EngineInfo} </caption>
 		<col style="width: 30%"/>
 		<col span="7" style="width: 10%" />
 		<thead>

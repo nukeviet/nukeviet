@@ -14,7 +14,7 @@
 	<div {DATA.mailer_mode_smtpt_show} id="smtp">
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.smtp_server} </caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.smtp_server} </caption>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
 				<tbody>
@@ -40,7 +40,7 @@
 		</div>
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.smtp_username} </caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.smtp_username} </caption>
 				<col style="width: 40%" />
 				<col style="width: 60%" />
 				<tbody>

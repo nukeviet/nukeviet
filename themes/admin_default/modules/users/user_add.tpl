@@ -101,7 +101,7 @@
 		</table>
 		<!-- BEGIN: field -->
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.fields} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.fields} </caption>
 			<colgroup>
 				<col class="w300"/>
 				<col class="w20"/>

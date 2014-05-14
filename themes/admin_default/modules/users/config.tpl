@@ -2,7 +2,7 @@
 <form  class="form-inline" role="form" action="{FORM_ACTION}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.access_caption} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_caption} </caption>
 			<thead>
 				<tr class="text-center">
 					<th>{LANG.access_admin}</th>
@@ -29,7 +29,7 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.access_register} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_register} </caption>
 			<colgroup>
 				<col style="width: 320px;" />
 				<col />
@@ -112,7 +112,7 @@
 			<tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.access_other} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_other} </caption>
 			<colgroup>
 				<col style="width: 320px;" />
 				<col />

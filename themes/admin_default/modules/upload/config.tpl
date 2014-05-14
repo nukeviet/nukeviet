@@ -2,7 +2,7 @@
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.autologo} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.autologo} </caption>
 			<tbody>
 				<!-- BEGIN: loop1 -->
 				<tr>
@@ -15,7 +15,7 @@
 		</table>
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.logosizecaption} </caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.logosizecaption} </caption>
 				<tbody>
 					<tr>
 						<td>{LANG.upload_logo}</td>

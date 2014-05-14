@@ -7,7 +7,7 @@
 	<div class="text-center">
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover w500">
-				<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.rpc_setting} </caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.rpc_setting} </caption>
 				<thead>
 					<tr>
 						<td>{LANG.rpc_linkname}</td>

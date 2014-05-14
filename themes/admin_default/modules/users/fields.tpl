@@ -60,7 +60,7 @@
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em> {CAPTIONFORM} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
 			<colgroup>
 				<col class="w250" />
 				<col />
