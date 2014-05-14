@@ -2,7 +2,7 @@
 <div id="rankForm">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{TITLE}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{TITLE}</caption>
 			<col class="w150" />
 			<col class="w300" />
 			<tr>

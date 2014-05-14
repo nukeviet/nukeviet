@@ -7,7 +7,7 @@
 </div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CONTENTS.caption}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
 		<col span="2" style="width:50%;white-space:nowrap" />
 		<tbody>
 			<!-- BEGIN: loop1 -->
@@ -19,7 +19,7 @@
 		</tbody>
 	</table>
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CONTENTS.stat.0}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.stat.0}</caption>
 		<tbody>
 			<tr>
 				<td><span class="text-middle pull-left">{CONTENTS.stat.1}:</span>

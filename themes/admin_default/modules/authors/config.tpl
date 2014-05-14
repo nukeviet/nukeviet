@@ -65,7 +65,7 @@
 <!-- BEGIN: list_firewall -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover" id="iduser">
-		<caption> {LANG.title_username} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.title_username} </caption>
 		<thead>
 			<tr class="text-center">
 				<th>{GLANG.username}</th>
@@ -143,7 +143,7 @@
 <!-- BEGIN: ipaccess -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover" id="idip">
-		<caption> {LANG.adminip} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.adminip} </caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.adminip_ip}</th>

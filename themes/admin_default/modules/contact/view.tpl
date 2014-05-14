@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{DATA.title}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{DATA.title}</caption>
 		<col class="w150"/>
 		<col/>
 		<tbody>
@@ -44,7 +44,7 @@
 <!-- BEGIN: data_reply -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>Re: {DATA.title}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>Re: {DATA.title}</caption>
 		<col class="w150"/>
 		<col />
 		<tbody>

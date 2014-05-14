@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{MODULE}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{MODULE}</caption>
 		<colgroup>
 			<col style="width: 40%"/>
 			<col style="width: 30%"/>

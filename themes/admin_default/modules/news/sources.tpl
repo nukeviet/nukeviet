@@ -14,7 +14,7 @@
 	<input name="savecat" type="hidden" value="1" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{LANG.add_sources}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.add_sources}</caption>
 			<tfoot>
 				<tr>
 					<td class="text-center" colspan="2"><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>

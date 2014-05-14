@@ -34,7 +34,7 @@
 			</tbody>
 		</table>
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{LANG.list_admin_row_title}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.list_admin_row_title}</caption>
 			<thead>
 				<tr>
 					<th>{LANG.username_admin_row_title}</th>

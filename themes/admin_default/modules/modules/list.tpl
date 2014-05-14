@@ -2,7 +2,7 @@
 <!-- BEGIN: act_modules -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CAPTION.0}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION.0}</caption>
 		<colgroup>
 			<col class="w100" />
 			<col class="w200" />
@@ -42,7 +42,7 @@
 <!-- BEGIN: deact_modules -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CAPTION.1}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION.1}</caption>
 		<colgroup>
 			<col class="w100" />
 			<col class="w200" />
@@ -82,7 +82,7 @@
 <!-- BEGIN: bad_modules -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CAPTION.2}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION.2}</caption>
 		<colgroup>
 			<col class="w100" />
 			<col class="w200" />

@@ -61,7 +61,7 @@
 	<input type="hidden" name="pa" value="{DATA.parentid}">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{FORM_CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em><em class="fa fa-file-text-o">&nbsp;</em>{FORM_CAPTION}</caption>
 			<colgroup>
 				<col class="w150" />
 				<col class="w300" />

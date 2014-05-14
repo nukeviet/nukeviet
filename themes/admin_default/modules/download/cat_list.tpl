@@ -2,7 +2,7 @@
 <div id="users">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{TABLE_CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{TABLE_CAPTION}</caption>
 			<colgroup>
 				<col class="w50">
 				<col span="2">

@@ -4,7 +4,7 @@
 <input name="report_check_error2" id="report_check_error2" type="hidden" value="{LANG.report_check_error2}" />
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{TABLE_CAPTION}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{TABLE_CAPTION}</caption>
 		<colgroup>
 			<col span="2"/>
 			<col class="w100"/>

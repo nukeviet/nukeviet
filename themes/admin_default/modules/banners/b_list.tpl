@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{CONTENTS.caption}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
 		<!-- BEGIN: nv_banner_weight -->
 		<col style="white-space:nowrap" />
 		<!-- END: nv_banner_weight -->

@@ -17,7 +17,7 @@
 		<input name="savecat" type="hidden" value="1" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption>{caption}</caption>
+				<caption><em class="fa fa-file-text-o">&nbsp;</em>{caption}</caption>
 				<tbody>
 					<tr>
 						<td class="text-right"><strong>{LANG.name}: </strong></td>

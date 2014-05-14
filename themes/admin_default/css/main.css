@@ -398,13 +398,12 @@ h1, h2, h3, h4, h5, h6{
 }
 
 table caption{
-	background: url('../images/arrows/export-16.png') no-repeat;
 	text-align: left;
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: bold;
 	font-family: 'Roboto',sans-serif;
 	line-height: 22px;
-	padding: 0px 0 5px 20px;
+	padding: 0px 0 5px;
 }
 
 sup.required {

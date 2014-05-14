@@ -98,7 +98,7 @@
 <!-- BEGIN: edit_resuilt -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption> {TITLE}: </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em> {TITLE}: </caption>
 		<thead>
 			<tr>
 				<th> {THEAD0} </th>

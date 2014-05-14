@@ -3,7 +3,7 @@
 <form action="{ACTION_FORM}" method="post">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption> <a href="{URL_SITEMAP}">{LANG.sitemapPing}</a> </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em> <a href="{URL_SITEMAP}">{LANG.sitemapPing}</a> </caption>
 		<tr>
 			<td>
 			<select name="searchEngine" class="form-control w200 pull-left" style="margin-right: 5px">
@@ -32,7 +32,7 @@
 <form action="{ACTION_FORM}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption> {LANG.searchEngineConfig} </caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.searchEngineConfig} </caption>
 			<thead>
 				<tr>
 					<th>{LANG.searchEngineName}</th>

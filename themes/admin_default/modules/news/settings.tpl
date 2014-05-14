@@ -134,7 +134,7 @@
 <form action="{FORM_ACTION}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption>{LANG.group_content}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.group_content}</caption>
 			<thead>
 				<tr class="text-center">
 					<th>{GLANG.mod_groups}</th>

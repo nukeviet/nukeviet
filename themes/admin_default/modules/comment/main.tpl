@@ -8,7 +8,7 @@
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 	<table>
-		<caption>{LANG.search_note}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.search_note}</caption>
 		<tr>
 			<td>{LANG.search_module}:</td>
 			<td>

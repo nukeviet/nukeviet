@@ -2,7 +2,7 @@
 <!-- BEGIN: module -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{LANG.googleplus_module}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.googleplus_module}</caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.weight}</th>
@@ -33,7 +33,7 @@
 <div class="alert alert-info">{LANG.googleplusNote1}</div>
 <div class="table-responsive navbar-form">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{LANG.googleplus_list}</caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.googleplus_list}</caption>
 		<thead>
 			<tr class="text-center">
 				<th>{LANG.weight}</th>

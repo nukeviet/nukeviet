@@ -15,7 +15,7 @@
 <!-- BEGIN: sysUpd -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-	<caption> {LANG.checkSystem} </caption>
+	<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.checkSystem} </caption>
 	<thead>
 		<tr>
 			<th> {LANG.checkContent} </th>
@@ -60,7 +60,7 @@
 <!-- BEGIN: modUpd -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-	<caption> {LANG.checkModules} </caption>
+	<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.checkModules} </caption>
 	<col class="top w150" />
 	<col class="top" />
 	<col class="top w200" />
@@ -149,7 +149,7 @@
 <!-- BEGIN: modsNew -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption> {LANG.moduleNote2_link} </caption>
+		<caption><em class="fa fa-file-text-o">&nbsp;</em> {LANG.moduleNote2_link} </caption>
 		<col class="top w150" />
 		<col class="top" />
 		<col class="top w200" />
