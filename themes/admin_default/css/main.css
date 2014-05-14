@@ -241,6 +241,7 @@ h1, h2, h3, h4, h5, h6{
 #info_tab {
 	background-color: #F2F2F2;
 	padding: 7px;
+	min-height: 22px;
 }
 
 #info_tab h3{

@@ -100,7 +100,7 @@
 		<div id="container">
 			<div id="info_tab">
 				<!-- BEGIN: empty_page_title -->
-				<h3 class="text-primary pull-left"><em id="cs_menu" class="fa fa-arrow-circle-left">&nbsp;</em> {PAGE_TITLE}</h3>
+				<h3 class="text-primary pull-left">{PAGE_TITLE}</h3>
 				<!-- END: empty_page_title -->
 
 				<!-- BEGIN: select_option -->
