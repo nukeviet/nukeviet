@@ -181,19 +181,21 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			$xtpl->parse( 'main.langdata' );
 		}
 
-		//Top_menu
+		// Top_menu
 		foreach( $admin_mods as $m => $v )
 		{
-			if( ! empty( $v['custom_title'] ) )
+			if( ! empty( $v['custom_title'] ) and $module_name != $m )
 			{
-				$xtpl->assign( 'TOP_MENU_CURRENT', (($module_name == $m) ? 'active' : 'dropdown') );
+				$array_submenu = nv_get_submenu( $m );
+				
+				$xtpl->assign( 'TOP_MENU_CLASS', $array_submenu ? ' class="dropdown"' : '' );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
-				$array_submenu = nv_get_submenu( $m );
 
 				if( ! empty( $array_submenu ) )
 				{
 					$xtpl->parse( 'main.top_menu_loop.has_sub' );
+					
 					foreach( $array_submenu as $mop => $submenu_i )
 					{
 						$xtpl->assign( 'SUBMENULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $mop );
@@ -233,16 +235,19 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			$xtpl->parse( 'main.hello_admin2' );
 		}
 
-		//Vertical menu
+		// Vertical menu
 		foreach( $admin_menu_mods as $m => $v )
 		{
-			$xtpl->assign( 'MENU_CURRENT', (($module_name == $m) ? ' class="selected"' : '') );
+			$xtpl->assign( 'MENU_CLASS', (($module_name == $m) ? ' class="active"' : '') );
 			$xtpl->assign( 'MENU_HREF', $m );
 			$xtpl->assign( 'MENU_NAME', $v );
 
 			if( $m != $module_name )
 			{
 				$submenu = nv_get_submenu_mod( $m );
+				
+				$xtpl->assign( 'MENU_CLASS', $submenu ? ' class="dropdown"' : '' );
+				
 				if( ! empty( $submenu ) )
 				{
 					foreach( $submenu as $n => $l )
@@ -268,7 +273,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			}
 			$xtpl->parse( 'main.menu_loop' );
 		}
-
 	}
 
 	if( ! empty( $select_options ) )
