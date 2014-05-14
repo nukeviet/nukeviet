@@ -17,7 +17,7 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
  */
 function nv_get_rss_link()
 {
-	global $db, $module_data, $global_config, $imgmid, $imgmid2, $iconrss, $site_mods;
+	global $db, $module_data, $global_config, $site_mods;
 	$contentrss = '';
 
 	foreach( $site_mods as $mod_name => $mod_info )
@@ -27,23 +27,28 @@ function nv_get_rss_link()
 			$mod_data = $mod_info['module_data'];
 			$mod_file = $mod_info['module_file'];
 
-			$contentrss .= $imgmid2 . "<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\">" . $iconrss . " <strong> " . $mod_info['custom_title'] . "</strong></a><br />";
+			$contentrss .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></span></a>";
 
 			$rssarray = array();
 			include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
+			
+			$contentrss .= "<ul>";
 			foreach( $rssarray as $key => $value )
 			{
 				$parentid = ( isset( $value['parentid'] ) ) ? $value['parentid'] : 0;
 				if( $parentid == 0 )
 				{
-					$contentrss .= $imgmid . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . " " . $value['title'] . "</a><br />";
+					$contentrss .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
 					$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
 					if( $catid > 0 )
 					{
-						$contentrss .= nv_get_sub_rss_link( $rssarray, $catid, $imgmid . $imgmid );
+						$contentrss .= nv_get_sub_rss_link( $rssarray, $catid );
 					}
+					$contentrss .= "</li>";
 				}
 			}
+			$contentrss .= "</ul>";
+			$contentrss .= "</li>";
 		}
 	}
 	return $contentrss;
@@ -57,22 +62,24 @@ function nv_get_rss_link()
  * @param mixed $image
  * @return
  */
-function nv_get_sub_rss_link( $rssarray, $id, $image )
+function nv_get_sub_rss_link( $rssarray, $id )
 {
-	global $imgmid, $imgmid2, $iconrss;
 	$content = '';
+	$content .= '<ul>';
 	foreach( $rssarray as $value )
 	{
 		if( isset( $value['parentid'] ) and $value['parentid'] == $id )
 		{
-			$content .= $image . $imgmid2 . "<a href=\"" . $value['link'] . "\">" . $iconrss . " " . $value['title'] . "</a><br />";
+			$content .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
 			$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
 			if( $catid > 0 )
 			{
-				$content .= nv_get_sub_rss_link( $rssarray, $catid, $image . $imgmid );
+				$content .= nv_get_sub_rss_link( $rssarray, $catid );
 			}
+			$content .= "</li>";
 		}
 	}
+	$content .= '</ul>';
 	return $content;
 }
 

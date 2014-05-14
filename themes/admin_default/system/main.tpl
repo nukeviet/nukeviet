@@ -3,21 +3,31 @@
 <div class="container-fluid">
 	<header id="header" class="row">
 		<div class="logo">
-			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><img alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50" /></a>
-		</div>
-		<div class="logout">
-			<a class="bthome" href="{NV_GO_CLIENTSECTOR_URL}"><span><em class="icon-home icon-large">&nbsp;</em> {NV_GO_CLIENTSECTOR}</span></a>
-			<a class="bthome" href="javascript:void(0);" onclick="nv_admin_logout();"><span><em class="icon-power-off icon-large">&nbsp;</em> {NV_LOGOUT}</span></a>
+			<a title="{NV_SITE_NAME}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}">
+				<img class="logo-md" alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo_small.png" width="240" height="50"/>
+				<img class="logo-xs" alt="{NV_SITE_NAME}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/logo-xs.png" width="50" height="50"/>
+			</a>
 		</div>
 		<!-- BEGIN: langdata -->
-		<div class="lang form-inline">
-			<strong>{NV_LANGDATA}</strong>:
-			<select id="lang" onchange="top.location.href=this.options[this.selectedIndex].value;return;" class="form-control input-sm">
-				<!-- BEGIN: option -->
-				<option value="{LANGOP}"{SELECTED}>{LANGVALUE} </option>
-				<!-- END: option -->
-			</select>
-		</div>
+		<ul class="menu pull-right">
+			<li title="{NV_LANGDATA}">
+				<a href="javascript:void(0);" data-toggle="dropdown">
+					<span class="screen-lg">{NV_LANGDATA_CURRENT} <em class="fa fa-caret-down">&nbsp;</em></span>
+					<span class="screen-xs"><em class="fa fa-magic fa-2x fix logout">&nbsp;</em><span>
+				</a> 
+				<ul class="dropdown-menu" role="menu">
+					<!-- BEGIN: option -->
+					<li{DISABLED}><a href="{LANGOP}">{LANGVALUE}</a></li>
+					<!-- END: option -->
+				</ul>
+			</li>
+			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_GO_CLIENTSECTOR}">
+				<a href="{NV_GO_CLIENTSECTOR_URL}"> <em class="fa fa-home fa-2x fix">&nbsp;</em></a>
+			</li>
+			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
+				<a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout">&nbsp;</em></a>
+			</li>
+		</ul>
 		<!-- END: langdata -->
 	</header>
 	<!-- #header-->
@@ -51,7 +61,7 @@
 		</div>
 	</div>
 	<div class="row hidden-xs" id="top_message">
-		<div class="col-sm-8 col-md-6">
+		<div class="col-sm-9 col-md-8">
 			<!-- BEGIN: hello_admin -->
 			{HELLO_ADMIN1}
 			<!-- END: hello_admin -->
@@ -62,7 +72,7 @@
 			{HELLO_ADMIN2}
 			<!-- END: hello_admin2 -->
 		</div>
-		<div class="col-sm-4 col-md-6">
+		<div class="col-sm-3 col-md-4">
 			<div class="row text-right">
 				<span id="digclock">{NV_DIGCLOCK}</span>
 			</div>
