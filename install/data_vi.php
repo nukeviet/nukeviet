@@ -222,9 +222,9 @@ $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cá
 $sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(5, 'default', 'users', 'global.login.php', 'Đăng nhập thành viên', '', 'primary', '[RIGHT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', 'primary', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(10, 'modern', 'about', 'global.about.php', 'Giới thiệu', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Đăng nhập', '', '', '[RIGHT]', 0, 1, '0', 1, 2, '') );
 $sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
