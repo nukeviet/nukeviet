@@ -98,6 +98,8 @@ a.link:hover {
 	min-height: 100%;
 	height: auto;
 	background: #fff;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 #left-menu-bg{
@@ -254,9 +256,8 @@ h1, h2, h3, h4, h5, h6{
 	}
 }
 @media (max-width: 865px) and (min-width: 768px) {
-	#menu-horizontal>ul>li>a{
-		padding-left: 0px;
-		padding-right: 0px;
+	#menu-horizontal>ul>li>a .caret{
+		display: none;
 	}
 }
 
@@ -269,13 +270,13 @@ h1, h2, h3, h4, h5, h6{
 #container {
 	margin-left: 200px;
 	height: 100%;
+	position: relative;
 }
 
 #contentmod {
 	padding: 15px;
 	margin-bottom: 50px;
-	display: inline-block;
-	width: 100%;
+	position: relative;
 }
 
 #info_tab {
@@ -313,9 +314,10 @@ h1, h2, h3, h4, h5, h6{
 /* Left Menu
  -----------------------------------------------------------------------------*/
 #left-menu {
-	float: left;
-	padding-top: 40px;
+	top: 40px;
+	left: 0;
 	width: 200px;
+	position: absolute;
 }
 
 #left-menu .nav>li>a{
@@ -398,6 +400,12 @@ h1, h2, h3, h4, h5, h6{
 	color: #0074a2;
 }
 
+#left-menu-toggle{
+	float: left;
+	margin-left: 5px;
+	margin-right: 0;
+}
+
 /* Footer
  -----------------------------------------------------------------------------*/
 #footer {
@@ -405,7 +413,7 @@ h1, h2, h3, h4, h5, h6{
 	left: 5px;
 	right: 5px;
 	bottom: 0;
-	padding-left: 200px;
+	margin-left: 200px;
 }
 
 #footer .footer-content{
@@ -504,14 +512,30 @@ sup.required {
 	#left-menu{
 		display: none;
 	}
+	
 	#left-menu-bg{
 		display: none;
 	}
+	
 	#container{
 		margin-left: 0;
 	}
+	
 	#footer{
-		padding-left: 0;
+		margin-left: 0;
+	}
+	
+	#left-menu.open, #left-menu-bg.open{
+		display: inline-block;
+	}
+	
+	#container.open{
+		right: -200px;
+	}
+	
+	#container.open, #footer.open{
+		right: -200px;
+		left: 200px;
 	}
 }
 

@@ -52,6 +52,12 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
+				<button id="left-menu-toggle" type="button" class="navbar-toggle" data-target="#left-menu">
+					<span class="sr-only">&nbsp;</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
 			</div>
 			<div class="collapse navbar-collapse" id="menu-horizontal">
 				<ul class="nav navbar-nav">
@@ -96,9 +102,10 @@
 				<!-- END: current -->
 				<!-- END: menu_loop -->
 			</ul>
+			<div class="clearfix"></div>
 		</aside>
 		<div id="container" class="clearfix">
-			<div id="info_tab">
+			<!--div id="info_tab">
 				<!-- BEGIN: empty_page_title -->
 				<h3 class="text-primary pull-left">{PAGE_TITLE}</h3>
 				<!-- END: empty_page_title -->
@@ -117,7 +124,7 @@
 				<!-- BEGIN: site_mods -->
 				<span class="pull-right"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}"><em class="fa fa-globe fa-lg">&nbsp;</em>{NV_GO_CLIENTMOD}</a></span>
 				<!-- END: site_mods -->
-			</div>
+			</div-->
 			<div id="contentmod">
 				{THEME_ERROR_INFO}
 				{MODULE_CONTENT}
