@@ -37,6 +37,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 		    $activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
             $allow_sitelangs = $global_config['allow_sitelangs'];
 
+            $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
             nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], ' langkey : ' . $keylang . ' [ ' . $temp . ' ]', $admin_info['userid'] );
 
             if( $activelang )
@@ -53,8 +54,6 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
             $sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'" );
             $sth->bindValue( ':config_value', implode( ',', $allow_sitelangs ), PDO::PARAM_STR );
             $sth->execute();
-
-            $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
 
 			nv_save_file_config_global();
 

@@ -62,9 +62,12 @@ $(document).ready(function(){
 			return nv_msgbeforeunload;
 		});
 	});
+	
 	$('form').submit(function() {
 		$(window).unbind();
 	});
+	
+	$('.tip', $('#header')).tooltip();
 });
 
 function ver_menu_click() {

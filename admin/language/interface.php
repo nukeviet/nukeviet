@@ -30,7 +30,7 @@ foreach ( $columns_array as $row )
 	}
 }
 
-if( empty( $array_lang_exit ) )
+if( empty( $array_lang_exit ) OR ! in_array( $dirlang, $array_lang_exit ) )
 {
 	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
 
