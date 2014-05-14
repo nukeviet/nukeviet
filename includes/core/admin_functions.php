@@ -540,13 +540,24 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= " </rule>\n";
 
 		if( $array_config_global['rewrite_optional'] )
-		{
-			$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-			$rewrite_rule .= " <match url=\"^seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-			$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
-			$rewrite_rule .= " </rule>\n";
+		{			
 			if( ! empty( $array_config_global['rewrite_op_mod'] ) )
 			{
+				if( $array_config_global['rewrite_op_mod'] == 'seek' )
+				{
+					$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+					$rewrite_rule .= " <match url=\"^q\=(.*)$\" ignoreCase=\"false\" />\n";
+					$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
+					$rewrite_rule .= " </rule>\n";
+				}
+				else
+				{
+					$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+					$rewrite_rule .= " <match url=\"^seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
+					$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
+					$rewrite_rule .= " </rule>\n";
+				}
+				
 				$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
 				$rewrite_rule .= " <match url=\"^search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
 				$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:1}\" appendQueryString=\"false\" />\n";
@@ -555,10 +566,15 @@ function nv_rewrite_change( $array_config_global )
 			else
 			{
 				$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-				$rewrite_rule .= " <match url=\"^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-				$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:2}\" appendQueryString=\"false\" />\n";
+				$rewrite_rule .= " <match url=\"^seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
+				$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
 				$rewrite_rule .= " </rule>\n";
 			}
+			
+			$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+			$rewrite_rule .= " <match url=\"^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
+			$rewrite_rule .= " <action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:2}\" appendQueryString=\"false\" />\n";
+			$rewrite_rule .= " </rule>\n";
 		}
 		else
 		{
@@ -603,14 +619,23 @@ function nv_rewrite_change( $array_config_global )
 		{
 			if( ! empty( $array_config_global['rewrite_op_mod'] ) )
 			{
-				$rewrite_rule .= "RewriteRule ^q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";;
-				$rewrite_rule .= "RewriteRule ^search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";;
+				if( $array_config_global['rewrite_op_mod'] == 'seek' )
+				{
+					$rewrite_rule .= "RewriteRule ^q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
+				}
+				else
+				{
+					$rewrite_rule .= "RewriteRule ^seek\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
+				}
+				
+				$rewrite_rule .= "RewriteRule ^search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";
 			}
 			else
 			{
 				$rewrite_rule .= "RewriteRule ^seek\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";;
-				$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$2 [L]\n";;
 			}
+			
+			$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";;
 		}
 		else
 		{
