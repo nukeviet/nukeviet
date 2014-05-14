@@ -171,6 +171,16 @@ h1, h2, h3, h4, h5, h6{
 	#header .dropdown-menu a{
 		text-align: right;
 	}
+	#header .menu>li>a em{
+		font-size: 3em;
+	}
+	#header .menu>li{
+		padding: 0 5px;
+	}
+	#header .menu>li>a em.fix{
+		bottom: -9px;
+		right: -2px;
+	}
 }
 
 /* Middle
