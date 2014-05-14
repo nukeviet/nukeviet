@@ -182,7 +182,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  imgposition tinyint(1) NOT NULL DEFAULT '1',
  copyright tinyint(1) unsigned NOT NULL DEFAULT '0',
  inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
- allowed_comm tinyint(1) unsigned NOT NULL DEFAULT '0',
+ allowed_comm varchar(255) NOT NULL DEFAULT '6',
  allowed_rating tinyint(1) unsigned NOT NULL DEFAULT '0',
  ratingdetail varchar(255) NOT NULL DEFAULT '',
  allowed_send tinyint(1) unsigned NOT NULL DEFAULT '0',
