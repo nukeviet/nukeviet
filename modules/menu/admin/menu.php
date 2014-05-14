@@ -8,10 +8,9 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$arr = array( );
+$arr = array();
 $arr['title'] = '';
 $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 $error = '';
@@ -44,7 +43,7 @@ function nv_menu_insert_id( $mid, $parentid, $title, $weight, $sort, $lev, $mod_
 	{
 		$link .= '&amp;' . NV_OP_VARIABLE . '=' . $op_mod;
 	}
-	$data_insert = array( );
+	$data_insert = array();
 	$data_insert['title'] = $title;
 	$data_insert['link'] = $link;
 	$data_insert['note'] = '';
@@ -65,7 +64,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	elseif( $arr['id'] == 0 )
 	{
 		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (title) VALUES ( :title )";
-		$data_insert = array( );
+		$data_insert = array();
 		$data_insert['title'] = $arr['title'];
 		$arr['id'] = $db->insert_id( $sql, 'id', $data_insert );
 		if( empty( $arr['id'] ) )
@@ -77,7 +76,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	{
 		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id'] );
 		$stmt->bindParam( ':title', $arr['title'], PDO::PARAM_STR );
-		if( !$stmt->execute( ) )
+		if( !$stmt->execute() )
 		{
 			$error = $lang_module['errorsave'];
 		}
@@ -103,10 +102,10 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 				{
 					// Thêm menu từ các chủ đề của module
 					$subweight = 0;
-					$array_sub_id = array( );
+					$array_sub_id = array();
 					if( file_exists( NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php' ) )
 					{
-						$array_item = array( );
+						$array_item = array();
 						$mod_data = $modvalues['module_data'];
 						include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
 						foreach( $array_item as $key => $item )
@@ -149,7 +148,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 			// Thêm menu từ các chủ đề của module
 			if( file_exists( NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php' ) )
 			{
-				$array_item = array( );
+				$array_item = array();
 				$mod_data = $modvalues['module_data'];
 				include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
 				foreach( $array_item as $key => $item )
@@ -161,7 +160,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 						++$sort;
 						$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '';
 						$parentid = nv_menu_insert_id( $mid, 0, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
-						$array_sub_id = array( );
+						$array_sub_id = array();
 						$subweight = 0;
 						foreach( $array_item as $subitem )
 						{
@@ -197,7 +196,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 		}
 		nv_del_moduleCache( $module_name );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-		exit( );
+		exit();
 	}
 
 }
@@ -205,7 +204,7 @@ elseif( !empty( $arr['id'] ) )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $arr['id'];
 	$result = $db->query( $sql );
-	$arr = $result->fetch( );
+	$arr = $result->fetch();
 	if( empty( $arr ) )
 	{
 		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );

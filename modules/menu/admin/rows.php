@@ -12,16 +12,21 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Default variable
 $error = '';
-$post['id'] = $post['parentid'] = $post['active_type'] = 0;
+$post['active_type'] = 0;
 $post['type_menu'] = $post['target'] = $post['module_name'] = $post['css'] = '';
 $post['groups_view'] = array( 6 );
 $arr_item = array();
 $sp = '&nbsp;&nbsp;&nbsp;';
 $sp_title = '';
 
-$post['mid'] = $nv_Request->get_int( 'mid', 'get', 0 );
+$post['mid'] = $nv_Request->get_int( 'mid', 'post,get', 0 );
 $post['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 $post['parentid'] = $nv_Request->get_int( 'parentid', 'get', 0 );
+if( empty( $post['mid'] ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+	die();
+}
 
 // System groups user
 $groups_list = nv_groups_list();
@@ -35,34 +40,34 @@ if( $post['id'] != 0 )
 	$post['link'] = nv_htmlspecialchars( $post['link'] );
 }
 
-if( $post['mid'] != 0 )
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' ORDER BY sort';
+$result = $db->query( $sql );
+
+$arr_item[0] = array(
+	'key' => 0,
+	'parentid' => 0,
+	'title' => $lang_module['cat0'],
+	'selected' => ($post['parentid'] == 0) ? ' selected="selected"' : ''
+);
+$array_all_item = array();
+while( $row = $result->fetch() )
 {
-	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' ORDER BY sort';
-	$result = $db->query( $sql );
-
-	$arr_item[0] = array(
-		'key' => 0,
-		'title' => $lang_module['cat0'],
-		'selected' => ($post['parentid'] == 0) ? ' selected="selected"' : ''
-	);
-
-	while( $row = $result->fetch() )
+	$sp_title = '';
+	if( $row['lev'] > 0 )
 	{
-		$sp_title = '';
-		if( $row['lev'] > 0 )
+		for( $i = 1; $i <= $row['lev']; ++$i )
 		{
-			for( $i = 1; $i <= $row['lev']; ++$i )
-			{
-				$sp_title .= $sp;
-			}
+			$sp_title .= $sp;
 		}
-
-		$arr_item[$row['id']] = array(
-			'key' => $row['id'],
-			'title' => $sp_title . $row['title'],
-			'selected' => ($post['parentid'] == $row['parentid']) ? ' selected="selected"' : ''
-		);
 	}
+
+	$arr_item[$row['id']] = array(
+		'key' => $row['id'],
+		'parentid' => $row['parentid'],
+		'title' => $sp_title . $row['title'],
+		'selected' => ($post['parentid'] == $row['parentid']) ? ' selected="selected"' : ''
+	);
+	$array_all_item[$row['id']] = $row;
 }
 
 $list_module = array();
@@ -110,13 +115,13 @@ foreach( $groups_list as $key => $title )
 
 $arr_menu = nv_list_menu();
 
-// Tao mot menu/Sua menu
+// Tao menu/Sua menu
 if( $nv_Request->isset_request( 'submit1', 'post' ) )
 {
 	$post = array();
 
 	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
-	$post['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+	$post['groups_view'] = !empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$post['id'] = $nv_Request->get_int( 'id', 'post', 0 );
 	$post['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -326,19 +331,45 @@ while( $row = $result->fetch() )
 	);
 }
 
-$link_title = '';
-if( $post['parentid'] != 0 )
+$breadcrumb = array();
+$parentid = $post['parentid'];
+while( $parentid > 0 )
 {
-	$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $post['parentid'];
-	$result = $db->query( $sql );
-	$parentid = $result->fetchColumn();
-	$link_title = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=0';
+	$array_item_i = $array_all_item[$parentid];
+	$breadcrumb[] = array(
+		'title' => $array_item_i['title'],
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $parentid
+	);
+	$parentid = $array_item_i['parentid'];
 }
+$breadcrumb[] = array(
+	'title' => $arr_menu[$post['mid']]['title'],
+	'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid']
+);
+$breadcrumb[] = array(
+	'title' => $lang_module['menu_manager'],
+	'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
+);
+sort( $breadcrumb, SORT_NUMERIC );
 
 $xtpl = new XTemplate( 'rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] ) . '&amp;parentid=' . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
+$s = sizeof( $breadcrumb ) - 1;
+for( $i = 0; $i < $s; $i++ )
+{
+	$xtpl->assign( 'BREADCRUMB', $breadcrumb[$i] );
+	$xtpl->parse( 'main.breadcrumb' );
+}
+$xtpl->assign( 'BREADCRUMB_ACTIVE', $breadcrumb[$s] );
 
 if( !empty( $arr_table ) )
 {
@@ -371,164 +402,55 @@ if( !empty( $arr_table ) )
 	$xtpl->parse( 'main.table' );
 }
 
-if( $nv_Request->isset_request( 'item', 'post' ) )
-{
-	$post['mid'] = $nv_Request->get_int( 'mid', 'post', 0 );
-	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $post['mid'] . ' ORDER BY sort';
-	$result = $db->query( $sql );
-
-	$arr_item[0] = array(
-		'key' => 0,
-		'title' => $lang_module['cat0'],
-		'selected' => ($post['parentid'] == 0) ? " selected=\"selected\"" : ""
-	);
-
-	while( $row = $result->fetch() )
-	{
-		$sp_title = '';
-		if( $row['lev'] > 0 )
-		{
-			for( $i = 1; $i <= $row['lev']; ++$i )
-			{
-				$sp_title .= $sp;
-			}
-		}
-		$arr_item[$row['id']] = array(
-			'key' => $row['id'],
-			'title' => $sp_title . $row['title'],
-			"selected" => ($post['parentid'] == $row['parentid']) ? " selected=\"selected\"" : ""
-		);
-	}
-
-	foreach( $arr_item as $arr_items )
-	{
-		$xtpl->assign( 'cat', $arr_items );
-		$xtpl->parse( 'main.cat' );
-	}
-
-	$contents = $xtpl->text( 'main.cat' );
-
-	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
-	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
-}
-
-// Lay chu de cua module duoc chon
-if( $nv_Request->isset_request( 'action', 'post' ) )
-{
-	$mod_name = $nv_Request->get_title( 'module', 'post', '' );
-
-	$stmt = $db->prepare( 'SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
-	$stmt->bindParam( ':module', $mod_name, PDO::PARAM_STR );
-	$stmt->execute();
-
-	list( $mod_name, $mod_file, $mod_data ) = $stmt->fetch( 3 );
-
-	if( empty( $mod_name ) )
-		die( $lang_module['add_error_module'] );
-
-	if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php' ) )
-	{
-		$array_item = array();
-		include NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php';
-	}
-
-	// Lấy menu từ các chức năng của module
-	$funcs_item = $site_mods[$mod_name]['funcs'];
-	foreach( $funcs_item as $key => $sub_item )
-	{
-		if( $sub_item['in_submenu'] == 1 )
-		{
-			$array_item[$key] = array(
-				'key' => $key,
-				'title' => $sub_item['func_custom_name'],
-				'alias' => $key
-			);
-		}
-	}
-	if( !empty( $array_item ) )
-	{
-		foreach( $array_item as $key => $item )
-		{
-			$parentid = ( isset( $item['parentid'] )) ? $item['parentid'] : 0;
-			if( empty( $parentid ) )
-			{
-				$item['module'] = $mod_name;
-				$xtpl->assign( 'item', $item );
-				$xtpl->parse( 'main.link.item' );
-				foreach( $array_item as $subitem )
-				{
-					if( isset( $subitem['parentid'] ) AND $subitem['parentid'] === $key )
-					{
-						$subitem['title'] = $sp . $subitem['title'];
-						$subitem['module'] = $mod_name;
-						$xtpl->assign( 'item', $subitem );
-						$xtpl->parse( 'main.link.item' );
-					}
-				}
-			}
-		}
-
-		$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module );
-		$xtpl->parse( 'main.link' );
-
-		$contents = $xtpl->text( 'main.link' );
-
-		include NV_ROOTDIR . '/includes/header.php';
-		echo $contents;
-		include NV_ROOTDIR . '/includes/footer.php';
-	}
-	die( '&nbsp;' );
-}
-
 if( $post['id'] != 0 )
 {
-	if( $post['op'] != '' )
+	if( $post['op'] != '' AND isset( $site_mods[$post['module_name']] ) )
 	{
-		$arr_cat = array();
-
-		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $post['module_name'] . '_cat ORDER BY catid ASC';
-		if( ($result = $db->query( $sql )) == false )
+		$mod_name = $post['module_name'];
+		$mod_file = $site_mods[$mod_name]['module_file'];
+		$mod_data = $site_mods[$mod_name]['module_data'];
+		$array_item = array();
+		if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php' ) )
 		{
-			$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $post['module_name'] . '_categories ORDER BY catid ASC';
-			if( $result = $db->query( $sql ) == true )
-			{
-				$result = $db->query( $sql );
-				while( $row = $result->fetch() )
-				{
-					$arr_cat[$row['id']] = array(
-						'module' => $post['module_name'],
-						'id' => $row['id'],
-						'title' => $row['title'],
-						'alias' => $row['alias'],
-						'module' => $post['module_name'],
-						'selected' => ($row['alias'] == $post['op']) ? " selected=\"selected\"" : ""
-					);
-				}
-			}
+			include NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php';
 		}
-		else
+		// Lấy menu từ các chức năng của module
+		$funcs_item = $site_mods[$mod_name]['funcs'];
+		foreach( $funcs_item as $key => $sub_item )
 		{
-			$result = $db->query( $sql );
-			while( $row = $result->fetch() )
+			if( $sub_item['in_submenu'] == 1 )
 			{
-				$arr_cat[$row['catid']] = array(
-					'module' => $post['module_name'],
-					'key' => $row['catid'],
-					'title' => $row['title'],
-					'alias' => $row['alias'],
-					'selected' => ($row['alias'] == $post['op']) ? ' selected="selected"' : ''
+				$array_item[$key] = array(
+					'key' => $key,
+					'title' => $sub_item['func_custom_name'],
+					'alias' => $key
 				);
 			}
 		}
 
-		if( !empty( $arr_cat ) )
+		if( !empty( $array_item ) )
 		{
-			foreach( $arr_cat as $item )
+			foreach( $array_item as $key => $item )
 			{
-				$xtpl->assign( 'item', $item );
-				$xtpl->parse( 'main.link.item' );
+				$parentid = ( isset( $item['parentid'] )) ? $item['parentid'] : 0;
+				if( empty( $parentid ) )
+				{
+					$item['module'] = $mod_name;
+					$item['selected'] = ($item['alias'] == $post['op']) ? ' selected="selected"' : '';
+					$xtpl->assign( 'item', $item );
+					$xtpl->parse( 'main.link.item' );
+					foreach( $array_item as $subitem )
+					{
+						if( isset( $subitem['parentid'] ) AND $subitem['parentid'] === $key )
+						{
+							$subitem['title'] = $sp . $subitem['title'];
+							$subitem['module'] = $mod_name;
+							$subitem['selected'] = ($subitem['alias'] == $post['op']) ? ' selected="selected"' : '';
+							$xtpl->assign( 'item', $subitem );
+							$xtpl->parse( 'main.link.item' );
+						}
+					}
+				}
 			}
 		}
 		$xtpl->parse( 'main.link' );
@@ -595,14 +517,6 @@ if( !empty( $error ) )
 	$xtpl->parse( 'main.error' );
 }
 
-if( $link_title != '' )
-{
-	$xtpl->assign( 'link_title', $link_title );
-	$xtpl->parse( 'main.title' );
-}
-$link_menu = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-$xtpl->assign( 'link_menu', $link_menu );
-
 // Xuat kieu active menu
 for( $i = 0; $i <= 2; ++$i )
 {
@@ -618,7 +532,7 @@ $xtpl->assign( 'FORM_CAPTION', ($post['id']) ? $lang_module['edit_menu'] : $lang
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-$page_title = $lang_module['menu_manager'] . ': ' . $arr_menu[$post['mid']]['title'];
+$page_title = $lang_module['menu_manager'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
