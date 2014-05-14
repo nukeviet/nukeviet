@@ -55,7 +55,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="menu-horizontal">
 				<ul class="nav navbar-nav">
-					<li class="hidden-md hidden-sm">
+					<li class="hidden-md hidden-sm hidden-xs">
 						<a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 					</li>
 					<!-- BEGIN: top_menu_loop -->

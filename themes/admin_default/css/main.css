@@ -239,6 +239,27 @@ h1, h2, h3, h4, h5, h6{
 	}
 }
 
+/* Menu Horizontal
+ -----------------------------------------------------------------------------*/
+@media (max-width: 1070px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a{
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+@media (max-width: 970px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+@media (max-width: 865px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
 /* Middle
  -----------------------------------------------------------------------------*/
 #middle{
@@ -475,6 +496,23 @@ sup.required {
 .text-middle{
 	height: 32px;
 	line-height: 32px;
+}
+
+/* Responsive theme
+ -----------------------------------------------------------------------------*/
+@media (max-width: 768px) {
+	#left-menu{
+		display: none;
+	}
+	#left-menu-bg{
+		display: none;
+	}
+	#container{
+		margin-left: 0;
+	}
+	#footer{
+		padding-left: 0;
+	}
 }
 
 /* Form Element
