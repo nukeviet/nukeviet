@@ -35,10 +35,11 @@
 
 html, body {
 	height: 100%;
+	background: #f1f1f1;
 }
 
 body, input, button, select {
-	font-family: arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size:12px;
 	font-weight:400;
 	line-height:18px;
@@ -96,16 +97,17 @@ a.link:hover {
 	position: relative;
 	min-height: 100%;
 	height: auto;
+	background: #fff;
 }
 
 #left-menu-bg{
 	position: absolute;
 	width: 200px;
-	top: 0;
+	top: 52px;
 	bottom: 0;
 	left: 0;
 	background: #101010;
-	z-index: -1;
+	z-index: 0;
 }
 /* Heading
  -----------------------------------------------------------------------------*/
@@ -257,7 +259,7 @@ h1, h2, h3, h4, h5, h6{
 
 #info_tab {
 	background-color: #F2F2F2;
-	padding: 7px;
+	padding: 7px 15px;
 	min-height: 36px;
 }
 
@@ -392,7 +394,8 @@ h1, h2, h3, h4, h5, h6{
 
 #footer div.copyright {
 	color: #4b4b4b;
-	font: normal 11px/15px Arial, Verdana, sans-serif;
+	font-size: 11px;
+	line-height: 15px;
 	margin: 7px 10px 7px 10px;
 	padding: 0;
 	float: left
