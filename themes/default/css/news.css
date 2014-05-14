@@ -126,15 +126,6 @@ div.news_column ul.related a:hover{
 	padding: 10px
 }
 
-#hot-news {
-	background: #fff url(../images/hot-news-shadow.png) 50% bottom no-repeat;
-	padding-bottom: 19px;
-}
-
-#hot-news .box-border {
-	background: url(../images/hot-news-g.png) bottom repeat-x
-}
-
 #hot-news h3 {
 	font-size: 1.5em;
 	font-weight: bold;
@@ -147,7 +138,6 @@ div.news_column ul.related a:hover{
 }
 
 #hot-news ul.other-news {
-	background: url(../images/dot.png) left 2px repeat-x;
 	border-top: 1px solid #dadada;
 	list-style-type: none;
 	margin: 0;

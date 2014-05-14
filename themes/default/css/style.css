@@ -404,13 +404,6 @@ header{
 		float: left;
 		width: 100%
 	}
-	#hot-news ul.other-news {
-    background: url("../images/dot.png") repeat-x scroll left 2px rgba(0, 0, 0, 0);
-    border-top: 1px solid #DADADA;
-    display: block;
-    list-style-type: none;
-    margin: 0;
-}
 }
 @media (min-height: 500px){
 	.container {
