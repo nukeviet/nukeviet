@@ -163,15 +163,16 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );
 		$lang_site = ( ! empty( $site_mods )) ? NV_LANG_DATA : $global_config['site_lang'];
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_site );
-		$xtpl->assign( 'NV_LOGOUT', $lang_global['logout'] );
+		$xtpl->assign( 'NV_LOGOUT', $lang_global['admin_logout_title'] );
 
 		if( ! empty( $array_lang_admin ) )
 		{
 			$xtpl->assign( 'NV_LANGDATA', $lang_global['langdata'] );
+			$xtpl->assign( 'NV_LANGDATA_CURRENT', $array_lang_admin[NV_LANG_DATA] );
 
 			foreach( $array_lang_admin as $lang_i => $lang_name )
 			{
-				$xtpl->assign( 'SELECTED', ($lang_i == NV_LANG_DATA) ? " selected=\"selected\"" : "" );
+				$xtpl->assign( 'DISABLED', ($lang_i == NV_LANG_DATA) ? " class=\"disabled\"" : "" );
 				$xtpl->assign( 'LANGVALUE', $lang_name );
 				$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
 				$xtpl->parse( 'main.langdata.option' );
