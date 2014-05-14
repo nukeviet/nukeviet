@@ -105,7 +105,7 @@
 			<div class="clearfix"></div>
 		</aside>
 		<div id="container" class="clearfix">
-			<!--div id="info_tab">
+			<div id="info_tab">
 				<!-- BEGIN: empty_page_title -->
 				<h3 class="text-primary pull-left">{PAGE_TITLE}</h3>
 				<!-- END: empty_page_title -->
@@ -124,7 +124,7 @@
 				<!-- BEGIN: site_mods -->
 				<span class="pull-right"><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}"><em class="fa fa-globe fa-lg">&nbsp;</em>{NV_GO_CLIENTMOD}</a></span>
 				<!-- END: site_mods -->
-			</div-->
+			</div>
 			<div id="contentmod">
 				{THEME_ERROR_INFO}
 				{MODULE_CONTENT}
