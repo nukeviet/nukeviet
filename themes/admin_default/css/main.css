@@ -100,6 +100,19 @@ h1, h2, h3, h4, h5, h6{
 	float: left;
 }
 
+#header div.logo .logo-xs{
+	display: none;
+}
+
+@media (max-width: 480px) {
+	#header div.logo .logo-xs{
+		display:block;
+	}	
+	#header div.logo .logo-md{
+		display:none;
+	}	
+}
+
 #header .dropdown-menu{
 	z-index: 1001;
 }
@@ -110,38 +123,47 @@ h1, h2, h3, h4, h5, h6{
 	padding: 0;
 	margin: 0;
 }
+
 #header .menu>li{
 	float: left;
 	line-height: 52px;
 	position: relative;
 	padding: 0 15px;
 }
+
 #header .menu>li:hover,#header .menu>li.open{
 	background: #333;
 }
+
 #header .menu>li>a{
 	color: #fff;
 	height: 52px;
 	display: block;
 	outline: 0;
 }
+
 #header .menu>li>a:hover,#header .menu>li>a:focus{
 	text-decoration: none;
 }
+
 #header .menu>li>a em.fix{
 	position: relative;
 	bottom: -4px;
 	right: -2px;
 }
+
 #header .menu>li>a em.logout{
 	zoom:0.85;
 }
+
 #header .menu>li>a .screen-lg{
 	display: block;
 }
+
 #header .menu>li>a .screen-xs{
 	display: none;
 }
+
 #header .menu>li>.dropdown-menu{
 	margin: 0;
 	border-radius: 0;
@@ -151,16 +173,20 @@ h1, h2, h3, h4, h5, h6{
 	border: 0;
 	color: #fff;
 }
+
 #header .dropdown-menu a,#header .dropdown-menu a:focus{
 	color: #fff;
 	padding: 5px 20px;
 }
+
 #header .dropdown-menu a:hover{
 	background: #000;
 }
+
 #header .dropdown-menu>.disabled>a,#header .dropdown-menu>.disabled>a:hover,#header .dropdown-menu>.disabled>a:focus{
 	color: #999;
 }
+
 @media (max-width: 300px) {
 	#header .menu>li>a .screen-lg{
 		display: none;
