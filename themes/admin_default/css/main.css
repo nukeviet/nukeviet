@@ -19,6 +19,19 @@
 /* ==========================================================================
  NukeViet's custom styles
  ========================================================================== */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(../../default/fonts/roboto-400.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(../../default/fonts/roboto-700.woff) format('woff');
+}
 
 html, body {
 	height: 100%;
