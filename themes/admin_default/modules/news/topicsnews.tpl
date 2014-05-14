@@ -12,7 +12,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="3"><i class="fa fa-check-square-o">&nbsp;</i> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <i class="fa fa-square-o ">&nbsp;</i> <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <i class="fa fa-trash-o">&nbsp;</i> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+					<td colspan="3"><em class="fa fa-check-square-o fa-lg">&nbsp;</em> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <em class="fa fa-square-o ">&nbsp;</em> <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 				</tr>
 			</tfoot>
 			<tbody>

@@ -43,8 +43,8 @@
 				</td>
 				<td>{ROW.link}</td>
 				<td class="text-center">
-					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop1 -->

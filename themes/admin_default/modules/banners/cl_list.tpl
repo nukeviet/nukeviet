@@ -23,10 +23,10 @@
 				<td>{ROW.reg_time}</td>
 				<td class="text-center"><input name="{ROW.act.0}" id="{ROW.act.0}" type="checkbox" value="1" onclick="{ROW.act.2}"{ROW.checked}/></td>
 				<td>
-					<em class="fa fa-search">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
-					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
-					<em class="fa fa-plus-circle">&nbsp;</em> <a href="{ROW.add}">{CONTENTS.add}</a> &nbsp; 
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.del}">{CONTENTS.del}</a></td>
+					<em class="fa fa-search fa-lg">&nbsp;</em> <a href="{ROW.view}">{CONTENTS.view}</a> &nbsp; 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit}">{CONTENTS.edit}</a> &nbsp; 
+					<em class="fa fa-plus-circle fa-lg fa-lg">&nbsp;</em> <a href="{ROW.add}">{CONTENTS.add}</a> &nbsp; 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.del}">{CONTENTS.del}</a></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

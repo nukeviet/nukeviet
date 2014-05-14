@@ -26,8 +26,8 @@
 				<td><a href="{ROW.link}">{ROW.title}</a> (<a href="{ROW.linksite}">{ROW.numnews} {LANG.topic_num_news}</a>)</td>
 				<td>{ROW.description}</td>
 				<td class="text-center">
-					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_topic({ROW.topicid})">{GLANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->

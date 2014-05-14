@@ -24,13 +24,13 @@
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 					<!-- END: weight -->
 				</select></td>
-				<td><em class="fa fa-search">&nbsp;</em> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
+				<td><em class="fa fa-search fa-lg">&nbsp;</em> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
 				<td>{ROW.values.custom_title}</td>
 				<td>{ROW.values.version}</td>
 				<td class="text-center"><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" checked="checked"{ROW.act_disabled} /></td>
-				<td><em class="fa fa-edit">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp; <em class="fa fa-sun-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+				<td><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> <em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 				<!-- BEGIN: delete -->
-				&nbsp;-&nbsp;<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 				<!-- END: delete -->
 				</td>
 			</tr>
@@ -64,13 +64,13 @@
 					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.key}</option>
 					<!-- END: weight -->
 				</select></td>
-				<td><em class="fa fa-search">&nbsp;</em> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
+				<td><em class="fa fa-search fa-lg">&nbsp;</em> <a href="{ROW.values.title.0}">{ROW.values.title.1}</a></td>
 				<td>{ROW.values.custom_title}</td>
 				<td>{ROW.values.version}</td>
 				<td class="text-center"><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" /></td>
-				<td><em class="fa fa-edit">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<em class="fa fa-sun-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+				<td><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> <em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 				<!-- BEGIN: delete -->
-				&nbsp;-&nbsp;<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 				<!-- END: delete -->
 				</td>
 			</tr>
@@ -108,9 +108,9 @@
 				<td>{ROW.values.custom_title}</td>
 				<td>{ROW.values.version}</td>
 				<td class="text-center"><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" /></td>
-				<td><em class="fa fa-edit">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> &nbsp;-&nbsp;<em class="fa fa-sun-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
+				<td><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> <em class="fa fa-sun-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
 				<!-- BEGIN: delete -->
-				&nbsp;-&nbsp;<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
 				<!-- END: delete -->
 				</td>
 			</tr>

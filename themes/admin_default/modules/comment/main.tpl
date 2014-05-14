@@ -77,12 +77,12 @@
 		<tfoot>
 			<tr>
 				<td colspan="3">
-					<em class="fa fa-check-square-o">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
-					<em class="fa fa-circle-o">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
+					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
+					<em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
 					<span style="width:100px;display:inline-block">&nbsp;</span> 
-					<em class="fa fa-exclamation-circle">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
-					<em class="fa fa-external-link">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
-					<em class="fa fa-trash-o">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
+					<em class="fa fa-exclamation-circle fa-lg">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
+					<em class="fa fa-external-link fa-lg">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
 				</td>
 				<td colspan="3" class="text-center">
 				<!-- BEGIN: generate_page -->
@@ -100,8 +100,8 @@
 				<td>{ROW.module}</td>
 				<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
 				<td>{ROW.email}</td>
-				<td class="text-center"><em class="fa fa-{ROW.status}">&nbsp;</em></td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-{ROW.status} fa-lg">&nbsp;</em></td>
+				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

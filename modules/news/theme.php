@@ -46,7 +46,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -114,7 +114,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -192,7 +192,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -279,7 +279,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_catcontent_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . " " . nv_link_delete_page( $array_catcontent_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.adminlink' );
 				}
 				if ( $newday >= NV_CURRENTTIME )
@@ -383,7 +383,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
-						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 						$xtpl->parse( 'main.listcat.adminlink' );
 					}
 				}
@@ -470,7 +470,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . " " . nv_link_delete_page( $array_content_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.content.adminlink' );
 				}
 
@@ -526,7 +526,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . " " . nv_link_delete_page( $array_content_i['id'] ) );
 				$xtpl->parse( 'main.loopcat.content.adminlink' );
 			}
 
@@ -704,7 +704,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . " " . nv_link_delete_page( $news_contents['id'] ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -838,7 +838,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $topic_array_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . " " . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );
 			}
 

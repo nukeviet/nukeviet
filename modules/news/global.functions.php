@@ -185,7 +185,7 @@ function nv_archive_content_module( $id, $listcatid )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-edit\">&nbsp;<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a></em>";
+	$link = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
 	return $link;
 }
 
@@ -198,7 +198,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-trash-o\">&nbsp;<a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a></em>";
+	$link = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
 	return $link;
 }
 

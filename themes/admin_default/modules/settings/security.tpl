@@ -133,7 +133,10 @@
 				<td class="text-center">{ROW.dbarea}</td>
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> - <em class="fa fa-trash-o">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a></td>
+				<td class="text-center">
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

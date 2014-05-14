@@ -24,8 +24,8 @@
 				<td><a href="{ROW.link_view}" title="{ROW.title}"><strong>{ROW.title}</strong></a></td>
 				<td> {ROW.menu_item} </td>
 				<td class="text-center">
-					<em class="fa fa-edit">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id});">{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a> &nbsp;
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_delete({ROW.id});">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop1 -->

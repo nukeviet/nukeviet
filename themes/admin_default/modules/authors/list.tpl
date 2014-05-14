@@ -21,13 +21,13 @@
 				<td>{DATA.is_suspend}</td>
 				<td>
 				<!-- BEGIN: edit -->
-				<em class="fa fa-edit">&nbsp;</em> <a href="{EDIT_HREF}">{EDIT_NAME}</a>
+				<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_HREF}">{EDIT_NAME}</a> 
 				<!-- END: edit -->
 				<!-- BEGIN: suspend -->
-				&nbsp;-&nbsp;<em class="fa fa-times-circle-o">&nbsp;</em><a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+				<em class="fa fa-times-circle-o fa-lg">&nbsp;</em><a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a> 
 				<!-- END: suspend -->
 				<!-- BEGIN: del -->
-				&nbsp;-&nbsp;<em class="fa fa-trash-o">&nbsp;</em><a href="{DEL_HREF}">{DEL_NAME}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{DEL_HREF}">{DEL_NAME}</a>
 				<!-- END: del -->
 				</td>
 			</tr>

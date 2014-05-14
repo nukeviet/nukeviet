@@ -80,7 +80,10 @@
 				<td class="text-left">{ROW.keyname}</td>
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <em class="fa fa-trash-o">&nbsp;</em> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a></td>
+				<td class="text-center">
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -160,7 +163,10 @@
 				<td class="text-center">{ROW.mask_text_array}</td>
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> - <em class="fa fa-trash-o">&nbsp;</em> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a></td>
+				<td class="text-center">
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a>
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

@@ -30,8 +30,8 @@
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
 				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
 				<td>
-					<em class="fa fa-edit">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
-					<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->

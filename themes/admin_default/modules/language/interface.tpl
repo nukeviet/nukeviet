@@ -25,9 +25,9 @@
 				<td>{ROW.langsitename}</td>
 				<td class="text-center">{ROW.author}</td>
 				<td class="text-center">{ROW.createdate}</td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a href="{ROW.url_edit}" title="{LANG.nv_admin_edit}">{LANG.nv_admin_edit}</a>
+				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.url_edit}" title="{LANG.nv_admin_edit}">{LANG.nv_admin_edit}</a>
 				<!-- BEGIN: write -->
-				- <em class="fa fa-sun-o">&nbsp;</em> <a href="{ROW.url_export}" title="{LANG.nv_admin_write}">{LANG.nv_admin_write}</a>
+				- <em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="{ROW.url_export}" title="{LANG.nv_admin_write}">{LANG.nv_admin_write}</a>
 				<!-- END: write -->
 				</td>
 			</tr>

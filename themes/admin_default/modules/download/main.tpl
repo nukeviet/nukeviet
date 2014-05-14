@@ -36,7 +36,7 @@
 				<td> {ROW.download_hits} </td>
 				<td> {ROW.comment_hits} </td>
 				<td class="text-center"><input name="status" id="change_status{ROW.id}" value="1" type="checkbox"{ROW.status} onclick="nv_chang_file_status({ROW.id})" /></td>
-				<td class="text-center"><em class="fa fa-edit">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id});">{GLANG.delete}</a></td>
+				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{GLANG.edit}</a> &nbsp;&nbsp;<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_file_del({ROW.id});">{GLANG.delete}</a></td>
 			</tr>
 			<!-- END: row -->
 		</tbody>
