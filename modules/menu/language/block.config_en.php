@@ -18,8 +18,6 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['menu'] = 'Select menu group';
-$lang_block['is_viewdes'] = 'Show the introduction in menu';
-$lang_block['is_viewdes_1'] = 'Only suitable for a certain type, some styles will display instead of the name on the title menu.';
 $lang_block['title_length'] = 'Title length';
 $lang_block['type'] = 'Menu type';
 $lang_block['m_type1'] = 'Nav_bar';

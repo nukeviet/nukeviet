@@ -115,7 +115,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 							{
 								++$subweight;
 								++$sort;
-								$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '';
+								$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '6';
 								$array_sub_id[] = nv_menu_insert_id( $mid, $parentid, $item['title'], $subweight, $sort, 1, $mod_name, $item['alias'], $groups_view );
 							}
 						}
@@ -158,7 +158,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 					{
 						++$weight;
 						++$sort;
-						$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '';
+						$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '6';
 						$parentid = nv_menu_insert_id( $mid, 0, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
 						$array_sub_id = array();
 						$subweight = 0;
@@ -168,7 +168,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 							{
 								++$subweight;
 								++$sort;
-								$groups_view = ( isset( $subitem['groups_view'] )) ? $subitem['groups_view'] : '';
+								$groups_view = ( isset( $subitem['groups_view'] )) ? $subitem['groups_view'] : '6';
 								$array_sub_id[] = nv_menu_insert_id( $mid, $parentid, $subitem['title'], $subweight, $sort, 1, $mod_name, $subitem['alias'], $groups_view );
 							}
 						}

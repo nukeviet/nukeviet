@@ -316,7 +316,12 @@ while( $row = $result->fetch() )
 	$nu = $db->query( $sql )->fetchColumn();
 
 	$row['sub'] = sizeof( array_filter( explode( ',', $row['subitem'] ) ) );
-
+	$array_groups_view = explode( ',', $row['groups_view'] );
+	$groups_view = array();
+	foreach( $array_groups_view as $_group_id )
+	{
+		$groups_view[] = $groups_list[$_group_id];
+	}
 	$arr_table[$row['id']] = array(
 		'id' => $row['id'],
 		'mid' => $row['mid'],
@@ -326,6 +331,7 @@ while( $row = $result->fetch() )
 		'link' => nv_htmlspecialchars( $row['link'] ),
 		'weight' => $row['weight'],
 		'title' => $row['title'],
+		'groups_view' => implode( '<br>', $groups_view ),
 		'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
 		'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit',
 	);
@@ -354,6 +360,7 @@ sort( $breadcrumb, SORT_NUMERIC );
 
 $xtpl = new XTemplate( 'rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -459,7 +466,6 @@ if( $post['id'] != 0 )
 
 $arr_menu = nv_list_menu();
 
-$xtpl->assign( 'GLANG', $lang_global );
 foreach( $arr_menu as $arr )
 {
 	$xtpl->assign( 'key', $arr['id'] );
