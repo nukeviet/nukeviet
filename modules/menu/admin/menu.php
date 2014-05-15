@@ -15,6 +15,20 @@ $arr['title'] = '';
 $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 $error = '';
 
+/**
+ * nv_menu_insert_id()
+ * 
+ * @param mixed $mid
+ * @param mixed $parentid
+ * @param mixed $title
+ * @param mixed $weight
+ * @param mixed $sort
+ * @param mixed $lev
+ * @param mixed $mod_name
+ * @param mixed $op_mod
+ * @param mixed $groups_view
+ * @return
+ */
 function nv_menu_insert_id( $mid, $parentid, $title, $weight, $sort, $lev, $mod_name, $op_mod, $groups_view )
 {
 	global $module_data, $db;
