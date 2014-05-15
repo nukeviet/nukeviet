@@ -217,22 +217,33 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		{
 			if( ! empty( $admin_info['last_login'] ) )
 			{
-				$temp = sprintf( $lang_global['hello_admin1'], "<strong>" . $admin_info['username'] . "</strong>", date( "H:i d/m/Y", $admin_info['last_login'] ), $admin_info['last_ip'] );
+				$temp = sprintf( $lang_global['hello_admin1'], $admin_info['username'], date( "H:i d/m/Y", $admin_info['last_login'] ), $admin_info['last_ip'] );
 				$xtpl->assign( 'HELLO_ADMIN1', $temp );
 				$xtpl->parse( 'main.hello_admin' );
 			}
 			else
 			{
-				$temp = sprintf( $lang_global['hello_admin3'], "<strong>" . $admin_info['username'] . "</strong>" );
+				$temp = sprintf( $lang_global['hello_admin3'], $admin_info['username'] );
 				$xtpl->assign( 'HELLO_ADMIN3', $temp );
 				$xtpl->parse( 'main.hello_admin3' );
 			}
 		}
 		else
 		{
-			$temp = sprintf( $lang_global['hello_admin2'], "<strong>" . $admin_info['username'] . "</strong>", nv_convertfromSec( NV_CURRENTTIME - $admin_info['current_login'] ), $admin_info['current_ip'] );
+			$temp = sprintf( $lang_global['hello_admin2'], $admin_info['username'], nv_convertfromSec( NV_CURRENTTIME - $admin_info['current_login'] ), $admin_info['current_ip'] );
 			$xtpl->assign( 'HELLO_ADMIN2', $temp );
 			$xtpl->parse( 'main.hello_admin2' );
+		}
+
+		// Admin photo
+		$xtpl->assign( 'ADMIN_USERNAME', $admin_info['username'] );
+		if( ! empty( $admin_info['photo'] ) and file_exists( NV_ROOTDIR . '/' . $admin_info['photo'] ) )
+		{
+			$xtpl->assign( 'ADMIN_PHOTO', NV_BASE_SITEURL . $admin_info['photo'] );
+		}
+		else
+		{
+			$xtpl->assign( 'ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg' );
 		}
 
 		// Vertical menu

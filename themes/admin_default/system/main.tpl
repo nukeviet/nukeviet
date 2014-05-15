@@ -29,46 +29,48 @@
 			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
 				<a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout">&nbsp;</em></a>
 			</li>
-			<!--li>
-				<!-- BEGIN: hello_admin -->
-				{HELLO_ADMIN1}
-				<!-- END: hello_admin -->
-				<!-- BEGIN: hello_admin3 -->
-				{HELLO_ADMIN3}
-				<!-- END: hello_admin3 -->
-				<!-- BEGIN: hello_admin2 -->
-				{HELLO_ADMIN2}
-				<!-- END: hello_admin2 -->
-				<span id="digclock">{NV_DIGCLOCK}</span>
-			</li-->
+			<li class="tip admin-info" data-toggle="tooltip" data-placement="bottom" title="<!-- BEGIN: hello_admin -->{HELLO_ADMIN1}<!-- END: hello_admin --><!-- BEGIN: hello_admin3 -->{HELLO_ADMIN3}<!-- END: hello_admin3 --><!-- BEGIN: hello_admin2 -->{HELLO_ADMIN2}<!-- END: hello_admin2 -->">
+				<a href="javascript:void(0);">
+					<img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32"/>
+				</a>
+			</li>
 		</ul>
 	</header>
 	<div class="row">
 		<div class="navbar navbar-inverse navbar-static-top" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-horizontal">
-					<span class="sr-only">&nbsp;</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="menu-horizontal">
-				<ul class="nav navbar-nav">
-					<li class="hidden-md hidden-sm">
-						<a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
-					</li>
-					<!-- BEGIN: top_menu_loop -->
-					<li{TOP_MENU_CLASS}>
-						<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
-						<!-- BEGIN: submenu -->
-						<ul class="dropdown-menu">
-							<!-- BEGIN: submenu_loop --><li><a href="{SUBMENULINK}" title="{SUBMENUTITLE}">{SUBMENUTITLE}</a></li><!-- END: submenu_loop -->
-						</ul>
-						<!-- END: submenu -->
-					</li>
-					<!-- END: top_menu_loop -->
-				</ul>
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-horizontal">
+						<span class="sr-only">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+					</button>
+					<button id="left-menu-toggle" type="button" class="navbar-toggle" data-target="#left-menu">
+						<span class="sr-only">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+						<span class="icon-bar">&nbsp;</span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" id="menu-horizontal">
+					<ul class="nav navbar-nav">
+						<li class="hidden-md hidden-sm hidden-xs">
+							<a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
+						</li>
+						<!-- BEGIN: top_menu_loop -->
+						<li{TOP_MENU_CLASS}>
+							<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
+							<!-- BEGIN: submenu -->
+							<ul class="dropdown-menu">
+								<!-- BEGIN: submenu_loop --><li><a href="{SUBMENULINK}" title="{SUBMENUTITLE}">{SUBMENUTITLE}</a></li><!-- END: submenu_loop -->
+							</ul>
+							<!-- END: submenu -->
+						</li>
+						<!-- END: top_menu_loop -->
+					</ul>
+					<p class="navbar-text navbar-right" id="digclock">{NV_DIGCLOCK}</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -96,6 +98,7 @@
 				<!-- END: current -->
 				<!-- END: menu_loop -->
 			</ul>
+			<div class="clearfix"></div>
 		</aside>
 		<div id="container" class="clearfix">
 			<div id="info_tab">

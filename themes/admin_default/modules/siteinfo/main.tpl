@@ -27,9 +27,9 @@
 </div>
 <!-- END: updateinfo -->
 <!-- BEGIN: pendinginfo -->
+<h3>{LANG.pendingInfo}</h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<h3>{LANG.pendingInfo}</h3>
 		<thead>
 			<tr>
 				<th>{LANG.moduleName}</th>
@@ -57,9 +57,9 @@
 </div>
 <!-- END: pendinginfo -->
 <!-- BEGIN: info -->
+<h3><em class="fa fa-info">&nbsp;</em><strong>{LANG.moduleInfo}</strong></h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<h3><em class="fa fa-info">&nbsp;</em><strong>{LANG.moduleInfo}</strong></h3>
 		<thead>
 			<tr>
 				<th>{LANG.moduleName}</th>
@@ -87,9 +87,9 @@
 </div>
 <!-- END: info -->
 <!-- BEGIN: version -->
+<h3><em class="fa fa-globe">&nbsp;</em><strong>{LANG.version}</strong> <span style="font-weight:400">(<a href="{ULINK}">{CHECKVERSION}</a>)</span></h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<h3><em class="fa fa-globe">&nbsp;</em><strong>{LANG.version}</strong> <span style="font-weight:400">(<a href="{ULINK}">{CHECKVERSION}</a>)</span></h3>
 		<thead>
 			<tr>
 				<th>{LANG.moduleContent}</th>

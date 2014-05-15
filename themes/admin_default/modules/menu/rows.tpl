@@ -3,7 +3,6 @@
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
 </script>
-
 <ol class="breadcrumb">
 	<!-- BEGIN: breadcrumb -->
 		<li><a href="{BREADCRUMB.link}">{BREADCRUMB.title}</a></li>
@@ -24,6 +23,7 @@
 				<th>{LANG.number}</th>
 				<th>{LANG.title}</th>
 				<th>{LANG.link}</th>
+				<th>{GLANG.groups_view}</th>
 				<th>{LANG.action}</th>
 			</tr>
 		</thead>
@@ -42,6 +42,7 @@
 				<!-- END: sub -->
 				</td>
 				<td>{ROW.link}</td>
+				<td>{ROW.groups_view}</td>
 				<td class="text-center">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
@@ -61,7 +62,7 @@
 	<input type="hidden" name="pa" value="{DATA.parentid}">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em><em class="fa fa-file-text-o">&nbsp;</em>{FORM_CAPTION}</caption>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{FORM_CAPTION}</caption>
 			<colgroup>
 				<col class="w150" />
 				<col class="w300" />

@@ -47,28 +47,59 @@ var NV = {
 		this.menuBusy = false;
 		this.menu = $(menu).removeClass('open');
 	},
+	fixContentHeight: function(){
+		var wrap = $('.nvwrap');
+		var vmenu = $('#left-menu');
+		
+		if( wrap.height() < vmenu.height() + vmenu.offset().top && vmenu.is(':visible') ){
+			wrap.css('min-height', ( vmenu.height() + vmenu.offset().top ) + 'px' )
+		}else{
+			wrap.css('min-height', '100%');
+		}
+	},
 };
 
 $(document).ready(function(){
+	// Control content height
+	NV.fixContentHeight();
+	$(window).resize(function(){
+		NV.fixContentHeight();
+	});
+	
+	// Show submenu
 	$('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
 		NV.openMenu(this);
 	}, function(){
 		NV.closeMenu(this);
 	});
 
+	// Left menu handle
+	$('#left-menu-toggle').click(function(){
+		if( $('#left-menu').is(':visible') ){
+			$('#left-menu, #left-menu-bg, #container, #footer').removeClass('open');
+		}else{
+			$('#left-menu, #left-menu-bg, #container, #footer').addClass('open');
+		}
+		NV.fixContentHeight();
+	});
+
+	// Show admin confirm
 	myTimerPage = setTimeout(function() {
 		timeoutsessrun();
 	}, nv_check_pass_mstime);
 
+	// Show confirm message on leave, reload page
 	$('form.confirm-reload').change(function() {
 		$(window).bind('beforeunload', function() {
 			return nv_msgbeforeunload;
 		});
 	});
 	
+	// Disable confirm message on submit form
 	$('form').submit(function() {
 		$(window).unbind();
 	});
 	
+	// Header tooltip
 	$('.tip', $('#header')).tooltip();
 });

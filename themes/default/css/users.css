@@ -59,6 +59,11 @@
 		margin-left:-300px;
 	}
 }
+@media (max-height: 599px){
+	.users-avupload{
+		top:0;
+	}
+}
 @media (min-height: 600px){
 	.users-avupload{
 		height:600px;

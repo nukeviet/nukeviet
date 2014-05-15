@@ -98,6 +98,8 @@ a.link:hover {
 	min-height: 100%;
 	height: auto;
 	background: #fff;
+	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 #left-menu-bg{
@@ -134,7 +136,7 @@ h1, h2, h3, h4, h5, h6{
 	display: none;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
 	#header div.logo .logo-xs{
 		display:block;
 	}	
@@ -194,6 +196,11 @@ h1, h2, h3, h4, h5, h6{
 	display: none;
 }
 
+#header .menu>li>a>img{
+	position: relative;
+	top: -1px;
+}
+
 #header .menu>li>.dropdown-menu{
 	margin: 0;
 	border-radius: 0;
@@ -217,7 +224,7 @@ h1, h2, h3, h4, h5, h6{
 	color: #999;
 }
 
-@media (max-width: 300px) {
+@media (max-width: 350px) {
 	#header .menu>li>a .screen-lg{
 		display: none;
 	}
@@ -238,6 +245,36 @@ h1, h2, h3, h4, h5, h6{
 		right: -2px;
 	}
 }
+@media (max-width: 270px){
+	#header .menu>li.admin-info{
+		display: none;
+	}
+}
+
+/* Menu Horizontal
+ -----------------------------------------------------------------------------*/
+@media (max-width: 1300px) and (min-width: 768px){
+	#digclock{
+		display: none;
+	}
+}
+@media (max-width: 1070px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a{
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+@media (max-width: 970px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+@media (max-width: 865px) and (min-width: 768px) {
+	#menu-horizontal>ul>li>a .caret{
+		display: none;
+	}
+}
 
 /* Middle
  -----------------------------------------------------------------------------*/
@@ -248,13 +285,13 @@ h1, h2, h3, h4, h5, h6{
 #container {
 	margin-left: 200px;
 	height: 100%;
+	position: relative;
 }
 
 #contentmod {
 	padding: 15px;
 	margin-bottom: 50px;
-	display: inline-block;
-	width: 100%;
+	position: relative;
 }
 
 #info_tab {
@@ -292,9 +329,10 @@ h1, h2, h3, h4, h5, h6{
 /* Left Menu
  -----------------------------------------------------------------------------*/
 #left-menu {
-	float: left;
-	padding-top: 40px;
+	top: 40px;
+	left: 0;
 	width: 200px;
+	position: absolute;
 }
 
 #left-menu .nav>li>a{
@@ -346,6 +384,7 @@ h1, h2, h3, h4, h5, h6{
 #left-menu .nav>li a.subcurrent{
 	background: #222;
 	color: #999;
+	padding: 7px 15px;
 }
 
 #left-menu .nav>li a.subcurrent:hover{
@@ -355,7 +394,8 @@ h1, h2, h3, h4, h5, h6{
 #left-menu .nav>li a.subactive{
 	background: #222;
 	color: #fff;
-	font-weight: bold;	
+	font-weight: bold;
+	padding: 7px 15px;
 }
 
 #left-menu .dropdown-menu{
@@ -377,6 +417,12 @@ h1, h2, h3, h4, h5, h6{
 	color: #0074a2;
 }
 
+#left-menu-toggle{
+	float: left;
+	margin-left: 5px;
+	margin-right: 0;
+}
+
 /* Footer
  -----------------------------------------------------------------------------*/
 #footer {
@@ -384,7 +430,7 @@ h1, h2, h3, h4, h5, h6{
 	left: 5px;
 	right: 5px;
 	bottom: 0;
-	padding-left: 200px;
+	margin-left: 200px;
 }
 
 #footer .footer-content{
@@ -475,6 +521,39 @@ sup.required {
 .text-middle{
 	height: 32px;
 	line-height: 32px;
+}
+
+/* Responsive theme
+ -----------------------------------------------------------------------------*/
+@media (max-width: 768px) {
+	#left-menu{
+		display: none;
+	}
+	
+	#left-menu-bg{
+		display: none;
+	}
+	
+	#container{
+		margin-left: 0;
+	}
+	
+	#footer{
+		margin-left: 0;
+	}
+	
+	#left-menu.open, #left-menu-bg.open{
+		display: inline-block;
+	}
+	
+	#container.open{
+		right: -200px;
+	}
+	
+	#container.open, #footer.open{
+		right: -200px;
+		left: 200px;
+	}
 }
 
 /* Form Element

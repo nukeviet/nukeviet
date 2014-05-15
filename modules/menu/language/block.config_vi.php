@@ -18,10 +18,12 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['menu'] = 'Chọn bộ menu';
-$lang_block['is_viewdes'] = 'Hiển thị phần giới thiệu vào menu';
-$lang_block['is_viewdes_1'] = 'Chỉ thích hợp với một số kiểu nhất định, một số kiểu sẽ hiển thị vào title thay cho tên menu.';
 $lang_block['title_length'] = 'Số kí tự của tiêu đề';
 $lang_block['type'] = 'Kiểu menu';
 $lang_block['m_type1'] = 'Nav_bar';
 $lang_block['m_type2'] = 'Vertical';
 $lang_block['m_type3'] = 'Treeview';
+
+$lang_block['menu_note_auto'] = 'Lưu ý: Block này lấy menu tự động không tùy chỉnh được trong khu vực quản trị';
+
+
