@@ -637,8 +637,8 @@ label {
 	font-size: 16px;
 	line-height: 22px;
 	display: inline-block;
-}
-.breadcrumb>li.active{
-	color: #0074a2;
 	font-weight: bold;
+}
+.breadcrumb>li:first-child{
+	color: #0074a2!important;
 }

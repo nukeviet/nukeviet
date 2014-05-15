@@ -337,26 +337,30 @@ while( $row = $result->fetch() )
 	);
 }
 
-$breadcrumb = array();
+$array_mod_title = array();
 $parentid = $post['parentid'];
 while( $parentid > 0 )
 {
 	$array_item_i = $array_all_item[$parentid];
-	$breadcrumb[] = array(
+	$array_mod_title[] = array(
 		'title' => $array_item_i['title'],
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $parentid
 	);
 	$parentid = $array_item_i['parentid'];
 }
-$breadcrumb[] = array(
+$array_mod_title[] = array(
 	'title' => $arr_menu[$post['mid']]['title'],
 	'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid']
 );
-$breadcrumb[] = array(
+$array_mod_title[] = array(
 	'title' => $lang_module['menu_manager'],
 	'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name
 );
-sort( $breadcrumb, SORT_NUMERIC );
+sort( $array_mod_title, SORT_NUMERIC );
+
+// Active last item
+$s = sizeof( $array_mod_title ) - 1;
+$array_mod_title[$s]['active'] = true;
 
 $xtpl = new XTemplate( 'rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -370,13 +374,6 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] ) . '&amp;parentid=' . $post['parentid'];
 $xtpl->assign( 'DATA', $post );
-$s = sizeof( $breadcrumb ) - 1;
-for( $i = 0; $i < $s; $i++ )
-{
-	$xtpl->assign( 'BREADCRUMB', $breadcrumb[$i] );
-	$xtpl->parse( 'main.breadcrumb' );
-}
-$xtpl->assign( 'BREADCRUMB_ACTIVE', $breadcrumb[$s] );
 
 if( !empty( $arr_table ) )
 {
