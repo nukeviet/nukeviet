@@ -136,7 +136,7 @@ h1, h2, h3, h4, h5, h6{
 	display: none;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
 	#header div.logo .logo-xs{
 		display:block;
 	}	
@@ -196,6 +196,11 @@ h1, h2, h3, h4, h5, h6{
 	display: none;
 }
 
+#header .menu>li>a>img{
+	position: relative;
+	top: -1px;
+}
+
 #header .menu>li>.dropdown-menu{
 	margin: 0;
 	border-radius: 0;
@@ -219,7 +224,7 @@ h1, h2, h3, h4, h5, h6{
 	color: #999;
 }
 
-@media (max-width: 300px) {
+@media (max-width: 350px) {
 	#header .menu>li>a .screen-lg{
 		display: none;
 	}
@@ -240,9 +245,19 @@ h1, h2, h3, h4, h5, h6{
 		right: -2px;
 	}
 }
+@media (max-width: 270px){
+	#header .menu>li.admin-info{
+		display: none;
+	}
+}
 
 /* Menu Horizontal
  -----------------------------------------------------------------------------*/
+@media (max-width: 1300px) and (min-width: 768px){
+	#digclock{
+		display: none;
+	}
+}
 @media (max-width: 1070px) and (min-width: 768px) {
 	#menu-horizontal>ul>li>a{
 		padding-left: 10px;
