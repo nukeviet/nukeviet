@@ -369,6 +369,7 @@ h1, h2, h3, h4, h5, h6{
 #left-menu .nav>li a.subcurrent{
 	background: #222;
 	color: #999;
+	padding: 7px 15px;
 }
 
 #left-menu .nav>li a.subcurrent:hover{
@@ -378,7 +379,8 @@ h1, h2, h3, h4, h5, h6{
 #left-menu .nav>li a.subactive{
 	background: #222;
 	color: #fff;
-	font-weight: bold;	
+	font-weight: bold;
+	padding: 7px 15px;
 }
 
 #left-menu .dropdown-menu{
