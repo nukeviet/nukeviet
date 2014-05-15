@@ -10,25 +10,41 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-global $nv_vertical_menu;
-
-$content = '';
-
-if( ! empty( $nv_vertical_menu ) )
+if( ! function_exists( 'nv_block_vertica_menu_note' ) )
 {
-	$content .= "<div id=\"ver_menu\">\n";
-
-	foreach( $nv_vertical_menu as $menu )
+	function nv_block_vertica_menu_note( $module, $data_block, $lang_block )
 	{
-		$content .= ( $menu[2] ) ? "<a href=\"" . $menu[1] . "\" class=\"current\">" . $menu[0] . "</a>\n" : "<a href=\"" . $menu[1] . "\">" . $menu[0] . "</a>\n";
-		if( ! empty( $menu['submenu'] ) )
+		$html = '';
+		$html .= "<tr>";
+		$html .= "	<td>&nbsp;</td>";
+		$html .= "	<td>" . $lang_block['menu_note_auto'] . "</td>";
+		$html .= "</tr>";
+		return $html;
+	}
+}
+
+if( defined( 'NV_SYSTEM' ) )
+{
+	global $nv_vertical_menu;
+
+	$content = '';
+
+	if( ! empty( $nv_vertical_menu ) )
+	{
+		$content .= "<div id=\"ver_menu\">\n";
+
+		foreach( $nv_vertical_menu as $menu )
 		{
-			foreach( $menu['submenu'] as $sub_menu )
+			$content .= ( $menu[2] ) ? "<a href=\"" . $menu[1] . "\" class=\"current\">" . $menu[0] . "</a>\n" : "<a href=\"" . $menu[1] . "\">" . $menu[0] . "</a>\n";
+			if( ! empty( $menu['submenu'] ) )
 			{
-				$content .= ( $sub_menu[2] ) ? "<a href=\"" . $sub_menu[1] . "\" class=\"sub_current\">" . $sub_menu[0] . "</a>\n" : "<a href=\"" . $sub_menu[1] . "\" class=\"sub_normal\">" . $sub_menu[0] . "</a>\n";
+				foreach( $menu['submenu'] as $sub_menu )
+				{
+					$content .= ( $sub_menu[2] ) ? "<a href=\"" . $sub_menu[1] . "\" class=\"sub_current\">" . $sub_menu[0] . "</a>\n" : "<a href=\"" . $sub_menu[1] . "\" class=\"sub_normal\">" . $sub_menu[0] . "</a>\n";
+				}
 			}
 		}
-	}
 
-	$content .= "</div>\n";
+		$content .= "</div>\n";
+	}
 }

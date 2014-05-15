@@ -19,7 +19,7 @@
 			unique : true,
 			persist : "location"
 		});
-	}); 
+	});
 </script>
 <style type="text/css">
 	#navigation{MENUID} a {

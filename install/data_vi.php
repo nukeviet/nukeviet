@@ -30,18 +30,18 @@ $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . 
 $sth->execute( array(1, 'Sitemap', 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
 $sth->execute( array(2, 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
 $sth->execute( array(3, 'Sitemap', 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
-$sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 0, 3, '') );
+$sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 1, 3, '') );
 $sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 4, '') );
 $sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 5, '') );
 $sth->execute( array(9, 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
 $sth->execute( array(10, 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
-$sth->execute( array(11, 'rss', 'rss', 'Rss', 'news', 1, 0, 1, '') );
+$sth->execute( array(11, 'rss', 'rss', 'Rss', 'news', 1, 1, 1, '') );
 $sth->execute( array(12, 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '') );
-$sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 0, 6, '') );
+$sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 1, 6, '') );
 $sth->execute( array(14, 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
 $sth->execute( array(15, 'topic', 'topic', 'Topic', 'news', 1, 0, 7, '') );
 $sth->execute( array(16, 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 8, '') );
-$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 0, 8, '') );
+$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 1, 8, '') );
 $sth->execute( array(18, 'changepass', 'changepass', 'Đổi mật khẩu', 'users', 1, 1, 6, '') );
 $sth->execute( array(19, 'editinfo', 'editinfo', 'Editinfo', 'users', 1, 0, 10, '') );
 $sth->execute( array(20, 'login', 'login', 'Đăng nhập', 'users', 1, 1, 2, '') );
@@ -231,8 +231,8 @@ $sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Thăm 
 $sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Bộ đếm', '', '', '[RIGHT]', 0, 1, '0', 1, 4, '') );
 $sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
 $sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Quảng cáo top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:5:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";}}') );
-$sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:6:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";i:5;s:6:"voting";}}') );
+$sth->execute( array(16, 'modern', 'menu', 'global.superfish.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
+$sth->execute( array(17, 'default', 'menu', 'global.bootstrap.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
 $sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:274:"© Copyright NukeViet 4. All right reserved.<br  />Xây dựng trên nền tảng <a href="http://nukeviet.vn/" title="Mã nguồn mở NukeViet">Mã nguồn mở NukeViet</a>. <a href="http://vinades.vn/" title="Thiết kế web">Thiết kế website</a> bởi VINADES.,JSC";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 4. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 $sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:6:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";i:5;s:6:"voting";}}') );
@@ -538,3 +538,34 @@ if( $result->fetchColumn() )
 
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
+
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Menu theme themes')");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (1, 0, 1, 'Giới thiệu', '/index.php?language=vi&nv=about', '', 1, 1, 0, '2,3', '6', 'about', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (2, 1, 1, 'Giới thiệu về NukeViet 3.0', '/index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-NukeViet-3-0', '', 1, 2, 1, '', '6', 'about', 'Gioi-thieu-ve-NukeViet-3-0', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (3, 1, 1, 'Giới thiệu về công ty chuyên quản NukeViet', '/index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', '', 2, 3, 1, '', '6', 'about', 'Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (4, 0, 1, 'Tin Tức', '/index.php?language=vi&nv=news', '', 2, 4, 0, '5,6,7,8,30,31,32', '6', 'news', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (5, 4, 1, 'Tin tức', '/index.php?language=vi&nv=news&amp;op=Tin-tuc', '', 1, 5, 1, '', '6', 'news', 'Tin-tuc', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (6, 4, 1, 'Sản phẩm', '/index.php?language=vi&nv=news&amp;op=San-pham', '', 2, 6, 1, '', '6', 'news', 'San-pham', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (7, 4, 1, 'Đối tác', '/index.php?language=vi&nv=news&amp;op=Doi-tac', '', 3, 7, 1, '', '6', 'news', 'Doi-tac', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (8, 4, 1, 'Tuyển dụng', '/index.php?language=vi&nv=news&amp;op=Tuyen-dung', '', 4, 8, 1, '', '6', 'news', 'Tuyen-dung', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (9, 0, 1, 'Thành viên', '/index.php?language=vi&nv=users', '', 3, 12, 0, '10,11,12,13,14,15,16', '6', 'users', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (10, 9, 1, 'Đăng nhập', '/index.php?language=vi&nv=users&op=login', '', 1, 13, 1, '', '5', 'users', 'login', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (11, 9, 1, 'Logout', '/index.php?language=vi&nv=users&op=logout', '', 2, 14, 1, '', '4', 'users', 'logout', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (12, 9, 1, 'Đăng ký', '/index.php?language=vi&nv=users&op=register', '', 3, 15, 1, '', '5', 'users', 'register', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (13, 9, 1, 'Quên mật khẩu', '/index.php?language=vi&nv=users&op=lostpass', '', 4, 16, 1, '', '5', 'users', 'lostpass', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (14, 9, 1, 'Đổi mật khẩu', '/index.php?language=vi&nv=users&op=changepass', '', 5, 17, 1, '', '4', 'users', 'changepass', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (15, 9, 1, 'Openid', '/index.php?language=vi&nv=users&op=openid', '', 6, 18, 1, '', '4', 'users', 'openid', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (16, 9, 1, 'Danh sách thành viên', '/index.php?language=vi&nv=users&op=memberlist', '', 7, 19, 1, '', '4', 'users', 'memberlist', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (17, 0, 1, 'Liên hệ', '/index.php?language=vi&nv=contact', '', 7, 28, 0, '18', '6', 'contact', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (18, 17, 1, 'Webmaster', '/index.php?language=vi&nv=contact&amp;op=1', '', 1, 29, 1, '', '6', 'contact', '1', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (19, 0, 1, 'Thống kê', '/index.php?language=vi&nv=statistics', '', 4, 20, 0, '20,21,22,23,24', '6', 'statistics', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (20, 19, 1, 'Theo đường dẫn đến site', '/index.php?language=vi&nv=statistics&amp;op=allreferers', '', 1, 21, 1, '', '6', 'statistics', 'allreferers', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (21, 19, 1, 'Theo quốc gia', '/index.php?language=vi&nv=statistics&amp;op=allcountries', '', 2, 22, 1, '', '6', 'statistics', 'allcountries', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (22, 19, 1, 'Theo trình duyệt', '/index.php?language=vi&nv=statistics&amp;op=allbrowsers', '', 3, 23, 1, '', '6', 'statistics', 'allbrowsers', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (23, 19, 1, 'Theo hệ điều hành', '/index.php?language=vi&nv=statistics&amp;op=allos', '', 4, 24, 1, '', '6', 'statistics', 'allos', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (24, 19, 1, 'Máy chủ tìm kiếm', '/index.php?language=vi&nv=statistics&amp;op=allbots', '', 5, 25, 1, '', '6', 'statistics', 'allbots', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (25, 0, 1, 'Thăm dò ý kiến', '/index.php?language=vi&nv=voting', '', 5, 26, 0, '', '6', 'voting', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (30, 4, 1, 'Rss', '/index.php?language=vi&nv=news&op=rss', '', 5, 9, 1, '', '6', 'news', 'rss', 1, '', 0, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (27, 0, 1, 'Tìm kiếm', '/index.php?language=vi&nv=seek', '', 6, 27, 0, '', '6', 'seek', '', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (31, 4, 1, 'Đăng bài viết', '/index.php?language=vi&nv=news&op=content', '', 6, 10, 1, '', '6', 'news', 'content', 1, '', 0, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (32, 4, 1, 'Tìm kiếm', '/index.php?language=vi&nv=news&op=search', '', 7, 11, 1, '', '6', 'news', 'search', 1, '', 0, 1) ");
