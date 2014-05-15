@@ -80,28 +80,28 @@ UAV.common = {
 			$('#' + UAV.config.target).attr('src', e.target.result);
 			$('#' + UAV.config.target).load(function(){
 				var img = document.getElementById(UAV.config.target);
-				
+
 				if( img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height ){
 					UAV.common.error(UAV.lang.bigsize);
 					UAV.data.error = true;
 					return false;
 				}
-				
+
 				if( img.naturalWidth < UAV.config.avatar_width || img.naturalHeight < UAV.config.avatar_height ){
 					UAV.common.error(UAV.lang.smallsize);
 					UAV.data.error = true;
 					return false;
 				}
-				
+
 				if( ! UAV.data.error ){
 					// Hide and show data
 					$('#' + UAV.config.uploadIcon).hide();
 					$('#' + UAV.config.uploadInfo).show();
-					
+
 					$('#' + UAV.config.imageType).html( file.type );
 					$('#' + UAV.config.imageSize).html( UAV.tool.bytes2Size( file.size ) );
 					$('#' + UAV.config.originalDimension).html( img.naturalWidth + ' x ' + img.naturalHeight );
-						
+
 					$('#' + UAV.config.target).Jcrop({
 						minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
 						aspectRatio : 1,
@@ -119,34 +119,34 @@ UAV.common = {
 					});
 				}
 			});
-		}
-		
+		};
+
 		fRead.readAsDataURL(file);
 	},
 	init: function(){
 		UAV.data.error = false;
-		
+
 		if( $('#' + UAV.config.inputFile).val() == '' ){
 			UAV.data.error = true;
 		}
-		
+
 		var image = $('#' + UAV.config.inputFile)[0].files[0];
-		
+
 		// Check ext
 		if( ! UAV.config.pattern.test( image.type ) ){
 			UAV.common.error(UAV.lang.filetype);
 			UAV.data.error = true;
 		}
-		
+
 		// Check size
 		if( image.size > UAV.config.maxsize){
 			UAV.common.error(UAV.lang.bigfile);
 			UAV.data.error = true;
 		}
-		
+
 		if( ! UAV.data.error ){
 			// Read image
-			UAV.common.read(image);	
+			UAV.common.read(image);
 		}
 	},
 	error: function(e){
@@ -186,7 +186,7 @@ UAV.common = {
 UAV.init = function(){
 	$('#' + UAV.config.uploadIcon).click(function(){
 		$('#' + UAV.config.inputFile).trigger('click');
-	});	
+	});
 	$('#' + UAV.config.inputFile).change(function(){
 		UAV.common.init();
 	});
@@ -198,4 +198,4 @@ UAV.init = function(){
 	$('#' + UAV.config.uploadForm).submit(function(){
 		return UAV.common.submit();
 	});
-}
+};

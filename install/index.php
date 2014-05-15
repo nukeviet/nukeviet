@@ -591,6 +591,9 @@ elseif( $step == 5 )
 
 						// Xoa du lieu tai bang nvx_config
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->quote( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+
+						// Xoa du lieu tai bang nvx_menu
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows WHERE module_name NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 					}
 					catch( PDOException $e )
 					{

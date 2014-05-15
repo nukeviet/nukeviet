@@ -26,7 +26,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	if( NV_SESSION_SAVE_PATH != '' )
 	{
 		$dir_no_scan[] = NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH;
-	}	
+	}
 	$error = array();
 	//Ten thu muc luu data
 	$stack[] = $dir;

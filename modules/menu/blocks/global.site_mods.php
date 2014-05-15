@@ -10,23 +10,32 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if( ! nv_function_exists( 'nv_menu_theme_default' ) )
+if( ! nv_function_exists( 'nv_menu_site_mods' ) )
 {
-	function nv_menu_theme_default_config( $module, $data_block, $lang_block )
+	function nv_menu_site_mods_config( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
 
-		$html = "\n";
+		$html = '<tr>';
+		$html .= '	<td>&nbsp;</td>';
+		$html .= '	<td>' . $lang_block['menu_note_auto'] . '</td>';
+		$html .= '</tr>';
+		$html .= '<tr><td>' . $lang_block['title_length'] . '</td><td>';
+
+		$array_no_show = array( 'comment', 'menu' );
 		foreach( $site_mods as $modname => $modvalues )
 		{
-			$checked = in_array( $modname, $data_block['module_in_menu'] ) ? ' checked="checked"' : '';
-			$html .= '<div style="float: left" class="w150"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div>';
+			if( ! in_array( $modname, $array_no_show ) )
+			{
+				$checked = in_array( $modname, $data_block['module_in_menu'] ) ? ' checked="checked"' : '';
+				$html .= '<div style="float: left" class="w150"><label style="text-align: left"><input type="checkbox" ' . $checked . ' value="' . $modname . '" name="module_in_menu[]">' . $modvalues['custom_title'] . '</label></div>';
+			}
 		}
-
-		return '<tr><td>' . $lang_block['title_length'] . '</td><td>' . $html . '</td></tr>';
+		$html .= '</td></tr>';
+		return $html;
 	}
 
-	function nv_menu_theme_default_submit( $module, $lang_block )
+	function nv_menu_site_mods_submit( $module, $lang_block )
 	{
 		global $nv_Request;
 		$return = array();
@@ -36,20 +45,20 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 	}
 
 	/**
-	 * nv_menu_theme_default()
+	 * nv_menu_site_mods()
 	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
-	function nv_menu_theme_default( $block_config )
+	function nv_menu_site_mods( $block_config )
 	{
 		global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.menu.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.menu.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/global.bootstrap.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -58,7 +67,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 			$block_theme = 'default';
 		}
 
-		$xtpl = new XTemplate( 'global.menu.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+		$xtpl = new XTemplate( 'global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
@@ -200,5 +209,5 @@ if( ! nv_function_exists( 'nv_menu_theme_default' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_menu_theme_default( $block_config );
+	$content = nv_menu_site_mods( $block_config );
 }
