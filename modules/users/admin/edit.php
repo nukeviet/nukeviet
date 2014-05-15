@@ -194,17 +194,63 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 			$password = ! empty( $_user['password1'] ) ? $crypt->hash( $_user['password1'] ) : $row['password'];
 
-			$photo = $row['photo'];
-			if( $_user['delpic'] )
+			// Check photo
+			if( $_user['delpic'] or empty( $photo ) )
 			{
-				if( ! empty( $photo ) and is_file( NV_ROOTDIR . '/' . $photo ) )
+				if( ! empty( $_user['photo'] ) )
 				{
-					if( nv_deletefile( NV_ROOTDIR . '/' . $photo ) )
+					$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $_user['photo'];
+		
+					if( ! file_exists( $tmp_photo ) )
+					{
+						$_user['photo'] = '';
+					}
+					else
+					{
+						$new_photo_name = $_user['photo'];
+						$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
+		
+						$new_photo_name2 = $new_photo_name;
+						$i = 1;
+						while( file_exists( $new_photo_path . $new_photo_name2 ) )
+						{
+							$new_photo_name2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $new_photo_name );
+							++ $i;
+						}
+						$new_photo = $new_photo_path . $new_photo_name2;
+		
+						if( nv_copyfile( $tmp_photo, $new_photo ) )
+						{
+							$_user['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
+						}
+						else
+						{
+							$_user['photo'] = '';
+						}
+		
+						nv_deletefile( $tmp_photo );
+					}
+				}
+		
+				// Delete old photo
+				if( $_user['delpic'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
+				{
+					nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
+				}
+			}
+			else
+			{
+				$_user['photo'] = $row['photo'];
+		
+				if( ! empty( $_user['photo'] ) )
+				{
+					if( ! file_exists( NV_ROOTDIR . '/' . $_user['photo'] ) )
 					{
 						$_user['photo'] = '';
 					}
 				}
 			}
+			
 			$in_groups = array();
 			foreach ( $_user['in_groups'] as $_group_id )
 			{
@@ -276,6 +322,7 @@ else
 	$custom_fields = $result->fetch();
 }
 
+// Data gender
 $genders = array(
 	'N' => array(
 		'key' => 'N',
@@ -336,16 +383,20 @@ else
 		$xtpl->parse( 'main.edit_user.gender' );
 	}
 
-	if( ! empty( $row['photo'] ) )
+	if( ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
 		$img = array(
-			'href' => $row['photo'],
+			'src' => NV_BASE_SITEURL . $row['photo'],
 			'height' => $size[1],
 			'width' => $size[0]
 		);
 		$xtpl->assign( 'IMG', $img );
 		$xtpl->parse( 'main.edit_user.photo' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.edit_user.add_photo' );
 	}
 
 	$a = 0;

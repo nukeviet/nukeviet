@@ -60,17 +60,25 @@
 				<tr>
 					<td colspan="2"> {LANG.avata} </td>
 					<td>
-					<!-- BEGIN: photo -->
-					<div style="padding-bottom:5px">
-						<a href="{NV_BASE_SITEURL}{IMG.href}" rel="shadowbox;height={IMG.height};width={IMG.width}">{LANG.click_to_view}</a>
-						&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" name="delpic" value="1" />
-						&nbsp;{LANG.delete}
-						<br />
-					</div>
-					<!-- END: photo -->
-					<input class="form-control" type="text" name='photo' value="{DATA.photo}" id="avatar" readonly="readonly" />
-					<input type="button" class="btn btn-info" value="{LANG.avata_chosen}" id="btn_upload" /></td>
+						<!-- BEGIN: photo -->
+						<p id="current-photo" class="pull-left text-center">
+							<img src="{IMG.src}" alt="{DATA.username}" class="img-thumbnail m-bottom" width="{IMG.width}" height="{IMG.height}"/><br />
+							<span class="icon-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
+							<input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
+						</p>
+						<!-- END: photo -->
+						<div id="change-photo" class="w300">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<em class="fa fa-trash-o fa-fix fa-pointer" onclick="$('#avatar').val('');">&nbsp;</em>
+								</span>
+								<input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly"/>
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" id="btn_upload"> <em class="fa fa-folder-open-o fa-fix">&nbsp;</em></button>
+								</span>
+							</div>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
@@ -183,32 +191,39 @@
 </form>
 <br />
 <script type="text/javascript">
-	//<![CDATA[
-	document.getElementById('form_user').setAttribute("autocomplete", "off");
-	$(function() {
-		$('#form_user').validate({
-			rules : {
-				username : {
-					minlength : 5
-				}
+//<![CDATA[
+document.getElementById('form_user').setAttribute("autocomplete", "off");
+$(function() {
+	$('#form_user').validate({
+		rules : {
+			username : {
+				minlength : 5
 			}
-		});
-		$(".datepicker").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
+		}
 	});
-
-	$("input[id=btn_upload]").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", "850", "650", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false
+	$(".datepicker").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true
 	});
-	//]]>
+	$("#btn_upload").click(function() {
+		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		return false;
+	});
+	$('#current-photo-btn').click(function(){
+		$('#current-photo').hide();
+		$('#photo_delete').val('1');
+		$('#change-photo').show();
+	});
+	<!-- BEGIN: add_photo -->
+	$('#change-photo').show();
+	<!-- END: add_photo -->
+});
+//]]>
 </script>
 <!-- END: edit_user -->
 <!-- END: main -->
