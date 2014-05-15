@@ -101,10 +101,14 @@
 			<div class="clearfix"></div>
 		</aside>
 		<div id="container" class="clearfix">
-			<div id="info_tab">
-				<!-- BEGIN: empty_page_title -->
-				<h3 class="text-primary pull-left">{PAGE_TITLE}</h3>
-				<!-- END: empty_page_title -->
+			<div id="info_tab" class="clearfix">
+				<!-- BEGIN: breadcrumbs -->
+				<ol class="breadcrumb">
+					<!-- BEGIN: loop -->
+					<li<!-- BEGIN: active --> class="active"<!-- END: active -->><!-- BEGIN: text -->{BREADCRUMBS.title}<!-- END: text --><!-- BEGIN: linked --><a href="{BREADCRUMBS.link}">{BREADCRUMBS.title}</a><!-- END: linked --></li>
+					<!-- END: loop -->
+				</ol>
+				<!-- END: breadcrumbs -->
 				<!-- BEGIN: select_option -->
 				<div class="pull-right btn-group">
 					<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
