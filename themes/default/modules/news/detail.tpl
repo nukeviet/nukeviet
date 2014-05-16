@@ -26,7 +26,7 @@
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_save -->
 		</ul>
-		<div class="clear"></div>
+		<div class="clear">&nbsp;</div>
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
 	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
@@ -44,7 +44,7 @@
 	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	    </div>
         <!-- END: socialbutton -->
-		<div class="clear"></div>
+		<div class="clear">&nbsp;</div>
 		<hr />
 		<!-- BEGIN: showhometext -->
 		<div id="hometext">
