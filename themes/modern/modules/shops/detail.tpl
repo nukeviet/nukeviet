@@ -165,7 +165,7 @@
 				</div>
 				<!-- BEGIN: comment -->
 				<div class="Page">
-					<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+					<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 				</div>
 				<!-- END: comment -->
 			</div>
