@@ -168,5 +168,3 @@ else
 	header( 'Content-Length: 0' );
 	exit();
 }
-
-?>

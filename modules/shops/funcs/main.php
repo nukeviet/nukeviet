@@ -31,8 +31,8 @@ if( $nv_Request->isset_request( 'changesprice', 'post' ) )
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
-	$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+	if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 	{
 		$contents = $cache;
 	}
@@ -41,7 +41,6 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 if( empty( $contents ) )
 {
 	$data_content = array();
-	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 	$html_pages = '';
 	$orderby = '';
 	if( $sorts == 0 )
@@ -62,7 +61,7 @@ if( empty( $contents ) )
 		// Fetch Limit
 		$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'inhome=1 AND status =1 ' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, ' . NV_LANG_DATA . '_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice' )->order( $orderby )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
@@ -106,13 +105,15 @@ if( empty( $contents ) )
 			);
 		}
 
+
 		if( empty( $data_content ) and $page > 1 )
 		{
 			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			exit();
 		}
 
-		$html_pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+		$html_pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 	}
 	elseif( $pro_config['home_view'] == 'view_home_cat' )
 	{
@@ -284,7 +285,7 @@ if( empty( $contents ) )
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
-		nv_set_cache( $cache_file, $contents );
+		nv_set_cache( $module_name, $cache_file, $contents );
 	}
 }
 
@@ -297,5 +298,3 @@ if( $page > 1 )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

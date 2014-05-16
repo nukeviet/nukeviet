@@ -1,41 +1,43 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
-<table class="tab1">
-	<thead>
-		<tr>
-			<td width="10px" align="center"></td>
-			<td><strong>{LANG.order_code}</strong></td>
-			<td><strong>{LANG.order_time}</strong></td>
-			<td><strong>{LANG.order_email}</strong></td>
-			<td align="right"><strong>{LANG.order_total}</strong></td>
-			<td><strong>{LANG.order_payment}</strong></td>
-			<td width="100px" align="center"><strong>{LANG.function}</strong></td>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th width="10px" class="text-center"></th>
+				<th><strong>{LANG.order_code}</strong></th>
+				<th><strong>{LANG.order_time}</strong></th>
+				<th><strong>{LANG.order_email}</strong></th>
+				<th align="right"><strong>{LANG.order_total}</strong></th>
+				<th><strong>{LANG.order_payment}</strong></th>
+				<th width="100px" class="text-center"><strong>{LANG.function}</strong></th>
+			</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN: row -->
+		<tr {bgview}>
+			<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
+			<td>{DATA.order_code}</td>
+			<td>{DATA.order_time}</td>
+			<td><a href="{DATA.link_user}" style="text-decoration:underline" target="_blank">{DATA.order_email}</a></td>
+			<td align="right">{DATA.order_total} {DATA.unit_total}</td>
+			<td>{DATA.status_payment}</td>
+			<td class="text-center"><span class="edit_icon"><a href="{link_view}" title="">{LANG.view}</a></span>
+			<!-- BEGIN: delete -->
+			&nbsp;-&nbsp;<span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span>
+			<!-- END: delete -->
+			</td>
 		</tr>
-	</thead>
-	<tbody>
-	<!-- BEGIN: row -->
-	<tr {bgview}>
-		<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
-		<td>{DATA.order_code}</td>
-		<td>{DATA.order_time}</td>
-		<td><a href="{DATA.link_user}" style="text-decoration:underline" target="_blank">{DATA.order_email}</a></td>
-		<td align="right">{DATA.order_total} {DATA.unit_total}</td>
-		<td>{DATA.status_payment}</td>
-		<td align="center"><span class="edit_icon"><a href="{link_view}" title="">{LANG.view}</a></span>
-		<!-- BEGIN: delete -->
-		&nbsp;-&nbsp;<span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span>
-		<!-- END: delete -->
-		</td>
-	</tr>
-	<!-- END: row -->
-	</tbody>
-	<tfoot>
-		<tr>
-			<td colspan="2"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> |<a href="#" id="delall">{LANG.prounit_del_select}</a></td>
-			<td colspan="5">{PAGES}</td>
-		</tr>
-	</tfoot>
-</table>
+		<!-- END: row -->
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2"><i class="fa fa-check-square-o">&nbsp;</i><a href="#" id="checkall">{LANG.prounit_select}</a> - <i class="fa fa-square-o">&nbsp;</i> <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> - <i class="fa fa-trash-o">&nbsp;</i><a href="#" id="delall">{LANG.prounit_del_select}</a></td>
+				<td colspan="5">{PAGES}</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
 <script type='text/javascript'>
 	$(function() {
 		$('#checkall').click(function() {
@@ -83,7 +85,7 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: data -->
 <!-- END: main -->

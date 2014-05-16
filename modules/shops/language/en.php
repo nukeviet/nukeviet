@@ -289,6 +289,7 @@ $lang_module['group_title'] = 'Category';
 $lang_module['product_code'] = 'Product code';
 $lang_module['detail_product_address'] = 'Place to sell';
 $lang_module['detail_source'] = 'Manufacturer';
+$lang_module['add_source_other'] = 'View all product this source';
 $lang_module['detail_product_discounts'] = 'Discounts';
 $lang_module['detail_promotional'] = 'Promotion';
 $lang_module['detail_warranty'] = 'The warranty';
@@ -323,6 +324,5 @@ $lang_module['displays_price_asc'] = 'Price ascending';
 $lang_module['displays_price_desc'] = 'Price reduced';
 $lang_module['displays_product'] = 'Sort by: ';
 $lang_module['compare'] = 'Compare';
+$lang_module['compare_empty_items'] = 'No items';
 $lang_module['num0'] = "Compare number is greater than or equal to 2";
-
-?>

@@ -40,5 +40,3 @@ foreach( $data_orders_return as $data_transaction_id )
 		}
 	}
 }
-
-?>

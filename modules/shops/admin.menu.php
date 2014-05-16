@@ -22,5 +22,3 @@ $submenu['money'] = $lang_module['money'];
 $submenu['payport'] = $lang_module['setup_payment'];
 $submenu['docpay'] = $lang_module['document_payment'];
 $submenu['setting'] = $lang_module['setting'];
-
-?>

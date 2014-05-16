@@ -199,5 +199,3 @@ else
 	Header( 'Location: ' . NV_BASE_SITEURL );
 	die();
 }
-
-?>

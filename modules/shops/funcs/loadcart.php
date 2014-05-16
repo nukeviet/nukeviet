@@ -21,7 +21,6 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 }
 
 if( $pro_config['active_price'] == '0' ) $total = 0;
-
 $total = FormatNumber( $total, 2, '.', ',' );
 
 $lang_tmp['cart_title'] = $lang_module['cart_title'];
@@ -34,6 +33,8 @@ $lang_tmp['active_order_dis'] = $lang_module['active_order_dis'];
 $xtpl = new XTemplate( "block.cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_tmp );
 $xtpl->assign( 'total', $total );
+$xtpl->assign( 'TEMPLATE', $module_info['template'] );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart" );
 
 if( defined( 'NV_IS_USER' ) )
@@ -76,5 +77,3 @@ switch ( $type )
 		echo $content;
 		break;
 }
-
-?>

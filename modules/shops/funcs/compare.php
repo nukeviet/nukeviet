@@ -66,6 +66,7 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $array_id = $nv_Request->get_string( 'array_id', 'session', '' );
 $array_id = unserialize( $_SESSION['array_id'] );
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
+
 if( ! empty( $array_id ) )
 {
 	foreach( $array_id as $array_id_i )
@@ -225,5 +226,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

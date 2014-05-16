@@ -38,5 +38,3 @@ if ( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_cart_info( $block_config );
 }
-
-?>

@@ -26,13 +26,6 @@ if( ! empty( $data ) )
 	$data['homeheight'] = $temp[1];
 }
 
-$groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if( ! empty( $groups_list ) )
-{
-	$array_who[] = $lang_global['who_view3'];
-}
-
 $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
@@ -85,11 +78,9 @@ $array_setting_payment = array();
 
 if( $data['active_payment'] == '1' )
 {
-	$array_setting_payment = array();
-
 	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
-	$all_page = $result->rowCount();
+	$num_items = $result->rowCount();
 
 	while( $row = $result->fetch() )
 	{
@@ -101,6 +92,13 @@ $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
+
+// Số sản phẩm hiển thị trên một dòng
+for( $i = 3; $i <= 4; $i++ )
+{
+    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
+    $xtpl->parse( 'main.per_row' );
+}
 
 $check_view = array(
 	"view_home_all" => "",
@@ -180,6 +178,7 @@ if( ! empty( $error ) )
 if( ! empty( $array_setting_payment ) )
 {
 	$a = 0;
+	$all_page = sizeof( $array_setting_payment );
 	$payment = $nv_Request->get_string( 'payment', 'get', 0 );
 
 	foreach( $array_setting_payment as $value )
@@ -209,5 +208,3 @@ $contents .= $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

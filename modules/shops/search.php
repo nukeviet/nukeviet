@@ -19,16 +19,16 @@ $db->sqlreset()->select( 'COUNT(*)' )
 		OR " . nv_like_logic( NV_LANG_DATA . '_hometext', $dbkeyword, $logic ) . ")
 		AND ( publtime < " . NV_CURRENTTIME . " AND (exptime=0 OR exptime>" . NV_CURRENTTIME . ") )" );
 
-$all_page = $db->query( $db->sql() )->fetchColumn();
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( 'id, ' . NV_LANG_DATA . '_title,' . NV_LANG_DATA . '_alias, listcatid, ' . NV_LANG_DATA . '_hometext, ' . NV_LANG_DATA . '_bodytext' )
 	->order( 'id DESC' )
 	->limit( $limit )
-	->offset( $pages );
+	->offset( ( $page - 1 ) * $limit );
 
 $tmp_re = $db->query( $db->sql() );
 
-if( $all_page )
+if( $num_items )
 {
 	$array_cat_alias = array();
 
@@ -53,5 +53,3 @@ if( $all_page )
 		);
 	}
 }
-
-?>

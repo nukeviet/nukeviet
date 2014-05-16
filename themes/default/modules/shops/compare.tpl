@@ -1,92 +1,77 @@
 <!-- BEGIN: main -->
 <div id="products" class="clearfix">
 	<!-- BEGIN: grid_rows -->
-	<div class="items" style="width:25%">
-		<div class="items_content" style="height: auto !important">
-			<div class="content_top{CSS_PRODUCT_CODE}">
-				<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:100px;max-width:100px"/>
-				<!-- BEGIN: tooltip -->
-				<span class="tip"><strong>{title_pro}</strong>
-					<br />
-					<img src="{img_pro}" style="max-width:{width}px;">
-					<br />
-					{intro}</span>
-				<!-- END: tooltip -->
-				</a>
-				<br />
-				<span><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></span>
-				<br />
-				<!-- BEGIN: product_code -->
-				<div class="shops-center">
-					{PRODUCT_CODE}
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3 text-center">
+		            <a href="{link_pro}" title="{title_pro}" rel="shadowbox">
+		                <img src="{img_pro}" alt="{title_pro}" width="140px" class="img-thumbnail">
+		            </a>
 				</div>
-				<!-- END: product_code -->
+				<div class="col-md-9">
+					<p><strong><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></strong></p>
+					<!-- BEGIN: price -->
+					<p>
+						{LANG.detail_pro_price}: <span class="{class_money}">{product_price} {money_unit}</span>
+						<!-- BEGIN: discounts -->
+						<br />
+						<span class="money">{product_discounts} {money_unit}</span>
+						<!-- END: discounts -->
+					</p>
+					<!-- END: price -->
+					
+					<!-- BEGIN: contact -->
+					<p>
+						{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
+					</p>
+					<!-- END: contact -->
+					
+					<p>
+						<!-- BEGIN: order -->
+						<a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+						<!-- END: order -->
+					</p>
+					
+					<!-- BEGIN: source -->
+					<p>
+						<strong>{LANG.detail_source}:</strong> <a href="{link_source}">{source}</a>
+					</p>
+					<!-- END: source -->
+					
+					<!-- BEGIN: promotional -->
+					<p>
+						<strong>{LANG.detail_promotional}:</strong> {promotional}
+					</p>
+					<!-- END: promotional -->
+					
+					<!-- BEGIN: warranty -->
+					<p>
+						<strong>{LANG.detail_warranty}:</strong> {warranty}
+					</p>
+					<!-- END: warranty -->
+					
+					<!-- BEGIN: address -->
+					<p>
+						<strong>{LANG.detail_product_address}:</strong> {address}
+					</p>
+					<!-- END: address -->
+					
+					<!-- BEGIN: note -->
+					<p>
+						<strong>{LANG.cart_note}:</strong> {note}
+					</p>
+					<!-- END: note -->
+					<p>
+						<strong>{LANG.product_detail}:</strong> {DETAIL}
+					</p>
+				</div>
 			</div>
-			<!-- BEGIN: price -->
-			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span>
-				<!-- BEGIN: discounts -->
-				<br />
-				<span class="money">{product_discounts} {money_unit}</span>
-				<!-- END: discounts -->
-			</p>
-			<!-- END: price -->
-			<!-- BEGIN: contact -->
-
-			<p class="content_price">
-				<span class="money">{LANG.detail_pro_price}: {LANG.price_contact}</span>
-			</p>
-			<!-- END: contact -->
-			<div align="center">
-				<!-- BEGIN: order -->
-				<a href="javascript:void(0)" id="{id}" title="{title_pro}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
-				<!-- END: order -->
-			</div>
-
-			<hr/>
-			<div style="text-align: left">
-				<!-- BEGIN: source -->
-				<div>
-					{LANG.detail_source} : <a href="{link_source}">{source}</a>
-				</div>
-				<!-- END: source -->
-				<!-- BEGIN: promotional -->
-				<div>
-					{LANG.detail_promotional} : {promotional}
-				</div>
-				<!-- END: promotional -->
-				<!-- BEGIN: warranty -->
-				<div>
-					{LANG.detail_warranty} : {warranty}
-				</div>
-				<!-- END: warranty -->
-				<!-- BEGIN: address -->
-				<div>
-					{LANG.detail_product_address} : {address}
-				</div>
-				<!-- END: address -->
-				<!-- BEGIN: note -->
-				<div>
-					{LANG.cart_note} : {note}
-				</div>
-				<!-- END: note -->
-				<div>
-					<b>{LANG.product_detail}</b>
-					<br/>
-					{DETAIL}
-
-				</div>
-
-			</div>
-
 		</div>
 	</div>
 	<!-- END: grid_rows -->
-
-	<!-- BEGIN: nodata -->
-	<center>
-		<strong style="color: #f00">{LANG.chuachonsp}</strong>
-	</center>
-	<!-- END: nodata -->
+	
+	<strong class="text-info text-center">{LANG.compare_empty_items}</strong>
+	
 </div>
 <!-- END: main -->

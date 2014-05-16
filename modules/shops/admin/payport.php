@@ -17,7 +17,7 @@ $array_setting_payment = array();
 // Load config template payment port in data
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 $result = $db->query( $sql );
-$all_page = $result->rowCount();
+$num_items = $result->rowCount();
 
 while( $row = $result->fetch() )
 {
@@ -141,6 +141,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $a = 0;
 if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 {
+	$all_page = sizeof( $array_setting_payment );
 	foreach( $array_setting_payment as $value )
 	{
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];
@@ -229,5 +230,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

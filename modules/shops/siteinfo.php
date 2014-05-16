@@ -67,5 +67,3 @@ if( $number > 0 )
 {
 	$pendinginfo[] = array( 'key' => $lang_siteinfo['siteinfo_order_noview'], 'value' => $number );
 }
-
-?>

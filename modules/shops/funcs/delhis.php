@@ -40,5 +40,3 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 }
 
 echo "ERR_Error";
-
-?>

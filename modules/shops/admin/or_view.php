@@ -9,7 +9,7 @@
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
- 
+
 $page_title = $lang_module['order_title'];
 $table_name = $db_config['prefix'] . '_' . $module_data . '_orders';
 
@@ -242,7 +242,7 @@ if( $result->rowCount() )
 		}
 		if( $row['userid'] > 0 )
 		{
-			$username = $db->query( 'SELECT username FROM ' . $db_config['dbsystem'] . '.' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
+			$username = $db->query( 'SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid'] )->fetchColumn();
 			$row['payment'] = $username;
 			$row['link_user'] = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=edit&userid=' . $row['userid'];
 		}
@@ -277,5 +277,3 @@ $set_active_op = 'order';
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

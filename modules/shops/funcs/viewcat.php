@@ -28,8 +28,8 @@ $sorts_old = $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
-	$cache_file = NV_LANG_DATA . '_' . $module_name . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( $cache_file ) ) != false )
+	$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+	if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 	{
 		$contents = $cache;
 	}
@@ -149,15 +149,15 @@ if( empty( $contents ) )
 
 		$db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( $where . ' AND status =1 ' );
 
-		$all_page = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db->query( $db->sql() )->fetchColumn();
 
 		$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, ' . NV_LANG_DATA . '_address, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, product_discounts, money_unit, showprice' )->order( $orderby )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 		$result = $db->query( $db->sql() );
 
 		$data_content = GetDataIn( $result, $catid );
-		$data_content['count'] = $all_page;
+		$data_content['count'] = $num_items;
 
-		$pages = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+		$pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 		if( sizeof( $data_content['data'] ) < 1 and $page > 1 )
 		{
@@ -170,7 +170,7 @@ if( empty( $contents ) )
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{
-		nv_set_cache( $cache_file, $contents );
+		nv_set_cache( $module_name, $cache_file, $contents );
 	}
 }
 
@@ -183,5 +183,3 @@ if( $page > 1 )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
