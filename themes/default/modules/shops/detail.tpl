@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<link rel="Stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/responsive-tabs.css" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.responsiveTabs.min.js"></script>
 <div id="detail">
 	<div class="panel panel-default">
 	    <div class="panel-body">
