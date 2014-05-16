@@ -837,7 +837,7 @@ function detail_product( $data_content, $data_unit, $data_others, $data_shop, $a
 		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
 		define( 'SHADOWBOX', true );
         $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/responsive-tabs.css\" />\n";
-        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/jquery.responsiveTabs.min.js\" />\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/jquery.responsiveTabs.min.js\" /></script>\n";
 	}
 
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
