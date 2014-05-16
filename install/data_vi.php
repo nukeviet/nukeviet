@@ -539,7 +539,7 @@ if( $result->fetchColumn() )
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
 
-$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Menu theme themes')");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (1, 0, 1, 'Giới thiệu', '/index.php?language=vi&nv=about', '', 1, 1, 0, '2,3', '6', 'about', '', 1, '', 1, 1)" );
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (2, 1, 1, 'Giới thiệu về NukeViet 3.0', '/index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-NukeViet-3-0', '', 1, 2, 1, '', '6', 'about', 'Gioi-thieu-ve-NukeViet-3-0', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (3, 1, 1, 'Giới thiệu về công ty chuyên quản NukeViet', '/index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', '', 2, 3, 1, '', '6', 'about', 'Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', 1, '', 1, 1) ");
