@@ -17,17 +17,17 @@ if( defined( 'NV_IS_FILE_THEMES' ) )
 	require NV_ROOTDIR . '/modules/menu/menu_config.php';
 }
 
-if( !nv_function_exists( 'nv_menu_theme_default' ) )
+if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 {
 
 	/**
-	 * nv_menu_check_current()
+	 * nv_menu_bootstrap_check_current()
 	 *
 	 * @param mixed $url
 	 * @param integer $type
 	 * @return
 	 */
-	function nv_menu_check_current( $url, $type = 0 )
+	function nv_menu_bootstrap_check_current( $url, $type = 0 )
 	{
 		global $module_name, $home, $client_info, $global_config;
 
@@ -65,12 +65,12 @@ if( !nv_function_exists( 'nv_menu_theme_default' ) )
 	}
 
 	/**
-	 * nv_menu_theme_default()
+	 * nv_menu_bootstrap()
 	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
-	function nv_menu_theme_default( $block_config )
+	function nv_menu_bootstrap( $block_config )
 	{
 		global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
@@ -136,7 +136,7 @@ if( !nv_function_exists( 'nv_menu_theme_default' ) )
 				$xtpl->parse( 'main.top_menu.sub' );
 				$xtpl->parse( 'main.top_menu.has_sub' );
 			}
-			if( nv_menu_check_current( $item['link'], $item['active_type'] ) )
+			if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
 			{
 				$classcurrent[] = 'active';
 			}
@@ -161,5 +161,5 @@ if( !nv_function_exists( 'nv_menu_theme_default' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_menu_theme_default( $block_config );
+	$content = nv_menu_bootstrap( $block_config );
 }
