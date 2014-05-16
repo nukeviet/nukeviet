@@ -111,3 +111,8 @@
 	background-position: right center;
 	background-image: url('../images/arrows/tall-down-arrow.gif')
 }
+
+/* EDIT INFO */
+#change-photo{
+	display: none;
+}

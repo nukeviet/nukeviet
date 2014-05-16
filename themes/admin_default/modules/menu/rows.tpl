@@ -3,13 +3,6 @@
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
 </script>
-<ol class="breadcrumb">
-	<!-- BEGIN: breadcrumb -->
-		<li><a href="{BREADCRUMB.link}">{BREADCRUMB.title}</a></li>
-	<!-- END: breadcrumb -->
-	<li class="active">{BREADCRUMB_ACTIVE.title}</li>
-</ol>
-
 <!-- BEGIN: table -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">

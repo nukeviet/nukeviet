@@ -74,7 +74,7 @@ function nv_get_submenu_mod( $module_name )
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
-	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer;
+	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title;
 
 	$dir_template = '';
 
@@ -304,11 +304,48 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->assign( 'NV_GO_CLIENTMOD', $lang_global['go_clientmod'] );
 		$xtpl->parse( 'main.site_mods' );
 	}
-
-	if( ! empty( $page_title ) )
+	
+	/**
+	 * Breadcrumbs
+	 * Note: If active is true, the link will be dismiss
+	 * If empty $array_mod_title and $page_title, breadcrumbs do not display
+	 * By default, breadcrumbs is $page_title
+	 */
+	if( empty( $array_mod_title ) and ! empty( $page_title ) )
 	{
-		$xtpl->assign( 'PAGE_TITLE', $page_title );
-		$xtpl->parse( 'main.empty_page_title' );
+		$array_mod_title = array(
+			0 => array(
+				'title' => $page_title,
+				'link' => '',
+				'active' => true,
+			),
+		);
+	}
+	
+	if( ! empty( $array_mod_title ) )
+	{
+		foreach( $array_mod_title as $breadcrumbs )
+		{
+			$xtpl->assign( 'BREADCRUMBS', $breadcrumbs );
+			
+			if( ! empty( $breadcrumbs['active'] ) )
+			{
+				$xtpl->parse( 'main.breadcrumbs.loop.active' );
+			}
+			
+			if( ! empty( $breadcrumbs['link'] ) and empty( $breadcrumbs['active'] ) )
+			{
+				$xtpl->parse( 'main.breadcrumbs.loop.linked' );
+			}
+			else
+			{
+				$xtpl->parse( 'main.breadcrumbs.loop.text' );
+			}
+			
+			$xtpl->parse( 'main.breadcrumbs.loop' );
+		}
+		
+		$xtpl->parse( 'main.breadcrumbs' );
 	}
 
 	$xtpl->assign( 'THEME_ERROR_INFO', nv_error_info() );

@@ -300,11 +300,6 @@ h1, h2, h3, h4, h5, h6{
 	min-height: 36px;
 }
 
-#info_tab h3{
-	margin-bottom: 0;
-	display: inline-block;
-}
-
 #info_tab #cs_menu{
 	width: 20px;
 	float: left;
@@ -629,4 +624,21 @@ input[type=radio]:checked:before {
 
 label {
     font-weight: normal;
+}
+
+/* Breadcrumb
+ -----------------------------------------------------------------------------*/
+.breadcrumb{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	background: transparent;
+	border: none;
+	font-size: 16px;
+	line-height: 22px;
+	display: inline-block;
+	font-weight: bold;
+}
+.breadcrumb>li:first-child{
+	color: #0074a2!important;
 }
