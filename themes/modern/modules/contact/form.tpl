@@ -10,27 +10,6 @@
 		<p>
 			{LANG.note}
 		</p>
-		<!-- BEGIN: department -->
-			<div class="panel panel-default">
-				<div class="panel-heading">{LANG.department}: {DEPARTMENT.full_name}</div>
-				<table class="table">
-					<tbody>
-						<tr>
-							<td>{LANG.phone}</td>
-							<td>{DEPARTMENT.phone}</td>
-						</tr>
-						<tr>
-							<td>{LANG.fax}</td>
-							<td>{DEPARTMENT.fax}</td>
-						</tr>
-						<tr>
-							<td>{LANG.email}</td>
-							<td>{DEPARTMENT.email}</td>
-						</tr>
-					</tbody>
-		  		</table>
-			</div>
-		<!-- END: department -->
 
 		<form id="fcontact" method="post" action="{ACTION_FILE}" onsubmit="return sendcontact('{NV_GFX_NUM}');">
 			<div class="contact-form box-border content-box">
