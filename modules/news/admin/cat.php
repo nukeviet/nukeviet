@@ -84,7 +84,7 @@ if( ! empty( $savecat ) )
 		{
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
-			nv_create_table_news( NV_LANG_DATA, $module_data, $newcatid );
+			nv_create_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid , NV_PREFIXLANG . '_' . $module_data . '_rows' );
 			nv_fix_cat_order();
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
