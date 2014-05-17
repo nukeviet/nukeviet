@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="cse"></div>
-<div id="search-form">
+<div id="search-form" class="text-center">
 	<p><em>{LANG.info_title}</em></p>
 	<form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form" class="form-inline">
 		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
@@ -15,7 +15,7 @@
 				<select name="m" id="search_query_mod" class="form-control">
 					<option value="all">{LANG.search_on_site}</option>
 					<!-- BEGIN: select_option -->
-					<option value="{MOD.value}"{MOD.selected}>{MOD.custom_title}</option>
+					<option data-adv="{MOD.adv_search}" value="{MOD.value}"{MOD.selected}>{MOD.custom_title}</option>
 					<!-- END: select_option -->
 				</select>
 			</div>
@@ -52,18 +52,28 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
-$("a.advSearch").click(function() {
+$('#search_query_mod').change(function(){
+	var data = $(this).find('option:selected').data();
+	if( data.adv == true ){
+		$("a.advSearch").show();
+	}else if( data.adv == false ){
+		$("a.advSearch").hide();
+	}else{
+		$("a.advSearch").show();
+	}
+});
+$("a.advSearch").click(function(e){
+	e.preventDefault();
 	var b = $("#form_search #search_query_mod").val();
-	if ("all" == b) {
+	if("all" == b){
 		return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
 	}
 	var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
 	{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
 
 	window.location.href = b;
-	return !1
 });
-$("a.IntSearch").click(function() {
+$("a.IntSearch").click(function(){
 	var a = $("#form_search [name=q]").val();
 	$("#search-form").hide();
 	$("#search_result").hide();
@@ -72,10 +82,10 @@ $("a.IntSearch").click(function() {
 	customSearchControl.draw('cse');
 	customSearchControl.execute(a);
 });
-$("#form_search").submit(function() {
+$("#form_search").submit(function(){
 	var a = $("#form_search [name=q]").val(), a = strip_tags(a), b;
 	$("#form_search [name=q]").val(a);
-	if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length) {
+	if({NV_MIN_SEARCH_LENGTH} > a.length || {NV_MAX_SEARCH_LENGTH} < a.length){
 		return $("#form_search [name=q]").select(), !1
 	}
 	return true;

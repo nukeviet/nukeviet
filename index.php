@@ -34,7 +34,7 @@ if( $global_config['online_upd'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'N
 // Thong ke
 if( $global_config['statistic'] and ! defined( 'NV_IS_AJAX' ) and ! defined( 'NV_IS_MY_USER_AGENT' ) )
 {
-	if( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'session' ) )
+	if( ! $nv_Request->isset_request( 'statistic_' . NV_LANG_DATA, 'cookie' ) )
 	{
 		require NV_ROOTDIR . '/includes/core/stat.php';
 	}
@@ -135,11 +135,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				if( $drag_block )
 				{
 					define( 'NV_IS_DRAG_BLOCK', true );
-					$adm_data_lang = $nv_Request->get_string( 'data_lang', 'cookie' );
-					if( $adm_data_lang != NV_LANG_DATA )
+					$adm_int_lang = $nv_Request->get_string( 'int_lang', 'cookie' );
+					if( $adm_int_lang != NV_LANG_DATA )
 					{
 						$nv_Request->set_Cookie( 'int_lang', NV_LANG_DATA, NV_LIVE_COOKIE_TIME );
-						$nv_Request->set_Cookie( 'data_lang', NV_LANG_DATA, NV_LIVE_COOKIE_TIME );
 					}
 				}
 			}
@@ -261,7 +260,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 
 			if( ! defined( 'NV_IS_AJAX' ) )
 			{
-				if( $module_info['submenu'] ) nv_create_submenu();
+				nv_create_submenu();
 			}
 
 			// Ket noi voi cac op cua module de thuc hien

@@ -151,7 +151,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
 	max_length bigint(20) unsigned NOT NULL DEFAULT '0',
 	required tinyint(3) unsigned NOT NULL DEFAULT '0',
 	show_register tinyint(3) unsigned NOT NULL DEFAULT '0',
-	user_editable enum('yes','once','never') NOT NULL DEFAULT 'yes',
+	user_editable tinyint(3) unsigned NOT NULL DEFAULT '0',
 	show_profile tinyint(4) NOT NULL DEFAULT '1',
 	class varchar(50) NOT NULL,
 	language text NOT NULL,
@@ -434,4 +434,13 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_plugin (
   weight tinyint(4) NOT NULL,
   PRIMARY KEY (pid),
   UNIQUE KEY plugin_file (plugin_file)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
+	 c_type varchar(100) NOT NULL,
+	 c_val varchar(100) NOT NULL,
+	 last_update int(11) NOT NULL DEFAULT '0',
+	 c_count int(11) unsigned NOT NULL DEFAULT '0',
+	 " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
+	 UNIQUE KEY c_type (c_type,c_val)
 ) ENGINE=MyISAM";

@@ -73,11 +73,17 @@ $lang_module['auto_postcomm_1'] = 'Không kiểm duyệt';
 $lang_module['auto_postcomm_2'] = 'Kiểm duyệt nếu không là thành viên';
 
 $lang_module['adminscomm'] = 'Admin quản lý bình luận';
-$lang_module['view_comm'] = 'Ai được phép xem comment';
-$lang_module['allowed_comm'] = 'Ai được phép đăng comment';
+$lang_module['view_comm'] = 'Ai được phép xem bình luận';
+$lang_module['allowed_comm'] = 'Ai được phép đăng bình luận';
 $lang_module['allowed_comm_item'] = 'Theo cấu hình bài viết';
 
 $lang_module['sortcomm'] = 'Sắp xếp bình luận theo';
 $lang_module['sortcomm_0'] = 'Mới trước';
 $lang_module['sortcomm_1'] = 'Cũ trước';
 $lang_module['sortcomm_2'] = 'Like nhiều trước';
+
+$lang_module['captcha'] = 'Cấu hình hiển thị captcha';
+$lang_module['captcha_0'] = 'Không hiển thị';
+$lang_module['captcha_1'] = 'Nếu không phải là thành viên';
+$lang_module['captcha_2'] = 'Nếu không phải người quản lý bình luận';
+$lang_module['captcha_3'] = 'Hiển thị trong mọi trường hợp';

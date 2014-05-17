@@ -193,17 +193,17 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					$contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
 					$contents .= "</div>";
 					$contents .= "</td></tr></table>";
-					$contents .= "<meta http-equiv=\"refresh\" content=\"30;url=" . $nv_redirect2 . "\" />";
+					$contents .= "<meta http-equiv=\"refresh\" content=\"3;url=" . $nv_redirect2 . "\" />";
 				}
 			}
 			else
 			{
-				$contents = "<meta http-equiv=\"refresh\" content=\"10;url=" . $nv_redirect . "\" />";
+				$contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
 			}
 		}
 		else
 		{
-			$contents = "<meta http-equiv=\"refresh\" content=\"10;url=" . $nv_redirect . "\" />";
+			$contents = "<meta http-equiv=\"refresh\" content=\"1;url=" . $nv_redirect . "\" />";
 		}
 	}
 }

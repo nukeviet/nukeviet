@@ -377,7 +377,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['copyright'] = ( int )$nv_Request->get_bool( 'copyright', 'post' );
 	$rowcontent['inhome'] = ( int )$nv_Request->get_bool( 'inhome', 'post' );
 
-	$rowcontent['allowed_comm'] = $nv_Request->get_int( 'allowed_comm', 'post', 0 );
+	$_groups_post = $nv_Request->get_array( 'allowed_comm', 'post', array() );
+	$rowcontent['allowed_comm'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$rowcontent['allowed_rating'] = ( int )$nv_Request->get_bool( 'allowed_rating', 'post' );
 	$rowcontent['allowed_send'] = ( int )$nv_Request->get_bool( 'allowed_send', 'post' );
@@ -387,7 +388,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords'] );
-    
+
 	if( $rowcontent['keywords'] == '' )
 	{
 		if( $rowcontent['hometext'] != '' )
@@ -423,7 +424,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$weightopic = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics' )->fetchColumn();
 			$weightopic = intval( $weightopic ) + 1;
 			$aliastopic = change_alias( $rowcontent['topictext'] );
-			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, thumbnail, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
+			$_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_topics (title, alias, description, image, weight, keywords, add_time, edit_time) VALUES ( :title, :alias, :description, '', :weight, :keywords, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 			$data_insert = array();
 			$data_insert['title'] = $rowcontent['topictext'];
 			$data_insert['alias'] = $aliastopic;
@@ -531,7 +532,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 :homeimgalt,
 				 :homeimgthumb,
 				 ' . intval( $rowcontent['inhome'] ) . ',
-				 ' . intval( $rowcontent['allowed_comm'] ) . ',
+				 :allowed_comm,
 				 ' . intval( $rowcontent['allowed_rating'] ) . ',
 				 ' . intval( $rowcontent['hitstotal'] ) . ',
 				 ' . intval( $rowcontent['hitscm'] ) . ',
@@ -547,6 +548,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$data_insert['homeimgfile'] = $rowcontent['homeimgfile'];
 			$data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
 			$data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
+			$data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
 
 			$rowcontent['id'] = $db->insert_id( $sql, 'id', $data_insert );
 			if( $rowcontent['id'] > 0 )
@@ -625,7 +627,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					 homeimgalt=:homeimgalt,
 					 homeimgthumb=:homeimgthumb,
 					 inhome=' . intval( $rowcontent['inhome'] ) . ',
-					 allowed_comm=' . intval( $rowcontent['allowed_comm'] ) . ',
+					 allowed_comm=:allowed_comm,
 					 allowed_rating=' . intval( $rowcontent['allowed_rating'] ) . ',
 					 edittime=' . NV_CURRENTTIME . '
 				WHERE id =' . $rowcontent['id'] );
@@ -638,6 +640,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$sth->bindParam( ':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR );
 			$sth->bindParam( ':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR );
 			$sth->bindParam( ':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR );
+			$sth->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
 
 			if( $sth->execute() )
 			{
@@ -970,14 +973,22 @@ for( $i = 0; $i < 60; ++$i )
 }
 $xtpl->assign( 'emin', $select );
 
-// allowed
-$select = '';
-while( list( $commid_i, $commid_title_i ) = each( $array_allowed_comm ) )
+// allowed comm
+
+$allowed_comm = explode( ',', $rowcontent['allowed_comm'] );
+foreach( $groups_list as $_group_id => $_title )
 {
-	$comm_sl = ( $commid_i == $rowcontent['allowed_comm'] ) ? ' selected="selected"' : '';
-	$select .= "<option value=\"" . $commid_i . "\" " . $comm_sl . ">" . $commid_title_i . "</option>\n";
+	$xtpl->assign( 'ALLOWED_COMM', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $allowed_comm ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.allowed_comm' );
 }
-$xtpl->assign( 'allowed_comm', $select );
+if( $module_config[$module_name]['allowed_comm'] != '-1' )
+{
+	$xtpl->parse( 'main.content_note_comm' );
+}
 
 // source
 $select = '';
@@ -1010,16 +1021,15 @@ if( sizeof( $array_block_cat_module ) )
 	}
 	$xtpl->parse( 'main.block_cat' );
 }
-$keywords_array = explode( ",", $rowcontent['keywords'] );
-if( sizeof( $keywords_array ) )
+if( ! empty( $rowcontent['keywords'] ) )
 {
+	$keywords_array = explode( ',', $rowcontent['keywords'] );
 	foreach( $keywords_array as $keywords )
 	{
 		$xtpl->assign( 'KEYWORDS', $keywords );
 		$xtpl->parse( 'main.keywords' );
 	}
 }
-
 $archive_checked = ( $rowcontent['archive'] ) ? ' checked="checked"' : '';
 $xtpl->assign( 'archive_checked', $archive_checked );
 $inhome_checked = ( $rowcontent['inhome'] ) ? ' checked="checked"' : '';

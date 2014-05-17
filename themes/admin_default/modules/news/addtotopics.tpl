@@ -1,37 +1,39 @@
 <!-- BEGIN: main -->
 <div id="add">
-	<table class="tab1">
-		<colgroup>
-			<col class="w50"/>
-			<col>
-		</colgroup>
-		<thead>
-			<tr>
-				<td>&nbsp;</td>
-				<td>{LANG.name}</td>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td class="center"><input name="checkall" type="checkbox"/></td>
-				<td>
-				<select name="topicsid">
-					<!-- BEGIN: topicsid -->
-					<option value="{TOPICSID.key}">{TOPICSID.title}</option>
-					<!-- END: topicsid -->
-				</select> 
-				<input name="update" type="button" value="{LANG.save}" /></td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td class="center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
-				<td>{ROW.title}</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<colgroup>
+				<col class="w50"/>
+				<col>
+			</colgroup>
+			<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th>{LANG.name}</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td class="text-center"><input name="checkall" type="checkbox"/></td>
+					<td>
+					<select class="form-control" name="topicsid">
+						<!-- BEGIN: topicsid -->
+						<option value="{TOPICSID.key}">{TOPICSID.title}</option>
+						<!-- END: topicsid -->
+					</select> 
+					<input name="update" type="button" value="{LANG.save}" /></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="text-center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
+					<td>{ROW.title}</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
 </div>
 <script type="text/javascript">
 	$(function() {

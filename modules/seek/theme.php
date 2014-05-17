@@ -44,6 +44,8 @@ function search_main_theme( $is_search, $search, $array_modul )
 		{
 			$m_info['value'] = $m_name;
 			$m_info['selected'] = ( $m_name == $search['mod'] ) ? " selected=\"selected\"" : "";
+			$m_info['adv_search'] = $m_info['adv_search'] ? 'true' : 'false';
+			
 			$xtpl->assign( 'MOD', $m_info );
 			$xtpl->parse( 'main.select_option' );
 		}

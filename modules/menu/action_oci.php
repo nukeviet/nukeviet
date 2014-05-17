@@ -35,7 +35,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  sort NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
  lev NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
  subitem VARCHAR2(4000 CHAR) DEFAULT '',
- who_view NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
  groups_view VARCHAR2(255 CHAR) DEFAULT '',
  module_name VARCHAR2(255 CHAR) DEFAULT '',
  op VARCHAR2(255 CHAR) DEFAULT '',
@@ -61,7 +60,6 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . " (
  id NUMBER(5,0) DEFAULT NULL,
  title VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
- description VARCHAR2(255 CHAR) DEFAULT '',
  primary key (id),
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_title UNIQUE (title)
 )";

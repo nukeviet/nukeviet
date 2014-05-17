@@ -37,6 +37,9 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 		    $activelang = $nv_Request->get_int( 'activelang', 'get', 0 );
             $allow_sitelangs = $global_config['allow_sitelangs'];
 
+            $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
+            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], ' langkey : ' . $keylang . ' [ ' . $temp . ' ]', $admin_info['userid'] );
+
             if( $activelang )
             {
                 $allow_sitelangs[] = $keylang;
@@ -51,10 +54,6 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
             $sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'" );
             $sth->bindValue( ':config_value', implode( ',', $allow_sitelangs ), PDO::PARAM_STR );
             $sth->execute();
-
-            $temp = ( $activelang == 1 ) ? $lang_global['yes'] : $lang_global['no'];
-
-            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_lang_slsite'], ' langkey : ' . $keylang . ' [ ' . $temp . ' ]', $admin_info['userid'] );
 
 			nv_save_file_config_global();
 
@@ -82,7 +81,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
-		else
+		elseif( $global_config['lang_multi'] )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_new'] . ' ' . $lang_module['nv_lang_data'], ' langkey : ' . $keylang, $admin_info['userid'] );
 
@@ -116,6 +115,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 					exit();
 				}
 			}
+			$db->columns_add( NV_COUNTER_GLOBALTABLE, $keylang . '_count', 'integer', 2147483647, true, 0);
 
 			if( defined( 'NV_MODULE_SETUP_DEFAULT' ) )
 			{
@@ -219,9 +219,8 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 					}
 				}
 			}
-			$nv_Request->set_Cookie( 'data_lang', $keylang, NV_LIVE_COOKIE_TIME );
 
-			$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=main' );
+			$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $keylang . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=main' );
 
 			$xtpl->parse( 'contents_setup' );
 			$contents = $xtpl->text( 'contents_setup' );
@@ -231,12 +230,21 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 			include NV_ROOTDIR . '/includes/footer.php';
 			exit();
 		}
+		else
+		{
+			include NV_ROOTDIR . '/includes/header.php';
+			echo nv_admin_theme( $lang_module['nv_data_note'] );
+			include NV_ROOTDIR . '/includes/footer.php';
+			exit();
+		}
 	}
 	elseif( $checksess == md5( $deletekeylang . session_id() . 'deletekeylang' ) and ! in_array( $deletekeylang, $global_config['allow_sitelangs'] ) )
 	{
 		define( 'NV_IS_FILE_MODULES', true );
 
 		$lang = $deletekeylang;
+
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'], ' langkey : ' . $deletekeylang, $admin_info['userid'] );
 
 		$sql = 'SELECT title, module_file, module_data FROM ' . $db_config['prefix'] . '_' . $lang . '_modules ORDER BY weight ASC';
 		$result_del_module = $db->query( $sql );
@@ -265,6 +273,8 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 			}
 		}
 
+		$db->query( 'ALTER TABLE ' . NV_COUNTER_GLOBALTABLE . ' DROP ' . $deletekeylang . '_count' );
+
 		require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
 		$sql_drop_table = nv_delete_table_sys( $deletekeylang );
@@ -285,7 +295,6 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 		$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_language WHERE lang = '" . $deletekeylang . "'" );
 
 		nv_delete_all_cache();
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['nv_setup_delete'], ' langkey : ' . $deletekeylang, $admin_info['userid'] );
 
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
 		exit();

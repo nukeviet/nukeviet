@@ -14,12 +14,6 @@ $page_title = $lang_module['download_config'];
 
 $array_exts = get_allow_exts();
 $groups_list = nv_groups_list();
-$array_who_upload = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if( ! empty( $groups_list ) )
-{
-	$array_who_upload[] = $lang_global['who_view3'];
-}
-
 $readme_file = NV_ROOTDIR . '/' . NV_DATADIR . '/README.txt';
 
 $array_config = array();
@@ -27,11 +21,7 @@ $array_config = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$array_config['is_addfile'] = $nv_Request->get_int( 'is_addfile', 'post', 0 );
-	$array_config['who_addfile'] = $nv_Request->get_int( 'who_addfile', 'post', 0 );
-	$array_config['groups_addfile'] = $nv_Request->get_typed_array( 'groups_addfile', 'post', 'int' );
 	$array_config['is_upload'] = $nv_Request->get_int( 'is_upload', 'post', 0 );
-	$array_config['who_upload'] = $nv_Request->get_int( 'who_upload', 'post', 0 );
-	$array_config['groups_upload'] = $nv_Request->get_typed_array( 'groups_upload', 'post', 'int' );
 	$array_config['maxfilesize'] = $nv_Request->get_float( 'maxfilesize', 'post', 0 );
 	$array_config['upload_filetype'] = $nv_Request->get_typed_array( 'upload_filetype', 'post', 'string' );
 	$array_config['upload_dir'] = $nv_Request->get_title( 'upload_dir', 'post', '' );
@@ -42,19 +32,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['is_resume'] = $nv_Request->get_int( 'is_resume', 'post', 0 );
 	$array_config['max_speed'] = $nv_Request->get_int( 'max_speed', 'post', 0 );
 
-	if( ! in_array( $array_config['who_addfile'], array_keys( $array_who_upload ) ) )
-	{
-		$array_config['who_addfile'] = 0;
-	}
+	$_groups_post = $nv_Request->get_array( 'groups_upload', 'post', array() );
+	$array_config['groups_addfile'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
-	$array_config['groups_addfile'] = ( ! empty( $array_config['groups_addfile'] ) ) ? implode( ',', $array_config['groups_addfile'] ) : '';
-
-	if( ! in_array( $array_config['who_upload'], array_keys( $array_who_upload ) ) )
-	{
-		$array_config['who_upload'] = 0;
-	}
-
-	$array_config['groups_upload'] = ( ! empty( $array_config['groups_upload'] ) ) ? implode( ',', $array_config['groups_upload'] ) : '';
+	$_groups_post = $nv_Request->get_array( 'groups_upload', 'post', array() );
+	$array_config['groups_upload'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	if( $array_config['maxfilesize'] <= 0 or $array_config['maxfilesize'] > NV_UPLOAD_MAX_FILESIZE )
 	{
@@ -137,10 +119,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 
 $array_config['is_addfile'] = 0;
-$array_config['who_addfile'] = 0;
 $array_config['groups_addfile'] = '';
 $array_config['is_upload'] = 0;
-$array_config['who_upload'] = 0;
 $array_config['groups_upload'] = '';
 $array_config['maxfilesize'] = NV_UPLOAD_MAX_FILESIZE;
 $array_config['upload_filetype'] = '';
@@ -169,28 +149,6 @@ $array_config['is_upload'] = ! empty( $array_config['is_upload'] ) ? ' checked="
 $array_config['is_zip'] = ! empty( $array_config['is_zip'] ) ? ' checked="checked"' : '';
 $array_config['is_resume'] = ! empty( $array_config['is_resume'] ) ? ' checked="checked"' : '';
 
-$who_addfile = $array_config['who_addfile'];
-$array_config['who_addfile'] = array();
-foreach( $array_who_upload as $key => $who )
-{
-	$array_config['who_addfile'][$key] = array(
-		'key' => $key,
-		'title' => $who,
-		'selected' => $key == $who_addfile ? ' selected="selected"' : ''
-	);
-}
-
-$who_upload = $array_config['who_upload'];
-$array_config['who_upload'] = array();
-foreach( $array_who_upload as $key => $who )
-{
-	$array_config['who_upload'][$key] = array(
-		'key' => $key,
-		'title' => $who,
-		'selected' => $key == $who_upload ? ' selected="selected"' : ''
-	);
-}
-
 $upload_filetype = ! empty( $array_config['upload_filetype'] ) ? explode( ',', $array_config['upload_filetype'] ) : array();
 $array_config['upload_filetype'] = array();
 if( ! empty( $array_exts ) )
@@ -205,7 +163,7 @@ if( ! empty( $array_exts ) )
 	}
 }
 
-$groups_addfile = ! empty( $array_config['groups_addfile'] ) ? explode( ',', $array_config['groups_addfile'] ) : array();
+$groups_addfile = explode( ',', $array_config['groups_addfile'] );
 $array_config['groups_addfile'] = array();
 if( ! empty( $groups_list ) )
 {
@@ -219,7 +177,7 @@ if( ! empty( $groups_list ) )
 	}
 }
 
-$groups_upload = ! empty( $array_config['groups_upload'] ) ? explode( ',', $array_config['groups_upload'] ) : array();
+$groups_upload = explode( ',', $array_config['groups_upload'] );
 $array_config['groups_upload'] = array();
 if( ! empty( $groups_list ) )
 {
@@ -245,36 +203,16 @@ foreach( $array_config['upload_filetype'] as $filetype )
 	$xtpl->parse( 'main.upload_filetype' );
 }
 
-foreach( $array_config['who_addfile'] as $who )
+foreach( $array_config['groups_addfile'] as $group )
 {
-	$xtpl->assign( 'WHO_ADDFILE', $who );
-	$xtpl->parse( 'main.who_addfile' );
+	$xtpl->assign( 'GROUPS_ADDFILE', $group );
+	$xtpl->parse( 'main.groups_addfile' );
 }
 
-if( ! empty( $array_config['groups_addfile'] ) )
+foreach( $array_config['groups_upload'] as $group )
 {
-	foreach( $array_config['groups_addfile'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_ADDFILE', $group );
-		$xtpl->parse( 'main.group3.groups_addfile' );
-	}
-	$xtpl->parse( 'main.group3' );
-}
-
-foreach( $array_config['who_upload'] as $who )
-{
-	$xtpl->assign( 'WHO_UPLOAD', $who );
-	$xtpl->parse( 'main.who_upload' );
-}
-
-if( ! empty( $array_config['groups_upload'] ) )
-{
-	foreach( $array_config['groups_upload'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_UPLOAD', $group );
-		$xtpl->parse( 'main.group_empty.groups_upload' );
-	}
-	$xtpl->parse( 'main.group_empty' );
+	$xtpl->assign( 'GROUPS_UPLOAD', $group );
+	$xtpl->parse( 'main.groups_upload' );
 }
 
 $xtpl->parse( 'main' );

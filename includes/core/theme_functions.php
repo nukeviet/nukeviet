@@ -502,6 +502,13 @@ function nv_xmlSitemapIndex_generate()
 	nv_xmlOutput( $contents, $lastModified );
 }
 
+/**
+ * nv_css_setproperties()
+ * 
+ * @param mixed $tag
+ * @param mixed $property_array
+ * @return
+ */
 function nv_css_setproperties( $tag, $property_array )
 {
     $css = $line = '';

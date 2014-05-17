@@ -28,7 +28,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  sort int(11) NOT NULL DEFAULT '0',
  lev int(11) NOT NULL DEFAULT '0',
  subitem text,
- who_view tinyint(2) NOT NULL DEFAULT '0',
  groups_view varchar(255) DEFAULT '',
  module_name varchar(255) DEFAULT '',
  op varchar(255) DEFAULT '',
@@ -43,7 +42,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  title varchar(50) NOT NULL,
- description varchar(255) DEFAULT '',
  PRIMARY KEY (id),
  UNIQUE KEY title (title)
 ) ENGINE=MyISAM";

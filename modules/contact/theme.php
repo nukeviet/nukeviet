@@ -14,12 +14,12 @@ if( ! defined( 'NV_IS_MOD_CONTACT' ) ) die( 'Stop!!!' );
  * main_theme()
  *
  * @param mixed $array_content
- * @param mixed $select_options
+ * @param mixed $array_department
  * @param mixed $base_url
  * @param mixed $checkss
  * @return
  */
-function main_theme( $array_content, $select_options, $base_url, $checkss )
+function contact_main_theme( $array_content, $array_department, $base_url, $checkss )
 {
 	global $module_file, $lang_global, $lang_module, $module_info;
 
@@ -49,22 +49,20 @@ function main_theme( $array_content, $select_options, $base_url, $checkss )
 		$xtpl->parse( 'main.form.iguest' );
 	}
 
-	if( ! empty( $select_options ) )
+	if( ! empty( $array_department ) )
 	{
-		foreach( $select_options as $value => $link )
+		foreach( $array_department as $value => $row )
 		{
-			$xtpl->assign( 'SELECT_NAME', $link['full_name'] );
-			$xtpl->assign( 'SELECT_VALUE', $value );
-			$xtpl->assign( 'SELECTED', ( $array_content['fpart'] == $value ) ? ' selected="selected"' : '' );
-			$xtpl->parse( 'main.form.select_option_loop' );
+			if( ! empty( $row['full_name'] ) )
+			{
+				$xtpl->assign( 'SELECT_NAME', $row['full_name'] );
+				$xtpl->assign( 'SELECT_VALUE', $value );
+				$xtpl->assign( 'SELECTED', ( $array_content['fpart'] == $value ) ? ' selected="selected"' : '' );
+				$xtpl->parse( 'main.form.select_option_loop' );
+			}
 		}
 
 		$xtpl->parse( 'main.form' );
-	}
-
-	if( ! empty( $array_content['bodytext'] ) )
-	{
-		$xtpl->parse( 'main.bodytext' );
 	}
 
 	$xtpl->parse( 'main' );

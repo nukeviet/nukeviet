@@ -541,12 +541,16 @@ function nv_change_captcha(imgid, captchaid) {
 	return false;
 }
 
-function NewWindow(mypage, myname, w, h, scroll) {
-	var win = null;
+function nv_open_browse(theURL, winName, w, h, features) {
 	LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0;
 	TopPosition = (screen.height) ? (screen.height - h) / 2 : 0;
-	win = window.open(mypage, myname, 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars=' + scroll + ',resizable');
+	settings = 'height=' + h + ',width=' + w + ',top=' + TopPosition + ',left=' + LeftPosition;
+	if (features != '') {
+		settings = settings + ',' + features;
+	}
+	window.open(theURL, winName, settings).focus();
 }
+
 
 function nv_setIframeHeight(iframeId) {
 	var ifDoc, ifRef = document.getElementById(iframeId);

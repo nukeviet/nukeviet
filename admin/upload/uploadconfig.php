@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$upload_checking_mode = $nv_Request->get_string( 'upload_checking_mode', 'post', '' );
 	if( $upload_checking_mode != 'mild' and $upload_checking_mode != 'lite' and $upload_checking_mode != 'strong' ) $upload_checking_mode = 'none';
 
-	$nv_max_size = $nv_Request->get_int( 'nv_max_size', 'post', $global_config['nv_max_size'] );
+	$nv_max_size = $nv_Request->get_float( 'nv_max_size', 'post', $global_config['nv_max_size'] );
 	$nv_max_size = min( nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ), $nv_max_size );
 	$nv_auto_resize = ( int )$nv_Request->get_bool( 'nv_auto_resize', 'post', 0 );
 

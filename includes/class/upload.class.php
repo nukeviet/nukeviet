@@ -85,7 +85,7 @@ class upload
 		if( ! is_array( $forbid_mimes ) ) $forbid_mimes = array( $forbid_mimes );
 
 		$this->config['allowed_files'] = $this->get_ini( $allowed_filetypes, $forbid_extensions, $forbid_mimes );
-		$this->config['maxsize'] = intval( $maxsize );
+		$this->config['maxsize'] = floatval( $maxsize );
 		$this->config['maxwidth'] = intval( $maxwidth );
 		$this->config['maxheight'] = intval( $maxheight );
 		$this->config['upload_checking_mode'] = UPLOAD_CHECKING_MODE;

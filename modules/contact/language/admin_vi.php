@@ -19,7 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
-$lang_module['list_row_title'] = 'Các bộ phận';
+$lang_module['department_title'] = 'Các bộ phận';
 $lang_module['err_row_title'] = 'Không có';
 $lang_module['part_row_title'] = 'Tên bộ phận';
 $lang_module['email_row_title'] = 'Email';
@@ -63,3 +63,4 @@ $lang_module['admin_send2mail_title'] = 'Gửi liên hệ tới email';
 $lang_module['delall'] = 'Xóa tất cả';
 $lang_module['siteinfo_new'] = 'Liên hệ chưa đọc';
 $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn';
+$lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';

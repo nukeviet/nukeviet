@@ -55,13 +55,12 @@ if( ! empty( $setmodule ) )
 			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
-			$in_menu = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			try
 			{
 				$sth = $db->prepare( "INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, in_menu, weight, submenu, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '0', " . $in_menu . ", " . $weight . ", 1, 1, '',1)
+					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
+					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
 				" );
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modrow['module_file'], PDO::PARAM_STR );
@@ -356,12 +355,12 @@ foreach( $modules_data as $row )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 			}
-			$mod['setup'] = "<em class=\"icon-sun icon-large\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
+			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
 			$mod['delete'] = '';
 			if( defined( "NV_IS_GODADMIN" ) AND ! in_array( $row['module_file'], $module_virtual_setup ) )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delmodule=' . $row['title'] . '&amp;checkss=' . md5( 'delmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
-				$mod['delete'] = " - <em class=\"icon-trash icon-large\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";
+				$mod['delete'] = " <em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";
 			}
 			if( $mod['module_file'] == $mod['title'] )
 			{

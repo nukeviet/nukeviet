@@ -16,7 +16,7 @@
 			<p>{COMMENT.content}</p>
 			<div class="text-right">
 				<ul class="comment-tool">
-					<!-- BEGIN: delete --><li><em class="fa fa-trash-o">&nbsp;</em> <a href="#" onclick="nv_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
+					<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" onclick="nv_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
 					<li><em class="fa fa-reply">&nbsp;</em> <a href="#" onclick="nv_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
 					<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
 					<li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>

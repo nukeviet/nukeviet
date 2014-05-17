@@ -17,10 +17,10 @@
 		<em class="pull-left time">{DETAIL.publtime}</em>
 		<ul class="list-inline pull-right">
 			<!-- BEGIN: allowed_send -->
-			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="NewWindow('{URL_SENDMAIL}','{TITLE}','650','500','no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
+			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_send -->
 			<!-- BEGIN: allowed_print -->
-			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="NewWindow('{URL_PRINT}','{TITLE}','840','768','yes');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
+			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_print -->
 			<!-- BEGIN: allowed_save -->
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
@@ -29,7 +29,7 @@
 		<div class="clear"></div>
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
-	        <div style="margin-right: 50px;" class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false"></div>
+	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
 	        <script type="text/javascript">
 	          window.___gcfg = {lang: nv_sitelang};
@@ -39,7 +39,7 @@
 	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 	          })();
 	        </script>
-	
+
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	    </div>
@@ -85,7 +85,7 @@
 			{COPYRIGHT}
 		</div>
 		<!-- END: copyright -->
-		
+
 		<!-- BEGIN: adminlink -->
 		<p class="text-center adminlink">
 			{ADMINLINK}
@@ -148,7 +148,7 @@
 							}
 						}
 					});
-			
+
 					$('.hover-star').rating('select', '{NUMBERRATING}');
 				</script>
 				<!-- BEGIN: disablerating -->
@@ -160,7 +160,7 @@
 				<!-- END: allowed_rating -->
 			</div>
 		</div>
-	
+
 	<!-- BEGIN: comment -->
 	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 	<!-- END: comment -->
@@ -172,15 +172,16 @@
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{TOPIC.title}" href="{TOPIC.link}">{TOPIC.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" rel="tooltip">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
-	<div class="clear"></div>
+	<div class="clear">&nbsp;</div>
 	<p class="text-right">
 		<a title="{TOPIC.topictitle}" href="{TOPIC.topiclink}">{LANG.more}</a>
 	</p>
@@ -192,27 +193,29 @@
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{RELATED_NEW.title}" href="{RELATED_NEW.link}">{RELATED_NEW.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" rel="tooltip">{RELATED_NEW.title}</a>
 			<em>({RELATED_NEW.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
 	</ul>
 	<!-- END: related_new -->
 	<!-- BEGIN: related -->
-	<div class="clear"></div>
+	<div class="clear">&nbsp;</div>
 	<p>
 		<strong>{LANG.related}</strong>
 	</p>
 	<ul class="related">
 		<!-- BEGIN: loop -->
 		<li>
-			<em class="fa fa-angle-right">&nbsp;</em><a title="{RELATED.title}" href="{RELATED.link}">{RELATED.title}</a>
+			<em class="fa fa-angle-right">&nbsp;</em>
+			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" rel="tooltip">{RELATED.title}</a>
 			<em>({RELATED.time})</em>
 			<!-- BEGIN: newday -->
-			<span class="icon_new"></span>
+			<span class="icon_new">&nbsp;</span>
 			<!-- END: newday -->
 		</li>
 		<!-- END: loop -->
@@ -223,6 +226,13 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$(".bodytext img").toggleClass('img-thumbnail');
+		<!-- BEGIN: tooltip -->
+		$("[rel='tooltip']").tooltip({
+			placement: "{TOOLTIP_POSITION}",
+			html: true,
+			title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+		});
+		<!-- END: tooltip -->
 	});
 </script>
 <!-- END: main -->

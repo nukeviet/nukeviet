@@ -1,18 +1,11 @@
 <!-- BEGIN: edit -->
-<div class="quote">
-	<blockquote {CLASS}><span>{INFO}</span></blockquote>
-</div>
+<div class="alert alert-info">{INFO}</div>
 <form method="post" action="{ACTION}">
-	<table class="tab1 fixtab">
-		<colgroup>
-			<col class="w200">
-			<col class="w20">
-			<col class="w350">
-			<col/>
-		</colgroup>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
 		<tfoot>
 			<tr>
-				<td colspan="4" class="center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" /></td>
+				<td colspan="4" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -20,8 +13,8 @@
 			<tr>
 				<td> {POSITION0}: </td>
 				<td><sup class="required"> &lowast; </sup></td>
-				<td><input class="w300" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" /></td>
-				<td><span class="row">&lArr;</span> {POSITION2} </td>
+				<td><input class="form-control" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" /></td>
+				<td><span>&lArr;</span> {POSITION2} </td>
 			</tr>
 			<!-- END: position -->
 			<!-- BEGIN: editor -->
@@ -29,7 +22,7 @@
 				<td> {EDITOR0}: </td>
 				<td>&nbsp;</td>
 				<td>
-				<select name="editor" id="editor">
+				<select name="editor" id="editor" class="form-control">
 					<option value="">{EDITOR3}</option>
 					<!-- BEGIN: loop -->
 					<option value="{VALUE}" {SELECTED}>{VALUE} </option>
@@ -99,34 +92,32 @@
 			<!-- END: lev -->
 		</tbody>
 	</table>
+</div>
 </form>
 <!-- END: edit -->
 <!-- BEGIN: edit_resuilt -->
-<table class="tab1">
-	<caption> {TITLE}: </caption>
-	<colgroup>
-		<col style="width: 30%"/>
-		<col span="2" style="width: 35%"/>
-		<col/>
-	</colgroup>
-	<thead>
-		<tr>
-			<td> {THEAD0} </td>
-			<td> {THEAD1} </td>
-			<td> {THEAD2} </td>
-		</tr>
-	</thead>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td> {VALUE0} </td>
-			<td> {VALUE1} </td>
-			<td> {VALUE2} </td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{TITLE}: </caption>
+		<thead>
+			<tr>
+				<th> {THEAD0} </th>
+				<th> {THEAD1} </th>
+				<th> {THEAD2} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td> {VALUE0} </td>
+				<td> {VALUE1} </td>
+				<td> {VALUE2} </td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <br/>
-<a class="button button-h" href="{EDIT_HREF}">{EDIT_NAME}</a>
-<a class="button button-h" href="{HOME_HREF}">{HOME_NAME}</a>
+<a class="btn btn-default" href="{EDIT_HREF}">{EDIT_NAME}</a>
+<a class="btn btn-default" href="{HOME_HREF}">{HOME_NAME}</a>
 <!-- END: edit_resuilt -->

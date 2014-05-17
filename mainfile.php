@@ -22,7 +22,7 @@ define( 'NV_MAINFILE', true );
 define( 'NV_START_TIME', microtime( true ) );
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = $newCountry = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -301,7 +301,7 @@ unset( $db_config['dbpass'] );
 
 // Ten cac table cua CSDL dung chung cho he thong
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
-define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
+define( 'NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users' );
 define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
 define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
@@ -311,13 +311,13 @@ define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
 define( 'NV_BANNERS_GLOBALTABLE', $db_config['prefix'] . '_banners' );
+define( 'NV_COUNTER_GLOBALTABLE', $db_config['prefix'] . '_counter' );
 
 define( 'NV_PREFIXLANG', $db_config['prefix'] . '_' . NV_LANG_DATA );
 define( 'NV_MODULES_TABLE', NV_PREFIXLANG . '_modules' );
 define( 'NV_BLOCKS_TABLE', NV_PREFIXLANG . '_blocks' );
 define( 'NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs' );
 
-define( 'NV_COUNTER_TABLE', NV_PREFIXLANG . '_counter' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
@@ -345,31 +345,6 @@ if( ! isset( $global_config['upload_checking_mode'] ) or ! in_array( $global_con
 	$global_config['upload_checking_mode'] = 'strong';
 }
 define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
-
-// Cap nhat Country moi
-if( ! empty( $newCountry ) )
-{
-    try
-    {
-    	if( $db->exec( "INSERT INTO " . $db_config['prefix'] . "_ipcountry VALUES (" . $newCountry['ip_from'] . ", " . $newCountry['ip_to'] . ", '" . $newCountry['code'] . "', '" . $newCountry['ip_file'] . "', " . NV_CURRENTTIME . ")" ) )
-    	{
-    		$time_del = NV_CURRENTTIME - 604800;
-    		$db->query( "DELETE FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "' AND country='ZZ' AND time < " . $time_del );
-    		$result = $db->query( "SELECT ip_from, ip_to, country FROM " . $db_config['prefix'] . "_ipcountry WHERE ip_file='" . $newCountry['ip_file'] . "'" );
-    		$array_ip_file = array();
-    		while( $row = $result->fetch() )
-    		{
-    			$array_ip_file[] = $row['ip_from'] . " => array(" . $row['ip_to'] . ", '" . $row['country'] . "')";
-    		}
-    		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $newCountry['ip_file'] . '.php', "<?php\n\n\$ranges = array(" . implode( ', ', $array_ip_file ) . ");", LOCK_EX );
-    	}
-    	unset( $newCountry, $time_del, $array_ip_file, $result, $row );
-    }
-    catch( PDOException $e )
-    {
-      trigger_error( $e->getMessage() );
-    }
-}
 
 if( defined( 'NV_ADMIN' ) )
 {

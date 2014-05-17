@@ -154,7 +154,15 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['birthday'] = 0;
 			}
 
-			$_user['in_groups'] = array_intersect( $_user['in_groups'], array_keys( $groups_list ) );
+			$in_groups = array();
+			foreach ( $_user['in_groups'] as $_group_id )
+			{
+				if( $_group_id > 9 )
+				{
+					$in_groups[] = $_group_id;
+				}
+			}
+			$_user['in_groups'] = array_intersect( $in_groups, array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
 				username, md5username, password, email, full_name, gender, birthday, sig, regdate,
@@ -223,6 +231,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						nv_groups_add_user( $group_id, $userid );
 					}
 				}
+				$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 				exit();
@@ -299,13 +308,18 @@ else
 		$xtpl->parse( 'main.edit_user.gender' );
 	}
 
-	if( ! empty( $groups ) )
+	$a = 0;
+	foreach( $groups as $group )
 	{
-		foreach( $groups as $group )
+		if( $group['id'] > 9 )
 		{
 			$xtpl->assign( 'GROUP', $group );
 			$xtpl->parse( 'main.edit_user.group.list' );
+			++$a;
 		}
+	}
+	if( $a > 0 )
+	{
 		$xtpl->parse( 'main.edit_user.group' );
 	}
 

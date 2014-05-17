@@ -67,7 +67,7 @@
 			<!-- BEGIN: photo -->
 			<p id="current-photo" class="pull-left text-center">
 				<img src="{DATA.photo}" alt="{DATA.username}" class="img-thumbnail m-bottom"/><br />
-				<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o">&nbsp;</em> {LANG.avata_delete}</span>
+				<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.avata_delete}</span>
 				<input type="hidden" name="photo_delete" id="photo_delete" value="{DATA.photo_delete}"/>
 			</p>
 			<!-- END: photo -->
@@ -169,7 +169,7 @@ $(document).ready(function() {
 		$("#birthday").datepicker('show');
 	});
 	$("#btn_upload").click(function() {
-		nv_open_browse_file( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){

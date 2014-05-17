@@ -6,10 +6,10 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-function sendcommment(module, area, id, view, allowed, newscheckss, gfx_count) {
+function sendcommment(module, area, id, allowed, newscheckss, gfx_count) {
 	var commentname = document.getElementById('commentname');
 	var commentemail = document.getElementById('commentemail_iavim');
-	var commentseccode = document.getElementById('commentseccode_iavim');
+	var code = $("#commentseccode_iavim").val();
 	var commentcontent = strip_tags(document.getElementById('commentcontent').value);
 	if (commentname.value == "") {
 		alert(nv_fullname);
@@ -17,22 +17,24 @@ function sendcommment(module, area, id, view, allowed, newscheckss, gfx_count) {
 	} else if (!nv_email_check(commentemail)) {
 		alert(nv_error_email);
 		commentemail.focus();
-	} else if (!nv_name_check(commentseccode)) {
+	} else if (gfx_count > 0 && !nv_namecheck.test(code)) {
 		error = nv_error_seccode.replace(/\[num\]/g, gfx_count);
 		alert(error);
-		commentseccode.focus();
+		$("#commentseccode_iavim").focus();
 	} else if (commentcontent == '') {
 		alert(nv_content);
 		document.getElementById('commentcontent').focus();
 	} else {
 		var sd = document.getElementById('buttoncontent');
 		sd.disabled = true;
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&view=' + view + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + commentseccode.value + '&content=' + encodeURIComponent(commentcontent), function(res) {
+		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + code + '&content=' + encodeURIComponent(commentcontent), function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
 				document.location = document.location;
 			} else {
-				nv_change_captcha('vimg', 'commentseccode_iavim');
+				if (gfx_count > 0 ) {
+					nv_change_captcha('vimg', 'commentseccode_iavim');
+				}
 				if (rs[0] == 'ERR') {
 					alert(rs[1]);
 				} else {

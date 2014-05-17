@@ -12,20 +12,20 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
-$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply";
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  full_name varchar(255) NOT NULL,
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,
- note mediumtext NOT NULL,
- admins mediumtext NOT NULL,
+ note text NOT NULL,
+ admins text NOT NULL,
  act tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY full_name (full_name)
@@ -58,4 +58,4 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  KEY id (id)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";

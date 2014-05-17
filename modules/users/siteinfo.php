@@ -26,6 +26,6 @@ if( $number > 0 )
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_waiting'],
 		'value' => $number,
-		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
 	);
 }

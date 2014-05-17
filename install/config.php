@@ -31,7 +31,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '4.0.01 Testing';// NukeViet 4.0 Closebeta 2
+$global_config['version'] = '4.0.05 Testing';// NukeViet 4.0 Closebeta 5
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';

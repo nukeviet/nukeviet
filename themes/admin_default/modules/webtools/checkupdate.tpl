@@ -13,12 +13,13 @@
 </script>
 <!-- END: main -->
 <!-- BEGIN: sysUpd -->
-<table class="tab1">
-	<caption> {LANG.checkSystem} </caption>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+	<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.checkSystem} </caption>
 	<thead>
 		<tr>
-			<td> {LANG.checkContent} </td>
-			<td> {LANG.checkValue} </td>
+			<th> {LANG.checkContent} </th>
+			<th> {LANG.checkValue} </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -41,6 +42,7 @@
 		</tr>
 	</tbody>
 </table>
+</div>
 <div style="text-align:right;">
 	{LANG.checkDate}: {SYSUPDDATE} (<a id="sysUpdRefresh" href="#">{LANG.reCheck}</a>)
 </div>
@@ -56,16 +58,17 @@
 </script>
 <!-- END: sysUpd -->
 <!-- BEGIN: modUpd -->
-<table class="tab1">
-	<caption> {LANG.checkModules} </caption>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+	<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.checkModules} </caption>
 	<col class="top w150" />
 	<col class="top" />
-	<col class="top w150" />
+	<col class="top w200" />
 	<thead>
 		<tr>
-			<td> {LANG.moduleName} </td>
-			<td> {LANG.moduleInfo} </td>
-			<td style="text-align:right"> {LANG.moduleNote} </td>
+			<th> {LANG.moduleName} </th>
+			<th> {LANG.moduleInfo} </th>
+			<th class="text-right"> {LANG.moduleNote} </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -98,6 +101,7 @@
 	<!-- END: loop -->
 	</tbody>
 </table>
+</div>
 <div style="text-align:right;">
 	{LANG.checkDate}: {MODUPDDATE} (<a id="modUpdRefresh" href="#">{LANG.reCheck}</a>)
 </div>
@@ -126,7 +130,7 @@
 </script>
 <!-- BEGIN: newMods -->
 <div style="text-align:left;">
-	<a id="newModList" class="button button-h" href="#">{LANG.moduleNote2_link}</a>
+	<a id="newModList" class="btn btn-primary" href="#">{LANG.moduleNote2_link}</a>
 </div>
 <script type="text/javascript">
 	//<![CDATA[
@@ -143,42 +147,44 @@
 <br />
 <!-- END: modUpd -->
 <!-- BEGIN: modsNew -->
-<table class="tab1">
-	<caption> {LANG.moduleNote2_link} </caption>
-	<col class="top w150" />
-	<col class="top" />
-	<col class="top w200" />
-	<thead>
-		<tr>
-			<td> {LANG.moduleName} </td>
-			<td> {LANG.moduleInfo} </td>
-		</tr>
-	</thead>
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td style="vertical-align:top">
-			<div class="Note Note2">
-				{MODNAME}
-			</div></td>
-			<td style="vertical-align:top">
-			<div class="ninfo">
-				{MODINFO}
-			</div>
-			<div class="tooltip">
-				<h3>{MODINFO}</h3>
-				<ul>
-					<!-- BEGIN: li -->
-					<li>
-						<strong>{MODTOOLTIP.title}</strong>: {MODTOOLTIP.content}
-					</li>
-					<!-- END: li -->
-				</ul>
-			</div></td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.moduleNote2_link} </caption>
+		<col class="top w150" />
+		<col class="top" />
+		<col class="top w200" />
+		<thead>
+			<tr>
+				<th> {LANG.moduleName} </th>
+				<th> {LANG.moduleInfo} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td style="vertical-align:top">
+				<div class="Note Note2">
+					{MODNAME}
+				</div></td>
+				<td style="vertical-align:top">
+				<div class="ninfo">
+					{MODINFO}
+				</div>
+				<div class="tooltip">
+					<h3>{MODINFO}</h3>
+					<ul>
+						<!-- BEGIN: li -->
+						<li>
+							<strong>{MODTOOLTIP.title}</strong>: {MODTOOLTIP.content}
+						</li>
+						<!-- END: li -->
+					</ul>
+				</div></td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <div style="text-align:right;">
 	{LANG.checkDate}: {MODUPDDATE} (<a id="modsNewRefresh" href="#">{LANG.reCheck}</a>)
 </div>

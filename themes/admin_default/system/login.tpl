@@ -9,9 +9,10 @@
 		<meta name="copyright" content="Copyright (c) {SITE_NAME}" />
 		<meta name="robots" content="noindex, nofollow" />
 		<title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {PAGE_TITLE}</title>
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css" />
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/font-awesome.css" />
 		<script type="text/javascript">
 			var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
 			var login_error_security = '{LOGIN_ERROR_SECURITY}';
@@ -60,9 +61,9 @@
 				<div class="inner-message">{LOGIN_INFO}</div>
 				<form class="loginform" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
 					<!-- BEGIN: lang_multi -->
-					<p class="muti-lang">
+					<p class="muti-lang form-inline">
 						<label for="langinterface">{LANGTITLE}:</label>
-						<select id="langinterface" name="langinterface" onchange="top.location.href=this.options[this.selectedIndex].value;">
+						<select id="langinterface" name="langinterface" onchange="top.location.href=this.options[this.selectedIndex].value;" class="form-control input-sm">
 							<!-- BEGIN: option -->
 							<option value="{LANGOP}" {SELECTED}>{LANGVALUE} </option>
 							<!-- END: option -->
@@ -71,23 +72,23 @@
 					<!-- END: lang_multi -->
 					<p>
 						<label for="nv_login">{N_LOGIN}:</label>
-						<input class="input-big" name="nv_login" type="text" id="login" value="{V_LOGIN}" />
+						<input class="form-control" name="nv_login" type="text" id="login" value="{V_LOGIN}" />
 					</p>
 					<p>
 						<label for="nv_password">{N_PASSWORD}:</label>
-						<input class="input-big" name="nv_password" type="password" id="password" />
+						<input class="form-control" name="nv_password" type="password" id="password" />
 					</p>
 					<!-- BEGIN: captcha -->
 					<p>
 						<label for="nv_seccode">{N_CAPTCHA}:</label>
 						<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="captcha"/>
 						<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-						<em class="icon-refresh icon-large icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
+						<em class="fa fa-refresh fa-lg icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
 					</p>
 					<!-- END: captcha -->
 					<div id="smb">
 						<input type="hidden" name="checkss" value="{CHECKSS}" />
-						<input class="button-h" type="submit" value="{N_SUBMIT}" />
+						<input class="btn btn-primary" type="submit" value="{N_SUBMIT}" />
 					</div>
 				</form>
 				<p class="lostpass">

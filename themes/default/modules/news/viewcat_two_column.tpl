@@ -21,7 +21,7 @@
 			<h3>
 				<a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
 				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
+				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
 			<p class="text-justify">
@@ -37,7 +37,7 @@
 		<ul class="related">
 			<!-- BEGIN: other -->
 			<li>
-				<a title="{NEWSTOP.title}" href="{NEWSTOP.link}">{NEWSTOP.title}</a>
+				<a class="show" href="{NEWSTOP.link}" data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" rel="tooltip">{NEWSTOP.title}</a>
 			</li>
 			<!-- END: other -->
 		</ul>
@@ -45,7 +45,7 @@
 	<!-- END: catcontent -->
 </div>
 <!-- BEGIN: loopcat -->
-<div class="news_column col-md-6">
+<div class="news_column two_column col-md-6">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
 			<a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a>
@@ -56,7 +56,7 @@
 			<h3>
 				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
 				<!-- BEGIN: newday -->
-				<span class="icon_new"></span>
+				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
 			<!-- BEGIN: image -->
@@ -74,7 +74,7 @@
 			<ul class="related">
 				<!-- BEGIN: other -->
 				<li class="{CLASS}">
-					<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" rel="tooltip">{CONTENT.title}</a>
 				</li>
 				<!-- END: other -->
 			</ul>
@@ -82,24 +82,34 @@
 	</div>
 </div>
 <!-- BEGIN: clear -->
-<div class="clear"></div>
+<div class="clear">&nbsp;</div>
 <!-- END: clear -->
 <!-- END: loopcat -->
-<div class="clear"></div>
+<div class="clear">&nbsp;</div>
 
 <script type="text/javascript">
 $(window).load(function(){
-    $.each( $('.news_column .panel-body'), function(k,v){
+    $.each( $('.two_column .panel-body'), function(k,v){
         if( k % 2 == 0 )
         {
-            var height1 = $($('.news_column .panel-body')[k]).height();
-            var height2 = $($('.news_column .panel-body')[k+1]).height();
+            var height1 = $($('.two_column .panel-body')[k]).height();
+            var height2 = $($('.two_column .panel-body')[k+1]).height();
             var height = ( height1 > height2 ? height1 : height2 );
-            $($('.news_column .panel-body')[k]).height( height );
-            $($('.news_column .panel-body')[k+1]).height( height );
+            $($('.two_column .panel-body')[k]).height( height );
+            $($('.two_column .panel-body')[k+1]).height( height );
         }
     });
 });
 </script>
+
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+$(document).ready(function() {$("[rel='tooltip']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
+</script>
+<!-- END: tooltip -->
 
 <!-- END: main -->

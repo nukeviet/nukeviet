@@ -3,7 +3,7 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate 31/05/2010, 00:36
+ * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
 /* Font */
@@ -37,11 +37,6 @@ ul, ol {
   list-style: none;
 }
 
-.panel-heading {
-  font-size: 14px;
-  font-weight: bold;
-}
-
 .input-group-btn{
 	font-size:14px!important;
 }
@@ -50,6 +45,9 @@ ul, ol {
 	padding: 8px;
 	line-height: 18px;
 	text-align: justify
+}
+.navbar-default .navbar-nav>li>a{
+	color: #fff;
 }
 
 /* Global */
@@ -67,7 +65,7 @@ a, a:link, a:active, a:visited{
 }
 a:hover{
 	text-decoration:none;
-	color:#5bc0de;
+	color:#065db0;
 }
 iframe{
 	border:0;
@@ -192,11 +190,6 @@ header{
 	min-height:100%;
 }
 
-/* Nav */
-.navbar{
-	margin-bottom:0;
-}
-
 /* Body */
 #body{
 	background:#fff;
@@ -232,7 +225,7 @@ header{
 }
 #footer .footer-copyright .menu li.top{
 	padding:0 4px;
-	background:#777;
+	background:#428bca;
 	color:#fff;
 	-webkit-border-radius:2px;
 	margin-left:10px;
@@ -364,6 +357,11 @@ header{
 	display: table-cell;
 	vertical-align: middle;
 }
+
+.panel-body h3 {
+	color: #0066cc;
+}
+
 .nv-infodie .logo{
 	max-width: 90%!important;
 }
@@ -406,13 +404,6 @@ header{
 		float: left;
 		width: 100%
 	}
-	#hot-news ul.other-news {
-    background: url("../images/dot.png") repeat-x scroll left 2px rgba(0, 0, 0, 0);
-    border-top: 1px solid #DADADA;
-    display: block;
-    list-style-type: none;
-    margin: 0;
-}
 }
 @media (min-height: 500px){
 	.container {
@@ -423,6 +414,76 @@ header{
 		top:50%;
 		margin-top:-250px;
 	}
+}
+
+/* Form */
+input[type="checkbox"],
+input[type="radio"] {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #bbb;
+	clear: none;
+	cursor: pointer;
+	display: inline-block;
+	line-height: 0;
+	height: 16px;
+	margin: 0px 4px 0 0;
+	outline: 0;
+	padding: 0 !important;
+	text-align: center;
+	vertical-align: middle;
+	width: 16px;
+	min-width: 16px;
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	color: #555;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+
+input[type=radio] {
+	border-radius: 50%;
+	margin-right: 4px;
+	line-height: 10px;
+}
+
+input[type=checkbox]:disabled,
+input[type=radio]:disabled,
+input[type=checkbox]:disabled:checked:before,
+input[type=radio]:disabled:checked:before {
+	opacity: 0.7;
+}
+
+input[type=checkbox]:checked:before,
+input[type=radio]:checked:before {
+	float: left;
+	display: inline-block;
+	vertical-align: middle;
+	width: 14px;
+	font: normal 14px/1 'FontAwesome';
+	speak: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+input[type=checkbox]:checked:before {
+	content: '\f00c';
+	margin: 0px 0 0 0px;
+	color: #1e8cbe;
+}
+
+input[type=radio]:checked:before {
+	content: '\2022';
+	text-indent: -9999px;
+	border-radius: 50px;
+	font-size: 24px;
+	width: 6px;
+	height: 6px;
+	margin: 4px;
+	line-height: 16px;
+	background-color: #1e8cbe;
 }
 
 /* Responsive theme */
@@ -553,4 +614,51 @@ ul.other-news{
 }
 .img-thumbnail{
 	height:auto !important
+}
+
+.fb-like
+{
+	height: 30px;
+	margin-right: 50px;
+}
+
+
+.navbar-inverse {
+	background-color: #0855A1;
+	border-color: #043C72;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+	color: #FFFFFF;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	color: #ffffff;
+	background-color: #043C72;
+}
+
+.list-inline .hidden-xs a {
+	color: #848484
+}
+.list-inline .hidden-xs a : hover {
+	color: #0066cc
+}
+div.news_column .panel-heading {
+	font-size: 14px;
+	font-weight: bold;
+}
+.panel-heading {
+	border-bottom: 1px solid rgba(0, 0, 0, 0);
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	padding: 10px;
+}
+table caption{
+	color: #0066CC
+	text-align: left;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: 'Roboto',sans-serif;
+	line-height: 22px;
+	padding: 0px 0 5px 2px;
 }

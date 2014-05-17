@@ -10,25 +10,15 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_d . "_cat ORDER BY sort ASC";
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
 $result = $db->query( $sql );
-
 While( $row = $result->fetch() )
 {
-	$t_sp = '';
-
-	if( $row['lev'] > 0 )
-	{
-		for( $i = 1; $i <= $row['lev']; ++$i )
-		{
-			$t_sp .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-		}
-	}
-
-	$arr_cat[$row['catid']] = array(
-		'module' => $module,
+	$array_item[$row['catid']] = array(
+		'parentid' => $row['parentid'],
+		'groups_view' => $row['groups_view'],
 		'key' => $row['catid'],
-		'title' => $t_sp . $row['title'],
+		'title' => $row['title'],
 		'alias' => $row['alias']
 	);
 }

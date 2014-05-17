@@ -35,11 +35,11 @@ $key_words = $module_info['keywords'];
 
 // check user post content
 $array_post_config = array();
-$sql = 'SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post ORDER BY pid ASC';
+$sql = 'SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post';
 $result = $db->query( $sql );
-while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
+while( list( $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
 {
-	$array_post_config[$member][$group_id] = array(
+	$array_post_config[$group_id] = array(
 		'addcontent' => $addcontent,
 		'postcontent' => $postcontent,
 		'editcontent' => $editcontent,
@@ -47,69 +47,57 @@ while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, 
 	);
 }
 
-if( isset( $array_post_config[0][0] ) )
-{
-	$array_post_user = $array_post_config[0][0];
-}
-else
-{
-	$array_post_user = array(
-		'addcontent' => 0,
-		'postcontent' => 0,
-		'editcontent' => 0,
-		'delcontent' => 0
-	);
-}
+$array_post_user = array(
+	'addcontent' => 0,
+	'postcontent' => 0,
+	'editcontent' => 0,
+	'delcontent' => 0
+);
 
-if( defined( 'NV_IS_USER' ) and isset( $array_post_config[1] ) )
+if( defined( 'NV_IS_USER' ) and isset( $array_post_config[4] ) )
 {
-	if( $array_post_config[1][0]['addcontent'] )
+	if( $array_post_config[4]['addcontent'] )
 	{
 		$array_post_user['addcontent'] = 1;
 	}
 
-	if( $array_post_config[1][0]['postcontent'] )
+	if( $array_post_config[4]['postcontent'] )
 	{
 		$array_post_user['postcontent'] = 1;
 	}
 
-	if( $array_post_config[1][0]['editcontent'] )
+	if( $array_post_config[4]['editcontent'] )
 	{
 		$array_post_user['editcontent'] = 1;
 	}
 
-	if( $array_post_config[1][0]['delcontent'] )
+	if( $array_post_config[4]['delcontent'] )
 	{
 		$array_post_user['delcontent'] = 1;
 	}
 
-	if( ! empty( $user_info['in_groups'] ) )
+	foreach( $user_info['in_groups'] as $group_id_i )
 	{
-		$array_in_groups = explode( ',', $user_info['in_groups'] );
-
-		foreach( $array_in_groups as $group_id_i )
+		if( $group_id_i > 0 and isset( $array_post_config[$group_id_i] ) )
 		{
-			if( $group_id_i > 0 and isset( $array_post_config[1][$group_id_i] ) )
+			if( $array_post_config[$group_id_i]['addcontent'] )
 			{
-				if( $array_post_config[1][$group_id_i]['addcontent'] )
-				{
-					$array_post_user['addcontent'] = 1;
-				}
+				$array_post_user['addcontent'] = 1;
+			}
 
-				if( $array_post_config[1][$group_id_i]['postcontent'] )
-				{
-					$array_post_user['postcontent'] = 1;
-				}
+			if( $array_post_config[$group_id_i]['postcontent'] )
+			{
+				$array_post_user['postcontent'] = 1;
+			}
 
-				if( $array_post_config[1][$group_id_i]['editcontent'] )
-				{
-					$array_post_user['editcontent'] = 1;
-				}
+			if( $array_post_config[$group_id_i]['editcontent'] )
+			{
+				$array_post_user['editcontent'] = 1;
+			}
 
-				if( $array_post_config[1][$group_id_i]['delcontent'] )
-				{
-					$array_post_user['delcontent'] = 1;
-				}
+			if( $array_post_config[$group_id_i]['delcontent'] )
+			{
+				$array_post_user['delcontent'] = 1;
 			}
 		}
 	}
@@ -246,7 +234,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		'bodyhtml' => '',
 		'copyright' => 0,
 		'inhome' => 1,
-		'allowed_comm' => $module_config[$module_name]['setcomm'],
+		'allowed_comm' => 4,
 		'allowed_rating' => 1,
 		'allowed_send' => 1,
 		'allowed_print' => 1,
@@ -754,12 +742,12 @@ elseif( defined( 'NV_IS_USER' ) )
 
 		if( $array_row_i['is_edit_content'] )
 		{
-			$array_link_content[] = "<em class=\"icon-edit icon-large\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
+			$array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
 		}
 
 		if( $array_row_i['is_del_content'] )
 		{
-			$array_link_content[] = "<em class=\"icon-trash icon-large\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a>";
+			$array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a>";
 		}
 
 		if( ! empty( $array_link_content ) )

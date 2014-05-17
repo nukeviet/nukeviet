@@ -577,23 +577,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	return $xtpl->text( 'main' );
 }
 
-function no_permission( $func_who_view )
+function no_permission()
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	if( $func_who_view == 1 )
-	{
-		$no_permission = $lang_module['member_view'];
-	}
-	elseif( $func_who_view == 2 )
-	{
-		$no_permission = $lang_module['admin_view'];
-	}
-	elseif( $func_who_view == 3 )
-	{
-		$no_permission = $lang_module['group_view'];
-	}
-	$xtpl->assign( 'NO_PERMISSION', $no_permission );
+	$xtpl->assign( 'NO_PERMISSION', $lang_module['no_permission'] );
 	$xtpl->parse( 'no_permission' );
 	return $xtpl->text( 'no_permission' );
 }
@@ -762,7 +750,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	return $xtpl->text( 'main' );
 }
 
-function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
+function search_result_theme( $key, $numRecord, $per_pages, $page, $array_content, $url_link, $catid )
 {
 	global $module_file, $module_info, $global_config, $lang_global, $lang_module, $db, $module_name, $global_array_cat, $module_config;
 	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
@@ -810,7 +798,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
 
-		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
+		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $page );
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );
 	}

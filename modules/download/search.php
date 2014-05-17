@@ -22,13 +22,13 @@ if( ! nv_function_exists( 'nv_sdown_cats' ) )
 	{
 		global $db;
 
-		$sql = 'SELECT id, title, alias, who_view, groups_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1';
+		$sql = 'SELECT id, title, alias, groups_view FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE status=1';
 		$result = $db->query( $sql );
 
 		$list = array();
 		while( $row = $result->fetch() )
 		{
-			if( nv_set_allow( $row['who_view'], $row['groups_view'] ) )
+			if( nv_user_in_groups( $row['groups_view'] ) )
 			{
 				$list[$row['id']] = array(
 					'id' => $row['id'],
@@ -62,7 +62,7 @@ if( ! empty( $list_cats ) )
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
 		$db->select( 'alias,title,description, introtext, catid' )
-			->limit($limit)->offset($pages);
+			->limit($limit)->offset($page);
 
 		$tmp_re = $db->query( $db->sql() );
 		while( list( $alias, $tilterow, $content, $introtext, $catid ) = $tmp_re->fetch( 3 ) )

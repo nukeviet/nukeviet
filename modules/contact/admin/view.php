@@ -46,7 +46,7 @@ $sender_id = intval( $row['sender_id'] );
 
 if( $sender_id )
 {
-	$sender_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $sender_id . '">' . $sender_name . '</a>';
+	$sender_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $sender_id . '">' . $sender_name . '</a>';
 }
 
 $row['send_name'] = $sender_name;
@@ -82,7 +82,7 @@ if( $row['is_reply'] )
 		{
 			$reply_name = $adm_row['admin_login'];
 		}
-		$reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval( $row['reply_aid'] ) . '">' . $reply_name . '</a>';
+		$reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval( $row['reply_aid'] ) . '">' . $reply_name . '</a>';
 
 		$adm_row['reply_name'] = $reply_name;
 		$adm_row['reply_time'] = nv_date( 'H:i d/m/Y', $row['reply_time'] );

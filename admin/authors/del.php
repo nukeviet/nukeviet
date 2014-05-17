@@ -125,8 +125,8 @@ if( $nv_Request->get_title( 'ok', 'post', 0 ) == $checkss )
 		}
 		elseif( $action_account == 2 )
 		{
-			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ')' );
-			$db->query( 'DELETE FROM ' . $db_config['dbsystem'] . '.' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id );
+			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id . ')' );
+			$db->query( 'DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $admin_id );
 			$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $admin_id );
 			$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $admin_id );
 			$db->query( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_id );
@@ -216,12 +216,12 @@ $page_title = $lang_module['nv_admin_del'];
 // Parse content
 $xtpl = new XTemplate( 'del.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
-$class = $contents['is_error'] ? ' class="error"' : '';
+$class = $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"';
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'CHECKSS', $checkss );
 
-$xtpl->assign( 'CLASS', $contents['is_error'] ? ' class="error"' : '' );
+$xtpl->assign( 'CLASS', $contents['is_error'] ? 'class="alert alert-danger"' : 'class="alert alert-info"' );
 $xtpl->assign( 'TITLE', $contents['title'] );
 $xtpl->assign( 'ACTION', $contents['action'] );
 $xtpl->assign( 'CHECKED', $contents['sendmail'] ? ' checked="checked"' : '' );

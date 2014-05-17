@@ -50,5 +50,6 @@ $lang_module['customcss'] = 'CSS tùy chỉnh';
 $lang_module['note'] = 'Lưu ý: Chỉ nhập giá trị cho những đối tượng muốn thay đổi so với cấu hình giao diện mặc định';
 $lang_module['block_note'] = 'Thiết lập chung cho các thành phần block (Block giao diện, khối chuyên mục tin tức,...)';
 $lang_module['general_css_note'] = 'Soạn thảo nội dung css vào đây';
+$lang_module['module_in_menu'] = 'Các module hiển thị tại menu';
 
 $lang_module['save'] = 'Lưu cấu hình';

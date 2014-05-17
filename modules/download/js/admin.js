@@ -51,7 +51,7 @@ function nv_row_del(catid) {
 
 function nv_file_del(fid) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'id=' + fid, function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&nocache=' + new Date().getTime(), 'del=1&id=' + fid, function(res) {
 			if (res == 'OK') {
 				window.location.href = window.location.href;
 			} else {
@@ -235,21 +235,21 @@ function nv_report_alldel() {
 
 function nv_file_additem(id) {
 	file_items++;
-	var newitem = "<div id=\"fileupload_item_" + file_items + "\"><input readonly=\"readonly\" class=\"w300\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse_file( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + " ); \" /></div>";
+	var newitem = "<div id=\"fileupload_item_" + file_items + "\" style=\"margin-top: 5px\">&nbsp;<input readonly=\"readonly\" class=\"w300 form-control pull-left\" value=\"\" name=\"fileupload[]\" id=\"fileupload" + file_items + "\" maxlength=\"255\" />";
+	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
+	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload" + file_items + "\" onclick=\"nv_checkfile( 'fileupload" + file_items + "', 1, 'check_fileupload" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload" + file_items + "\" onclick=\"nv_gourl( 'fileupload" + file_items + "', 1, 'go_fileupload" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input class=\"btn btn-info\" type=\"button\" value=\"" + file_delurl + "\" onclick=\"nv_delurl( " + id + ", " + file_items + " ); \" /></div>";
 	$("#fileupload_items").append(newitem);
 }
 
 //  ---------------------------------------
 
 function nv_file_additem2() {
-	var newitem = "<input readonly=\"readonly\" class=\"txt\" value=\"\" name=\"fileupload2[]\" id=\"fileupload2_" + file_items + "\" style=\"width : 300px\" maxlength=\"255\" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse_file( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload2_" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_checkUrl + "\" id= \"check_fileupload2_" + file_items + "\" onclick=\"nv_checkfile( 'fileupload2_" + file_items + "', 1, 'check_fileupload2_" + file_items + "' ); \" />";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_gourl + "\" id= \"go_fileupload2_" + file_items + "\" onclick=\"nv_gourl( 'fileupload2_" + file_items + "', 1, 'go_fileupload2_" + file_items + "' ); \" /><br />";
+	var newitem = "<div style=\"display: inline-block; margin-top: 10px\"><input readonly=\"readonly\" class=\"form-control w300 pull-left\" style=\"margin-right: 5px\" value=\"\" name=\"fileupload2[]\" id=\"fileupload2_" + file_items + "\" maxlength=\"255\" />";
+	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_selectfile + "\" name=\"selectfile\" onclick=\"nv_open_browse( '" + nv_base_adminurl + "index.php?" + nv_name_variable + "=upload&popup=1&area=fileupload2_" + file_items + "&path=" + file_dir + "&type=file', 'NVImg', 850, 420, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; \" />";
+	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_checkUrl + "\" id= \"check_fileupload2_" + file_items + "\" onclick=\"nv_checkfile( 'fileupload2_" + file_items + "', 1, 'check_fileupload2_" + file_items + "' ); \" />";
+	newitem += "&nbsp;<input type=\"button\" class=\"btn btn-info pull-left\" style=\"margin-right: 5px\" value=\"" + file_gourl + "\" id= \"go_fileupload2_" + file_items + "\" onclick=\"nv_gourl( 'fileupload2_" + file_items + "', 1, 'go_fileupload2_" + file_items + "' ); \" /><br /></div>";
 	$("#fileupload2_items").append(newitem);
 	file_items++;
 }
@@ -257,8 +257,8 @@ function nv_file_additem2() {
 //  ---------------------------------------
 
 function nv_linkdirect_additem() {
-	var newitem = "<textarea name=\"linkdirect[]\" id=\"linkdirect" + linkdirect_items + "\" style=\"width : 300px; height : 150px\"></textarea>";
-	newitem += "&nbsp;<input type=\"button\" value=\"" + file_checkUrl + "\" id=\"check_linkdirect" + linkdirect_items + "\" onclick=\"nv_checkfile( 'linkdirect" + linkdirect_items + "', 0, 'check_linkdirect" + linkdirect_items + "' ); \" /><br />";
+	var newitem = "<div class=\"clearfix\">&nbsp;</div><textarea name=\"linkdirect[]\" id=\"linkdirect" + linkdirect_items + "\" style=\"width : 500px; height : 100px; margin-top: 10px\" class=\"form-control pull-left\"></textarea>";
+	newitem += "&nbsp;&nbsp;<input type=\"button\" style=\"margin-top: 10px\" class=\"btn btn-info pull-left\" value=\"" + file_checkUrl + "\" id=\"check_linkdirect" + linkdirect_items + "\" onclick=\"nv_checkfile( 'linkdirect" + linkdirect_items + "', 0, 'check_linkdirect" + linkdirect_items + "' ); \" /><br />";
 	$("#linkdirect_items").append(newitem);
 	linkdirect_items++;
 }

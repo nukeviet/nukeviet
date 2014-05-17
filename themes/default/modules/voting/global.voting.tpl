@@ -20,7 +20,7 @@
 		<!-- END: result1 -->
 		<div class="clearfix">
 			<input class="btn btn-success btn-sm" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}');" />
-			<a title="{VOTING.langresult}" href="javascript:void(0);" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '');"><button class="btn btn-link btn-sm">{VOTING.langresult}</button></a>
+			<input class="btn btn-primary btn-sm" value="{VOTING.langresult}" type="button" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '');" />
 		</div>
 	</fieldset>
 </form>

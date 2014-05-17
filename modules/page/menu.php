@@ -10,14 +10,11 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$sql = "SELECT id, title, alias FROM " . NV_PREFIXLANG . "_" . $module_d . " ORDER BY weight ASC";
+$sql = 'SELECT id, title, alias FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
-
 While( $row = $result->fetch() )
 {
-	
-	$arr_cat[$row['id']] = array(
-		'module' => $module,
+	$array_item[$row['id']] = array(
 		'key' => $row['id'],
 		'title' => $row['title'],
 		'alias' => $row['alias'],

@@ -163,7 +163,7 @@ class Error
 			if( isset( $_SERVER[$k] ) ) return $_SERVER[$k];
 			elseif( isset( $_ENV[$k] ) ) return $_ENV[$k];
 			elseif( @getenv( $k ) ) return @getenv( $k );
-			elseif( function_exists( 'apache_getenv' ) && apache_getenv( $k, true ) ) return apache_getenv( $k, true );
+			elseif( function_exists( 'apache_getenv' ) and apache_getenv( $k, true ) ) return apache_getenv( $k, true );
 		}
 		return '';
 	}
@@ -366,7 +366,7 @@ class Error
 		global $error_info;
 
 		$info = $this->errstr;
-		if( $this->errno != E_USER_ERROR && $this->errno != E_USER_WARNING && $this->errno != E_USER_NOTICE )
+		if( $this->errno != E_USER_ERROR and $this->errno != E_USER_WARNING and $this->errno != E_USER_NOTICE )
 		{
 			if( ! empty( $this->errfile ) ) $info .= ' in file ' . $this->errfile;
 			if( ! empty( $this->errline ) ) $info .= ' on line ' . $this->errline;
@@ -408,7 +408,7 @@ class Error
 				$this->_send();
 			}
 
-			if( ! empty( $this->display_errors_list ) and isset( $this->display_errors_list[$errno] ) )
+			if( ! empty( $this->display_errors_list ) and isset( $this->display_errors_list[$errno] ) and ! preg_match( "/^ftp\_login\(\)/i", $errstr ) )
 			{
 				$this->_display();
 			}

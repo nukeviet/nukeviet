@@ -1,17 +1,19 @@
 <!-- BEGIN: main -->
 <br />
 <br />
-<p class="center">
+<p class="text-center">
 	<strong>{LANG.nv_lang_readok}</strong>
 </p>
-<table class="tab1">
-	<tbody>
-		<!-- BEGIN: loop -->
-		<tr>
-			<td>{NAME}</td>
-		</tr>
-		<!-- END: loop -->
-	</tbody>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td>{NAME}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <meta http-equiv="Refresh" content="10;URL={URL}" />
 <!-- END: main -->

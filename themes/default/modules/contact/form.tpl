@@ -7,8 +7,7 @@
 	</div>
 	<!-- END: error -->
 	<!-- BEGIN: form -->
-	<div class="alert alert-info fade in">
-		<em data-dismiss="alert" aria-hidden="true" class="fa fa-times fa-fix fa-pointer pull-right fa-lg">&nbsp;</em>
+	<div class="alert alert-info">
 		{LANG.note}
 	</div>
 	<form id="fcontact" method="post" action="{ACTION_FILE}" onsubmit="return sendcontact('{NV_GFX_NUM}');">
@@ -65,10 +64,5 @@
 		</div>
 	</form>
 	<!-- END: form -->
-	<!-- BEGIN: bodytext -->
-	<div class="well">
-		{CONTENT.bodytext}
-	</div>
-	<!-- END: bodytext -->
 </div>
 <!-- END: main -->

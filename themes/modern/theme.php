@@ -53,15 +53,6 @@ function nv_site_theme( $contents, $full = true )
 			$js .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/fix-png-ie6.js\"></script>\n";
 			$js .= "<script type=\"text/javascript\">DD_belatedPNG.fix('#');</script>\n";
 		}
-		else
-		{
-			$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/gtie6.css\" />\n";
-
-			if( $client_info['browser']['version'] >= 9 )
-			{
-				$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/ie9.css\" />\n";
-			}
-		}
 	}
 
 	if( defined( 'NV_IS_ADMIN' ) and $full )
@@ -137,7 +128,7 @@ function nv_site_theme( $contents, $full = true )
 		$a = 0;
 		foreach( $site_mods as $modname => $modvalues )
 		{
-			if( ! empty( $modvalues['in_menu'] ) )
+			if( in_array($modname, $config_theme['module_in_menu']) )
 			{
 				if( $home == 1 && $a == 0 )
 				{

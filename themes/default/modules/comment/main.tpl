@@ -6,17 +6,11 @@
 			<p class="comment-title"><em class="fa fa-comments">&nbsp;</em> {LANG.comment}</p>
 		</div>
 		<div class="col-xs-6 text-right">
-			<div class="btn-group">
-				<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-					{LANG.sortcomm}
-					<span class="caret">&nbsp;</span>
-				</button>
-				<ul class="dropdown-menu text-left sortcomm">
-					<!-- BEGIN: sortcomm -->
-					<li><a href="#"<!-- BEGIN: active --> class="active"<!-- END: active --> onclick="window.location='{BASE_URL_COMM}&sortcomm={OPTION.key}';">{OPTION.title}</a></li>
-					<!-- END: sortcomm -->
-				</ul>
-			</div>
+			<select id="sort" class="form-control">
+				<!-- BEGIN: sortcomm -->
+				<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
+				<!-- END: sortcomm -->
+			</select>
 			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_hide_show}</a></span>
 		</div>
 	</div>
@@ -41,6 +35,7 @@
 					<textarea id="commentcontent" class="form-control" cols="60" rows="3" placeholder="{LANG.comment_content}"></textarea>
 				</div>
 			</div>
+			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
 				<label class="col-xs-3">{LANG.comment_seccode}</label>
 				<div class="col-xs-4">
@@ -51,8 +46,9 @@
 					<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
 				</div>
 			</div>
+			<!-- END: captcha -->
 			<div class="form-group text-center">
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{VIEW_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', '{GFX_NUM}');" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
 			</div>
 		</form>
@@ -65,10 +61,15 @@
 		<!-- END: allowed_comm -->
 		<!-- BEGIN: form_login-->
 		<div class="alert alert-danger fade in">
-			<em data-dismiss="alert" aria-hidden="true" class="fa fa-times fa-fix fa-pointer pull-right fa-lg">&nbsp;</em>
 			{COMMENT_LOGIN}
 		</div>
 		<!-- END: form_login -->
 	</div>
 </div>
+<script type="text/javascript">
+$("#sort").change(function() {
+	var key = $('#sort').val();
+	window.location='{BASE_URL_COMM}&sortcomm=' + key;
+});
+</script>
 <!-- END: main -->

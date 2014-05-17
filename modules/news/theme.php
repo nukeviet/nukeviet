@@ -40,12 +40,13 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -70,6 +71,12 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -100,13 +107,14 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -129,6 +137,12 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -178,7 +192,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 
 		if( defined( 'NV_IS_MODADMIN' ) )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 			$xtpl->parse( 'main.viewcatloop.adminlink' );
 		}
 
@@ -265,7 +279,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_catcontent_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . " " . nv_link_delete_page( $array_catcontent_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.adminlink' );
 				}
 				if ( $newday >= NV_CURRENTTIME )
@@ -369,7 +383,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 					if( defined( 'NV_IS_MODADMIN' ) )
 					{
-						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_row_i['id'] ) );
+						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 						$xtpl->parse( 'main.listcat.adminlink' );
 					}
 				}
@@ -383,6 +397,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
+					$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 					$xtpl->assign( 'OTHER', $array_row_i );
 					$xtpl->parse( 'main.listcat.related.loop' );
 				}
@@ -406,6 +421,12 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 			$xtpl->parse( 'main.listcat' );
 		}
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -449,7 +470,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 				if( defined( 'NV_IS_MODADMIN' ) )
 				{
-					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . " " . nv_link_delete_page( $array_content_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.content.adminlink' );
 				}
 
@@ -505,7 +526,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $array_content_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_content_i['id'] ) . " " . nv_link_delete_page( $array_content_i['id'] ) );
 				$xtpl->parse( 'main.loopcat.content.adminlink' );
 			}
 
@@ -529,6 +550,9 @@ function viewcat_two_column( $array_content, $array_catpage )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
+
+					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], $module_config[$module_name]['tooltip_length'] );
+
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
@@ -542,6 +566,12 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$xtpl->parse( 'main.loopcat' );
 			++$a;
 		}
+	}
+
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
 	}
 
 	//Theo chu de
@@ -674,7 +704,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . " " . nv_link_delete_page( $news_contents['id'] ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -701,6 +731,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_new_array as $key => $related_new_array_i )
 		{
+			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $related_new_array_i['time'] + ( 86400 * $related_new_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -718,6 +749,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_array as $related_array_i )
 		{
+			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $related_array_i['time'] + ( 86400 * $related_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -733,6 +765,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $topic_array as $key => $topic_array_i )
 		{
+			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
 			$newday = $topic_array_i['time'] + ( 86400 * $topic_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -751,28 +784,21 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->parse( 'main.comment' );
 	}
 
+	if( $module_config[$module_name]['showtooltip'] )
+	{
+		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
+		$xtpl->parse( 'main.tooltip' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
-function no_permission( $func_who_view )
+function no_permission()
 {
 	global $module_info, $module_file, $lang_module;
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-
-	if( $func_who_view == 1 )
-	{
-		$no_permission = $lang_module['member_view'];
-	}
-	elseif( $func_who_view == 2 )
-	{
-		$no_permission = $lang_module['admin_view'];
-	}
-	elseif( $func_who_view == 3 )
-	{
-		$no_permission = $lang_module['group_view'];
-	}
 
 	$xtpl->assign( 'NO_PERMISSION', $no_permission );
 	$xtpl->parse( 'no_permission' );
@@ -812,7 +838,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $topic_array_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . " " . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );
 			}
 
@@ -951,7 +977,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . '?' );
+	$xtpl->assign( 'BASE_URL_SITE', NV_BASE_SITEURL . 'index.php' );
 	$xtpl->assign( 'TO_DATE', $date_array['to_date'] );
 	$xtpl->assign( 'FROM_DATE', $date_array['from_date'] );
 	$xtpl->assign( 'KEY', $key );
@@ -980,7 +1006,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
 	return $xtpl->text( 'main' );
 }
 
-function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $catid )
+function search_result_theme( $key, $numRecord, $per_pages, $page, $array_content, $catid )
 {
 	global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
@@ -1023,7 +1049,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 	if( $numRecord > $per_pages )// show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
-		if( strpos( $url_link, '&page=' ) > 0)
+		if( strpos( $url_link, '&page=' ) > 0 )
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );
 		}
@@ -1032,7 +1058,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
 
-		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $pages );
+		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $page );
 
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );

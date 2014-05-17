@@ -12,11 +12,11 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) )	die( 'Stop!!!' );
 
 $sql_drop_module = array();
 
-$count = $db->query( "select count(*) from all_tables where table_name='" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows" ) . "'" )->fetchColumn();
+$count = $db->query( "select count(*) from all_tables where table_name='" . strtoupper( $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department" ) . "'" )->fetchColumn();
 if( $count )
 {
-	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows cascade constraints PURGE';
-	$sql_drop_module[] = 'drop SEQUENCE SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS';
+	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_department cascade constraints PURGE';
+	$sql_drop_module[] = 'drop SEQUENCE SNV_' . strtoupper( $lang . '_' . $module_data ) . '_department';
 
 	$sql_drop_module[] = 'drop table ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_send cascade constraints PURGE';
 	$sql_drop_module[] = 'drop SEQUENCE SNV_' . strtoupper( $lang . '_' . $module_data ) . '_SEND';
@@ -24,7 +24,7 @@ if( $count )
 
 $sql_create_module = $sql_drop_module;
 
-$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_rows (
+$sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_department (
 	 id NUMBER(8,0) DEFAULT NULL,
 	 full_name VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 phone VARCHAR2(255 CHAR) DEFAULT NULL,
@@ -34,18 +34,18 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 act NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
  	primary key (id),
- CONSTRAINT cnv_" . $lang . "_" . $module_data . "_rows_full_name UNIQUE (full_name)
+ CONSTRAINT cnv_" . $lang . "_" . $module_data . "_dep_name UNIQUE (full_name)
 )";
 
-//Tạo TRIGGER cho bảng nvx_vi_module_rows
-$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS';
+//Tạo TRIGGER cho bảng nvx_vi_module_department
+$sql_create_module[] = 'create sequence SNV_' . strtoupper( $lang . '_' . $module_data ) . '_department';
 
-$sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS
- BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows
+$sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_' . $module_data ) . '_department
+ BEFORE INSERT ON ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_department
  FOR EACH ROW WHEN (new.id is null)
 	BEGIN
-	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS.nextval INTO :new.id FROM DUAL;
-	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_ROWS;';
+	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '_department.nextval INTO :new.id FROM DUAL;
+	END TNV_' . strtoupper( $lang . '_' . $module_data ) . '_department;';
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_send (
 	 id NUMBER(8,0) DEFAULT NULL,
@@ -95,4 +95,4 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply(id) TABLESPACE USERS";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";

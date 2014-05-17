@@ -35,7 +35,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
  bodytext CLOB NOT NULL ENABLE,
  keywords VARCHAR2(4000 CHAR) DEFAULT '',
  socialbutton NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
- activecomm NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
+ activecomm VARCHAR2(255 CHAR) DEFAULT '',
  facebookappid VARCHAR2(30 CHAR) DEFAULT '',
  layout_func VARCHAR2(100 CHAR) DEFAULT '',
  gid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
@@ -56,3 +56,14 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 	BEGIN
 	 SELECT SNV_' . strtoupper( $lang . '_' . $module_data ) . '.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $lang . '_' . $module_data ) . ';';
+
+// Comments
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '6')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '4')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";

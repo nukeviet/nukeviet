@@ -15,14 +15,15 @@ $page_title = $lang_module['voting_edit'];
 $error = '';
 $vid = $nv_Request->get_int( 'vid', 'post,get' );
 $submit = $nv_Request->get_string( 'submit', 'post' );
+$groups_list = nv_groups_list();
 
 if( ! empty( $submit ) )
 {
 	$question = $nv_Request->get_title( 'question', 'post', '', 1 );
 	$link = $nv_Request->get_title( 'link', 'post', '', 1 );
-	$who_view = $nv_Request->get_int( 'who_view', 'post', 0 );
-	$groups_view = $nv_Request->get_array( 'groups_view', 'post' );
-	$groups_view = implode( ',', $groups_view );
+
+	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+	$groups_view = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
 	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
@@ -74,8 +75,7 @@ if( ! empty( $submit ) )
 		}
 	}
 	$rowvote = array(
-		'who_view' => 0,
-		'groups_view' => '',
+		'groups_view' => '6',
 		'publ_time' => $begindate,
 		'exp_time' => $enddate,
 		'acceptcm' => $maxoption,
@@ -89,7 +89,7 @@ if( ! empty( $submit ) )
 
 		if( empty( $vid ) )
 		{
-			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, who_view, groups_view, publ_time, exp_time, act) VALUES (" . $db->quote( $question ) . ", " . $db->quote( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $who_view . ", " . $db->quote( $groups_view ) . ", 0,0,1)";
+			$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . " (question, link, acceptcm, admin_id, groups_view, publ_time, exp_time, act) VALUES (" . $db->quote( $question ) . ", " . $db->quote( $link ) . ", " . $maxoption . "," . $admin_info['admin_id'] . ", " . $db->quote( $groups_view ) . ", 0,0,1)";
 			$vid = $db->insert_id( $sql, 'vid' );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid'] );
 		}
@@ -139,7 +139,7 @@ if( ! empty( $submit ) )
 			{
 				$act = 1;
 			}
-			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->quote( $question ) . ", link=" . $db->quote( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", who_view=" . $who_view . ", groups_view = " . $db->quote( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
+			$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->quote( $question ) . ", link=" . $db->quote( $link ) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", groups_view = " . $db->quote( $groups_view ) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
 			if( $db->exec( $sql ) )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid'] );
@@ -192,8 +192,7 @@ else
 	else
 	{
 		$rowvote = array(
-			'who_view' => 0,
-			'groups_view' => '',
+			'groups_view' => '6',
 			'publ_time' => NV_CURRENTTIME,
 			'exp_time' => '',
 			'acceptcm' => 1,
@@ -217,37 +216,9 @@ if( $error != '' )
 	$xtpl->parse( 'main.error' );
 }
 
-$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
-$array_allowed_comm = array( $lang_global['no'], $lang_global['who_view0'], $lang_global['who_view1'] );
-
-$groups_list = nv_groups_list();
 $tdate = date( "d|m|Y|H|i" );
 list( $pday, $pmonth, $pyear, $phour, $pmin ) = explode( "|", $tdate );
 $emonth = $eday = $eyear = $emin = $ehour = 0;
-
-$who_view = $rowvote['who_view'];
-foreach( $array_who_view as $k => $w )
-{
-	$xtpl->assign( 'WHO_VIEW', array(
-		'key' => $k,
-		'title' => $w,
-		'selected' => $who_view == $k ? ' selected="selected"' : ''
-	) );
-	$xtpl->parse( 'main.who_view' );
-}
-
-$xtpl->assign( 'SHOW_GROUPS_LIST', $who_view == 3 ? 'visibility:visible;display:block;' : 'visibility:hidden;display:none;' );
-
-$groups_view = explode( ',', $rowvote['groups_view'] );
-foreach( $groups_list as $group_id => $grtl )
-{
-	$xtpl->assign( 'GROUPS_VIEW', array(
-		'key' => $group_id,
-		'title' => $grtl,
-		'checked' => in_array( $group_id, $groups_view ) ? ' checked="checked"' : ''
-	) );
-	$xtpl->parse( 'main.groups_view' );
-}
 
 $tdate = date( 'H|i', $rowvote['publ_time'] );
 $publ_date = date( 'd/m/Y', $rowvote['publ_time'] );
@@ -321,6 +292,17 @@ foreach( $array_answervote as $id => $title )
 
 $xtpl->assign( 'NEW_ITEM', ++$items );
 $xtpl->assign( 'NEW_ITEM_NUM', $items );
+
+$groups_view = explode( ',', $rowvote['groups_view'] );
+foreach( $groups_list as $_group_id => $_title )
+{
+	$xtpl->assign( 'GROUPS_VIEW', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $groups_view ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.groups_view' );
+}
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

@@ -41,16 +41,11 @@ $array_viewcat_nosub = array(
 	'viewcat_grid_new' => $lang_module['viewcat_grid_new'],
 	'viewcat_grid_old' => $lang_module['viewcat_grid_old']
 );
-$array_who_view = array(
-	$lang_global['who_view0'],
-	$lang_global['who_view1'],
-	$lang_global['who_view2'],
-	$lang_global['who_view3']
-);
+
 $array_allowed_comm = array(
 	$lang_global['no'],
-	$lang_global['who_view0'],
-	$lang_global['who_view1']
+	$lang_global['level6'],
+	$lang_global['level4']
 );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -314,17 +309,17 @@ function nv_show_cat_list( $parentid = 0 )
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or (isset( $array_cat_admin[$admin_id][$catid] ) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1) )
 			{
 				$func_cat_disabled = false;
-				$admin_funcs[] = "<em class=\"icon-plus icon-large\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a>\n";
+				$admin_funcs[] = "<em class=\"fa fa-plus fa-lg\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a>\n";
 			}
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or ($parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 			{
 				$func_cat_disabled = false;
-				$admin_funcs[] = "<em class=\"icon-edit icon-large\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a>\n";
+				$admin_funcs[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a class=\"\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a>\n";
 			}
 			if( defined( 'NV_IS_ADMIN_MODULE' ) or ($parentid > 0 and isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 			{
 				$weight_disabled = false;
-				$admin_funcs[] = "<em class=\"icon-trash icon-large\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a>";
+				$admin_funcs[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a>";
 			}
 
 			$xtpl->assign( 'ROW', array(
@@ -582,7 +577,7 @@ function nv_show_sources_list()
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
 
 	$num = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
 	$num_items = ($num > 1) ? $num : 1;
 	$per_page = 15;
 	$page = $nv_Request->get_int( 'page', 'get', 1 );

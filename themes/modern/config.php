@@ -15,7 +15,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$config_theme['show_logo'] = $nv_Request->get_int( 'show_logo', 'post', 0 );
 	$config_theme['show_site_name'] = $nv_Request->get_int( 'show_site_name', 'post', 0 );
-
+	$config_theme['module_in_menu'] = $nv_Request->get_typed_array( 'module_in_menu', 'post', 'string' );
 	$config_value = serialize( $config_theme );
 
 	if ( isset( $module_config['themes'][$selectthemes] ) )
@@ -61,5 +61,12 @@ $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
 $xtpl->assign( 'CONFIG_THEME', $config_theme );
 
+foreach( $site_mods as $modname => $modvalues )
+{
+	$modvalues['modname'] = $modname;
+	$modvalues['checked'] = in_array($modname, $config_theme['module_in_menu']) ? ' checked="checked"' : '';
+	$xtpl->assign( 'MODULE', $modvalues );
+	$xtpl->parse( 'main.module' );
+}
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

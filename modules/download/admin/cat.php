@@ -80,15 +80,9 @@ function nv_del_cat( $catid )
 	nv_insert_logs( NV_LANG_DATA, $module_data, 'Delete Category', $title, $admin_info['userid'] );
 }
 
-$groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if( ! empty( $groups_list ) )
-{
-	$array_who[] = $lang_global['who_view3'];
-}
-
 $array = array();
 $error = '';
+$groups_list = nv_groups_list();
 
 // Add cat
 if( $nv_Request->isset_request( 'add', 'get' ) )
@@ -100,10 +94,6 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
 		$array['description'] = $nv_Request->get_title( 'description', 'post', '', 1 );
-		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
-		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
-		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
-		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
 		$array['alias'] = $nv_Request->get_title( 'alias', 'post', '' );
 		$array['alias'] = ( $array['alias'] == '' ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
 		if( empty( $array['title'] ) )
@@ -140,32 +130,22 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 
 		if( ! $is_error )
 		{
-			if( ! in_array( $array['who_view'], array_keys( $array_who ) ) )
-			{
-				$array['who_view'] = 0;
-			}
+			$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+			$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
-			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
-
-			if( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
-			{
-				$array['who_download'] = 0;
-			}
-
-			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
+			$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
+			$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 			$sql = 'SELECT MAX(weight) AS new_weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $array['parentid'];
 			$new_weight = $db->query( $sql )->fetchColumn();
 			$new_weight = ( int )$new_weight + 1;
 
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_categories (parentid, title, alias, description, who_view, groups_view, who_download, groups_download, weight, status) VALUES (
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_categories (parentid, title, alias, description, groups_view, groups_download, weight, status) VALUES (
 				 ' . $array['parentid'] . ',
 				 :title,
 				 :alias,
 				 :description,
-				 ' . $array['who_view'] . ',
 				 :groups_view,
-				 ' . $array['who_download'] . ',
 				 :groups_download,
 				 ' . $new_weight . ',
 				 1)';
@@ -199,10 +179,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['title'] = '';
 		$array['alias'] = '';
 		$array['description'] = '';
-		$array['who_view'] = 0;
-		$array['groups_view'] = array();
-		$array['who_download'] = 0;
-		$array['groups_download'] = array();
+		$array['groups_view'] =	$array['groups_download'] = '';
 	}
 
 	$listcats = array(
@@ -214,54 +191,26 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 	);
 	$listcats = $listcats + nv_listcats( $array['parentid'] );
 
-	$who_view = $array['who_view'];
-	$array['who_view'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_view'][] = array(
-			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_view ? ' selected="selected"' : ''
-		);
-	}
-
-	$groups_view = $array['groups_view'];
+	$groups_view = explode( ',', $array['groups_view'] );
 	$array['groups_view'] = array();
-	if( ! empty( $groups_list ) )
+	foreach( $groups_list as $key => $title )
 	{
-		foreach( $groups_list as $key => $title )
-		{
-			$array['groups_view'][] = array(
-				'key' => $key,
-				'title' => $title,
-				'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
-			);
-		}
-	}
-
-	$who_download = $array['who_download'];
-	$array['who_download'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_download'][] = array(
+		$array['groups_view'][] = array(
 			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_download ? ' selected="selected"' : ''
+			'title' => $title,
+			'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 		);
 	}
 
-	$groups_download = $array['groups_download'];
+	$groups_download = explode( ',', $array['groups_download'] );
 	$array['groups_download'] = array();
-	if( ! empty( $groups_list ) )
+	foreach( $groups_list as $key => $title )
 	{
-		foreach( $groups_list as $key => $title )
-		{
-			$array['groups_download'][] = array(
-				'key' => $key,
-				'title' => $title,
-				'checked' => in_array( $key, $groups_download ) ? ' checked="checked"' : ''
-			);
-		}
+		$array['groups_download'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_download ) ? ' checked="checked"' : ''
+		);
 	}
 
 	$xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -281,36 +230,16 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$xtpl->parse( 'main.parentid' );
 	}
 
-	foreach( $array['who_view'] as $who )
+	foreach( $array['groups_view'] as $group )
 	{
-		$xtpl->assign( 'WHO_VIEW', $who );
-		$xtpl->parse( 'main.who_view' );
+		$xtpl->assign( 'GROUPS_VIEW', $group );
+		$xtpl->parse( 'main.groups_view' );
 	}
 
-	if( ! empty( $array['groups_view'] ) )
+	foreach( $array['groups_download'] as $group )
 	{
-		foreach( $array['groups_view'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_VIEW', $group );
-			$xtpl->parse( 'main.group_view_empty.groups_view' );
-		}
-		$xtpl->parse( 'main.group_view_empty' );
-	}
-
-	foreach( $array['who_download'] as $who )
-	{
-		$xtpl->assign( 'WHO_DOWNLOAD', $who );
-		$xtpl->parse( 'main.who_download' );
-	}
-
-	if( ! empty( $array['groups_download'] ) )
-	{
-		foreach( $array['groups_download'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
-			$xtpl->parse( 'main.group_download_empty.groups_download' );
-		}
-		$xtpl->parse( 'main.group_download_empty' );
+		$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
+		$xtpl->parse( 'main.groups_download' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -351,10 +280,12 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 		$array['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
 		$array['description'] = $nv_Request->get_title( 'description', 'post', '' );
-		$array['who_view'] = $nv_Request->get_int( 'who_view', 'post', 0 );
-		$array['groups_view'] = $nv_Request->get_typed_array( 'groups_view', 'post', 'int' );
-		$array['who_download'] = $nv_Request->get_int( 'who_download', 'post', 0 );
-		$array['groups_download'] = $nv_Request->get_typed_array( 'groups_download', 'post', 'int' );
+
+		$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
+		$array['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+
+		$_groups_post = $nv_Request->get_array( 'groups_download', 'post', array() );
+		$array['groups_download'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 		$array['alias'] = $nv_Request->get_title( 'alias', 'post', '' );
 		$array['alias'] = ( $array['alias'] == '' ) ? change_alias( $array['title'] ) : change_alias( $array['alias'] );
@@ -396,20 +327,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 		if( ! $is_error )
 		{
-			if( ! in_array( $array['who_view'], array_keys( $array_who ) ) )
-			{
-				$array['who_view'] = 0;
-			}
-
-			$array['groups_view'] = ( ! empty( $array['groups_view'] ) ) ? implode( ',', $array['groups_view'] ) : '';
-
-			if( ! in_array( $array['who_download'], array_keys( $array_who ) ) )
-			{
-				$array['who_download'] = 0;
-			}
-
-			$array['groups_download'] = ( ! empty( $array['groups_download'] ) ) ? implode( ',', $array['groups_download'] ) : '';
-
 			if( $array['parentid'] != $row['parentid'] )
 			{
 				$sql = 'SELECT MAX(weight) AS new_weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_categories WHERE parentid=' . $array['parentid'];
@@ -428,9 +345,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 				 title= :title,
 				 alias= :alias,
 				 description= :description,
-				 who_view=' . $array['who_view'] . ',
 				 groups_view= :groups_view,
-				 who_download=' . $array['who_download'] . ',
 				 groups_download= :groups_download,
 				 weight=' . $new_weight . '
 				 WHERE id=' . $catid );
@@ -467,10 +382,9 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$array['title'] = $row['title'];
 		$array['alias'] = $row['alias'];
 		$array['description'] = $row['description'];
-		$array['who_view'] = ( int )$row['who_view'];
-		$array['groups_view'] = ! empty( $row['groups_view'] ) ? explode( ',', $row['groups_view'] ) : array();
-		$array['who_download'] = ( int )$row['who_download'];
-		$array['groups_download'] = ! empty( $row['groups_download'] ) ? explode( ',', $row['groups_download'] ) : array();
+
+		$array['groups_view'] = explode( ',', $row['groups_view'] );
+		$array['groups_download'] = explode( ',', $row['groups_download'] );
 	}
 
 	$listcats = array(
@@ -482,54 +396,26 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	);
 	$listcats = $listcats + nv_listcats( $array['parentid'], $catid );
 
-	$who_view = $array['who_view'];
-	$array['who_view'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_view'][] = array(
-			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_view ? ' selected="selected"' : ''
-		);
-	}
-
 	$groups_view = $array['groups_view'];
 	$array['groups_view'] = array();
-	if( ! empty( $groups_list ) )
+	foreach( $groups_list as $key => $title )
 	{
-		foreach( $groups_list as $key => $title )
-		{
-			$array['groups_view'][] = array(
-				'key' => $key,
-				'title' => $title,
-				'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
-			);
-		}
-	}
-
-	$who_download = $array['who_download'];
-	$array['who_download'] = array();
-	foreach( $array_who as $key => $who )
-	{
-		$array['who_download'][] = array(
+		$array['groups_view'][] = array(
 			'key' => $key,
-			'title' => $who,
-			'selected' => $key == $who_download ? ' selected="selected"' : ''
+			'title' => $title,
+			'checked' => in_array( $key, $groups_view ) ? ' checked="checked"' : ''
 		);
 	}
 
 	$groups_download = $array['groups_download'];
 	$array['groups_download'] = array();
-	if( ! empty( $groups_list ) )
+	foreach( $groups_list as $key => $title )
 	{
-		foreach( $groups_list as $key => $title )
-		{
-			$array['groups_download'][] = array(
-				'key' => $key,
-				'title' => $title,
-				'checked' => in_array( $key, $groups_download ) ? ' checked="checked"' : ''
-			);
-		}
+		$array['groups_download'][] = array(
+			'key' => $key,
+			'title' => $title,
+			'checked' => in_array( $key, $groups_download ) ? ' checked="checked"' : ''
+		);
 	}
 
 	$xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -549,36 +435,17 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		$xtpl->parse( 'main.parentid' );
 	}
 
-	foreach( $array['who_view'] as $who )
+	foreach( $array['groups_view'] as $group )
 	{
-		$xtpl->assign( 'WHO_VIEW', $who );
-		$xtpl->parse( 'main.who_view' );
+		$xtpl->assign( 'GROUPS_VIEW', $group );
+		$xtpl->parse( 'main.groups_view' );
 	}
 
-	if( ! empty( $array['groups_view'] ) )
-	{
-		foreach( $array['groups_view'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_VIEW', $group );
-			$xtpl->parse( 'main.group_view_empty.groups_view' );
-		}
-		$xtpl->parse( 'main.group_view_empty' );
-	}
 
-	foreach( $array['who_download'] as $who )
+	foreach( $array['groups_download'] as $group )
 	{
-		$xtpl->assign( 'WHO_DOWNLOAD', $who );
-		$xtpl->parse( 'main.who_download' );
-	}
-
-	if( ! empty( $array['groups_download'] ) )
-	{
-		foreach( $array['groups_download'] as $group )
-		{
-			$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
-			$xtpl->parse( 'main.group_download_empty.groups_download' );
-		}
-		$xtpl->parse( 'main.group_download_empty' );
+		$xtpl->assign( 'GROUPS_DOWNLOAD', $group );
+		$xtpl->parse( 'main.groups_download' );
 	}
 
 	$xtpl->parse( 'main' );

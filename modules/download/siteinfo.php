@@ -40,7 +40,7 @@ if( $number > 0 )
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_comment_pending'],
 		'value' => $number,
-		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=0'
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=comment&amp;status=0'
 	);
 }
 
@@ -53,7 +53,7 @@ if( $number > 0 )
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_users_send'],
 		'value' => $number,
-		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=filequeue'
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=filequeue'
 	);
 }
 
@@ -64,6 +64,6 @@ if( $number > 0 )
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_eror'],
 		'value' => $number,
-		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=report'
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=report'
 	);
 }

@@ -27,6 +27,9 @@ if( ! empty( $savesetting ) )
 
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
 	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
+	$array_config['showtooltip'] = $nv_Request->get_int( 'showtooltip', 'post', 0 );
+	$array_config['tooltip_position'] = $nv_Request->get_string( 'tooltip_position', 'post', '' );
+	$array_config['tooltip_length'] = $nv_Request->get_int( 'tooltip_length', 'post', 0 );
 	$array_config['showhometext'] = $nv_Request->get_int( 'showhometext', 'post', 0 );
 
 	$array_config['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
@@ -70,6 +73,23 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'DATA', $module_config[$module_name] );
+
+$array_tooltip_position = array(
+	'top' => $lang_module['showtooltip_position_top'],
+	'bottom' => $lang_module['showtooltip_position_bottom'],
+	'left' => $lang_module['showtooltip_position_left'],
+	'right' => $lang_module['showtooltip_position_right']);
+
+// Vi tri hien thi tooltip
+foreach( $array_tooltip_position as $key => $val )
+{
+	$xtpl->assign( 'TOOLTIP_P', array(
+		'key' => $key,
+		'title' => $val,
+		'selected' => $key == $module_config[$module_name]['tooltip_position'] ? ' selected="selected"' : ''
+	) );
+	$xtpl->parse( 'main.tooltip_position' );
+}
 
 // Cach hien thi tren trang chu
 foreach( $array_viewcat_full as $key => $val )
@@ -115,9 +135,9 @@ for( $i = 0; $i <= 6; ++$i )
 	$xtpl->parse( 'main.allowed_rating_point' );
 }
 
+$xtpl->assign( 'SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
-$xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
 
@@ -164,31 +184,37 @@ foreach( $array_config_source as $key => $val )
 $xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'CURRENTPATH', defined( 'NV_IS_SPADMIN' ) ? "images" : NV_UPLOADS_DIR . '/' . $module_name );
 
-$contents .= 'nv_open_browse_file("' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
+$contents .= 'nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
 $contents .= 'return false;';
 $contents .= '});';
 $contents .= "\n//]]>\n</script>\n";
 
 if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {
+	$groups_list = nv_groups_list();
+	unset($groups_list[6]);
+
 	$savepost = $nv_Request->get_int( 'savepost', 'post', 0 );
 	if( ! empty( $savepost ) )
 	{
 		$array_config = array();
-		$array_pid = $nv_Request->get_typed_array( 'array_pid', 'post' );
+		$array_group_id = $nv_Request->get_typed_array( 'array_group_id', 'post' );
 		$array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post' );
 		$array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post' );
 		$array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post' );
 		$array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post' );
 
-		foreach( $array_pid as $pid )
+		foreach( $array_group_id as $group_id )
 		{
-			$addcontent = ( isset( $array_addcontent[$pid] ) and intval( $array_addcontent[$pid] ) == 1 ) ? 1 : 0;
-			$postcontent = ( isset( $array_postcontent[$pid] ) and intval( $array_postcontent[$pid] ) == 1 ) ? 1 : 0;
-			$editcontent = ( isset( $array_editcontent[$pid] ) and intval( $array_editcontent[$pid] ) == 1 ) ? 1 : 0;
-			$delcontent = ( isset( $array_delcontent[$pid] ) and intval( $array_delcontent[$pid] ) == 1 ) ? 1 : 0;
-			$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
-			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE pid =" . $pid );
+			if( isset( $groups_list[$group_id] ) )
+			{
+				$addcontent = ( isset( $array_addcontent[$group_id] ) and intval( $array_addcontent[$group_id] ) == 1 ) ? 1 : 0;
+				$postcontent = ( isset( $array_postcontent[$group_id] ) and intval( $array_postcontent[$group_id] ) == 1 ) ? 1 : 0;
+				$editcontent = ( isset( $array_editcontent[$group_id] ) and intval( $array_editcontent[$group_id] ) == 1 ) ? 1 : 0;
+				$delcontent = ( isset( $array_delcontent[$group_id] ) and intval( $array_delcontent[$group_id] ) == 1 ) ? 1 : 0;
+				$addcontent = ( $postcontent == 1 ) ? 1 : $addcontent;
+				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_config_post SET addcontent = '" . $addcontent . "', postcontent = '" . $postcontent . "', editcontent = '" . $editcontent . "', delcontent = '" . $delcontent . "' WHERE group_id =" . $group_id );
+			}
 		}
 
 		nv_del_moduleCache( 'settings' );
@@ -197,75 +223,55 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 		die();
 	}
 
-	$array_post_title = array();
-	$array_post_title[0][0] = $lang_global['who_view0'];
-
-	$array_post_title[1][0] = $lang_global['who_view1'];
-
-	$groups_list = nv_groups_list();
-	foreach( $groups_list as $group_id => $grtl )
-	{
-		$array_post_title[1][$group_id] = $grtl;
-	}
-
-	$array_post_member = array();
 	$array_post_data = array();
 
-	$sql = "SELECT pid, member, group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY pid ASC";
+	$sql = "SELECT group_id, addcontent, postcontent, editcontent, delcontent FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post ORDER BY group_id ASC";
 	$result = $db->query( $sql );
-	while( list( $pid, $member, $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
+	while( list( $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) = $result->fetch( 3 ) )
 	{
-		if( isset( $array_post_title[$member][$group_id] ) )
+		if( isset( $groups_list[$group_id] ) )
 		{
-			$array_post_member[$member][$group_id] = $pid;
-			$array_post_data[$pid] = array(
-				"pid" => $pid,
-				"member" => $member,
-				"group_id" => $group_id,
-				"addcontent" => $addcontent,
-				"postcontent" => $postcontent,
-				"editcontent" => $editcontent,
-				"delcontent" => $delcontent
+			$array_post_data[$group_id] = array(
+				'group_id' => $group_id,
+				'addcontent' => $addcontent,
+				'postcontent' => $postcontent,
+				'editcontent' => $editcontent,
+				'delcontent' => $delcontent
 			);
 		}
 		else
 		{
-			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_config_post WHERE pid = " . $pid );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config_post WHERE group_id = ' . $group_id );
 		}
 	}
 
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 
-	foreach( $array_post_title as $member => $array_post_1 )
+	foreach( $groups_list as $group_id => $group_title )
 	{
-		foreach( $array_post_1 as $group_id => $array_post_2 )
+		if( ( isset( $array_post_data[$group_id] ) ) )
 		{
-
-			$pid = ( isset( $array_post_member[$member][$group_id] ) ) ? $array_post_member[$member][$group_id] : 0;
-			if( $pid > 0 )
-			{
-				$addcontent = $array_post_data[$pid]['addcontent'];
-				$postcontent = $array_post_data[$pid]['postcontent'];
-				$editcontent = $array_post_data[$pid]['editcontent'];
-				$delcontent = $array_post_data[$pid]['delcontent'];
-			}
-			else
-			{
-				$addcontent = $postcontent = $editcontent = $delcontent = 0;
-				$pid = $db->insert_id( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (member, group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $member . "', '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )", "pid" );
-			}
-
-			$xtpl->assign( 'ROW', array(
-				'array_post_2' => $array_post_2,
-				'pid' => $pid,
-				'addcontent' => $addcontent ? ' checked="checked"' : '',
-				'postcontent' => $postcontent ? ' checked="checked"' : '',
-				'editcontent' => $editcontent ? ' checked="checked"' : '',
-				'delcontent' => $delcontent ? ' checked="checked"' : ''
-			) );
-
-			$xtpl->parse( 'main.admin_config_post.loop' );
+			$addcontent = $array_post_data[$group_id]['addcontent'];
+			$postcontent = $array_post_data[$group_id]['postcontent'];
+			$editcontent = $array_post_data[$group_id]['editcontent'];
+			$delcontent = $array_post_data[$group_id]['delcontent'];
 		}
+		else
+		{
+			$addcontent = $postcontent = $editcontent = $delcontent = 0;
+			$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_config_post (group_id,addcontent,postcontent,editcontent,delcontent) VALUES ( '" . $group_id . "', '" . $addcontent . "', '" . $postcontent . "', '" . $editcontent . "', '" . $delcontent . "' )" );
+		}
+
+		$xtpl->assign( 'ROW', array(
+			'group_id' => $group_id,
+			'group_title' => $group_title,
+			'addcontent' => $addcontent ? ' checked="checked"' : '',
+			'postcontent' => $postcontent ? ' checked="checked"' : '',
+			'editcontent' => $editcontent ? ' checked="checked"' : '',
+			'delcontent' => $delcontent ? ' checked="checked"' : ''
+		) );
+
+		$xtpl->parse( 'main.admin_config_post.loop' );
 	}
 
 	$xtpl->parse( 'main.admin_config_post' );

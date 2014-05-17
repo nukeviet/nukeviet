@@ -109,7 +109,7 @@ elseif( $step == 2 )
 			{
 				$list_valid[] = NV_SESSION_SAVE_PATH;
 			}
-			
+
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
 			if( $ftp_root === false )
@@ -127,12 +127,12 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR, NV_DATADIR . '/ip_files' );
+	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR );
 	if( NV_SESSION_SAVE_PATH != '' )
 	{
 		$array_dir[] = NV_SESSION_SAVE_PATH;
 	}
-	
+
 	// Them vao cac file trong thu muc data va file cau hinh tam
 	$array_file_data = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, '/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/' );
 	foreach( $array_file_data as $file_i )
@@ -193,7 +193,7 @@ elseif( $step == 2 )
 				if( NV_SESSION_SAVE_PATH != '' )
 				{
 					$check_files[] = NV_SESSION_SAVE_PATH;
-				}				
+				}
 
 				$list_files = ftp_nlist( $conn_id, '.' );
 
@@ -292,24 +292,6 @@ elseif( $step == 2 )
 	if( $ftp_check_login > 0 )
 	{
 		ftp_close( $conn_id );
-	}
-
-	if( $nextstep )
-	{
-		$i = 0;
-		for( $ip_file = 0; $ip_file <= 255; $ip_file++ )
-		{
-			if( file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $ip_file . '.php', "<?php\n\n\$ranges = array();", LOCK_EX ) )
-			{
-				++$i;
-			}
-		}
-
-		if( $i != 256 )
-		{
-			$nextstep = 0;
-			$array_dir_check[NV_DATADIR . '/ip_files'] = sprintf( $lang_module['dir_not_writable_ip_files'], NV_DATADIR . '/ip_files' );
-		}
 	}
 
 	if( $step < 3 and $nextstep == 1 )
@@ -595,11 +577,11 @@ elseif( $step == 5 )
 						// Xoa du lieu tai bang nvx_setup_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						// Xoa du lieu tai bang nvx_vi_blocks
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight WHERE bid in (SELECT bid FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
-
 						// Xoa du lieu tai bang nvx_vi_blocks_groups
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+
+						// Xoa du lieu tai bang nvx_vi_blocks
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight WHERE bid NOT IN (SELECT bid FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups)" );
 
 						// Xoa du lieu tai bang nvx_vi_modthemes
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modthemes WHERE func_id in (SELECT func_id FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
@@ -609,6 +591,9 @@ elseif( $step == 5 )
 
 						// Xoa du lieu tai bang nvx_config
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_config WHERE lang=" . $db->quote( $lang_data ) . " AND module!='global' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+
+						// Xoa du lieu tai bang nvx_menu
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows WHERE module_name NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
 					}
 					catch( PDOException $e )
 					{
@@ -881,6 +866,74 @@ elseif( $step == 6 )
 							trigger_error( $e->getMessage() );
 						}
 					}
+
+					// Data Counter
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'last', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)" );
+
+					$year = date( 'Y' );;
+					for( $i=0; $i < 9; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)" );
+						++$year;
+					}
+
+					$ar_tmp = explode(',', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec');
+					foreach( $ar_tmp as $month )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)" );
+					}
+
+					for( $i=1; $i < 32; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					$ar_tmp = explode(',', 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday');
+					foreach( $ar_tmp as $dayofweek )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)" );
+					}
+
+					for( $i=0; $i < 24; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					if( file_exists( NV_ROOTDIR . '/includes/bots.php' ) )
+					{
+						include NV_ROOTDIR . '/includes/bots.php' ;
+						foreach( $bots as $_bot => $v )
+						{
+							$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
+						}
+					}
+
+					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
+					foreach( $tmp_array as $_browser => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
+					}
+
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
+
+					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
+					foreach( $tmp_array as $_os => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', 'Unspecified', 0, 0, 0)" );
+
+					foreach( $countries as $_country => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote( $_country ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)" );
+
 					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}

@@ -14,7 +14,7 @@ $page_title = $lang_module['country'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['country'];
 
-$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_TABLE . " WHERE c_type='country' AND c_count!=0";
+$sql = "SELECT COUNT(*), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country' AND c_count!=0";
 $result = $db->query( $sql );
 list( $num_items, $max ) = $result->fetch( 3 );
 
@@ -26,7 +26,7 @@ if( $num_items )
 
 	$db->sqlreset()
 		->select( 'c_val,c_count, last_update' )
-		->from( NV_COUNTER_TABLE )
+		->from( NV_COUNTER_GLOBALTABLE )
 		->where( "c_type='country' AND c_count!=0" )
 		->order( 'c_count DESC' )
 		->limit( $per_page )
@@ -53,9 +53,9 @@ if( $num_items )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
-}
 
-$contents = allcountries();
+	$contents = nv_theme_statistics_allcountries( $num_items, $countries_list, $cts );
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

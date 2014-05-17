@@ -21,9 +21,12 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (9, 'themes', 'mod_themes', 9, 1, 1, 0, '')";
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (10, 'upload', 'mod_upload', 10, 1, 1, 1, '')";
 
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 1, 0)";
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0)";
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (6, 'All', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (5, 'Guest', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (4, 'Users', '', " . NV_CURRENTTIME . ", 0, 0, 3, 1, 0, 1, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (1, 'Super admin', '', " . NV_CURRENTTIME . ", 0, 0, 4, 1, 0, 1, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (2, 'General admin', '', " . NV_CURRENTTIME . ", 0, 0, 5, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (3, 'Module admin', '', " . NV_CURRENTTIME . ", 0, 0, 6, 1, 0, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
@@ -111,6 +114,7 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'display_errors_list', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'nv_auto_resize', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'dump_interval', '1')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'cdn_url', '')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "')";
@@ -120,7 +124,6 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_gfx_height', '25')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_max_width', '1500')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_max_height', '1500')";
-$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'cdn_url', '')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_live_cookie_time', '" . NV_LIVE_COOKIE_TIME . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_live_session_time', '0')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_anti_iframe', '" . NV_ANTI_IFRAME . "')";

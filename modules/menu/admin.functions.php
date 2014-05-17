@@ -10,23 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'add_menu', 'change_weight_row', 'del_row' );
-
-global $global_arr_menu;
-global $array_who_view;
-global $type_target;
-global $list_module;
-
-$list_module = array();
-
-$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight';
-$list = nv_db_cache( $sql, '', 'modules' );
-foreach( $list as $row )
-{
-	$list_module[$row['title']] = array( 'module_data' => $row['custom_title'] );
-}
-
-$array_who_view = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'], $lang_global['who_view3'] );
+$allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row' );
 
 // Loai lien ket
 $type_target = array();
@@ -52,7 +36,6 @@ function nv_list_menu()
 		$list[$row['id']] = array(
 			'id' => $row['id'],
 			'title' => $row['title'],
-			'description' => $row['description']
 		);
 	}
 
@@ -60,7 +43,7 @@ function nv_list_menu()
 }
 
 /**
- * nv_fix_cat_order()
+ * menu_fix_order()
  *
  * @param mixed $mid
  * @param integer $parentid
@@ -68,7 +51,7 @@ function nv_list_menu()
  * @param integer $lev
  * @return
  */
-function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
+function menu_fix_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op;
 
@@ -99,7 +82,7 @@ function nv_fix_cat_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 		++$weight;
 		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET weight=" . $weight . ", sort=" . $order . ", lev='" . $lev . "' WHERE id=" . intval( $catid_i );
 		$db->query( $sql );
-		$order = nv_fix_cat_order( $mid, $catid_i, $order, $lev );
+		$order = menu_fix_order( $mid, $catid_i, $order, $lev );
 	}
 
 	return $order;
