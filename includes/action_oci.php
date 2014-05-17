@@ -13,7 +13,7 @@ if( ! defined( 'NV_MAINFILE' ) )
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 
-function nv_create_table( $table_des, $table_src )
+function nv_copy_structure_table( $table_des, $table_src )
 {
 	global $db, $db_config;
 	return $db->exec( 'CREATE TABLE ' . $table_des . ' AS SELECT * FROM ' . $table_src . ' where 1=0' );

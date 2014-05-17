@@ -611,7 +611,7 @@ elseif( $step == 5 )
 							$result = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_cat ORDER BY sort ASC" );
 							while( list( $catid_i ) = $result->fetch( 3 ) )
 							{
-								nv_create_table_news( $lang_data, 'news', $catid_i );
+								nv_copy_structure_table( $lang_data, 'news', $catid_i );
 							}
 
 							$result = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_rows ORDER BY id ASC" );
