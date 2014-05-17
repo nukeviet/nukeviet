@@ -41,7 +41,6 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 if( empty( $contents ) )
 {
 	$data_content = array();
-	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=main';
 	$html_pages = '';
 	$orderby = '';
 	if( $sorts == 0 )
@@ -106,12 +105,14 @@ if( empty( $contents ) )
 			);
 		}
 
+
 		if( empty( $data_content ) and $page > 1 )
 		{
 			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			exit();
 		}
 
+		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 		$html_pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 	}
 	elseif( $pro_config['home_view'] == 'view_home_cat' )

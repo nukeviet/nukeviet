@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<link rel="Stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/responsive-tabs.css" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.responsiveTabs.min.js"></script>
 <div id="detail">
 	<div class="panel panel-default">
 	    <div class="panel-body">
@@ -195,7 +197,7 @@
 
         <!-- BEGIN: comment -->
         <div id="tab-3">
-            <iframe src="{NV_COMM_URL}" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+            <iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
         </div>
         <!-- END: comment -->
     </div>

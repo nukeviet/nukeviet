@@ -84,7 +84,7 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
                 $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
-                
+
 				foreach( $data_row['data'] as $data_row_i )
 				{
 					$xtpl->assign( 'ID', $data_row_i['id'] );
@@ -159,7 +159,7 @@ function view_home_group( $data_content, $html_pages = "", $sort = 0 )
                         }
                         $xtpl->parse( 'main.catalogs.items.compare' );
                     }
-        
+
                     if( ! empty( $array_id ) )
                     {
                         $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
@@ -212,7 +212,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
                 $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
-                
+
 				foreach( $data_row['data'] as $data_row_i )
 				{
 					$xtpl->assign( 'ID', $data_row_i['id'] );
@@ -271,7 +271,7 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row_i['id'] ) );
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
-                    
+
                     // So sanh san pham
                     if( $pro_config['show_compare'] == 1 )
                     {
@@ -286,13 +286,13 @@ function view_home_cat( $data_content, $html_pages = "", $sort = 0 )
                         }
                         $xtpl->parse( 'main.catalogs.items.compare' );
                     }
-        
+
                     if( ! empty( $array_id ) )
                     {
                         $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
                         $xtpl->assign( 'ch', $ch );
                     }
-                    
+
 					$xtpl->parse( 'main.catalogs.items' );
 					++$i;
 				}
@@ -344,7 +344,7 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 	{
 		$i = 1;
         $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
-        
+
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
@@ -357,9 +357,9 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
-            
+
 			$xtpl->assign( 'num', $num_row );
-            
+
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -403,7 +403,7 @@ function view_home_all( $data_content, $html_pages = "", $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
-            
+
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
@@ -462,7 +462,7 @@ function view_search_all( $data_content, $html_pages = "" )
 	{
 		$i = 1;
         $num_row = $pro_config['per_row'] == 3 ? 4 : 3;
-        
+
 		foreach( $data_content as $data_row )
 		{
 			$xtpl->assign( 'ID', $data_row['id'] );
@@ -475,7 +475,7 @@ function view_search_all( $data_content, $html_pages = "" )
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'num', $num_row );
-            
+
 			if( $pro_config['active_order'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -592,7 +592,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	{
 		$i = 1;
 		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
-        
+
 		foreach( $data_content['data'] as $data_row )
 		{
 			$xtpl->assign( 'id', $data_row['id'] );
@@ -603,7 +603,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
 			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
-            
+
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
@@ -652,7 +652,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.grid_rows.adminlink' );
 			}
-            
+
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
@@ -836,8 +836,6 @@ function detail_product( $data_content, $data_unit, $data_others, $data_shop, $a
 		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
 		define( 'SHADOWBOX', true );
-        $my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/responsive-tabs.css\" />\n";
-        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/jquery.responsiveTabs.min.js\" />\n";
 	}
 
 	$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
@@ -1249,9 +1247,9 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
     if( ! empty( $intro_pay) )
     {
         $xtpl->assign( 'intro_pay', $intro_pay );
-        $xtpl->parse( 'main.actpay.intro_pay' );   
+        $xtpl->parse( 'main.actpay.intro_pay' );
     }
-    
+
 	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' ) $xtpl->parse( 'main.actpay' );
 	$xtpl->assign( 'url_finsh', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name );
 	$xtpl->assign( 'url_print', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=print&order_id=" . $data_content['order_id'] . "&checkss=" . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );
