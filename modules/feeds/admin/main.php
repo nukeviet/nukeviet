@@ -21,7 +21,7 @@ $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $modu
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS, true );
+	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
 	file_put_contents( $content_file, $bodytext );
 
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -44,7 +44,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 if( $is_edit )
 {
-	if( ! empty( $bodytext ) ) $bodytext = nv_htmlspecialchars( $bodytext );
+	$bodytext = htmlspecialchars( nv_editor_br2nl( $bodytext ) );
 
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{

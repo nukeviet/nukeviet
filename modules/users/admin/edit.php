@@ -200,7 +200,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				if( ! empty( $_user['photo'] ) )
 				{
 					$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $_user['photo'];
-		
+
 					if( ! file_exists( $tmp_photo ) )
 					{
 						$_user['photo'] = '';
@@ -209,7 +209,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					{
 						$new_photo_name = $_user['photo'];
 						$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
-		
+
 						$new_photo_name2 = $new_photo_name;
 						$i = 1;
 						while( file_exists( $new_photo_path . $new_photo_name2 ) )
@@ -218,7 +218,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 							++ $i;
 						}
 						$new_photo = $new_photo_path . $new_photo_name2;
-		
+
 						if( nv_copyfile( $tmp_photo, $new_photo ) )
 						{
 							$_user['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
@@ -227,11 +227,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						{
 							$_user['photo'] = '';
 						}
-		
+
 						nv_deletefile( $tmp_photo );
 					}
 				}
-		
+
 				// Delete old photo
 				if( $_user['delpic'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
 				{
@@ -241,7 +241,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			else
 			{
 				$_user['photo'] = $row['photo'];
-		
+
 				if( ! empty( $_user['photo'] ) )
 				{
 					if( ! file_exists( NV_ROOTDIR . '/' . $_user['photo'] ) )
@@ -250,7 +250,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					}
 				}
 			}
-			
+
 			$in_groups = array();
 			foreach ( $_user['in_groups'] as $_group_id )
 			{
@@ -478,9 +478,9 @@ else
 				}
 				elseif( $row['field_type'] == 'editor' )
 				{
+					$row['value'] = htmlspecialchars( nv_editor_br2nl( $row['value'] ) );
 					if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 					{
-						$row['value'] = nv_htmlspecialchars( nv_editor_br2nl( $row['value'] ) );
 						$array_tmp = explode( '@', $row['class'] );
 						$edits = nv_aleditor( 'custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'] );
 						$xtpl->assign( 'EDITOR', $edits );
@@ -488,7 +488,6 @@ else
 					}
 					else
 					{
-						$row['value'] = nv_htmlspecialchars( nv_br2nl( $row['value'] ) );
 						$row['class'] = '';
 						$xtpl->assign( 'FIELD', $row );
 						$xtpl->parse( 'main.edit_user.field.loop.textarea' );

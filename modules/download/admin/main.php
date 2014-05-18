@@ -295,8 +295,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$array['groups_view'] = ! empty( $array['groups_view'] ) ? explode( ',', $array['groups_view'] ) : array( 6 );
 	$array['groups_download'] = ! empty( $array['groups_download'] ) ? explode( ',', $array['groups_download'] ) : array( 6 );
 
-	if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
-	if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
+	$array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
 
 	$array['fileupload_num'] = sizeof( $array['fileupload'] );
 	$array['linkdirect_num'] = sizeof( $array['linkdirect'] );
@@ -374,7 +373,7 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	{
 		require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 	}
-
+	$array['description'] = htmlspecialchars( nv_editor_br2nl( $array['description'] ) );
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{
 		$array['description'] = nv_aleditor( 'description', '100%', '300px', $array['description'] );

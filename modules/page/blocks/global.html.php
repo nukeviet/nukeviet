@@ -22,9 +22,7 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 			require NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 		}
 
-		$htmlcontent = ( defined( 'NV_EDITOR' ) ) ? nv_editor_br2nl( $data_block['htmlcontent'] ) : nv_br2nl( $data_block['htmlcontent'] );
-		$htmlcontent = nv_htmlspecialchars( $htmlcontent );
-
+		$htmlcontent = htmlspecialchars( nv_editor_br2nl( $data_block['htmlcontent'] ) );
 		if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 		{
 			$html = nv_add_editor_js() . nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
