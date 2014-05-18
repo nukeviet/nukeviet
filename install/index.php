@@ -608,19 +608,19 @@ elseif( $step == 5 )
 						$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules WHERE title='news'";
 						if( $db->query( $sql )->fetchColumn() )
 						{
-							$result = $db->query( "SELECT catid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_cat ORDER BY sort ASC" );
+							$result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC' );
 							while( list( $catid_i ) = $result->fetch( 3 ) )
 							{
-								nv_copy_structure_table( $lang_data, 'news', $catid_i );
+								nv_copy_structure_table( $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid_i, $db_config['prefix'] . '_' . $lang_data . '_news_rows' );
 							}
 
-							$result = $db->query( "SELECT id, listcatid FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_rows ORDER BY id ASC" );
+							$result = $db->query( 'SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC' );
 							while( list( $id, $listcatid ) = $result->fetch( 3 ) )
 							{
 								$arr_catid = explode( ',', $listcatid );
 								foreach( $arr_catid as $catid )
 								{
-									$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . " SELECT * FROM " . $db_config['prefix'] . "_" . $lang_data . "_news_rows WHERE id=" . $id );
+									$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id=' . $id );
 								}
 							}
 							$result->closeCursor();
@@ -720,8 +720,8 @@ elseif( $step == 6 )
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
 			$userid = 1;
-			$db->query( "TRUNCATE TABLE " . $db_config['prefix'] . "_users" );
-			$db->query( "TRUNCATE TABLE " . $db_config['prefix'] . "_authors" );
+			$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_users' );
+			$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_authors' );
 
 			$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_users
 				(userid, username, md5username, password, email, full_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
@@ -741,7 +741,7 @@ elseif( $step == 6 )
 			{
 				try
 				{
-					$db->query( "INSERT INTO " . $db_config['prefix'] . "_users_info (userid) VALUES (" . $userid . ")" );
+					$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')' );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, data) VALUES(1, " . $userid . ", '0')" );
 
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote( NV_SITE_TIMEZONE_NAME ) . ")" );
