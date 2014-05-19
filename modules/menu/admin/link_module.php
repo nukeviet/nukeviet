@@ -12,6 +12,8 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Lay chu de cua module duoc chon
 
+$sp = '&nbsp;&nbsp;&nbsp;';
+
 $mod_name = $nv_Request->get_title( 'module', 'post', '' );
 
 $stmt = $db->prepare( 'SELECT title, module_file, module_data FROM ' . NV_MODULES_TABLE . ' WHERE title= :module' );
