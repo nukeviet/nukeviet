@@ -153,11 +153,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 	}
 }
-elseif( $id )
-{
-	$row['bodytext'] = nv_editor_br2nl( $row['bodytext'] );
-}
-else
+elseif( empty( $id)  )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
@@ -167,10 +163,9 @@ else
 	$row['gid'] = 0;
 }
 
-if( ! empty( $row['bodytext'] ) ) $row['bodytext'] = nv_htmlspecialchars( $row['bodytext'] );
-
 if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
+$row['bodytext'] = htmlspecialchars( nv_editor_br2nl( $row['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
 	$row['bodytext'] = nv_aleditor( 'bodytext', '100%', '300px', $row['bodytext'] );

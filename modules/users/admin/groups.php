@@ -408,7 +408,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			$post['publics'] = '';
 		}
 
-		if( ! empty( $post['content'] ) ) $post['content'] = nv_htmlspecialchars( $post['content'] );
+		$post['content'] = htmlspecialchars( nv_editor_br2nl( $post['content'] ) );
 
 		$xtpl->assign( 'DATA', $post );
 

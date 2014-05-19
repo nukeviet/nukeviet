@@ -808,7 +808,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$id_block_content = $id_block_content_post;
 }
 
-if( ! empty( $rowcontent['bodyhtml'] ) ) $rowcontent['bodyhtml'] = nv_htmlspecialchars( $rowcontent['bodyhtml'] );
+$rowcontent['bodyhtml'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodyhtml'] ) );
 
 if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
 {

@@ -15,6 +15,9 @@
 		position: relative;
 		z-index: 1000
 	}
+	#mudimPanel{
+		left:0 !important
+	}
 </style>
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />

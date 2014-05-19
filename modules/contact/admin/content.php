@@ -19,7 +19,7 @@ if( defined( 'NV_EDITOR' ) )
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS, true );
+	$bodytext = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
 
 	if ( isset( $module_config[$module_name]['bodytext'] ) )
 	{
@@ -51,7 +51,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 if( $is_edit )
 {
-	if( ! empty( $bodytext ) ) $bodytext = nv_htmlspecialchars( $bodytext );
+	$bodytext = htmlspecialchars( nv_editor_br2nl( $bodytext ) );
 
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 

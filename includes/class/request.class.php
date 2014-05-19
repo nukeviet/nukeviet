@@ -12,7 +12,7 @@ if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
 if( ! defined( 'NV_LIVE_SESSION_TIME' ) ) define( 'NV_LIVE_SESSION_TIME', 0 );
 if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( '/[\/]+$/', '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 if( ! defined( 'NV_ADMINDIR' ) ) define( 'NV_ADMINDIR', 'admin' );
-if( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'admin/editors' );
+if( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'editors' );
 
 /**
  * Request
@@ -829,10 +829,11 @@ class Request
 		}
 		else
 		{
-			$value = preg_replace( "/\t+/", ' ', $value );
-			unset( $matches );
-			preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches );
-			$value = str_replace( $matches[0], $matches[1], $value );
+			//$value = preg_replace( "/\t+/", ' ', $value );
+			if( preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches ) )
+			{
+				$value = str_replace( $matches[0], $matches[1], $value );
+			}
 			$value = $this->filterTags( $value );
 			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
 			$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
@@ -1288,7 +1289,7 @@ class Request
 	 * @param mixed $save
 	 * @return
 	 */
-	public function get_editor( $name, $default = '', $allowed_html_tags = '', $save = false )
+	public function get_editor( $name, $default = '', $allowed_html_tags = '' )
 	{
 		$value = ( string )$this->get_value( $name, 'post', $default );
 		if( ! empty( $allowed_html_tags ) )
@@ -1296,14 +1297,6 @@ class Request
 			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
 			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
 			$value = strip_tags( $value, $allowed_html_tags );
-		}
-		if( ( bool )$save )
-		{
-			$value = strtr( $value, array(
-					"\r\n" => '',
-					"\r" => '',
-					"\n" => ''
-				) );
 		}
 		return trim( $value );
 	}

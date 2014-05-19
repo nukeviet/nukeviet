@@ -13,10 +13,10 @@ if( ! defined( 'NV_MAINFILE' ) )
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 
-function nv_create_table_news( $lang_data, $module_data, $catid )
+function nv_copy_structure_table( $table_des, $table_src )
 {
 	global $db, $db_config;
-	return $db->exec( 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_' . $module_data . '_' . $catid . ' AS SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_' . $module_data . '_rows where 1=0' );
+	return $db->exec( 'CREATE TABLE ' . $table_des . ' AS SELECT * FROM ' . $table_src . ' where 1=0' );
 }
 
 function nv_delete_table_sys( $lang )
