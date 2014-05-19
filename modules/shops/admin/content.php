@@ -618,8 +618,6 @@ elseif( $rowcontent['id'] > 0 )
 	}
 }
 
-if( ! empty( $rowcontent['bodytext'] ) ) $rowcontent['bodytext'] = nv_htmlspecialchars( $rowcontent['bodytext'] );
-
 if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
 {
 	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
@@ -800,6 +798,7 @@ while( list( $sourceid_i, $source_title_i ) = each( $array_source_module ) )
 }
 $xtpl->assign( 'sourceid', $select );
 
+$rowcontent['bodytext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
 	$edits = nv_aleditor( 'bodytext', '100%', '300px', $rowcontent['bodytext'] );
