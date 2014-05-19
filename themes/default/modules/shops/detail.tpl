@@ -1,6 +1,4 @@
 <!-- BEGIN: main -->
-<link rel="Stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/responsive-tabs.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/jquery.responsiveTabs.min.js"></script>
 <div id="detail">
 	<div class="panel panel-default">
 	    <div class="panel-body">
@@ -168,39 +166,38 @@
 		{LANG.company_product} : <a href="{link_shop}" title="{title_shop}">{title_shop}</a>
 		<!-- END: shop -->
 	</div>
-
-    <div id="horizontalTab">
-        <ul>
-            <li><a href="#tab-1">{LANG.product_detail}</a></li>
-            <li><a href="#tab-2">{LANG.add_otherimage}</a></li>
-            <!-- BEGIN: comment_tab -->
-            <li><a href="#tab-3">{LANG.detail_comments}</a></li>
-            <!-- END: comment_tab -->
-        </ul>
-
-        <div id="tab-1">
-            <p>{DETAIL}</p>
-        </div>
-
-        <div id="tab-2">
-            <!-- BEGIN: othersimg -->
-            <div class="col-xs-6 col-md-3">
-                <a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
-            </div>
-            <!-- END: othersimg -->
-            <div class="clear"></div>
-
-            <!-- BEGIN: no_otherimage -->
-            {LANG.detail_no_otherimage}
-            <!-- END: no_otherimage -->
-        </div>
-
-        <!-- BEGIN: comment -->
-        <div id="tab-3">
-            <iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
-        </div>
-        <!-- END: comment -->
-    </div>
+	
+	<div id="tabs" class="tabs">
+		<nav>
+			<ul>
+				<li><a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a></li>
+				<li><a href="#section-2"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.add_otherimage}</span></a></li>
+				<!-- BEGIN: comment_tab -->
+				<li><a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a></li>
+				<!-- END: comment_tab -->
+			</ul>
+		</nav>
+		<div class="content">
+			<section id="section-1">{DETAIL}</section>
+			<section id="section-2">
+	            <!-- BEGIN: othersimg -->
+	            <div class="col-xs-6 col-md-3">
+	                <a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
+	            </div>
+	            <!-- END: othersimg -->
+	            <div class="clear">&nbsp;</div>
+	
+	            <!-- BEGIN: no_otherimage -->
+	            {LANG.detail_no_otherimage}
+	            <!-- END: no_otherimage -->
+			</section>
+			<!-- BEGIN: comment -->
+			<section id="section-3">
+				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+			</section>
+			<!-- END: comment -->
+		</div>
+	</div>
 
 	<!-- BEGIN: other -->
 	<div class="panel panel-default">
@@ -217,16 +214,11 @@
 	<!-- END: other_view -->
 </div>
 <div class="msgshow" id="msgshow"></div>
-<script language="javascript" type="text/javascript">tabview_initialize('TabView');</script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE}/js/tabresponsive.js"></script>
 <script type="text/javascript">
-$(function(){
-    $('#horizontalTab').responsiveTabs({
-        rotate: false,
-        startCollapsed: 'accordion',
-        collapsible: 'accordion',
-        setHash: true
-    });
+new CBPFWTabs( document.getElementById( 'tabs' ) );
 
+$(function(){
 	<!-- BEGIN: allowed_print_js -->
 	$('#click_print').click(function(event){
 	var href = $(this).attr("href");

@@ -843,6 +843,7 @@ function detail_product( $data_content, $data_unit, $data_others, $data_shop, $a
 
 	$xtpl = new XTemplate( "detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'MODULE', $module_name );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
