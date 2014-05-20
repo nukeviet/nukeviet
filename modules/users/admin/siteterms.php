@@ -69,12 +69,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 	}
 }
-else
-{
-	$content = nv_editor_br2nl( $row['content'] );
-}
 
-if( ! empty( $content ) ) $content = nv_htmlspecialchars( $content );
+$content = htmlspecialchars( nv_editor_br2nl( $content ) );
 
 $xtpl = new XTemplate( 'siteterms.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

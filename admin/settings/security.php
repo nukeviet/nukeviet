@@ -146,7 +146,7 @@ if( $nv_Request->isset_request( 'submitcaptcha', 'post' ) )
 	foreach( $variable as $value )
 	{
 		$value = trim( $value );
-		if( preg_match( '/^[a-z0-9]+$/', $value ) )
+		if( preg_match( '/^[a-z0-9]+$/', $value ) and ! in_array( $value, $nv_allowed_html_tags) )
 		{
 			$nv_allowed_html_tags[] = $value;
 		}

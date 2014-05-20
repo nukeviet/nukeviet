@@ -255,8 +255,8 @@ else
 	$array['is_del_report'] = 1;
 }
 
-if( ! empty( $array['description'] ) ) $array['description'] = nv_htmlspecialchars( $array['description'] );
-if( ! empty( $array['introtext'] ) ) $array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
+$array['description'] = htmlspecialchars( nv_editor_br2nl( $array['description'] ) );
+$array['introtext'] = nv_htmlspecialchars( $array['introtext'] );
 
 $array['fileupload_num'] = sizeof( $array['fileupload'] );
 $array['linkdirect_num'] = sizeof( $array['linkdirect'] );

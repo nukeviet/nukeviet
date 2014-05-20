@@ -139,10 +139,10 @@ h1, h2, h3, h4, h5, h6{
 @media (max-width: 550px) {
 	#header div.logo .logo-xs{
 		display:block;
-	}	
+	}
 	#header div.logo .logo-md{
 		display:none;
-	}	
+	}
 }
 
 #header .dropdown-menu{
@@ -450,10 +450,6 @@ h1, h2, h3, h4, h5, h6{
 	float: right
 }
 
-#mudimPanel{
-	left:0 !important
-}
-
 table caption{
 	text-align: left;
 	font-size: 14px;
@@ -524,27 +520,27 @@ sup.required {
 	#left-menu{
 		display: none;
 	}
-	
+
 	#left-menu-bg{
 		display: none;
 	}
-	
+
 	#container{
 		margin-left: 0;
 	}
-	
+
 	#footer{
 		margin-left: 0;
 	}
-	
+
 	#left-menu.open, #left-menu-bg.open{
 		display: inline-block;
 	}
-	
+
 	#container.open{
 		right: -200px;
 	}
-	
+
 	#container.open, #footer.open{
 		right: -200px;
 		left: 200px;

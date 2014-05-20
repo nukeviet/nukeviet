@@ -52,7 +52,7 @@ $mess_content = $error = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
-	$mess_content = $nv_Request->get_editor( 'mess_content', '', NV_ALLOWED_HTML_TAGS, true );
+	$mess_content = $nv_Request->get_editor( 'mess_content', '', NV_ALLOWED_HTML_TAGS );
 
 	if( strip_tags( $mess_content ) != '' )
 	{
@@ -102,7 +102,7 @@ else
 	$mess_content .= $row['content'];
 }
 
-$mess_content = nv_htmlspecialchars( $mess_content );
+$mess_content = htmlspecialchars( nv_editor_br2nl( $mess_content ) );
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {

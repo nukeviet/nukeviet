@@ -241,7 +241,7 @@ else
 	}
 }
 
-if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
+$note = htmlspecialchars( nv_editor_br2nl( $note ) );
 
 if( ! empty( $error ) )
 {

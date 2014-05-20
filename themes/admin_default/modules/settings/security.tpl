@@ -52,12 +52,12 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.nv_allowed_html_tags}</strong></td>
-					<td><textarea name="nv_allowed_html_tags" class="form-control" style="width: 550px; height: 60px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
+					<td><textarea name="nv_allowed_html_tags" class="form-control" style="height: 100px" class="required">{NV_ALLOWED_HTML_TAGS}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.captcha} </caption>
@@ -134,7 +134,7 @@
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
 				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a> 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a>
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a>
 				</td>
 			</tr>

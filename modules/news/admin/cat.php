@@ -14,7 +14,7 @@ $page_title = $lang_module['categories'];
 
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', 0, '', '', 0 );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', '6', '', 0 );
 
 $groups_list = nv_groups_list();
 
@@ -84,7 +84,7 @@ if( ! empty( $savecat ) )
 		{
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
-			nv_create_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid , NV_PREFIXLANG . '_' . $module_data . '_rows' );
+			nv_copy_structure_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid , NV_PREFIXLANG . '_' . $module_data . '_rows' );
 			nv_fix_cat_order();
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )

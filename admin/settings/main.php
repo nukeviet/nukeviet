@@ -185,9 +185,7 @@ foreach( $module_array as $mod )
 	$xtpl->parse( 'main.module' );
 }
 
-$global_config['disable_site_content'] = nv_editor_br2nl( $global_config['disable_site_content'] );
-
-if( ! empty( $global_config['disable_site_content'] ) ) $global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['disable_site_content'] );
+$global_config['disable_site_content'] = htmlspecialchars( nv_editor_br2nl( $global_config['disable_site_content'] ) );
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {

@@ -809,7 +809,7 @@ class image
 				$newname = preg_replace( '/^\W+|\W+$/', '', $newname );
 				$newname = preg_replace( '/[ ]+/', '_', $newname );
 				$newname = strtolower( preg_replace( '/\W-/', '', $newname ) );
-				$newname = preg_replace( "/." . $this->create_Image_info['ext'] . "$/", '', $newname );
+				$newname = preg_replace( "/." . array_pop( explode( '.', $newname ) ) . "$/", '', $newname );
 				if( ! preg_match( "/\/$/", $path ) ) $path = $path . "/";
 				$newname = $path . $newname . '.' . $this->create_Image_info['ext'];
 
