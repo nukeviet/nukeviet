@@ -31,7 +31,7 @@
                 <label>{LANG.background}</label>
                 <input type="text" value="{CONFIG_THEME_BODY.background_color}" name="body_background_color" id="picker_body_background" style="width: 80px" />
                 <input type="text" id="body_bg_image" value="{CONFIG_THEME_BODY.background_image}" name="body_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-                <button onclick="nv_open_filemanage( 'body_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+                <button onclick="nv_open_filemanage( 'body_bg_image' ); return false;"><em class="fa fa-folder-open-o">&nbsp;</em></button>
                 <input type="text" value="{CONFIG_THEME_BODY.background_repeat}" name="body_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
                 <input type="text" value="{CONFIG_THEME_BODY.background_position}" name="body_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" />
                 <br />
@@ -98,7 +98,7 @@
             <label>{LANG.background}</label>
             <input type="text" value="{CONFIG_THEME_HEADER.background_color}" name="header_background_color" id="picker_header_background" style="width: 80px" />
             <input type="text" id="header_bg_image" value="{CONFIG_THEME_HEADER.background_image}" name="header_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-            <button onclick="nv_open_filemanage( 'header_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <button onclick="nv_open_filemanage( 'header_bg_image' ); return false;"><em class="fa fa-folder-open-o">&nbsp;</em></button>
             <input type="text" value="{CONFIG_THEME_HEADER.background_repeat}" name="header_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
             <input type="text" value="{CONFIG_THEME_HEADER.background_position}" name="header_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" />
             <br />
@@ -132,7 +132,7 @@
             <label>{LANG.background}</label>
             <input type="text" value="{CONFIG_THEME_FOOTER.background_color}" name="footer_background_color" id="picker_footer_background" style="width: 80px" />
             <input type="text" id="footer_bg_image" value="{CONFIG_THEME_FOOTER.background_image}" name="footer_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-            <button onclick="nv_open_filemanage( 'footer_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <button onclick="nv_open_filemanage( 'footer_bg_image' ); return false;"><em class="fa fa-folder-open-o">&nbsp;</em></button>
             <input type="text" value="{CONFIG_THEME_FOOTER.background_repeat}" name="footer_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
             <input type="text" value="{CONFIG_THEME_FOOTER.background_position}" name="footer_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" />
             <br />
@@ -173,7 +173,7 @@
             <label>{LANG.background}</label>
             <input type="text" value="{CONFIG_THEME_BLOCK.background_color}" name="block_background_color" id="picker_block_header_bg" style="width: 80px" />
             <input type="text" id="block_bg_image" value="{CONFIG_THEME_BLOCK.background_image}" name="block_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-            <button onclick="nv_open_filemanage( 'block_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <button onclick="nv_open_filemanage( 'block_bg_image' ); return false;"><em class="fa fa-folder-open-o">&nbsp;</em></button>
             <input type="text" value="{CONFIG_THEME_BLOCK.background_repeat}" name="block_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
             <input type="text" value="{CONFIG_THEME_BLOCK.background_position}" name="block_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" /><br />
             
@@ -207,7 +207,7 @@
             <label>{LANG.heading}</label>
             <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_color}" name="block_heading_background_color" id="picker_block_header_bg" style="width: 80px" />
             <input type="text" id="block_heading_bg_image" value="{CONFIG_THEME_BLOCK_HEADING.background_image}" name="block_heading_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
-            <button onclick="nv_open_filemanage( 'block_heading_bg_image' ); return false;"><em class="icon-folder-open">&nbsp;</em></button>
+            <button onclick="nv_open_filemanage( 'block_heading_bg_image' ); return false;"><em class="fa fa-folder-open-o">&nbsp;</em></button>
             <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_repeat}" name="block_heading_background_repeat" style="width: 80px" placeholder="{LANG.background_imgage_repeat}" />
             <input type="text" value="{CONFIG_THEME_BLOCK_HEADING.background_position}" name="block_heading_background_position" style="width: 80px" placeholder="{LANG.background_imgage_postion}" /><br />
             
