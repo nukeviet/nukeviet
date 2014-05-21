@@ -17,6 +17,6 @@ While( $row = $result->fetch() )
 	$array_item[$row['id']] = array(
 		'key' => $row['id'],
 		'title' => $row['title'],
-		'alias' => $row['alias'],
+		'alias' => $row['alias'] . $global_config['rewrite_exturl'],
 	);
 }

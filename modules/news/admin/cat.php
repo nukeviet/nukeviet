@@ -14,7 +14,7 @@ $page_title = $lang_module['categories'];
 
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', 0, '', '', 0 );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', '6', '', 0 );
 
 $groups_list = nv_groups_list();
 

@@ -399,8 +399,16 @@ class upload
 	private function get_mime_image( $userfile )
 	{
 		$mime = '';
-
-		$img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
+		$img_exts = array(
+		    IMAGETYPE_GIF => 'gif',
+		    IMAGETYPE_JPEG => 'jpg',
+		    IMAGETYPE_PNG => 'png',
+		    IMAGETYPE_SWF => 'swf',
+		    IMAGETYPE_PSD => 'psd',
+		    IMAGETYPE_BMP => 'bmp',
+		    IMAGETYPE_TIFF_II => 'tiff',
+		    IMAGETYPE_TIFF_MM => 'tiff'
+		);
 		if( in_array( $this->file_extension, $img_exts ) )
 		{
 			if( ( $img_info = @getimagesize( $userfile['tmp_name'] ) ) !== false )
@@ -416,6 +424,10 @@ class upload
 				if( empty( $mime ) and isset( $this->img_info[2] ) )
 				{
 					$mime = image_type_to_mime_type( $this->img_info[2] );
+				}
+				if( isset( $img_exts[$this->img_info[2]] ) )
+				{
+					$this->file_extension = $img_exts[$this->img_info[2]];
 				}
 			}
 		}

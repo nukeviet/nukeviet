@@ -3,8 +3,7 @@
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
 			<col span="3" />
-			<col span="2" class="w150"/>
-			<col class="w150"/>
+			<col span="2" class="w100"/>
 		</colgroup>
 		<thead>
 			<tr class="text-center">

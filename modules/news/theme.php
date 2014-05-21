@@ -800,7 +800,7 @@ function no_permission()
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	$xtpl->assign( 'NO_PERMISSION', $no_permission );
+	$xtpl->assign( 'NO_PERMISSION', $lang_module['no_permission'] );
 	$xtpl->parse( 'no_permission' );
 	return $xtpl->text( 'no_permission' );
 }

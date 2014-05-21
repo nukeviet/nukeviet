@@ -15,8 +15,12 @@ if( empty( $global_config['site_lang'] ) or ! preg_match( '/^[a-z]{2}$/', $globa
 	if( ! file_exists( NV_ROOTDIR . '/language/en/global.php' ) ) trigger_error( 'Error! Lang file is absent!', 256 );
 	$global_config['site_lang'] = 'en';
 }
-
-if( defined( 'NV_ADMIN' ) and $global_config['lang_multi'] )
+if( empty( $global_config['lang_multi'] ) )
+{
+	define( 'NV_LANG_INTERFACE', $global_config['site_lang'] );
+	define( 'NV_LANG_DATA', $global_config['site_lang'] );
+}
+elseif( defined( 'NV_ADMIN' ) )
 {
 	$cookie = $nv_Request->get_string( 'data_lang', 'cookie' );
 	$site_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post' );

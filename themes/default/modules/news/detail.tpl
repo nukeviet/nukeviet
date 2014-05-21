@@ -237,9 +237,7 @@
 </script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
-<div id="no_permission">
-	<p>
-		{NO_PERMISSION}
-	</p>
+<div class="alert alert-info">
+	{NO_PERMISSION}
 </div>
 <!-- END: no_permission -->

@@ -7,7 +7,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div id="getuidcontent">
-	<form id="formgetuid" method="get" action="{FORM_ACTION}">
+	<form class="form-inline" id="formgetuid" method="get" action="{FORM_ACTION}">
 		<input type="hidden" name="area" value="{AREA}" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
@@ -45,14 +45,17 @@
 						<td><input class="form-control fixwidthinput" type="text" name="last_ip" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
-						<td colspan="4" class="text-center"><input class="btn btn-primary" type="submit" name="submit" value="{LANG.search}"/> <input type="button" class="reset" value="{LANG.reset}"/></td>
+						<td colspan="4" class="text-center">
+							<input type="reset" class="btn btn-info" value="{LANG.reset}"/>
+							<input class="btn btn-primary" type="submit" name="submit" value="{LANG.search}"/>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</form>
 </div>
-<div id="resultdata"></div>
+<div id="resultdata">&nbsp;</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
@@ -79,12 +82,6 @@
 					$("#formgetuid input, #formgetuid select").removeAttr("disabled")
 				}
 			});
-			return !1
-		});
-		$(".reset").click(function() {
-			$("[type=text]").val('');
-			$("select[name=gender]").val('');
-			$("#resultdata").html('');
 			return !1
 		});
 	});
