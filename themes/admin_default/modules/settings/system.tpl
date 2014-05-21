@@ -62,10 +62,12 @@
 					<!-- END: site_lang_option -->
 				</select></td>
 			</tr>
+			<!-- BEGIN: lang_geo -->
 			<tr>
 				<td><strong>{LANG.lang_geo}</strong></td>
 				<td><input type="checkbox" value="1" name="lang_geo" {CHECKED_LANG_GEO} /> ( <a href="{CONFIG_LANG_GEO}">{LANG.lang_geo_config}</a> ) </td>
 			</tr>
+			<!-- END: lang_geo -->
 			<!-- END: lang_multi -->
 			<!-- BEGIN: rewrite_optional -->
 			<tr>

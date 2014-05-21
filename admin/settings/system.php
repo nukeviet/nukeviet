@@ -213,17 +213,20 @@ if( defined( 'NV_IS_GODADMIN' ) )
 
 		$xtpl->parse( 'main.system.rewrite_optional' );
 	}
-	if( $lang_multi and sizeof( $global_config['allow_sitelangs'] ) > 1 )
+	if( sizeof( $global_config['allow_sitelangs'] ) > 1 )
 	{
-		$xtpl->assign( 'CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=language&' . NV_OP_VARIABLE . '=countries' );
-		$xtpl->assign( 'CHECKED_LANG_GEO', ( $array_config_global['lang_geo'] == 1 ) ? ' checked ' : '' );
-
 		foreach( $allow_sitelangs as $lang_i )
 		{
 			$xtpl->assign( 'LANGOP', $lang_i );
 			$xtpl->assign( 'SELECTED', ( $lang_i == $array_config_global['site_lang'] ) ? "selected='selected'" : "" );
 			$xtpl->assign( 'LANGVALUE', $language_array[$lang_i]['name'] );
 			$xtpl->parse( 'main.system.lang_multi.site_lang_option' );
+		}
+		if( $lang_multi )
+		{
+			$xtpl->assign( 'CONFIG_LANG_GEO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=language&' . NV_OP_VARIABLE . '=countries' );
+			$xtpl->assign( 'CHECKED_LANG_GEO', ( $array_config_global['lang_geo'] == 1 ) ? ' checked ' : '' );
+			$xtpl->parse( 'main.system.lang_multi.lang_geo' );
 		}
 		$xtpl->parse( 'main.system.lang_multi' );
 	}
