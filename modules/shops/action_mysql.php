@@ -320,7 +320,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $data = array();
-$data['image_size'] = '100x500';
+$data['image_size'] = '100x100';
 $data['home_view'] = 'view_home_all';
 $data['per_page'] = 20;
 $data['per_row'] = 4;

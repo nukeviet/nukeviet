@@ -13,8 +13,8 @@
             <!-- END: sorts -->
         </select>
     </div>
-    <!-- END: displays -->
     <div class="clear">&nbsp;</div>
+    <!-- END: displays -->
 
 	<!-- BEGIN: row -->
 	<div class="panel panel-default">
