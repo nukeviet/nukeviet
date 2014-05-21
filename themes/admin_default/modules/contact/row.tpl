@@ -25,6 +25,14 @@
 					<td><strong>{GLANG.email}</strong></td>
 					<td><input class="w150 form-control" type="email" oninvalid="setCustomValidity( nv_email )" oninput="setCustomValidity('')" name="email" value="{DATA.email}"/></td>
 				</tr>
+                <tr>
+					<td><strong>{LANG.yahoo_row_title}</strong></td>
+					<td><input class="w150 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/></td>
+				</tr>
+                <tr>
+					<td><strong>{LANG.skype_row_title}</strong></td>
+					<td><input class="w150 form-control" type="skype" name="skype" value="{DATA.skype}"/></td>
+				</tr>
 				<tr>
 					<td colspan="2">
 					<p>
