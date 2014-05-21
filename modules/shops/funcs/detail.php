@@ -70,6 +70,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	{
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 	}
+	
+	//metatag image facebook
+	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
 
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_sources WHERE sourceid = ' . $data_content['source_id'] );
 	$data_temp = $sql->fetch();
