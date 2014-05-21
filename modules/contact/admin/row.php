@@ -68,6 +68,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
+    $yahoo = $nv_Request->get_title( 'yahoo', 'post', '', 1 );
+    $skype = $nv_Request->get_title( 'skype', 'post', '', 1 );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
@@ -140,13 +142,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, yahoo=:yahoo, skype=:skype, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, phone, fax, email, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :note, :admins, 1)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, phone, fax, email, yahoo, skype, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
@@ -155,6 +157,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 		$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 		$sth->bindParam( ':email', $email, PDO::PARAM_STR );
+        $sth->bindParam( ':yahoo', $yahoo, PDO::PARAM_STR );
+        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
 		$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 		$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
 		$sth->execute();
@@ -175,6 +179,8 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
+        $yahoo = $frow['yahoo'];
+        $skype = $frow['skype'];
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
@@ -227,7 +233,7 @@ else
 	}
 	else
 	{
-		$full_name = $phone = $fax = $email = $note = '';
+		$full_name = $phone = $fax = $email = $yahoo = $skype = $note = '';
 		$view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
@@ -241,7 +247,7 @@ else
 	}
 }
 
-$note = htmlspecialchars( nv_editor_br2nl( $note ) );
+if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
 
 if( ! empty( $error ) )
 {
@@ -263,6 +269,8 @@ $xtpl->assign( 'DATA', array(
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
+    'yahoo' => $yahoo,
+    'skype' => $skype,
 	'note' => $note
 ) );
 
