@@ -18,18 +18,18 @@
 <form action="{LINK_CART}" method="post" id="fpro">
 	<input type="hidden" value="1" name="save"/>
 	<div class="table-responsive">
-    	<table class="table table-hover">
+    	<table class="table table-striped table-bordered table-hover">
     	    <thead>
         		<tr>
-        			<th width="20">{LANG.order_no_products}</th>
-        			<th width="50" align="center">{LANG.cart_images}</th>
-        			<th style="width:180px">{LANG.cart_products}</th>
+        			<th>{LANG.order_no_products}</th>
+        			<th>{LANG.cart_images}</th>
+        			<th>{LANG.cart_products}</th>
         			<!-- BEGIN: price1 -->
-        			<th style="width:80px" align="right">{LANG.cart_price} ({unit_config})</th>
+        			<th>{LANG.cart_price} ({unit_config})</th>
         			<!-- END: price1 -->
-        			<th align="center" width="40">{LANG.cart_numbers}</th>
-        			<th style="width:50px">{LANG.cart_unit}</th>
-        			<th align="center" width="20"></th>
+        			<th style="width: 80px">{LANG.cart_numbers}</th>
+        			<th>{LANG.cart_unit}</th>
+        			<th>&nbsp;</th>
         		</tr>
     		</thead>
     		<tbody>
@@ -49,7 +49,7 @@
     		</tbody>
     	</table>
     </div>
-    
+
 	<div>
 		<!-- BEGIN: price3 -->
 		<div class="clearfix">
@@ -59,7 +59,7 @@
 			<div class="clear"></div>
 		</div>
 		<!-- END: price3 -->
-		
+
         <div class="row">
             <div class="col-md-6 text-left" style="margin-top: 10px;">
                 <a title="{LANG.cart_back} {LANG.cart_page_product}" href="{LINK_PRODUCTS}"><em class="fa fa-arrow-circle-left">&nbsp;</em>{LANG.cart_back} <span>{LANG.cart_page_product}</span></a>
@@ -91,6 +91,6 @@
 			});
 			return false;
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->
