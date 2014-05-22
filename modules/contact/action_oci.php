@@ -97,4 +97,4 @@ $sql_create_module[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $lang . '_
 
 $sql_create_module[] = "CREATE INDEX inv_" . $lang . "_" . $module_data . "_rid ON " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply(id) TABLESPACE USERS";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, phone, fax, email, note, admins, act) VALUES ('Webmaster', '', '', '', '', '1/1/1/0;', 1)";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, phone, fax, email, yahoo, skype, note, admins, act) VALUES ('Webmaster', '', '', '', '', '', '', '1/1/1/0;', 1)";
