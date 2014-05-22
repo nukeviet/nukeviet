@@ -18,6 +18,7 @@
 				<td><strong>{LANG.clearcache}</strong></td>
 				<td><input type="checkbox" value="clearcache" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 			</tr>
+			<!-- BEGIN: godadmin -->
 			<tr>
 				<td><strong>{LANG.clearsession}</strong></td>
 				<td><input type="checkbox" value="clearsession" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
@@ -34,6 +35,7 @@
 				<td><strong>{LANG.clearip_logs}</strong></td>
 				<td><input type="checkbox" value="clearip_logs" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 			</tr>
+			<!-- END: godadmin -->
 		</tbody>
 	</table>
 </div>

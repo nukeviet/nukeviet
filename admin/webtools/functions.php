@@ -10,11 +10,10 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main' );
+$allow_func = array( 'main', 'clearsystem' );
 if( empty( $global_config['idsite'] ) )
 {
 	$allow_func[] = 'checkupdate';
-	$allow_func[] = 'clearsystem';
 	$allow_func[] = 'config';
 	$allow_func[] = 'mudim';
 }
