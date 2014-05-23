@@ -47,7 +47,7 @@ function nv_site_theme( $contents, $full = true )
 		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
 		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
 		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
-		    $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
+		    $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
 		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
 			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
 			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
@@ -58,12 +58,6 @@ function nv_site_theme( $contents, $full = true )
 			unset( $config_theme, $css_content );
     	}
 	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
-
-		$module_in_menu = unserialize( $module_config['themes'][$global_config['module_theme'] . '_in_menu'] );
-	}
-	else
-	{
-		$module_in_menu = array();
 	}
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
