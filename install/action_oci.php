@@ -554,21 +554,6 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_LOGS.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_LOGS;';
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ipcountry (
-	ip_from NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	ip_to NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	country CHAR(2 CHAR) DEFAULT '' NOT NULL ENABLE,
-	ip_file NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
-	time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	CONSTRAINT unv_ipcountry_ip_from UNIQUE (ip_from,ip_to)
-)";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_ip_file ON NV3_IPCOUNTRY(ip_file) TABLESPACE USERS";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_country ON NV3_IPCOUNTRY(country) TABLESPACE USERS";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_time ON NV3_IPCOUNTRY(time) TABLESPACE USERS";
-
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did NUMBER(8,0) DEFAULT NULL,
 	dirname VARCHAR2(255 CHAR) DEFAULT NULL,

@@ -15,6 +15,12 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_conf
 {
 	$submenu['system'] = $lang_module['global_config'];
 }
+
+if( isset( $admin_mods['language'] ) )
+{
+	$submenu['language'] = $lang_global['mod_language'];
+}
+
 $submenu['smtp'] = $lang_module['smtp_config'];
 if( defined( 'NV_IS_GODADMIN' ) )
 {

@@ -53,6 +53,11 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 
+if( defined( 'NV_IS_GODADMIN' ) )
+{
+	$xtpl->parse( 'main.godadmin' );
+}
+
 if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_request( 'deltype', 'post' ) )
 {
 	$deltype = $nv_Request->get_typed_array( 'deltype', 'post', 'string', array() );
@@ -75,97 +80,103 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			$xtpl->assign( 'DELFILE', $file );
 			$xtpl->parse( 'main.delfile.loop' );
 		}
-		$timestamp = intval( $global_config['timestamp'] ) + 1;
-		$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $timestamp . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'" );
-		nv_save_file_config_global();
-	}
-
-	if( in_array( 'clearsession', $deltype ) AND NV_SESSION_SAVE_PATH != '' )
-	{
-		$ssDir = NV_ROOTDIR . "/" . NV_SESSION_SAVE_PATH;
-		$files = nv_clear_files( $ssDir, NV_SESSION_SAVE_PATH );
-		foreach( $files as $file )
+		if( defined( 'NV_IS_GODADMIN' ) )
 		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
+			$timestamp = intval( $global_config['timestamp'] ) + 1;
+			$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $timestamp . "' WHERE lang = 'sys' AND module = 'global' AND config_name = 'timestamp'" );
+			nv_save_file_config_global();
 		}
 	}
 
-	if( in_array( 'clearfiletemp', $deltype ) )
+	if( defined( 'NV_IS_GODADMIN' ) )
 	{
-		$dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
-		if( $dh = opendir( $dir ) )
+		if( in_array( 'clearsession', $deltype ) AND NV_SESSION_SAVE_PATH != '' )
 		{
-			while( ( $file = readdir( $dh ) ) !== false )
+			$ssDir = NV_ROOTDIR . "/" . NV_SESSION_SAVE_PATH;
+			$files = nv_clear_files( $ssDir, NV_SESSION_SAVE_PATH );
+			foreach( $files as $file )
 			{
-				if( preg_match( "/^(" . nv_preg_quote( NV_TEMPNAM_PREFIX ) . ")[a-zA-Z0-9\-\_\.]+$/", $file ) )
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
+		}
+
+		if( in_array( 'clearfiletemp', $deltype ) )
+		{
+			$dir = NV_ROOTDIR . "/" . NV_TEMP_DIR;
+			if( $dh = opendir( $dir ) )
+			{
+				while( ( $file = readdir( $dh ) ) !== false )
 				{
-					if( is_file( $dir . '/' . $file ) )
+					if( preg_match( "/^(" . nv_preg_quote( NV_TEMPNAM_PREFIX ) . ")[a-zA-Z0-9\-\_\.]+$/", $file ) )
 					{
-						if( @unlink( $dir . '/' . $file ) )
+						if( is_file( $dir . '/' . $file ) )
 						{
-							$xtpl->assign( 'DELFILE', NV_TEMP_DIR . '/' . $file );
-							$xtpl->parse( 'main.delfile.loop' );
+							if( @unlink( $dir . '/' . $file ) )
+							{
+								$xtpl->assign( 'DELFILE', NV_TEMP_DIR . '/' . $file );
+								$xtpl->parse( 'main.delfile.loop' );
+							}
 						}
-					}
-					else
-					{
-						$rt = nv_deletefile( $dir . '/' . $file, true );
-						if( $rt[0] == 1 )
+						else
 						{
-							$xtpl->assign( 'DELFILE', NV_TEMP_DIR . '/' . $file );
-							$xtpl->parse( 'main.delfile.loop' );
+							$rt = nv_deletefile( $dir . '/' . $file, true );
+							if( $rt[0] == 1 )
+							{
+								$xtpl->assign( 'DELFILE', NV_TEMP_DIR . '/' . $file );
+								$xtpl->parse( 'main.delfile.loop' );
+							}
 						}
 					}
 				}
+				closedir( $dh );
 			}
-			closedir( $dh );
-		}
-	}
-
-	if( in_array( 'clearerrorlogs', $deltype ) )
-	{
-		$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
-		$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs' );
-		foreach( $files as $file )
-		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
 		}
 
-		$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/errors256';
-		$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/errors256' );
-		foreach( $files as $file )
+		if( in_array( 'clearerrorlogs', $deltype ) )
 		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
+			$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs';
+			$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs' );
+			foreach( $files as $file )
+			{
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
+
+			$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/errors256';
+			$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/errors256' );
+			foreach( $files as $file )
+			{
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
+
+			$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/old';
+			$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/old' );
+			foreach( $files as $file )
+			{
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
+
+			$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/tmp';
+			$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/tmp' );
+			foreach( $files as $file )
+			{
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
 		}
 
-		$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/old';
-		$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/old' );
-		foreach( $files as $file )
+		if( in_array( 'clearip_logs', $deltype ) )
 		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
-		}
-
-		$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/tmp';
-		$files = nv_clear_files( $dir, NV_LOGS_DIR . '/error_logs/tmp' );
-		foreach( $files as $file )
-		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
-		}
-	}
-
-	if( in_array( 'clearip_logs', $deltype ) )
-	{
-		$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
-		$files = nv_clear_files( $dir, NV_LOGS_DIR . '/ip_logs' );
-		foreach( $files as $file )
-		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
+			$dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs';
+			$files = nv_clear_files( $dir, NV_LOGS_DIR . '/ip_logs' );
+			foreach( $files as $file )
+			{
+				$xtpl->assign( 'DELFILE', $file );
+				$xtpl->parse( 'main.delfile.loop' );
+			}
 		}
 	}
 	$xtpl->parse( 'main.delfile' );
