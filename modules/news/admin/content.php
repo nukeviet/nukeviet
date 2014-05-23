@@ -133,7 +133,9 @@ $rowcontent = array(
 	'total_rating' => 0,
 	'click_rating' => 0,
 	'keywords' => '',
-	'keywords_old' => '' );
+	'keywords_old' => '',
+	'mode' => 'add'
+);
 
 $rowcontent['topictext'] = '';
 $page_title = $lang_module['content_add'];
@@ -185,6 +187,7 @@ if( $rowcontent['id'] > 0 )
 			if( $check_edit == sizeof( $arr_catid ) )
 			{
 				$check_permission = true;
+				$rowcontent['mode'] = 'edit';
 			}
 		}
 	}
@@ -695,8 +698,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		nv_set_status_module();
 		if( empty( $error ) )
 		{
-			$id_block_content_new = array_diff( $id_block_content_post, $id_block_content );
-			$id_block_content_del = array_diff( $id_block_content, $id_block_content_post );
+			$id_block_content_new = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content_post, $id_block_content ) : $id_block_content_post;
+			$id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content, $id_block_content_post ) : array();
+
 			foreach( $id_block_content_new as $bid_i )
 			{
 				$_sql = 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid_i;

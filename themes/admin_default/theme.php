@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_get_submenu( $mod )
 {
-	global $lang_global, $module_name, $global_config;
+	global $lang_global, $module_name, $global_config, $admin_mods;
 
 	$submenu = array();
 
