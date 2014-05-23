@@ -66,13 +66,24 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 	clearstatcache();
 	if( in_array( 'clearcache', $deltype ) )
 	{
-		$cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR;
-		$files = nv_clear_files( $cacheDir, NV_CACHEDIR );
-		foreach( $files as $file )
+		if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR ) )
 		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
+			while( ( $modname = readdir( $dh ) ) !== false )
+			{
+				if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
+				{
+					$cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
+					$files = nv_clear_files( $cacheDir, NV_CACHEDIR );
+					foreach( $files as $file )
+					{
+						$xtpl->assign( 'DELFILE', $file );
+						$xtpl->parse( 'main.delfile.loop' );
+					}
+				}
+			}
+			closedir( $dh );
 		}
+
 		$cssDir = NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css';
 		$files = nv_clear_files( $cssDir, SYSTEM_FILES_DIR . '/css' );
 		foreach( $files as $file )
