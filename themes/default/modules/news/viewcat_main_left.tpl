@@ -13,7 +13,7 @@
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
-		
+
 		<div class="clear">&nbsp;</div>
 		<div class="panel-body">
 			<div class="row">
@@ -22,18 +22,18 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show" href="{OTHER.link}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" rel="tooltip">{OTHER.title}</a>
+							<a class="show" href="{OTHER.link}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
 				</div>
 				<!-- END: related -->
-				
+
 				<div class="{WCT}">
 					<!-- BEGIN: image -->
 					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
 					<!-- END: image -->
-					
+
 					<h3>
 						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 						<!-- BEGIN: newday -->
@@ -49,7 +49,7 @@
 <!-- END: listcat -->
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-$(document).ready(function() {$("[rel='tooltip']").tooltip({
+$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,
 	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
