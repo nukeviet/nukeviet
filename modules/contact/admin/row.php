@@ -120,8 +120,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	else
 	{
-		$note = nv_editor_nl2br( $note );
-
 		$admins_list = array();
 		foreach( $adms as $admid => $values )
 		{

@@ -168,7 +168,7 @@
 
 			}
 		});
-		return false
+		return !1;
 	});
 	//]]>
 </script>
@@ -188,11 +188,11 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10))
+		$("div#pageContent").load("{MODULE_URL}={OP}&list&random=" + nv_randomPassword(10));
 	});
 	$("input[name=addNew]").click(function() {
 		window.location.href = "{MODULE_URL}={OP}&add";
-		return false
+		return !1;
 	});
 	//]]>
 </script>
@@ -239,10 +239,10 @@
 			url : "{MODULE_URL}={OP}",
 			data : "gid={GID}&exclude=" + $(this).attr("title"),
 			success : function(a) {
-				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a)
+				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
 			}
 		});
-		return false
+		return !1;
 	});
 	//]]>
 </script>
@@ -257,23 +257,22 @@
 	<input class="btn btn-success" name="searchUser" type="button" value="{GLANG.search}" />
 </div>
 <!-- END: adduser -->
-<div id="pageContent"></div>
+<div id="pageContent">&nbsp;</div>
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))
+		$("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10));
 	});
 	$("input[name=searchUser]").click(function() {
-		var a = $(this).prev().attr("id");
-		nv_open_browse("{MODULE_URL}=getuserid&area=" + a + "&filtersql={FILTERSQL}", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false
+		nv_open_browse("{MODULE_URL}=getuserid&area=uid&filtersql={FILTERSQL}", "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
 	});
 	$("input[name=addUser]").click(function() {
 		var a = $("#ablist input[name=uid]").val(), a = intval(a);
 		a == 0 && ( a = "");
 		$("#ablist input[name=uid]").val(a);
 		if (a == "") {
-			return alert("{LANG.choiceUserID}"), $("#ablist input[name=uid]").select(), false
+			return alert("{LANG.choiceUserID}"), $("#ablist input[name=uid]").select(), false;
 		}
 		$("#pageContent input, #pageContent select").attr("disabled", "disabled");
 		$.ajax({
@@ -281,10 +280,10 @@
 			url : "{MODULE_URL}={OP}",
 			data : "gid={GID}&uid=" + a + "&rand=" + nv_randomPassword(10),
 			success : function(a) {
-				a == "OK" ? ($("#ablist input[name=uid]").val(""), $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))) : alert(a)
+				a == "OK" ? ($("#ablist input[name=uid]").val(""), $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10))) : alert(a);
 			}
 		});
-		return false
+		return !1;
 	});
 	//]]>
 </script>

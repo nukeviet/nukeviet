@@ -13,13 +13,13 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 // Ten cac table cua CSDL dung chung cho he thong
 
 $query = $db->query( "select table_name from all_tables WHERE table_name LIKE '" . strtoupper( $db_config['prefix'] . "_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_table[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
 }
 
 $query = $db->query( "select sequence_name from user_sequences WHERE sequence_name LIKE '" . strtoupper( "SNV_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_table[] = 'drop SEQUENCE ' . $row['sequence_name'];
 }

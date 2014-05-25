@@ -87,7 +87,7 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 			$block_theme = 'default';
 		}
 
-		$array_menu = array( );
+		$array_menu = array();
 		$sql = 'SELECT id, parentid, title, link, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
 		$list = nv_db_cache( $sql, '', 'menu' );
 
@@ -124,7 +124,7 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 
 		foreach( $array_menu[0] as $id => $item )
 		{
-			$classcurrent = array( );
+			$classcurrent = array();
 			if( isset( $array_menu[$id] ) )
 			{
 				$classcurrent[] = 'dropdown';

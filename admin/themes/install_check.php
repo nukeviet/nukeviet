@@ -299,7 +299,7 @@ if( file_exists( $filename ) )
 							}
 
 							// Thiết lập Block
-							$array_all_funcid = array( );
+							$array_all_funcid = array();
 							$func_result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
 							while( list( $func_id_i ) = $func_result->fetch( 3 ) )
 							{
@@ -335,18 +335,18 @@ if( file_exists( $filename ) )
 								$sth = $db->prepare( 'SELECT MAX(weight) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position' );
 								$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
 								$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
-								$sth->execute( );
-								$row['weight'] = intval( $sth->fetchColumn( ) ) + 1;
+								$sth->execute();
+								$row['weight'] = intval( $sth->fetchColumn() ) + 1;
 
 								$row['exp_time'] = 0;
 								$row['active'] = 1;
-								$row['groups_view'] = '0';
+								$row['groups_view'] = '6';
 
 								$all_func = ($row['all_func'] == 1 AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name )) ? 1 : 0;
 
 								$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 								( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
-								$data = array( );
+								$data = array();
 								$data['selectthemes'] = $selectthemes;
 								$data['module'] = $row['module'];
 								$data['file_name'] = $file_name;
@@ -363,7 +363,7 @@ if( file_exists( $filename ) )
 								}
 								else
 								{
-									$array_funcid = array( );
+									$array_funcid = array();
 									if( ! is_array( $row['funcs'] ) )
 									{
 										$row['funcs'] = array( $row['funcs'] );
@@ -390,7 +390,7 @@ if( file_exists( $filename ) )
 								{
 									$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 									$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
-									$sth->execute( );
+									$sth->execute();
 									$weight = $sth->fetchColumn();
 									$weight = intval( $weight ) + 1;
 

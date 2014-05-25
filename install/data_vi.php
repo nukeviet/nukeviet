@@ -242,8 +242,8 @@ $sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Menu foo
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
 
-$array_funcid = array( );
-$array_funcid_mod = array( );
+$array_funcid = array();
+$array_funcid_mod = array();
 $array_weight_block = array();
 
 $func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );

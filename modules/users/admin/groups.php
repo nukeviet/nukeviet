@@ -293,9 +293,9 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
 		$post = array();
+		$post['id'] = $nv_Request->get_int( 'id', 'get' );
 		if( $nv_Request->isset_request( 'edit', 'get' ) )
 		{
-			$post['id'] = $nv_Request->get_int( 'id', 'get' );
 			if( empty( $post['id'] ) or ! isset( $groupsList[$post['id']] ) OR $post['id'] < 10 OR $groupsList[$post['id']]['idsite'] != $global_config['idsite'] )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -333,8 +333,6 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			}
 
 			$post['content'] = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
-			$test_content = trim( strip_tags( $post['content'] ) );
-			$post['content'] = ! empty( $test_content ) ? nv_editor_nl2br( $post['content'] ) : '';
 
 			$post['exp_time'] = $nv_Request->get_title( 'exp_time', 'post', '' );
 

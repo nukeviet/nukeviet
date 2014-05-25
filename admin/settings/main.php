@@ -64,8 +64,6 @@ if( $submit )
 		$array_config['disable_site_content'] = $lang_global['disable_site_content'];
 	}
 
-	$array_config['disable_site_content'] = nv_editor_nl2br( $array_config['disable_site_content'] );
-
 	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'" );
 	foreach( $array_config as $config_name => $config_value )
 	{
@@ -119,10 +117,6 @@ while( list( $theme ) = $result->fetch( 3 ) )
         $mobile_theme_array[] = $theme;
     }
 }
-
-$global_config['disable_site_content'] = nv_br2nl( $global_config['disable_site_content'] );
-// dung de lay data tu CSDL
-$global_config['disable_site_content'] = nv_htmlspecialchars( $global_config['disable_site_content'] );
 
 $global_config['switch_mobi_des'] = ! empty( $global_config['switch_mobi_des'] ) ? ' checked="checked"' : '';
 
