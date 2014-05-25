@@ -55,7 +55,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 
 			$config_ini .= "\t</positions>";
 
-			$array_layout_other = array( );
+			$array_layout_other = array();
 			$result = $db->query( 'SELECT layout, in_module, func_name FROM ' . NV_PREFIXLANG . '_modthemes t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.theme=' . $db->quote( $themename ) . ' AND t1.func_id=t2.func_id AND t1.layout!=' . $db->quote( $layoutdefault ) );
 			while( list( $layout, $in_module, $func_name ) = $result->fetch( 3 ) )
 			{
@@ -76,10 +76,10 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 				$config_ini .= "\t</setlayout>";
 			}
 
-			$array_layout_block = array( );
-			$array_not_all_func = array( );
+			$array_layout_block = array();
+			$array_not_all_func = array();
 			$result = $db->query( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme=' . $db->quote( $themename ) . ' ORDER BY position ASC, weight ASC' );
-			while( $row = $result->fetch( ) )
+			while( $row = $result->fetch() )
 			{
 				$array_layout_block[] = $row;
 				if( empty( $row['all_func'] ) )
@@ -89,7 +89,7 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 			}
 			if( ! empty( $array_layout_block ) )
 			{
-				$array_block_func = array( );
+				$array_block_func = array();
 				if( ! empty( $array_not_all_func ) )
 				{
 					$result = $db->query( 'SELECT bid, func_name, in_module FROM ' . NV_BLOCKS_TABLE . '_weight t1, ' . NV_MODFUNCS_TABLE . ' t2 WHERE t1.bid IN (' . implode( ',', $array_not_all_func ) . ') AND t1.func_id=t2.func_id' );

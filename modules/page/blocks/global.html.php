@@ -38,12 +38,11 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 	function nv_block_data_config_html_submit( $module, $lang_block )
 	{
 		global $nv_Request;
-		$xhtml = $nv_Request->get_editor( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
 
 		$return = array();
 		$return['error'] = array();
 		$return['config'] = array();
-		$return['config']['htmlcontent'] = defined( 'NV_EDITOR' ) ? nv_editor_nl2br( $xhtml ) : nv_nl2br( $xhtml, '<br />' );
+		$return['config']['htmlcontent'] = $nv_Request->get_editor( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
 
 		return $return;
 	}

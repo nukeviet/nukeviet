@@ -78,7 +78,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	elseif( empty( $row['layout_func'] ) OR in_array( 'layout.' . $row['layout_func'] . '.tpl', $layout_array ) )
 	{
-		$row['bodytext'] = nv_editor_nl2br( $row['bodytext'] );
 		$row['alias'] = empty( $row['alias'] ) ? change_alias( $row['title'] ) : change_alias( $row['alias'] );
 
 		if( empty( $row['keywords'] ) )

@@ -41,7 +41,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 	else
 	{
-		$content = nv_editor_nl2br( $content );
 		if( $mode == 'edit' )
 		{
 			$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET

@@ -190,7 +190,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		else
 		{
 			$array['introtext'] = ! empty( $array['introtext'] ) ? nv_nl2br( $array['introtext'], '<br />' ) : '';
-			$array['description'] = ! empty( $array['description'] ) ? nv_editor_nl2br( $array['description'] ) : $array['introtext'];
 			$array['fileupload'] = ( ! empty( $array['fileupload'] ) ) ? implode( '[NV]', $array['fileupload'] ) : '';
 			if( ( ! empty( $array['linkdirect'] ) ) )
 			{

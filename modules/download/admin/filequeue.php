@@ -235,7 +235,6 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 		else
 		{
 			$alias = change_alias( $array['title'] );
-			$array['description'] = nv_editor_nl2br( $array['description'] );
 			$array['introtext'] = nv_nl2br( $array['introtext'], '<br />' );
 
 			if( $row['user_id'] )
