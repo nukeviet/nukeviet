@@ -23,7 +23,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 
 	if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
-		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&view=' . $view_comm . '&allowed=' . $allowed_comm . '&checkss=' . $checkss;
+		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed_comm . '&checkss=' . $checkss;
 
 		// Kiểm tra quyền xem bình luận
 		$form_login = 0;
