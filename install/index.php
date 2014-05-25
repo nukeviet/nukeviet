@@ -804,7 +804,8 @@ elseif( $step == 6 )
 				$array_config_rewrite = array(
 					'rewrite_optional' => $global_config['rewrite_optional'],
 					'rewrite_endurl' => $global_config['rewrite_endurl'],
-					'rewrite_exturl' => $global_config['rewrite_exturl']
+					'rewrite_exturl' => $global_config['rewrite_exturl'],
+					'rewrite_op_mod' => $global_config['rewrite_op_mod']
 				);
 				$rewrite = nv_rewrite_change( $array_config_rewrite );
 				if( empty( $rewrite[0] ) )

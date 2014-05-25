@@ -146,8 +146,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 		nv_save_file_config_global();
 
-		require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
-		$rewrite = nv_rewrite_change( $global_config );
+		$array_config_rewrite = array(
+			'rewrite_optional' => $array_config_global['rewrite_optional'],
+			'rewrite_endurl' => $global_config['rewrite_endurl'],
+			'rewrite_exturl' => $global_config['rewrite_exturl'],
+			'rewrite_op_mod' => $array_config_global['rewrite_op_mod']
+		);
+		$rewrite = nv_rewrite_change( $array_config_rewrite );
 		if( empty( $rewrite[0] ) )
 		{
 			$errormess .= sprintf( $lang_module['err_writable'], $rewrite[1] );

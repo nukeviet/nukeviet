@@ -48,6 +48,7 @@ $global_config['gzip_method'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;
+$global_config['rewrite_op_mod'] = '';
 
 $global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;

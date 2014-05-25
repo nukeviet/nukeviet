@@ -196,6 +196,10 @@ function nv_save_file_config_global()
 		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
 	}
 
+	$my_domains = array_map( 'trim', explode( ',', $config_variable['my_domains'] ) );
+	$my_domains[] = NV_SERVER_NAME;
+	$config_variable['my_domains'] = implode( ',', array_unique( $my_domains ) );
+
 	$config_variable['check_rewrite_file'] = nv_check_rewrite_file();
 	$config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : "request";
 	$config_variable['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
