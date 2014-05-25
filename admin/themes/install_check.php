@@ -340,7 +340,7 @@ if( file_exists( $filename ) )
 
 								$row['exp_time'] = 0;
 								$row['active'] = 1;
-								$row['groups_view'] = '0';
+								$row['groups_view'] = '6';
 
 								$all_func = ($row['all_func'] == 1 AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name )) ? 1 : 0;
 
