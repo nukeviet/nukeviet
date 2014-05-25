@@ -202,12 +202,12 @@ $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . 
 $sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '6', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
 $sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[LEFT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'À Propos', '', 'orange', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'À Propos', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(5, 'default', 'users', 'global.voting_random.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(6, 'default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(10, 'modern', 'about', 'global.about.php', 'À Propos', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );

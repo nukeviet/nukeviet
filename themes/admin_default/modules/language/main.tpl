@@ -31,7 +31,7 @@
 			<tr>
 				<td>{ROW.keylang}</td>
 				<td>{ROW.name}</td>
-				<td class="text-center">
+				<td align="center">
 				<!-- BEGIN: allow_sitelangs_note -->
 				{LANG.site_lang}
 				<!-- END: allow_sitelangs_note -->

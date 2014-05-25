@@ -216,7 +216,7 @@ $sth->execute( array(57, 'left-body-right', 'default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 1, 'a:1:{s:12:"title_length";i:25;}') );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 1, 'a:1:{s:12:"title_length";i:25;}') );
 $sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', 'primary', '[LEFT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
 $sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );

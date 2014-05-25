@@ -179,7 +179,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) )
 		$array['title'] = '';
 		$array['alias'] = '';
 		$array['description'] = '';
-		$array['groups_view'] =	$array['groups_download'] = '';
+		$array['groups_view'] =	$array['groups_download'] = 6;
 	}
 
 	$listcats = array(
