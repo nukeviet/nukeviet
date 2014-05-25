@@ -81,7 +81,6 @@ foreach( $list as $row )
 		'description' => $row['description'],
 		'inhome' => $row['inhome'],
 		'keywords' => $row['keywords'],
-		'groups_view' => $row['groups_view'],
 		'lev' => $row['lev'],
 		'numpro' => $row['numpro']
 	);

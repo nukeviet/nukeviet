@@ -42,7 +42,7 @@
     </div>
 
     <div class="table-responsive">
-    	<table class="table table-hover">
+    	<table class="table table-striped table-bordered table-hover">
     	    <thead>
     		<tr>
     			<th align="center" width="30px"> {LANG.order_no_products} </th>

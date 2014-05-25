@@ -84,9 +84,9 @@
 		<input class="btn btn-primary" type="submit" value="{LANG.order_submit}" id="click_submit">
 		<!-- END: onsubmit -->
 		<!-- BEGIN: onpay -->
-		<input type="button" value="{LANG.order_submit_pay}" id="click_pay">
+		<input class="btn btn-primary" type="button" value="{LANG.order_submit_pay}" id="click_pay">
 		<!-- END: onpay -->
-		<input type="button" value="{LANG.order_print}" id="click_print">
+		<input class="btn btn-info" type="button" value="{LANG.order_print}" id="click_print">
 	</form>
 </div>
 <!-- BEGIN: transaction -->
