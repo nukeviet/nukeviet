@@ -53,7 +53,7 @@ function nv_show_tags_list( $q = '' )
 	}
 	$sth->closeCursor();
 
-	if( empty( $q ) AND $number > 9 )
+	if( empty( $q ) and $number > 9 )
 	{
 		$xtpl->parse( 'main.other' );
 	}

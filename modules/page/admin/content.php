@@ -76,7 +76,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['empty_bodytext'];
 	}
-	elseif( empty( $row['layout_func'] ) OR in_array( 'layout.' . $row['layout_func'] . '.tpl', $layout_array ) )
+	elseif( empty( $row['layout_func'] ) or in_array( 'layout.' . $row['layout_func'] . '.tpl', $layout_array ) )
 	{
 		$row['alias'] = empty( $row['alias'] ) ? change_alias( $row['title'] ) : change_alias( $row['alias'] );
 
@@ -174,7 +174,7 @@ else
 	$row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
-if( ! empty( $row['image'] ) AND is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['image'] ) )
+if( ! empty( $row['image'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['image'] ) )
 {
 	$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['image'];
 }

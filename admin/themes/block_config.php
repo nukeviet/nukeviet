@@ -22,7 +22,7 @@ if( ! empty( $file_name ) )
 	// Xac dinh ton tai cua block
 	$path_file_php = $path_file_ini = $path_file_lang = '';
 
-	if( $module == 'theme' and ( preg_match( $global_config['check_theme'], $selectthemes, $mtheme ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes, $mtheme ) ) and preg_match( $global_config['check_block_theme'], $file_name, $matches ) AND file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name ) )
+	if( $module == 'theme' and ( preg_match( $global_config['check_theme'], $selectthemes, $mtheme ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes, $mtheme ) ) and preg_match( $global_config['check_block_theme'], $file_name, $matches ) and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name ) )
 	{
 		if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $matches[1] . '.' . $matches[2] . '.ini' ) )
 		{
@@ -44,7 +44,7 @@ if( ! empty( $file_name ) )
 		}
 		//die($path_file_php .'=--->'. $path_file_ini .'=--->'. $path_file_lang);
 	}
-	elseif( isset( $site_mods[$module] ) AND preg_match( $global_config['check_block_module'], $file_name, $matches ))
+	elseif( isset( $site_mods[$module] ) and preg_match( $global_config['check_block_module'], $file_name, $matches ))
 	{
 		$module_file = $site_mods[$module]['module_file'];
 

@@ -334,7 +334,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			$_columns_array = $db->columns_array( NV_USERS_GLOBALTABLE );
 
-			if(  $dataform['max_length'] <= 4294967296 and ! empty( $dataform['field'] ) and ! empty( $dataform['title'] ) AND !isset( $_columns_array[$dataform['field']] ) )
+			if(  $dataform['max_length'] <= 4294967296 and ! empty( $dataform['field'] ) and ! empty( $dataform['title'] ) and !isset( $_columns_array[$dataform['field']] ) )
 			{
 				$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_USERS_GLOBALTABLE . '_field' )->fetchColumn();
 				$weight = intval( $weight ) + 1;

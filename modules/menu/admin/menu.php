@@ -17,7 +17,7 @@ $error = '';
 
 /**
  * nv_menu_insert_id()
- * 
+ *
  * @param mixed $mid
  * @param mixed $parentid
  * @param mixed $title
@@ -101,7 +101,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 		$weight = 0;
 		$sort = 0;
 		$mid = $arr['id'];
-		if( $action_menu == 'sys_mod' OR $action_menu == 'sys_mod_sub' )
+		if( $action_menu == 'sys_mod' or $action_menu == 'sys_mod_sub' )
 		{
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid );
 			unset( $site_mods['menu'], $site_mods['comment'] );
@@ -112,7 +112,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 				$lev = 0;
 				$subitem = '';
 				$parentid = nv_menu_insert_id( $mid, 0, $modvalues['custom_title'], $weight, $sort, 0, $mod_name, '', $modvalues['groups_view'] );
-				if( $parentid AND $action_menu == 'sys_mod_sub' )
+				if( $parentid and $action_menu == 'sys_mod_sub' )
 				{
 					// Thêm menu từ các chủ đề của module
 					$subweight = 0;
@@ -178,7 +178,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 						$subweight = 0;
 						foreach( $array_item as $subitem )
 						{
-							if( isset( $subitem['parentid'] ) AND $subitem['parentid'] === $key )
+							if( isset( $subitem['parentid'] ) and $subitem['parentid'] === $key )
 							{
 								++$subweight;
 								++$sort;

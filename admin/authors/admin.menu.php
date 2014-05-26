@@ -12,7 +12,7 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $allow_func = array( 'main', 'edit' );
 
-if( empty( $global_config['spadmin_add_admin'] ) AND $global_config['idsite'] > 0 )
+if( empty( $global_config['spadmin_add_admin'] ) and $global_config['idsite'] > 0 )
 {
 	// Fix add admin for subsite
 	$global_config['spadmin_add_admin'] = 1;

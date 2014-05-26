@@ -11,7 +11,7 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 $allow_func = array( 'main', 'language', 'smtp' );
-if( defined( 'NV_IS_GODADMIN' ) OR ( defined( 'NV_IS_SPADMIN' ) AND $global_config['idsite'] > 0 ) )
+if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $global_config['idsite'] > 0 ) )
 {
 	$allow_func[] = 'system';
 }

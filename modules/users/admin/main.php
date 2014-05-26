@@ -122,7 +122,7 @@ while( $row = $result2->fetch() )
 		'level' => $lang_module['level0'],
 		'is_admin' => false
 	);
-	if( $global_config['idsite'] > 0 AND $row['idsite'] != $global_config['idsite'] )
+	if( $global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] )
 	{
 		$users_list[$row['userid']]['is_edit'] = false;
 		$users_list[$row['userid']]['is_delete'] = false;

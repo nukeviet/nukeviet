@@ -46,7 +46,7 @@ else
 	$global_config['gfx_chk'] = 0;
 }
 $admin_login_redirect = $nv_Request->get_string( 'admin_login_redirect', 'session', '' );
-if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) AND $nv_Request->get_title( 'checkss', 'post' ) == $checkss)
+if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request->get_title( 'checkss', 'post' ) == $checkss)
 {
 	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
 	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
@@ -220,7 +220,7 @@ if( isset( $size[1] ) )
 	$xtpl->assign( 'WIDTH', $size[0] );
 	$xtpl->assign( 'HEIGHT', $size[1] );
 
-	if( isset( $size['mime'] ) AND $size['mime'] == 'application/x-shockwave-flash' )
+	if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
 	{
 		$xtpl->parse( 'main.swf' );
 	}

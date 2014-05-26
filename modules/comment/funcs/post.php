@@ -15,7 +15,7 @@ $difftimeout = 360;
 $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 
 $module = $nv_Request->get_string( 'module', 'post' );
-if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND isset( $site_mods[$module] ) )
+if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and isset( $site_mods[$module] ) )
 {
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	$area = $nv_Request->get_int( 'area', 'post', 0 );
@@ -23,7 +23,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 	$allowed_comm = $nv_Request->get_title( 'allowed', 'post' );
 	$checkss = $nv_Request->get_title( 'checkss', 'post' );
 
-	if( $id > 0 AND $module_config[$module]['activecomm'] == 1 AND $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
+	if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		// Kiểm tra quyền đăng bình luận
 		$allowed = $module_config[$module]['allowed_comm'];
@@ -65,11 +65,11 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 			{
 				$show_captcha = false;
 			}
-			elseif( $captcha == 1 AND defined( 'NV_IS_USER' ) )
+			elseif( $captcha == 1 and defined( 'NV_IS_USER' ) )
 			{
 				$show_captcha = false;
 			}
-			elseif( $captcha == 2 AND defined( 'NV_IS_MODADMIN' ) )
+			elseif( $captcha == 2 and defined( 'NV_IS_MODADMIN' ) )
 			{
 				if( defined( 'NV_IS_SPADMIN' ) )
 				{
@@ -85,7 +85,7 @@ if( ! empty( $module ) AND isset( $module_config[$module]['activecomm'] ) AND is
 				}
 			}
 
-			if( $show_captcha AND ! nv_capcha_txt( $code ) )
+			if( $show_captcha and ! nv_capcha_txt( $code ) )
 			{
 				$contents = 'ERR_' . $lang_global['securitycodeincorrect'];
 			}

@@ -67,7 +67,7 @@ else
 	}
 	elseif( preg_match( '#image\/[x\-]*([a-z]+)#', $upload_info['mime'] ) )
 	{
-		if( $global_config['nv_auto_resize'] AND ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
+		if( $global_config['nv_auto_resize'] and ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
 		{
 			require_once NV_ROOTDIR . '/includes/class/image.class.php';
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );

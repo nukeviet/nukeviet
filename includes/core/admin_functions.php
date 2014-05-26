@@ -31,7 +31,7 @@ function nv_groups_list()
 		while( $row = $result->fetch() )
 		{
 			if( $row['group_id'] < 9 ) $row['title'] = $lang_global['level' . $row['group_id']];
-			$groups[$row['group_id']] = ( $global_config['idsite'] > 0 AND empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
+			$groups[$row['group_id']] = ( $global_config['idsite'] > 0 and empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
 		}
 		nv_set_cache( 'users', $cache_file, serialize( $groups ) );
 

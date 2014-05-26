@@ -88,7 +88,7 @@ $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UP
 
 if( empty( $path ) )
 {
-	if( $global_config['idsite'] OR ! defined( 'NV_IS_SPADMIN' ) )
+	if( $global_config['idsite'] or ! defined( 'NV_IS_SPADMIN' ) )
 	{
 		$path = NV_UPLOADS_DIR;
 	}

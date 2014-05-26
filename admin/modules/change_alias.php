@@ -17,7 +17,7 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 $sql = 'SELECT f.func_name AS func_title,f.func_custom_name AS func_custom_title,f.alias AS fun_alias, m.custom_title AS mod_custom_title FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE f.func_id=' . $id . ' AND f.in_module=m.title';
 $row = $db->query( $sql )->fetch();
 
-if( ! isset($row['func_title']) OR $row['func_title']=='main' ) die( 'NO_' . $id );
+if( ! isset($row['func_title']) or $row['func_title']=='main' ) die( 'NO_' . $id );
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {

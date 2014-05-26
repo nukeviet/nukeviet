@@ -610,7 +610,7 @@ class upload
 
 		if( ! empty( $this->config['maxsize'] ) and $userfile['size'] > $this->config['maxsize'] )
 		{
-			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			if( ! ( $no_check_size and preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
 				return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
 			}
@@ -625,7 +625,7 @@ class upload
 
 			if( ! $this->verify_image( $userfile['tmp_name'] ) ) return _ERROR_UPLOAD_IMAGE_FAILED;
 
-			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			if( ! ( $no_check_size and preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
 				if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] ) return sprintf( _ERROR_UPLOAD_IMAGE_WIDTH, $this->config['maxwidth'] );
 
@@ -665,7 +665,7 @@ class upload
 	 */
 	private function string_to_filename( $word )
 	{
-		if( defined( 'NV_LANG_DATA' ) AND file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
+		if( defined( 'NV_LANG_DATA' ) and file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
 		{
 			include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ;
 			$word = strtr( $word, $utf8_lookup_lang );
@@ -1238,7 +1238,7 @@ class upload
 
 		if( ! empty( $this->config['maxsize'] ) and $return['size'] > $this->config['maxsize'] )
 		{
-			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			if( ! ( $no_check_size and preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
 				@unlink( $this->temp_file );
 				$return['error'] = sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
@@ -1265,7 +1265,7 @@ class upload
 				return $return;
 			}
 
-			if( ! ( $no_check_size AND preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
+			if( ! ( $no_check_size and preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
 				if( ! empty( $this->config['maxwidth'] ) and $this->img_info[0] > $this->config['maxwidth'] )
 				{

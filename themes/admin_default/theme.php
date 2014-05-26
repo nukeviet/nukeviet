@@ -370,7 +370,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.ckeditor' );
 	}
 
-	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
+	if( defined( "NV_IS_SPADMIN" ) and $admin_info['level'] == 1 )
 	{
 		$xtpl->parse( 'main.memory_time_usage' );
 	}

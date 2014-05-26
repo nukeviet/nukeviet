@@ -183,7 +183,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 					$sth_is->bindParam( ':lang_key', $lang_key, PDO::PARAM_STR );
 					$sth_is->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
 					$sth_is->execute();
-					if( $read_type == 0 AND ! $sth_is->rowCount() )
+					if( $read_type == 0 and ! $sth_is->rowCount() )
 					{
 						$check_type_update = true;
 					}

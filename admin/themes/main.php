@@ -52,7 +52,7 @@ foreach( $theme_list as $value )
 		continue;
 	}
 	//kiem tra giao dien co danh cho subsite hay ko
-	if( ! empty( $array_site_cat_theme ) AND ! in_array( $value, $array_site_cat_theme ) )
+	if( ! empty( $array_site_cat_theme ) and ! in_array( $value, $array_site_cat_theme ) )
 	{
 		continue;
 	}
@@ -88,7 +88,7 @@ foreach( $theme_list as $value )
 
 	$xtpl->assign( 'POSITION', implode( ' | ', $pos ) );
 	$dash = 0;
-	if( ! in_array( $value, $theme_mobile_list ) AND $global_config['site_theme'] != $value )
+	if( ! in_array( $value, $theme_mobile_list ) and $global_config['site_theme'] != $value )
 	{
 		$xtpl->parse( 'main.loop.link_active' );
 		$dash++;

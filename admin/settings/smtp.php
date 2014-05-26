@@ -47,7 +47,7 @@ if( $nv_Request->isset_request( 'mailer_mode', 'post' ) )
 	}
 	nv_del_moduleCache( 'settings' );
 
-	if( $array_config['smtp_ssl'] == 1 AND $array_config['mailer_mode'] == 'smtp' )
+	if( $array_config['smtp_ssl'] == 1 and $array_config['mailer_mode'] == 'smtp' )
 	{
 		require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 		$array_phpmod = phpinfo_array( 8, 1 );

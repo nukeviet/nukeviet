@@ -71,7 +71,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default_footer' ) )
 		$a = 0;
 		foreach( $footer_menu as $modname => $modvalues )
 		{
-			if( in_array( $modname, $block_config['module_in_menu'] ) AND ! empty( $modvalues['funcs'] ) )
+			if( in_array( $modname, $block_config['module_in_menu'] ) and ! empty( $modvalues['funcs'] ) )
 			{
 				if( $home == 1 and $a == 0 )
 				{

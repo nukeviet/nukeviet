@@ -11,7 +11,7 @@
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['main'] = $lang_module['site_config'];
-if( defined( 'NV_IS_GODADMIN' ) OR ( defined( "NV_IS_SPADMIN" ) AND $global_config['idsite'] > 0 ) )
+if( defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and $global_config['idsite'] > 0 ) )
 {
 	$submenu['system'] = $lang_module['global_config'];
 }

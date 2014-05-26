@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_global['mod_groups'];
 $contents = '';
 //Lay danh sach nhom
-$sql = 'SELECT * FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
+$sql = 'SELECT * FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
 $result = $db->query( $sql );
 $groupsList = array();
 $groupcount = 0;
@@ -44,7 +44,7 @@ if( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 {
 	$group_id = $nv_Request->get_int( 'id', 'post' );
 	$cWeight = $nv_Request->get_int( 'cWeight', 'post' );
-	if( ! isset( $groupsList[$group_id] ) OR ! defined( 'NV_IS_SPADMIN' ) OR $group_id < 10 OR $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( 'ERROR' );
+	if( ! isset( $groupsList[$group_id] ) or ! defined( 'NV_IS_SPADMIN' ) or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( 'ERROR' );
 
 	$cWeight = min( $cWeight, $groupcount );
 
@@ -72,7 +72,7 @@ if( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 if( $nv_Request->isset_request( 'act', 'post' ) )
 {
 	$group_id = $nv_Request->get_int( 'act', 'post' );
-	if( ! isset( $groupsList[$group_id] ) OR ! defined( 'NV_IS_SPADMIN' ) OR $group_id < 10 OR $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( 'ERROR|' . $groupsList[$group_id]['act'] );
+	if( ! isset( $groupsList[$group_id] ) or ! defined( 'NV_IS_SPADMIN' ) or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( 'ERROR|' . $groupsList[$group_id]['act'] );
 
 	$act = $groupsList[$group_id]['act'] ? 0 : 1;
 	$query = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=' . $act . ' WHERE group_id=' . $group_id;
@@ -87,7 +87,7 @@ if( $nv_Request->isset_request( 'act', 'post' ) )
 if( $nv_Request->isset_request( 'del', 'post' ) )
 {
 	$group_id = $nv_Request->get_int( 'del', 'post', 0 );
-	if( ! isset( $groupsList[$group_id] ) OR ! defined( 'NV_IS_SPADMIN' ) OR $group_id < 10 OR $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$group_id] ) or ! defined( 'NV_IS_SPADMIN' ) or $group_id < 10 or $groupsList[$group_id]['idsite'] != $global_config['idsite'] ) die( $lang_module['error_group_not_found'] );
 
 	$array_groups = array();
 	$result_gru = $db->query( 'SELECT group_id, userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid IN (SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')' );
@@ -131,7 +131,7 @@ if( $nv_Request->isset_request( 'gid,uid', 'post' ) )
 {
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$uid = $nv_Request->get_int( 'uid', 'post', 0 );
-	if( ! isset( $groupsList[$gid] ) OR $gid < 10 ) die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$gid] ) or $gid < 10 ) die( $lang_module['error_group_not_found'] );
 
 	if( $groupsList[$gid]['idsite'] != $global_config['idsite'] AND $groupsList[$gid]['idsite'] == 0 )
 	{
@@ -174,7 +174,7 @@ if( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 {
 	$gid = $nv_Request->get_int( 'gid', 'post', 0 );
 	$uid = $nv_Request->get_int( 'exclude', 'post', 0 );
-	if( ! isset( $groupsList[$gid] ) OR $gid < 10 ) die( $lang_module['error_group_not_found'] );
+	if( ! isset( $groupsList[$gid] ) or $gid < 10 ) die( $lang_module['error_group_not_found'] );
 
 	if( $groupsList[$gid]['idsite'] != $global_config['idsite'] AND $groupsList[$gid]['idsite'] == 0 )
 	{
@@ -242,7 +242,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 		foreach ( $_rows as $row )
 		{
 			$xtpl->assign( 'LOOP', $row );
-			if( $group_id > 3 AND ( $idsite == 0 OR $idsite == $row['idsite'] ) )
+			if( $group_id > 3 and ( $idsite == 0 or $idsite == $row['idsite'] ) )
 			{
 				$xtpl->parse( 'listUsers.ifExists.loop.delete' );
 			}
@@ -260,7 +260,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 if( $nv_Request->isset_request( 'userlist', 'get' ) )
 {
 	$group_id = $nv_Request->get_int( 'userlist', 'get', 0 );
-	if( ! isset( $groupsList[$group_id] ) OR ! ( $group_id < 4 OR $group_id > 9 ))
+	if( ! isset( $groupsList[$group_id] ) or ! ( $group_id < 4 or $group_id > 9 ))
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		die();
@@ -296,7 +296,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		$post['id'] = $nv_Request->get_int( 'id', 'get' );
 		if( $nv_Request->isset_request( 'edit', 'get' ) )
 		{
-			if( empty( $post['id'] ) or ! isset( $groupsList[$post['id']] ) OR $post['id'] < 10 OR $groupsList[$post['id']]['idsite'] != $global_config['idsite'] )
+			if( empty( $post['id'] ) or ! isset( $groupsList[$post['id']] ) or $post['id'] < 10 or $groupsList[$post['id']]['idsite'] != $global_config['idsite'] )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 				die();
@@ -324,7 +324,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			}
 
 			// Kiểm tra trùng tên nhóm
-			$stmt = $db->prepare( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' OR (idsite=0 AND siteus=1))' );
+			$stmt = $db->prepare( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))' );
 			$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
 			$stmt->execute();
 			if( $stmt->fetchColumn() )
@@ -351,7 +351,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			$post['siteus'] = $nv_Request->get_int( 'siteus', 'post', 0 );
 			if( $post['siteus'] != 1 ) $post['siteus'] = 0;
 
-			if( isset( $post['id'] ) AND $post['id'] > 3 )
+			if( isset( $post['id'] ) and $post['id'] > 3 )
 			{
 				$stmt = $db->prepare( "UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
 					title= :title,
@@ -410,7 +410,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 
 		$xtpl->assign( 'DATA', $post );
 
-		if( defined( 'NV_CONFIG_DIR' ) AND empty( $global_config['idsite'] ) )
+		if( defined( 'NV_CONFIG_DIR' ) and empty( $global_config['idsite'] ) )
 		{
 			$xtpl->parse( 'add.siteus' );
 		}
@@ -447,7 +447,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 	foreach( $groupsList as $group_id => $values )
 	{
 		$xtpl->assign( 'GROUP_ID', $group_id );
-		if( $group_id < 4 OR $group_id > 9  )
+		if( $group_id < 4 or $group_id > 9  )
 		{
 			$link_userlist = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op .'&amp;userlist=' . $group_id;
 		}
@@ -470,7 +470,7 @@ if( $nv_Request->isset_request( 'list', 'get' ) )
 			'link_userlist' => $link_userlist
 		);
 
-		if( defined( 'NV_IS_SPADMIN' ) AND $group_id > 9 AND $values['idsite'] == $global_config['idsite'] )
+		if( defined( 'NV_IS_SPADMIN' ) and $group_id > 9 and $values['idsite'] == $global_config['idsite'] )
 		{
 			$_bg = ( empty( $global_config['idsite'] ) ) ? $weight_op : 1;
 			for( $i = $_bg; $i <= $groupcount; $i++ )

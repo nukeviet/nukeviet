@@ -17,7 +17,7 @@ if( $nv_Request->isset_request( 'plugin_file', 'post' ) )
 {
 	$config_plugin = array();
 	$plugin_file = $nv_Request->get_title( 'plugin_file', 'post' );
-	if( preg_match( $pattern_plugin, $plugin_file ) AND is_file( NV_ROOTDIR . '/includes/plugin/' . $plugin_file ) )
+	if( preg_match( $pattern_plugin, $plugin_file ) and is_file( NV_ROOTDIR . '/includes/plugin/' . $plugin_file ) )
 	{
 		$plugin_area = $nv_Request->get_int( 'plugin_area', 'post' );
 		if( $nv_Request->isset_request( 'delete', 'post' ) )
@@ -60,10 +60,10 @@ if( $nv_Request->isset_request( 'dpid', 'get' ) )
 {
 	$dpid = $nv_Request->get_int( 'dpid', 'get' );
 	$checkss = $nv_Request->get_title( 'checkss', 'get' );
-	if( $dpid > 0 AND $checkss == md5( $dpid . '-' . session_id() . '-' . $global_config['sitekey'] ) )
+	if( $dpid > 0 and $checkss == md5( $dpid . '-' . session_id() . '-' . $global_config['sitekey'] ) )
 	{
 		$row = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $dpid )->fetch();
-		if( ! empty( $row ) AND $db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid ) )
+		if( ! empty( $row ) and $db->exec( 'DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid ) )
 		{
 			$weight = intval( $row['weight'] );
 			$_query = $db->query( 'SELECT pid FROM ' . $db_config['prefix'] . '_plugin WHERE plugin_area=' . $row['plugin_area'] . ' AND weight > ' . $weight . ' ORDER BY weight ASC' );
@@ -77,7 +77,7 @@ if( $nv_Request->isset_request( 'dpid', 'get' ) )
 	}
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 }
-elseif( $nv_Request->isset_request( 'pid', 'get' ) AND $nv_Request->isset_request( 'weight', 'get' ) )
+elseif( $nv_Request->isset_request( 'pid', 'get' ) and $nv_Request->isset_request( 'weight', 'get' ) )
 {
 	$pid = $nv_Request->get_int( 'pid', 'get' );
 	$row = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $pid )->fetch();

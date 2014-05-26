@@ -248,7 +248,7 @@ function nv_show_funcs()
 
 			if( $module_version['virtual'] )
 			{
-				if( $funcs != 'main' AND in_array( $funcs, $fun_change_alias ) )
+				if( $funcs != 'main' and in_array( $funcs, $fun_change_alias ) )
 				{
 					$xtpl->parse( 'main.loop.change_alias' );
 				}
