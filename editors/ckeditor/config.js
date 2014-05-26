@@ -14,6 +14,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.youtube_older = true;
 	config.youtube_privacy = false;
 	config.youtube_autoplay = true;
+	config.codeSnippet_theme = 'github';
 	// Default setting.
 	config.toolbarGroups = [
 	    { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
