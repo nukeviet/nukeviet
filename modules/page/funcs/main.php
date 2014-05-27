@@ -18,7 +18,7 @@ if( $id )
 	$row = $db->query( $sql )->fetch();
 
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], true );
-	if( ! empty( $array_op ) AND $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	if( ! empty( $array_op ) and $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 	{
 		Header( 'Location: ' . $base_url_rewrite );
 		die();

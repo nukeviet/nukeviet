@@ -292,7 +292,7 @@ function nv_html_meta_tags()
 		$kw[] = $module_info['keywords'];
 	}
 
-	if( $home AND ! empty( $global_config['site_keywords'] ) )
+	if( $home and ! empty( $global_config['site_keywords'] ) )
 	{
 		$kw[] = $global_config['site_keywords'];
 	}
@@ -309,7 +309,7 @@ function nv_html_meta_tags()
 
 	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
 
-	if( $global_config['idsite'] AND file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
+	if( $global_config['idsite'] and file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
 	{
 		$file_metatags = NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml';
 	}
@@ -382,7 +382,7 @@ function nv_html_meta_tags()
 	{
 		foreach( $meta_property as $key => $value )
 		{
-			if( ! preg_match('/^og\:/', $key) AND ! empty( $value ) )
+			if( ! preg_match('/^og\:/', $key) and ! empty( $value ) )
 			{
 				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
 			}

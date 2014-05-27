@@ -19,7 +19,7 @@ $checkss = $nv_Request->get_string( 'checkss', 'post' );
 
 $session_id = session_id() . '_' . $global_config['sitekey'];
 
-if( $cid > 0 AND $checkss == md5( $cid . '_' . $session_id ) )
+if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 {
 	if( $nv_Request->isset_request( $module_name . '_like_' . $cid, 'cookie' ) )
 	{

@@ -8,8 +8,7 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if( !defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 if( defined( 'NV_IS_FILE_THEMES' ) )
 {

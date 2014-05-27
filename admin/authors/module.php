@@ -36,7 +36,7 @@ if( defined( 'NV_IS_AJAX' ) )
 		$row = $db->query( $query )->fetch();
 		if( !empty( $row ) )
 		{
-			if( ! ( $act == 3 AND ( $row['module'] == 'database' OR $row['module'] == 'settings' OR $row['module'] == 'site' ) ) )
+			if( ! ( $act == 3 and ( $row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site' ) ) )
 			{
 				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey'] );
@@ -73,7 +73,7 @@ foreach ( $rows as $row )
 	for( $i = 1; $i <= 3; $i++ )
 	{
 		$chang_act[$i] = ( $row['act_' . $i] ) ? ' checked="checked"' : '';
-		if( $i == 3 AND ( $row['module'] == 'database' OR $row['module'] == 'settings' OR $row['module'] == 'site' ) )
+		if( $i == 3 and ( $row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site' ) )
 		{
 			$chang_act[$i] .= ' disabled="disabled"';
 		}

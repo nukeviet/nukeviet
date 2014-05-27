@@ -16,7 +16,7 @@ $alias = $array_op[0];
 
 if( isset( $array_op[1] ) )
 {
-	if( sizeof( $array_op ) == 2 AND preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m ) )
+	if( sizeof( $array_op ) == 2 and preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m ) )
 	{
 		$page = intval( $m[1] );
 	}
@@ -27,7 +27,7 @@ if( isset( $array_op[1] ) )
 }
 $page_title = trim( str_replace( '-', ' ', $alias ) );
 
-if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
+if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 {
 	$stmt = $db->prepare( 'SELECT tid, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
@@ -102,7 +102,7 @@ if( ! empty( $page_title ) AND $page_title == strip_punctuation( $page_title ) )
 		$db->sqlreset()
 			->select( 'id, catid, addtime, edittime, publtime, title, alias, hitstotal' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
-			->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') AND publtime < ' . $end_publtime )
+			->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime )
 			->order( 'publtime DESC' )
 			->limit( $st_links );
 		$result = $db->query( $db->sql() );

@@ -150,6 +150,7 @@ if( $rowcontent['id'] > 0 )
 	$rowcontent = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch();
 	if( ! empty( $rowcontent['id'] ) )
 	{
+		$rowcontent['mode'] = 'edit';
 		$arr_catid = explode( ',', $rowcontent['listcatid'] );
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )
 		{
@@ -187,7 +188,6 @@ if( $rowcontent['id'] > 0 )
 			if( $check_edit == sizeof( $arr_catid ) )
 			{
 				$check_permission = true;
-				$rowcontent['mode'] = 'edit';
 			}
 		}
 	}
@@ -374,8 +374,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$rowcontent['imgposition'] = 1;
 	}
-	$bodyhtml = $nv_Request->get_string( 'bodyhtml', 'post', '' );
-	$rowcontent['bodyhtml'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodyhtml, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodyhtml ) ), '<br />' );
+	$rowcontent['bodyhtml'] = $nv_Request->get_editor( 'bodyhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$rowcontent['copyright'] = ( int )$nv_Request->get_bool( 'copyright', 'post' );
 	$rowcontent['inhome'] = ( int )$nv_Request->get_bool( 'inhome', 'post' );

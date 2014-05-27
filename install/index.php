@@ -405,7 +405,7 @@ elseif( $step == 5 )
 		{
 			$db_config['dbsystem'] = $db_config['dbname'];
 		}
-		elseif( $db_config['dbtype'] == 'oci' AND empty( $db_config['dbport'] ) )
+		elseif( $db_config['dbtype'] == 'oci' and empty( $db_config['dbport'] ) )
 		{
 			$db_config['dbport'] = 1521;
 			$db_config['dbsystem'] = $db_config['dbuname'];

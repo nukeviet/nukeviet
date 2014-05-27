@@ -39,7 +39,7 @@ while( $row = $result->fetch() )
 	else
 	{
 		$interval = $row['inter_val'] * 60;
-		if( empty( $interval ) OR empty( $row['last_time'] ) )
+		if( empty( $interval ) or empty( $row['last_time'] ) )
 		{
 			$next_time = nv_date( 'l, d/m/Y H:i', max( $row['start_time'], $global_config['cronjobs_next_time'], NV_CURRENTTIME ) );
 		}

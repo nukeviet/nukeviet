@@ -149,7 +149,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 		$xtpl->assign( 'LOGO', NV_BASE_SITEURL . $global_config['site_logo'] );
 		$xtpl->assign( 'WIDTH', $size[0] );
 		$xtpl->assign( 'HEIGHT', $size[1] );
-		if( isset( $size['mime'] ) AND $size['mime'] == 'application/x-shockwave-flash' )
+		if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
 		{
 			$xtpl->parse( 'main.swf' );
 		}
@@ -161,7 +161,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'INFO_TITLE', $info_title );
 	$xtpl->assign( 'INFO_CONTENT', $info_content );
 
-	if( defined( 'NV_IS_ADMIN' ) AND ! empty( $admin_link ) )
+	if( defined( 'NV_IS_ADMIN' ) and ! empty( $admin_link ) )
 	{
 		$xtpl->assign( 'ADMIN_LINK', $admin_link );
 		$xtpl->assign( 'GO_ADMINPAGE', empty( $admin_title ) ? $lang_global['admin_page'] : $admin_title );

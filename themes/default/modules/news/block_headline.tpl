@@ -30,7 +30,7 @@
 				<ul class="lastest-news">
 					<!-- BEGIN: loop -->
 					<li>
-						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext}" data-img="{LASTEST.homeimgfile}" rel="block_headline_tooltip">{LASTEST.title}</a>
+						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>
 					</li>
 					<!-- END: loop -->
 				</ul>
@@ -42,7 +42,7 @@
 </div>
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-$(document).ready(function() {$("[rel='block_headline_tooltip']").tooltip({
+$(document).ready(function() {$("[data-rel='block_headline_tooltip']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,
 	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}

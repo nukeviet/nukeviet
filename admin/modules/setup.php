@@ -34,7 +34,7 @@ if( ! empty( $setmodule ) )
 		$modrow = $sth->fetch();
 		if( ! empty( $modrow ) )
 		{
-			if( ! empty( $array_site_cat_module ) AND ! in_array( $modrow['module_file'], $array_site_cat_module ) )
+			if( ! empty( $array_site_cat_module ) and ! in_array( $modrow['module_file'], $array_site_cat_module ) )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 				die();
@@ -92,7 +92,7 @@ if( ! empty( $setmodule ) )
 
 // Xoa module
 $delmodule = $nv_Request->get_title( 'delmodule', 'get', '', 1 );
-if( defined( 'NV_IS_GODADMIN' ) AND ! empty( $delmodule ) )
+if( defined( 'NV_IS_GODADMIN' ) and ! empty( $delmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'delmodule' . $delmodule . session_id() . $global_config['sitekey'] ) )
 	{
@@ -122,7 +122,7 @@ if( defined( 'NV_IS_GODADMIN' ) AND ! empty( $delmodule ) )
 			}
 		}
 
-		if( empty( $module_exit ) AND defined( 'NV_CONFIG_DIR' ) )
+		if( empty( $module_exit ) and defined( 'NV_CONFIG_DIR' ) )
 		{
 			// kiem tra cac site con
 			$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC' );
@@ -331,7 +331,7 @@ foreach( $modules_data as $row )
 {
 	if( in_array( $row['title'], $modules_exit ) )
 	{
-		if( ! empty( $array_site_cat_module ) AND ! in_array( $row['module_file'], $array_site_cat_module ) )
+		if( ! empty( $array_site_cat_module ) and ! in_array( $row['module_file'], $array_site_cat_module ) )
 		{
 			continue;
 		}
@@ -357,7 +357,7 @@ foreach( $modules_data as $row )
 			}
 			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
 			$mod['delete'] = '';
-			if( defined( "NV_IS_GODADMIN" ) AND ! in_array( $row['module_file'], $module_virtual_setup ) )
+			if( defined( "NV_IS_GODADMIN" ) and ! in_array( $row['module_file'], $module_virtual_setup ) )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delmodule=' . $row['title'] . '&amp;checkss=' . md5( 'delmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 				$mod['delete'] = " <em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";

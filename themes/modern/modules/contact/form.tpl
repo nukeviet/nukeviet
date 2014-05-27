@@ -64,7 +64,10 @@
 					&nbsp;{LANG.captcha}:&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" id="vimg" />
 					<img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','fcode_iavim');"/>
 					<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="input capcha" />
-					<input type="hidden" name="checkss" value="{CHECKSS}" />&nbsp; <input type="submit" value="{LANG.sendcontact}" id="btsend" name="btsend" class="button" />&nbsp; <input type="reset" value="{LANG.reset}" class="button-2" />
+					<input type="hidden" name="checkss" value="{CHECKSS}" />&nbsp;
+					<input type="reset" value="{LANG.reset}" class="button-2" />
+					&nbsp;
+					<input type="submit" value="{LANG.sendcontact}" id="btsend" name="btsend" class="button" />
 				</p>
 			</div>
 		</form>

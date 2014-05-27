@@ -297,7 +297,7 @@ class optimezer
 	private function tidy5( $string )
 	{
 		$menu = array();
-		 
+
 		if( strpos( $string, '<menu' ) !== false )
 		{
 	 		$menu = array(
@@ -306,25 +306,25 @@ class optimezer
 			);
 			$string = str_replace( array_keys( $menu ), $menu, $string );
 		}
-		
+
 		$this->tidy_options['doctype'] = 'omit';
 		//$this->tidy_options['output-html'] = true;
 		//$this->tidy_options['output-xhtml'] = false;
 		$this->tidy_options['drop-proprietary-attributes'] = false;
 		$this->tidy_options['new-blocklevel-tags'] = 'article aside audio details dialog figcaption figure footer header hgroup menutidy nav section source summary track video';
-		
+
 		$string = tidy_repair_string( $string, $this->tidy_options, 'utf8' );
-		
+
 		if( empty( $string ) !== true )
 		{
 			if( ! empty( $menu ) )
 			{
 				$string = str_replace( $menu, array_keys( $menu ), $string );
 			}
-		
+
 			return "<!DOCTYPE html>\n" . $string;
 		}
-		
+
 		return false;
 	}
 
@@ -576,7 +576,7 @@ class optimezer
 		$content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
 		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
 		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
-		$content = preg_replace( '/^\s+/m', '', $content );
+		$content = preg_replace( '/^\s+/', '', $content );
 
 		return $content;
 	}

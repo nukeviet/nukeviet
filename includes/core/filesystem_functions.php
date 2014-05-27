@@ -132,7 +132,8 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 	global $sys_info;
 
 	if( empty( $filename ) ) return false;
-	$ext = strtolower( array_pop( explode( '.', $filename ) ) );
+	$_array_name = explode( '.', $filename );
+	$ext = strtolower( array_pop( $_array_name ) );
 	if( empty( $ext ) ) return false;
 
 	$mime = 'application/octet-stream';

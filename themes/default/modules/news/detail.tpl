@@ -212,7 +212,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" rel="tooltip">{RELATED.title}</a>
+			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip">{RELATED.title}</a>
 			<em>({RELATED.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -227,7 +227,7 @@
 	$(document).ready(function() {
 		$(".bodytext img").toggleClass('img-thumbnail');
 		<!-- BEGIN: tooltip -->
-		$("[rel='tooltip']").tooltip({
+		$("[data-rel='tooltip']").tooltip({
 			placement: "{TOOLTIP_POSITION}",
 			html: true,
 			title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}

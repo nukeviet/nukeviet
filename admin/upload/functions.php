@@ -148,7 +148,7 @@ function nv_check_path_upload( $path )
 	$result = false;
 	if( $global_config['idsite'] )
 	{
-		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) OR $path = NV_UPLOADS_DIR )
+		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) or $path = NV_UPLOADS_DIR )
 		{
 			$result = true;
 		}

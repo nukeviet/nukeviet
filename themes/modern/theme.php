@@ -8,7 +8,7 @@
  * @Createdate 31/05/2010, 00:36
  */
 
-if( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 function nv_site_theme( $contents, $full = true )
 {
@@ -24,14 +24,7 @@ function nv_site_theme( $contents, $full = true )
 	}
 
 	// Determine tpl file, check exists tpl file
-	if( ! $full )
-	{
-		$layout_file = 'simple.tpl';
-	}
-	else
-	{
-		$layout_file = 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl';
-	}
+	$layout_file = ( $full ) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
 	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file ) )
 	{

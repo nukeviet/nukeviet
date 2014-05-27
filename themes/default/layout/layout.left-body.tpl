@@ -15,7 +15,6 @@
 	<div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
 		[LEFT]
 	</div>
-	
 </div>
 <div class="row">
 	<div class="col-md-12">

@@ -17,7 +17,7 @@ $checkss = $nv_Request->get_string( 'checkss', 'post' );
 
 $session_id = session_id() . '_' . $global_config['sitekey'];
 
-if( $cid > 0 AND $checkss == md5( $cid . '_' . $session_id ) )
+if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 {
 	$_sql = 'SELECT cid, module FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
 	$row = $db->query( $_sql )->fetch();

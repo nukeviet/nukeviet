@@ -246,7 +246,7 @@ if( file_exists( $filename ) )
 						}
 					}
 
-					if( ! empty($selectthemes) AND file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
+					if( ! empty($selectthemes) and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 					{
 						$sth = $db->prepare('SELECT count(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = 0 AND theme= :theme');
 						$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -312,14 +312,14 @@ if( file_exists( $filename ) )
 								$row = (array)$blocks[$i];
 								$file_name = $row['file_name'];
 
-								if( $row['module'] == 'theme' AND preg_match( $global_config['check_block_theme'], $file_name, $matches ) )
+								if( $row['module'] == 'theme' and preg_match( $global_config['check_block_theme'], $file_name, $matches ) )
 								{
 									if( ! file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/blocks/' . $file_name ) )
 									{
 										continue;
 									}
 								}
-								elseif( isset( $site_mods[$row['module']] ) AND preg_match( $global_config['check_block_module'], $file_name, $matches ) )
+								elseif( isset( $site_mods[$row['module']] ) and preg_match( $global_config['check_block_module'], $file_name, $matches ) )
 								{
 									$mod_file = $site_mods[$module]['module_file'];
 									if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name ) )
@@ -342,7 +342,7 @@ if( file_exists( $filename ) )
 								$row['active'] = 1;
 								$row['groups_view'] = '6';
 
-								$all_func = ($row['all_func'] == 1 AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name )) ? 1 : 0;
+								$all_func = ($row['all_func'] == 1 and preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name )) ? 1 : 0;
 
 								$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
 								( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";

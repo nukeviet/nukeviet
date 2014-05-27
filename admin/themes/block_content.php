@@ -304,7 +304,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$array_funcid = array();
 			foreach ($array_funcid_module as $func_id => $mod)
 			{
-				if( in_array( $mod, $array_in_module ) AND in_array( $func_id, $array_funcid_post ) )
+				if( in_array( $mod, $array_in_module ) and in_array( $func_id, $array_funcid_post ) )
 				{
 					$array_funcid[] = $func_id;
 				}

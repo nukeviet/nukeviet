@@ -59,7 +59,7 @@ if( !empty( $array_item ) )
 			$xtpl->parse( 'main.link.item' );
 			foreach( $array_item as $subitem )
 			{
-				if( isset( $subitem['parentid'] ) AND $subitem['parentid'] === $key )
+				if( isset( $subitem['parentid'] ) and $subitem['parentid'] === $key )
 				{
 					$subitem['title'] = $sp . $subitem['title'];
 					$subitem['module'] = $mod_name;

@@ -15,7 +15,7 @@ $cid = $nv_Request->get_int( 'cid', 'get,post' );
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
 $row = $db->query( $sql )->fetch();
 
-if( empty( $row ) OR ! isset( $site_mod_comm[$row['module']] ) )
+if( empty( $row ) or ! isset( $site_mod_comm[$row['module']] ) )
 {
 	header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();

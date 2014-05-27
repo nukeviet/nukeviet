@@ -76,7 +76,7 @@ if( ! empty( $admin_cookie ) )
 		$admin_info['in_groups'][] = 2;
 	}
 
-	if( $admin_info['level'] == 1 AND $global_config['idsite'] == 0 )
+	if( $admin_info['level'] == 1 and $global_config['idsite'] == 0 )
 	{
 		define( 'NV_IS_GODADMIN', true );
 		$admin_info['in_groups'][] = 1;

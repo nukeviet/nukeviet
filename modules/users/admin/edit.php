@@ -45,7 +45,7 @@ else
 	}
 }
 
-if( $global_config['idsite'] > 0 AND $row['idsite'] != $global_config['idsite'] AND $admin_info['admin_id'] != $userid )
+if( $global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite'] and $admin_info['admin_id'] != $userid )
 {
 	$allow = false;
 }

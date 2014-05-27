@@ -47,7 +47,7 @@ if( isset( $admin_mods['authors'] ) )
 	$allow_func[] = 'authors';
 }
 
-if( defined( 'NV_IS_SPADMIN' ) AND empty( $global_config['idsite'] ) )
+if( defined( 'NV_IS_SPADMIN' ) and empty( $global_config['idsite'] ) )
 {
 	$submenu['question'] = $lang_module['question'];
 	$submenu['siteterms'] = $lang_module['siteterms'];

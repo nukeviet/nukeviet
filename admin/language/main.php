@@ -24,7 +24,7 @@ while( $row = $result->fetch() )
 	$array_lang_setup[$row['lang']] = intval( $row['setup'] );
 }
 
-if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( 'NV_IS_SPADMIN' ) ) )
+if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( 'NV_IS_SPADMIN' ) ) )
 {
 	$checksess = $nv_Request->get_title( 'checksess', 'get', '' );
 	$keylang = $nv_Request->get_title( 'keylang', 'get', '', 1 );
@@ -138,7 +138,7 @@ if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( '
 					$setmodule = $row['title'];
 					$row['module_file'] = $row['module_file'];
 
-					if( in_array( $row['module_file'], $modules_exit ) AND in_array( $setmodule, $array_module_setup ))
+					if( in_array( $row['module_file'], $modules_exit ) and in_array( $setmodule, $array_module_setup ))
 					{
 						nv_setup_data_module( $keylang, $setmodule );
 					}
@@ -311,7 +311,7 @@ foreach( $global_config['allow_adminlangs'] as $keylang )
 		'name' => $language_array[$keylang]['name']
 	) );
 
-	if( defined( 'NV_IS_GODADMIN' ) OR ( $global_config['idsite'] > 0 AND defined( 'NV_IS_SPADMIN' ) ) )
+	if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( 'NV_IS_SPADMIN' ) ) )
 	{
 		if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 		{

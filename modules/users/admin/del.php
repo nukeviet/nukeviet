@@ -30,7 +30,7 @@ if( empty( $row ) )
 
 list( $username, $full_name, $email, $photo, $idsite ) = $row;
 
-if( $global_config['idsite'] > 0 AND $idsite != $global_config['idsite'] )
+if( $global_config['idsite'] > 0 and $idsite != $global_config['idsite'] )
 {
 	die( 'NO' );
 }
