@@ -81,7 +81,7 @@ else
 					$array_field_config[] = $row_field;
 				}
 				
-				$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
+				$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $item['userid'];
 				$result = $db->query( $sql );
 				$custom_fields = $result->fetch();
 
