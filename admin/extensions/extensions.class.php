@@ -40,6 +40,7 @@ class NV_Extensions
 	private $site_config = array(
 		'version' => '4.x',
 		'sitekey' => 'default',
+		'site_charset' => 'utf-8',
 	);
 	
 	/**
@@ -67,6 +68,10 @@ class NV_Extensions
 		if( ! empty( $config['version'] ) )
 		{
 			$this->site_config['sitekey'] = $config['sitekey'];
+		}
+		if( ! empty( $config['site_charset'] ) )
+		{
+			$this->site_config['site_charset'] = $config['site_charset'];
 		}
 		
 		// Find my domain
@@ -188,7 +193,7 @@ class NV_Extensions
 			unset( $args['headers']['user-agent'] );
 		}
 
-		if( '1.1' == $args['httpversion'] and ! isset( $args['headers']['connection'] ) )
+		if( $args['httpversion'] == '1.1' and ! isset( $args['headers']['connection'] ) )
 		{
 			$args['headers']['connection'] = 'close';
 		}
@@ -199,25 +204,25 @@ class NV_Extensions
 		
 		if( ! isset( $args['headers']['Accept-Encoding'] ) )
 		{
-			if( $encoding = WP_Http_Encoding::accept_encoding( $url, $args ) )
+			if( $encoding = NV_http_encoding::accept_encoding( $url, $args ) )
 			{
 				$args['headers']['Accept-Encoding'] = $encoding;
 			}	
 		}
 
-		if( ( ! is_null( $args['body'] ) and '' != $args['body'] ) || 'POST' == $args['method'] || 'PUT' == $args['method'] )
+		if( ( ! is_null( $args['body'] ) and '' != $args['body'] ) or $args['method'] == 'POST' or $args['method'] == 'PUT' )
 		{
-			if( is_array( $args['body'] ) || is_object( $args['body'] ) )
+			if( is_array( $args['body'] ) or is_object( $args['body'] ) )
 			{
 				$args['body'] = http_build_query( $args['body'], null, '&' );
 
 				if( ! isset( $args['headers']['Content-Type'] ) )
 				{
-					$args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . get_option( 'blog_charset' );
+					$args['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=' . $this->site_config['site_charset'];
 				}
 			}
 
-			if( '' === $args['body'] )
+			if( $args['body'] === '' )
 			{
 				$args['body'] = null;
 			}	
@@ -232,15 +237,28 @@ class NV_Extensions
 
 		reset_mbstring_encoding();
 
-		if( is_wp_error( $response ) )
+		if( $this->is_error( $response ) )
+		{
 			return $response;
+		}
 
 		// Append cookies that were used in this request to the response
-		if( ! empty( $r['cookies'] ) )
+		if( ! empty( $args['cookies'] ) )
 		{
-			$cookies_set = wp_list_pluck( $response['cookies'], 'name' );
+			$cookies_set = array();
+			foreach( $response['cookies'] as $key => $value )
+			{
+				if( is_object( $value ) )
+				{
+					$cookies_set[$key] = $value->name;
+				}
+				else
+				{
+					$cookies_set[$key] = $value['name'];
+				}
+			}
 			
-			foreach( $r['cookies'] as $cookie )
+			foreach( $args['cookies'] as $cookie )
 			{
 				if( ! in_array( $cookie->name, $cookies_set ) and $cookie->test( $url ) )
 				{
@@ -307,16 +325,71 @@ class NV_Extensions
 			case 1: $message = "A valid URL was not provided."; break;
 			case 2: $message = "User has blocked requests through HTTP."; break;
 			case 3: $message = "Destination directory for file streaming does not exist or is not writable."; break;
+			case 4: $message = "Destination directory for file streaming does not exist or is not writable."; break;
 			default: $message = "There are some unknow errors had been occurred.";
 		}
 		
 		$this->error['code'] = $code;
 		$this->error['message'] = $message;
 	}
+
+	private function _dispatch_request( $url, $args )
+	{
+		static $transports = array();
+
+		$class = $this->_get_first_available_transport( $args, $url );
+		
+		if( ! $class )
+		{
+			$this->set_error(4);
+			return false;
+		}
+
+		// Transport claims to support request, instantiate it and give it a whirl.
+		if( empty( $transports[$class] ) )
+		{
+			$transports[$class] = new $class;
+		}
+
+		$response = $transports[$class]->request( $url, $args );
+
+		return $response;
+	}
 	
 	public function reset()
 	{
 		$this->error = array();
+	}
+	
+	public function is_error( $resources )
+	{
+		if( is_object( $resources ) and isset( $resources->error ) and empty( $resources->error ) )
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public function _get_first_available_transport( $args, $url = null )
+	{
+		$request_order = array( 'curl', 'streams' );
+
+		// Loop over each transport on each HTTP request looking for one which will serve this request's needs
+		foreach( $request_order as $transport )
+		{
+			$class = 'NV_http_' . $transport;
+
+			// Check to see if this transport is a possibility, calls the transport statically
+			if( ! call_user_func( array( $class, 'test' ), $args, $url ) )
+			{
+				continue;
+			}
+
+			return $class;
+		}
+
+		return false;
 	}
 	
 	public static function processHeaders( $headers, $url = '' )
@@ -338,7 +411,7 @@ class NV_Extensions
 		// In this case, determine the final HTTP header and parse from there.
 		for( $i = sizeof( $headers ) - 1; $i >= 0; $i -- )
 		{
-			if( ! empty( $headers[$i] ) and false === strpos( $headers[$i], ':' ) )
+			if( ! empty( $headers[$i] ) and strpos( $headers[$i], ':' ) === false )
 			{
 				$headers = array_splice( $headers, $i );
 				break;
@@ -354,7 +427,7 @@ class NV_Extensions
 				continue;
 			}				
 
-			if( false === strpos( $tempheader, ':' ) )
+			if( strpos( $tempheader, ':' ) === false )
 			{
 				$stack = explode( ' ', $tempheader, 3 );
 				$stack[] = '';
@@ -496,7 +569,7 @@ class NV_http_cookie{
 				list( $key, $val ) = strpos( $pair, '=' ) ? explode( '=', $pair ) : array( $pair, '' );
 				$key = strtolower( trim( $key ) );
 				
-				if( 'expires' == $key )
+				if( $key == 'expires' )
 				{
 					$val = strtotime( $val );
 				}
@@ -546,7 +619,7 @@ class NV_http_cookie{
 
 		// Get details on the URL we're thinking about sending to
 		$url = parse_url( $url );
-		$url['port'] = isset( $url['port'] ) ? $url['port'] : ( 'https' == $url['scheme'] ? 443 : 80 );
+		$url['port'] = isset( $url['port'] ) ? $url['port'] : ( $url['scheme'] == 'https' ? 443 : 80 );
 		$url['path'] = isset( $url['path'] ) ? $url['path'] : '/';
 
 		// Values to use for comparison against the URL
@@ -554,7 +627,7 @@ class NV_http_cookie{
 		$port   = isset( $this->port )   ? $this->port   : null;
 		$domain = isset( $this->domain ) ? strtolower( $this->domain ) : strtolower( $url['host'] );
 		
-		if( false === stripos( $domain, '.' ) )
+		if( stripos( $domain, '.' ) === false )
 		{
 			$domain .= '.local';
 		}
@@ -594,5 +667,167 @@ class NV_http_cookie{
 	function getFullHeader()
 	{
 		return 'Cookie: ' . $this->getHeaderValue();
+	}
+}
+
+class NV_http_encoding{
+
+	public static function compress( $raw, $level = 9, $supports = null )
+	{
+		return gzdeflate( $raw, $level );
+	}
+
+	public static function decompress( $compressed, $length = null )
+	{
+		if( empty( $compressed ) )
+		{
+			return $compressed;
+		}
+
+		if( ( $decompressed = @gzinflate( $compressed ) ) !== false )
+		{
+			return $decompressed;
+		}
+
+		if( ( $decompressed = NV_http_encoding::compatible_gzinflate( $compressed ) ) !== false )
+		{
+			return $decompressed;
+		}
+
+		if( ( $decompressed = @gzuncompress( $compressed ) ) !== false )
+		{
+			return $decompressed;
+		}
+
+		if( function_exists('gzdecode') )
+		{
+			$decompressed = @gzdecode( $compressed );
+
+			if( $decompressed !== false )
+			{
+				return $decompressed;
+			}
+		}
+
+		return $compressed;
+	}
+
+	public static function compatible_gzinflate( $gzData )
+	{
+		// Compressed data might contain a full header, if so strip it for gzinflate()
+		if( substr( $gzData, 0, 3 ) == "\x1f\x8b\x08" )
+		{
+			$i = 10;
+			$flg = ord( substr( $gzData, 3, 1 ) );
+			if( $flg > 0 )
+			{
+				if( $flg & 4 )
+				{
+					list( $xlen ) = unpack( 'v', substr( $gzData, $i, 2 ) );
+					$i = $i + 2 + $xlen;
+				}
+				
+				if( $flg & 8 )
+				{
+					$i = strpos( $gzData, "\0", $i ) + 1;
+				}
+				
+				if( $flg & 16 )
+				{
+					$i = strpos( $gzData, "\0", $i ) + 1;
+				}
+					
+				if( $flg & 2 )
+				{
+					$i = $i + 2;
+				}
+			}
+			
+			$decompressed = @gzinflate( substr( $gzData, $i, -8 ) );
+			
+			if( $decompressed !== false )
+			{
+				return $decompressed;
+			}
+		}
+
+		// Compressed data from java.util.zip.Deflater amongst others.
+		$decompressed = @gzinflate( substr( $gzData, 2 ) );
+		
+		if( $decompressed !== false )
+		{
+			return $decompressed;
+		}
+
+		return false;
+	}
+
+	public static function accept_encoding( $url, $args )
+	{
+		$type = array();
+		$compression_enabled = NV_http_encoding::is_available();
+
+		if( ! $args['decompress'] )
+		{
+			// decompression specifically disabled
+			$compression_enabled = false;
+		}
+		elseif( $args['stream'] )
+		{
+			// disable when streaming to file
+			$compression_enabled = false;
+		}	
+		elseif( isset( $args['limit_response_size'] ) )
+		{
+			// If only partial content is being requested, we won't be able to decompress it
+			$compression_enabled = false;
+		}
+
+		if( $compression_enabled )
+		{
+			if( function_exists( 'gzinflate' ) )
+			{
+				$type[] = 'deflate;q=1.0';
+			}
+
+			if( function_exists( 'gzuncompress' ) )
+			{
+				$type[] = 'compress;q=0.5';
+			}
+
+			if( function_exists( 'gzdecode' ) )
+			{
+				$type[] = 'gzip;q=0.5';
+			}
+		}
+
+		return implode( ', ', $type );
+	}
+
+	public static function content_encoding()
+	{
+		return 'deflate';
+	}
+
+	public static function should_decode( $headers )
+	{
+		if( is_array( $headers ) )
+		{
+			if( array_key_exists('content-encoding', $headers) and ! empty( $headers['content-encoding'] ) )
+			{
+				return true;
+			}
+		}
+		elseif( is_string( $headers ) )
+		{
+			return ( stripos( $headers, 'content-encoding:' ) !== false );
+		}
+
+		return false;
+	}
+
+	public static function is_available()
+	{
+		return ( function_exists('gzuncompress') or function_exists('gzdeflate') or function_exists('gzinflate') );
 	}
 }
