@@ -11,27 +11,27 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.part_row_title}</strong></td>
-					<td><input class="w150 form-control" type="text" name="full_name" value="{DATA.full_name}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"/></td>
+					<td><input class="w300 form-control" type="text" name="full_name" value="{DATA.full_name}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"/></td>
 				</tr>
 				<tr>
 					<td><strong>{GLANG.phonenumber}</strong></td>
-					<td><input class="w150 form-control" type="text" name="phone" value="{DATA.phone}"/></td>
+					<td><input class="w300 form-control" type="text" name="phone" value="{DATA.phone}"/></td>
 				</tr>
 				<tr>
 					<td><strong>Fax</strong></td>
-					<td><input class="w150 form-control" type="text" name="fax" value="{DATA.fax}"/></td>
+					<td><input class="w300 form-control" type="text" name="fax" value="{DATA.fax}"/></td>
 				</tr>
 				<tr>
 					<td><strong>{GLANG.email}</strong></td>
-					<td><input class="w150 form-control" type="email" oninvalid="setCustomValidity( nv_email )" oninput="setCustomValidity('')" name="email" value="{DATA.email}"/></td>
+					<td><input class="w300 form-control" type="email" oninvalid="setCustomValidity( nv_email )" oninput="setCustomValidity('')" name="email" value="{DATA.email}"/></td>
 				</tr>
                 <tr>
 					<td><strong>{LANG.yahoo_row_title}</strong></td>
-					<td><input class="w150 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/></td>
+					<td><input class="w300 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/></td>
 				</tr>
                 <tr>
 					<td><strong>{LANG.skype_row_title}</strong></td>
-					<td><input class="w150 form-control" type="skype" name="skype" value="{DATA.skype}"/></td>
+					<td><input class="w300 form-control" type="skype" name="skype" value="{DATA.skype}"/></td>
 				</tr>
 				<tr>
 					<td colspan="2">
