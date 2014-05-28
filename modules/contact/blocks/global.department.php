@@ -90,34 +90,38 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 		{
 			foreach( $array_department as $value => $row )
 			{
-				if( ! empty( $row['phone'] ) or ! empty( $row['fax'] ) or ! empty( $row['email'] ) or ! empty( $row['note'] ) )
+				if( ! empty( $row['phone'] ) or ! empty( $row['fax'] ) or ! empty( $row['email'] ) or ! empty( $row['yahoo'] ) or ! empty( $row['skype'] ) )
 				{
 					$xtpl->assign( 'DEPARTMENT', $row );
-
+					
 					if( ! empty( $row['phone'] ) )
 					{
 						$xtpl->parse( 'main.phone' );
 					}
+					
 					if( ! empty( $row['fax'] ) )
 					{
 						$xtpl->parse( 'main.fax' );
 					}
+
 					if( ! empty( $row['email'] ) )
 					{
 						$xtpl->parse( 'main.email' );
 					}
+					
 					if( ! empty( $row['yahoo'] ) )
 					{
 						$xtpl->parse( 'main.yahoo' );
 					}
+
 					if( ! empty( $row['skype'] ) )
 					{
 						$xtpl->parse( 'main.skype' );
 					}
-					if( ! empty( $row['full_name'] ) )
-					{
-						$xtpl->parse( 'main.full_name' );
-					}
+				}
+				else
+				{
+					return '';
 				}
 			}
 		}
