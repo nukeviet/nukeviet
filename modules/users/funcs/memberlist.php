@@ -32,6 +32,7 @@ else
 		'title' => $lang_module['listusers'],
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op
 	);
+	
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
@@ -57,8 +58,34 @@ else
 					'title' => $item['username'],
 					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias( $item['username'] ) . '-' . $item['md5username']
 				);
+				
+				$array_field_config = array();
+				$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
+				while( $row_field = $result_field->fetch() )
+				{
+					$language = unserialize( $row_field['language'] );
+					$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
+					$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
+					if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
+					elseif( ! empty( $row_field['sql_choices'] ) )
+					{
+						$row_field['sql_choices'] = explode( '|', $row_field['sql_choices'] );
+						$query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+						$result = $db->query( $query );
+						$weight = 0;
+						while( list( $key, $val ) = $result->fetch( 3 ) )
+						{
+							$row_field['field_choices'][$key] = $val;
+						}
+					}
+					$array_field_config[] = $row_field;
+				}
+				
+				$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $item['userid'];
+				$result = $db->query( $sql );
+				$custom_fields = $result->fetch();
 
-				$contents = nv_memberslist_detail_theme( $item );
+				$contents = nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields );
 			}
 			else
 			{

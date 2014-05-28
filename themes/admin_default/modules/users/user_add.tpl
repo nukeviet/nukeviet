@@ -3,13 +3,7 @@
 <div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<p>
-			<span>{ERROR}</span>
-		</p>
-	</blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
@@ -27,36 +21,36 @@
 				<tr>
 					<td> {LANG.account} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input type="text" class="form-control w300 required" value="{DATA.username}" name="username" id="username_iavim" /></td>
+					<td><input type="text" class="form-control required" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.email} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input type="text" class="form-control w300 email required" value="{DATA.email}" name="email" id="email_iavim" /></td>
+					<td><input type="text" class="form-control email required" value="{DATA.email}" name="email" id="email_iavim" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.password} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w150 required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" /></td>
+					<td><input class="form-control required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w150 required password" type="password" name="password2" value="{DATA.password2}" /></td>
+					<td><input class="form-control required password" type="password" name="password2" value="{DATA.password2}" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w300 required" type="text" value="{DATA.question}" name="question" /></td>
+					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
+					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.name} </td>
-					<td><input class="form-control w300" type="text" value="{DATA.full_name}" name="full_name" /></td>
+					<td><input class="form-control" type="text" value="{DATA.full_name}" name="full_name" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
@@ -81,7 +75,7 @@
 				</tr>
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.sig} </td>
-					<td><textarea class="w300" name="sig" cols="70" rows="5">{DATA.sig}</textarea></td>
+					<td><textarea name="sig" class="form-control" cols="70" rows="5" style="width: 300px">{DATA.sig}</textarea></td>
 				</tr>
 				<!-- BEGIN: group -->
 				<tr>
@@ -119,10 +113,10 @@
 					</td>
 					<td>
 					<!-- BEGIN: textbox -->
-					<input class="form-control w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+					<input class="form-control {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 300px" />
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
-					<input class="form-control w100 datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+					<input class="form-control datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 100px" />
 					<!-- END: date -->
 					<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 					<!-- END: textarea -->
