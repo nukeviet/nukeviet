@@ -1227,7 +1227,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
  * @param mixed $item
  * @return
  */
-function nv_memberslist_detail_theme( $item )
+function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields )
 {
 	global $module_info, $module_file, $lang_module, $module_name;
 
@@ -1254,6 +1254,39 @@ function nv_memberslist_detail_theme( $item )
 	if( ! empty( $item['view_mail'] ) )
 	{
 		$xtpl->parse( 'main.viewemail' );
+	}
+
+	// Parse custom fields
+	if( ! empty( $array_field_config ) )
+	{
+		//var_dump($array_field_config); die();
+		foreach( $array_field_config as $row )
+		{
+			if( $row['show_profile'] )
+			{
+				$question_type = $row['field_type'];
+				if( $question_type == 'checkbox' )
+				{
+					$result = explode( ',', $custom_fields[$row['field']] );
+					$value = '';
+					foreach( $result as $item )
+					{
+						$value .= $row['field_choices'][$item] . '<br />';
+					}
+				}
+				elseif( $question_type == 'multiselect' or $question_type == 'select' or $question_type == 'radio' )
+				{
+					$value = $row['field_choices'][$custom_fields[$row['field']]];
+				}
+				else
+				{
+					$value = $custom_fields[$row['field']];
+				}
+				$xtpl->assign( 'FIELD', array( 'title' => $row['title'], 'value' => $value ) );
+				$xtpl->parse( 'main.field.loop' );
+			}
+		}
+		$xtpl->parse( 'main.field' );
 	}
 
 	$xtpl->parse( 'main' );
