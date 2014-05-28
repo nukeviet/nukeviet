@@ -27,26 +27,26 @@
 				<tr>
 					<td> {LANG.account} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 required form-control" value="{DATA.username}" name="username" id="username_iavim"  /></td>
+					<td><input class="required form-control" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.email} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="w300 email required form-control" value="{DATA.email}" name="email" id="email_iavim" /></td>
+					<td><input class="email required form-control" value="{DATA.email}" name="email" id="email_iavim" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w300 required" type="text" value="{DATA.question}" name="question" /></td>
+					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
 					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control w300 required" type="text" value="{DATA.answer}" name="answer" /></td>
+					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.name} </td>
-					<td><input class="form-control w300" type="text" value="{DATA.full_name}" name="full_name"/></td>
+					<td><input class="form-control" type="text" value="{DATA.full_name}" name="full_name" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
@@ -82,7 +82,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" class="form-control datepicker" value="{DATA.birthday}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
+					<td><input name="birthday" class="form-control datepicker" value="{DATA.birthday}" style="width: 300px;" maxlength="10" readonly="readonly" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -129,7 +129,7 @@
 					</td>
 					<td>
 					<!-- BEGIN: textbox -->
-					<input class="form-control w300 {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" />
+					<input class="form-control {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 300px" />
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
 					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
@@ -175,11 +175,11 @@
 			<tbody>
 				<tr>
 					<td> {LANG.password} </td>
-					<td><input class="form-control w150" type="password" name="password1" autocomplete="off" value="{DATA.password1}" /></td>
+					<td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
-					<td><input class="form-control w150" type="password" name="password2" autocomplete="off" value="{DATA.password2}" /></td>
+					<td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" /></td>
 				</tr>
 			</tbody>
 		</table>
