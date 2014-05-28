@@ -177,8 +177,6 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
-        $yahoo = $frow['yahoo'];
-        $skype = $frow['skype'];
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
@@ -267,8 +265,6 @@ $xtpl->assign( 'DATA', array(
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
-    'yahoo' => $yahoo,
-    'skype' => $skype,
 	'note' => $note
 ) );
 
