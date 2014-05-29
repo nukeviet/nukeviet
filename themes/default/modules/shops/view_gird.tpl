@@ -20,7 +20,7 @@
     <div class="col-sm-6 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
-                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-toggle="tooltip" data-placement="bottom" data-rel="tooltip" data-html="true" title="<img class='img-thumbnail pull-left' style='margin: 0 5px 5px 0;' src='{img_pro}' width='{width}' /><p class='text-justify'><strong>{title_pro}</strong><br />{intro}</p><div class='clearfix'></div>" class="img-thumbnail custom_tooltip" style="max-height:{height}px;max-width:{width}px;"></a>
+                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content="{intro}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
             </div>
             <div class="caption text-center">
                 <h3><a href="{LINK}" title="{title_pro}">{title_pro0}</a></h3>
@@ -63,15 +63,21 @@
         </div>
     </div>
 	<!-- END: grid_rows -->
-	<div class="clearfix"></div>
+	<div class="clearfix">
+	</div>
 	<div class="pages">
 		{pages}
 	</div>
 </div>
-<div class="msgshow" id="msgshow"></div>
+<div class="msgshow" id="msgshow">
+</div>
 <!-- BEGIN: tooltip_js -->
 <script type="text/javascript">
-    $(document).ready(function() {$("[data-rel='tooltip']").tooltip();});
+	$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
+		placement: "bottom",
+		html: true,
+		title: function(){return '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+	});});
 </script>
 <!-- END: tooltip_js -->
 <!-- END: main -->
