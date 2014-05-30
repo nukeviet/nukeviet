@@ -35,6 +35,9 @@ function nv_menu_blocks( $block_config )
 				case 1:
 					$row['target'] = '';
 					break;
+				case 3:
+					$row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+					break;
 				default:
 					$row['target'] = ' onclick="this.target=\'_blank\'"';
 			}
