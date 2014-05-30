@@ -78,7 +78,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_description}:</td>
-					<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;">{DATAFORM.description}</textarea></td>
+					<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;" class="form-control">{DATAFORM.description}</textarea></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_required}</td>
