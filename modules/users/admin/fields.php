@@ -377,7 +377,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						$type_date = 'LONGTEXT NOT NULL';
 					}
-					$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
+					$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info ADD `" . $dataform['field'] . "` " . $type_date );
 				}
 			}
 		}
@@ -450,7 +450,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( $fid and ! empty( $field ) )
 	{
 		$query1 = 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
-		$query2 = 'ALTER TABLE ' . NV_USERS_GLOBALTABLE . '_info DROP ' . $field;
+		$query2 = 'ALTER TABLE ' . NV_USERS_GLOBALTABLE . '_info DROP `' . $field . '`';
 		if( $db->query( $query1 ) and $db->query( $query2 ) )
 		{
 			$query = 'SELECT fid FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
