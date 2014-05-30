@@ -200,7 +200,7 @@ class NV_Extensions
 		
 		NV_Extensions::buildCookieHeader( $args );
 		
-		mbstring_binary_safe_encoding();
+		//mbstring_binary_safe_encoding();
 		
 		if( ! isset( $args['headers']['Accept-Encoding'] ) )
 		{
@@ -235,7 +235,7 @@ class NV_Extensions
 
 		$response = $this->_dispatch_request( $url, $args );
 
-		reset_mbstring_encoding();
+		//reset_mbstring_encoding();
 
 		if( $this->is_error( $response ) )
 		{
@@ -282,24 +282,10 @@ class NV_Extensions
 			if( isset( $_SERVER[$k] ) ) return $_SERVER[$k];
 			elseif( isset( $_ENV[$k] ) ) return $_ENV[$k];
 			elseif( @getenv( $k ) ) return @getenv( $k );
-			elseif( function_exists( 'apache_getenv' ) && apache_getenv( $k, true ) ) return apache_getenv( $k, true );
+			elseif( function_exists( 'apache_getenv' ) and apache_getenv( $k, true ) ) return apache_getenv( $k, true );
 		}
 		
 		return '';
-	}
-	
-	private function build_args( $args, $defaults )
-	{
-		if( is_object( $args ) )
-		{
-			$args = get_object_vars( $args );
-		}
-		elseif( ! is_array( $args ) )
-		{
-			$args = $this->parse_str( $args );
-		}
-		
-		return array_merge( $defaults, $args );
 	}
 	
 	private function parse_str( $str )
@@ -315,7 +301,7 @@ class NV_Extensions
 		return $r;
 	}
 	
-	private function set_error( $code )
+	public static function set_error( $code )
 	{
 		$code = intval( $code );
 		$message = "";
@@ -325,7 +311,12 @@ class NV_Extensions
 			case 1: $message = "A valid URL was not provided."; break;
 			case 2: $message = "User has blocked requests through HTTP."; break;
 			case 3: $message = "Destination directory for file streaming does not exist or is not writable."; break;
-			case 4: $message = "Destination directory for file streaming does not exist or is not writable."; break;
+			case 4: $message = "There are no HTTP transports available which can complete the requested request."; break;
+			case 5: $message = "Too many redirects."; break;
+			case 6: $message = "The SSL certificate for the host could not be verified."; break;
+			case 7: $message = "HTTP request failed."; break;
+			case 8: $message = "Could not open stream file."; break;
+			case 9: $message = "Failed to write request to temporary file."; break;
 			default: $message = "There are some unknow errors had been occurred.";
 		}
 		
@@ -354,6 +345,135 @@ class NV_Extensions
 		$response = $transports[$class]->request( $url, $args );
 
 		return $response;
+	}
+	
+	static function handle_redirects( $url, $args, $response )
+	{
+		static $nv_http;
+		
+		// If no redirects are present, or, redirects were not requested, perform no action.
+		if( ! isset( $response['headers']['location'] ) or $args['_redirection'] === 0 )
+		{
+			return false;
+		}
+
+		// Only perform redirections on redirection http codes
+		if( $response['response']['code'] > 399 or $response['response']['code'] < 300 )
+		{
+			return false;
+		}
+
+		// Don't redirect if we've run out of redirects
+		if( $args['redirection'] -- <= 0 )
+		{
+			$this->set_error(5);
+			return false;
+		}
+
+		$redirect_location = $response['headers']['location'];
+
+		// If there were multiple Location headers, use the last header specified
+		if( is_array( $redirect_location ) )
+		{
+			$redirect_location = array_pop( $redirect_location );
+		}
+
+		$redirect_location = NV_Extensions::make_absolute_url( $redirect_location, $url );
+
+		// POST requests should not POST to a redirected location
+		if( $args['method'] == 'POST' )
+		{
+			if( in_array( $response['response']['code'], array( 302, 303 ) ) )
+			{
+				$args['method'] = 'GET';
+			}
+		}
+
+		// Include valid cookies in the redirect process
+		if( ! empty( $response['cookies'] ) )
+		{
+			foreach ( $response['cookies'] as $cookie )
+			{
+				if( $cookie->test( $redirect_location ) )
+				{
+					$args['cookies'][] = $cookie;
+				}
+			}
+		}
+
+		// Create object if null
+		if( is_null( $nv_http ) )
+		{
+			$nv_http = new NV_Extensions();
+		}
+		
+		return $nv_http->request( $redirect_location, $args );
+	}
+	
+	static function make_absolute_url( $maybe_relative_path, $url )
+	{
+		if( empty( $url ) )
+		{
+			return $maybe_relative_path;
+		}
+
+		// Check for a scheme
+		if( strpos( $maybe_relative_path, '://' ) !== false )
+		{
+			return $maybe_relative_path;
+		}
+
+		if( ! $url_parts = @parse_url( $url ) )
+		{
+			return $maybe_relative_path;
+		}
+
+		if( ! $relative_url_parts = @parse_url( $maybe_relative_path ) )
+		{
+			return $maybe_relative_path;
+		}
+
+		$absolute_path = $url_parts['scheme'] . '://' . $url_parts['host'];
+		
+		if( isset( $url_parts['port'] ) )
+		{
+			$absolute_path .= ':' . $url_parts['port'];
+		}
+
+		// Start off with the Absolute URL path
+		$path = ! empty( $url_parts['path'] ) ? $url_parts['path'] : '/';
+
+		// If it's a root-relative path, then great
+		if( ! empty( $relative_url_parts['path'] ) and $relative_url_parts['path'][0] == '/' )
+		{
+			$path = $relative_url_parts['path'];
+		}
+		// Else it's a relative path
+		elseif( ! empty( $relative_url_parts['path'] ) )
+		{
+			// Strip off any file components from the absolute path
+			$path = substr( $path, 0, strrpos( $path, '/' ) + 1 );
+
+			// Build the new path
+			$path .= $relative_url_parts['path'];
+
+			// Strip all /path/../ out of the path
+			while( strpos( $path, '../' ) > 1 )
+			{
+				$path = preg_replace( '![^/]+/\.\./!', '', $path );
+			}
+
+			// Strip any final leading ../ from the path
+			$path = preg_replace( '!^/(\.\./)+!', '', $path );
+		}
+
+		// Add the Query string
+		if( ! empty( $relative_url_parts['query'] ) )
+		{
+			$path .= '?' . $relative_url_parts['query'];
+		}
+
+		return $absolute_path . '/' . ltrim( $path, '/' );
 	}
 	
 	public function reset()
@@ -390,6 +510,27 @@ class NV_Extensions
 		}
 
 		return false;
+	}
+	
+	public static function build_args( $args, $defaults )
+	{
+		if( is_object( $args ) )
+		{
+			$args = get_object_vars( $args );
+		}
+		elseif( ! is_array( $args ) )
+		{
+			$args = $this->parse_str( $args );
+		}
+		
+		return array_merge( $defaults, $args );
+	}
+	
+	public static function processResponse( $strResponse )
+	{
+		$res = explode( "\r\n\r\n", $strResponse, 2 );
+
+		return array( 'headers' => $res[0], 'body' => isset( $res[1] ) ? $res[1] : '' );
 	}
 	
 	public static function processHeaders( $headers, $url = '' )
@@ -489,6 +630,42 @@ class NV_Extensions
 			$cookies_header = substr( $cookies_header, 0, -2 );
 			$args['headers']['cookie'] = $cookies_header;
 		}
+	}
+	
+	static function is_ip_address( $maybe_ip )
+	{
+		if( preg_match( '/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $maybe_ip ) )
+		{
+			return 4;
+		}
+
+		if( strpos( $maybe_ip, ':' ) !== false and preg_match( '/^(((?=.*(::))(?!.*\3.+\3))\3?|([\dA-F]{1,4}(\3|:\b|$)|\2))(?4){5}((?4){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i', trim( $maybe_ip, ' []' ) ) )
+		{
+			return 6;
+		}
+
+		return false;
+	}
+	
+	function post( $url, $args = array() )
+	{
+		$defaults = array( 'method' => 'POST' );
+		$args = $this->build_args( $args, $defaults );
+		return $this->request( $url, $args );
+	}
+
+	function get( $url, $args = array() )
+	{
+		$defaults = array( 'method' => 'GET' );
+		$args = $this->build_args( $args, $defaults );
+		return $this->request( $url, $args );
+	}
+
+	function head( $url, $args = array() )
+	{
+		$defaults = array('method' => 'HEAD');
+		$args = $this->build_args( $args, $defaults );
+		return $this->request( $url, $args );
 	}
 }
 
@@ -670,7 +847,785 @@ class NV_http_cookie{
 	}
 }
 
-class NV_http_encoding{
+class NV_http_curl
+{
+
+	/**
+	 * Temporary header storage for during requests.
+	 * @access private
+	 * @var string
+	 */
+	private $headers = '';
+
+	/**
+	 * Temporary body storage for during requests.
+	 * @access private
+	 * @var string
+	 */
+	private $body = '';
+
+	/**
+	 * The maximum amount of data to recieve from the remote server
+	 * @access private
+	 * @var int
+	 */
+	private $max_body_length = false;
+
+	/**
+	 * The file resource used for streaming to file.
+	 * @access private
+	 * @var resource
+	 */
+	private $stream_handle = false;
+	
+	/**
+	 * The error code and error message.
+	 * @access public
+	 * @var array
+	 */
+	public $error = array();
+
+	function request( $url, $args = array() )
+	{
+		$defaults = array(
+			'method' => 'GET',
+			'timeout' => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking' => true,
+			'headers' => array(),
+			'body' => null,
+			'cookies' => array()
+		);
+
+		$args = NV_Extensions::build_args( $args, $defaults );
+
+		if( isset( $args['headers']['User-Agent'] ) )
+		{
+			$args['user-agent'] = $args['headers']['User-Agent'];
+			unset($args['headers']['User-Agent']);
+		}
+		elseif( isset( $args['headers']['user-agent'] ) )
+		{
+			$args['user-agent'] = $args['headers']['user-agent'];
+			unset( $args['headers']['user-agent'] );
+		}
+
+		// Construct Cookie: header if any cookies are set.
+		NV_Extensions::buildCookieHeader( $args );
+
+		$handle = curl_init();
+
+		/*
+		// No Proxy setting so proxy be omitted
+		// cURL offers really easy proxy support.
+		$proxy = new NV_http_proxy();
+
+		if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+		{
+			curl_setopt( $handle, CURLOPT_PROXYTYPE, CURLPROXY_HTTP );
+			curl_setopt( $handle, CURLOPT_PROXY, $proxy->host() );
+			curl_setopt( $handle, CURLOPT_PROXYPORT, $proxy->port() );
+
+			if( $proxy->use_authentication() )
+			{
+				curl_setopt( $handle, CURLOPT_PROXYAUTH, CURLAUTH_ANY );
+				curl_setopt( $handle, CURLOPT_PROXYUSERPWD, $proxy->authentication() );
+			}
+		}
+		*/
+
+		$is_local = isset( $args['local']) and $args['local'];
+		$ssl_verify = isset( $args['sslverify'] ) and $args['sslverify'];
+
+		// CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since
+		// a value of 0 will allow an unlimited timeout.
+		$timeout = ( int ) ceil( $args['timeout'] );
+		curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, $timeout );
+		curl_setopt( $handle, CURLOPT_TIMEOUT, $timeout );
+
+		curl_setopt( $handle, CURLOPT_URL, $url );
+		curl_setopt( $handle, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $handle, CURLOPT_SSL_VERIFYHOST, ( $ssl_verify === true ) ? 2 : false );
+		curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify );
+		curl_setopt( $handle, CURLOPT_CAINFO, $args['sslcertificates'] );
+		curl_setopt( $handle, CURLOPT_USERAGENT, $args['user-agent'] );
+		
+		// The option doesn't work with safe mode or when open_basedir is set, and there's a
+		curl_setopt( $handle, CURLOPT_FOLLOWLOCATION, false );
+		
+		if( defined( 'CURLOPT_PROTOCOLS' ) )
+		{
+			// PHP 5.2.10 / cURL 7.19.4
+			curl_setopt( $handle, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS );
+		}
+
+		switch( $args['method'] )
+		{
+			case 'HEAD':
+				curl_setopt( $handle, CURLOPT_NOBODY, true );
+				break;
+			case 'POST':
+				curl_setopt( $handle, CURLOPT_POST, true );
+				curl_setopt( $handle, CURLOPT_POSTFIELDS, $args['body'] );
+				break;
+			case 'PUT':
+				curl_setopt( $handle, CURLOPT_CUSTOMREQUEST, 'PUT' );
+				curl_setopt( $handle, CURLOPT_POSTFIELDS, $args['body'] );
+				break;
+			default:
+				curl_setopt( $handle, CURLOPT_CUSTOMREQUEST, $args['method'] );
+				
+				if( ! is_null( $args['body'] ) )
+				{
+					curl_setopt( $handle, CURLOPT_POSTFIELDS, $args['body'] );
+				}
+					
+				break;
+		}
+
+		if( $args['blocking'] === true )
+		{
+			curl_setopt( $handle, CURLOPT_HEADERFUNCTION, array( $this, 'stream_headers' ) );
+			curl_setopt( $handle, CURLOPT_WRITEFUNCTION, array( $this, 'stream_body' ) );
+		}
+
+		curl_setopt( $handle, CURLOPT_HEADER, false );
+
+		if( isset( $args['limit_response_size'] ) )
+		{
+			$this->max_body_length = intval( $args['limit_response_size'] );
+		}
+		else
+		{
+			$this->max_body_length = false;		
+		}				
+
+		// If streaming to a file open a file handle, and setup our curl streaming handler
+		if( $args['stream'] )
+		{
+			$this->stream_handle = @fopen( $args['filename'], 'w+' );
+				
+			if( ! $this->stream_handle )
+			{
+				$this->set_error(1);
+				return $this;
+			}
+		}
+		else
+		{
+			$this->stream_handle = false;
+		}
+
+		if( ! empty( $args['headers'] ) )
+		{
+			// cURL expects full header strings in each element
+			$headers = array();
+			foreach( $args['headers'] as $name => $value )
+			{
+				$headers[] = "{$name}: $value";
+			}
+			
+			curl_setopt( $handle, CURLOPT_HTTPHEADER, $headers );
+		}
+
+		if( $args['httpversion'] == '1.0' )
+		{
+			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0 );
+		}
+		else
+		{
+			curl_setopt( $handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1 );
+		}
+
+		// We don't need to return the body, so don't. Just execute request and return.
+		if( ! $args['blocking'] )
+		{
+			curl_exec( $handle );
+
+			if( $curl_error = curl_error( $handle ) )
+			{
+				curl_close( $handle );
+				
+				$this->set_error(2);
+				return $this;
+			}
+			
+			if( in_array( curl_getinfo( $handle, CURLINFO_HTTP_CODE ), array( 301, 302 ) ) )
+			{
+				curl_close( $handle );
+				
+				$this->set_error(3);
+				return $this;
+			}
+
+			curl_close( $handle );
+			return array( 'headers' => array(), 'body' => '', 'response' => array( 'code' => false, 'message' => false ), 'cookies' => array() );
+		}
+
+		$theResponse = curl_exec( $handle );
+		$theHeaders = NV_Extensions::processHeaders( $this->headers, $url );
+		$theBody = $this->body;
+
+		$this->headers = '';
+		$this->body = '';
+
+		$curl_error = curl_errno( $handle );
+
+		// If an error occured, or, no response
+		if( $curl_error or ( strlen( $theBody ) == 0 and empty( $theHeaders['headers'] ) ) )
+		{
+			if( CURLE_WRITE_ERROR /* 23 */ == $curl_error and $args['stream'] )
+			{
+				fclose( $this->stream_handle );
+				
+				$this->set_error(4);
+				return $this;
+			}
+			
+			if( $curl_error = curl_error( $handle ) )
+			{
+				curl_close( $handle );
+				
+				$this->set_error(2);
+				return $this;
+			}
+			
+			if( in_array( curl_getinfo( $handle, CURLINFO_HTTP_CODE ), array( 301, 302 ) ) )
+			{
+				curl_close( $handle );
+				
+				$this->set_error(3);
+				return $this;
+			}
+		}
+
+		$response = array();
+		$response['code'] = curl_getinfo( $handle, CURLINFO_HTTP_CODE );
+		$response['message'] = $response['code'];
+
+		curl_close( $handle );
+
+		if( $args['stream'] )
+		{
+			fclose( $this->stream_handle );
+		}
+
+		$response = array(
+			'headers' => $theHeaders['headers'],
+			'body' => null,
+			'response' => $response,
+			'cookies' => $theHeaders['cookies'],
+			'filename' => $args['filename']
+		);
+
+		// Handle redirects
+		if( ( $redirect_response = NV_Extensions::handle_redirects( $url, $args, $response ) ) !== false )
+		{
+			return $redirect_response;
+		}
+
+		if( $args['decompress'] === true and NV_http_encoding::should_decode( $theHeaders['headers'] ) === true )
+		{
+			$theBody = NV_http_encoding::decompress( $theBody );
+		}
+
+		$response['body'] = $theBody;
+
+		return $response;
+	}
+
+	private function stream_headers( $handle, $headers )
+	{
+		$this->headers .= $headers;
+		return strlen( $headers );
+	}
+
+	private function stream_body( $handle, $data )
+	{
+		$data_length = strlen( $data );
+
+		if( $this->max_body_length and ( strlen( $this->body ) + $data_length ) > $this->max_body_length )
+		{
+			$data = substr( $data, 0, ( $this->max_body_length - $data_length ) );
+		}
+
+		if( $this->stream_handle )
+		{
+			$bytes_written = fwrite( $this->stream_handle, $data );
+		}
+		else
+		{
+			$this->body .= $data;
+			$bytes_written = $data_length;
+		}
+
+		return $bytes_written;
+	}
+
+	private function set_error( $code )
+	{
+		$code = intval( $code );
+		$message = "";
+		
+		switch( $code )
+		{
+			case 1: $message = "Could not open handle for fopen() to streamfile."; break;
+			case 2: $message = "HTTP Curl request failed."; break;
+			case 3: $message = "Too many redirects."; break;
+			case 4: $message = "Failed to write request to temporary file."; break;
+			default: $message = "There are some unknow errors had been occurred.";
+		}
+		
+		$this->error['code'] = $code;
+		$this->error['message'] = $message;
+	}
+
+	public static function test( $args = array() )
+	{
+		if( ! function_exists( 'curl_init' ) or ! function_exists( 'curl_exec' ) )
+		{
+			return false;
+		}
+
+		$is_ssl = isset( $args['ssl'] ) and $args['ssl'];
+
+		if( $is_ssl )
+		{
+			$curl_version = curl_version();
+			if( ! ( CURL_VERSION_SSL & $curl_version['features'] ) )
+			{
+				// Does this cURL version support SSL requests?
+				return false;
+			}
+		}
+
+		return true;
+	}
+}
+
+class NV_http_streams
+{
+	function request( $url, $args = array() )
+	{
+		$defaults = array(
+			'method' => 'GET',
+			'timeout' => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking' => true,
+			'headers' => array(),
+			'body' => null,
+			'cookies' => array()
+		);
+
+		$args = NV_Extensions::build_args( $args, $defaults );
+
+		if( isset( $args['headers']['User-Agent'] ) )
+		{
+			$args['user-agent'] = $args['headers']['User-Agent'];
+			unset( $args['headers']['User-Agent'] );
+		}
+		elseif( isset( $args['headers']['user-agent'] ) )
+		{
+			$args['user-agent'] = $args['headers']['user-agent'];
+			unset( $args['headers']['user-agent'] );
+		}
+
+		// Construct Cookie: header if any cookies are set
+		NV_Extensions::buildCookieHeader( $args );
+
+		$arrURL = parse_url( $url );
+
+		$connect_host = $arrURL['host'];
+
+		$secure_transport = ( $arrURL['scheme'] == 'ssl' or $arrURL['scheme'] == 'https' );
+		if( ! isset( $arrURL['port'] ) )
+		{
+			if( $arrURL['scheme'] == 'ssl' or $arrURL['scheme'] == 'https' )
+			{
+				$arrURL['port'] = 443;
+				$secure_transport = true;
+			}
+			else
+			{
+				$arrURL['port'] = 80;
+			}
+		}
+
+		if( isset( $args['headers']['Host'] ) or isset( $args['headers']['host'] ) )
+		{
+			if( isset( $args['headers']['Host'] ) )
+			{
+				$arrURL['host'] = $args['headers']['Host'];
+			}
+			else
+			{
+				$arrURL['host'] = $args['headers']['host'];
+			}
+			
+			unset( $args['headers']['Host'], $args['headers']['host'] );
+		}
+
+		// Certain versions of PHP have issues with 'localhost' and IPv6, It attempts to connect to ::1,
+		// which fails when the server is not set up for it. For compatibility, always connect to the IPv4 address.
+		if( strtolower( $connect_host ) == 'localhost' )
+		{
+			$connect_host = '127.0.0.1';
+		}
+
+		$connect_host = $secure_transport ? 'ssl://' . $connect_host : 'tcp://' . $connect_host;
+
+		$is_local = isset( $args['local'] ) and $args['local'];
+		$ssl_verify = isset( $args['sslverify'] ) and $args['sslverify'];
+
+		// NukeViet has no proxy setup
+		//$proxy = new WP_http_proxy();
+
+		$context = stream_context_create( array(
+			'ssl' => array(
+				'verify_peer' => $ssl_verify,
+				//'CN_match' => $arrURL['host'], // This is handled by self::verify_ssl_certificate()
+				'capture_peer_cert' => $ssl_verify,
+				'SNI_enabled' => true,
+				'cafile' => $args['sslcertificates'],
+				'allow_self_signed' => ! $ssl_verify,
+			)
+		) );
+
+		$timeout = ( int ) floor( $args['timeout'] );
+		$utimeout = $timeout == $args['timeout'] ? 0 : 1000000 * $args['timeout'] % 1000000;
+		$connect_timeout = max( $timeout, 1 );
+
+		$connection_error = null; // Store error number
+		$connection_error_str = null; // Store error string
+
+		// In the event that the SSL connection fails, silence the many PHP Warnings
+		if( $secure_transport )
+		{
+			$error_reporting = error_reporting( 0 );
+		}
+
+		// No proxy option on NukeViet, maybe in future!!!!
+		//if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+		//{
+		//	$handle = @stream_socket_client( 'tcp://' . $proxy->host() . ':' . $proxy->port(), $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+		//}
+		//else
+		//{
+			$handle = @stream_socket_client( $connect_host . ':' . $arrURL['port'], $connection_error, $connection_error_str, $connect_timeout, STREAM_CLIENT_CONNECT, $context );
+		//}
+
+		if( $secure_transport )
+		{
+			error_reporting( $error_reporting );
+		}
+
+		if( $handle === false )
+		{
+			// SSL connection failed due to expired/invalid cert, or, OpenSSL configuration is broken
+			if( $secure_transport and $connection_error === 0 and $connection_error_str === '' )
+			{
+				NV_Extensions::set_error(6);
+				return false;
+			}
+
+			NV_Extensions::set_error(7);
+			return false;
+		}
+
+		// Verify that the SSL certificate is valid for this request
+		if( $secure_transport and $ssl_verify /* and ! $proxy->is_enabled() */ )
+		{
+			if( ! self::verify_ssl_certificate( $handle, $arrURL['host'] ) )
+			{
+				NV_Extensions::set_error(6);
+				return false;
+			}
+		}
+
+		stream_set_timeout( $handle, $timeout, $utimeout );
+
+		//if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+		//{
+		//	//Some proxies require full URL in this field.
+		//	$requestPath = $url;
+		//}
+		//else
+		//{
+			$requestPath = $arrURL['path'] . ( isset( $arrURL['query'] ) ? '?' . $arrURL['query'] : '' );
+		//}
+
+		if( empty( $requestPath ) )
+		{
+			$requestPath .= '/';
+		}
+
+		$strHeaders = strtoupper( $args['method'] ) . ' ' . $requestPath . ' HTTP/' . $args['httpversion'] . "\r\n";
+
+		//if( $proxy->is_enabled() and $proxy->send_through_proxy( $url ) )
+		//{
+		//	$strHeaders .= 'Host: ' . $arrURL['host'] . ':' . $arrURL['port'] . "\r\n";
+		//}
+		//else
+		//{
+			$strHeaders .= 'Host: ' . $arrURL['host'] . "\r\n";
+		//}
+
+		if( isset( $args['user-agent'] ) )
+		{
+			$strHeaders .= 'User-agent: ' . $args['user-agent'] . "\r\n";
+		}
+
+		if( is_array( $args['headers'] ) )
+		{
+			foreach( ( array ) $args['headers'] as $header => $headerValue )
+			{
+				$strHeaders .= $header . ': ' . $headerValue . "\r\n";
+			}
+		}
+		else
+		{
+			$strHeaders .= $args['headers'];
+		}
+
+		//if( $proxy->use_authentication() )
+		//{
+		//	$strHeaders .= $proxy->authentication_header() . "\r\n";
+		//}
+
+		$strHeaders .= "\r\n";
+
+		if( ! is_null( $args['body'] ) )
+		{
+			$strHeaders .= $args['body'];
+		}
+
+		fwrite( $handle, $strHeaders );
+
+		if( ! $args['blocking'] )
+		{
+			stream_set_blocking( $handle, 0 );
+			fclose( $handle );
+			return array( 'headers' => array(), 'body' => '', 'response' => array( 'code' => false, 'message' => false ), 'cookies' => array() );
+		}
+
+		$strResponse = '';
+		$bodyStarted = false;
+		$keep_reading = true;
+		$block_size = 4096;
+		if( isset( $args['limit_response_size'] ) )
+		{
+			$block_size = min( $block_size, $args['limit_response_size'] );
+		}
+
+		// If streaming to a file setup the file handle
+		if( $args['stream'] )
+		{
+			$stream_handle = @fopen( $args['filename'], 'w+' );
+			
+			if( ! $stream_handle )
+			{
+				NV_Extensions::set_error(8);
+				return false;
+			}
+
+			$bytes_written = 0;
+			while( ! feof( $handle ) and $keep_reading )
+			{
+				$block = fread( $handle, $block_size );
+				
+				if( ! $bodyStarted )
+				{
+					$strResponse .= $block;
+					
+					if( strpos( $strResponse, "\r\n\r\n" ) )
+					{
+						$process = NV_Extensions::processResponse( $strResponse );
+						$bodyStarted = true;
+						$block = $process['body'];
+						unset( $strResponse );
+						$process['body'] = '';
+					}
+				}
+
+				$this_block_size = strlen( $block );
+
+				if( isset( $args['limit_response_size'] ) and ( $bytes_written + $this_block_size ) > $args['limit_response_size'] )
+				{
+					$block = substr( $block, 0, ( $args['limit_response_size'] - $bytes_written ) );
+				}
+
+				$bytes_written_to_file = fwrite( $stream_handle, $block );
+
+				if( $bytes_written_to_file != $this_block_size )
+				{
+					fclose( $handle );
+					fclose( $stream_handle );
+					NV_Extensions::set_error(9);
+					return false;
+				}
+
+				$bytes_written += $bytes_written_to_file;
+
+				$keep_reading = !isset( $args['limit_response_size'] ) or $bytes_written < $args['limit_response_size'];
+			}
+
+			fclose( $stream_handle );
+
+		}
+		else
+		{
+			$header_length = 0;
+			while( ! feof( $handle ) and $keep_reading )
+			{
+				$block = fread( $handle, $block_size );
+				$strResponse .= $block;
+				
+				if( ! $bodyStarted and strpos( $strResponse, "\r\n\r\n" ) )
+				{
+					$header_length = strpos( $strResponse, "\r\n\r\n" ) + 4;
+					$bodyStarted = true;
+				}
+				
+				$keep_reading = ( ! $bodyStarted or ! isset( $args['limit_response_size'] ) or strlen( $strResponse ) < ( $header_length + $args['limit_response_size'] ) );
+			}
+
+			$process = NV_Extensions::processResponse( $strResponse );
+			unset( $strResponse );
+
+		}
+
+		fclose( $handle );
+
+		$arrHeaders = NV_Extensions::processHeaders( $process['headers'], $url );
+
+		$response = array(
+			'headers' => $arrHeaders['headers'],
+			'body' => null, // Not yet processed
+			'response' => $arrHeaders['response'],
+			'cookies' => $arrHeaders['cookies'],
+			'filename' => $args['filename']
+		);
+
+		// Handle redirects
+		if( false !== ( $redirect_response = NV_Extensions::handle_redirects( $url, $args, $response ) ) )
+		{
+			return $redirect_response;
+		}
+
+		// If the body was chunk encoded, then decode it.
+		if( ! empty( $process['body'] ) and isset( $arrHeaders['headers']['transfer-encoding'] ) and 'chunked' == $arrHeaders['headers']['transfer-encoding'] )
+		{
+			$process['body'] = NV_Extensions::chunkTransferDecode( $process['body'] );
+		}
+
+		if( $args['decompress'] === true and NV_http_encoding::should_decode( $arrHeaders['headers'] ) === true )
+		{
+			$process['body'] = NV_http_encoding::decompress( $process['body'] );
+		}
+
+		if( isset( $args['limit_response_size'] ) and strlen( $process['body'] ) > $args['limit_response_size'] )
+		{
+			$process['body'] = substr( $process['body'], 0, $args['limit_response_size'] );
+		}
+
+		$response['body'] = $process['body'];
+
+		return $response;
+	}
+
+	static function verify_ssl_certificate( $stream, $host )
+	{
+		$context_options = stream_context_get_options( $stream );
+
+		if( empty( $context_options['ssl']['peer_certificate'] ) )
+		{
+			return false;
+		}
+
+		$cert = openssl_x509_parse( $context_options['ssl']['peer_certificate'] );
+		if( ! $cert )
+		{
+			return false;
+		}
+
+		// If the request is being made to an IP address, we'll validate against IP fields in the cert (if they exist)
+		$host_type = ( NV_Extensions::is_ip_address( $host ) ? 'ip' : 'dns' );
+
+		$certificate_hostnames = array();
+		
+		if( ! empty( $cert['extensions']['subjectAltName'] ) )
+		{
+			$match_against = preg_split( '/,\s*/', $cert['extensions']['subjectAltName'] );
+			
+			foreach( $match_against as $match )
+			{
+				list( $match_type, $match_host ) = explode( ':', $match );
+				if( $host_type == strtolower( trim( $match_type ) ) ) // IP: or DNS:
+				{
+					$certificate_hostnames[] = strtolower( trim( $match_host ) );
+				}
+			}
+		}
+		elseif( ! empty( $cert['subject']['CN'] ) )
+		{
+			// Only use the CN when the certificate includes no subjectAltName extension
+			$certificate_hostnames[] = strtolower( $cert['subject']['CN'] );
+		}
+
+		// Exact hostname/IP matches
+		if( in_array( strtolower( $host ), $certificate_hostnames ) )
+		{
+			return true;
+		}
+
+		// IP's can't be wildcards, Stop processing
+		if( $host_type == 'ip' )
+		{
+			return false;
+		}
+
+		// Test to see if the domain is at least 2 deep for wildcard support
+		if( substr_count( $host, '.' ) < 2 )
+		{
+			return false;
+		}
+
+		// Wildcard subdomains certs (*.example.com) are valid for a.example.com but not a.b.example.com
+		$wildcard_host = preg_replace( '/^[^.]+\./', '*.', $host );
+
+		return in_array( strtolower( $wildcard_host ), $certificate_hostnames );
+	}
+
+	public static function test( $args = array() )
+	{
+		if( ! function_exists( 'stream_socket_client' ) )
+		{
+			return false;
+		}
+
+		$is_ssl = isset( $args['ssl'] ) and $args['ssl'];
+
+		if( $is_ssl )
+		{
+			if( ! extension_loaded( 'openssl' ) )
+			{
+				return false;
+			}
+			
+			if( ! function_exists( 'openssl_x509_parse' ) )
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+}
+
+class NV_http_encoding
+{
 
 	public static function compress( $raw, $level = 9, $supports = null )
 	{

@@ -18,7 +18,11 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 
 require( NV_ROOTDIR . '/' . NV_ADMINDIR . '/extensions/extensions.class.php' );
-$NV_Extensions = new NV_Extensions( $global_config );
+$NV_Extensions = new NV_Extensions( $global_config, NV_TEMP_DIR );
+
+// Develop debug
+//print_r( $NV_Extensions->get( 'http://nukeviet.vn/' ) );
+//die();
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
