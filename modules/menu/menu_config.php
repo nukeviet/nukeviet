@@ -32,7 +32,7 @@ function nv_block_config_menu( $module, $data_block, $lang_block )
 	$html .= $lang_block['title_length'];
 	$html .= "</td>";
 	$html .= "<td>";
-	$html .= "<input type=\"text\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
+	$html .= "<input type=\"text\" class=\"form-control w100\" name=\"config_title_length\" value=\"" . $data_block['title_length'] . "\"/>";
 	$html .= "</td>";
 	$html .= "</tr>";
 
