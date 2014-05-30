@@ -167,7 +167,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $validatefield ), 0, 50);
 		
-		if( empty( $dataform['field'] ) )
+		require_once NV_ROOTDIR . '/includes/field_not_allow.php' ;
+		
+		if( in_array( $dataform['field'], $field_not_allow ) )
+		{
+			$error = $lang_module['field_error_not_allow'];
+		}
+		elseif( empty( $dataform['field'] ) )
 		{
 			$error = $lang_module['field_error_empty'];
 		}
