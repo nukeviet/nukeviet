@@ -207,6 +207,7 @@ $lang_module['field_required_note'] = 'Required fields will always be shown duri
 $lang_module['field_show_register'] = 'Show during register';
 $lang_module['field_user_editable'] = 'User editable';
 $lang_module['field_show_profile'] = 'Show on profile pages';
+$lang_module['field_error_empty'] = 'Field do not empty';
 $lang_module['field_type'] = 'Field Type';
 $lang_module['field_type_number'] = 'Number';
 $lang_module['field_type_date'] = 'Date';

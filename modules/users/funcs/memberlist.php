@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 $page_title = $module_info['funcs'][$op]['func_custom_name'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['listusers'];
-//print_r($global_config['whoviewuser']); die();
+
 if( $global_config['whoviewuser'] == 2 and ! defined( 'NV_IS_ADMIN' ) )
 {
 	$nv_redirect = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );

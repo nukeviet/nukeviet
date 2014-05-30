@@ -134,6 +134,7 @@ $error = '';
 $field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+	$validatefield = array( 'pattern' => '/[^a-zA-Z\_]/', 'replacement' => '' );
 	$preg_replace = array( 'pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '' );
 
 	$dataform = array();
@@ -164,15 +165,22 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
-
-		// Kiểm tra trùng trường dữ liệu
-		$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
-		$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
-		$stmt->execute();
-		if( $stmt->fetchColumn() )
+		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $validatefield ), 0, 50);
+		
+		if( empty( $dataform['field'] ) )
 		{
-			$error = $lang_module['field_error'];
+			$error = $lang_module['field_error_empty'];
+		}
+		else
+		{
+			// Kiểm tra trùng trường dữ liệu
+			$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
+			$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->fetchColumn() )
+			{
+				$error = $lang_module['field_error'];
+			}
 		}
 	}
 
@@ -377,7 +385,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						$type_date = 'LONGTEXT NOT NULL';
 					}
-					$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info ADD `" . $dataform['field'] . "` " . $type_date );
+					$save = $db->exec( "ALTER TABLE " . NV_USERS_GLOBALTABLE . "_info ADD " . $dataform['field'] . " " . $type_date );
 				}
 			}
 		}
@@ -451,7 +459,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	if( $fid and ! empty( $field ) )
 	{
 		$query1 = 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE fid=' . $fid;
-		$query2 = 'ALTER TABLE ' . NV_USERS_GLOBALTABLE . '_info DROP `' . $field . '`';
+		$query2 = 'ALTER TABLE ' . NV_USERS_GLOBALTABLE . '_info DROP ' . $field;
 		if( $db->query( $query1 ) and $db->query( $query2 ) )
 		{
 			$query = 'SELECT fid FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE weight > ' . $weight . ' ORDER BY weight ASC';
