@@ -126,8 +126,10 @@
 				<tr>
 					<td>{LANG.avatar_size}</td>
 					<td>
-						<input type="text" class="form-control txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
-						<input type="text" class="form-control txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
+						<label>
+							<input type="text" class="form-control txt-half" name="avatar_width" value="{DATA.avatar_width}" style="width: 50px"/> x
+							<input type="text" class="form-control txt-half" name="avatar_height" value="{DATA.avatar_height}" style="width: 50px"/>
+						</label>
 					</td>
 				</tr>
 				<!-- BEGIN: user_forum -->

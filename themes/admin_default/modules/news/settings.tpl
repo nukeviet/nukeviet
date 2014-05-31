@@ -108,7 +108,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_copyright}</strong></td>
-					<td><textarea style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
+					<td><textarea class="form-control" style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.tags_alias}</strong></td>
