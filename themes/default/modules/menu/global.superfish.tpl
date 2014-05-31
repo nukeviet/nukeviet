@@ -1,6 +1,6 @@
 <!-- BEGIN: tree -->
 <li>
-	<a href="{MENUTREE.link}" class="sf-with-ul"{MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
+	<a title="{MENUTREE.note}" href="{MENUTREE.link}" class="sf-with-ul"{MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
 	<!-- BEGIN: tree_content -->
 	<ul>
 		{TREE_CONTENT}

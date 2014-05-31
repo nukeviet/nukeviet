@@ -99,13 +99,17 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 					case 1:
 						$row['target'] = '';
 						break;
+					case 3:
+						$row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+						break;
 					default:
 						$row['target'] = ' onclick="this.target=\'_blank\'"';
 				}
 
 				$array_menu[$row['parentid']][$row['id']] = array(
 					'id' => $row['id'],
-					'title' => nv_clean60( $row['title'], $block_config['title_length'] ),
+					'title' => $row['title'],
+					'title_trim' => nv_clean60( $row['title'], $block_config['title_length'] ),
 					'target' => $row['target'],
 					'note' => empty( $row['note'] ) ? $row['title'] : $row['note'],
 					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),

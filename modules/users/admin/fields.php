@@ -134,6 +134,7 @@ $error = '';
 $field_choices = array();
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+	$validatefield = array( 'pattern' => '/[^a-zA-Z\_]/', 'replacement' => '' );
 	$preg_replace = array( 'pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '' );
 
 	$dataform = array();
@@ -164,15 +165,28 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $preg_replace ), 0, 50);
-
-		// Kiểm tra trùng trường dữ liệu
-		$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
-		$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
-		$stmt->execute();
-		if( $stmt->fetchColumn() )
+		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $validatefield ), 0, 50);
+		
+		require_once NV_ROOTDIR . '/includes/field_not_allow.php' ;
+		
+		if( in_array( $dataform['field'], $field_not_allow ) )
 		{
-			$error = $lang_module['field_error'];
+			$error = $lang_module['field_error_not_allow'];
+		}
+		elseif( empty( $dataform['field'] ) )
+		{
+			$error = $lang_module['field_error_empty'];
+		}
+		else
+		{
+			// Kiểm tra trùng trường dữ liệu
+			$stmt = $db->prepare( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE field= :field' );
+			$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->fetchColumn() )
+			{
+				$error = $lang_module['field_error'];
+			}
 		}
 	}
 
@@ -386,11 +400,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$query = "UPDATE " . NV_USERS_GLOBALTABLE . "_field SET";
 			if( $text_fields == 1 )
 			{
-				$query .= " field_choices='" . $dataform['field_choices'] . "', match_type='" . $dataform['match_type'] . "',
+				$query .= " match_type='" . $dataform['match_type'] . "',
 				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
 			}
 			$query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
 				required = '" . $dataform['required'] . "',
+				field_choices='" . $dataform['field_choices'] . "',
 				sql_choices = '" . $dataform['sql_choices'] . "',
 				show_register = '" . $dataform['show_register'] . "',
 				user_editable = '" . $dataform['user_editable'] . "',
