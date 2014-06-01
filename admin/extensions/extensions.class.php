@@ -23,12 +23,6 @@ if( ! defined( 'NV_EXTENSIONS_CLASS' ) ) define( 'NV_EXTENSIONS_CLASS', true );
 class NV_Extensions
 {
 	/**
-	 * NukeViet Store API url
-	 * This url is private and use on all nukeviet system
-	 */
-	private $api_url = 'http://api.nukeviet.vn/store/';
-	
-	/**
 	 * Variable to set dir
 	 */
 	private $root_dir = '';
@@ -121,6 +115,7 @@ class NV_Extensions
 			'requested' => 0,  // Number requested if redirection
 			'httpversion' => 1.0,
 			'user-agent' => 'NUKEVIET CMS ' . $this->site_config['version'] . '. Developed by VINADES. Url: http://nukeviet.vn. Code: ' . md5( $this->site_config['sitekey'] ),
+			'referer' => null,
 			'reject_unsafe_urls' => false,
 			'blocking' => true,
 			'headers' => array(),
@@ -195,6 +190,7 @@ class NV_Extensions
 			$args['headers'] = $processedHeaders['headers'];
 		}
 
+		// Get User Agent
 		if( isset( $args['headers']['User-Agent'] ) )
 		{
 			$args['user-agent'] = $args['headers']['User-Agent'];
@@ -206,12 +202,24 @@ class NV_Extensions
 			$args['user-agent'] = $args['headers']['user-agent'];
 			unset( $args['headers']['user-agent'] );
 		}
+		
+		// Get Referer
+		if( isset( $args['headers']['Referer'] ) )
+		{
+			$args['referer'] = $args['headers']['Referer'];
+			unset( $args['headers']['Referer'] );
+		}
+		elseif( isset( $args['headers']['referer'] ) )
+		{
+			$args['referer'] = $args['headers']['referer'];
+			unset( $args['headers']['referer'] );
+		}
 
 		if( $args['httpversion'] == '1.1' and ! isset( $args['headers']['connection'] ) )
 		{
 			$args['headers']['connection'] = 'close';
 		}
-		
+
 		NV_Extensions::buildCookieHeader( $args );
 		
 		NV_Extensions::mbstring_binary_safe_encoding();
@@ -1100,6 +1108,7 @@ class NV_http_curl
 
 		$args = NV_Extensions::build_args( $args, $defaults );
 
+		// Get User Agent
 		if( isset( $args['headers']['User-Agent'] ) )
 		{
 			$args['user-agent'] = $args['headers']['User-Agent'];
@@ -1109,6 +1118,18 @@ class NV_http_curl
 		{
 			$args['user-agent'] = $args['headers']['user-agent'];
 			unset( $args['headers']['user-agent'] );
+		}
+
+		// Get Referer
+		if( isset( $args['headers']['Referer'] ) )
+		{
+			$args['referer'] = $args['headers']['Referer'];
+			unset( $args['headers']['Referer'] );
+		}
+		elseif( isset( $args['headers']['referer'] ) )
+		{
+			$args['referer'] = $args['headers']['referer'];
+			unset( $args['headers']['referer'] );
 		}
 
 		// Construct Cookie: header if any cookies are set.
@@ -1150,6 +1171,13 @@ class NV_http_curl
 		curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify );
 		curl_setopt( $handle, CURLOPT_CAINFO, $args['sslcertificates'] );
 		curl_setopt( $handle, CURLOPT_USERAGENT, $args['user-agent'] );
+		
+		// Add Curl referer if not empty
+		if( ! is_null( $args['referer'] ) or ! empty( $args['referer'] ) )
+		{
+			curl_setopt( $handle, CURLOPT_AUTOREFERER, true );
+			curl_setopt( $handle, CURLOPT_REFERER, $args['referer'] );
+		}
 		
 		// The option doesn't work with safe mode or when open_basedir is set, and there's a
 		curl_setopt( $handle, CURLOPT_FOLLOWLOCATION, false );
@@ -1454,6 +1482,7 @@ class NV_http_streams
 		
 		$args = NV_Extensions::build_args( $args, $defaults );
 		
+		// Get user agent
 		if( isset( $args['headers']['User-Agent'] ) )
 		{
 			$args['user-agent'] = $args['headers']['User-Agent'];
@@ -1463,6 +1492,18 @@ class NV_http_streams
 		{
 			$args['user-agent'] = $args['headers']['user-agent'];
 			unset( $args['headers']['user-agent'] );
+		}
+
+		// Get Referer
+		if( isset( $args['headers']['Referer'] ) )
+		{
+			$args['referer'] = $args['headers']['Referer'];
+			unset( $args['headers']['Referer'] );
+		}
+		elseif( isset( $args['headers']['referer'] ) )
+		{
+			$args['referer'] = $args['headers']['referer'];
+			unset( $args['headers']['referer'] );
 		}
 
 		// Construct Cookie: header if any cookies are set
@@ -1608,6 +1649,12 @@ class NV_http_streams
 		if( isset( $args['user-agent'] ) )
 		{
 			$strHeaders .= 'User-agent: ' . $args['user-agent'] . "\r\n";
+		}
+		
+		// Add referer if not empty
+		if( ! empty( $args['referer'] ) )
+		{
+				$strHeaders .= 'Referer: ' . $args['referer'] . "\r\n";
 		}
 
 		if( is_array( $args['headers'] ) )
