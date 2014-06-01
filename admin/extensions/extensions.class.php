@@ -200,7 +200,7 @@ class NV_Extensions
 		
 		NV_Extensions::buildCookieHeader( $args );
 		
-		//mbstring_binary_safe_encoding();
+		NV_Extensions::mbstring_binary_safe_encoding();
 		
 		if( ! isset( $args['headers']['Accept-Encoding'] ) )
 		{
@@ -235,7 +235,7 @@ class NV_Extensions
 
 		$response = $this->_dispatch_request( $url, $args );
 
-		//reset_mbstring_encoding();
+		NV_Extensions::reset_mbstring_encoding();
 
 		if( $this->is_error( $response ) )
 		{
@@ -347,6 +347,40 @@ class NV_Extensions
 		return $response;
 	}
 	
+	public static function mbstring_binary_safe_encoding( $reset = false )
+	{
+		static $encodings = array();
+		static $overloaded = null;
+	
+		if( is_null( $overloaded ) )
+		{
+			$overloaded = function_exists( 'mb_internal_encoding' ) and ( ini_get( 'mbstring.func_overload' ) & 2 );
+		}
+	
+		if( $overloaded === false )
+		{
+			return;
+		}
+	
+		if( ! $reset )
+		{
+			$encoding = mb_internal_encoding();
+			array_push( $encodings, $encoding );
+			mb_internal_encoding( 'ISO-8859-1' );
+		}
+	
+		if( $reset and $encodings )
+		{
+			$encoding = array_pop( $encodings );
+			mb_internal_encoding( $encoding );
+		}
+	}
+	
+	public static function reset_mbstring_encoding()
+	{
+		NV_Extensions::mbstring_binary_safe_encoding( true );
+	}
+		
 	static function handle_redirects( $url, $args, $response )
 	{
 		static $nv_http;
@@ -1218,9 +1252,9 @@ class NV_http_streams
 			'body' => null,
 			'cookies' => array()
 		);
-
+		
 		$args = NV_Extensions::build_args( $args, $defaults );
-
+		
 		if( isset( $args['headers']['User-Agent'] ) )
 		{
 			$args['user-agent'] = $args['headers']['User-Agent'];
@@ -1468,7 +1502,7 @@ class NV_http_streams
 
 				$bytes_written += $bytes_written_to_file;
 
-				$keep_reading = !isset( $args['limit_response_size'] ) or $bytes_written < $args['limit_response_size'];
+				$keep_reading = ! isset( $args['limit_response_size'] ) or $bytes_written < $args['limit_response_size'];
 			}
 
 			fclose( $stream_handle );
@@ -1477,6 +1511,8 @@ class NV_http_streams
 		else
 		{
 			$header_length = 0;
+			
+			// Not end file and some one
 			while( ! feof( $handle ) and $keep_reading )
 			{
 				$block = fread( $handle, $block_size );
@@ -1493,7 +1529,6 @@ class NV_http_streams
 
 			$process = NV_Extensions::processResponse( $strResponse );
 			unset( $strResponse );
-
 		}
 
 		fclose( $handle );
@@ -1626,7 +1661,6 @@ class NV_http_streams
 
 class NV_http_encoding
 {
-
 	public static function compress( $raw, $level = 9, $supports = null )
 	{
 		return gzdeflate( $raw, $level );
