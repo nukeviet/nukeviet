@@ -13,13 +13,13 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 // Ten cac table cua CSDL dung chung cho he thong
 
 $query = $db->query( "select table_name from all_tables WHERE table_name LIKE '" . strtoupper( $db_config['prefix'] . "_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_table[] = 'drop table ' . $row['table_name'] . ' cascade constraints PURGE';
 }
 
 $query = $db->query( "select sequence_name from user_sequences WHERE sequence_name LIKE '" . strtoupper( "SNV_%" ) . "'" );
-while( $row = $query->fetch( ) )
+while( $row = $query->fetch() )
 {
 	$sql_drop_table[] = 'drop SEQUENCE ' . $row['sequence_name'];
 }
@@ -553,21 +553,6 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	BEGIN
 	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_LOGS.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_LOGS;';
-
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ipcountry (
-	ip_from NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	ip_to NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	country CHAR(2 CHAR) DEFAULT '' NOT NULL ENABLE,
-	ip_file NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
-	time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
-	CONSTRAINT unv_ipcountry_ip_from UNIQUE (ip_from,ip_to)
-)";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_ip_file ON NV3_IPCOUNTRY(ip_file) TABLESPACE USERS";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_country ON NV3_IPCOUNTRY(country) TABLESPACE USERS";
-
-$sql_create_table[] = "CREATE INDEX inv_ipcountry_time ON NV3_IPCOUNTRY(time) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did NUMBER(8,0) DEFAULT NULL,

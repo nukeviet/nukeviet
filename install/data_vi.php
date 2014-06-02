@@ -216,7 +216,7 @@ $sth->execute( array(57, 'left-body-right', 'default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 1, 'a:1:{s:12:"title_length";i:25;}') );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 1, 'a:1:{s:12:"title_length";i:25;}') );
 $sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', 'primary', '[LEFT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
 $sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );
@@ -236,14 +236,14 @@ $sth->execute( array(17, 'default', 'menu', 'global.bootstrap.php', 'Menu Site',
 $sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:274:"© Copyright NukeViet 4. All right reserved.<br  />Xây dựng trên nền tảng <a href="http://nukeviet.vn/" title="Mã nguồn mở NukeViet">Mã nguồn mở NukeViet</a>. <a href="http://vinades.vn/" title="Thiết kế web">Thiết kế website</a> bởi VINADES.,JSC";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 4. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 $sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:6:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";i:5;s:6:"voting";}}') );
-$sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
+$sth->execute( array(21, 'default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
 $sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Menu footer', '', 'no_title', '[MENU_FOOTER]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:4:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";}}') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
 
-$array_funcid = array( );
-$array_funcid_mod = array( );
+$array_funcid = array();
+$array_funcid_mod = array();
 $array_weight_block = array();
 
 $func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );

@@ -8,8 +8,7 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if( !defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 if( defined( 'NV_IS_FILE_THEMES' ) )
 {
@@ -87,7 +86,7 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 			$block_theme = 'default';
 		}
 
-		$array_menu = array( );
+		$array_menu = array();
 		$sql = 'SELECT id, parentid, title, link, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
 		$list = nv_db_cache( $sql, '', 'menu' );
 
@@ -100,13 +99,17 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 					case 1:
 						$row['target'] = '';
 						break;
+					case 3:
+						$row['target'] = ' onclick="window.open(this.href,\'targetWindow\',\'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,\');return false;"';
+						break;
 					default:
 						$row['target'] = ' onclick="this.target=\'_blank\'"';
 				}
 
 				$array_menu[$row['parentid']][$row['id']] = array(
 					'id' => $row['id'],
-					'title' => nv_clean60( $row['title'], $block_config['title_length'] ),
+					'title' => $row['title'],
+					'title_trim' => nv_clean60( $row['title'], $block_config['title_length'] ),
 					'target' => $row['target'],
 					'note' => empty( $row['note'] ) ? $row['title'] : $row['note'],
 					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
@@ -124,7 +127,7 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 
 		foreach( $array_menu[0] as $id => $item )
 		{
-			$classcurrent = array( );
+			$classcurrent = array();
 			if( isset( $array_menu[$id] ) )
 			{
 				$classcurrent[] = 'dropdown';

@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_get_submenu( $mod )
 {
-	global $lang_global, $module_name, $global_config;
+	global $lang_global, $module_name, $global_config, $admin_mods;
 
 	$submenu = array();
 
@@ -41,7 +41,7 @@ function nv_get_submenu( $mod )
 
 function nv_get_submenu_mod( $module_name )
 {
-	global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config;
+	global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
 
 	$submenu = array();
 	if( isset( $site_mods[$module_name] ) )
@@ -182,12 +182,18 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		}
 
 		// Top_menu
-		foreach( $admin_mods as $m => $v )
+		$top_menu = $admin_mods;
+		if( sizeof( $top_menu ) > 8 )
+		{
+			unset( $top_menu['authors'] );
+			unset( $top_menu['language'] );
+		}
+		foreach( $top_menu as $m => $v )
 		{
 			if( ! empty( $v['custom_title'] ) and $module_name != $m )
 			{
 				$array_submenu = nv_get_submenu( $m );
-				
+
 				$xtpl->assign( 'TOP_MENU_CLASS', $array_submenu ? ' class="dropdown"' : '' );
 				$xtpl->assign( 'TOP_MENU_HREF', $m );
 				$xtpl->assign( 'TOP_MENU_NAME', $v['custom_title'] );
@@ -195,7 +201,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 				if( ! empty( $array_submenu ) )
 				{
 					$xtpl->parse( 'main.top_menu_loop.has_sub' );
-					
+
 					foreach( $array_submenu as $mop => $submenu_i )
 					{
 						$xtpl->assign( 'SUBMENULINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m . '&amp;' . NV_OP_VARIABLE . '=' . $mop );
@@ -256,9 +262,9 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			if( $m != $module_name )
 			{
 				$submenu = nv_get_submenu_mod( $m );
-				
+
 				$xtpl->assign( 'MENU_CLASS', $submenu ? ' class="dropdown"' : '' );
-				
+
 				if( ! empty( $submenu ) )
 				{
 					foreach( $submenu as $n => $l )
@@ -304,7 +310,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->assign( 'NV_GO_CLIENTMOD', $lang_global['go_clientmod'] );
 		$xtpl->parse( 'main.site_mods' );
 	}
-	
+
 	/**
 	 * Breadcrumbs
 	 * Note: If active is true, the link will be dismiss
@@ -321,18 +327,18 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			),
 		);
 	}
-	
+
 	if( ! empty( $array_mod_title ) )
 	{
 		foreach( $array_mod_title as $breadcrumbs )
 		{
 			$xtpl->assign( 'BREADCRUMBS', $breadcrumbs );
-			
+
 			if( ! empty( $breadcrumbs['active'] ) )
 			{
 				$xtpl->parse( 'main.breadcrumbs.loop.active' );
 			}
-			
+
 			if( ! empty( $breadcrumbs['link'] ) and empty( $breadcrumbs['active'] ) )
 			{
 				$xtpl->parse( 'main.breadcrumbs.loop.linked' );
@@ -341,10 +347,10 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				$xtpl->parse( 'main.breadcrumbs.loop.text' );
 			}
-			
+
 			$xtpl->parse( 'main.breadcrumbs.loop' );
 		}
-		
+
 		$xtpl->parse( 'main.breadcrumbs' );
 	}
 
@@ -364,7 +370,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.ckeditor' );
 	}
 
-	if( defined( "NV_IS_SPADMIN" ) AND $admin_info['level'] == 1 )
+	if( defined( "NV_IS_SPADMIN" ) and $admin_info['level'] == 1 )
 	{
 		$xtpl->parse( 'main.memory_time_usage' );
 	}

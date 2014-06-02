@@ -53,6 +53,14 @@
 				{USER.regdate}
 			</dd>
 		</dl>
+		<!-- BEGIN: field -->
+		<!-- BEGIN: loop -->
+		<dl class="clearfix">
+			<dt class="fl">{FIELD.title}</dt>
+			<dd class="fl">{FIELD.value}</dd>
+		</dl>
+		<!-- END: loop -->
+		<!-- END: field -->
 	</div>
 </div>
 <!-- END: main -->

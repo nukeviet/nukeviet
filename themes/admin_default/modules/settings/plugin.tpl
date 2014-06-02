@@ -2,7 +2,7 @@
 <!-- BEGIN: error-->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_ftp">
+<form class="form-inline" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="form_edit_ftp">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
@@ -41,7 +41,7 @@
 						<!-- BEGIN: area -->
 						<option value="{AREA_VALUE}">{AREA_TEXT} </option>
 						<!-- END: area -->
-					</select> &nbsp; <input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/> &nbsp; <input type="submit" name="delete" onclick="return confirm(nv_is_del_confirm[0]);" value="{LANG.plugin_file_delete}" style="width: 150px;"/></td>
+					</select> &nbsp; <input class="btn btn-primary" type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/> &nbsp; <input class="btn btn-danger" type="submit" name="delete" onclick="return confirm(nv_is_del_confirm[0]);" value="{LANG.plugin_file_delete}" style="width: 150px;"/></td>
 				</tr>
 				<!-- END: add -->
 			</tbody>

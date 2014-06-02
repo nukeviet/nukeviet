@@ -31,7 +31,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '4.0.05 Testing';// NukeViet 4.0 Closebeta 5
+$global_config['version'] = '4.0.07';// NukeViet 4.0 Closebeta 7
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -48,6 +48,7 @@ $global_config['gzip_method'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;
+$global_config['rewrite_op_mod'] = '';
 
 $global_config['proxy_blocker'] = 0;
 $global_config['str_referer_blocker'] = 0;

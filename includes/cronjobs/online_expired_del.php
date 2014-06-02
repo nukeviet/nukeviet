@@ -28,7 +28,7 @@ function cron_online_expired_del()
 		$timedel = NV_CURRENTTIME - 86400;
 		while( ($file = readdir( $dh )) !== false )
 		{
-			if( preg_match( '/^sess\_([a-z0-9]+)$/', $file ) AND filemtime( $dir . '/' . $file ) < $timedel )
+			if( preg_match( '/^sess\_([a-z0-9]+)$/', $file ) and filemtime( $dir . '/' . $file ) < $timedel )
 			{
 				unlink( $dir . '/' . $file );
 			}

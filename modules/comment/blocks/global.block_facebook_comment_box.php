@@ -52,7 +52,7 @@ if( ! nv_function_exists( 'nv_facebook_comment_box_blocks' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['facebookappid'] = $nv_Request->get_title( 'config_facebookappid', 'post', 0 );
-		$return['config']['width'] = $nv_Request->get_int( 'config_width', 'post', 0 );
+		$return['config']['width'] = $nv_Request->get_string( 'config_width', 'post', 0 );
 		$return['config']['numpost'] = $nv_Request->get_int( 'config_numpost', 'post', 0 );
 		$return['config']['scheme'] = $nv_Request->get_title( 'config_scheme', 'post', 0 );
 

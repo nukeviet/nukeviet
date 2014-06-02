@@ -19,7 +19,8 @@ $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, m
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (7, 'language', 'mod_language', 7, 1, 1, 0, '')";
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (8, 'modules', 'mod_modules', 8, 1, 1, 0, '')";
 $sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (9, 'themes', 'mod_themes', 9, 1, 1, 0, '')";
-$sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (10, 'upload', 'mod_upload', 10, 1, 1, 1, '')";
+$sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (10, 'extensions', 'mod_extensions', 10, 1, 0, 0, '')";
+$sql_create_table[] = "INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_module (mid, module, lang_key, weight, act_1, act_2, act_3, checksum) VALUES (11, 'upload', 'mod_upload', 11, 1, 1, 1, '')";
 
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (6, 'All', '', " . NV_CURRENTTIME . ", 0, 0, 1, 1, 0, 0, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (5, 'Guest', '', " . NV_CURRENTTIME . ", 0, 0, 2, 1, 0, 0, 0)";

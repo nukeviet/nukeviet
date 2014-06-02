@@ -106,7 +106,7 @@ $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments' );
 
 $array_where = array();
-if( ! empty( $module ) AND isset( $site_mod_comm[$module] ) )
+if( ! empty( $module ) and isset( $site_mod_comm[$module] ) )
 {
 	$array_where[] = 'module = ' . $db->quote( $module );
 }
@@ -140,29 +140,29 @@ if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from['to_date'], 
 	$array_where[] = 'post_time < ' . mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 }
 
-if( $sstatus == 0 OR $sstatus == 1 )
+if( $sstatus == 0 or $sstatus == 1 )
 {
 	$array_where[] = 'status = ' . $sstatus;
 }
 if( ! empty( $from['q'] ) )
 {
 	$array_like = array();
-	if( $stype == '' OR $stype == 'content' )
+	if( $stype == '' or $stype == 'content' )
 	{
 		$array_like[] = 'content LIKE :content';
 	}
 
-	if( $stype == '' OR $stype == 'post_name' )
+	if( $stype == '' or $stype == 'post_name' )
 	{
 		$array_like[] = 'post_name LIKE :post_name';
 	}
 
-	if( $stype == '' OR $stype == 'post_email' )
+	if( $stype == '' or $stype == 'post_email' )
 	{
 		$array_like[] = 'post_email LIKE :post_email';
 	}
 
-	if( $stype == 'content_id' AND preg_match( '/^[0-9]$/', $from['q'] ) )
+	if( $stype == 'content_id' and preg_match( '/^[0-9]$/', $from['q'] ) )
 	{
 		$array_like = array();
 		$array_like[] = 'id =' . intval( $from['q'] );

@@ -60,7 +60,7 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 {
 	$pozlang = $nv_Request->get_array( 'pozlang', 'post', array() );
 
-	if( ! empty( $pozlang ) AND isset( $language_array[$typelang] ) )
+	if( ! empty( $pozlang ) and isset( $language_array[$typelang] ) )
 	{
 		foreach( $pozlang as $id => $lang_value )
 		{

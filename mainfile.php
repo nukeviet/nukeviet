@@ -321,11 +321,11 @@ define( 'NV_MODFUNCS_TABLE', NV_PREFIXLANG . '_modfuncs' );
 define( 'NV_SEARCHKEYS_TABLE', NV_PREFIXLANG . '_searchkeys' );
 define( 'NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats' );
 
-$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' OR (lang='sys' AND module='site') ORDER BY module ASC";
+$sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
 $list = nv_db_cache( $sql, '', 'settings' );
 foreach( $list as $row )
 {
-	if( ( $row['lang'] == NV_LANG_DATA AND $row['module'] == 'global' ) OR ( $row['lang'] == 'sys' AND $row['module'] == 'site' ) )
+	if( ( $row['lang'] == NV_LANG_DATA and $row['module'] == 'global' ) or ( $row['lang'] == 'sys' AND $row['module'] == 'site' ) )
 	{
 		$global_config[$row['config_name']] = $row['config_value'];
 	}

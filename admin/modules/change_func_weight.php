@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $fid = $nv_Request->get_int( 'fid', 'post', 0 );
 $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
 
-if( empty( $fid ) OR empty( $new_weight ) ) die( 'NO|' . $fid );
+if( empty( $fid ) or empty( $new_weight ) ) die( 'NO|' . $fid );
 
 $row = $db->query( 'SELECT in_module FROM ' . NV_MODFUNCS_TABLE . ' WHERE func_id=' . $fid )->fetch();
 

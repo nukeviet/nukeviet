@@ -1,6 +1,6 @@
 <!-- BEGIN: tree -->
 <li>
-	<a title="{MENUTREE.note}" href="{MENUTREE.link}" class="sf-with-ul"{MENUTREE.target}><strong>{MENUTREE.title}</strong></a>
+	<a title="{MENUTREE.note}" href="{MENUTREE.link}" class="sf-with-ul"{MENUTREE.target}><strong>{MENUTREE.title_trim}</strong></a>
 	<!-- BEGIN: tree_content -->
 	<ul>
 		{TREE_CONTENT}
@@ -18,7 +18,7 @@
 			<ul id="menu_{MENUID}">
 				<!-- BEGIN: loopcat1 -->
 					<li>
-						<a title="{CAT1.note}" href="{CAT1.link}"{CAT1.target}>{CAT1.title}</a>
+						<a title="{CAT1.note}" href="{CAT1.link}"{CAT1.target}>{CAT1.title_trim}</a>
 						<!-- BEGIN: expand -->
 						<span class="arrow" id="expand">+</span>
 						<!-- END: expand -->

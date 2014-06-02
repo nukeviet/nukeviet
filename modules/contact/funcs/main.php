@@ -198,13 +198,13 @@ if( ! empty( $array_department ) )
     else
     {
     	$base_url_rewrite = $base_url;
-        if( isset( $array_op[0] ) AND isset( $array_department[$fpart] ) )
+        if( isset( $array_op[0] ) and isset( $array_department[$fpart] ) )
         {
         	$array_department_i = $array_department[$fpart];
         	$array_department = array( $fpart => $array_department_i );
 
             $base_url_rewrite .= '&amp;' . NV_OP_VARIABLE . '=' . $fpart;
-            if( isset( $array_op[1] ) AND $array_op[1] == 0 )
+            if( isset( $array_op[1] ) and $array_op[1] == 0 )
             {
                 $base_url_rewrite .= '/0';
                 if( isset( $array_op[2] ) )

@@ -271,9 +271,17 @@ function nv_dump_restore( $file )
 	$sql = $insert = '';
 	$query_len = 0;
 	$execute = false;
-
-	foreach( $str as $st )
+	
+	foreach( $str as $stKey => $st )
 	{
+		$st = trim( str_replace( "\\\\", "", $st ) );
+		
+		// Remove BOM
+		if( $stKey == 0 )
+		{
+			$st = preg_replace( "/^\xEF\xBB\xBF/", "", $st );
+		}
+		
 		if( empty( $st ) || preg_match( '/^(#|--)/', $st ) )
 		{
 			continue;
@@ -283,7 +291,7 @@ function nv_dump_restore( $file )
 			$query_len += strlen( $st );
 
 			unset( $m );
-			if( empty( $insert ) && preg_match( "/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i", $st, $m ) )
+			if( empty( $insert ) and preg_match( "/^(INSERT INTO `?[^` ]+`? .*?VALUES)(.*)$/i", $st, $m ) )
 			{
 				$insert = $m[1] . ' ';
 				$sql .= $m[2];
@@ -295,14 +303,14 @@ function nv_dump_restore( $file )
 
 			if( $sql )
 			{
-				if( preg_match( "/;\s*$/", $st ) )
+				if( preg_match( "/;\s*$/", $st ) and ( empty( $insert ) or ( ! ( ( substr_count( $sql, '\'' ) - substr_count( $sql, '\\\'' ) ) % 2 ) ) ) )
 				{
 					$sql = rtrim( $insert . $sql, ';' );
 					$insert = '';
-					$execute = true;
+					$execute = true;					
 				}
 
-				if( $query_len >= 65536 && preg_match( "/,\s*$/", $st ) )
+				if( $query_len >= 65536 and preg_match( "/,\s*$/", $st ) )
 				{
 					$sql = rtrim( $insert . $sql, ',' );
 					$execute = true;
@@ -315,10 +323,11 @@ function nv_dump_restore( $file )
 					{
 						$db->query( $sql );
 					}
-					catch (PDOException $e)
+					catch( PDOException $e )
 					{
 						return false;
 					}
+					
 					$sql = '';
 					$query_len = 0;
 					$execute = false;

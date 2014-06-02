@@ -18,7 +18,6 @@
 	<div class="col-sm-3 col-sm-pull-3">
 		[LEFT]
 	</div>
-	
 </div>
 <div class="row">
 	<div class="col-md-12">

@@ -50,12 +50,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: error -->
-<div class="quote">
-	<blockquote class="error">
-		<p>
-			<span>{ERROR}</span>
-		</p></blockquote>
-</div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields">
 	<div class="table-responsive">
@@ -69,7 +64,7 @@
 				<!-- BEGIN: field -->
 				<tr>
 					<td>{LANG.field_id}:</td>
-					<td><input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</td>
+					<td><label><input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</label></td>
 				</tr>
 				<!-- END: field -->
 				<tr>
@@ -78,7 +73,7 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_description}:</td>
-					<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;">{DATAFORM.description}</textarea></td>
+					<td><textarea cols="60" rows="3" name="description" style="width:350px; overflow: hidden;" class="form-control">{DATAFORM.description}</textarea></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_required}</td>
@@ -351,12 +346,20 @@
 			var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
 			return (fieldCheck_rule.test(str) ) ? true : false;
 		}, ' required a-z, 0-9, and _ only');
+		
+		$.validator.addMethod('validatefield', function(str) {
+			if (str == '') {
+				return true;
+			}
+			var fieldCheck_rule = /^([a-zA-Z_])+$/;
+			return (fieldCheck_rule.test(str) ) ? true : false;
+		}, ' required a-z, and _ only');
 
 		$('#ffields').validate({
 			rules : {
 				field : {
 					required : true,
-					validalphanumeric : true
+					validatefield : true
 				}
 			}
 		});

@@ -93,7 +93,7 @@ else
 					{
 						$info = $lang_module['openid_lostpass_info'];
 					}
-					elseif( $global_config['allowquestion'] AND ( empty( $row['question'] ) or empty( $row['answer'] ) ) )
+					elseif( $global_config['allowquestion'] and ( empty( $row['question'] ) or empty( $row['answer'] ) ) )
 					{
 						$info = $lang_module['lostpass_question_empty'];
 					}

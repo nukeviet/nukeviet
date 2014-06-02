@@ -35,7 +35,7 @@ else
 
 if( empty( $level ) or $admin_info['level'] < $level )
 {
-	if( $global_config['idsite'] > 0 AND $idsite != $global_config['idsite'] )
+	if( $global_config['idsite'] > 0 and $idsite != $global_config['idsite'] )
 	{
 		die( 'NO' );
 	}

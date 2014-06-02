@@ -42,7 +42,7 @@ class sql_db extends pdo
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 		);
 
-		if( in_array( $config['dbtype'], $AvailableDrivers ) AND in_array( $config['dbtype'], $aray_type ) )
+		if( in_array( $config['dbtype'], $AvailableDrivers ) and in_array( $config['dbtype'], $aray_type ) )
 		{
 			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
 			if( !empty ( $config['dbport'] ) )
@@ -73,7 +73,7 @@ class sql_db extends pdo
 		{
 			parent::__construct( $dsn , $config['dbuname'], $config['dbpass'], $driver_options );
 			parent::exec( "SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
-			if( version_compare( PHP_VERSION, '5.3.6', '<' ) AND $config['dbtype'] == 'mysql' )
+			if( version_compare( PHP_VERSION, '5.3.6', '<' ) and $config['dbtype'] == 'mysql' )
 			{
 				parent::exec('SET NAMES utf8');
 			}
@@ -443,7 +443,7 @@ class sql_db extends pdo
 	public function sql()
 	{
 		$return = 'SELECT ' . $this->_select;
-		if( $this->dbtype == 'oci' AND $this->_offset )
+		if( $this->dbtype == 'oci' and $this->_offset )
 		{
 			$return .= ', ROWNUM oci_rownum ';
 		}
@@ -457,12 +457,12 @@ class sql_db extends pdo
 		if( $this->_where )
 		{
 			$return .= ' WHERE ' . $this->_where;
-			if( $this->dbtype == 'oci' AND $this->_limit > 0 )
+			if( $this->dbtype == 'oci' and $this->_limit > 0 )
 			{
 				$return .= ' AND ROWNUM <= ' . ($this->_limit + $this->_offset);
 			}
 		}
-		elseif( $this->dbtype == 'oci' AND $this->_limit > 0 )
+		elseif( $this->dbtype == 'oci' and $this->_limit > 0 )
 		{
 			$return .= ' WHERE ROWNUM <= ' . ($this->_limit + $this->_offset);
 		}
@@ -490,7 +490,7 @@ class sql_db extends pdo
 				$return .= ' OFFSET ' . $this->_offset;
 			}
 		}
-		elseif( $this->dbtype == 'oci' AND $this->_offset > 0 )
+		elseif( $this->dbtype == 'oci' and $this->_offset > 0 )
 		{
 			$return = 'SELECT ' . $this->_select . ' FROM (' . $return . ') WHERE oci_rownum >= ' . ($this->_offset + 1);
 		}

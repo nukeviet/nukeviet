@@ -408,7 +408,7 @@ if( !empty( $arr_table ) )
 
 if( $post['id'] != 0 )
 {
-	if( $post['op'] != '' AND isset( $site_mods[$post['module_name']] ) )
+	if( $post['op'] != '' and isset( $site_mods[$post['module_name']] ) )
 	{
 		$mod_name = $post['module_name'];
 		$mod_file = $site_mods[$mod_name]['module_file'];
@@ -445,7 +445,7 @@ if( $post['id'] != 0 )
 					$xtpl->parse( 'main.link.item' );
 					foreach( $array_item as $subitem )
 					{
-						if( isset( $subitem['parentid'] ) AND $subitem['parentid'] === $key )
+						if( isset( $subitem['parentid'] ) and $subitem['parentid'] === $key )
 						{
 							$subitem['title'] = $sp . $subitem['title'];
 							$subitem['module'] = $mod_name;

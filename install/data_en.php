@@ -196,15 +196,15 @@ $sth->execute( array(50, 'body', 'mobile_nukeviet') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '6', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Category', '', 'no_title', '[LEFT]', 0, 1, '6', 0, 1, 'a:1:{s:12:"title_length";i:25;}') );
 $sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Counter', '', '', '[LEFT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Left Banner', '', '', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'About', '', 'orange', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'About', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(5, 'default', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'headline', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'headline', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, '') );
+$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
 $sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
@@ -221,8 +221,8 @@ $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', ''
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
 
-$array_funcid = array( );
-$array_funcid_mod = array( );
+$array_funcid = array();
+$array_funcid_mod = array();
 $array_weight_block = array();
 
 $func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );

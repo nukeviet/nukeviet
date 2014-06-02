@@ -66,11 +66,11 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 		{
 			$show_captcha = false;
 		}
-		elseif( $captcha == 1 AND defined( 'NV_IS_USER' ) )
+		elseif( $captcha == 1 and defined( 'NV_IS_USER' ) )
 		{
 			$show_captcha = false;
 		}
-		elseif( $captcha == 2 AND defined( 'NV_IS_MODADMIN' ) )
+		elseif( $captcha == 2 and defined( 'NV_IS_MODADMIN' ) )
 		{
 			if( defined( 'NV_IS_SPADMIN' ) )
 			{

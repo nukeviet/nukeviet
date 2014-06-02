@@ -121,7 +121,7 @@ foreach( $list_cats as $value )
 
 		if( $num_items )
 		{
-			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' );
+			$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, groups_comment, comment_hits' );
 			$db->order( 'uploadtime DESC' );
 			$db->limit( $new_page );
 
@@ -159,7 +159,7 @@ foreach( $list_cats as $value )
 					'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
 				);
 
-				if( $row['comment_allow'] )
+				if( $row['groups_comment'] )
 				{
 					$array_item[$row['id']]['comment_hits'] = ( int )$row['comment_hits'];
 				}

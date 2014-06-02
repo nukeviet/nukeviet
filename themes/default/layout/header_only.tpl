@@ -3,7 +3,6 @@
 	<head>
 		{THEME_PAGE_TITLE} {THEME_META_TAGS}
 
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		{THEME_SITE_RSS}
 
@@ -23,3 +22,4 @@
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
+	<body>

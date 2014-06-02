@@ -11,13 +11,13 @@
 			</p>
 			<div class="clear">&nbsp;</div>
 		</div>
-		
+
 		<ul class="other-news clearfix">
 			<!-- BEGIN: othernews -->
 			<li>
 				<div class="content-box clearfix">
 					<a href="{othernews.link}"><img src="{othernews.imgsource}" alt="{othernews.title}" class="img-thumbnail pull-left imghome" style="width:56px;"/></a>
-					<h5><a {TITLE} class="show" href="{othernews.link}" data-content="{othernews.hometext}" data-img="{othernews.imgsource}" rel="block_newscenter_tooltip">{othernews.title}</a></h5>
+					<h5><a {TITLE} class="show" href="{othernews.link}" data-content="{othernews.hometext}" data-img="{othernews.imgsource}" data-rel="block_newscenter_tooltip">{othernews.title}</a></h5>
 					<div class="clear">&nbsp;</div>
 				</div>
 			</li>
@@ -28,7 +28,7 @@
 </div>
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-$(document).ready(function() {$("[rel='block_newscenter_tooltip']").tooltip({
+$(document).ready(function() {$("[data-rel='block_newscenter_tooltip']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,
 	title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}

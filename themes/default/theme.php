@@ -15,14 +15,7 @@ function nv_site_theme( $contents, $full = true )
 	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config;
 
 	// Determine tpl file, check exists tpl file
-	if( ! $full )
-	{
-		$layout_file = 'simple.tpl';
-	}
-	else
-	{
-		$layout_file = 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl';
-	}
+	$layout_file = ( $full ) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
 	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file ) )
 	{
@@ -47,7 +40,7 @@ function nv_site_theme( $contents, $full = true )
 		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
 		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
 		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
-		    $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
+		    $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
 		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
 			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
 			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
@@ -58,12 +51,6 @@ function nv_site_theme( $contents, $full = true )
 			unset( $config_theme, $css_content );
     	}
 	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
-
-		$module_in_menu = unserialize( $module_config['themes'][$global_config['module_theme'] . '_in_menu'] );
-	}
-	else
-	{
-		$module_in_menu = array();
 	}
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );

@@ -9,7 +9,7 @@
 function nv_chang_status(vid) {
 	var nv_timer = nv_settimeout_disable('change_status_' + vid, 5000);
 	var new_status = $("#change_status_" + vid).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_status&nocache=' + new Date().getTime(), 'id=' + vid, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_status&nocache=' + new Date().getTime(), 'id=' + vid + '&new_status=' + new_status, function(res) {
 		if (res != 'OK') {
 			alert(nv_is_change_act_confirm[2]);
 			window.location.href = strHref;

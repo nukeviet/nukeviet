@@ -133,7 +133,9 @@ $rowcontent = array(
 	'total_rating' => 0,
 	'click_rating' => 0,
 	'keywords' => '',
-	'keywords_old' => '' );
+	'keywords_old' => '',
+	'mode' => 'add'
+);
 
 $rowcontent['topictext'] = '';
 $page_title = $lang_module['content_add'];
@@ -148,6 +150,7 @@ if( $rowcontent['id'] > 0 )
 	$rowcontent = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch();
 	if( ! empty( $rowcontent['id'] ) )
 	{
+		$rowcontent['mode'] = 'edit';
 		$arr_catid = explode( ',', $rowcontent['listcatid'] );
 		if( defined( 'NV_IS_ADMIN_MODULE' ) )
 		{
@@ -371,8 +374,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$rowcontent['imgposition'] = 1;
 	}
-	$bodyhtml = $nv_Request->get_string( 'bodyhtml', 'post', '' );
-	$rowcontent['bodyhtml'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodyhtml, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodyhtml ) ), '<br />' );
+	$rowcontent['bodyhtml'] = $nv_Request->get_editor( 'bodyhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$rowcontent['copyright'] = ( int )$nv_Request->get_bool( 'copyright', 'post' );
 	$rowcontent['inhome'] = ( int )$nv_Request->get_bool( 'inhome', 'post' );
@@ -695,8 +697,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		nv_set_status_module();
 		if( empty( $error ) )
 		{
-			$id_block_content_new = array_diff( $id_block_content_post, $id_block_content );
-			$id_block_content_del = array_diff( $id_block_content, $id_block_content_post );
+			$id_block_content_new = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content_post, $id_block_content ) : $id_block_content_post;
+			$id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content, $id_block_content_post ) : array();
+
 			foreach( $id_block_content_new as $bid_i )
 			{
 				$_sql = 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid_i;

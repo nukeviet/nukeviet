@@ -40,7 +40,14 @@ if( isset( $access_admin['access_groups'][$level] ) and $access_admin['access_gr
 	$submenu['groups'] = $lang_global['mod_groups'];
 	$allow_func[] = 'groups';
 }
-if( defined( 'NV_IS_SPADMIN' ) AND empty( $global_config['idsite'] ) )
+
+if( isset( $admin_mods['authors'] ) )
+{
+	$submenu['authors'] = $lang_global['mod_authors'];
+	$allow_func[] = 'authors';
+}
+
+if( defined( 'NV_IS_SPADMIN' ) and empty( $global_config['idsite'] ) )
 {
 	$submenu['question'] = $lang_module['question'];
 	$submenu['siteterms'] = $lang_module['siteterms'];

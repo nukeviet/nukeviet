@@ -373,18 +373,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_ipcountry (
-	ip_from int(11) unsigned NOT NULL,
-	ip_to int(11) unsigned NOT NULL,
-	country char(2) NOT NULL,
-	ip_file smallint(5) unsigned NOT NULL,
-	time int(11) NOT NULL DEFAULT '0',
-	UNIQUE KEY ip_from (ip_from,ip_to),
-	KEY ip_file (ip_file),
-	KEY country (country),
-	KEY time (time)
-) ENGINE=MyISAM";
-
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did mediumint(8) NOT NULL AUTO_INCREMENT,
 	dirname varchar(255) DEFAULT NULL,

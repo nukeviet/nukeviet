@@ -31,6 +31,14 @@
 				<th>{LANG.regdate}</th>
 				<td>{USER.regdate}</td>
 			</tr>
+			<!-- BEGIN: field -->
+			<!-- BEGIN: loop -->
+			<tr>
+				<th>{FIELD.title}</th>
+				<td>{FIELD.value}</td>
+			</tr>
+			<!-- END: loop -->
+			<!-- END: field -->
 		</tbody>
 	</table>
 </div>
