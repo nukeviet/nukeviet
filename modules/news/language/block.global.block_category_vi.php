@@ -18,3 +18,4 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['title_length'] = 'Số ký tự của tiêu đề';
+$lang_block['catid'] = 'Chuyên mục cần hiển thị sub';
