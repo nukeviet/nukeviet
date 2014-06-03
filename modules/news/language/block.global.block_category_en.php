@@ -18,3 +18,4 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['title_length'] = 'Title length';
+$lang_block['catid'] = 'Select catid to view';
