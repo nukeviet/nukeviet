@@ -82,6 +82,7 @@ $lang_module['delsource_msg_rows'] = 'This manufacturer have %s product (s), you
 $lang_module['setting'] = 'Configuration';
 $lang_module['setting_indexfile'] = 'Showing methode on main page';
 $lang_module['setting_homesite'] = 'Image size on main page';
+$lang_module['setting_guest_order'] = 'Allow guest order';
 $lang_module['setting_hometext'] = 'Show short description on product details view';
 $lang_module['setting_per_page'] = 'Number of products on 1 page';
 $lang_module['setting_per_row'] = 'Number of products on 1 line (grid showing)';

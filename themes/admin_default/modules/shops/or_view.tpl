@@ -39,12 +39,12 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<td width="30px">{LANG.order_no_products}</td>
-				<td>{LANG.order_products_name}</td>
-				<td>{LANG.content_product_code}</td>
-				<td class="text-center" width="60px">{LANG.order_product_numbers}</td>
-				<td>{LANG.order_product_unit}</td>
-				<td align="right">{LANG.order_product_price} ({unit})</td>
+				<th width="30px">{LANG.order_no_products}</th>
+				<th>{LANG.order_products_name}</th>
+				<th>{LANG.content_product_code}</th>
+				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
+				<th>{LANG.order_product_unit}</th>
+				<th align="right">{LANG.order_product_price} ({unit})</th>
 			</tr>
 		</thead>
 		<tbody>

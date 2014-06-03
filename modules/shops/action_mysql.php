@@ -329,6 +329,7 @@ $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
 $data['format_order_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
 $data['format_code_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
+$data['active_guest_order'] = 0;
 $data['active_showhomtext'] = 1;
 $data['active_order'] = 1;
 $data['active_price'] = 1;

@@ -82,6 +82,7 @@ $lang_module['delsource_msg_rows'] = 'Hãng sản xuất có %s sản phẩm b�
 $lang_module['setting'] = 'Cấu hình module';
 $lang_module['setting_indexfile'] = 'Phương án thể hiện trang chủ';
 $lang_module['setting_homesite'] = 'Kích thước của hình tại trang chủ';
+$lang_module['setting_guest_order'] = 'Cho phép đặt hàng không cần đăng nhập';
 $lang_module['setting_hometext'] = 'Hiển thị phần giới thiệu gắn gọn khi xem chi tiết sản phẩm';
 $lang_module['setting_per_page'] = 'Số sản phẩm được hiển thị trong một trang';
 $lang_module['setting_per_row'] = 'Số sản phẩm được hiển thị trên một hàng (hiển thị dạng lưới)';

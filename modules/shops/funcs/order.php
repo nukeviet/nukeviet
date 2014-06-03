@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-if( ! defined( 'NV_IS_USER' ) )
+if( ! defined( 'NV_IS_USER' ) and ! $pro_config['active_guest_order'] )
 {
 	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart';
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $redirect ) );
@@ -189,18 +189,22 @@ if( $post_order == 1 )
 				}
 			}
 
+			$checkss = md5( $order_id . $global_config['sitekey'] . session_id() );
+			$review_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss;
+
 			$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
+			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $review_url );
+			
+			$data_order['review_url'] = $review_url;
+			
 			$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
 
 			nv_sendmail( array( $global_config['site_name'], $global_config['site_email'] ), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
 
 			// Chuyen trang xem thong tin don hang vua dat
-			$checkss = md5( $order_id . $global_config['sitekey'] . session_id() );
 			unset( $_SESSION[$module_data . '_cart'] );
-
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss );
-
+			Header( 'Location: ' . $review_url );
 			$action = 1;
 		}
 	}

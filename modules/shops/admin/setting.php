@@ -53,6 +53,7 @@ if( $savesetting == 1 )
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
+	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -139,6 +140,9 @@ $xtpl->assign( 'ck_active_order_number', $check );
 
 $check = ( $data['active_payment'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_payment', $check );
+
+$check = ( $data['active_guest_order'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_guest_order', $check );
 
 $check = ( $data['active_showhomtext'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_showhomtext', $check );

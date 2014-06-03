@@ -230,6 +230,7 @@ $lang_module['order_submit_pay'] = 'Thanh toán trực tuyến';
 $lang_module['order_submit_contact'] = 'Liên hệ với tôi để thánh toán';
 $lang_module['order_submit_send'] = 'Gửi thông tin phiếu đặt hàng';
 $lang_module['order_email_title'] = '[%s] Thông tin đơn hàng %s';
+$lang_module['order_email_review'] = 'Bạn có thể xem lại thông tin đơn hàng tại <a href="%s">đây</a>';
 $lang_module['order_email_noreply'] = 'Đây là email được gửi tự động từ website <a href="%s">%s</a>, vui lòng không trả lời email này vì chúng tôi sẽ không nhận được email của bạn. Nếu không hiểu về nội dung email này hãy đơn giản xóa nó khỏi hòm thư của bạn.';
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
 $lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! chúng tôi sẽ gửi hàng cho bạn sớm nhất';
