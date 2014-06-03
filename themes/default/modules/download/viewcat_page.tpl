@@ -59,7 +59,8 @@
 		<ul class="list-inline">
 			<li><em class="fa fa-upload">&nbsp;</em> {LANG.uploadtime}: {listpostcat.uploadtime}</li>
 			<li><em class="fa fa-eye">&nbsp;</em> {LANG.view_hits} {listpostcat.view_hits}</li>
-			<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits} {listpostcat.download_hits}</li>	
+			<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits} {listpostcat.download_hits}</li>
+			<li><em class="fa fa-comments">&nbsp;</em> {LANG.comment_hits}: {listpostcat.comment_hits}</li>	
 		</ul>
 	</div>
 </div>

@@ -70,7 +70,7 @@ if( ! empty( $num_items ) )
 	$today = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 	$yesterday = $today - 86400;
 
-	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_allow, comment_hits' )
+	$db->select( 'id, catid, title, alias, introtext , uploadtime, author_name, filesize, fileimage, view_hits, download_hits, comment_hits' )
 		->order( 'uploadtime DESC' )
 		->limit( $per_page )
 		->offset( ( $page - 1 ) * $per_page );
@@ -114,15 +114,11 @@ if( ! empty( $num_items ) )
 			'imagesrc' => ( ! empty( $row['fileimage'] ) ) ? NV_BASE_SITEURL . NV_FILES_DIR . $row['fileimage'] : '',
 			'view_hits' => $row['view_hits'],
 			'download_hits' => $row['download_hits'],
+			'comment_hits' => ( int )$row['comment_hits'],
 			'more_link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 			'edit_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $row['id'] : '',
 			'del_link' => ( defined( 'NV_IS_MODADMIN' ) ) ? NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name : ''
 		);
-
-		if( $row['comment_allow'] )
-		{
-			$array[$row['id']]['comment_hits'] = ( int )$row['comment_hits'];
-		}
 	}
 	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 

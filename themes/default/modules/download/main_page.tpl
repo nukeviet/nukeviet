@@ -17,11 +17,12 @@
 	<div class="panel-body">
 			<!-- BEGIN: itemcat -->
 				<div>
-					<h4><a title="{itemcat.title}" href="{itemcat.more_link}">{itemcat.title}</a></h4>
+					<h3><a title="{itemcat.title}" href="{itemcat.more_link}"><strong>{itemcat.title}</strong></a></h3>
 					<ul class="list-inline">
 						<li><em class="fa fa-user">&nbsp;</em> {LANG.author_name}: {itemcat.author_name}</li>
 						<li><em class="fa fa-eye">&nbsp;</em> {LANG.view_hits}: {itemcat.view_hits}</li>
-						<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits}: {itemcat.download_hits}</li>	
+						<li><em class="fa fa-download">&nbsp;</em> {LANG.download_hits}: {itemcat.download_hits}</li>
+						<li><em class="fa fa-comments">&nbsp;</em> {LANG.comment_hits}: {itemcat.comment_hits}</li>	
 					</ul>
 				</div>
 				<!-- BEGIN: image -->
