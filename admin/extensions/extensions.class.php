@@ -357,6 +357,8 @@ class NV_Extensions
 			case 7: $message = "HTTP request failed."; break;
 			case 8: $message = "Could not open stream file."; break;
 			case 9: $message = "Failed to write request to temporary file."; break;
+			case 10: $message = "Could not open handle for fopen() to streamfile."; break;
+			case 11: $message = "HTTP Curl request failed."; break;
 			default: $message = "There are some unknow errors had been occurred.";
 		}
 		
@@ -1236,7 +1238,7 @@ class NV_http_curl
 				
 			if( ! $this->stream_handle )
 			{
-				$this->set_error(1);
+				NV_Extensions::set_error(10);
 				return $this;
 			}
 		}
@@ -1275,7 +1277,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				$this->set_error(2);
+				NV_Extensions::set_error(11);
 				return $this;
 			}
 			
@@ -1283,7 +1285,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				$this->set_error(3);
+				NV_Extensions::set_error(5);
 				return $this;
 			}
 
@@ -1307,7 +1309,7 @@ class NV_http_curl
 			{
 				fclose( $this->stream_handle );
 				
-				$this->set_error(4);
+				NV_Extensions::set_error(9);
 				return $this;
 			}
 			
@@ -1315,7 +1317,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				$this->set_error(2);
+				NV_Extensions::set_error(11);
 				return $this;
 			}
 			
@@ -1323,7 +1325,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				$this->set_error(3);
+				NV_Extensions::set_error(5);
 				return $this;
 			}
 		}
@@ -1403,30 +1405,6 @@ class NV_http_curl
 		}
 
 		return $bytes_written;
-	}
-
-	/**
-	 * NV_http_curl::set_error()
-	 * 
-	 * @param mixed $code
-	 * @return
-	 */
-	private function set_error( $code )
-	{
-		$code = intval( $code );
-		$message = "";
-		
-		switch( $code )
-		{
-			case 1: $message = "Could not open handle for fopen() to streamfile."; break;
-			case 2: $message = "HTTP Curl request failed."; break;
-			case 3: $message = "Too many redirects."; break;
-			case 4: $message = "Failed to write request to temporary file."; break;
-			default: $message = "There are some unknow errors had been occurred.";
-		}
-		
-		$this->error['code'] = $code;
-		$this->error['message'] = $message;
 	}
 
 	/**
