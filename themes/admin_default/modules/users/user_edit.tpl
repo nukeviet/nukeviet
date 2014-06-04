@@ -63,7 +63,7 @@
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">
 							<img src="{IMG.src}" alt="{DATA.username}" class="img-thumbnail m-bottom" width="{IMG.width}" height="{IMG.height}"/><br />
-							<span class="icon-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
+							<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
 							<input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
 						</p>
 						<!-- END: photo -->

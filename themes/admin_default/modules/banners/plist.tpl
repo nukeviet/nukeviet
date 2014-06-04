@@ -5,7 +5,7 @@
 		<colgroup>
 			<col span="3">
 			<col class="w100">
-			<col class="w300">
+			<col class="w350">
 		</colgroup>
 		<thead>
 			<tr>

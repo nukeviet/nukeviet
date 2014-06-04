@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['menu'] = 'Select menu group';
 $lang_block['title_length'] = 'Title length';
+$lang_block['module_display'] = 'Module display';
 $lang_block['type'] = 'Menu type';
 $lang_block['m_type1'] = 'Nav_bar';
 $lang_block['m_type2'] = 'Vertical';

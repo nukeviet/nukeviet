@@ -5,9 +5,9 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-					<span class="glyphicon glyphicon-th"></span><a title="{catparent.title}" href="{catparent.link}">{catparent.title_trim}</a>
+					<a title="{catparent.title}" href="{catparent.link}">{catparent.title_trim}</a>
 					<!-- BEGIN: expand -->
-					<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapse{catparent.id}"><span class="glyphicon glyphicon-tasks"></a>
+					<a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapse{catparent.id}">+</a>
 					<!-- END: expand -->
 				</h4>
 			</div>
@@ -18,7 +18,7 @@
 						<!-- BEGIN: loopsubcatparent -->
 						<tr>
 							<td>
-								<span class="glyphicon glyphicon-pencil text-primary"></span><a title="{loopsubcatparent.title}" href="{loopsubcatparent.link}">{loopsubcatparent.title_trim}</a>
+								<a title="{loopsubcatparent.title}" href="{loopsubcatparent.link}">{loopsubcatparent.title_trim}</a>
 							</td>
 						</tr>
 						<!-- END: loopsubcatparent -->

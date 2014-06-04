@@ -20,6 +20,7 @@ $lang_translator['langtype'] = 'lang_block';
 $lang_block['menu'] = 'Chọn bộ menu';
 $lang_block['title_length'] = 'Số kí tự của tiêu đề';
 $lang_block['type'] = 'Kiểu menu';
+$lang_block['module_display'] = 'Module hiển thị';
 $lang_block['m_type1'] = 'Nav_bar';
 $lang_block['m_type2'] = 'Vertical';
 $lang_block['m_type3'] = 'Treeview';

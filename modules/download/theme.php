@@ -285,6 +285,7 @@ function view_file( $row, $download_config )
 
 	if( defined( 'NV_COMM_URL' ) )
 	{
+		$xtpl->parse( 'main.comment_hits' );
 		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
 		$xtpl->parse( 'main.comment' );
 	}

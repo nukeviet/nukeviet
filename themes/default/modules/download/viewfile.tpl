@@ -53,10 +53,10 @@
 			<dt>{LANG.download_hits}:</dt>
 			<dd id="download_hits">{ROW.download_hits}</dd>
 			
-			<!-- BEGIN: comment_allow -->
+			<!-- BEGIN: comment_hits -->
 			<dt>{LANG.comment_hits}:</dt>
 			<dd>{ROW.comment_hits}</dd>
-			<!-- END: comment_allow -->
+			<!-- END: comment_hits -->
 		</dl>
 	</div>
 	
