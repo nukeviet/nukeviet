@@ -75,12 +75,26 @@
 				<tr>
 					<td>{CONTENTS.publ_date.0}:</td>
 					<td>&nbsp;</td>
-					<td><input name="{CONTENTS.publ_date.1}" class="form-control pull-left w100 datepicker" type="text" value="{CONTENTS.publ_date.2}" maxlength="{CONTENTS.publ_date.3}" readonly="readonly" /></td>
+					<td>
+						<div class="input-group pull-left" style="margin-right: 10px">
+							<input name="{CONTENTS.publ_date.1}" id="publ_date" value="{CONTENTS.publ_date.2}" maxlength="{CONTENTS.publ_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
+							<span class="input-group-btn pull-left">
+								<button class="btn btn-default" type="button" id="publ_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+							</span>
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.exp_date.0}:</td>
 					<td>&nbsp;</td>
-					<td><input name="{CONTENTS.exp_date.1}" class="form-control pull-left w100 datepicker" type="text" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
+					<td>
+						<div class="input-group pull-left" style="margin-right: 10px">
+							<input name="{CONTENTS.exp_date.1}" id="exp_date" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" class="form-control" style="width: 100px;" readonly="readonly" type="text" />
+							<span class="input-group-btn pull-left">
+								<button class="btn btn-default" type="button" id="exp_date-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+							</span>
+						</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -92,14 +106,20 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#frm').validate();
-		$(".datepicker").datepicker({
-			showOn : "both",
+		$("#publ_time,#exp_date").datepicker({
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
+			showOn: 'focus'
+		});
+		
+		$('#publ_time-btn').click(function(){
+			$("#publ_time").datepicker('show');
+		});
+		
+		$('#exp_date-btn').click(function(){
+			$("#exp_date").datepicker('show');
 		});
 	});
 </script>

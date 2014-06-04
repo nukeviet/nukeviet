@@ -16,7 +16,7 @@
 				<tr>
 					<td>{CONTENTS.size}:</td>
 					<td><sup class="required">&lowast;</sup></td>
-					<td><span class="text-middle"><span class="pull-left"> {CONTENTS.width.0}: </span>&nbsp;<input name="{CONTENTS.width.1}" id="{CONTENTS.width.1}" type="text" value="{CONTENTS.width.2}" class="form-control w100 pull-left" maxlength="{CONTENTS.width.3}" />&nbsp;<span class="pull-left"> {CONTENTS.height.0}: </span> <input name="{CONTENTS.height.1}" id="{CONTENTS.height.1}" type="text" value="{CONTENTS.height.2}" class="form-control w100 pull-left" maxlength="{CONTENTS.height.3}" /></span></td>
+					<td><input name="{CONTENTS.width.1}" id="{CONTENTS.width.1}" type="text" value="{CONTENTS.width.2}" class="form-control w100 pull-left" maxlength="{CONTENTS.width.3}" placeholder="{CONTENTS.width.0}" /><span class="pull-left text-middle">&nbsp;x&nbsp;</span><input name="{CONTENTS.height.1}" id="{CONTENTS.height.1}" type="text" value="{CONTENTS.height.2}" class="form-control w100 pull-left" maxlength="{CONTENTS.height.3}" placeholder="{CONTENTS.height.0}" /></td>
 				</tr>
 				<tr>
 					<td>{CONTENTS.blang.0}:</td>

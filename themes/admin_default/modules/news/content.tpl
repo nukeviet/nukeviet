@@ -70,7 +70,7 @@
 						<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 					</tr>
 					<tr>
-						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 100%; height:100px;" class="form-control">{rowcontent.hometext}</textarea></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
