@@ -42,7 +42,7 @@ class NV_Extensions
 	 * Error code help user to show error message with optional language
 	 * Error message is default by english.
 	 */
-	public $error = array();
+	public static $error = array();
 	
 	/**
 	 * NV_Extensions::__construct()
@@ -362,8 +362,8 @@ class NV_Extensions
 			default: $message = "There are some unknow errors had been occurred.";
 		}
 		
-		$this->error['code'] = $code;
-		$this->error['message'] = $message;
+		self::$error['code'] = $code;
+		self::$error['message'] = $message;
 	}
 
 	/**
