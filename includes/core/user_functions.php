@@ -196,6 +196,7 @@ function nv_blocks_content( $sitecontent )
 					}
 					if( ! empty( $xtpl ) )
 					{
+						$xtpl->assign( 'BLOCK_ID', $_row['bid'] );
 						$xtpl->assign( 'BLOCK_TITLE', $_row['blockTitle'] );
 						$xtpl->assign( 'BLOCK_CONTENT', $content );
 						$xtpl->assign( 'TEMPLATE', $_template );
