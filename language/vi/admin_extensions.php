@@ -41,3 +41,24 @@ $lang_module['empty_response'] = 'Không có bất kỳ dữ liệu nào phù h�
 $lang_module['author'] = 'Tác giả';
 $lang_module['detail'] = 'Chi tiết';
 $lang_module['install'] = 'Cài đặt';
+$lang_module['newest_version'] = 'Phiên bản mới nhất';
+$lang_module['ext_type'] = 'Loại';
+$lang_module['compatible'] = 'Tương thích';
+$lang_module['incompatible'] = 'Không tương thích';
+
+$lang_module['types_0'] = "Không rõ";
+$lang_module['types_1'] = "Modules";
+$lang_module['types_2'] = "Themes";
+$lang_module['types_3'] = "Blocks";
+$lang_module['types_4'] = "Cronjobs";
+$lang_module['types_5'] = "Khác";
+
+$lang_module['file_type_0'] = "Không rõ";
+$lang_module['file_type_1'] = "File cài đặt";
+$lang_module['file_type_2'] = "File hướng dẫn";
+$lang_module['file_type_3'] = "Loại file khác";
+
+$lang_module['develop_note'] = 'Chức năng này hiện đang trong quá trình phát triển';
+
+$lang_module['search_key'] = "Nhập từ khóa";
+$lang_module['search_go'] = "Tìm";

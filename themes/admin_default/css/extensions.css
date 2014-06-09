@@ -45,6 +45,13 @@
 	height: 110px;
 }
 
+.ext-item .col-explain{
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	height: 110px;
+}
+
 /*
  * Star rating
  */
