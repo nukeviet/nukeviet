@@ -268,7 +268,7 @@ class upload
 	 */
 	private function get_mime_from_userFile( $userfile )
 	{
-		return preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $userfile['type'] ) );
+		return preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $userfile['type'] ) );
 	}
 
 	/**
@@ -314,7 +314,7 @@ class upload
 			{
 				$mime = finfo_file( $finfo, realpath( $userfile['tmp_name'] ) );
 				finfo_close( $finfo );
-				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 
@@ -326,7 +326,7 @@ class upload
 				if( $finfo )
 				{
 					$mime = $finfo->file( realpath( $userfile['tmp_name'] ) );
-					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+					$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 				}
 			}
 		}
@@ -354,7 +354,7 @@ class upload
 				$m = trim( $m );
 				if( ! empty( $m ) )
 				{
-					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
+					$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m );
 				}
 			}
 			elseif( $this->func_exists( 'exec' ) )
@@ -363,7 +363,7 @@ class upload
 				$m = trim( $m );
 				if( ! empty( $m ) )
 				{
-					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
+					$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m );
 				}
 			}
 		}
@@ -384,7 +384,7 @@ class upload
 		if( $this->func_exists( 'mime_content_type' ) )
 		{
 			$mime = mime_content_type( $userfile['tmp_name'] );
-			$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+			$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 		}
 
 		return $mime;
@@ -418,7 +418,7 @@ class upload
 				if( array_key_exists( 'mime', $this->img_info ) and ! empty( $this->img_info['mime'] ) )
 				{
 					$mime = trim( $this->img_info['mime'] );
-					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $mime );
+					$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $mime );
 				}
 
 				if( empty( $mime ) and isset( $this->img_info[2] ) )
@@ -955,7 +955,7 @@ class upload
 					$Ctype = trim( $Ctype );
 					if( ! empty( $Ctype ) )
 					{
-						$this->urlfile_mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $Ctype );
+						$this->urlfile_mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $Ctype );
 						break;
 					}
 				}
