@@ -78,7 +78,7 @@
 }
 
 /*
- *
+ * Fixed bootstrap button
  */
 .ext-btn em{
 	color: #666;
@@ -87,4 +87,16 @@
 .ext-btn a, .ext-btn a:hover{
 	color: #666;
 	text-decoration: none;
+}
+
+/**
+ * Detail
+ */
+.ext-dinfo{
+	width: 300px;
+	margin-left: 10px;
+}
+.ext-detail img{
+	margin-bottom: 10px!important;
+	max-width: 90%!important;
 }

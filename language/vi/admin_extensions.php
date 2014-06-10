@@ -45,6 +45,22 @@ $lang_module['newest_version'] = 'Phiên bản mới nhất';
 $lang_module['ext_type'] = 'Loại';
 $lang_module['compatible'] = 'Tương thích';
 $lang_module['incompatible'] = 'Không tương thích';
+$lang_module['tab_info'] = 'Thông tin';
+$lang_module['tab_guide'] = 'Hướng dẫn';
+$lang_module['tab_files'] = 'Tải về khả dụng';
+$lang_module['tab_images'] = 'Hình ảnh';
+$lang_module['updatetime'] = 'Cập nhật';
+$lang_module['view_hits'] = 'Lượt xem';
+$lang_module['download_hits'] = 'Tải về';
+$lang_module['rating_text'] = 'Đánh giá';
+$lang_module['rating_text_detail'] = '%s điểm/%s đánh giá';
+$lang_module['license'] = 'Giấy phép';
+$lang_module['download'] = 'Tải xuống';
+$lang_module['download_note'] = 'Sử dụng đường dẫn này để tải xuống máy tính cá nhân';
+$lang_module['install_note'] = 'Sử dụng đường dẫn này để cài đặt trực tiếp';
+
+$lang_module['file_name'] = 'Tên file';
+$lang_module['file_version'] = 'Phiên bản';
 
 $lang_module['types_0'] = 'Không rõ';
 $lang_module['types_1'] = 'Modules';
@@ -64,3 +80,5 @@ $lang_module['search_key'] = 'Nhập từ khóa';
 $lang_module['search_go'] = 'Tìm';
 
 $lang_module['detail_title'] = 'Chi tiết ứng dụng &quot;%s&quot;';
+$lang_module['detail_empty_documentation'] = 'Ứng dụng này không có hướng dẫn';
+$lang_module['detail_empty_images'] = 'Ứng dụng này không có ảnh minh họa';
