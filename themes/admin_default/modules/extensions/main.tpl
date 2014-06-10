@@ -35,7 +35,7 @@
 				</p>
 				<p>
 					<button type="button" class="btn btn-default btn-xs ext-btn">
-						<em class="fa fa-share-square-o fa-lg">&nbsp;</em> <a href="{ROW.detail_link}">{LANG.detail}</a>
+						<em class="fa fa-share-square-o fa-lg">&nbsp;</em> <a class="ex-detail" title="{ROW.detail_title}" href="{ROW.detail_link}">{LANG.detail}</a>
 					</button>
 					<!-- BEGIN: install -->
 					<button type="button" class="btn btn-default btn-xs ext-btn">
@@ -60,6 +60,40 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
+<script type="text/javascript">
+Shadowbox.init({
+	animate: false,
+	animateFade: false,
+    enableKeys: false,
+    modal: true,
+    overlayOpacity: 0.8,
+    handleOversize: 'resize',
+});
+var player_width = $(window).width();
+var player_height = $(window).height();
+if( player_width > 1060 ){
+	player_width = 1000;
+}else{
+	player_width = player_width - 60;
+}
+if( player_height > 660 ){
+	player_height = 600;
+}else{
+	player_height = player_height - 60;
+}
+$(function(){
+	$('.ex-detail').click(function(e){
+		e.preventDefault();
+		Shadowbox.open({
+	        content: '<iframe style="width:' + player_width + 'px;height:' + player_height + 'px;border:0" src="' + $(this).attr('href') + '"></iframe>',
+	        player: "html",
+	        title: $(this).attr('title'),
+	        height: player_height,
+	        width: player_width
+	    });
+	});
+});
+</script>
 <!-- END: data -->
 <!-- END: main -->
 <!-- BEGIN: dev -->

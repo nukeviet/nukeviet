@@ -10,6 +10,14 @@
 
 if( ! defined( 'NV_IS_FILE_EXTENSIONS' ) ) die( 'Stop!!!' );
 
+if( ! defined( 'SHADOWBOX' ) )
+{
+	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+
+	define( 'SHADOWBOX', true );
+}
+
 $page_title = $lang_global['mod_extensions'];
 
 $request = array();
@@ -109,6 +117,7 @@ else
 		
 		$row['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $row['id'];
 		$row['detail_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail&amp;id=' . $row['id'];
+		$row['detail_title'] = sprintf( $lang_module['detail_title'], $row['title'] );
 		
 		$xtpl->assign( 'ROW', $row );
 		
