@@ -82,3 +82,21 @@ $lang_module['search_go'] = 'Tìm';
 $lang_module['detail_title'] = 'Chi tiết ứng dụng &quot;%s&quot;';
 $lang_module['detail_empty_documentation'] = 'Ứng dụng này không có hướng dẫn';
 $lang_module['detail_empty_images'] = 'Ứng dụng này không có ảnh minh họa';
+
+$lang_module['install_title'] = 'Cài đặt ứng dụng &quot;%s&quot;';
+$lang_module['install_getfile'] = 'Tìm kiếm phiên bản thích hợp';
+$lang_module['install_getfile_error'] = 'Không có phiên bản nào thích hợp';
+$lang_module['install_check_compatible'] = 'Kiểm tra tính tương thích';
+$lang_module['install_check_compatible_error'] = 'Phiên bản không tương thích';
+$lang_module['install_check_auto_install'] = 'Kiểm tra khả năng cài đặt tự động';
+$lang_module['install_manual_install'] = 'Ứng dụng này không hỗ trợ cài đặt tự động, bạn có thể click vào nút tải về bện dưới và làm theo hướng dẫn để cài đặt ứng dụng thủ công';
+$lang_module['install_manual_install_danger'] = 'Ứng dụng này không hỗ trợ cài đặt tự động, và cũng không có hướng dẫn cài đặt, bạn có thể click vào nút bên dưới để tải về cà cài đặt thủ công';
+$lang_module['install_documentation'] = 'Hướng dẫn cài đặt';
+$lang_module['install_check_installed'] = 'Kiểm tra ứng dụng chưa được cài đặt';
+$lang_module['install_check_installed_error'] = 'Ứng dụng này đã tồn tại trên hệ thống';
+$lang_module['install_check_installed_unsure'] = 'Hệ thống không thể kiểm tra kiểu ứng dụng này một cách tối ưu, có thể việc cài mới sẽ ghi đẽ nội dung cũ, bạn nên lưu ý trước khi cài đặt';
+$lang_module['install_continue'] = 'Tiếp tục cài đặt';
+$lang_module['install_cancel'] = 'Hủy cài đặt';
+$lang_module['install_file_download'] = 'Tải về file cài đặt';
+
+$lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';

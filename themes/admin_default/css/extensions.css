@@ -100,3 +100,7 @@
 	margin-bottom: 10px!important;
 	max-width: 90%!important;
 }
+
+#file-download, #file-download .complete, #file-download .waiting{
+	display: none;
+}
