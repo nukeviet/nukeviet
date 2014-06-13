@@ -150,9 +150,7 @@ class CJzip
 	 */
 	private function check_encode()
 	{
-		if( ! $this->is_gzip ) return ( 'none' );
-
-		if( ! function_exists( 'gzencode' ) ) return ( 'none' );
+		if( ! $this->is_gzip or ! function_exists( 'gzencode' ) or ! isset( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ) return 'none';
 
 		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
