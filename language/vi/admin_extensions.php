@@ -100,3 +100,5 @@ $lang_module['install_cancel'] = 'Hủy cài đặt';
 $lang_module['install_file_download'] = 'Tải về file cài đặt';
 
 $lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';
+$lang_module['download_error_save'] = 'Lỗi: Lưu file thất bại';
+$lang_module['download_ok'] = 'Tải file thành công, hệ thống sẽ chuyển đến trang cài đặt trong giây lát';

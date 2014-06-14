@@ -113,3 +113,45 @@ function nv_extensions_is_installed( $type, $name, $version )
 	
 	return 2;
 }
+
+/**
+ * is_serialized_string()
+ * 
+ * @param mixed $data
+ * @return
+ */
+function is_serialized_string( $data )
+{
+	if( ! is_string( $data ) )
+	{
+		return false;
+	}
+	
+	$data = trim( $data );
+	$length = strlen( $data );
+	
+	if( $length < 4 )
+	{
+		return false;
+	}
+	elseif( $data{1} !== ':' )
+	{
+		return false;
+	}
+	elseif( $data{$length-3} !== ';' )
+	{
+		return false;
+	}
+	elseif( $data{0} !== 'a' )
+	{
+		return false;
+	}
+	elseif( $data{$length-4} !== '"' )
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}

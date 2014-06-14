@@ -99,6 +99,10 @@ else
 		
 		$xtpl->assign( 'DATA', $array );
 		
+		$array_string = $array;
+		unset( $array_string['title'], $array_string['documentation'] );
+		$xtpl->assign( 'STRING_DATA', nv_base64_encode( @serialize( $array_string ) ) );
+		
 		$page_title = sprintf( $lang_module['install_title'], $array['title'] );
 		
 		// Show getfile info

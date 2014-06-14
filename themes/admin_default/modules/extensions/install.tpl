@@ -65,7 +65,9 @@
 <!-- END: unsure -->
 <!-- BEGIN: startdownload -->
 <script type="text/javascript">
-
+$(document).ready(function(){
+	EXT.startDownload();
+});
 </script>
 <!-- END: startdownload -->
 <div id="file-download" class="m-bottom">
@@ -73,11 +75,12 @@
 	<strong>{LANG.install_file_download}<span class="waiting">...</span></strong> 
 	<em class="fa fa-lg fa-check complete">&nbsp;</em>
 </div>
-<div id="file-download-error">
+<div id="file-download-response">
 	
 </div>
 <script type="text/javascript">
 var EXT = {
+	tid: {DATA.tid},
 	isDownloaded: false,
 	startDownload: function(){
 		if( ! EXT.isDownloaded ){
@@ -90,12 +93,14 @@ var EXT = {
 			$.ajax({
 				type: 'POST',
 				url: script_name,
-				data: nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&id={DATA.id}&fid={DATA.compatible.id}',
+				data: nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data={STRING_DATA}',
 				success: function(e){
-					if( e == 'OK' ){
-						EXT.handleOk();
+					$('#file-download .waiting').hide();
+					e = e.split('|');
+					if( e[0] == 'OK' ){
+						EXT.handleOk(e[1]);
 					}else{
-						EXT.handleError(e);
+						EXT.handleError(e[1]);
 					}
 				}
 			});
@@ -104,15 +109,27 @@ var EXT = {
 	cancel: function(){
 		window.location = '{CANCEL_LINK}';
 	},
-	handleOk: function(){
+	handleOk: function(f){
 		$('#file-download').addClass('text-success');
 		$('#file-download .status').removeClass('fa-meh-o').addClass('fa-smile-o');
 		$('#file-download .complete').show();
+		
+		$('#file-download-response').html('<div class="alert alert-success">{LANG.download_ok}</div>');
+		
+		setTimeout( "EXT.redirect()", 3000 );
 	},
 	handleError: function(m){
 		$('#file-download').addClass('text-danger');
 		$('#file-download .status').removeClass('fa-meh-o').addClass('fa-frown-o');
-		$('#file-download-error').html('<div class="alert alert-danger">' + m + '</div>');
+		$('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
+	},
+	redirect: function(){
+		if( EXT.tid == 2 ){
+			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=themes&' + nv_fc_variable + '=install_theme&downloaded=1';
+		}else{
+			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=modules&' + nv_fc_variable + '=install_module&downloaded=1';
+		}
+		window.location = url;
 	},
 };
 </script>
