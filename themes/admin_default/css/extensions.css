@@ -45,6 +45,13 @@
 	height: 110px;
 }
 
+.ext-item .col-explain{
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	height: 110px;
+}
+
 /*
  * Star rating
  */
@@ -71,7 +78,7 @@
 }
 
 /*
- *
+ * Fixed bootstrap button
  */
 .ext-btn em{
 	color: #666;
@@ -80,4 +87,20 @@
 .ext-btn a, .ext-btn a:hover{
 	color: #666;
 	text-decoration: none;
+}
+
+/**
+ * Detail
+ */
+.ext-dinfo{
+	width: 300px;
+	margin-left: 10px;
+}
+.ext-detail img{
+	margin-bottom: 10px!important;
+	max-width: 90%!important;
+}
+
+#file-download, #file-download .complete, #file-download .waiting{
+	display: none;
 }

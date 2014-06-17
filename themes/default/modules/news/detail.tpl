@@ -173,7 +173,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" rel="tooltip">{TOPIC.title}</a>
+			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -194,7 +194,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" rel="tooltip">{RELATED_NEW.title}</a>
+			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip">{RELATED_NEW.title}</a>
 			<em>({RELATED_NEW.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -224,16 +224,16 @@
 </div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$(".bodytext img").toggleClass('img-thumbnail');
-		<!-- BEGIN: tooltip -->
-		$("[data-rel='tooltip']").tooltip({
-			placement: "{TOOLTIP_POSITION}",
-			html: true,
-			title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-		});
-		<!-- END: tooltip -->
+$(document).ready(function() {
+	$(".bodytext img").toggleClass('img-thumbnail');
+	<!-- BEGIN: tooltip -->
+	$("[data-rel='tooltip']").tooltip({
+		placement: "{TOOLTIP_POSITION}",
+		html: true,
+		title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
 	});
+	<!-- END: tooltip -->
+});
 </script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->

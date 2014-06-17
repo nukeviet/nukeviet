@@ -19,7 +19,7 @@ $menu_top = array(
 	'custom_title' => $lang_global['mod_extensions']
 );
 
-$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites' );
+$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download' );
 
 $submenu['newest'] = $lang_module['newest'];
 $submenu['popular'] = $lang_module['popular'];
@@ -54,4 +54,104 @@ function nv_extensions_get_lang( $input )
 	}
 	
 	return 'Error' . ( $input['code'] ? ': ' . $input['code'] . '.' : '.' );
+}
+
+/**
+ * nv_extensions_is_installed()
+ * 
+ * @param mixed $type
+ * @param mixed $name
+ * @param mixed $version
+ * @return
+ * 0: Not exists
+ * 1: Exists
+ * 2: Unsure
+ */
+function nv_extensions_is_installed( $type, $name, $version )
+{
+	global $db;
+	
+	// Module
+	if( $type == 1 )
+	{
+		if( ! is_dir( NV_ROOTDIR . '/modules/' . $name ) )
+		{
+			return 0;
+		}
+		
+		return 1;
+		
+		//$stmt = $db->prepare( 'SELECT mod_version FROM ' . NV_PREFIXLANG . '_setup_modules WHERE module_file= :modfile AND module_file=title' );
+		//$stmt->bindParam( ':modfile', $name, PDO::PARAM_STR );
+		//$stmt->execute();
+		//$row = $stmt->fetch();	
+	}
+	// Theme
+	elseif( $type == 2 )
+	{
+		if( ! is_dir( NV_ROOTDIR . '/themes/' . $name ) )
+		{
+			return 0;
+		}
+		return 1;
+	}
+	// Block
+	elseif( $type == 3 )
+	{
+		return 2;
+	}
+	// Crons
+	elseif( $type == 4 )
+	{
+		if( ! is_file( NV_ROOTDIR . '/includes/cronjobs/' . $name ) )
+		{
+			return 0;
+		}
+		
+		return 1;
+	}
+	
+	return 2;
+}
+
+/**
+ * is_serialized_string()
+ * 
+ * @param mixed $data
+ * @return
+ */
+function is_serialized_string( $data )
+{
+	if( ! is_string( $data ) )
+	{
+		return false;
+	}
+	
+	$data = trim( $data );
+	$length = strlen( $data );
+	
+	if( $length < 4 )
+	{
+		return false;
+	}
+	elseif( $data{1} !== ':' )
+	{
+		return false;
+	}
+	elseif( $data{$length-3} !== ';' )
+	{
+		return false;
+	}
+	elseif( $data{0} !== 'a' )
+	{
+		return false;
+	}
+	elseif( $data{$length-4} !== '"' )
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }

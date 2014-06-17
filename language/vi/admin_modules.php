@@ -77,6 +77,7 @@ $lang_module['autoinstall_module_uploadedfile'] = 'Hệ thống đã tải lên 
 $lang_module['autoinstall_module_uploadedfilesize'] = 'Dung lượng: ';
 $lang_module['autoinstall_module_uploaded_filenum'] = 'Tổng số file + folder: ';
 $lang_module['autoinstall_module_error_uploadfile'] = 'Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại hoặc chmod thư mục tmp';
+$lang_module['autoinstall_module_error_downloaded'] = 'Lỗi: Không tìm thấy file đã upload';
 $lang_module['autoinstall_module_error_createfile'] = 'Lỗi: không thể lưu đệm danh sách file. Hãy kiểm tra lại hoặc chmod thư mục tmp';
 $lang_module['autoinstall_module_error_invalidfile'] = 'Lỗi: File zip không hợp lệ';
 $lang_module['autoinstall_module_error_warning_overwrite'] = 'Thông báo: Cấu trúc của module bạn cài đặt có các file và thư mục không đúng chuẩn, bạn có chắc chắn thực hiện tiếp quá trình cài đặt';
