@@ -31,7 +31,7 @@
 							</tr>
 							<tr>
 								<th>{LANG.newest_version}</th>
-								<td>{ROW.updatetime}</td>
+								<td>{DATA.newest_version}</td>
 							</tr>
 							<tr>
 								<th>{LANG.updatetime}</th>
