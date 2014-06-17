@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------
   CHIM - CHuoi's Input Method
 ----------------------------------------------------------------------------
-  copyright         : (C) 2005, 2006, 2007 by Dao Hai Lam/  website           : 
+  copyright         : (C) 2005, 2006, 2007 by Dao Hai Lam/  website           :
   http://xvnkb.sf.net/chim
   email             : daohailam<at>yahoo<dot>com
   last modify       : Thu, 05 Jul 2007 23:07:22 +0700
@@ -11,8 +11,8 @@
  (c)2008 by Mudzot
  http://code.google.com/p/mudim
  email: mudzot<at>gmail.com
- version: 0.8
- date: 29.05.08
+ Revision: r163 
+ date: 	May 10, 2013
 ----------------------------------------------------------------------------
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 // Development environment: Firefox with Firebug extension with console debug
 if (typeof(console)=='undefined') {	//if console doesnt exist, use the annoying alert instead
 	console=function () {return this;};	// console.debug   <--- instruct the build script remove this line
-	console.debug = function (a) {alert(a)};		
+	console.debug = function (a) {alert(a)};
 }
 
 //----------------------------------------------------------------------------
@@ -183,7 +183,7 @@ Mudim.CheckSpell = function(key, grp) {
 					}
 				}
 			}
-			
+
 			if (len == 2 && (b[1]==CHIM.CHAR_u || b[1]==CHIM.CHAR_U) && (b[0]==CHIM.CHAR_q || b[0]==CHIM.CHAR_Q) && (grp==2 || (grp==1 && Mudim.GetMarkTypeID(n,1)==1))) {	//spelling rule as described in Issue #16 comment #0
 				CHIM.off = len;
 				return CHIM.Append(len, c, key);
@@ -209,7 +209,7 @@ Mudim.CheckSpell = function(key, grp) {
 				return;
 			} else if( kp > 12 ) {		// b, d, f,...
 				CHIM.off = len;
-			} else if( kp >= 0 ) { // vowels				
+			} else if( kp >= 0 ) { // vowels
 				var i = 0;
 				while (Mudim.consonants.indexOf(b[i])>=0) {
 					i++;
@@ -402,14 +402,14 @@ CHIM.AddKey = function( key ) {
 					if (Mudim.GetMarkTypeID(n,1)==3) {			//Exception of dd, replace the first char
 						//console.debug('Receive 2nd d, consider 1st char to put mark');
 						p=0;c=b[p];x=c.charCodeAt(0);
-					}					
+					}
 					if (Mudim.PutMark(p,x,1,v,n,true)) {
 						//console.debug('Successfully put mark of group 1');
 						if (p>0 && Mudim.GetMarkTypeID(n,1)==1 && p<count-1 && CHIM.CharIsO(b[p])>=0 && CHIM.CharIsUI(b[p-1])>=0 && b[0]!=CHIM.CHAR_q && b[0]!=CHIM.CHAR_Q) {		// uox+ when x!=i   ---> u+o+
 							//console.debug('uoxw when x!=i : put additional + on u');
 							Mudim.PutMark(p-1,b[p-1].charCodeAt(0),1,CHIM.vn_UW,n,false);
 						}
-						found=true; 
+						found=true;
 						break;
 					}
 				}
@@ -423,7 +423,7 @@ CHIM.AddKey = function( key ) {
 			v = CHIM.vncode_2[i];
 			if (Mudim.PutMark(p,x,2,v,n,true)) {
 				//console.debug('Successfully put mark of group 2');
-				found=true; 
+				found=true;
 				break;
 			}
 		}
@@ -465,7 +465,7 @@ CHIM.BackSpace = function() {
 			i--;
 		}
 		if (i<0) {
-			i=CHIM.vn_UW.length-1;		
+			i=CHIM.vn_UW.length-1;
 			while (i>=0 && CHIM.vn_UW[i] != code) {		// is this u+ ?
 				i--;
 			}
@@ -594,7 +594,7 @@ CHIM.GetTarget = function(e) {
 	if (r.tagName == 'BODY') {
 		r = r.parentNode;
 	}
-	CHIM.peckable = r.tagName=='HTML' || r.type=='textarea' || r.type=='text';
+	CHIM.peckable = r.tagName=='HTML' || r.type=='textarea' || r.type=='text' || r.type=='search';
 
 	return r;
 };
@@ -838,21 +838,19 @@ CHIM.HTMLEditor.Process = function(target, l) {
 	range.setEnd(container, offset);
 	range.setStart(container, offset);
 	sel.removeAllRanges();
-	sel.addRange(range);	
+	sel.addRange(range);
 };
 //----------------------------------------------------------------------------
 // Function: CHIM.Freeze
 //----------------------------------------------------------------------------
 CHIM.Freeze = function(target) {
-	/*var ign = Mudim.IGNORE_ID;
+	var ign = Mudim.IGNORE_ID;
 	if (ign.length > 0) {
 		for ( var i = 0; i < ign.length; i++ ) {
 			if( target.id == ign[i] ) {return true;}
 		}
 	}
-	return false;*/
-	var ign = Mudim.IGNORE_ID;
-	return ( ign.test( target.id ) ) ? true : false;
+	return false;
 };
 //----------------------------------------------------------------------------
 // Function: CHIM.KeyHandler
@@ -951,14 +949,14 @@ CHIM.KeyDown = function(e) {
 	if ( e.shiftKey || e.shiftLeft || e.metaKey ) {
 		Mudim.shiftSerie |= 1;		//Shift pressed
 		if (e.keyCode != CHIM.VK_SHIFT) {	// Shift-x
-			Mudim.shiftSerie |= 2;	
+			Mudim.shiftSerie |= 2;
 		}
 		return;
 	}
 	if ( e.ctrlKey || e.ctrlLeft || e.metaKey ) {
 		Mudim.ctrlSerie |= 1;		//Ctrl pressed
 		if (e.keyCode != CHIM.VK_CTRL) {	// Ctrl-x
-			Mudim.ctrlSerie |= 2;	
+			Mudim.ctrlSerie |= 2;
 		}
 		return;
 	}
@@ -1189,7 +1187,7 @@ Mudim.FindAccentPos = function(nKey) {
 	if (!len || CHIM.off!=0) {return -1;}
 	for( i = 1; i < m.length; i++ )
 		if( m[i].indexOf(k) >= 0 ) {break;}
-	p=len-1;	
+	p=len-1;
 	Mudim.is='ot';
 	switch (l=i) {
 		case 1:
@@ -1320,7 +1318,7 @@ Mudim.AdjustAccent = function(vk) {
 		return false;
 	}
 	var p=Mudim.FindAccentPos(vk);
-	var a = Mudim.accent;	
+	var a = Mudim.accent;
 	var b=CHIM.buffer;
 	var v,i,j,c;
 	if (p<0) { return false;}
