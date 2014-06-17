@@ -34,13 +34,9 @@
 					</span>
 				</p>
 				<p>
-					<button type="button" class="btn btn-default btn-xs ext-btn">
-						<em class="fa fa-share-square-o fa-lg">&nbsp;</em> <a class="ex-detail" title="{ROW.detail_title}" href="{ROW.detail_link}">{LANG.detail}</a>
-					</button>
+					<a class="ex-detail btn btn-default btn-xs ext-btn" title="{ROW.detail_title}" href="{ROW.detail_link}"><em class="fa fa-share-square-o fa-lg">&nbsp;</em> {LANG.detail}</a>
 					<!-- BEGIN: install -->
-					<button type="button" class="btn btn-default btn-xs ext-btn">
-						<em class="fa fa-download fa-lg">&nbsp;</em> <a href="{ROW.install_link}">{LANG.install}</a>
-					</button>
+					<a class="btn btn-default btn-xs ext-btn" href="{ROW.install_link}"><em class="fa fa-download fa-lg">&nbsp;</em> {LANG.install}</a>
 					<!-- END: install -->
 				</p>
 			</div>
