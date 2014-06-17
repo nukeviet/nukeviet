@@ -110,7 +110,7 @@ class NV_Extensions
 	{
 		$defaults = array(
 			'method' => 'GET',
-			'timeout' => 5,
+			'timeout' => 10,
 			'redirection' => 5,
 			'requested' => 0,  // Number requested if redirection
 			'httpversion' => 1.0,
