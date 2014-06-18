@@ -10,14 +10,18 @@
 
 if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['pagetitle'];
-
 $array_config = array();
 if( $nv_Request->isset_request( 'save', 'post' ) )
 {
 	$pageTitleMode = $nv_Request->get_title( 'pageTitleMode', 'post', '', 1);
-
-	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'" );
+	if( isset( $global_config['pageTitleMode'] ) )
+	{
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = 'pageTitleMode'" );
+	}
+	else
+	{
+		$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'pageTitleMode', :config_value)" );
+	}
 	$sth->bindParam( ':config_value', $pageTitleMode, PDO::PARAM_STR, 255 );
 	$sth->execute();
 
@@ -40,6 +44,7 @@ $xtpl->assign( 'DATA', $global_config );
 $xtpl->parse( 'main' );
 $content = $xtpl->text( 'main' );
 
+$page_title = $lang_module['pagetitle'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $content );
 include NV_ROOTDIR . '/includes/footer.php';
