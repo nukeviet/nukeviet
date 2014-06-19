@@ -104,6 +104,7 @@ $lang_module['autoinstall_theme_error_warning_fileexist'] = 'Danh sách hiện c
 $lang_module['autoinstall_theme_checkfile_notice'] = 'Để tiếp tục quá trình cài đặt, click vào KIỂM TRA hệ thống sẽ tự động kiểm tra tính tương thích';
 $lang_module['autoinstall_theme_checkfile'] = 'KIỂM TRA !';
 $lang_module['autoinstall_theme_installdone'] = 'TIẾN HÀNH CÀI ĐẶT...';
+$lang_module['autoinstall_theme_error_downloaded'] = 'Lỗi: Không tìm thấy file đã download';
 $lang_module['autoinstall_theme_error_invalidfile'] = 'Lỗi: File zip không hợp lệ';
 $lang_module['autoinstall_theme_error_invalidfile_back'] = 'Quay lại';
 $lang_module['autoinstall_package_processing'] = ' Xin chờ quá trình thực hiện hoàn thành...';

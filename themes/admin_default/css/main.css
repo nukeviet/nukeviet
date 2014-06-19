@@ -80,6 +80,10 @@ a.link:hover {
 	color: #0000FF;
 }
 
+#sb-container{
+	z-index: 2000!important;
+}
+
 .red {
 	color: red
 }

@@ -229,7 +229,7 @@ function nv_xmlOutput( $content, $lastModified )
 
 	$encoding = 'none';
 
-	if( nv_function_exists( 'gzencode' ) )
+	if( nv_function_exists( 'gzencode' ) and isset( $_SERVER['HTTP_ACCEPT_ENCODING'] ) )
 	{
 		$encoding = strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip' ) ? 'gzip' : ( strstr( $_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate' ) ? 'deflate' : 'none' );
 
