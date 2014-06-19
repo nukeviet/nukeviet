@@ -34,8 +34,12 @@ nv_DigitalClock('digclock');
 $(document).ready(function(){
 	$('#menu-site-default .dropdown').hover(function(){
 		$(this).addClass('open');
+		$(this).attr("rel", $(this).attr("title"));
+        $(this).removeAttr("title");
 	}, function(){
 		$(this).removeClass('open');
+		$(this).attr("title", $(this).attr("rel"));
+        $(this).removeAttr("rel");
 	});
 });
 </script>
