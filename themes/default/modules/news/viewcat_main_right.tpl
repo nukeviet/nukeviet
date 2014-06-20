@@ -4,12 +4,12 @@
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
 			<ul class="list-inline" style="margin: 0">
-				<li><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></li>
+				<li><h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2></li>
 				<!-- BEGIN: subcatloop -->
-				<li class="hidden-xs"><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
+				<li class="hidden-xs"><h3><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h3></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></li>
+				<li class="pull-right hidden-xs"><h3><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></h3></li>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>

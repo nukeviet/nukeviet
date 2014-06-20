@@ -284,3 +284,17 @@ div.news_column ul.related a:hover{
 .margin_image{
 	margin: 0 5px 1px 0;
 }
+h1{
+    font-size: 16px !important;
+}
+h2{
+    font-size: 15px !important;
+}
+h3{
+    font-size: 14px !important;
+}
+.news_column h1, .news_column h2, .news_column h3, .news_column h4, .news_column h5, .news_column h6
+{
+	padding: 0 !important;
+	margin: 0 !important;
+}

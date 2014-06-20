@@ -9,9 +9,16 @@
 			<div class="container">
 				<div class="row" id="header-wraper">
 					<div id="header">
+						<!-- BEGIN: main_h1 -->
+						<div id="logo">
+							 <h1><a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{SITE_NAME}" /><span>{SITE_NAME}</span></a></h1>
+						</div>
+						<!-- END: main_h1 -->
+						<!-- BEGIN: main_none_h1 -->
 						<div id="logo">
 							<a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" alt="{SITE_NAME}" /><span>{SITE_NAME}</span></a>
 						</div>
+						<!-- END: main_none_h1 -->
 						<div class="pull-right">
 							<div id="social-icons">
 								[SOCIAL_ICONS]
