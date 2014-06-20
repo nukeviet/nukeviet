@@ -254,6 +254,23 @@ function nv_setup_data_module( $lang, $module_name )
 				}
 			}
 			// end get default layout
+			$_layoutdefault = ( isset( $module_version['layoutdefault'] ) ) ? $module_version['layoutdefault'] : '';
+			if( ! empty( $_layoutdefault ) )
+			{
+				$_layout_mod = explode( ';', $_layoutdefault );
+				foreach ( $_layout_mod as $_layout_fun )
+				{
+					list( $layout_name, $_func ) = explode( ':', trim( $_layout_fun ) );
+					$arr_f = explode( ',', trim( $_func ) );
+					foreach( $arr_f as $f )
+					{
+						if( ! isset( $array_layout_func_default[$module_name][$f]) )
+						{
+							$array_layout_func_default[$module_name][$f] = $layout_name;
+						}
+					}
+				}
+			}
 
 			$arr_func_id_old = array();
 
@@ -268,16 +285,17 @@ function nv_setup_data_module( $lang, $module_name )
 			$new_funcs = preg_replace( $global_config['check_op_file'], '\\1', $new_funcs );
 			$new_funcs = array_flip( $new_funcs );
 			$array_keys = array_keys( $new_funcs );
-
+			
+			$array_submenu = ( isset( $module_version['submenu'] ) ) ? explode( ',', $module_version['submenu'] ) : array();
 			foreach( $array_keys as $func )
 			{
 				$show_func = 0;
 				$weight = 0;
-				$layout = ( isset( $array_layout_func_default[$module_name][$func] ) ) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
+				$in_submenu = ( in_array( $func, $array_submenu ) ) ? 1 : 0;
 				if( isset( $arr_func_id_old[$func] ) and isset( $arr_func_id_old[$func] ) > 0 )
 				{
 					$arr_func_id[$func] = $arr_func_id_old[$func];
-					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
+					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET show_func= ' . $show_func . ', in_submenu=' . $in_submenu . ', subweight=0 WHERE func_id=' . $arr_func_id[$func] );
 				}
 				else
 				{
@@ -289,7 +307,7 @@ function nv_setup_data_module( $lang, $module_name )
 
 					$arr_func_id[$func] = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
-					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", 0, " . $weight . ", '')", "func_id", $data );
+					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data );
 				}
 			}
 
@@ -303,6 +321,10 @@ function nv_setup_data_module( $lang, $module_name )
 					$show_func = 1;
 					++$subweight;
 					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
+
+					$layout = ( isset( $array_layout_func_default[$module_name][$func] ) ) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
+					
+					$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (`func_id`, `layout`, `theme`) VALUES (' . $func_id . ', ' . $db->quote( $layout ) . ', ' . $db->quote( $selectthemes ) . ')');
 				}
 			}
 		}
@@ -314,8 +336,10 @@ function nv_setup_data_module( $lang, $module_name )
 			$sth->execute();
 		}
 
+		
 		if( isset( $module_version['uploads_dir'] ) and ! empty( $module_version['uploads_dir'] ) )
 		{
+			$sth_dir = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)' );
 			foreach( $module_version['uploads_dir'] as $path )
 			{
 				$cp = '';
@@ -332,9 +356,8 @@ function nv_setup_data_module( $lang, $module_name )
 							{
 								try
 								{
-									$sth = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)' );
-									$sth->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $cp . $p, PDO::PARAM_STR );
-									$sth->execute();
+									$sth_dir->bindValue(':dirname', NV_UPLOADS_DIR . '/' . $cp . $p, PDO::PARAM_STR );
+									$sth_dir->execute();
 								}
 								catch (PDOException $e)
 								{

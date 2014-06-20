@@ -51,10 +51,12 @@ var NV = {
 		var wrap = $('.nvwrap');
 		var vmenu = $('#left-menu');
 		
-		if( wrap.height() < vmenu.height() + vmenu.offset().top && vmenu.is(':visible') ){
-			wrap.css('min-height', ( vmenu.height() + vmenu.offset().top ) + 'px' )
-		}else{
-			wrap.css('min-height', '100%');
+		if( wrap.length > 0 ){
+			if( wrap.height() < vmenu.height() + vmenu.offset().top && vmenu.is(':visible') ){
+				wrap.css('min-height', ( vmenu.height() + vmenu.offset().top ) + 'px' )
+			}else{
+				wrap.css('min-height', '100%');
+			}		
 		}
 	},
 };

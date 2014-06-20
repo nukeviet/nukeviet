@@ -1,0 +1,106 @@
+.ext-wrap{
+	background: #F7F7F7;
+	margin-bottom: 10px;
+}
+
+.ext-item{
+	border-bottom: 1px #f2f2f2 solid;
+	border-top: 1px #fff solid;
+	padding: 10px;
+}
+
+.ext-item span.img-thumbnail{
+	width: 110px;
+	height: 110px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.ext-item span.img-thumbnail span{
+	width: 100px;
+	height: 100px;
+	overflow: hidden;
+	display: inline-block;
+}
+
+.ext-item span.img-thumbnail span img{
+	width: 100px;
+	min-height: 100px;
+}
+
+.ext-item .col-img{
+	float: left;
+	width: 120px;
+}
+
+.ext-item .col-data{
+	padding-left: 120px;
+	height: 110px;
+}
+
+.ext-item .col-info{
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	height: 110px;
+}
+
+.ext-item .col-explain{
+	float: right;
+	width: 200px;
+	padding-left: 10px;
+	height: 110px;
+}
+
+/*
+ * Star rating
+ */
+.rating {
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	font-size: 22px;
+}
+.rating span.star {
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	display: inline-block;
+}
+.rating span.star:before {
+	content: "\f006";
+	padding-right: 5px;
+	color: #999999;
+}
+.rating span.star.active:before,
+.rating span.star.active ~ span.star:before {
+	content: "\f005";
+	color: #e3cf7a;
+}
+
+/*
+ * Fixed bootstrap button
+ */
+.ext-btn em{
+	color: #666;
+}
+
+.ext-btn a, .ext-btn a:hover{
+	color: #666;
+	text-decoration: none;
+}
+
+/**
+ * Detail
+ */
+.ext-dinfo{
+	width: 300px;
+	margin-left: 10px;
+}
+.ext-detail img{
+	margin-bottom: 10px!important;
+	max-width: 90%!important;
+}
+
+#file-download, #file-download .complete, #file-download .waiting{
+	display: none;
+}

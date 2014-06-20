@@ -1,82 +1,3 @@
-<!-- BEGIN: autoinstall_theme_error_uploadfile -->
-<p class="text-center">
-	<br />
-	<strong style="color:red">{LANG.autoinstall_theme_error_uploadfile}</strong>
-</p>
-<!-- END: autoinstall_theme_error_uploadfile -->
-
-<!-- BEGIN: autoinstall_theme_error_invalidfile -->
-<p class="text-center">
-	<br />
-	<strong style="color:red">{LANG.autoinstall_theme_error_invalidfile} <a href="javascript:history.go(-1)">{LANG.autoinstall_theme_error_invalidfile_back}</a></strong>
-</p>
-<!-- END: autoinstall_theme_error_invalidfile -->
-<!-- BEGIN: autoinstall_theme_uploadedfile -->
-<table class="table">
-	<tbody>
-		<tr>
-			<td><strong>{LANG.autoinstall_theme_uploadedfile}</strong><span style="color:red;font-weight:bold">{FILENAME}</span> - {LANG.autoinstall_theme_uploadedfilesize}<span style="color:red;font-weight:bold">{FILESIZE}</span></td>
-		</tr>
-	</tbody>
-</table>
-<table class="table">
-	<tbody>
-		<tr>
-			<td> {LANG.autoinstall_theme_uploaded_filenum} {FILENUM} </td>
-		</tr>
-	</tbody>
-</table>
-<div style="overflow:auto;max-height:300px;width:100%">
-	<table class="table">
-		<col style="width:40px" />
-		<col style="width:50%" />
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td>{FILE.stt}</td>
-				<td>{FILE.filename}</td>
-				<td>{FILE.size}</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
-</div>
-<div id="message" style="display:none;text-align:center;color:red">
-	<table class="table">
-		<tbody>
-			<tr>
-				<td class="text-center"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />
-				<br />
-				{LANG.autoinstall_package_processing} </td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div id="step1">
-	<table class="table">
-		<tbody>
-			<tr>
-				<td class="text-center"><strong>{LANG.autoinstall_theme_checkfile_notice}</strong>
-				<br />
-				<input type="button" name="checkfile" value="{LANG.autoinstall_theme_checkfile}" class="btn btn-primary"/></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<script type="text/javascript">
-	$(function() {
-		//<![CDATA[
-		$("input[name=checkfile]").click(function() {
-			$("#message").show();
-			$("#step1").html("");
-			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
-				$("#message").hide();
-			});
-		});
-	});
-	//]]>
-</script>
-<!-- END: autoinstall_theme_uploadedfile -->
 <!-- BEGIN: main -->
 <form name="install_theme" enctype="multipart/form-data" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}" method="post">
 	<table class="table">
@@ -122,3 +43,73 @@
 	//]]>
 </script>
 <!-- END: main -->
+
+<!-- BEGIN: info -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
+<!-- BEGIN: fileinfo -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<tbody>
+			<tr>
+				<td class="text-center"> {LANG.autoinstall_theme_uploadedfile} <strong style="color:red">{INFO.filename}</strong> - {LANG.autoinstall_theme_uploadedfilesize} <strong style="color:red">{INFO.filesize}</strong></td>
+			</tr>
+			<tr>
+				<td class="text-center"> {LANG.autoinstall_theme_uploaded_filenum} <strong style="color:red">{INFO.filenum}</strong></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id="filelist">
+	<!-- BEGIN: file -->
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td> {FILE} </td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
+	<!-- END: file -->
+</div>
+<div id="message" style="display:none;text-align:center;color:red">
+	<table class="table">
+		<tbody>
+			<tr>
+				<td class="text-center"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />
+				<br />
+				{LANG.autoinstall_package_processing} </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id="step1">
+	<table class="table">
+		<tbody>
+			<tr>
+				<td class="text-center">
+				<p><strong>{LANG.autoinstall_theme_checkfile_notice}</strong></p>
+				<input type="button" name="checkfile" value="{LANG.autoinstall_theme_checkfile}" class="btn btn-primary"/></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+	$(function() {
+		//<![CDATA[
+		$("input[name=checkfile]").click(function() {
+			$("#message").show();
+			$("#step1").html("");
+			$("#step1").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check", function() {
+				$("#message").hide();
+			});
+		});
+	});
+	//]]>
+</script>
+<!-- END: fileinfo -->
+<!-- END: info -->

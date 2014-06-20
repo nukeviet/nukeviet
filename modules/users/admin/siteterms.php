@@ -29,7 +29,7 @@ else
 	$mode = 'edit';
 }
 
-$error = '';
+$error = $content = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {

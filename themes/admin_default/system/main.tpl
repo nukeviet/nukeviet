@@ -150,18 +150,5 @@
 <div id="timeoutsess" class="chromeframe">
 	{LANG_TIMEOUTSESS_NOUSER}, <a onclick="timeoutsesscancel();" href="#">{LANG_TIMEOUTSESS_CLICK}</a>. {LANG_TIMEOUTSESS_TIMEOUT}: <span id="secField"> 60 </span> {LANG_TIMEOUTSESS_SEC}
 </div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
-<!-- BEGIN: ckeditor -->
-<script type="text/javascript">
-	for (var i in CKEDITOR.instances) {
-		CKEDITOR.instances[i].on('key', function(e) {
-			$(window).bind('beforeunload', function() {
-				return '{MSGBEFOREUNLOAD}';
-			});
-		});
-	}
-</script>
-<!-- END: ckeditor -->
 {FILE "footer.tpl"}
 <!-- END: main -->

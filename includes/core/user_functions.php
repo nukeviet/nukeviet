@@ -196,6 +196,7 @@ function nv_blocks_content( $sitecontent )
 					}
 					if( ! empty( $xtpl ) )
 					{
+						$xtpl->assign( 'BLOCK_ID', $_row['bid'] );
 						$xtpl->assign( 'BLOCK_TITLE', $_row['blockTitle'] );
 						$xtpl->assign( 'BLOCK_CONTENT', $content );
 						$xtpl->assign( 'TEMPLATE', $_template );
@@ -258,17 +259,17 @@ function nv_html_meta_tags()
 	global $global_config, $db_config, $lang_global, $key_words, $description, $module_info, $home, $client_info, $op, $page_title, $canonicalUrl, $meta_property, $id_profile_googleplus;
 
 	$return = '';
-	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? strip_tags( $description ) : ( ! empty( $module_info['description'] ) ? $module_info['description'] : '' ) );
+	$site_description = $home ? $global_config['site_description'] : ( ! empty( $description ) ? $description : ( empty( $module_info['description'] ) ? '' : $module_info['description'] ) );
 
 	if ( empty( $site_description ) )
- {
- $ds = array();
- if ( ! empty( $page_title ) ) $ds[] = $page_title;
- if ( $op != 'main' ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
- $ds[] = $module_info['custom_title'];
- $ds[] = $client_info['selfurl'];
- $site_description = implode( ' - ', $ds );
- }
+	{
+		$ds = array();
+		if ( ! empty( $page_title ) ) $ds[] = $page_title;
+		if ( $op != 'main' ) $ds[] = $module_info['funcs'][$op]['func_custom_name'];
+		$ds[] = $module_info['custom_title'];
+		$ds[] = $client_info['selfurl'];
+		$site_description = implode( ' - ', $ds );
+	}
 	elseif ( $site_description == 'no' )
 	{
 		$site_description = '';
@@ -276,7 +277,13 @@ function nv_html_meta_tags()
 
 	if ( ! empty( $site_description ) )
 	{
-		$return .= "<meta name=\"description\" content=\"" . strip_tags( $site_description ) . "\" />\n";
+	    $site_description = preg_replace( '/<[^>]*>/', ' ', $site_description ); // ----- remove HTML TAGs
+	    $site_description = str_replace( "\r", '', $site_description );    // --- replace with empty space
+	    $site_description = str_replace( "\n", ' ', $site_description );   // --- replace with space
+	    $site_description = str_replace( "\t", ' ', $site_description );   // --- replace with space
+	    $site_description = trim( preg_replace( '/[ ]+/', ' ', $site_description ) ); // ----- remove multiple spaces
+
+		$return .= "<meta name=\"description\" content=\"" . $site_description . "\" />\n";
 	}
 
 	$kw = array();

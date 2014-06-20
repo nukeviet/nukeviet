@@ -24,7 +24,7 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
+if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) or $nv_Request->isset_request( 'downloaded', 'get' ) )
 {
 	require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
@@ -33,52 +33,66 @@ if( $nv_Request->isset_request( NV_OP_VARIABLE, 'post' ) )
 	$error = '';
 	$info = array();
 
-	if( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
+	if( $nv_Request->isset_request( 'downloaded', 'get' ) )
 	{
-		if( move_uploaded_file( $_FILES['modulefile']['tmp_name'], $filename ) )
+		if( ! file_exists( $filename ) )
 		{
-			$zip = new PclZip( $filename );
-			$status = $zip->properties();
+			$error = $lang_module['autoinstall_module_error_downloaded'];
+		}
+	}
+	elseif( is_uploaded_file( $_FILES['modulefile']['tmp_name'] ) )
+	{
+		if( ! move_uploaded_file( $_FILES['modulefile']['tmp_name'], $filename ) )
+		{
+			$error = $lang_module['autoinstall_module_error_uploadfile'];
+		}
+		
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename( $_FILES['modulefile']['name'] ), $admin_info['userid'] );
+		
+		if( ! file_exists( $filename ) )
+		{
+			$error = $lang_module['autoinstall_module_error_downloaded'];
+		}
+	}
 
-			if( $status['status'] == 'ok' )
+	// Check file
+	if( empty( $error ) )
+	{
+		$zip = new PclZip( $filename );
+		$status = $zip->properties();
+
+		if( $status['status'] == 'ok' )
+		{
+			$validfolder = array();
+			$info['filesize'] = nv_convertfromBytes( filesize( $filename ) );
+			$info['filename'] = basename( $filename );
+			$info['filenum'] = $status['nb'];
+			$info['filefolder'] = array();
+			$info['filelist'] = array();
+
+			// Show file and folder
+			$list = $zip->listContent();
+			$sizeof = sizeof( $list );
+
+			for( $i = 0, $j = 1; $i < $sizeof; ++$i, ++$j )
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_module'], basename( $_FILES['modulefile']['name'] ), $admin_info['userid'] );
-
-				$validfolder = array();
-				$info['filesize'] = nv_convertfromBytes( $_FILES['modulefile']['size'] );
-				$info['filename'] = $_FILES['modulefile']['name'];
-				$info['filenum'] = $status['nb'];
-				$info['filefolder'] = array();
-				$info['filelist'] = array();
-
-				// Show file and folder
-				$list = $zip->listContent();
-				$sizeof = sizeof( $list );
-
-				for( $i = 0, $j = 1; $i < $sizeof; ++$i, ++$j )
+				if( ! $list[$i]['folder'] )
 				{
-					if( ! $list[$i]['folder'] )
-					{
-						$bytes = nv_convertfromBytes( $list[$i]['size'] );
-					}
-					else
-					{
-						$bytes = '';
-						$validfolder[] = $list[$i]['filename'];
-					}
-
-					$info['filefolder'][] = $list[$i]['filename'];
-					$info['filelist'][] = '[' . $j . '] ' . $list[$i]['filename'] . ' ' . $bytes;
+					$bytes = nv_convertfromBytes( $list[$i]['size'] );
 				}
-			}
-			else
-			{
-				$error = $lang_module['autoinstall_module_error_invalidfile'] . ' <a href="javascript:history.go(-1)">' . $lang_module['back'] . '</a>';
-			}
+				else
+				{
+					$bytes = '';
+					$validfolder[] = $list[$i]['filename'];
+				}
+
+				$info['filefolder'][] = $list[$i]['filename'];
+				$info['filelist'][] = '[' . $j . '] ' . $list[$i]['filename'] . ' ' . $bytes;
+			}		
 		}
 		else
 		{
-			$error = $lang_module['autoinstall_module_error_uploadfile'];
+			$error = $lang_module['autoinstall_module_error_invalidfile'] . ' <a href="javascript:history.go(-1)">' . $lang_module['back'] . '</a>';
 		}
 	}
 

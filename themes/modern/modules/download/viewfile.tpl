@@ -108,11 +108,11 @@
 					{ROW.download_hits}
 				</div>
 			</li>
-			<!-- BEGIN: comment_allow -->
+			<!-- BEGIN: comment_hits -->
 			<li>
 				<strong>{LANG.comment_hits}</strong>: {ROW.comment_hits}
 			</li>
-			<!-- END: comment_allow -->
+			<!-- END: comment_hits -->
 		</ul>
 		<div class="b-rate m-bottom">
 			<div class="header-rate">

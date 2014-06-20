@@ -21,7 +21,7 @@
 					</tr>
 					<tr>
 						<td><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg icon-pointer" onclick="get_alias();">&nbsp;</em></td>
+						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
 					</tr>
 				</tbody>
 			</table>
@@ -70,7 +70,7 @@
 						<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 					</tr>
 					<tr>
-						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 98%; height:100px;">{rowcontent.hometext}</textarea></td>
+						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 100%; height:100px;" class="form-control">{rowcontent.hometext}</textarea></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
