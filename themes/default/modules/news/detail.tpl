@@ -13,7 +13,7 @@
 <!-- END: facebookjssdk -->
 <div class="news_column panel panel-default">
 	<div class="panel-body">
-		<h2>{DETAIL.title}</h2>
+		<h1>{DETAIL.title}</h1>
 		<em class="pull-left time">{DETAIL.publtime}</em>
 		<ul class="list-inline pull-right">
 			<!-- BEGIN: allowed_send -->
