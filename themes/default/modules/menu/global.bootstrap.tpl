@@ -37,6 +37,13 @@ $(document).ready(function(){
 	}, function(){
 		$(this).removeClass('open');
 	});
+	$('#menu-site-default a').hover(function(){
+		$(this).attr("rel", $(this).attr("title"));
+        $(this).removeAttr("title");
+	}, function(){
+		$(this).attr("title", $(this).attr("rel"));
+        $(this).removeAttr("rel");
+	});
 });
 </script>
 <!-- END: main -->

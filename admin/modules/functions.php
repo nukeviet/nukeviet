@@ -321,10 +321,6 @@ function nv_setup_data_module( $lang, $module_name )
 					$show_func = 1;
 					++$subweight;
 					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
-
-					$layout = ( isset( $array_layout_func_default[$module_name][$func] ) ) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
-					
-					$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (`func_id`, `layout`, `theme`) VALUES (' . $func_id . ', ' . $db->quote( $layout ) . ', ' . $db->quote( $selectthemes ) . ')');
 				}
 			}
 		}
