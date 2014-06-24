@@ -121,6 +121,33 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 		$xtpl->parse( 'main.complete' );
 	}
+	elseif( $nv_Request->isset_request( 'saveall', 'post' ) and $nv_Request->isset_request( 'layout', 'post' ) )
+	{
+		$layout = $nv_Request->get_string( 'layout', 'post' );
+		$module = $nv_Request->get_string( 'module', 'post' );
+		if( in_array( $layout, $layout_array) )
+		{
+			if( empty( $module ) )
+			{
+				//Setup layout for all module
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func=1) AND theme= :theme' );
+				$sth->bindParam( ':layout', $layout, PDO::PARAM_STR );
+				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+				$sth->execute();
+				$set_layout_site = true;
+			}
+			elseif( isset( $site_mods[$module] ) )
+			{
+				//Setup layout for module
+				$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_modthemes SET layout= :layout WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module = :in_module AND show_func=1) AND theme= :theme' );
+				$sth->bindParam( ':layout', $layout, PDO::PARAM_STR );
+				$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+				$sth->bindParam( ':in_module', $module, PDO::PARAM_STR );
+				$sth->execute();
+				$set_layout_site = true;
+			}
+		}
+	}
 
 	$array_layout_func_data = array();
 	$sth = $db->prepare('SELECT func_id, layout FROM ' . NV_PREFIXLANG . '_modthemes WHERE theme= :theme');
@@ -194,6 +221,12 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		nv_del_moduleCache( 'modules' );
 	}
 
+	foreach( $layout_array as $_layout )
+	{
+		$xtpl->assign( 'LAYOUT', $_layout );
+		$xtpl->parse( 'main.layout' );
+	}
+
 	$rows = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' )->fetchAll();
 	$number_func = sizeof( $rows );
 
@@ -202,7 +235,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	{
 		if( isset( $array_layout_func[$row['title']] ) )
 		{
-			$xtpl->assign( 'MOD_NAME_TITLE', $row['custom_title'] );
+			$xtpl->assign( 'MODULE', $row );
+			$xtpl->parse( 'main.module' );
 
 			$array_layout_func_mod = $array_layout_func[$row['title']];
 
