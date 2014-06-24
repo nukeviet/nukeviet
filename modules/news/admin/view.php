@@ -49,8 +49,6 @@ if( $rowcontent['id'] > 0 )
 			}
 		}
 	}
-
-
 }
 if( $check_permission )
 {
