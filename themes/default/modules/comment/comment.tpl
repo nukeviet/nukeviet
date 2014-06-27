@@ -7,9 +7,9 @@
 		</a>
 		<div class="media-body">
 			<div class="comment-info">
-				<em class="fa fa-user">&nbsp;</em> <strong class="item">{COMMENT.post_name} </strong>
+				<em class="fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
 				<!-- BEGIN: emailcomm -->
-			 	<em class="fa fa-envelope-o">&nbsp;</em> <a class="item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
+			 	<em class="fa fa-envelope-o">&nbsp;</em> <a class="cm_item" title="mailto {COMMENT.post_email}" href="mailto:{COMMENT.post_email}">{COMMENT.post_email}</a>
 				<!-- END: emailcomm -->
 				<em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
 			</div>
