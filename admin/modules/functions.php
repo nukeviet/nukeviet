@@ -285,7 +285,7 @@ function nv_setup_data_module( $lang, $module_name )
 			$new_funcs = preg_replace( $global_config['check_op_file'], '\\1', $new_funcs );
 			$new_funcs = array_flip( $new_funcs );
 			$array_keys = array_keys( $new_funcs );
-			
+
 			$array_submenu = ( isset( $module_version['submenu'] ) ) ? explode( ',', $module_version['submenu'] ) : array();
 			foreach( $array_keys as $func )
 			{
@@ -308,6 +308,18 @@ function nv_setup_data_module( $lang, $module_name )
 					$arr_func_id[$func] = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modfuncs
 						(func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES
 					 	(:func_name, :alias, :func_custom_name, :in_module, " . $show_func . ", " . $in_submenu . ", " . $weight . ", '')", "func_id", $data );
+					if( $arr_func_id[$func] )
+					{
+	-					$layout = $layoutdefault;
+						if( isset( $array_layout_func_default[$module_name][$func] ) )
+						{
+							if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/layout/layout.' . $array_layout_func_default[$module_name][$func] . '.tpl' ) )
+							{
+								$layout = $array_layout_func_default[$module_name][$func];
+							}
+						}
+						$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (`func_id`, `layout`, `theme`) VALUES (' . $arr_func_id[$func] . ', ' . $db->quote( $layout ) . ', ' . $db->quote( $selectthemes ) . ')');
+					}
 				}
 			}
 
@@ -321,10 +333,6 @@ function nv_setup_data_module( $lang, $module_name )
 					$show_func = 1;
 					++$subweight;
 					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $lang . '_modfuncs SET subweight=' . $subweight . ', show_func=' . $show_func . ' WHERE func_id=' . $func_id );
-
-					$layout = ( isset( $array_layout_func_default[$module_name][$func] ) ) ? $array_layout_func_default[$module_name][$func] : $layoutdefault;
-					
-					$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (`func_id`, `layout`, `theme`) VALUES (' . $func_id . ', ' . $db->quote( $layout ) . ', ' . $db->quote( $selectthemes ) . ')');
 				}
 			}
 		}
@@ -336,7 +344,7 @@ function nv_setup_data_module( $lang, $module_name )
 			$sth->execute();
 		}
 
-		
+
 		if( isset( $module_version['uploads_dir'] ) and ! empty( $module_version['uploads_dir'] ) )
 		{
 			$sth_dir = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)' );

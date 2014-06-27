@@ -48,7 +48,14 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 
 		$page_title = $module_info['custom_title'];
 		$key_words = $module_info['keywords'];
-		$global_config['mudim_active'] = 0;
+		if( $client_info['browser']['key'] == 'chrome' )
+		{
+			$global_config['mudim_showpanel'] = 0;
+		}
+		else
+		{
+			$global_config['mudim_active'] = 0;
+		}
 
 		$sortcomm_old = $nv_Request->get_int( 'sortcomm', 'cookie', $module_config[$module]['sortcomm'] );
 		$sortcomm = $nv_Request->get_int( 'sortcomm', 'post,get', $sortcomm_old );

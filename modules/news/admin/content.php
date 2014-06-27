@@ -332,7 +332,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
 
-	if( ! empty( $publ_date ) and preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m ) )
 	{
 		$phour = $nv_Request->get_int( 'phour', 'post', 0 );
 		$pmin = $nv_Request->get_int( 'pmin', 'post', 0 );
@@ -344,7 +344,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	}
 
 	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
-	if( ! empty( $exp_date ) and preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m ) )
 	{
 		$ehour = $nv_Request->get_int( 'ehour', 'post', 0 );
 		$emin = $nv_Request->get_int( 'emin', 'post', 0 );
@@ -771,9 +771,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 							}
 							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 						}
-						$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . $tid . ', :keyword)' );
-						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
-						$sth->execute();
+						try
+						{
+							$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . $tid . ', :keyword)' );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute();
+						}
+						catch( PDOException $e )
+						{
+							trigger_error( $e->getMessage() );
+						}
 					}
 				}
 
@@ -977,7 +984,6 @@ for( $i = 0; $i < 60; ++$i )
 $xtpl->assign( 'emin', $select );
 
 // allowed comm
-
 $allowed_comm = explode( ',', $rowcontent['allowed_comm'] );
 foreach( $groups_list as $_group_id => $_title )
 {
@@ -1067,7 +1073,6 @@ if( defined( 'NV_IS_ADMIN_MODULE' ) || ! empty( $array_pub_content ) ) //toan qu
 }
 else
 {
-
 	//gioi hoan quyen
 	if( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
 	{
@@ -1119,5 +1124,3 @@ if( $rowcontent['id'] > 0 )
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

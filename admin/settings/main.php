@@ -10,8 +10,6 @@
 
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
-$page_title = sprintf( $lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name'] );
-
 $submit = $nv_Request->get_string( 'submit', 'post' );
 $errormess = '';
 
@@ -56,6 +54,11 @@ if( $submit )
 	}
 
 	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );
+	if( ! isset( $site_mods[$array_config['site_home_module']] ) )
+	{
+		$array_config['site_home_module'] = $global_config['site_home_module'];
+	}
+
 	$array_config['site_description'] = nv_substr( $nv_Request->get_title( 'site_description', 'post', '', 1 ), 0, 255 );
 	$array_config['disable_site_content'] = $nv_Request->get_editor( 'disable_site_content', '', NV_ALLOWED_HTML_TAGS );
 
@@ -137,11 +140,6 @@ $value_setting = array(
 	'switch_mobi_des' => $global_config['switch_mobi_des']
 );
 
-$module_array = array();
-
-$sql = 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' WHERE act=1 ORDER BY weight ASC';
-$module_array = $db->query( $sql )->fetchAll();
-
 if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 $lang_module['browse_image'] = $lang_global['browse_image'];
 
@@ -172,7 +170,9 @@ if( ! empty( $mobile_theme_array ) )
     $xtpl->parse( 'main.mobile_theme' );
 }
 
-foreach( $module_array as $mod )
+$sql = "SELECT title, custom_title FROM " . NV_MODULES_TABLE . " WHERE act=1 AND title NOT IN ('menu', 'comment') ORDER BY weight ASC";
+$mods = $db->query( $sql );
+foreach( $mods as $mod )
 {
 	$xtpl->assign( 'SELECTED', ( $global_config['site_home_module'] == $mod['title'] ) ? ' selected="selected"' : '' );
 	$xtpl->assign( 'MODULE', $mod );
@@ -202,6 +202,8 @@ if( $errormess != '' )
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
+
+$page_title = sprintf( $lang_module['lang_site_config'], $language_array[NV_LANG_DATA]['name'] );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

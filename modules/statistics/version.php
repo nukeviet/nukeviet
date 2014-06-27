@@ -15,6 +15,7 @@ $module_version = array(
 	'modfuncs' => 'main,allreferers,allcountries,allbrowsers,allos,allbots,referer',
 	'change_alias' => 'allreferers,allcountries,allbrowsers,allos,allbots,referer',
 	'submenu' => 'main,allreferers,allcountries,allbrowsers,allos,allbots',
+	'layoutdefault' => 'body:main,allreferers,allcountries,allbrowsers,allos,allbots',
 	'is_sysmod' => 0,
 	'virtual' => 2,
 	'version' => '4.0.00',

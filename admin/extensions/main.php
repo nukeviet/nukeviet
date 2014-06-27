@@ -21,7 +21,7 @@ if( ! defined( 'SHADOWBOX' ) )
 $page_title = $lang_global['mod_extensions'];
 
 $request = array();
-$request['page'] = $nv_Request->get_int( 'page', 'get', 0 );
+$request['page'] = $nv_Request->get_int( 'page', 'get', 1 );
 $request['mode'] = $nv_Request->get_title( 'mode', 'get', 'featured' );
 $request['q'] = nv_substr( $nv_Request->get_title( 'q', 'get', '' ), 0, 64 );
 

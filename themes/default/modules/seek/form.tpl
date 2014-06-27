@@ -21,18 +21,18 @@
 			</div>
 			<div class="form-group">
 				<input type="submit" id="search_submit" value="{LANG.search_title}" class="btn btn-primary"/>
-				<a href="advSearch" class="advSearch">{LANG.search_title_adv}</a>
+				<a href="#" class="advSearch">{LANG.search_title_adv}</a>
 			</div>
 		</div>
 		<div class="radio">
 			<label class="radio-inline">
-				<input name="l" id="search_logic_and" type="radio"{DATA.andChecked} value="1" /> 
+				<input name="l" id="search_logic_and" type="radio"{DATA.andChecked} value="1" />
 				{LANG.logic_and}
-			</label>			
+			</label>
 			<label class="radio-inline">
 				<input name="l" id="search_logic_or" type="radio"{DATA.orChecked} value="0" />
 				{LANG.logic_or}
-			</label>			
+			</label>
 		</div>
 		<input type="hidden" name="page" value="{PAGE}"/>
 	</form>

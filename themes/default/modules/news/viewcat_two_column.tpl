@@ -48,7 +48,7 @@
 <div class="news_column two_column col-md-6">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
-			<a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a>
+			<h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2>
 		</div>
 
 		<div class="panel-body">
