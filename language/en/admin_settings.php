@@ -26,6 +26,8 @@ $lang_module['optActive_no'] = 'No activation';
 $lang_module['optActive_all'] = 'Activate full site';
 $lang_module['optActive_site'] = 'Activated areas outside the site';
 $lang_module['optActive_admin'] = 'Activate the admin area';
+
+$lang_module['site_domain'] = 'Primary Domain';
 $lang_module['sitename'] = 'Site name';
 $lang_module['theme'] = 'Default theme for PC';
 $lang_module['mobile_theme'] = 'Default theme for Mobile';

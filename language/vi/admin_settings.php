@@ -26,6 +26,8 @@ $lang_module['optActive_no'] = 'Không kích hoạt';
 $lang_module['optActive_all'] = 'Kích hoạt toàn site';
 $lang_module['optActive_site'] = 'Kích hoạt khu vực ngoài site';
 $lang_module['optActive_admin'] = 'Kích hoạt khu vực admin';
+
+$lang_module['site_domain'] = 'Tên miền chính của site';
 $lang_module['sitename'] = 'Tên gọi của site';
 $lang_module['theme'] = 'Giao diện mặc định cho PC';
 $lang_module['mobile_theme'] = 'Giao diện mặc định cho Mobile';
