@@ -14,6 +14,18 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
+$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
+if( $page > 1 )
+{
+	$base_url_rewrite .= '/page-' . $page;
+}
+$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die();
+}
+
 $set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == 'viewcat_main_' ) ? true : false;
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
