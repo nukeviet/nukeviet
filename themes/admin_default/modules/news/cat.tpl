@@ -67,6 +67,10 @@
 						</td>
 					</tr>
 					<tr>
+						<td class="text-right"><strong>{LANG.content_bodytext}: </strong></td>
+						<td>{DESCRIPTIONHTML}</td>
+					</tr>
+					<tr>
 						<td class="text-right"><strong>{LANG.viewdescription}: </strong></td>
 						<td>
 						<!-- BEGIN: viewdescription -->

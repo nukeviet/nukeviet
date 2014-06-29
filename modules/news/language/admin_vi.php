@@ -56,7 +56,7 @@ $lang_module['checkall'] = 'Chọn tất cả';
 $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
 
 $lang_module['description'] = 'Miêu tả';
-$lang_module['viewdescription'] = 'Hiển thị miêu tả khi xem chủ đề';
+$lang_module['viewdescription'] = 'Hiển thị nội dung chi tiết khi xem chủ đề';
 $lang_module['viewdescription_0'] = 'Không hiển thị ';
 $lang_module['viewdescription_1'] = 'Hiển thị tại trang số 1 của chủ đề';
 $lang_module['viewdescription_2'] = 'Hiển thị ở tất cả các trang của chủ đề';
