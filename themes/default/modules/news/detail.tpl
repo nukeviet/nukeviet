@@ -26,26 +26,7 @@
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_save -->
 		</ul>
-		<div class="clear">&nbsp;</div>
-        <!-- BEGIN: socialbutton -->
-        <div class="socialicon pull-left">
-	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
-	        <div class="g-plusone" data-size="medium"></div>
-	        <script type="text/javascript">
-	          window.___gcfg = {lang: nv_sitelang};
-	          (function() {
-	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	            po.src = 'https://apis.google.com/js/plusone.js';
-	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	          })();
-	        </script>
-
-	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-	    </div>
-        <!-- END: socialbutton -->
-		<div class="clear">&nbsp;</div>
-		<hr />
+		<hr class="clear"/>
 		<!-- BEGIN: showhometext -->
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
@@ -86,12 +67,30 @@
 		</div>
 		<!-- END: copyright -->
 
-		<!-- BEGIN: adminlink -->
-		<p class="text-center adminlink">
+		<hr />
+        <!-- BEGIN: socialbutton -->
+        <div class="socialicon pull-left">
+	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
+	        <div class="g-plusone" data-size="medium"></div>
+	        <script type="text/javascript">
+	          window.___gcfg = {lang: nv_sitelang};
+	          (function() {
+	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	            po.src = 'https://apis.google.com/js/plusone.js';
+	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	          })();
+	        </script>
+
+	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
+	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	    </div>
+        <!-- END: socialbutton -->
+        <!-- BEGIN: adminlink -->
+		<p class="text-right adminlink">
 			{ADMINLINK}
 		</p>
 		<!-- END: adminlink -->
-		<hr />
+		<div class="clear">&nbsp;</div>
 		<div class="row">
 			<div class="col-md-6">
 				<!-- BEGIN: keywords -->
