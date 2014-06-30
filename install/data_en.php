@@ -225,17 +225,53 @@ $array_funcid = array();
 $array_funcid_mod = array();
 $array_weight_block = array();
 
-$func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-while( list( $func_id_i, $in_module ) = $func_result->fetch( 3 ) )
+$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
 {
 	$array_funcid[] = $func_id_i;
-	$array_funcid_mod[$in_module][] = $func_id_i;
+	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
 }
 
 $func_result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC' );
 while( $row = $func_result->fetch() )
 {
-	$array_funcid_i = ( $row['all_func']==1 ) ? $array_funcid : $array_funcid_mod[$row['module']];
+	if( $row['all_func']==1 )
+	{
+		$array_funcid_i = $array_funcid;
+	}
+	else
+	{
+		$array_funcid_i = $array_funcid_mod[$row['module']];
+
+		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini' );
+		$blocks = $xml->xpath( 'setblocks/block' );
+		for( $i = 0, $count = sizeof( $blocks ); $i < $count; ++$i )
+		{
+			$rowini = (array)$blocks[$i];
+			if( $rowini['module'] == $row['module'] AND $rowini['file_name'] == $row['file_name'] )
+			{
+				$array_funcid_i = array();
+				if( ! is_array( $rowini['funcs'] ) )
+				{
+					$rowini['funcs'] = array( $rowini['funcs'] );
+				}
+				foreach( $rowini['funcs'] as $_funcs_list )
+				{
+					list( $mod, $func_list ) = explode( ':', $_funcs_list );
+					$func_array = explode( ',', $func_list );
+					foreach( $func_array as $_func )
+					{
+						if( isset( $array_funcid_mod[$row['module']][$_func] ))
+						{
+							$array_funcid_i[] = $array_funcid_mod[$row['module']][$_func];
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
 	foreach( $array_funcid_i as $func_id )
 	{
 		if( isset($array_weight_block[$row['theme']][$row['position']][$func_id]) )
