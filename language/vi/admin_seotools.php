@@ -87,6 +87,8 @@ $lang_module['metaTagsVar'] = 'Chấp nhận các biến';
 $lang_module['metaTagsContent'] = 'Nội dung';
 $lang_module['metaTagsOgp'] = 'Kích hoạt meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: là 1 chuẩn dữ liệu để chia sẻ dữ liệu lên facebook, xem chi tiết tại <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
+$lang_module['description_length'] = 'Số ký tự của thẻ meta tag description';
+$lang_module['description_note'] = ' = 0 không giới hạn số ký tự';
 
 $lang_module['global_statistics'] = 'Cấu hình thống kê';
 $lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';

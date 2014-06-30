@@ -31,6 +31,10 @@
 					<td colspan="2" class="text-right">{LANG.metaTagsOgp}</td>
 					<td><input type="checkbox" value="1" name="metaTagsOgp" {METATAGSOGPCHECKED}/></td>
 				</tr>
+				<tr>
+					<td colspan="2" class="text-right">{LANG.description_length}</td>
+					<td><input type="text" value="{DESCRIPTION_LENGTH}" name="description_length" pattern="^[0-9]*$"  oninvalid="setCustomValidity( nv_digits )" oninput="setCustomValidity('')" /> ( {LANG.description_note} )</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

@@ -282,7 +282,10 @@ function nv_html_meta_tags()
 	    $site_description = str_replace( "\n", ' ', $site_description );   // --- replace with space
 	    $site_description = str_replace( "\t", ' ', $site_description );   // --- replace with space
 	    $site_description = trim( preg_replace( '/[ ]+/', ' ', $site_description ) ); // ----- remove multiple spaces
-
+		if( $global_config['description_length'] )
+		{
+			$site_description = nv_clean60( $site_description, $global_config['description_length'] );
+		}
 		$return .= "<meta name=\"description\" content=\"" . $site_description . "\" />\n";
 	}
 
