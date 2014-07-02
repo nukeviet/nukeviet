@@ -525,6 +525,7 @@ function openidLogin_Res1( $attribs )
 
 		if( $option == 2 )
 		{
+			// Dang nhap bang mot tai khoan do he thong tao tu dong
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
 				(username, md5username, password, email, full_name, gender, photo, birthday,
 				regdate, question, answer, passlostkey,
@@ -554,6 +555,7 @@ function openidLogin_Res1( $attribs )
 				die();
 			}
 
+			// Cap nhat so thanh vien
 			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
 			$query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
@@ -561,6 +563,17 @@ function openidLogin_Res1( $attribs )
 			$row = $result->fetch();
 			$result->closeCursor();
 
+			// Luu vao bang thong tin tuy chinh
+			$query_field = array();
+			$query_field['userid'] = $userid;
+			$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY fid ASC' );
+			while( $row_f = $result_field->fetch() )
+			{
+				$query_field[$row_f['field']] = $db->quote( $row_f['default_value'] );
+			}
+			$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
+
+			// Luu vao bang OpenID
 			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid , :email)' );
 			$stmt->bindParam( ':openid', $reg_attribs['openid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
