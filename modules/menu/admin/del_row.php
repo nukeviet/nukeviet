@@ -21,7 +21,8 @@ $row = $db->query( $sql )->fetch();
 
 if( empty( $row ) ) die( 'NO_' . $id );
 
-$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
+$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' OR parentid=' . $id;
+
 if( $db->exec( $sql ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
