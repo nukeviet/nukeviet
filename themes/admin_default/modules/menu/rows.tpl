@@ -2,6 +2,7 @@
 <script type="text/javascript">
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
+	var nv_lang_data = '{NV_LANG_DATA}';
 </script>
 <!-- BEGIN: table -->
 <div class="table-responsive">

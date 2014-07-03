@@ -12,9 +12,14 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['categories'];
 
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', '6', '', 0 );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', '', '6', '', 0 );
 
 $groups_list = nv_groups_list();
 
@@ -30,6 +35,8 @@ if( ! empty( $savecat ) )
 	$alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
+	$descriptionhtml = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
+
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
 	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
@@ -63,8 +70,8 @@ if( ! empty( $savecat ) )
 		$viewcat = 'viewcat_page_new';
 		$subcatid = '';
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, groups_view) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
 
 		$data_insert = array();
 		$data_insert['parentid'] = $parentid;
@@ -72,6 +79,7 @@ if( ! empty( $savecat ) )
 		$data_insert['titlesite'] = $titlesite;
 		$data_insert['alias'] = $alias;
 		$data_insert['description'] = $description;
+		$data_insert['descriptionhtml'] = $descriptionhtml;
 		$data_insert['weight'] = $weight;
 		$data_insert['viewcat'] = $viewcat;
 		$data_insert['subcatid'] = $subcatid;
@@ -104,7 +112,7 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description= :description, image= :image, viewdescription= :viewdescription, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
 		$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_INT);
 		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
 		$stmt->bindParam( ':titlesite', $titlesite, PDO::PARAM_STR );
@@ -112,7 +120,8 @@ if( ! empty( $savecat ) )
 		$stmt->bindParam( ':image', $image, PDO::PARAM_STR );
 		$stmt->bindParam( ':viewdescription', $viewdescription, PDO::PARAM_STR );
 		$stmt->bindParam( ':keywords', $keywords, PDO::PARAM_STR );
-		$stmt->bindParam( ':description', $description, PDO::PARAM_STR );
+		$stmt->bindParam( ':description', $description, PDO::PARAM_STR, strlen( $description ) );
+		$stmt->bindParam( ':descriptionhtml', $descriptionhtml, PDO::PARAM_STR, strlen( $descriptionhtml ) );
 		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
 		$stmt->execute();
 
@@ -155,6 +164,7 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	$titlesite = $global_array_cat[$catid]['titlesite'];
 	$alias = $global_array_cat[$catid]['alias'];
 	$description = $global_array_cat[$catid]['description'];
+	$descriptionhtml = $global_array_cat[$catid]['descriptionhtml'];
 	$viewdescription = $global_array_cat[$catid]['viewdescription'];
 	$image = $global_array_cat[$catid]['image'];
 	$keywords = $global_array_cat[$catid]['keywords'];
@@ -295,7 +305,20 @@ if( ! empty( $array_cat_list ) )
 		$xtpl->parse( 'main.content.groups_views' );
 	}
 
+	$descriptionhtml = nv_htmlspecialchars( nv_editor_br2nl( $descriptionhtml ) );
+	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+	{
+		$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_name;
+		$descriptionhtml = nv_aleditor( 'descriptionhtml', '100%', '200px', $descriptionhtml, $_uploads_dir, $_uploads_dir );
+	}
+	else
+	{
+		$descriptionhtml = "<textarea style=\"width: 100%\" name=\"descriptionhtml\" id=\"descriptionhtml\" cols=\"20\" rows=\"15\">" . $descriptionhtml . "</textarea>";
+	}
+	$xtpl->assign( 'DESCRIPTIONHTML', $descriptionhtml );
+
 	$xtpl->parse( 'main.content' );
+
 }
 
 $xtpl->parse( 'main' );

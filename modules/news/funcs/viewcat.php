@@ -14,6 +14,18 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
+$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
+if( $page > 1 )
+{
+	$base_url_rewrite .= '/page-' . $page;
+}
+$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die();
+}
+
 $set_view_page = ( $page > 1 and substr( $viewcat, 0, 13 ) == 'viewcat_main_' ) ? true : false;
 
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
@@ -35,6 +47,7 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 $page_title = ( ! empty( $global_array_cat[$catid]['titlesite'] ) ) ? $global_array_cat[$catid]['titlesite'] : $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
 $description = $global_array_cat[$catid]['description'];
+$global_array_cat[$catid]['description'] = $global_array_cat[$catid]['descriptionhtml'];
 if( ! empty($global_array_cat[$catid]['image']))
 {
 	$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $global_array_cat[$catid]['image'];

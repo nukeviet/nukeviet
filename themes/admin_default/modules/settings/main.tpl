@@ -11,24 +11,37 @@
 			</tr>
 		</tfoot>
 		<tbody>
+			<!-- BEGIN: site_domain -->
 			<tr>
-				<td><strong>{LANG.sitename}</strong></td>
+				<th>{LANG.site_domain}</th>
+				<td>
+					<select name="site_domain" class="form-control w200">
+						<option value=""> -- </option>
+						<!-- BEGIN: loop -->
+						<option value="{site_domain}"{SELECTED}>{site_domain} </option>
+						<!-- END: loop -->
+					</select>
+				</td>
+			</tr>
+			<!-- END: site_domain -->
+			<tr>
+				<th>{LANG.sitename}</th>
 				<td><input type="text" name="site_name" value="{VALUE.sitename}" class="form-control" style="width: 450px"/></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.description}</strong></td>
+				<th>{LANG.description}</th>
 				<td><input type="text" name="site_description" value="{VALUE.description}" class="form-control" style="width: 450px"/></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.site_keywords}</strong></td>
+				<th>{LANG.site_keywords}</th>
 				<td><input type="text" name="site_keywords" class="form-control" value="{VALUE.site_keywords}" style="width: 450px"/></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.site_logo}</strong></td>
+				<th>{LANG.site_logo}</th>
 				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.theme}</strong></td>
+				<th>{LANG.theme}</th>
 				<td>
 				<select name="site_theme" class="form-control w200">
 					<!-- BEGIN: site_theme -->
@@ -38,7 +51,7 @@
 			</tr>
 			<!-- BEGIN: mobile_theme -->
 			<tr>
-				<td><strong>{LANG.mobile_theme}</strong></td>
+				<th>{LANG.mobile_theme}</th>
 				<td>
 				<select name="mobile_theme" class="form-control w200">
 					<option value="">{LANG.theme}</option>
@@ -49,7 +62,7 @@
 			</tr>
 			<!-- END: mobile_theme -->
 			<tr>
-				<td><strong>{LANG.default_module}</strong></td>
+				<th>{LANG.default_module}</th>
 				<td>
 				<select name="site_home_module" class="form-control w200">
 					<!-- BEGIN: module -->
@@ -58,11 +71,11 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.allow_switch_mobi_des}</strong></td>
+				<th>{LANG.allow_switch_mobi_des}</th>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.disable_content}</strong></td>
+				<th>{LANG.disable_content}</th>
 				<td> {DISABLE_SITE_CONTENT} </td>
 			</tr>
 		</tbody>

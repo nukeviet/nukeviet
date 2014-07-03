@@ -16,6 +16,10 @@ $errormess = '';
 if( $submit )
 {
 	$array_config = array();
+
+	$site_domain = $nv_Request->get_title( 'site_domain', 'post', '' );
+	$array_config['site_domain'] = ( sizeof( $global_config['my_domains'] ) > 1 AND in_array( $site_domain, $global_config['my_domains'] ) ) ? $site_domain : '';
+
 	$array_config['site_theme'] = nv_substr( $nv_Request->get_title( 'site_theme', 'post', '', 1 ), 0, 255 );
     $array_config['mobile_theme'] = nv_substr( $nv_Request->get_title( 'mobile_theme', 'post', '', 1 ), 0, 255 );
 	$array_config['site_name'] = nv_substr( $nv_Request->get_title( 'site_name', 'post', '', 1 ), 0, 255 );
@@ -151,6 +155,17 @@ $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'VALUE', $value_setting );
+
+if( sizeof( $global_config['my_domains'] ) > 1 )
+{
+	foreach ($global_config['my_domains'] as $_domain )
+	{
+		$xtpl->assign( 'SELECTED', ( $global_config['site_domain'] == $_domain ) ? ' selected="selected"' : '' );
+		$xtpl->assign( 'site_domain', $_domain );
+		$xtpl->parse( 'main.site_domain.loop' );
+	}
+	$xtpl->parse( 'main.site_domain' );
+}
 
 foreach( $theme_array as $folder )
 {

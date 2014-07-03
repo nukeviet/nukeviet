@@ -37,6 +37,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 titlesite VARCHAR2(255 CHAR) DEFAULT NULL,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 description VARCHAR2(4000 CHAR) DEFAULT NULL,
+	 descriptionhtml VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 image VARCHAR2(255 CHAR) DEFAULT NULL,
 	 viewdescription NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 weight NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,

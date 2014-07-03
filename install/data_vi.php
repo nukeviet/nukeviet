@@ -246,17 +246,53 @@ $array_funcid = array();
 $array_funcid_mod = array();
 $array_weight_block = array();
 
-$func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-while( list( $func_id_i, $in_module ) = $func_result->fetch( 3 ) )
+$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
 {
 	$array_funcid[] = $func_id_i;
-	$array_funcid_mod[$in_module][] = $func_id_i;
+	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
 }
 
 $func_result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC' );
 while( $row = $func_result->fetch() )
 {
-	$array_funcid_i = ( $row['all_func']==1 ) ? $array_funcid : $array_funcid_mod[$row['module']];
+	if( $row['all_func']==1 )
+	{
+		$array_funcid_i = $array_funcid;
+	}
+	else
+	{
+		$array_funcid_i = $array_funcid_mod[$row['module']];
+
+		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini' );
+		$blocks = $xml->xpath( 'setblocks/block' );
+		for( $i = 0, $count = sizeof( $blocks ); $i < $count; ++$i )
+		{
+			$rowini = (array)$blocks[$i];
+			if( $rowini['module'] == $row['module'] AND $rowini['file_name'] == $row['file_name'] )
+			{
+				$array_funcid_i = array();
+				if( ! is_array( $rowini['funcs'] ) )
+				{
+					$rowini['funcs'] = array( $rowini['funcs'] );
+				}
+				foreach( $rowini['funcs'] as $_funcs_list )
+				{
+					list( $mod, $func_list ) = explode( ':', $_funcs_list );
+					$func_array = explode( ',', $func_list );
+					foreach( $func_array as $_func )
+					{
+						if( isset( $array_funcid_mod[$row['module']][$_func] ))
+						{
+							$array_funcid_i[] = $array_funcid_mod[$row['module']][$_func];
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
 	foreach( $array_funcid_i as $func_id )
 	{
 		if( isset($array_weight_block[$row['theme']][$row['position']][$func_id]) )
@@ -301,13 +337,13 @@ $db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
 if( $result->fetchColumn() )
 {
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'Tin tức', '', 'Tin-tuc', '', '', 0, 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 1, 4, '2', '', '', 1274986690, 1274986690, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 0, 'Sản phẩm', '', 'San-pham', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274986705, 1274986705, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (8, 1, 'Thông cáo báo chí', '', 'thong-cao-bao-chi', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987105, 1274987244, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (9, 1, 'Tin công nghệ', '', 'Tin-cong-nghe', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987212, 1274987212, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (10, 0, 'Đối tác', '', 'Doi-tac', '', '', 0, 3, 9, 0, 'viewcat_main_right', 0, '', 1, 4, '2', '', '', 1274987460, 1274987460, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (11, 0, 'Tuyển dụng', '', 'Tuyen-dung', '', '', 0, 4, 12, 0, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987538, 1274987538, '6')" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (12, 1, 'Bản tin nội bộ', '', 'Ban-tin-noi-bo', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987902, 1274987902, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'Tin tức', '', 'Tin-tuc', '', '', '', 0, 1, 1, 0, 'viewcat_main_right', 3, '8,12,9', 1, 4, '2', '', '', 1274986690, 1274986690, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 0, 'Sản phẩm', '', 'San-pham', '', '', '', 0, 2, 5, 0, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274986705, 1274986705, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (8, 1, 'Thông cáo báo chí', '', 'thong-cao-bao-chi', '', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987105, 1274987244, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (9, 1, 'Tin công nghệ', '', 'Tin-cong-nghe', '', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987212, 1274987212, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (10, 0, 'Đối tác', '', 'Doi-tac', '', '', '', 0, 3, 9, 0, 'viewcat_main_right', 0, '', 1, 4, '2', '', '', 1274987460, 1274987460, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (11, 0, 'Tuyển dụng', '', 'Tuyen-dung', '', '', '', 0, 4, 12, 0, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987538, 1274987538, '6')" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (12, 1, 'Bản tin nội bộ', '', 'Ban-tin-noi-bo', '', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987902, 1274987902, '6')" );
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (1, 1, '1,8,12', 0, 1, 'Quỳnh Nhi', 1, 1274989177, 1275318126, 1, 1274989140, 0, 2, 'Ra mắt công ty mã nguồn mở đầu tiên tại Việt Nam', 'Ra-mat-cong-ty-ma-nguon-mo-dau-tien-tai-Viet-Nam', 'Mã nguồn mở NukeViet vốn đã quá quen thuộc với cộng đồng CNTT Việt Nam trong mấy năm qua. Tuy chưa hoạt động chính thức, nhưng chỉ trong khoảng 5 năm gần đây, mã nguồn mở NukeViet đã được dùng phổ biến ở Việt Nam, áp dụng ở hầu hết các lĩnh vực, từ tin tức đến thương mại điện tử, từ các website cá nhân cho tới những hệ thống website doanh nghiệp.', 'nangly.jpg', 'Thành lập VINADES.,JSC', 1, 1, '6', 1, 1, 0, 0, 0)" );
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (2, 1, '1,8,12', 1, 1, 'laser', 2, 1274989787, 1275318114, 1, 1274989740, 0, 2, 'Công bố dự án NukeViet 3.0 sau 1 tháng ra mắt VINADES.,JSC', 'Cong-bo-du-an-NukeViet-3-0-sau-1-thang-ra-mat-VINADES-JSC', 'NukeViet 3.0 - Một nền tảng được xây dựng hoàn toàn mới với những công nghệ web tiên tiến nhất hiện nay hứa hẹn sẽ làm một cuộc cách mạng về mã nguồn mở ở Việt Nam. Món quà này là lời cảm ơn chân thành nhất mà VINADES.,JSC muốn gửi tới cộng đồng sau một tháng chính thức ra mắt.', 'nukeviet3.jpg', 'NukeViet 3.0', 1, 1, '6', 1, 1, 0, 0, 0)" );

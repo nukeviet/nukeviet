@@ -282,7 +282,10 @@ function nv_html_meta_tags()
 	    $site_description = str_replace( "\n", ' ', $site_description );   // --- replace with space
 	    $site_description = str_replace( "\t", ' ', $site_description );   // --- replace with space
 	    $site_description = trim( preg_replace( '/[ ]+/', ' ', $site_description ) ); // ----- remove multiple spaces
-
+		if( $global_config['description_length'] )
+		{
+			$site_description = nv_clean60( $site_description, $global_config['description_length'] );
+		}
 		$return .= "<meta name=\"description\" content=\"" . $site_description . "\" />\n";
 	}
 
@@ -359,13 +362,14 @@ function nv_html_meta_tags()
 		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";
 	}
 
-	if( empty( $canonicalUrl ) ) $canonicalUrl = $client_info['selfurl'];
-
-	if( substr( $canonicalUrl, 0, 4 ) != 'http' )
+	if( empty( $canonicalUrl ) )
+	{
+		$canonicalUrl = str_replace( NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl'] );
+	}
+	elseif( substr( $canonicalUrl, 0, 4 ) != 'http' )
 	{
 		if( substr( $canonicalUrl, 0, 1 ) != '/' ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
-
-		$canonicalUrl = NV_MY_DOMAIN . $canonicalUrl;
+		$canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;
 	}
 
 	//Open Graph protocol http://ogp.me

@@ -190,7 +190,7 @@ $global_config['cookie_domain'] = $nv_Request->cookie_domain;
 // vd: http://mydomain1.com/ten_thu_muc_chua_site
 $global_config['site_url'] = $nv_Request->site_url;
 
-// vd: 'mydomain1.com,mydomain2.com'
+// vd: array( 'mydomain1.com', 'mydomain2.com' )
 $global_config['my_domains'] = $nv_Request->my_domains;
 
 $sys_info['register_globals'] = $nv_Request->is_register_globals;
@@ -334,6 +334,8 @@ foreach( $list as $row )
 		$module_config[$row['module']][$row['config_name']] = $row['config_value'];
 	}
 }
+
+define( 'NV_MAIN_DOMAIN',  in_array( $global_config['site_domain'], $global_config['my_domains'] ) ? str_replace( NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN )  : NV_MY_DOMAIN );
 
 $global_config['smtp_password'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['smtp_password'] ) );
 if( $sys_info['ini_set_support'] )
