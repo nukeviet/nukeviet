@@ -821,6 +821,7 @@ function detail_product( $data_content, $data_unit, $data_others, $data_shop, $a
 		$xtpl->assign( 'height', $pro_config['homeheight'] );
 		$xtpl->assign( 'width', $pro_config['homewidth'] );
 		$xtpl->assign( 'RATE', $data_content['ratingdetail'] );
+		
 		if( $pro_config['active_showhomtext'] == '1' )
 		{
 			$xtpl->assign( 'hometext', $data_content[NV_LANG_DATA . '_hometext'] );
@@ -854,6 +855,11 @@ function detail_product( $data_content, $data_unit, $data_others, $data_shop, $a
 		if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_content['product_code'] ) )
 		{
 			$xtpl->parse( 'main.product_code' );
+		}
+		
+		if( ! empty( $data_content['homeimgfile'] ) )
+		{
+			$xtpl->parse( 'main.shadowbox' );
 		}
 	}
 

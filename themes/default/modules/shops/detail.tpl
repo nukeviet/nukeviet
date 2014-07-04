@@ -3,7 +3,7 @@
 	<div class="panel panel-default">
 	    <div class="panel-body">
             <div class="col-md-3 text-center">
-                <a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox">
+                <a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->>
                     <img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail">
                 </a><br />
                 <em class="fa fa-search-plus text-primary zoom_img">&nbsp;</em><a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]">{LANG.detail_view_lage_img}</a>
