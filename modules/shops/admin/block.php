@@ -92,7 +92,6 @@ if( $result->rowCount() )
 	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ( $a % 2 ) ? ' class="second"' : '',
 			'id' => $id,
 			'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : '',
 			'title' => $title

@@ -3,11 +3,12 @@
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<td width="10px" class="text-center">&nbsp;</td>
-			<td><strong>{LANG.money_name}</strong></td>
-			<td><strong>{LANG.currency}</strong></td>
-			<td><strong>{LANG.exchange}</strong></td>
-			<td width="120px" class="text-center"><strong>{LANG.function}</strong></td>
+			<th width="10px" class="text-center">&nbsp;</th>
+			<th>{LANG.money_name}</th>
+			<th>{LANG.currency}</th>
+			<th>{LANG.exchange}</th>
+			<th>{LANG.round}</th>
+			<th width="120px" class="text-center">{LANG.function}</th>
 		</tr>
 	</thead>
 	<tfoot>
@@ -17,13 +18,14 @@
 	</tfoot>
 	<tbody>
 	<!-- BEGIN: row -->
-	<tr>
-		<td><input type="checkbox" class="ck" value="{ROW.id}" /></td>
-		<td>{ROW.code}</td>
-		<td>{ROW.currency}</td>
-		<td>{ROW.exchange}</td>
-		<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
-	</tr>
+		<tr>
+			<td><input type="checkbox" class="ck" value="{ROW.id}" /></td>
+			<td>{ROW.code}</td>
+			<td>{ROW.currency}</td>
+			<td>1 {ROW.code} = {ROW.exchange} {MONEY_UNIT}</td>
+			<td>{ROW.round}</td>
+			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
+		</tr>
 	<!-- END: row -->
 	</tbody>
 </table>
@@ -92,11 +94,21 @@
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.currency}: </strong></td>
-				<td><input class="form-control" style="width: 600px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
+				<td><input class="form-control" style="width: 500px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.exchange}: </strong></td>
-				<td><input class="form-control" style="width: 600px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
+				<td><input class="form-control" style="width: 500px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><strong>{LANG.round}: </strong></td>
+				<td>
+					<select class="form-control" name="round">
+						<!-- BEGIN: round -->
+						<option value="{ROUND.round1}"{ROUND.selected}>{ROUND.round2}</option>
+						<!-- END: round -->
+					</select>
+				</td>
 			</tr>
 		</tbody>
 	</table>

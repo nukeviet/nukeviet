@@ -41,10 +41,6 @@
                     </p></li>
                     <!-- END: hometext -->
 
-                    <!-- BEGIN: source -->
-                    <li><strong>{LANG.detail_source}:</strong> <a href="{link_source}" title="{LANG.detail_source_search}">{source}</a></li>
-                    <!-- END: source -->
-
                     <!-- BEGIN: promotional -->
                     <li>
                         <strong>{LANG.detail_promotional}:</strong> {promotional}
@@ -56,17 +52,6 @@
                         <strong>{LANG.detail_warranty}:</strong> {warranty}
                     </li>
                     <!-- END: warranty -->
-                    <!-- BEGIN: address -->
-                    <li>
-                        <strong>{LANG.detail_product_address}:</strong> {address}
-                    </li>
-                    <!-- END: address -->
-
-                    <!-- BEGIN: note -->
-                    <li>
-                        <strong>{LANG.cart_note}:</strong> {note}
-                    </li>
-                    <!-- END: note -->
                 </ul>
                 <hr />
                 <div id="ratedata">
@@ -166,7 +151,7 @@
 		{LANG.company_product} : <a href="{link_shop}" title="{title_shop}">{title_shop}</a>
 		<!-- END: shop -->
 	</div>
-	
+
 	<div id="tabs" class="tabs">
 		<nav>
 			<ul>
@@ -186,7 +171,7 @@
 	            </div>
 	            <!-- END: othersimg -->
 	            <div class="clear">&nbsp;</div>
-	
+
 	            <!-- BEGIN: no_otherimage -->
 	            {LANG.detail_no_otherimage}
 	            <!-- END: no_otherimage -->

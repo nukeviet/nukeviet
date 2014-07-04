@@ -10,57 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$global_array_cat = array();
-$global_array_cat[0] = array(
-	'catid' => 0,
-	'parentid' => 0,
-	'title' => 'Other',
-	'alias' => 'Other',
-	'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=Other',
-	'viewcat' => 'viewcat_page_new',
-	'subcatid' => 0,
-	'numlinks' => 3,
-	'description' => '',
-	'keywords' => ''
-);
-
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description, inhome, ' . NV_LANG_DATA . '_keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-$result = $db->query( $sql );
-
-while( list( $catid_i, $parentid_i, $lev_i, $title_i, $alias_i, $viewcat_i, $numsubcat_i, $subcatid_i, $numlinks_i, $description_i, $inhome_i, $keywords_i, $groups_view_i ) = $result->fetch( 3 ) )
-{
-	$xtitle_i = '';
-	if( $lev_i > 0 )
-	{
-		$xtitle_i .= '&nbsp;&nbsp;&nbsp;|';
-		for( $i = 1; $i <= $lev_i; $i++ )
-		{
-			$xtitle_i .= '---';
-		}
-		$xtitle_i .= '&nbsp;';
-	}
-	$xtitle_i .= $title_i;
-
-	$global_array_cat[$catid_i] = array(
-		'catid' => $catid_i,
-		'parentid' => $parentid_i,
-		'title' => $title_i,
-		'alias' => $alias_i,
-		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_i,
-		'viewcat' => $viewcat_i,
-		'numsubcat' => $numsubcat_i,
-		'subcatid' => $subcatid_i,
-		'numlinks' => $numlinks_i,
-		'description' => $description_i,
-		'inhome' => $inhome_i,
-		'keywords' => $keywords_i,
-		'groups_view' => $groups_view_i,
-		'lev' => $lev_i,
-		'name' => $xtitle_i
-	);
-}
-
-$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting', 'content', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'sources', 'change_source', 'list_source', 'del_source', 'sourceajax', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup' );
+$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting', 'content', 'custom_form', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view' );
 
 $array_viewcat_full = array(
 	'view_home_cat' => $lang_module['view_home_cat'],
@@ -72,6 +22,7 @@ $array_viewcat_nosub = array( 'viewcat_page_list' => $lang_module['viewcat_page_
 define( 'NV_IS_FILE_ADMIN', true );
 
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
+require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
 
 /**
  * nv_fix_cat_order()
@@ -153,27 +104,6 @@ function nv_fix_block_cat()
 }
 
 /**
- * nv_fix_source()
- *
- * @return
- */
-function nv_fix_source()
-{
-	global $db, $db_config, $module_data;
-
-	$sql = 'SELECT sourceid FROM ' . $db_config['prefix'] . '_' . $module_data . '_sources ORDER BY weight ASC';
-	$result = $db->query( $sql );
-	$weight = 0;
-	while( $row = $result->fetch() )
-	{
-		++$weight;
-		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_sources SET weight=' . $weight . ' WHERE sourceid=' . $row['sourceid'];
-		$db->query( $sql );
-	}
-	$result->closeCursor();
-}
-
-/**
  * nv_news_fix_block()
  *
  * @param mixed $bid
@@ -214,12 +144,12 @@ function nv_news_fix_block( $bid, $repairtable = true )
 }
 
 /**
- * nv_show_cat_list()
+ * shops_show_cat_list()
  *
  * @param integer $parentid
  * @return
  */
-function nv_show_cat_list( $parentid = 0 )
+function shops_show_cat_list( $parentid = 0 )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_full, $array_viewcat_nosub, $global_config, $module_file;
 
@@ -256,7 +186,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title, weight, viewcat, numsubcat, inhome, numlinks FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
+	$sql = 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
 	$result = $db->query( $sql );
 	$num = $result->rowCount();
 
@@ -265,7 +195,7 @@ function nv_show_cat_list( $parentid = 0 )
 		$a = 0;
 		$array_inhome = array( $lang_global['no'], $lang_global['yes'] );
 
-		while( list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks ) = $result->fetch( 3 ) )
+		while( list( $catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday ) = $result->fetch( 3 ) )
 		{
 			$array_viewcat = ( $numsubcat > 0 ) ? $array_viewcat_full : $array_viewcat_nosub;
 			if( ! array_key_exists( $viewcat, $array_viewcat ) )
@@ -277,7 +207,6 @@ function nv_show_cat_list( $parentid = 0 )
 			}
 
 			$xtpl->assign( 'ROW', array(
-				'class' => ( $a % 2 ) ? ' class="second"' : '',
 				'catid' => $catid,
 				'cat_link' => NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $catid,
 				'title' => $title,
@@ -325,6 +254,16 @@ function nv_show_cat_list( $parentid = 0 )
 				$xtpl->parse( 'main.data.loop.numlinks' );
 			}
 
+			for( $i = 0; $i <= 30; $i++ )
+			{
+				$xtpl->assign( 'NEWDAY', array(
+					'key' => $i,
+					'title' => $i,
+					'selected' => $i == $newday ? ' selected=\'selected\'' : ''
+				) );
+				$xtpl->parse( 'main.data.loop.newday' );
+			}
+
 			$xtpl->parse( 'main.data.loop' );
 			++$a;
 		}
@@ -336,9 +275,7 @@ function nv_show_cat_list( $parentid = 0 )
 	unset( $sql, $result );
 
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	return $contents;
+	return $xtpl->text( 'main' );
 }
 
 /**
@@ -401,12 +338,12 @@ function nv_fix_group_order( $parentid = 0, $sort = 0, $lev = 0 )
 }
 
 /**
- * nv_show_group_list()
+ * shops_show_group_list()
  *
  * @param integer $parentid
  * @return
  */
-function nv_show_group_list( $parentid = 0 )
+function shops_show_group_list( $parentid = 0 )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_nosub, $module_file, $global_config;
 
@@ -441,16 +378,16 @@ function nv_show_group_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, numlinks FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
+	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num = $result->rowCount();
 
 	if( $num > 0 )
 	{
 		$a = 0;
-		$array_inhome = array( $lang_global['no'], $lang_global['yes'] );
+		$array_yes_no = array( $lang_global['no'], $lang_global['yes'] );
 
-		while( list( $groupid, $parentid, $title, $weight, $viewgroup, $numsubgroup, $inhome, $numlinks ) = $result->fetch( 3 ) )
+		while( list( $groupid, $parentid, $title, $weight, $viewgroup, $numsubgroup, $inhome, $in_order ) = $result->fetch( 3 ) )
 		{
 			$array_viewgroup = $array_viewcat_nosub;
 			if( ! array_key_exists( $viewgroup, $array_viewgroup ) )
@@ -462,7 +399,6 @@ function nv_show_group_list( $parentid = 0 )
 			}
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"groupid" => $groupid,
 				"group_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid,
 				"title" => $title,
@@ -472,7 +408,7 @@ function nv_show_group_list( $parentid = 0 )
 
 			for( $i = 1; $i <= $num; $i++ )
 			{
-				$xtpl->assign( 'WEIGHT', array(
+				$xtpl->assign( 'OPTION', array(
 					"key" => $i,
 					"title" => $i,
 					"selected" => $i == $weight ? " selected=\"selected\"" : ""
@@ -480,19 +416,26 @@ function nv_show_group_list( $parentid = 0 )
 				$xtpl->parse( 'main.data.loop.weight' );
 			}
 
-			foreach( $array_inhome as $key => $val )
+			foreach( $array_yes_no as $key => $val )
 			{
-				$xtpl->assign( 'INHOME', array(
+				$xtpl->assign( 'OPTION', array(
 					"key" => $key,
 					"title" => $val,
 					"selected" => $key == $inhome ? " selected=\"selected\"" : ""
 				) );
 				$xtpl->parse( 'main.data.loop.inhome' );
+
+				$xtpl->assign( 'OPTION', array(
+					"key" => $key,
+					"title" => $val,
+					"selected" => $key == $in_order ? " selected=\"selected\"" : ""
+				) );
+				$xtpl->parse( 'main.data.loop.in_order' );
 			}
 
 			foreach( $array_viewgroup as $key => $val )
 			{
-				$xtpl->assign( 'VIEWGROUP', array(
+				$xtpl->assign( 'OPTION', array(
 					"key" => $key,
 					"title" => $val,
 					"selected" => $key == $viewgroup ? " selected=\"selected\"" : ""
@@ -511,9 +454,7 @@ function nv_show_group_list( $parentid = 0 )
 	unset( $sql, $result );
 
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	return $contents;
+	return $xtpl->text( 'main' );
 }
 
 /**
@@ -549,9 +490,8 @@ function nv_show_block_cat_list()
 			$numnews = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $row['bid'] )->fetchColumn();
 
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 				"bid" => $row['bid'],
-				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['topic_num_news'] . ")" : "",
+				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['num_product'] . ")" : "",
 				"title" => $row[NV_LANG_DATA . '_title']
 			) );
 
@@ -582,48 +522,45 @@ function nv_show_block_cat_list()
 	$result->closeCursor();
 
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	return $contents;
+	return $xtpl->text( 'main' );
 }
 
 /**
- * nv_show_sources_list()
+ * shops_show_discounts_list()
  *
  * @return
  */
-function nv_show_sources_list()
+function shops_show_discounts_list()
 {
-	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $nv_Request, $global_config, $module_file;
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_config, $module_file;
 
-	$xtpl = new XTemplate( "sources_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( "discounts_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
-	$xtpl->assign( 'OP', $op );
+	$xtpl->assign( 'OP', 'blockcat' );
 
-	$num = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_sources ORDER BY weight ASC" )->rowCount();
-	$base_url = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=sources";
-	$num_items = ( $num > 1 ) ? $num : 1;
-	$per_page = 15;
-	$page = $nv_Request->get_int( 'page', 'get', 1 );
+	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_discounts ORDER BY weight ASC";
+	$result = $db->query( $sql );
+
+	$num = $result->rowCount();
 
 	if( $num > 0 )
 	{
 		$a = 0;
-		$db->sqlreset()->select( '*' )->from( $db_config['prefix'] . "_" . $module_data . "_sources" )->order( 'weight' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
-		$result = $db->query( $db->sql() );
+		$array_adddefault = array( $lang_global['no'], $lang_global['yes'] );
 
 		while( $row = $result->fetch() )
 		{
+			$numnews = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE bid=" . $row['bid'] )->fetchColumn();
+
 			$xtpl->assign( 'ROW', array(
-				"class" => ( $a % 2 ) ? " class=\"second\"" : "",
-				"sourceid" => $row['sourceid'],
-				"title" => $row[NV_LANG_DATA . '_title'],
-				"link" => $row['link']
+				"bid" => $row['bid'],
+				"numnews" => $numnews ? " (" . $numnews . " " . $lang_module['num_product'] . ")" : "",
+				"title" => $row[NV_LANG_DATA . '_title']
 			) );
 
 			for( $i = 1; $i <= $num; $i++ )
@@ -636,24 +573,24 @@ function nv_show_sources_list()
 				$xtpl->parse( 'main.loop.weight' );
 			}
 
+			foreach( $array_adddefault as $key => $val )
+			{
+				$xtpl->assign( 'ADDDEFAULT', array(
+					"key" => $key,
+					"title" => $val,
+					"selected" => $key == $row['adddefault'] ? " selected=\"selected\"" : ""
+				) );
+				$xtpl->parse( 'main.loop.adddefault' );
+			}
+
 			$xtpl->parse( 'main.loop' );
 			++$a;
 		}
-		$result->closeCursor();
-
-		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
-
-		if( $generate_page )
-		{
-			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-			$xtpl->parse( 'main.generate_page' );
-		}
 	}
+	$result->closeCursor();
 
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	return $contents;
+	return $xtpl->text( 'main' );
 }
 
 /**
@@ -685,7 +622,6 @@ function nv_show_block_list( $bid )
 	while( list( $id, $listcatid, $title, $alias, $weight ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
 			"id" => $id,
 			"title" => $title,
 			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id
@@ -707,24 +643,7 @@ function nv_show_block_list( $bid )
 	$result->closeCursor();
 
 	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	return $contents;
-}
-
-/**
- * FormatNumber()
- *
- * @param mixed $number
- * @param integer $decimals
- * @param string $thousand_separator
- * @param string $decimal_point
- * @return
- */
-function FormatNumber( $number, $decimals = 0, $thousand_separator = '&nbsp;', $decimal_point = '.' )
-{
-	$str = number_format( $number, 0, ',', '.' );
-	return $str;
+	return $xtpl->text( 'main' );
 }
 
 /**
@@ -771,4 +690,37 @@ function GetCatidInChild( $catid )
 		}
 	}
 	return array_unique( $array_cat );
+}
+
+/**
+ * nv_show_custom_form()
+ *
+ * @param mixed $form
+ * @param mixed $array_custom
+ * @param mixed $array_custom_lang
+ * @return
+ */
+function nv_show_custom_form( $form, $array_custom, $array_custom_lang )
+{
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $global_config, $module_file;
+
+	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+
+	if( preg_match( '/^[a-zA-Z0-9\-\_]+$/', $form ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/cat_form_' . $form . '.php' ) )
+	{
+		require_once NV_ROOTDIR . '/modules/' . $module_file . '/admin/cat_form_' . $form . '.php';
+	}
+
+	$xtpl->assign( 'CUSTOM', $array_custom );
+	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
 }

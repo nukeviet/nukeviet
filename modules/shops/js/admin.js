@@ -102,47 +102,6 @@ function nv_del_group(catid) {
 	return false;
 }
 
-// Xu ly sources ---------------------------------------
-function nv_chang_sources(sourceid, mod) {
-	var nv_timer = nv_settimeout_disable('id_' + mod + '_' + sourceid, 5000);
-	var new_vid = $('#id_' + mod + '_' + sourceid).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
-		var r_split = res.split('_');
-		if (r_split[0] != 'OK') {
-			alert(nv_is_change_act_confirm[2]);
-		}
-		clearTimeout(nv_timer);
-		nv_show_list_source();
-	});
-	return;
-}
-
-function nv_show_list_source() {
-	if (document.getElementById('module_show_list')) {
-		$('#module_show_list').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=list_source&nocache=' + new Date().getTime());
-	}
-	return;
-}
-
-function nv_del_source(sourceid) {
-	if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_source&nocache=' + new Date().getTime(), 'sourceid=' + sourceid, function(res) {
-			function nv_del_source_result(res) {
-				var r_split = res.split('_');
-				if (r_split[0] == 'OK') {
-					nv_show_list_source();
-				} else if (r_split[0] == 'ERR') {
-					alert(r_split[1]);
-				} else {
-					alert(nv_is_del_confirm[2]);
-				}
-				return false;
-			}
-
-		});
-	}
-	return false;
-}
 
 // Xu ly block ---------------------------------------
 
@@ -372,8 +331,8 @@ function nv_getcatalog(obj) {
 	$('#vcatid').load(url);
 }
 
-function nv_getgroup(obj) {
+function nv_change_catid(obj, id) {
 	var cid = $(obj).val();
-	var url = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid + "&inrow=" + inrow;
-	$('#listgroupid').load(url);
+	$('#custom_form').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=custom_form&cid=' + cid + "&id=" + id);
+	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid + "&inrow=" + inrow);
 }

@@ -34,11 +34,6 @@
 				{hometext}
 			</p>
 			<!-- END: hometext -->
-			<!-- BEGIN: source -->
-			<div>
-				{LANG.detail_source} : <a href="{link_source}">{source}</a>
-			</div>
-			<!-- END: source -->
 			<!-- BEGIN: promotional -->
 			<div>
 				{LANG.detail_promotional} : {promotional}
@@ -54,11 +49,6 @@
 				{LANG.detail_product_address} : {address}
 			</div>
 			<!-- END: address -->
-			<!-- BEGIN: note -->
-			<div>
-				{LANG.cart_note} : {note}
-			</div>
-			<!-- END: note -->
 			<div id="ratedata">
                 <!-- BEGIN: allowed_rating -->
             	<div class="clearfix">

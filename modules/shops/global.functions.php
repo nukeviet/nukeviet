@@ -10,6 +10,15 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+// Ket noi file ngon ngu tuy chinh du lieu
+if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/custom_' . NV_LANG_INTERFACE . '.php' ) )
+{
+	$lang_temp = $lang_module;
+	require NV_ROOTDIR . '/modules/' . $module_file . '/language/custom_' . NV_LANG_INTERFACE . '.php';
+	$lang_module = $lang_module + $lang_temp;
+	unset( $lang_temp ); 
+}
+		
 // Cau hinh mac dinh
 $pro_config = $module_config[$module_name];
 
@@ -22,41 +31,12 @@ if( ! empty( $pro_config ) )
 	$pro_config['blockheight'] = $temp[1];
 }
 if( empty( $pro_config['format_order_id'] ) ) $pro_config['format_order_id'] = strtoupper( $module_name ) . '%d';
-if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0;
-// Thoi gian xu ly archive
-
-// Lay ty gia ngoai te
-$money_config = array();
-
-$sql = 'SELECT code, currency, exchange FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
-$list = nv_db_cache( $sql, '', $module_name );
-
-foreach( $list as $row )
-{
-	$is_config = ( $row['code'] == $pro_config['money_unit'] ) ? 1 : 0;
-	$money_config[$row['code']] = array(
-		'code' => $row['code'],
-		'currency' => $row['currency'],
-		'exchange' => $row['exchange'],
-		'is_config' => $is_config
-	);
-}
-unset( $list, $row );
+if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0; // Thoi gian xu ly archive
 
 // Xu ly viec dang san pham tu dong, cho het han san pham ...
 if( $pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_CURRENTTIME )
 {
 	nv_set_status_module();
-}
-
-/**
- * nv_fomart_money()
- *
- * @return
- */
-function nv_fomart_money( $number, $dec_point = ',', $thousands_sep = ' ' )
-{
-	return preg_replace( "/\\" . $dec_point . "00$/", "", number_format( $number, 2, $dec_point, $thousands_sep ) );
 }
 
 /**
@@ -134,7 +114,7 @@ function nv_del_content_module( $id )
 	$content_del = 'NO_' . $id;
 	$title = '';
 
-	list( $id, $listcatid, $title, $group_id ) = $db->query( 'SELECT id, listcatid, ' . NV_LANG_DATA . '_title, group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . intval( $id ) )->fetch( 3 );
+	list( $id, $listcatid, $title ) = $db->query( 'SELECT id, listcatid, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . intval( $id ) )->fetch( 3 );
 	if( $id > 0 )
 	{
 		$number_no_del = 0;
@@ -151,8 +131,12 @@ function nv_del_content_module( $id )
 		{
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );
+			$groupid = GetGroupID( $id );
+			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group WHERE pro_id = ' . $id ) )
+			{
+				nv_fix_group_count( $groupid );
+			}
 			$content_del = 'OK_' . $id;
-			nv_fix_group_count( $group_id );
 		}
 		else
 		{
@@ -183,7 +167,7 @@ function nv_archive_content_module( $id )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-edit\">&nbsp;</em><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
+	$link = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
 	return $link;
 }
 
@@ -196,7 +180,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-trash-o\">&nbsp;</em><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
+	$link = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
 	return $link;
 }
 
@@ -289,13 +273,11 @@ function nv_fix_group_count( $listid )
 {
 	global $db, $module_data, $db_config;
 
-	$array_id = explode( ',', $listid );
-
-	foreach( $array_id as $id )
+	foreach( $listid as $id )
 	{
 		if( ! empty( $id ) )
 		{
-			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' ) AND status =1 AND publtime <= " . NV_CURRENTTIME . " AND (exptime=0 OR exptime >=" . NV_CURRENTTIME . ")";
+			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' )";
 			$num = $db->query( $sql )->fetchColumn();
 
 			$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numpro=" . $num . " WHERE groupid=" . intval( $id );
@@ -388,4 +370,22 @@ function GetGroupidInParent( $groupid, $check_inhome = 0 )
 		}
 	}
 	return array_unique( $array_group );
+}
+
+/**
+ * GetGroupID()
+ *
+ * @param mixed $pro_id
+ * @return
+ */
+function GetGroupID( $pro_id )
+{
+	global $db, $db_config, $module_data;
+	$data = array();
+	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
+	while( $row = $result->fetch() )
+	{
+		$data[] = $row['group_id'];
+	}
+	return $data;
 }

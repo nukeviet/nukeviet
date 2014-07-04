@@ -35,9 +35,20 @@ if( ! empty( $savegroup ) )
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
 	$data['alias'] = ( $data['alias'] == '' ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
 
+	$image = $nv_Request->get_string( 'image', 'post', '' );
+	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	{
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$data['image'] = substr( $image, $lu );
+	}
+	else
+	{
+		$data['image'] = '';
+	}
+
 	if( $data['title'] == '' )
 	{
-		$error = $lang_module['error_group_name'];
+		$error = $lang_module['group_name_empty'];
 	}
 
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $table_name . ' WHERE groupid!=' . $data['groupid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
@@ -76,13 +87,13 @@ if( ! empty( $savegroup ) )
 		$viewgroup = 'viewgroup_page_list';
 		$subgroupid = '';
 
-		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image, thumbnail, weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, numlinks, admins, add_time, edit_time, numpro " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", " . $data['cateid'] . ",' ',' '," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '4', :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0' " . $listvalue . " )";
+		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, add_time, edit_time, numpro, in_order " . $listfield . " )
+ 			VALUES (" . $data['parentid'] . ", " . $data['cateid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;
 		$data_insert['subgroupid'] = $subgroupid;
-		$data_insert['admins'] = $admins;
+		$data_insert['image'] = $data['image'];
 		$newgroupid = intval( $db->insert_id( $sql, 'groupid', $data_insert ) );
 
 		if( $newgroupid > 0 )
@@ -102,8 +113,9 @@ if( ! empty( $savegroup ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( 'UPDATE ' . $table_name . ' SET parentid=' . $data['parentid'] . ', cateid= :cateid, ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE groupid =' . $data['groupid'] );
+			$stmt = $db->prepare( 'UPDATE ' . $table_name . ' SET parentid=' . $data['parentid'] . ', cateid = :cateid, image = :image, ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE groupid =' . $data['groupid'] );
 			$stmt->bindParam( ':cateid', $data['cateid'], PDO::PARAM_STR );
+			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
@@ -169,12 +181,23 @@ while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 	$array_group_list[] = array( $groupid_i, $xtitle_i );
 }
 
+$lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
+
+if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data['image'] ) )
+{
+	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
+}
+$data['description'] = nv_br2nl( $data['description'] );
+
 $xtpl = new XTemplate( 'group_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'caption', $caption );
+$xtpl->assign( 'GLANG', $lang_global );
+$xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . $data['cateid'] );
-$xtpl->assign( 'GROUP_LIST', nv_show_group_list( $data['parentid'] ) );
+$xtpl->assign( 'GROUP_LIST', shops_show_group_list( $data['parentid'] ) );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
 
 if( $error != '' )
 {
@@ -189,6 +212,11 @@ foreach( $array_group_list as $rows_i )
 	$xtpl->assign( 'ptitle_i', $rows_i[1] );
 	$xtpl->assign( 'pselect', $sl );
 	$xtpl->parse( 'main.parent_loop' );
+}
+
+if( empty( $data['alias'] ) )
+{
+	$xtpl->parse( 'main.getalias' );
 }
 
 $xtpl->parse( 'main' );
