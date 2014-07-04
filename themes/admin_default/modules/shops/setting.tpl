@@ -91,6 +91,10 @@
 				<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.setting_active_wishlist}</strong></td>
+				<td><input type="checkbox" value="1" name="active_wishlist" {ck_active_wishlist} id="active_wishlist" /></td>
+			</tr>
+			<tr>
 				<td colspan="2" style="text-align: center; padding:10px"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting"></td>
 			</tr>
 		</tbody>

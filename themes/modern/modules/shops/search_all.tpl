@@ -25,13 +25,7 @@
 				<option {ROW.selected} value="{ROW.catid}">{ROW.xtitle}</option>
 				<!-- END: loopcata -->
 			</select></td>
-			<td>
-			<select name="sourceid" style="width:100%" id="sourceid1">
-				<option value="0">{LANG.source_title}</option>
-				<!-- BEGIN: loopsource -->
-				<option {ROW.selected} value="{ROW.sourceid}">{ROW.title}</option>
-				<!-- END: loopsource -->
-			</select></td>
+			<td> </td>
 		</tr>
 	</table>
 	<table width="100%">

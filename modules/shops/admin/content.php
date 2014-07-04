@@ -15,14 +15,21 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$table_name = $db_config['prefix'] . "_" . $module_data . "_rows";
-$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( "Y_m" ), true );
+if( empty( $global_array_cat ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
+	die();
+}
+
+$table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
+$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( 'Y_m' ), true );
 $array_block_cat_module = array();
 $id_block_content = array();
+$array_custom = array();
+$array_custom_lang = array();
 
-$sql = "SELECT bid, adddefault, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat ORDER BY weight ASC";
+$sql = 'SELECT bid, adddefault, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query( $sql );
-
 while( list( $bid_i, $adddefault_i, $title_i ) = $result->fetch( 3 ) )
 {
 	$array_block_cat_module[$bid_i] = $title_i;
@@ -35,22 +42,20 @@ while( list( $bid_i, $adddefault_i, $title_i ) = $result->fetch( 3 ) )
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'get', 0 );
 
-$stmt = $db->prepare( "SELECT numsubcat FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid= :parentid" );
+$stmt = $db->prepare( 'SELECT numsubcat FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid= :parentid' );
 $stmt->bindParam( ':parentid', $parentid, PDO::PARAM_STR );
 $stmt->execute();
 $subcatid = $stmt->fetchColumn();
 if( $subcatid > 0 )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
 	die();
 }
 
 $rowcontent = array(
 	'id' => 0,
 	'listcatid' => $catid,
-	'group_id' => '',
 	'user_id' => $admin_info['admin_id'],
-	'source_id' => 0,
 	'addtime' => NV_CURRENTTIME,
 	'edittime' => NV_CURRENTTIME,
 	'status' => 0,
@@ -60,7 +65,7 @@ $rowcontent = array(
 	'product_code' => '',
 	'product_number' => 1,
 	'product_price' => 0,
-	'product_discounts' => 0,
+	'discount_id' => 0,
 	'money_unit' => $pro_config['money_unit'],
 	'product_unit' => '',
 	'homeimgfile' => '',
@@ -86,12 +91,8 @@ $rowcontent = array(
 	'bodytext' => '',
 	'note' => '',
 	'keywords' => '',
-	'address' => '',
-	'description' => '',
 	'warranty' => '',
 	'promotional' => '',
-	'sourcetext' => '',
-	'topictext' => ''
 );
 
 $page_title = $lang_module['content_add'];
@@ -100,6 +101,12 @@ $groups_list = nv_groups_list();
 
 $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
 
+$group_id_old = array();
+if( $rowcontent['id'] > 0 )
+{
+	$group_id_old = getGroupID( $rowcontent['id'] );
+}
+
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {
 	$field_lang = nv_file_table( $table_name );
@@ -107,25 +114,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['listcatid'] = $nv_Request->get_int( 'catid', 'post', 0 );
 
-	$group_id = array_unique( $nv_Request->get_typed_array( 'groupids', 'post', 'int', array() ) );
-	$rowcontent['group_id'] = implode( ',', $group_id );
+	$rowcontent['group_id'] = array_unique( $nv_Request->get_typed_array( 'groupids', 'post', 'int', array() ) );
 
-	$rowcontent['source_id'] = $nv_Request->get_int( 'sourceid', 'post', 0 );
 	$rowcontent['showprice'] = $nv_Request->get_int( 'showprice', 'post', 0 );
 	$rowcontent['showorder'] = $nv_Request->get_int( 'showorder', 'post', 0 );
-
-	if( $rowcontent['source_id'] == 0 )
-	{
-		$rowcontent['sourcetext'] = nv_substr( $nv_Request->get_title( 'sourcetext', 'post', '', 1 ), 0, 255 );
-		if( ! empty( $rowcontent['sourcetext'] ) )
-		{
-			$stmt = $db->prepare( 'SELECT sourceid FROM ' . $db_config['prefix'] . '_' . $module_data . '_sources WHERE ' . NV_LANG_DATA . '_title= :sourcetext' );
-			$stmt->bindParam( ':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR );
-			$stmt->execute();
-			$rowcontent['source_id'] = (int) $stmt->fetchColumn();
-		}
-	}
-	if( $rowcontent['source_id'] > 0 ) $rowcontent['sourcetext'] = '';
 
 	$publ_date = $nv_Request->get_title( 'publ_date', 'post', '' );
 	$exp_date = $nv_Request->get_title( 'exp_date', 'post', '' );
@@ -174,17 +166,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ( $alias == '' ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
-	$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
+	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
 	$rowcontent['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$rowcontent['product_price'] = $nv_Request->get_string( 'product_price', 'post', '' );
-	$rowcontent['product_price'] = str_replace( ',', '', $rowcontent['product_price'] );
-	$rowcontent['product_discounts'] = $nv_Request->get_int( 'product_discounts', 'post', 0 );
+	$rowcontent['product_price'] = floatval( preg_replace( '/[^0-9\.]/', '', $rowcontent['product_price'] ) );
+
+	$rowcontent['discount_id'] = $nv_Request->get_int( 'discount_id', 'post', 0 );
 	$rowcontent['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', '' );
 	$rowcontent['product_unit'] = $nv_Request->get_int( 'product_unit', 'post', 0 );
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
-	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 
 	$bodytext = $nv_Request->get_string( 'bodytext', 'post', '' );
 	$rowcontent['bodytext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodytext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodytext ) ), '<br />' );
@@ -200,6 +192,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_print'] = ( int )$nv_Request->get_bool( 'allowed_print', 'post' );
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
 	$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
+
+	$array_custom = $nv_Request->get_array( 'custom', 'post' );
+	$array_custom_lang = $nv_Request->get_array( 'custom_lang', 'post' );
+
+	$rowcontent['custom_site'] = ( ! empty( $array_custom ) ) ? serialize( $array_custom ) : '';
+	$rowcontent['custom'] = ( ! empty( $array_custom_lang ) ) ? serialize( $array_custom_lang ) : '';
 
 	// Xu ly anh minh hoa khac
 	$otherimage = $nv_Request->get_typed_array( 'otherimage', 'post', 'string' );
@@ -268,36 +266,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_product_unit'];
 	}
-	elseif( $rowcontent['product_price'] <= 0 AND $rowcontent['showprice'] )
+	elseif( $rowcontent['product_price'] <= 0 and $rowcontent['showprice'] )
 	{
 		$error = $lang_module['error_product_price'];
 	}
-	elseif( $rowcontent['product_discounts'] < 0 )
-	{
-		$error = $lang_module['error_product_discounts'];
-	}
 	else
 	{
-		// Xu ly hang san xuat moi
-		if( ! empty( $rowcontent['sourcetext'] ) )
-		{
-			$weight = $db->query( 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_sources' )->fetchColumn();
-			$weight = intval( $weight ) + 1;
-			$field_lang_source = nv_file_table( $db_config['prefix'] . '_' . $module_data . '_sources' );
-			$listfield = '';
-			$listvalue = '';
-			$data_insert = array();
-			foreach( $field_lang_source as $field_lang_i )
-			{
-				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ', ' . $flang . '_' . $fname;
-				$listvalue .= ', :' . $flang . '_' . $fname;
-				$data_insert[$flang . '_' . $fname] = $rowcontent['sourcetext'];
-			}
-			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_sources ( link, logo, weight, add_time, edit_time " . $listfield . ") VALUES ( '', '', " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . " " . $listvalue . ")";
-			$rowcontent['source_id'] = $db->insert_id( $sql, 'sourceid', $data_insert );
-		}
-
 		// Xu ly tu khoa
 		if( $rowcontent['keywords'] == '' )
 		{
@@ -353,12 +327,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$rowcontent['status'] = 2;
 			}
 
-			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, group_id, user_id, source_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price,product_discounts, money_unit , product_unit, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
+			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, money_unit, product_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice, custom " . $listfield . ")
 				 VALUES ( NULL ,
 				 :listcatid,
-				 :group_id,
 				 " . intval( $rowcontent['user_id'] ) . ",
-				 " . intval( $rowcontent['source_id'] ) . ",
 				 " . intval( $rowcontent['addtime'] ) . ",
 				 " . intval( $rowcontent['edittime'] ) . ",
 				 " . intval( $rowcontent['status'] ) . ",
@@ -367,10 +339,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 " . intval( $rowcontent['archive'] ) . ",
 				 :product_code,
 				 " . intval( $rowcontent['product_number'] ) . ",
-				 " . intval( $rowcontent['product_price'] ) . ",
-				 " . intval( $rowcontent['product_discounts'] ) . ",
+				 :product_price,
 				 :money_unit,
 				 " . intval( $rowcontent['product_unit'] ) . ",
+				 " . intval( $rowcontent['discount_id'] ) . ",
 				 :homeimgfile,
 				 :homeimgthumb,
 				 :homeimgalt,
@@ -387,13 +359,14 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 " . intval( $rowcontent['hitstotal'] ) . ",
 				 " . intval( $rowcontent['hitscm'] ) . ",
 				 " . intval( $rowcontent['hitslm'] ) . ",
-				 " . intval( $rowcontent['showprice'] ) . "
+				 " . intval( $rowcontent['showprice'] ) . ",
+				 :custom
 				" . $listvalue . "
 			)";
 			$data_insert = array();
 			$data_insert['listcatid'] = $rowcontent['listcatid'];
-			$data_insert['group_id'] = $rowcontent['group_id'];
 			$data_insert['product_code'] = $rowcontent['product_code'];
+			$data_insert['product_price'] = $rowcontent['product_price'];
 			$data_insert['money_unit'] = $rowcontent['money_unit'];
 			$data_insert['homeimgfile'] = $rowcontent['homeimgfile'];
 			$data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
@@ -401,6 +374,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$data_insert['otherimage'] = $rowcontent['otherimage'];
 			$data_insert['ratingdetail'] = $rowcontent['ratingdetail'];
 			$data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
+			$data_insert['custom'] = $rowcontent['custom_site'];
 			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
@@ -411,6 +385,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $rowcontent['id'] > 0 )
 			{
+				if( ! empty( $rowcontent['group_id'] ) )
+				{
+					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_items_group VALUES(' . $rowcontent['id'] . ', :group_id)' );
+					foreach( $rowcontent['group_id'] as $group_id_i )
+					{
+						$stmt->bindParam( ':group_id', $group_id_i, PDO::PARAM_STR );
+						$stmt->execute();
+					}
+				}
+					
 				$auto_product_code = '';
 				if( ! empty( $pro_config['format_code_id'] ) and empty( $rowcontent['product_code'] ) )
 				{
@@ -460,9 +444,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET
 			 listcatid= :listcatid,
-			 group_id= :group_id,
 			 user_id=" . intval( $rowcontent['user_id'] ) . ",
-			 source_id=" . intval( $rowcontent['source_id'] ) . ",
 			 status=" . intval( $rowcontent['status'] ) . ",
 			 publtime=" . intval( $rowcontent['publtime'] ) . ",
 			 exptime=" . intval( $rowcontent['exptime'] ) . ",
@@ -470,10 +452,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 archive=" . intval( $rowcontent['archive'] ) . ",
 			 product_code = :product_code,
 			 product_number = product_number + " . intval( $rowcontent['product_number'] ) . ",
-			 product_price = " . intval( $rowcontent['product_price'] ) . ",
-			 product_discounts = " . intval( $rowcontent['product_discounts'] ) . ",
+			 product_price = :product_price,
 			 money_unit = :money_unit,
 			 product_unit = " . intval( $rowcontent['product_unit'] ) . ",
+			 discount_id = " . intval( $rowcontent['discount_id'] ) . ",
 			 homeimgfile= :homeimgfile,
 			 homeimgalt= :homeimgalt,
 			 otherimage= :otherimage,
@@ -487,40 +469,56 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 allowed_print=" . intval( $rowcontent['allowed_print'] ) . ",
 			 allowed_save=" . intval( $rowcontent['allowed_save'] ) . ",
 			 showprice = " . intval( $rowcontent['showprice'] ) . ",
+			 custom= :custom,
 			 " . NV_LANG_DATA . "_title= :title,
 			 " . NV_LANG_DATA . "_alias= :alias,
+			 " . NV_LANG_DATA . "_keywords= :keywords,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
-			 " . NV_LANG_DATA . "_address= :address,
-			 " . NV_LANG_DATA . "_note= :note,
-			 " . NV_LANG_DATA . "_keywords= :keywords,
+			 " . NV_LANG_DATA . "_warranty= :warranty,
 			 " . NV_LANG_DATA . "_promotional= :promotional,
-			 " . NV_LANG_DATA . "_warranty= :warranty
-			WHERE id =" . $rowcontent['id'] );
+			 " . NV_LANG_DATA . "_custom= :custom_lang
+			 WHERE id =" . $rowcontent['id'] );
 
 			$stmt->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
-			$stmt->bindParam( ':group_id', $rowcontent['group_id'], PDO::PARAM_STR );
 			$stmt->bindParam( ':product_code', $rowcontent['product_code'], PDO::PARAM_STR );
 			$stmt->bindParam( ':money_unit', $rowcontent['money_unit'], PDO::PARAM_STR );
+			$stmt->bindParam( ':product_price', $rowcontent['product_price'], PDO::PARAM_STR );
 			$stmt->bindParam( ':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR );
 			$stmt->bindParam( ':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR );
 			$stmt->bindParam( ':otherimage', $rowcontent['otherimage'], PDO::PARAM_STR );
 			$stmt->bindParam( ':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR );
 			$stmt->bindParam( ':title', $rowcontent['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
-			$stmt->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR );
-			$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR );
-			$stmt->bindParam( ':address', $rowcontent['address'], PDO::PARAM_STR );
-			$stmt->bindParam( ':note', $rowcontent['note'], PDO::PARAM_STR );
+			$stmt->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen( $rowcontent['hometext'] ) );
+			$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
 			$stmt->bindParam( ':keywords', $rowcontent['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
 			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
 			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
+			$stmt->bindParam( ':custom', $rowcontent['custom_site'], PDO::PARAM_STR, strlen( $rowcontent['custom_site'] ) );
+			$stmt->bindParam( ':custom_lang', $rowcontent['custom'], PDO::PARAM_STR, strlen( $rowcontent['custom'] ) );
 
 			if( $stmt->execute() )
 			{
-				nv_fix_group_count( $rowcontent['group_id'] );
-				if( $rowcontent_old['group_id'] != $rowcontent['group_id'] ) nv_fix_group_count( $rowcontent_old['group_id'] );
+				if( $group_id_old != $rowcontent['group_id'] )
+				{
+					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group WHERE pro_id = ' . $rowcontent['id'];
+					$db->query( $sql );
+					
+					if( ! empty( $rowcontent['group_id'] ) )
+					{
+						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_items_group VALUES(' . $rowcontent['id'] . ', :group_id)' );
+						foreach( $rowcontent['group_id'] as $group_id_i )
+						{
+							$stmt->bindParam( ':group_id', $group_id_i, PDO::PARAM_STR );
+							$stmt->execute();
+						}
+					}
+
+					nv_fix_group_count( $rowcontent['group_id'] );
+					nv_fix_group_count( $group_id_old );
+				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
 			else
@@ -533,7 +531,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if( $error == '' )
 		{
-			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_block WHERE id = " . $rowcontent['id'] );
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] );
 
 			foreach( $id_block_content as $bid_i )
 			{
@@ -552,61 +550,29 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		nv_del_moduleCache( $module_name );
 	}
-
 }
 elseif( $rowcontent['id'] > 0 )
 {
-	$rowdata = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch();
-	$rowcontent = array(
-		'id' => $rowdata['id'],
-		'listcatid' => $rowdata['listcatid'],
-		'group_id' => $rowdata['group_id'],
-		'user_id' => $rowdata['user_id'],
-		'source_id' => $rowdata['source_id'],
-		'addtime' => $rowdata['addtime'],
-		'edittime' => $rowdata['edittime'],
-		'status' => $rowdata['status'],
-		'publtime' => $rowdata['publtime'],
-		'exptime' => $rowdata['exptime'],
-		'archive' => $rowdata['archive'],
-		'product_code' => $rowdata['product_code'],
-		'product_number' => $rowdata['product_number'],
-		'product_price' => $rowdata['product_price'],
-		'product_discounts' => $rowdata['product_discounts'],
-		'money_unit' => $rowdata['money_unit'],
-		'product_unit' => $rowdata['product_unit'],
-		'homeimgfile' => $rowdata['homeimgfile'],
-		'homeimgthumb' => $rowdata['homeimgthumb'],
-		'homeimgalt' => $rowdata['homeimgalt'],
-		'otherimage' => $rowdata['otherimage'],
-		'imgposition' => $rowdata['imgposition'],
-		'copyright' => $rowdata['copyright'],
-		'inhome' => $rowdata['inhome'],
-		'allowed_comm' => $rowdata['allowed_comm'],
-		'allowed_rating' => $rowdata['allowed_rating'],
-		'ratingdetail' => $rowdata['ratingdetail'],
-		'allowed_send' => $rowdata['allowed_send'],
-		'allowed_print' => $rowdata['allowed_print'],
-		'allowed_save' => $rowdata['allowed_save'],
-		'hitstotal' => $rowdata['hitstotal'],
-		'hitscm' => $rowdata['hitscm'],
-		'hitslm' => $rowdata['hitslm'],
-		'showprice' => $rowdata['showprice'],
-		'title' => $rowdata[NV_LANG_DATA . '_title'],
-		'alias' => $rowdata[NV_LANG_DATA . '_alias'],
-		'hometext' => $rowdata[NV_LANG_DATA . '_hometext'],
-		'bodytext' => $rowdata[NV_LANG_DATA . '_bodytext'],
-		'note' => $rowdata[NV_LANG_DATA . '_note'],
-		'keywords' => $rowdata[NV_LANG_DATA . '_keywords'],
-		'address' => $rowdata[NV_LANG_DATA . '_address'],
-		'promotional' => $rowdata[NV_LANG_DATA . '_promotional'],
-		'warranty' => $rowdata[NV_LANG_DATA . '_warranty']
-	);
+	$rowcontent = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch();
+	$rowcontent['title'] = $rowcontent[NV_LANG_DATA . '_title'];
+	$rowcontent['alias'] = $rowcontent[NV_LANG_DATA . '_alias'];
+	$rowcontent['hometext'] = $rowcontent[NV_LANG_DATA . '_hometext'];
+	$rowcontent['bodytext'] = $rowcontent[NV_LANG_DATA . '_bodytext'];
+	$rowcontent['keywords'] = $rowcontent[NV_LANG_DATA . '_keywords'];
+	$rowcontent['promotional'] = $rowcontent[NV_LANG_DATA . '_promotional'];
+	$rowcontent['warranty'] = $rowcontent[NV_LANG_DATA . '_warranty'];
+	$rowcontent['group_id'] = $group_id_old;
+
+	if ( !empty( $rowcontent['custom'] ) )
+	{
+		$array_custom = unserialize( $rowcontent['custom'] );
+	}
+	if ( !empty( $rowcontent[NV_LANG_DATA . '_custom'] ) )
+	{
+		$array_custom_lang = unserialize( $rowcontent[NV_LANG_DATA . '_custom'] );
+	}
 
 	$page_title = $lang_module['content_edit'];
-
-	$rowcontent['sourcetext'] = '';
-	$rowcontent['topictext'] = '';
 
 	$id_block_content = array();
 	$sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block where id=' . $rowcontent['id'];
@@ -622,15 +588,7 @@ if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR .
 {
 	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
 }
-
-$sql = 'SELECT sourceid, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_sources ORDER BY weight ASC';
-$result = $db->query( $sql );
-$array_source_module = array();
-$array_source_module[0] = $lang_module['sources_sl'];
-while( list( $sourceid_i, $title_i ) = $result->fetch( 3 ) )
-{
-	$array_source_module[$sourceid_i] = $title_i;
-}
+$rowcontent['hometext'] = nv_htmlspecialchars( nv_br2nl( $rowcontent['hometext'] ) );
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
 $publ_date = date( 'd/m/Y', $rowcontent['publtime'] );
@@ -698,42 +656,28 @@ if( ! empty( $otherimage ) )
 }
 $xtpl->assign( 'FILE_ITEMS', $items );
 
-// List catalogs
-$sql = 'SELECT catid, ' . NV_LANG_DATA . '_title, lev, numsubcat FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-$result_cat = $db->query( $sql );
-if( $result_cat->rowCount() == 0 )
+foreach ($global_array_cat as $catid_i => $rowscat )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
-	die();
-}
-
-while( list( $catid_i, $title_i, $lev_i, $numsubcat_i ) = $result_cat->fetch( 3 ) )
-{
-	if( $rowcontent['listcatid'] == 0 ) $rowcontent['listcatid'] = $catid_i;
-
 	$xtitle_i = '';
-	if( $lev_i > 0 )
+	if( $rowscat['lev'] > 0 )
 	{
-		for( $i = 1; $i <= $lev_i; $i++ )
+		for( $i = 1; $i <= $rowscat['lev']; $i++ )
 		{
 			$xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		}
 	}
+	$rowscat['title'] = $xtitle_i . $rowscat['title'];
+	$rowscat['selected'] = ( $catid_i == $rowcontent['listcatid'] ) ? ' selected="selected"' : '';
 
-	$select = ( $catid_i == $rowcontent['listcatid'] ) ? ' selected=\'selected\'' : '';
-
-	$xtpl->assign( 'xtitle_i', $xtitle_i );
-	$xtpl->assign( 'title_i', $title_i );
-	$xtpl->assign( 'catid_i', $catid_i );
-	$xtpl->assign( 'select', $select );
-
+	$xtpl->assign( 'ROWSCAT', $rowscat );
 	$xtpl->parse( 'main.rowscat' );
 }
 
 // List group
+//var_dump($rowcontent['group_id']); die;
 if( ! empty( $rowcontent['group_id'] ) )
 {
-	$array_groupid_in_row = explode( ',', $rowcontent['group_id'] );
+	$array_groupid_in_row = $rowcontent['group_id'];
 }
 else
 {
@@ -770,7 +714,7 @@ for( $i = 0; $i <= 23; $i++ )
 }
 $xtpl->assign( 'ehour', $select );
 
-$select = "";
+$select = '';
 for( $i = 0; $i < 60; $i++ )
 {
 	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $emin ) ? " selected=\"selected\"" : "" ) . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
@@ -789,15 +733,6 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.allowed_comm' );
 }
 
-// Source
-$select = "";
-while( list( $sourceid_i, $source_title_i ) = each( $array_source_module ) )
-{
-	$source_sl = ( $sourceid_i == $rowcontent['source_id'] ) ? " selected=\"selected\"" : "";
-	$select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
-}
-$xtpl->assign( 'sourceid', $select );
-
 $rowcontent['bodytext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
@@ -808,7 +743,7 @@ else
 	$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext'] . "</textarea>";
 }
 
-$shtm = "";
+$shtm = '';
 if( count( $array_block_cat_module ) > 0 )
 {
 	foreach( $array_block_cat_module as $bid_i => $bid_title )
@@ -818,6 +753,16 @@ if( count( $array_block_cat_module ) > 0 )
 	}
 	$xtpl->assign( 'row_block', $shtm );
 	$xtpl->parse( 'main.block_cat' );
+}
+
+// List discount
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+$_result = $db->query( $sql );
+while( $_discount = $_result->fetch() )
+{
+	$_discount['selected'] = ( $_discount['did'] == $rowcontent['discount_id'] ) ? "selected=\"selected\"" : "";
+	$xtpl->assign( 'DISCOUNT', $_discount );
+	$xtpl->parse( 'main.discount' );
 }
 
 // List pro_unit
@@ -873,6 +818,7 @@ $xtpl->assign( 'edit_bodytext', $edits );
 
 if( $rowcontent['id'] > 0 )
 {
+	$op = 'items';
 	$xtpl->parse( 'main.edit' );
 }
 else
@@ -884,6 +830,13 @@ if( empty( $rowcontent['alias'] ) )
 {
 	$xtpl->parse( 'main.getalias' );
 }
+
+if( $rowcontent['listcatid'] AND !empty( $global_array_cat[$rowcontent['listcatid']]['form'] ) )
+{
+	$datacustom_form = nv_show_custom_form( $global_array_cat[$rowcontent['listcatid']]['form'], $array_custom, $array_custom_lang );
+	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+}
+$xtpl->parse( 'main.custom_form' );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

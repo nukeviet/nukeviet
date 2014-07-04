@@ -23,7 +23,7 @@ if( $mod == 'weight' and $new_vid > 0 )
 	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat WHERE bid=' . $bid;
 	$result = $db->query( $sql );
 	$numrows = $result->rowCount();
-	if( $numrows != 1 ) die( 'NO_' . $topicid );
+	if( $numrows != 1 ) die( 'NO_' . $bid );
 
 	$sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat WHERE bid!=' . $bid . ' ORDER BY weight ASC';
 	$result = $db->query( $sql );

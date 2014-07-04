@@ -62,7 +62,7 @@ while( $row = $query->fetch() )
 
 	$row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
 	$row['order_time'] = nv_date( "H:i d/m/y", $row['order_time'] );
-	$row['order_total'] = FormatNumber( $row['order_total'], 2, '.', ',' );
+	$row['order_total'] = nv_number_format( $row['order_total'], 2 );
 
 	$xtpl->assign( 'DATA', $row );
 
@@ -80,10 +80,7 @@ while( $row = $query->fetch() )
 		$xtpl->assign( 'DIS', 'disabled="disabled"' );
 	}
 
-	$bg = ( $count % 2 == 0 ) ? "class=\"second\"" : "";
 	$bgview = ( $row['order_view'] == '0' ) ? "class=\"bgview\"" : "";
-
-	$xtpl->assign( 'bg', $bg );
 	$xtpl->assign( 'bgview', $bgview );
 
 	$xtpl->parse( 'main.data.row' );

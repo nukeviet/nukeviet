@@ -29,12 +29,7 @@
                 </select>
             </div>
             <div class="col-xs-6">
-                <select name="sourceid" id="sourceid1" class="form-control">
-                    <option value="0">{LANG.source_title}</option>
-                    <!-- BEGIN: loopsource -->
-                    <option {ROW.selected} value="{ROW.sourceid}">{ROW.title}</option>
-                    <!-- END: loopsource -->
-                </select>
+
             </div>
         </div>
 

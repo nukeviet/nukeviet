@@ -18,9 +18,18 @@ $savecat = 0;
 $data = array();
 $groups_list = nv_groups_list();
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'] ) = array( 0, 0, '', '', '', '', '6' );
+list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'],  $data['image'], $data['form'], $data['newday'] ) = array( 0, 0, '', '', '', '', '6', '', '', 7);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
+
+$cat_form_exit = array();
+$_form_exit = scandir( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+foreach ( $_form_exit as $_form ) {
+	if( preg_match( '/^cat\_form\_([a-zA-Z0-9\-\_]+)\.tpl$/', $_form, $m ) )
+	{
+		$cat_form_exit[] = $m[1];
+	}
+}
 
 if( ! empty( $savecat ) )
 {
@@ -51,6 +60,20 @@ if( ! empty( $savecat ) )
 		$error = $lang_module['error_cat_name'];
 	}
 
+	$image = $nv_Request->get_string( 'image', 'post', '' );
+	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	{
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$data['image'] = substr( $image, $lu );
+	}
+	else
+	{
+		$data['image'] = '';
+	}
+
+	$data['form'] = $nv_Request->get_title( 'cat_form', 'post', '' );
+	if( ! in_array( $data['form'], $cat_form_exit ) ) $data['form'] = '';
+
 	$stmt = $db->prepare( 'SELECT count(*) FROM ' . $table_name . ' WHERE catid!=' . $data['catid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
 	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 	$stmt->execute();
@@ -79,15 +102,15 @@ if( ! empty( $savecat ) )
 
 		$weight = intval( $weight ) + 1;
 
-		$viewcat = 'viewcat_page_list';
-		$subcatid = '';
-
-		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, thumbnail, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, admins, add_time, edit_time, groups_view " . $listfield . " )
- 			VALUES (NULL, :parentid, ' ', ' '," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view" . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, form, admins, add_time, edit_time, groups_view " . $listfield . " )
+ 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :form, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
-		$data_insert['subcatid'] = $subcatid;
-		$data_insert['viewcat'] = $viewcat;
+		$data_insert['image'] = $data['image'];
+		$data_insert['subcatid'] = '';
+		$data_insert['viewcat'] = 'viewcat_page_list';
+		$data_insert['newday'] = $data['newday'];
+		$data_insert['form'] = $data['form'];
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $data['groups_view'];
 		foreach( $field_lang as $field_lang_i )
@@ -114,12 +137,14 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid= :parentid, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, form = :form, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+			$stmt->bindParam( ':form', $data['form'], PDO::PARAM_STR );
 			$stmt->bindParam( ':groups_view', $data['groups_view'], PDO::PARAM_STR );
 			if( $stmt->execute() )
 			{
@@ -147,18 +172,28 @@ if( ! empty( $savecat ) )
 		}
 	}
 }
-
-$data['parentid'] = $nv_Request->get_int( 'parentid', 'get,post', 0 );
-
-$data['catid'] = $nv_Request->get_int( 'catid', 'get', 0 );
-if( $data['catid'] > 0 )
-{
-	list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'] ) = $db->query( 'SELECT catid, parentid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, groups_view FROM ' . $table_name . ' where catid=' . $data['catid'] )->fetch( 3 );
-	$caption = $lang_module['edit_cat'];
-}
 else
 {
-	$caption = $lang_module['add_cat'];
+	$data['parentid'] = $nv_Request->get_int( 'parentid', 'get,post', 0 );
+
+	$data['catid'] = $nv_Request->get_int( 'catid', 'get', 0 );
+	if( $data['catid'] > 0 )
+	{
+		$data = $db->query( 'SELECT * FROM ' . $table_name . ' where catid=' . $data['catid'] )->fetch();
+		if( empty( $data ) )
+		{
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			die();
+		}
+		$data['title'] = $data[NV_LANG_DATA . '_title'];
+		$data['alias'] = $data[NV_LANG_DATA . '_alias'];
+		$data['description'] = $data[NV_LANG_DATA . '_description'];
+		$data['keywords'] = $data[NV_LANG_DATA . '_keywords'];
+	}
+	elseif( $data['parentid'] )
+	{
+		$data['form'] = $db->query( 'SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetchColumn();
+	}
 }
 
 $sql = 'SELECT catid, ' . NV_LANG_DATA . '_title, lev FROM ' . $table_name . ' WHERE catid !=' . $data['catid'] . ' ORDER BY sort ASC';
@@ -181,17 +216,32 @@ while( list( $catid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 	$array_cat_list[] = array( $catid_i, $xtitle_i );
 }
 
+$lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
+$lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
+
+if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data['image'] ) )
+{
+	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
+}
+$data['description'] = nv_br2nl( $data['description'] );
+
 $xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-$xtpl->assign( 'caption', $caption );
+$xtpl->assign( 'CAPTION', ( $data['catid'] > 0 ) ? $lang_module['edit_cat'] : $lang_module['add_cat'] );
 $xtpl->assign( 'DATA', $data );
-$xtpl->assign( 'CAT_LIST', nv_show_cat_list( $data['parentid'] ) );
+$xtpl->assign( 'CAT_LIST', shops_show_cat_list( $data['parentid'] ) );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
 
 if( $error != '' )
 {
 	$xtpl->assign( 'error', $error );
 	$xtpl->parse( 'main.error' );
+}
+
+if( empty( $data['alias'] ) )
+{
+	$xtpl->parse( 'main.getalias' );
 }
 
 foreach( $array_cat_list as $rows_i )
@@ -214,6 +264,19 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.groups_view' );
 }
 
+if( ! empty( $cat_form_exit ) )
+{
+	foreach ( $cat_form_exit as $_form )
+	{
+		$xtpl->assign( 'CAT_FORM', array(
+			'value' => $_form,
+			'selected' => ( $data['form'] == $_form ) ? ' selected="selected"' : '',
+			'title' => $_form
+		) );
+		$xtpl->parse( 'main.cat_form.loop' );
+	}
+	$xtpl->parse( 'main.cat_form' );
+}
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 

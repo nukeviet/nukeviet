@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$groupid = $nv_Request->get_int( 'groupid', 'post', 0 );
+$groupid = $nv_Request->get_int( 'groupid', 'post, get', 0 );
 $contents = "NO_" . $groupid;
 
 list( $groupid, $parentid, $title ) = $db->query( "SELECT groupid, parentid, " . NV_LANG_DATA . "_title FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid )->fetch( 3 );
@@ -18,6 +18,7 @@ list( $groupid, $parentid, $title ) = $db->query( "SELECT groupid, parentid, " .
 if( $groupid > 0 )
 {
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
+	
 	$check_parentid = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid=" . $groupid )->fetchColumn();
 
 	if( intval( $check_parentid ) > 0 )
@@ -26,7 +27,7 @@ if( $groupid > 0 )
 	}
 	else
 	{
-		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE group_id='" . $groupid . "' OR group_id REGEXP '^" . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "$'" )->fetchColumn();
+		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" )->fetchColumn();
 
 		if( intval( $check_rows ) > 0 )
 		{
@@ -41,7 +42,7 @@ if( $groupid > 0 )
 					$sql = "SELECT groupid, " . NV_LANG_DATA . "_title, lev FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid!='" . $groupid . "' ORDER BY sort ASC";
 					$result = $db->query( $sql );
 					$array_group_list = array();
-					$array_group_list[0] = "&nbsp;";
+					$array_group_list[0] = $lang_module['delgroup_no_group'];
 					while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 					{
 						$xtitle_i = "";
@@ -83,11 +84,11 @@ if( $groupid > 0 )
 				}
 				elseif( ! empty( $delgroupandrows ) )
 				{
-					$result = $db->query( "SELECT id, group_id FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE group_id='" . $groupid . "' OR group_id REGEXP '^" . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "$'" );
+					$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" );
 
 					while( $row = $result->fetch() )
 					{
-						nv_del_content_module( $row['id'] );
+						nv_del_content_module( $row['pro_id'] );
 					}
 
 					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
@@ -104,7 +105,7 @@ if( $groupid > 0 )
 
 					if( $groupidnews > 0 )
 					{
-						$result = $db->query( "SELECT id, group_id FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE group_id='" . $groupid . "' OR group_id REGEXP '^" . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "$'" );
+						$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" );
 
 						while( $row = $result->fetch() )
 						{
@@ -113,14 +114,15 @@ if( $groupid > 0 )
 							$row['group_id'][] = $groupidnews;
 							$row['group_id'] = array_unique( $row['group_id'] );
 
-							$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET group_id= :group_id WHERE id =" . $row['id'] );
-							$stmt->bindParam( ':group_id', implode( ",", $row['group_id'] ), PDO::PARAM_STR );
+							$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_items_group SET group_id= :group_id WHERE pro_id =" . $row['pro_id'] );
+							$stmt->bindParam( ':group_id', $groupidnews, PDO::PARAM_STR );
 							$stmt->execute();
 						}
 
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
 
 						nv_fix_group_order();
+						nv_fix_group_count( $groupidnews );
 						nv_del_moduleCache( $module_name );
 
 						Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid );
@@ -136,6 +138,9 @@ if( $groupid > 0 )
 	}
 	if( $contents == "NO_" . $groupid )
 	{
+		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id=" . $groupid;
+		$db->exec( $sql );
+		
 		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid;
 		if( $db->exec( $sql ) )
 		{
