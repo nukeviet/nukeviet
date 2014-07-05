@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' ); 
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
