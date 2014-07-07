@@ -181,6 +181,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 pub_content tinyint(4) NOT NULL default '0',
 	 edit_content tinyint(4) NOT NULL default '0',
 	 del_content tinyint(4) NOT NULL default '0',
+	 app_content tinyint(4) NOT NULL default '0',
 	 UNIQUE KEY userid (userid,catid)
 	) ENGINE=MyISAM";
 
