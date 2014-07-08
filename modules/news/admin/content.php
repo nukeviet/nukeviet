@@ -245,6 +245,11 @@ foreach( $global_array_cat as $catid_i => $array_value )
 
 			if( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
 			{
+				$check_pub_content = true;
+			}
+			
+			if( $array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 )
+			{
 				$check_censor_content = true;
 			}
 
@@ -1077,6 +1082,10 @@ else
 	if( $rowcontent['status'] == 1 and $rowcontent['id'] > 0 )
 	{
 		$xtpl->parse( 'main.status' );
+	}
+	elseif( ! empty( $array_cat_pub_content ) ) // neu co quyen dang bai
+	{
+		$xtpl->parse( 'main.status0' );
 	}
 	else
 	{
