@@ -54,6 +54,19 @@
                     <!-- END: warranty -->
                 </ul>
                 <hr />
+                
+                <div class="row">
+				<!-- BEGIN: group -->
+					<!-- BEGIN: items -->
+					<div class="col-md-6">
+					{GROUP}
+					</div>
+					<!-- END: items -->
+				<!-- END: group -->
+				</div>
+				
+				<div class="clearfix">&nbsp;</div>
+				
                 <div id="ratedata">
                 <!-- BEGIN: allowed_rating -->
                 <div class="clearfix">

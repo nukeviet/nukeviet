@@ -83,7 +83,6 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
-				'note' => $note,
 				'hometext' => $hometext,
 				'homeimgalt' => $homeimgalt,
 				'homeimgthumb' => $thumb,
