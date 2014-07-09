@@ -117,7 +117,7 @@ if( ! empty( $savecat ) )
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
 
 	$alias = str_replace( '-', ' ', nv_unhtmlspecialchars( $alias ) );
-	$keywords = explode( ',', nv_strtolower( $keywords ) );
+	$keywords = explode( ',', $keywords );
 	$keywords[] = $alias;
 	$keywords = array_map( 'strip_punctuation', $keywords );
 	$keywords = array_map( 'trim', $keywords );

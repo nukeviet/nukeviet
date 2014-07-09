@@ -103,6 +103,7 @@ $(document).ready(function() {
 
         if(event.keyCode==13){
             var keywords_add= $("#keywords-search").val();
+            keywords_add = trim( keywords_add );
             if( keywords_add != '' ){
                 nv_add_element( 'keywords', keywords_add, keywords_add );
                 $(this).val('');
@@ -139,6 +140,7 @@ $(document).ready(function() {
     $("#keywords-search").blur(function() {
 		// add placeholder to get the comma-and-space at the end
         var keywords_add= $("#keywords-search").val();
+        keywords_add = trim( keywords_add );
         if( keywords_add != '' ){
             nv_add_element( 'keywords', keywords_add, keywords_add );
             $(this).val('');
@@ -149,8 +151,13 @@ $(document).ready(function() {
 		var keywords_add= $("#keywords-search").val();
         if(keywords_add.search(',') > 0 )
         {
-            keywords_add = keywords_add.replace(",", "");
-            nv_add_element( 'keywords', keywords_add, keywords_add );
+            keywords_add = keywords_add.split(",");
+            for (i = 0; i < keywords_add.length; i++) {
+                var str_keyword = trim( keywords_add[i] );
+                if( str_keyword != '' ){
+                    nv_add_element( 'keywords', str_keyword, str_keyword );   
+                }
+            }
             $(this).val('');
         }
         return false;
