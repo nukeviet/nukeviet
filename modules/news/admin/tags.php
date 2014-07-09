@@ -12,14 +12,21 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 /**
  * nv_show_tags_list()
- *
+ * 
+ * @param string $q
+ * @param integer $incomplete
  * @return
  */
-function nv_show_tags_list( $q = '' )
+function nv_show_tags_list( $q = '', $incomplete = false )
 {
 	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
 	$db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
+
+	if( $incomplete === true )
+	{
+		$db->where( 'description = \'\'' );
+	}
 
 	if( ! empty( $q ) )
 	{
@@ -47,8 +54,15 @@ function nv_show_tags_list( $q = '' )
 	{
 		$row['number'] = ++$number;
 		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
-		$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . '#edit';
+		$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . ( $incomplete === true ? '&amp;incomplete=1' : '' ) . '#edit';
+		
 		$xtpl->assign( 'ROW', $row );
+		
+		if( empty( $row['description'] ) and $incomplete === false )
+		{
+			$xtpl->parse( 'main.loop.incomplete' );
+		}
+		
 		$xtpl->parse( 'main.loop' );
 	}
 	$sth->closeCursor();
@@ -90,6 +104,7 @@ elseif( $nv_Request->isset_request( 'q', 'get' ) )
 
 $error = '';
 $savecat = 0;
+$incomplete = $nv_Request->get_bool( 'incomplete', 'get,post', false );
 list( $tid, $title, $alias, $description, $image, $keywords ) = array( 0, '', '', '', '', '' );
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
@@ -148,7 +163,7 @@ if( ! empty( $savecat ) )
 			$sth->execute();
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, $msg_lg, $alias, $admin_info['userid'] );
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . ( $incomplete ? '&incomplete=1' : '' ) );
 			die();
 		}
 		catch( PDOException $e )
@@ -159,6 +174,7 @@ if( ! empty( $savecat ) )
 }
 
 $tid = $nv_Request->get_int( 'tid', 'get', 0 );
+
 if( $tid > 0 )
 {
 	list( $tid, $alias, $description, $image, $keywords ) = $db->query( 'SELECT tid, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid )->fetch( 3 );
@@ -176,7 +192,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
-$xtpl->assign( 'TAGS_LIST', nv_show_tags_list() );
+$xtpl->assign( 'TAGS_LIST', nv_show_tags_list( '', $incomplete ) );
 
 $xtpl->assign( 'tid', $tid );
 $xtpl->assign( 'alias', $alias );
@@ -194,6 +210,15 @@ if( ! empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
+}
+
+// Nhac nho dang xem cac tags duoi dang khong co mo ta, thay doi gia tri submit form
+if( $incomplete )
+{
+	$xtpl->assign( 'ALL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
+	
+	$xtpl->parse( 'main.incomplete' );
+	$xtpl->parse( 'main.incomplete_link' );
 }
 
 $xtpl->parse( 'main' );

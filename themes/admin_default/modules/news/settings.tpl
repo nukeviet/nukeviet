@@ -4,11 +4,7 @@
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<tfoot>
-				<tr>
-					<td class="text-center" colspan="2"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting" /></td>
-				</tr>
-			</tfoot>
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_view}</caption>
 			<tbody>
 				<tr>
 					<td><strong>{LANG.setting_indexfile}</strong></td>
@@ -68,10 +64,6 @@
 					<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.facebookAppID}</strong></td>
-					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.socialbutton}</strong></td>
 					<td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
 				</tr>
@@ -82,15 +74,6 @@
 						<!-- BEGIN: allowed_rating_point -->
 						<option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
 						<!-- END: allowed_rating_point -->
-					</select></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.structure_image_upload}</strong></td>
-					<td>
-					<select class="form-control" name="structure_upload">
-						<!-- BEGIN: structure_upload -->
-						<option value="{STRUCTURE_UPLOAD.key}"{STRUCTURE_UPLOAD.selected}>{STRUCTURE_UPLOAD.title}</option>
-						<!-- END: structure_upload -->
 					</select></td>
 				</tr>
 				<tr>
@@ -110,11 +93,47 @@
 					<td><strong>{LANG.setting_copyright}</strong></td>
 					<td><textarea class="form-control" style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
 				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_post}</caption>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.facebookAppID}</strong></td>
+					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
+				</tr>
 				<tr>
 					<td><strong>{LANG.tags_alias}</strong></td>
 					<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.structure_image_upload}</strong></td>
+					<td>
+					<select class="form-control" name="structure_upload">
+						<!-- BEGIN: structure_upload -->
+						<option value="{STRUCTURE_UPLOAD.key}"{STRUCTURE_UPLOAD.selected}>{STRUCTURE_UPLOAD.title}</option>
+						<!-- END: structure_upload -->
+					</select></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_auto_tags}</strong></td>
+					<td><input type="checkbox" value="1" name="auto_tags"{AUTO_TAGS}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_tags_remind}</strong></td>
+					<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
+				</tr>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td class="text-center" colspan="2">
+						<input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" />
+						<input type="hidden" value="1" name="savesetting" />
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
 </form>

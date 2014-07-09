@@ -396,7 +396,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords'] );
 
-	if( $rowcontent['keywords'] == '' )
+	// Tu dong xac dinh keywords
+	if( $rowcontent['keywords'] == '' and ! empty( $module_config[$module_name]['auto_tags'] ) )
 	{
 		if( $rowcontent['hometext'] != '' )
 		{
@@ -1122,6 +1123,12 @@ if( sizeof( $_array ) )
 	}
 	$xtpl->parse( 'main.googleplus' );
 }
+
+if( $module_config[$module_name]['auto_tags'] )
+{
+	$xtpl->parse( 'main.auto_tags' );
+}
+
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 

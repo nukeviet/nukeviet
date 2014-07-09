@@ -27,7 +27,7 @@
 </div>
 <!-- END: updateinfo -->
 <!-- BEGIN: pendinginfo -->
-<h3>{LANG.pendingInfo}</h3>
+<h3><em class="fa fa-clock-o">&nbsp;</em><strong>{LANG.pendingInfo}</strong></h3>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
