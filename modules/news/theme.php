@@ -761,6 +761,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.related' );
 	}
+	
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $key => $topic_array_i )
@@ -788,6 +789,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
 		$xtpl->parse( 'main.tooltip' );
+	}
+
+	if( $news_contents['status'] != 1 )
+	{
+		$xtpl->parse( 'main.no_public' );
 	}
 
 	$xtpl->parse( 'main' );

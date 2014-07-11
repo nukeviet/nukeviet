@@ -134,3 +134,4 @@ $lang_module['error_addcontent'] = 'Lỗi: Bạn chưa được cấp quyền đ
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng';
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
+$lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';

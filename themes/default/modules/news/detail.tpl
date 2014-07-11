@@ -27,6 +27,11 @@
 			<!-- END: allowed_save -->
 		</ul>
 		<hr class="clear"/>
+		<!-- BEGIN: no_public -->
+		<div class="alert alert-warning">
+			{LANG.no_public}
+		</div>
+		<!-- END: no_public -->
 		<!-- BEGIN: showhometext -->
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
