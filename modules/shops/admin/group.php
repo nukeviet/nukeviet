@@ -16,7 +16,7 @@ $table_name = $db_config['prefix'] . '_' . $module_data . '_group';
 $error = $admins = '';
 $savegroup = 0;
 $data = array();
-list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'] ) = array( 0, 0, '', '', '', '', 0, 0 );
+list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image'] ) = array( 0, 0, '', '', '', '', 0, 0, '' );
 
 $savegroup = $nv_Request->get_int( 'savegroup', 'post', 0 );
 
@@ -153,7 +153,7 @@ $data['groupid'] = $nv_Request->get_int( 'groupid', 'get', 0 );
 
 if( $data['groupid'] > 0 )
 {
-	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'] ) = $db->query( 'SELECT groupid, parentid,cateid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords FROM ' . $table_name . ' where groupid=' . $data['groupid'] )->fetch( 3 );
+	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['image'] ) = $db->query( 'SELECT groupid, parentid,cateid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, image FROM ' . $table_name . ' where groupid=' . $data['groupid'] )->fetch( 3 );
 	$caption = $lang_module['edit_group'];
 }
 else
