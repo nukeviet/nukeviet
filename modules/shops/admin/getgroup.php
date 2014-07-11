@@ -70,7 +70,7 @@ foreach( $data_group as $groupid_i => $groupinfo_i )
 		{
 			$ch = ' checked="checked"';
 		}
-		$contents_temp_none .= '<div class="row"><label><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $groupinfo_i['title'] . '</li></div>';
+		$contents_temp_none .= '<div class="row"><label><strong>' . $groupinfo_i['title'] . '</strong></li></div>';
 		if( $groupinfo_i['numsubgroup'] > 0 )
 		{
 			$contents_temp_none .= getgroup_ckhtml( $data_group, $array_groupid_in_row, $groupid_i );
