@@ -20,6 +20,7 @@ function nv_set_dir_class( $array )
 {
 	$class = array( 'folder' );
 	$menu = false;
+	
 	if( ! empty( $array ) )
 	{
 		foreach( $array as $key => $item )
@@ -32,7 +33,12 @@ function nv_set_dir_class( $array )
 	}
 
 	$class = implode( ' ', $class );
-	if( $menu ) $class .= ' menu';
+	
+	if( $menu )
+	{
+		$class .= ' menu';
+	}
+	
 	return $class;
 }
 

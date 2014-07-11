@@ -22,11 +22,11 @@ function resize_byHeight(a, b, d) {
 }
 
 function calSize(a, b, d, e) {
-	if (a > d) {
+	if(a > d) {
 		b = resize_byWidth(a, b, d);
 		a = d;
 	}
-	if (b > e) {
+	if(b > e) {
 		a = resize_byHeight(a, b, e);
 		b = e
 	}
@@ -36,7 +36,7 @@ function calSize(a, b, d, e) {
 function calSizeMax(a, b, d, e) {
 	var g = d;
 	d = resize_byWidth(a, b, d);
-	if (!(d <= e )) {
+	if(!(d <= e )) {
 		d = e;
 		g = resize_byHeight(a, b, e);
 	}
@@ -46,7 +46,7 @@ function calSizeMax(a, b, d, e) {
 function calSizeMin(a, b, d, e) {
 	var g = d;
 	d = resize_byWidth(a, b, d);
-	if (!(d >= e )) {
+	if(!(d >= e )) {
 		d = e;
 		g = resize_byHeight(a, b, e);
 	}
@@ -60,22 +60,22 @@ function is_numeric(a) {
 function checkNewSize() {
 	var a = $("input[name=newWidth]").val(), b = $("input[name=newHeight]").val(), d = [], e = $("input[name=origWidth]").val(), g = $("input[name=origHeight]").val(), h = calSizeMax(e, g, nv_max_width, nv_max_height);
 	e = calSizeMin(e, g, nv_min_width, nv_min_height);
-	if (a == "" || !is_numeric(a)) {
+	if(a == "" || !is_numeric(a)) {
 		d = [LANG.errorEmptyX, "newWidth"];
 	} else {
-		if (a > h[0]) {
+		if(a > h[0]) {
 			d = [LANG.errorMaxX, "newWidth"];
 		} else {
-			if (a < e[0]) {
+			if(a < e[0]) {
 				d = [LANG.errorMinX, "newWidth"];
 			} else {
-				if (b == "" || !is_numeric(b)) {
+				if(b == "" || !is_numeric(b)) {
 					d = [LANG.errorEmptyY, "newHeight"];
 				} else {
-					if (b > h[1]) {
+					if(b > h[1]) {
 						d = [LANG.errorMaxY, "newHeight"];
 					} else {
-						if (b < e[1]) {
+						if(b < e[1]) {
 							d = [LANG.errorMinY, "newHeight"];
 						}
 					}
@@ -84,7 +84,7 @@ function checkNewSize() {
 		}
 	}
 	$("div[title=createInfo]").find("div").remove();
-	if ( typeof d[0] != "undefined") {
+	if( typeof d[0] != "undefined") {
 		$("div[title=createInfo]").prepend('<div class="red">' + d[0] + "</div>");
 		$("input[name='" + d[1] + "']").select();
 		return false;
@@ -97,7 +97,7 @@ function checkNewSize() {
 function pathList(a, b) {
 	var d = [];
 	$("#foldertree").find("span").each(function() {
-		if ($(this).attr("title") == b || $(this).attr("title") != "" && $(this).is("." + a)) {
+		if($(this).attr("title") == b || $(this).attr("title") != "" && $(this).is("." + a)) {
 			d[d.length] = $(this).attr("title");
 		}
 	});
@@ -110,10 +110,10 @@ function insertvaluetofield() {
 	var e = $("img[title='" + c + "']").attr("name").split("|");
 	f = (e[7] == "") ? $("span#foldervalue").attr("title") : e[7];
 	d = nv_siteroot + f + "/" + c;
-	if (b != "") {
+	if(b != "") {
 		$("#" + b, opener.document).val(d);
 		b = $("input[name=alt]").val();
-		if (b != "") {
+		if(b != "") {
 			$("#" + b, opener.document).val($("img[title='" + c + "']").attr("alt"));
 		}
 		window.close();
@@ -124,11 +124,11 @@ function insertvaluetofield() {
 			// Get the reference to a dialog window.
 			var dialog = this.getDialog();
 			// Check if this is the Image dialog window.
-			if (dialog.getName() == 'image2') {
+			if(dialog.getName() == 'image2') {
 				// Get the reference to a text field that holds the "alt" attribute.
 				var element = dialog.getContentElement('info', 'alt');
 				// Assign the new value.
-				if (element)
+				if(element)
 					element.setValue($("img[title='" + c + "']").attr("alt"));
 			}
 		});
@@ -139,11 +139,11 @@ function insertvaluetofield() {
 
 function nv_selFile(d) {
 	var a = $("input[name=CKEditorFuncNum]").val(), b = $("input[name=area]").val();
-	if (a > 0) {
+	if(a > 0) {
 		window.opener.CKEDITOR.tools.callFunction(a, d, "");
 		window.close();
 	}
-	if (b != "") {
+	if(b != "") {
 		$("#" + b, opener.document).val(d);
 		window.close();
 	}
@@ -162,7 +162,7 @@ function preview() {
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
 	var d = $("img[title='" + a + "']").attr("name").split("|");
 	b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
-	if (d[3] == "image" || d[2] == "swf") {
+	if(d[3] == "image" || d[2] == "swf") {
 		var g = calSize(d[0], d[1], 360, 230);
 		e += d[0] + " x " + d[1] + " pixels (" + d[4] + ")<br />";
 		d[3] == "image" ? $("div#fileView").html('<img width="' + g[0] + '" height="' + g[1] + '" src="' + nv_siteroot + b + "/" + a + '" />') : $("#fileView").flash({
@@ -207,7 +207,7 @@ function create() {
 	$("input.dynamic").val("");
 	var a = $("input[name=selFile]").val(), d = $("img[title='" + a + "']").attr("name");
 	d = d.split("|");
-	if (d[3] == "image") {
+	if(d[3] == "image") {
 		b = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
 		$("input[name=origWidth]").val(d[0]);
 		$("input[name=origHeight]").val(d[1]);
@@ -275,35 +275,44 @@ function filedelete() {
 		}
 	});
 }
-function fileMouseup(a) {
+
+// Ham xu ly khi nhap chuot vao 1 file
+function fileMouseup(a){
 	$(".imgsel").removeClass("imgsel");
 	$(a).addClass("imgsel");
 	a = $(a).attr("title");
 	$("input[name=selFile]").val(a);
 	a = a.slice(-3);
 	var b = $("input[name=CKEditorFuncNum]").val(), d = $("input[name=area]").val(), e = "<ul>";
-	if (b > 0 || d != "") {
-		e += '<li id="select"><img style="margin-right:5px" src="' + ICON.select + '"/>' + LANG.select + '</li>'
+	
+	if(b > 0 || d != "") {
+		e += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>'
 	}
-	e += '<li id="download"><img style="margin-right:5px" src="' + ICON.download + '"/>' + LANG.download + '</li>';
-	e += '<li id="filepreview"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.preview + '</li>';
-	if ($.inArray(a, array_images) !== -1){
+	
+	e += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+	e += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+	
+	if($.inArray(a, array_images) !== -1){
 		if($("span#create_file").attr("title") == "1") {
-			e += '<li id="fileaddlogo"><img style="margin-right:5px" src="' + ICON.preview + '"/>' + LANG.addlogo + '</li>';
-			e += '<li id="create"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.upload_createimage + '</li>'
-			e += '<li id="cropfile"><img style="margin-right:5px" src="' + ICON.filecrop + '"/>' + LANG.crop + '</li>'
-			e += '<li id="rotatefile"><img style="margin-right:5px" src="' + ICON.filerotate + '"/>' + LANG.rotate + '</li>'
+			e += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+			e += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>'
+			e += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>'
+			e += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>'
 		}
 	}
-	if ($("span#move_file").attr("title") == "1") {
-		e += '<li id="move"><img style="margin-right:5px" src="' + ICON.move + '"/>' + LANG.move + '</li>'
+	
+	if($("span#move_file").attr("title") == "1") {
+		e += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>'
 	}
-	if ($("span#rename_file").attr("title") == "1") {
-		e += '<li id="rename"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.rename + '</li>'
+	
+	if($("span#rename_file").attr("title") == "1") {
+		e += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>'
 	}
-	if ($("span#delete_file").attr("title") == "1") {
-		e += '<li id="filedelete"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.upload_delfile + '</li>'
+	
+	if($("span#delete_file").attr("title") == "1") {
+		e += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>'
 	}
+	
 	e += "</ul>";
 	$("div#contextMenu").html(e)
 }
@@ -313,9 +322,10 @@ function is_allowed_upload() {
 	$("span#upload_file").attr("title") == "1" ? $("input[name=upload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=upload]").parent().parent().css("display", "none").next().css("display", "block")
 }
 
+// Ham xu ly khi nhap chuot vao thu muc
 function folderClick(a) {
 	var b = $(a).attr("title");
-	if (b != $("span#foldervalue").attr("title")) {
+	if(b != $("span#foldervalue").attr("title")) {
 		$("span#foldervalue").attr("title", b);
 		$("span#view_dir").attr("title", $(a).is(".view_dir") ? "1" : "0");
 		$("span#create_dir").attr("title", $(a).is(".create_dir") ? "1" : "0");
@@ -330,35 +340,44 @@ function folderClick(a) {
 		$("span#rotate_file").attr("title", $(a).is(".rotate_file") ? "1" : "0");
 		$("span.folder").css("color", "");
 		$(a).css("color", "red");
-		if ($(a).is(".view_dir")) {
+		
+		if($(a).is(".view_dir")) {
 			a = $("select[name=imgtype]").val();
 			var d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-			$("div#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_siteroot + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+			$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + b + "&imgfile=" + d + "&type=" + a + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
 		} else {
 			$("div#imglist").text("")
 		}
+		
 		is_allowed_upload()
 	}
 }
 
+// Ham xu ly khi chuot phai vao thu muc
 function menuMouseup(a) {
 	$(a).attr("title");
 	$("span").attr("name", "");
 	$(a).attr("name", "current");
+	
 	var b = "";
-	if ($(a).is(".create_dir")) {
-		b += '<li id="createfolder"><img style="margin-right:5px" src="' + ICON.create + '"/>' + LANG.createfolder + '</li>'
+	
+	if($(a).is(".create_dir")) {
+		b += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 	}
-	if ($(a).is(".rename_dir")) {
-		b += '<li id="renamefolder"><img style="margin-right:5px" src="' + ICON.rename + '"/>' + LANG.renamefolder + '</li>'
+	
+	if($(a).is(".rename_dir")) {
+		b += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
 	}
-	if ($(a).is(".delete_dir")) {
-		b += '<li id="deletefolder"><img style="margin-right:5px" src="' + ICON.filedelete + '"/>' + LANG.deletefolder + '</li>'
+	
+	if($(a).is(".delete_dir")) {
+		b += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
 	}
-	if (b != "") {
+	
+	if(b != "") {
 		b = "<ul>" + b + "</ul>"
 	}
-	$("div#contextMenu").html(b)
+	
+	$("div#contextMenu").html(b);
 }
 
 function renamefolder() {
@@ -374,7 +393,7 @@ function createfolder() {
 }
 
 function deletefolder() {
-	if (confirm(LANG.delete_folder)) {
+	if(confirm(LANG.delete_folder)) {
 		var a = $("span[name=current]").attr("title");
 		$.ajax({
 			type : "POST",
@@ -382,13 +401,13 @@ function deletefolder() {
 			data : "path=" + a,
 			success : function(b) {
 				b = b.split("_");
-				if (b[0] == "ERROR") {
+				if(b[0] == "ERROR") {
 					alert(b[1])
 				} else {
 					b = a.split("/");
 					a = "";
 					for ( i = 0; i < b.length - 1; i++) {
-						if (a != "") {
+						if(a != "") {
 							a += "/"
 						}
 						a += b[i]
@@ -434,15 +453,16 @@ function rotatefile() {
 }
 
 var ICON = [];
-ICON.select = nv_siteroot + 'js/contextmenu/icons/select.png';
-ICON.download = nv_siteroot + 'js/contextmenu/icons/download.png';
-ICON.preview = nv_siteroot + 'js/contextmenu/icons/view.png';
-ICON.create = nv_siteroot + 'js/contextmenu/icons/copy.png';
-ICON.move = nv_siteroot + 'js/contextmenu/icons/move.png';
-ICON.rename = nv_siteroot + 'js/contextmenu/icons/rename.png';
-ICON.filedelete = nv_siteroot + 'js/contextmenu/icons/delete.png';
-ICON.filecrop = nv_siteroot + 'js/contextmenu/icons/crop.png';
-ICON.filerotate = nv_siteroot + 'js/contextmenu/icons/rotate.png';
+ICON.select = 'fa-check-square-o';
+ICON.download = 'fa-download';
+ICON.preview = 'fa-eye';
+ICON.create = 'fa-files-o';
+ICON.move = 'fa-arrows';
+ICON.rename = 'fa-pencil-square-o';
+ICON.filedelete = 'fa-trash-o';
+ICON.filecrop = 'fa-crop';
+ICON.filerotate = 'fa-repeat';
+ICON.addlogo = 'fa-file-image-o';
 
 $(".vchange").change(function() {
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
@@ -495,19 +515,19 @@ $("input[name=imgurl]").change(function() {
 
 $("#confirm").click(function() {
 	var a = $("input[name=upload]").val(), b = $("span#foldervalue").attr("title"), d = $("input[name=currentFileUpload]").val(), e = a + " " + b, g = $("select[name=imgtype]").val(), h = $("select[name=author]").val() == 1 ? "&author" : "";
-	if (a != "" && d != e) {
+	if(a != "" && d != e) {
 		$("input[name=upload]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
 		$("input[name=upload]").upload(nv_module_url + "upload&random=" + nv_randomNum(10), "path=" + b, function(k) {
 			$("input[name=currentFileUpload]").val(e);
 			var l = k.split("_");
-			if (l[0] == "ERROR") {
+			if(l[0] == "ERROR") {
 				$("div#errorInfo").html(l[1]).dialog("open");
 				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
 			} else {
 				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "block");
 				$("input[name=selFile]").val(k);
 				var ckf = $("input[name=CKEditorFuncNum]").val(), area = $("input[name=area]").val();
-				if (ckf > 0 || area != "") {
+				if(ckf > 0 || area != "") {
 					$("#cfile").html('<a href="javascript:void(0);" onclick="nv_selFile(\'' + nv_siteroot + b + '/' + k + '\')">' + k + '</a>');
 				} else {
 					$("#cfile").html(k);
@@ -521,7 +541,7 @@ $("#confirm").click(function() {
 		a = $("input[name=imgurl]").val();
 		d = $("input[name=currentFileUrl]").val();
 		var j = a + " " + b;
-		if (/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(a) && d != j) {
+		if(/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(a) && d != j) {
 			$("input[name=imgurl]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
 			$.ajax({
 				type : "POST",
@@ -530,7 +550,7 @@ $("#confirm").click(function() {
 				success : function(k) {
 					$("input[name=currentFileUrl]").val(j);
 					var l = k.split("_");
-					if (l[0] == "ERROR") {
+					if(l[0] == "ERROR") {
 						$("div#errorInfo").html(l[1]).dialog("open");
 						$("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
 					} else {
@@ -563,7 +583,7 @@ $("div#renamefolder").dialog({
 		Ok : function() {
 			var a = $("span[name=current]").attr("title"), b = $("input[name=foldername]").val(), d = $("span#foldervalue").attr("title"), e = a.split("/");
 			e = e[e.length - 1];
-			if (b == "" || b == e || !nv_namecheck.test(b)) {
+			if(b == "" || b == e || !nv_namecheck.test(b)) {
 				alert(LANG.rename_nonamefolder);
 				$("input[name=foldername]").focus();
 				return false
@@ -574,11 +594,11 @@ $("div#renamefolder").dialog({
 			$("span." + e).each(function() {
 				var h = $(this).attr("title").split("/");
 				h = h[h.length - 1];
-				if (b == h) {
+				if(b == h) {
 					g = false
 				}
 			});
-			if (!g) {
+			if(!g) {
 				alert(LANG.folder_exists);
 				$("input[name=foldername]").focus();
 				return false
@@ -589,7 +609,7 @@ $("div#renamefolder").dialog({
 				data : "path=" + a + "&newname=" + b,
 				success : function(h) {
 					var j = h.split("_");
-					if (j[0] == "ERROR") {
+					if(j[0] == "ERROR") {
 						alert(j[1])
 					} else {
 						j = h.split("/");
@@ -619,7 +639,7 @@ $("div#createfolder").dialog({
 	buttons : {
 		Ok : function() {
 			var a = $("input[name=createfoldername]").val(), b = $("span[name=current]").attr("title");
-			if (a == "" || !nv_namecheck.test(a)) {
+			if(a == "" || !nv_namecheck.test(a)) {
 				alert(LANG.name_folder_error);
 				$("input[name=createfoldername]").focus();
 				return false
@@ -630,7 +650,7 @@ $("div#createfolder").dialog({
 				data : "path=" + b + "&newname=" + a,
 				success : function(d) {
 					var e = d.split("_");
-					if (e[0] == "ERROR") {
+					if(e[0] == "ERROR") {
 						alert(e[1])
 					} else {
 						e = $("select[name=imgtype]").val();
@@ -648,7 +668,7 @@ $("div#createfolder").dialog({
 $("input[name=newWidth], input[name=newHeight]").keyup(function() {
 	var a = $(this).attr("name"), b = $("input[name='" + a + "']").val(), d = $("input[name=origWidth]").val(), e = $("input[name=origHeight]").val(), g = calSizeMax(d, e, nv_max_width, nv_max_height);
 	g = a == "newWidth" ? g[0] : g[1];
-	if (!is_numeric(b) || b > g || b < 0) {
+	if(!is_numeric(b) || b > g || b < 0) {
 		$("input[name=newWidth]").val("");
 		$("input[name=newHeight]").val("")
 	} else {
@@ -662,10 +682,10 @@ $("[name=prView]").click(function() {
 
 $("[name=newSizeOK]").click(function() {
 	var a = $("input[name=newWidth]").val(), b = $("input[name=newHeight]").val(), d = $("input[name=origWidth]").val(), e = $("input[name=origHeight]").val();
-	if (a == d && b == e) {
+	if(a == d && b == e) {
 		$("div#imgcreate").dialog("close")
 	} else {
-		if (checkNewSize() !== false) {
+		if(checkNewSize() !== false) {
 			$(this).attr("disabled", "disabled");
 			d = $("input[name=selFile]").val();
 			var g = $("span#foldervalue").attr("title");
@@ -675,7 +695,7 @@ $("[name=newSizeOK]").click(function() {
 				data : "path=" + g + "&img=" + d + "&width=" + a + "&height=" + b + "&num=" + nv_randomNum(10),
 				success : function(h) {
 					var j = h.split("_");
-					if (j[0] == "ERROR") {
+					if(j[0] == "ERROR") {
 						alert(j[1]);
 						$("[name=newSizeOK]").removeAttr("disabled")
 					} else {
@@ -694,7 +714,7 @@ $("[name=newSizeOK]").click(function() {
 
 $("input[name=newPathOK]").click(function() {
 	var a = $("span#foldervalue").attr("title"), b = $("select[name=newPath]").val(), d = $("input[name=selFile]").val(), e = $("input[name=mirrorFile]:checked").length;
-	if (a == b) {
+	if(a == b) {
 		$("div#filemove").dialog("close")
 	} else {
 		$(this).attr("disabled", "disabled");
@@ -704,7 +724,7 @@ $("input[name=newPathOK]").click(function() {
 			data : "path=" + a + "&newpath=" + b + "&file=" + d + "&mirror=" + e,
 			success : function(g) {
 				var h = g.split("_");
-				if (h[0] == "ERROR") {
+				if(h[0] == "ERROR") {
 					alert(h[1]);
 					$("input[name=newPathOK]").removeAttr("disabled");
 				} else {
@@ -713,7 +733,7 @@ $("input[name=newPathOK]").click(function() {
 					$("input[name=selFile]").val(g);
 					$("input[name=newPathOK]").removeAttr("disabled");
 					$("div#filemove").dialog("close");
-					if (j == 1) {
+					if(j == 1) {
 						j = $("span#path").attr("title");
 						$("#imgfolder").load(nv_module_url + "folderlist&path=" + j + "&currentpath=" + b + "&random=" + nv_randomNum(10));
 						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
@@ -730,12 +750,12 @@ $("input[name=filerenameOK]").click(function() {
 	var b = $("input[name=selFile]").val(), d = $("input[name=filerenameNewName]").val(), e = b.match(/^(.+)\.([a-zA-Z0-9]+)$/);
 	d = $.trim(d);
 	$("input[name=filerenameNewName]").val(d);
-	if (d == "") {
+	if(d == "") {
 		alert(LANG.rename_noname);
 		$("input[name=filerenameNewName]").focus();
 	} else {
 		a = $("input[name=filerenameAlt]").val();
-		if (e[1] == d && a == $("img[title='" + b + "']").attr("alt")) {
+		if(e[1] == d && a == $("img[title='" + b + "']").attr("alt")) {
 			$("div#filerename").dialog("close");
 		} else {
 			n = $("img[title='" + b + "']").attr("name").split("|");
@@ -748,7 +768,7 @@ $("input[name=filerenameOK]").click(function() {
 				data : "path=" + p + "&file=" + b + "&newname=" + d + "&newalt=" + a,
 				success : function(g) {
 					var h = g.split("_");
-					if (h[0] == "ERROR") {
+					if(h[0] == "ERROR") {
 						alert(h[1]);
 						$("input[name=filerenameOK]").removeAttr("disabled");
 					} else {

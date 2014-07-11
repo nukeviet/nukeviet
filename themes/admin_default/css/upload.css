@@ -173,12 +173,32 @@
 	text-align: center;
 }
 
+/* Add Logo */
+div.watermark {
+	border: 1px dashed #000;
+}
+
+img.watermark:hover {
+	cursor: move;
+}
+
+.w50{
+	width: 50px!important;
+}
+
 .authorFile {
 	float: left;
 	margin-left: 5px;
 	position: relative
 }
 
+/* Context Menu */
+#jqContextMenu .fa{
+	color: #666;
+	width: 25px;
+}
+
+/* List files */
 .imgcontent {
 	background: #fff;
 	border: 2px solid #EAEAEA;
