@@ -46,9 +46,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$_where .= ' AND userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
-		$db->select( 'COUNT(*)' )
-			->from( NV_UPLOAD_GLOBALTABLE . '_file' )
-			->where( $_where );
+		$db->select( 'COUNT(*)' )->from( NV_UPLOAD_GLOBALTABLE . '_file' )->where( $_where );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -82,10 +80,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$sql .= ' AND t1.userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
-		$db->select( 'COUNT(*)' )
-			->from( NV_UPLOAD_GLOBALTABLE . '_file t1' )
-			->join( 'INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')
-			->where( $_where );
+		$db->select( 'COUNT(*)' )->from( NV_UPLOAD_GLOBALTABLE . '_file t1' )->join( 'INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')->where( $_where );
 
 		$sth = $db->prepare( $db->sql() );
 		$keyword = '%' . addcslashes( $q, '_%' ) . '%';

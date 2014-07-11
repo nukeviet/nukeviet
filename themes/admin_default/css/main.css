@@ -646,3 +646,13 @@ label {
 .breadcrumb>li:first-child{
 	color: #0074a2!important;
 }
+
+/* ==========================================================================
+ Fixed Jquery UI Style
+ ========================================================================== */
+.ui-widget{
+	font-family: 'Roboto', sans-serif!important;
+	font-size:12px!important;
+	font-weight:400!important;
+	line-height:18px!important;
+}

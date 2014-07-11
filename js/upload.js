@@ -165,7 +165,7 @@ function preview() {
 	if (d[3] == "image" || d[2] == "swf") {
 		var g = calSize(d[0], d[1], 360, 230);
 		e += d[0] + " x " + d[1] + " pixels (" + d[4] + ")<br />";
-		d[3] == "image" ? $("div#fileView").html('<img style="border:2px solid #F0F0F0;" width="' + g[0] + '" height="' + g[1] + '" src="' + nv_siteroot + b + "/" + a + '" />') : $("#fileView").flash({
+		d[3] == "image" ? $("div#fileView").html('<img width="' + g[0] + '" height="' + g[1] + '" src="' + nv_siteroot + b + "/" + a + '" />') : $("#fileView").flash({
 			src : nv_siteroot + b + "/" + a,
 			width : g[0],
 			height : g[1]
@@ -407,7 +407,7 @@ function searchfile() {
 	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
 	b = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
 	$("div#filesearch").dialog("close");
-	$("#imglist").html('<p style="padding:20px; text-align:center"><img src="' + nv_siteroot + 'images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10))
+	$("#imglist").html(nv_loading_data).load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10))
 	return false;
 }
 
@@ -446,28 +446,36 @@ ICON.filerotate = nv_siteroot + 'js/contextmenu/icons/rotate.png';
 
 $(".vchange").change(function() {
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
-	$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
 });
 
-$(".refresh a").click(function() {
-	var a = $("span#foldervalue").attr("title"), b = $("select[name=imgtype]").val(), d = $("input[name=selFile]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "", g = $("span#path").attr("title");
-	$("#imgfolder").load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
-	$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10));
+$(".refresh em").click(function(){
+	var a = $("span#foldervalue").attr("title"),
+		b = $("select[name=imgtype]").val(),
+		d = $("input[name=selFile]").val(),
+		e = $("select[name=author]").val() == 1 ? "&author" : "",
+		g = $("span#path").attr("title");
+	
+	$("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
+	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10));
+	
 	return false
 });
 
-$(".search a").click(function() {
-	var a = $("span#foldervalue").attr("title"), b = pathList("create_file", a), d, e;
+$(".search em").click(function () {
+	var a = $("span#foldervalue").attr("title"),
+		b = pathList("create_file", a),
+		d, e;
 	$("select[name=searchPath]").html("");
-	for (e in b ) {
+	for (e in b) {
 		d = a == b[e] ? ' selected="selected"' : "";
 		$("select[name=searchPath]").append('<option value="' + b[e] + '"' + d + ">" + b[e] + "</option>")
 	}
 	$("div#filesearch").dialog({
-		autoOpen : false,
-		width : 300,
-		modal : true,
-		position : "center"
+		autoOpen: false,
+		width: 300,
+		modal: true,
+		position: "center"
 	}).dialog("open");
 	$("input[name=q]").val("").focus();
 	return false
@@ -648,11 +656,11 @@ $("input[name=newWidth], input[name=newHeight]").keyup(function() {
 	}
 });
 
-$("input[name=prView]").click(function() {
+$("[name=prView]").click(function() {
 	checkNewSize()
 });
 
-$("input[name=newSizeOK]").click(function() {
+$("[name=newSizeOK]").click(function() {
 	var a = $("input[name=newWidth]").val(), b = $("input[name=newHeight]").val(), d = $("input[name=origWidth]").val(), e = $("input[name=origHeight]").val();
 	if (a == d && b == e) {
 		$("div#imgcreate").dialog("close")
@@ -669,12 +677,12 @@ $("input[name=newSizeOK]").click(function() {
 					var j = h.split("_");
 					if (j[0] == "ERROR") {
 						alert(j[1]);
-						$("input[name=newSizeOK]").removeAttr("disabled")
+						$("[name=newSizeOK]").removeAttr("disabled")
 					} else {
 						j = $("select[name=imgtype]").val();
 						var k = $("select[name=author]").val() == 1 ? "&author" : "";
 						$("input[name=selFile]").val(h);
-						$("input[name=newSizeOK]").removeAttr("disabled");
+						$("[name=newSizeOK]").removeAttr("disabled");
 						$("div#imgcreate").dialog("close");
 						$("#imglist").load(nv_module_url + "imglist&path=" + g + "&type=" + j + "&imgfile=" + h + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10))
 					}
