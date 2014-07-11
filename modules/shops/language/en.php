@@ -321,3 +321,30 @@ $lang_module['compare'] = 'Compare';
 $lang_module['compare_empty_items'] = 'No items';
 $lang_module['num0'] = "Compare number is greater than or equal to 2";
 $lang_module['newday'] = "New";
+
+$lang_module['wishlist'] = "Wishlist";
+$lang_module['wishlist_product'] = "Wishlist product";
+$lang_module['wishlist_add_success'] = "Product added to wishlist";
+$lang_module['wishlist_exits'] = "This product is already in wishlist";
+$lang_module['wishlist_error'] = "This product can not be add to the wishlist";
+$lang_module['wishlist_guest'] = "You need to login to use this feature";
+$lang_module['wishlist_del_item'] = "Drop";
+$lang_module['wishlist_del_item_confirm'] = "Are you sure you want to remove this product from the wishlist?";
+$lang_module['wishlist_del_item_success'] = "Removed from product wishlist";
+$lang_module['wishlist_no_priduct'] = "No products in wishlist";
+
+$lang_module['discount_detail'] = "Promotions";
+$lang_module['discount_content_begin'] = "From day %s";
+$lang_module['discount_content_end'] = " to day %s";
+$lang_module['discount_content_text'] = "<strong>%s</strong> promotions apply to product <strong class='text-danger'>%1s</strong>";
+$lang_module['discount_content_text_items'] = "Reduce %s&#37; when purchase from <strong>%1s</strong> to <strong>%2s</strong> product";
+
+$lang_module['rateconfirm'] = 'Are you sure you want to evaluate';
+$lang_module['rateavg_percent'] = 'Average rate';
+$lang_module['5star'] = '5 star';
+$lang_module['4star'] = '4 star';
+$lang_module['3star'] = '3 star';
+$lang_module['2star'] = '2 star';
+$lang_module['1star'] = '1 star';
+
+$lang_module['custom'] = 'Custom';

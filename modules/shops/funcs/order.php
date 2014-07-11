@@ -48,6 +48,7 @@ if( $post_order == 1 )
 	$listid = '';
 	$listnum = '';
 	$listprice = '';
+	$listgroup = '';
 	$i = 0;
 	$total = 0;
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )

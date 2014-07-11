@@ -249,6 +249,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  listid text NOT NULL,
  listnum text NOT NULL,
  listprice text NOT NULL,
+ listgroup text NOT NULL,
  user_id int(11) unsigned NOT NULL default '0',
  admin_id int(11) unsigned NOT NULL default '0',
  shop_id int(11) unsigned NOT NULL default '0',

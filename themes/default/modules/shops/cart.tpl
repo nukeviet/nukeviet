@@ -25,7 +25,7 @@
         			<th>{LANG.cart_images}</th>
         			<th>{LANG.cart_products}</th>
         			<!-- BEGIN: price1 -->
-        			<th>{LANG.cart_price} ({unit_config})</th>
+        			<th>{LANG.cart_price}</th>
         			<!-- END: price1 -->
         			<th style="width: 80px">{LANG.cart_numbers}</th>
         			<th>{LANG.cart_unit}</th>
@@ -37,12 +37,21 @@
     		<tr id="{id}">
     			<td align="center">{stt}</td>
     			<td align="center"><img src="{img_pro}" alt="{link_pro}" width="70" class="img-thumbnail" /></td>
-    			<td><a title="{title_pro}" href="{link_pro}">{title_pro}</a></td>
+    			<td>
+    				<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
+					<!-- BEGIN: display_group -->
+					<p>
+						<!-- BEGIN: group -->
+						<span style="margin-right: 10px"><span class="text-muted">{group}</span></span>
+						<!-- END: group -->
+					</p>
+					<!-- END: display_group -->
+    			</td>
     			<!-- BEGIN: price2 -->
-    			<td class="money text-right"><strong>{product_price}</strong></td>
+    			<td class="money text-right"><strong>{PRICE.sale_format} {PRICE.unit}</strong></td>
     			<!-- END: price2 -->
     			<td align="center"><input type="number" size="1" value="{pro_num}" name="listproid[{id}]" id="{id}" class="form-control"/></td>
-    			<td>{product_unit}</td>
+    			<td>{product_unit}</td> 
     			<td align="center"><a class="remove_cart" title="{LANG.cart_remove_pro}" href="{link_remove}"><em style="color: red" class="fa fa-times-circle">&nbsp;</em></a></td>
     		</tr>
     		<!-- END: rows -->
