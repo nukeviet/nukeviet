@@ -29,20 +29,24 @@ if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request( 'direction', 'post' ) )
 {
 	$direction = $nv_Request->get_int( 'direction', 'post', 0 );
-	$direction = $direction%360;
+	
 	if( $direction < 0 )
 	{
-		$direction = 360 + $direction;
+		$direction = 0;
+	}
+	elseif( $direction > 359 )
+	{
+		$direction = 359;
 	}
 
-	if( $direction > 0 )
+	if( $direction > 0 and $direction != 360 )
 	{
 		require_once NV_ROOTDIR . '/includes/class/image.class.php';
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->rotate( $direction );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
 		$createImage->close();
-
+		
 		if( isset( $array_dirname[$path] ) )
 		{
 			if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
@@ -55,26 +59,9 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 			$did = $array_dirname[$path];
 			$db->query( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ", srcheight=" . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = '" . $file . "'" );
 		}
-
-		die( 'OK' );
 	}
-	else
-	{
-		die( 'ERROR#' . $lang_module['notlevel'] );
-	}
+	
+	die( 'OK' );
 }
 
-$xtpl = new XTemplate( 'rotate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'NV_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-$xtpl->assign( 'IMG_PATH', $path );
-$xtpl->assign( 'IMG_FILE', $file );
-$xtpl->assign( 'IMG_MTIME', filemtime( NV_ROOTDIR . '/' . $path . '/' . $file ) );
-
-$xtpl->parse( 'main' );
-$contents = $xtpl->text( 'main' );
-
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+die( 'ERROR#Error Access!!!' );

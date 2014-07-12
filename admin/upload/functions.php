@@ -50,31 +50,37 @@ function nv_check_allow_upload_dir( $dir )
 
 	if( in_array( $arr_dir[0], $allow_upload_dir ) )
 	{
+		// Quyen cua dieu hanh toi cao va dieu hanh chung
 		if( defined( 'NV_IS_SPADMIN' ) )
 		{
 			$level['view_dir'] = true;
 
+			// Cho phep tao thu muc con
 			if( $admin_info['allow_create_subdirectories'] )
 			{
 				$level['create_dir'] = true;
 			}
 
+			// Cho phep doi ten, xoa thu muc
 			if( $admin_info['allow_modify_subdirectories'] and ! in_array( $dir, $allow_upload_dir ) )
 			{
 				$level['rename_dir'] = true;
 				$level['delete_dir'] = true;
 
+				// Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
 				if( isset( $arr_dir[1] ) and ! empty( $arr_dir[1] ) and isset( $site_mods[$arr_dir[1]] ) and ! isset( $arr_dir[2] ) )
 				{
 					unset( $level['rename_dir'], $level['delete_dir'] );
 				}
 			}
 
+			// Cho phep upload file
 			if( ! empty( $admin_info['allow_files_type'] ) )
 			{
 				$level['upload_file'] = true;
 			}
 
+			// Cho phep sua, xoa file
 			if( $admin_info['allow_modify_files'] )
 			{
 				$level['create_file'] = true;

@@ -161,6 +161,17 @@
 	display: none;
 }
 
+/* Rorate Image */
+#rorateimage{
+	padding: 10px;
+	display: none;
+	overflow: hidden;
+}
+
+#rorateContent{
+	margin: 0 auto 10px auto;
+}
+
 /* Rename File */
 #filerename{
 	padding: 10px;

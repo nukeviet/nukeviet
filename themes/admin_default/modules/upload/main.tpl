@@ -19,6 +19,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.upload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jQueryRotate.js"></script>
 
 <div class="content">
 	<div class="row upload-wrap">
@@ -243,6 +244,25 @@
 		<div class="text-center">
 			<input class="btn btn-primary" type="button" value="{LANG.addlogosave}" name="filerenameOK" />
 		</div>
+	</div>
+</div>
+
+<div id="rorateimage" title="{LANG.rotate}">
+	<input type="hidden" class="dynamic" name="roratePath" value=""/>
+	<input type="hidden" class="dynamic" name="rorateFile" value=""/>
+	<h4 class="text-center"><strong id="rorateimageName" class="dynamic">&nbsp;</strong></h4>
+	<div id="rorateContent" class="rorate-content">
+		
+	</div>
+	<div class="text-center form-inline">
+		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
+		<button id="rorateLeft" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-undo">&nbsp;</em>
+		</button>
+		<button id="rorateRight" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+		</button>
+		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
 	</div>
 </div>
 
