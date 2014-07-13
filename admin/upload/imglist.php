@@ -135,6 +135,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 
 			$file['data'] .= '|' . $file['ext'] . '|' . $file['type'] . '|' . nv_convertfromBytes( $file['filesize'] ) . '|' . $file['userid'] . '|' . nv_date( 'l, d F Y, H:i:s P', $file['mtime'] ) . '|';
 			$file['data'] .= ( empty( $q ) ) ? '' : $file['dirname'];
+			$file['data'] .= '|' . $file['mtime'];
 
 			$file['sel'] = ( $selectfile == $file['title'] ) ? ' imgsel' : '';
 			$file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];

@@ -440,6 +440,7 @@ function menuMouseup(a){
 	$("div#contextMenu").html(b);
 }
 
+// Doi ten thu muc
 function renamefolder(){
 	var a = $("span[name=current]").attr("title").split("/");
 	a = a[a.length - 1];
@@ -447,11 +448,13 @@ function renamefolder(){
 	$("div#renamefolder").dialog("open");
 }
 
+// Tao thu muc
 function createfolder(){
 	$("input[name=createfoldername]").val("");
 	$("div#createfolder").dialog("open")
 }
 
+// Xoa thu muc
 function deletefolder(){
 	if(confirm(LANG.delete_folder)){
 		var a = $("span[name=current]").attr("title");
@@ -482,6 +485,7 @@ function deletefolder(){
 	}
 }
 
+// Tim kiem file
 function searchfile(){
 	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
 	b = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
@@ -490,6 +494,7 @@ function searchfile(){
 	return false;
 }
 
+// Cat anh
 function cropfile(){
 	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
 	var c = $("img[title='" + a + "']").attr("name").split("|");
@@ -501,6 +506,7 @@ function cropfile(){
 	win = window.open(nv_module_url + 'cropimg&path=' + b + "&file=" + a, 'addlogo', settings);
 }
 
+// Xoay anh
 function rotatefile(){
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
@@ -522,7 +528,7 @@ function rotatefile(){
 		'height' : size[1],
 		'margin-top' : contentMargin,
 		'margin-bottom' : contentMargin + 10,
-	}).html('<img src="' + nv_siteroot + path + "/" + selFile + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+	}).html('<img src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	$("div#rorateimage").dialog({
 		autoOpen : false,
