@@ -263,20 +263,31 @@ function move(){
 	$("input.dynamic").prop("checked", false);
 	$("select[name=newPath]").html("");
 	
-	var d, e;
-	var a = $("span#foldervalue").attr("title");
-	var b = pathList("create_file", a);
-	var g = $("input[name=selFile]").val();
+	var selected, e;
+	var currentFolder = $("span#foldervalue").attr("title");
+	var listPath = pathList("create_file", currentFolder);
 	
-	for( e in b ){
-		d = a == b[e] ? ' selected="selected"' : "";
-		$("select[name=newPath]").append('<option value="' + b[e] + '"' + d + ">" + b[e] + "</option>");
+	for( e in listPath ){
+		selected = currentFolder == listPath[e] ? ' selected="selected"' : "";
+		$("select[name=newPath]").append('<option value="' + listPath[e] + '"' + selected + ">" + listPath[e] + "</option>");
 	}
 	
-	d = $("img[title='" + g + "']").attr("name").split("|");
-	a = (d[7] == "") ? $("span#foldervalue").attr("title") : d[7];
+	var selFile = $("input[name=selFile]").val();
+
+	// Kiem tra di chuyen nhieu file hay di chuyen 1 file
+	if( selFile.indexOf('|') == -1 ){
+		var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+		var moveMessage = path + "/" + selFile;
+	}else{
+		selFile = selFile.split('|');
+		var selFileData = $("img[title='" + selFile[0] + "']").attr("name").split("|");
+		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+		var moveMessage = LANG.move_multiple.replace( '%s', selFile.length ) + ".";
+		selFile = selFile.join('|');	
+	}
 	
-	$("div[title=pathFileName]").text(a + "/" + g);
+	$("div[title=pathFileName]").text( moveMessage );
 	$("div#filemove").dialog({
 		autoOpen : false,
 		width : 300,
@@ -307,70 +318,114 @@ function filerename(){
 
 // Goi chuc nang xoa file
 function filedelete(){
-	var a = $("input[name=selFile]").val();
-	var d = $("select[name=imgtype]").val();
-	var e = $("select[name=author]").val() == 1 ? "&author" : "";
-	var f = $("img[title='" + a + "']").attr("name").split("|");
-	var b = ( f[7] == "" ) ? $("span#foldervalue").attr("title") : f[7];
+	var imgtype = $("select[name=imgtype]").val();
+	var author = $("select[name=author]").val() == 1 ? "&author" : "";
+	var order = $("select[name=order]").val();
 	
-	if( confirm(LANG.upload_delimg_confirm + " " + a + " ?") ){
+	var selFile = $("input[name=selFile]").val();
+	
+	// Kiem tra xoa nhieu file hay xoa 1 file
+	if( selFile.indexOf('|') == -1 ){
+		var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+		var confirmMessage = LANG.upload_delimg_confirm + " " + selFile + " ?";
+	}else{
+		selFile = selFile.split('|');
+		var selFileData = $("img[title='" + selFile[0] + "']").attr("name").split("|");
+		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+		var confirmMessage = LANG.upload_delimgs_confirm.replace( '%s', selFile.length ) + "?";
+		selFile = selFile.join('|');	
+	}
+	
+	if( confirm( confirmMessage ) ){
 		$.ajax({
 			type : "POST",
 			url : nv_module_url + "delimg",
-			data : "path=" + b + "&file=" + a,
-			success : function(){
-				$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + b + "&type=" + d + e + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
+			data : "path=" + path + "&file=" + selFile,
+			success : function(e){
+				e = e.split('#');
+				
+				if( e[0] != 'OK' ){
+					alert( e[1] );
+				}else{
+					$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + author + "&order=" + order + "&num=" + +nv_randomNum(10));
+				}
 			}
 		});
 	}
 }
 
-// Ham xu ly khi nhap chuot vao 1 file
-function fileMouseup( file ){
-	// Xoa het file dang kich hoat
-	$(".imgsel").removeClass("imgsel");
-	
-	// File duoc chon kich hoat
-	$(file).addClass("imgsel");
-	
-	var fileName = $(file).attr("title");
-	$("input[name=selFile]").val(fileName);
-	var fileExt = fileName.slice(-3);
-	
-	var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
-	var area = $("input[name=area]").val();
-	var contextMenu = "<ul>";
-	
-	if( CKEditorFuncNum > 0 || area != "" ){
-		contextMenu += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>'
-	}
-	
-	contextMenu += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
-	contextMenu += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
-	
-	if( $.inArray( fileExt, array_images ) !== -1 ){
-		if( $("span#create_file").attr("title") == "1" ){
-			contextMenu += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
-			contextMenu += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>'
-			contextMenu += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>'
-			contextMenu += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>'
+// Ham xu ly khi nhap chuot vao 1 file (Chuot trai lan chuot phai)
+function fileMouseup( file, e ){
+	// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
+	if( KEYPR.isCtrl ){
+		if( $(file).is('.imgsel') && e.which != 3 ){
+			$(file).removeClass('imgsel');
+		}else{
+			$(file).addClass('imgsel');
+		}
+	}else{
+		if( e.which != 3 || ( e.which == 3 && ! $(file).is('.imgsel') ) ){
+			$('.imgsel').removeClass('imgsel');
+			$(file).addClass('imgsel');
 		}
 	}
 	
-	if( $("span#move_file").attr("title") == "1" ){
-		contextMenu += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>'
+	if( e.which == 3 ){
+		var isMultiple = $('.imgsel').length === 1 ? false : true;
+		var fileName, fileExt;
+		
+		if( isMultiple ){
+			fileExt = '';
+			fileName = new Array();
+			$.each( $('.imgsel'), function(){
+				fileName.push( $(this).attr("title") );
+			});
+			fileName = fileName.join('|');
+		}else{
+			fileName = $(file).attr("title");
+			fileExt = isMultiple ? '' : fileName.slice(-3);			
+		}
+		
+		$("input[name=selFile]").val(fileName);
+		
+		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
+		var area = $("input[name=area]").val();
+		var contextMenu = "<ul>";
+		
+		if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
+			contextMenu += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
+		}
+		
+		if( ! isMultiple ){
+			contextMenu += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+			contextMenu += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+		}
+		
+		if( $.inArray( fileExt, array_images ) !== -1 ){
+			if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
+				contextMenu += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+				contextMenu += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
+				contextMenu += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
+				contextMenu += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
+			}
+		}
+		
+		if( $("span#move_file").attr("title") == "1" ){
+			contextMenu += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
+		}
+		
+		if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
+			contextMenu += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
+		}
+		
+		if( $("span#delete_file").attr("title") == "1" ){
+			contextMenu += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
+		}
+		
+		contextMenu += "</ul>";
+		$("div#contextMenu").html(contextMenu);
 	}
-	
-	if( $("span#rename_file").attr("title") == "1" ){
-		contextMenu += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>'
-	}
-	
-	if( $("span#delete_file").attr("title") == "1" ){
-		contextMenu += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>'
-	}
-	
-	contextMenu += "</ul>";
-	$("div#contextMenu").html(contextMenu);
 }
 
 // Ham xu ly quyen upload (Co/Khong)
@@ -379,7 +434,7 @@ function is_allowed_upload(){
 	$("span#upload_file").attr("title") == "1" ? $("input[name=upload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=upload]").parent().parent().css("display", "none").next().css("display", "block")
 }
 
-// Ham xu ly khi nhap chuot vao thu muc
+// Ham xu ly khi nhap chuot vao thu muc (Dinh quyen thao tac voi file trong thu muc duoc chon, truy cap thu muc)
 function folderClick( folder ){
 	var folderPath = $(folder).attr("title");
 	if( folderPath != $("span#foldervalue").attr("title") ){
@@ -413,7 +468,7 @@ function folderClick( folder ){
 	}
 }
 
-// Ham xu ly khi chuot phai vao thu muc
+// Ham xu ly khi chuot phai vao thu muc (Dinh quyen doi ten, tao thu muc moi, xoa thu muc)
 function menuMouseup(a){
 	$(a).attr("title");
 	$("span").attr("name", "");
@@ -421,19 +476,19 @@ function menuMouseup(a){
 	
 	var b = "";
 	
-	if($(a).is(".create_dir")){
+	if( $(a).is(".create_dir") ){
 		b += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 	}
 	
-	if($(a).is(".rename_dir")){
+	if( $(a).is(".rename_dir") ){
 		b += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
 	}
 	
-	if($(a).is(".delete_dir")){
+	if( $(a).is(".delete_dir") ){
 		b += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
 	}
 	
-	if(b != ""){
+	if( b != "" ){
 		b = "<ul>" + b + "</ul>"
 	}
 	
@@ -801,33 +856,45 @@ $("[name=newSizeOK]").click(function(){
 	}
 });
 
+// Di chuyen file (Luu lai)
 $("input[name=newPathOK]").click(function(){
-	var a = $("span#foldervalue").attr("title"), b = $("select[name=newPath]").val(), d = $("input[name=selFile]").val(), e = $("input[name=mirrorFile]:checked").length;
-	if(a == b){
-		$("div#filemove").dialog("close")
-	} else {
+	var currentFolder = $("span#foldervalue").attr("title");
+	var newPath = $("select[name=newPath]").val();
+	var selFile = $("input[name=selFile]").val();
+	var mirrorFile = $("input[name=mirrorFile]:checked").length;
+	
+	if( currentFolder == newPath ){
+		$("div#filemove").dialog("close");
+	}else{
 		$(this).attr("disabled", "disabled");
+		
 		$.ajax({
 			type : "POST",
 			url : nv_module_url + "moveimg&num=" + nv_randomNum(10),
-			data : "path=" + a + "&newpath=" + b + "&file=" + d + "&mirror=" + e,
-			success : function(g){
-				var h = g.split("_");
-				if(h[0] == "ERROR"){
-					alert(h[1]);
+			data : "path=" + currentFolder + "&newpath=" + newPath + "&file=" + selFile + "&mirror=" + mirrorFile,
+			success : function(e){
+				var e = e.split("#");
+				
+				if( e[0] == "ERROR" ){
+					alert( e[1] );
 					$("input[name=newPathOK]").removeAttr("disabled");
-				} else {
-					h = $("select[name=imgtype]").val();
-					var j = $("input[name=goNewPath]:checked").length, k = $("select[name=author]").val() == 1 ? "&author" : "";
-					$("input[name=selFile]").val(g);
+				}else{
+					var imgtype = $("select[name=imgtype]").val();
+					var goNewPath = $("input[name=goNewPath]:checked").length;
+					var author = $("select[name=author]").val() == 1 ? "&author" : "";
+					var order = $("select[name=order]").val();
+					var imgfile = e[1];
+					
 					$("input[name=newPathOK]").removeAttr("disabled");
+					$("input[name=selFile]").val( imgfile );
 					$("div#filemove").dialog("close");
-					if(j == 1){
-						j = $("span#path").attr("title");
-						$("#imgfolder").load(nv_module_url + "folderlist&path=" + j + "&currentpath=" + b + "&random=" + nv_randomNum(10));
-						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
-					} else {
-						$("#imglist").load(nv_module_url + "imglist&path=" + a + "&type=" + h + "&imgfile=" + g + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10));
+					
+					if( goNewPath == 1 ){
+						goNewPath = $("span#path").attr("title");
+						$("#imgfolder").load(nv_module_url + "folderlist&path=" + goNewPath + "&currentpath=" + newPath + "&random=" + nv_randomNum(10));
+						$("#imglist").load(nv_module_url + "imglist&path=" + newPath + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10));
+					}else{
+						$("#imglist").load(nv_module_url + "imglist&path=" + currentFolder + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10));
 					}
 				}
 			}
@@ -992,4 +1059,52 @@ var RRT = {
 	},
 };
 
+/* Keypress, Click Handle */
+var KEYPR = {
+	isCtrl : false,
+	isShift : false,
+	allowKey : [ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123 ],
+	init : function(){
+		$('body').keyup(function(e){			
+			if( ! $(e.target).is('.dynamic') && $.inArray( e.keyCode, KEYPR.allowKey ) == -1 ){
+				e.preventDefault();
+			}else{
+				return;
+			}
+			
+			// console.log(e);
+			// Ctrl key unpress
+			if( e.keyCode == 17 ){
+				KEYPR.isCtrl = false;
+			}else if( e.keyCode == 27 ){
+				// Unselect file
+				$(".imgsel").removeClass("imgsel");
+			}else if( e.keyCode == 65 && e.ctrlKey === true ){
+				$(".imgcontent").addClass("imgsel");
+			}
+		});
+		
+		$('body').keydown(function(e){
+			if( ! $(e.target).is('.dynamic') && $.inArray( e.keyCode, KEYPR.allowKey ) == -1 ){
+				e.preventDefault();
+			}else{
+				return;
+			}
+			
+			// Ctrl key press
+			if( e.keyCode == 17 ){
+				KEYPR.isCtrl = true;
+			}
+		});
+		
+		// Unselect file when click on wrap area
+		$('.filebrowse').click(function(e){
+			if( $(e.target).is('.filebrowse') ){
+				$(".imgsel").removeClass("imgsel");
+			}
+		});
+	},
+};
+
+KEYPR.init();
 RRT.init();

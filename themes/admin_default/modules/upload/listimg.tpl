@@ -23,12 +23,12 @@ $("img.previewimg").lazyload({
 	placeholder : "{NV_BASE_SITEURL}images/grey.gif",
 	container : $(".filebrowse")
 });
-$(".imgcontent").bind("mouseup", function() {
-	fileMouseup(this)
+$(".imgcontent").bind("mouseup", function(e) {
+	fileMouseup(this, e);
 });
 
 $(".imgcontent").dblclick(function() {
-	insertvaluetofield()
+	insertvaluetofield();
 });
 
 $(".imgcontent").contextMenu("contextMenu", {
@@ -66,14 +66,21 @@ $(".imgcontent").contextMenu("contextMenu", {
 		rotatefile : function() {
 			rotatefile()
 		}
-	}
+	},
+	onContextMenu : function(e){
+		if( $("div#contextMenu ul li").length > 0 ){
+			return true;
+		}
+		
+		return false;
+	},
 });
 //]]>
 </script>
 
 <!-- BEGIN: imgsel -->
 <script type="text/javascript">
-$(".imgcontent.imgsel").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
+$(".imgcontent.imgsel:first").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
 window.location.href = "#nv_imgsel_{NV_CURRENTTIME}";
 </script>
 <!-- END: imgsel -->
