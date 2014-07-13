@@ -185,9 +185,11 @@ function nv_check_path_upload( $path )
 function nv_get_viewImage( $fileName )
 {
 	global $array_thumb_config;
+	
 	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $fileName, $m ) )
 	{
 		$viewFile = NV_FILES_DIR . '/' . $m[1];
+		
 		if( file_exists( NV_ROOTDIR . '/' . $viewFile ) )
 		{
 			$size = @getimagesize( NV_ROOTDIR . '/' . $viewFile );
@@ -196,6 +198,7 @@ function nv_get_viewImage( $fileName )
 		else
 		{
 			$m[2] = rtrim( $m[2], '/' );
+			
 			if( isset( $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]] ) )
 			{
 				$thumb_config = $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]];
@@ -325,6 +328,7 @@ function nv_getFileInfo( $pathimg, $file )
 		$info['srcwidth'] = $size[0];
 		$info['srcheight'] = $size[1];
 		$info['size'] = $size[0] . '|' . $size[1];
+		
 		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/([a-z0-9\-\_\.\/]+)$/i', $pathimg . '/' . $file, $m ) )
 		{
 			if( ( $thub_src = nv_get_viewImage( $pathimg . '/' . $file ) ) !== false )
@@ -334,11 +338,13 @@ function nv_getFileInfo( $pathimg, $file )
 				$info['srcheight'] = $thub_src[2];
 			}
 		}
+		
 		if( $info['srcwidth'] > 80 )
 		{
 			$info['srcheight'] = round( 80 / $info['srcwidth'] * $info['srcheight'] );
 			$info['srcwidth'] = 80;
 		}
+		
 		if( $info['srcheight'] > 80 )
 		{
 			$info['srcwidth'] = round( 80 / $info['srcheight'] * $info['srcwidth'] );
