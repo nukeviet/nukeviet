@@ -38,7 +38,7 @@
 				<tr>
 					<th class="text-right">{LANG.description}</th>
 					<td>
-						<textarea style="width: 500px" name="description" id="description" cols="100" rows="5">{DATA.description}</textarea> <span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
+						<textarea style="width: 500px" name="description" id="description" cols="100" rows="5" class="form-control">{DATA.description}</textarea> <span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
 					</td>
 				</tr>
 				<tr>

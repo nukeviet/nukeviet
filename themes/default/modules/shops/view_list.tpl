@@ -2,6 +2,9 @@
 <div id="category">
     <div class="page-header">
         <h1>{CAT_NAME}</h1>
+		<!-- BEGIN: image -->
+		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
+		<!-- END: image -->
     </div>
     
     <!-- BEGIN: displays -->
@@ -24,6 +27,9 @@
     		</div>
     		<div>
     			<strong><a title="{title_pro}" href="{link_pro}">{title_pro}</a></strong>
+            	<!-- BEGIN: new -->
+            	<span class="label label-success">{LANG.newday}</span>
+            	<!-- END: new -->
     			<br />
     			<!-- BEGIN: product_code -->
     			{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
@@ -33,17 +39,26 @@
     			<br />
     			<span>
     				<!-- BEGIN: price -->
-    				{LANG.title_price} : <strong class="{class_money}">{product_price} {money_unit}</strong>
-    				<!-- BEGIN: discounts -->
-    				&nbsp; <span class="money">{product_discounts} {money_unit}</span>
-    				<!-- END: discounts -->
-    				<br />
+	    				{LANG.title_price} : 
+	                    <!-- BEGIN: discounts -->
+	                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+	                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+	                    <!-- END: discounts -->
+	                    
+						<!-- BEGIN: no_discounts -->
+						<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+						<!-- END: no_discounts -->
     				<!-- END: price -->
+    				
     				<!-- BEGIN: contact -->
     				{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-    				<br />
     				<!-- END: contact -->
+    				
+	          		<!-- BEGIN: discounts -->
+	            	(-{PRICE.discount_percent}%)
+	            	<!-- END: discounts -->
     			</span>
+    			<br />
     			<p class="text-justify">{intro}</p>
     		</div>
     

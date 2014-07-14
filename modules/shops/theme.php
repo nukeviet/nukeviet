@@ -104,11 +104,12 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.new' );
 					}
 
+					$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
+
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
 						{
-							$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
 							$xtpl->assign( 'PRICE', $price );
 							if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
 							{
@@ -148,23 +149,21 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row_i['id'] ) );
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
-					else
-					{
-	                    // So sanh san pham
-	                    if( $pro_config['show_compare'] == 1 )
-	                    {
-	                        if( isset( $_SESSION['array_id'] ) )
-	                        {
-	                            $array_id = $_SESSION['array_id'];
-	                            $array_id = unserialize( $array_id );
-	                        }
-	                        else
-	                        {
-	                            $array_id = array();
-	                        }
-	                        $xtpl->parse( 'main.catalogs.items.compare' );
-	                    }
-					}
+
+                    // So sanh san pham
+                    if( $pro_config['show_compare'] == 1 )
+                    {
+                        if( isset( $_SESSION['array_id'] ) )
+                        {
+                            $array_id = $_SESSION['array_id'];
+                            $array_id = unserialize( $array_id );
+                        }
+                        else
+                        {
+                            $array_id = array();
+                        }
+                        $xtpl->parse( 'main.catalogs.items.compare' );
+                    }
 
 					// San pham yeu thich
 					if( $pro_config['active_wishlist'] )
@@ -256,11 +255,12 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.new' );
 					}
 
+					$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
+
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
 						{
-							$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
 							$xtpl->assign( 'PRICE', $price );
 							if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
 							{
@@ -299,24 +299,22 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row_i['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row_i['id'] ) );
 						$xtpl->parse( 'main.catalogs.items.adminlink' );
 					}
-					else
-					{
-	                    // So sanh san pham
-	                    if( $pro_config['show_compare'] == 1 )
-	                    {
-	                        if( isset( $_SESSION['array_id'] ) )
-	                        {
-	                            $array_id = $_SESSION['array_id'];
-	                            $array_id = unserialize( $array_id );
-	                        }
-	                        else
-	                        {
-	                            $array_id = array();
-	                        }
-	                        $xtpl->parse( 'main.catalogs.items.compare' );
-	                    }
-					}
 
+                    // So sanh san pham
+                    if( $pro_config['show_compare'] == 1 )
+                    {
+                        if( isset( $_SESSION['array_id'] ) )
+                        {
+                            $array_id = $_SESSION['array_id'];
+                            $array_id = unserialize( $array_id );
+                        }
+                        else
+                        {
+                            $array_id = array();
+                        }
+                        $xtpl->parse( 'main.catalogs.items.compare' );
+                    }
+						
 					// San pham yeu thich
 					if( $pro_config['active_wishlist'] )
 					{
@@ -425,12 +423,13 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 					$xtpl->parse( 'main.items.order' );
 				}
 			}
+			
+			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
 
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
 					$xtpl->assign( 'PRICE', $price );
 					if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -461,23 +460,21 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
-			else
-			{
-	            // So sanh san pham
-	            if( $pro_config['show_compare'] == 1 )
-	            {
-	                if( isset( $_SESSION['array_id'] ) )
-	                {
-	                    $array_id = $_SESSION['array_id'];
-	                    $array_id = unserialize( $array_id );
-	                }
-	                else
-	                {
-	                    $array_id = array();
-	                }
-	                $xtpl->parse( 'main.items.compare' );
-	            }
-			}
+
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.items.compare' );
+            }
 			
 			// San pham yeu thich
 			if( $pro_config['active_wishlist'] )
@@ -561,11 +558,13 @@ function view_search_all( $data_content, $html_pages = '' )
 					$xtpl->parse( 'main.items.order' );
 				}
 			}
+
+			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			
 			if( $pro_config['active_price'] == '1' )
 			{			
 				if( $data_row['showprice'] == '1' )
 				{
-					$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
 					$xtpl->assign( 'PRICE', $price );
 					if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -592,23 +591,21 @@ function view_search_all( $data_content, $html_pages = '' )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
-			else
-			{
-	            // So sanh san pham
-	            if( $pro_config['show_compare'] == 1 )
-	            {
-	                if( isset( $_SESSION['array_id'] ) )
-	                {
-	                    $array_id = $_SESSION['array_id'];
-	                    $array_id = unserialize( $array_id );
-	                }
-	                else
-	                {
-	                    $array_id = array();
-	                }
-	                $xtpl->parse( 'main.items.compare' );
-	            }
-			}
+
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.items.compare' );
+            }
 			
 			// San pham yeu thich
 			if( $pro_config['active_wishlist'] )
@@ -723,12 +720,13 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			{
 				$xtpl->parse( 'main.grid_rows.new' );
 			}
-
+			
+			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
 					$xtpl->assign( 'PRICE', $price );
 					if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -770,23 +768,21 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.grid_rows.adminlink' );
 			}
-			else
-			{
-	            // So sanh san pham
-	            if( $pro_config['show_compare'] == 1 )
-	            {
-	                if( isset( $_SESSION['array_id'] ) )
-	                {
-	                    $array_id = $_SESSION['array_id'];
-	                    $array_id = unserialize( $array_id );
-	                }
-	                else
-	                {
-	                    $array_id = array();
-	                }
-	                $xtpl->parse( 'main.grid_rows.compare' );
-	            }
-			}
+
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.grid_rows.compare' );
+            }
 
 			// San pham yeu thich
 			if( $pro_config['active_wishlist'] )
@@ -901,11 +897,12 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 				$xtpl->parse( 'main.row.new' );
 			}
 
+			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			
 			if( $pro_config['active_price'] == '1' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
 					$xtpl->assign( 'PRICE', $price );
 					if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -923,7 +920,6 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 					$xtpl->parse( 'main.row.contact' );
 				}
 			}
-			$xtpl->assign( 'address', $data_row['address'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
 			$xtpl->assign( 'publtime', $lang_module['detail_dateup'] . ' ' . nv_date( 'd-m-Y h:i:s A', $data_row['publtime'] ) );
@@ -1117,13 +1113,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 				{
 					$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $otherimage_i;
 					$xtpl->assign( 'IMG_SRC_OTHER', $otherimage_i );
-					$xtpl->parse( 'main.othersimg' );
+					$xtpl->parse( 'main.othersimg.loop' );
 				}
 			}
-		}
-		else
-		{
-			$xtpl->parse( 'main.no_otherimage' );
+			$xtpl->parse( 'main.othersimg' );
+			$xtpl->parse( 'main.othersimg_title' );
 		}
 
 		if( ! empty( $pro_config['show_product_code'] ) and ! empty( $data_content['product_code'] ) )
@@ -1141,7 +1135,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$group = $global_array_group[$gid];
 		if( $group['parentid'] == 0 and $group['in_order'] )
 		{
-			$group_content .= '<select name="group" class="form-control form-group">';
+			$group_content .= '<select name="group" class="form-control form-group input-sm">';
 			$group_content .= '<option value="" selected="selected">' . $group['title'] . '</option>';
 			$group_content .= getgroup_selecthtml( $global_array_group, $group['groupid'], $listgroupid );
 			$group_content .= '</select>';
@@ -1185,13 +1179,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	{
 		$hmtl = view_home_all( $data_others );
 		$xtpl->assign( 'OTHER', $hmtl );
-
-		$newday = $data_row_i['publtime'] + ( 86400 * $data_row_i['newday'] );
-		if ( $newday >= NV_CURRENTTIME )
-		{
-			$xtpl->parse( 'main.catalogs.items.new' );
-		}
-
 		$xtpl->parse( 'main.other' );
 	}
 	if( ! empty( $array_other_view ) )
@@ -2063,23 +2050,21 @@ function wishlist( $data_content, $html_pages = '' )
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_row['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_row['id'] ) );
 				$xtpl->parse( 'main.items.adminlink' );
 			}
-			else
-			{
-	            // So sanh san pham
-	            if( $pro_config['show_compare'] == 1 )
-	            {
-	                if( isset( $_SESSION['array_id'] ) )
-	                {
-	                    $array_id = $_SESSION['array_id'];
-	                    $array_id = unserialize( $array_id );
-	                }
-	                else
-	                {
-	                    $array_id = array();
-	                }
-	                $xtpl->parse( 'main.items.compare' );
-	            }
-			}
+
+            // So sanh san pham
+            if( $pro_config['show_compare'] == 1 )
+            {
+                if( isset( $_SESSION['array_id'] ) )
+                {
+                    $array_id = $_SESSION['array_id'];
+                    $array_id = unserialize( $array_id );
+                }
+                else
+                {
+                    $array_id = array();
+                }
+                $xtpl->parse( 'main.items.compare' );
+            }
 
             if( ! empty( $array_id ) )
             {

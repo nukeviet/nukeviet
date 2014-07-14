@@ -2,6 +2,9 @@
 <div id="category">
     <div class="page-header">
         <h1>{CAT_NAME}</h1>
+		<!-- BEGIN: image -->
+		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
+		<!-- END: image -->
     </div>
 
     <!-- BEGIN: displays -->
@@ -22,6 +25,14 @@
             <div style="height: {height}px">
                 <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content="{intro}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
             </div>
+            <div class="info_pro">
+            	<!-- BEGIN: new -->
+            	<span class="label label-success newday">{LANG.newday}</span>
+            	<!-- END: new -->
+            	<!-- BEGIN: discounts -->
+            	<span class="label label-danger">-{PRICE.discount_percent}%</span>
+            	<!-- END: discounts -->
+            </div>
             <div class="caption text-center">
                 <h3><a href="{LINK}" title="{title_pro}">{title_pro0}</a></h3>
 
@@ -32,16 +43,19 @@
                 <!-- BEGIN: adminlink -->
                 <p>{ADMINLINK}</p>
                 <!-- END: adminlink -->
-
-                <!-- BEGIN: price -->
-                <p class="price">
-                    <span class="{class_money}">{product_price} {money_unit}</span>
+                
+				<!-- BEGIN: price -->
+				<p class="price">
                     <!-- BEGIN: discounts -->
-                    <br />
-                    <span class="money">{product_discounts} {money_unit}</span>
+                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
                     <!-- END: discounts -->
-                </p>
-                <!-- END: price -->
+                    
+					<!-- BEGIN: no_discounts -->
+					<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+					<!-- END: no_discounts -->
+				</p>
+				<!-- END: price -->
 
                 <!-- BEGIN: contact -->
                 <p class="price">
