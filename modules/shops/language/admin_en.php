@@ -313,6 +313,8 @@ $lang_module['module_regis'] = 'Use the support';
 $lang_module['siteinfo_exptime'] = 'Products to expire';
 $lang_module['product'] = 'products';
 
+$lang_module['discounts'] = 'Quản lý giảm giá';
+
 //Lang for function discounts
 $lang_module['delete'] = 'Delete';
 $lang_module['number'] = 'Number';
