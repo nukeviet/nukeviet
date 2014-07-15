@@ -153,15 +153,22 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
                     // So sanh san pham
                     if( $pro_config['show_compare'] == 1 )
                     {
-                        if( isset( $_SESSION['array_id'] ) )
+                        if( isset( $_SESSION[$module_name . '_array_id'] ) )
                         {
-                            $array_id = $_SESSION['array_id'];
+                            $array_id = $_SESSION[$module_name . '_array_id'];
                             $array_id = unserialize( $array_id );
                         }
                         else
                         {
                             $array_id = array();
                         }
+						
+	                    if( ! empty( $array_id ) )
+	                    {
+	                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                        $xtpl->assign( 'ch', $ch );
+	                    }
+
                         $xtpl->parse( 'main.catalogs.items.compare' );
                     }
 
@@ -177,12 +184,6 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 						}
 						$xtpl->parse( 'main.catalogs.items.wishlist' );
 					}
-
-                    if( ! empty( $array_id ) )
-                    {
-                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-                        $xtpl->assign( 'ch', $ch );
-                    }
 
 					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -303,15 +304,22 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
                     // So sanh san pham
                     if( $pro_config['show_compare'] == 1 )
                     {
-                        if( isset( $_SESSION['array_id'] ) )
+                        if( isset( $_SESSION[$module_name . '_array_id'] ) )
                         {
-                            $array_id = $_SESSION['array_id'];
+                            $array_id = $_SESSION[$module_name . '_array_id'];
                             $array_id = unserialize( $array_id );
                         }
                         else
                         {
                             $array_id = array();
                         }
+						
+	                    if( ! empty( $array_id ) )
+	                    {
+	                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                        $xtpl->assign( 'ch', $ch );
+	                    }
+
                         $xtpl->parse( 'main.catalogs.items.compare' );
                     }
 						
@@ -327,12 +335,6 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 						}
 						$xtpl->parse( 'main.catalogs.items.wishlist' );
 					}
-
-                    if( ! empty( $array_id ) )
-                    {
-                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-                        $xtpl->assign( 'ch', $ch );
-                    }
 
 					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
 					{
@@ -363,7 +365,7 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
  */
 function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id;
 
 	$xtpl = new XTemplate( 'main_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -464,15 +466,22 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
-                if( isset( $_SESSION['array_id'] ) )
+                if( isset( $_SESSION[$module_name . '_array_id'] ) )
                 {
-                    $array_id = $_SESSION['array_id'];
+                    $array_id = $_SESSION[$module_name . '_array_id'];
                     $array_id = unserialize( $array_id );
                 }
                 else
                 {
                     $array_id = array();
                 }
+				
+	            if( ! empty( $array_id ) )
+	            {
+	                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                $xtpl->assign( 'ch', $ch );
+	            }
+				
                 $xtpl->parse( 'main.items.compare' );
             }
 			
@@ -488,12 +497,6 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 				}
 				$xtpl->parse( 'main.items.wishlist' );
 			}
-
-            if( ! empty( $array_id ) )
-            {
-                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-                $xtpl->assign( 'ch', $ch );
-            }
 
 			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 			{
@@ -595,15 +598,22 @@ function view_search_all( $data_content, $html_pages = '' )
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
-                if( isset( $_SESSION['array_id'] ) )
+                if( isset( $_SESSION[$module_name . '_array_id'] ) )
                 {
-                    $array_id = $_SESSION['array_id'];
+                    $array_id = $_SESSION[$module_name . '_array_id'];
                     $array_id = unserialize( $array_id );
                 }
                 else
                 {
                     $array_id = array();
                 }
+				
+	            if( ! empty( $array_id ) )
+	            {
+	                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                $xtpl->assign( 'ch', $ch );
+	            }
+			
                 $xtpl->parse( 'main.items.compare' );
             }
 			
@@ -619,12 +629,6 @@ function view_search_all( $data_content, $html_pages = '' )
 				}
 				$xtpl->parse( 'main.items.wishlist' );
 			}
-
-            if( ! empty( $array_id ) )
-            {
-                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-                $xtpl->assign( 'ch', $ch );
-            }
 			
 			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 			{
@@ -772,15 +776,22 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
-                if( isset( $_SESSION['array_id'] ) )
+                if( isset( $_SESSION[$module_name . '_array_id'] ) )
                 {
-                    $array_id = $_SESSION['array_id'];
+                    $array_id = $_SESSION[$module_name . '_array_id'];
                     $array_id = unserialize( $array_id );
                 }
                 else
                 {
                     $array_id = array();
                 }
+				
+				if( ! empty( $array_id ) )
+				{
+					$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+					$xtpl->assign( 'ch', $ch );
+				}
+			
                 $xtpl->parse( 'main.grid_rows.compare' );
             }
 
@@ -795,12 +806,6 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 					}
 				}
 				$xtpl->parse( 'main.grid_rows.wishlist' );
-			}
-
-			if( ! empty( $array_id ) )
-			{
-				$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-				$xtpl->assign( 'ch', $ch );
 			}
 
 			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
@@ -853,15 +858,22 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 
 	if( $pro_config['show_compare'] == 1 )
 	{
-		if( isset( $_SESSION['array_id'] ) )
+		if( isset( $_SESSION[$module_name . '_array_id'] ) )
 		{
-			$array_id = $_SESSION['array_id'];
+			$array_id = $_SESSION[$module_name . '_array_id'];
 			$array_id = unserialize( $array_id );
 		}
 		else
 		{
 			$array_id = array();
 		}
+		
+		if( ! empty( $array_id ) )
+		{
+			$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+			$xtpl->assign( 'ch', $ch );
+		}
+		$xtpl->parse( 'main.compare' );
 	}
 
 	if( $pro_config['show_displays'] == 1 )
@@ -947,12 +959,6 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 					}
 				}
 				$xtpl->parse( 'main.row.wishlist' );
-			}
-
-			if( ! empty( $array_id ) )
-			{
-				$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-				$xtpl->assign( 'ch', $ch );
 			}
 
 			if( defined( 'NV_IS_MODADMIN' ) )
@@ -2054,22 +2060,23 @@ function wishlist( $data_content, $html_pages = '' )
             // So sanh san pham
             if( $pro_config['show_compare'] == 1 )
             {
-                if( isset( $_SESSION['array_id'] ) )
+                if( isset( $_SESSION[$module_name . '_array_id'] ) )
                 {
-                    $array_id = $_SESSION['array_id'];
+                    $array_id = $_SESSION[$module_name . '_array_id'];
                     $array_id = unserialize( $array_id );
                 }
                 else
                 {
                     $array_id = array();
                 }
+				
+	            if( ! empty( $array_id ) )
+	            {
+	                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                $xtpl->assign( 'ch', $ch );
+	            }
+			
                 $xtpl->parse( 'main.items.compare' );
-            }
-
-            if( ! empty( $array_id ) )
-            {
-                $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
-                $xtpl->assign( 'ch', $ch );
             }
 
 			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )

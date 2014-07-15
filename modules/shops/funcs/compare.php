@@ -10,6 +10,7 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
+$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
 
 if( $nv_Request->isset_request( 'compare', 'post' ) )
 {
@@ -46,6 +47,7 @@ if( $nv_Request->isset_request( 'compareresult', 'post' ) )
 {
 	$array_id = $nv_Request->get_string( 'array_id', 'session', '' );
 	$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
+
 	if( count( $array_id ) < 2 )
 	{
 		die( $lang_module['num0'] );
