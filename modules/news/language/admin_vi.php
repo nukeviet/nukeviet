@@ -50,6 +50,7 @@ $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
 $lang_module['numlinks'] = 'Số liên kết';
+$lang_module['numcomments'] = 'Số bình luận';
 $lang_module['newday'] = 'Icon tin mới (ngày)';
 $lang_module['hitstotal'] = 'Số lượt xem';
 $lang_module['checkall'] = 'Chọn tất cả';
@@ -84,6 +85,7 @@ $lang_module['delcat_msg_cat_permissions'] = 'Bạn không có quyền thực hi
 $lang_module['delcatandrows'] = 'Xóa Chuyên mục và các bài viết';
 $lang_module['delcat_msg_rows_noselect'] = 'Bạn cần chọn Chuyên mục để di chuyển bài viết tới';
 $lang_module['deltopic_msg_rows'] = 'nhóm tin liên quan có %s bài viết, bạn có chắc chắn xóa, khi đó nhóm tin liên quan sẽ bị xóa khỏi các bài viết.';
+
 $lang_module['setting'] = 'Cấu hình module';
 $lang_module['setting_indexfile'] = 'Phương án thể hiện trang chủ';
 $lang_module['setting_homesite'] = 'Kích thước của hình tại trang chủ';
@@ -93,6 +95,11 @@ $lang_module['setting_per_page'] = 'Số bài viết được hiển thị cùng
 $lang_module['setting_st_links'] = 'Số bài viết chỉ hiển thị link';
 $lang_module['setting_idf_df'] = 'Mặc định';
 $lang_module['setting_copyright'] = 'Nội dung hiển thị nếu bài viết có lựa chọn giữ bản quyền bài viết';
+$lang_module['setting_view'] = 'Cấu hình hiển thị';
+$lang_module['setting_post'] = 'Cấu hình đăng bài';
+$lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
+$lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
+
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
 $lang_module['viewcat_page_old'] = 'danh sách, cũ lên trên';
@@ -104,6 +111,7 @@ $lang_module['viewcat_list_new'] = 'theo tiêu đề, mới lên trên';
 $lang_module['viewcat_list_old'] = 'theo tiêu đề, cũ lên trên';
 $lang_module['viewcat_grid_new'] = 'theo lưới, mới lên trên';
 $lang_module['viewcat_grid_old'] = 'theo lưới, cũ lên trên';
+
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
 $lang_module['search_status'] = 'Trạng thái';
@@ -122,6 +130,7 @@ $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chuyên mục';
 $lang_module['sources_sl'] = 'Hãy chọn hoặc tự điền';
+
 $lang_module['content_cat'] = 'Chuyên mục của bài viết';
 $lang_module['content_block'] = 'Bài viết thuộc các nhóm tin';
 $lang_module['content_topic'] = 'Thuộc dòng sự kiện';
@@ -161,6 +170,9 @@ $lang_module['redircet_title'] = 'Thực hiện thành công thao tác';
 $lang_module['content_checkcat'] = 'Chủ đề chính cho bài viết';
 $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho bài viết.';
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
+$lang_module['content_tags_empty'] = 'Chú ý: Bài viết chưa có từ khóa nào';
+$lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu bài viết này, có thể tắt tính năng tự động tạo từ khóa ở phần quản lý module';
+
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
 $lang_module['showtooltip_position_top'] = 'Trên';
@@ -193,6 +205,7 @@ $lang_module['topic_nonews'] = 'Hiện tại không có bài viết nào thuộc
 $lang_module['addtotopics'] = 'Thêm vào nhóm tin liên quan';
 $lang_module['topic_update_success'] = 'Cập nhật thành công!';
 $lang_module['topic_num_news'] = ' bài viết';
+
 $lang_module['siteinfo_publtime'] = 'Tổng số bài viết hiệu lực';
 $lang_module['siteinfo_users_send'] = 'Số bài viết thành viên gửi tới';
 $lang_module['siteinfo_pending'] = 'Số bài viết chờ đăng';
@@ -200,11 +213,14 @@ $lang_module['siteinfo_expired'] = 'Số bài viết đã hết hạn';
 $lang_module['siteinfo_exptime'] = 'Số bài viết sắp hết hạn';
 $lang_module['siteinfo_comment'] = 'Tổng số bình luận được đăng';
 $lang_module['siteinfo_comment_pending'] = 'Số bình luận chờ duyệt';
+$lang_module['siteinfo_tags_incomplete'] = 'Số tags chưa có mô tả';
+
 $lang_module['group_content'] = 'Cấu hình đăng bài viết tại trang người dùng';
 $lang_module['group_addcontent'] = 'Được đăng bài viết';
 $lang_module['group_postcontent'] = 'Đăng bài viết không cần kiểm duyệt';
 $lang_module['group_editcontent'] = 'Được sửa bài viết đã đăng';
 $lang_module['group_delcontent'] = 'Được xóa bài viết đã đăng';
+
 $lang_module['admin'] = 'Phân quyền quản lý';
 $lang_module['admin_permissions'] = 'Quyền hạn';
 $lang_module['admin_edit'] = 'Sửa quyền hạn';
@@ -219,6 +235,7 @@ $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
 $lang_module['admin_email'] = 'Email';
+
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';
 $lang_module['permissions_add_content'] = 'Tạo bài viết';
 $lang_module['permissions_pub_content'] = 'Đăng bài viết';
@@ -228,8 +245,10 @@ $lang_module['permissions_del_content'] = 'Xóa bài viêt';
 $lang_module['permissions_pub_error'] = 'Lỗi: Bạn không được đăng bài viết tại Chuyên mục: %1$s';
 $lang_module['permissions_sendspadmin_error'] = 'Lỗi: Bạn không được phép chuyển bài viết cho tổng biên tập tại Chuyên mục: %1$s';
 $lang_module['permissions_pub_show_error'] = 'Lỗi: Bạn không được cho hiển thị bài viết tại Chuyên mục: %1$s';
+
 $lang_module['error_no_del_content_id'] = 'Lỗi: Hệ thống không xóa được các bài viết có id:';
 $lang_module['structure_image_upload'] = 'Ảnh upload của module được lưu trữ mặc định theo cấu trúc thư mục';
+
 $lang_module['config_source'] = 'Cấu hình hiển thị nguồn bài viết tại chi tiết tin';
 $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
@@ -237,9 +256,11 @@ $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
 $lang_module['tags'] = 'Quản lý Tags';
 $lang_module['add_tags'] = 'Thêm Tags';
-$lang_module['edit_tags']= 'Sửa Tags';
-$lang_module['tags_alias']= 'Lọc bỏ dấu tiếng việt, các ký tự khác a-z, 0-9, - trong Liên kết tĩnh của tags';
-$lang_module['alias_search']= 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
+$lang_module['edit_tags'] = 'Sửa Tags';
+$lang_module['tags_alias'] = 'Lọc bỏ dấu tiếng việt, các ký tự khác a-z, 0-9, - trong Liên kết tĩnh của tags';
+$lang_module['alias_search'] = 'Để hiển thị các tags khác, bạn dùng chức năng tìm kiếm để hiển thị nhiều kết quả hơn';
+$lang_module['tags_all_link'] = 'Chế độ xem các tags chưa có mô tả đang được kích hoạt, nhấp vào đây để xem tất cả các tags';
+$lang_module['tags_no_description'] = 'Chưa có mô tả';
 
 $lang_module['googleplus'] = 'Xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';

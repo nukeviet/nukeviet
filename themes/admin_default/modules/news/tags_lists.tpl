@@ -15,7 +15,12 @@
 			<tr>
 				<td class="text-center">{ROW.number}</td>
 				<td><a href="{ROW.link}">{ROW.alias}</a></td>
-				<td>{ROW.keywords}</td>
+				<td>
+					{ROW.keywords} 
+					<!-- BEGIN: incomplete -->
+				 	<em class="text-danger fa fa-lg fa-warning tags-tip" data-toggle="tooltip" data-placement="top" title="{LANG.tags_no_description}">&nbsp;</em>
+					<!-- END: incomplete -->
+				</td>
 				<td class="text-center">{ROW.numnews}</td>
 				<td class="text-center">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
@@ -33,4 +38,9 @@
 		<!-- END: other -->
 	</table>
 </div>
+<script type="text/javascript">
+$(function(){
+	$('.tags-tip').tooltip();
+});
+</script>
 <!-- END: main -->

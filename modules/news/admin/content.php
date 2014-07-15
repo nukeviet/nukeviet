@@ -247,7 +247,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 			{
 				$check_pub_content = true;
 			}
-			
+
 			if( $array_cat_admin[$admin_id][$catid_i]['app_content'] == 1 )
 			{
 				$check_censor_content = true;
@@ -396,7 +396,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords'] );
 
-	if( $rowcontent['keywords'] == '' )
+	// Tu dong xac dinh keywords
+	if( $rowcontent['keywords'] == '' and ! empty( $module_config[$module_name]['auto_tags'] ) )
 	{
 		if( $rowcontent['hometext'] != '' )
 		{
@@ -727,7 +728,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $rowcontent['keywords'] != $rowcontent['keywords_old'] )
 			{
-				$keywords = explode( ',', nv_strtolower( $rowcontent['keywords'] ) );
+				$keywords = explode( ',', $rowcontent['keywords'] );
 				$keywords = array_map( 'strip_punctuation', $keywords );
 				$keywords = array_map( 'trim', $keywords );
 				$keywords = array_diff( $keywords, array( '' ) );
@@ -738,7 +739,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					if( ! in_array( $keyword, $array_keywords_old ) )
 					{
 						$alias_i = ( $module_config[$module_name]['tags_alias'] ) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
-
+						$alias_i = nv_strtolower( $alias_i );
 						$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
 						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
@@ -776,16 +777,21 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 							}
 							$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid );
 						}
+
+						// insert keyword for table _tags_id
 						try
 						{
-							$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . $tid . ', :keyword)' );
+							$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute();
 						}
 						catch( PDOException $e )
 						{
-							trigger_error( $e->getMessage() );
+							$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id SET keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute();
 						}
+						unset( $array_keywords_old[$tid] );
 					}
 				}
 
@@ -1122,6 +1128,12 @@ if( sizeof( $_array ) )
 	}
 	$xtpl->parse( 'main.googleplus' );
 }
+
+if( $module_config[$module_name]['auto_tags'] )
+{
+	$xtpl->parse( 'main.auto_tags' );
+}
+
 $xtpl->parse( 'main' );
 $contents .= $xtpl->text( 'main' );
 

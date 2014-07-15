@@ -38,6 +38,8 @@ if( ! empty( $savesetting ) )
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
 	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
+	$array_config['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
+	$array_config['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
 
 	if( ! nv_is_url( $array_config['show_no_image'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['show_no_image'] ) )
 	{
@@ -139,6 +141,8 @@ $xtpl->assign( 'SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' ch
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
 
 $array_structure_image = array();

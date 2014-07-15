@@ -234,7 +234,7 @@ foreach( $array_search as $key => $val )
 $a = 0;
 foreach( $array_status_view as $key => $val )
 {
-	if( $key == $sstatus && $a == 0 )
+	if( $key == $sstatus and $a == 0 )
 	{
 		$sl = ' selected="selected"';
 		$a = 1;
@@ -269,19 +269,22 @@ $db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
-$data = array();
-while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $username ) = $result->fetch( 3 ) )
+$data = $array_ids = array();
+while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$title = nv_clean60( $title );
+	
 	if( $catid > 0 )
 	{
 		$catid_i = $catid;
 	}
+	
 	$check_permission_edit = $check_permission_delete = false;
+	
 	if( defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
 		$check_permission_edit = $check_permission_delete = true;
@@ -290,6 +293,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	{
 		$array_temp = explode( ',', $listcatid );
 		$check_edit = $check_del = 0;
+		
 		foreach( $array_temp as $catid_i )
 		{
 			if( isset( $array_cat_admin[$admin_id][$catid_i] ) )
@@ -313,6 +317,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					{
 						++$check_edit;
 					}
+					
 					if( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
 					{
 						++$check_del;
@@ -324,36 +329,59 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 				}
 			}
 		}
+		
 		if( $check_edit == sizeof( $array_temp ) )
 		{
 			$check_permission_edit = true;
 		}
+		
 		if( $check_del == sizeof( $array_temp ) )
 		{
 			$check_permission_delete = true;
 		}
 	}
+	
 	$admin_funcs = array();
 	if( $check_permission_edit ) $admin_funcs[] = nv_link_edit_page( $id );
 	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
-	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
-	$data[] = array(
+	
+	$data[$id] = array(
 		'id' => $id,
-		'link' => $link,
+		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 		'title' => $title,
 		'publtime' => $publtime,
 		'status' => $lang_module['status_' . $status],
 		'username' => $username,
-		'hitstotal' => $hitstotal,
-		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs ) );
+		'hitstotal' => number_format( $hitstotal, 0, ',', '.' ),
+		'hitscm' => number_format( $hitscm, 0, ',', '.' ),
+		'numtags' => 0,
+		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
+	);
+	
+	$array_ids[] = $id;
 }
+
+// Lay so tags
+if( ! empty( $array_ids ) )
+{
+	$db->sqlreset()->select( 'COUNT(*) AS numtags, id' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags_id' )->where( 'id IN( ' . implode( ',', $array_ids ) . ' )' )->group( 'id' );
+	$result = $db->query( $db->sql() );
+	
+	while( list( $numtags, $id ) = $result->fetch( 3 ) )
+	{
+		$data[$id]['numtags'] = $numtags;
+	}	
+}
+
 $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'waiting' => $lang_module['status_action_0'] );
-//chuyen sang cho duyet
+	'waiting' => $lang_module['status_action_0']
+);
+
+// Chuyen sang cho duyet
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['declined'] = $lang_module['declined'];
@@ -364,12 +392,15 @@ elseif( $check_declined ) // neu co quyen duyet bai thi
 {
 	$array_list_action['declined'] = $lang_module['declined'];
 }
+
 $action = array();
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
 	$action[] = array( 'value' => $catid_i, 'title' => $title_i );
 }
+
 $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -384,21 +415,25 @@ $xtpl->assign( 'base_url_id', $base_url_id );
 $xtpl->assign( 'base_url_name', $base_url_name );
 $xtpl->assign( 'base_url_publtime', $base_url_publtime );
 $xtpl->assign( 'base_url_exptime', $base_url_exptime );
+
 foreach( $val_cat_content as $cat_content )
 {
 	$xtpl->assign( 'CAT_CONTENT', $cat_content );
 	$xtpl->parse( 'main.cat_content' );
 }
+
 foreach( $search_type as $search_t )
 {
 	$xtpl->assign( 'SEARCH_TYPE', $search_t );
 	$xtpl->parse( 'main.search_type' );
 }
+
 foreach( $search_per_page as $s_per_page )
 {
 	$xtpl->assign( 'SEARCH_PER_PAGE', $s_per_page );
 	$xtpl->parse( 'main.s_per_page' );
 }
+
 foreach( $search_status as $status_view )
 {
 	$xtpl->assign( 'SEARCH_STATUS', $status_view );
@@ -410,18 +445,22 @@ foreach( $data as $row )
 	$xtpl->assign( 'ROW', $row );
 	$xtpl->parse( 'main.loop' );
 }
+
 foreach( $action as $action1 )
 {
 	$xtpl->assign( 'ACTION', $action1 );
 	$xtpl->parse( 'main.action' );
 }
+
 if( ! empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	$xtpl->parse( 'main.generate_page' );
 }
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';

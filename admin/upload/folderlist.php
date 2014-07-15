@@ -20,6 +20,7 @@ function nv_set_dir_class( $array )
 {
 	$class = array( 'folder' );
 	$menu = false;
+	
 	if( ! empty( $array ) )
 	{
 		foreach( $array as $key => $item )
@@ -32,7 +33,12 @@ function nv_set_dir_class( $array )
 	}
 
 	$class = implode( ' ', $class );
-	if( $menu ) $class .= ' menu';
+	
+	if( $menu )
+	{
+		$class .= ' menu';
+	}
+	
 	return $class;
 }
 
@@ -121,6 +127,8 @@ $xtpl->assign( 'CREATE_FILE', ( isset( $check_allow_upload_dir['create_file'] ) 
 $xtpl->assign( 'RENAME_FILE', ( isset( $check_allow_upload_dir['rename_file'] ) and $check_allow_upload_dir['rename_file'] === true ) ? 1 : 0 );
 $xtpl->assign( 'CROP_FILE', ( isset( $check_allow_upload_dir['crop_file'] ) and $check_allow_upload_dir['crop_file'] === true ) ? 1 : 0 );
 $xtpl->assign( 'ROTATE_FILE', ( isset( $check_allow_upload_dir['rotate_file'] ) and $check_allow_upload_dir['rotate_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'DELETE_FILE', ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'MOVE_FILE', ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
 
 if( ! empty( $content ) )
 {

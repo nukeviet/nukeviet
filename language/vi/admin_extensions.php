@@ -98,6 +98,8 @@ $lang_module['install_check_installed_unsure'] = 'Hệ thống không thể ki�
 $lang_module['install_continue'] = 'Tiếp tục cài đặt';
 $lang_module['install_cancel'] = 'Hủy cài đặt';
 $lang_module['install_file_download'] = 'Tải về file cài đặt';
+$lang_module['install_check_require'] = 'Kiểm tra ứng dụng bắt buộc';
+$lang_module['install_check_require_fail'] = 'Để ứng dụng này có thể hoạt động, bạn cần phải cài đặt ứng dụng <strong>&quot;%s&quot;</strong> trước. Nhấp vào đây để xem thông tin về ứng dụng bắt buộc này';
 
 $lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';
 $lang_module['download_error_save'] = 'Lỗi: Lưu file thất bại';
