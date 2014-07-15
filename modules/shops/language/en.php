@@ -35,6 +35,7 @@ $lang_module['title_code'] = 'Reference';
 $lang_module['title_product_in_page'] = 'prodcuts on page';
 $lang_module['title_next'] = 'continue';
 $lang_module['add_product'] = 'Add to cart';
+$lang_module['title_wishlist'] = 'Favorite';
 $lang_module['detail_product'] = 'Details';
 $lang_module['set_cart_success'] = 'Added "%s" to cart';
 $lang_module['profile_manage'] = 'Profile management';
