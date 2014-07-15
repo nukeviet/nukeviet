@@ -71,7 +71,7 @@ if( ! empty( $savecat ) )
 				{
 					list( $flang, $fname ) = $field_lang_i;
 					$listfield .= ', ' . $flang . '_' . $fname;
-					if( $flang == NV_LANG_DATA ) $listvalue .= ', :' . $flang . '_' . $fname;
+					$listvalue .= ', :' . $flang . '_' . $fname;
 				}
 
 				$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block_cat (bid, adddefault,image, weight, add_time, edit_time " . $listfield . ") VALUES (NULL, 0, '', " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . " " . $listvalue . ")";
