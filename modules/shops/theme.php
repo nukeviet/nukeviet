@@ -62,7 +62,7 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
  */
 function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id;
+	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -214,7 +214,7 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
  */
 function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1981,7 +1981,7 @@ function compare( $data_pro )
  */
 function wishlist( $data_content, $html_pages = '' )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id;
+	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name;
 
 	$xtpl = new XTemplate( 'wishlist.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );

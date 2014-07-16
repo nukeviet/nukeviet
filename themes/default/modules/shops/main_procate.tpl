@@ -56,7 +56,10 @@
                             <!-- BEGIN: order -->
                             <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                             <!-- END: order -->
-                            <a href="{LINK}" title="{TITLE}" ><button type="button" class="btn btn-primary btn-xs">{LANG.detail_product}</button></a>
+                            
+		                    <!-- BEGIN: wishlist -->
+		                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
+		                    <!-- END: wishlist -->
                         </div>
 					</div>
 				</div>

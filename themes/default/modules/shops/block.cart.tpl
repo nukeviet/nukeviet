@@ -15,6 +15,9 @@
 	<p class="clearfix">
 		<a title="{LANG.cart_check_out}" href="{LINK_VIEW}" id="submit_send">{LANG.cart_check_out}</a>
 	</p>
+	<p class="clearfix">
+		<a title="{LANG.wishlist_product}" href="{WISHLIST}">{LANG.wishlist_product}</a> (<span id="wishlist_num_id">{NUM_ID}</span>)
+	</p>	
 	<!--  BEGIN: history -->
 	<p>
 		<a href="{LINK_HIS}"><span>{LANG.history_title}</span></a>

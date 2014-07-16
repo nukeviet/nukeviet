@@ -1,17 +1,5 @@
 <!-- BEGIN: main -->
 <div id="products" class="clearfix">
-    <!-- BEGIN: displays -->
-    <div class="form-group form-inline pull-right">
-        <label class="control-label">{LANG.displays_product}</label>
-        <select name="sort" id="sort" class="form-control input-sm" onchange="nv_chang_price();">
-            <!-- BEGIN: sorts -->
-                <option value="{key}" {se}> {value}</option>
-            <!-- END: sorts -->
-        </select>
-    </div>
-    <div class="clearfix">&nbsp;</div>
-    <!-- END: displays -->
-
     <!-- BEGIN: items -->
     <div class="col-sm-6 col-md-{num}">
         <div class="thumbnail">
@@ -62,9 +50,7 @@
                     <!-- BEGIN: order -->
                     <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                     <!-- END: order -->
-                    <!-- BEGIN: wishlist -->
-                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
-                    <!-- END: wishlist -->
+                    <a href="javascript:void(0)" title="{LANG.wishlist_del_item}" onclick="wishlist_del_item({ID})" class="btn btn-danger btn-xs">{LANG.wishlist_del_item}</a>
                 </div>
             </div>
         </div>
@@ -77,6 +63,11 @@
 </div>
 <!-- END: pages -->
 <div class="msgshow" id="msgshow">&nbsp;</div>
+
+<script type="text/javascript">
+	var lang_del_confirm = '{LANG.wishlist_del_item_confirm}';
+</script>
+
 <!-- BEGIN: tooltip_js -->
 <script type="text/javascript">
 	$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
