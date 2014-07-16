@@ -1036,6 +1036,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
         $xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
         $xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
         $xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
+		
+		if( ! empty( $data_content['homeimgfile'] ) )
+		{
+			$xtpl->parse( 'main.shadowbox' );
+		}
 
 		if( ! empty( $data_content[NV_LANG_DATA . '_promotional'] ) )
 		{
@@ -1334,8 +1339,6 @@ function cart_product( $data_content, $array_error_number )
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 
-			$note = str_replace( '|', ', ', $data_row['note'] );
-			$xtpl->assign( 'note', nv_clean60( $note, 50 ) );
 			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'], $data_row['num'] );
 			$xtpl->assign( 'PRICE', $price );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
