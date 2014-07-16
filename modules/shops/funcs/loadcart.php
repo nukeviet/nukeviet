@@ -39,7 +39,7 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart" );
 $xtpl->assign( 'WISHLIST', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=wishlist" );
 
-if( $pro_config['active_wishlist'] )
+if( $pro_config['active_wishlist'] and ! empty( $user_info ) )
 {
 	$count = 0;
 	$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
@@ -48,7 +48,7 @@ if( $pro_config['active_wishlist'] )
 		$count = count( explode( ',', $listid ) );
 	}
 	$xtpl->assign( 'NUM_ID', $count );
-	$xtpl->parse( 'main.wishlist' );
+	$xtpl->parse( 'main.enable.wishlist' );
 }
 
 if( defined( 'NV_IS_USER' ) )
