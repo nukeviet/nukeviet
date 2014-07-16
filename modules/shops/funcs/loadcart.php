@@ -16,7 +16,8 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 {
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
-		$total = $total + $info['price'] * $info['num'];
+		$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'], $info['num'] );
+		$total = $total + $price['sale'];
 	}
 }
 
