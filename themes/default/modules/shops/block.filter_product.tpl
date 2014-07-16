@@ -3,16 +3,26 @@
 	<!-- BEGIN: loop -->
 	
 		<!-- BEGIN: main_group -->
-		<p><strong>{DATA.title}</strong></p>
+		<p>
+			<!-- BEGIN: image -->
+			<img src="{DATA.image}" style="max-height: 16px; max-width: 16px" />
+			<!-- END: image -->
+			<strong>{DATA.title}</strong>
+		</p>
 		<!-- END: main_group -->
 		
 		<!-- BEGIN: sub_group -->
 		<p>
 			{DATA.space}
 			<!-- BEGIN: checkbox -->
-			<input type="checkbox" name="group_id[]" value="{DATA.id}" id="{DATA.id}">&nbsp;
+			<input type="checkbox" name="group_id[]" value="{DATA.id}" id="{DATA.id}">
 			<!-- END: checkbox -->
-			<label for="{DATA.id}">{DATA.title} <span class="text-danger">({DATA.numpro})</span></label>
+			<label for="{DATA.id}">
+				<!-- BEGIN: image -->
+				<img src="{DATA.image}" style="max-height: 16px; max-width: 16px" />
+				<!-- END: image -->
+				{DATA.title} <span class="text-danger">({DATA.numpro})</span>
+			</label>
 		</p>
 		<!-- END: sub_group -->
 		

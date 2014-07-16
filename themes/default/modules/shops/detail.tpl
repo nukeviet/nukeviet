@@ -23,11 +23,16 @@
 
                     <!-- BEGIN: price -->
                     <li><p>
-                        {LANG.detail_pro_price}: <span class="{class_money}">{product_price} {money_unit}</span>
+                        {LANG.detail_pro_price}:
                         <!-- BEGIN: discounts -->
-                        <span class="money">{product_discounts} {money_unit}</span>
+                        <span class="money">{PRICE.sale_format} {PRICE.unit}</span> 
+                        <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
                         <!-- END: discounts -->
-                        / 1 {pro_unit}
+                        <span class="money">{product_discounts} {money_unit}</span>
+                        
+						<!-- BEGIN: no_discounts -->
+						<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+						<!-- END: no_discounts -->
                     </p></li>
                     <!-- END: price -->
 
@@ -40,6 +45,18 @@
                         {hometext}
                     </p></li>
                     <!-- END: hometext -->
+                    
+					<!-- BEGIN: custom -->
+						<!-- BEGIN: loop -->
+						<li><p><strong>{custom.lang}:</strong> {custom.title}</p></li>
+						<!-- END: loop -->
+					<!-- END: custom -->
+					
+					<!-- BEGIN: custom_lang -->
+						<!-- BEGIN: loop -->
+						<li><p><strong>{custom_lang.lang}:</strong> {custom_lang.title}</p></li>
+						<!-- END: loop -->
+					<!-- END: custom_lang -->
 
                     <!-- BEGIN: promotional -->
                     <li>
@@ -169,7 +186,15 @@
 		<nav>
 			<ul>
 				<li><a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a></li>
+				
+				<!-- BEGIN: discount_title -->
+				<li><a href="#section-4"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.discount_detail}</span></a></li>
+				<!-- END: discount_title -->
+				
+				<!-- BEGIN: othersimg_title -->
 				<li><a href="#section-2"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.add_otherimage}</span></a></li>
+				<!-- END: othersimg_title -->
+				
 				<!-- BEGIN: comment_tab -->
 				<li><a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a></li>
 				<!-- END: comment_tab -->
@@ -177,18 +202,29 @@
 		</nav>
 		<div class="content">
 			<section id="section-1">{DETAIL}</section>
+			
+			<!-- BEGIN: discount_content -->
+			<section id="section-4">
+				<h3>{DISCOUNT.title}</h3>
+				<p>{DISCOUNT.begin_time}{DISCOUNT.end_time}, {DISCOUNT.text}</p>
+				<ul>
+					<!-- BEGIN: items -->
+					<li>{ITEMS}</li>
+					<!-- END: items -->
+				</ul>
+			</section>
+			<!-- END: discount_content -->
+			
+			<!-- BEGIN: othersimg -->
 			<section id="section-2">
-	            <!-- BEGIN: othersimg -->
+	            <!-- BEGIN: loop -->
 	            <div class="col-xs-6 col-md-3">
 	                <a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
 	            </div>
-	            <!-- END: othersimg -->
+	            <!-- END: loop -->
 	            <div class="clear">&nbsp;</div>
-
-	            <!-- BEGIN: no_otherimage -->
-	            {LANG.detail_no_otherimage}
-	            <!-- END: no_otherimage -->
 			</section>
+			<!-- END: othersimg -->
 			<!-- BEGIN: comment -->
 			<section id="section-3">
 				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>

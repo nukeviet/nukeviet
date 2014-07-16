@@ -242,7 +242,7 @@ function nv_compare_click() {
 }
 
 function nv_compare_del( id, all ) {
-	if (confirm(compare_del_items_confirm)) {
+	if (confirm(lang_del_confirm)) {
 		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compare_del=1&id=' + id + '&all=' + all, function(res) {
 			if (res == 'OK') {
 				window.location.href = window.location.href;
