@@ -35,7 +35,7 @@
 					<th class="text-right">
 					<br>
 					{LANG.description}</th>
-					<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
+					<td><textarea class="form-control" style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
