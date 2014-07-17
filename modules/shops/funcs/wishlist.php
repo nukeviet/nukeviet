@@ -12,10 +12,16 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['wishlist_product'];
 
-if( empty( $array_wishlist_id ) )
+if( ! defined( 'NV_IS_USER' ) )
 {
 	$redirect = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $redirect ) );
+	die();
+}
+
+if( empty( $array_wishlist_id ) )
+{
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 
@@ -34,7 +40,6 @@ $num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
 	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )
-	->order( $orderby )
 	->limit( $per_page )
 	->offset( ( $page - 1 ) * $per_page );
 

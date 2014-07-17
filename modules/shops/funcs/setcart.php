@@ -18,7 +18,7 @@ $group = $nv_Request->get_string( 'group', 'post,get', '' );
 $num = $nv_Request->get_int( 'num', 'post,get', 1 );
 $ac = $nv_Request->get_string( 'ac', 'post,get', 0 );
 $contents_msg = "";
-
+//nv_insert_logs( NV_LANG_DATA, $module_name, 'gdhfth', $num, $admin_info['userid'] );
 if( ! is_numeric( $num ) || $num < 0 )
 {
 	$contents_msg = 'ERR_' . $lang_module['cart_set_err'];
@@ -32,8 +32,6 @@ else
 			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
 
-			$price_product = nv_currency_conversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'], $data_content['discount_id'] );
-
 			if( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'];
@@ -46,7 +44,9 @@ else
 					$_SESSION[$module_data . '_cart'][$id] = array(
 						'num' => $num,
 						'order' => 0,
-						'price' => $price_product['sale'],
+						'price' => $data_content['product_price'],
+						'money_unit' => $data_content['money_unit'],
+						'discount_id' => $data_content['discount_id'],
 						'store' => $data_content['product_number'],
 						'group' => $group
 					);

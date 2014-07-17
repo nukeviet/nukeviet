@@ -1990,7 +1990,6 @@ function wishlist( $data_content, $html_pages = '' )
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	
-	$lang_module['wishlist_update_time'] = sprintf( $lang_module['wishlist_update_time'], $a );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	$xtpl->assign( 'CSS_PRODUCT_CODE', ! empty( $pro_config['show_product_code'] ) ? ' show-product-code' : '' );
@@ -2088,7 +2087,6 @@ function wishlist( $data_content, $html_pages = '' )
 			}
 
 			$xtpl->parse( 'main.items' );
-			++$i;
 		}
 
 		if( ! empty( $html_pages ) )
