@@ -51,7 +51,18 @@
 		<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">{pro_no}</td>
-				<td class="prd"><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></td>
+				<td class="prd">
+					<span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span><br />
+					<!-- BEGIN: display_group -->
+					<span class="text-muted">
+						<ul style="padding: 0">
+							<!-- BEGIN: item -->
+							<li class="pull-left" style="margin-right: 10px">{group_title}</li>
+							<!-- END: item -->
+						</ul>
+					</span>
+					<!-- END: display_group -->
+				</td>
 				<td><strong>{product_code}</strong></td>
 				<td class="amount" class="text-center">{product_number}</td>
 				<td class="unit">{product_unit}</td>
@@ -61,7 +72,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total}</strong></td>
+				<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></td>
 			</tr>
 		</tfoot>
 	</table>

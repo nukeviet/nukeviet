@@ -30,6 +30,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	$listid = explode( '|', $data['listid'] );
 	$listnum = explode( '|', $data['listnum'] );
 	$listprice = explode( '|', $data['listprice'] );
+	$listgroup = explode( '|', $data['listgroup'] );
 	$temppro = array();
 
 	$i = 0;
@@ -37,32 +38,34 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	{
 		if( empty( $listprice[$i] ) ) $listprice[$i] = 0;
 		if( empty( $listnum[$i] ) ) $listnum[$i] = 0;
+		if( ! isset( $listgroup[$i] ) ) $listgroup[$i] = '';
 
-		$temppro[$proid] = array( 'price' => $listprice[$i], 'num' => $listnum[$i] );
+		$temppro[$proid] = array( 'price' => $listprice[$i], 'num' => $listnum[$i], 'group' => $listgroup[$i] );
 
 		$arrayid[] = $proid;
-		$i;
+		$i++;
 	}
 
 	if( ! empty( $arrayid ) )
 	{
 		$templistid = implode( ',', $arrayid );
 
-		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
+		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
 
 		$result = $db->query( $sql );
-		while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit, $discount_id ) = $result->fetch( 3 ) )
 		{
 			$data_pro[] = array(
 				'id' => $id,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
-				'product_note' => $note,
 				'hometext' => $hometext,
 				'product_price' => $temppro[$id]['price'],
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
+				'discount_id' => $discount_id,
+				'product_group' => $temppro[$id]['group'],
 				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'product_number' => $temppro[$id]['num']
 			);

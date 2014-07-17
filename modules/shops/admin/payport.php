@@ -145,7 +145,6 @@ if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 	foreach( $array_setting_payment as $value )
 	{
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];
-		$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 		$value['active'] = ( $value['active'] == "1" ) ? "checked=\"checked\"" : "";
 		$value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
 
@@ -169,7 +168,6 @@ if( ! empty( $array_payment_other ) && empty( $data_pay ) )
 		if( ! in_array( $pay, $array_setting_payment_key ) )
 		{
 			$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];
-			$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 			$value['STT'] = $a;
 
 			$xtpl->assign( 'ODATA_PM', $value );

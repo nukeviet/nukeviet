@@ -16,12 +16,13 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 {
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
-		$total = $total + $info['price'] * $info['num'];
+		$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'], $info['num'] );
+		$total = $total + $price['sale'];
 	}
 }
 
 if( $pro_config['active_price'] == '0' ) $total = 0;
-$total = FormatNumber( $total, 2, '.', ',' );
+$total = nv_number_format( $total, $money_config[$pro_config['money_unit']]['decimals'] );
 
 $lang_tmp['cart_title'] = $lang_module['cart_title'];
 $lang_tmp['cart_product_title'] = $lang_module['cart_product_title'];
@@ -29,6 +30,7 @@ $lang_tmp['cart_product_total'] = $lang_module['cart_product_total'];
 $lang_tmp['cart_check_out'] = $lang_module['cart_check_out'];
 $lang_tmp['history_title'] = $lang_module['history_title'];
 $lang_tmp['active_order_dis'] = $lang_module['active_order_dis'];
+$lang_tmp['wishlist_product'] = $lang_module['wishlist_product'];
 
 $xtpl = new XTemplate( "block.cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_tmp );
@@ -36,6 +38,19 @@ $xtpl->assign( 'total', $total );
 $xtpl->assign( 'TEMPLATE', $module_info['template'] );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart" );
+$xtpl->assign( 'WISHLIST', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=wishlist" );
+
+if( $pro_config['active_wishlist'] and ! empty( $user_info ) )
+{
+	$count = 0;
+	$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
+	if( $listid )
+	{
+		$count = count( explode( ',', $listid ) );
+	}
+	$xtpl->assign( 'NUM_ID', $count );
+	$xtpl->parse( 'main.enable.wishlist' );
+}
 
 if( defined( 'NV_IS_USER' ) )
 {

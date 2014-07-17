@@ -14,7 +14,7 @@ if( ! function_exists( 'nv_search_product' ) )
 {
 	/**
 	 * nv_search_product()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -33,7 +33,6 @@ if( ! function_exists( 'nv_search_product' ) )
 		$price1_temp = $nv_Request->get_string( 'price1', 'get', '' );
 		$price2_temp = $nv_Request->get_string( 'price2', 'get', '' );
 		$typemoney = $nv_Request->get_string( 'typemoney', 'get', '' );
-		$sourceid = $nv_Request->get_int( 'sid', 'get', 0 );
 		$cataid = $nv_Request->get_int( 'cata', 'get', 0 );
 
 		if( $cataid == 0 ) $cataid = $catid;
@@ -90,16 +89,6 @@ if( ! function_exists( 'nv_search_product' ) )
 			$row['selected'] = ( $typemoney == $row['code'] ) ? 'selected="selected"' : '';
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'main.typemoney' );
-		}
-
-		$sql = 'SELECT ' . NV_LANG_DATA . '_title AS title, sourceid FROM ' . $db_config['prefix'] . '_' . $mod_data . '_sources';
-		$list = nv_db_cache( $sql, '', $module );
-
-		foreach( $list as $row )
-		{
-			$row['selected'] = ( $row['sourceid'] == $sourceid ) ? 'selected="selected"' : '';
-			$xtpl->assign( 'ROW', $row );
-			$xtpl->parse( 'main.loopsource' );
 		}
 
 		if( $price1 == -1 ) $price1 = '';

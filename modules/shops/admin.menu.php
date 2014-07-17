@@ -10,14 +10,14 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
+$submenu['order'] = $lang_module['order_title'];
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
+$submenu['discounts'] = $lang_module['discounts'];
 $submenu['cat'] = $lang_module['categories'];
 $submenu['group'] = $lang_module['group'];
 $submenu['blockcat'] = $lang_module['block'];
-$submenu['sources'] = $lang_module['sources'];
 $submenu['prounit'] = $lang_module['prounit'];
-$submenu['order'] = $lang_module['order_title'];
 $submenu['money'] = $lang_module['money'];
 $submenu['payport'] = $lang_module['setup_payment'];
 $submenu['docpay'] = $lang_module['document_payment'];

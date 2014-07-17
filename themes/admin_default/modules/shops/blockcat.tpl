@@ -5,10 +5,7 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
 <form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
@@ -21,24 +18,24 @@
 			<col width="150"/>
 			<tbody>
 				<tr>
-					<td align="right"><strong>{LANG.block_name}: </strong></td>
+					<th class="text-right">{LANG.block_name}: </th>
 					<td><input class="form-control" style="width: 650px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 				</tr>
 				<!-- BEGIN: alias -->
 				<tr>
-					<td align="right" width="100px"><strong>{LANG.alias}: </strong></td>
+					<th class="text-right" width="100px">{LANG.alias}: </th>
 					<td><input class="form-control" style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
 				</tr>
 				<!-- END: alias -->
 				<tr>
-					<td align="right"><strong>{LANG.keywords}: </strong></td>
+					<th class="text-right">{LANG.keywords}: </th>
 					<td><input class="form-control" style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td valign="top" align="right" width="100px">
+					<th class="text-right">
 					<br>
-					<strong>{LANG.description}</strong></td>
-					<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
+					{LANG.description}</th>
+					<td><textarea class="form-control" style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
 			</tbody>
 		</table>

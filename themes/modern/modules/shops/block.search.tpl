@@ -32,14 +32,6 @@
 		</select>
 	</div>
 	<div align="center" style="padding:2px">
-		<select name="sourceid" style="width:70%" id="sourceid">
-			<option value="0">{LANG.source_title}</option>
-			<!-- BEGIN: loopsource -->
-			<option {ROW.selected} value="{ROW.sourceid}">{ROW.title}</option>
-			<!-- END: loopsource -->
-		</select>
-	</div>
-	<div align="center" style="padding:2px">
 		<input type="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch()">
 	</div>
 </form>

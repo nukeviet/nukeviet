@@ -6,7 +6,7 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-function sendrating(id, point, newscheckss) 
+function sendrating(id, point, newscheckss)
 {
 	if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
 		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
@@ -79,7 +79,7 @@ function cartorder(a_ob) {
 				alert_msg(strText);
 				linkloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 				$("#cart_" + nv_module_name).load(linkloadcart);
-				window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
+				//window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
 			}
 		}
 	});
@@ -89,9 +89,28 @@ function cartorder(a_ob) {
 function cartorder_detail(a_ob) {
 	var num = $('#pnum').val();
 	var id = $(a_ob).attr("id");
+	var group = '';
+	
+	var i = 0;
+    $('select[name=group] option:selected').each(function(){
+    	var value = $(this).val();
+    	if( value != '' )
+    	{
+    		if( i == 0 )
+    		{
+    			group = group + value;
+    		}
+    		else
+    		{
+    			group = group + ',' + value;
+    		}
+    	}
+    	i++;
+	});
+	
 	$.ajax({
 		type : "POST",
-		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&nocache=" + new Date().getTime(),
+		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&group=" + group + "&nocache=" + new Date().getTime(),
 		data : 'num=' + num,
 		success : function(data) {
 			var s = data.split('_');
@@ -157,15 +176,14 @@ function onsubmitsearch() {
 	var price2 = $('#price2').val();
 	if (price2 == null)
 		price2 = '';
-	var sid = $('#sourceid').val();
 	var typemoney = $('#typemoney').val();
 	if (typemoney == null)
 		typemoney = '';
 	var cataid = $('#cata').val();
-	if (keyword == '' && price1 == '' && price2 == '' && cataid == 0 && sid == 0) {
+	if (keyword == '' && price1 == '' && price2 == '' && cataid == 0 ) {
 		return false;
 	} else {
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=shops&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid + '&sid=' + sid;
+		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=shops&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid;
 	}
 	return false;
 }
@@ -178,15 +196,14 @@ function onsubmitsearch1() {
 	var price2 = $('#price21').val();
 	if (price2 == null)
 		price2 = '';
-	var sid = $('#sourceid1').val();
 	var typemoney = $('#typemoney1').val();
 	if (typemoney == null)
 		typemoney = '';
 	var cataid = $('#cata1').val();
-	if (keyword == '' && price1 == '' && price2 == '' && cataid == 0 && sid == 0) {
+	if (keyword == '' && price1 == '' && price2 == '' && cataid == 0 ) {
 		return false;
 	} else {
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid + '&sid=' + sid;
+		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid;
 	}
 	return false;
 }
@@ -222,4 +239,55 @@ function nv_compare_click() {
 		}
 	});
 	return;
+}
+
+function nv_compare_del( id, all ) {
+	if (confirm(lang_del_confirm)) {
+		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compare_del=1&id=' + id + '&all=' + all, function(res) {
+			if (res == 'OK') {
+				window.location.href = window.location.href;
+			}
+		});
+	}
+	return;
+}
+
+function wishlist(id, object) {
+	$.ajax({
+		type : "GET",
+		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=wishlist_update' + '&id=' + id + "&ac=add&nocache=" + new Date().getTime(),
+		data : '',
+		success : function(data) {
+			var s = data.split('_');
+			if( s[0] == 'OK' )
+			{
+				$(object).addClass('disabled');
+				$('#wishlist_num_id').text( s[1] );	
+			}
+			alert_msg(s[2]);
+		}
+	});
+}
+
+function wishlist_del_item(id) {
+	if (confirm(lang_del_confirm)) {
+		$.ajax({
+			type : "GET",
+			url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=wishlist_update' + '&id=' + id + "&ac=del&nocache=" + new Date().getTime(),
+			data : '',
+			success : function(data) {
+				var s = data.split('_');
+				if( s[0] == 'OK' )
+				{
+					$('#wishlist_num_id').text( s[1] );
+					$('#item_' + id).remove();
+					if( s[1] == '0' )
+					{
+						window.location.href = window.location.href;
+					}
+				}
+				alert_msg(s[2]);
+			}
+		});
+	}
 }
