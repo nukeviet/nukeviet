@@ -80,8 +80,7 @@ while( $row = $query->fetch() )
 		$xtpl->assign( 'DIS', 'disabled="disabled"' );
 	}
 
-	$bgview = ( $row['order_view'] == '0' ) ? "class=\"bgview\"" : "";
-	$xtpl->assign( 'bgview', $bgview );
+	if( $row['order_view'] == '0' ) $xtpl->parse( 'main.data.row.bgview' );
 
 	$xtpl->parse( 'main.data.row' );
 	++$count;

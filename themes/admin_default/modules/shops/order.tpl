@@ -10,22 +10,23 @@
 				<th><strong>{LANG.order_email}</strong></th>
 				<th align="right"><strong>{LANG.order_total}</strong></th>
 				<th><strong>{LANG.order_payment}</strong></th>
-				<th width="100px" class="text-center"><strong>{LANG.function}</strong></th>
+				<th width="130px" class="text-center"><strong>{LANG.function}</strong></th>
 			</tr>
 		</thead>
 		<tbody>
 		<!-- BEGIN: row -->
-		<tr {bgview}>
+		<tr <!-- BEGIN: bgview -->class="warning"<!-- END: bgview -->>
 			<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
 			<td>{DATA.order_code}</td>
 			<td>{DATA.order_time}</td>
 			<td><a href="{DATA.link_user}" style="text-decoration:underline" target="_blank">{DATA.order_email}</a></td>
 			<td align="right">{DATA.order_total} {DATA.unit_total}</td>
 			<td>{DATA.status_payment}</td>
-			<td class="text-center"><span class="edit_icon"><a href="{link_view}" title="">{LANG.view}</a></span>
-			<!-- BEGIN: delete -->
-			&nbsp;-&nbsp;<span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span>
-			<!-- END: delete -->
+			<td class="text-center">
+				<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{link_view}" title="">{LANG.view}</a>
+				<!-- BEGIN: delete -->
+				&nbsp;-&nbsp;<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{link_del}" class="delete" title="">{LANG.del}</a>
+				<!-- END: delete -->
 			</td>
 		</tr>
 		<!-- END: row -->

@@ -4,9 +4,9 @@
 		<thead>
 			<tr>
 				<th class="w100">{LANG.weight}</th>
-				<th class="text-center" class="w100">ID</th>
+				<th class="text-center w50">ID</th>
 				<th>{LANG.name}</th>
-				<th>{LANG.adddefaultblock}</th>
+				<th class="w250">{LANG.adddefaultblock}</th>
 				<th class="w150">&nbsp;</th>
 			</tr>
 		</thead>

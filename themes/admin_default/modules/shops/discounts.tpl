@@ -91,9 +91,9 @@
 						<tbody>
 							<!-- BEGIN: config -->
 							<tr id="discount_{CONFIG.id}">
-								<td><input type="number" name="config[{CONFIG.id}][discount_from]" value="{CONFIG.discount_from}"/></td>
-								<td><input type="number" name="config[{CONFIG.id}][discount_to]" value="{CONFIG.discount_to}"/></td>
-								<td><input type="text" name="config[{CONFIG.id}][discount_number]" value="{CONFIG.discount_number}"/></td>
+								<td><input class="form-control" type="number" name="config[{CONFIG.id}][discount_from]" value="{CONFIG.discount_from}" /></td>
+								<td><input class="form-control" type="number" name="config[{CONFIG.id}][discount_to]" value="{CONFIG.discount_to}"/></td>
+								<td><input class="form-control" type="text" name="config[{CONFIG.id}][discount_number]" value="{CONFIG.discount_number}" /></td>
 								<td><em class="fa fa-trash-o fa-lg">&nbsp;</em><a onclick="$('#discount_{CONFIG.id}').remove();">{LANG.delete}</a></td>
 							</tr>
 							<!-- END: config -->

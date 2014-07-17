@@ -1,39 +1,56 @@
 <!-- BEGIN: main -->
-<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="get">
-	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
-	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
-	<label>{LANG.search_cat}: </label>
-	<select class="form-control" name="catid">
-		<option value="0">{LANG.search_cat_all}</option>
-		<!-- BEGIN: catid -->
-		<option value="{CATID.catid}"{CATID.selected}>{CATID.name}</option>
-		<!-- END: catid -->
-	</select>
-	<label>{LANG.search_type}: </label>
-	<select class="form-control" name="stype">
-		<!-- BEGIN: stype -->
-		<option value="{STYPE.key}"{STYPE.selected}>{STYPE.title}</option>
-		<!-- END: stype -->
-	</select>
-	<label>{LANG.search_per_page}: </label>
-	<select class="form-control" name="per_page">
-		<!-- BEGIN: per_page -->
-		<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
-		<!-- END: per_page -->
-	</select>
-	<br />
-	{LANG.search_key}: <input class="form-control" type="text" value="{Q}" maxlength="{NV_MAX_SEARCH_LENGTH}" name="q" style="width: 265px">
-	<input class="btn btn-primary" type="submit" value="{LANG.search}">
-	<br>
-	<input type="hidden" name ="checkss" value="{CHECKSESS}" />
-	<label><em>{SEARCH_NOTE}</em></label>
-</form>
+<div class="well">
+	<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="get">
+		<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
+		<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
+		<div class="row">
+			<div class="col-xs-6 col-sm-3">
+				<label>{LANG.search_cat}: </label>
+				<select class="form-control" style="width: 150px !important" name="catid">
+					<option value="0">{LANG.search_cat_all}</option>
+					<!-- BEGIN: catid -->
+					<option value="{CATID.catid}"{CATID.selected}>{CATID.title}</option>
+					<!-- END: catid -->
+				</select>
+			</div>
+	
+			<div class="col-xs-6 col-sm-3">
+				<label>{LANG.search_type}: </label>
+				<select class="form-control" name="stype">
+					<!-- BEGIN: stype -->
+					<option value="{STYPE.key}"{STYPE.selected}>{STYPE.title}</option>
+					<!-- END: stype -->
+				</select>
+			</div>
+	
+			<div class="col-xs-6 col-sm-3">
+				<label>{LANG.search_per_page}: </label>
+				<select class="form-control" name="per_page">
+					<!-- BEGIN: per_page -->
+					<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
+					<!-- END: per_page -->
+				</select>
+			</div>
+	
+			<div class="col-xs-6 col-sm-3">
+				<input class="form-control" type="text" value="{Q}" maxlength="{NV_MAX_SEARCH_LENGTH}" name="q" placeholder="{LANG.search_key}">
+				<input class="btn btn-primary" type="submit" value="{LANG.search}">
+			</div>
+		</div>
+		<br>
+		<input type="hidden" name ="checkss" value="{CHECKSESS}" />
+		<label><em class="text-danger">{SEARCH_NOTE}</em></label>
+	</form>
+</div>
+
 <form class="form-inline" name="block_list">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
-					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+					<th class="text-center">
+					<input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" />
+					</th>
 					<th style="width:40px">&nbsp;</th>
 					<th><a href="{BASE_URL_NAME}">{LANG.name}</a></th>
 					<th class="text-center"><a href="{BASE_URL_PUBLTIME}">{LANG.content_publ_date}</a></th>
@@ -46,7 +63,9 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"></td>
+					<td class="text-center">
+					<input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]">
+					</td>
 					<td><a href="{ROW.imghome}" rel="shadowbox[random]"/ title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}" width="40"/></a></td>
 					<td class="top">
 					<p>
@@ -71,7 +90,9 @@
 						<!-- BEGIN: action -->
 						<option value="{ACTION.key}">{ACTION.title}</option>
 						<!-- END: action -->
-					</select><input type="button" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}"></td>
+					</select> &nbsp;
+					<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}">
+					</td>
 				</tr>
 			</tfoot>
 		</table>
