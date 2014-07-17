@@ -684,7 +684,8 @@ class image
 			if( $direction != 0 and $direction != 360 )
 			{
 				$this->set_memory_limit();
-				$workingImage = imagerotate( $this->createImage, $direction, -1 );
+				$transColor = imagecolorallocatealpha( $this->createImage, 255, 255, 255, 127 );
+				$workingImage = imagerotate( $this->createImage, $direction, $transColor );
 				imagealphablending( $workingImage, true );
 				imagesavealpha( $workingImage, true );
 				$this->createImage = $workingImage;

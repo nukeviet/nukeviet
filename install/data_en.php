@@ -225,17 +225,53 @@ $array_funcid = array();
 $array_funcid_mod = array();
 $array_weight_block = array();
 
-$func_result = $db->query( 'SELECT func_id, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-while( list( $func_id_i, $in_module ) = $func_result->fetch( 3 ) )
+$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
 {
 	$array_funcid[] = $func_id_i;
-	$array_funcid_mod[$in_module][] = $func_id_i;
+	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
 }
 
 $func_result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC' );
 while( $row = $func_result->fetch() )
 {
-	$array_funcid_i = ( $row['all_func']==1 ) ? $array_funcid : $array_funcid_mod[$row['module']];
+	if( $row['all_func']==1 )
+	{
+		$array_funcid_i = $array_funcid;
+	}
+	else
+	{
+		$array_funcid_i = $array_funcid_mod[$row['module']];
+
+		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini' );
+		$blocks = $xml->xpath( 'setblocks/block' );
+		for( $i = 0, $count = sizeof( $blocks ); $i < $count; ++$i )
+		{
+			$rowini = (array)$blocks[$i];
+			if( $rowini['module'] == $row['module'] AND $rowini['file_name'] == $row['file_name'] )
+			{
+				$array_funcid_i = array();
+				if( ! is_array( $rowini['funcs'] ) )
+				{
+					$rowini['funcs'] = array( $rowini['funcs'] );
+				}
+				foreach( $rowini['funcs'] as $_funcs_list )
+				{
+					list( $mod, $func_list ) = explode( ':', $_funcs_list );
+					$func_array = explode( ',', $func_list );
+					foreach( $func_array as $_func )
+					{
+						if( isset( $array_funcid_mod[$row['module']][$_func] ))
+						{
+							$array_funcid_i[] = $array_funcid_mod[$row['module']][$_func];
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
 	foreach( $array_funcid_i as $func_id )
 	{
 		if( isset($array_weight_block[$row['theme']][$row['position']][$func_id]) )
@@ -282,20 +318,20 @@ $db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='news'" );
 if( $result->fetchColumn() )
 {
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'Co-operate', '', 'Co-operate', '', '', 0, 2, 5, 0, 'viewcat_page_new', 2, '2,3', 1, 3, '2', '', '', 1277689708, 1277689708, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 1, 'Careers at NukeViet', '', 'Careers-at-NukeViet', '', '', 0, 1, 6, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690086, 1277690259, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (3, 1, 'Partners', '', 'Partners', '', '', 0, 2, 7, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690142, 1277690291, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (4, 0, 'NukeViet news', '', 'NukeViet-news', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '2', '', '', 1277690451, 1277690451, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (5, 4, 'Security issues', '', 'Security-issues', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690497, 1277690564, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (6, 4, 'Release notes', '', 'Release-notes', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690588, 1277690588, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (7, 4, 'Development team talk', '', 'Development-team-talk', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690652, 1277690652, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (8, 0, 'NukeViet community', '', 'NukeViet-community', '', '', 0, 3, 8, 0, 'viewcat_page_new', 3, '9,10,11', 1, 3, '2', '', '', 1277690748, 1277690748, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (9, 8, 'Activities', '', 'Activities', '', '', 0, 1, 9, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690765, 1277690765, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (10, 8, 'Events', '', 'Events', '', '', 0, 2, 10, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690783, 1277690783, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (11, 8, 'Faces of week &#x3A;D', '', 'Faces-of-week-D', '', '', 0, 3, 11, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690821, 1277690821, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (12, 0, 'Lastest technologies', '', 'Lastest-technologies', '', '', 0, 4, 12, 0, 'viewcat_page_new', 2, '13,14', 1, 3, '2', '', '', 1277690888, 1277690888, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (13, 12, 'World wide web', '', 'World-wide-web', '', '', 0, 1, 13, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690934, 1277690934, '6') ");
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (14, 12, 'Around internet', '', 'Around-internet', '', '', 0, 2, 14, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690982, 1277690982, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (1, 0, 'Co-operate', '', 'Co-operate', '', '', '', 0, 2, 5, 0, 'viewcat_page_new', 2, '2,3', 1, 3, '2', '', '', 1277689708, 1277689708, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (2, 1, 'Careers at NukeViet', '', 'Careers-at-NukeViet', '', '', '', 0, 1, 6, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690086, 1277690259, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (3, 1, 'Partners', '', 'Partners', '', '', '', 0, 2, 7, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690142, 1277690291, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (4, 0, 'NukeViet news', '', 'NukeViet-news', '', '', '', 0, 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '2', '', '', 1277690451, 1277690451, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (5, 4, 'Security issues', '', 'Security-issues', '', '', '', 0, 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690497, 1277690564, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (6, 4, 'Release notes', '', 'Release-notes', '', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690588, 1277690588, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (7, 4, 'Development team talk', '', 'Development-team-talk', '', '', '', 0, 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690652, 1277690652, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (8, 0, 'NukeViet community', '', 'NukeViet-community', '', '', '', 0, 3, 8, 0, 'viewcat_page_new', 3, '9,10,11', 1, 3, '2', '', '', 1277690748, 1277690748, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (9, 8, 'Activities', '', 'Activities', '', '', '', 0, 1, 9, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690765, 1277690765, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (10, 8, 'Events', '', 'Events', '', '', '', 0, 2, 10, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690783, 1277690783, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (11, 8, 'Faces of week &#x3A;D', '', 'Faces-of-week-D', '', '', '', 0, 3, 11, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690821, 1277690821, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (12, 0, 'Lastest technologies', '', 'Lastest-technologies', '', '', '', 0, 4, 12, 0, 'viewcat_page_new', 2, '13,14', 1, 3, '2', '', '', 1277690888, 1277690888, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (13, 12, 'World wide web', '', 'World-wide-web', '', '', '', 0, 1, 13, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690934, 1277690934, '6') ");
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_cat VALUES (14, 12, 'Around internet', '', 'Around-internet', '', '', '', 0, 2, 14, 1, 'viewcat_page_new', 0, '', 1, 3, '2', '', '', 1277690982, 1277690982, '6') ");
 
 	$db->query ("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (1, 1, '1,7,8', 0, 8, 'VINADES', 0, 1277689959, 1277690410, 1, 1277689920, 0, 2, 'Invite to co-operate announcement', 'Invite-to-co-operate-announcement', 'VINADES.,JSC was founded in order to professionalize NukeViet opensource development and release. We also using NukeViet in our bussiness projects to make it continue developing. Include Advertisment, provide hosting services for NukeViet CMS development.', 'hoptac.jpg', '', 1, 1, '6', 1, 2, 0, 0, 0) ");
 	$db->query ("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_rows VALUES (2, 14, '14,8', 0, 8, '', 1, 1277691366, 1277691470, 1, 1277691360, 0, 2, 'What does WWW mean?', 'What-does-WWW-mean', 'The World Wide Web, abbreviated as WWW and commonly known as the Web, is a system of interlinked hypertext&nbsp; documents accessed via the Internet.', 'nukeviet3.jpg', 'NukeViet 3.0', 1, 1, 2, 1, 0, 0, 0, 0) ");

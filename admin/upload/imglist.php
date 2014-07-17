@@ -13,6 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $per_page = 50;
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
+
 if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path] ) )
 {
 	if( $refresh )
@@ -26,8 +27,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 
 	$q = nv_string_to_filename( htmlspecialchars( trim( $nv_Request->get_string( 'q', 'get' ) ), ENT_QUOTES ) );
 
-	$selectfile = htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES );
-	$selectfile = basename( $selectfile );
+	$selectfile = array_map( "basename", explode( "|", htmlspecialchars( trim( $nv_Request->get_string( 'imgfile', 'get', '' ) ), ENT_QUOTES ) ) );
 
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
 
@@ -46,9 +46,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$_where .= ' AND userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
-		$db->select( 'COUNT(*)' )
-			->from( NV_UPLOAD_GLOBALTABLE . '_file' )
-			->where( $_where );
+		$db->select( 'COUNT(*)' )->from( NV_UPLOAD_GLOBALTABLE . '_file' )->where( $_where );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -82,10 +80,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$sql .= ' AND t1.userid=' . $admin_info['userid'];
 			$base_url .= '&amp;author';
 		}
-		$db->select( 'COUNT(*)' )
-			->from( NV_UPLOAD_GLOBALTABLE . '_file t1' )
-			->join( 'INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')
-			->where( $_where );
+		$db->select( 'COUNT(*)' )->from( NV_UPLOAD_GLOBALTABLE . '_file t1' )->join( 'INNER JOIN ' . NV_UPLOAD_GLOBALTABLE . '_dir t2 ON t1.did = t2.did')->where( $_where );
 
 		$sth = $db->prepare( $db->sql() );
 		$keyword = '%' . addcslashes( $q, '_%' ) . '%';
@@ -140,8 +135,9 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 
 			$file['data'] .= '|' . $file['ext'] . '|' . $file['type'] . '|' . nv_convertfromBytes( $file['filesize'] ) . '|' . $file['userid'] . '|' . nv_date( 'l, d F Y, H:i:s P', $file['mtime'] ) . '|';
 			$file['data'] .= ( empty( $q ) ) ? '' : $file['dirname'];
+			$file['data'] .= '|' . $file['mtime'];
 
-			$file['sel'] = ( $selectfile == $file['title'] ) ? ' imgsel' : '';
+			$file['sel'] = in_array( $file['title'], $selectfile ) ? ' imgsel' : '';
 			$file['src'] = NV_BASE_SITEURL . $file['src'] . '?' . $file['mtime'];
 
 			$xtpl->assign( 'IMG', $file );
@@ -153,12 +149,14 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 			$xtpl->assign( 'NV_CURRENTTIME', NV_CURRENTTIME );
 			$xtpl->parse( 'main.imgsel' );
 		}
+		
 		if( $num_items > $per_page )
 		{
 			$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'imglist' );
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 			$xtpl->parse( 'main.generate_page' );
 		}
+		
 		$xtpl->parse( 'main' );
 		$contents = $xtpl->text( 'main' );
 

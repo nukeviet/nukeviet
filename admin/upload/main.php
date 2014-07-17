@@ -56,12 +56,15 @@ if( $popup )
 
 	$xtpl->parse( 'main.header' );
 	$xtpl->parse( 'main.footer' );
+	
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	if ( $nv_Request->isset_request( 'nomudim', 'get' ) )
+	
+	if( ! $nv_Request->isset_request( 'nomudim', 'get' ) or $nv_Request->get_int( 'nomudim', 'get', 0 ) == 1 )
 	{
 		$global_config['mudim_active'] = 0;
 	}
+	
 	$head_site = 0;
 }
 else

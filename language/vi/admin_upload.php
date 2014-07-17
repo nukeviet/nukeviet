@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['upload_manager'] = 'Quản lý Files';
 $lang_module['upload_delimg_confirm'] = 'Bạn có chắc muốn xóa file';
+$lang_module['upload_delimgs_confirm'] = 'Bạn có chắc muốn xóa %s file này không';
 $lang_module['upload_delimg_success'] = 'Xóa file thành công !';
 $lang_module['upload_delimg_unsuccess'] = 'Lỗi không thể xóa file!';
 $lang_module['upload_create_too_bigimg'] = 'Kích thước của hình quá lớn';
@@ -54,6 +55,7 @@ $lang_module['delete_folder'] = 'Bạn có chắc muốn xóa thư mục này kh
 $lang_module['download'] = 'Tải về';
 $lang_module['select'] = 'Chọn';
 $lang_module['move'] = 'Di chuyển';
+$lang_module['move_multiple'] = 'Di chuyển %s file';
 $lang_module['origSize'] = 'Kích thước gốc';
 $lang_module['sizenotchanged'] = 'Hình mà bạn muốn tạo mới có kích thước giống hình gốc';
 $lang_module['name_folder_error'] = 'Bạn chưa đặt tên cho thư mục hoặc tên không đúng quy chuẩn';
@@ -139,3 +141,5 @@ $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
 
 $lang_module['crop'] = 'Cắt ảnh';
 $lang_module['rotate'] = 'Xoay ảnh';
+$lang_module['waiting'] = 'Đang tải dữ liệu, vui lòng đợi';
+$lang_module['file_no_exists'] = 'File không tồn tại';

@@ -10,6 +10,14 @@
 
 if( ! defined( 'NV_IS_FILE_EXTENSIONS' ) ) die( 'Stop!!!' );
 
+if( ! defined( 'SHADOWBOX' ) )
+{
+	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+
+	define( 'SHADOWBOX', true );
+}
+
 $page_title = $lang_global['mod_extensions'];
 
 $request = array();
@@ -100,7 +108,7 @@ else
 		$xtpl->assign( 'DATA', $array );
 		
 		$array_string = $array;
-		unset( $array_string['title'], $array_string['documentation'] );
+		unset( $array_string['title'], $array_string['documentation'], $array_string['require'] );
 		$xtpl->assign( 'STRING_DATA', nv_base64_encode( @serialize( $array_string ) ) );
 		
 		$page_title = sprintf( $lang_module['install_title'], $array['title'] );
@@ -119,38 +127,62 @@ else
 		{
 			$xtpl->parse( 'main.install.compatible' );
 			
-			// Check auto install
-			if( $array['compatible']['type'] != 1 or ! in_array( $array['tid'], array( 1, 2, 3, 4 ) ) )
+			// Check require plugin
+			$allow_continue = true;
+			if( ! empty( $array['require'] ) )
 			{
-				$xtpl->assign( 'MANUAL_MESSAGE', $array['documentation'] ? $lang_module['install_manual_install'] : $lang_module['install_manual_install_danger'] );
-				$xtpl->parse( 'main.install.manual' );
-			}
-			else
-			{
-				$xtpl->parse( 'main.install.auto' );
+				$require_installed = nv_extensions_is_installed( $array['require']['tid'], $array['require']['name'], '' );
 				
-				$xtpl->assign( 'CANCEL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-				
-				// Check installed
-				$installed = nv_extensions_is_installed( $array['tid'], $array['name'], $array['compatible']['ver'] );
-				
-				if( $installed == 1 )
+				if( $require_installed === 0 )
 				{
-					$xtpl->parse( 'main.install.installed' );
+					$allow_continue = false;
+					$xtpl->assign( 'REQUIRE_MESSAGE', sprintf( $lang_module['install_check_require_fail'], $array['require']['title'] ) );
+					$xtpl->assign( 'REQUIRE_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail&amp;id=' . $array['require']['id'] );
+					$xtpl->assign( 'REQUIRE_TITLE', sprintf( $lang_module['detail_title'], $array['require']['title'] ) );
+					
+					$xtpl->parse( 'main.install.require_noexists' );
 				}
 				else
 				{
-					if( $installed == 2 )
+					$xtpl->parse( 'main.install.require_exists' );
+				}
+			}
+			
+			if( $allow_continue === true )
+			{
+				// Check auto install
+				if( $array['compatible']['type'] != 1 or ! in_array( $array['tid'], array( 1, 2, 3, 4 ) ) )
+				{
+					$xtpl->assign( 'MANUAL_MESSAGE', $array['documentation'] ? $lang_module['install_manual_install'] : $lang_module['install_manual_install_danger'] );
+					$xtpl->parse( 'main.install.manual' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.install.auto' );
+					
+					$xtpl->assign( 'CANCEL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+					
+					// Check installed
+					$installed = nv_extensions_is_installed( $array['tid'], $array['name'], $array['compatible']['ver'] );
+					
+					if( $installed == 1 )
 					{
-						$xtpl->parse( 'main.install.not_install.unsure' );
+						$xtpl->parse( 'main.install.installed' );
 					}
 					else
 					{
-						$xtpl->parse( 'main.install.not_install.startdownload' );
+						if( $installed == 2 )
+						{
+							$xtpl->parse( 'main.install.not_install.unsure' );
+						}
+						else
+						{
+							$xtpl->parse( 'main.install.not_install.startdownload' );
+						}
+						
+						$xtpl->parse( 'main.install.not_install' );
 					}
-					
-					$xtpl->parse( 'main.install.not_install' );
-				}
+				}	
 			}
 		}
 		

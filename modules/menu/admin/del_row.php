@@ -16,39 +16,51 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $mid = $nv_Request->get_int( 'mid', 'post', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
 
-$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
-$row = $db->query( $sql )->fetch();
+nv_menu_del_sub( $id, $parentid );
 
-if( empty( $row ) ) die( 'NO_' . $id );
+nv_del_moduleCache( $module_name );
+menu_fix_order( $mid );
 
-$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
-if( $db->exec( $sql ) )
+function nv_menu_del_sub( $id, $parentid )
 {
-	nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
+	global $module_data, $module_name, $db, $admin_info;
+	$sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
+	$row = $db->query( $sql )->fetch();
 
-	nv_del_moduleCache( $module_name );
-	menu_fix_order( $mid );
+	if( empty( $row ) ) die( 'NO_' . $id );
 
-	// Cap nhat cho menu cha
-	if( $parentid > 0 )
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+	if( $db->exec( $sql ) )
 	{
-		$sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
-		$row = $db->query( $sql )->fetch();
-		if( ! empty( $row ) )
+		$subitem = ( ! empty( $row['subitem'] ) ) ? explode( ',', $row['subitem'] ) : array();
+		foreach( $subitem as $id )
 		{
-			$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
+			// Cap nhat cho menu cha
+			if( $parentid > 0 )
+			{
+				$sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
+				$row = $db->query( $sql )->fetch();
+				if( ! empty( $row ) )
+				{
+					$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $row['subitem'] ) ) ), array( $id ) ) );
 
-			$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid );
-			$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen( $subitem ) );
-			$stmt->execute();
+					$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid );
+					$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen( $subitem ) );
+					$stmt->execute();
+				}
+			}
+			$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+
+			list( $parentid ) = $db->query( $sql )->fetch( 3 );
+			nv_menu_del_sub( $id, $parentid );
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
 		}
 	}
+	else
+	{
+		die( 'NO_' . $id );
+	}
 }
-else
-{
-	die( 'NO_' . $id );
-}
-
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
 include NV_ROOTDIR . '/includes/footer.php';

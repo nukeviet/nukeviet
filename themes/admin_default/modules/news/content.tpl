@@ -8,7 +8,7 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 
-<form class="form-inline" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
+<form class="form-inline m-bottom" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
 	<div class="row">
 		<div class="col-sm-12 col-md-9">
 			<table class="table table-striped table-bordered">
@@ -133,7 +133,7 @@
 		                                <div class="wrap">
 		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
 		                                    <div class="innerWrap">
-		                                        <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="form-control" style="width: 100%;" />
+		                                        <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="form-control textInput" style="width: 100%;" />
 		                                    </div>
 		                                </div>
 		                            </div>
@@ -160,14 +160,14 @@
 		                                <div class="wrap">
 		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
 		                                    <div class="innerWrap">
-		                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control" style="width: 100%;" />
+		                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
 		                                    </div>
 		                                </div>
 		                            </div>
 		                        </div>
 		                	</div>
 						</li>
-<li>
+						<li>
 							<p class="message_head">
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
@@ -299,6 +299,7 @@
 		<br />
 	</div>
 </form>
+<div id="message"></div>
 <script type="text/javascript">
 //<![CDATA[
 var content_checkcatmsg = "{LANG.content_checkcatmsg}";
@@ -310,6 +311,15 @@ $("input[name=selectimg]").click(function() {
 	var type = "image";
 	nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 	return false;
+});
+$('[type="submit"]').hover(function(){
+	if( $('[name="keywords[]"]').length == 0 ){
+		if( $('#message-tags').length == 0 ){
+			$('#message').html('<div id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
+		}
+	}else{
+		$('#message-tags').remove();
+	}
 });
 //]]>
 </script>

@@ -33,6 +33,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 titlesite varchar(255) DEFAULT '',
 	 alias varchar(255) NOT NULL DEFAULT '',
 	 description text,
+	 descriptionhtml text,
 	 image varchar(255) DEFAULT '',
 	 viewdescription tinyint(2) NOT NULL DEFAULT '0',
 	 weight smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -180,6 +181,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 pub_content tinyint(4) NOT NULL default '0',
 	 edit_content tinyint(4) NOT NULL default '0',
 	 del_content tinyint(4) NOT NULL default '0',
+	 app_content tinyint(4) NOT NULL default '0',
 	 UNIQUE KEY userid (userid,catid)
 	) ENGINE=MyISAM";
 
@@ -221,6 +223,8 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'facebookappid', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'socialbutton', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_alias', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_tags', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_remind', '1')";
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";

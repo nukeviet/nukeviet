@@ -6,6 +6,11 @@
 	<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
 	<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br /><br />
 </form>
+<!-- BEGIN: incomplete_link -->
+<div class="alert alert-info">
+	<a class="text-info" href="{ALL_LINK}">{LANG.tags_all_link}.</a>
+</div>
+<!-- END: incomplete_link -->
 <div id="module_show_list">
 	{TAGS_LIST}
 </div>
@@ -18,6 +23,7 @@
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name ="tid" value="{tid}" />
 	<input name="savecat" type="hidden" value="1" />
+	<!-- BEGIN: incomplete --><input name="incomplete" type="hidden" value="1" /><!-- END: incomplete -->
 	<div class="table-responsive">
 		<table id="edit" class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.add_tags}</caption>

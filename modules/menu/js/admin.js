@@ -74,10 +74,14 @@ function nv_chang_weight_item(id, mid, parentid) {
 }
 
 function nv_menu_item_delete(id, mid, parentid, num) {
-	if (num) {
-		alert(cat + num + caton);
-	} else if (confirm(nv_is_del_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_row&nocache=' + new Date().getTime(), 'id=' + id + '&parentid=' + parentid + '&mid=' + mid, function(res) {
+	var del_confirm = 0;
+    if (num && confirm(cat + num + caton ) ) {
+		del_confirm = 1;
+	}else if (confirm(nv_is_del_confirm[0])) {
+		del_confirm = 1;
+	}
+    if( del_confirm == 1 ){
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_row&nocache=' + new Date().getTime(), 'id=' + id + '&parentid=' + parentid + '&mid=' + mid, function(res) {
 			var r_split = res.split('_');
 			if (r_split[0] == 'OK') {
 				window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rows&mid=' + r_split[2] + '&parentid=' + r_split[3];
@@ -85,6 +89,6 @@ function nv_menu_item_delete(id, mid, parentid, num) {
 				alert(nv_is_del_confirm[2]);
 			}
 		});
-	}
+    }
 	return false;
 }

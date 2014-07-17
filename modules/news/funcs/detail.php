@@ -121,10 +121,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		die();
 	}
 
-	if( $catid != $news_contents['catid'] )
-	{
-		$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
-	}
+	$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
 	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
@@ -332,7 +329,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	define( 'NV_COMM_ID', $news_contents['id'] );
 	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
-	
+
 	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
 	$id_profile_googleplus = $news_contents['gid'];
 

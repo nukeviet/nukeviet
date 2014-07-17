@@ -641,6 +641,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.showhometext' );
 	}
+	
 	if( ! empty( $news_contents['post_name'] ) )
 	{
 		$xtpl->parse( 'main.post_name' );
@@ -660,6 +661,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.author' );
 	}
+	
 	if( $news_contents['copyright'] == 1 )
 	{
 		if( ! empty( $module_config[$module_name]['copyright'] ) )
@@ -743,6 +745,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.related' );
 	}
+	
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $key => $topic_array_i )
@@ -763,6 +766,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
 		$xtpl->parse( 'main.comment' );
+	}
+
+	if( $news_contents['status'] != 1 )
+	{
+		$xtpl->parse( 'main.no_public' );
 	}
 
 	$xtpl->parse( 'main' );

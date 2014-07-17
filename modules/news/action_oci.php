@@ -37,6 +37,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 titlesite VARCHAR2(255 CHAR) DEFAULT NULL,
 	 alias VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 	 description VARCHAR2(4000 CHAR) DEFAULT NULL,
+	 descriptionhtml VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 image VARCHAR2(255 CHAR) DEFAULT NULL,
 	 viewdescription NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 weight NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
@@ -279,6 +280,8 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'facebookappid', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'socialbutton', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_alias', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_tags', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'tags_remind', '1')";
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";

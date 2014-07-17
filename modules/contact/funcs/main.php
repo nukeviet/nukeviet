@@ -220,7 +220,7 @@ if( ! empty( $array_department ) )
             header( 'Location:' . $base_url_rewrite );
             die();
         }
-        $canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( $base_url, true);
+        $canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite( $base_url, true);
     }
 }
 

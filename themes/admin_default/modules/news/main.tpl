@@ -47,7 +47,6 @@
 					<th><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
 					<th>{LANG.status}</th>
 					<th>{LANG.content_admin}</th>
-					<th>{LANG.hitstotal}</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -55,18 +54,24 @@
 				<!-- BEGIN: loop -->
 				<tr>
 					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
-					<td class="text-left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+					<td class="text-left">
+						<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
+						<ul class="news-inf-icons">
+							<li title="{LANG.keywords}"><em class="fa fa-tags">&nbsp;</em> {ROW.numtags}</li>
+							<li title="{LANG.hitstotal}"><em class="fa fa-eye">&nbsp;</em> {ROW.hitstotal}</li>
+							<li title="{LANG.numcomments}"><em class="fa fa-comment-o">&nbsp;</em> {ROW.hitscm}</li>
+						</ul>
+					</td>
 					<td>{ROW.publtime}</td>
 					<td>{ROW.status}</td>
 					<td>{ROW.username}</td>
-					<td>{ROW.hitstotal}</td>
 					<td>{ROW.feature}</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
 				<tr class="text-left">
-					<td colspan="7">
+					<td colspan="6">
 					<select class="form-control" name="action" id="action">
 						<!-- BEGIN: action -->
 						<option value="{ACTION.value}">{ACTION.title}</option>

@@ -22,6 +22,52 @@
 <div class="alert alert-danger">{LANG.install_check_compatible_error}</div>
 <!-- END: incompatible -->
 
+<!-- BEGIN: require_exists -->
+<p class="text-success">
+	<em class="fa fa-lg fa-smile-o">&nbsp;</em> <strong>{LANG.install_check_require}</strong> <em class="fa fa-lg fa-check">&nbsp;</em>
+</p>
+<!-- END: require_exists -->
+<!-- BEGIN: require_noexists -->
+<p class="text-danger">
+	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_require}</strong>
+</p>
+<div class="alert alert-danger"><a class="text-danger ex-detail" href="{REQUIRE_LINK}" title="{REQUIRE_TITLE}">{REQUIRE_MESSAGE}</a></div>
+<script type="text/javascript">
+Shadowbox.init({
+	animate: false,
+	animateFade: false,
+    enableKeys: false,
+    modal: true,
+    overlayOpacity: 0.8,
+    handleOversize: 'resize',
+});
+var player_width = $(window).width();
+var player_height = $(window).height();
+if( player_width > 1060 ){
+	player_width = 1000;
+}else{
+	player_width = player_width - 60;
+}
+if( player_height > 660 ){
+	player_height = 600;
+}else{
+	player_height = player_height - 60;
+}
+$(function(){
+	$('.ex-detail').click(function(e){
+		e.preventDefault();
+		Shadowbox.open({
+	        content: '<iframe style="width:' + player_width + 'px;height:' + player_height + 'px;border:0" src="' + $(this).attr('href') + '"></iframe>',
+	        player: "html",
+	        title: $(this).attr('title'),
+	        height: player_height,
+	        width: player_width
+	    });
+	});
+});
+</script>
+<!-- END: require_noexists -->
+
 <!-- BEGIN: auto -->
 <p class="text-success">
 	<em class="fa fa-lg fa-smile-o">&nbsp;</em> <strong>{LANG.install_check_auto_install}</strong> <em class="fa fa-lg fa-check">&nbsp;</em>

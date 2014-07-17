@@ -53,6 +53,11 @@
 
  	<div class="clear"></div>
 </div>
+<!-- BEGIN: no_public -->
+<div class="content-box highlight">
+	{LANG.no_public}
+</div>
+<!-- END: no_public -->
 <!-- BEGIN: showhometext -->
 <div id="hometext" class="short-desc clearfix">
 	<!-- BEGIN: imgthumb -->

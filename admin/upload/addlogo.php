@@ -10,6 +10,8 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+$page_title = $lang_module['addlogo'];
+
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post,get' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
@@ -132,6 +134,21 @@ $logosite = array(
 	'h' => $h
 );
 
+// Goi framework
+$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.core.css" rel="stylesheet" />';
+$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.theme.css" rel="stylesheet" />';
+$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.resizable.css" rel="stylesheet" />';
+$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.core.min.js"></script>';
+$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.draggable.min.js"></script>';
+$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.resizable.min.js"></script>';
+$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.watermarker.js"></script>';
+
+// Mac dinh tat mudim
+if( ! $nv_Request->isset_request( 'nomudim', 'get' ) or $nv_Request->get_int( 'nomudim', 'get', 0 ) == 1 )
+{
+	$global_config['mudim_active'] = 0;
+}
+
 $xtpl = new XTemplate( 'addlogo.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -145,5 +162,5 @@ $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
+echo nv_admin_theme( $contents, 0 );
 include NV_ROOTDIR . '/includes/footer.php';

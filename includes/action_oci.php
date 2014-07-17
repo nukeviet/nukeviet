@@ -175,6 +175,7 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('comment', 'comment', 'comment', 'Comment', '', 1279360267, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES ('page', 'page', 'page', 'page', '', 1279360267, 1, 1, '', '', '', '', '0', 11, 1, '', 0, 0)";
 
+	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_domain', '')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_logo', 'images/logo.png')";
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', 'global', 'site_description', 'NukeViet CMS 4.x Developed by VINADES.,JSC')";
