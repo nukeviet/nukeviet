@@ -39,7 +39,7 @@
 		</tr>
 		<tr>
 			<td>{LANG.search_key}:</td>
-			<td><input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control w200" /></td>	
+			<td><input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control w200" /></td>
 			<td>{LANG.search_type}:</td>
 			<td>
 				<select name="stype" class="form-control w200">
@@ -77,12 +77,12 @@
 		<tfoot>
 			<tr>
 				<td colspan="3">
-					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; 
-					<em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a> 
-					<span style="width:100px;display:inline-block">&nbsp;</span> 
-					<em class="fa fa-exclamation-circle fa-lg">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a> 
-					<em class="fa fa-external-link fa-lg">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a> 
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a> 
+					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp;
+					<em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>
+					<span style="width:100px;display:inline-block">&nbsp;</span>
+					<em class="fa fa-exclamation-circle fa-lg">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a>
+					<em class="fa fa-external-link fa-lg">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a>
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a>
 				</td>
 				<td colspan="3" class="text-center">
 				<!-- BEGIN: generate_page -->
@@ -98,7 +98,7 @@
 			<tr>
 				<td class="text-center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
 				<td>{ROW.module}</td>
-				<td><a target="_blank" href="{ROW.link}">{ROW.content}</a></td>
+				<td><a target="_blank" href="{ROW.link}" title="{ROW.content}">{ROW.title}</a></td>
 				<td>{ROW.email}</td>
 				<td class="text-center"><em class="fa fa-{ROW.status} fa-lg">&nbsp;</em></td>
 				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
