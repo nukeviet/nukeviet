@@ -45,11 +45,6 @@
 
 			<hr/>
 			<div style="text-align: left">
-				<!-- BEGIN: source -->
-				<div>
-					{LANG.detail_source} : <a href="{link_source}">{source}</a>
-				</div>
-				<!-- END: source -->
 				<!-- BEGIN: promotional -->
 				<div>
 					{LANG.detail_promotional} : {promotional}
@@ -60,16 +55,6 @@
 					{LANG.detail_warranty} : {warranty}
 				</div>
 				<!-- END: warranty -->
-				<!-- BEGIN: address -->
-				<div>
-					{LANG.detail_product_address} : {address}
-				</div>
-				<!-- END: address -->
-				<!-- BEGIN: note -->
-				<div>
-					{LANG.cart_note} : {note}
-				</div>
-				<!-- END: note -->
 				<div>
 					<b>{LANG.product_detail}</b>
 					<br/>

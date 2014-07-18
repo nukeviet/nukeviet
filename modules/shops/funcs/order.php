@@ -34,6 +34,7 @@ $data_order = array(
 	'listid' => '',
 	'listnum' => '',
 	'listprice' => '',
+	'listgroup' => '',
 	'admin_id' => 0,
 	'shop_id' => 0,
 	'who_is' => 0,
@@ -47,6 +48,7 @@ if( $post_order == 1 )
 	$listid = '';
 	$listnum = '';
 	$listprice = '';
+	$listgroup = '';
 	$i = 0;
 	$total = 0;
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
@@ -62,13 +64,16 @@ if( $post_order == 1 )
 				$listid .= $pro_id;
 				$listnum .= $info['num'];
 				$listprice .= $info['price'];
+				$listgroup .= $info['group'];
 			}
 			else
 			{
 				$listid .= '|' . $pro_id;
 				$listnum .= '|' . $info['num'];
 				$listprice .= '|' . $info['price'];
+				$listgroup .= '|' . $info['group']; 
 			}
+			
 			$total = $total + ( ( int )$info['num'] * ( double )$info['price'] );
 			++$i;
 		}
@@ -84,6 +89,7 @@ if( $post_order == 1 )
 	$data_order['listid'] = $listid;
 	$data_order['listnum'] = $listnum;
 	$data_order['listprice'] = $listprice;
+	$data_order['listgroup'] = $listgroup;
 	$data_order['order_total'] = $total;
 
 	if( empty( $data_order['order_name'] ) ) $error['order_name'] = $lang_module['order_name_err'];
@@ -101,14 +107,14 @@ if( $post_order == 1 )
 		$order_code = vsprintf( $pro_config['format_order_id'], $item['auto_increment'] );
 		$transaction_status = ( empty( $pro_config['auto_check_order'] ) ) ? - 1 : 0;
 		$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
-			lang, order_code, order_name, order_email, order_address, order_phone, order_note, listid, listnum, listprice,
+			lang, order_code, order_name, order_email, order_address, order_phone, order_note, listid, listnum, listprice, listgroup,
 			user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
 			transaction_status, transaction_id, transaction_count
 		) VALUES (
 			'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email,
 			:order_address, :order_phone,
 			:order_note, :listid,
-			:listnum, :listprice,
+			:listnum, :listprice, :listgroup,
 			" . intval( $data_order['user_id'] ) . ", " . intval( $data_order['admin_id'] ) . ", " . intval( $data_order['shop_id'] ) . ",
 			" . intval( $data_order['who_is'] ) . ", :unit_total, " . doubleval( $data_order['order_total'] ) . ",
 			" . intval( $data_order['order_time'] ) . ", :ip, 0, " . $transaction_status . ", 0, 0
@@ -123,8 +129,10 @@ if( $post_order == 1 )
 		$data_insert['listid'] = $data_order['listid'];
 		$data_insert['listnum'] = $data_order['listnum'];
 		$data_insert['listprice'] = $data_order['listprice'];
+		$data_insert['listgroup'] = $data_order['listgroup'];
 		$data_insert['ip'] = $client_info['ip'];
 		$data_insert['unit_total'] = $data_order['unit_total'];
+
 		$order_id = $db->insert_id( $sql, 'order_id', $data_insert );
 		if( $order_id > 0 )
 		{
@@ -169,17 +177,16 @@ if( $post_order == 1 )
 			{
 				$templistid = implode( ',', $arrayid );
 
-				$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
+				$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
 				$result = $db->query( $sql );
 
-				while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
+				while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
 				{
 					$data_pro[] = array(
 						'id' => $id,
 						'publtime' => $publtime,
 						'title' => $title,
 						'alias' => $alias,
-						'product_note' => $note,
 						'hometext' => $hometext,
 						'product_price' => $temppro[$id]['price'],
 						'product_unit' => $unit,
@@ -195,9 +202,9 @@ if( $post_order == 1 )
 			$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
 			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $review_url );
-			
+
 			$data_order['review_url'] = $review_url;
-			
+
 			$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
 
 			nv_sendmail( array( $global_config['site_name'], $global_config['site_email'] ), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
@@ -225,10 +232,10 @@ if( $action == 0 )
 	{
 		$listid = implode( ',', $arrayid );
 
-		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price,t1.product_discounts,t2.' . NV_LANG_DATA . '_title, t1.money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
+		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
 		$result = $db->query( $sql );
 
-		while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $product_discounts, $unit, $money_unit ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
@@ -249,22 +256,24 @@ if( $action == 0 )
 
 			if( $pro_config['active_price'] == '0' )
 			{
-				$product_discounts = $product_price = 0;
+				$discount_id = $product_price = 0;
 			}
+			
+			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
 
 			$data_content[] = array(
 				'id' => $id,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
-				'note' => $note,
 				'hometext' => $hometext,
 				'homeimgalt' => $homeimgalt,
 				'homeimgthumb' => $thumb,
 				'product_price' => $product_price,
-				'product_discounts' => $product_discounts,
+				'discount_id' => $discount_id,
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
+				'group' => $group,
 				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'num' => $_SESSION[$module_data . '_cart'][$id]['num']
 			);

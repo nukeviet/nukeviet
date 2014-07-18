@@ -54,6 +54,7 @@ if( $savesetting == 1 )
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
+	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -159,6 +160,9 @@ $xtpl->assign( 'ck_compare', $check );
 $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
 
+$check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_wishlist', $check );
+
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );
 while( list( $code, $currency ) = $result->fetch( 3 ) )
@@ -189,7 +193,6 @@ if( ! empty( $array_setting_payment ) )
 	{
 		$value['titleactive'] = ( ! empty( $value['active'] ) ) ? $lang_global['yes'] : $lang_global['no'];
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
-		$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 		$value['active'] = ( $value['active'] == '1' ) ? "checked=\"checked\"" : "";
 		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $value['images_button'] ) )
 		{

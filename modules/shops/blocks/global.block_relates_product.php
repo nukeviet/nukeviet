@@ -69,44 +69,6 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		return $return;
 	}
 
-	if( ! function_exists( 'CurrencyConversion' ) )
-	{
-		/**
-		 * CurrencyConversion()
-		 *
-		 * @param mixed $price
-		 * @param mixed $currency_curent
-		 * @param mixed $currency_convert
-		 * @param mixed $block_config
-		 * @return
-		 */
-		function CurrencyConversion( $price, $currency_curent, $currency_convert, $block_config )
-		{
-			global $money_config, $module_config;
-			$module = $block_config['module'];
-			$pro_config = $module_config[$module];
-			$str = number_format( $price, 0, '.', ' ' );
-			if( ! empty( $money_config ) )
-			{
-				if( $currency_curent == $pro_config['money_unit'] )
-				{
-					$value = doubleval( $money_config[$currency_convert]['exchange'] );
-					$price = doubleval( $price * $value );
-					$str = number_format( $price, 0, '.', ' ' );
-					$ss = "~";
-				}
-				elseif( $currency_convert == $pro_config['money_unit'] )
-				{
-					$value = doubleval( $money_config[$currency_curent]['exchange'] );
-					$price = doubleval( $price / $value );
-					$str = number_format( $price, 0, '.', ' ' );
-				}
-			}
-			$ss = ( $currency_curent == $currency_convert ) ? "" : "~";
-			return $ss . $str;
-		}
-	}
-
 	/**
 	 * nv_relates_product()
 	 *
@@ -169,7 +131,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		$xtpl->assign( 'WIDTH', $pro_config['blockwidth'] );
 
 		$db->sqlreset()
-			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice' )
+			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice' )
 			->from( $db_config['prefix'] . '_' . $module . '_rows t1' )
 			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $block_config['blockid'] . ' AND t1.status =1' )
@@ -207,20 +169,8 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 			if( $pro_config['active_price'] == '1' and $row['showprice'] == '1' )
 			{
-				$product_price = CurrencyConversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $block_config );
-				$xtpl->assign( 'product_price', $product_price );
-				$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
-				if( $row['product_discounts'] != 0 )
-				{
-					$price_product_discounts = $row['product_price'] - ( $row['product_price'] * ( $row['product_discounts'] / 100 ) );
-					$xtpl->assign( 'product_discounts', CurrencyConversion( $price_product_discounts, $row['money_unit'], $pro_config['money_unit'], $block_config ) );
-					$xtpl->assign( 'class_money', 'discounts_money' );
-					$xtpl->parse( 'main.loop.discounts' );
-				}
-				else
-				{
-					$xtpl->assign( 'class_money', 'money' );
-				}
+				$price = nv_currency_conversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $row['discount_id'] );
+				$xtpl->assign( 'PRICE', $price );
 				$xtpl->parse( 'main.loop.price' );
 			}
 

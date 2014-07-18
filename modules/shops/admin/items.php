@@ -203,13 +203,13 @@ $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 $ord_sql = ( $ordername == 'title' ? NV_LANG_DATA . '_title' : $ordername ) . ' ' . $order;
-$db->sqlreset()->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, status , edittime, publtime, exptime, product_number, product_price, product_discounts, money_unit, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$db->sqlreset()->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, status , edittime, publtime, exptime, product_number, product_price, money_unit, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
 
-while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $product_discounts, $money_unit, $username ) = $result->fetch( 3 ) )
+while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $money_unit, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$edittime = nv_date( 'H:i d/m/y', $edittime );
@@ -257,11 +257,10 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		'status' => $lang_module['status_' . $status],
 		'admin_id' => ! empty( $username ) ? $username : '',
 		'product_number' => $product_number,
-		'product_price' => nv_fomart_money( $product_price, ',', '.' ),
+		'product_price' => preg_replace( '/\.00$/', '', number_format( $product_price, 2, '.', ',' ) ),
 		'money_unit' => $money_unit,
 		'thumb' => $thumb,
 		'imghome' => $imghome,
-		'product_discounts' => $product_discounts,
 		'link_edit' => nv_link_edit_page( $id ),
 		'link_delete' => nv_link_delete_page( $id )
 	) );

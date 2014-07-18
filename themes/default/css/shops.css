@@ -1173,3 +1173,14 @@ img.calendar {
 		margin: 0;
 	}
 }
+
+.info_pro{
+	position: absolute; 
+	top: 40px; 
+	left: 5px
+}
+
+.newday{
+	display: block;
+	text-transform: uppercase
+}

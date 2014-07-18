@@ -12,6 +12,14 @@
                     <div style="height: {height}px">
                         <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content="{hometext}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
                     </div>
+		            <div class="info_pro">
+		            	<!-- BEGIN: new -->
+		            	<span class="label label-success newday">{LANG.newday}</span>
+		            	<!-- END: new -->
+		            	<!-- BEGIN: discounts -->
+		            	<span class="label label-danger">-{PRICE.discount_percent}%</span>
+		            	<!-- END: discounts -->
+		            </div>
 					<div class="caption text-center">
     					<h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>
 
@@ -23,21 +31,22 @@
                         <p>{ADMINLINK}</p>
                         <!-- END: adminlink -->
 
-                        <!-- BEGIN: price -->
-                        <p class="price">
-                            <span class="{class_money}">{product_price} {money_unit}</span>
-                            <!-- BEGIN: discounts -->
-                            <br />
-                            <span class="money">{product_discounts} {money_unit}</span>
-                            <!-- END: discounts -->
-                        </p>
-                        <!-- END: price -->
-
-                        <!-- BEGIN: contact -->
-                        <p class="price">
-                            {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-                        </p>
-                        <!-- END: contact -->
+						<!-- BEGIN: price -->
+						<p class="price">
+		                    <!-- BEGIN: discounts -->
+		                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+		                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+		                    <!-- END: discounts -->
+		                    
+							<!-- BEGIN: no_discounts -->
+							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+							<!-- END: no_discounts -->
+						</p>
+						<!-- END: price -->
+		
+		                <!-- BEGIN: contact -->
+		                <p class="price">{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span></p>
+		                <!-- END: contact -->
 
                         <!-- BEGIN: compare -->
                         <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
@@ -47,7 +56,10 @@
                             <!-- BEGIN: order -->
                             <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                             <!-- END: order -->
-                            <a href="{LINK}" title="{TITLE}" ><button type="button" class="btn btn-primary btn-xs">{LANG.detail_product}</button></a>
+                            
+		                    <!-- BEGIN: wishlist -->
+		                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
+		                    <!-- END: wishlist -->
                         </div>
 					</div>
 				</div>

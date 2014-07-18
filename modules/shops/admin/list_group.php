@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $parentid = $nv_Request->get_int( 'parentid', 'get', 0 );
 
-$contents = nv_show_group_list( $parentid );
+$contents = shops_show_group_list( $parentid );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;

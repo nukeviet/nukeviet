@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 04, 2011, 03:18:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 04, 2011, 03:18:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -19,8 +19,6 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['group_select_info'] = 'If select "Group member", Please check group to allows';
 $lang_module['categories'] = 'Category';
-$lang_module['topics'] = 'Criteria for types of products';
-$lang_module['sources'] = 'Manufacturer';
 $lang_module['save'] = 'Save';
 $lang_module['action'] = 'Perform';
 $lang_module['move'] = 'Move';
@@ -40,17 +38,14 @@ $lang_module['error_name'] = 'Error: You need to enter Product name';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'number of products';
 $lang_module['inhome'] = 'show on main page';
+$lang_module['in_order'] = 'Display when order';
 $lang_module['numlinks'] = 'number of links';
 $lang_module['description'] = 'Description';
 $lang_module['keywords'] = 'Keywords';
 $lang_module['content_list'] = 'Products list';
 $lang_module['content_add'] = 'Add a product';
 $lang_module['add_cat'] = 'Add a category';
-$lang_module['add_topic'] = 'Add group of products';
-$lang_module['add_sources'] = 'Add a manufacturer';
-$lang_module['edit_cat'] = 'Edit category';
-$lang_module['edit_topic'] = 'Edit group of products';
-$lang_module['edit_sources'] = 'Edit manufacturer';
+$lang_module['edit_cat'] = 'Edit cat';
 $lang_module['siteinfo_publtime'] = 'Total products';
 $lang_module['siteinfo_pending'] = 'Products pending';
 $lang_module['siteinfo_comment_pending'] = 'waiting for approval';
@@ -59,7 +54,8 @@ $lang_module['siteinfo_order'] = 'Total of orders';
 $lang_module['siteinfo_order_noview'] = 'Orders pending';
 $lang_module['siteinfo_expired'] = 'Product has expired';
 $lang_module['catalog_name'] = 'Category name';
-$lang_module['topics_name'] = 'Product group name';
+$lang_module['cat_form'] = 'Custom';
+$lang_module['newday'] = 'New day';
 $lang_module['add_block_cat'] = 'Add a block group';
 $lang_module['edit_block_cat'] = 'Edit block group';
 $lang_module['content_add_items'] = 'List of products';
@@ -70,15 +66,12 @@ $lang_module['cat_title'] = 'List of Category';
 $lang_module['link'] = 'Manufacturer\'s website';
 $lang_module['cat_sub'] = 'Category';
 $lang_module['cat_sub_sl'] = 'Main category';
-$lang_module['topic_sl'] = 'Select or fill group of products';
 $lang_module['delcat_msg_cat'] = 'This Category have %s sub-categories, you need to delete or move sub-categories first';
 $lang_module['delcat_msg_rows'] = 'This category have %s products, are you sure to delete or move to other category';
 $lang_module['delcat_msg_rows_select'] = 'Attention: category %1$s have %2$s products. <br />When you delete this category, you will delete all product in it..';
 $lang_module['delcat_msg_rows_move'] = 'Or select Category to move products to';
 $lang_module['delcatandrows'] = 'Delete Category and Products';
 $lang_module['delcat_msg_rows_noselect'] = 'Please select category to move products to';
-$lang_module['deltopic_msg_rows'] = 'This group has %s products, you sure you want to delete, then the products will be deleted from the product.';
-$lang_module['delsource_msg_rows'] = 'This manufacturer have %s product (s), you must move all product to other manufacturer or delete all product.';
 $lang_module['setting'] = 'Configuration';
 $lang_module['setting_indexfile'] = 'Showing methode on main page';
 $lang_module['setting_homesite'] = 'Image size on main page';
@@ -90,6 +83,7 @@ $lang_module['setting_per_note_home'] = 'Including Main page';
 $lang_module['setting_idf_df'] = 'Defaut';
 $lang_module['setting_allow_all'] = 'All';
 $lang_module['setting_allow_member'] = 'Member';
+$lang_module['setting_post_auto_member'] = 'Automatically log when members post without censorship';
 $lang_module['setting_up_products'] = 'Post product without sensoring (member)';
 $lang_module['setting_up_products_shop'] = 'Post product without sensoring (booth)';
 $lang_module['setting_order_to_admin'] = 'Send order to Admin';
@@ -104,6 +98,7 @@ $lang_module['setting_active_payment'] = 'Authorizes the on-line payment with in
 $lang_module['setting_active_payment_note'] = 'If this function is enable, the on-line payment is authorized. This function will be unable if the illimited order is on';
 $lang_module['setting_active_tooltip'] = 'Enable tooltip for products';
 $lang_module['setting_show_product_code'] = 'Show product code';
+$lang_module['setting_active_wishlist'] = 'Use wishlist function';
 $lang_module['setup_payment'] = 'Integrate the on-line payment';
 $lang_module['setup_payment_guide'] = 'See the tutorial';
 $lang_module['setting_stt'] = 'Order';
@@ -120,6 +115,7 @@ $lang_module['setting_home_view'] = 'Display method at main page';
 $lang_module['view_home_none'] = 'Any products showing';
 $lang_module['view_home_all'] = 'Allowed products on main page';
 $lang_module['view_home_cat'] = 'By Categories';
+$lang_module['view_home_group'] = 'Show product group';
 $lang_module['cat_have_product_err'] = 'You can not add a sub-category on a category having products';
 $lang_module['cat_do_not_add'] = 'Adding fail';
 $lang_module['error_cat_name'] = 'Category missing';
@@ -145,10 +141,8 @@ $lang_module['error_product_unit'] = 'Please add product unit';
 $lang_module['error_cat'] = 'Error: Please select category';
 $lang_module['error_product_price'] = 'Error: price can not be 0 or negative number';
 $lang_module['error_product_discounts'] = 'Error: discount rate can not be negative';
-$lang_module['sources_sl'] = 'Select or enter';
 $lang_module['content_cat'] = 'Category';
 $lang_module['content_block'] = 'product blocks';
-$lang_module['content_topic'] = 'As part of the product group';
 $lang_module['content_homeimg'] = 'Illustration';
 $lang_module['content_homeimgalt'] = 'Legend of illustration (for product details)';
 $lang_module['content_hometext'] = 'Short description';
@@ -180,8 +174,6 @@ $lang_module['content_product_number'] = 'Quantity in stock';
 $lang_module['content_product_number1'] = 'Stock q\'ty';
 $lang_module['content_product_product_price'] = 'Price';
 $lang_module['content_product_money_unit'] = 'Currency';
-$lang_module['content_product_address'] = 'Sale place';
-$lang_module['content_sourceid'] = 'Manufacturer';
 $lang_module['content_product_discounts'] = 'Discount';
 $lang_module['content_copyright'] = 'Copyrighted products';
 $lang_module['content_archive'] = 'Archive after expire time';
@@ -202,25 +194,8 @@ $lang_module['block_name'] = 'Block\'s name (product)';
 $lang_module['block_error_name'] = 'Error: Block\'s name of product can\'t empty.';
 $lang_module['block_error_alias'] = 'Error: This alias is exit. Rename it and try again!';
 $lang_module['adddefaultblock'] = 'As defaut when posting products';
-$lang_module['source_logo'] = 'Manufacturer\'s logo';
-$lang_module['source_title'] = 'Manufacturer\'s name';
-$lang_module['source_error_title'] = 'Error: Enter the name of manufacturer';
 $lang_module['cat_no'] = 'No.';
-$lang_module['topic_title'] = 'Criteria';
-$lang_module['edit_topics'] = 'Edit the content criteria';
-$lang_module['add_topics'] = 'Additional criteria for';
-$lang_module['topic_sub'] = 'The sub-criteria';
-$lang_module['topic_search'] = 'Criteria to search';
-$lang_module['topic_sub_note'] = 'The sub-criteria separated by <strong>;</strong> <br />Eg: criteria 1; criteria 2';
-$lang_module['topic_page'] = 'This product is part of the product group';
-$lang_module['topic_del'] = 'Remove from group';
-$lang_module['topic_nocheck'] = 'Please select at least one product';
-$lang_module['topic_delete_confirm'] = 'Are you sure you want to delete this criteria?';
-$lang_module['topic_delete_success'] = 'Successfully removed!';
-$lang_module['topic_nonews'] = 'There are no products in this product group!';
-$lang_module['addtotopics'] = 'Add to group products';
-$lang_module['topic_update_success'] = 'Update successful!';
-$lang_module['topic_num_news'] = 'Product';
+$lang_module['num_product'] = 'Product';
 $lang_module['content_product_shop'] = 'Store';
 $lang_module['prounit'] = 'Product unit';
 $lang_module['prounit_name_unit'] = 'Product unit name';
@@ -326,18 +301,39 @@ $lang_module['edit_group'] = 'Edit Product group';
 $lang_module['add_group'] = 'Add Product group';
 $lang_module['group_name'] = 'Product group name';
 $lang_module['group_sub'] = 'Group';
+$lang_module['group_name_empty'] = 'Error: Group name do not empty';
 $lang_module['delgroup_msg_group'] = 'This category has %s sub-categories, please delete or move sub-categories first';
 $lang_module['delgroup_msg_rows'] = 'This category has %s products, are you sure to delete or move products to other category';
 $lang_module['delgroup_msg_rows_select'] = 'Chú ý: Group %1$s has %2$s products. <br />All products inside will be deleted when you delete this group.';
 $lang_module['delgroup_msg_rows_move'] = 'Or select group to move to';
 $lang_module['delgroupandrows'] = 'Delete group and products';
-$lang_module['delgroup_msg_rows_noselect'] = 'Please select product group to move to';
+$lang_module['delgroup_no_group'] = 'No group';
 $lang_module['content_group'] = 'Product Group';
 $lang_module['add_otherimage'] = 'Add picture';
 $lang_module['file_selectfile'] = 'Select image';
 $lang_module['group_of'] = 'types of products';
 $lang_module['group_of_none'] = 'Not included in any group';
-$lang_module['view_home_group'] = 'Show product group';
+$lang_module['setting_compare'] = 'Use compare product';
+$lang_module['setting_displays'] = 'Use sort product';
+$lang_module['discounts'] = 'Discount';
+$lang_module['delete'] = 'Delete';
+$lang_module['number'] = 'Number';
+$lang_module['title'] = 'Title';
+$lang_module['begin_time'] = 'Begin time';
+$lang_module['end_time'] = 'End time';
+$lang_module['config_discounts'] = 'Discounts config';
+$lang_module['error_required_title'] = 'Error: Required fields enter the Title';
+$lang_module['error_required_begin_time'] = 'Error: Required fields enter the Begin time';
+$lang_module['error_required_end_time'] = 'Error: Required fields enter the End time';
+$lang_module['error_required_config'] = 'Error: Required fields enter the Config';
+$lang_module['discount_add'] = 'Add new discount';
+$lang_module['discount_edit'] = 'Edit discount';
+$lang_module['discount_from'] = 'From production';
+$lang_module['discount_to'] = 'to production';
+$lang_module['discount_number'] = 'Discount %';
+$lang_module['round'] = 'Round';
+$lang_module['round1'] = 'round';
+$lang_module['round2'] = 'if the amount is greater than';
 $lang_module['module_name'] = 'Module name';
 $lang_module['module_version'] = 'Current version';
 $lang_module['site_key'] = 'SITE KEY';

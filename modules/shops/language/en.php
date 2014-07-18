@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language English
- * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
- * @Createdate Jul 04, 2011, 03:18:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jul 04, 2011, 03:18:00 AM
+*/
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -17,10 +17,10 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['nocatpage'] = 'Error: missing category';
 $lang_module['title_products'] = 'products';
 $lang_module['product_host'] = 'Hot products';
 $lang_module['product_page'] = 'Page';
+$lang_module['product_code'] = 'Product code';
 $lang_module['title_eshop'] = 'Add to cart';
 $lang_module['title_viewnum'] = 'Show';
 $lang_module['title_viewtype'] = 'Type';
@@ -28,13 +28,13 @@ $lang_module['title_onnum'] = 'on';
 $lang_module['title_numpage'] = 'Page number';
 $lang_module['title_order'] = 'Place an Order';
 $lang_module['title_price'] = 'Price';
-$lang_module['title_sale_address'] = 'Sale place';
 $lang_module['title_upby'] = 'posted by';
 $lang_module['title_new'] = 'Newer';
 $lang_module['title_older'] = 'Older';
 $lang_module['title_code'] = 'Reference';
 $lang_module['title_product_in_page'] = 'prodcuts on page';
 $lang_module['title_next'] = 'continue';
+$lang_module['title_wishlist'] = 'Favorite';
 $lang_module['add_product'] = 'Add to cart';
 $lang_module['detail_product'] = 'Details';
 $lang_module['set_cart_success'] = 'Added "%s" to cart';
@@ -71,7 +71,7 @@ $lang_module['profile_products_status'] = 'Status';
 $lang_module['profile_products_status_ok'] = 'approved';
 $lang_module['profile_products_status_no'] = 'waiting approval';
 $lang_module['profile_company_name'] = 'Company name';
-$lang_module['profile_company_address'] = 'Addresse';
+$lang_module['profile_company_address'] = 'Address';
 $lang_module['profile_my_company'] = 'Your company';
 $lang_module['profile_my_user'] = 'Your profile';
 $lang_module['profile_user_name'] = 'Full name';
@@ -120,6 +120,7 @@ $lang_module['product_keywords'] = 'Keywords';
 $lang_module['product_move_form'] = 'Transport mode';
 $lang_module['lang_post'] = 'Confirm';
 $lang_module['product_post_ok'] = 'You have succesfully posted!';
+$lang_module['product_edit_ok'] = 'Update success!';
 $lang_module['redirect_to_back'] = 'Click here to return to management section';
 $lang_module['product_post_fail'] = 'Your session is illegal!';
 $lang_module['product_alias'] = 'Alias';
@@ -130,7 +131,6 @@ $lang_module['detail_view_lage_img'] = 'View full size';
 $lang_module['detail_dateup'] = 'Post on';
 $lang_module['detail_num_view'] = 'Views';
 $lang_module['detail_pro_price'] = 'Price';
-$lang_module['detail_address'] = 'Sale place';
 $lang_module['detail_status'] = 'Status';
 $lang_module['detail_pro_number'] = 'Quantity';
 $lang_module['detail_exptime'] = 'Expire date';
@@ -155,6 +155,13 @@ $lang_module['print_link'] = 'URL';
 $lang_module['detail_rate_ok'] = 'Yo rated %s notes. Thanks!';
 $lang_module['detail_rate_timeout'] = 'You commented, please wait for %s minutes to continue';
 $lang_module['detail_do_not_view'] = 'You can not view other links!';
+$lang_module['detail_product_address'] = 'Place to sell';
+$lang_module['detail_product_discounts'] = 'Discounts';
+$lang_module['detail_promotional'] = 'Promotion';
+$lang_module['detail_warranty'] = 'The warranty';
+$lang_module['detail_no_permission'] = 'NOTE: You may not see this product details';
+$lang_module['detail_no_otherimage'] = 'This product has no other image';
+$lang_module['detail_close_feature'] = 'This function is disabled';
 $lang_module['redirect_to_back_shops'] = 'Return to main page';
 $lang_module['company_product'] = 'Products of booth';
 $lang_module['cart_check_cart'] = 'View cart';
@@ -205,6 +212,7 @@ $lang_module['system_waring'] = 'The system is updating this function';
 $lang_module['order_title'] = 'Order';
 $lang_module['unit_total'] = 'Unit';
 $lang_module['view'] = 'Views';
+$lang_module['order_view'] = 'Order view';
 $lang_module['order_date'] = 'Ordered date';
 $lang_module['order_moment'] = 'at';
 $lang_module['order_no_products'] = 'Order';
@@ -218,6 +226,10 @@ $lang_module['order_submit'] = 'Submit';
 $lang_module['order_submit_pay'] = 'Online payment';
 $lang_module['order_submit_contact'] = 'Contact for payment';
 $lang_module['order_submit_send'] = 'Send order';
+$lang_module['order_email_title'] = '[%s] Order info %s';
+$lang_module['order_email_review'] = 'You can review information order in <a href="%s">here</a>';
+$lang_module['order_email_noreply'] = 'This email is automatically sent from the website <a href="%s">%s</a>, please do not reply this email because we will not receive your email. If you do not understand the contents of this email please simply delete it from your inbox.';
+$lang_module['order_email_thanks'] = 'Thank you for ordering on the website %s,<br  />Here is your order information.';
 $lang_module['payment_complete'] = 'You paid succesfully! We will send products to you soon';
 $lang_module['payment_erorr'] = 'Payment error by an unknow reason';
 $lang_module['cart_title'] = 'Your cart';
@@ -235,6 +247,7 @@ $lang_module['history_payment_check'] = 'Paid, waiting';
 $lang_module['history_payment_cancel'] = 'Refund';
 $lang_module['history_payment_yes'] = 'Paid, money received';
 $lang_module['history_title'] = 'Order history';
+$lang_module['history_update'] = 'Reload';
 $lang_module['del_history_error_status'] = 'Approved, can not cancel';
 $lang_module['del_history_ok'] = 'This order was canceled';
 $lang_module['history_del_confirm'] = 'Do you want to cancel this order?';
@@ -271,12 +284,10 @@ $lang_module['from_date'] = 'from';
 $lang_module['to_date'] = 'to';
 $lang_module['find_content'] = 'Search by product details';
 $lang_module['find_author'] = 'Search by poster';
-$lang_module['find_resource'] = 'Search by category';
 $lang_module['find_all'] = 'All';
 $lang_module['search_modul_title'] = 'Product';
 $lang_module['type_title'] = 'Searching method';
 $lang_module['finter_title'] = 'Time';
-$lang_module['source_title'] = 'All manufacturers';
 $lang_module['keywords'] = 'Keyword';
 $lang_module['search_reset'] = 'Clear';
 $lang_module['product_number_max'] = 'Product: %1$s left in stock: %2$s';
@@ -286,13 +297,6 @@ $lang_module['update_order'] = 'Notification: The systeme updated information of
 $lang_module['no_update_order'] = 'Notification: The systeme can not find any new order';
 $lang_module['active_order_dis'] = 'On-line shopping function is disable';
 $lang_module['group_title'] = 'Category';
-$lang_module['product_code'] = 'Product code';
-$lang_module['detail_product_address'] = 'Place to sell';
-$lang_module['detail_source'] = 'Manufacturer';
-$lang_module['add_source_other'] = 'View all product this source';
-$lang_module['detail_product_discounts'] = 'Discounts';
-$lang_module['detail_promotional'] = 'Promotion';
-$lang_module['detail_warranty'] = 'The warranty';
 $lang_module['notresult'] = 'Not found!';
 $lang_module['sort_by'] = 'Sort by';
 $lang_module['sort_by_name_az'] = 'Name ascending (a-z)';
@@ -323,6 +327,37 @@ $lang_module['displays_new'] = 'New updates';
 $lang_module['displays_price_asc'] = 'Price ascending';
 $lang_module['displays_price_desc'] = 'Price reduced';
 $lang_module['displays_product'] = 'Sort by: ';
+$lang_module['newday'] = 'New';
+$lang_module['filter'] = 'Filter';
+$lang_module['filter_no_item'] = 'Choose at least one attribute';
 $lang_module['compare'] = 'Compare';
 $lang_module['compare_empty_items'] = 'No items';
-$lang_module['num0'] = "Compare number is greater than or equal to 2";
+$lang_module['num0'] = 'Compare number is greater than or equal to 2';
+$lang_module['compare_del_all'] = 'Delete all';
+$lang_module['compare_del_items'] = 'Delete in list';
+$lang_module['compare_del_items_confirm'] = 'Do you want to remove this product from the product list compare?';
+$lang_module['wishlist'] = 'Wishlist';
+$lang_module['wishlist_product'] = 'Wishlist product';
+$lang_module['wishlist_add_success'] = 'Product added to wishlist';
+$lang_module['wishlist_exits'] = 'This product is already in wishlist';
+$lang_module['wishlist_error'] = 'This product can not be add to the wishlist';
+$lang_module['wishlist_guest'] = 'You need to login to use this feature';
+$lang_module['wishlist_del_item'] = 'Drop';
+$lang_module['wishlist_del_item_confirm'] = 'Are you sure you want to remove this product from the wishlist?';
+$lang_module['wishlist_del_item_success'] = 'Removed from product wishlist';
+$lang_module['wishlist_no_priduct'] = 'No products in wishlist';
+$lang_module['discount_detail'] = 'Promotions';
+$lang_module['discount_content_begin'] = 'From day %s';
+$lang_module['discount_content_end'] = ' to day %s';
+$lang_module['discount_content_text'] = '<strong>%s</strong> promotions apply to product <strong class=\'text-danger\'>%1s</strong>';
+$lang_module['discount_content_text_items'] = 'Reduce %s&#37; when purchase from <strong>%1s</strong> to <strong>%2s</strong> product';
+$lang_module['rateconfirm'] = 'Are you sure you want to evaluate';
+$lang_module['rateavg_percent'] = 'Average rate';
+$lang_module['5star'] = '5 star';
+$lang_module['4star'] = '4 star';
+$lang_module['3star'] = '3 star';
+$lang_module['2star'] = '2 star';
+$lang_module['1star'] = '1 star';
+$lang_module['custom'] = 'Custom';
+$lang_module['nocatpage'] = 'Error: missing category';
+$lang_module['detail_address'] = 'Sale place';
