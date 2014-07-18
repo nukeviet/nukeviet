@@ -567,13 +567,14 @@ function rotatefile(){
 
 	$("div#rorateimage").dialog({
 		autoOpen : false,
-		width : 388,
+		width : 400,
 		modal : true,
 		position : "center"
 	}).dialog("open");
 	
 	// Dat lai gia tri xoay
 	RRT.direction = 0;
+	RRT.currentDirection = 0;
 }
 
 var ICON = [];
@@ -932,6 +933,8 @@ var LFILE = {
 /* Rorate Handle */
 var RRT = {
 	direction: 0,
+	currentDirection: 0,
+	arrayDirection: [ 0, 90, 180, 270 ],
 	timer: null,
 	timeOut: 20,
 	trigger: function(){
@@ -998,6 +1001,30 @@ var RRT = {
 		
 		$('#rorateRight').bind( "mouseup mouseleave", function(){
 			clearInterval( RRT.timer );
+		});
+		
+		$('#rorate90Anticlockwise').click(function(){
+			RRT.currentDirection --;
+			
+			if( RRT.currentDirection < 0 ){
+				RRT.currentDirection = 3;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
+		});
+		
+		$('#rorate90Clockwise').click(function(){
+			RRT.currentDirection ++;
+			
+			if( RRT.currentDirection > 3 ){
+				RRT.currentDirection = 0;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
 		});
 		
 		$('#rorateimageOK').click(function(){

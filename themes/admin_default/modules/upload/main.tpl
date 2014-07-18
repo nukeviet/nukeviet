@@ -230,11 +230,17 @@
 	</div>
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
-		<button id="rorateLeft" type="button" class="btn btn-default">
+		<button id="rorate90Anticlockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-undo">&nbsp;</em> 90
+		</button>
+		<button id="rorateLeft" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-undo">&nbsp;</em>
 		</button>
-		<button id="rorateRight" type="button" class="btn btn-default">
+		<button id="rorateRight" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+		</button>
+		<button id="rorate90Clockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em> 90
 		</button>
 		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
 	</div>
