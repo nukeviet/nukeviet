@@ -1114,10 +1114,12 @@ var NVUPLOAD = {
 		}else{
 			$('#upload-button-area').html( NVUPLOAD.buttons );
 			
+			var folderPath = $("span#foldervalue").attr("title");
+			
 			NVUPLOAD.uploader = new plupload.Uploader({
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
-				url : nv_module_url + "upload&random=" + nv_randomNum(10),
+				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
 				flash_swf_url : nv_siteroot + 'js/plupload/Moxie.swf',
 				silverlight_xap_url : nv_siteroot+ 'js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
