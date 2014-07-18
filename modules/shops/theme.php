@@ -1273,7 +1273,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
  */
 function print_product( $data_content, $data_unit, $page_title )
 {
-	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config;
+	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $global_array_cat;
 
 	$xtpl = new XTemplate( 'print_pro.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1300,8 +1300,6 @@ function print_product( $data_content, $data_unit, $page_title )
 		$xtpl->assign( 'height', $pro_config['homeheight'] );
 		$xtpl->assign( 'width', $pro_config['homewidth'] );
 
-		$link_url = $global_config['site_url'] . '/' . '?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data_content['id'] . '/' . $data_content[NV_LANG_DATA . '_alias'];
-		$xtpl->assign( 'link_url', $link_url );
 		$xtpl->assign( 'site_name', $global_config['site_name'] );
 		$xtpl->assign( 'url', $global_config['site_url'] );
 		$xtpl->assign( 'contact', $global_config['site_email'] );
