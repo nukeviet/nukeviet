@@ -36,7 +36,8 @@
 
 <script type="text/javascript">
 //<![CDATA[
-is_allowed_upload();
+// Init upload
+NVUPLOAD.init();
 
 $("#foldertree").treeview({
 	collapsed : true,

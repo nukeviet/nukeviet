@@ -71,6 +71,7 @@ function file_name_change() {
 		$("#block_config").html(htmlload);
 		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
 			if (theResponse.length > 10) {
+				theResponse = theResponse.replace("<head/><tr><td", "<tr><td");//fix for Centmin Mod 1.2.3-eva2000.07
 				$("#block_config").html(theResponse);
 			} else {
 				$("#block_config").hide();
