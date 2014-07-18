@@ -167,6 +167,10 @@
 	overflow: hidden;
 }
 
+#rorateimage .btn-reset{
+	width: 38px;
+}
+
 #rorateContent{
 	margin: 0 auto 10px auto;
 }
