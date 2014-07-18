@@ -116,14 +116,15 @@ function insertvaluetofield(){
 		$("#" + area, opener.document).val( fullPath );
 		
 		var alt = $("input[name=alt]").val();
+		
 		if( alt != "" ){
 			$("#" + alt, opener.document).val( $("img[title='" + selFile + "']").attr("alt") );
 		}
+		
 		window.close();
 	}else{
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		
-		$("span#foldervalue").attr("title");
 		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, fullPath, function(){
 			var dialog = this.getDialog();
 			
@@ -136,21 +137,6 @@ function insertvaluetofield(){
 			}
 		});
 
-		window.close();
-	}
-}
-
-function nv_selFile( file ){
-	var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
-	var area = $("input[name=area]").val();
-	
-	if( CKEditorFuncNum > 0 ){
-		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, file, "");
-		window.close();
-	}
-	
-	if( area != "" ){
-		$("#" + area, opener.document).val(file);
 		window.close();
 	}
 }
@@ -428,12 +414,6 @@ function fileMouseup( file, e ){
 	}
 }
 
-// Ham xu ly quyen upload (Co/Khong)
-function is_allowed_upload(){
-	$("input[name=upload]").parent().css("display", "block");
-	$("span#upload_file").attr("title") == "1" ? $("input[name=upload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=upload]").parent().parent().css("display", "none").next().css("display", "block")
-}
-
 // Ham xu ly khi nhap chuot vao thu muc (Dinh quyen thao tac voi file trong thu muc duoc chon, truy cap thu muc)
 function folderClick( folder ){
 	var folderPath = $(folder).attr("title");
@@ -464,7 +444,7 @@ function folderClick( folder ){
 			$("div#imglist").text("");
 		}
 		
-		is_allowed_upload();
+		NVUPLOAD.init();
 	}
 }
 
@@ -643,69 +623,6 @@ $(".search em").click(function (){
 	}).dialog("open");
 	$("input[name=q]").val("").focus();
 	return false
-});
-
-$("input[name=upload]").change(function(){
-	var a = $(this).val();
-	f = a.replace(/.*\\(.*)/, "$1").replace(/.*\/(.*)/, "$1");
-	$(this).parent().prev().html(f);
-	a = a + " " + $("span#foldervalue").attr("title");
-	$("input[name=currentFileUpload]").val() != a && $(this).parent().next().next().css("display", "none").next().css("display", "none")
-});
-
-$("input[name=imgurl]").change(function(){
-	$(this).parent().next().next().css("display", "none").next().css("display", "none");
-});
-
-$("#confirm").click(function(){
-	var a = $("input[name=upload]").val(), b = $("span#foldervalue").attr("title"), d = $("input[name=currentFileUpload]").val(), e = a + " " + b, g = $("select[name=imgtype]").val(), h = $("select[name=author]").val() == 1 ? "&author" : "";
-	if(a != "" && d != e){
-		$("input[name=upload]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
-		$("input[name=upload]").upload(nv_module_url + "upload&random=" + nv_randomNum(10), "path=" + b, function(k){
-			$("input[name=currentFileUpload]").val(e);
-			var l = k.split("_");
-			if(l[0] == "ERROR"){
-				$("div#errorInfo").html(l[1]).dialog("open");
-				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
-			} else {
-				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "block");
-				$("input[name=selFile]").val(k);
-				var ckf = $("input[name=CKEditorFuncNum]").val(), area = $("input[name=area]").val();
-				if(ckf > 0 || area != ""){
-					$("#cfile").html('<a href="javascript:void(0);" onclick="nv_selFile(\'' + nv_siteroot + b + '/' + k + '\')">' + k + '</a>');
-				} else {
-					$("#cfile").html(k);
-				}
-				$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&order=0&imgfile=" + k, function(){
-					filerename();
-				});
-			}
-		}, "html");
-	} else {
-		a = $("input[name=imgurl]").val();
-		d = $("input[name=currentFileUrl]").val();
-		var j = a + " " + b;
-		if(/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(a) && d != j){
-			$("input[name=imgurl]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
-			$.ajax({
-				type : "POST",
-				url : nv_module_url + "upload&random=" + nv_randomNum(10),
-				data : "path=" + b + "&fileurl=" + a,
-				success : function(k){
-					$("input[name=currentFileUrl]").val(j);
-					var l = k.split("_");
-					if(l[0] == "ERROR"){
-						$("div#errorInfo").html(l[1]).dialog("open");
-						$("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
-					} else {
-						$("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "block").next().css("display", "none");
-						$("input[name=selFile]").val(k);
-						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + "&imgfile=" + k + h + "&order=0&num=" + +nv_randomNum(10))
-					}
-				}
-			})
-		}
-	}
 });
 
 $("div#errorInfo").dialog({
@@ -950,6 +867,57 @@ $("img[name=myFile2]").dblclick(function(){
 	$("input[name=newWidth]").val(a).select();
 });
 
+
+// Upload tu internet
+function remoteUpload(){
+	$("div.dynamic, span.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	$("div#uploadremote").dialog({
+		autoOpen : false,
+		width : 400,
+		height : 95,
+		modal : true,
+		position : "center"
+	}).dialog("open");
+	
+	return false;
+}
+
+// Upload tu internet (Submit)
+$('[name="uploadremoteFileOK"]').click(function(){
+	var fileUrl = $("input[name=uploadremoteFile]").val();
+	var currUrl = $("input[name=currentFileUrl]").val();
+	var folderPath = $("span#foldervalue").attr("title");
+	var check = fileUrl + " " + folderPath;
+	
+	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check ){
+		$(this).attr('disabled', 'disabled');
+		$('#upload-remote-info').html('<em class="fa fa-2x fa-spinner fa-spin"></em>');
+		
+		$.ajax({
+			type : "POST",
+			url : nv_module_url + "upload&random=" + nv_randomNum(10),
+			data : "path=" + folderPath + "&fileurl=" + fileUrl,
+			success : function(k){
+				$("input[name=currentFileUrl]").val( check );
+				$('[name="uploadremoteFileOK"]').removeAttr('disabled');
+				
+				var l = k.split("_");
+				if( l[0] == "ERROR" ){
+					$("div#errorInfo").html(l[1]).dialog("open");
+					$('#upload-remote-info').html('');
+				}else{
+					$("input[name=selFile]").val(k);
+					$('#upload-remote-info').html('<em class="fa fa-2x fa-check text-success"></em>');
+					LFILE.reload( folderPath, k );
+					setTimeout( "NVUPLOAD.closeRemoteDialog()", 500 );
+				}
+			}
+		});
+	}
+});
+
 /* List File Handle */
 var LFILE = {
 	reload : function( path, file ){
@@ -1072,15 +1040,9 @@ var KEYPR = {
 				return;
 			}
 			
-			// console.log(e);
 			// Ctrl key unpress
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = false;
-			}else if( e.keyCode == 27 ){
-				// Unselect file
-				$(".imgsel").removeClass("imgsel");
-			}else if( e.keyCode == 65 && e.ctrlKey === true ){
-				$(".imgcontent").addClass("imgsel");
 			}
 		});
 		
@@ -1094,6 +1056,11 @@ var KEYPR = {
 			// Ctrl key press
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = true;
+			}else if( e.keyCode == 27 ){
+				// Unselect file
+				$(".imgsel").removeClass("imgsel");
+			}else if( e.keyCode == 65 && e.ctrlKey === true ){
+				$(".imgcontent").addClass("imgsel");
 			}
 		});
 		
@@ -1103,6 +1070,368 @@ var KEYPR = {
 				$(".imgsel").removeClass("imgsel");
 			}
 		});
+	},
+};
+
+var NVUPLOAD = {
+	uploader: null, // Pupload variable
+	rendered: false, // Is rendered upload container
+	started: false,
+	buttons: 
+		'<div class="row">' +
+			'<div class="col-sm-7 buttons">' +
+				'<div class="btn-group dropup browse-button">' +
+					'<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' +
+						LANG.upload_mode + ' <span class="caret"></span>' +
+					'</button>' +
+					'<ul class="dropdown-menu" role="menu">' +
+						'<li><a id="upload-remote" onclick="return remoteUpload();" href="#">' + LANG.upload_mode_remote + '</a></li>' +
+						'<li><a id="upload-local" href="#">' + LANG.upload_mode_local + '</a></li>' +
+					'</ul>' +
+				'</div>	' +
+			'</div>' +
+			'<div class="col-sm-5">' +
+				'<div class="row" id="upload-queue-total">' +
+					'<div class="col-sm-4 total-size"></div>' +
+					'<div class="col-sm-8 total-status"></div>' +
+				'</div>' +
+			'</div>' +
+		'</div>',	
+	closeRemoteDialog : function(){
+		$("div#uploadremote").dialog('close');
+	},
+	init : function(){
+		// Reset upload if exists
+		if( NVUPLOAD.uploader != null ){
+			NVUPLOAD.reset();
+		}
+		
+		// Check folder if allow upload
+		var isUploadAllow = $("span#upload_file").attr("title") == "1" ? true : false;
+		
+		if( ! isUploadAllow ){
+			$('#upload-button-area').html('<span class="text-danger"><em class="fa fa-info">&nbsp;</em>' + LANG.notupload + '</span>');
+		}else{
+			$('#upload-button-area').html( NVUPLOAD.buttons );
+			
+			NVUPLOAD.uploader = new plupload.Uploader({
+				runtimes : 'html5,flash,silverlight,html4',
+				browse_button : 'upload-local',
+				url : nv_module_url + "upload&random=" + nv_randomNum(10),
+				flash_swf_url : nv_siteroot + 'js/plupload/Moxie.swf',
+				silverlight_xap_url : nv_siteroot+ 'js/plupload/Moxie.xap',
+				drop_element : 'upload-content',
+				file_data_name: 'upload',
+				init: {
+					// Event on init uploader
+					PostInit: function(){
+						
+					},
+			
+					// Event on add file (Add to queue or first add)
+					FilesAdded: function(up, files){
+						// Build upload container
+						if( ! NVUPLOAD.rendered ){
+							NVUPLOAD.renderUI();
+						}
+						
+						NVUPLOAD.updateList();
+						
+						$('#upload-start').click(function(){
+							NVUPLOAD.uploader.start();
+						});
+						
+						$('#upload-cancel').click(function(){
+							NVUPLOAD.uploadCancel();
+						});
+					},
+					
+					// Event on trigger a file upload status
+					UploadProgress: function( up, file ){
+						$('#' + file.id + ' .file-status').html( file.percent + '%' );
+						NVUPLOAD.handleStatus( file, false );
+						NVUPLOAD.updateTotalProgress();
+					},
+					
+					// Event on one file finish uploaded (Maybe success or error)
+					FileUploaded: function( up, file, response ){
+						response = response.response;
+						NVUPLOAD.handleStatus( file, response );
+					},
+					
+					// Event on start upload or finish upload
+					StateChanged: function(){
+						// Start upload
+						if( NVUPLOAD.uploader.state === plupload.STARTED ){
+							if( ! NVUPLOAD.started ){
+								NVUPLOAD.started = true;
+								// Hide control button
+								$('#upload-start, #upload-cancel, #upload-button-area .browse-button').hide();
+								
+								// Add some button
+								$('#upload-button-area .buttons').append(
+									'<input id="upload-stop" type="button" class="btn btn-primary" value="' + LANG.upload_stop + '"/> ' +
+									'<input style="display:none" id="upload-continue" type="button" class="btn btn-primary" value="' + LANG.upload_continue + '"/>' +
+									'<div class="total-info pull-right"></div>'
+								);
+								
+								$('#upload-button-area .total-info').html(
+									mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
+								);
+								
+								// Init upload progress bar
+								$('#upload-queue-total .total-status').html(
+									'<div class="progress">' +
+										'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
+									'</div>'
+								);
+								
+								// Set button handle
+								$('#upload-stop').click(function(){
+									$(this).hide();
+									$('#upload-continue').show();
+									NVUPLOAD.uploader.stop();
+								});
+								
+								$('#upload-continue').click(function(){
+									$(this).hide();
+									$('#upload-stop').show();
+									NVUPLOAD.uploader.start();
+								});
+							}
+						}else{
+							NVUPLOAD.updateList();
+						}
+					},
+					
+					// Event on a file is uploading
+					UploadFile: function( up, file ){
+						// Not thing to do
+					},
+					
+					// Event on remove a file
+					FilesRemoved: function(){
+						var scrollTop = $('#upload-queue-files').scrollTop();
+						NVUPLOAD.updateList();
+						$('#upload-queue-files').scrollTop( scrollTop );
+					},
+					
+					// Event on all files are uploaded
+					UploadComplete: function( up, files ){
+						$('#upload-continue').hide();
+						$('#upload-stop').hide();
+						
+						// Show finish button if has failed file
+						if( NVUPLOAD.uploader.total.failed > 0 ){
+							$('<input type="button" class="btn btn-primary" value="' + LANG.upload_finish + '" id="upload-finish"/>').insertBefore( $('#upload-stop') );
+							
+							$('#upload-finish').click(function(){
+								NVUPLOAD.finish();
+							});
+						}else{
+							$('<i class="fa fa-2x text-success fa-spin fa-spinner"></i>').insertBefore( $('#upload-stop') );
+							setTimeout( "NVUPLOAD.finish()", 1000 );
+						}
+					},
+					
+					// Event on error
+					Error: function(up, err){
+						$("div#errorInfo").html( "Error #" + err.code + ": " + err.message ).dialog("open");
+						
+						if( err.code === plupload.INIT_ERROR ){
+							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );
+						}
+					}
+				}
+			});
+			
+			NVUPLOAD.uploader.init();
+		}
+	},
+	renderUI: function(){
+		// Hide files list and show upload container
+		$('#imglist').css({'display' : 'none'});
+		$('#upload-queue').css({'display' : 'block'});
+		
+		// Add some button
+		$('#upload-button-area .buttons').append(
+			'<input id="upload-start" type="button" class="btn btn-primary" value="' + LANG.upload_file + '"/> ' +
+			'<input id="upload-cancel" type="button" class="btn btn-default" value="' + LANG.upload_cancel + '"/> '
+		);
+		
+		// Change browse_button (Change style, Method: setOption is error)
+		$('#upload-button-area .browse-button button').remove();
+		$('#upload-remote').parent().remove();
+		$('#upload-button-area .browse-button ul').removeAttr('role').removeClass('dropdown-menu').addClass('fixul');
+		$('#upload-local').addClass('btn btn-primary').text(LANG.upload_add_files);
+		$('#upload-button-area .browse-button ul li div:first').width( $('#upload-local').outerWidth() ).height( $('#upload-local').outerHeight() );
+		
+		// Build upload queue
+		$('#upload-queue').html('\
+			<div class="queue-header">\
+				<div class="container-fluid">\
+					<div class="row">\
+						<div class="col-sm-7">' + LANG.file_name + '</div>\
+						<div class="col-sm-2">' + LANG.upload_size + '</div>\
+						<div class="col-sm-3">' + LANG.upload_status + '</div>\
+					</div>\
+				</div>\
+			</div>\
+			<div id="upload-queue-files" class="container-fluid"></div>\
+		');
+		
+		// Rendered is true
+		NVUPLOAD.rendered = true;
+	},
+	updateList: function(){
+		var fileList = $('#upload-queue-files').html('');
+
+		$.each( NVUPLOAD.uploader.files, function(i, file){
+			fileList.append(
+				'<div id="' + file.id + '" class="row file-item">' +
+					'<div class="col-sm-7 file-name"><span>' + file.name + '</span></div>' +
+					'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
+					'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
+					'<div class="col-sm-1 file-action text-right"></div>' +
+				'</div>'
+			);
+
+			NVUPLOAD.handleStatus( file, false );
+
+			$('#' + file.id + ' .file-delete').click(function(e){
+				$('#' + file.id).remove();
+				NVUPLOAD.uploader.removeFile( file );
+
+				e.preventDefault();
+			});
+		});
+
+		$('#upload-queue-total .total-size').html( plupload.formatSize( NVUPLOAD.uploader.total.size ) );
+
+		// Scroll to end of file list
+		fileList[0].scrollTop = fileList[0].scrollHeight;
+
+		NVUPLOAD.updateTotalProgress();
+		
+		// Enable, disable start button
+		if( NVUPLOAD.uploader.files.length ){
+			$('#upload-start').removeAttr('disabled');
+		}else{
+			$('#upload-start').attr('disabled', 'disabled');
+		}
+	},
+	reset: function(){
+		// Destroy current uploader
+		NVUPLOAD.uploader.destroy();
+		NVUPLOAD.started = false;
+		
+		// Clear uploader variable
+		NVUPLOAD.uploader = null;
+		
+		// Reset upload button
+		$('#upload-button-area').html( NVUPLOAD.buttons );
+		
+		// Clear upload container
+		$('#upload-queue-files').html('');
+	},
+	uploadCancel: function(){
+		// Reset uploader
+		NVUPLOAD.reset();
+		
+		// Hide upload container and show file list
+		$('#upload-queue').html('').css({'display' : 'none'});
+		$('#imglist').css({'display' : 'block'});
+		
+		// Rendered is false
+		NVUPLOAD.rendered = false;
+		
+		// Init uploader
+		NVUPLOAD.init();
+	},
+	destroyUpload: function(){
+		// Reset uploader
+		NVUPLOAD.reset();
+		
+		// Hide upload container and show file list
+		$('#upload-queue').html('').css({'display' : 'none'});
+		$('#imglist').css({'display' : 'block'});
+		
+		// Rendered is false
+		NVUPLOAD.rendered = false;
+	},
+	handleStatus: function( file, response ){
+		var actionClass;
+		
+		if( response != false ){
+			check = response.split('_');
+			
+			if( check[0] == 'ERROR' ){
+				file.status = plupload.FAILED;
+				file.hint = check[1];
+				NVUPLOAD.uploader.total.uploaded --;
+				NVUPLOAD.uploader.total.failed ++;			
+			}else{
+				file.name = response;
+			}
+			
+			$.each( NVUPLOAD.uploader.files, function(i, f){
+				if( f.id == file.id ){
+					NVUPLOAD.uploader.files[i].status = file.status;
+					NVUPLOAD.uploader.files[i].hint = file.hint;
+					NVUPLOAD.uploader.files[i].name = file.name;
+				}
+			});
+		}
+		
+		if( file.status == plupload.DONE ){
+			actionClass = 'text-success fa fa-lg fa-check';
+		}else if( file.status == plupload.FAILED ){
+			actionClass = 'text-danger fa fa-lg fa-exclamation-triangle';
+		}else if( file.status == plupload.QUEUED ){
+			actionClass = 'fa fa-lg fa-trash-o file-delete fa-pointer';
+		}else if( file.status == plupload.UPLOADING ){
+			actionClass = 'text-info fa fa-lg fa-spin fa-circle-o-notch';
+		}else{
+			// Nothing to do
+		}
+
+		$('#' + file.id + ' .file-action').html('<i class="' + actionClass + '"></i>');
+		
+		if( file.hint ){
+			$('#' + file.id).attr('title', file.hint);	
+		}
+	},
+	updateTotalProgress: function(){
+		$('#upload-queue-total .total-status').html(
+			'<div class="progress">' +
+				'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
+			'</div>'
+		);
+		
+		$('#upload-button-area .total-info').html(
+			mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
+		);
+	},
+	finish: function(){
+		var folderPath = $("span#foldervalue").attr("title");
+		
+		if( NVUPLOAD.uploader.total.uploaded > 0 ){
+			var selFile = new Array();
+			
+			$.each( NVUPLOAD.uploader.files, function( k, v ){
+				if( v.status == plupload.DONE ){
+					selFile.push( v.name );
+				}
+			});
+			
+			selFile = selFile.join('|');
+		}else{
+			var selFile = '';
+		}
+
+		$("input[name=selFile]").val( selFile );
+		NVUPLOAD.uploadCancel();
+		LFILE.reload( folderPath, selFile );
 	},
 };
 
