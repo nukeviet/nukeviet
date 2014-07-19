@@ -203,21 +203,6 @@ function preview(){
 	});
 }
 
-// Them logo
-function addlogo(){
-	var selFile = $("input[name=selFile]").val();
-	var e = LANG.upload_size + ": ";
-	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
-	path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
-	var win = null;
-	
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'addlogo&path=' + path + "&file=" + selFile, 'addlogo', settings);
-}
-
 // Tao anh moi (Menu cong cu anh)
 function create(){
 	$("div.dynamic").text("");
@@ -632,6 +617,133 @@ function cropfile(){
 	}
 
 	$("div#cropimage").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
+}
+
+// Them logo
+function addlogo(){
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	var logo = $("input[name=upload_logo]").val();
+	var logoConfig = $("input[name=upload_logo_config]").val().split('|');
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#addlogoContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="addlogo-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.addlogo_error_small + '</span>');
+	}else if( logo == '' ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.notlogo + '</span>');
+	}else{
+		$('#addlogoButtons').html(
+			'X:<input type="text" id="addlogo-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="addlogo-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="addlogo-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="addlogo-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="addlogo-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		
+		// Set logo size
+		var markW, markH;
+
+		if( selFileData[0] <= 150 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[2] ) / 100 );
+		}
+		else if( selFileData[0] < 350 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[3] ) / 100 );
+		}
+		else
+		{
+			if( Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 ) > logoConfig[0] )
+			{
+				markW = logoConfig[0];
+			}
+			else
+			{
+				markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 );
+			}
+		}
+		
+		markH = Math.ceil( markW * logoConfig[1] / logoConfig[0] );
+		
+		if( markH > selFileData[1] ){
+			markH = selFileData[1];
+			markW = Math.ceil( markH * logoConfig[0] / logoConfig[1] );
+		}
+		
+		markW = parseInt( Math.floor( markW / markScale ) );
+		markH = parseInt( Math.floor( markH / markScale ) );
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#addlogoContent img.addlogo-image').Watermarker({
+			watermark_img : logo,
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#addlogo-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#addlogo-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#addlogo-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#addlogo-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#addlogo-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "addlogo&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#addlogo-x').val() + "&y=" + $('#addlogo-y').val() + "&w=" + $('#addlogo-w').val() + "&h=" + $('#addlogo-h').val(),
+				success : function(e){
+					$('#addlogo-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#addlogo").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#addlogo").dialog({
 		autoOpen : false,
 		width : 400,
 		modal : true,

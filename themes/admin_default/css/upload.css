@@ -343,3 +343,18 @@ img.previewimg {
 	right: 1px!important;
 	bottom: 1px!important;
 }
+
+/* Add logo */
+#addlogo{
+	padding: 10px;
+	display: none;	
+}
+
+#addlogo .addlogo-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
+}
+
+#addlogo .addlogo-content img{
+	vertical-align: top;
+}

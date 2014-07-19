@@ -91,6 +91,8 @@
 <input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
 <input type="hidden" name="area" value="{AREA}"/>
 <input type="hidden" name="alt" value="{ALT}"/>
+<input type="hidden" name="upload_logo" value="{UPLOAD_LOGO}"/>
+<input type="hidden" name="upload_logo_config" value="{UPLOAD_LOGO_CONFIG}"/>
 
 <div class="upload-hide" id="contextMenu"></div>
 
@@ -260,10 +262,13 @@
 </div>
 
 <div id="cropimage" title="{LANG.crop}">
-	<input type="hidden" class="dynamic" name="cropPath" value=""/>
-	<input type="hidden" class="dynamic" name="cropFile" value=""/>
 	<div id="cropContent" class="crop-content"></div>
 	<div id="cropButtons" class="text-center form-inline dynamic"></div>
+</div>
+
+<div id="addlogo" title="{LANG.addlogo}">
+	<div id="addlogoContent" class="addlogo-content"></div>
+	<div id="addlogoButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <script type="text/javascript">
@@ -314,6 +319,8 @@ LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
 LANG.crop_error_small = "{LANG.crop_error_small}";
 LANG.save = "{LANG.addlogosave}";
+LANG.notlogo = "{LANG.notlogo}";
+LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 
 var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
 var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
