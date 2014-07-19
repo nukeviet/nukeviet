@@ -175,7 +175,7 @@ function preview(){
 	if( selFileData[3] == "image" || selFileData[2] == "swf" ){
 		var size = calSize( selFileData[0], selFileData[1], 360, 230 );
 		html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '" />') : $("#fileView").flash({
+		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
 			src : nv_siteroot + fullPath + "/" + selFile,
 			width : size[0],
 			height : size[1]
@@ -225,7 +225,7 @@ function create(){
 		
 		DisSize = calSize( selFileData[0], selFileData[1], 360, 230 );
 		
-		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile );
+		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile + "?" + selFileData[8] );
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
 		$("#fileInfoName2").html( selFile );
 		
