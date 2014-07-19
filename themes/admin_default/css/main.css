@@ -399,10 +399,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #left-menu .nav > li a.subactive {
-	background: #222;
-	color: #fff;
+	background: url("../images/vertical_menu_bg.jpg") no-repeat scroll left -75px #f5fbfe;
+	color: #cb0000;
 	font-weight: bold;
-	padding: 7px 15px;
+	padding: 3px 5px;
+	text-align: right;
 }
 
 #left-menu .dropdown-menu {
