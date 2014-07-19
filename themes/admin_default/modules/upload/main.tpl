@@ -263,9 +263,7 @@
 	<input type="hidden" class="dynamic" name="cropPath" value=""/>
 	<input type="hidden" class="dynamic" name="cropFile" value=""/>
 	<div id="cropContent" class="crop-content"></div>
-	<div id="cropButtons" class="text-center form-inline dynamic">
-		BUTTON
-	</div>
+	<div id="cropButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <script type="text/javascript">
