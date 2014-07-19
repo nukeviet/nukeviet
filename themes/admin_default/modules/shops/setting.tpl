@@ -95,6 +95,18 @@
 				<td><input type="checkbox" value="1" name="active_wishlist" {ck_active_wishlist} id="active_wishlist" /></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.tags_alias}</strong></td>
+				<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.setting_auto_tags}</strong></td>
+				<td><input type="checkbox" value="1" name="auto_tags"{AUTO_TAGS}/></td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.setting_tags_remind}</strong></td>
+				<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
+			</tr>
+			<tr>
 				<td colspan="2" style="text-align: center; padding:10px"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting"></td>
 			</tr>
 		</tbody>
