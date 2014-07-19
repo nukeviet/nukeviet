@@ -1,11 +1,13 @@
 <!-- BEGIN: main -->
-<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
-	<label><em>{LANG.search_note}</em></label>
-	<br />
-	{LANG.search_key}:
-	<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
-	<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br /><br />
-</form>
+<div class="well">
+	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
+		{LANG.search_key}:
+		<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
+		<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br />
+	</form>
+	<label><em>{LANG.search_note_fix}</em></label>
+</div>
+
 <!-- BEGIN: incomplete_link -->
 <div class="alert alert-info">
 	<a class="text-info" href="{ALL_LINK}">{LANG.tags_all_link}.</a>

@@ -133,6 +133,7 @@ $lang_module['search_author'] = 'Author';
 $lang_module['search_admin'] = 'Redactor';
 $lang_module['search_per_page'] = 'Number of products showing';
 $lang_module['search_note'] = 'Keywords must be plus than %d characters, less than %d characters, without html tags';
+$lang_module['search_note_fix'] = 'Keywords must be plus than 2 characters, less than 64 characters, without html tags';
 $lang_module['content_edit'] = 'Edit product';
 $lang_module['error_title'] = 'Error: product name missing';
 $lang_module['error_product_code'] = 'Error: You chose the same product code';

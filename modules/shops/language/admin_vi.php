@@ -136,6 +136,7 @@ $lang_module['search_author'] = 'Tác giả sản phẩm';
 $lang_module['search_admin'] = 'Người nhập liệu';
 $lang_module['search_per_page'] = 'Số sản phẩm hiển thị';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html';
+$lang_module['search_note_fix'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['content_edit'] = 'Sửa sản phẩm';
 $lang_module['error_title'] = 'Lỗi: Sản phẩm chưa có tên';
 $lang_module['error_product_code'] = 'Lỗi: Mã sản phẩm bạn chọn bị trùng';
