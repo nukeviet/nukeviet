@@ -6,51 +6,61 @@
  * @Createdate 27/01/2011, 9:36
  */
 
-function nv_randomNum(a){
-	for (var b = "", d = 0; d < a; d++){
-		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
+function nv_randomNum( a ){
+	for( var b = "", d = 0; d < a; d++ ){
+		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
 	}
-	return b
+	
+	return b;
 }
 
-function resize_byWidth(a, b, d){
-	return Math.round(d / a * b);
+// Return height
+function resize_byWidth( a, b, d ){
+	return parseInt( Math.round( d / a * b ) );
 }
 
-function resize_byHeight(a, b, d){
-	return Math.round(d / b * a);
+// Return width
+function resize_byHeight( a, b, d ){
+	return parseInt( Math.round( d / b * a ) );
 }
 
-function calSize(a, b, d, e){
-	if(a > d){
-		b = resize_byWidth(a, b, d);
+// Resize image with display width and height (fix to container)
+function calSize( a, b, d, e ){
+	if( a > d ){
+		b = resize_byWidth( a, b, d );
 		a = d;
 	}
-	if(b > e){
-		a = resize_byHeight(a, b, e);
+	
+	if( b > e ){
+		a = resize_byHeight( a, b, e );
 		b = e
 	}
-	return [a, b];
+	
+	return [parseInt( a ), parseInt( b )];
 }
 
-function calSizeMax(a, b, d, e){
+function calSizeMax( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d <= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d <= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
-function calSizeMin(a, b, d, e){
+function calSizeMin( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d >= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d >= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
 function is_numeric(a){
@@ -531,14 +541,102 @@ function searchfile(){
 
 // Cat anh
 function cropfile(){
-	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var c = $("img[title='" + a + "']").attr("name").split("|");
-	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
-	var win = null;
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'cropimg&path=' + b + "&file=" + a, 'addlogo', settings);
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#cropContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="crop-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#cropButtons').html('<span class="text-danger">' + LANG.crop_error_small + '</span>');
+	}else{
+		$('#cropButtons').html(
+			'X:<input type="text" id="crop-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="crop-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="crop-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="crop-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="crop-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		var markW = parseInt( Math.round( size[0] * 0.7 ) );
+		var markH = parseInt( Math.round( size[1] * 0.7 ) );
+		
+		if( markW < 10 ){
+			markW = 10;
+		}
+		
+		if( markH < 10 ){
+			markH = 10;
+		}
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#cropContent img.crop-image').Watermarker({
+			watermark_img : nv_siteroot + 'themes/admin_default/images/transparent.png',
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#crop-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#crop-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#crop-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#crop-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#crop-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "cropimg&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#crop-x').val() + "&y=" + $('#crop-y').val() + "&w=" + $('#crop-w').val() + "&h=" + $('#crop-h').val(),
+				success : function(e){
+					$('#crop-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#cropimage").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#cropimage").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
 }
 
 // Xoay anh

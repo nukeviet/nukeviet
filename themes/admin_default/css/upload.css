@@ -322,3 +322,24 @@ img.previewimg {
 	font-size: 12px;
 	padding: 15px
 }
+
+/* Crop image */
+#cropimage{
+	padding: 10px;
+	display: none;	
+}
+
+#cropimage .crop-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
+}
+
+#cropimage .crop-content img{
+	vertical-align: top;
+}
+
+.ui-dialog .ui-resizable-se {
+	background-position: -64px -224px!important;
+	right: 1px!important;
+	bottom: 1px!important;
+}

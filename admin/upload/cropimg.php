@@ -44,9 +44,9 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 		if( isset( $array_dirname[$path] ) )
 		{
-			if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
+			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
 			{
-				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] . '/' . $file );
+				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 			}
 
 			$info = nv_getFileInfo( $path, $file );
@@ -63,32 +63,4 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	}
 }
 
-$file_size = getimagesize( NV_ROOTDIR . '/' . $path . '/' . $file );
-
-$w = ceil( $file_size[0] * 0.7 );
-$h = ceil( $file_size[1] * 0.7 );
-$x = $file_size[0] - $w - 5;
-$y = $file_size[1] - $h - 5;
-
-$logosite = array(
-	'x' => $x,
-	'y' => $y,
-	'w' => $w,
-	'h' => $h
-);
-
-$xtpl = new XTemplate( 'cropimg.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'NV_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-$xtpl->assign( 'IMG_PATH', $path );
-$xtpl->assign( 'IMG_FILE', $file );
-$xtpl->assign( 'IMG_MTIME', filemtime( NV_ROOTDIR . '/' . $path . '/' . $file ) );
-$xtpl->assign( 'LOGOSITE', $logosite );
-
-$xtpl->parse( 'main' );
-$contents = $xtpl->text( 'main' );
-
-include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
-include NV_ROOTDIR . '/includes/footer.php';
+die( 'ERROR#Error Access!!!' );

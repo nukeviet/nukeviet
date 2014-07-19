@@ -4,9 +4,9 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.button.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
@@ -14,6 +14,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.button.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.watermarker.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
@@ -258,6 +259,15 @@
 	</div>
 </div>
 
+<div id="cropimage" title="{LANG.crop}">
+	<input type="hidden" class="dynamic" name="cropPath" value=""/>
+	<input type="hidden" class="dynamic" name="cropFile" value=""/>
+	<div id="cropContent" class="crop-content"></div>
+	<div id="cropButtons" class="text-center form-inline dynamic">
+		BUTTON
+	</div>
+</div>
+
 <script type="text/javascript">
 //<![CDATA[
 var LANG = [];
@@ -304,6 +314,8 @@ LANG.upload_info = "{LANG.upload_info}";
 LANG.upload_stop = "{LANG.upload_stop}";
 LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
+LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.save = "{LANG.addlogosave}";
 
 var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
 var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
