@@ -55,6 +55,9 @@ if( $savesetting == 1 )
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
+	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
+	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
+	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -123,6 +126,10 @@ for( $i = 5; $i <= 50; $i = $i + 5 )
 {
 	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $data['per_page'] ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 }
+
+$xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '' );
 
 $check = ( $data['auto_check_order'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_auto_check_order', $check );

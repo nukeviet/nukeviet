@@ -151,6 +151,11 @@
         <div class="col-md-6">
             <div style="margin-top: 6px">
                 <button class="btn btn-default btn-sm disabled">{LANG.detail_share}:</button>
+                <!-- BEGIN: allowed_print -->
+                <a rel="nofollow" href="{LINK_PRINT}" class="btn btn-default btn-sm" title="Print" id="click_print">
+                    <em class="fa fa-print fa-lg fb">&nbsp;</em>
+                </a>
+                <!-- END: allowed_print -->
                 <a onclick="share_facebook();" href="javascript:;" class="btn btn-default btn-sm" title="Share On Facebook">
                     <em class="fa fa-thumbs-o-up fa-lg fb">&nbsp;</em>
                 </a>

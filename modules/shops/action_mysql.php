@@ -52,7 +52,6 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_rows
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_alias,
-	 DROP ' . $lang . '_keywords,
 	 DROP ' . $lang . '_hometext,
 	 DROP ' . $lang . '_bodytext,
 	 DROP ' . $lang . '_warranty,
@@ -80,6 +79,15 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_units
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_note';
+	 
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tags
+	 DROP ' . $lang . '_numpro,
+	 DROP ' . $lang . '_alias,
+	 DROP ' . $lang . '_image,
+	 DROP ' . $lang . '_description,
+	 DROP ' . $lang . '_keywords';
+	 
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id DROP ' . $lang . '_keyword';
 }
 elseif( $op != 'setup' )
 {
@@ -94,6 +102,8 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_units';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_items_group';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags_id';
 	$set_lang_data = '';
 }
 
@@ -201,7 +211,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_rows ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 255 ) NOT NULL DEFAULT '',
- ADD " . $lang . "_keywords text NOT NULL,
  ADD " . $lang . "_hometext text NOT NULL,
  ADD " . $lang . "_bodytext mediumtext NOT NULL,
  ADD " . $lang . "_warranty text NOT NULL,
@@ -326,11 +335,32 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   PRIMARY KEY (`wid`)
 ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tags (
+	 tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	 PRIMARY KEY (tid)
+	) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tags_id (
+	 id int(11) NOT NULL,
+	 tid mediumint(9) NOT NULL,
+	 UNIQUE KEY sid (id,tid)
+	) ENGINE=MyISAM";
+
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tags ADD " . $lang . "_numpro mediumint(8) NOT NULL DEFAULT '0',
+ ADD " . $lang . "_alias varchar(255) NOT NULL DEFAULT '',
+ ADD " . $lang . "_image varchar(255) DEFAULT '',
+ ADD " . $lang . "_description text,
+ ADD " . $lang . "_keywords varchar(255) DEFAULT '',
+ ADD UNIQUE(" . $lang . "_alias)";
+ 
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tags_id ADD " . $lang . "_keyword varchar(65) NOT NULL";
+
+
 $data = array();
 $data['image_size'] = '100x100';
 $data['home_view'] = 'view_home_all';
 $data['per_page'] = 20;
-$data['per_row'] = 4;
+$data['per_row'] = 3;
 $data['money_unit'] = 'VND';
 $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
@@ -349,6 +379,9 @@ $data['show_product_code'] = 1;
 $data['show_compare'] = 0;
 $data['show_displays'] = 0;
 $data['active_wishlist'] = 1;
+$data['tags_alias'] = 0;
+$data['auto_tags'] = 1;
+$data['tags_remind'] = 0;
 
 foreach( $data as $config_name => $config_value )
 {
@@ -371,7 +404,6 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_title = " . $set_lang_data . "_title";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_alias = " . $set_lang_data . "_alias";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_hometext = " . $set_lang_data . "_hometext";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_bodytext = " . $set_lang_data . "_bodytext";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_warranty = " . $set_lang_data . "_warranty";
@@ -409,6 +441,22 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . $set_lang_data;
 	}
+	
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tags" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_alias = " . $set_lang_data . "_title";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_image = " . $set_lang_data . "_alias";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_description = " . $set_lang_data . "_description";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
+	}
+	
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tags_id" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags_id SET " . $lang . "_keyword = " . $set_lang_data . "_keyword";
+	}
+
 
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SET exchange = '1'";
 }

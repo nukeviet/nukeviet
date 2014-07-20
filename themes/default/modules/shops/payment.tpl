@@ -109,8 +109,10 @@
 	<!-- END: actpay -->
 
     <!-- BEGIN: intro_pay -->
-    <div class="alert alert-info">
-        {intro_pay}
+    <div class="panel panel-default">
+    	<div class="panel-body">
+        	{intro_pay}
+        </div>
     </div>
     <!-- END: intro_pay -->
 </div>

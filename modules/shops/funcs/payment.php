@@ -112,7 +112,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 
 		// Get content intro
 		$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_content.txt';
-		if( ! empty( $url_checkout ) and file_exists( $content_file ) )
+		if( file_exists( $content_file ) )
 		{
 			$intro_pay = file_get_contents( $content_file );
 			$intro_pay = nv_editor_br2nl( $intro_pay );

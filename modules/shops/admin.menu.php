@@ -19,6 +19,7 @@ $submenu['group'] = $lang_module['group'];
 $submenu['blockcat'] = $lang_module['block'];
 $submenu['prounit'] = $lang_module['prounit'];
 $submenu['money'] = $lang_module['money'];
+$submenu['tags'] = $lang_module['tags'];
 $submenu['payport'] = $lang_module['setup_payment'];
 $submenu['docpay'] = $lang_module['document_payment'];
 $submenu['setting'] = $lang_module['setting'];

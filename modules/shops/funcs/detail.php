@@ -31,7 +31,6 @@ if( empty( $data_content ) )
 }
 
 $page_title = $data_content[NV_LANG_DATA . '_title'];
-$key_words = $data_content[NV_LANG_DATA . '_keywords'];
 $description = $data_content[NV_LANG_DATA . '_hometext'];
 
 if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )

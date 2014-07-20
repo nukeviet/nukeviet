@@ -10,6 +10,7 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+
 <script type="text/javascript">var inrow = '{inrow}';</script>
 <form class="form-inline" action="" enctype="multipart/form-data" method="post">
 	<input type="hidden" value="1" name="save">
@@ -151,11 +152,31 @@
 				<tbody>
 					<tr>
 						<td style="line-height:16px"><strong>{LANG.content_keywords}</strong>
-						<br />
-						{LANG.content_keywords_note} <a onclick="create_keywords();" href="javascript:void(0);" style="color:#0099CC">{LANG.content_clickhere}</a></td>
 					</tr>
 					<tr>
-						<td><textarea rows="3" cols="20" id="keywords" name="keywords" style="width: 100%;" class="form-control">{rowcontent.keywords}</textarea></td>
+						<td>
+							<div class="message_body" style="overflow: auto">
+								<div class="clearfix uiTokenizer uiInlineTokenizer">
+		                            <div id="keywords" class="tokenarea">
+		                                <!-- BEGIN: keywords -->
+		                                <span class="uiToken removable" title="{KEYWORDS}">
+		                                    {KEYWORDS}
+		                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
+		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
+		                                </span>
+		                                <!-- END: keywords -->
+		                            </div>
+		                            <div class="uiTypeahead">
+		                                <div class="wrap">
+		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+		                                    <div class="innerWrap">
+		                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                	</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -284,21 +305,9 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/shops/js/content.js"></script>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#publ_date,#exp_date").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-
-	});
-
 	var file_items = '{FILE_ITEMS}';
 	var file_selectfile = '{LANG.file_selectfile}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
@@ -313,76 +322,6 @@
 		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-
-	$("#listgroupid").load('{url_load}');
-
-	function FormatNumber(str) {
-
-		var strTemp = GetNumber(str);
-		if (strTemp.length <= 3)
-			return strTemp;
-		strResult = "";
-		for (var i = 0; i < strTemp.length; i++)
-			strTemp = strTemp.replace(",", "");
-		var m = strTemp.lastIndexOf(".");
-		if (m == -1) {
-			for (var i = strTemp.length; i >= 0; i--) {
-				if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
-					strResult = "," + strResult;
-				strResult = strTemp.substring(i, i + 1) + strResult;
-			}
-		} else {
-			var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
-			var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."), strTemp.length);
-			var tam = 0;
-			for (var i = strphannguyen.length; i >= 0; i--) {
-
-				if (strResult.length > 0 && tam == 4) {
-					strResult = "," + strResult;
-					tam = 1;
-				}
-
-				strResult = strphannguyen.substring(i, i + 1) + strResult;
-				tam = tam + 1;
-			}
-			strResult = strResult + strphanthapphan;
-		}
-		return strResult;
-	}
-
-	function GetNumber(str) {
-		var count = 0;
-		for (var i = 0; i < str.length; i++) {
-			var temp = str.substring(i, i + 1);
-			if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
-				alert("{LANG.inputnumber}");
-				return str.substring(0, i);
-			}
-			if (temp == " ")
-				return str.substring(0, i);
-			if (temp == ".") {
-				if (count > 0)
-					return str.substring(0, ipubl_date);
-				count++;
-			}
-		}
-		return str;
-	}
-
-	function IsNumberInt(str) {
-		for (var i = 0; i < str.length; i++) {
-			var temp = str.substring(i, i + 1);
-			if (!(temp == "." || (temp >= 0 && temp <= 9))) {
-				alert("{LANG.inputnumber}");
-				return str.substring(0, i);
-			}
-			if (temp == ",") {
-				alert("{LANG.thaythedaucham}");
-				return str.substring(0, i);
-			}
-		}
-		return str;
-	}
 </script>
 
 <!-- BEGIN:getalias -->

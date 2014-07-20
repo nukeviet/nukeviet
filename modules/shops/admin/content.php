@@ -91,6 +91,7 @@ $rowcontent = array(
 	'bodytext' => '',
 	'note' => '',
 	'keywords' => '',
+	'keywords_old' => '',
 	'warranty' => '',
 	'promotional' => '',
 );
@@ -105,6 +106,15 @@ $group_id_old = array();
 if( $rowcontent['id'] > 0 )
 {
 	$group_id_old = getGroupID( $rowcontent['id'] );
+	
+	$array_keywords_old = array();
+	$_query = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY ' . NV_LANG_DATA . '_keyword ASC' );
+	while( $row = $_query->fetch() )
+	{
+		$array_keywords_old[$row['tid']] = $row[NV_LANG_DATA . '_keyword'];
+	}
+	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
+	$rowcontent['keywords_old'] = $rowcontent['keywords'];
 }
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
@@ -191,7 +201,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['allowed_send'] = ( int )$nv_Request->get_bool( 'allowed_send', 'post' );
 	$rowcontent['allowed_print'] = ( int )$nv_Request->get_bool( 'allowed_print', 'post' );
 	$rowcontent['allowed_save'] = ( int )$nv_Request->get_bool( 'allowed_save', 'post' );
-	$rowcontent['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
+
+	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
+    $rowcontent['keywords'] = implode(', ', $rowcontent['keywords'] );
 
 	$array_custom = $nv_Request->get_array( 'custom', 'post' );
 	$array_custom_lang = $nv_Request->get_array( 'custom_lang', 'post' );
@@ -543,6 +555,86 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				nv_news_fix_block( $bid_i );
 			}
 
+			// Update tags list
+			if( $rowcontent['keywords'] != $rowcontent['keywords_old'] )
+			{
+				$keywords = explode( ',', $rowcontent['keywords'] );
+				$keywords = array_map( 'strip_punctuation', $keywords );
+				$keywords = array_map( 'trim', $keywords );
+				$keywords = array_diff( $keywords, array( '' ) );
+				$keywords = array_unique( $keywords );
+
+				foreach( $keywords as $keyword )
+				{
+					if( ! in_array( $keyword, $array_keywords_old ) )
+					{
+						$alias_i = ( $module_config[$module_name]['tags_alias'] ) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
+						$alias_i = nv_strtolower( $alias_i );
+						$sth = $db->prepare( 'SELECT tid, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA .'_description, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags where ' . NV_LANG_DATA . '_alias= :alias OR FIND_IN_SET(:keyword, ' . NV_LANG_DATA . '_keywords)>0' );
+						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
+						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+						$sth->execute();
+
+						list( $tid, $alias, $keywords_i ) = $sth->fetch( 3 );
+						if( empty( $tid ) )
+						{
+							$array_insert = array();
+							$array_insert['alias'] = $alias_i;
+							$array_insert['keyword'] = $keyword;
+
+							$tid = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags (" . NV_LANG_DATA . "_numpro, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_image, " . NV_LANG_DATA . "_keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
+						}
+						else
+						{
+							if( $alias != $alias_i )
+							{
+								if( ! empty( $keywords_i ) )
+								{
+									$keyword_arr = explode( ',', $keywords_i );
+									$keyword_arr[] = $keyword;
+									$keywords_i2 = implode( ',', array_unique( $keyword_arr ) );
+								}
+								else
+								{
+									$keywords_i2 = $keyword;
+								}
+								if( $keywords_i != $keywords_i2 )
+								{
+									$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_keywords= :keywords WHERE tid =' . $tid );
+									$sth->bindParam( ':keywords', $keywords_i2, PDO::PARAM_STR );
+									$sth->execute();
+								}
+							}
+							$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro+1 WHERE tid = ' . $tid );
+						}
+
+						// insert keyword for table _tags_id
+						try
+						{
+							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_id (id, tid, ' . NV_LANG_DATA . '_keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute();
+						}
+						catch( PDOException $e )
+						{
+							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id SET ' . NV_LANG_DATA . '_keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
+							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
+							$sth->execute();
+						}
+						unset( $array_keywords_old[$tid] );
+					}
+				}
+
+				foreach( $array_keywords_old as $tid => $keyword )
+				{
+					if( ! in_array( $keyword, $keywords ) )
+					{
+						$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro-1 WHERE tid = ' . $tid );
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
+					}
+				}
+			}
+
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items' );
 			die();
@@ -781,6 +873,17 @@ while( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
 	$uch = ( $rowcontent['product_unit'] == $unitid_i ) ? "selected=\"selected\"" : "";
 	$xtpl->assign( 'uch', $uch );
 	$xtpl->parse( 'main.rowunit' );
+}
+
+// Print tags
+if( ! empty( $rowcontent['keywords'] ) )
+{
+	$keywords_array = explode( ',', $rowcontent['keywords'] );
+	foreach( $keywords_array as $keywords )
+	{
+		$xtpl->assign( 'KEYWORDS', $keywords );
+		$xtpl->parse( 'main.keywords' );
+	}
 }
 
 $archive_checked = ( $rowcontent['archive'] ) ? " checked=\"checked\"" : "";
