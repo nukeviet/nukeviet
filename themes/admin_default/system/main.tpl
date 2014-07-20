@@ -75,31 +75,31 @@
 		</div>
 	</div>
 	<section id="middle" class="row">	
-	<aside id="left-menu">
-		<div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">	
-			<ul class="nav nav-pills nav-stacked text-color">
+		<aside id="left-menu">
+			<div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">	
+				<ul class="nav nav-pills nav-stacked text-color">
 				<!-- BEGIN: menu_loop -->
-				<li{MENU_CLASS}>
-					<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
-					<!-- BEGIN: submenu -->
-					<ul class="dropdown-menu">
-						<!-- BEGIN: submenu_loop -->
-						<li>
-							<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-						</li>
-						<!-- END: submenu_loop -->
-					</ul>
-					<!-- END: submenu -->
-					<span class="arrow">&nbsp;</span>
-				</li>
-				<!-- BEGIN: current -->
-				<li>
-					<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-				</li>
-				<!-- END: current -->
-				<!-- END: menu_loop -->
-			</ul>
-			<div class="clearfix"></div>
+					<li {MENU_CLASS}>
+						<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+						<!-- BEGIN: submenu -->
+						<ul class="dropdown-menu">
+							<!-- BEGIN: submenu_loop -->
+							<li>
+								<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+							</li>
+							<!-- END: submenu_loop -->
+						</ul>
+						<!-- END: submenu -->
+						<span class="arrow">&nbsp;</span>
+					</li>
+					<!-- BEGIN: current -->
+					<li>
+						<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+					</li>
+					<!-- END: current -->
+					<!-- END: menu_loop -->
+				</ul>
+				<div class="clearfix"></div>
 			</div>
 		</aside>		
 		<div id="container" class="clearfix">
@@ -152,18 +152,5 @@
 <div id="timeoutsess" class="chromeframe">
 	{LANG_TIMEOUTSESS_NOUSER}, <a onclick="timeoutsesscancel();" href="#">{LANG_TIMEOUTSESS_CLICK}</a>. {LANG_TIMEOUTSESS_TIMEOUT}: <span id="secField"> 60 </span> {LANG_TIMEOUTSESS_SEC}
 </div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
-<!-- BEGIN: ckeditor -->
-<script type="text/javascript">
-	for (var i in CKEDITOR.instances) {
-		CKEDITOR.instances[i].on('key', function(e) {
-			$(window).bind('beforeunload', function() {
-				return '{MSGBEFOREUNLOAD}';
-			});
-		});
-	}
-</script>
-<!-- END: ckeditor -->
 {FILE "footer.tpl"}
 <!-- END: main -->
