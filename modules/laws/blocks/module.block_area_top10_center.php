@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Jul 06, 2011, 06:31:13 AM
+ */
+
+if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
+
+if ( ! function_exists( 'nv_law_block_10area' ) )
+{
+    function nv_law_block_10area ()
+    {
+        global $lang_module, $module_info, $module_file, $nv_laws_listarea, $module_name, $db, $module_data;
+		
+        $xtpl = new XTemplate( "block_top10_area.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+        $xtpl->assign( 'LANG', $lang_module );
+        $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+        $xtpl->assign( 'TEMPLATE', $module_info['template'] );
+        $xtpl->assign( 'MODULE_FILE', $module_file );
+		
+        $title_length = 34;
+		
+		unset( $nv_laws_listarea[0] );
+		
+		$i = 1;
+        foreach ( $nv_laws_listarea as $cat )
+        {
+            if ( $cat['parentid'] == 0 )
+            {
+				$in = "";
+				if( empty( $cat['subcats'] ) )
+				{
+					$in = " `aid`=" . $cat['id'];
+				}
+				else
+				{
+					$in = $cat['subcats'];
+					$in = " `aid` IN(" . implode( ",", $in ) . ")";
+				}
+				
+				$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE" . $in . " AND `status`=1";
+				$result = $db->query( $sql );
+				$num = $result->fetchColumn();
+				
+				$cat['name'] = nv_clean60( $cat['title'], $title_length );
+				$cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=area/" . $cat['alias'];
+				
+				$xtpl->assign( 'NUM_LAW', $num );
+				$xtpl->assign( 'CAT', $cat );
+				$xtpl->parse( 'main.loop' );
+				
+				if( $i >= 10 ) break; 
+				
+				$i ++;
+            }
+        }
+        
+		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1";
+		$result = $db->query( $sql );
+		$num = $result->fetchColumn();
+		
+		$xtpl->assign( 'INFO_NUM', sprintf( $lang_module['info_num'], $num ) );
+
+        $xtpl->parse( 'main' );
+        return $xtpl->text( 'main' );
+    }
+}
+
+$content = nv_law_block_10area();
+
+?>

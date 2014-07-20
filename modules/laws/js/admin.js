@@ -1,0 +1,83 @@
+/* *
+ * @Project NUKEVIET 3.0
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Createdate Wed, 27 Jul 2011 14:55:22 GMT
+ */
+ 
+function nv_add_files( nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_select )
+{
+	nv_num_files ++;
+	$('#filearea').append(
+		'<div id="fileitem_'+nv_num_files+'">' +
+			'<input class="txt" type="text" name="files[]" id="fileupload_'+nv_num_files+'" value="" />' +
+			'<input onclick="nv_open_browse_file( \''+nv_admin_baseurl+'index.php?'+nv_name_variable+'=upload&popup=1&area=fileupload_'+nv_num_files+'&path='+nv_files_dir+'&type=file\', \'NVImg\', \'850\', \'500\', \'resizable=no,scrollbars=no,toolbar=no,location=no,status=no\' );return false;" type="button" value="Browse server" class="selectfile" />' +
+			'<input onclick="nv_delete_datacontent(\'fileitem_'+nv_num_files+'\');return false;" type="button" value="'+nv_lang_delete+'" class="selectfile" />'+
+		'</div>'
+	);
+	
+	return false;
+}
+
+//  -------------------------------------
+
+function nv_delete_datacontent( content )
+{
+	$('#' + content).remove();
+	return false;
+}
+
+//  ---------------------------------------
+
+function nv_change_status( id )
+{
+   var nv_timer = nv_settimeout_disable( 'status_' + id, 4000 );
+   $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'changestatus=1&id=' + id, function(res) {
+		if( res != 'OK' )
+    	{
+    		alert( nv_is_change_act_confirm[2] );
+    		window.location.href = window.location.href;
+    	}
+    	return;
+	});
+   return;
+}
+
+//  ---------------------------------------
+
+function nv_delete_law( id )
+{
+	if ( confirm( nv_is_del_confirm[0] ) )
+	{
+	   $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+    		if( res == 'OK' )
+        	{
+        		window.location.href = window.location.href;
+        	}
+        	else
+        	{
+        		alert( nv_is_del_confirm[2] );
+        	}
+    	});
+	}
+	return false;
+}
+
+function nv_delete_signer( id )
+{
+	if ( confirm( nv_is_del_confirm[0] ) )
+	{
+	   $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=signer&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+    		if( res == 'OK' )
+        	{
+        		window.location.href = window.location.href;
+        	}
+        	else
+        	{
+        		alert( nv_is_del_confirm[2] );
+        	}
+    	});
+	}
+	return false;
+}
+
