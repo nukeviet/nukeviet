@@ -90,10 +90,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
 				$dm = preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $dm );
+				$_p  = '';
+				if( preg_match( '/(.*)\:([0-9]+)$/', $dm, $m ) )
+				{
+					$dm = $m[1];
+					$_p  = ':' . $m[2];
+				}
 				$dm = nv_check_domain( nv_strtolower( $dm ) );
 				if( ! empty( $dm ) )
 				{
-					$array_config_global['my_domains'][] = $dm;
+					$array_config_global['my_domains'][] = $dm . $_p;
 				}
 			}
 		}
