@@ -141,7 +141,6 @@ $lang_module['no'] = 'No';
 $lang_module['what_is_openid'] = 'If you had Google or Yahoo\'s account, <br />you can click this picture below to login';
 $lang_module['google_openid_login'] = 'Google\'s account';
 $lang_module['yahoo_openid_login'] = 'Yahoo\'s account';
-$lang_module['myopenid_openid_login'] = 'MyOpenID\'s account';
 $lang_module['canceled_authentication'] = 'You canceled access by OpenID';
 $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
