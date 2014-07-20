@@ -51,6 +51,7 @@ if( $post_order == 1 )
 	$listgroup = '';
 	$i = 0;
 	$total = 0;
+	
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
 		if( $pro_config['active_price'] == '0' )
@@ -59,6 +60,8 @@ if( $post_order == 1 )
 		}
 		if( $_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 )
 		{
+			$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'] );
+			$info['price'] = $price['price'];
 			if( $i == 0 )
 			{
 				$listid .= $pro_id;
