@@ -19,61 +19,18 @@
 <!-- END: generate_page -->
 <script type="text/javascript">
 //<![CDATA[
-$("img.previewimg").lazyload({
+$('img.previewimg').lazyload({
 	placeholder : "{NV_BASE_SITEURL}images/grey.gif",
 	container : $(".filebrowse")
 });
-$(".imgcontent").bind("mouseup", function(e) {
+
+$('.imgcontent').bind("mouseup contextmenu", function(e) {
+	e.preventDefault();
 	fileMouseup(this, e);
 });
 
-$(".imgcontent").dblclick(function() {
+$('.imgcontent').dblclick(function() {
 	insertvaluetofield();
-});
-
-$(".imgcontent").contextMenu("contextMenu", {
-	menuStyle : {
-		width : "120px"
-	},
-	bindings : {
-		select : function() {
-			insertvaluetofield()
-		},
-		download : function() {
-			download()
-		},
-		filepreview : function() {
-			preview()
-		},
-		fileaddlogo : function() {
-			addlogo()
-		},
-		create : function() {
-			create()
-		},
-		move : function() {
-			move()
-		},
-		rename : function() {
-			filerename()
-		},
-		filedelete : function() {
-			filedelete()
-		},
-        cropfile : function() {
-			cropfile()
-		},
-		rotatefile : function() {
-			rotatefile()
-		}
-	},
-	onContextMenu : function(e){
-		if( $("div#contextMenu ul li").length > 0 ){
-			return true;
-		}
-		
-		return false;
-	},
 });
 //]]>
 </script>

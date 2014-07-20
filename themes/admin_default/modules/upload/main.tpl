@@ -15,7 +15,6 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.button.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.watermarker.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>

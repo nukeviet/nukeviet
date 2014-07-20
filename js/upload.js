@@ -372,102 +372,105 @@ function fileMouseup( file, e ){
 		
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		var area = $("input[name=area]").val();
-		var contextMenu = "<ul>";
+		var html = "";
 		
 		if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
-			contextMenu += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
+			html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
 		}
 		
 		if( ! isMultiple ){
-			contextMenu += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
-			contextMenu += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+			html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+			html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
 		}
 		
 		if( $.inArray( fileExt, array_images ) !== -1 ){
 			if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
-				contextMenu += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
-				contextMenu += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
-				contextMenu += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
-				contextMenu += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
+				html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+				html += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
+				html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
+				html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
 			}
 		}
 		
 		if( $("span#move_file").attr("title") == "1" ){
-			contextMenu += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
+			html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
 		}
 		
 		if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
-			contextMenu += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
+			html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
 		}
 		
 		if( $("span#delete_file").attr("title") == "1" ){
-			contextMenu += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
+			html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
 		}
 		
-		contextMenu += "</ul>";
-		$("div#contextMenu").html(contextMenu);
+		if( html != '' ){
+			html = "<ul>" + html + "</ul>";
+		}
+
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);
 	}
 }
 
-// Ham xu ly khi nhap chuot vao thu muc (Dinh quyen thao tac voi file trong thu muc duoc chon, truy cap thu muc)
-function folderClick( folder ){
-	var folderPath = $(folder).attr("title");
-	if( folderPath != $("span#foldervalue").attr("title") ){
-		$("span#foldervalue").attr("title", folderPath);
-		$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
-		$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
-		$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
-		$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
-		$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
-		$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
-		$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
-		$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
-		$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
-		$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
-		$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
-		$("span.folder").css("color", "");
-		
-		$(folder).css("color", "red");
-		
-		if( $(folder).is(".view_dir") ){
-			var imgtype = $("select[name=imgtype]").val();
-			var selFile = $("input[name=selFile]").val();
-			var author = $("select[name=author]").val() == 1 ? "&author" : "";
+// Ham xu ly khi click chuot vao thu muc (Xem chi tiet, dinh quyen doi ten, tao thu muc moi, xoa thu muc)
+function folderMouseup( folder, e ){
+	if( e.which != 3 ){ // Left mouse click
+		var folderPath = $(folder).attr("title");
+		if( folderPath != $("span#foldervalue").attr("title") ){
+			$("span#foldervalue").attr("title", folderPath);
+			$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
+			$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
+			$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
+			$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
+			$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
+			$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
+			$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
+			$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
+			$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
+			$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
+			$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
+			$("span.folder").css("color", "");
 			
-			$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
-		}else{
-			$("div#imglist").text("");
+			$(folder).css("color", "red");
+			
+			if( $(folder).is(".view_dir") ){
+				var imgtype = $("select[name=imgtype]").val();
+				var selFile = $("input[name=selFile]").val();
+				var author = $("select[name=author]").val() == 1 ? "&author" : "";
+				
+				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+			}else{
+				$("div#imglist").text("");
+			}
+			
+			NVUPLOAD.init();
+		}
+	}else if( $(folder).is('.menu') ){ // Right mouse click
+		$("span.folder").attr("name", "");
+		$(folder).attr("name", "current");
+		
+		var html = "";
+		
+		if( $(folder).is(".create_dir") ){
+			html += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 		}
 		
-		NVUPLOAD.init();
+		if( $(folder).is(".rename_dir") ){
+			html += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
+		}
+		
+		if( $(folder).is(".delete_dir") ){
+			html += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
+		}
+		
+		if( html != "" ){
+			html = "<ul>" + html + "</ul>"
+		}
+		
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);		
 	}
-}
-
-// Ham xu ly khi chuot phai vao thu muc (Dinh quyen doi ten, tao thu muc moi, xoa thu muc)
-function menuMouseup(a){
-	$(a).attr("title");
-	$("span").attr("name", "");
-	$(a).attr("name", "current");
-	
-	var b = "";
-	
-	if( $(a).is(".create_dir") ){
-		b += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
-	}
-	
-	if( $(a).is(".rename_dir") ){
-		b += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
-	}
-	
-	if( $(a).is(".delete_dir") ){
-		b += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
-	}
-	
-	if( b != "" ){
-		b = "<ul>" + b + "</ul>"
-	}
-	
-	$("div#contextMenu").html(b);
 }
 
 // Doi ten thu muc
@@ -1682,5 +1685,113 @@ var NVUPLOAD = {
 	},
 };
 
+var NVCMENU = {
+    menuStyle: {
+      listStyle: 'none',
+      padding: '1px',
+      margin: '0px',
+      backgroundColor: '#fff',
+      border: '1px solid #999',
+      width: '120px'
+    },
+    itemStyle: {
+      margin: '0px',
+      color: '#000',
+      display: 'block',
+      cursor: 'default',
+      padding: '3px',
+      border: '1px solid #fff',
+      backgroundColor: 'transparent'
+    },
+    itemHoverStyle: {
+      border: '1px solid #0a246a',
+      backgroundColor: '#b6bdd2'
+    },
+    shadow : null,
+    menu : null,
+	bindings : {
+		select : function() {
+			insertvaluetofield();
+		},
+		download : function() {
+			download();
+		},
+		filepreview : function() {
+			preview();
+		},
+		fileaddlogo : function() {
+			addlogo();
+		},
+		create : function() {
+			create();
+		},
+		move : function() {
+			move();
+		},
+		rename : function() {
+			filerename();
+		},
+		filedelete : function() {
+			filedelete();
+		},
+        cropfile : function() {
+			cropfile();
+		},
+		rotatefile : function() {
+			rotatefile();
+		},
+		renamefolder : function() {
+			renamefolder()
+		},
+		createfolder : function() {
+			createfolder()
+		},
+		deletefolder : function() {
+			deletefolder()
+		}
+	},
+	init : function(){
+		NVCMENU.menu = $('<div id="nvContextMenu"></div>').hide().css({position:'absolute', zIndex:'500'}).appendTo('body').bind('click', function(e){
+			//e.stopPropagation();
+		});
+		NVCMENU.shadow = $('<div id="nvContextMenuShadow"></div>').hide().css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499}).appendTo('body');
+	},
+	show : function(e){
+		e.preventDefault();
+		
+		if( $('#contextMenu').html() != '' ){
+			var content = $('#contextMenu').find('ul:first').clone(true);
+		    content.css(NVCMENU.menuStyle).find('li').css(NVCMENU.itemStyle).hover(function(){
+		        $(this).css(NVCMENU.itemHoverStyle);
+		      },
+		      function(){
+		        $(this).css(NVCMENU.itemStyle);
+		      }
+		    ).find('img').css({verticalAlign:'middle',paddingRight:'2px'});
+		    
+		   	NVCMENU.menu.html(content);
+		    
+			$.each(NVCMENU.bindings, function(id, func){
+				$('#' + id, NVCMENU.menu).bind('click', function(e){
+					NVCMENU.hide();
+					func();
+				});
+			});
+
+			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
+			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();
+			
+			$(document).one('click', NVCMENU.hide);
+		}
+		return false;
+	},
+	hide : function(){
+		NVCMENU.menu.hide();
+		NVCMENU.shadow.hide();
+	},
+};
+
+// Init functions
 KEYPR.init();
 RRT.init();
+NVCMENU.init();
