@@ -1752,9 +1752,15 @@ var NVCMENU = {
 	},
 	init : function(){
 		NVCMENU.menu = $('<div id="nvContextMenu"></div>').hide().css({position:'absolute', zIndex:'500'}).appendTo('body').bind('click', function(e){
-			//e.stopPropagation();
+			e.stopPropagation();
 		});
 		NVCMENU.shadow = $('<div id="nvContextMenuShadow"></div>').hide().css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499}).appendTo('body');
+		
+		$(document).delegate( '*', 'click', function(e){
+			if( e.which != 3 ){
+				NVCMENU.hide();
+			}	
+		});
 	},
 	show : function(e){
 		e.preventDefault();
@@ -1779,13 +1785,7 @@ var NVCMENU = {
 			});
 
 			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
-			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();
-			
-			$(document).one('click', function(e){
-				if( e.which != 3 ){
-					NVCMENU.hide();
-				}	
-			});
+			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();			
 		}
 		return false;
 	},
