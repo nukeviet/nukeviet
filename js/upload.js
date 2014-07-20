@@ -1781,7 +1781,11 @@ var NVCMENU = {
 			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
 			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();
 			
-			$(document).one('click', NVCMENU.hide);
+			$(document).one('click', function(e){
+				if( e.which != 3 ){
+					NVCMENU.hide();
+				}	
+			});
 		}
 		return false;
 	},
