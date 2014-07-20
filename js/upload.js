@@ -1172,6 +1172,10 @@ var RRT = {
 		var direction = RRT.direction;
 		direction ++;
 		
+		if( direction == 360 ){
+			direction = 0;
+		}
+		
 		RRT.setDirection( direction );
 		RRT.setVal();
 		RRT.trigger();
@@ -1179,6 +1183,10 @@ var RRT = {
 	decrease: function(){
 		var direction = RRT.direction;
 		direction --;
+		
+		if( direction == -1 ){
+			direction = 359;
+		}
 		
 		RRT.setDirection( direction );
 		RRT.setVal();
