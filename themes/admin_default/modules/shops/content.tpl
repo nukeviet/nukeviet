@@ -300,6 +300,8 @@
 	</div>
 </form>
 
+<div id="message"></div>
+
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
@@ -322,6 +324,17 @@
 		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
+	
+	$('[type="submit"]').hover(function(){
+		if( $('[name="keywords[]"]').length == 0 ){
+			if( $('#message-tags').length == 0 ){
+				$('#message').html('<div style="margin-top: 10px" id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
+			}
+		}else{
+			$('#message-tags').remove();
+		}
+	});
+
 </script>
 
 <!-- BEGIN:getalias -->

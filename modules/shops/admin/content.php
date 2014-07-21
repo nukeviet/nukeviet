@@ -883,6 +883,11 @@ if( ! empty( $rowcontent['keywords'] ) )
 	}
 }
 
+if( $module_config[$module_name]['auto_tags'] )
+{
+	$xtpl->parse( 'main.auto_tags' );
+}
+
 $archive_checked = ( $rowcontent['archive'] ) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'archive_checked', $archive_checked );
 
