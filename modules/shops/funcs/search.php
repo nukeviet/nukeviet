@@ -70,7 +70,7 @@ $tbl_src = '';
 if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
 	$dbkey = $db->dblikeescape( $key );
-	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
+	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' ) ";
 
 	if( $catid != 0 )
 	{
