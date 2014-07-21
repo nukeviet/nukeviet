@@ -18,6 +18,9 @@ error_reporting( 0 );
 
 define( 'NV_MAINFILE', true );
 
+// Bat/tat che do phat trien
+define( 'NV_DEVELOP_MODE', false );
+
 // Thoi gian bat dau phien lam viec
 define( 'NV_START_TIME', microtime( true ) );
 
