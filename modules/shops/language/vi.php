@@ -365,3 +365,6 @@ $lang_module['2star'] = '2 sao';
 $lang_module['1star'] = '1 sao';
 
 $lang_module['custom'] = 'Mở rộng';
+
+$lang_module['product_empty'] = 'Hết hàng';
+$lang_module['product_number'] = 'Còn lại';

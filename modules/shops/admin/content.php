@@ -484,7 +484,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 custom= :custom,
 			 " . NV_LANG_DATA . "_title= :title,
 			 " . NV_LANG_DATA . "_alias= :alias,
-			 " . NV_LANG_DATA . "_keywords= :keywords,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
 			 " . NV_LANG_DATA . "_warranty= :warranty,
@@ -504,7 +503,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen( $rowcontent['hometext'] ) );
 			$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
-			$stmt->bindParam( ':keywords', $rowcontent['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
 			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
 			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
@@ -650,7 +648,6 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['alias'] = $rowcontent[NV_LANG_DATA . '_alias'];
 	$rowcontent['hometext'] = $rowcontent[NV_LANG_DATA . '_hometext'];
 	$rowcontent['bodytext'] = $rowcontent[NV_LANG_DATA . '_bodytext'];
-	$rowcontent['keywords'] = $rowcontent[NV_LANG_DATA . '_keywords'];
 	$rowcontent['promotional'] = $rowcontent[NV_LANG_DATA . '_promotional'];
 	$rowcontent['warranty'] = $rowcontent[NV_LANG_DATA . '_warranty'];
 	$rowcontent['group_id'] = $group_id_old;
@@ -884,6 +881,11 @@ if( ! empty( $rowcontent['keywords'] ) )
 		$xtpl->assign( 'KEYWORDS', $keywords );
 		$xtpl->parse( 'main.keywords' );
 	}
+}
+
+if( $module_config[$module_name]['auto_tags'] )
+{
+	$xtpl->parse( 'main.auto_tags' );
 }
 
 $archive_checked = ( $rowcontent['archive'] ) ? " checked=\"checked\"" : "";

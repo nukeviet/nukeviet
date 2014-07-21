@@ -95,9 +95,9 @@ if( ! empty( $array_id ) )
 {
 	foreach( $array_id as $array_id_i )
 	{
-		$sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_warranty,' . NV_LANG_DATA . '_promotional as promotional, ' . NV_LANG_DATA . '_bodytext, custom, ' . NV_LANG_DATA . '_custom FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
+		$sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_warranty,' . NV_LANG_DATA . '_promotional as promotional, ' . NV_LANG_DATA . '_bodytext, custom, ' . NV_LANG_DATA . '_custom FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
 		$result = $db->query( $sql );
-		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice, $warranty, $promotional, $bodytext, $custom, $custom_lang ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $warranty, $promotional, $bodytext, $custom, $custom_lang ) = $result->fetch( 3 ) )
 		{
 			// Xac dinh anh lon
 			$homeimgfiles1 = $homeimgfile;
@@ -128,6 +128,7 @@ if( ! empty( $array_id ) )
 				'homeimgalt' => $homeimgalt,
 				'homeimgthumb' => $homeimgthumbs,
 				'product_code' => $product_code,
+				'product_number' => $product_number,
 				'product_price' => $product_price,
 				'discount_id' => $discount_id,
 				'money_unit' => $money_unit,

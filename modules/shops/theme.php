@@ -134,7 +134,14 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 					{
 						if( $data_row_i['showprice'] == '1' )
 						{
-							$xtpl->parse( 'main.catalogs.items.order' );
+							if( $data_row_i['product_number'] > 0 )
+							{
+								$xtpl->parse( 'main.catalogs.items.order' );
+							}
+							else
+							{
+								$xtpl->parse( 'main.catalogs.items.product_empty' );
+							}
 						}
 					}
 					if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.catalogs.items.tooltip' );
@@ -286,7 +293,14 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 					{
 						if( $data_row_i['showprice'] == '1' )
 						{
-							$xtpl->parse( 'main.catalogs.items.order' );
+							if( $data_row_i['product_number'] > 0 )
+							{
+								$xtpl->parse( 'main.catalogs.items.order' );
+							}
+							else
+							{
+								$xtpl->parse( 'main.catalogs.items.product_empty' );
+							}
 						}
 					}
 
@@ -422,7 +436,14 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.items.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.items.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.product_empty' );
+					}
 				}
 			}
 			
@@ -558,7 +579,14 @@ function view_search_all( $data_content, $html_pages = '' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.items.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.items.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.product_empty' );
+					}
 				}
 			}
 
@@ -757,7 +785,14 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.grid_rows.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.grid_rows.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.grid_rows.product_empty' );
+					}
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 ) $xtpl->parse( 'main.grid_rows.tooltip' );
@@ -849,11 +884,14 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart' );
 	$xtpl->assign( 'SUM', count( $data_content['data'] ) );
 
-	$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
-	if( ! empty( $data_content['image'] ) and file_exists( $image ) )
+	if( isset( $data_content['image'] ) )
 	{
-		$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
-		$xtpl->parse( 'main.image' );
+		$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
+		if( ! empty( $data_content['image'] ) and file_exists( $image ) )
+		{
+			$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
+			$xtpl->parse( 'main.image' );
+		}	
 	}
 
 	if( $pro_config['show_compare'] == 1 )
@@ -939,7 +977,14 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.row.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.row.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.row.product_empty' );
+					}
 				}
 			}
 
@@ -1033,9 +1078,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$price = nv_currency_conversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'], $data_content['discount_id'] );
 		$xtpl->assign( 'PRICE', $price );
 		$xtpl->assign( 'PRODUCT_CODE', $data_content['product_code'] );
+		$xtpl->assign( 'PRODUCT_NUMBER', $data_content['product_number'] );
         $xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
         $xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
         $xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
+		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 		
 		if( ! empty( $data_content['homeimgfile'] ) )
 		{
@@ -1229,7 +1276,14 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	{
 		if( $data_content['showprice'] == '1' )
 		{
-			$xtpl->parse( 'main.order' );
+			if( $data_content['product_number'] > 0 )
+			{
+				$xtpl->parse( 'main.order' );
+			}
+			else
+			{
+				$xtpl->parse( 'main.product_empty' );
+			}
 		}
 	}
 
@@ -2017,7 +2071,14 @@ function wishlist( $data_content, $html_pages = '' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.items.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.items.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.product_empty' );
+					}
 				}
 			}
 

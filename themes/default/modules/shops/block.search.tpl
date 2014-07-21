@@ -36,7 +36,7 @@
 	</div>
 
 	<div class="text-center">
-		<input type="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch()" class="btn btn-primary">
+		<input type="button" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch('{MODULE_NAME}')" class="btn btn-primary">
 	</div>
 </form>
 <!-- END: main -->

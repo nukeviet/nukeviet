@@ -64,7 +64,7 @@ if( empty( $contents ) )
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
+		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
 			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )
 			->order( $orderby )
 			->limit( $per_page )
@@ -72,7 +72,7 @@ if( empty( $contents ) )
 
 		$result = $db->query( $db->sql() );
 
-		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
@@ -100,6 +100,7 @@ if( empty( $contents ) )
 				'homeimgalt' => $homeimgalt,
 				'homeimgthumb' => $thumb,
 				'product_price' => $product_price,
+				'product_number' => $product_number,
 				'product_code' => $product_code,
 				'discount_id' => $discount_id,
 				'money_unit' => $money_unit,
@@ -133,7 +134,7 @@ if( empty( $contents ) )
 
 				$num_pro = $db->query( $db->sql() )->fetchColumn();
 
-				$db->select( 't1.id, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
+				$db->select( 't1.id, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
 					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )
 					->order( 't1.id DESC' )
 					->limit( $array_info_i['numlinks'] );
@@ -141,7 +142,7 @@ if( empty( $contents ) )
 				$result = $db->query( $db->sql() );
 				$data_pro = array();
 
-				while( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+				while( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 				{
 					if( $homeimgthumb == 1 )//image thumb
 					{
@@ -169,6 +170,7 @@ if( empty( $contents ) )
 						'homeimgalt' => $homeimgalt,
 						'homeimgthumb' => $thumb,
 						'product_code' => $product_code,
+						'product_number' => $product_number,
 						'product_price' => $product_price,
 						'discount_id' => $discount_id,
 						'money_unit' => $money_unit,
@@ -215,14 +217,14 @@ if( empty( $contents ) )
 				$sql_regexp = "(" . implode( " OR ", $sql_regexp ) . ")";
 
 				// Fetch Limit
-				$db->sqlreset()->select( 'COUNT(*)' )
+				$db->sqlreset()->select( 'DISTINCT id' )
 					->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
 					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t3.pro_id = t1.id' )
 					->where( $sql_regexp . ' AND t1.inhome=1 AND t1.status =1' );
 
-				$num_pro = $db->query( $db->sql() )->fetchColumn();
+				$num_pro = $db->query( $db->sql() )->rowCount();
 
-				$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
+				$db->select( 'DISTINCT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
 					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t3.pro_id = t1.id' )
 					->order( 't1.id DESC' )
 					->limit( $num_links );
@@ -231,7 +233,7 @@ if( empty( $contents ) )
 
 				$data_pro = array();
 
-				while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+				while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 				{
 					if( $homeimgthumb == 1 )//image thumb
 					{
@@ -259,6 +261,7 @@ if( empty( $contents ) )
 						'homeimgalt' => $homeimgalt,
 						'homeimgthumb' => $thumb,
 						'product_code' => $product_code,
+						'product_number' => $product_number,
 						'product_price' => $product_price,
 						'discount_id' => $discount_id,
 						'money_unit' => $money_unit,

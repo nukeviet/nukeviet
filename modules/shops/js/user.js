@@ -168,7 +168,7 @@ function cleartxtinput(id, txt_default) {
 	});
 }
 
-function onsubmitsearch() {
+function onsubmitsearch(module) {
 	var keyword = $('#keyword').val();
 	var price1 = $('#price1').val();
 	if (price1 == null)
@@ -183,7 +183,7 @@ function onsubmitsearch() {
 	if (keyword == '' && price1 == '' && price2 == '' && cataid == 0 ) {
 		return false;
 	} else {
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=shops&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid;
+		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + module + '&' + nv_fc_variable + '=search_result&keyword=' + rawurlencode(keyword) + '&price1=' + price1 + '&price2=' + price2 + '&typemoney=' + typemoney + '&cata=' + cataid;
 	}
 	return false;
 }
