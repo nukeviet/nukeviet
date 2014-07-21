@@ -58,6 +58,7 @@ if( ! function_exists( 'nv_search_product' ) )
 		$xtpl = new XTemplate( 'block.search.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		$xtpl->assign( 'MODULE_NAME', $module );
 
 		$sql = 'SELECT catid, lev, ' . NV_LANG_DATA . '_title AS title FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
 		$list = nv_db_cache( $sql, '', $module );

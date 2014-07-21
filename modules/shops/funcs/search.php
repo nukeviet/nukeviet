@@ -125,7 +125,7 @@ if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 		}
 		else//no image
 		{
-			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_name . '/no-image.jpg';
+			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 		}
 
 		$array_content[] = array(
