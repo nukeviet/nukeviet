@@ -106,6 +106,7 @@
 	</div>
 	<!-- END: items -->
 </div>
+<div class="clear">&nbsp;</div>
 <!-- BEGIN: pages -->
 <div class="pages">
 	{generate_page}
