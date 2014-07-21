@@ -380,24 +380,11 @@ function fileMouseup( file, e ){
 		}
 	}
 	
+	LFILE.setSelFile();
+
 	if( e.which == 3 ){
 		var isMultiple = $('.imgsel').length === 1 ? false : true;
-		var fileName, fileExt;
-		
-		if( isMultiple ){
-			fileExt = '';
-			fileName = new Array();
-			$.each( $('.imgsel'), function(){
-				fileName.push( $(this).attr("title") );
-			});
-			fileName = fileName.join('|');
-		}else{
-			fileName = $(file).attr("title");
-			fileExt = isMultiple ? '' : fileName.slice(-3);			
-		}
-		
-		$("input[name=selFile]").val(fileName);
-		
+		var fileExt = $("input[name=selFile]").val().slice(-3);	
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		var area = $("input[name=area]").val();
 		var html = "";
@@ -1172,6 +1159,19 @@ var LFILE = {
 		
 		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10) );
 	},
+	setSelFile : function(){
+		$("input[name=selFile]").val('');
+	
+		if( $('.imgsel').length ){
+			fileName = new Array();
+			$.each( $('.imgsel'), function(){
+				fileName.push( $(this).attr("title") );
+			});
+			fileName = fileName.join('|');
+			
+			$("input[name=selFile]").val(fileName);
+		}
+	},
 }
 
 /* Rorate Handle */
@@ -1336,25 +1336,37 @@ var KEYPR = {
 			}
 			
 			// Ctrl key press
-			if( e.keyCode == 17 ){
+			if( e.keyCode == 17 /* Ctrl */ ){
 				KEYPR.isCtrl = true;
-			}else if( e.keyCode == 27 ){
+			}else if( e.keyCode == 27 /* ESC */ ){
 				// Unselect all file
 				$(".imgsel").removeClass("imgsel");
+				LFILE.setSelFile();
 				
 				// Hide contextmenu
 				NVCMENU.hide();
 				
 				// Reset shift offset
 				KEYPR.shiftOffset = 0;
-			}else if( e.keyCode == 65 && e.ctrlKey === true ){
+			}else if( e.keyCode == 65 /* A */ && e.ctrlKey === true ){
 				// Select all file
 				$(".imgcontent").addClass("imgsel");
+				LFILE.setSelFile();
 				
 				// Hide contextmenu
 				NVCMENU.hide();
-			}else if( e.keyCode == 16 ){
+			}else if( e.keyCode == 16 /* Shift */ ){
 				KEYPR.isShift = true;
+			}else if( e.keyCode == 46 /* Del */ ){
+				// Delete file
+				if( $('.imgsel').length && $("span#delete_file").attr("title") == '1' ){
+					filedelete();
+				}
+			}else if( e.keyCode == 88 /* X */ ){
+				// Move file
+				if( $('.imgsel').length && $("span#move_file").attr("title") == '1' ){
+					move();
+				}
 			}
 		});
 		
