@@ -1359,8 +1359,8 @@ var KEYPR = {
 		});
 		
 		// Unselect file when click on wrap area
-		$('.filebrowse').click(function(e){
-			if( $(e.target).is('.filebrowse') ){
+		$('#imglist, .filebrowse').click(function(e){
+			if( $(e.target).is('.filebrowse') || $(e.target).is('#imglist') ){
 				$(".imgsel").removeClass("imgsel");
 			}
 		});

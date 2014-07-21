@@ -31,7 +31,7 @@
 			</p>
 		</div>
 		<div id="upload-content" class="col-lg-10 col-md-10 col-sm-9 filebrowse">
-			<div id="imglist">
+			<div id="imglist" class="clearfix">
 				<p class="upload-loading">
 					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
 					<br />
