@@ -260,7 +260,8 @@ img.watermark:hover {
 
 /* List files */
 #imglist {
-	margin: 5px
+	height: 100%;
+	padding: 5px 0;
 }
 
 .imgcontent {
