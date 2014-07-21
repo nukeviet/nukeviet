@@ -413,12 +413,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #left-menu .dropdown-menu > li > a {
-	color: #999;
+	color: #333;
 	padding: 5px 20px;
 }
 
 #left-menu .dropdown-menu > li > a:hover, #left-menu .dropdown-menu > li > a:focus {
-	background: #f9f9f9;
+	background: #e1e1e1;
 	color: #cb0000;
 }
 
