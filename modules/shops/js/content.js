@@ -85,8 +85,6 @@ $(document).ready(function() {
 
 });
 
-$("#listgroupid").load('{url_load}');
-
 function FormatNumber(str) {
 
 	var strTemp = GetNumber(str);

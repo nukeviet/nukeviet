@@ -334,6 +334,8 @@
 			$('#message-tags').remove();
 		}
 	});
+	
+	$("#listgroupid").load('{url_load}');
 
 </script>
 
