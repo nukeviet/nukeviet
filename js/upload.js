@@ -338,6 +338,19 @@ function filedelete(){
 
 // Ham xu ly khi nhap chuot vao 1 file (Chuot trai lan chuot phai)
 function fileMouseup( file, e ){
+	// Set shift offset
+	if( e.which != 3 && ! KEYPR.isShift ){
+		// Reset shift offset
+		KEYPR.shiftOffset = 0;
+
+		$.each( $('.imgcontent'), function(k, v){
+			if( v == file ){
+				KEYPR.shiftOffset = k;
+				return false;
+			}
+		});
+	}
+	
 	// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
 	if( KEYPR.isCtrl ){
 		if( $(file).is('.imgsel') && e.which != 3 ){
@@ -345,6 +358,21 @@ function fileMouseup( file, e ){
 		}else{
 			$(file).addClass('imgsel');
 		}
+	}else if( KEYPR.isShift && e.which != 3 ){
+		var clickOffset = -1;
+		$('.imgcontent').removeClass('imgsel');
+		
+		$.each( $('.imgcontent'), function(k, v){
+			if( v == file ){
+				clickOffset = k;
+			}
+			
+			if( ( clickOffset == -1 && k >= KEYPR.shiftOffset ) || ( clickOffset != -1 && k <= KEYPR.shiftOffset ) || v == file ){
+				if( ! $(v).is('.imgsel') ){
+					$(v).addClass('imgsel');
+				}
+			}
+		});
 	}else{
 		if( e.which != 3 || ( e.which == 3 && ! $(file).is('.imgsel') ) ){
 			$('.imgsel').removeClass('imgsel');
@@ -1138,6 +1166,9 @@ var LFILE = {
 		var imgtype = $("select[name=imgtype]").val();
 		var author = $("select[name=author]").val() == 1 ? "&author" : "";
 		var order = $("select[name=order]").val();
+
+		// Reset shift offset
+		KEYPR.shiftOffset = 0;
 		
 		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10) );
 	},
@@ -1279,6 +1310,7 @@ var RRT = {
 var KEYPR = {
 	isCtrl : false,
 	isShift : false,
+	shiftOffset : 0,
 	allowKey : [ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123 ],
 	init : function(){
 		$('body').keyup(function(e){			
@@ -1291,6 +1323,8 @@ var KEYPR = {
 			// Ctrl key unpress
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = false;
+			}else if( e.keyCode == 16 ){
+				KEYPR.isShift = false;
 			}
 		});
 		
@@ -1305,10 +1339,22 @@ var KEYPR = {
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = true;
 			}else if( e.keyCode == 27 ){
-				// Unselect file
+				// Unselect all file
 				$(".imgsel").removeClass("imgsel");
+				
+				// Hide contextmenu
+				NVCMENU.hide();
+				
+				// Reset shift offset
+				KEYPR.shiftOffset = 0;
 			}else if( e.keyCode == 65 && e.ctrlKey === true ){
+				// Select all file
 				$(".imgcontent").addClass("imgsel");
+				
+				// Hide contextmenu
+				NVCMENU.hide();
+			}else if( e.keyCode == 16 ){
+				KEYPR.isShift = true;
 			}
 		});
 		
