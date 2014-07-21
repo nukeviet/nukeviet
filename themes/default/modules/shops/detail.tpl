@@ -173,11 +173,17 @@
         <div class="col-md-6">
             <!-- BEGIN: order -->
             <div class="pull-right" style="margin-top: 6px">
-                <span class="pull-left" style="margin: 6px 6px 0">{LANG.title_order}:</span>
+                <span class="pull-left text-muted" style="margin: 6px 20px 0">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
                 <input type="number" name="num" value="1" id="pnum" class="pull-left form-control" style="width: 70px">
                 <a href="javascript:void(0)" id="{proid}" title="{title_pro}" onclick="cartorder_detail(this)"><button class="btn btn-warning btn-xs" style="margin: 5px 0 0 5px">{LANG.add_product}</button></a>
             </div>
             <!-- END: order -->
+            
+            <!-- BEGIN: product_empty -->
+            <div class="pull-right" style="margin-top: 6px">
+                <button class="btn btn-danger disabled">{LANG.product_empty}</button>
+            </div>
+            <!-- END: product_empty -->
         </div>
     </div>
 

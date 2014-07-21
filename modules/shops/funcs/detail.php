@@ -82,7 +82,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 	// Fetch Limit
 	$db->sqlreset()
-		->select( ' t1.id, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext, t2.newday' )
+		->select( ' t1.id, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext, t2.newday' )
 		->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
 		->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t1.listcatid = t2.catid' )
 		->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )
@@ -91,7 +91,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$result = $db->query( $db->sql() );
 
 	$data_others = array();
-	while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_price, $money_unit, $discount_id, $showprice, $hometext, $newday ) = $result->fetch( 3 ) )
+	while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -119,6 +119,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'hometext' => $hometext,
 			'addtime' => $addtime,
 			'product_code' => $product_code,
+			'product_number' => $product_number,
 			'product_price' => $product_price,
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
@@ -143,7 +144,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		if( ! empty( $arrtempid ) )
 		{
 			// Fetch Limit
-			$db->sqlreset()->select( 't1.id, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext, t2.newday' )
+			$db->sqlreset()->select( 't1.id, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext, t2.newday' )
 			->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
 			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t1.listcatid = t2.catid' )
 			->where( 'id IN ( ' . $arrtempid . ') AND status=1' )
@@ -151,7 +152,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			->limit( $pro_config['per_row'] * 2 );
 			$result = $db->query( $db->sql() );
 
-			while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_price, $money_unit, $discount_id, $showprice, $hometext, $newday ) = $result->fetch( 3 ) )
+			while( list( $_id, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $newday ) = $result->fetch( 3 ) )
 			{
 				if( $homeimgthumb == 1 )//image thumb
 				{
@@ -179,6 +180,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					'hometext' => $hometext,
 					'addtime' => $addtime,
 					'product_code' => $product_code,
+					'product_number' => $product_number,
 					'product_price' => $product_price,
 					'discount_id' => $discount_id,
 					'money_unit' => $money_unit,

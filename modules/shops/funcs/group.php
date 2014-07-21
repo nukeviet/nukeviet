@@ -34,7 +34,7 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 $db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( "(group_id='" . $groupid . "' OR group_id REGEXP '^" . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\\\,' OR group_id REGEXP '\\\," . $groupid . "\$') AND status =1" );
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgalt, homeimgfile, homeimgthumb, product_code, product_price, money_unit, discount_id, showprice' )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$db->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgalt, homeimgfile, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice' )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 $result = $db->query( $db->sql() );
 

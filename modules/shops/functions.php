@@ -120,7 +120,7 @@ function GetDataIn( $result, $catid )
 	global $global_array_cat, $module_name, $db, $link, $module_info, $global_config;
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -148,6 +148,7 @@ function GetDataIn( $result, $catid )
 			'homeimgalt' => $homeimgalt,
 			'homeimgthumb' => $thumb,
 			'product_code' => $product_code,
+			'product_number' => $product_number,
 			'product_price' => $product_price,
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
@@ -181,7 +182,7 @@ function GetDataInGroup( $result, $groupid )
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $money_unit, $discount_id, $showprice ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -209,6 +210,7 @@ function GetDataInGroup( $result, $groupid )
 			'homeimgalt' => $homeimgalt,
 			'homeimgthumb' => $thumb,
 			'product_code' => $product_code,
+			'product_number' => product_number,
 			'product_price' => $product_price,
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,

@@ -57,6 +57,10 @@
                             <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                             <!-- END: order -->
                             
+							<!-- BEGIN: product_empty -->
+		                    <button class="btn btn-danger disabled btn-xs">{LANG.product_empty}</button>
+		                    <!-- END: product_empty -->
+                            
 		                    <!-- BEGIN: wishlist -->
 		                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
 		                    <!-- END: wishlist -->
