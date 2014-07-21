@@ -884,11 +884,14 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart' );
 	$xtpl->assign( 'SUM', count( $data_content['data'] ) );
 
-	$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
-	if( ! empty( $data_content['image'] ) and file_exists( $image ) )
+	if( isset( $data_content['image'] ) )
 	{
-		$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
-		$xtpl->parse( 'main.image' );
+		$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
+		if( ! empty( $data_content['image'] ) and file_exists( $image ) )
+		{
+			$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
+			$xtpl->parse( 'main.image' );
+		}	
 	}
 
 	if( $pro_config['show_compare'] == 1 )
@@ -2068,7 +2071,14 @@ function wishlist( $data_content, $html_pages = '' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$xtpl->parse( 'main.items.order' );
+					if( $data_row['product_number'] > 0 )
+					{
+						$xtpl->parse( 'main.items.order' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.product_empty' );
+					}
 				}
 			}
 
