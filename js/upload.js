@@ -6,51 +6,61 @@
  * @Createdate 27/01/2011, 9:36
  */
 
-function nv_randomNum(a){
-	for (var b = "", d = 0; d < a; d++){
-		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
+function nv_randomNum( a ){
+	for( var b = "", d = 0; d < a; d++ ){
+		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
 	}
-	return b
+	
+	return b;
 }
 
-function resize_byWidth(a, b, d){
-	return Math.round(d / a * b);
+// Return height
+function resize_byWidth( a, b, d ){
+	return parseInt( Math.round( d / a * b ) );
 }
 
-function resize_byHeight(a, b, d){
-	return Math.round(d / b * a);
+// Return width
+function resize_byHeight( a, b, d ){
+	return parseInt( Math.round( d / b * a ) );
 }
 
-function calSize(a, b, d, e){
-	if(a > d){
-		b = resize_byWidth(a, b, d);
+// Resize image with display width and height (fix to container)
+function calSize( a, b, d, e ){
+	if( a > d ){
+		b = resize_byWidth( a, b, d );
 		a = d;
 	}
-	if(b > e){
-		a = resize_byHeight(a, b, e);
+	
+	if( b > e ){
+		a = resize_byHeight( a, b, e );
 		b = e
 	}
-	return [a, b];
+	
+	return [parseInt( a ), parseInt( b )];
 }
 
-function calSizeMax(a, b, d, e){
+function calSizeMax( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d <= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d <= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
-function calSizeMin(a, b, d, e){
+function calSizeMin( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d >= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d >= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
 function is_numeric(a){
@@ -165,7 +175,7 @@ function preview(){
 	if( selFileData[3] == "image" || selFileData[2] == "swf" ){
 		var size = calSize( selFileData[0], selFileData[1], 360, 230 );
 		html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '" />') : $("#fileView").flash({
+		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
 			src : nv_siteroot + fullPath + "/" + selFile,
 			width : size[0],
 			height : size[1]
@@ -193,21 +203,6 @@ function preview(){
 	});
 }
 
-// Them logo
-function addlogo(){
-	var selFile = $("input[name=selFile]").val();
-	var e = LANG.upload_size + ": ";
-	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
-	path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
-	var win = null;
-	
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'addlogo&path=' + path + "&file=" + selFile, 'addlogo', settings);
-}
-
 // Tao anh moi (Menu cong cu anh)
 function create(){
 	$("div.dynamic").text("");
@@ -230,7 +225,7 @@ function create(){
 		
 		DisSize = calSize( selFileData[0], selFileData[1], 360, 230 );
 		
-		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile );
+		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile + "?" + selFileData[8] );
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
 		$("#fileInfoName2").html( selFile );
 		
@@ -377,102 +372,105 @@ function fileMouseup( file, e ){
 		
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		var area = $("input[name=area]").val();
-		var contextMenu = "<ul>";
+		var html = "";
 		
 		if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
-			contextMenu += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
+			html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
 		}
 		
 		if( ! isMultiple ){
-			contextMenu += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
-			contextMenu += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+			html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+			html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
 		}
 		
 		if( $.inArray( fileExt, array_images ) !== -1 ){
 			if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
-				contextMenu += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
-				contextMenu += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
-				contextMenu += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
-				contextMenu += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
+				html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+				html += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
+				html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
+				html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
 			}
 		}
 		
 		if( $("span#move_file").attr("title") == "1" ){
-			contextMenu += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
+			html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
 		}
 		
 		if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
-			contextMenu += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
+			html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
 		}
 		
 		if( $("span#delete_file").attr("title") == "1" ){
-			contextMenu += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
+			html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
 		}
 		
-		contextMenu += "</ul>";
-		$("div#contextMenu").html(contextMenu);
+		if( html != '' ){
+			html = "<ul>" + html + "</ul>";
+		}
+
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);
 	}
 }
 
-// Ham xu ly khi nhap chuot vao thu muc (Dinh quyen thao tac voi file trong thu muc duoc chon, truy cap thu muc)
-function folderClick( folder ){
-	var folderPath = $(folder).attr("title");
-	if( folderPath != $("span#foldervalue").attr("title") ){
-		$("span#foldervalue").attr("title", folderPath);
-		$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
-		$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
-		$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
-		$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
-		$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
-		$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
-		$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
-		$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
-		$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
-		$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
-		$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
-		$("span.folder").css("color", "");
-		
-		$(folder).css("color", "red");
-		
-		if( $(folder).is(".view_dir") ){
-			var imgtype = $("select[name=imgtype]").val();
-			var selFile = $("input[name=selFile]").val();
-			var author = $("select[name=author]").val() == 1 ? "&author" : "";
+// Ham xu ly khi click chuot vao thu muc (Xem chi tiet, dinh quyen doi ten, tao thu muc moi, xoa thu muc)
+function folderMouseup( folder, e ){
+	if( e.which != 3 ){ // Left mouse click
+		var folderPath = $(folder).attr("title");
+		if( folderPath != $("span#foldervalue").attr("title") ){
+			$("span#foldervalue").attr("title", folderPath);
+			$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
+			$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
+			$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
+			$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
+			$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
+			$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
+			$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
+			$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
+			$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
+			$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
+			$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
+			$("span.folder").css("color", "");
 			
-			$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
-		}else{
-			$("div#imglist").text("");
+			$(folder).css("color", "red");
+			
+			if( $(folder).is(".view_dir") ){
+				var imgtype = $("select[name=imgtype]").val();
+				var selFile = $("input[name=selFile]").val();
+				var author = $("select[name=author]").val() == 1 ? "&author" : "";
+				
+				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+			}else{
+				$("div#imglist").text("");
+			}
+			
+			NVUPLOAD.init();
+		}
+	}else if( $(folder).is('.menu') ){ // Right mouse click
+		$("span.folder").attr("name", "");
+		$(folder).attr("name", "current");
+		
+		var html = "";
+		
+		if( $(folder).is(".create_dir") ){
+			html += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 		}
 		
-		NVUPLOAD.init();
+		if( $(folder).is(".rename_dir") ){
+			html += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
+		}
+		
+		if( $(folder).is(".delete_dir") ){
+			html += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
+		}
+		
+		if( html != "" ){
+			html = "<ul>" + html + "</ul>"
+		}
+		
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);		
 	}
-}
-
-// Ham xu ly khi chuot phai vao thu muc (Dinh quyen doi ten, tao thu muc moi, xoa thu muc)
-function menuMouseup(a){
-	$(a).attr("title");
-	$("span").attr("name", "");
-	$(a).attr("name", "current");
-	
-	var b = "";
-	
-	if( $(a).is(".create_dir") ){
-		b += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
-	}
-	
-	if( $(a).is(".rename_dir") ){
-		b += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
-	}
-	
-	if( $(a).is(".delete_dir") ){
-		b += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
-	}
-	
-	if( b != "" ){
-		b = "<ul>" + b + "</ul>"
-	}
-	
-	$("div#contextMenu").html(b);
 }
 
 // Doi ten thu muc
@@ -531,14 +529,229 @@ function searchfile(){
 
 // Cat anh
 function cropfile(){
-	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var c = $("img[title='" + a + "']").attr("name").split("|");
-	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
-	var win = null;
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'cropimg&path=' + b + "&file=" + a, 'addlogo', settings);
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#cropContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="crop-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#cropButtons').html('<span class="text-danger">' + LANG.crop_error_small + '</span>');
+	}else{
+		$('#cropButtons').html(
+			'X:<input type="text" id="crop-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="crop-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="crop-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="crop-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="crop-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		var markW = parseInt( Math.round( size[0] * 0.7 ) );
+		var markH = parseInt( Math.round( size[1] * 0.7 ) );
+		
+		if( markW < 10 ){
+			markW = 10;
+		}
+		
+		if( markH < 10 ){
+			markH = 10;
+		}
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#cropContent img.crop-image').Watermarker({
+			watermark_img : nv_siteroot + 'themes/admin_default/images/transparent.png',
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#crop-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#crop-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#crop-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#crop-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#crop-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "cropimg&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#crop-x').val() + "&y=" + $('#crop-y').val() + "&w=" + $('#crop-w').val() + "&h=" + $('#crop-h').val(),
+				success : function(e){
+					$('#crop-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#cropimage").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#cropimage").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
+}
+
+// Them logo
+function addlogo(){
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	var logo = $("input[name=upload_logo]").val();
+	var logoConfig = $("input[name=upload_logo_config]").val().split('|');
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#addlogoContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="addlogo-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.addlogo_error_small + '</span>');
+	}else if( logo == '' ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.notlogo + '</span>');
+	}else{
+		$('#addlogoButtons').html(
+			'X:<input type="text" id="addlogo-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="addlogo-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="addlogo-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="addlogo-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="addlogo-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		
+		// Set logo size
+		var markW, markH;
+
+		if( selFileData[0] <= 150 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[2] ) / 100 );
+		}
+		else if( selFileData[0] < 350 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[3] ) / 100 );
+		}
+		else
+		{
+			if( Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 ) > logoConfig[0] )
+			{
+				markW = logoConfig[0];
+			}
+			else
+			{
+				markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 );
+			}
+		}
+		
+		markH = Math.ceil( markW * logoConfig[1] / logoConfig[0] );
+		
+		if( markH > selFileData[1] ){
+			markH = selFileData[1];
+			markW = Math.ceil( markH * logoConfig[0] / logoConfig[1] );
+		}
+		
+		markW = parseInt( Math.floor( markW / markScale ) );
+		markH = parseInt( Math.floor( markH / markScale ) );
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#addlogoContent img.addlogo-image').Watermarker({
+			watermark_img : logo,
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#addlogo-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#addlogo-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#addlogo-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#addlogo-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#addlogo-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "addlogo&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#addlogo-x').val() + "&y=" + $('#addlogo-y').val() + "&w=" + $('#addlogo-w').val() + "&h=" + $('#addlogo-h').val(),
+				success : function(e){
+					$('#addlogo-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#addlogo").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#addlogo").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
 }
 
 // Xoay anh
@@ -567,13 +780,14 @@ function rotatefile(){
 
 	$("div#rorateimage").dialog({
 		autoOpen : false,
-		width : 388,
+		width : 400,
 		modal : true,
 		position : "center"
 	}).dialog("open");
 	
 	// Dat lai gia tri xoay
 	RRT.direction = 0;
+	RRT.currentDirection = 0;
 }
 
 var ICON = [];
@@ -932,6 +1146,8 @@ var LFILE = {
 /* Rorate Handle */
 var RRT = {
 	direction: 0,
+	currentDirection: 0,
+	arrayDirection: [ 0, 90, 180, 270 ],
 	timer: null,
 	timeOut: 20,
 	trigger: function(){
@@ -959,6 +1175,10 @@ var RRT = {
 		var direction = RRT.direction;
 		direction ++;
 		
+		if( direction == 360 ){
+			direction = 0;
+		}
+		
 		RRT.setDirection( direction );
 		RRT.setVal();
 		RRT.trigger();
@@ -966,6 +1186,10 @@ var RRT = {
 	decrease: function(){
 		var direction = RRT.direction;
 		direction --;
+		
+		if( direction == -1 ){
+			direction = 359;
+		}
 		
 		RRT.setDirection( direction );
 		RRT.setVal();
@@ -998,6 +1222,30 @@ var RRT = {
 		
 		$('#rorateRight').bind( "mouseup mouseleave", function(){
 			clearInterval( RRT.timer );
+		});
+		
+		$('#rorate90Anticlockwise').click(function(){
+			RRT.currentDirection --;
+			
+			if( RRT.currentDirection < 0 ){
+				RRT.currentDirection = 3;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
+		});
+		
+		$('#rorate90Clockwise').click(function(){
+			RRT.currentDirection ++;
+			
+			if( RRT.currentDirection > 3 ){
+				RRT.currentDirection = 0;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
 		});
 		
 		$('#rorateimageOK').click(function(){
@@ -1114,10 +1362,12 @@ var NVUPLOAD = {
 		}else{
 			$('#upload-button-area').html( NVUPLOAD.buttons );
 			
+			var folderPath = $("span#foldervalue").attr("title");
+			
 			NVUPLOAD.uploader = new plupload.Uploader({
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
-				url : nv_module_url + "upload&random=" + nv_randomNum(10),
+				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
 				flash_swf_url : nv_siteroot + 'js/plupload/Moxie.swf',
 				silverlight_xap_url : nv_siteroot+ 'js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
@@ -1435,5 +1685,117 @@ var NVUPLOAD = {
 	},
 };
 
+var NVCMENU = {
+    menuStyle: {
+      listStyle: 'none',
+      padding: '1px',
+      margin: '0px',
+      backgroundColor: '#fff',
+      border: '1px solid #999',
+      width: '120px'
+    },
+    itemStyle: {
+      margin: '0px',
+      color: '#000',
+      display: 'block',
+      cursor: 'default',
+      padding: '3px',
+      border: '1px solid #fff',
+      backgroundColor: 'transparent'
+    },
+    itemHoverStyle: {
+      border: '1px solid #0a246a',
+      backgroundColor: '#b6bdd2'
+    },
+    shadow : null,
+    menu : null,
+	bindings : {
+		select : function() {
+			insertvaluetofield();
+		},
+		download : function() {
+			download();
+		},
+		filepreview : function() {
+			preview();
+		},
+		fileaddlogo : function() {
+			addlogo();
+		},
+		create : function() {
+			create();
+		},
+		move : function() {
+			move();
+		},
+		rename : function() {
+			filerename();
+		},
+		filedelete : function() {
+			filedelete();
+		},
+        cropfile : function() {
+			cropfile();
+		},
+		rotatefile : function() {
+			rotatefile();
+		},
+		renamefolder : function() {
+			renamefolder()
+		},
+		createfolder : function() {
+			createfolder()
+		},
+		deletefolder : function() {
+			deletefolder()
+		}
+	},
+	init : function(){
+		NVCMENU.menu = $('<div id="nvContextMenu"></div>').hide().css({position:'absolute', zIndex:'500'}).appendTo('body').bind('click', function(e){
+			e.stopPropagation();
+		});
+		NVCMENU.shadow = $('<div id="nvContextMenuShadow"></div>').hide().css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499}).appendTo('body');
+		
+		$(document).delegate( '*', 'click', function(e){
+			if( e.which != 3 ){
+				NVCMENU.hide();
+			}	
+		});
+	},
+	show : function(e){
+		e.preventDefault();
+		
+		if( $('#contextMenu').html() != '' ){
+			var content = $('#contextMenu').find('ul:first').clone(true);
+		    content.css(NVCMENU.menuStyle).find('li').css(NVCMENU.itemStyle).hover(function(){
+		        $(this).css(NVCMENU.itemHoverStyle);
+		      },
+		      function(){
+		        $(this).css(NVCMENU.itemStyle);
+		      }
+		    ).find('img').css({verticalAlign:'middle',paddingRight:'2px'});
+		    
+		   	NVCMENU.menu.html(content);
+		    
+			$.each(NVCMENU.bindings, function(id, func){
+				$('#' + id, NVCMENU.menu).bind('click', function(e){
+					NVCMENU.hide();
+					func();
+				});
+			});
+
+			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
+			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();			
+		}
+		return false;
+	},
+	hide : function(){
+		NVCMENU.menu.hide();
+		NVCMENU.shadow.hide();
+	},
+};
+
+// Init functions
 KEYPR.init();
 RRT.init();
+NVCMENU.init();

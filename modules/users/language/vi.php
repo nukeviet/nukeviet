@@ -155,7 +155,6 @@ $lang_module['no'] = 'Không';
 $lang_module['what_is_openid'] = 'Nếu đã có tài khoản Google hoặc Yahoo,<br />bạn có thể click vào hình dưới đây để đăng nhập';
 $lang_module['google_openid_login'] = 'Tài khoản Google';
 $lang_module['yahoo_openid_login'] = 'Tài khoản Yahoo';
-$lang_module['myopenid_openid_login'] = 'Tài khoản MyOpenID';
 $lang_module['canceled_authentication'] = 'Bạn đã hủy bỏ truy cập bằng OpenID';
 $lang_module['not_logged_in'] = 'Bạn Chưa đăng nhập bằng OpenID';
 $lang_module['logged_in_failed'] = 'Rất tiếc là OpenID-Server không cung cấp đủ các thông tin cần thiết để có thể đăng nhập vào website của chúng tôi';

@@ -167,6 +167,10 @@
 	overflow: hidden;
 }
 
+#rorateimage .btn-reset{
+	width: 38px;
+}
+
 #rorateContent{
 	margin: 0 auto 10px auto;
 }
@@ -254,12 +258,6 @@ img.watermark:hover {
 	width: 50px!important;
 }
 
-/* Context Menu */
-#jqContextMenu .fa{
-	color: #666;
-	width: 25px;
-}
-
 /* List files */
 #imglist {
 	margin: 5px
@@ -317,4 +315,46 @@ img.previewimg {
 	color: #F00;
 	font-size: 12px;
 	padding: 15px
+}
+
+/* Crop image */
+#cropimage{
+	padding: 10px;
+	display: none;	
+}
+
+#cropimage .crop-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
+}
+
+#cropimage .crop-content img{
+	vertical-align: top;
+}
+
+.ui-dialog .ui-resizable-se {
+	background-position: -64px -224px!important;
+	right: 1px!important;
+	bottom: 1px!important;
+}
+
+/* Add logo */
+#addlogo{
+	padding: 10px;
+	display: none;	
+}
+
+#addlogo .addlogo-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
+}
+
+#addlogo .addlogo-content img{
+	vertical-align: top;
+}
+
+/* Context Menu */
+#nvContextMenu .fa{
+	color: #666;
+	width: 25px;
 }

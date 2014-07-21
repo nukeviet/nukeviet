@@ -4,9 +4,9 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.button.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
@@ -14,7 +14,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.button.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.watermarker.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>
@@ -90,6 +90,8 @@
 <input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
 <input type="hidden" name="area" value="{AREA}"/>
 <input type="hidden" name="alt" value="{ALT}"/>
+<input type="hidden" name="upload_logo" value="{UPLOAD_LOGO}"/>
+<input type="hidden" name="upload_logo_config" value="{UPLOAD_LOGO_CONFIG}"/>
 
 <div class="upload-hide" id="contextMenu"></div>
 
@@ -230,11 +232,17 @@
 	</div>
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
-		<button id="rorateLeft" type="button" class="btn btn-default">
+		<button id="rorate90Anticlockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-undo">&nbsp;</em> 90
+		</button>
+		<button id="rorateLeft" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-undo">&nbsp;</em>
 		</button>
-		<button id="rorateRight" type="button" class="btn btn-default">
+		<button id="rorateRight" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+		</button>
+		<button id="rorate90Clockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em> 90
 		</button>
 		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
 	</div>
@@ -250,6 +258,16 @@
 		</div>
 		<div class="col-xs-2 dynamic text-center" id="upload-remote-info"></div>
 	</div>
+</div>
+
+<div id="cropimage" title="{LANG.crop}">
+	<div id="cropContent" class="crop-content"></div>
+	<div id="cropButtons" class="text-center form-inline dynamic"></div>
+</div>
+
+<div id="addlogo" title="{LANG.addlogo}">
+	<div id="addlogoContent" class="addlogo-content"></div>
+	<div id="addlogoButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <script type="text/javascript">
@@ -298,6 +316,10 @@ LANG.upload_info = "{LANG.upload_info}";
 LANG.upload_stop = "{LANG.upload_stop}";
 LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
+LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.save = "{LANG.addlogosave}";
+LANG.notlogo = "{LANG.notlogo}";
+LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 
 var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
 var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
