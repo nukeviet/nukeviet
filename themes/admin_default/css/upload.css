@@ -258,12 +258,6 @@ img.watermark:hover {
 	width: 50px!important;
 }
 
-/* Context Menu */
-#jqContextMenu .fa{
-	color: #666;
-	width: 25px;
-}
-
 /* List files */
 #imglist {
 	margin: 5px
@@ -357,4 +351,10 @@ img.previewimg {
 
 #addlogo .addlogo-content img{
 	vertical-align: top;
+}
+
+/* Context Menu */
+#nvContextMenu .fa{
+	color: #666;
+	width: 25px;
 }

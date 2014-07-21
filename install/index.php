@@ -414,12 +414,35 @@ elseif( $step == 5 )
 		// Bat dau phien lam viec cua MySQL
 		require_once NV_ROOTDIR . '/includes/class/db.class.php';
 		$db = new sql_db( $db_config );
-
-		if( empty( $db->connect ) )
+		$connect = $db->connect;
+		if( ! $connect )
 		{
 			$db_config['error'] = 'Could not connect to data server';
+			if( $db_config['dbtype'] == 'mysql' )
+			{
+				$db_config['dbname'] = '';
+				$db = new sql_db( $db_config );
+				$db_config['dbname'] = $db_config['dbsystem'];
+				if( $db->connect )
+				{
+					try
+					{
+						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
+						$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+						$db->exec( 'USE ' . $db_config['dbname'] );
+
+						$db_config['error'] = '';
+						$connect = 1;
+					}
+					catch( PDOException $e )
+					{
+						trigger_error( $e->getMessage() );
+					}
+				}
+			}
 		}
-		else
+
+		if( $connect )
 		{
 			$tables = array();
 

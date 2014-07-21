@@ -333,7 +333,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Left Menu
  -----------------------------------------------------------------------------*/
 #left-menu {
-	top: 40px;
+	top: 4px;
 	left: 0;
 	width: 200px;
 	position: absolute;
@@ -698,4 +698,3 @@ label {
 	padding: 0px;
 	font-family: Arial, Helvetica, sans-serif;
 }
-
