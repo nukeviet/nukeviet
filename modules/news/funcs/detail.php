@@ -105,6 +105,12 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 				$publtime = intval( $news_contents['publtime'] );
 			}
 		}
+
+		if( defined( 'NV_IS_MODADMIN' ) and $news_contents['status'] != 1 )
+		{
+			$alert = sprintf( $lang_module['status_alert'], $lang_module['status_' . $news_contents['status']] );
+			$my_head .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
+		}
 	}
 
 	if( $publtime == 0 )
