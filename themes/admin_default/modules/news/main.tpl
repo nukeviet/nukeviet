@@ -1,40 +1,39 @@
 <!-- BEGIN: main -->
-<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get">
-	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
-	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
-	<label> {LANG.search_cat}: </label>
-	<select class="form-control" name="catid">
-		<!-- BEGIN: cat_content -->
-		<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
-		<!-- END: cat_content -->
-	</select>
-	<label> {LANG.search_type}: </label>
-	<select class="form-control" name="stype">
-		<!-- BEGIN: search_type -->
-		<option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
-		<!-- END: search_type -->
-	</select>
-	<label> {LANG.search_status}: </label>
-	<select class="form-control" name="sstatus">
-		<!-- BEGIN: search_status -->
-		<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
-		<!-- END: search_status -->
-	</select>
-	<label> {LANG.search_per_page}: </label>
-	<select class="form-control" name="per_page">
-		<!-- BEGIN: s_per_page -->
-		<option value="{SEARCH_PER_PAGE.page}" {SEARCH_PER_PAGE.selected}>{SEARCH_PER_PAGE.page}</option>
-		<!-- END: s_per_page -->
-	</select>
-	<br />
-	<br />
-	{LANG.search_key}:
-	<input class="form-control" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
-	<input class="btn btn-primary" type="submit" value="{LANG.search}" />
-	<br />
-	<input type="hidden" name="checkss" value="{CHECKSS}" />
-	<label><em>{LANG.search_note}</em></label>
-</form>
+<div class="well">
+	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" class="form-inline" role="form">
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+		<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
+		
+		<select class="form-control" name="catid">
+			<!-- BEGIN: cat_content -->
+			<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
+			<!-- END: cat_content -->
+		</select>
+		<label> {LANG.search_type}: </label>
+		<select class="form-control" name="stype">
+			<!-- BEGIN: search_type -->
+			<option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
+			<!-- END: search_type -->
+		</select>
+		<label> {LANG.search_status}: </label>
+		<select class="form-control" name="sstatus">
+			<!-- BEGIN: search_status -->
+			<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
+			<!-- END: search_status -->
+		</select>
+		<label> {LANG.search_per_page}: </label>
+		<select class="form-control" name="per_page">
+			<!-- BEGIN: s_per_page -->
+			<option value="{SEARCH_PER_PAGE.page}" {SEARCH_PER_PAGE.selected}>{SEARCH_PER_PAGE.page}</option>
+			<!-- END: s_per_page -->
+		</select>
+		<input class="form-control" type="text" value="{Q}" maxlength="64" name="q" placeholder="{LANG.search_key}" />
+		<input class="btn btn-primary" type="submit" value="{LANG.search}" />
+		<br />
+		<input type="hidden" name="checkss" value="{CHECKSS}" /><br />
+		<label><em>{LANG.search_note}</em></label>
+	</form>
+</div>
 
 <form class="navbar-form" name="block_list" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}">
 	<div class="table-responsive">
