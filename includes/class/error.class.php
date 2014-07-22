@@ -397,10 +397,7 @@ class Error
 
 		if( ! file_exists( $track_errors ) )
 		{
-			if( ! NV_DEVELOP_MODE )
-			{
-				file_put_contents( $track_errors, '', FILE_APPEND );
-			}
+			file_put_contents( $track_errors, '', FILE_APPEND );
 			
 			if( ! empty( $this->log_errors_list ) and isset( $this->log_errors_list[$errno] ) )
 			{

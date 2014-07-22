@@ -81,10 +81,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			if( ! NV_DEVELOP_MODE )
-			{
-				trigger_error( $e->getMessage() );
-			}
+			trigger_error( $e->getMessage() );
 		}
 	}
 
@@ -127,10 +124,7 @@ class sql_db extends pdo
 		}
 		catch( PDOException $e )
 		{
-			if( ! NV_DEVELOP_MODE )
-			{
-				trigger_error( $e->getMessage() );
-			}
+			trigger_error( $e->getMessage() );
 		}
 		return false;
 	}
