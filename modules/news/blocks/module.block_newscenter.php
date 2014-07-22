@@ -56,7 +56,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 					->where( 'status= 1' )
 					->order( 'publtime DESC' )
-					->limit( 4 );
+					->limit( 3 );
 		
 		$list = nv_db_cache( $db->sql(), 'id', $module_name );
 		
@@ -71,31 +71,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 		
 				if( $row['homeimgfile'] != '' and file_exists( $image ) )
 				{
-					$width = 183;
-					$height = 150;
-		
 					$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
-					$imginfo = nv_is_image( $image );
-					$basename = basename( $image );
-					if( $imginfo['width'] > $width or $imginfo['height'] > $height )
-					{
-						$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', $module_name . '_' . $row['id'] . '_\1_' . $width . '-' . $height . '\2', $basename );
-						if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) )
-						{
-							$row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
-						}
-						else
-						{
-							require_once NV_ROOTDIR . '/includes/class/image.class.php';
-							$_image = new image( $image, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-							$_image->resizeXY( $width, $height );
-							$_image->save( NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename );
-							if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) )
-							{
-								$row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
-							}
-						}
-					}
 				}
 				elseif( nv_is_url( $row['homeimgfile'] ) )
 				{
