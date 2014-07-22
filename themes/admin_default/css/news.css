@@ -245,7 +245,7 @@ select, input {
 }
 .news-inf-icons li{
 	display: inline-block;
-	padding-left: 30px;
+	padding-left: 10px;
 }
 .news-inf-icons li:first-child{
 	padding-left: 0;
