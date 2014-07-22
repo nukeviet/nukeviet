@@ -11,7 +11,6 @@
 	</div>
 </div>
 <!-- END: loopimg -->
-<div class="clearfix"></div>
 <!-- BEGIN: generate_page -->
 <div class="text-center">
 	{GENERATE_PAGE}
