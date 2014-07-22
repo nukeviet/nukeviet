@@ -399,14 +399,42 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	// Tu dong xac dinh keywords
 	if( $rowcontent['keywords'] == '' and ! empty( $module_config[$module_name]['auto_tags'] ) )
 	{
-		if( $rowcontent['hometext'] != '' )
+		$keywords = ( $rowcontent['hometext'] != '' ) ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
+		$keywords = nv_get_keywords( $keywords, 100 );
+		$keywords = explode( ',', $keywords );
+
+		// Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
+		$keywords_return = array();
+		$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword' );
+		foreach ( $keywords as $keyword_i )
 		{
-			$rowcontent['keywords'] = nv_get_keywords( $rowcontent['hometext'] );
+			$sth->bindParam( ':keyword', $keyword_i, PDO::PARAM_STR );
+			$sth->execute();
+			if( $sth->fetchColumn() )
+			{
+				$keywords_return[] = $keyword_i;
+				if( sizeof( $keywords_return ) > 20 )
+				{
+					break;
+				}
+			}
 		}
-		else
+
+		if( sizeof( $keywords_return ) < 20 )
 		{
-			$rowcontent['keywords'] = nv_get_keywords( $rowcontent['bodyhtml'] );
+			foreach ( $keywords as $keyword_i )
+			{
+				if( ! in_array( $keyword_i, $keywords_return ) )
+				{
+					$keywords_return[] = $keyword_i;
+					if( sizeof( $keywords_return ) > 20 )
+					{
+						break;
+					}
+				}
+			}
 		}
+		$rowcontent['keywords'] = implode( ',', $keywords );
 	}
 
 	if( empty( $rowcontent['title'] ) )
