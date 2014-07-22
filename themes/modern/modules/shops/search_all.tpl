@@ -52,20 +52,32 @@
 				<!-- END: tooltip -->
 				</a>
 				<br />
-				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span>
+				<span>
+					<a href="{LINK}" title="{TITLE}">{TITLE0}</a>
+					<!-- BEGIN: new -->
+					<span class="newday">({LANG.newday})</span>
+					<!-- END: new -->
+				</span>
 				<br />
 			</p>
+			<!-- BEGIN: discounts -->
+			<p>{LANG.detail_product_discounts}: {PRICE.discount_percent}%</p>
+			<!-- END: discounts -->
 			<!-- BEGIN: adminlink -->
 			<div class="shops-center">
 				{ADMINLINK}
 			</div>
 			<!-- END: adminlink -->
 			<!-- BEGIN: price -->
-			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span>
+			<p class="price">
 				<!-- BEGIN: discounts -->
-				<span class="money">{product_discounts} {money_unit}</span>
+				<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+				<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
 				<!-- END: discounts -->
+				
+				<!-- BEGIN: no_discounts -->
+				<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+				<!-- END: no_discounts -->
 			</p>
 			<!-- END: price -->
 			<!-- BEGIN: contact -->
@@ -77,7 +89,14 @@
 				<!-- BEGIN: order -->
 				<a href="javascript:void(0)" id="{ID}" title="{TITLE}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
 				<!-- END: order -->
-				<a href="{LINK}" title="{TITLE}" class="pro_detail" >{LANG.detail_product}</a>
+				
+				<!-- BEGIN: product_empty -->
+				<a href="javascript:void(0)" class="pro_detail">{LANG.product_empty}</a>
+				<!-- END: product_empty -->
+				
+				<!-- BEGIN: wishlist -->
+				<a href="javascript:void(0)" title="{TITLE}" onclick="wishlist({ID}, this)" class="pro_detail">{LANG.wishlist}</a>
+				<!-- END: wishlist -->
 			</div>
 		</div>
 	</div>

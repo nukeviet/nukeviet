@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div id="detail">
 	<div>
-		<span class="image-demo"> <a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox"> <img src="{SRC_PRO}" alt="" width="140px" style="border:1px solid #eeeeee; padding:2px"> </a>
+		<span class="image-demo"> <a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->> <img src="{SRC_PRO}" alt="" width="140px" style="border:1px solid #eeeeee; padding:2px"> </a>
 			<br />
 			<a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]"><span class="zoom_img">{LANG.detail_view_lage_img}</span></a>
 			<!-- BEGIN: adminlink -->
@@ -19,11 +19,16 @@
 			<!-- END: product_code -->
 			<!-- BEGIN: price -->
 			<p>
-				{LANG.detail_pro_price}: <span class="{class_money}">{product_price} {money_unit}</span>
+				{LANG.detail_pro_price}:
 				<!-- BEGIN: discounts -->
-				<span class="money">{product_discounts} {money_unit}</span>
+				<span class="money">{PRICE.sale_format} {PRICE.unit}</span> 
+				<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
 				<!-- END: discounts -->
-				/ 1 {pro_unit}
+				<span class="money">{product_discounts} {money_unit}</span>
+				
+				<!-- BEGIN: no_discounts -->
+				<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+				<!-- END: no_discounts -->
 			</p>
 			<!-- END: price -->
 			<!-- BEGIN: contact -->
@@ -34,6 +39,19 @@
 				{hometext}
 			</p>
 			<!-- END: hometext -->
+			
+			<!-- BEGIN: custom -->
+				<!-- BEGIN: loop -->
+				<p><strong>{custom.lang}:</strong> {custom.title}</p>
+				<!-- END: loop -->
+			<!-- END: custom -->
+			
+			<!-- BEGIN: custom_lang -->
+				<!-- BEGIN: loop -->
+				<p><strong>{custom_lang.lang}:</strong> {custom_lang.title}</p>
+				<!-- END: loop -->
+			<!-- END: custom_lang -->
+			
 			<!-- BEGIN: promotional -->
 			<div>
 				{LANG.detail_promotional} : {promotional}
@@ -44,11 +62,14 @@
 				{LANG.detail_warranty} : {warranty}
 			</div>
 			<!-- END: warranty -->
-			<!-- BEGIN: address -->
-			<div>
-				{LANG.detail_product_address} : {address}
-			</div>
-			<!-- END: address -->
+			
+			<!-- BEGIN: group -->
+				<!-- BEGIN: items -->
+				<p>{GROUP}</p>
+				<!-- END: items -->
+				<div class="clearfix">&nbsp;</div>
+			<!-- END: group -->
+			
 			<div id="ratedata">
                 <!-- BEGIN: allowed_rating -->
             	<div class="clearfix">
@@ -115,12 +136,18 @@
 						<a onclick="share_facebook();" href="javascript:;" title="Share on Facebook"> <img border="0" alt="Share on Facebook" src="{THEME_URL}/images/shops/flickr.png"> </a> <a onclick="share_twitter();" href="javascript:;" title="Share on Twitter"> <img border="0" alt="Share on Twitter" src="{THEME_URL}/images/shops/twitter.png"> </a> <a onclick="share_google();" href="javascript:;" title="Share on Google"> <img border="0" alt="Share on Google" src="{THEME_URL}/images/shops/google.png"> </a> <a onclick="share_buzz();" href="javascript:;" title="Share on Buzz"> <img border="0" alt="Share on Buzz" src="{THEME_URL}/images/shops/buzz.png"> </a> </span>
 				</div>
 				<!-- BEGIN: order -->
-				<div class="clearfix fr" style="width:170px; padding:6px 0px">
-					<span class="fl" style="line-height:22px;">{LANG.title_order} : &nbsp;</span>
+				<div class="clearfix fr" style="width:210px; padding:6px 0px">
+					<span class="fl" style="line-height:22px;">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}&nbsp;&nbsp;</span>
 					<input type="text" name="num" value="1" style="width:30px; height:15px" id="pnum" class="fl">
 					<a href="javascript:void(0)" id="{proid}" title="{title_pro}" class="pro_order fl" onclick="cartorder_detail(this)"> {LANG.add_product} </a>
 				</div>
 				<!-- END: order -->
+				
+				<!-- BEGIN: product_empty -->
+				<div class="fr" style="margin-top: 6px">
+					<button class="button disabled">{LANG.product_empty}</button>
+				</div>
+				<!-- END: product_empty -->
 				<div style="clear:both"></div>
 		</div>
 		<div style="clear:both"></div>
@@ -132,7 +159,15 @@
 		<div class="TabView" id="TabView">
 			<div class="Tabs">
 				<a href="#">{LANG.product_detail}</a>
+				
+				<!-- BEGIN: othersimg_title -->
 				<a href="#">{LANG.add_otherimage}</a>
+				<!-- END: othersimg_title -->
+				
+				<!-- BEGIN: discount_title -->
+				<a href="#">{LANG.discount_detail}</a>
+				<!-- END: discount_title -->
+				
 				<!-- BEGIN: comment_tab -->
 				<a href="#">{LANG.detail_comments}</a>
 				<!-- END: comment_tab -->
@@ -153,6 +188,17 @@
 						<!-- END: no_otherimage -->
 					</div>
 				</div>
+				<!-- BEGIN: discount_content -->
+				<div class="Page">
+					<h3>{DISCOUNT.title}</h3>
+					<p>{DISCOUNT.begin_time}{DISCOUNT.end_time}, {DISCOUNT.text}</p>
+					<ul>
+						<!-- BEGIN: items -->
+						<li>{ITEMS}</li>
+						<!-- END: items -->
+					</ul>
+				</div>
+				<!-- END: discount_content -->
 				<!-- BEGIN: comment -->
 				<div class="Page">
 					<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
