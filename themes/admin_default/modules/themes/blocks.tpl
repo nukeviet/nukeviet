@@ -16,9 +16,9 @@
 				<th>{LANG.block_pos}</th>
 				<th>{LANG.block_title}</th>
 				<th>{LANG.block_file}</th>
-				<td class="text-center">{LANG.block_active}</th>
+				<th class="text-center">{LANG.block_active}</th>
 				<th>{LANG.block_func_list}</th>
-				<td class="text-center">{LANG.functions}</th>
+				<th class="text-center">{LANG.functions}</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -44,7 +44,7 @@
 				</select></td>
 				<td>{ROW.title}</td>
 				<td>{ROW.module} {ROW.file_name}</td>
-				<td class="text-center">{ROW.active}</td>
+				<td class="text-center"><input type="checkbox" name="active" title="{ROW.bid}" id="change_active_{ROW.bid}" {ROW.active} /></td>
 				<td>
 				<!-- BEGIN: all_func -->
 				{LANG.add_block_all_module}
@@ -148,6 +148,25 @@
 					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks";
 				}
 			});
+		});
+		$("input[name=active]").change(function() {
+			var bid = $(this).attr("title");
+			var new_status = $('#change_active_' + bid).is(':checked') ? 1 : 0;
+			if (confirm(nv_is_change_act_confirm[0])) {
+				var nv_timer = nv_settimeout_disable('change_active_' + bid, 3000);
+				$.ajax({
+					type : "POST",
+					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=blocks_change_active",
+					data : "bid=" + bid + "&new_status=" + new_status,
+					success : function(data) {
+						
+					}
+				});
+			}
+			else
+			{
+				$('#change_active_' + bid).prop('checked', new_status ? false : true );
+			}
 		});
 	});
 	//]]>

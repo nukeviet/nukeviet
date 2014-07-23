@@ -95,7 +95,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 			'title' => $row['title'],
 			'module' => $row['module'],
 			'file_name' => $row['file_name'],
-			'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no']
+			'active' => $row['active'] ? 'checked="checked"' : ''
 		) );
 
 		$numposition = $blocks_positions[$row['position']];
