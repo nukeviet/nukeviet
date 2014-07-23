@@ -287,14 +287,42 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		// Xu ly tu khoa
 		if( $rowcontent['keywords'] == '' )
 		{
-			if( $rowcontent['hometext'] != '' )
+			$keywords = ( $rowcontent['hometext'] != '' ) ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
+			$keywords = nv_get_keywords( $keywords, 100 );
+			$keywords = explode( ',', $keywords );
+	
+			// Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
+			$keywords_return = array();
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id where ' . NV_LANG_DATA . '_keyword = :keyword' );
+			foreach ( $keywords as $keyword_i )
 			{
-				$rowcontent['keywords'] = nv_get_keywords( $rowcontent['hometext'] );
+				$sth->bindParam( ':keyword', $keyword_i, PDO::PARAM_STR );
+				$sth->execute();
+				if( $sth->fetchColumn() )
+				{
+					$keywords_return[] = $keyword_i;
+					if( sizeof( $keywords_return ) > 20 )
+					{
+						break;
+					}
+				}
 			}
-			else
+	
+			if( sizeof( $keywords_return ) < 20 )
 			{
-				$rowcontent['keywords'] = nv_get_keywords( $rowcontent['bodytext'] );
+				foreach ( $keywords as $keyword_i )
+				{
+					if( ! in_array( $keyword_i, $keywords_return ) )
+					{
+						$keywords_return[] = $keyword_i;
+						if( sizeof( $keywords_return ) > 20 )
+						{
+							break;
+						}
+					}
+				}
 			}
+			$rowcontent['keywords'] = implode( ',', $keywords );
 		}
 		$rowcontent['status'] = ( $nv_Request->isset_request( 'status1', 'post' ) ) ? 1 : 0;
 
@@ -643,6 +671,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 }
 elseif( $rowcontent['id'] > 0 )
 {
+	$keyword = $rowcontent['keywords'];
 	$rowcontent = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch();
 	$rowcontent['title'] = $rowcontent[NV_LANG_DATA . '_title'];
 	$rowcontent['alias'] = $rowcontent[NV_LANG_DATA . '_alias'];
@@ -651,6 +680,7 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['promotional'] = $rowcontent[NV_LANG_DATA . '_promotional'];
 	$rowcontent['warranty'] = $rowcontent[NV_LANG_DATA . '_warranty'];
 	$rowcontent['group_id'] = $group_id_old;
+	$rowcontent['keywords'] = $keyword;
 
 	if ( !empty( $rowcontent['custom'] ) )
 	{
