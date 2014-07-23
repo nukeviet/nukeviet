@@ -98,7 +98,7 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 	$price = $price * $number;
 
 	$r = $money_config[$currency_convert]['round'];
-	$decimals = 0;
+	$decimals = nv_get_decimals( $currency_convert );
 
 	if( $r > 1 )
 	{
@@ -106,10 +106,9 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 	}
 	else
 	{
-		$decimals = $money_config[$currency_convert]['decimals'];
 		$price = round( $price, $decimals );
 	}
-
+	
 	$f = 0;
 	$discount_percent = 0;
 	$discount = 0;
@@ -166,4 +165,18 @@ function nv_number_format( $number, $decimals = 0 )
 {
 	$str = number_format( $number, $decimals, ',', '.' );
 	return $str;
+}
+
+function nv_get_decimals( $currency_convert )
+{
+	global $money_config;
+	
+	$r = $money_config[$currency_convert]['round'];
+	$decimals = 0;
+
+	if( $r <= 1 )
+	{
+		$decimals = $money_config[$currency_convert]['decimals'];
+	}
+	return $decimals;
 }
