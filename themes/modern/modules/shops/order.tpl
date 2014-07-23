@@ -42,9 +42,18 @@
 			<!-- BEGIN: rows -->
 			<tr {bg}>
 				<td align="center">{pro_no}</td>
-				<td class="prd"><a title="{title_pro}" href="{link_pro}">{title_pro}</a></td>
+				<td class="prd">
+					<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
+					<!-- BEGIN: display_group -->
+						<p>
+						<!-- BEGIN: group -->
+						<span style="margin-right: 10px">{group}</span>
+						<!-- END: group -->
+						</p>
+					<!-- END: display_group -->
+				</td>
 				<!-- BEGIN: price2 -->
-				<td class="money" align="right"><strong>{product_price}</strong></td>
+				<td class="money" align="right"><strong>{PRICE.sale_format}</strong></td>
 				<!-- END: price2 -->
 				<td class="amount" align="center">{pro_num}</td>
 				<td class="unit">{product_unit}</td>

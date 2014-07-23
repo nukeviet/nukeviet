@@ -20,7 +20,7 @@
 			<td class="image" width="50" align="center">{LANG.cart_images}</td>
 			<td class="prd" style="width:180px">{LANG.cart_products}</td>
 			<!-- BEGIN: price1 -->
-			<td class="price" style="width:80px" align="right">{LANG.cart_price} ({unit_config})</td>
+			<td class="price" style="width:80px" align="right">{LANG.cart_price}</td>
 			<!-- END: price1 -->
 			<td class="amount" align="center" width="40">{LANG.cart_numbers}</td>
 			<td class="unit" style="width:50px">{LANG.cart_unit}</td>
@@ -30,9 +30,18 @@
 		<tr id="{id}" {bg}>
 			<td align="center">{stt}</td>
 			<td align="center"><img src="{img_pro}" alt="{link_pro}" class="imgpro"/></td>
-			<td class="prd"><a title="{title_pro}" href="{link_pro}">{title_pro}</a></td>
+			<td class="prd">
+				<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
+				<!-- BEGIN: display_group -->
+				<p>
+					<!-- BEGIN: group -->
+					<span style="margin-right: 10px"><span class="text-muted">{group}</span></span>
+					<!-- END: group -->
+				</p>
+				<!-- END: display_group -->
+			</td>
 			<!-- BEGIN: price2 -->
-			<td class="money" align="right"><strong>{product_price}</strong></td>
+			<td class="money" align="right"><strong>{PRICE.sale_format} {PRICE.unit}</strong></td>
 			<!-- END: price2 -->
 			<td class="amount" align="center"><input size="1" value="{pro_num}" name="listproid[{id}]" id="{id}" class="btnum"/></td>
 			<td class="unit">{product_unit}</td>

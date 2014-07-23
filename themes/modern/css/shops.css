@@ -772,3 +772,8 @@ img.calendar {
     font-size: 18px;
     font-weight: bold;
 }
+
+.newday{
+	color: red;
+	text-transform: uppercase;
+}

@@ -24,13 +24,22 @@
 				<!-- END: tooltip -->
 				</a>
 				<br />
-				<span><a href="{LINK}" title="{TITLE}">{TITLE0}</a></span>
+				<span>
+					<a href="{LINK}" title="{TITLE}">{TITLE0}</a>
+					<!-- BEGIN: new -->
+					<span class="newday">({LANG.newday})</span>
+					<!-- END: new -->
+				</span>
 				<br />
 				<!-- BEGIN: product_code -->
 				<div class="shops-center">
 					{PRODUCT_CODE}
 				</div>
 				<!-- END: product_code -->
+				
+				<!-- BEGIN: discounts -->
+				<p>{LANG.detail_product_discounts}: {PRICE.discount_percent}%</p>
+				<!-- END: discounts -->
 			</div>
 			<!-- BEGIN: adminlink -->
 			<div class="shops-center">
@@ -38,12 +47,15 @@
 			</div>
 			<!-- END: adminlink -->
 			<!-- BEGIN: price -->
-			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span>
+			<p class="price">
 				<!-- BEGIN: discounts -->
-				<br />
-				<span class="money">{product_discounts} {money_unit}</span>
+				<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+				<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
 				<!-- END: discounts -->
+				
+				<!-- BEGIN: no_discounts -->
+				<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+				<!-- END: no_discounts -->
 			</p>
 			<!-- END: price -->
 			<!-- BEGIN: contact -->
@@ -51,11 +63,23 @@
 				{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
 			</p>
 			<!-- END: contact -->
+			
+            <!-- BEGIN: compare -->
+            <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
+            <!-- END: compare -->
+            
 			<div class="clearfix">
 				<!-- BEGIN: order -->
 				<a href="javascript:void(0)" id="{ID}" title="{TITLE}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
 				<!-- END: order -->
-				<a href="{LINK}" title="{TITLE}" class="pro_detail" >{LANG.detail_product}</a>
+				
+				<!-- BEGIN: product_empty -->
+				<a href="javascript:void(0)" class="pro_detail">{LANG.product_empty}</a>
+				<!-- END: product_empty -->
+				
+				<!-- BEGIN: wishlist -->
+				<a href="javascript:void(0)" title="{TITLE}" onclick="wishlist({ID}, this)" class="pro_detail">{LANG.wishlist}</a>
+				<!-- END: wishlist -->
 			</div>
 		</div>
 	</div>

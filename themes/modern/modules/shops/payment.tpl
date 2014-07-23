@@ -49,7 +49,16 @@
 		<!-- BEGIN: loop -->
 		<tr {bg}>
 			<td align="center"> {pro_no} </td>
-			<td class="prd"><a title="{product_name}" href="{link_pro}">{product_name}</a></td>
+			<td class="prd">
+				<a title="{product_name}" href="{link_pro}">{product_name}</a>
+				<!-- BEGIN: display_group -->
+				<p>
+					<!-- BEGIN: group -->
+					<span style="margin-right: 10px">{group}</span>
+					<!-- END: group -->
+				</p>
+				<!-- END: display_group -->
+			</td>
 			<!-- BEGIN: price2 -->
 			<td class="money" align="right"><strong>{product_price}</strong></td>
 			<!-- END: price2 -->

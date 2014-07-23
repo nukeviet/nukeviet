@@ -90,7 +90,7 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'product_code', $pdata['product_code'] );
 	$xtpl->assign( 'product_name', $pdata['title'] );
 	$xtpl->assign( 'product_number', $pdata['product_number'] );
-	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], $money_config[$pro_config['money_unit']]['decimals'] ) );
+	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 	$xtpl->assign( 'pro_no', $i + 1 );
@@ -113,7 +113,7 @@ if( ! empty( $data_content['order_note'] ) )
 {
 	$xtpl->parse( 'main.order_note' );
 }
-$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], $money_config[$pro_config['money_unit']]['decimals'] ) );
+$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 $xtpl->assign( 'unit', $data_content['unit_total'] );
 
 // transaction_status: Trang thai giao dich:
@@ -221,7 +221,7 @@ if( $result->rowCount() )
 
 		if( ! empty( $row['payment_id'] ) ) $array_payment[] = $row['payment_id'];
 
-		$row['payment_amount'] = nv_number_format( $row['payment_amount'], 2 );
+		$row['payment_amount'] = nv_number_format( $row['payment_amount'], nv_get_decimals( $pro_config['money_unit'] ) );
 
 		if( $row['transaction_status'] == 4 )
 		{

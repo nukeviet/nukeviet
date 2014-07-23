@@ -1,77 +1,127 @@
 <!-- BEGIN: main -->
-<div id="products" class="clearfix">
-	<!-- BEGIN: grid_rows -->
-	<div class="items" style="width:25%">
-		<div class="items_content" style="height: auto !important">
-			<div class="content_top{CSS_PRODUCT_CODE}">
-				<a title="{title_pro}" href="{link_pro}" class="tip_trigger"> <img src="{img_pro}" alt="{title_pro}" style="max-height:100px;max-width:100px"/>
-				<!-- BEGIN: tooltip -->
-				<span class="tip"><strong>{title_pro}</strong>
-					<br />
-					<img src="{img_pro}" style="max-width:{width}px;">
-					<br />
-					{intro}</span>
-				<!-- END: tooltip -->
-				</a>
-				<br />
-				<span><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></span>
-				<br />
-				<!-- BEGIN: product_code -->
-				<div class="shops-center">
-					{PRODUCT_CODE}
-				</div>
-				<!-- END: product_code -->
-			</div>
-			<!-- BEGIN: price -->
-			<p class="content_price">
-				<span class="{class_money}">{product_price} {money_unit}</span>
-				<!-- BEGIN: discounts -->
-				<br />
-				<span class="money">{product_discounts} {money_unit}</span>
-				<!-- END: discounts -->
-			</p>
-			<!-- END: price -->
+<table class="tab1">
+	<colgroup>
+		<col width="150px" />
+	</colgroup>
+	
+	<thead>
+		<th>&nbsp;</th>
+		<!-- BEGIN: homeimgthumb -->
+		<th class="text-center">
+			<a href="{link_pro}"><img src="{img_pro}" style="max-width: 100px" /></a></th>
+		<!-- END: homeimgthumb -->
+	</thead>
+	
+	<tbody>
+		<tr>
+			<td align="center"><button class="button-2" onclick="nv_compare_del( 0, 1 )">{LANG.compare_del_all}</button></strong></td>
+			<!-- BEGIN: delete -->
+			<td align="center"><button class="button-2" onclick="nv_compare_del( {id}, 0 )">{LANG.compare_del_items}</button></td>
+			<!-- END: delete -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.detail_product_name}</strong></td>
+			<!-- BEGIN: title -->
+			<td><a href="{link_pro}" title="{title_pro}">{title_pro}</a></td>
+			<!-- END: title -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.product_intro}</strong></td>
+			<!-- BEGIN: hometext -->
+			<td>{intro}</td>
+			<!-- END: hometext -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.detail_product}</strong></td>
+			<!-- BEGIN: bodytext -->
+			<td>{bodytext}</td>
+			<!-- END: bodytext -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.product_code}</strong></td>
+			<!-- BEGIN: product_code -->
+			<td>{product_code}</td>
+			<!-- END: product_code -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.title_price}</strong></td>
+			<!-- BEGIN: product_price -->
+			<td>{PRICE.sale_format} {PRICE.unit}</td>
+			<!-- END: product_price -->
+			
 			<!-- BEGIN: contact -->
-
-			<p class="content_price">
-				<span class="money">{LANG.detail_pro_price}: {LANG.price_contact}</span>
-			</p>
+			<td>{LANG.price_contact}</td>
 			<!-- END: contact -->
-			<div align="center">
-				<!-- BEGIN: order -->
-				<a href="javascript:void(0)" id="{id}" title="{title_pro}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
-				<!-- END: order -->
-			</div>
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.detail_product_discounts}</strong></td>
+			<!-- BEGIN: discount -->
+			<td>{PRICE.discount_percent}%</td>
+			<!-- END: discount -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.detail_warranty}</strong></td>
+			<!-- BEGIN: warranty -->
+			<td>{warranty}</td>
+			<!-- END: warranty -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.detail_promotional}</strong></td>
+			<!-- BEGIN: promotional -->
+			<td>{promotional}</td>
+			<!-- END: promotional -->
+		</tr>
+	</tbody>
+	
+	<tbody>
+		<tr>
+			<td><strong>{LANG.custom}</strong></td>
+			<!-- BEGIN: custom_field -->
+			<td>
+				<!-- BEGIN: custom -->
+					<!-- BEGIN: loop -->
+					<p><strong>{custom.lang}:</strong> {custom.title}</p>
+					<!-- END: loop -->
+				<!-- END: custom -->
+				
+				<!-- BEGIN: custom_lang -->
+					<!-- BEGIN: loop -->
+					<p><strong>{custom_lang.lang}:</strong> {custom_lang.title}</p>
+					<!-- END: loop -->
+				<!-- END: custom_lang -->
+			</td>
+			<!-- END: custom_field -->
+		</tr>
+	</tbody>
+	
+</table>
 
-			<hr/>
-			<div style="text-align: left">
-				<!-- BEGIN: promotional -->
-				<div>
-					{LANG.detail_promotional} : {promotional}
-				</div>
-				<!-- END: promotional -->
-				<!-- BEGIN: warranty -->
-				<div>
-					{LANG.detail_warranty} : {warranty}
-				</div>
-				<!-- END: warranty -->
-				<div>
-					<b>{LANG.product_detail}</b>
-					<br/>
-					{DETAIL}
+<script type="text/javascript">
+	var lang_del_confirm = '{LANG.compare_del_items_confirm}';
+</script>
 
-				</div>
-
-			</div>
-
-		</div>
-	</div>
-	<!-- END: grid_rows -->
-
-	<!-- BEGIN: nodata -->
-	<center>
-		<strong style="color: #f00">{LANG.chuachonsp}</strong>
-	</center>
-	<!-- END: nodata -->
-</div>
 <!-- END: main -->

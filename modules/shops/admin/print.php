@@ -44,7 +44,7 @@ foreach( $listid as $id )
 
 	$xtpl->assign( 'product_name', $title );
 	$xtpl->assign( 'product_number', $listnum[$i] );
-	$xtpl->assign( 'product_price', nv_number_format( $product_price, 2 ) );
+	$xtpl->assign( 'product_price', nv_number_format( $product_price, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $money_unit );
 	$xtpl->assign( 'tt', $i + 1 );
 
@@ -52,7 +52,7 @@ foreach( $listid as $id )
 	++$i;
 }
 
-$xtpl->assign( 'order_total', nv_number_format( $data['order_total'], 2 ) );
+$xtpl->assign( 'order_total', nv_number_format( $data['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 $xtpl->assign( 'unit', $data['unit_total'] );
 
 $payment = ( $data['order_total'] == '1' ) ? $lang_module['order_payment'] : $lang_module['order_no_payment'];

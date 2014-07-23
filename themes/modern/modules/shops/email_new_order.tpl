@@ -79,9 +79,7 @@
 					<!-- END: price3 -->
 				</tr>
 			</table>
-			<p>
-				&nbsp;
-			</p>
+			<p>{LANG.order_email_review}</p>
 			<p>
 				{LANG.order_email_noreply}
 			</p>
