@@ -97,7 +97,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'deleteallfile' . sess
 				}
 				catch( PDOException $e )
 				{
-				  trigger_error( $e->getMessage() );
+					trigger_error( $e->getMessage() );
 				}
 			}
 			$contents = $lang_module['nv_lang_deleteok'];

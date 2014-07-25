@@ -241,6 +241,18 @@ $countries = array(
 	'ZZ' => array( 'RES', 'Reserved', '' )
 );
 
+function inet_to_bits( $inet )
+{
+	$unpacked = unpack( 'A16', $inet );
+	$unpacked = str_split( $unpacked[1] );
+	$binaryip = '';
+	foreach( $unpacked as $char )
+	{
+		$binaryip .= str_pad( decbin( ord( $char ) ), 8, '0', STR_PAD_LEFT );
+	}
+	return $binaryip;
+}
+
 /**
  * nv_getCountry_from_file()
  *
@@ -263,6 +275,32 @@ function nv_getCountry_from_file( $ip )
 			foreach( $ranges as $key => $value )
 			{
 				if( $key <= $code and $value[0] >= $code ) return $value[1];
+			}
+		}
+	}
+	else
+	{
+		$numbers = explode( ':', $ip );
+		if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/ip6_files/' . $numbers[0] . '.php' ) )
+		{
+			$ip = inet_pton( $ip );
+			$binaryip = inet_to_bits( $ip );
+
+			$ranges = array();
+			include NV_ROOTDIR . '/' . NV_DATADIR . '/ip6_files/' . $numbers[0] . '.php' ;
+			foreach( $ranges as $cidrnet => $country )
+			{
+				list( $net, $maskbits ) = explode( '/', $cidrnet );
+				$net = inet_pton( $net );
+				$binarynet = inet_to_bits( $net );
+
+				$ip_net_bits = substr( $binaryip, 0, $maskbits );
+				$net_bits = substr( $binarynet, 0, $maskbits );
+
+				if( $ip_net_bits === $net_bits )
+				{
+					return $country;
+				}
 			}
 		}
 	}

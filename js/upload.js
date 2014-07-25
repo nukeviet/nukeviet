@@ -6,51 +6,61 @@
  * @Createdate 27/01/2011, 9:36
  */
 
-function nv_randomNum(a){
-	for (var b = "", d = 0; d < a; d++){
-		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(Math.random() * 62));
+function nv_randomNum( a ){
+	for( var b = "", d = 0; d < a; d++ ){
+		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
 	}
-	return b
+	
+	return b;
 }
 
-function resize_byWidth(a, b, d){
-	return Math.round(d / a * b);
+// Return height
+function resize_byWidth( a, b, d ){
+	return parseInt( Math.round( d / a * b ) );
 }
 
-function resize_byHeight(a, b, d){
-	return Math.round(d / b * a);
+// Return width
+function resize_byHeight( a, b, d ){
+	return parseInt( Math.round( d / b * a ) );
 }
 
-function calSize(a, b, d, e){
-	if(a > d){
-		b = resize_byWidth(a, b, d);
+// Resize image with display width and height (fix to container)
+function calSize( a, b, d, e ){
+	if( a > d ){
+		b = resize_byWidth( a, b, d );
 		a = d;
 	}
-	if(b > e){
-		a = resize_byHeight(a, b, e);
+	
+	if( b > e ){
+		a = resize_byHeight( a, b, e );
 		b = e
 	}
-	return [a, b];
+	
+	return [parseInt( a ), parseInt( b )];
 }
 
-function calSizeMax(a, b, d, e){
+function calSizeMax( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d <= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d <= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
-function calSizeMin(a, b, d, e){
+function calSizeMin( a, b, d, e ){
 	var g = d;
-	d = resize_byWidth(a, b, d);
-	if(!(d >= e )){
+	d = resize_byWidth( a, b, d );
+	
+	if( ! ( d >= e ) ){
 		d = e;
-		g = resize_byHeight(a, b, e);
+		g = resize_byHeight( a, b, e );
 	}
-	return [g, d];
+	
+	return [parseInt( g ), parseInt( d )];
 }
 
 function is_numeric(a){
@@ -116,14 +126,15 @@ function insertvaluetofield(){
 		$("#" + area, opener.document).val( fullPath );
 		
 		var alt = $("input[name=alt]").val();
+		
 		if( alt != "" ){
 			$("#" + alt, opener.document).val( $("img[title='" + selFile + "']").attr("alt") );
 		}
+		
 		window.close();
 	}else{
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		
-		$("span#foldervalue").attr("title");
 		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, fullPath, function(){
 			var dialog = this.getDialog();
 			
@@ -136,21 +147,6 @@ function insertvaluetofield(){
 			}
 		});
 
-		window.close();
-	}
-}
-
-function nv_selFile( file ){
-	var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
-	var area = $("input[name=area]").val();
-	
-	if( CKEditorFuncNum > 0 ){
-		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, file, "");
-		window.close();
-	}
-	
-	if( area != "" ){
-		$("#" + area, opener.document).val(file);
 		window.close();
 	}
 }
@@ -179,7 +175,7 @@ function preview(){
 	if( selFileData[3] == "image" || selFileData[2] == "swf" ){
 		var size = calSize( selFileData[0], selFileData[1], 360, 230 );
 		html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '" />') : $("#fileView").flash({
+		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
 			src : nv_siteroot + fullPath + "/" + selFile,
 			width : size[0],
 			height : size[1]
@@ -207,21 +203,6 @@ function preview(){
 	});
 }
 
-// Them logo
-function addlogo(){
-	var selFile = $("input[name=selFile]").val();
-	var e = LANG.upload_size + ": ";
-	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
-	path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
-	var win = null;
-	
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'addlogo&path=' + path + "&file=" + selFile, 'addlogo', settings);
-}
-
 // Tao anh moi (Menu cong cu anh)
 function create(){
 	$("div.dynamic").text("");
@@ -244,7 +225,7 @@ function create(){
 		
 		DisSize = calSize( selFileData[0], selFileData[1], 360, 230 );
 		
-		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile );
+		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile + "?" + selFileData[8] );
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
 		$("#fileInfoName2").html( selFile );
 		
@@ -357,6 +338,19 @@ function filedelete(){
 
 // Ham xu ly khi nhap chuot vao 1 file (Chuot trai lan chuot phai)
 function fileMouseup( file, e ){
+	// Set shift offset
+	if( e.which != 3 && ! KEYPR.isShift ){
+		// Reset shift offset
+		KEYPR.shiftOffset = 0;
+
+		$.each( $('.imgcontent'), function(k, v){
+			if( v == file ){
+				KEYPR.shiftOffset = k;
+				return false;
+			}
+		});
+	}
+	
 	// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
 	if( KEYPR.isCtrl ){
 		if( $(file).is('.imgsel') && e.which != 3 ){
@@ -364,6 +358,21 @@ function fileMouseup( file, e ){
 		}else{
 			$(file).addClass('imgsel');
 		}
+	}else if( KEYPR.isShift && e.which != 3 ){
+		var clickOffset = -1;
+		$('.imgcontent').removeClass('imgsel');
+		
+		$.each( $('.imgcontent'), function(k, v){
+			if( v == file ){
+				clickOffset = k;
+			}
+			
+			if( ( clickOffset == -1 && k >= KEYPR.shiftOffset ) || ( clickOffset != -1 && k <= KEYPR.shiftOffset ) || v == file ){
+				if( ! $(v).is('.imgsel') ){
+					$(v).addClass('imgsel');
+				}
+			}
+		});
 	}else{
 		if( e.which != 3 || ( e.which == 3 && ! $(file).is('.imgsel') ) ){
 			$('.imgsel').removeClass('imgsel');
@@ -371,128 +380,112 @@ function fileMouseup( file, e ){
 		}
 	}
 	
+	LFILE.setSelFile();
+
 	if( e.which == 3 ){
 		var isMultiple = $('.imgsel').length === 1 ? false : true;
-		var fileName, fileExt;
-		
-		if( isMultiple ){
-			fileExt = '';
-			fileName = new Array();
-			$.each( $('.imgsel'), function(){
-				fileName.push( $(this).attr("title") );
-			});
-			fileName = fileName.join('|');
-		}else{
-			fileName = $(file).attr("title");
-			fileExt = isMultiple ? '' : fileName.slice(-3);			
-		}
-		
-		$("input[name=selFile]").val(fileName);
-		
+		var fileExt = $("input[name=selFile]").val().slice(-3);	
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 		var area = $("input[name=area]").val();
-		var contextMenu = "<ul>";
+		var html = "";
 		
 		if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
-			contextMenu += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
+			html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
 		}
 		
 		if( ! isMultiple ){
-			contextMenu += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
-			contextMenu += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+			html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+			html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
 		}
 		
 		if( $.inArray( fileExt, array_images ) !== -1 ){
 			if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
-				contextMenu += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
-				contextMenu += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
-				contextMenu += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
-				contextMenu += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
+				html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+				html += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
+				html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
+				html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
 			}
 		}
 		
 		if( $("span#move_file").attr("title") == "1" ){
-			contextMenu += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
+			html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
 		}
 		
 		if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
-			contextMenu += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
+			html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
 		}
 		
 		if( $("span#delete_file").attr("title") == "1" ){
-			contextMenu += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
+			html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
 		}
 		
-		contextMenu += "</ul>";
-		$("div#contextMenu").html(contextMenu);
+		if( html != '' ){
+			html = "<ul>" + html + "</ul>";
+		}
+
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);
 	}
 }
 
-// Ham xu ly quyen upload (Co/Khong)
-function is_allowed_upload(){
-	$("input[name=upload]").parent().css("display", "block");
-	$("span#upload_file").attr("title") == "1" ? $("input[name=upload]").parent().parent().css("display", "block").next().css("display", "none") : $("input[name=upload]").parent().parent().css("display", "none").next().css("display", "block")
-}
-
-// Ham xu ly khi nhap chuot vao thu muc (Dinh quyen thao tac voi file trong thu muc duoc chon, truy cap thu muc)
-function folderClick( folder ){
-	var folderPath = $(folder).attr("title");
-	if( folderPath != $("span#foldervalue").attr("title") ){
-		$("span#foldervalue").attr("title", folderPath);
-		$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
-		$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
-		$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
-		$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
-		$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
-		$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
-		$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
-		$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
-		$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
-		$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
-		$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
-		$("span.folder").css("color", "");
-		
-		$(folder).css("color", "red");
-		
-		if( $(folder).is(".view_dir") ){
-			var imgtype = $("select[name=imgtype]").val();
-			var selFile = $("input[name=selFile]").val();
-			var author = $("select[name=author]").val() == 1 ? "&author" : "";
+// Ham xu ly khi click chuot vao thu muc (Xem chi tiet, dinh quyen doi ten, tao thu muc moi, xoa thu muc)
+function folderMouseup( folder, e ){
+	if( e.which != 3 ){ // Left mouse click
+		var folderPath = $(folder).attr("title");
+		if( folderPath != $("span#foldervalue").attr("title") ){
+			$("span#foldervalue").attr("title", folderPath);
+			$("span#view_dir").attr("title", $(folder).is(".view_dir") ? "1" : "0");
+			$("span#create_dir").attr("title", $(folder).is(".create_dir") ? "1" : "0");
+			$("span#rename_dir").attr("title", $(folder).is(".rename_dir") ? "1" : "0");
+			$("span#delete_dir").attr("title", $(folder).is(".delete_dir") ? "1" : "0");
+			$("span#upload_file").attr("title", $(folder).is(".upload_file") ? "1" : "0");
+			$("span#create_file").attr("title", $(folder).is(".create_file") ? "1" : "0");
+			$("span#rename_file").attr("title", $(folder).is(".rename_file") ? "1" : "0");
+			$("span#delete_file").attr("title", $(folder).is(".delete_file") ? "1" : "0");
+			$("span#move_file").attr("title", $(folder).is(".move_file") ? "1" : "0");
+			$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
+			$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
+			$("span.folder").css("color", "");
 			
-			$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
-		}else{
-			$("div#imglist").text("");
+			$(folder).css("color", "red");
+			
+			if( $(folder).is(".view_dir") ){
+				var imgtype = $("select[name=imgtype]").val();
+				var selFile = $("input[name=selFile]").val();
+				var author = $("select[name=author]").val() == 1 ? "&author" : "";
+				
+				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+			}else{
+				$("div#imglist").text("");
+			}
+			
+			NVUPLOAD.init();
+		}
+	}else if( $(folder).is('.menu') ){ // Right mouse click
+		$("span.folder").attr("name", "");
+		$(folder).attr("name", "current");
+		
+		var html = "";
+		
+		if( $(folder).is(".create_dir") ){
+			html += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 		}
 		
-		is_allowed_upload();
+		if( $(folder).is(".rename_dir") ){
+			html += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
+		}
+		
+		if( $(folder).is(".delete_dir") ){
+			html += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
+		}
+		
+		if( html != "" ){
+			html = "<ul>" + html + "</ul>"
+		}
+		
+		$("div#contextMenu").html(html);
+		NVCMENU.show(e);		
 	}
-}
-
-// Ham xu ly khi chuot phai vao thu muc (Dinh quyen doi ten, tao thu muc moi, xoa thu muc)
-function menuMouseup(a){
-	$(a).attr("title");
-	$("span").attr("name", "");
-	$(a).attr("name", "current");
-	
-	var b = "";
-	
-	if( $(a).is(".create_dir") ){
-		b += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
-	}
-	
-	if( $(a).is(".rename_dir") ){
-		b += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
-	}
-	
-	if( $(a).is(".delete_dir") ){
-		b += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
-	}
-	
-	if( b != "" ){
-		b = "<ul>" + b + "</ul>"
-	}
-	
-	$("div#contextMenu").html(b);
 }
 
 // Doi ten thu muc
@@ -551,14 +544,229 @@ function searchfile(){
 
 // Cat anh
 function cropfile(){
-	var a = $("input[name=selFile]").val(), e = LANG.upload_size + ": ";
-	var c = $("img[title='" + a + "']").attr("name").split("|");
-	b = (c[7] == "") ? $("span#foldervalue").attr("title") : c[7];
-	var win = null;
-	LeftPosition = (screen.width) ? (screen.width - 850) / 2 : 0;
-	TopPosition = (screen.height) ? (screen.height - 420) / 2 : 0;
-	settings = 'height=420,width=850,top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars,resizable';
-	win = window.open(nv_module_url + 'cropimg&path=' + b + "&file=" + a, 'addlogo', settings);
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#cropContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="crop-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#cropButtons').html('<span class="text-danger">' + LANG.crop_error_small + '</span>');
+	}else{
+		$('#cropButtons').html(
+			'X:<input type="text" id="crop-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="crop-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="crop-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="crop-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="crop-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		var markW = parseInt( Math.round( size[0] * 0.7 ) );
+		var markH = parseInt( Math.round( size[1] * 0.7 ) );
+		
+		if( markW < 10 ){
+			markW = 10;
+		}
+		
+		if( markH < 10 ){
+			markH = 10;
+		}
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#cropContent img.crop-image').Watermarker({
+			watermark_img : nv_siteroot + 'themes/admin_default/images/transparent.png',
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#crop-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#crop-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#crop-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#crop-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#crop-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "cropimg&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#crop-x').val() + "&y=" + $('#crop-y').val() + "&w=" + $('#crop-w').val() + "&h=" + $('#crop-h').val(),
+				success : function(e){
+					$('#crop-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#cropimage").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#cropimage").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
+}
+
+// Them logo
+function addlogo(){
+	$("div.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	var selFile = $("input[name=selFile]").val();
+	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
+	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
+	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
+	var logo = $("input[name=upload_logo]").val();
+	var logoConfig = $("input[name=upload_logo_config]").val().split('|');
+	
+	selFileData[0] = parseInt( selFileData[0] );
+	selFileData[1] = parseInt( selFileData[1] );
+
+	$('#addlogoContent').css({
+		'width' : size[0] + 4,
+		'height' : size[1] + 4,
+	}).html('<img class="addlogo-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+
+	// Check size
+	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.addlogo_error_small + '</span>');
+	}else if( logo == '' ){
+		$('#addlogoButtons').html('<span class="text-danger">' + LANG.notlogo + '</span>');
+	}else{
+		$('#addlogoButtons').html(
+			'X:<input type="text" id="addlogo-x" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'Y:<input type="text" id="addlogo-y" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'W:<input type="text" id="addlogo-w" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'H:<input type="text" id="addlogo-h" value="" class="w50 form-control" readonly="readonly"/> ' +
+			'<input type="button" id="addlogo-save" value="' + LANG.save + '" class="btn btn-primary"/>'
+		);
+		
+		var markScale = selFileData[0] / size[0];
+		
+		// Set logo size
+		var markW, markH;
+
+		if( selFileData[0] <= 150 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[2] ) / 100 );
+		}
+		else if( selFileData[0] < 350 )
+		{
+			markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[3] ) / 100 );
+		}
+		else
+		{
+			if( Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 ) > logoConfig[0] )
+			{
+				markW = logoConfig[0];
+			}
+			else
+			{
+				markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 );
+			}
+		}
+		
+		markH = Math.ceil( markW * logoConfig[1] / logoConfig[0] );
+		
+		if( markH > selFileData[1] ){
+			markH = selFileData[1];
+			markW = Math.ceil( markH * logoConfig[0] / logoConfig[1] );
+		}
+		
+		markW = parseInt( Math.floor( markW / markScale ) );
+		markH = parseInt( Math.floor( markH / markScale ) );
+		
+		var markX = size[0] - markW - 5;
+		var markY = size[1] - markH - 5;
+		
+		if( markX < 0 ){
+			markX = 0;
+		}
+		
+		if( markY < 0 ){
+			markY = 0;
+		}
+		
+		// Init watermark
+		$('#addlogoContent img.addlogo-image').Watermarker({
+			watermark_img : logo,
+			x : markX,
+			y : markY,
+			w : markW,
+			h : markH,
+			opacity : 1,
+			position : 'centercenter',
+			onChange : function(e){
+				$('#addlogo-x').val( parseInt( Math.floor( markScale * e.x ) ) );
+				$('#addlogo-y').val( parseInt( Math.floor( markScale * e.y ) ) );
+				$('#addlogo-w').val( parseInt( Math.floor( markScale * e.w ) ) );
+				$('#addlogo-h').val( parseInt( Math.floor( markScale * e.h ) ) );
+			}
+		});
+		
+		$('#addlogo-save').click(function(){
+			$(this).attr('disabled', 'disabled');
+			
+			$.ajax({
+				type : "POST",
+				url : nv_module_url + "addlogo&random=" + nv_randomNum(10),
+				data : "path=" + path + "&file=" + selFile + "&x=" + $('#addlogo-x').val() + "&y=" + $('#addlogo-y').val() + "&w=" + $('#addlogo-w').val() + "&h=" + $('#addlogo-h').val(),
+				success : function(e){
+					$('#addlogo-save').removeAttr('disabled');
+					e = e.split('#');
+					
+					if( e[0] == 'ERROR' ){
+						$("div#errorInfo").html(e[1]).dialog("open");
+					}else{
+						LFILE.reload( path, selFile );
+						$("div#addlogo").dialog('close');
+					}
+				}
+			});
+		});
+	}
+
+	$("div#addlogo").dialog({
+		autoOpen : false,
+		width : 400,
+		modal : true,
+		position : "center"
+	}).dialog("open");	
 }
 
 // Xoay anh
@@ -587,13 +795,14 @@ function rotatefile(){
 
 	$("div#rorateimage").dialog({
 		autoOpen : false,
-		width : 388,
+		width : 400,
 		modal : true,
 		position : "center"
 	}).dialog("open");
 	
 	// Dat lai gia tri xoay
 	RRT.direction = 0;
+	RRT.currentDirection = 0;
 }
 
 var ICON = [];
@@ -643,69 +852,6 @@ $(".search em").click(function (){
 	}).dialog("open");
 	$("input[name=q]").val("").focus();
 	return false
-});
-
-$("input[name=upload]").change(function(){
-	var a = $(this).val();
-	f = a.replace(/.*\\(.*)/, "$1").replace(/.*\/(.*)/, "$1");
-	$(this).parent().prev().html(f);
-	a = a + " " + $("span#foldervalue").attr("title");
-	$("input[name=currentFileUpload]").val() != a && $(this).parent().next().next().css("display", "none").next().css("display", "none")
-});
-
-$("input[name=imgurl]").change(function(){
-	$(this).parent().next().next().css("display", "none").next().css("display", "none");
-});
-
-$("#confirm").click(function(){
-	var a = $("input[name=upload]").val(), b = $("span#foldervalue").attr("title"), d = $("input[name=currentFileUpload]").val(), e = a + " " + b, g = $("select[name=imgtype]").val(), h = $("select[name=author]").val() == 1 ? "&author" : "";
-	if(a != "" && d != e){
-		$("input[name=upload]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
-		$("input[name=upload]").upload(nv_module_url + "upload&random=" + nv_randomNum(10), "path=" + b, function(k){
-			$("input[name=currentFileUpload]").val(e);
-			var l = k.split("_");
-			if(l[0] == "ERROR"){
-				$("div#errorInfo").html(l[1]).dialog("open");
-				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
-			} else {
-				$("input[name=upload]").parent().css("display", "block").next().css("display", "none").next().css("display", "block");
-				$("input[name=selFile]").val(k);
-				var ckf = $("input[name=CKEditorFuncNum]").val(), area = $("input[name=area]").val();
-				if(ckf > 0 || area != ""){
-					$("#cfile").html('<a href="javascript:void(0);" onclick="nv_selFile(\'' + nv_siteroot + b + '/' + k + '\')">' + k + '</a>');
-				} else {
-					$("#cfile").html(k);
-				}
-				$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + h + "&order=0&imgfile=" + k, function(){
-					filerename();
-				});
-			}
-		}, "html");
-	} else {
-		a = $("input[name=imgurl]").val();
-		d = $("input[name=currentFileUrl]").val();
-		var j = a + " " + b;
-		if(/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(a) && d != j){
-			$("input[name=imgurl]").parent().css("display", "none").next().css("display", "block").next().css("display", "none");
-			$.ajax({
-				type : "POST",
-				url : nv_module_url + "upload&random=" + nv_randomNum(10),
-				data : "path=" + b + "&fileurl=" + a,
-				success : function(k){
-					$("input[name=currentFileUrl]").val(j);
-					var l = k.split("_");
-					if(l[0] == "ERROR"){
-						$("div#errorInfo").html(l[1]).dialog("open");
-						$("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "none").next().css("display", "block")
-					} else {
-						$("input[name=imgurl]").parent().css("display", "block").next().css("display", "none").next().css("display", "block").next().css("display", "none");
-						$("input[name=selFile]").val(k);
-						$("#imglist").load(nv_module_url + "imglist&path=" + b + "&type=" + g + "&imgfile=" + k + h + "&order=0&num=" + +nv_randomNum(10))
-					}
-				}
-			})
-		}
-	}
 });
 
 $("div#errorInfo").dialog({
@@ -950,20 +1096,89 @@ $("img[name=myFile2]").dblclick(function(){
 	$("input[name=newWidth]").val(a).select();
 });
 
+
+// Upload tu internet
+function remoteUpload(){
+	$("div.dynamic, span.dynamic").html("");
+	$("input.dynamic").val("");
+	
+	$("div#uploadremote").dialog({
+		autoOpen : false,
+		width : 400,
+		height : 95,
+		modal : true,
+		position : "center"
+	}).dialog("open");
+	
+	return false;
+}
+
+// Upload tu internet (Submit)
+$('[name="uploadremoteFileOK"]').click(function(){
+	var fileUrl = $("input[name=uploadremoteFile]").val();
+	var currUrl = $("input[name=currentFileUrl]").val();
+	var folderPath = $("span#foldervalue").attr("title");
+	var check = fileUrl + " " + folderPath;
+	
+	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check ){
+		$(this).attr('disabled', 'disabled');
+		$('#upload-remote-info').html('<em class="fa fa-2x fa-spinner fa-spin"></em>');
+		
+		$.ajax({
+			type : "POST",
+			url : nv_module_url + "upload&random=" + nv_randomNum(10),
+			data : "path=" + folderPath + "&fileurl=" + fileUrl,
+			success : function(k){
+				$("input[name=currentFileUrl]").val( check );
+				$('[name="uploadremoteFileOK"]').removeAttr('disabled');
+				
+				var l = k.split("_");
+				if( l[0] == "ERROR" ){
+					$("div#errorInfo").html(l[1]).dialog("open");
+					$('#upload-remote-info').html('');
+				}else{
+					$("input[name=selFile]").val(k);
+					$('#upload-remote-info').html('<em class="fa fa-2x fa-check text-success"></em>');
+					LFILE.reload( folderPath, k );
+					setTimeout( "NVUPLOAD.closeRemoteDialog()", 500 );
+				}
+			}
+		});
+	}
+});
+
 /* List File Handle */
 var LFILE = {
 	reload : function( path, file ){
 		var imgtype = $("select[name=imgtype]").val();
 		var author = $("select[name=author]").val() == 1 ? "&author" : "";
 		var order = $("select[name=order]").val();
+
+		// Reset shift offset
+		KEYPR.shiftOffset = 0;
 		
 		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10) );
+	},
+	setSelFile : function(){
+		$("input[name=selFile]").val('');
+	
+		if( $('.imgsel').length ){
+			fileName = new Array();
+			$.each( $('.imgsel'), function(){
+				fileName.push( $(this).attr("title") );
+			});
+			fileName = fileName.join('|');
+			
+			$("input[name=selFile]").val(fileName);
+		}
 	},
 }
 
 /* Rorate Handle */
 var RRT = {
 	direction: 0,
+	currentDirection: 0,
+	arrayDirection: [ 0, 90, 180, 270 ],
 	timer: null,
 	timeOut: 20,
 	trigger: function(){
@@ -991,6 +1206,10 @@ var RRT = {
 		var direction = RRT.direction;
 		direction ++;
 		
+		if( direction == 360 ){
+			direction = 0;
+		}
+		
 		RRT.setDirection( direction );
 		RRT.setVal();
 		RRT.trigger();
@@ -998,6 +1217,10 @@ var RRT = {
 	decrease: function(){
 		var direction = RRT.direction;
 		direction --;
+		
+		if( direction == -1 ){
+			direction = 359;
+		}
 		
 		RRT.setDirection( direction );
 		RRT.setVal();
@@ -1032,6 +1255,30 @@ var RRT = {
 			clearInterval( RRT.timer );
 		});
 		
+		$('#rorate90Anticlockwise').click(function(){
+			RRT.currentDirection --;
+			
+			if( RRT.currentDirection < 0 ){
+				RRT.currentDirection = 3;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
+		});
+		
+		$('#rorate90Clockwise').click(function(){
+			RRT.currentDirection ++;
+			
+			if( RRT.currentDirection > 3 ){
+				RRT.currentDirection = 0;
+			}
+			
+			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
+			RRT.setVal();
+			RRT.trigger();			
+		});
+		
 		$('#rorateimageOK').click(function(){
 			var roratePath = $('[name="roratePath"]').val();
 			var rorateFile = $('[name="rorateFile"]').val();
@@ -1063,6 +1310,7 @@ var RRT = {
 var KEYPR = {
 	isCtrl : false,
 	isShift : false,
+	shiftOffset : 0,
 	allowKey : [ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123 ],
 	init : function(){
 		$('body').keyup(function(e){			
@@ -1072,15 +1320,11 @@ var KEYPR = {
 				return;
 			}
 			
-			// console.log(e);
 			// Ctrl key unpress
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = false;
-			}else if( e.keyCode == 27 ){
-				// Unselect file
-				$(".imgsel").removeClass("imgsel");
-			}else if( e.keyCode == 65 && e.ctrlKey === true ){
-				$(".imgcontent").addClass("imgsel");
+			}else if( e.keyCode == 16 ){
+				KEYPR.isShift = false;
 			}
 		});
 		
@@ -1092,19 +1336,536 @@ var KEYPR = {
 			}
 			
 			// Ctrl key press
-			if( e.keyCode == 17 ){
+			if( e.keyCode == 17 /* Ctrl */ ){
 				KEYPR.isCtrl = true;
+			}else if( e.keyCode == 27 /* ESC */ ){
+				// Unselect all file
+				$(".imgsel").removeClass("imgsel");
+				LFILE.setSelFile();
+				
+				// Hide contextmenu
+				NVCMENU.hide();
+				
+				// Reset shift offset
+				KEYPR.shiftOffset = 0;
+			}else if( e.keyCode == 65 /* A */ && e.ctrlKey === true ){
+				// Select all file
+				$(".imgcontent").addClass("imgsel");
+				LFILE.setSelFile();
+				
+				// Hide contextmenu
+				NVCMENU.hide();
+			}else if( e.keyCode == 16 /* Shift */ ){
+				KEYPR.isShift = true;
+			}else if( e.keyCode == 46 /* Del */ ){
+				// Delete file
+				if( $('.imgsel').length && $("span#delete_file").attr("title") == '1' ){
+					filedelete();
+				}
+			}else if( e.keyCode == 88 /* X */ ){
+				// Move file
+				if( $('.imgsel').length && $("span#move_file").attr("title") == '1' ){
+					move();
+				}
 			}
 		});
 		
 		// Unselect file when click on wrap area
-		$('.filebrowse').click(function(e){
-			if( $(e.target).is('.filebrowse') ){
+		$('#imglist, .filebrowse').click(function(e){
+			if( $(e.target).is('.filebrowse') || $(e.target).is('#imglist') ){
 				$(".imgsel").removeClass("imgsel");
 			}
 		});
 	},
 };
 
+var NVUPLOAD = {
+	uploader: null, // Pupload variable
+	rendered: false, // Is rendered upload container
+	started: false,
+	buttons: 
+		'<div class="row">' +
+			'<div class="col-sm-7 buttons">' +
+				'<div class="btn-group dropup browse-button">' +
+					'<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' +
+						LANG.upload_mode + ' <span class="caret"></span>' +
+					'</button>' +
+					'<ul class="dropdown-menu" role="menu">' +
+						'<li><a id="upload-remote" onclick="return remoteUpload();" href="#">' + LANG.upload_mode_remote + '</a></li>' +
+						'<li><a id="upload-local" href="#">' + LANG.upload_mode_local + '</a></li>' +
+					'</ul>' +
+				'</div>	' +
+			'</div>' +
+			'<div class="col-sm-5">' +
+				'<div class="row" id="upload-queue-total">' +
+					'<div class="col-sm-4 total-size"></div>' +
+					'<div class="col-sm-8 total-status"></div>' +
+				'</div>' +
+			'</div>' +
+		'</div>',	
+	closeRemoteDialog : function(){
+		$("div#uploadremote").dialog('close');
+	},
+	init : function(){
+		// Reset upload if exists
+		if( NVUPLOAD.uploader != null ){
+			NVUPLOAD.reset();
+		}
+		
+		// Check folder if allow upload
+		var isUploadAllow = $("span#upload_file").attr("title") == "1" ? true : false;
+		
+		if( ! isUploadAllow ){
+			$('#upload-button-area').html('<span class="text-danger"><em class="fa fa-info">&nbsp;</em>' + LANG.notupload + '</span>');
+		}else{
+			$('#upload-button-area').html( NVUPLOAD.buttons );
+			
+			var folderPath = $("span#foldervalue").attr("title");
+			
+			NVUPLOAD.uploader = new plupload.Uploader({
+				runtimes : 'html5,flash,silverlight,html4',
+				browse_button : 'upload-local',
+				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
+				flash_swf_url : nv_siteroot + 'js/plupload/Moxie.swf',
+				silverlight_xap_url : nv_siteroot+ 'js/plupload/Moxie.xap',
+				drop_element : 'upload-content',
+				file_data_name : 'upload',
+				filters : nv_filters,
+				init: {
+					// Event on init uploader
+					PostInit: function(){
+						
+					},
+			
+					// Event on add file (Add to queue or first add)
+					FilesAdded: function(up, files){
+						// Build upload container
+						if( ! NVUPLOAD.rendered ){
+							NVUPLOAD.renderUI();
+						}
+						
+						NVUPLOAD.updateList();
+						
+						$('#upload-start').click(function(){
+							NVUPLOAD.uploader.start();
+						});
+						
+						$('#upload-cancel').click(function(){
+							NVUPLOAD.uploadCancel();
+						});
+					},
+					
+					// Event on trigger a file upload status
+					UploadProgress: function( up, file ){
+						$('#' + file.id + ' .file-status').html( file.percent + '%' );
+						NVUPLOAD.handleStatus( file, false );
+						NVUPLOAD.updateTotalProgress();
+					},
+					
+					// Event on one file finish uploaded (Maybe success or error)
+					FileUploaded: function( up, file, response ){
+						response = response.response;
+						NVUPLOAD.handleStatus( file, response );
+					},
+					
+					// Event on start upload or finish upload
+					StateChanged: function(){
+						// Start upload
+						if( NVUPLOAD.uploader.state === plupload.STARTED ){
+							if( ! NVUPLOAD.started ){
+								NVUPLOAD.started = true;
+								// Hide control button
+								$('#upload-start, #upload-cancel, #upload-button-area .browse-button').hide();
+								
+								// Add some button
+								$('#upload-button-area .buttons').append(
+									'<input id="upload-stop" type="button" class="btn btn-primary" value="' + LANG.upload_stop + '"/> ' +
+									'<input style="display:none" id="upload-continue" type="button" class="btn btn-primary" value="' + LANG.upload_continue + '"/>' +
+									'<div class="total-info pull-right"></div>'
+								);
+								
+								$('#upload-button-area .total-info').html(
+									mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
+								);
+								
+								// Init upload progress bar
+								$('#upload-queue-total .total-status').html(
+									'<div class="progress">' +
+										'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
+									'</div>'
+								);
+								
+								// Set button handle
+								$('#upload-stop').click(function(){
+									$(this).hide();
+									$('#upload-continue').show();
+									NVUPLOAD.uploader.stop();
+								});
+								
+								$('#upload-continue').click(function(){
+									$(this).hide();
+									$('#upload-stop').show();
+									NVUPLOAD.uploader.start();
+								});
+							}
+						}else{
+							NVUPLOAD.updateList();
+						}
+					},
+					
+					// Event on a file is uploading
+					UploadFile: function( up, file ){
+						// Not thing to do
+					},
+					
+					// Event on remove a file
+					FilesRemoved: function(){
+						var scrollTop = $('#upload-queue-files').scrollTop();
+						NVUPLOAD.updateList();
+						$('#upload-queue-files').scrollTop( scrollTop );
+					},
+					
+					// Event on all files are uploaded
+					UploadComplete: function( up, files ){
+						$('#upload-continue').hide();
+						$('#upload-stop').hide();
+						
+						// Show finish button if has failed file
+						if( NVUPLOAD.uploader.total.failed > 0 ){
+							$('<input type="button" class="btn btn-primary" value="' + LANG.upload_finish + '" id="upload-finish"/>').insertBefore( $('#upload-stop') );
+							
+							$('#upload-finish').click(function(){
+								NVUPLOAD.finish();
+							});
+						}else{
+							$('<i class="fa fa-2x text-success fa-spin fa-spinner"></i>').insertBefore( $('#upload-stop') );
+							setTimeout( "NVUPLOAD.finish()", 1000 );
+						}
+					},
+					
+					// Event on error
+					Error: function(up, err){
+						$("div#errorInfo").html( "Error #" + err.code + ": " + err.message ).dialog("open");
+						
+						if( err.code === plupload.INIT_ERROR ){
+							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );
+						}
+					}
+				}
+			});
+			
+			NVUPLOAD.uploader.init();
+		}
+	},
+	renderUI: function(){
+		// Hide files list and show upload container
+		$('#imglist').css({'display' : 'none'});
+		$('#upload-queue').css({'display' : 'block'});
+		
+		// Add some button
+		$('#upload-button-area .buttons').append(
+			'<input id="upload-start" type="button" class="btn btn-primary" value="' + LANG.upload_file + '"/> ' +
+			'<input id="upload-cancel" type="button" class="btn btn-default" value="' + LANG.upload_cancel + '"/> '
+		);
+		
+		// Change browse_button (Change style, Method: setOption is error)
+		$('#upload-button-area .browse-button button').remove();
+		$('#upload-remote').parent().remove();
+		$('#upload-button-area .browse-button ul').removeAttr('role').removeClass('dropdown-menu').addClass('fixul');
+		$('#upload-local').addClass('btn btn-primary').text(LANG.upload_add_files);
+		$('#upload-button-area .browse-button ul li div:first').width( $('#upload-local').outerWidth() ).height( $('#upload-local').outerHeight() );
+		
+		// Build upload queue
+		$('#upload-queue').html('\
+			<div class="queue-header">\
+				<div class="container-fluid">\
+					<div class="row">\
+						<div class="col-sm-7">' + LANG.file_name + '</div>\
+						<div class="col-sm-2">' + LANG.upload_size + '</div>\
+						<div class="col-sm-3">' + LANG.upload_status + '</div>\
+					</div>\
+				</div>\
+			</div>\
+			<div id="upload-queue-files" class="container-fluid"></div>\
+		');
+		
+		// Rendered is true
+		NVUPLOAD.rendered = true;
+	},
+	updateList: function(){
+		var fileList = $('#upload-queue-files').html('');
+
+		$.each( NVUPLOAD.uploader.files, function(i, file){
+			fileList.append(
+				'<div id="' + file.id + '" class="row file-item">' +
+					'<div class="col-sm-7 file-name"><span>' + file.name + '</span></div>' +
+					'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
+					'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
+					'<div class="col-sm-1 file-action text-right"></div>' +
+				'</div>'
+			);
+
+			NVUPLOAD.handleStatus( file, false );
+
+			$('#' + file.id + ' .file-delete').click(function(e){
+				$('#' + file.id).remove();
+				NVUPLOAD.uploader.removeFile( file );
+
+				e.preventDefault();
+			});
+		});
+
+		$('#upload-queue-total .total-size').html( plupload.formatSize( NVUPLOAD.uploader.total.size ) );
+
+		// Scroll to end of file list
+		fileList[0].scrollTop = fileList[0].scrollHeight;
+
+		NVUPLOAD.updateTotalProgress();
+		
+		// Enable, disable start button
+		if( NVUPLOAD.uploader.files.length ){
+			$('#upload-start').removeAttr('disabled');
+		}else{
+			$('#upload-start').attr('disabled', 'disabled');
+		}
+	},
+	reset: function(){
+		// Destroy current uploader
+		NVUPLOAD.uploader.destroy();
+		NVUPLOAD.started = false;
+		
+		// Clear uploader variable
+		NVUPLOAD.uploader = null;
+		
+		// Reset upload button
+		$('#upload-button-area').html( NVUPLOAD.buttons );
+		
+		// Clear upload container
+		$('#upload-queue-files').html('');
+	},
+	uploadCancel: function(){
+		// Reset uploader
+		NVUPLOAD.reset();
+		
+		// Hide upload container and show file list
+		$('#upload-queue').html('').css({'display' : 'none'});
+		$('#imglist').css({'display' : 'block'});
+		
+		// Rendered is false
+		NVUPLOAD.rendered = false;
+		
+		// Init uploader
+		NVUPLOAD.init();
+	},
+	destroyUpload: function(){
+		// Reset uploader
+		NVUPLOAD.reset();
+		
+		// Hide upload container and show file list
+		$('#upload-queue').html('').css({'display' : 'none'});
+		$('#imglist').css({'display' : 'block'});
+		
+		// Rendered is false
+		NVUPLOAD.rendered = false;
+	},
+	handleStatus: function( file, response ){
+		var actionClass;
+		
+		if( response != false ){
+			check = response.split('_');
+			
+			if( check[0] == 'ERROR' ){
+				file.status = plupload.FAILED;
+				file.hint = check[1];
+				NVUPLOAD.uploader.total.uploaded --;
+				NVUPLOAD.uploader.total.failed ++;			
+			}else{
+				file.name = response;
+			}
+			
+			$.each( NVUPLOAD.uploader.files, function(i, f){
+				if( f.id == file.id ){
+					NVUPLOAD.uploader.files[i].status = file.status;
+					NVUPLOAD.uploader.files[i].hint = file.hint;
+					NVUPLOAD.uploader.files[i].name = file.name;
+				}
+			});
+		}
+		
+		if( file.status == plupload.DONE ){
+			actionClass = 'text-success fa fa-lg fa-check';
+		}else if( file.status == plupload.FAILED ){
+			actionClass = 'text-danger fa fa-lg fa-exclamation-triangle';
+		}else if( file.status == plupload.QUEUED ){
+			actionClass = 'fa fa-lg fa-trash-o file-delete fa-pointer';
+		}else if( file.status == plupload.UPLOADING ){
+			actionClass = 'text-info fa fa-lg fa-spin fa-circle-o-notch';
+		}else{
+			// Nothing to do
+		}
+
+		$('#' + file.id + ' .file-action').html('<i class="' + actionClass + '"></i>');
+		
+		if( file.hint ){
+			$('#' + file.id).attr('title', file.hint);	
+		}
+	},
+	updateTotalProgress: function(){
+		$('#upload-queue-total .total-status').html(
+			'<div class="progress">' +
+				'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
+			'</div>'
+		);
+		
+		$('#upload-button-area .total-info').html(
+			mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
+		);
+	},
+	finish: function(){
+		var folderPath = $("span#foldervalue").attr("title");
+		
+		if( NVUPLOAD.uploader.total.uploaded > 0 ){
+			var selFile = new Array();
+			
+			$.each( NVUPLOAD.uploader.files, function( k, v ){
+				if( v.status == plupload.DONE ){
+					selFile.push( v.name );
+				}
+			});
+			
+			selFile = selFile.join('|');
+		}else{
+			var selFile = '';
+		}
+
+		$("input[name=selFile]").val( selFile );
+		NVUPLOAD.uploadCancel();
+		LFILE.reload( folderPath, selFile );
+	},
+};
+
+var NVCMENU = {
+    menuStyle: {
+      listStyle: 'none',
+      padding: '1px',
+      margin: '0px',
+      backgroundColor: '#fff',
+      border: '1px solid #999',
+      width: '120px'
+    },
+    itemStyle: {
+      margin: '0px',
+      color: '#000',
+      display: 'block',
+      cursor: 'default',
+      padding: '3px',
+      border: '1px solid #fff',
+      backgroundColor: 'transparent'
+    },
+    itemHoverStyle: {
+      border: '1px solid #0a246a',
+      backgroundColor: '#b6bdd2'
+    },
+    shadow : null,
+    menu : null,
+	bindings : {
+		select : function() {
+			insertvaluetofield();
+		},
+		download : function() {
+			download();
+		},
+		filepreview : function() {
+			preview();
+		},
+		fileaddlogo : function() {
+			addlogo();
+		},
+		create : function() {
+			create();
+		},
+		move : function() {
+			move();
+		},
+		rename : function() {
+			filerename();
+		},
+		filedelete : function() {
+			filedelete();
+		},
+        cropfile : function() {
+			cropfile();
+		},
+		rotatefile : function() {
+			rotatefile();
+		},
+		renamefolder : function() {
+			renamefolder()
+		},
+		createfolder : function() {
+			createfolder()
+		},
+		deletefolder : function() {
+			deletefolder()
+		}
+	},
+	init : function(){
+		NVCMENU.menu = $('<div id="nvContextMenu"></div>').hide().css({position:'absolute', zIndex:'500'}).appendTo('body').bind('click', function(e){
+			e.stopPropagation();
+		});
+		NVCMENU.shadow = $('<div id="nvContextMenuShadow"></div>').hide().css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499}).appendTo('body');
+		
+		$(document).delegate( '*', 'click', function(e){
+			if( e.which != 3 ){
+				NVCMENU.hide();
+			}	
+		});
+	},
+	show : function(e){
+		e.preventDefault();
+		
+		if( $('#contextMenu').html() != '' ){
+			var content = $('#contextMenu').find('ul:first').clone(true);
+		    content.css(NVCMENU.menuStyle).find('li').css(NVCMENU.itemStyle).hover(function(){
+		        $(this).css(NVCMENU.itemHoverStyle);
+		      },
+		      function(){
+		        $(this).css(NVCMENU.itemStyle);
+		      }
+		    ).find('img').css({verticalAlign:'middle',paddingRight:'2px'});
+		    
+		   	NVCMENU.menu.html(content);
+		    
+			$.each(NVCMENU.bindings, function(id, func){
+				$('#' + id, NVCMENU.menu).bind('click', function(e){
+					NVCMENU.hide();
+					func();
+				});
+			});
+
+			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
+			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();			
+		}
+		return false;
+	},
+	hide : function(){
+		NVCMENU.menu.hide();
+		NVCMENU.shadow.hide();
+	},
+};
+
+// Init functions
 KEYPR.init();
 RRT.init();
+NVCMENU.init();
+
+// Disable select text
+$('#imglist').attr('unselectable','on').css({
+	'-moz-user-select':'-moz-none',
+	'-moz-user-select':'none',
+	'-o-user-select':'none',
+	'-khtml-user-select':'none',
+	'-webkit-user-select':'none',
+	'-ms-user-select':'none',
+	'user-select':'none'
+}).bind('selectstart', function(){ return false; });

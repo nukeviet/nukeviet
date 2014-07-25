@@ -16,7 +16,6 @@
 	bottom: 0;
 	width: 100%;
 	height: 40px;
-	overflow: hidden;
 	-webkit-box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.175);
 	box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.175);
 	line-height: 28px;
@@ -168,6 +167,10 @@
 	overflow: hidden;
 }
 
+#rorateimage .btn-reset{
+	width: 38px;
+}
+
 #rorateContent{
 	margin: 0 auto 10px auto;
 }
@@ -184,6 +187,64 @@
 	text-align: center;
 }
 
+/* Remote upload */
+#uploadremote{
+	padding: 10px;
+	display: none;	
+}
+
+/* Local upload */
+#upload-queue{
+	display: none;
+	height: 100%;
+	padding-top: 30px;
+	position: relative;
+}
+
+#upload-queue .queue-header{
+	position: absolute;
+	top: 0px;
+	height: 30px;
+	width: 100%;
+	border-bottom: 1px solid #e1e1e8;
+	line-height: 30px;
+	font-weight: bold;
+}
+
+#upload-button-area .browse-button ul.fixul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#upload-queue-files{
+	height: 100%;
+	overflow: auto;
+}
+
+#upload-queue-files .file-item{
+	padding: 5px 0;
+	border-bottom: 1px solid #e1e1e8;
+}
+
+#upload-queue-files .file-item:nth-child(odd){
+	background: #f9f9f9;
+}
+
+#upload-queue-files .file-item:hover{
+	background: #f5f5f5;
+}
+
+#upload-queue-total .total-status .progress{
+	margin: 6px 0 0 0;
+}
+
+@media (max-width: 768px){
+	#upload-queue{
+		height: 400px;
+	}
+}
+
 /* Add Logo */
 div.watermark {
 	border: 1px dashed #000;
@@ -197,19 +258,12 @@ img.watermark:hover {
 	width: 50px!important;
 }
 
-.authorFile {
-	float: left;
-	margin-left: 5px;
-	position: relative
-}
-
-/* Context Menu */
-#jqContextMenu .fa{
-	color: #666;
-	width: 25px;
-}
-
 /* List files */
+#imglist {
+	height: 100%;
+	padding: 5px 0;
+}
+
 .imgcontent {
 	background: #fff;
 	border: 2px solid #EAEAEA;
@@ -225,38 +279,28 @@ img.watermark:hover {
 	width: 100px
 }
 
-.imgInfo {
-	font: 400 10px/12px tahoma, arial, sans-serif;
-	height: 30px
-}
-
-.imgsel {
-	background: #fd8;
-	border: 2px solid #fb0;
+.imgcontent:hover {
+	background: #F2F9FC;
+	border: 2px solid #DDEFF8;
 	color: #333
 }
 
-.notupload {
-	color: #F00;
-	float: right;
+.imgInfo {
 	font-size: 10px;
-	font-weight: bold;
-	padding: 5px
+	line-height: 12px;
+	height: 30px
 }
 
-.upload {
-	background: url('../images/upload.gif') no-repeat 0px 0px;
-	cursor: pointer;
-	float: left;
-	height: 26px;
-	overflow: hidden;
-	position: relative;
-	width: 77px
+.imgsel { /* Selected file */
+	background: #fd8;
+	border: 2px solid #fb0;
+	color: #333;
 }
 
-.uploadForm {
-	float: right;
-	position: relative
+.imgcontent.imgsel:hover {
+	background: #fb0;
+	border: 2px solid #EEAF00;
+	color: #333
 }
 
 img.previewimg {
@@ -267,37 +311,51 @@ img.previewimg {
 	padding: 2px
 }
 
+/* Info error */
 #errorInfo {
 	color: #F00;
 	font-size: 12px;
 	padding: 15px
 }
 
-#imglist {
-	margin: 5px
+/* Crop image */
+#cropimage{
+	padding: 10px;
+	display: none;	
 }
 
-.imgcontent:hover {
-	background: #F2F9FC;
-	border: 2px solid #DDEFF8;
-	color: #333
+#cropimage .crop-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
 }
 
-.upload:hover {
-	background: url('../images/upload.gif') no-repeat 0px -26px
+#cropimage .crop-content img{
+	vertical-align: top;
 }
 
-input[type="file"] {
-	cursor: pointer;
-	filter: alpha(opacity=0);
-	font-size: 30px;
-	height: 33px;
-	left: -320px;
-	opacity: 0;
-	position: relative;
-	z-index: 1000
+.ui-dialog .ui-resizable-se {
+	background-position: -64px -224px!important;
+	right: 1px!important;
+	bottom: 1px!important;
 }
 
-#mudimPanel{
-	left:0 !important
+/* Add logo */
+#addlogo{
+	padding: 10px;
+	display: none;	
+}
+
+#addlogo .addlogo-content{
+	margin: 0 auto 10px auto;
+	border: 2px solid #F0F0F0;
+}
+
+#addlogo .addlogo-content img{
+	vertical-align: top;
+}
+
+/* Context Menu */
+#nvContextMenu .fa{
+	color: #666;
+	width: 25px;
 }

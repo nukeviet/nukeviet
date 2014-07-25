@@ -7,13 +7,18 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
-					<td class="text-center" colspan="2"><strong>{LANG.autoinstall_package_select}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
-					<select name="modulename" class="form-control w200">
-						<option value="0">{LANG.autoinstall_method_none}</option>
-						<!-- BEGIN: module_file -->
-						<option value="{MODULE_FILE}">{MODULE_FILE}</option>
-						<!-- END: module_file -->
-					</select></td>
+					<td class="text-center">
+						<strong>{LANG.autoinstall_package_select}: </strong>
+						<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/>
+					</td>
+					<td>
+						<select name="modulename" class="form-control w200">
+							<option value="0">{LANG.autoinstall_method_none}</option>
+							<!-- BEGIN: module_file -->
+							<option value="{MODULE_FILE}">{MODULE_FILE}</option>
+							<!-- END: module_file -->
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /> <input name="back" type="button" value="{LANG.back}" class="btn btn-primary" /></td>

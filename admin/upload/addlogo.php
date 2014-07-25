@@ -63,9 +63,9 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 		if( isset( $array_dirname[$path] ) )
 		{
-			if( preg_match( "/^" . nv_preg_quote( NV_UPLOADS_DIR ) . "\/([a-z0-9\-\_\/]+)$/i", $path, $m ) )
+			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
 			{
-				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] . '/' . $file );
+				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 			}
 
 			$info = nv_getFileInfo( $path, $file );
@@ -82,85 +82,4 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	}
 }
 
-if( file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
-{
-	$upload_logo = $global_config['upload_logo'];
-}
-elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-{
-	$upload_logo = $global_config['site_logo'];
-}
-elseif( file_exists( NV_ROOTDIR . '/images/logo.png' ) )
-{
-	$upload_logo = 'images/logo.png';
-}
-else
-{
-	trigger_error( $lang_module['notlogo'], 256 );
-}
-
-$logo_size = getimagesize( NV_ROOTDIR . '/' . $upload_logo );
-$file_size = getimagesize( NV_ROOTDIR . '/' . $path . '/' . $file );
-
-if( $file_size[0] <= 150 )
-{
-	$w = ceil( $logo_size[0] * $global_config['autologosize1'] / 100 );
-}
-elseif( $file_size[0] < 350 )
-{
-	$w = ceil( $logo_size[0] * $global_config['autologosize2'] / 100 );
-}
-else
-{
-	if( ceil( $file_size[0] * $global_config['autologosize3'] / 100 ) > $logo_size[0] )
-	{
-		$w = $logo_size[0];
-	}
-	else
-	{
-		$w = ceil( $file_size[0] * $global_config['autologosize3'] / 100 );
-	}
-}
-
-$h = ceil( $w * $logo_size[1] / $logo_size[0] );
-$x = $file_size[0] - $w - 5;
-$y = $file_size[1] - $h - 5;
-
-$logosite = array(
-	'p' => NV_BASE_SITEURL . $upload_logo,
-	'x' => $x,
-	'y' => $y,
-	'w' => $w,
-	'h' => $h
-);
-
-// Goi framework
-$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.core.css" rel="stylesheet" />';
-$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.theme.css" rel="stylesheet" />';
-$my_head .= '<link type="text/css" href="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.resizable.css" rel="stylesheet" />';
-$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.core.min.js"></script>';
-$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.draggable.min.js"></script>';
-$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.ui.resizable.min.js"></script>';
-$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'js/ui/jquery.watermarker.js"></script>';
-
-// Mac dinh tat mudim
-if( ! $nv_Request->isset_request( 'nomudim', 'get' ) or $nv_Request->get_int( 'nomudim', 'get', 0 ) == 1 )
-{
-	$global_config['mudim_active'] = 0;
-}
-
-$xtpl = new XTemplate( 'addlogo.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-$xtpl->assign( 'LANG', $lang_module );
-$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'NV_OP_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-$xtpl->assign( 'IMG_PATH', $path );
-$xtpl->assign( 'IMG_FILE', $file );
-$xtpl->assign( 'IMG_MTIME', filemtime( NV_ROOTDIR . '/' . $path . '/' . $file ) );
-$xtpl->assign( 'LOGOSITE', $logosite );
-
-$xtpl->parse( 'main' );
-$contents = $xtpl->text( 'main' );
-
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme( $contents, 0 );
-include NV_ROOTDIR . '/includes/footer.php';
+die( 'ERROR#Error Access!!' );

@@ -216,12 +216,13 @@ while( list( $cid, $module, $area, $id, $content, $userid, $post_name, $email, $
 	{
 		$email = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $userid . '"> ' . $email . '</a>';
 	}
-
+	$content = nv_br2nl($content);
 	$row = array(
 		'cid' => $cid,
 		'post_name' => $post_name,
 		'email' => $email,
-		'content' => $content,
+		'title' => nv_clean60( $content, 255 ),
+		'content' => $content ,
 		'module' => $module,
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;area=' . $area . '&amp;id=' . $id,
 		'status' => ( $status == 1 ) ? 'check' : 'circle-o',

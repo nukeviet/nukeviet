@@ -36,7 +36,8 @@
 
 <script type="text/javascript">
 //<![CDATA[
-is_allowed_upload();
+// Init upload
+NVUPLOAD.init();
 
 $("#foldertree").treeview({
 	collapsed : true,
@@ -44,29 +45,9 @@ $("#foldertree").treeview({
 	persist : "location"
 });
 
-$("span.folder").click(function() {
-	folderClick(this)
-});
-
-$("span.menu").mouseup(function() {
-	menuMouseup(this)
-});
-
-$("span.menu").contextMenu("contextMenu", {
-	menuStyle : {
-		width : "120px"
-	},
-	bindings : {
-		renamefolder : function() {
-			renamefolder()
-		},
-		createfolder : function() {
-			createfolder()
-		},
-		deletefolder : function() {
-			deletefolder()
-		}
-	}
+$('span.folder').bind('mouseup contextmenu', function(e){
+	e.preventDefault();
+	folderMouseup(this, e);
 });
 //]]>
 </script>

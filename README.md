@@ -38,5 +38,5 @@ VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
 Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
 
 Head Office:
-  - Room 1805 - CT2 Nang Huong Building, 583 Nguyen Trai st, Ha Dong dist, Hanoi, Vietnam.
-  - Phone: +84-4-85872007, Fax: +84-4-35500914, Email: contact (at) vinades.vn 
+  - Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai st, Ha Dong dist, Hanoi, Vietnam.
+  - Phone: +84-4-85872007, Fax: +84-4-35500914, Email: contact (at) vinades.vn

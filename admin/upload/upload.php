@@ -190,7 +190,9 @@ if( empty( $error ) )
 		$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 		$sth->execute();
 	}
+	
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid'] );
+	
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";

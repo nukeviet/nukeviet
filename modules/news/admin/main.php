@@ -108,16 +108,19 @@ $array_search = array(
 	'bodytext' => $lang_module['search_bodytext'],
 	'author' => $lang_module['search_author'],
 	'admin_id' => $lang_module['search_admin'],
-	'sourcetext' => $lang_module['sources'] );
+	'sourcetext' => $lang_module['sources']
+);
 $array_in_rows = array(
 	'title',
 	'bodytext',
 	'author',
-	'sourcetext' );
+	'sourcetext'
+);
 $array_in_ordername = array(
 	'title',
 	'publtime',
-	'exptime' );
+	'exptime'
+);
 $array_status_view = array(
 	'-' => '---',
 	'5' => $lang_module['status_5'],
@@ -126,7 +129,17 @@ $array_status_view = array(
 	'6' => $lang_module['status_6'],
 	'4' => $lang_module['status_4'],
 	'2' => $lang_module['status_2'],
-	'3' => $lang_module['status_3'] );
+	'3' => $lang_module['status_3']
+);
+$array_status_class = array(
+	'5' => 'danger',
+	'1' => '',
+	'0' => 'warning',
+	'6' => 'warning',
+	'4' => 'info',
+	'2' => 'success',
+	'3' => 'danger'
+);
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -277,14 +290,14 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$title = nv_clean60( $title );
-	
+
 	if( $catid > 0 )
 	{
 		$catid_i = $catid;
 	}
-	
+
 	$check_permission_edit = $check_permission_delete = false;
-	
+
 	if( defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
 		$check_permission_edit = $check_permission_delete = true;
@@ -293,7 +306,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	{
 		$array_temp = explode( ',', $listcatid );
 		$check_edit = $check_del = 0;
-		
+
 		foreach( $array_temp as $catid_i )
 		{
 			if( isset( $array_cat_admin[$admin_id][$catid_i] ) )
@@ -317,7 +330,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					{
 						++$check_edit;
 					}
-					
+
 					if( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
 					{
 						++$check_del;
@@ -329,35 +342,36 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 				}
 			}
 		}
-		
+
 		if( $check_edit == sizeof( $array_temp ) )
 		{
 			$check_permission_edit = true;
 		}
-		
+
 		if( $check_del == sizeof( $array_temp ) )
 		{
 			$check_permission_delete = true;
 		}
 	}
-	
+
 	$admin_funcs = array();
 	if( $check_permission_edit ) $admin_funcs[] = nv_link_edit_page( $id );
 	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
-	
+
 	$data[$id] = array(
 		'id' => $id,
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 		'title' => $title,
 		'publtime' => $publtime,
 		'status' => $lang_module['status_' . $status],
+		'class' => $array_status_class[$status],
 		'username' => $username,
 		'hitstotal' => number_format( $hitstotal, 0, ',', '.' ),
 		'hitscm' => number_format( $hitscm, 0, ',', '.' ),
 		'numtags' => 0,
 		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
 	);
-	
+
 	$array_ids[] = $id;
 }
 
@@ -366,11 +380,11 @@ if( ! empty( $array_ids ) )
 {
 	$db->sqlreset()->select( 'COUNT(*) AS numtags, id' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags_id' )->where( 'id IN( ' . implode( ',', $array_ids ) . ' )' )->group( 'id' );
 	$result = $db->query( $db->sql() );
-	
+
 	while( list( $numtags, $id ) = $result->fetch( 3 ) )
 	{
 		$data[$id]['numtags'] = $numtags;
-	}	
+	}
 }
 
 $array_list_action = array(

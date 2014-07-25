@@ -52,7 +52,7 @@
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
-<form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields">
+<form class="form-inline" action="{FORM_ACTION}" method="post" id="ffields" autocomplete="off">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTIONFORM} </caption>
@@ -332,7 +332,6 @@
 		}
 	}
 
-
 	$(document).ready(function() {
 		if ($("input[name=fid]").val() == 0) {
 			nv_show_list_field();
@@ -343,15 +342,15 @@
 			if (str == '') {
 				return true;
 			}
-			var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
+			var fieldCheck_rule = /^([a-zA-Z0-9_-])+$/;
 			return (fieldCheck_rule.test(str) ) ? true : false;
 		}, ' required a-z, 0-9, and _ only');
-		
+
 		$.validator.addMethod('validatefield', function(str) {
 			if (str == '') {
 				return true;
 			}
-			var fieldCheck_rule = /^([a-zA-Z_])+$/;
+			var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
 			return (fieldCheck_rule.test(str) ) ? true : false;
 		}, ' required a-z, and _ only');
 

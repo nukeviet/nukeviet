@@ -1012,10 +1012,8 @@ function nv_editor_br2nl( $text )
  * @param string $content
  * @return
  */
-function nv_get_keywords( $content = '' )
+function nv_get_keywords( $content, $keyword_limit = 20 )
 {
-	if( empty( $content ) ) return ( '' );
-
 	$content = strip_tags( $content );
 	$content = nv_unhtmlspecialchars( $content );
 	$content = strip_punctuation( $content );
@@ -1052,8 +1050,7 @@ function nv_get_keywords( $content = '' )
 			}
 
 			$keywords_return = array_unique( $keywords_return );
-
-			if( sizeof( $keywords_return ) > 20 )
+			if( sizeof( $keywords_return ) > $keyword_limit )
 			{
 				break;
 			}

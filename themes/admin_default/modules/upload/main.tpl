@@ -4,9 +4,9 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.button.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
@@ -14,12 +14,12 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.resizable.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.button.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.watermarker.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.flash.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.upload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jQueryRotate.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/plupload/plupload.full.min.js"></script>
 
 <div class="content">
 	<div class="row upload-wrap">
@@ -30,14 +30,15 @@
 				{LANG.waiting}...
 			</p>
 		</div>
-		<div class="col-lg-10 col-md-10 col-sm-9 filebrowse">
-			<div id="imglist">
+		<div id="upload-content" class="col-lg-10 col-md-10 col-sm-9 filebrowse">
+			<div id="imglist" class="clearfix">
 				<p class="upload-loading">
 					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
 					<br />
 					{LANG.waiting}...
 				</p>
 			</div>
+			<div id="upload-queue"></div>
 		</div>
 	</div>
 </div>
@@ -78,44 +79,19 @@
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div class="uploadForm" class="upload-hide">
-				<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">
-					{LANG.upload_file}
-				</div>
-				<div class="upload"><input type="file" name="upload" id="myfile"/>
-				</div>
-				<div style="margin-top:10px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>
-				</div>
-				<div style="margin-top:5px;margin-left:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/>
-				</div>
-				<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
-				</div>
-				<div style="float:left;margin:0 5px;">
-					{LANG.upload_otherurl}: <input type="text" name="imgurl"/>
-				</div>
-				<div style="margin-top:10px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>
-				</div>
-				<div style="margin-top:5px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/>
-				</div>
-				<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
-				</div>
-				<div style="float:left;"><input type="button" value="Upload" id="confirm" />
-				</div>
-			</div>
-			<div class="notupload" class="upload-hide">
-				{LANG.notupload}
-			</div>
+			<div id="upload-button-area">&nbsp;</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>
 </div>
 
-<input type="hidden" name="currentFileUpload" value=""/>
 <input type="hidden" name="currentFileUrl" value=""/>
 <input type="hidden" name="selFile" value=""/>
 <input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
 <input type="hidden" name="area" value="{AREA}"/>
 <input type="hidden" name="alt" value="{ALT}"/>
+<input type="hidden" name="upload_logo" value="{UPLOAD_LOGO}"/>
+<input type="hidden" name="upload_logo_config" value="{UPLOAD_LOGO_CONFIG}"/>
 
 <div class="upload-hide" id="contextMenu"></div>
 
@@ -128,7 +104,7 @@
 		<div class="form-group">
 			<label class="control-label col-xs-3">{LANG.rename_newname}:</label>
 			<div class="col-xs-9">
-				<input type="text" name="foldername" class="form-control"/>
+				<input type="text" name="foldername" class="form-control dynamic"/>
 			</div>
 		</div>
 	</div>
@@ -139,7 +115,7 @@
 		<div class="form-group">
 			<label class="control-label col-xs-5">{LANG.foldername}:</label>
 			<div class="col-xs-7">
-				<input type="text" name="createfoldername" class="form-control"/>
+				<input type="text" name="createfoldername" class="form-control dynamic"/>
 			</div>
 		</div>
 	</div>
@@ -256,14 +232,42 @@
 	</div>
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
-		<button id="rorateLeft" type="button" class="btn btn-default">
+		<button id="rorate90Anticlockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-undo">&nbsp;</em> 90
+		</button>
+		<button id="rorateLeft" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-undo">&nbsp;</em>
 		</button>
-		<button id="rorateRight" type="button" class="btn btn-default">
+		<button id="rorateRight" type="button" class="btn btn-default btn-reset">
 			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+		</button>
+		<button id="rorate90Clockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em> 90
 		</button>
 		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
 	</div>
+</div>
+
+<div id="uploadremote" title="{LANG.upload_mode_remote}">
+	<div class="row">
+		<div class="col-xs-7">
+			<input type="text" class="form-control dynamic" name="uploadremoteFile" placeholder="{LANG.enter_url}"/>
+		</div>
+		<div class="col-xs-3">
+			<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
+		</div>
+		<div class="col-xs-2 dynamic text-center" id="upload-remote-info"></div>
+	</div>
+</div>
+
+<div id="cropimage" title="{LANG.crop}">
+	<div id="cropContent" class="crop-content"></div>
+	<div id="cropButtons" class="text-center form-inline dynamic"></div>
+</div>
+
+<div id="addlogo" title="{LANG.addlogo}">
+	<div id="addlogoContent" class="addlogo-content"></div>
+	<div id="addlogoButtons" class="text-center form-inline dynamic"></div>
 </div>
 
 <script type="text/javascript">
@@ -299,10 +303,38 @@ LANG.errorEmptyX = "{LANG.errorEmptyX}";
 LANG.errorEmptyY = "{LANG.errorEmptyY}";
 LANG.crop = "{LANG.crop}";
 LANG.rotate = "{LANG.rotate}";
+LANG.notupload = "{LANG.notupload}";
+LANG.upload_file = "{LANG.upload_file}";
+LANG.upload_mode = "{LANG.upload_mode}";
+LANG.upload_mode_remote = "{LANG.upload_mode_remote}";
+LANG.upload_mode_local = "{LANG.upload_mode_local}";
+LANG.upload_cancel = "{LANG.upload_cancel}";
+LANG.upload_add_files = "{LANG.upload_add_files}";
+LANG.file_name = "{LANG.file_name}";
+LANG.upload_status = "{LANG.upload_status}";
+LANG.upload_info = "{LANG.upload_info}";
+LANG.upload_stop = "{LANG.upload_stop}";
+LANG.upload_continue = "{LANG.upload_continue}";
+LANG.upload_finish = "{LANG.upload_finish}";
+LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.save = "{LANG.addlogosave}";
+LANG.notlogo = "{LANG.notlogo}";
+LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 
-var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
-var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
+var nv_max_width = '{NV_MAX_WIDTH}';
+var nv_max_height = '{NV_MAX_HEIGHT}';
+var nv_min_width = '{NV_MIN_WIDTH}';
+var nv_min_height = '{NV_MIN_HEIGHT}';
+var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=";
+var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
+var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em><br />{LANG.waiting}...</p>';
+var nv_filters = {
+	mime_types : [
+		<!-- BEGIN: mime -->{ title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
+		<!-- END: mime -->
+	]
+};
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/upload.js"></script>
