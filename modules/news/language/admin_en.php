@@ -47,6 +47,7 @@ $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';
 $lang_module['inhome'] = 'Home';
 $lang_module['numlinks'] = 'Number of link';
+$lang_module['numcomments'] = 'Num comments';
 $lang_module['newday'] = 'Show new icon (day)';
 $lang_module['description'] = 'Description';
 $lang_module['keywords'] = 'Keyword';

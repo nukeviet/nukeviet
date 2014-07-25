@@ -187,7 +187,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 	}
 	elseif( $stype == 'admin_id' )
 	{
-		$where = " u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
+		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 	}
 	elseif( ! empty( $q ) )
 	{
@@ -274,6 +274,9 @@ $base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;
 $base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;
 $base_url_exptime = $base_url_mod . '&amp;ordername=exptime&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_hitstotal = $base_url_mod . '&amp;ordername=hitstotal&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 . '&amp;page=' . $page;
+
 $base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 
 $ord_sql = ' r.' . $ordername . ' ' . $order;
@@ -429,6 +432,8 @@ $xtpl->assign( 'base_url_id', $base_url_id );
 $xtpl->assign( 'base_url_name', $base_url_name );
 $xtpl->assign( 'base_url_publtime', $base_url_publtime );
 $xtpl->assign( 'base_url_exptime', $base_url_exptime );
+$xtpl->assign( 'base_url_hitstotal', $base_url_hitstotal );
+$xtpl->assign( 'base_url_hitscm', $base_url_hitscm );
 
 foreach( $val_cat_content as $cat_content )
 {

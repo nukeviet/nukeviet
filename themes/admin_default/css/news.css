@@ -250,3 +250,6 @@ select, input {
 .news-inf-icons li:first-child{
 	padding-left: 0;
 }
+.fa{
+    cursor: help;
+}
