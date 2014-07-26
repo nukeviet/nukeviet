@@ -153,18 +153,6 @@ class NvUpdate
 	}
 
 	/**
-	 * NvUpdate::build_full_ver()
-	 *
-	 * @param mixed $version
-	 * @param mixed $revision
-	 * @return
-	 */
-	public function build_full_ver( $version, $revision )
-	{
-		return $version . '.r' . $revision;
-	}
-
-	/**
 	 * NvUpdate::list_data_update()
 	 *
 	 * @return
@@ -179,20 +167,9 @@ class NvUpdate
 
 		foreach( $this->config['tasklist'] as $task )
 		{
-			// Neu la nang cap module
-			if( ! empty( $this->config['formodule'] ) )
+			if( nv_version_compare( $task['r'], $nv_update_config['updatelog']['old_version'] ) > 0 )
 			{
-				if( nv_version_compare( $task['r'], $nv_update_config['updatelog']['old_version'] ) > 0 )
-				{
-					$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
-				}
-			}
-			else
-			{
-				if( $task['r'] > $global_config['revision'] )
-				{
-					$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
-				}
+				$tasklist[$task['f']] = array( 'langkey' => $task['l'], 'require' => $task['rq'] );
 			}
 		}
 
@@ -1012,7 +989,7 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 		}
 		else
 		{
-			$array['current_version'] = $NvUpdate->build_full_ver( $global_config['version'], $global_config['revision'] );
+			$array['current_version'] = $global_config['version'];
 		}
 
 		// Kiem tra ho tro phien ban nang cap
@@ -1942,7 +1919,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		if( $type == 'ver' )
 		{
 			$version = nv_geVersion( 0 );
-			$array['current_version'] = $NvUpdate->build_full_ver( $global_config['version'], $global_config['revision'] );
+			$array['current_version'] = $global_config['version'];
 			$array['newVersion'] = ( string )$version->version . ' - ' . ( string )$version->name;
 
 			$array['checkversion'] = false;
