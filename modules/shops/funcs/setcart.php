@@ -18,7 +18,7 @@ $group = $nv_Request->get_string( 'group', 'post,get', '' );
 $num = $nv_Request->get_int( 'num', 'post,get', 1 );
 $ac = $nv_Request->get_string( 'ac', 'post,get', 0 );
 $contents_msg = "";
-//nv_insert_logs( NV_LANG_DATA, $module_name, 'gdhfth', $num, $admin_info['userid'] );
+
 if( ! is_numeric( $num ) || $num < 0 )
 {
 	$contents_msg = 'ERR_' . $lang_module['cart_set_err'];

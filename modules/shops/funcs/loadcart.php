@@ -22,7 +22,8 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 }
 
 if( $pro_config['active_price'] == '0' ) $total = 0;
-$total = nv_number_format( $total, $money_config[$pro_config['money_unit']]['decimals'] );
+
+$total = nv_number_format( $total, nv_get_decimals( $pro_config['money_unit'] ) );
 
 $lang_tmp['cart_title'] = $lang_module['cart_title'];
 $lang_tmp['cart_product_title'] = $lang_module['cart_product_title'];

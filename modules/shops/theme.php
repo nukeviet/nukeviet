@@ -172,7 +172,7 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 						
 	                    if( ! empty( $array_id ) )
 	                    {
-	                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                        $ch = ( in_array( $data_row_i['id'], $array_id ) ) ? ' checked="checked"' : '';
 	                        $xtpl->assign( 'ch', $ch );
 	                    }
 
@@ -330,7 +330,7 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 						
 	                    if( ! empty( $array_id ) )
 	                    {
-	                        $ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+	                        $ch = ( in_array( $data_row_i['id'], $array_id ) ) ? ' checked="checked"' : '';
 	                        $xtpl->assign( 'ch', $ch );
 	                    }
 
@@ -908,7 +908,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 		
 		if( ! empty( $array_id ) )
 		{
-			$ch = ( in_array( $data_row['id'], $array_id ) ) ? ' checked="checked"' : '';
+			$ch = ( in_array( $data_content['id'], $array_id ) ) ? ' checked="checked"' : '';
 			$xtpl->assign( 'ch', $ch );
 		}
 		$xtpl->parse( 'main.compare' );

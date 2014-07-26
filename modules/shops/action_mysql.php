@@ -316,23 +316,23 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_discounts (
-  `did` smallint(6) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL DEFAULT '',
-  `weight` smallint(6) NOT NULL DEFAULT '0',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `edit_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `begin_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `end_time` int(11) unsigned NOT NULL DEFAULT '0',
-  `config` text NOT NULL,
-  PRIMARY KEY (`did`),
-  KEY `begin_time` (`begin_time`,`end_time`)
+  did smallint(6) NOT NULL AUTO_INCREMENT,
+  title varchar(100) NOT NULL DEFAULT '',
+  weight smallint(6) NOT NULL DEFAULT '0',
+  add_time int(11) unsigned NOT NULL DEFAULT '0',
+  edit_time int(11) unsigned NOT NULL DEFAULT '0',
+  begin_time int(11) unsigned NOT NULL DEFAULT '0',
+  end_time int(11) unsigned NOT NULL DEFAULT '0',
+  config text NOT NULL,
+  PRIMARY KEY (did),
+  KEY begin_time (begin_time,end_time)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_wishlist (
-  `wid` smallint(6) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL default '0',
-  `listid` text DEFAULT '',
-  PRIMARY KEY (`wid`)
+  wid smallint(6) NOT NULL AUTO_INCREMENT,
+  user_id int(11) unsigned NOT NULL default '0',
+  listid text DEFAULT '',
+  PRIMARY KEY (wid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tags (

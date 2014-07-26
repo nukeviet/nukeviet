@@ -60,8 +60,8 @@ if( $post_order == 1 )
 		}
 		if( $_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 )
 		{
-			$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'] );
-			$info['price'] = $price['price'];
+			$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'] );
+			$info['price'] = $price['sale'];
 			if( $i == 0 )
 			{
 				$listid .= $pro_id;
