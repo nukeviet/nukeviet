@@ -119,7 +119,9 @@ $array_in_rows = array(
 $array_in_ordername = array(
 	'title',
 	'publtime',
-	'exptime'
+	'exptime',
+	'hitstotal',
+	'hitscm'	
 );
 $array_status_view = array(
 	'-' => '---',
