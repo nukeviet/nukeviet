@@ -45,6 +45,15 @@
 					<th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
 					<th class="text-center">{LANG.content_admin}</th>
 					<th class="text-center">{LANG.status}</th>
+                    <th class="text-center">
+					   <a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a>
+                    </th>
+                    <th class="text-center">
+					   <a href="{base_url_hitscm}"><em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em></a>
+                    </th>
+                    <th class="text-center">
+					   <em title="{LANG.keywords}" class="fa fa-tags">&nbsp;</em>
+                    </th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -57,14 +66,10 @@
 					</td>
 					<td>{ROW.publtime}</td>
 					<td>{ROW.username}</td>
-					<td title="{ROW.status}">
-						<ul class="news-inf-icons">
-							<li title="{LANG.hitstotal}"><em class="fa fa-eye">&nbsp;</em> {ROW.hitstotal}</li>
-							<li title="{LANG.numcomments}"><em class="fa fa-comment-o">&nbsp;</em> {ROW.hitscm}</li>
-							<li title="{LANG.keywords}"><em class="fa fa-tags">&nbsp;</em> {ROW.numtags}</li>
-							<li title="{ROW.status}">{ROW.status}</li>
-						</ul>
-					</td>
+					<td title="{ROW.status}">{ROW.status}</td>
+                    <td class="text-center">{ROW.hitstotal}</td>
+                    <td class="text-center">{ROW.hitscm}</td>
+                    <td class="text-center">{ROW.numtags}</td>
 					<td>{ROW.feature}</td>
 				</tr>
 				<!-- END: loop -->
