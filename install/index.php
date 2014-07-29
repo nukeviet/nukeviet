@@ -849,7 +849,7 @@ elseif( $step == 6 )
 
 						if( $check_rewrite_file )
 						{
-							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap.xml';
+							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
 						}
 						else
 						{

@@ -26,9 +26,9 @@ $sth->execute( array('comment', 'comment', 'comment', 'Comment', '', 1279366705,
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'Sitemap', 'Sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
+$sth->execute( array(1, 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
 $sth->execute( array(2, 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
-$sth->execute( array(3, 'Sitemap', 'Sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
+$sth->execute( array(3, 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
 $sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 0, 1, '') );
 $sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 2, '') );
 $sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 3, '') );

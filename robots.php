@@ -13,7 +13,7 @@ define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ 
 
 require NV_ROOTDIR . '/includes/constants.php';
 
-$cache_file = NV_ROOTDIR . "/" . NV_DATADIR . "/robots.php";
+$cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if( file_exists( $cache_file ) )
 {
 	$createTime = filemtime( $cache_file );
@@ -49,11 +49,11 @@ $maxAge = 2592000;
 $expTme = $createTime + $maxAge;
 $hash = $createTime . '-' . md5( $host );
 
-header( "Etag: \"" . $hash . "\"" );
+header( 'Etag: "' . $hash . '"' );
 
 if( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_NONE_MATCH'] ) == '"' . $hash . '"' )
 {
-	header( "HTTP/1.1 304 Not Modified" );
+	header( 'HTTP/1.1 304 Not Modified' );
 	header( 'Content-Length: 0' );
 	exit();
 }
@@ -61,36 +61,36 @@ if( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && stripslashes( $_SERVER['HTTP_IF_N
 $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 if( $base_siteurl == '\\' or $base_siteurl == '/' ) $base_siteurl = '';
 if( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( '\\', '/', $base_siteurl );
-if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
+if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( '/[\/]+$/', '', $base_siteurl );
 if( ! empty( $base_siteurl ) )
 {
-	$base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
-	$base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+	$base_siteurl = preg_replace( '/^[\/]*(.*)$/', '/\\1', $base_siteurl );
+	$base_siteurl = preg_replace( '#/index\.php(.*)$#', '', $base_siteurl );
 }
 $base_siteurl .= '/';
 
 $contents = array();
-$contents[] = "User-agent: *";
+$contents[] = 'User-agent: *';
 foreach( $robots_data as $key => $value )
 {
 	if( $value == 0 )
 	{
-		$contents[] = "Disallow: " . $key;
+		$contents[] = 'Disallow: ' . $key;
 	}
 }
 foreach( $robots_other as $key => $value )
 {
 	if( $value == 0 )
 	{
-		$contents[] = "Disallow: " . $key;
+		$contents[] = 'Disallow: ' . $key;
 	}
 }
-$contents[] = "Sitemap: http://" . $host . $base_siteurl . "Sitemap.xml";
+$contents[] = 'Sitemap: http://' . $host . $base_siteurl . 'sitemap.xml';
 $contents = implode( "\n", $contents );
 
-header( "Content-Type: text/plain; charset=utf-8" );
+header( 'Content-Type: text/plain; charset=utf-8' );
 header( 'Cache-Control: public; max-age=' . $maxAge );
-header( 'Last-Modified: ' . gmdate( "D, d M Y H:i:s", $createTime ) . " GMT" );
-header( "expires: " . gmdate( "D, d M Y H:i:s", $expTme ) . " GMT" );
+header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', $createTime ) . ' GMT' );
+header( 'expires: ' . gmdate( 'D, d M Y H:i:s', $expTme ) . ' GMT' );
 
 print_r( $contents );

@@ -11,7 +11,7 @@
 if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $url = array();
-$cacheFile = NV_LANG_DATA . '_Sitemap_' . NV_CACHE_PREFIX . '.cache';
+$cacheFile = NV_LANG_DATA . '_sitemap_' . NV_CACHE_PREFIX . '.cache';
 $pa = NV_CURRENTTIME - 7200;
 
 if( ( $cache = nv_get_cache( $module_name, $cacheFile ) ) != false and filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $cacheFile ) >= $pa )
