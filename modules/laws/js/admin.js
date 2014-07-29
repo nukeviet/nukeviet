@@ -10,9 +10,9 @@ function nv_add_files( nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_s
 	nv_num_files ++;
 	$('#filearea').append(
 		'<div id="fileitem_'+nv_num_files+'">' +
-			'<input class="txt" type="text" name="files[]" id="fileupload_'+nv_num_files+'" value="" />' +
-			'<input onclick="nv_open_browse_file( \''+nv_admin_baseurl+'index.php?'+nv_name_variable+'=upload&popup=1&area=fileupload_'+nv_num_files+'&path='+nv_files_dir+'&type=file\', \'NVImg\', \'850\', \'500\', \'resizable=no,scrollbars=no,toolbar=no,location=no,status=no\' );return false;" type="button" value="Browse server" class="selectfile" />' +
-			'<input onclick="nv_delete_datacontent(\'fileitem_'+nv_num_files+'\');return false;" type="button" value="'+nv_lang_delete+'" class="selectfile" />'+
+			'<input class="form-control" style="width: 400px; margin: 4px 4px 0 0;" type="text" name="files[]" id="fileupload_'+nv_num_files+'" value="" />' +
+			'<input onclick="nv_open_browse_file( \''+nv_admin_baseurl+'index.php?'+nv_name_variable+'=upload&popup=1&area=fileupload_'+nv_num_files+'&path='+nv_files_dir+'&type=file\', \'NVImg\', \'850\', \'500\', \'resizable=no,scrollbars=no,toolbar=no,location=no,status=no\' );return false;" type="button" value="Browse server" class="selectfile btn btn-primary" style="margin-right: 3px" />' +
+			'<input onclick="nv_delete_datacontent(\'fileitem_'+nv_num_files+'\');return false;" type="button" value="'+nv_lang_delete+'" class="selectfile btn btn-danger" />'+
 		'</div>'
 	);
 	

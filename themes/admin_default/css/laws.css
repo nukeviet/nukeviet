@@ -13,7 +13,6 @@
 #pageContent{margin-top: 10px;}
 #pageContent .result{margin:10px 0;font:800 13px Tahoma,Arial,Verdana,sans-serif;color:red}
 #pageContent dl {padding: 4px;background: #FFF;}
-#pageContent input {padding: 2px;font:400 12px Tahoma,Arial,Verdana,sans-serif;}
 #pageContent input[type="text"].txt {width: 280px;}
 #pageContent textarea.txt {width: 400px;height:100px}
 #pageContent label {font:400 12px/20px Tahoma,Arial,Verdana,sans-serif;}

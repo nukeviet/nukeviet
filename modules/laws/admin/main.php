@@ -396,7 +396,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     else
     {
         $post['relatement'] = $post['replacement'] = $post['title'] = $post['code'] = $post['introtext'] = $post['bodytext'] = $post['keywords'] = $post['author'] = $post['publtime'] = $post['exptime'] = "";
-        $post['groups_view'] = $post['groups_download'] = $post['files'] = array();
+        $post['groups_view'] = $post['groups_download'] = $post['files'] = array( 6 );
         $post['aid'] = $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
 
         $post['groupcss'] = $post['groupcss2'] = "groupcss0";
@@ -412,7 +412,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     if ( ! empty( $post['introtext'] ) ) $post['introtext'] = nv_htmlspecialchars( $post['introtext'] );
     if ( ! empty( $post['bodytext'] ) ) $post['bodytext'] = nv_htmlspecialchars( $post['bodytext'] );
     if ( ! empty( $post['note'] ) ) $post['note'] = nv_htmlspecialchars( $post['note'] );
-	
+
     $xtpl->assign( 'DATA', $post );
     foreach ( $catList as $_cat )
     {

@@ -7,7 +7,7 @@
 					<th>{LANG.signer_title}</th>
 					<th>{LANG.signer_offices}</th>
 					<th>{LANG.signer_positions}</th>
-					<th style="width:90px" class="text-center">{LANG.feature}</th>
+					<th style="width:120px" class="text-center">{LANG.feature}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -17,10 +17,8 @@
 					<td>{ROW.offices}</td>
 					<td>{ROW.positions}</td>
 					<td class="text-center">
-						<!--<span class="edit_icon"><a href="{ROW.url_edit}">{GLANG.edit}</a></span>-->
-						&nbsp;&nbsp;
-                        <a href="{ROW.url_edit}">{GLANG.edit}</a> |
-						<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_delete_signer({ROW.id});">{GLANG.delete}</a></span>
+                        <em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.url_edit}">{GLANG.edit}</a> -
+						<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_delete_signer({ROW.id});">{GLANG.delete}</a>
 					</td>
 				</tr>
 			<!-- END: row -->

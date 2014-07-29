@@ -139,4 +139,6 @@ $lang_module['config_typeview'] = "Cách hiển thị";
 $lang_module['type_view_0'] = "Mới nhất lên trên";
 $lang_module['type_view_1'] = "Cũ nhất lên trên";
 
+$lang_module['wait'] = "Vui lòng đợi...";
+
 ?>

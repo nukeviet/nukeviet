@@ -249,17 +249,16 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
 
     $xtpl->assign( 'PARENTID', $parentid );
 
-    $a = 0;
     foreach ( $aList as $id => $values )
     {
         if ( $values['parentid'] == $parentid )
         {
-
             $loop = array( //
                 'id' => $id, //
                 'title' => $values['title'], //
                 'count' => $values['count'] //
                 );
+				
             $xtpl->assign( 'LOOP', $loop );
 
             for ( $i = 1; $i <= $values['pcount']; $i++ )
@@ -269,12 +268,15 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
                 $xtpl->parse( 'list.loop.option' );
             }
 
-            $xtpl->assign( 'CLASS', $a % 2 ? " class=\"second\"" : "" );
-
-            if ( $loop['count'] != 0 ) $xtpl->parse( 'list.loop.count' );
-            else  $xtpl->parse( 'list.loop.countEmpty' );
+            if ( $loop['count'] != 0 )
+			{
+				$xtpl->parse( 'list.loop.count' );
+			}
+            else
+			{
+				$xtpl->parse( 'list.loop.countempty' );
+			}
             $xtpl->parse( 'list.loop' );
-            $a++;
         }
     }
     $xtpl->parse( 'list' );
