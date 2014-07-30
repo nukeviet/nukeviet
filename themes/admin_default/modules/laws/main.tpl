@@ -201,11 +201,11 @@
 					</tr>
 					<tr>
 						<td style="vertical-align:top">{LANG.note}</td>
-						<td>						<textarea style="width:400px;" class="form-control" name="note" id="note">{DATA.note}</textarea></td>
+						<td><textarea style="width:400px;" class="form-control" name="note" id="note">{DATA.note}</textarea></td>
 					</tr>
 					<tr>
 						<td style="vertical-align:top">{LANG.introtext}</td>
-						<td>						<textarea style="width:400px" class="form-control" name="introtext" id="introtext">{DATA.introtext}</textarea></td>
+						<td><textarea style="width:400px" class="form-control" name="introtext" id="introtext">{DATA.introtext}</textarea></td>
 					</tr>
 				</tbody>
 			</table>
@@ -233,9 +233,8 @@
 		buttonImageOnly : true
 	});
 
-	var nv_num_files = {
-		NUMFILE }
-	};
+	var nv_num_files = {NUMFILE};
+	
 	$(document).ready(function() {
 		$("#replacementSearch").click(function() {
 			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=getlid&area=replacement", "NVImg", "850", "600", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
@@ -293,12 +292,6 @@
 			return !1
 		}
 
-		a = $("[name=bodytext]").val();
-		a = trim(a);
-		if (a.length < 2) {
-			alert("{LANG.bodytexterror}");
-			return !1
-		}
 		a = $(this).serialize();
 		var b = $(this).attr("action");
 		$("[type=submit]").attr("disabled", "disabled");
