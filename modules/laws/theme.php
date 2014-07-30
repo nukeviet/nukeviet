@@ -48,8 +48,6 @@ function nv_theme_laws_detail ( $array_data )
 	$array_data['area'] = $nv_laws_listarea[$array_data['aid']]['title'];
 	$array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
 	
-	$array_data['signer'] = $array_data['signer'] ? $array_data['signer'] : "N/A";
-	
     $xtpl->assign( 'DATA', $array_data );
 	
 	if( ! empty( $array_data['bodytext'] ) )

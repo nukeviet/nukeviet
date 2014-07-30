@@ -223,7 +223,6 @@
 </div>
 <script type="text/javascript">
 	//<![CDATA[
-
 	$("#publtime,#startvalid").datepicker({
 		showOn : "both",
 		dateFormat : "dd.mm.yy",

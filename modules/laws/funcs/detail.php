@@ -74,11 +74,6 @@ $page_title = $row['title'];
 $key_words = $row['keywords'];
 $description = $row['introtext'];
 
-// Get signer
-$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $row['signer'];
-$result = $db->query( $sql );
-list( $row['signer'] ) = $result->fetch( 3 );
-
 // Lay van ban thay the no
 if( ! empty( $row['replacement'] ) )
 {
@@ -122,6 +117,15 @@ if( ! empty( $row['relatement'] ) )
 			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $_alias  //
 		);
 	}
+}
+
+// Nguoi ky
+if( ! empty( $row['sgid'] ) )
+{
+	$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id` = " . $row['sgid'];
+	$result = $db->query( $sql );
+	$row['relatement'] = array();
+	list( $row['signer'] ) = $result->fetch( 3 );
 }
 
 // File download

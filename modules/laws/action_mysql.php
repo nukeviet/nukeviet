@@ -76,7 +76,6 @@ $sql_create_module[] = "CREATE TABLE `" . $db_config['prefix'] . "_" . $lang . "
   `introtext` text NOT NULL,
   `bodytext` text NOT NULL,
   `keywords` varchar(255) NOT NULL,
-  `signer` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `groups_view` varchar(255) NOT NULL,
   `groups_download` varchar(255) NOT NULL,
   `files` mediumtext NOT NULL,

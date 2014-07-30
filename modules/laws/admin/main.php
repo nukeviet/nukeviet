@@ -198,25 +198,6 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         }
         if ( empty( $post['keywords'] ) ) $post['keywords'] = nv_get_keywords( ( ! empty( $post['bodytext'] ) ? $post['bodytext'] : $post['introtext'] ) );
 		
-        $post['signer'] = $nv_Request->get_title( 'signer', 'post', '', 1 );
-		
-		// New Signer
-		$signer_id = 0;
-		/*$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `title`=" . $db->quote( $post['signer'] );
-		$result = $db->query( $sql );
-		$signer_id = $result->fetchColumn();
-		if( ! $signer_id )
-		{
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_signer` VALUES(
-				NULL,
-				" . $db->quote( $post['signer'] ) . ",
-				" . $db->quote( '' ) . ",
-				" . $db->quote( '' ) . ",
-				" . NV_CURRENTTIME . "
-			)";
-			$signer_id = $db->insert_id( $sql );
-		}*/
-		
         $_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
         $post['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
         
@@ -289,7 +270,6 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 `introtext`=" . $db->quote( $post['introtext'] ) . ", 
                 `bodytext`=" . $db->quote( $post['bodytext'] ) . ", 
                 `keywords`=" . $db->quote( $post['keywords'] ) . ", 
-                `signer`=" . $signer_id . ", 
                 `groups_view`=" . $db->quote( $post['groups_view'] ) . ",  
                 `groups_download`=" . $db->quote( $post['groups_download'] ) . ", 
                 `files`=" . $db->quote( $post['files'] ) . ", 
@@ -331,7 +311,6 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 " . $db->quote( $post['introtext'] ) . ", 
                 " . $db->quote( $post['bodytext'] ) . ", 
                 " . $db->quote( $post['keywords'] ) . ", 
-                " . $signer_id . ",
                 " . $db->quote( $post['groups_view'] ) . ", 
                 " . $db->quote( $post['groups_download'] ) . ", 
                 " . $db->quote( $post['files'] ) . ", 
@@ -368,10 +347,6 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     if ( isset( $post['id'] ) )
     {
         $post = $row;
-		
-		$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $row['signer'];
-		$result = $db->query( $sql );
-		list( $post['signer'] ) = $result->fetch( 3 );
 		
         $post['select0'] = ( $post['exptime'] == 0 or $post['exptime'] > NV_CURRENTTIME ) ? " selected=\"selected\"" : "";
         $post['select1'] = ( $post['exptime'] != 0 and $post['exptime'] <= NV_CURRENTTIME ) ? " selected=\"selected\"" : "";
