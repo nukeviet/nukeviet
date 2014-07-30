@@ -52,6 +52,11 @@ function nv_theme_laws_detail ( $array_data )
 	
     $xtpl->assign( 'DATA', $array_data );
 	
+	if( ! empty( $array_data['bodytext'] ) )
+	{
+		$xtpl->parse( 'main.bodytext' );
+	}
+	
 	if( ! empty( $array_data['relatement'] ) )
 	{
 		foreach( $array_data['relatement'] as $relatement )

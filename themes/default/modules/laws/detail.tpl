@@ -76,8 +76,11 @@
 	</table>
 </div>
 
+<!-- BEGIN: bodytext -->
 <h3 class="lawh3">{LANG.bodytext}</h3>
 {DATA.bodytext}
+<!-- END: bodytext -->
+
 <div style="height:10px"></div>
 <!-- BEGIN: files -->
 <h3 class="lawh3">{LANG.files}</h3>
