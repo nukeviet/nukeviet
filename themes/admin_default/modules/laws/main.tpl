@@ -292,6 +292,10 @@
 			return !1
 		}
 
+		<!-- BEGIN: is_editor -->
+		$("textarea[name=bodytext]").val(CKEDITOR.instances.laws_bodytext.getData());	 
+		<!-- END: is_editor -->
+		
 		a = $(this).serialize();
 		var b = $(this).attr("action");
 		$("[type=submit]").attr("disabled", "disabled");
