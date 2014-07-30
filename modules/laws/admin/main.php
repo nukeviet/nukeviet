@@ -50,13 +50,7 @@ if ( empty( $sgList ) and ! $nv_Request->isset_request( 'add', 'get' ) )
     die();
 }
 
-$sql = "SELECT COUNT(*) as ccount 
-FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` a, 
-`" . NV_PREFIXLANG . "_" . $module_data . "_cat` b, 
-`" . NV_PREFIXLANG . "_" . $module_data . "_area` c, 
-`" . NV_PREFIXLANG . "_" . $module_data . "_subject` d,
-`" . NV_PREFIXLANG . "_" . $module_data . "_signer` e 
-WHERE a.cid=b.id AND a.aid=c.id AND a.sid=d.id AND a.sgid=e.id";
+$sql = "SELECT COUNT(*) as ccount FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status` = 1";
 $result = $db->query( $sql );
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
