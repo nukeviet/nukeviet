@@ -301,7 +301,6 @@
 			data : a,
 			success : function(c) {
 				if (c == "OK") {
-					alert("{LANG.addTopicOK}");
 					window.location = "{MODULE_URL}";
 				} else {
 					alert(c);
