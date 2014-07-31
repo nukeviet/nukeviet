@@ -39,10 +39,13 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 	{
 		global $nv_Request;
 
+		$htmlcontent = $nv_Request->get_editor( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
+		$htmlcontent = strtr( $htmlcontent, array( "\r\n" => '', "\r" => '', "\n" => '' ) );
+
 		$return = array();
 		$return['error'] = array();
 		$return['config'] = array();
-		$return['config']['htmlcontent'] = $nv_Request->get_editor( 'htmlcontent', '', NV_ALLOWED_HTML_TAGS );
+		$return['config']['htmlcontent'] = $htmlcontent;
 
 		return $return;
 	}
