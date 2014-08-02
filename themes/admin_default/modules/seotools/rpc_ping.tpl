@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/admin_default/css/webtools_rpc.css" type="text/css" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/admin_default/css/seotools_rpc.css" type="text/css" />
 <div id="rpc">
 	<h3>{LANG.rpc_ftitle}</h3>
 	<div class="list">
@@ -19,10 +19,10 @@
 		<div class="service">
 			<div class="col1">
 				<!-- BEGIN: icon -->
-				<img src="{NV_BASE_SITEURL}themes/admin_default/images/webtools/{SERVICE.icon}" alt="" />
+				<img src="{NV_BASE_SITEURL}themes/admin_default/images/seotools/{SERVICE.icon}" alt="" />
 				<!-- END: icon -->
 				<!-- BEGIN: noticon -->
-				<img src="{NV_BASE_SITEURL}themes/admin_default/images/webtools/link.png" alt="" />
+				<img src="{NV_BASE_SITEURL}themes/admin_default/images/seotools/link.png" alt="" />
 				<!-- END: noticon -->
 				<span>{SERVICE.title}</span>
 			</div>

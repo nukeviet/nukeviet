@@ -22,33 +22,35 @@ function nv_get_rss_link()
 
 	foreach( $site_mods as $mod_name => $mod_info )
 	{
-		if( $mod_info['rss'] == 1 and isset( $mod_info['alias']['rss'] ) and file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/rssdata.php' ) )
+		if( $mod_info['rss'] == 1 and isset( $mod_info['alias']['rss'] ) and file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/funcs/rss.php' ) )
 		{
 			$mod_data = $mod_info['module_data'];
 			$mod_file = $mod_info['module_file'];
 
 			$contentrss .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $mod_info['custom_title'] . "\" href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $mod_name . "&amp;" . NV_OP_VARIABLE . "=" . $mod_info['alias']['rss'] . "\"><strong> " . $mod_info['custom_title'] . "</strong></span></a>";
-
-			$rssarray = array();
-			include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
-			
-			$contentrss .= "<ul>";
-			foreach( $rssarray as $key => $value )
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ) )
 			{
-				$parentid = ( isset( $value['parentid'] ) ) ? $value['parentid'] : 0;
-				if( $parentid == 0 )
+				$rssarray = array();
+				include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
+				
+				$contentrss .= "<ul>";
+				foreach( $rssarray as $key => $value )
 				{
-					$contentrss .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
-					$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
-					if( $catid > 0 )
+					$parentid = ( isset( $value['parentid'] ) ) ? $value['parentid'] : 0;
+					if( $parentid == 0 )
 					{
-						$contentrss .= nv_get_sub_rss_link( $rssarray, $catid );
+						$contentrss .= "<li><span><em class='fa fa-rss text-warning'>&nbsp;</em><a title=\"" . $value['title'] . "\" href=\"" . $value['link'] . "\">" . $value['title'] . "</a></span>";
+						$catid = ( isset( $value['catid'] ) ) ? $value['catid'] : 0;
+						if( $catid > 0 )
+						{
+							$contentrss .= nv_get_sub_rss_link( $rssarray, $catid );
+						}
+						$contentrss .= "</li>";
 					}
-					$contentrss .= "</li>";
 				}
+				$contentrss .= "</ul>";
+				$contentrss .= "</li>";
 			}
-			$contentrss .= "</ul>";
-			$contentrss .= "</li>";
 		}
 	}
 	return $contentrss;

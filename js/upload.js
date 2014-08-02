@@ -1429,7 +1429,8 @@ var NVUPLOAD = {
 				flash_swf_url : nv_siteroot + 'js/plupload/Moxie.swf',
 				silverlight_xap_url : nv_siteroot+ 'js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
-				file_data_name: 'upload',
+				file_data_name : 'upload',
+				filters : nv_filters,
 				init: {
 					// Event on init uploader
 					PostInit: function(){
