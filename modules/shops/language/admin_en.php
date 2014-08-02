@@ -143,6 +143,7 @@ $lang_module['error_product_unit'] = 'Please add product unit';
 $lang_module['error_cat'] = 'Error: Please select category';
 $lang_module['error_product_price'] = 'Error: price can not be 0 or negative number';
 $lang_module['error_product_discounts'] = 'Error: discount rate can not be negative';
+$lang_module['error_inputnumber'] = 'Error: the number entered is not valid';
 $lang_module['content_cat'] = 'Category';
 $lang_module['content_block'] = 'product blocks';
 $lang_module['content_homeimg'] = 'Illustration';

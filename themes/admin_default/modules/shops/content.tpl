@@ -312,6 +312,7 @@
 <script type="text/javascript">
 	var file_items = '{FILE_ITEMS}';
 	var file_selectfile = '{LANG.file_selectfile}';
+	var inputnumber = '{LANG.error_inputnumber}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
 	var currentpath = "{CURRENT}";

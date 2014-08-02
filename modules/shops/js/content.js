@@ -124,7 +124,7 @@ function GetNumber(str) {
 	for (var i = 0; i < str.length; i++) {
 		var temp = str.substring(i, i + 1);
 		if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
-			alert("{LANG.inputnumber}");
+			alert(inputnumber);
 			return str.substring(0, i);
 		}
 		if (temp == " ")
@@ -133,21 +133,6 @@ function GetNumber(str) {
 			if (count > 0)
 				return str.substring(0, ipubl_date);
 			count++;
-		}
-	}
-	return str;
-}
-
-function IsNumberInt(str) {
-	for (var i = 0; i < str.length; i++) {
-		var temp = str.substring(i, i + 1);
-		if (!(temp == "." || (temp >= 0 && temp <= 9))) {
-			alert("{LANG.inputnumber}");
-			return str.substring(0, i);
-		}
-		if (temp == ",") {
-			alert("{LANG.thaythedaucham}");
-			return str.substring(0, i);
 		}
 	}
 	return str;
