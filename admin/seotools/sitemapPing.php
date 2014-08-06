@@ -28,11 +28,11 @@ function nv_sitemapPing( $module, $link )
 
 	if( $sys_info['supports_rewrite'] )
 	{
-		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap-' . NV_LANG_DATA . '.' . $module . '.xml';
+		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap-' . NV_LANG_DATA . '.' . $module . '.xml';
 	}
 	else
 	{
-		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=Sitemap';
+		$myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=sitemap';
 	}
 
 	$link = $link . urlencode( $myUrl );
@@ -104,7 +104,7 @@ $searchEngines['searchEngine'] = array();
 $info = '';
 
 $sitemapFiles = array();
-$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " f, " . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='Sitemap' AND f.in_module = m.title";
+$sql = "SELECT f.in_module as name, m.custom_title as title FROM " . NV_MODFUNCS_TABLE . " f, " . NV_MODULES_TABLE . " m WHERE m.act = 1 AND f.func_name='sitemap' AND f.in_module = m.title";
 $result = $db->query( $sql );
 while( $row = $result->fetch() )
 {
@@ -113,7 +113,7 @@ while( $row = $result->fetch() )
 
 if( $global_config['check_rewrite_file'] )
 {
-    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'Sitemap.xml';
+    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
 }
 else
 {
