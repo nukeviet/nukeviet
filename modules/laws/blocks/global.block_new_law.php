@@ -33,14 +33,26 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
             {
                 $block_theme = "default";
             }
+			
             $xtpl = new XTemplate( "block_new_law.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $modfile );
-			$title_length = 24;
+			$title_length = 34;
 			
 			if( $module_name != $module )
 			{
-				$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/block.law_new.css\" />";
+				$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/laws.css\" />";
+				$temp_lang_module = $lang_module;
+				$lang_module = array();
+				include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
+				$lang_block_module = $lang_module;
+				$lang_module = $temp_lang_module;
+			}
+			else
+			{
+				$lang_block_module = $lang_module;
 			}
 			
+			$xtpl->assign( 'LANG', $lang_block_module );
+
 			while( $row = $result->fetch() )
 			{
 				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=detail/" . change_alias( $row['title'] . "-" . $row['id'] );
