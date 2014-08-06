@@ -50,6 +50,28 @@ ul, ol {
 	color: #fff;
 }
 
+/* Fixed Jquery UI Style */
+.ui-widget {
+	font-family: 'Roboto', sans-serif !important;
+	font-size: 12px !important;
+	font-weight: 400 !important;
+	line-height: 18px !important;
+}
+
+.ui-datepicker {
+	width: 18em!important;
+}
+
+.ui-datepicker select.ui-datepicker-month {
+	width: 59%!important;
+	font-weight: normal!important;
+}
+
+.ui-datepicker select.ui-datepicker-year {
+	width: 39%!important;
+	font-weight: normal!important;
+}
+
 /* Global */
 html{
 	height: 100%;
