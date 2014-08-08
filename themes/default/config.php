@@ -16,8 +16,8 @@ $propety = array();
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
     // Css property for body
-	$property['color'] = $nv_Request->get_title( 'body_color', 'post', '' );
-	$property['font_size'] = $nv_Request->get_title( 'body_font_size', 'post', '' );
+    $property['color'] = $nv_Request->get_title( 'body_color', 'post', '' );
+    $property['font_size'] = $nv_Request->get_title( 'body_font_size', 'post', '' );
     $property['font_family'] = $nv_Request->get_title( 'body_font_family', 'post', '' );
     $property['font_weight'] = $nv_Request->get_bool( 'body_font_weight', 'post', 0 );
     $property['font_weight'] = $property['font_weight'] ? 'bold' : '';
@@ -133,10 +133,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['padding_bottom'] = $nv_Request->get_title( 'block_padding_bottom', 'post', '' );
     $property['padding_left'] = $nv_Request->get_title( 'block_padding_left', 'post', '' );
     $property['padding_right'] = $nv_Request->get_title( 'block_padding_right', 'post', '' );
-	$property['border_color'] = $nv_Request->get_title( 'block_border_color', 'post', '' );
-	$property['border_style'] = $nv_Request->get_title( 'block_border_style', 'post', '' );
-	$property['border_width'] = $nv_Request->get_title( 'block_border_width', 'post', '' );
-	$property['border_radius'] = $nv_Request->get_title( 'block_border_radius', 'post', '' );
+    $property['border_color'] = $nv_Request->get_title( 'block_border_color', 'post', '' );
+    $property['border_style'] = $nv_Request->get_title( 'block_border_style', 'post', '' );
+    $property['border_width'] = $nv_Request->get_title( 'block_border_width', 'post', '' );
+    $property['border_radius'] = $nv_Request->get_title( 'block_border_radius', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'block_customcss', 'post', '' );
     $config_theme['block'] = $property;
     unset( $property );
