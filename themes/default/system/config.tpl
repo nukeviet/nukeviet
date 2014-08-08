@@ -94,7 +94,7 @@
             <textarea name="content_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_CONTENT.customcss}</textarea><br />
         </div>
         
-        <div id="tab3" class="tab_content">
+        <div id="tab3" class="tab_content">        	
             <label>{LANG.background}</label>
             <input type="text" value="{CONFIG_THEME_HEADER.background_color}" name="header_background_color" id="picker_header_background" style="width: 80px" />
             <input type="text" id="header_bg_image" value="{CONFIG_THEME_HEADER.background_image}" name="header_background_image" placeholder="{LANG.background_imgage}" style="width: 201px" />
