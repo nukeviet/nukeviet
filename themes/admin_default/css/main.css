@@ -656,6 +656,18 @@ label {
 	line-height: 18px !important;
 }
 
+.ui-datepicker {
+	width: 18em!important;
+}
+
+.ui-datepicker select.ui-datepicker-month {
+	width: 59%!important;
+}
+
+.ui-datepicker select.ui-datepicker-year {
+	width: 39%!important;
+}
+
 /* =====================================================
  Add more style left menu admin css
  =====================================================*/
