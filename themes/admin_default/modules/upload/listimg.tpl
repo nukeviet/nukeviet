@@ -45,6 +45,11 @@ $( "#imglist" ).selectable({
 	},
 	stop: function( e, ui ){
 		fileSelectStop(e, ui);
+		
+		setTimeout(function(){
+			KEYPR.isSelectable = false;
+			KEYPR.isFileSelectable = false;
+		}, 50);
 	},
 	unselecting: function( e, ui ){
 		fileUnselect(e, ui);
