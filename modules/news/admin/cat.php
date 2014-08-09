@@ -23,7 +23,43 @@ list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionh
 
 $groups_list = nv_groups_list();
 
+$parentid = $nv_Request->get_int( 'parentid', 'get,post', 0 );
+
+$catid = $nv_Request->get_int( 'catid', 'get', 0 );
+
+if( $catid > 0 and isset( $global_array_cat[$catid] ) )
+{
+	$parentid = $global_array_cat[$catid]['parentid'];
+	$title = $global_array_cat[$catid]['title'];
+	$titlesite = $global_array_cat[$catid]['titlesite'];
+	$alias = $global_array_cat[$catid]['alias'];
+	$description = $global_array_cat[$catid]['description'];
+	$descriptionhtml = $global_array_cat[$catid]['descriptionhtml'];
+	$viewdescription = $global_array_cat[$catid]['viewdescription'];
+	$image = $global_array_cat[$catid]['image'];
+	$keywords = $global_array_cat[$catid]['keywords'];
+	$groups_view = $global_array_cat[$catid]['groups_view'];
+
+	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
+	{
+		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+		{
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
+			die();
+		}
+	}
+
+	$caption = $lang_module['edit_cat'];
+	$array_in_cat = GetCatidInParent( $catid );
+}
+else
+{
+	$caption = $lang_module['add_cat'];
+	$array_in_cat = array();
+}
+
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
+
 if( ! empty( $savecat ) )
 {
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
@@ -32,13 +68,43 @@ if( ! empty( $savecat ) )
 	$title = $nv_Request->get_title( 'title', 'post', '', 1 );
 	$titlesite = $nv_Request->get_title( 'titlesite', 'post', '', 1 );
 	$keywords = $nv_Request->get_title( 'keywords', 'post', '', 1 );
-	$alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$description = $nv_Request->get_string( 'description', 'post', '' );
 	$description = nv_nl2br( nv_htmlspecialchars( strip_tags( $description ) ), '<br />' );
 	$descriptionhtml = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
-	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
+	
+	// Xử lý liên kết tĩnh
+	$_alias = $nv_Request->get_title( 'alias', 'post', '' );
+	$_alias = ( $_alias == '' ) ? change_alias( $title ) : change_alias( $_alias );
+	
+	if( empty( $_alias ) or ! preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $_alias ) )
+	{
+		if( empty( $alias ) )
+		{
+			if( $catid )
+			{
+				$alias = 'cat-' . $catid;
+			}
+			else
+			{
+				$_alias = $db->query( 'SELECT MAX(catid) AS cid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetch();
+				
+				if( empty( $catid ) )
+				{
+					$alias = 'cat-1';
+				}
+				else
+				{
+					$alias = 'cat-' . ( intval( $_alias['cid'] ) + 1 );
+				}
+			}
+		}
+	}
+	else
+	{
+		$alias = $_alias;
+	}
 
 	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$groups_view = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
@@ -152,40 +218,6 @@ if( ! empty( $savecat ) )
 	{
 		$error = $lang_module['error_name'];
 	}
-}
-
-$parentid = $nv_Request->get_int( 'parentid', 'get,post', 0 );
-
-$catid = $nv_Request->get_int( 'catid', 'get', 0 );
-if( $catid > 0 and isset( $global_array_cat[$catid] ) )
-{
-	$parentid = $global_array_cat[$catid]['parentid'];
-	$title = $global_array_cat[$catid]['title'];
-	$titlesite = $global_array_cat[$catid]['titlesite'];
-	$alias = $global_array_cat[$catid]['alias'];
-	$description = $global_array_cat[$catid]['description'];
-	$descriptionhtml = $global_array_cat[$catid]['descriptionhtml'];
-	$viewdescription = $global_array_cat[$catid]['viewdescription'];
-	$image = $global_array_cat[$catid]['image'];
-	$keywords = $global_array_cat[$catid]['keywords'];
-	$groups_view = $global_array_cat[$catid]['groups_view'];
-
-	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
-	{
-		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
-		{
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
-			die();
-		}
-	}
-
-	$caption = $lang_module['edit_cat'];
-	$array_in_cat = GetCatidInParent( $catid );
-}
-else
-{
-	$caption = $lang_module['add_cat'];
-	$array_in_cat = array();
 }
 
 $groups_view = explode( ',', $groups_view );
