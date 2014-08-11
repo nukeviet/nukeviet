@@ -73,11 +73,11 @@ if( ! empty( $savecat ) )
 	$descriptionhtml = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
-	
+
 	// Xử lý liên kết tĩnh
 	$_alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$_alias = ( $_alias == '' ) ? change_alias( $title ) : change_alias( $_alias );
-	
+
 	if( empty( $_alias ) or ! preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $_alias ) )
 	{
 		if( empty( $alias ) )
@@ -88,15 +88,15 @@ if( ! empty( $savecat ) )
 			}
 			else
 			{
-				$_alias = $db->query( 'SELECT MAX(catid) AS cid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetch();
-				
-				if( empty( $catid ) )
+				$_m_catid = $db->query( 'SELECT MAX(catid) AS cid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetchColumn();
+
+				if( empty( $_m_catid ) )
 				{
 					$alias = 'cat-1';
 				}
 				else
 				{
-					$alias = 'cat-' . ( intval( $_alias['cid'] ) + 1 );
+					$alias = 'cat-' . ( intval( $_m_catid ) + 1 );
 				}
 			}
 		}
