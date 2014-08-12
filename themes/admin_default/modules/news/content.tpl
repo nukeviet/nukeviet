@@ -51,7 +51,7 @@
 					</tr>
 					<tr>
 						<td>{LANG.content_homeimgalt}</td>
-						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:98%" /></td>
+						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.homeimgalt}" id="homeimgalt" name="homeimgalt" style="width:100%" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.imgposition}</td>
