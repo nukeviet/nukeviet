@@ -54,7 +54,7 @@ if( ! empty( $savecat ) )
 		$data_insert['image'] = $image;
 		$data_insert['weight'] = $weight;
 		$data_insert['keywords'] = $keywords;
-		
+
 		if( $db->insert_id( $sql, 'bid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_blockcat', " ", $admin_info['userid'] );
@@ -79,7 +79,7 @@ if( ! empty( $savecat ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_blockcat', "blockid " . $bid, $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-			die('den day');
+			die();
 		}
 		else
 		{

@@ -315,10 +315,17 @@ $("input[name=selectimg]").click(function() {
 $('[type="submit"]').hover(function(){
 	if( $('[name="keywords[]"]').length == 0 ){
 		if( $('#message-tags').length == 0 ){
-			$('#message').html('<div id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
+			$('#message').append('<div id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
 		}
 	}else{
 		$('#message-tags').remove();
+	}
+	if( $('[name="alias"]').val() == '' ){
+		if( $('#message-alias').length == 0 ){
+			$('#message').append('<div id="message-alias" class="alert alert-danger">{LANG.alias_empty_notice}.</div>');
+		}
+	}else{
+		$('#message-alias').remove();
 	}
 });
 //]]>

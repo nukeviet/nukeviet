@@ -336,96 +336,102 @@ function filedelete(){
 	}
 }
 
-// Ham xu ly khi nhap chuot vao 1 file (Chuot trai lan chuot phai)
+// Ham xu ly khi nhap chuot vao 1 file (Chuot trai, chuot giua lan chuot phai)
 function fileMouseup( file, e ){
-	// Set shift offset
-	if( e.which != 3 && ! KEYPR.isShift ){
-		// Reset shift offset
-		KEYPR.shiftOffset = 0;
-
-		$.each( $('.imgcontent'), function(k, v){
-			if( v == file ){
-				KEYPR.shiftOffset = k;
-				return false;
-			}
-		});
-	}
+	// Khong xu ly neu jquery UI selectable dang kich hoat
+	if( KEYPR.isFileSelectable == false ){
+		// Set shift offset
+		if( e.which != 3 && ! KEYPR.isShift ){
+			// Reset shift offset
+			KEYPR.shiftOffset = 0;
 	
-	// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
-	if( KEYPR.isCtrl ){
-		if( $(file).is('.imgsel') && e.which != 3 ){
-			$(file).removeClass('imgsel');
-		}else{
-			$(file).addClass('imgsel');
+			$.each( $('.imgcontent'), function(k, v){
+				if( v == file ){
+					KEYPR.shiftOffset = k;
+					return false;
+				}
+			});
 		}
-	}else if( KEYPR.isShift && e.which != 3 ){
-		var clickOffset = -1;
-		$('.imgcontent').removeClass('imgsel');
 		
-		$.each( $('.imgcontent'), function(k, v){
-			if( v == file ){
-				clickOffset = k;
+		// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
+		if( KEYPR.isCtrl ){
+			if( $(file).is('.imgsel') && e.which != 3 ){
+				$(file).removeClass('imgsel');
+			}else{
+				$(file).addClass('imgsel');
+			}
+		}else if( KEYPR.isShift && e.which != 3 ){
+			var clickOffset = -1;
+			$('.imgcontent').removeClass('imgsel');
+			
+			$.each( $('.imgcontent'), function(k, v){
+				if( v == file ){
+					clickOffset = k;
+				}
+				
+				if( ( clickOffset == -1 && k >= KEYPR.shiftOffset ) || ( clickOffset != -1 && k <= KEYPR.shiftOffset ) || v == file ){
+					if( ! $(v).is('.imgsel') ){
+						$(v).addClass('imgsel');
+					}
+				}
+			});
+		}else{
+			if( e.which != 3 || ( e.which == 3 && ! $(file).is('.imgsel') ) ){
+				$('.imgsel').removeClass('imgsel');
+				$(file).addClass('imgsel');
+			}
+		}
+		
+		LFILE.setSelFile();
+	
+		if( e.which == 3 ){
+			var isMultiple = $('.imgsel').length === 1 ? false : true;
+			var fileExt = $("input[name=selFile]").val().slice(-3);	
+			var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
+			var area = $("input[name=area]").val();
+			var html = "";
+			
+			if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
+				html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
 			}
 			
-			if( ( clickOffset == -1 && k >= KEYPR.shiftOffset ) || ( clickOffset != -1 && k <= KEYPR.shiftOffset ) || v == file ){
-				if( ! $(v).is('.imgsel') ){
-					$(v).addClass('imgsel');
+			if( ! isMultiple ){
+				html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
+				html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
+			}
+			
+			if( $.inArray( fileExt, array_images ) !== -1 ){
+				if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
+					html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
+					html += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
+					html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
+					html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
 				}
 			}
-		});
-	}else{
-		if( e.which != 3 || ( e.which == 3 && ! $(file).is('.imgsel') ) ){
-			$('.imgsel').removeClass('imgsel');
-			$(file).addClass('imgsel');
+			
+			if( $("span#move_file").attr("title") == "1" ){
+				html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
+			}
+			
+			if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
+				html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
+			}
+			
+			if( $("span#delete_file").attr("title") == "1" ){
+				html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
+			}
+			
+			if( html != '' ){
+				html = "<ul>" + html + "</ul>";
+			}
+	
+			$("div#contextMenu").html(html);
+			NVCMENU.show(e);
 		}
+		
 	}
 	
-	LFILE.setSelFile();
-
-	if( e.which == 3 ){
-		var isMultiple = $('.imgsel').length === 1 ? false : true;
-		var fileExt = $("input[name=selFile]").val().slice(-3);	
-		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
-		var area = $("input[name=area]").val();
-		var html = "";
-		
-		if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
-			html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
-		}
-		
-		if( ! isMultiple ){
-			html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
-			html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
-		}
-		
-		if( $.inArray( fileExt, array_images ) !== -1 ){
-			if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
-				html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
-				html += '<li id="create"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.upload_createimage + '</li>';
-				html += '<li id="cropfile"><em class="fa fa-lg ' + ICON.filecrop + '">&nbsp;</em>' + LANG.crop + '</li>';
-				html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
-			}
-		}
-		
-		if( $("span#move_file").attr("title") == "1" ){
-			html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
-		}
-		
-		if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
-			html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
-		}
-		
-		if( $("span#delete_file").attr("title") == "1" ){
-			html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
-		}
-		
-		if( html != '' ){
-			html = "<ul>" + html + "</ul>";
-		}
-
-		$("div#contextMenu").html(html);
-		NVCMENU.show(e);
-	}
+	KEYPR.isFileSelectable = false;
 }
 
 // Ham xu ly khi click chuot vao thu muc (Xem chi tiet, dinh quyen doi ten, tao thu muc moi, xoa thu muc)
@@ -803,6 +809,35 @@ function rotatefile(){
 	// Dat lai gia tri xoay
 	RRT.direction = 0;
 	RRT.currentDirection = 0;
+}
+
+// Xu ly keo tha chuot chon file
+function fileSelecting(e, ui){
+	if( e.ctrlKey ){
+		if( $(ui.selecting).is('.imgsel') ){
+			$(ui.selecting).addClass('imgtempunsel');
+		}else{
+			$(ui.selecting).addClass('imgtempsel');
+		}
+	}else if( e.shiftKey ){
+		$(ui.selecting).addClass('imgtempsel');
+	}else{
+		$(ui.selecting).removeClass('imgtempunsel').addClass('imgtempsel');
+		$('#imglist .imgcontent:not(.imgtempsel)').addClass('imgtempunsel');
+	}
+}
+
+// Xu ly khi thoi chon file
+function fileUnselect(e, ui){
+	$(ui.unselecting).removeClass('imgtempunsel imgtempsel');
+}
+
+// Xu ly khi ket thuc chon file
+function fileSelectStop(e, ui){
+	$('#imglist .ui-selected').removeClass('ui-selected');
+	$('.imgtempsel').addClass('imgsel').removeClass('imgtempsel');
+	$('.imgtempunsel').removeClass('imgsel imgtempunsel');
+	LFILE.setSelFile();
 }
 
 var ICON = [];
@@ -1312,6 +1347,8 @@ var KEYPR = {
 	isShift : false,
 	shiftOffset : 0,
 	allowKey : [ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123 ],
+	isSelectable: false,
+	isFileSelectable: false,
 	init : function(){
 		$('body').keyup(function(e){			
 			if( ! $(e.target).is('.dynamic') && $.inArray( e.keyCode, KEYPR.allowKey ) == -1 ){
@@ -1371,10 +1408,14 @@ var KEYPR = {
 		});
 		
 		// Unselect file when click on wrap area
-		$('#imglist, .filebrowse').click(function(e){
-			if( $(e.target).is('.filebrowse') || $(e.target).is('#imglist') ){
-				$(".imgsel").removeClass("imgsel");
+		$('#imglist').click(function(e){
+			if( KEYPR.isSelectable == false ){
+				if( $(e.target).is('#imglist') ){
+					$(".imgsel").removeClass("imgsel");
+				}
 			}
+			
+			KEYPR.isSelectable = false;
 		});
 	},
 };
@@ -1858,14 +1899,3 @@ var NVCMENU = {
 KEYPR.init();
 RRT.init();
 NVCMENU.init();
-
-// Disable select text
-$('#imglist').attr('unselectable','on').css({
-	'-moz-user-select':'-moz-none',
-	'-moz-user-select':'none',
-	'-o-user-select':'none',
-	'-khtml-user-select':'none',
-	'-webkit-user-select':'none',
-	'-ms-user-select':'none',
-	'user-select':'none'
-}).bind('selectstart', function(){ return false; });

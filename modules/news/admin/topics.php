@@ -66,6 +66,7 @@ if( ! empty( $savecat ) )
 		$data_insert['image'] = $array['image'];
 		$data_insert['weight'] = $weight;
 		$data_insert['keywords'] = $array['keywords'];
+		
 		if( $db->insert_id( $_sql, 'topicid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
@@ -73,7 +74,7 @@ if( ! empty( $savecat ) )
 			die();
 		}
 		else
-		{die('den day');
+		{
 			$error = $lang_module['errorsave'];
 		}
 	}

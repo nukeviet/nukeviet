@@ -291,7 +291,7 @@ img.watermark:hover {
 	height: 30px
 }
 
-.imgsel { /* Selected file */
+.imgsel, .imgtempsel { /* Selected file */
 	background: #fd8;
 	border: 2px solid #fb0;
 	color: #333;
@@ -301,6 +301,12 @@ img.watermark:hover {
 	background: #fb0;
 	border: 2px solid #EEAF00;
 	color: #333
+}
+
+.imgtempunsel{
+	background: #fff!important;
+	border: 2px solid #EAEAEA!important;
+	color: #666!important;
 }
 
 img.previewimg {

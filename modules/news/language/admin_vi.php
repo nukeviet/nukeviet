@@ -267,4 +267,7 @@ $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo quyền tác giả của module';
 $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
+
+$lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
+
 ?>
