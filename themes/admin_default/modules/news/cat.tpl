@@ -9,7 +9,7 @@
 	<div class="alert alert-warning">{ERROR}</div>
 	<!-- END: error -->
 	<!-- BEGIN: content -->
-	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="post">
+	<form action="{NV_BASE_ADMINURL}index.php" method="post">
 		<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 		<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
 		<input type="hidden" name ="catid" value="{catid}" />
@@ -25,7 +25,10 @@
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control w500" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+						<td>
+							<input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>
+							&nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em>
+						</td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>Title Site: </strong></td>
@@ -34,7 +37,7 @@
 					<tr>
 						<td class="text-right"><strong>{LANG.cat_sub}: </strong></td>
 						<td>
-						<select class="form-control" name="parentid">
+						<select class="form-control w200" name="parentid">
 							<!-- BEGIN: cat_listsub -->
 							<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
 							<!-- END: cat_listsub -->
@@ -48,11 +51,17 @@
 						<td class="text-right">
 						<br />
 						<strong>{LANG.description} </strong></td>
-						<td ><textarea class="w500 form-control" id="description"  name="description" cols="100" rows="5">{description}</textarea><span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
+						<td >
+							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea><br />
+							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
+						</td>
 					</tr>
 					<tr>
 						<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control w500" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td>
+							<input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/>
+							&nbsp;<input type="button" value="Browse server" name="selectimg" class="btn btn-info" />
+						</td>
 					</tr>
 					<tr>
 						<td class="text-right">
