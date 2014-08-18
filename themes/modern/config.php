@@ -30,6 +30,19 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->bindParam( ':config_name', $selectthemes, PDO::PARAM_STR );
 	$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR, strlen( $config_value ) );
 	$sth->execute();
+	
+	if( defined( 'NV_CONFIG_DIR' ) AND $global_config['idsite'] > 0 )
+	{
+		if( isset( $global_config['sitetimestamp'] ) )
+		{
+			$sitetimestamp = intval( $global_config['sitetimestamp'] ) + 1;
+			$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $sitetimestamp . "' WHERE lang = 'sys' AND module = 'site' AND config_name = 'sitetimestamp'" );
+		}
+		else
+		{
+			$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'sitetimestamp', '1')");
+		}
+	}
 
 	nv_del_moduleCache( 'settings' );
 

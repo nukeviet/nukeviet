@@ -21,6 +21,11 @@ function nv_site_theme( $contents, $full = true )
 	{
 		nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
 	}
+	
+	if( isset( $global_config['sitetimestamp'] ) )
+	{
+		$global_config['timestamp'] += $global_config['sitetimestamp'];
+	}
 
 	$css = nv_html_css();
 
