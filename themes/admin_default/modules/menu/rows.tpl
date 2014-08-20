@@ -11,14 +11,15 @@
 			<col class="w50">
 			<col span="2">
 			<col class="w150">
+			<col class="w150">
 		</colgroup>
 		<thead>
-			<tr class="text-center">
+			<tr>
 				<th>{LANG.number}</th>
 				<th>{LANG.title}</th>
 				<th>{LANG.link}</th>
-				<th>{GLANG.groups_view}</th>
-				<th>{LANG.action}</th>
+				<th class="text-center">{GLANG.groups_view}</th>
+				<th class="text-center">{LANG.action}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -36,7 +37,7 @@
 				<!-- END: sub -->
 				</td>
 				<td>{ROW.link}</td>
-				<td>{ROW.groups_view}</td>
+				<td class="text-center">{ROW.groups_view}</td>
 				<td class="text-center">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>

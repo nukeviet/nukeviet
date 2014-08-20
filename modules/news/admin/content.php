@@ -399,7 +399,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['alias'] = $alias;
 	}
 
-	$rowcontent['hometext'] = $nv_Request->get_title( 'hometext', 'post', '' );
+	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
 
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
