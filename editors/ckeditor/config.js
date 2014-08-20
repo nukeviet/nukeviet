@@ -31,4 +31,17 @@ CKEDITOR.editorConfig = function( config ) {
 	    { name: 'styles' },
 	    { name: 'colors' },
 	];
+	
+	config.toolbar_Basic =
+	[
+		{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+		{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
+                 ,'Iframe' ] },
+                '/',
+		{ name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+		{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
+		{ name: 'tools', items : [ 'Maximize','-','About' ] },
+	];
 };
