@@ -226,6 +226,14 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	define( 'NV_COMM_ID', $data_content['id'] );
 	define( 'NV_COMM_ALLOWED', $data_content['allowed_comm'] );
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+	
+	$key_word = array();
+	$_query = $db->query( 'SELECT a1.' . NV_LANG_DATA . '_keyword, a2.' . NV_LANG_DATA . '_alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
+	while( $row = $_query->fetch() )
+	{
+		$key_word[] = $row[NV_LANG_DATA . '_keyword'];
+	}
+	$key_words = implode( ', ', $key_word );
 
 	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view );
 }
