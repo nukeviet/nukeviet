@@ -366,32 +366,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['archive'] = ( $rowcontent['exptime'] > NV_CURRENTTIME ) ? 1 : 2;
 	}
 	$rowcontent['title'] = $nv_Request->get_title( 'title', 'post', '', 1 );
-	
+
 	// Xử lý liên kết tĩnh
 	$alias = $nv_Request->get_title( 'alias', 'post', '' );
 	$alias = ( $alias == '' ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
-	
+
 	if( empty( $alias ) or ! preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $alias ) )
 	{
 		if( empty( $rowcontent['alias'] ) )
 		{
-			if( $rowcontent['id'] )
-			{
-				$rowcontent['alias'] = 'post-' . $rowcontent['id'];
-			}
-			else
-			{
-				$alias = $db->query( 'SELECT MAX(id) AS mid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows' )->fetch();
-				
-				if( empty( $alias['mid'] ) )
-				{
-					$rowcontent['alias'] = 'post-1';
-				}
-				else
-				{
-					$rowcontent['alias'] = 'post-' . ( intval( $alias['mid'] ) + 1 );
-				}
-			}
+			$rowcontent['alias'] = 'post';
 		}
 	}
 	else
