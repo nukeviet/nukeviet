@@ -163,7 +163,8 @@ $(document).ready(function() {
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		showOn: 'focus'
+		showOn: 'focus',
+		yearRange: "-90:+0"
 	});
 	$('#birthday-btn').click(function(){
 		$("#birthday").datepicker('show');

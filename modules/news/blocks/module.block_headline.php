@@ -84,7 +84,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 					->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 					->where( 'bid=' . $array_bid['bid'] )
-					->order( 't2.weight ASC' )
+					->order( 't2.weight DESC' )
 					->limit( $array_bid['number'] );
 	
 				$result = $db->query( $db->sql() );

@@ -231,9 +231,11 @@ function nv_del_block_list(oForm, bid) {
 	}
 
 	if (del_list != '') {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'del_list=' + del_list + '&bid=' + bid, function(res) {
-			nv_chang_block_result(res);
-		});
+		if (confirm(nv_is_del_confirm[0])) {
+			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'del_list=' + del_list + '&bid=' + bid, function(res) {
+				nv_chang_block_result(res);
+			});
+		}
 	}
 }
 

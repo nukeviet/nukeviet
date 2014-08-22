@@ -231,7 +231,8 @@
 			changeYear : true,
 			showOtherMonths : true,
 			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
+			buttonImageOnly : true,
+			yearRange: "-90:+0"
 		});
 		$('form').validate();
 	});

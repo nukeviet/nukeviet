@@ -684,3 +684,7 @@ table caption{
 	line-height: 22px;
 	padding: 0px 0 5px 2px;
 }
+
+blockquote{
+	font-size: 13px
+}
