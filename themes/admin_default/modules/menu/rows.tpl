@@ -101,7 +101,7 @@
 						</select>
 						<span id="thu">
 							<!-- BEGIN: link -->
-							<select name="op" id="item_name_{item.alias}" onchange="nv_link_settitle('{item.alias}','{item.module}');" class="form-control w200">
+							<select name="op" id="module_sub_menu" onchange="nv_link_settitle('{item.alias}','{item.module}');" class="form-control w200">
 								<option value="">{LANG.item_menu}</option>
 								<!-- BEGIN: item -->
 								<option value="{item.alias}"{item.selected}>{item.title}</option>

@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $sql = 'SELECT id, title, alias FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
-While( $row = $result->fetch() )
+while( $row = $result->fetch() )
 {
 	$array_item[$row['id']] = array(
 		'key' => $row['id'],
