@@ -178,7 +178,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 						$subweight = 0;
 						foreach( $array_item as $subitem )
 						{
-							if( isset( $subitem['parentid'] ) and $subitem['parentid'] === $key )
+							if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
 							{
 								++$subweight;
 								++$sort;

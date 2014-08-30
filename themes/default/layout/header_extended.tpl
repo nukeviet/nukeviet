@@ -53,9 +53,9 @@
 		<section>
 			<div class="container" id="body">
 				<!-- BEGIN: breadcrumbs -->
-				<ol class="breadcrumb" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-					<li class="home"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
-					<!-- BEGIN: loop --><li><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
+				<ol class="breadcrumb">
+					<li class="home" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
+					<!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
 				[THEME_ERROR_INFO]

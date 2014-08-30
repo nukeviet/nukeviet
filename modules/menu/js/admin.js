@@ -7,13 +7,13 @@
  */
 
 function nv_link_settitle(alias, module) {
-	var nv_timer = nv_settimeout_disable('item_name_' + alias, 2000);
-	var new_status = $("#item_name_" + alias).val();
+	var nv_timer = nv_settimeout_disable('module_sub_menu', 2000);
+	var new_status = $("#module_sub_menu").val();
 	if (new_status != 0) {
 		$('input#module').val(module);
 		$('input#op').val(new_status);
 		$('input#link').val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module + "&" + nv_fc_variable + "=" + new_status);
-		var new_text = document.getElementById('item_name_' + alias).options[document.getElementById('item_name_' + alias).selectedIndex].text;
+		var new_text = document.getElementById('module_sub_menu').options[document.getElementById('module_sub_menu').selectedIndex].text;
 		$('input#title').val(trim(new_text));
 	}
 	return;

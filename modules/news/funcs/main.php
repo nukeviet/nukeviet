@@ -42,16 +42,15 @@ if( empty( $contents ) )
 
 	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
 	{
-		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 't1.publtime DESC' : 't1.publtime ASC';
+		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->where( 't1.status= 1 AND t1.inhome=1' );
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 't1.id, t1.catid, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
@@ -82,29 +81,30 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
+			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 			$end_publtime = $item['publtime'];
 		}
 
 		$db->sqlreset()
-			->select('t1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal, t2.newday')
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' );
+			->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' );
 
 		if( $viewcat == 'viewcat_page_new' )
 		{
-			$db->where( 't1.status= 1 AND t1.inhome=1 AND t1.publtime < ' . $end_publtime );
+			$db->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
 		}
 		else
 		{
-			$db->where( 't1.status= 1 AND t1.inhome=1 AND t1.publtime > ' . $end_publtime );
+			$db->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
 		}
 		$db->order( $order_by )->limit( $st_links );
 
 		$result = $db->query( $db->sql() );
 		while( $item = $result->fetch() )
 		{
+			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_cat_other[] = $item;
 		}
@@ -119,10 +119,9 @@ if( empty( $contents ) )
 
 		$key = 0;
 		$db->sqlreset()
-			->select('t1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
-			->where( 't1.status= 1 AND t1.inhome=1' )
-			->order( 't1.publtime DESC' );
+			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->where( 'status= 1 AND inhome=1' )
+			->order( 'publtime DESC' );
 
 		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
@@ -130,7 +129,7 @@ if( empty( $contents ) )
 			{
 				$array_cat[$key] = $array_cat_i;
 
-				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid . ' t1' )->limit( $array_cat_i['numlinks'] )->sql() );
+				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit( $array_cat_i['numlinks'] )->sql() );
 				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
@@ -154,7 +153,7 @@ if( empty( $contents ) )
 						$item['imghome'] = '';
 					}
 
-
+					$item['newday'] = $array_cat_i['newday'];
 					$item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 					$array_cat[$key]['content'][] = $item;
 				}
@@ -174,16 +173,15 @@ if( empty( $contents ) )
 		$key = 0;
 
 		$db->sqlreset()
-			->select('t1.id, t1.listcatid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday')
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
-			->where( 't1.status= 1 AND t1.inhome=1' )
-			->order( 't1.publtime DESC' );
+			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+			->where( 'status= 1 AND inhome=1' )
+			->order( 'publtime DESC' );
 		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_catpage[$key] = $array_cat_i;
-				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid . ' t1' )->limit($array_cat_i['numlinks'])->sql() );
+				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit($array_cat_i['numlinks'])->sql() );
 
 				while( $item = $result->fetch() )
 				{
@@ -208,6 +206,7 @@ if( empty( $contents ) )
 						$item['imghome'] = '';
 					}
 
+					$item['newday'] = $array_cat_i['newday'];
 					$item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 					$array_catpage[$key]['content'][] = $item;
 				}
@@ -221,16 +220,15 @@ if( empty( $contents ) )
 	}
 	elseif( $viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old' )
 	{
-		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? ' t1.publtime DESC' : ' t1.publtime ASC';
+		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? ' publtime DESC' : ' publtime ASC';
 		$db->sqlreset()
 			->select( 'COUNT(*) ')
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->where( 't1.status= 1 AND t1.inhome=1' );
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 't1.id, t1.catid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit($per_page )
 			->offset( ( $page - 1 ) * $per_page );
@@ -258,7 +256,8 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-
+			
+			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
@@ -269,17 +268,16 @@ if( empty( $contents ) )
 	}
 	elseif( $viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old' ) // Xem theo tieu de
 	{
-		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 't1.publtime DESC' : 't1.publtime ASC';
+		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'publtime DESC' : 'publtime ASC';
 
 		$db->sqlreset()
 			->select( 'COUNT(*) ')
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->where( 't1.status= 1 AND t1.inhome=1' );
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status= 1 AND inhome=1' );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 't1.id, t1.catid, t1.topicid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.newday' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
+		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit($per_page )
 			->offset( ( $page - 1 ) * $per_page );
@@ -308,6 +306,7 @@ if( empty( $contents ) )
 				$item['imghome'] = '';
 			}
 
+			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;
 		}
