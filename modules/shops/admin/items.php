@@ -88,7 +88,7 @@ if( $checkss == md5( session_id() ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
-		$from .= " WHERE admin_id IN (0," . implode( ",", $array_admin_id ) . ",0)";
+		$from .= " WHERE user_id IN (0," . ( ! empty( $array_admin_id ) ? implode( ",", $array_admin_id ) : 0 ) . ",0)";
 	}
 	elseif( ! empty( $q ) )
 	{
@@ -110,7 +110,7 @@ if( $checkss == md5( session_id() ) )
 		$from .= " WHERE ( " . implode( " OR ", $arr_from );
 		if( ! empty( $array_admin_id ) )
 		{
-			$from .= ' OR (admin_id IN (0,' . implode( ',', $array_admin_id ) . ',0))';
+			$from .= ' OR (user_id IN (0,' . implode( ',', $array_admin_id ) . ',0))';
 		}
 		$from .= ' )';
 	}

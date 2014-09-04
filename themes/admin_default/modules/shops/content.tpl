@@ -84,7 +84,7 @@
 				<tbody id="otherimage">
 					<!-- BEGIN: otherimage -->
 					<tr>
-						<td><input value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255"><input value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
+						<td><input class="form-control" value="{DATAOTHERIMAGE.value}" style="width:400px; margin-right: 5px" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255"><input class="btn btn-info" value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
 					</tr>
 					<!-- END: otherimage -->
 					<tr>
@@ -312,6 +312,7 @@
 <script type="text/javascript">
 	var file_items = '{FILE_ITEMS}';
 	var file_selectfile = '{LANG.file_selectfile}';
+	var inputnumber = '{LANG.error_inputnumber}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
 	var currentpath = "{CURRENT}";
