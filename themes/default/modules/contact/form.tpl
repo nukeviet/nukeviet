@@ -7,7 +7,7 @@
 	</div>
 	<!-- END: error -->
 	<!-- BEGIN: form -->
-	<div class="alert alert-info">
+	<div class="alert alert-info hidden"> mấy dòng ấn định nội dung này ko cần thiết vì người dùng có thể dùng block html để viết gì thì viết
 		{LANG.note}
 	</div>
 	<form id="fcontact" method="post" action="{ACTION_FILE}" onsubmit="return sendcontact('{NV_GFX_NUM}');">
