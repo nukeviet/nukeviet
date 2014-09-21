@@ -178,7 +178,7 @@ if( $rowcontent['id'] > 0 )
 						{
 							++$check_edit;
 						}
-						elseif( $status == 0 and $rowcontent['admin_id'] == $admin_id )
+						elseif( ( $status == 0 or $status == 4 ) and $rowcontent['admin_id'] == $admin_id )
 						{
 							++$check_edit;
 						}

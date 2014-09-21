@@ -54,7 +54,7 @@ if( ! empty( $del_array ) )
 						{
 							++$check_del;
 						}
-						elseif( $status == 0 and $post_id == $admin_id )
+						elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
 						{
 							++$check_del;
 						}
