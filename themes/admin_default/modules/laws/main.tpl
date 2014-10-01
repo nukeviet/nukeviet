@@ -67,13 +67,13 @@
 				<col style="width:200px" />
 				<tbody>
 					<tr>
-						<td>{LANG.title} <span style="color:red">*</span></td>
+						<td>{LANG.title} <span class="red">*</span></td>
 						<td>
 						<input title="{LANG.title}" class="form-control" style="width: 400px" type="text" name="title" value="{DATA.title}" maxlength="255" />
 						</td>
 					</tr>
 					<tr>
-						<td>{LANG.code}</td>
+						<td>{LANG.code} <span class="red">*</span></td>
 						<td>
 						<input title="{LANG.code}" class="form-control" style="width: 400px" type="text" name="code" value="{DATA.code}" maxlength="255" />
 						</td>
@@ -204,7 +204,7 @@
 						<td><textarea style="width:400px;" class="form-control" name="note" id="note">{DATA.note}</textarea></td>
 					</tr>
 					<tr>
-						<td style="vertical-align:top">{LANG.introtext}</td>
+						<td>{LANG.introtext} <span class="red">*</span></td>
 						<td><textarea style="width:400px" class="form-control" name="introtext" id="introtext">{DATA.introtext}</textarea></td>
 					</tr>
 				</tbody>

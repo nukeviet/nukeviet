@@ -11,7 +11,7 @@
 			<tbody>
 				<tr>
 					<td style="width:150px">
-						<strong>{LANG.signer_title}</strong>
+						<strong>{LANG.signer_title} <span class="red">*</span></strong>
 					</td>
 					<td>
 						<input class="form-control" type="text" style="width:350px" value="{DATA.title}" name="title" />
