@@ -38,13 +38,13 @@ $cat = $nv_laws_listarea[$catid];
 $in = "";
 if( empty( $cat['subcats'] ) )
 {
-	$in = " `aid`=" . $catid;
+	$in = " aid=" . $catid;
 }
 else
 {
 	$in = $cat['subcats'];
 	$in[] = $catid;
-	$in = " `aid` IN(" . implode( ",", $in ) . ")";
+	$in = " aid IN(" . implode( ",", $in ) . ")";
 }
 
 // Set page title, keywords, description
@@ -59,7 +59,7 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1 AND" . $in . " ORDER BY `addtime` " . $order . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
@@ -99,5 +99,3 @@ $contents = nv_theme_laws_area( $array_data, $generate_page, $cat );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

@@ -44,5 +44,3 @@ if ( ! function_exists( 'nv_law_block_singer' ) )
 }
 
 $content = nv_law_block_singer();
-
-?>

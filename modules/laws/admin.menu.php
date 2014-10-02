@@ -17,5 +17,3 @@ $submenu['area'] = $lang_module['area'];
 $submenu['cat'] = $lang_module['cat'];
 $submenu['subject'] = $lang_module['subject'];
 $submenu['config'] = $lang_module['config'];
-
-?>

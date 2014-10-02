@@ -60,10 +60,10 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
             if ( $cat['parentid'] == 0 )
             {
 				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $cat['alias'];
-				$html .= "<li>\n";
+				$html .= "<li>";
 				$html .= "<em class=\"fa fa-comment-o fa-lg\">&nbsp;</em><a title=\"" . $cat['title'] . "\" href=\"" . $link . "\">" . nv_clean60( $cat['title'], $block_config['title_length'] ) . "</a>\n";
 				if ( ! empty( $cat['subcats'] ) ) $html .= nv_content_subcat( $cat['subcats'], $block_config['title_length'] );
-				$html .= "</li>\n";
+				$html .= "</li>";
 				
 				if( $i >= 10 ) break;
 				$i ++;

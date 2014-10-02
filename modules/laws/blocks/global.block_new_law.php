@@ -19,7 +19,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
         $data = $site_mods[$module]['module_data'];
         $modfile = $site_mods[$module]['module_file'];
 		
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $data . "_row` WHERE `status`=1 ORDER BY `addtime` DESC LIMIT 0,10";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $data . "_row WHERE status=1 ORDER BY addtime DESC LIMIT 0,10";
 		$result = $db->query( $sql );
 		$numrow = $result->rowCount();
 		
@@ -78,5 +78,3 @@ if ( defined( 'NV_SYSTEM' ) )
         $content = nv_law_block_newg( $block_config );
     }
 }
-
-?>

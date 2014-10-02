@@ -17,7 +17,7 @@ $key_words = $module_info['keywords'];
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = $nv_laws_setting['numsub'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1";
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1";
 
 $key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH);
 
@@ -59,7 +59,7 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 	{
 		$dbkey = $db->dblikeescape( $key );
 		$base_url .= "&amp;q=" . $key;
-		$sql .= " AND ( `title` LIKE '%" . $dbkey . "%' OR `introtext` LIKE '%" . $dbkey . "%' OR `code` LIKE '%" . $dbkey . "%' OR `bodytext` LIKE '%" . $dbkey . "%' )";
+		$sql .= " AND ( title LIKE '%" . $dbkey . "%' OR introtext LIKE '%" . $dbkey . "%' OR code LIKE '%" . $dbkey . "%' OR bodytext LIKE '%" . $dbkey . "%' )";
 	}
 	
 	if( ! empty( $area ) )
@@ -70,13 +70,13 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 		$in = "";
 		if( empty( $tmp['subcats'] ) )
 		{
-			$in = " AND `aid`=" . $area;
+			$in = " AND aid=" . $area;
 		}
 		else
 		{
 			$in = $tmp['subcats'];
 			$in[] = $area;
-			$in = " AND `aid` IN(" . implode( ",", $in ) . ")";
+			$in = " AND aid IN(" . implode( ",", $in ) . ")";
 		}
 
 		$sql .= $in;
@@ -90,13 +90,13 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 		$in = "";
 		if( empty( $tmp['subcats'] ) )
 		{
-			$in = " AND `cid`=" . $cat;
+			$in = " AND cid=" . $cat;
 		}
 		else
 		{
 			$in = $tmp['subcats'];
 			$in[] = $cat;
-			$in = " AND `cid` IN(" . implode( ",", $in ) . ")";
+			$in = " AND cid IN(" . implode( ",", $in ) . ")";
 		}
 
 		$sql .= $in;
@@ -104,19 +104,19 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 	
 	if( ! empty( $subject ) )
 	{
-		$sql .= " AND `sid`=" . $subject;
+		$sql .= " AND sid=" . $subject;
 		$base_url .= "&amp;subject=" . $subject;
 	}
 	
 	if( ! empty( $sfrom1 ) )
 	{
-		$sql .= " AND `publtime`>=" . $sfrom1;
+		$sql .= " AND publtime>=" . $sfrom1;
 		$base_url .= "&amp;sfrom=" . $sfrom;
 	}
 	
 	if( ! empty( $sto1 ) )
 	{
-		$sql .= " AND `publtime`<=" . $sto1;
+		$sql .= " AND publtime<=" . $sto1;
 		$base_url .= "&amp;sto=" . $sto;
 	}
 	
@@ -124,12 +124,12 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 	{
 		if( $sstatus == 1 )
 		{
-			$sql .= " AND ( `exptime`=0 OR `exptime`>=" . NV_CURRENTTIME . ")";
+			$sql .= " AND ( exptime=0 OR exptime>=" . NV_CURRENTTIME . ")";
 			$base_url .= "&amp;status=" . $sstatus;
 		}
 		else
 		{
-			$sql .= " AND ( `exptime`!=0 AND `exptime`<" . NV_CURRENTTIME . ")";
+			$sql .= " AND ( exptime!=0 AND exptime<" . NV_CURRENTTIME . ")";
 			$base_url .= "&amp;status=" . $sstatus;
 		}
 	}
@@ -145,7 +145,7 @@ if( ! $search )
 
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 
-$sql .= " ORDER BY `addtime` " . $order . " LIMIT " . $page . "," . $per_page;
+$sql .= " ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
@@ -188,5 +188,3 @@ $contents = nv_theme_laws_search( $array_data, $generate_page, $all_page );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

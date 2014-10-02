@@ -22,7 +22,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
         die( 'NO' );
     }
     
-    $sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $id;
+    $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $result = $db->query( $sql );
     $title = $result->fetchColumn();
     
@@ -31,10 +31,10 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
         die( 'NO' );
     }
 	
-    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $id;
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $db->query( $sql );
 	
-    $sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `signer`=" . $id;
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE signer=" . $id;
     $db->query( $sql );
 	
     nv_del_moduleCache( $module_name );
@@ -50,10 +50,10 @@ $per_page = 30;
 $array = array();
 
 // Base data
-$sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`!=0";
+$sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id!=0";
 $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
 
-$sql .= " ORDER BY `id` DESC";
+$sql .= " ORDER BY id DESC";
 
 // Get num row
 $sql1 = "SELECT COUNT(*) " . $sql;
@@ -121,5 +121,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

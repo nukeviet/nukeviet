@@ -68,5 +68,3 @@ $lang_module['s_signer_all'] = "-- Tất cả --";
 $lang_module['s_result'] = "Kết quả tìm kiếm:";
 $lang_module['s_noresult'] = "Không có kết quả nào phù hợp với yêu cầu của bạn";
 $lang_module['s_result_num'] = "%d văn bản";
-
-?>

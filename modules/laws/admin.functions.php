@@ -52,7 +52,7 @@ function nv_catList()
 {
     global $db, $module_data;
 
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` ORDER BY `parentid`,`weight` ASC";
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat ORDER BY parentid,weight ASC";
     $result = $db->query( $sql );
     $list = array();
     while ( $row = $result->fetch() )
@@ -91,13 +91,13 @@ function fix_catWeight( $parentid )
 {
     global $db, $module_data;
 
-    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_cat` WHERE `parentid`=" . intval( $parentid ) . " ORDER BY `weight` ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE parentid=" . intval( $parentid ) . " ORDER BY weight ASC";
     $result = $db->query( $sql );
     $weight = 0;
     while ( $row = $result->fetch() )
     {
         $weight++;
-        $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_cat` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+        $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query( $query );
     }
 }
@@ -106,7 +106,7 @@ function nv_aList()
 {
     global $db, $module_data;
 
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` ORDER BY `parentid`,`weight` ASC";
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_area ORDER BY parentid,weight ASC";
     $result = $db->query( $sql );
     $list = array();
     while ( $row = $result->fetch() )
@@ -145,13 +145,13 @@ function fix_aWeight( $parentid )
 {
     global $db, $module_data;
 
-    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `parentid`=" . intval( $parentid ) . " ORDER BY `weight` ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE parentid=" . intval( $parentid ) . " ORDER BY weight ASC";
     $result = $db->query( $sql );
     $weight = 0;
     while ( $row = $result->fetch() )
     {
         $weight++;
-        $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_area` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+        $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query( $query );
     }
 }
@@ -160,7 +160,7 @@ function nv_sList()
 {
     global $db, $module_data;
 
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_subject` ORDER BY `weight` ASC";
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
     $result = $db->query( $sql );
     $list = array();
     while ( $row = $result->fetch() )
@@ -180,7 +180,7 @@ function nv_sgList()
 {
     global $db, $module_data;
 
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` ORDER BY `id` ASC";
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer ORDER BY id ASC";
     $result = $db->query( $sql );
     $list = array();
     while ( $row = $result->fetch() )
@@ -200,15 +200,13 @@ function fix_subjectWeight()
 {
     global $db, $module_data;
 
-    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_subject` ORDER BY `weight` ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
     $result = $db->query( $sql );
     $weight = 0;
     while ( $row = $result->fetch() )
     {
         $weight++;
-        $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_subject` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+        $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query( $query );
     }
 }
-
-?>

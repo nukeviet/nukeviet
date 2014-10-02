@@ -18,7 +18,7 @@ if ( ! preg_match( "/^([a-z0-9\-\_\.]+)$/i", $alias ) )
     exit();
 }
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `alias`=" . $db->quote( $alias ) . " AND `status`=1";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE alias=" . $db->quote( $alias ) . " AND status=1";
 if ( ( $result = $db->query( $sql ) ) === false )
 {
     Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
@@ -56,7 +56,7 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 	$lawsdownloaded = ! empty( $lawsdownloaded ) ? unserialize( $lawsdownloaded ) : array();
 	if( ! in_array( $row['id'], $lawsdownloaded ) )
 	{
-		$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_row` SET `download_hits`=`download_hits`+1 WHERE `id`=" . $row['id'];
+		$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET download_hits=download_hits+1 WHERE id=" . $row['id'];
 		$db->query( $sql );
 		$lawsdownloaded[] = $row['id'];
 		$lawsdownloaded = serialize( $lawsdownloaded );
@@ -77,7 +77,7 @@ $description = $row['introtext'];
 // Lay van ban thay the no
 if( ! empty( $row['replacement'] ) )
 {
-	$sql = "SELECT `title`, `alias`, `code` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id` IN(" . $row['replacement'] . ")";
+	$sql = "SELECT title, alias, code FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id IN(" . $row['replacement'] . ")";
 	$result = $db->query( $sql );
 	$row['replacement'] = array();
 	while( list( $_title, $_alias, $_code ) = $result->fetch( 3 ) )
@@ -92,7 +92,7 @@ if( ! empty( $row['replacement'] ) )
 
 // Lay van ban ma no thay the
 $row['unreplacement'] = array();
-$sql = "SELECT b.title, b.alias, b.code FROM `" . NV_PREFIXLANG . "_" . $module_data . "_set_replace` AS a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_row` AS b ON a.oid=b.id WHERE a.nid=" . $row['id'];
+$sql = "SELECT b.title, b.alias, b.code FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace AS a INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row AS b ON a.oid=b.id WHERE a.nid=" . $row['id'];
 $result = $db->query( $sql );
 while( list( $_title, $_alias, $_code ) = $result->fetch( 3 ) )
 {
@@ -106,7 +106,7 @@ while( list( $_title, $_alias, $_code ) = $result->fetch( 3 ) )
 // Lay cac van ban lien quan
 if( ! empty( $row['relatement'] ) )
 {
-	$sql = "SELECT `title`, `alias`, `code` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id` IN(" . $row['relatement'] . ")";
+	$sql = "SELECT title, alias, code FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id IN(" . $row['relatement'] . ")";
 	$result = $db->query( $sql );
 	$row['relatement'] = array();
 	while( list( $_title, $_alias, $_code ) = $result->fetch( 3 ) )
@@ -122,7 +122,7 @@ if( ! empty( $row['relatement'] ) )
 // Nguoi ky
 if( ! empty( $row['sgid'] ) )
 {
-	$sql = "SELECT `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id` = " . $row['sgid'];
+	$sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id = " . $row['sgid'];
 	$result = $db->query( $sql );
 	$row['relatement'] = array();
 	list( $row['signer'] ) = $result->fetch( 3 );
@@ -150,7 +150,7 @@ $lawsviewed = $nv_Request->get_string( 'lawsviewed', 'session', '' );
 $lawsviewed = ! empty( $lawsviewed ) ? unserialize( $lawsviewed ) : array();
 if( ! in_array( $row['id'], $lawsviewed ) )
 {
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_row` SET `view_hits`=`view_hits`+1 WHERE `id`=" . $row['id'];
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET view_hits=view_hits+1 WHERE id=" . $row['id'];
 	$db->query( $sql );
 	$lawsviewed[] = $row['id'];
 	$lawsviewed = serialize( $lawsviewed );
@@ -162,5 +162,3 @@ $contents = nv_theme_laws_detail( $row );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

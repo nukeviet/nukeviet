@@ -20,7 +20,7 @@ if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile 
 }
 else
 {
-    $sql = "SELECT `alias`, `addtime`  FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1 ORDER BY `addtime` DESC LIMIT 1000";
+    $sql = "SELECT alias, addtime  FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime DESC LIMIT 1000";
     $result = $db->query( $sql );
     while ( list( $alias, $addtime ) = $result->fetch( 3 ) )
     {
@@ -36,5 +36,3 @@ else
 
 nv_xmlSitemap_generate( $url );
 die();
-
-?>

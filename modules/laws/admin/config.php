@@ -22,7 +22,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     foreach ( $array_config as $config_name => $config_value )
     {
-		$query = "REPLACE INTO `" . NV_PREFIXLANG . "_" . $module_data . "_config` VALUES (" . $db->quote( $config_name ) . "," . $db->quote( $config_value ) . ")";
+		$query = "REPLACE INTO " . NV_PREFIXLANG . "_" . $module_data . "_config VALUES (" . $db->quote( $config_name ) . "," . $db->quote( $config_value ) . ")";
 		$db->query( $query );
     }
 
@@ -36,7 +36,7 @@ $array_config['nummain'] = 50;
 $array_config['numsub'] = 50;
 $array_config['typeview'] = 0;
 
-$sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+$sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->query( $sql );
 while ( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 {
@@ -70,5 +70,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

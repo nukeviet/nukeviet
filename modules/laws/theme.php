@@ -240,5 +240,3 @@ function nv_theme_laws_signer( $array_data, $generate_page, $cat )
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
-
-?>

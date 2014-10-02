@@ -13,11 +13,6 @@ if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
-
-
-
-
-
 //
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = $nv_laws_setting['nummain'];
@@ -25,7 +20,7 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 	
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 	
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1 ORDER BY `addtime` " . $order . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
@@ -68,5 +63,3 @@ $contents = nv_theme_laws_main( $array_data, $generate_page );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

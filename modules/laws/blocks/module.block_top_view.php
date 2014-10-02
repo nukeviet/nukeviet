@@ -25,7 +25,7 @@ if ( ! function_exists( 'nv_law_block_top_view' ) )
         $title_length = 24;
 		
         $html = "";
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` ORDER BY `view_hits` DESC LIMIT 0,10";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row ORDER BY view_hits DESC LIMIT 0,10";
 		$result = $db->query( $sql );
 		
         while ( $row = $result->fetch() )
@@ -45,5 +45,3 @@ if ( ! function_exists( 'nv_law_block_top_view' ) )
 }
 
 $content = nv_law_block_top_view();
-
-?>

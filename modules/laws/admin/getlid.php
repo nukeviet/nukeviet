@@ -92,7 +92,7 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
         $array['eto1'] = "";
     }
 	
-    $sql = "FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id`!=0";
+    $sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id!=0";
 
     $is_null = true;
     foreach ( $array as $check )
@@ -121,25 +121,25 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
         if ( ! empty( $array['pfrom1'] ) )
         {
             $base_url .= "&amp;pfrom=" . rawurlencode( $array['pfrom'] );
-            $sql .= " AND `publtime`>=" . $array['pfrom1'];
+            $sql .= " AND publtime>=" . $array['pfrom1'];
         }
 
         if ( ! empty( $array['pto1'] ) )
         {
             $base_url .= "&amp;pto=" . rawurlencode( $array['pto'] );
-            $sql .= " AND `publtime`<=" . $array['pto1'];
+            $sql .= " AND publtime<=" . $array['pto1'];
         }
 
         if ( ! empty( $array['efrom1'] ) )
         {
             $base_url .= "&amp;efrom=" . rawurlencode( $array['efrom'] );
-            $sql .= " AND `exptime`>=" . $array['efrom1'];
+            $sql .= " AND exptime>=" . $array['efrom1'];
         }
 
         if ( ! empty( $array['eto1'] ) )
         {
             $base_url .= "&amp;eto=" . rawurlencode( $array['eto'] );
-            $sql .= " AND `exptime`<=" . $array['eto1'];
+            $sql .= " AND exptime<=" . $array['eto1'];
         }
 
         $sql1 = "SELECT COUNT(*) " . $sql;
@@ -166,25 +166,25 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
         if ( ! empty( $orderid ) )
         {
             $base_url .= "&amp;orderid=" . $orderid;
-            $sql .= " ORDER BY `id` " . $orderid . "";
+            $sql .= " ORDER BY id " . $orderid . "";
         } elseif ( ! empty( $ordertitle ) )
         {
             $base_url .= "&amp;ordertitle=" . $ordertitle;
-            $sql .= " ORDER BY `title` " . $ordertitle . "";
+            $sql .= " ORDER BY title " . $ordertitle . "";
         } elseif ( ! empty( $ordercode ) )
         {
             $base_url .= "&amp;ordercode=" . $ordercode;
-            $sql .= " ORDER BY `code` " . $ordercode . "";
+            $sql .= " ORDER BY code " . $ordercode . "";
         } elseif ( ! empty( $orderaddtime ) )
         {
             $base_url .= "&amp;orderaddtime=" . $orderaddtime;
-            $sql .= " ORDER BY `addtime` " . $orderaddtime . "";
+            $sql .= " ORDER BY addtime " . $orderaddtime . "";
         }
 
         $page = $nv_Request->get_int( 'page', 'get', 0 );
         $per_page = 10;
 
-        $sql2 = "SELECT `id`, `title`, `code`, `addtime` " . $sql . " LIMIT " . $page . ", " . $per_page;
+        $sql2 = "SELECT id, title, code, addtime " . $sql . " LIMIT " . $page . ", " . $per_page;
         $query2 = $db->query( $sql2 );
 
         while ( $row = $query2->fetch() )
@@ -242,5 +242,3 @@ include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
 exit();
-
-?>

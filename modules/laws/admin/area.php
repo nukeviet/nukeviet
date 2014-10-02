@@ -30,17 +30,17 @@ if ( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
 
     if ( $cWeight > $aList[$id]['pcount'] ) $cWeight = $aList[$id]['pcount'];
 
-    $sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `parentid`=" . intval( $aList[$id]['parentid'] ) . " AND `id`!=" . $id . " ORDER BY `weight` ASC";
+    $sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE parentid=" . intval( $aList[$id]['parentid'] ) . " AND id!=" . $id . " ORDER BY weight ASC";
     $result = $db->query( $sql );
     $weight = 0;
     while ( $row = $result->fetch() )
     {
         $weight++;
         if ( $weight == $cWeight ) $weight++;
-        $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_area` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
+        $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query( $query );
     }
-    $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_area` SET `weight`=" . $cWeight . " WHERE `id`=" . $id;
+    $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET weight=" . $cWeight . " WHERE id=" . $id;
     $db->query( $query );
     nv_del_moduleCache( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['logChangeaWeight'], "Id: " . $id, $admin_info['userid'] );
@@ -52,12 +52,12 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $id = $nv_Request->get_int( 'del', 'post', 0 );
     if ( ! isset( $aList[$id] ) ) die( $lang_module['errorAreaNotExists'] );
     if ( $aList[$id]['count'] > 0 ) die( $lang_module['errorAreaYesSub'] );
-    $sql = "SELECT COUNT(*) as count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `aid`=" . $id;
+    $sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE aid=" . $id;
     $result = $db->query( $sql );
     $row = $result->fetch();
     if ( $row['count'] ) die( $lang_module['errorAreaYesRow'] );
 
-    $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `id` = " . $id;
+    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE id = " . $id;
     $db->query( $query );
     fix_aWeight( $aList[$id]['parentid'] );
     nv_del_moduleCache( $module_name );
@@ -136,7 +136,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $weight = $aList[$post['id']]['weight'];
             if ( $post['parentid'] != $aList[$post['id']]['parentid'] )
             {
-                $sql = "SELECT MAX(weight) as nweight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `parentid`=" . $post['parentid'];
+                $sql = "SELECT MAX(weight) as nweight FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE parentid=" . $post['parentid'];
                 if ( ( $result = $db->query( $sql ) ) !== false )
                 {
                     $weight = $result->fetchColumn();
@@ -149,18 +149,18 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 $if_fixWeight = $aList[$post['id']]['parentid'];
             }
 
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_area` SET 
-                    `parentid`=" . $post['parentid'] . ", 
-                    `alias`=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
-                    `title`=" . $db->quote( $post['title'] ) . ", 
-                    `introduction`=" . $db->quote( $post['introduction'] ) . ", 
-                    `keywords`=" . $db->quote( $post['keywords'] ) . ", 
-                    `weight`=" . $weight . " WHERE `id`=" . $post['id'];
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET 
+                    parentid=" . $post['parentid'] . ", 
+                    alias=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
+                    title=" . $db->quote( $post['title'] ) . ", 
+                    introduction=" . $db->quote( $post['introduction'] ) . ", 
+                    keywords=" . $db->quote( $post['keywords'] ) . ", 
+                    weight=" . $weight . " WHERE id=" . $post['id'];
             $db->query( $query );
         }
         else
         {
-            $sql = "SELECT MAX(weight) as nweight FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `parentid`=" . $post['parentid'];
+            $sql = "SELECT MAX(weight) as nweight FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE parentid=" . $post['parentid'];
             if ( ( $result = $db->query( $sql ) ) !== false )
             {
                 $weight = $result->fetchColumn();
@@ -171,14 +171,14 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 $weight = 1;
             }
 
-            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_area` 
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_area 
                 VALUES (NULL, " . $post['parentid'] . ", '', " . $db->quote( $post['title'] ) . ", 
                 " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ", 
                 " . NV_CURRENTTIME . ", " . $weight . ");";
             $post['id'] = $db->insert_id( $query );
 
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_area` SET 
-                `alias`=" . $db->quote( $alias . "-" . $post['id'] ) . " WHERE `id`=" . $post['id'];
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET 
+                alias=" . $db->quote( $alias . "-" . $post['id'] ) . " WHERE id=" . $post['id'];
             $db->query( $query );
         }
 
@@ -190,7 +190,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
     if ( $nv_Request->isset_request( 'edit', 'get' ) )
     {
-        $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_area` WHERE `id`=" . $post['id'];
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE id=" . $post['id'];
         $result = $db->query( $sql );
         $row = $result->fetch();
         $post['title'] = $row['title'];
@@ -290,5 +290,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

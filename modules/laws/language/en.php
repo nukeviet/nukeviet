@@ -22,5 +22,3 @@ $lang_module['search'] = "Search";
 $lang_module['area'] = "Area";
 $lang_module['cat'] = "Category";
 $lang_module['subject'] = "Subject";
-
-?>

@@ -17,7 +17,7 @@ $error = "";
 
 if( $id )
 {
-	$sql = "SELECT `id`, `title`, `offices`, `positions` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $id;
+	$sql = "SELECT id, title, offices, positions FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
 	$result = $db->query( $sql );
 	$check = $result->rowCount();
 		
@@ -67,7 +67,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		if( empty( $id ) )
 		{
 			// Check exist
-			$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `title`=" . $db->quote( $array['title'] ) . " AND `offices`=" . $db->quote( $array['offices'] ) . " AND `positions`=" . $db->quote( $array['positions'] );
+			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote( $array['title'] ) . " AND offices=" . $db->quote( $array['offices'] ) . " AND positions=" . $db->quote( $array['positions'] );
 			$result = $db->query( $sql );
 			list ( $check_exist ) = $result->fetch( 3 );
 				
@@ -78,7 +78,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 			else
 			{
 				// Insert into database
-				$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_signer` VALUES (
+				$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_signer VALUES (
 					NULL, 
 					" . $db->quote( $array['title'] ) . ", 
 					" . $db->quote( $array['offices'] ) . ", 
@@ -103,7 +103,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 		else
 		{
 			// Check exist
-			$sql = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `title`=" . $db->quote( $array['title'] ) . " AND `id`!=" . $id;
+			$sql = "SELECT id FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE title=" . $db->quote( $array['title'] ) . " AND id!=" . $id;
 			$result = $db->query( $sql );
 			list ( $check_exist ) = $result->fetch( 3 );
 				
@@ -113,11 +113,11 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_signer` SET 
-					`title`=" . $db->quote( $array['title'] ) . ", 
-					`offices`=" . $db->quote( $array['offices'] ) . ", 
-					`positions`=" . $db->quote( $array['positions'] ) . "
-					WHERE `id` =" . $id;
+				$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_signer SET 
+					title=" . $db->quote( $array['title'] ) . ", 
+					offices=" . $db->quote( $array['offices'] ) . ", 
+					positions=" . $db->quote( $array['positions'] ) . "
+					WHERE id =" . $id;
 					
 				if ( $db->query( $sql ) )
 				{
@@ -155,7 +155,7 @@ if ( ! empty ( $error ) )
 
 if ( $nv_Request->isset_request( 'edit', 'get' ) )
 {
-    $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $post['id'];
+    $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $post['id'];
     $result = $db->query( $sql );
     $row = $result->fetch();
     $post['title'] = $row['title'];
@@ -178,5 +178,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

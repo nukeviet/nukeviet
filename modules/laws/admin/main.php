@@ -50,7 +50,7 @@ if ( empty( $sgList ) and ! $nv_Request->isset_request( 'add', 'get' ) )
     die();
 }
 
-$sql = "SELECT COUNT(*) as ccount FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status` = 1";
+$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status = 1";
 $result = $db->query( $sql );
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
@@ -79,7 +79,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     {
         $post['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 
-        $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id`=" . $post['id'];
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $post['id'];
         $result = $db->query( $sql );
         $num = $result->rowCount();
         if ( $num != 1 )
@@ -145,7 +145,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 			
 			foreach( $check_replacement as $replacement )
 			{
-				$sql = "SELECT COUNT(*) as count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id`=" . $replacement;
+				$sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $replacement;
 				$result = $db->query( $sql );
 				$count = $result->fetchColumn();
 
@@ -169,7 +169,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 			
 			foreach( $check_relatement as $relatement )
 			{
-				$sql = "SELECT COUNT(*) as count FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id`=" . $relatement;
+				$sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $relatement;
 				$result = $db->query( $sql );
 				$count = $result->fetchColumn();
 
@@ -256,32 +256,32 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
         if ( isset( $post['id'] ) )
         {
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_row` SET 
-                `replacement`=" . $db->quote( $post['replacement'] ) . ", 
-                `relatement`=" . $db->quote( $post['relatement'] ) . ", 
-                `title`=" . $db->quote( $post['title'] ) . ", 
-                `alias`=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
-                `code`=" . $db->quote( $post['code'] ) . ", 
-                `aid`=" . $post['aid'] . ", 
-                `cid`=" . $post['cid'] . ",               
-                `sid`=" . $post['sid'] . ",                  
-                `sgid`=" . $post['sgid'] . ", 
-                `note`=" . $db->quote( $post['note'] ) . ", 
-                `introtext`=" . $db->quote( $post['introtext'] ) . ", 
-                `bodytext`=" . $db->quote( $post['bodytext'] ) . ", 
-                `keywords`=" . $db->quote( $post['keywords'] ) . ", 
-                `groups_view`=" . $db->quote( $post['groups_view'] ) . ",  
-                `groups_download`=" . $db->quote( $post['groups_download'] ) . ", 
-                `files`=" . $db->quote( $post['files'] ) . ", 
-                `edittime`=" . NV_CURRENTTIME . ", 
-                `publtime`=" . $post['publtime'] . ", 
-                `exptime`=" . $post['exptime'] . ", 
-                `startvalid`=" . $post['startvalid'] . ", 
-                `admin_edit`=" . $admin_info['userid'] . " 
-                WHERE `id`=" . $post['id'];
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET 
+                replacement=" . $db->quote( $post['replacement'] ) . ", 
+                relatement=" . $db->quote( $post['relatement'] ) . ", 
+                title=" . $db->quote( $post['title'] ) . ", 
+                alias=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
+                code=" . $db->quote( $post['code'] ) . ", 
+                aid=" . $post['aid'] . ", 
+                cid=" . $post['cid'] . ",               
+                sid=" . $post['sid'] . ",                  
+                sgid=" . $post['sgid'] . ", 
+                note=" . $db->quote( $post['note'] ) . ", 
+                introtext=" . $db->quote( $post['introtext'] ) . ", 
+                bodytext=" . $db->quote( $post['bodytext'] ) . ", 
+                keywords=" . $db->quote( $post['keywords'] ) . ", 
+                groups_view=" . $db->quote( $post['groups_view'] ) . ",  
+                groups_download=" . $db->quote( $post['groups_download'] ) . ", 
+                files=" . $db->quote( $post['files'] ) . ", 
+                edittime=" . NV_CURRENTTIME . ", 
+                publtime=" . $post['publtime'] . ", 
+                exptime=" . $post['exptime'] . ", 
+                startvalid=" . $post['startvalid'] . ", 
+                admin_edit=" . $admin_info['userid'] . " 
+                WHERE id=" . $post['id'];
             $db->query( $query );
 
-			$sql = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_set_replace` WHERE `nid`=" . $post['id'];
+			$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE nid=" . $post['id'];
 			$db->query( $sql );
 			
 			$replacement = explode( ",", $post['replacement'] );
@@ -289,14 +289,14 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 			
 			foreach( $replacement as $rep )
 			{
-				$db->query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_set_replace` VALUES( NULL, " . $post['id'] . ", " . $rep . " )" );
+				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $post['id'] . ", " . $rep . " )" );
 			}
 			
             nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editRow'], "Id: " . $post['id'], $admin_info['userid'] );
         }
         else
         {
-            $query = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_row` VALUES 
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row VALUES 
                 (NULL, 
                 " . $db->quote( $post['replacement'] ) . ", 
                 " . $db->quote( $post['relatement'] ) . ", 
@@ -322,7 +322,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $_id = $db->insert_id( $query );
 
             $alias .= "-" . $_id;
-            $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_row` SET `alias`=" . $db->quote( $alias ) . " WHERE `id`=" . $_id;
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET alias=" . $db->quote( $alias ) . " WHERE id=" . $_id;
             $db->query( $query );
 
 			$replacement = explode( ",", $post['replacement'] );
@@ -330,7 +330,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 			
 			foreach( $replacement as $rep )
 			{
-				$db->query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_set_replace` VALUES( NULL, " . $_id . ", " . $rep . " )" );
+				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $_id . ", " . $rep . " )" );
 			}
 
             nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addRow'], "Id: " . $_id, $admin_info['userid'] );
@@ -489,10 +489,10 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     $id = $nv_Request->get_int( 'id', 'post', 0 );
 	
-    $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id` = " . $id;
+    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
     $db->query( $query );
 	
-    $query = "DELETE FROM `" . NV_PREFIXLANG . "_" . $module_data . "_set_replace` WHERE `oid` = " . $id;
+    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE oid = " . $id;
     $db->query( $query );
 	
     nv_del_moduleCache( $module_name );
@@ -503,7 +503,7 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
     $id = $nv_Request->get_int( 'id', 'post', 0 );
 	
-    $sql = "SELECT `status` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `id`=" . $id;
+    $sql = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $id;
     $result = $db->query( $sql );
     $num = $result->rowCount();
     if ( ! $num ) die( "ERROR" );
@@ -511,7 +511,7 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     $status = $row['status'];
     if ( $status != 1 ) $status = 1;
     else  $status = 0;
-    $query = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_row` SET `status`=" . $status . " WHERE `id`=" . $id;
+    $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET status=" . $status . " WHERE id=" . $id;
     if ( $db->query( $query ) === false ) die( "ERROR" );
 	
     nv_del_moduleCache( $module_name );
@@ -528,12 +528,12 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
         $cat = $nv_Request->get_int( 'cat', 'get', 0 );
         if ( ! empty( $cat ) and isset( $catList[$cat] ) )
         {
-            $where .= " WHERE `catid`=" . $cat;
+            $where .= " WHERE catid=" . $cat;
             $base_url .= "&cat=" . $cat;
         }
     }
 
-    $sql = "SELECT COUNT(*) as ccount FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row`" . $where;
+    $sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row" . $where;
     $result = $db->query( $sql );
     $all_page = $result->fetch();
     $all_page = $all_page['ccount'];
@@ -543,7 +543,7 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
 
     if ( $all_page )
     {
-        $sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row`" . $where . " ORDER BY `addtime` DESC LIMIT " . $page . "," . $per_page;
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row" . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
         $result = $db->query( $sql );
         $a = 0;
         while ( $row = $result->fetch() )
@@ -575,5 +575,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

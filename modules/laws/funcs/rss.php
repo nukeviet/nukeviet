@@ -41,17 +41,17 @@ if ( ! empty( $nv_laws_listcat ) )
         $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;cat=" . $nv_laws_listcat[$cid]['alias'];
         $channel['description'] = $nv_laws_listcat[$cid]['introduction'];
         
-        $sql = "SELECT `id`, `title`, `alias`, `introtext`, `addtime`
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `cid`=" . $cid . " 
-        AND `status`=1 ORDER BY `edittime` DESC LIMIT 30";
+        $sql = "SELECT id, title, alias, introtext, addtime
+        FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE cid=" . $cid . " 
+        AND status=1 ORDER BY edittime DESC LIMIT 30";
     }
     else
     {
         $in = array_keys( $nv_laws_listcat );
         $in = implode( ",", $in );
-        $sql = "SELECT `id`, `title`, `alias`, `introtext`, `addtime`
-        FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `cid` IN (" . $in . ") 
-        AND `status`=1 ORDER BY `edittime` DESC LIMIT 30";
+        $sql = "SELECT id, title, alias, introtext, addtime
+        FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE cid IN (" . $in . ") 
+        AND status=1 ORDER BY edittime DESC LIMIT 30";
     }
     if ( $module_info['rss'] )
     {
@@ -73,5 +73,3 @@ if ( ! empty( $nv_laws_listcat ) )
 
 nv_rss_generate( $channel, $items );
 die();
-
-?>

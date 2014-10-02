@@ -16,7 +16,7 @@ function nv_module_setting()
 {
     global $module_data;
     
-    $sql = "SELECT `config_name`, `config_value` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_config`";
+    $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
     $list = nv_db_cache( $sql );
     
     $array = array();
@@ -53,8 +53,8 @@ function nv_laws_listcat ( $is_link = false, $is_parentlink = true, $where = 'ca
 {
     global $module_data, $module_name, $module_info;
     
-    $sql = "SELECT `id`, `parentid`, `alias`, `title`, `introduction` , `keywords`
-    FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $where . "` ORDER BY `parentid`,`weight` ASC";
+    $sql = "SELECT id, parentid, alias, title, introduction , keywords
+    FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $where . " ORDER BY parentid,weight ASC";
     
     $list = nv_db_cache( $sql, 'id' );
     
@@ -98,7 +98,7 @@ $nv_laws_listcat = nv_laws_listcat();
 $nv_laws_listarea = nv_laws_listcat( false, false, 'area' );
 $nv_laws_setting = nv_module_setting();
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_subject` ORDER BY `weight` ASC";
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
 $list = nv_db_cache( $sql, 'id' );
 foreach ( $list as $row )
 {
@@ -184,5 +184,3 @@ foreach ( $nv_laws_listcat as $c )
 		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias']
 	);
 }
-
-?>

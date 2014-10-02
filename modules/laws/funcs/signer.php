@@ -18,7 +18,7 @@ if ( empty( $id ) )
     exit();
 }
 
-$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` WHERE `id`=" . $id;
+$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
 $result = $db->query( $sql );
 $signer = $result->fetch();
 
@@ -40,7 +40,7 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 	
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1 AND `signer`=" . $signer['id'] . " ORDER BY `addtime` " . $order . " LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND signer=" . $signer['id'] . " ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
@@ -80,5 +80,3 @@ $contents = nv_theme_laws_signer( $array_data, $generate_page, $signer );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

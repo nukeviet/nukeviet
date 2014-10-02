@@ -68,5 +68,3 @@ if ( ! function_exists( 'nv_law_block_area' ) )
 }
 
 $content = nv_law_block_area();
-
-?>

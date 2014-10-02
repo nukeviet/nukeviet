@@ -34,15 +34,15 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
 				$in = "";
 				if( empty( $cat['subcats'] ) )
 				{
-					$in = " `aid`=" . $cat['id'];
+					$in = " aid=" . $cat['id'];
 				}
 				else
 				{
 					$in = $cat['subcats'];
-					$in = " `aid` IN(" . implode( ",", $in ) . ")";
+					$in = " aid IN(" . implode( ",", $in ) . ")";
 				}
 				
-				$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE" . $in . " AND `status`=1";
+				$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE" . $in . " AND status=1";
 				$result = $db->query( $sql );
 				$num = $result->fetchColumn();
 				
@@ -59,7 +59,7 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
             }
         }
         
-		$sql = "SELECT COUNT(*) FROM `" . NV_PREFIXLANG . "_" . $module_data . "_row` WHERE `status`=1";
+		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1";
 		$result = $db->query( $sql );
 		$num = $result->fetchColumn();
 		
@@ -71,5 +71,3 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
 }
 
 $content = nv_law_block_10area();
-
-?>

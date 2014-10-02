@@ -89,7 +89,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 			$xtpl->parse( 'main.status' );
 		}
 		
-		$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_signer` ORDER BY `title` ASC";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer ORDER BY title ASC";
 		$list = array( 0 => array( "id" => 0, "title" => $lang_module['s_signer_all'], "alias" => "" ) ) + nv_db_cache( $sql, 'id', $module_name );
 		foreach ( $list as $row )
 		{
@@ -108,5 +108,3 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 }
 
 $content = nv_law_block_search();
-
-?>
