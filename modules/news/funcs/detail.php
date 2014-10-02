@@ -43,7 +43,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
 			$news_contents['homeimgalt'] = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
-			if( ! empty( $news_contents['homeimgfile'] ) and $news_contents['imgposition'] > 0 )
+			if( ! empty( $news_contents['homeimgfile'] ) )
 			{
 				$src = $alt = $note = '';
 				$width = $height = 0;
@@ -78,23 +78,25 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					}
 				}
 
-				if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
+				if( ! empty( $src ) )
 				{
-					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-					$meta_property['og:image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
+					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] : NV_MY_DOMAIN . $src;
+
+					if( $news_contents['imgposition'] > 0 )
+					{
+						$news_contents['image'] = array(
+							'src' => $src,
+							'width' => $width,
+							'alt' => $news_contents['homeimgalt'],
+							'note' => $news_contents['homeimgalt'],
+							'position' => $news_contents['imgposition']
+						);
+					}
 				}
 				elseif( !empty( $show_no_image ) )
 				{
 					$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
 				}
-
-				$news_contents['image'] = array(
-					'src' => $src,
-					'width' => $width,
-					'alt' => $news_contents['homeimgalt'],
-					'note' => $news_contents['homeimgalt'],
-					'position' => $news_contents['imgposition']
-				);
 			}
 			elseif( ! empty( $show_no_image ) )
 			{
