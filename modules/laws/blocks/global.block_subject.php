@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_laws_block_subject' ) )
 {
-	function nv_block_config_laws_category( $module, $data_block, $lang_block )
+	function nv_block_config_laws_subject( $module, $data_block, $lang_block )
 	{
 		$html = '';
         $html .= '<tr>';
@@ -31,7 +31,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 		return $html;
 	}
 
-	function nv_block_config_laws_category_submit( $module, $lang_block )
+	function nv_block_config_laws_subject_submit( $module, $lang_block )
 	{
 		global $nv_Request;
 		$return = array();
