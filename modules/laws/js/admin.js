@@ -8,7 +8,6 @@
 function nv_add_files( nv_admin_baseurl, nv_files_dir, nv_lang_delete, nv_lang_select )
 {
 	nv_num_files ++;
-	alert('1');
 	$('#filearea').append(
 		'<div id="fileitem_'+nv_num_files+'">' +
 			'<input class="form-control" style="width: 400px; margin: 4px 4px 0 0;" type="text" name="files[]" id="fileupload_'+nv_num_files+'" value="" />' +
