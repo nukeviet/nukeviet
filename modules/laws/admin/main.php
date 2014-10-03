@@ -411,10 +411,11 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $xtpl->parse( 'add.singers' );                
             
     }            
-
+	
+	$is_editor = 0;
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
     {
-        $xtpl->parse( 'add.is_editor' );
+        $is_editor = 1;
         $_cont = nv_aleditor( 'bodytext', '100%', '300px', $post['bodytext'] );
     }
     else
@@ -469,6 +470,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 	}
 
 	$xtpl->assign( 'NUMFILE', count( $post['files'] ) );
+	$xtpl->assign( 'IS_EDITOR', $is_editor );
 	
     $xtpl->parse( 'add' );
     $contents = $xtpl->text( 'add' );

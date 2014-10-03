@@ -16,11 +16,11 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$("div#pageContent").load("{MODULE_URL}=cat&list&random=" + nv_randomPassword(10))
+		$("div#pageContent").load("{MODULE_URL}=cat&list&random=" + nv_randomPassword(10));
 	});
 	$("input[name=addNew]").click(function() {
 		window.location.href = "{MODULE_URL}=cat&add";
-		return false
+		return false;
 	});
 	//]]>
 </script>
@@ -74,7 +74,7 @@
 		if (a == "") {
 			alert("{LANG.errorIsEmpty}: " + $("input[name=title]").attr("title"));
 			$("input[name=title]").select();
-			return !1
+			return !1;
 		}
 		a = $(this).serialize();
 		var c = $(this).attr("action");
@@ -85,14 +85,14 @@
 			data : a,
 			success : function(b) {
 				if (b == "OK") {
-					window.location.href = "{MODULE_URL}=cat"
+					window.location.href = "{MODULE_URL}=cat";
 				} else {
 					alert(b);
-					$("input[name=submit]").removeAttr("disabled")
+					$("input[name=submit]").removeAttr("disabled");
 				}
 			}
 		});
-		return !1
+		return !1;
 	});
 	//]]>
 </script>
@@ -137,15 +137,15 @@
 		var a = $(this).attr("href");
 		$("div.myh3").append('<span> &raquo; <a class="mycat" href="' + a + '">' + $(this).text() + "</a></span>");
 		$("div#pageContent").load("{MODULE_URL}=cat&list&parentid=" + a + "&random=" + nv_randomPassword(10));
-		return !1
+		return !1;
 	});
 	$("a.mycat").click(function() {
 		if ($(this).parent().next().text() != "") {
 			$(this).parent().nextAll().remove();
 			var a = $(this).attr("href"), a = a != "0" ? "&parentid=" + a : "";
-			$("div#pageContent").load("{MODULE_URL}=cat&list" + a + "&random=" + nv_randomPassword(10))
+			$("div#pageContent").load("{MODULE_URL}=cat&list" + a + "&random=" + nv_randomPassword(10));
 		}
-		return !1
+		return !1;
 	});
 	$("a.del").click(function() {
 		confirm("{LANG.delConfirm} ?") && $.ajax({
@@ -153,10 +153,10 @@
 			url : "{MODULE_URL}=cat",
 			data : "del=" + $(this).attr("href"),
 			success : function(a) {
-				a == "OK" ? window.location.href = window.location.href : alert(a)
+				a == "OK" ? window.location.href = window.location.href : alert(a);
 			}
 		});
-		return !1
+		return !1;
 	});
 	$("select.newWeight").change(function() {
 		var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
@@ -167,10 +167,10 @@
 			data : "cWeight=" + b + "&id=" + a,
 			success : function(a) {
 				a == "OK" ? ( a = $("table.tab1").attr("summary"), $("div#pageContent").load("{MODULE_URL}=cat&list&parentid=" + a + "&random=" + nv_randomPassword(10))) : alert("{LANG.errorChangeWeight}");
-				$(c).removeAttr("disabled")
+				$(c).removeAttr("disabled");
 			}
 		});
-		return !1
+		return !1;
 	});
 	//]]>
 </script>

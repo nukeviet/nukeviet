@@ -12,11 +12,11 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(function() {
-		$("div#pageContent").load("{MODULE_URL}=subject&list&random=" + nv_randomPassword(10))
+		$("div#pageContent").load("{MODULE_URL}=subject&list&random=" + nv_randomPassword(10));
 	});
 	$("input[name=addNew]").click(function() {
 		window.location.href = "{MODULE_URL}=subject&add";
-		return !1
+		return !1;
 	});
 	//]]>
 </script>
@@ -61,7 +61,7 @@
 		if (a == "") {
 			alert("{LANG.errorIsEmpty}: " + $("input[name=title]").attr("title"));
 			$("input[name=title]").select();
-			return !1
+			return !1;
 		}
 		a = $(this).serialize();
 		var c = $(this).attr("action");
@@ -72,14 +72,14 @@
 			data : a,
 			success : function(b) {
 				if (b == "OK") {
-					window.location.href = "{MODULE_URL}=subject"
+					window.location.href = "{MODULE_URL}=subject";
 				} else {
 					alert(b);
-					$("input[name=submit]").removeAttr("disabled")
+					$("input[name=submit]").removeAttr("disabled");
 				}
 			}
 		});
-		return !1
+		return !1;
 	});
 	//]]>
 </script>
@@ -118,10 +118,10 @@
 			url : "{MODULE_URL}=subject",
 			data : "del=" + $(this).attr("href"),
 			success : function(a) {
-				a == "OK" ? window.location.href = window.location.href : alert(a)
+				a == "OK" ? window.location.href = window.location.href : alert(a);
 			}
 		});
-		return !1
+		return !1;
 	});
 	$("select.newWeight").change(function() {
 		var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
@@ -132,10 +132,10 @@
 			data : "cWeight=" + b + "&id=" + a,
 			success : function(a) {
 				a == "OK" ? ( a = $("table.tab1").attr("summary"), $("div#pageContent").load("{MODULE_URL}=subject&list&random=" + nv_randomPassword(10))) : alert("{LANG.errorChangeWeight}");
-				$(c).removeAttr("disabled")
+				$(c).removeAttr("disabled");
 			}
 		});
-		return !1
+		return !1;
 	});
 	//]]>
 </script>

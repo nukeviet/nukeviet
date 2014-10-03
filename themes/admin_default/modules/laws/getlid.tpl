@@ -107,15 +107,15 @@ $("#formgetuid").submit(function() {
   $("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
   $.ajax({type:"GET", url:a, success:function(c) {
     $("#resultdata").html(c);
-    $("#formgetuid input, #formgetuid select").removeAttr("disabled")
+    $("#formgetuid input, #formgetuid select").removeAttr("disabled");
   }});
-  return!1
+  return!1;
 });
 $(".reset").click(function() {
   $("[type=text]").val('');
   $("select[name=gender]").val('');
   $("#resultdata").html('');
-  return!1
+  return!1;
 });
 //]]>
 </script>
@@ -186,7 +186,7 @@ function nv_close_pop ( id ) {
 $("thead a,.generatePage a").click(function() {
   var a = $(this).attr("href");
   $("#resultdata").load(a);
-  return!1
+  return!1;
 });
 //]]>
 </script>

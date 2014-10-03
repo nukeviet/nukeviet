@@ -137,7 +137,7 @@
 						<td>
 						<div id="filearea">
 							<!-- BEGIN: files -->
-							<div id="fileitem_{FILEUPL.id}">
+							<div id="fileitem_{FILEUPL.id}" style="margin-bottom: 5px">
 								<input title="{LANG.fileupload}" class="form-control" type="text" name="files[]" id="fileupload_{FILEUPL.id}" value="{FILEUPL.value}" style="width: 400px" />
 								<input onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=fileupload_{FILEUPL.id}&path={UPLOADS_DIR_USER}&type=file', 'NVImg', '850', '500', 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' );return false;" type="button" value="Browse server" class="selectfile btn btn-primary" />
 								<input onclick="nv_delete_datacontent('fileitem_{FILEUPL.id}');return false;" type="button" value="{GLANG.delete}" class="selectfile btn btn-danger" />
@@ -233,7 +233,8 @@
 		buttonImageOnly : true
 	});
 
-	var nv_num_files = {NUMFILE};
+	var nv_num_files = '{NUMFILE}';
+	var nv_is_editor = '{IS_EDITOR}';
 	
 	$(document).ready(function() {
 		$("#replacementSearch").click(function() {
@@ -248,24 +249,6 @@
 			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=getlid&area=supplement", "NVImg", "850", "600", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 			return false;
 		});
-		$('select[name=who_view]').change(function() {
-			if ($(this).val() == 3) {
-				$('#group_view').removeClass('groupcss0');
-				$('#group_view').addClass('groupcss1');
-			} else {
-				$('#group_view').removeClass('groupcss1');
-				$('#group_view').addClass('groupcss0');
-			}
-		});
-		$('select[name=who_download]').change(function() {
-			if ($(this).val() == 3) {
-				$('#groups_download').removeClass('groupcss0');
-				$('#groups_download').addClass('groupcss1');
-			} else {
-				$('#groups_download').removeClass('groupcss1');
-				$('#groups_download').addClass('groupcss0');
-			}
-		});
 	});
 	$("form#addRow").submit(function() {
 		var a = $("[name=title]").val();
@@ -274,13 +257,13 @@
 		if (a.length < 2) {
 			alert("{LANG.errorIsEmpty}: {LANG.title}");
 			$("[name=title]").select();
-			return !1
+			return !1;
 		}
 
 		if (trim($("[name=code]").val()) == "") {
 			alert("{LANG.errorAreaYesCode}");
 			$("[name=code]").select();
-			return !1
+			return !1;
 		}
 
 		a = $("[name=introtext]").val();
@@ -289,12 +272,13 @@
 		if (a.length < 2) {
 			alert("{LANG.errorIsEmpty}: {LANG.introtext}");
 			$("[name=introtext]").select();
-			return !1
+			return !1;
 		}
 
-		<!-- BEGIN: is_editor -->
-		$("textarea[name=bodytext]").val(CKEDITOR.instances.laws_bodytext.getData());	 
-		<!-- END: is_editor -->
+		if( nv_is_editor == '1' )
+		{
+			$("textarea[name=bodytext]").val(CKEDITOR.instances.laws_bodytext.getData());
+		}
 		
 		a = $(this).serialize();
 		var b = $(this).attr("action");
@@ -309,10 +293,10 @@
 				} else {
 					alert(c);
 				}
-				$("[type=submit]").removeAttr("disabled")
+				$("[type=submit]").removeAttr("disabled");
 			}
 		});
-		return !1
+		return !1;
 	});
 	//]]>
 </script>
