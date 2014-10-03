@@ -30,6 +30,7 @@ $lang_module['feature'] = "Chức năng";
 $lang_module['hl0'] = "Còn hiệu lực";
 $lang_module['hl1'] = "Hết hiệu lực";
 
+$lang_module['add_laws'] = "Thêm văn bản";
 $lang_module['logChangeWeight'] = "Thay đổi thứ tự thể loại";
 $lang_module['bodytexterror'] = "Bạn chưa nhập nội dung cho phần nội dung chi tiết";
 $lang_module['errorCatNotExists'] = "Lỗi! Thể loại này không tồn tại";
@@ -73,6 +74,7 @@ $lang_module['erroNotSelectCat'] = "Lỗi! Bạn chưa chọn Thể loại";
 $lang_module['erroNotSelectArea'] = "Lỗi! Bạn chưa chọn Lĩnh vực";
 $lang_module['erroNotSelectSubject'] = "Lỗi! Bạn chưa chọn Cơ quan Ban hành";
 $lang_module['erroNotSelectSinger'] = "Lỗi ! Bạn chưa chọn Người ký văn bản";
+$lang_module['erroNotSelectPubtime'] = "Lỗi ! Bạn chưa chọn ngày ban hành văn bản";
 $lang_module['introtext'] = "Mô tả ngắn gọn";
 $lang_module['editRow'] = "Sửa Thông tin Văn bản";
 $lang_module['addRow'] = "Thêm Văn bản";
@@ -140,3 +142,5 @@ $lang_module['type_view_0'] = "Mới nhất lên trên";
 $lang_module['type_view_1'] = "Cũ nhất lên trên";
 
 $lang_module['wait'] = "Vui lòng đợi...";
+
+$lang_module['search_error'] = "Chọn ít nhất một điều kiện tìm kiếm";

@@ -121,8 +121,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         if ( ! isset( $sgList[$post['sgid']] ) )
         {
             die( $lang_module['erroNotSelectSinger'] );
-                    
-        }                                
+        }
 
         $post['introtext'] = $nv_Request->get_title( 'introtext', 'post', '', 1 );
         $post['introtext'] = nv_nl2br( $post['introtext'], "<br />" );
@@ -233,6 +232,11 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         {
             $post['publtime'] = 0;
         }
+        if ( empty( $post['publtime'] ) )
+        {
+            die( $lang_module['erroNotSelectPubtime'] );
+        }
+		
         $post['exptime'] = nv_substr( $nv_Request->get_title( 'exptime', 'post', '', 1 ), 0, 10);
         unset( $m );
         if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['exptime'], $m ) )
@@ -527,15 +531,44 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
     $where = "";
     if ( $nv_Request->isset_request( 'cat', 'get' ) )
     {
-        $cat = $nv_Request->get_int( 'cat', 'get', 0 );
-        if ( ! empty( $cat ) and isset( $catList[$cat] ) )
+    	$keywords = $nv_Request->get_string( 'keywords', 'get', '' );
+        $cid = $nv_Request->get_int( 'cat', 'get', 0 );
+		$aid = $nv_Request->get_int( 'aid', 'get', 0 );
+		$sid = $nv_Request->get_int( 'sid', 'get', 0 );
+		$sgid = $nv_Request->get_int( 'sgid', 'get', 0 );
+		
+        if ( ! empty( $keywords ) )
         {
-            $where .= " WHERE catid=" . $cat;
-            $base_url .= "&cat=" . $cat;
+            $where .= " AND title like '%" . $keywords . "%' OR code like '%" . $keywords . "%' OR note like '%" . $keywords . "%' OR introtext like '%" . $keywords . "%' OR bodytext like '%" . $keywords . "%'";
+            $base_url .= "&keywords=" . $keywords;
+        }
+		
+        if ( ! empty( $cid ) and isset( $catList[$cid] ) )
+        {
+            $where .= " AND cid=" . $cid;
+            $base_url .= "&cat=" . $cid;
+        }
+		
+        if ( ! empty( $aid ) and isset( $aList[$aid] ) )
+        {
+            $where .= " AND aid=" . $aid;
+            $base_url .= "&aid=" . $aid;
+        }
+		
+        if ( ! empty( $sid ) and isset( $sList[$sid] ) )
+        {
+            $where .= " AND sid=" . $sid;
+            $base_url .= "&sid=" . $sid;
+        }
+		
+        if ( ! empty( $sgid ) and isset( $sgList[$sgid] ) )
+        {
+            $where .= " AND sgid=" . $sgid;
+            $base_url .= "&sgid=" . $sgid;
         }
     }
 
-    $sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row" . $where;
+    $sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE 1=1 " . $where;
     $result = $db->query( $sql );
     $all_page = $result->fetch();
     $all_page = $all_page['ccount'];
@@ -545,7 +578,7 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
 
     if ( $all_page )
     {
-        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row" . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
+        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE 1=1 " . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
         $result = $db->query( $sql );
         $a = 0;
         while ( $row = $result->fetch() )
@@ -569,8 +602,40 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
     exit;
 }
 
+$search = array(
+	'keywords' => '',
+	'cid' => 0,
+	'aid' => 0,
+	'sid' => 0
+);
+
+foreach ( $catList as $_cat )
+{
+    $xtpl->assign( 'CATOPT', $_cat );
+    $xtpl->parse( 'main.catParent' );
+}
+
+foreach ( $aList as $_aList )
+{
+    $xtpl->assign( 'ALIST', $_aList );
+    $xtpl->parse( 'main.alist' );
+}
+
+foreach ( $sList as $_sList )
+{
+    $xtpl->assign( 'SLIST', $_sList );
+    $xtpl->parse( 'main.slist' );
+}
+
+foreach ( $sgList as $_sgList )
+{
+    $xtpl->assign( 'SGLIST', $_sgList );
+    $xtpl->parse( 'main.sglist' );
+}
+
 $xtpl->assign( 'BASE_LOAD', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&list" );
 $xtpl->assign( 'ADD_LINK', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&add" );
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
