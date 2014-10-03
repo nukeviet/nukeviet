@@ -12,7 +12,7 @@ if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_law_block_top_view' ) )
 {
-    function nv_law_block_top_view ()
+    function nv_law_block_top_view()
     {
         global $lang_module, $module_info, $module_file, $nv_laws_listsubject, $module_name, $db, $module_data;
 		
@@ -44,4 +44,7 @@ if ( ! function_exists( 'nv_law_block_top_view' ) )
     }
 }
 
-$content = nv_law_block_top_view();
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_law_block_top_view();
+}

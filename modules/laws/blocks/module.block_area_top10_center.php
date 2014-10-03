@@ -70,4 +70,7 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
     }
 }
 
-$content = nv_law_block_10area();
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_law_block_10area();
+}

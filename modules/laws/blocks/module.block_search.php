@@ -107,4 +107,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
     }
 }
 
-$content = nv_law_block_search();
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_law_block_search();
+}

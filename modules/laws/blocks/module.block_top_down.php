@@ -44,4 +44,7 @@ if ( ! function_exists( 'nv_law_block_top_down' ) )
     }
 }
 
-$content = nv_law_block_top_down();
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_law_block_top_down();
+}

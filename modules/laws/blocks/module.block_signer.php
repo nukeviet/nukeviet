@@ -43,4 +43,7 @@ if ( ! function_exists( 'nv_law_block_singer' ) )
     }
 }
 
-$content = nv_law_block_singer();
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_law_block_singer();
+}
