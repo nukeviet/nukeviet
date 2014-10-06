@@ -1,14 +1,19 @@
 <!-- BEGIN: list -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col />
+			<col class="w100" />
+			<col span="4" class="w150" />
+		</colgroup>
 		<thead>
 			<tr>
 				<th>{LANG.title}</th>
 				<th>{LANG.code}</th>
 				<th>{LANG.publtime}</th>
 				<th>{LANG.exptime}</th>
-				<th class="text-center" style="width:150px">{LANG.status}</th>
-				<th class="text-center" style="width:120px">{LANG.feature}</th>
+				<th class="text-center">{LANG.status}</th>
+				<th class="text-center">{LANG.feature}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,7 +57,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.areaSel}</label>
-			<select class="form-control" name="aid">
+			<select class="form-control" name="aid" style="max-width: 200px">
 				<option value="">---{LANG.areaSel}---</option>
 				<!-- BEGIN: alist -->
 				<option value="{ALIST.id}">{ALIST.title}</option>
@@ -61,7 +66,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.subjectSel}</label>
-			<select class="form-control" name="sid">
+			<select class="form-control" name="sid" style="max-width: 200px">
 				<option value="">---{LANG.subjectSel}---</option>
 				<!-- BEGIN: slist -->
 				<option value="{SLIST.id}">{SLIST.title}</option>
@@ -70,7 +75,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.signer}</label>
-			<select class="form-control" name="sgid">
+			<select class="form-control" name="sgid" style="max-width: 200px">
 				<option value="">---{LANG.signer}---</option>
 				<!-- BEGIN: sglist -->
 				<option value="{SGLIST.id}">{SGLIST.title}</option>
