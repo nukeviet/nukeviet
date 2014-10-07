@@ -1,12 +1,14 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<tr>
-			<th class="text-center" style="width:20px">{LANG.stt}</th>
-			<th class="text-center" style="width:100px">{LANG.code}</th>
-			<th class="text-center" style="width:120px">{LANG.publtime}</th>
-			<th class="text-center">{LANG.introtext}</th>
-		</tr>
+		<thead>
+			<tr>
+				<th class="text-center" style="width:20px">{LANG.stt}</th>
+				<th class="text-center" style="width:100px">{LANG.code}</th>
+				<th class="text-center" style="width:120px">{LANG.publtime}</th>
+				<th class="text-center">{LANG.introtext}</th>
+			</tr>
+		</thead>
 		<tbody>
 		<!-- BEGIN: loop -->
 			<tr>

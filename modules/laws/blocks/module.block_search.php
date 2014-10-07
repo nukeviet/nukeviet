@@ -8,18 +8,51 @@
  * @Createdate Jul 06, 2011, 06:31:13 AM
  */
 
-if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if ( ! function_exists( 'nv_law_block_search' ) )
 {
-    function nv_law_block_search ()
-    {
-        global $my_head, $lang_module, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
+	function nv_block_config_laws_search( $module, $data_block, $lang_block )
+	{
+		$html = '';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['style'] . '</td>';
+        $html .= '<td>';
+		$html .= "<select name=\"config_style\" class=\"form-control w200\">\n";
+		$sel = $data_block['style'] == 'center' ? 'selected="selected"' : '';
+		$html .= '<option value="center" ' . $sel . '>Center</option>';
+		$sel = $data_block['style'] == 'vertical' ? 'selected="selected"' : '';
+		$html .= '<option value="vertical" ' . $sel . '>Vertical</option>';
+		$html .= "</select>\n";
+        $html .= '</td>';
+        $html .= '</tr>';
 		
+		return $html;
+	}
+
+	function nv_block_config_laws_search_submit( $module, $lang_block )
+	{
+		global $nv_Request;
+		$return = array();
+		$return['error'] = array();
+		$return['config'] = array();
+		$return['config']['style'] = $nv_Request->get_string( 'config_style', 'post', '' );
+		return $return;
+	}
+	
+    function nv_law_block_search( $block_config )
+    {
+        global $my_head, $lang_module, $site_mods, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
+        
+		$module = $block_config['module'];
+		$module_data = $site_mods[$module]['module_data'];
+		$module_file = $site_mods[$module]['module_file'];
+
 		if ( empty( $my_head ) or ! preg_match( "/\/popcalendar\.js[^>]+>/", $my_head ) )
 		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
 		
-        $xtpl = new XTemplate( "block_search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+		$block_file_name = $block_config['style'] == 'center' ? 'block_search_center.tpl' : 'block_search_vertical.tpl';
+        $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
         $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -109,5 +142,5 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_law_block_search();
+	$content = nv_law_block_search( $block_config );
 }
