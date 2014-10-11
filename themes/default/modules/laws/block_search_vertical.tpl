@@ -15,12 +15,12 @@
 
 	<div class="form-group form-inline">
 		<label class="control-label">{LANG.s_pubtime}</label>
-		<input class="form-control" id="ls_from" style="width: 93%" type="text" name="sfrom" value="{FROM}" readonly="readonly"/>
+		<input class="form-control" id="ls_from" style="width: 90%" type="text" name="sfrom" value="{FROM}" readonly="readonly"/>
 	</div>
-	
+
 	<div class="form-group form-inline">
 		<label class="control-label">{LANG.to}</label>
-		<input class="form-control" id="ls_to" style="width: 93%" type="text" name="sto" value="{TO}" readonly="readonly"/>
+		<input class="form-control" id="ls_to" style="width: 90%" type="text" name="sto" value="{TO}" readonly="readonly"/>
 	</div>
 
 	<div class="form-group">
