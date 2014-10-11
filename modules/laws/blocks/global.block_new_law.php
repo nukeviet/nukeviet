@@ -76,6 +76,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 			if( $module_name != $module )
 			{
 				$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/laws.css\" />";
+
 				$temp_lang_module = $lang_module;
 				$lang_module = array();
 				include NV_ROOTDIR . '/modules/' . $site_mods[$module]['module_file'] . '/language/' . NV_LANG_INTERFACE . '.php' ;
@@ -102,6 +103,8 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 				{
 					$row['stitle'] = $row['title'];
 				}
+
+				$row['publtime'] = nv_date( 'd/m/Y', $row['publtime'] );
 
 				$xtpl->assign( 'ROW', $row );
 
