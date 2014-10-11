@@ -28,7 +28,6 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$ck = $data_block['show_code'] ? 'checked="checked"' : '';
 		$html .= '<td><input type="checkbox" name="config_show_code" value="1" ' . $ck . ' /></td>';
         $html .= '</tr>';
-
 		return $html;
 	}
 
@@ -52,7 +51,12 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
         $data = $site_mods[$module]['module_data'];
         $modfile = $site_mods[$module]['module_file'];
 
-		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $data . "_row WHERE status=1 ORDER BY addtime DESC LIMIT 0," . $block_config['numrow'];
+		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 10;
+		$title_length = ( isset( $block_config['title_length'] ) ) ? $block_config['title_length'] : 0;
+		$show_code = ( isset( $block_config['show_code'] ) ) ? $block_config['show_code'] : 1;
+
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $data . "_row WHERE status=1 ORDER BY addtime DESC LIMIT 0," . $numrow;
+
 		$result = $db->query( $sql );
 		$numrow = $result->rowCount();
 
@@ -92,7 +96,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
 				if( ! empty( $block_config['title_length'] ) )
 				{
-					$row['stitle'] = nv_clean60( $row['title'], $block_config['title_length'] );
+					$row['stitle'] = nv_clean60( $row['title'], $title_length );
 				}
 				else
 				{
@@ -101,7 +105,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
 				$xtpl->assign( 'ROW', $row );
 
-				if( isset( $block_config['show_code'] ) and $block_config['show_code'] )
+				if( $show_code )
 				{
 					$xtpl->parse( 'main.loop.code' );
 				}
