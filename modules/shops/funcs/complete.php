@@ -22,7 +22,7 @@ if( file_exists( NV_ROOTDIR . "/modules/" . $module_file . "/payment/" . $paymen
 	$stmt->execute();
 	if( $stmt->rowCount() )
 	{
-		$row = $result->fetch();
+		$row = $stmt->fetch();
 		$payment_config = unserialize( nv_base64_decode( $row['config'] ) );
 		$payment_config['paymentname'] = $row['paymentname'];
 		$payment_config['domain'] = $row['domain'];

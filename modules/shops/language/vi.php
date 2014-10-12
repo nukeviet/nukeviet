@@ -232,6 +232,7 @@ $lang_module['order_email_noreply'] = 'Đây là email được gửi tự độ
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
 $lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! chúng tôi sẽ gửi hàng cho bạn sớm nhất';
 $lang_module['payment_erorr'] = 'Quá trình thanh toán có lỗi do một lý do nào đó';
+$lang_module['payment_paypal_pay'] = 'Thanh toán đơn hàng %s';
 $lang_module['cart_title'] = 'Giỏ hàng';
 $lang_module['cart_product_title'] = 'mặt hàng';
 $lang_module['cart_product_total'] = 'Tổng';

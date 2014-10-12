@@ -44,3 +44,4 @@
 !/themes/default/modules/shops/*
 !/service_shops_nganluong.php
 !/includes/class/nusoap.php
+!/includes/class/PayPal/*
