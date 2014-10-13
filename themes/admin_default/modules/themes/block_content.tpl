@@ -147,8 +147,8 @@
 	</div>
 	<div style="padding:10px;text-align:center">
 		<input type="hidden" name="bid" value="{ROW.bid}" />
-		<input type="button" onclick="window.close()" value="{LANG.back}" class="btn btn-primary" />
 		<input type="submit" name="confirm" value="{LANG.block_confirm}" class="btn btn-primary" />
+		<input type="button" onclick="window.close()" value="{LANG.back}" class="btn btn-default" />
 	</div>
 </form>
 
