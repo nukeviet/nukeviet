@@ -15,10 +15,20 @@
 			</li>
 			<!-- BEGIN: top_menu -->
 			<li{TOP_MENU.current}>
+                <!-- BEGIN: icon -->
+                <img src="{TOP_MENU.icon}" />&nbsp;
+                <!-- END: icon -->
 				<a href="{TOP_MENU.link}" title="{TOP_MENU.title}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
 				<!-- BEGIN: sub -->
 				<ul class="dropdown-menu">
-					<!-- BEGIN: item --><li><a href="{SUB.link}" title="{SUB.title}" {SUB.target}>{SUB.title_trim}</a></li><!-- END: item -->
+					<!-- BEGIN: item -->
+                    <li>
+                        <!-- BEGIN: icon -->
+                        <img src="{SUB.icon}" />&nbsp;
+                        <!-- END: icon -->
+                        <a href="{SUB.link}" title="{SUB.title}" {SUB.target}>{SUB.title_trim}</a>
+                    </li>
+                    <!-- END: item -->
 				</ul>
 				<!-- END: sub -->
 			</li>

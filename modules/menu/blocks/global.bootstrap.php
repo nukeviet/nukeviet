@@ -8,7 +8,7 @@
  * @Createdate Jan 17, 2011 11:34:27 AM
  */
 
-if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_FILE_THEMES' ) )
 {
@@ -16,7 +16,7 @@ if( defined( 'NV_IS_FILE_THEMES' ) )
 	require NV_ROOTDIR . '/modules/menu/menu_config.php';
 }
 
-if( !nv_function_exists( 'nv_menu_bootstrap' ) )
+if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 {
 
 	/**
@@ -32,27 +32,24 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 
 		$url = nv_unhtmlspecialchars( $url );
 
-		if( $client_info['selfurl'] == $url )
-			return true;
+		if( $client_info['selfurl'] == $url ) return true;
 		// Chinh xac tuyet doi
 
 		$_curr_url = NV_BASE_SITEURL . str_replace( $global_config['site_url'] . '/', '', $client_info['selfurl'] );
 		$_url = nv_url_rewrite( $url, true );
 
-		if( $home and ($_url == nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . 'index.php' or $_url == NV_BASE_SITEURL) )
+		if( $home and ( $_url == nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA ) or $_url == NV_BASE_SITEURL . 'index.php' or $_url == NV_BASE_SITEURL ) )
 		{
 			return true;
 		}
 		elseif( $type == 2 )
 		{
-			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) )
-				return true;
+			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
 		}
 		elseif( $type == 1 )
 		{
-			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) )
-				return true;
+			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
 			return false;
 		}
 		elseif( $_curr_url == $_url )
@@ -105,7 +102,14 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 					default:
 						$row['target'] = ' onclick="this.target=\'_blank\'"';
 				}
-
+				if( ! empty( $row['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'] ) )
+				{
+					$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
+				}
+				else
+				{
+					$row['icon'] = '';
+				}
 				$array_menu[$row['parentid']][$row['id']] = array(
 					'id' => $row['id'],
 					'title' => $row['title'],
@@ -113,9 +117,10 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 					'target' => $row['target'],
 					'note' => empty( $row['note'] ) ? $row['title'] : $row['note'],
 					'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
+					'icon' => $row['icon'],
 					'css' => $row['css'],
 					'active_type' => $row['active_type'],
-				);
+					);
 			}
 		}
 
@@ -134,6 +139,10 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 				foreach( $array_menu[$id] as $sid => $sitem )
 				{
 					$xtpl->assign( 'SUB', $sitem );
+					if( ! empty( $sitem['icon'] ) )
+					{
+						$xtpl->parse( 'main.top_menu.sub.item.icon' );
+					}
 					$xtpl->parse( 'main.top_menu.sub.item' );
 				}
 				$xtpl->parse( 'main.top_menu.sub' );
@@ -143,16 +152,20 @@ if( !nv_function_exists( 'nv_menu_bootstrap' ) )
 			{
 				$classcurrent[] = 'active';
 			}
-			if( !empty( $item['class'] ) )
+			if( ! empty( $item['class'] ) )
 			{
 				$classcurrent[] = $item['class'];
 			}
-			$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent )) . '"';
+			$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent ) ) . '"';
 			$xtpl->assign( 'TOP_MENU', $item );
+			if( ! empty( $item['icon'] ) )
+			{
+				$xtpl->parse( 'main.top_menu.icon' );
+			}
 			$xtpl->parse( 'main.top_menu' );
 		}
 		// Active home menu
-		if( !empty( $home ) )
+		if( ! empty( $home ) )
 		{
 			$xtpl->parse( 'main.home_active' );
 		}

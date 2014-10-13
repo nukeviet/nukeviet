@@ -31,7 +31,12 @@
 					<option value="{stt}" {select}>{stt}</option>
 					<!-- END: weight -->
 				</select></td>
-				<td><a href="{ROW.url_title}"><strong>{ROW.title} </strong></a>
+				<td>
+                    <!-- BEGIN: icon -->
+                    <img src="{ROW.icon}" height="20px" />
+                    <!-- END: icon -->
+                    <a href="{ROW.url_title}"><strong>{ROW.title} </strong>
+                </a>
 				<!-- BEGIN: sub -->
 				(<span class="requie">{ROW.sub} {LANG.sub_menu}</span>)
 				<!-- END: sub -->
@@ -122,6 +127,14 @@
 					<td><input type="text" name="link" class="w300 form-control" value="{DATA.link}" id="link"/></td>
 					<td>&nbsp;</td>
 				</tr>
+                <tr>
+					<td><strong>{LANG.icon}</strong></td>
+					<td>
+						<input class="form-control w200 pull-left" type="text" name="icon" id="icon" value="{DATA.icon}"/>
+						&nbsp;<input type="button" value="Browse" name="selectimg" class="btn btn-info" />
+					</td>
+                    <td>&nbsp;</td>
+				</tr>
 				<tr>
 					<td><strong>{LANG.note}</strong></td>
 					<td><input type="text" name="note" class="w300 form-control" value="{DATA.note}"/></td>
@@ -166,4 +179,14 @@
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+	$("input[name=selectimg]").click(function() {
+		var area = "icon";
+		var path = "{UPLOAD_CURRENT}";
+		var currentpath = "{UPLOAD_CURRENT}";
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+</script>
 <!-- END: main -->
