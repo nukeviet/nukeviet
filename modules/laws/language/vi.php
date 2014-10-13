@@ -26,6 +26,7 @@ $lang_module['subject'] = "Cơ quan ban hành";
 $lang_module['files'] = "File đính kèm";
 $lang_module['view_hits'] = "lượt xem";
 $lang_module['download_hits'] = "lượt tải";
+$lang_module['trichyeu'] = "Trích yếu";
 
 $lang_module['title'] = "Tên văn bản";
 $lang_module['replacement'] = "Văn bản thay thế";
@@ -68,3 +69,5 @@ $lang_module['s_signer_all'] = "-- Tất cả --";
 $lang_module['s_result'] = "Kết quả tìm kiếm:";
 $lang_module['s_noresult'] = "Không có kết quả nào phù hợp với yêu cầu của bạn";
 $lang_module['s_result_num'] = "%d văn bản";
+
+$lang_module['download'] = "Tải tập tin";
