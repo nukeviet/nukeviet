@@ -68,7 +68,7 @@ while ( $row = $result->fetch() )
 				$file_title = basename( $file );
 				$row['files'][] = array(
 					"title" => $file_title,
-					"title0" => nv_clean60( $file_title, 10 ),
+					"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
 					"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
 				);
 			}

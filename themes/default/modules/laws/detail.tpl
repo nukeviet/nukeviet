@@ -85,7 +85,7 @@
 <h3 class="lawh3">{LANG.files}</h3>
 <ul class="list-item">
 	<!-- BEGIN: loop -->
-	<li><a href="{FILE.url}" title="{FILE.title}">{FILE.title}</a></li>
+	<li><a href="{FILE.url}" title="{FILE.title}">{FILE.titledown}</a></li>
 	<!-- END: loop -->
 </ul>
 <!-- END: files -->

@@ -31,7 +31,7 @@
 					<!-- BEGIN: files -->
 						<ul style="padding: 0">
 							<!-- BEGIN: loopfile -->
-							<li style="display: inline-block"><em class="fa fa-download">&nbsp;</em><a href="{FILE.url}" title="{FILE.title}">{FILE.title0}</a></li>
+							<li style="display: inline-block"><em class="fa fa-download">&nbsp;</em><a href="{FILE.url}" title="{FILE.title}">{FILE.titledown}</a></li>
 							<!-- END: loopfile -->
 						</ul>
 					<!-- END: files -->
