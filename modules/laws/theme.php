@@ -116,11 +116,6 @@ function nv_theme_laws_detail ( $array_data )
 			$xtpl->parse( 'main.files' );
 		}
 	}
-	elseif( $array_data['groups_download'] == 4 )
-	{
-		$xtpl->assign( 'URLLOGIN', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=login&nv_redirect=" . nv_base64_encode( $client_info['selfurl'] ) );
-		$xtpl->parse( 'main.logindownload' );
-	}
 	else
 	{
 		$xtpl->parse( 'main.nodownload' );

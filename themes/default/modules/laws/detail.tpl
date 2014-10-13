@@ -81,7 +81,6 @@
 {DATA.bodytext}
 <!-- END: bodytext -->
 
-<div style="height:10px"></div>
 <!-- BEGIN: files -->
 <h3 class="lawh3">{LANG.files}</h3>
 <ul class="list-item">
@@ -90,12 +89,10 @@
 	<!-- END: loop -->
 </ul>
 <!-- END: files -->
-<!-- BEGIN: logindownload -->
-<h3 class="lawh3">{LANG.files}</h3>
-<p class="text-center"><a href="{URLLOGIN}" title="">{LANG.info_download_login}</a></p>
-<!-- END: logindownload -->
+
 <!-- BEGIN: nodownload -->
 <h3 class="lawh3">{LANG.files}</h3>
 <p class="text-center">{LANG.info_download_no}</p>
 <!-- END: nodownload -->
+
 <!-- END: main -->
