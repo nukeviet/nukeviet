@@ -12,21 +12,40 @@ if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
 
 function nv_theme_laws_main ( $array_data, $generate_page )
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
     $xtpl->assign( 'generate_page', $generate_page );
 
-	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
+
+		if( $nv_laws_setting['down_in_home'] )
+		{
+			if ( nv_user_in_groups( $row['groups_download'] ) )
+			{
+				if( ! empty( $row['files'] ) )
+				{
+					foreach( $row['files'] as $file )
+					{
+						$xtpl->assign( 'FILE', $file );
+						$xtpl->parse( 'main.loop.down_in_home.files.loopfile' );
+					}
+					$xtpl->parse( 'main.loop.down_in_home.files' );
+				}
+			}
+			$xtpl->parse( 'main.loop.down_in_home' );
+		}
 		$xtpl->parse( 'main.loop' );
-		$i ++;
+	}
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		$xtpl->parse( 'main.down_in_home' );
 	}
 
     $xtpl->parse( 'main' );
@@ -39,22 +58,22 @@ function nv_theme_laws_detail ( $array_data )
 
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
-	
+
 	$array_data['publtime'] = $array_data['publtime'] ? nv_date( "d/m/Y", $array_data['publtime'] ) : "N/A";
 	$array_data['startvalid'] = $array_data['startvalid'] ? nv_date( "d/m/Y", $array_data['startvalid'] ) : "N/A";
 	$array_data['exptime'] = $array_data['exptime'] ? nv_date( "d/m/Y", $array_data['exptime'] ) : "N/A";
-	
+
 	$array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
 	$array_data['area'] = $nv_laws_listarea[$array_data['aid']]['title'];
 	$array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
-	
+
     $xtpl->assign( 'DATA', $array_data );
-	
+
 	if( ! empty( $array_data['bodytext'] ) )
 	{
 		$xtpl->parse( 'main.bodytext' );
 	}
-	
+
 	if( ! empty( $array_data['relatement'] ) )
 	{
 		foreach( $array_data['relatement'] as $relatement )
@@ -84,7 +103,7 @@ function nv_theme_laws_detail ( $array_data )
 		}
 		$xtpl->parse( 'main.unreplacement' );
 	}
-	
+
 	if ( nv_user_in_groups( $array_data['groups_download'] ) )
 	{
 		if( ! empty( $array_data['files'] ) )
@@ -106,6 +125,7 @@ function nv_theme_laws_detail ( $array_data )
 	{
 		$xtpl->parse( 'main.nodownload' );
 	}
+
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
@@ -136,7 +156,7 @@ function nv_theme_laws_search ( $array_data, $generate_page, $all_page )
 		$xtpl->parse( 'empty' );
 		return $xtpl->text( 'empty' );
 	}
-	
+
     $xtpl->parse( 'main' );
     return $xtpl->text( 'main' );
 }
@@ -148,7 +168,7 @@ function nv_theme_laws_area ( $array_data, $generate_page, $cat )
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CAT', $cat );
-	
+
     $xtpl->assign( 'generate_page', $generate_page );
 
 	$i = 1;
@@ -198,7 +218,7 @@ function nv_theme_laws_subject ( $array_data, $generate_page, $cat )
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CAT', $cat );
-	
+
     $xtpl->assign( 'generate_page', $generate_page );
 
 	$i = 1;
@@ -223,7 +243,7 @@ function nv_theme_laws_signer( $array_data, $generate_page, $cat )
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CAT', $cat );
-	
+
     $xtpl->assign( 'generate_page', $generate_page );
 
 	$i = 1;

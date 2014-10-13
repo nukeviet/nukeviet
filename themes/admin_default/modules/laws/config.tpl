@@ -26,10 +26,16 @@
 	                        </select>
 	                    </td>
 	                </tr>
+	                <tr>
+	                    <td>{LANG.config_down_in_home}</td>
+	                    <td>
+							<input type="checkbox" name="down_in_home" value="1" {DATA.down_in_home} />
+	                    </td>
+	                </tr>
 	            </tbody>
 	        </table>
 	    </div>
-        <div style="text-align:center;padding-top:15px">
+        <div class="text-center">
             <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" />
         </div>
     </form>

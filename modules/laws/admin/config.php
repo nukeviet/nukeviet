@@ -19,6 +19,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['nummain'] = $nv_Request->get_int( 'nummain', 'post', 0 );
     $array_config['numsub'] = $nv_Request->get_int( 'numsub', 'post', 0 );
     $array_config['typeview'] = $nv_Request->get_int( 'typeview', 'post', 0 );
+	$array_config['down_in_home'] = $nv_Request->get_int( 'down_in_home', 'post', 0 );
 
     foreach ( $array_config as $config_name => $config_value )
     {
@@ -35,6 +36,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 $array_config['nummain'] = 50;
 $array_config['numsub'] = 50;
 $array_config['typeview'] = 0;
+$array_config['down_in_home'] = 1;
 
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->query( $sql );
@@ -52,6 +54,8 @@ for( $i = 0; $i <= 1; $i ++ )
         "selected" => ( $i == $array_config['typeview'] ) ? " selected=\"selected\"" : "" //
 	);
 }
+
+$array_config['down_in_home'] = $array_config['down_in_home'] ? 'checked="checked"' : '';
 
 $xtpl = new XTemplate( "config.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op );

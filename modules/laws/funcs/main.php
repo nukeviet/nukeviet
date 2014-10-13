@@ -17,9 +17,9 @@ $key_words = $module_info['keywords'];
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = $nv_laws_setting['nummain'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
-	
+
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
-	
+
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 
 $result = $db->query( $sql );
@@ -41,7 +41,7 @@ if ( ! $all_page or $page >= $all_page )
 		exit();
 	}
 }
-	
+
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $array_data = array();
@@ -53,7 +53,28 @@ while ( $row = $result->fetch() )
 	$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
 	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
 	$row['stt'] = $stt;
-	
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		// File download
+		if( ! empty( $row['files'] ) )
+		{
+			$row['files'] = explode( ",", $row['files'] );
+			$files = $row['files'];
+			$row['files'] = array();
+
+			foreach( $files as $id => $file )
+			{
+				$file_title = basename( $file );
+				$row['files'][] = array(
+					"title" => $file_title,
+					"title0" => nv_clean60( $file_title, 10 ),
+					"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+				);
+			}
+		}
+	}
+
 	$array_data[] = $row;
 	$stt ++;
 }

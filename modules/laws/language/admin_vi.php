@@ -137,6 +137,7 @@ $lang_module['config'] = "Cấu hình module";
 $lang_module['config_nummain'] = "Số văn bản tại trang chủ";
 $lang_module['config_numsub'] = "Số văn bản tại các trang con";
 $lang_module['config_typeview'] = "Cách hiển thị";
+$lang_module['config_down_in_home'] = "Download trên trang chính";
 
 $lang_module['type_view_0'] = "Mới nhất lên trên";
 $lang_module['type_view_1'] = "Cũ nhất lên trên";

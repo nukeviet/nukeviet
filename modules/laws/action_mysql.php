@@ -117,5 +117,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('nummain', '50'),
 ('numsub', '50'),
-('typeview', '0')
+('typeview', '0'),
+('down_in_home', '1')
 ";

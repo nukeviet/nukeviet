@@ -24,11 +24,13 @@ if ( ( $result = $db->query( $sql ) ) === false )
     Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
+
 if ( ( $row = $result->fetch() ) === false )
 {
     Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
     exit();
 }
+
 if ( ! nv_user_in_groups( $row['groups_view'] ) )
 {
 	nv_info_die( $lang_module['info_no_allow'], $lang_module['info_no_allow'], $lang_module['info_no_allow_detail'] );
@@ -37,14 +39,15 @@ if ( ! nv_user_in_groups( $row['groups_view'] ) )
 if( $nv_Request->isset_request( 'download', 'get' ) )
 {
 	$fileid = $nv_Request->get_int( 'id', 'get', 0 );
-	
+
 	$row['files'] = explode( ",", $row['files'] );
+
 	if( ! isset( $row['files'][$fileid] ) )
 	{
 		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 		exit();
 	}
-	
+
 	if ( ! file_exists ( NV_UPLOADS_REAL_DIR . $row['files'][$fileid] ) )
 	{
 		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
@@ -62,7 +65,7 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 		$lawsdownloaded = serialize( $lawsdownloaded );
 		$nv_Request->set_Session( 'lawsdownloaded', $lawsdownloaded );
 	}
-	
+
 	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
 	$file_info = pathinfo( NV_UPLOADS_REAL_DIR . $row['files'][$fileid] );
 	$download = new download( NV_UPLOADS_REAL_DIR . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
@@ -134,7 +137,7 @@ if( ! empty( $row['files'] ) )
 	$row['files'] = explode( ",", $row['files'] );
 	$files = $row['files'];
 	$row['files'] = array();
-	
+
 	foreach( $files as $id => $file )
 	{
 		$file_title = basename( $file );
