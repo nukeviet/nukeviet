@@ -2,17 +2,20 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
-			<col span="4" />
+			<col width="50" />
+			<col width="100" />
+			<col width="125" />
+			<col />
 			<col width="130" />
 		</colgroup>
 		<thead>
 			<tr>
-				<th class="text-center" style="width:20px">{LANG.stt}</th>
-				<th class="text-center" style="width:100px">{LANG.code}</th>
-				<th class="text-center" style="width:120px">{LANG.publtime}</th>
+				<th class="text-center">{LANG.stt}</th>
+				<th class="text-center">{LANG.code}</th>
+				<th class="text-center">{LANG.publtime}</th>
 				<th class="text-center">{LANG.introtext}</th>
 				<!-- BEGIN: down_in_home -->
-				<th>&nbsp;</th>
+				<th>{LANG.files}</th>
 				<!-- END: down_in_home -->
 			</tr>
 		</thead>
