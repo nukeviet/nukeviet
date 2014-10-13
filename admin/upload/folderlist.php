@@ -77,11 +77,18 @@ function viewdirtree( $dir, $currentpath )
 
 			$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 			$xtpl->assign( 'DIRTREE', $tree );
+			
+			if( empty( $content2 ) )
+			{
+				$content2 = '<li class="hide">&nbsp;</li>';
+			}
+			
 			if( ! empty( $content2 ) )
 			{
 				$xtpl->assign( 'TREE_CONTENT', $content2 );
 				$xtpl->parse( 'tree.tree_content' );
 			}
+			
 			$xtpl->parse( 'tree' );
 			$content .= $xtpl->text( 'tree' );
 		}
@@ -129,6 +136,11 @@ $xtpl->assign( 'CROP_FILE', ( isset( $check_allow_upload_dir['crop_file'] ) and 
 $xtpl->assign( 'ROTATE_FILE', ( isset( $check_allow_upload_dir['rotate_file'] ) and $check_allow_upload_dir['rotate_file'] === true ) ? 1 : 0 );
 $xtpl->assign( 'DELETE_FILE', ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
 $xtpl->assign( 'MOVE_FILE', ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
+
+if( empty( $content ) )
+{
+	$content = '<li class="hide">&nbsp;</li>';
+}
 
 if( ! empty( $content ) )
 {

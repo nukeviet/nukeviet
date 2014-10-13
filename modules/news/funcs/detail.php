@@ -43,7 +43,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
 			$news_contents['homeimgalt'] = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
-			if( ! empty( $news_contents['homeimgfile'] ) and $news_contents['imgposition'] > 0 )
+			if( ! empty( $news_contents['homeimgfile'] ) )
 			{
 				$src = $alt = $note = '';
 				$width = $height = 0;
@@ -78,23 +78,25 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					}
 				}
 
-				if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] ) )
+				if( ! empty( $src ) )
 				{
-					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-					$meta_property['og:image'] = NV_MY_DOMAIN . $news_contents['homeimgfile'];
+					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'] : NV_MY_DOMAIN . $src;
+
+					if( $news_contents['imgposition'] > 0 )
+					{
+						$news_contents['image'] = array(
+							'src' => $src,
+							'width' => $width,
+							'alt' => $news_contents['homeimgalt'],
+							'note' => $news_contents['homeimgalt'],
+							'position' => $news_contents['imgposition']
+						);
+					}
 				}
 				elseif( !empty( $show_no_image ) )
 				{
 					$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
 				}
-
-				$news_contents['image'] = array(
-					'src' => $src,
-					'width' => $width,
-					'alt' => $news_contents['homeimgalt'],
-					'note' => $news_contents['homeimgalt'],
-					'position' => $news_contents['imgposition']
-				);
 			}
 			elseif( ! empty( $show_no_image ) )
 			{
@@ -147,10 +149,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 	$related_new_array = array();
 	$db->sqlreset()
-		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday, t1.homeimgfile, t1.homeimgthumb, t1.hometext' )
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
-		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
-		->where( 't1.status=1 AND t1.publtime > ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
+		->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
+		->where( 'status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
 		->order( 'id ASC' )
 		->limit( $st_links );
 
@@ -183,7 +184,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'title' => $row['title'],
 			'time' => $row['publtime'],
 			'link' => $link,
-			'newday' => $row['newday'],
+			'newday' => $global_array_cat[$catid]['newday'],
 			'hometext' => $row['hometext'],
 			'imghome' => $row['imghome']
 		);
@@ -195,10 +196,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$related_array = array();
 
 	$db->sqlreset()
-		->select( 't1.id, t1.title, t1.alias, t1.publtime, t2.newday, t1.homeimgfile, t1.homeimgthumb, t1.hometext' )
-		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' t1' )
-		->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
-		->where( 't1.status=1 AND t1.publtime < ' . $publtime . ' AND t1.publtime < ' . NV_CURRENTTIME )
+		->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
+		->where( 'status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
 		->order( 'id DESC' )
 		->limit( $st_links );
 
@@ -231,7 +231,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'title' => $row['title'],
 			'time' => $row['publtime'],
 			'link' => $link,
-			'newday' => $row['newday'],
+			'newday' => $global_array_cat[$catid]['newday'],
 			'hometext' => $row['hometext'],
 			'imghome' => $row['imghome']
 		);
@@ -247,10 +247,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
 
 		$db->sqlreset()
-			->select( 't1.id, t1.catid, t1.title, t1.alias, t1.publtime, t2.newday, t1.homeimgfile, t1.homeimgthumb, t1.hometext' )
+			->select( 'id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_cat t2 ON t1.catid = t2.catid' )
-			->where( 't1.status=1 AND t1.topicid = ' . $news_contents['topicid'] . ' AND t1.id != ' . $id )
+			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
 
@@ -284,7 +283,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 				'title' => $row['title'],
 				'link' => $link,
 				'time' => $row['publtime'],
-				'newday' => $row['newday'],
+				'newday' => $global_array_cat[$row['catid']]['newday'],
 				'topiclink' => $topiclink,
 				'topictitle' => $topic_title,
 				'hometext' => $row['hometext'],

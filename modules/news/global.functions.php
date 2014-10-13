@@ -98,20 +98,9 @@ function nv_del_content_module( $id )
 	global $db, $module_name, $module_data, $title, $lang_module;
 	$content_del = 'NO_' . $id;
 	$title = '';
-	list( $id, $listcatid, $title, $homeimgfile, $homeimgthumb ) = $db->query( 'SELECT id, listcatid, title, homeimgfile, homeimgthumb FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval( $id ) )->fetch( 3 );
+	list( $id, $listcatid, $title, $homeimgfile ) = $db->query( 'SELECT id, listcatid, title, homeimgfile FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval( $id ) )->fetch( 3 );
 	if( $id > 0 )
 	{
-		if( $homeimgthumb != '' and $homeimgthumb != '|' )
-		{
-			$homeimgthumb_arr = explode( '|', $homeimgthumb );
-			foreach( $homeimgthumb_arr as $file )
-			{
-				if( ! empty( $file ) and is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $file ) )
-				{
-					@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $file );
-				}
-			}
-		}
 		$number_no_del = 0;
 		$array_catid = explode( ',', $listcatid );
 		foreach( $array_catid as $catid_i )

@@ -1,14 +1,15 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: updateinfo -->
-<div class="infoalert" id="infodetectedupg">
-	{LANG.update_package_detected}
-	<br />
-	<strong><a href="{URL_UPDATE}" title="{LANG.update_package_do}">{LANG.update_package_do}</a></strong> - <strong><a href="{URL_DELETE_PACKAGE}" title="{LANG.update_package_delete}" class="delete_update_backage">{LANG.update_package_delete}</a></strong>
+<div class="alert alert-info text-center" id="infodetectedupg">
+	<p>{LANG.update_package_detected}</p>
+	<strong><a href="{URL_UPDATE}" title="{LANG.update_package_do}">{LANG.update_package_do}</a></strong>
+	 - 
+	<strong><a href="{URL_DELETE_PACKAGE}" title="{LANG.update_package_delete}" class="delete_update_backage">{LANG.update_package_delete}</a></strong>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('.delete_update_backage').click(function() {
 				if (confirm(nv_is_del_confirm[0])) {
-					$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></div>');
+					$('#infodetectedupg').append('<div id="dpackagew"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em></div>');
 					$.get($(this).attr('href'), function(e) {
 						$('#dpackagew').remove()
 						if (e == 'OK') {

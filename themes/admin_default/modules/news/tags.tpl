@@ -1,11 +1,12 @@
 <!-- BEGIN: main -->
-<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
-	<label><em>{LANG.search_note}</em></label>
-	<br />
-	{LANG.search_key}:
-	<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
-	<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br /><br />
-</form>
+<div class="well">
+	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" onsubmit="return nv_search_tag();">
+		{LANG.search_key}:
+		<input class="form-control" id="q" type="text" value="{Q}" maxlength="64" name="q" style="width: 265px" />
+		<input class="btn btn-primary" type="submit" value="{LANG.search}" /><br /><br />
+		<label><em>{LANG.search_note}</em></label>
+	</form>
+</div>
 <!-- BEGIN: incomplete_link -->
 <div class="alert alert-info">
 	<a class="text-info" href="{ALL_LINK}">{LANG.tags_all_link}.</a>
@@ -35,7 +36,7 @@
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
-					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> {GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max} </td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /><span class="text-middle">{GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max}</span></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
@@ -43,7 +44,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.description}</strong></td>
-					<td><textarea class="w500 form-control" id="description" name="description" cols="100" rows="5">{description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+					<td><textarea class="w500 form-control" id="description" name="description" cols="100" rows="5">{description}</textarea><span class="text-middle">{GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max}</span></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>

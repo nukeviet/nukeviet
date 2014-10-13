@@ -12,7 +12,7 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_COMM_ID' ) )
 {
-	if( $module_config[$module_name]['activecomm'] )
+	if( isset( $site_mods['comment'] ) and $module_config[$module_name]['activecomm'] )
 	{
 		// Kiểm tra quyền đăng bình luận
 		$allowed = $module_config[$module_name]['allowed_comm'];

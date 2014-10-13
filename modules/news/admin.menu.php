@@ -77,7 +77,10 @@ else
 $allow_func = array( 'main', 'view', 'exptime', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat', 'blocksajax' );
 
 $submenu['cat'] = $lang_module['categories'];
-$submenu['content'] = $lang_module['content_add'];
+if( ! isset( $site_mods['cms'] ) )
+{
+	$submenu['content'] = $lang_module['content_add'];
+}
 
 if( $NV_IS_ADMIN_MODULE )
 {
@@ -111,6 +114,7 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'tags';
 
 	$allow_func[] = 'setting';
+	$allow_func[] = 'tools';
 }
 
 if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/admins.php' ) )

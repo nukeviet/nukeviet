@@ -31,6 +31,30 @@ $('.imgcontent').bind("mouseup contextmenu", function(e) {
 $('.imgcontent').dblclick(function() {
 	insertvaluetofield();
 });
+
+$( "#imglist" ).selectable({
+	filter: '.imgcontent',
+	delay: 90,
+	start: function( e, ui ){
+		NVCMENU.hide();
+		KEYPR.isSelectable = true;
+		KEYPR.isFileSelectable = true;
+	},
+	selecting: function( e, ui ){
+		fileSelecting(e, ui);
+	},
+	stop: function( e, ui ){
+		fileSelectStop(e, ui);
+		
+		setTimeout(function(){
+			KEYPR.isSelectable = false;
+			KEYPR.isFileSelectable = false;
+		}, 50);
+	},
+	unselecting: function( e, ui ){
+		fileUnselect(e, ui);
+	},
+});
 //]]>
 </script>
 
