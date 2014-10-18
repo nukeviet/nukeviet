@@ -1074,11 +1074,8 @@ if( sizeof( $array_block_cat_module ) )
 {
 	foreach( $array_block_cat_module as $bid_i => $bid_title )
 	{
-		if( in_array( $bid_i, $id_block_content ) )
-		{
-			$xtpl->assign( 'BLOCKS', array( 'title' => $bid_title, 'bid' => $bid_i ) );
-			$xtpl->parse( 'main.block_cat.default' );
-		}
+		$xtpl->assign( 'BLOCKS', array( 'title' => $bid_title, 'bid' => $bid_i, 'checked' =>  in_array( $bid_i, $id_block_content ) ? 'checked="checked"' : '' ) );
+		$xtpl->parse( 'main.block_cat.loop' );
 	}
 	$xtpl->parse( 'main.block_cat' );
 }
