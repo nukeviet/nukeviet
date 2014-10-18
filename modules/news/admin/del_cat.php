@@ -100,7 +100,10 @@ if( $catid > 0 )
 								}
 								foreach( $arr_catid_news as $catid_i )
 								{
-									$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
+									if( isset($global_array_cat[$catid_i] ) )
+									{
+										$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
+									}
 								}
 								$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
 							}
@@ -129,8 +132,15 @@ if( $catid > 0 )
 								$arr_catid_news = array_diff( $arr_catid_old, $arr_catid_i );
 								if( ! in_array( $catidnews, $arr_catid_news ) )
 								{
-									$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catidnews . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['id'] );
-									$arr_catid_news[] = $catidnews;
+									try
+									{
+										$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catidnews . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $row['id'] );
+										$arr_catid_news[] = $catidnews;
+									}
+									catch( PDOException $e )
+									{
+										trigger_error( $e->getMessage() );
+									}
 								}
 								if( $catid == $row['catid'] )
 								{
@@ -138,7 +148,10 @@ if( $catid > 0 )
 								}
 								foreach( $arr_catid_news as $catid_i )
 								{
-									$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
+									if( isset($global_array_cat[$catid_i] ) )
+									{
+										$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid_i . " SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
+									}
 								}
 								$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET catid=" . $row['catid'] . ", listcatid = '" . implode( ',', $arr_catid_news ) . "' WHERE id =" . $row['id'] );
 							}

@@ -226,7 +226,7 @@ $data_users = array();
 $data_users[0] = 'system';
 if( ! empty( $array_userid ) )
 {
-	$result_users = $db->query( 'SELECT userid, username FROM ' . $db_config['prefix'] . '_users WHERE userid IN (' . implode( ',', $array_userid ) . ')' );
+	$result_users = $db->query( 'SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode( ',', $array_userid ) . ')' );
 	while( $data_i = $result_users->fetch() )
 	{
 		$data_users[$data_i['userid']] = $data_i['username'];

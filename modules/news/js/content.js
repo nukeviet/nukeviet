@@ -155,38 +155,12 @@ $(document).ready(function() {
             for (i = 0; i < keywords_add.length; i++) {
                 var str_keyword = trim( keywords_add[i] );
                 if( str_keyword != '' ){
-                    nv_add_element( 'keywords', str_keyword, str_keyword );   
+                    nv_add_element( 'keywords', str_keyword, str_keyword );
                 }
             }
             $(this).val('');
         }
         return false;
-	});
-
-
-    $("#bids-search").bind("keydown", function(event) {
-		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
-			event.preventDefault();
-		}
-	}).autocomplete({
-		source : function(request, response) {
-			$.getJSON(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=blocksajax", {
-				term : extractLast(request.term)
-			}, response);
-		},
-		search : function() {
-			// custom minLength
-			var term = extractLast(this.value);
-			if (term.length < 2) {
-				return false;
-			}
-		},
-		select : function(event, ui) {
-			// add placeholder to get the comma-and-space at the end
-            nv_add_element( 'bids', ui.item.key, ui.item.value );
-            $(this).val('');
-            return false;
-		}
 	});
 
 	// hide message_body after the first one

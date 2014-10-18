@@ -121,7 +121,7 @@ $array_in_ordername = array(
 	'publtime',
 	'exptime',
 	'hitstotal',
-	'hitscm'	
+	'hitscm'
 );
 $array_status_view = array(
 	'-' => '---',
@@ -331,7 +331,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					{
 						++$check_edit;
 					}
-					elseif( $status == 0 and $post_id == $admin_id )
+					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
 					{
 						++$check_edit;
 					}
@@ -340,7 +340,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					{
 						++$check_del;
 					}
-					elseif( $status == 0 and $post_id == $admin_id )
+					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
 					{
 						++$check_del;
 					}

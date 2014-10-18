@@ -76,7 +76,7 @@ foreach( $site_mods as $key => $title )
 {
 	$list_module[] = array(
 		'key' => $key,
-		'title' => $title['module_data'],
+		'title' => $title['custom_title'],
 		'selected' => ($key == $post['module_name']) ? ' selected="selected"' : ''
 	);
 }
