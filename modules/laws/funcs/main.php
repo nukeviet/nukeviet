@@ -13,39 +13,26 @@ if ( ! defined( 'NV_IS_MOD_LAWS' ) ) die( 'Stop!!!' );
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 
-//
-$page = $nv_Request->get_int( 'page', 'get', 0 );
+$page = 1;
+if( isset( $array_op[0] ) and substr( $array_op[0], 0, 5 ) == 'page-' )
+{
+	$page = intval( substr( $array_op[0], 5 ) );
+}
+
 $per_page = $nv_laws_setting['nummain'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
-
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
 $all_page = $query->fetchColumn();
 
-if ( ! $all_page or $page >= $all_page )
-{
-	if ( $nv_Request->isset_request( 'page', 'get' ) )
-	{
-		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-		exit();
-	}
-	else
-	{
-		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_site_theme( '' );
-		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
-	}
-}
-
-$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
 
 $array_data = array();
-$stt = $page + 1;
+$stt = nv_get_start_id( $page, $per_page );
 while ( $row = $result->fetch() )
 {
 	$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];

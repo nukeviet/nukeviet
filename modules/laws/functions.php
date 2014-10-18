@@ -93,6 +93,11 @@ function nv_laws_listcat ( $is_link = false, $is_parentlink = true, $where = 'ca
     return $list2;
 }
 
+function nv_get_start_id( $page, $per_page )
+{
+	return $page == 1 ? 1 : ( $page * $per_page ) - ( $per_page == 1 ? 0 : 1 );
+}
+
 global $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $nv_laws_setting;
 $nv_laws_listcat = nv_laws_listcat();
 $nv_laws_listarea = nv_laws_listcat( false, false, 'area' );

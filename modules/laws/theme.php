@@ -138,7 +138,6 @@ function nv_theme_laws_search ( $array_data, $generate_page, $all_page )
 	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
@@ -158,7 +157,7 @@ function nv_theme_laws_search ( $array_data, $generate_page, $all_page )
 
 function nv_theme_laws_area ( $array_data, $generate_page, $cat )
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
@@ -169,12 +168,33 @@ function nv_theme_laws_area ( $array_data, $generate_page, $cat )
 	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
+
+		if( $nv_laws_setting['down_in_home'] )
+		{
+			if ( nv_user_in_groups( $row['groups_download'] ) )
+			{
+				if( ! empty( $row['files'] ) )
+				{
+					foreach( $row['files'] as $file )
+					{
+						$xtpl->assign( 'FILE', $file );
+						$xtpl->parse( 'main.loop.down_in_home.files.loopfile' );
+					}
+					$xtpl->parse( 'main.loop.down_in_home.files' );
+				}
+			}
+			$xtpl->parse( 'main.loop.down_in_home' );
+		}
 		$xtpl->parse( 'main.loop' );
 		$i ++;
+	}
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		$xtpl->parse( 'main.down_in_home' );
 	}
 
     $xtpl->parse( 'main' );
@@ -194,7 +214,6 @@ function nv_theme_laws_cat ( $array_data, $generate_page, $cat )
 	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
@@ -208,7 +227,7 @@ function nv_theme_laws_cat ( $array_data, $generate_page, $cat )
 
 function nv_theme_laws_subject ( $array_data, $generate_page, $cat )
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $nv_laws_setting, $module_file, $lang_module, $module_config, $module_info, $op;
 
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
@@ -219,12 +238,34 @@ function nv_theme_laws_subject ( $array_data, $generate_page, $cat )
 	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
+
+		if( $nv_laws_setting['down_in_home'] )
+		{
+			if ( nv_user_in_groups( $row['groups_download'] ) )
+			{
+				if( ! empty( $row['files'] ) )
+				{
+					foreach( $row['files'] as $file )
+					{
+						$xtpl->assign( 'FILE', $file );
+						$xtpl->parse( 'main.loop.down_in_home.files.loopfile' );
+					}
+					$xtpl->parse( 'main.loop.down_in_home.files' );
+				}
+			}
+			$xtpl->parse( 'main.loop.down_in_home' );
+		}
+
 		$xtpl->parse( 'main.loop' );
 		$i ++;
+	}
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		$xtpl->parse( 'main.down_in_home' );
 	}
 
     $xtpl->parse( 'main' );
@@ -233,7 +274,7 @@ function nv_theme_laws_subject ( $array_data, $generate_page, $cat )
 
 function nv_theme_laws_signer( $array_data, $generate_page, $cat )
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
@@ -244,12 +285,34 @@ function nv_theme_laws_signer( $array_data, $generate_page, $cat )
 	$i = 1;
     foreach( $array_data as $row )
 	{
-		$row['class'] = ( $i % 2 == 0 ) ? " class=\"bg\"" : "";
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
+
+		if( $nv_laws_setting['down_in_home'] )
+		{
+			if ( nv_user_in_groups( $row['groups_download'] ) )
+			{
+				if( ! empty( $row['files'] ) )
+				{
+					foreach( $row['files'] as $file )
+					{
+						$xtpl->assign( 'FILE', $file );
+						$xtpl->parse( 'main.loop.down_in_home.files.loopfile' );
+					}
+					$xtpl->parse( 'main.loop.down_in_home.files' );
+				}
+			}
+			$xtpl->parse( 'main.loop.down_in_home' );
+		}
+
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.loop' );
 		$i ++;
+	}
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		$xtpl->parse( 'main.down_in_home' );
 	}
 
     $xtpl->parse( 'main' );
