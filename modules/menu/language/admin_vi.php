@@ -83,3 +83,4 @@ $lang_module['action_menu'] = 'Nạp menu từ';
 $lang_module['action_menu_sys_1'] = 'Các menu là các module';
 $lang_module['action_menu_sys_2'] = 'Các menu là các module, submenu là các chủ đề hoặc chức năng';
 $lang_module['action_menu_sys_3'] = 'Các menu là chủ đề hoặc chức năng module';
+$lang_module['icon'] = 'Icon menu';
