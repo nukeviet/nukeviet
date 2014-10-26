@@ -92,7 +92,7 @@ if( $topicid > 0 )
 		$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 		$topic_other_array[] = $item;
 	}
-	unset( $result, $row, $arr_listcatid );
+	unset( $result, $row );
 
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topicalias;
 	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
