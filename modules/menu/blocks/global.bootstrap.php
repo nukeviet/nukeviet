@@ -84,9 +84,8 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 		}
 
 		$array_menu = array();
-		$sql = 'SELECT id, parentid, title, link, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
+		$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
 		$list = nv_db_cache( $sql, '', 'menu' );
-
 		foreach( $list as $row )
 		{
 			if( nv_user_in_groups( $row['groups_view'] ) )
@@ -120,7 +119,7 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 					'icon' => $row['icon'],
 					'css' => $row['css'],
 					'active_type' => $row['active_type'],
-					);
+				);
 			}
 		}
 
