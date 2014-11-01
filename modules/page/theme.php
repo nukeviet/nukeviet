@@ -92,7 +92,9 @@ function nv_page_main_list( $array_data )
 {
 	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
 
-	$xtpl = new XTemplate( 'main_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$template = ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl' ) ) ? $module_info['template'] : 'default';
+
+	$xtpl = new XTemplate( 'main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
 	if( ! empty( $array_data ) )
