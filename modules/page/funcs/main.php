@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $contents = '';
 
-if( $id )
+if( $id and $page_config['viewtype'] == 0 or ! empty( $alias ) )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND id=' . $id;
 	$row = $db->query( $sql )->fetch();
@@ -69,6 +69,18 @@ if( $id )
 }
 else
 {
+	$array_data = array();
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight';
+	$result = $db->query( $sql );
+
+	while( $row = $result->fetch() )
+	{
+		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
+		$array_data[$row['id']] = $row;
+	}
+
+	$contents = nv_page_main_list( $array_data );
+
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 	$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];

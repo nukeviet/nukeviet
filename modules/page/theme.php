@@ -19,7 +19,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  */
 function nv_page_main( $row, $ab_links )
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info;
+	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config;
 
 	if( ! defined( 'SHADOWBOX' ) )
 	{
@@ -35,28 +35,28 @@ function nv_page_main( $row, $ab_links )
 
 	if( $row['socialbutton'] )
 	{
-		if( ! defined( 'FACEBOOK_JSSDK' ) and $row['facebookappid'] )
+		if( ! defined( 'FACEBOOK_JSSDK' ) and $page_config['facebookapi'] )
 		{
-			$meta_property['fb:app_id'] = $row['facebookappid'];
-			
+			$meta_property['fb:app_id'] = $page_config['facebookapi'];
+
 			$xtpl->assign( 'FACEBOOK_LANG', ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US' );
-			$xtpl->assign( 'FACEBOOK_APPID', $row['facebookappid'] );
-			
+			$xtpl->assign( 'FACEBOOK_APPID', $page_config['facebookapi'] );
+
 			$xtpl->parse( 'main.facebookjssdk' );
-			
+
 			define( 'FACEBOOK_JSSDK', true );
 		}
-		
+
 		if( defined( 'FACEBOOK_JSSDK' ) )
 		{
 			$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
-		
+
 			$xtpl->parse( 'main.socialbutton.facebook' );
 		}
-		
+
 		$xtpl->parse( 'main.socialbutton' );
 	}
-	
+
 	if( ! empty( $row['image'] ) )
 	{
 		$xtpl->parse( 'main.image' );
@@ -76,6 +76,44 @@ function nv_page_main( $row, $ab_links )
 	{
 		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
 		$xtpl->parse( 'main.comment' );
+	}
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * nv_page_main_list()
+ *
+ * @param mixed $array_data
+ * @return
+ */
+function nv_page_main_list( $array_data )
+{
+	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
+
+	$xtpl = new XTemplate( 'main_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+
+	if( ! empty( $array_data ) )
+	{
+		foreach( $array_data as $data )
+		{
+			if( ! empty( $data['image'] ) )
+			{
+				$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
+				$data['imagealt'] = ! empty( $data['imagealt'] ) ? $data['imagealt'] : $data['title'];
+			}
+
+			$xtpl->assign( 'DATA', $data );
+
+			if( ! empty( $data['image'] ) )
+			{
+				$xtpl->parse( 'main.loop.image' );
+			}
+
+			$xtpl->parse( 'main.loop' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

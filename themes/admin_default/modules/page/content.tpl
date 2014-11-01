@@ -58,10 +58,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/> {LANG.socialbuttonnote}
-							<br /><label><strong>{LANG.facebookAppID}</strong></label>
-							<input class="form-control" name="facebookappid" value="{DATA.facebookappid}" type="text"/>
-							<span class="text-middle">&nbsp; {LANG.facebookAppIDNote} </span>
+							<label><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/> {LANG.socialbuttonnote}</label>
 						</td>
 					</tr>
 					<tr>
@@ -73,7 +70,7 @@
 							<!-- BEGIN: layout_func -->
 							<option value="{LAYOUT_FUNC.key}"{LAYOUT_FUNC.selected}>{LAYOUT_FUNC.key}</option>
 							<!-- END: layout_func -->
-						</select></td>							
+						</select></td>
 					</tr>
 					<!-- BEGIN: googleplus -->
 					<tr>
