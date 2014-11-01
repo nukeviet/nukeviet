@@ -41,10 +41,16 @@ $lang_module['imagealt'] = 'Image note';
 $lang_module['socialbutton'] = 'Social button';
 $lang_module['socialbuttonnote'] = 'Display Like facebook, G+, Twitter';
 $lang_module['activecomm'] = 'Allow comment';
-$lang_module['facebookAppID'] = 'Facebook App ID';
-$lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['layout_func'] = 'Layout';
 $lang_module['layout_default'] = 'Default';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
 $lang_module['googleplus_1'] = 'Not use';
 $lang_module['googleplus_0'] = 'Follow configure of module';
+
+$lang_module['config'] = 'Config';
+$lang_module['config_view_type'] = 'Display articles type';
+$lang_module['config_view_type_0'] = 'Main article';
+$lang_module['config_view_type_1'] = 'List article';
+$lang_module['config_facebookapi'] = 'Facebook App ID';
+$lang_module['config_facebookapi_note'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
+$lang_module['config_save'] = 'Save config';

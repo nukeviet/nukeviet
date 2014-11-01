@@ -13,6 +13,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 $sql_drop_module = array();
 
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . ";";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config;";
 
 $sql_create_module = $sql_drop_module;
 
@@ -27,7 +28,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  keywords text,
  socialbutton tinyint(4) NOT NULL DEFAULT '0',
  activecomm varchar(255) DEFAULT '',
- facebookappid varchar(30) DEFAULT '',
  layout_func varchar(100) DEFAULT '',
  gid mediumint(9) NOT NULL DEFAULT '0',
  weight smallint(4) NOT NULL DEFAULT '0',
@@ -38,6 +38,16 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config (
+ config_name varchar(30) NOT NULL,
+ config_value varchar(255) NOT NULL,
+ UNIQUE KEY config_name (config_name)
+)ENGINE=MyISAM";
+
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
+('viewtype', '0'),
+('facebookapi', '')";
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
