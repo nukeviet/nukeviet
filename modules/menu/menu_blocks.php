@@ -23,7 +23,7 @@ function nv_menu_blocks( $block_config )
 	global $db, $global_config, $my_head;
 
 	$list_cats = array();
-	$sql = 'SELECT id, parentid, title, link, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
+	$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
 	$list = nv_db_cache( $sql, '', 'menu' );
 
 	foreach( $list as $row )
@@ -41,7 +41,14 @@ function nv_menu_blocks( $block_config )
 				default:
 					$row['target'] = ' onclick="this.target=\'_blank\'"';
 			}
-
+			if( ! empty( $row['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/menu/' . $row['icon'] ) )
+			{
+				$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/menu/' . $row['icon'];
+			}
+			else
+			{
+				$row['icon'] = '';
+			}
 			$list_cats[$row['id']] = array(
 				'id' => $row['id'],
 				'parentid' => $row['parentid'],
@@ -49,11 +56,11 @@ function nv_menu_blocks( $block_config )
 				'title' => $row['title'],
 				'title_trim' => nv_clean60( $row['title'], $block_config['title_length'] ),
 				'target' => $row['target'],
-				'note' => empty( $row['note'] ) ? $row['title'] :  $row['note'],
+				'note' => empty( $row['note'] ) ? $row['title'] : $row['note'],
 				'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
+				'icon' => $row['icon'],
 				'html_class' => $row['css'],
-				'current' => nv_menu_check_current( $row['link'], ( int )$row['active_type'] )
-			);
+				'current' => nv_menu_check_current( $row['link'], ( int )$row['active_type'] ) );
 		}
 	}
 
@@ -77,6 +84,10 @@ function nv_menu_blocks( $block_config )
 			$cat['class'] = nv_menu_blocks_active( $cat );
 
 			$xtpl->assign( 'CAT1', $cat );
+			if( ! empty( $cat['icon'] ) )
+			{
+				$xtpl->parse( 'main.loopcat1.icon' );
+			}
 			if( ! empty( $cat['subcats'] ) )
 			{
 				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
@@ -203,7 +214,10 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 				$list_cats[$catid]['class'] = nv_menu_blocks_active( $list_cats[$catid] );
 
 				$xtpl->assign( 'MENUTREE', $list_cats[$catid] );
-
+				if( ! empty( $list_cats[$catid]['icon'] ) )
+				{
+					$xtpl->parse( 'tree.icon' );
+				}
 				if( ! empty( $list_cats[$catid]['subcats'] ) )
 				{
 					$tree = nv_smenu_blocks( $style, $list_cats, $list_cats[$catid]['subcats'] );

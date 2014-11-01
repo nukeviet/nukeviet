@@ -83,3 +83,4 @@ $lang_module['action_menu'] = 'Import form';
 $lang_module['action_menu_sys_1'] = 'Module name';
 $lang_module['action_menu_sys_2'] = 'Module name, submenu is catalogs or functions';
 $lang_module['action_menu_sys_3'] = 'Catalogs or functions in module';
+$lang_module['icon'] = 'Icon';

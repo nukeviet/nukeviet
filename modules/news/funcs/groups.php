@@ -101,7 +101,7 @@ if( isset( $array_op[1] ) )
 			$item_array_other[] = $item;
 		}
 
-		unset( $query, $row, $arr_listcatid );
+		unset( $query, $row );
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		if( ! empty( $image_group ) )

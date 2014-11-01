@@ -112,7 +112,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			$item_array_other[] = $item;
 		}
 
-		unset( $query, $row, $arr_listcatid );
+		unset( $query, $row );
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 

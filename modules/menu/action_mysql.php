@@ -23,6 +23,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  mid smallint(5) NOT NULL DEFAULT '0',
  title varchar(255) NOT NULL,
  link text NOT NULL,
+ icon varchar(255) DEFAULT '',
  note varchar(255) DEFAULT '',
  weight int(11) NOT NULL,
  sort int(11) NOT NULL DEFAULT '0',

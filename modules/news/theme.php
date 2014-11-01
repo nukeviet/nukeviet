@@ -326,33 +326,13 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 			if( $array_row_i['subcatid'] != '' )
 			{
-				$exl = 0;
-				$arrsubcat_s = explode( ',', $array_row_i['subcatid'] );
-
-				foreach( $arrsubcat_s as $subcatid_i )
+				$_arr_subcat = explode( ',', $array_row_i['subcatid'] );
+				foreach( $_arr_subcat as $catid_i )
 				{
-					if( $global_array_cat[$subcatid_i]['inhome'] == 1 )
+					if( $global_array_cat[$catid_i]['inhome'] == 1 )
 					{
-						$xtpl->clear_autoreset();
-
-						if( $exl < 3 )
-						{
-							$xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid_i] );
-							$xtpl->parse( 'main.listcat.subcatloop' );
-							$xtpl->set_autoreset();
-						}
-						else
-						{
-							$more = array(
-								'title' => $lang_module['more'],
-								'link' => $global_array_cat[$catid]['link']
-							);
-							$xtpl->assign( 'MORE', $more );
-							$xtpl->parse( 'main.listcat.subcatmore' );
-							$xtpl->set_autoreset();
-							break;
-						}
-						++$exl;
+						$xtpl->assign( 'SUBCAT', $global_array_cat[$catid_i] );
+						$xtpl->parse( 'main.listcat.subcatloop' );
 					}
 				}
 			}
@@ -761,7 +741,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.related' );
 	}
-	
+
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $key => $topic_array_i )

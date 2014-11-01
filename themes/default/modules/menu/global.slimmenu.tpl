@@ -1,5 +1,8 @@
 <!-- BEGIN: tree -->
 <li>
+	<!-- BEGIN: icon -->
+	<img src="{MENUTREE.icon}" />&nbsp;
+	<!-- END: icon -->
 	<a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title}</a>
 	<!-- BEGIN: tree_content -->
 	<ul>
@@ -15,6 +18,9 @@
 <ul class="slimmenu">
 	<!-- BEGIN: loopcat1 -->
 	<li>
+		<!-- BEGIN: icon -->
+        <img src="{CAT1.icon}" />&nbsp;
+        <!-- END: icon -->
 		<a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title}</a>
 		<!-- BEGIN: cat2 -->
 			<ul>
