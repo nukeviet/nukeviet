@@ -226,7 +226,7 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.activecomm' );
 }
 
-if( empty( $alias ) ) $xtpl->parse( 'main.get_alias' );
+if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
 
 if( $error )
 {
