@@ -100,14 +100,14 @@
 	function nv_load_laws(url, area) {
 		$('#lawlist').load(rawurldecode(url));
 	}
-	
+
 	function nv_search_laws(){
 		var keywords = $('input[name="keywords"]').val();
 		var cid = $('select[name="cid"]').val();
 		var aid = $('select[name="aid"]').val();
 		var sid = $('select[name="sid"]').val();
 		var sgid = $('select[name="sgid"]').val();
-		
+
 		if( keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '' )
 		{
 			alert( '{LANG.search_error}' );
@@ -121,7 +121,7 @@
 
 	$(window).load(function() {
 		$('#lawlist').load('{BASE_LOAD}');
-	}); 
+	});
 </script>
 <!-- END: main -->
 
@@ -154,7 +154,6 @@
 								</td>
 							</tr>
 
-
 							<tr>
 								<td style="vertical-align:top"> {LANG.fileupload} <strong>[<a onclick="nv_add_files('{NV_BASE_ADMINURL}','{UPLOADS_DIR_USER}','{GLANG.delete}','Browse server');" href="javascript:void(0);" title="{LANG.add}">{LANG.add}]</a></strong></td>
 								<td>
@@ -169,13 +168,13 @@
 								</div></td>
 							</tr>
 							<tr class="form-inline">
-								<td> {LANG.publtime} </td>
+								<td> {LANG.publtime}  <span class="red">*</span></td>
 								<td><label>
 									<input class="form-control" name="publtime" id="publtime" value="{DATA.publtime}" style="width: 110px;" maxlength="10" type="text" />
 									&nbsp;({LANG.prm})</label></td>
 							</tr>
 							<tr class="form-inline">
-								<td> {LANG.startvalid} </td>
+								<td> {LANG.startvalid}</td>
 								<td><label>
 									<input class="form-control" name="startvalid" id="startvalid" value="{DATA.startvalid}" style="width: 110px;" maxlength="10" type="text" />
 									&nbsp;({LANG.prm})</label></td>
@@ -241,7 +240,7 @@
 				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
-							<td>{LANG.catSel}</td>
+							<td>{LANG.catSel} <span class="red">*</span></td>
 						</tr>
 						<tr>
 							<td>
@@ -253,7 +252,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>{LANG.areaSel}</td>
+							<td>{LANG.areaSel} <span class="red">*</span></td>
 						</tr>
 						<tr>
 							<td>
@@ -264,7 +263,7 @@
 							</select></td>
 						</tr>
 						<tr>
-							<td>{LANG.subjectSel}</td>
+							<td>{LANG.subjectSel} <span class="red">*</span></td>
 						</tr>
 						<tr>
 							<td>
@@ -275,7 +274,7 @@
 							</select></td>
 						</tr>
 						<tr>
-							<td>{LANG.signer}</td>
+							<td>{LANG.signer} <span class="red">*</span></td>
 						</tr>
 						<tr>
 							<td>
@@ -311,7 +310,7 @@
 				</table>
 			</div>
 		</div>
-		
+
 		<input type="hidden" name="save" value="1" />
 		<input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" />
 	</form>
@@ -330,7 +329,7 @@
 
 	var nv_num_files = '{NUMFILE}';
 	var nv_is_editor = '{IS_EDITOR}';
-	
+
 	$(document).ready(function() {
 		$("#replacementSearch").click(function() {
 			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=getlid&area=replacement", "NVImg", "850", "600", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
@@ -374,7 +373,7 @@
 		{
 			$("textarea[name=bodytext]").val(CKEDITOR.instances.laws_bodytext.getData());
 		}
-		
+
 		a = $(this).serialize();
 		var b = $(this).attr("action");
 		$("[type=submit]").attr("disabled", "disabled");
