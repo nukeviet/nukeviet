@@ -275,6 +275,10 @@ div.news_column ul.related a:hover{
 	word-break: break-word
 }
 
+.bodytext figure.image figcaption{
+	padding: 5px;
+}
+
 .tooltip-inner {
 	width: 300px; 
 	max-width: 300px; !important;
