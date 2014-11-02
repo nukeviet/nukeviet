@@ -20,11 +20,20 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', 'listid ' . $listid, $admin_info['userid'] );
 
 	$topicsid = $nv_Request->get_int( 'topicsid', 'post' );
-	$listid = explode( ',', $listid );
+	$listid = array_filter( array_unique( array_map( 'trim', explode( ',', $listid ) ) ) );
 
 	foreach( $listid as $_id )
 	{
-		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . intval( $_id ) );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . $_id );
+		
+		$result = $db->query( 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id );
+		list( $listcatid ) = $result->fetch( 3 );
+		$listcatid = explode( ',', $listcatid );
+		
+		foreach( $listcatid as $catid )
+		{
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SET topicid=' . $topicsid . ' WHERE id=' . $_id );
+		}
 	}
 
 	nv_del_moduleCache( $module_name );
