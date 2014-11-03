@@ -26,7 +26,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$html .= "</select>\n";
         $html .= '</td>';
         $html .= '</tr>';
-		
+
 		return $html;
 	}
 
@@ -39,18 +39,15 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$return['config']['style'] = $nv_Request->get_string( 'config_style', 'post', '' );
 		return $return;
 	}
-	
+
     function nv_law_block_search( $block_config )
     {
         global $my_head, $lang_module, $site_mods, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
-        
+
 		$module = $block_config['module'];
 		$module_data = $site_mods[$module]['module_data'];
 		$module_file = $site_mods[$module]['module_file'];
 
-		if ( empty( $my_head ) or ! preg_match( "/\/popcalendar\.js[^>]+>/", $my_head ) )
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/popcalendar/popcalendar.js\"></script>\n";
-		
 		$block_file_name = $block_config['style'] == 'center' ? 'block_search_center.tpl' : 'block_search_vertical.tpl';
         $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
@@ -63,15 +60,15 @@ if ( ! function_exists( 'nv_law_block_search' ) )
         $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
         $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
         $xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . "index.php?" );
-		
+
 		$skey = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH);
-		
+
 		$sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '', 1 ), 0, 10);
 		$sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '', 1 ), 0, 10);
-		
+
 		$xtpl->assign( 'FROM', $sfrom );
 		$xtpl->assign( 'TO', $sto );
-		
+
 		$sarea = $nv_Request->get_int( 'area', 'get', 0 );
 		$scat = $nv_Request->get_int( 'cat', 'get', 0 );
 		$ssubject = $nv_Request->get_int( 'subject', 'get', 0 );
@@ -79,62 +76,65 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$ssigner = $nv_Request->get_int( 'signer', 'get', 0 );
 
 		$nv_laws_listarea = array( 0 => array( "id" => 0, "title" => $lang_module['search_area'], "alias" => "" ) ) + $nv_laws_listarea;
-		
+
 		foreach( $nv_laws_listarea as $area )
 		{
-			$xtpl->assign( 'KEY', $area['id'] );	
+			$xtpl->assign( 'KEY', $area['id'] );
 			$xtpl->assign( 'TITLE', $area['title'] );
-			
-			$xtpl->assign( 'SELECTED', $area['id'] == $sarea ? " selected=\"selected\"" : "" );			
+
+			$xtpl->assign( 'SELECTED', $area['id'] == $sarea ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.area' );
 		}
-		
+
 		$nv_laws_listcat = array( 0 => array( "id" => 0, "title" => $lang_module['search_cat'], "alias" => "" ) ) + $nv_laws_listcat;
-		
+
 		foreach( $nv_laws_listcat as $area )
 		{
-			$xtpl->assign( 'KEY', $area['id'] );	
+			$xtpl->assign( 'KEY', $area['id'] );
 			$xtpl->assign( 'TITLE', $area['title'] );
-			
-			$xtpl->assign( 'SELECTED', $area['id'] == $scat ? " selected=\"selected\"" : "" );			
+
+			$xtpl->assign( 'SELECTED', $area['id'] == $scat ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.cat' );
 		}
-		
-		$nv_laws_listsubject = array( 0 => array( "id" => 0, "title" => $lang_module['search_subject'], "alias" => "" ) ) + $nv_laws_listsubject;
-		
+
+		if( ! empty( $nv_laws_listsubject ) )
+		{
+			$nv_laws_listsubject = array( 0 => array( "id" => 0, "title" => $lang_module['search_subject'], "alias" => "" ) ) + $nv_laws_listsubject;
+		}
+
 		foreach( $nv_laws_listsubject as $area )
 		{
-			$xtpl->assign( 'KEY', $area['id'] );	
+			$xtpl->assign( 'KEY', $area['id'] );
 			$xtpl->assign( 'TITLE', $area['title'] );
-			
-			$xtpl->assign( 'SELECTED', $area['id'] == $ssubject ? " selected=\"selected\"" : "" );			
+
+			$xtpl->assign( 'SELECTED', $area['id'] == $ssubject ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.subject' );
 		}
-		
+
 		$nv_list_status = array();
 		$nv_list_status[] = array( "id" => 0, "title" => $lang_module['s_status_all'], "selected" => "" );
 		$nv_list_status[] = array( "id" => 1, "title" => $lang_module['s_status_1'], "selected" => 1 == $sstatus ? " selected=\"selected\"" : "" );
 		$nv_list_status[] = array( "id" => 2, "title" => $lang_module['s_status_2'], "selected" => 2 == $sstatus ? " selected=\"selected\"" : "" );
-		
+
 		foreach( $nv_list_status as $status )
 		{
-			$xtpl->assign( 'status', $status );	
+			$xtpl->assign( 'status', $status );
 			$xtpl->parse( 'main.status' );
 		}
-		
+
 		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer ORDER BY title ASC";
 		$list = array( 0 => array( "id" => 0, "title" => $lang_module['s_signer_all'], "alias" => "" ) ) + nv_db_cache( $sql, 'id', $module_name );
 		foreach ( $list as $row )
 		{
-			$xtpl->assign( 'KEY', $row['id'] );	
+			$xtpl->assign( 'KEY', $row['id'] );
 			$xtpl->assign( 'TITLE', $row['title'] );
-			
-			$xtpl->assign( 'SELECTED', $row['id'] == $ssigner ? " selected=\"selected\"" : "" );			
+
+			$xtpl->assign( 'SELECTED', $row['id'] == $ssigner ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.signer' );
 		}
-		
+
         $xtpl->assign( 'Q', $skey );
-		
+
         $xtpl->parse( 'main' );
         return $xtpl->text( 'main' );
     }
