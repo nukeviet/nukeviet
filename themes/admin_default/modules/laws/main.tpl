@@ -371,7 +371,7 @@
 
 		if( nv_is_editor == '1' )
 		{
-			$("textarea[name=bodytext]").val(CKEDITOR.instances.laws_bodytext.getData());
+			$("textarea[name=bodytext]").val(CKEDITOR.instances.{MODULE_DATA}_bodytext.getData());
 		}
 
 		a = $(this).serialize();
