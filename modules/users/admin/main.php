@@ -21,7 +21,7 @@ if( $usactive_old != $usactive )
 $_where = 'active=' . ( $usactive % 2 );
 if( $usactive > 1 )
 {
-	$_where .= ' AND idsite=' . $global_config['idsite'];
+	$_where .= ' AND (idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
