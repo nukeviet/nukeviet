@@ -495,18 +495,9 @@ class Request
 		session_set_cookie_params( NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1 );
 
 		session_name( $this->cookie_prefix . '_sess' );
-		$session_id = isset( $_COOKIE[$this->cookie_prefix . '_sess'] ) ? $_COOKIE[$this->cookie_prefix . '_sess'] : '';
-		if( ! preg_match( '/^([a-zA-Z0-9]{32})([\d]+)$/', $session_id ) )
-		{
-			$session_id = md5( uniqid( rand(), true ) ) . sprintf( '%u', $this->ip_addr );
-			session_id( $session_id );
-		}
 		session_start();
 		$session_id = session_id();
-		if( ! preg_match( '/^([a-zA-Z0-9]{32})([\d]+)$/', $session_id ) )
-		{
-			trigger_error( Request::INCORRECT_SESSION_ID, 256 );
-		}
+
 		$_SESSION = ( isset( $_SESSION ) and is_array( $_SESSION ) ) ? $_SESSION : array();
 		if( sizeof( $_SESSION ) )
 		{
