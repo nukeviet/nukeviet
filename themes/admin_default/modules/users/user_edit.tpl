@@ -82,7 +82,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" class="form-control datepicker" value="{DATA.birthday}" style="width: 300px;" maxlength="10" readonly="readonly" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -175,11 +175,11 @@
 			<tbody>
 				<tr>
 					<td> {LANG.password} </td>
-					<td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /></td>
+					<td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">Radom Pass</a></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
-					<td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" /></td>
+					<td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" id="password2" /> <input id="methods" type="checkbox"> Show password</td>
 				</tr>
 			</tbody>
 		</table>
@@ -194,6 +194,11 @@
 //<![CDATA[
 document.getElementById('form_user').setAttribute("autocomplete", "off");
 $(function() {
+	$.toggleShowPassword({
+	    field: '#password2',
+	    control: '#methods'
+	});
+
 	$('#form_user').validate({
 		rules : {
 			username : {
@@ -201,6 +206,7 @@ $(function() {
 			}
 		}
 	});
+
 	$(".datepicker").datepicker({
 		showOn : "both",
 		dateFormat : "dd/mm/yy",
@@ -208,8 +214,25 @@ $(function() {
 		changeYear : true,
 		showOtherMonths : true,
 		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true
+		buttonImageOnly : true,
 	});
+
+	$("#birthday").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImageOnly : true,
+		yearRange: "-99:+0",
+		beforeShow: function() {
+	        setTimeout(function(){
+	            $('.ui-datepicker').css('z-index', 999999999);
+	        }, 0);
+    	}
+	});
+
 	$("#btn_upload").click(function() {
 		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
@@ -219,11 +242,15 @@ $(function() {
 		$('#photo_delete').val('1');
 		$('#change-photo').show();
 	});
-	<!-- BEGIN: add_photo -->
-	$('#change-photo').show();
-	<!-- END: add_photo -->
 });
 //]]>
 </script>
+<!-- BEGIN: add_photo -->
+<script type="text/javascript">
+//<![CDATA[
+	$('#change-photo').show();
+//]]>
+</script>
+<!-- END: add_photo -->
 <!-- END: edit_user -->
 <!-- END: main -->

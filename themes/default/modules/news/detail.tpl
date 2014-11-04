@@ -231,10 +231,10 @@
 $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 	<!-- BEGIN: tooltip -->
-	$("[data-rel='tooltip']").tooltip({
+	$("[data-rel='tooltip'][data-content!='']").tooltip({
 		placement: "{TOOLTIP_POSITION}",
 		html: true,
-		title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
 	});
 	<!-- END: tooltip -->
 });

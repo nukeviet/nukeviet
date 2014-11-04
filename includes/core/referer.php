@@ -103,7 +103,7 @@ function nv_referer_update()
 				if( isset( $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'] ) and ! empty( $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'] ) )
 				{
 					$key = $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'];
-					$key = $nv_Request->referer_queries[$key];
+					$key = ! empty( $nv_Request->referer_queries[$key] ) ? $nv_Request->referer_queries[$key] : '';
 					$key = str_replace( '+', ' ', $key );
 					$key = nv_strtolower( $key );
 					$key = nv_substr( $key, 0, 100 );
