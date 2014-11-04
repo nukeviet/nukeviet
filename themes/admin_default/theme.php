@@ -16,7 +16,7 @@ function nv_get_submenu( $mod )
 
 	$submenu = array();
 
-	if( $mod != $module_name and file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php' ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php' ) )
 	{
 		//ket noi voi file ngon ngu cua module
 		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
@@ -185,12 +185,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$top_menu = $admin_mods;
 		if( sizeof( $top_menu ) > 8 )
 		{
-			unset( $top_menu['authors'] );
-			unset( $top_menu['language'] );
+			if( $module_name != 'authors' ) unset( $top_menu['authors'] );
+			if( $module_name != 'language' ) unset( $top_menu['language'] );
 		}
 		foreach( $top_menu as $m => $v )
 		{
-			if( ! empty( $v['custom_title'] ) and $module_name != $m )
+			if( ! empty( $v['custom_title'] ) )
 			{
 				$array_submenu = nv_get_submenu( $m );
 
