@@ -10,6 +10,13 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+if( $nv_Request->isset_request( 'nv_genpass', 'post' ) )
+{
+	$_len = round( ( NV_UPASSMIN + NV_UPASSMAX ) / 2 );
+	echo nv_genpass( $_len );
+	exit();
+}
+
 $page_title = $lang_module['user_add'];
 
 $groups_list = nv_groups_list();
@@ -289,6 +296,11 @@ $xtpl->assign( 'DATA', $_user );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_add' );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+
+$xtpl->assign( 'NV_UNICKMIN', NV_UNICKMIN );
+$xtpl->assign( 'NV_UNICKMAX', NV_UNICKMAX );
+$xtpl->assign( 'NV_UPASSMAX', NV_UPASSMAX );
+$xtpl->assign( 'NV_UPASSMAX', NV_UPASSMAX );
 
 if( ! empty( $error ) )
 {

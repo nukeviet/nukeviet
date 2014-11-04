@@ -245,3 +245,29 @@ function nv_group_exclude_user(group_id, userid) {
 
 	return;
 }
+
+function nv_genpass() {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_add&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
+		$("input[name='password1']").val(res);
+		$("input[name='password2']").val(res);
+	});
+	return;
+}
+
+$.toggleShowPassword = function (options) {
+    var settings = $.extend({
+        field: "#password",
+        control: "#toggle_show_password",
+    }, options);
+
+    var control = $(settings.control);
+    var field = $(settings.field);
+
+    control.bind('click', function () {
+        if (control.is(':checked')) {
+            field.attr('type', 'text');
+        } else {
+            field.attr('type', 'password');
+        }
+    });
+};
