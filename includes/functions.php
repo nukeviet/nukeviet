@@ -1872,10 +1872,6 @@ function nv_site_mods()
 			{
 				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
 			}
-			else
-			{
-				unset( $site_mods[$m_title] );
-			}
 		}
 		if( isset( $site_mods['users'] ) )
 		{

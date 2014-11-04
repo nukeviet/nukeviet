@@ -62,15 +62,14 @@ else
 if( preg_match( $global_config['check_module'], $module_name ) )
 {
 	$site_mods = nv_site_mods();
-
 	// IMG thong ke truy cap + online
 	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == 'statimg' )
 	{
-		include_once NV_ROOTDIR . '/includes/core/statimg.php' ;
+		include_once NV_ROOTDIR . '/includes/core/statimg.php';
 	}
-
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
 	if( empty( $op ) ) $op = 'main';
+
 	if( $global_config['rewrite_op_mod'] != '' and ! isset( $site_mods[$module_name] ) )
 	{
 		$op = ( $op == 'main' ) ? $module_name : $module_name . '/' . $op;
@@ -80,6 +79,24 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
+		//kiem tra quyen truy cap module
+		$groups_view = ( string )$site_mods[$module_name]['groups_view'];
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		{
+			// Login users
+			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+			die();
+		}
+		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
+		{
+			// Exit
+			nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
+			die();
+		}
+		elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
+		{
+			nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+		}
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
@@ -156,7 +173,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Xac dinh giao dien chung
 			$is_mobile = false;
 			$theme_type = '';
-            $_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
+			$_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
 			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 			{
 				$global_config['module_theme'] = $_theme;
@@ -164,23 +181,23 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				$theme_type = $global_config['array_theme_type'][1];
 			}
 			else
-    		{
-                $_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
-    			if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
-    			{
-    				$global_config['module_theme'] = $_theme;
-    				$theme_type = $global_config['array_theme_type'][0];
-    			}
-    			elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
-    			{
-    				$global_config['module_theme'] = 'default';
-    				$theme_type = $global_config['array_theme_type'][0];
-    			}
-    			else
-    			{
-    				trigger_error( 'Error! Does not exist themes default', 256 );
-    			}
-            }
+			{
+				$_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
+				if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
+				{
+					$global_config['module_theme'] = $_theme;
+					$theme_type = $global_config['array_theme_type'][0];
+				}
+				elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
+				{
+					$global_config['module_theme'] = 'default';
+					$theme_type = $global_config['array_theme_type'][0];
+				}
+				else
+				{
+					trigger_error( 'Error! Does not exist themes default', 256 );
+				}
+			}
 
 			// Xac lap lai giao kieu giao dien hien tai
 			if( $theme_type != $global_config['current_theme_type'] )
@@ -224,7 +241,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			{
 				require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/' . NV_LANG_INTERFACE . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php') )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php' ) )
 			{
 				require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/language/en.php';
 			}
@@ -281,32 +298,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			$sth->execute();
 
 			nv_del_moduleCache( 'modules' );
-		}
-	}
-	else
-	{
-		$sql = 'SELECT * FROM ' . NV_MODFUNCS_TABLE . ' AS f, ' . NV_MODULES_TABLE . ' AS m WHERE m.act = 1 AND f.in_module = m.title ORDER BY m.weight, f.subweight';
-		$list = nv_db_cache( $sql, '', 'modules' );
-
-		foreach( $list as $row )
-		{
-			if( $row['title'] == $module_name )
-			{
-				$groups_view = ( string )$row['groups_view'];
-				if( ! defined( 'NV_IS_USER' ) and $groups_view == 1 )
-				{
-					// Login users
-					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					die();
-				}
-				elseif( ! defined( 'NV_IS_ADMIN' ) and $groups_view == '2' )
-				{
-					// Exit
-					nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
-					die();
-				}
-				break;
-			}
 		}
 	}
 }
