@@ -68,7 +68,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 			$check_cat = true;
 		}
 	}
-	if( isset( $array_cat_admin[$admin_id] ) && $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
+	if( isset( $array_cat_admin[$admin_id][$catid_i] ) && $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
 	{
 		$check_declined = true;
 	}
