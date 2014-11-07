@@ -836,6 +836,8 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 	{
 		foreach( $topic_other_array as $topic_other_array_i )
 		{
+			$topic_other_array_i['publtime'] = nv_date( 'H:i d/m/Y', $topic_other_array_i['publtime'] );
+			
 			$xtpl->assign( 'TOPIC_OTHER', $topic_other_array_i );
 			$xtpl->parse( 'main.other.loop' );
 		}
