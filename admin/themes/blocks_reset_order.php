@@ -36,12 +36,6 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 		$array_funcid[] = $func_id_i;
 	}
 
-	$sth = $db->prepare( 'SELECT MAX(t1.weight)
-		FROM ' . NV_BLOCKS_TABLE . '_weight t1
-		INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
-		WHERE t1.func_id = :func_id AND t2.theme = :theme AND t2.position = :position' );
-    $sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
-
 	foreach( $array_bid as $bid => $position )
 	{
 		$func_list = array();
@@ -56,6 +50,11 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 		{
 			if( ! in_array( $func_id, $func_list ) ) // Cac function chua duoc them
 			{
+				$sth = $db->prepare( 'SELECT MAX(t1.weight)
+					FROM ' . NV_BLOCKS_TABLE . '_weight t1
+					INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+					WHERE t1.func_id = :func_id AND t2.theme = :theme AND t2.position = :position' );
+			    $sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
 				$sth->bindParam( ':position', $position, PDO::PARAM_STR );
 				$sth->execute();
