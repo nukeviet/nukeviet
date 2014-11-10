@@ -33,6 +33,7 @@ if( $num_items )
 	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';
 
 	$db->select( 'r.id, r.title, r.alias, r.catid, r.hometext, c.bodytext' )
+		->order( 'publtime DESC' )
 		->limit( $limit )
 		->offset( ( $page - 1 ) * $limit );
 	$result = $db->query( $db->sql() );

@@ -135,6 +135,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 	$numRecord = $db->query( $db->sql() )->fetchColumn();
 
 	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
+		->order( 'tb1.publtime DESC' )
 		->limit( $per_page )
 		->offset( ( $page - 1 ) * $per_page );
 
