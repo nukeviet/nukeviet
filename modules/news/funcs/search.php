@@ -123,11 +123,11 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		$where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db->dblikeescape( $dbkey ) . "%' OR link like '%" . $db->dblikeescape( $qurl ) . "%'))";
 	}
 
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $to_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m ) )
 	{
 		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from_date, $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m ) )
 	{
 		$where .= ' AND publtime <= ' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
