@@ -26,7 +26,8 @@ if( $per_page_old != $per_page )
 	$nv_Request->set_Cookie( 'per_page', $per_page, NV_LIVE_COOKIE_TIME );
 }
 
-$q = strip_tags( $nv_Request->get_string( 'q', 'get', '' ) );
+$q = $nv_Request->get_title( 'q', 'get', '' );
+$q = str_replace( '+', ' ', $q );
 $qhtml = nv_htmlspecialchars( $q );
 $ordername = $nv_Request->get_string( 'ordername', 'get', 'publtime' );
 $order = $nv_Request->get_string( 'order', 'get' ) == 'asc' ? 'asc' : 'desc';
