@@ -15,7 +15,7 @@
 				<a href="javascript:void(0);" data-toggle="dropdown">
 					<span class="screen-lg">{NV_LANGDATA_CURRENT} <em class="fa fa-caret-down">&nbsp;</em></span>
 					<span class="screen-xs"><em class="fa fa-magic fa-2x fix logout">&nbsp;</em><span>
-				</a> 
+				</a>
 				<ul class="dropdown-menu" role="menu">
 					<!-- BEGIN: option -->
 					<li{DISABLED}><a href="{LANGOP}">{LANGVALUE}</a></li>
@@ -26,13 +26,13 @@
 			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_GO_CLIENTSECTOR}">
 				<a href="{NV_GO_CLIENTSECTOR_URL}"> <em class="fa fa-home fa-2x fix">&nbsp;</em></a>
 			</li>
-			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
-				<a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout">&nbsp;</em></a>
-			</li>
 			<li class="tip admin-info" data-toggle="tooltip" data-placement="bottom" title="<!-- BEGIN: hello_admin -->{HELLO_ADMIN1}<!-- END: hello_admin --><!-- BEGIN: hello_admin3 -->{HELLO_ADMIN3}<!-- END: hello_admin3 --><!-- BEGIN: hello_admin2 -->{HELLO_ADMIN2}<!-- END: hello_admin2 -->">
-				<a href="javascript:void(0);">
+				<a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=users">
 					<img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32"/>
 				</a>
+			</li>
+			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
+				<a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout">&nbsp;</em></a>
 			</li>
 		</ul>
 	</header>
@@ -59,7 +59,7 @@
 							<a title="{LANG.Home}" href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 						</li>
 						<!-- BEGIN: top_menu_loop -->
-						<li{TOP_MENU_CLASS}>
+						<li {TOP_MENU_CLASS}>
 							<a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={TOP_MENU_HREF}">{TOP_MENU_NAME}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
 							<!-- BEGIN: submenu -->
 							<ul class="dropdown-menu">
@@ -74,9 +74,9 @@
 			</div>
 		</div>
 	</div>
-	<section id="middle" class="row">	
+	<section id="middle" class="row">
 		<aside id="left-menu">
-			<div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">	
+			<div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">
 				<ul class="nav nav-pills nav-stacked text-color">
 				<!-- BEGIN: menu_loop -->
 					<li {MENU_CLASS}>
@@ -99,9 +99,9 @@
 					<!-- END: current -->
 					<!-- END: menu_loop -->
 				</ul>
-				<div class="clearfix"></div>
+				<div class="clearfix"> </div>
 			</div>
-		</aside>		
+		</aside>
 		<div id="container" class="clearfix">
 			<div id="info_tab" class="clearfix">
 				<!-- BEGIN: breadcrumbs -->

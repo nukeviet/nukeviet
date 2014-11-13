@@ -418,9 +418,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		// Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
 		$keywords_return = array();
-		$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword' );
 		foreach ( $keywords as $keyword_i )
 		{
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id where keyword = :keyword' );
 			$sth->bindParam( ':keyword', $keyword_i, PDO::PARAM_STR );
 			$sth->execute();
 			if( $sth->fetchColumn() )

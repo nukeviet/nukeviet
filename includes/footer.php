@@ -10,7 +10,7 @@
 
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-unset( $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone );
+unset( $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone, $countries, $module_info, $site_mods );
 global $db, $nv_Request, $nv_plugin_area;
 
 $contents = ob_get_contents();
@@ -34,6 +34,8 @@ if( isset( $nv_plugin_area[3] ) )
         include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
     }
 }
+
+unset( $lang_global, $global_config, $client_info );
 
 //Nen trang
 if( defined( 'NV_IS_GZIP' ) )

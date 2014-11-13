@@ -26,7 +26,7 @@ function search_main_theme( $is_search, $search, $array_modul )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
 	$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
-	$xtpl->assign( 'PAGE', 0 );
+	$xtpl->assign( 'PAGE', $search['page'] );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -45,7 +45,7 @@ function search_main_theme( $is_search, $search, $array_modul )
 			$m_info['value'] = $m_name;
 			$m_info['selected'] = ( $m_name == $search['mod'] ) ? " selected=\"selected\"" : "";
 			$m_info['adv_search'] = $m_info['adv_search'] ? 'true' : 'false';
-			
+
 			$xtpl->assign( 'MOD', $m_info );
 			$xtpl->parse( 'main.select_option' );
 		}

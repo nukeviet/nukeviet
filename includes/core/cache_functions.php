@@ -18,13 +18,15 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  */
 function nv_delete_cache( $modname, $pattern )
 {
-	if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname ) )
+	$dir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
+	
+	if( is_dir( $dir ) and $dh = opendir( $dir ) )
 	{
 		while( ( $file = readdir( $dh ) ) !== false )
 		{
 			if( preg_match( $pattern, $file ) )
 			{
-				unlink( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname . '/' . $file );
+				unlink( $dir . '/' . $file );
 			}
 		}
 		closedir( $dh );
@@ -37,7 +39,7 @@ function nv_delete_cache( $modname, $pattern )
  *
  * @return
  */
-function nv_delete_all_cache( $sys = true)
+function nv_delete_all_cache( $sys = true )
 {
 	if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR ) )
 	{
@@ -49,6 +51,7 @@ function nv_delete_all_cache( $sys = true)
 		{
 			$pattern = '/^' . NV_LANG_DATA . '\_(.*)\.cache$/';
 		}
+		
 		while( ( $modname = readdir( $dh ) ) !== false )
 		{
 			if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
@@ -56,6 +59,7 @@ function nv_delete_all_cache( $sys = true)
 				nv_delete_cache( $modname, $pattern );
 			}
 		}
+		
 		closedir( $dh );
 	}
 }
@@ -70,7 +74,7 @@ function nv_delete_all_cache( $sys = true)
  */
 function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
 {
-	if( empty( $lang ) )
+	if( ! empty( $lang ) )
 	{
 		$pattern = '/^' . $lang . '\_(.*)\.cache$/';
 	}
@@ -78,6 +82,7 @@ function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
 	{
 		$pattern = '/(.*)\.cache$/';
 	}
+	
 	nv_delete_cache( $module_name, $pattern );
 }
 

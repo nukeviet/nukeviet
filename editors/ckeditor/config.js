@@ -6,7 +6,7 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
 	config.allowedContent = true;
-	config.extraPlugins = 'autosave,video';
+	config.extraPlugins = 'video';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
 	    { name: 'styles' },
 	    { name: 'colors' },
 	];
-	
+
 	config.toolbar_Basic =
 	[
 		{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },

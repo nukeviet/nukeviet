@@ -225,7 +225,6 @@ function nv_news_get_bodytext( $bodytext )
 		}
 	}
 
-	$bodytext = nv_unhtmlspecialchars( strip_tags( $bodytext ) );
-	$bodytext = str_replace( '&nbsp;', ' ', $bodytext );
+	$bodytext = str_replace( '&nbsp;', ' ', strip_tags( $bodytext ) );
 	return preg_replace( '/[ ]+/', ' ', $bodytext );
 }

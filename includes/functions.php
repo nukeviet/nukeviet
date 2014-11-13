@@ -1859,22 +1859,9 @@ function nv_site_mods()
 				$allowed = true;
 				$is_modadmin = true;
 			}
-			elseif( $m_title == $global_config['site_home_module'] )
-			{
-				$allowed = true;
-			}
-			elseif( nv_user_in_groups( $row['groups_view'] ) )
-			{
-				$allowed = true;
-			}
-
 			if( $allowed )
 			{
 				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
-			}
-			else
-			{
-				unset( $site_mods[$m_title] );
 			}
 		}
 		if( isset( $site_mods['users'] ) )
