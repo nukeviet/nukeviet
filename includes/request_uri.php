@@ -26,7 +26,7 @@ $request_uri = preg_replace( '/(' . $base_siteurl_quote . ')index\.php\//', '\\1
 
 if( $global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
 {
-	$_GET[NV_NAME_VARIABLE] = '';
+	$_GET[NV_NAME_VARIABLE] = 'page';
 	$_GET[NV_OP_VARIABLE] = $matches[1];
 }
 elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-\_\.\/\+]+)(' . nv_preg_quote( $global_config['rewrite_endurl'] ) . '|' . nv_preg_quote( $global_config['rewrite_exturl'] ) . ')$/i', $request_uri, $matches ) )
