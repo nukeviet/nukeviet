@@ -281,7 +281,6 @@ function nv_clean60( $string, $num = 60 )
 	$string = nv_unhtmlspecialchars( $string );
 
 	$len = nv_strlen( $string );
-
 	if( $num and $num < $len )
 	{
 		if( ord( nv_substr( $string, $num, 1 ) ) == 32 )
@@ -297,5 +296,6 @@ function nv_clean60( $string, $num = 60 )
 			$string = nv_clean60( $string, $num - 1 );
 		}
 	}
-	return $string;
+	
+	return nv_htmlspecialchars( $string );
 }
