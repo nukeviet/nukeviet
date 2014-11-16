@@ -73,6 +73,28 @@ function htmlspecialchars_decode(string, quote_style) {
     return string;
 }
 
+function nv_filename_alt( fileAlt ){
+    var lastChar = fileAlt.charAt(fileAlt.length - 1);
+
+    if( lastChar === '/' || lastChar === '\\' ){
+        fileAlt = fileAlt.slice(0, -1);
+    }
+
+    fileAlt = decodeURIComponent( htmlspecialchars_decode( fileAlt.replace(/^.*[\/\\]/g, '') ) );
+    fileAlt = fileAlt.split('.');
+    
+    if( fileAlt.length > 1 ){
+    	fileAlt[fileAlt.length - 1] = '';
+    }
+    
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('_');
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('-');
+    fileAlt = fileAlt.join(' ');
+    return trim( fileAlt );
+}
+
 function nv_randomNum( a ){
 	for( var b = "", d = 0; d < a; d++ ){
 		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
@@ -189,15 +211,18 @@ function insertvaluetofield(){
 	var path = ( imageInfo[7] == "" ) ? $("span#foldervalue").attr("title") : imageInfo[7];
 	var fullPath = nv_siteroot + path + "/" + selFile;
 	
-	if( area != "" ){
+	if( area != '' ){
 		$("#" + area, opener.document).val( fullPath );
 		
-		var alt = $("input[name=alt]").val();
-		
-		if( alt != "" ){
-			$("#" + alt, opener.document).val( $("img[title='" + selFile + "']").attr("alt") );
+		var idalt = $("input[name=alt]").val();
+		if( idalt != '' ) {
+		    fileAlt = nv_filename_alt( selFile );
+		    alt = $("img[title='" + selFile + "']").attr("alt");
+			if( alt == fileAlt ){
+				alt = '';
+			}
+			$("#" + idalt, opener.document).val( alt );
 		}
-		
 		window.close();
 	}else{
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
@@ -1215,27 +1240,7 @@ function remoteUpload(){
 	if( nv_auto_alt ){
 		$('#uploadremoteFile').keyup(function(){
 			var imageUrl = $(this).val();
-			var fileAlt = imageUrl;
-		    var lastChar = fileAlt.charAt(fileAlt.length - 1);
-		
-		    if( lastChar === '/' || lastChar === '\\' ){
-		        fileAlt = fileAlt.slice(0, -1);
-		    }
-		
-		    fileAlt = decodeURIComponent( htmlspecialchars_decode( fileAlt.replace(/^.*[\/\\]/g, '') ) );
-		    fileAlt = fileAlt.split('.');
-		    
-		    if( fileAlt.length > 1 ){
-		    	fileAlt[fileAlt.length - 1] = '';
-		    }
-		    
-		    fileAlt = fileAlt.join(' ');
-		    fileAlt = fileAlt.split('_');
-		    fileAlt = fileAlt.join(' ');
-		    fileAlt = fileAlt.split('-');
-		    fileAlt = fileAlt.join(' ');
-		    fileAlt = trim( fileAlt );
-		    
+		    fileAlt = nv_filename_alt( imageUrl );
 			$('#uploadremoteFileAlt').val( fileAlt );
 		});
 	}
@@ -1779,26 +1784,8 @@ var NVUPLOAD = {
 				fileAlt = NVLDATA.getValue(file.id);
 				
 				if( nv_auto_alt && fileAlt == '' ){
-					fileAlt = file.name;
-				    var lastChar = fileAlt.charAt(fileAlt.length - 1);
-				
-				    if( lastChar === '/' || lastChar === '\\' ){
-				        fileAlt = fileAlt.slice(0, -1);
-				    }
-				
-				    fileAlt = decodeURIComponent( htmlspecialchars_decode( fileAlt.replace(/^.*[\/\\]/g, '') ) );
-				    fileAlt = fileAlt.split('.');
-				    
-				    if( fileAlt.length > 1 ){
-				    	fileAlt[fileAlt.length - 1] = '';
-				    }
-				    
-				    fileAlt = fileAlt.join(' ');
-				    fileAlt = fileAlt.split('_');
-				    fileAlt = fileAlt.join(' ');
-				    fileAlt = fileAlt.split('-');
-				    fileAlt = fileAlt.join(' ');
-				    fileAlt = trim( fileAlt );
+
+				    fileAlt = nv_filename_alt( file.name );
 					
 					NVLDATA.setValue( file.id, fileAlt );					
 				}
