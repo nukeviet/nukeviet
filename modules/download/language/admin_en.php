@@ -94,6 +94,7 @@ $lang_module['report_check_error'] = 'Broken link found. Press OK to fix';
 $lang_module['report_check_error2'] = 'Error: File not exists. Press OK to delete this report';
 $lang_module['report_delete'] = 'Delete';
 $lang_module['file_gourl'] = 'Access';
+$lang_module['file_delurl'] = 'Delete file';
 $lang_module['download_report'] = 'Error report';
 $lang_module['download_filemanager'] = 'Manage file';
 $lang_module['download_editfile'] = 'Edit file';

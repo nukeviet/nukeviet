@@ -30,6 +30,8 @@ $lang_module['comment_content'] = 'Content';
 $lang_module['comment_seccode'] = 'Security code';
 $lang_module['comment_submit'] = 'Submit';
 $lang_module['comment_timeout'] = 'You\'ve voted, please wait for %s minutes later to post a comment';
+
+$lang_module['sortcomm'] = 'Sort comments';
 $lang_module['sortcomm_0'] = 'Sort by new comments';
 $lang_module['sortcomm_1'] = 'Sort by old comments';
 $lang_module['sortcomm_2'] = 'Sort by likes';

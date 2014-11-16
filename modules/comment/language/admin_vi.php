@@ -22,7 +22,6 @@ $lang_module['save'] = 'Save';
 
 $lang_module['comment'] = 'Quản lý bình luận';
 $lang_module['edit'] = 'Sửa';
-
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
 $lang_module['search_status'] = 'Trạng thái';
