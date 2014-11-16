@@ -48,10 +48,10 @@ while( list( $group_id, $addcontent, $postcontent, $editcontent, $delcontent ) =
 }
 
 $array_post_user = array(
-	'addcontent' => 0,
-	'postcontent' => 0,
-	'editcontent' => 0,
-	'delcontent' => 0
+	'addcontent' => isset( $array_post_config[5]['addcontent'] ) ? $array_post_config[5]['addcontent'] : 0,
+	'postcontent' => isset( $array_post_config[5]['postcontent'] ) ? $array_post_config[5]['postcontent'] : 0,
+	'editcontent' => isset( $array_post_config[5]['editcontent'] ) ? $array_post_config[5]['editcontent'] : 0,
+	'delcontent' => isset( $array_post_config[5]['delcontent'] ) ? $array_post_config[5]['delcontent'] : 0
 );
 
 if( defined( 'NV_IS_USER' ) and isset( $array_post_config[4] ) )
@@ -229,7 +229,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		'hometext' => '',
 		'homeimgfile' => '',
 		'homeimgalt' => '',
-		'homeimgthumb' => '|',
+		'homeimgthumb' => 0,
 		'imgposition' => 1,
 		'bodyhtml' => '',
 		'copyright' => 0,
@@ -294,11 +294,11 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 		// Xu ly anh minh hoa
 		$rowcontent['homeimgthumb'] = 0;
-		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
+		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -394,7 +394,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 						 " . $db->quote( $rowcontent['hometext'] ) . ",
 						 " . $db->quote( $rowcontent['homeimgfile'] ) . ",
 						 " . $db->quote( $rowcontent['homeimgalt'] ) . ",
-						 " . $db->quote( $rowcontent['homeimgthumb'] ) . ",
+						 " . intval( $rowcontent['homeimgthumb'] ) . ",
 						 " . intval( $rowcontent['inhome'] ) . ",
 						 " . intval( $rowcontent['allowed_comm'] ) . ",
 						 " . intval( $rowcontent['allowed_rating'] ) . ",
@@ -456,7 +456,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 						 hometext=" . $db->quote( $rowcontent['hometext'] ) . ",
 						 homeimgfile=" . $db->quote( $rowcontent['homeimgfile'] ) . ",
 						 homeimgalt=" . $db->quote( $rowcontent['homeimgalt'] ) . ",
-						 homeimgthumb=" . $db->quote( $rowcontent['homeimgthumb'] ) . ",
+						 homeimgthumb=" . intval( $rowcontent['homeimgthumb'] ) . ",
 						 inhome=" . intval( $rowcontent['inhome'] ) . ",
 						 allowed_comm=" . intval( $rowcontent['allowed_comm'] ) . ",
 						 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
