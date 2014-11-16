@@ -44,8 +44,14 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 	}
 
 	$xtpl->assign( 'COMMENTCONTENT', $comment );
-
-	if( $allowed_comm )
+	
+	if( $form_login )
+	{
+		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_header=' . md5( $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
+		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['comment_login'] . '</a>' );
+		$xtpl->parse( 'main.form_login' );
+	}
+	elseif( $allowed_comm )
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
@@ -103,12 +109,6 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 			$xtpl->assign( 'GFX_NUM', 0 );
 		}
 		$xtpl->parse( 'main.allowed_comm' );
-	}
-	elseif( $form_login )
-	{
-		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
-		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['comment_login'] . '</a>' );
-		$xtpl->parse( 'main.form_login' );
 	}
 
 	$xtpl->parse( 'main' );

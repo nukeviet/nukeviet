@@ -788,6 +788,8 @@ $mod_title = $lang_module['login'];
 
 $contents = '';
 $error = '';
+$nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
+$full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
 	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
@@ -856,7 +858,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( $nv_redirect ) . '" />';
 
 		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_site_theme( $contents );
+		echo nv_site_theme( $contents, $full );
 		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
@@ -864,6 +866,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 	$array_login = array(
 		'nv_login' => $nv_username,
 		'nv_password' => $nv_password,
+		'nv_header' => $nv_header,
 		'nv_redirect' => $nv_redirect
 	);
 }
@@ -872,6 +875,7 @@ else
 	$array_login = array(
 		'nv_login' => '',
 		'nv_password' => '',
+		'nv_header' => $nv_header,
 		'nv_redirect' => $nv_redirect
 	);
 }
@@ -885,5 +889,5 @@ if( $global_config['allowuserreg'] == 2 )
 $contents .= user_login( $gfx_chk, $array_login );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme( $contents, $full );
 include NV_ROOTDIR . '/includes/footer.php';
