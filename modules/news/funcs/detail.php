@@ -50,6 +50,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 				if( $news_contents['homeimgthumb'] == 1 and $news_contents['imgposition'] == 1 )
 				{
 					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
+					$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
 					$width = $module_config[$module_name]['homewidth'];
 				}
 				elseif( $news_contents['homeimgthumb'] == 3 )
@@ -76,6 +77,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 							$width = $imagesize[0];
 						}
 					}
+					$news_contents['homeimgfile'] = $src;
 				}
 
 				if( ! empty( $src ) )
