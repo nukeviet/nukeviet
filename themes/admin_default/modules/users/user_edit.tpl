@@ -175,11 +175,11 @@
 			<tbody>
 				<tr>
 					<td> {LANG.password} </td>
-					<td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">Radom Pass</a></td>
+					<td><input class="form-control" type="password" name="password1" autocomplete="off" value="{DATA.password1}" style="width: 300px" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
-					<td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" id="password2" /> <input id="methods" type="checkbox"> Show password</td>
+					<td><input class="form-control" type="password" name="password2" autocomplete="off" value="{DATA.password2}" style="width: 300px" id="password2" /> <input id="methods" type="checkbox">{LANG.show_password}</td>
 				</tr>
 			</tbody>
 		</table>
