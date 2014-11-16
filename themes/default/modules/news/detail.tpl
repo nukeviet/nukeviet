@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <!-- BEGIN: facebookjssdk -->
 <div id="fb-root"></div>
 <script type="text/javascript">
@@ -239,6 +240,8 @@ $(document).ready(function() {
 	<!-- END: tooltip -->
 });
 </script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
 <div class="alert alert-info">
