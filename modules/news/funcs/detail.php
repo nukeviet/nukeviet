@@ -262,11 +262,11 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			{
 				$row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 2 ) //image file
+			elseif( $row['homeimgthumb'] == 2 ) //image file
 			{
 				$row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
 			}
-			elseif( $item['homeimgthumb'] == 3 ) //image url
+			elseif( $row['homeimgthumb'] == 3 ) //image url
 			{
 				$row['imghome'] = $row['homeimgfile'];
 			}
