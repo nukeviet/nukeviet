@@ -29,6 +29,7 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 if( $popup )
 {
 	$lang_module['browse_file'] = $lang_global['browse_file'];
+	
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
@@ -129,8 +130,18 @@ if( $popup )
 		}
 	}
 
-	$xtpl->parse( 'main.header' );
-	$xtpl->parse( 'main.footer' );
+	$xtpl->assign( 'UPLOAD_ALT_REQUIRE', ! empty( $global_config['upload_alt_require'] ) ? 'true' : 'false' );
+	$xtpl->assign( 'UPLOAD_AUTO_ALT', ! empty( $global_config['upload_auto_alt'] ) ? 'true' : 'false' );
+
+	if( ! empty( $global_config['upload_alt_require'] ) )
+	{
+		$xtpl->parse( 'main.alt_remote' );
+	}
+
+	if( ! empty( $global_config['upload_auto_alt'] ) )
+	{
+		$xtpl->parse( 'main.auto_alt' );
+	}
 	
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );

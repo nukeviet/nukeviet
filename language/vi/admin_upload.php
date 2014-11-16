@@ -157,3 +157,6 @@ $lang_module['upload_stop'] = 'Dừng';
 $lang_module['upload_finish'] = 'Hoàn tất';
 $lang_module['upload_continue'] = 'Tiếp tục';
 $lang_module['addlogo_error_small'] = 'Ảnh này kích thước quá nhỏ, không thể chèn logo vào';
+$lang_module['upload_alt_require'] = 'Bắt buộc nhập chú thích cho file khi upload';
+$lang_module['upload_auto_alt'] = 'Tự xác định mô tả từ tên ảnh';
+$lang_module['upload_alt_note'] = 'Hãy nhập chú thích cho file trước';

@@ -33,6 +33,13 @@
 	overflow: auto;
 }
 
+.upload-file-alt{
+	height: 18px;
+	margin: 0;
+	border-radius: 0;
+	padding: 0;
+}
+
 @media (max-width: 768px){
 	.content{
 		height: auto;

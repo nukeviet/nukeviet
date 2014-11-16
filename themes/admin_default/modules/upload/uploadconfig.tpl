@@ -35,6 +35,18 @@
 					</select> {UPLOAD_CHECKING_NOTE} </td>
 				</tr>
 				<tr>
+					<td><strong>{LANG.upload_alt_require}</strong></td>
+					<td>
+						<input type="checkbox" name="upload_alt_require" value="1"{UPLOAD_ALT_REQUIRE}/>
+					</td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.upload_auto_alt}</strong></td>
+					<td>
+						<input type="checkbox" name="upload_auto_alt" value="1"{UPLOAD_AUTO_ALT}/>
+					</td>
+				</tr>
+				<tr>
 					<td><strong>{LANG.uploadconfig_types}</strong></td>
 					<td>
 					<!-- BEGIN: types -->
