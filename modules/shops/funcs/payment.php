@@ -166,8 +166,8 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
 	$data = $result->fetch();
-
-	if( isset( $data['transaction_status'] ) and intval( $data['transaction_status'] ) == 0 and preg_match( '/^[a-zA-Z0-9]+$/', $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.checkout_url.php' ) )
+	
+	if( isset( $data['transaction_status'] ) and ( intval( $data['transaction_status'] ) == 0 or ( intval( $data['transaction_status'] ) == 1 and $payment = 'paypal_express_checkout' ) ) and preg_match( '/^[a-zA-Z0-9\_]+$/', $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.checkout_url.php' ) )
 	{
 		$config = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment = '" . $payment . "'" )->fetch();
 		$payment_config = unserialize( nv_base64_decode( $config['config'] ) );

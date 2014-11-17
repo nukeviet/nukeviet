@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/PPBootStrap.php" colors="true">
+    <testsuites>
+        <testsuite name="All">
+            <directory suffix="tests/Test.php">.</directory>            
+        </testsuite>
+    </testsuites>
+    
+    <logging>
+        <log type="junit" target="build/junit.xml" logIncompleteSkipped="false" />
+    </logging>
+    
+    <filter>
+        <whitelist>
+            <directory>./lib</directory>
+            <exclude>
+                <directory>./vendor</directory>
+                <directory>./lib/auth/PPAuth.php</directory>
+                <directory>./lib/auth/AuthUtil.php</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
