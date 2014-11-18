@@ -259,7 +259,7 @@
 	<!-- END: other_view -->
 </div>
 <div class="msgshow" id="msgshow"></div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE}/js/tabresponsive.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/tabresponsive.js"></script>
 <script type="text/javascript">
 new CBPFWTabs( document.getElementById( 'tabs' ) );
 
