@@ -6,14 +6,15 @@ class PPHttpConfig {
 	 * These are typically overridden by PPConnectionManager
 	 */
 	public static $DEFAULT_CURL_OPTS = array(
-		CURLOPT_SSLVERSION => 3,
+		CURLOPT_SSLVERSION => 1,
 		CURLOPT_CONNECTTIMEOUT => 10,
 		CURLOPT_RETURNTRANSFER => TRUE,
 		CURLOPT_TIMEOUT        => 60,	// maximum number of seconds to allow cURL functions to execute
 		CURLOPT_USERAGENT      => 'PayPal-PHP-SDK',
 		CURLOPT_HTTPHEADER     => array(),
 		CURLOPT_SSL_VERIFYHOST => 2,
-		CURLOPT_SSL_VERIFYPEER => 1
+		CURLOPT_SSL_VERIFYPEER => 1,
+		CURLOPT_SSL_CIPHER_LIST => 'TLSv1',
 	);	
 	
 	const HEADER_SEPARATOR = ';';	
