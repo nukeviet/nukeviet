@@ -139,7 +139,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			unset( $list, $row );
 		}
 
-		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
+		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
 		$xtpl->assign( 'NUMVIEW', $num_view );
 		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
