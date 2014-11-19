@@ -147,7 +147,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 					$row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 				}
 
-				$row['hometext'] = nv_clean60( $row['hometext'], $block_config['tooltip_length'] );
+				$row['hometext'] = nv_clean60( $row['hometext'], $block_config['tooltip_length'], true );
 
 				$xtpl->assign( 'othernews', $row );
 

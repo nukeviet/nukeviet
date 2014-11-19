@@ -274,7 +274,7 @@ function change_alias( $alias )
  * @param integer $num
  * @return
  */
-function nv_clean60( $string, $num = 60 )
+function nv_clean60( $string, $num = 60, $specialchars = false )
 {
 	global $global_config;
 
@@ -297,5 +297,7 @@ function nv_clean60( $string, $num = 60 )
 		}
 	}
 	
-	return nv_htmlspecialchars( $string );
+	if( $specialchars ) $string = nv_htmlspecialchars( $string );
+	
+	return $string;
 }

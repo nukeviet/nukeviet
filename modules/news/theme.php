@@ -40,7 +40,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
 
@@ -107,7 +107,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
@@ -377,7 +377,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
-					$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+					$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 					$xtpl->assign( 'OTHER', $array_row_i );
 					$xtpl->parse( 'main.listcat.related.loop' );
 				}
@@ -531,7 +531,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
 
-					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], $module_config[$module_name]['tooltip_length'] );
+					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], $module_config[$module_name]['tooltip_length'], true );
 
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
@@ -711,7 +711,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_new_array as $key => $related_new_array_i )
 		{
-			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_new_array_i['time'] + ( 86400 * $related_new_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -729,7 +729,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_array as $related_array_i )
 		{
-			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_array_i['time'] + ( 86400 * $related_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -746,7 +746,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $topic_array as $key => $topic_array_i )
 		{
-			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'] );
+			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $topic_array_i['time'] + ( 86400 * $topic_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
