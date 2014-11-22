@@ -42,7 +42,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 				}
 			}
 			$news_contents['showhometext'] = $module_config[$module_name]['showhometext'];
-			$news_contents['homeimgalt'] = ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'];
 			if( ! empty( $news_contents['homeimgfile'] ) )
 			{
 				$src = $alt = $note = '';
@@ -89,7 +88,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 						$news_contents['image'] = array(
 							'src' => $src,
 							'width' => $width,
-							'alt' => $news_contents['homeimgalt'],
+							'alt' => ( empty( $news_contents['homeimgalt'] ) ) ? $news_contents['title'] : $news_contents['homeimgalt'],
 							'note' => $news_contents['homeimgalt'],
 							'position' => $news_contents['imgposition']
 						);
@@ -153,7 +152,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$db->sqlreset()
 		->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime > ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->where( 'status=1 AND publtime > ' . $publtime )
 		->order( 'id ASC' )
 		->limit( $st_links );
 
@@ -200,7 +199,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$db->sqlreset()
 		->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
-		->where( 'status=1 AND publtime < ' . $publtime . ' AND publtime < ' . NV_CURRENTTIME )
+		->where( 'status=1 AND publtime < ' . $publtime )
 		->order( 'id DESC' )
 		->limit( $st_links );
 

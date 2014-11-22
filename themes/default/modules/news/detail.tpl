@@ -37,7 +37,7 @@
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
 			<div class="imghome pull-left text-center" style="width:{DETAIL.image.width}px;">
-				<a href="{DETAIL.homeimgfile}" title="{DETAIL.image.note}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" /></a>
+				<a href="{DETAIL.homeimgfile}" title="{DETAIL.image.alt}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" /></a>
 				<em>{DETAIL.image.note}</em>
 			</div>
 			<!-- END: imgthumb -->
