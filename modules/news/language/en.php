@@ -134,3 +134,13 @@ $lang_module['del_content'] = 'Delete Post';
 $lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['rating_average'] = 'Ranking';
 $lang_module['rating_count'] = 'vote';
+
+$lang_module['no_public'] = 'Note: This article has not yet been published, only those with the right manipulation can view the content.';
+$lang_module['status_alert'] = 'Article are in state: % 1$s';
+$lang_module['status_0'] = 'Waitting';
+$lang_module['status_1'] = 'Published';
+$lang_module['status_2'] = 'Still waitting';
+$lang_module['status_3'] = 'Expired';
+$lang_module['status_4'] = 'Draft';
+$lang_module['status_5'] = 'Reject';
+$lang_module['status_6'] = 'Switch Editor';

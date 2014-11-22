@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <ul class="nav nav-tabs m-bottom">
-	<li><a href="{URL_HREF}main">{LANG.user_info}</a></li>
+	<li><a href="{URL_MODULE}">{LANG.user_info}</a></li>
 	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
 	<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>
 	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->

@@ -35,6 +35,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-9">
 			<input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" />
+			<input name="nv_header" value="{DATA.nv_header}" type="hidden" />
 			<input type="submit" value="{LANG.login_submit}" class="btn btn-primary" />
 		</div>
 	</div>

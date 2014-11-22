@@ -204,6 +204,8 @@ $lang_module['whoviewlistuser'] = 'Ai được xem danh sách thành viên';
 $lang_module['whoview_all'] = 'Tất cả';
 $lang_module['whoview_user'] = 'Thành viên';
 $lang_module['whoview_admin'] = 'Quản trị';
+$lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
+$lang_module['show_password'] = 'Hiển thị mật khẩu';
 
 $lang_module['usactive_0'] = 'Tài khoản bị khóa';
 $lang_module['usactive_1'] = 'Tài khoản hoạt động';

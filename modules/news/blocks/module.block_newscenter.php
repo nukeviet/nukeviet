@@ -25,9 +25,17 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 		{
 			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
 		}
-		$html .= '</select>';		
+		$html .= '</select>';
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['width'] . '</td>';
+		$html .= '	<td><input type="width" name="config_width" class="form-control" value="' . $data_block['width'] . '"/></td>';
+		$html .= '</tr>';
+		$html .= '<tr>';
+		$html .= '	<td>' . $lang_block['height'] . '</td>';
+		$html .= '	<td><input type="height" name="config_height" class="form-control" value="' . $data_block['height'] . '"/></td>';
 		$html .= '</tr>';
 		return $html;
 	}
@@ -41,39 +49,43 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 		$return['config']['showtooltip'] = $nv_Request->get_int( 'config_showtooltip', 'post', 0 );
 		$return['config']['tooltip_position'] = $nv_Request->get_string( 'config_tooltip_position', 'post', 0 );
 		$return['config']['tooltip_length'] = $nv_Request->get_string( 'config_tooltip_length', 'post', 0 );
+		$return['config']['width'] = $nv_Request->get_string( 'config_width', 'post', '' );
+		$return['config']['height'] = $nv_Request->get_string( 'config_height', 'post', '' );
 		return $return;
 	}
 
 	function nv_news_block_newscenter( $block_config )
 	{
 		global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
-		
+
 		$xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 		$xtpl->assign( 'lang', $lang_module );
-		
+
 		$db->sqlreset()
 					->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 					->where( 'status= 1' )
 					->order( 'publtime DESC' )
 					->limit( 4 );
-		
+
 		$list = nv_db_cache( $db->sql(), 'id', $module_name );
-		
+
 		$i = 1;
 		foreach( $list as $row )
 		{
 			$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 			$row['hometext'] = nv_clean60( strip_tags( $row['hometext'] ), 360 );
+            $row['titleclean60'] = nv_clean60( $row['title'], 60);
+
 			if( $i == 1 )
 			{
 				$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
-		
+
 				if( $row['homeimgfile'] != '' and file_exists( $image ) )
 				{
-					$width = 183;
-					$height = 150;
-		
+					$width = isset( $block_config['width'] ) ? $block_config['width'] : 183;
+					$height = isset( $block_config['height'] ) ? $block_config['height'] : 150;
+
 					$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
 					$imginfo = nv_is_image( $image );
 					$basename = basename( $image );
@@ -134,16 +146,16 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 				{
 					$row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
 				}
-				
-				$row['hometext'] = nv_clean60( $row['hometext'], $block_config['tooltip_length'] );
-				
+
+				$row['hometext'] = nv_clean60( $row['hometext'], $block_config['tooltip_length'], true );
+
 				$xtpl->assign( 'othernews', $row );
-				
+
 				if( ! $block_config['showtooltip'] )
 				{
 					$xtpl->assign( 'TITLE', 'title="' . $row['title'] . '"' );
 				}
-				
+
 				$xtpl->parse( 'main.othernews' );
 			}
 		}
@@ -153,7 +165,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 			$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
 			$xtpl->parse( 'main.tooltip' );
 		}
-		
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

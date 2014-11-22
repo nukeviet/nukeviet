@@ -788,6 +788,8 @@ $mod_title = $lang_module['login'];
 
 $contents = '';
 $error = '';
+$nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
+$full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
 	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
@@ -817,12 +819,20 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		else
 		{
 			$error = $lang_global['loginincorrect'];
-
-			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
+			if( nv_check_valid_email( $nv_username ) == '' )
+			{
+				$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
+				$login_email = true;
+			}
+			else
+			{
+				$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
+				$login_email = false;
+			}
 			$row = $db->query( $sql )->fetch();
 			if( ! empty( $row ) )
 			{
-				if( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
+				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate( $nv_password, $row['password'] ) )
 				{
 					if( ! $row['active'] )
 					{
@@ -848,7 +858,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( $nv_redirect ) . '" />';
 
 		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_site_theme( $contents );
+		echo nv_site_theme( $contents, $full );
 		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
@@ -856,6 +866,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 	$array_login = array(
 		'nv_login' => $nv_username,
 		'nv_password' => $nv_password,
+		'nv_header' => $nv_header,
 		'nv_redirect' => $nv_redirect
 	);
 }
@@ -864,6 +875,7 @@ else
 	$array_login = array(
 		'nv_login' => '',
 		'nv_password' => '',
+		'nv_header' => $nv_header,
 		'nv_redirect' => $nv_redirect
 	);
 }
@@ -877,5 +889,5 @@ if( $global_config['allowuserreg'] == 2 )
 $contents .= user_login( $gfx_chk, $array_login );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme( $contents, $full );
 include NV_ROOTDIR . '/includes/footer.php';

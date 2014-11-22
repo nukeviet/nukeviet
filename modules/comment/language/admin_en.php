@@ -30,7 +30,6 @@ $lang_module['edit_delete'] = 'Del comment';
 $lang_module['delete'] = 'Delete';
 $lang_module['funcs'] = 'Function';
 $lang_module['email'] = 'Email';
-$lang_module['topic'] = 'Topic';
 $lang_module['content'] = 'Content';
 $lang_module['status'] = 'Status';
 $lang_module['delete_title'] = 'Delete';

@@ -28,6 +28,7 @@ $lang_global['mod_siteinfo'] = 'Informations';
 $lang_global['mod_language'] = 'Language';
 $lang_global['mod_upload'] = 'Upload';
 $lang_global['mod_webtools'] = 'Webtools';
+$lang_global['mod_extensions'] = 'Extensions';
 $lang_global['go_clientsector'] = 'Home page';
 $lang_global['go_clientmod'] = 'Preview';
 $lang_global['please_select'] = 'Please select';

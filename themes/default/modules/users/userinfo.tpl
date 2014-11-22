@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <ul class="nav nav-tabs m-bottom">
-	<li class="active"><a href="{URL_HREF}main">{LANG.user_info}</a></li>
+	<li class="active"><a href="{URL_MODULE}">{LANG.user_info}</a></li>
 	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
 	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
 	<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>

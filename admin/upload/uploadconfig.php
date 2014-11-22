@@ -104,6 +104,18 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->execute();
 
 	$array_config_define = array();
+	$array_config_define['upload_alt_require'] = ( int ) $nv_Request->get_bool( 'upload_alt_require', 'post', 0 );
+	$array_config_define['upload_auto_alt'] = ( int ) $nv_Request->get_bool( 'upload_auto_alt', 'post', 0 );
+
+	$sth->bindValue( ':config_name', 'upload_alt_require', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $array_config_define['upload_alt_require'], PDO::PARAM_STR );
+	$sth->execute();
+
+	$sth->bindValue( ':config_name', 'upload_auto_alt', PDO::PARAM_STR );
+	$sth->bindValue( ':config_value', $array_config_define['upload_auto_alt'], PDO::PARAM_STR );
+	$sth->execute();
+	
+	$array_config_define = array();
 	$array_config_define['nv_max_width'] = $nv_Request->get_int( 'nv_max_width', 'post' );
 	$array_config_define['nv_max_height'] = $nv_Request->get_int( 'nv_max_height', 'post' );
 
@@ -138,6 +150,8 @@ $p_size = $sys_max_size / 100;
 
 $xtpl->assign( 'SYS_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
 $xtpl->assign( 'NV_AUTO_RESIZE', ( $global_config['nv_auto_resize'] ) ? ' checked="checked"' : '' );
+$xtpl->assign( 'UPLOAD_ALT_REQUIRE', ( $global_config['upload_alt_require'] ) ? ' checked="checked"' : '' );
+$xtpl->assign( 'UPLOAD_AUTO_ALT', ( $global_config['upload_auto_alt'] ) ? ' checked="checked"' : '' );
 
 for( $index = 100; $index > 0; --$index )
 {

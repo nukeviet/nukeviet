@@ -70,7 +70,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$db->sqlreset()
 			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
 			->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
-			->where( 'status= 1 AND publtime BETWEEN ' . $publtime . ' AND ' . NV_CURRENTTIME )
+			->where( 'status= 1 AND publtime > ' . $publtime )
 			->order( 'hitstotal DESC' )
 			->limit( $block_config['numrow'] );
 
@@ -122,7 +122,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 		foreach( $array_block_news as $array_news )
 		{
-			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'] );
+			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'], true );
 			$xtpl->assign( 'blocknews', $array_news );
 			if( ! empty( $array_news['imgurl'] ) )
 			{

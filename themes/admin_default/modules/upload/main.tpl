@@ -251,9 +251,22 @@
 </div>
 
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
+	<!-- BEGIN: alt_remote -->
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-12">
+				<label for="uploadremoteFileAlt">{LANG.altimage}</label>
+				<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
+			</div>
+		</div>
+	</div>
+	<!-- END: alt_remote -->
 	<div class="row">
+		<div class="col-xs-12">
+			<label for="uploadremoteFile">{LANG.enter_url}</label>
+		</div>
 		<div class="col-xs-7">
-			<input type="text" class="form-control dynamic" name="uploadremoteFile" placeholder="{LANG.enter_url}"/>
+			<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
 		</div>
 		<div class="col-xs-3">
 			<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
@@ -322,6 +335,8 @@ LANG.crop_error_small = "{LANG.crop_error_small}";
 LANG.save = "{LANG.addlogosave}";
 LANG.notlogo = "{LANG.notlogo}";
 LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
+LANG.altimage = "{LANG.altimage}";
+LANG.upload_alt_note = "{LANG.upload_alt_note}";
 
 var nv_max_width = '{NV_MAX_WIDTH}';
 var nv_max_height = '{NV_MAX_HEIGHT}';
@@ -337,6 +352,8 @@ var nv_filters = {
 		<!-- END: mime -->
 	]
 };
+var nv_alt_require = {UPLOAD_ALT_REQUIRE};
+var nv_auto_alt = {UPLOAD_AUTO_ALT};
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/upload.js"></script>

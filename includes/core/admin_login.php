@@ -77,14 +77,24 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 		}
 
 		$userid = 0;
-		$row = $db->query( "SELECT userid, username, password FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'" )->fetch();
+		if( nv_check_valid_email( $nv_username ) == '' )
+		{
+			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
+			$login_email = true;
+		}
+		else
+		{
+			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
+			$login_email = false;
+		}		
+		$row = $db->query( $sql )->fetch();
 		if( empty( $row ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0 );
 		}
 		else
 		{
-			if( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
+			if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate( $nv_password, $row['password'] ) )
 			{
 				$userid = $row['userid'];
 			}
