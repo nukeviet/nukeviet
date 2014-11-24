@@ -16,12 +16,11 @@ $receiver = $payment_config['receiver_pay'];
 
 $return_url = $global_config['site_url'] . "/?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=complete&payment=nganluong";
 $price = $data['order_total'];
-$price_vn = intval( CurrencyConversionToNumber( $price, $pro_config['money_unit'], "VND" ) );
+$price_array = nv_currency_conversion( $price, $pro_config['money_unit'], "VND" );
+$price_vn = $price_array['sale'];
 $order_code = $data['order_code'];
 $transaction_info = $data['order_note'];
 
 $nl = new NL_Checkout( $payment_config['checkout_url'], $payment_config['merchant_site'], $payment_config['secure_pass'] );
 $url = $nl->buildCheckoutUrl( $return_url, $receiver, $transaction_info, $order_code, $price_vn );
 $url .= "&key_refer=5c429fb7cc74299b5d1e53fb0906b8cb";
-
-?>

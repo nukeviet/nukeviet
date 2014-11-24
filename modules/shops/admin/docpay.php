@@ -22,7 +22,6 @@ $intro_pay = "";
 if( file_exists( $content_file ) )
 {
 	$intro_pay = file_get_contents( $content_file );
-	$intro_pay = nv_editor_br2nl( $intro_pay );
 }
 
 if( $nv_Request->get_int( 'saveintro', 'post', 0 ) == 1 )
@@ -31,7 +30,7 @@ if( $nv_Request->get_int( 'saveintro', 'post', 0 ) == 1 )
 	$intro_pay = defined( 'NV_EDITOR' ) ? nv_nl2br( $intro_pay, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $intro_pay ) ), '<br />' );
 	file_put_contents( $content_file, $intro_pay );
 }
-
+$intro_pay = htmlspecialchars( nv_editor_br2nl( $intro_pay ) );
 if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
 	$edits = nv_aleditor( 'intro_pay', '100%', '300px', $intro_pay );
@@ -51,5 +50,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

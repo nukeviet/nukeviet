@@ -53,7 +53,5 @@ $page_title = $data_content[NV_LANG_DATA . '_title'];
 $contents = print_product( $data_content, $data_unit, $page_title );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $contents;
+echo nv_site_theme( $contents, false );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

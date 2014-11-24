@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 function BoldKeywordInStr( $str, $keyword )
 {
-	$tmp = explode( " ", $keyword );
+	$tmp = explode( ' ', $keyword );
 	foreach( $tmp as $k )
 	{
 		$tp = strtolower( $k );
@@ -30,7 +30,7 @@ $from_date = $nv_Request->get_title( 'from_date', 'get', '', 1 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 1 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = $nv_Request->get_int( 'choose', 'get', 1 );
-$pages = $nv_Request->get_int( 'page', 'get', 0 );
+$pages = $nv_Request->get_int( 'page', 'get', 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
 $per_pages = 20;
@@ -45,12 +45,12 @@ $array_cat_search[0] = array(
 
 foreach( $global_array_cat as $arr_cat_i )
 {
-	$xtitle = "";
+	$xtitle = '';
 	if( $arr_cat_i['lev'] > 0 )
 	{
 		for( $i = 1; $i <= $arr_cat_i['lev']; $i++ )
 		{
-			$xtitle .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+			$xtitle .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		}
 	}
 
@@ -62,54 +62,54 @@ foreach( $global_array_cat as $arr_cat_i )
 	);
 }
 
-$contents = call_user_func( "search_theme", $key, $check_num, $date_array, $array_cat_search );
+$contents = call_user_func( 'search_theme', $key, $check_num, $date_array, $array_cat_search );
 
-$where = "";
-$tbl_src = "";
+$where = '';
+$tbl_src = '';
 
 if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 {
 	$dbkey = $db->dblikeescape( $key );
-	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_keywords LIKE '%" . $dbkey . "%' ) ";
+	$where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' ) ";
 
 	if( $catid != 0 )
 	{
 		if( $global_array_cat[$catid]['numsubcat'] == 0 )
 		{
-			$where .= "AND listcatid=" . $catid;
+			$where .= 'AND listcatid=' . $catid;
 		}
 		else
 		{
 			$array_cat = array();
 			$array_cat = GetCatidInParent( $catid );
-			$where .= "AND listcatid IN (" . implode( ",", $array_cat ) . ")";
+			$where .= 'AND listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 	}
 
-	if( $to_date != "" )
+	if( $to_date != '' )
 	{
-		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $to_date, $m );
+		preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m );
 		$tdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
-		preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $from_date, $m );
+		preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m );
 		$fdate = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 		$where .= " AND ( publtime < $fdate AND publtime >= $tdate ) ";
 	}
 
-	$table_search = $db_config['prefix'] . "_" . $module_data . "_rows";
+	$table_search = $db_config['prefix'] . '_' . $module_data . '_rows';
 
 	// Fetch Limit
-	$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search )->where( "status =1 " . $where );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search )->where( 'status =1 ' . $where );
 
 	$numRecord = $db->query( $db->sql() )->fetchColumn();
 
-	$db->select( "id, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_alias, listcatid, " . NV_LANG_DATA . "_hometext, publtime, homeimgfile, homeimgthumb, source_id" )->order( 'id DESC' )->limit( $per_pages )->offset( $pages );
+	$db->select( 'id, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, listcatid, ' . NV_LANG_DATA . '_hometext, publtime, homeimgfile, homeimgthumb' )->order( 'id DESC' )->limit( $per_pages )->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 
 	$array_content = array();
-	$url_link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=";
+	$url_link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=';
 
-	while( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
+	while( list( $id, $title, $alias, $listcatid, $hometext, $publtime, $homeimgfile, $homeimgthumb ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -125,21 +125,20 @@ if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 		}
 		else//no image
 		{
-			$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 		}
 
 		$array_content[] = array(
-			"id" => $id,
-			"title" => $title,
-			"alias" => $alias,
-			"listcatid" => $listcatid,
-			"hometext" => $hometext,
-			"publtime" => $publtime,
-			"homeimgthumb" => $thumb,
-			"sourceid" => $sourceid
+			'id' => $id,
+			'title' => $title,
+			'alias' => $alias,
+			'listcatid' => $listcatid,
+			'hometext' => $hometext,
+			'publtime' => $publtime,
+			'homeimgthumb' => $thumb,
 		);
 	}
-	$contents .= call_user_func( "search_result_theme", $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
+	$contents .= call_user_func( 'search_result_theme', $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid );
 }
 
 if( empty( $key ) )
@@ -157,5 +156,3 @@ $mod_title = $lang_module['main_title'];
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

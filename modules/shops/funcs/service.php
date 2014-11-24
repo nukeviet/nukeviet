@@ -100,5 +100,3 @@ else
 {
 	die( 'Thanh toan khong kich hoat' );
 }
-
-?>

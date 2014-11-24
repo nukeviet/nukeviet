@@ -13,7 +13,9 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 define( 'NV_IS_MOD_SHOPS', true );
 
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
+require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
 
+$array_wishlist_id = array();
 $arr_cat_title = array();
 $catid = 0;
 $parentid = 0;
@@ -29,29 +31,9 @@ $array_displays = array(
 );
 
 // Categories
-$global_array_cat = array();
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, who_view, groups_view FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-
-$list = nv_db_cache( $sql, 'catid', $module_name );
-foreach( $list as $row )
+foreach( $global_array_cat as $row )
 {
-	$global_array_cat[$row['catid']] = array(
-		'catid' => $row['catid'],
-		'parentid' => $row['parentid'],
-		'title' => $row['title'],
-		'alias' => $row['alias'],
-		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'],
-		'viewcat' => $row['viewcat'],
-		'numsubcat' => $row['numsubcat'],
-		'subcatid' => $row['subcatid'],
-		'numlinks' => $row['numlinks'],
-		'description' => $row['description'],
-		'inhome' => $row['inhome'],
-		'keywords' => $row['keywords'],
-		'who_view' => $row['who_view'],
-		'groups_view' => $row['groups_view'],
-		'lev' => $row['lev']
-	);
+	$global_array_cat[$row['catid']]['link'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
 	if( $alias_cat_url == $row['alias'] )
 	{
@@ -61,39 +43,15 @@ foreach( $list as $row )
 }
 
 // Groups
-$global_array_group = array();
-
-$sql = 'SELECT groupid, parentid, cateid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, who_view, groups_view, numpro FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
-
-$list = nv_db_cache( $sql, '', $module_name );
-foreach( $list as $row )
+foreach( $global_array_group as $row )
 {
-	$global_array_group[$row['groupid']] = array(
-		'groupid' => $row['groupid'],
-		'parentid' => $row['parentid'],
-		'cateid' => $row['cateid'],
-		'title' => $row['title'],
-		'alias' => $row['alias'],
-		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $row['alias'],
-		'viewgroup' => $row['viewgroup'],
-		'numsubgroup' => $row['numsubgroup'],
-		'subgroupid' => $row['subgroupid'],
-		'numlinks' => $row['numlinks'],
-		'description' => $row['description'],
-		'inhome' => $row['inhome'],
-		'keywords' => $row['keywords'],
-		'who_view' => $row['who_view'],
-		'groups_view' => $row['groups_view'],
-		'lev' => $row['lev'],
-		'numpro' => $row['numpro']
-	);
-
+	$global_array_group[$row['groupid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $row['alias'];
 	if( $alias_group_url == $row['alias'] )
 	{
 		$groupid = $row['groupid'];
 	}
 }
-unset( $list, $alias_cat_url, $row, $alias_group_url );
+unset( $alias_cat_url, $row, $alias_group_url );
 
 $page = 1;
 $per_page = $pro_config['per_page'];
@@ -140,6 +98,16 @@ if( $op == 'main' )
 	}
 }
 
+// Wishlist
+if( defined( 'NV_IS_USER' ) and $pro_config['active_wishlist'] )
+{
+	$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
+	if( $listid )
+	{
+		$array_wishlist_id = explode( ',', $listid );	
+	}
+}
+
 /**
  * GetDataIn()
  *
@@ -149,10 +117,10 @@ if( $op == 'main' )
  */
 function GetDataIn( $result, $catid )
 {
-	global $global_array_cat, $module_name, $db, $link, $module_info;
+	global $global_array_cat, $module_name, $db, $link, $module_info, $global_config;
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -177,21 +145,23 @@ function GetDataIn( $result, $catid )
 			'title' => $title,
 			'alias' => $alias,
 			'hometext' => $hometext,
-			'address' => $address,
 			'homeimgalt' => $homeimgalt,
 			'homeimgthumb' => $thumb,
 			'product_code' => $product_code,
+			'product_number' => $product_number,
 			'product_price' => $product_price,
-			'product_discounts' => $product_discounts,
+			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id,
+			'newday' => $newday,
+			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
 
 	$data_content['id'] = $catid;
 	$data_content['title'] = $global_array_cat[$catid]['title'];
+	$data_content['image'] = $global_array_cat[$catid]['image'];
 	$data_content['data'] = $data;
 	$data_content['alias'] = $global_array_cat[$catid]['alias'];
 
@@ -207,12 +177,12 @@ function GetDataIn( $result, $catid )
  */
 function GetDataInGroup( $result, $groupid )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat;
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $address, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_price, $product_discounts, $money_unit, $showprice ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -237,15 +207,16 @@ function GetDataInGroup( $result, $groupid )
 			'title' => $title,
 			'alias' => $alias,
 			'hometext' => $hometext,
-			'address' => $address,
 			'homeimgalt' => $homeimgalt,
 			'homeimgthumb' => $thumb,
 			'product_code' => $product_code,
+			'product_number' => $product_number,
 			'product_price' => $product_price,
-			'product_discounts' => $product_discounts,
+			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id,
+			'newday' => $newday,
+			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -256,84 +227,6 @@ function GetDataInGroup( $result, $groupid )
 	$data_content['alias'] = $global_array_group[$groupid]['alias'];
 
 	return $data_content;
-}
-
-/**
- * FormatNumber()
- *
- * @param mixed $number
- * @param integer $decimals
- * @param string $thousand_separator
- * @param string $decimal_point
- * @return
- */
-function FormatNumber( $number, $decimals = 0, $thousand_separator = '&nbsp;', $decimal_point = '.' )
-{
-	$str = number_format( $number, 0, ',', '.' );
-	return $str;
-}
-
-//eg : echo CurrencyConversion ( 100000, 'USD', 'VND' );
-/*return string money eg: 100 000 000*/
-/**
- * CurrencyConversion()
- *
- * @param mixed $price
- * @param mixed $currency_curent
- * @param mixed $currency_convert
- * @return
- */
-function CurrencyConversion( $price, $currency_curent, $currency_convert )
-{
-	global $money_config, $pro_config;
-	$str = number_format( $price, 0, '.', ' ' );
-	if( ! empty( $money_config ) )
-	{
-		if( $currency_curent == $pro_config['money_unit'] )
-		{
-			$value = doubleval( $money_config[$currency_convert]['exchange'] );
-			$price = doubleval( $price / $value );
-			$str = number_format( $price, 0, '.', ' ' );
-			$ss = '~';
-		}
-		elseif( $currency_convert == $pro_config['money_unit'] )
-		{
-			$value = doubleval( $money_config[$currency_curent]['exchange'] );
-			$price = doubleval( $price * $value );
-			$str = number_format( $price, 0, '.', ' ' );
-		}
-	}
-	$ss = ( $currency_curent == $currency_convert ) ? '' : '~';
-	return $ss . $str;
-}
-
-//eg : echo CurrencyConversion ( 100000, 'USD', 'VND' );
-/*return double money eg: 100000000 */
-/**
- * CurrencyConversionToNumber()
- *
- * @param mixed $price
- * @param mixed $currency_curent
- * @param mixed $currency_convert
- * @return
- */
-function CurrencyConversionToNumber( $price, $currency_curent, $currency_convert )
-{
-	global $money_config, $pro_config;
-	if( ! empty( $money_config ) )
-	{
-		if( $currency_curent == $pro_config['money_unit'] )
-		{
-			$value = doubleval( $money_config[$currency_convert]['exchange'] );
-			$price = doubleval( $price / $value );
-		}
-		elseif( $currency_convert == $pro_config['money_unit'] )
-		{
-			$value = doubleval( $money_config[$currency_curent]['exchange'] );
-			$price = doubleval( $price * $value );
-		}
-	}
-	return $price;
 }
 
 /**
@@ -363,4 +256,39 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
 	}
 }
 
-?>
+/**
+ * getgroup_selecthtml()
+ *
+ * @param mixed $data_group
+ * @param mixed $pid
+ * @param mixed $listgroupid
+ * @return
+ */
+function getgroup_selecthtml( $data_group, $pid, $listgroupid )
+{
+	$contents_temp = '';
+	if( ! empty( $data_group ) )
+	{
+		foreach( $data_group as $groupid_i => $groupinfo_i )
+		{
+			$in_array = in_array( $groupid_i, $listgroupid );
+			if( $groupinfo_i['parentid'] == $pid and $groupinfo_i['in_order'] and $in_array )
+			{
+				$xtitle_i = '';
+				if( $groupinfo_i['lev'] > 0 )
+				{
+					for( $i = 2; $i <= $groupinfo_i['lev']; $i++ )
+					{
+						$xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+					}
+				}
+				$contents_temp .= '<option value="' . $groupid_i . '">' . $xtitle_i . $groupinfo_i['title'] . '</option>';
+				if( $groupinfo_i['numsubgroup'] > 0 )
+				{
+					$contents_temp .= getgroup_selecthtml( $data_group, $groupid_i, $listgroupid );
+				}
+			}
+		}
+	}
+	return $contents_temp;
+}

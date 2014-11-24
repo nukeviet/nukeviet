@@ -5,45 +5,44 @@
 <br />
 <a id="edit"></a>
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-warning">{ERROR}</div>
 <!-- END: error -->
-<form action="{NV_BASE_ADMINURL}index.php" method="post">
+<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
 	<input type="hidden" name ="bid" value="{DATA.bid}" />
 	<input name="savecat" type="hidden" value="1" />
-	<table class="tab1">
-		<caption>{LANG.add_block_cat}</caption>
-		<col width="150"/>
-		<tbody>
-			<tr>
-				<td align="right"><strong>{LANG.block_name}: </strong></td>
-				<td><input style="width: 650px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
-			</tr>
-			<!-- BEGIN: alias -->
-			<tr>
-				<td align="right" width="100px"><strong>{LANG.alias}: </strong></td>
-				<td><input style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
-			</tr>
-			<!-- END: alias -->
-			<tr>
-				<td align="right"><strong>{LANG.keywords}: </strong></td>
-				<td><input style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
-			</tr>
-			<tr>
-				<td valign="top" align="right" width="100px">
-				<br>
-				<strong>{LANG.description}</strong></td>
-				<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.add_block_cat}</caption>
+			<col width="150"/>
+			<tbody>
+				<tr>
+					<th class="text-right">{LANG.block_name}: </th>
+					<td><input class="form-control" style="width: 650px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
+				</tr>
+				<!-- BEGIN: alias -->
+				<tr>
+					<th class="text-right" width="100px">{LANG.alias}: </th>
+					<td><input class="form-control" style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
+				</tr>
+				<!-- END: alias -->
+				<tr>
+					<th class="text-right">{LANG.keywords}: </th>
+					<td><input class="form-control" style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
+				</tr>
+				<tr>
+					<th class="text-right">
+					<br>
+					{LANG.description}</th>
+					<td><textarea class="form-control" style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<br />
-	<div align="center">
-		<input name="submit1" type="submit" value="{LANG.save}" />
+	<div class="text-center">
+		<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" />
 	</div>
 </form>
 <!-- END: main -->

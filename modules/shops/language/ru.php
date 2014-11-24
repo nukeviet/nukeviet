@@ -20,22 +20,6 @@ $lang_translator['copyright'] = "@Copyright (C) 2010 VINADES.,JSC. All rights re
 $lang_translator['info'] = "Language translated by http://translate.google.com";
 $lang_translator['langtype'] = "lang_module";
 
-$lang_module['comment_success'] = "Комментарии успеха";
-$lang_module['comment_unsuccess'] = "Ошибка при обработке данных проекта или неполных данных";
-$lang_module['comment_view'] = "Просмотреть отзывы";
-$lang_module['comment_submit'] = "Отправить комментарии";
-$lang_module['comment_timeout'] = "У вас есть комментарии, пожалуйста, дождитесь%s минут, чтобы оставить комментарий.";
-$lang_module['comment_limit_characters'] = "Количество символов составляет 250 типа";
-$lang_module['comment_capcha'] = "Введите код безопасности";
-$lang_module['comment_you_have'] = "Вы";
-$lang_module['comment_characters_left'] = "Характер";
-$lang_module['comment_limit'] = "У вас есть все символы, введенные";
-$lang_module['comment_list'] = "Ответ список";
-$lang_module['comment_user_view_info'] = "Профиль";
-$lang_module['comment_send'] = "Отправить комментарии";
-$lang_module['comment_do_not_send'] = "Вы должны Войти, чтобы новый пост члены здесь";
-$lang_module['comment_date'] = "Дата";
-$lang_module['comment_customer'] = "Отзывы";
 $lang_module['title_products'] = "Продукты";
 $lang_module['product_host'] = "Горячие продукты";
 $lang_module['product_page'] = "Главная";
@@ -293,5 +277,3 @@ $lang_module['finter_title'] = "Время";
 $lang_module['source_title'] = "Источник";
 $lang_module['keywords'] = "Ключевые слова";
 $lang_module['search_reset'] = "Очистить";
-
-?>

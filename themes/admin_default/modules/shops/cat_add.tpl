@@ -2,73 +2,108 @@
 <div id="module_show_list">
 	{CAT_LIST}
 </div>
-<div id="cat-delete-area"></div>
-<div id="edit">
+<div id="cat-delete-area">&nbsp;</div>
+<div id="edit" class="table-responsive">
 	<!-- BEGIN: error -->
-	<div class="quote" style="width:98%; margin:auto">
-		<blockquote class="error"><span>{error}</span></blockquote>
-	</div>
-	<div class="clear"></div>
+	<div class="alert alert-warning">{error}</div>
 	<!-- END: error -->
-	<form action="" method="post">
+	<form class="form-inline" action="" method="post">
 		<input type="hidden" name="catid" value="{DATA.catid}" />
 		<input type="hidden" name="parentid_old" value="{DATA.parentid}" />
 		<input name="savecat" type="hidden" value="1" />
-		<table class="tab1">
-			<caption>{caption}</caption>
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{CAPTION}</caption>
 			<tbody>
 				<tr>
-					<td align="right"><strong>{LANG.catalog_name}</strong></td>
-					<td><input style="width: 650px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
+					<th class="text-right">{LANG.catalog_name}</th>
+					<td><input class="form-control" style="width: 500px" name="title" type="text" value="{DATA.title}" maxlength="255" id="idtitle" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 				</tr>
 				<tr>
-					<td align="right"><strong>{LANG.cat_sub}</strong></td>
+					<th class="text-right">{LANG.alias} : </th>
+					<td><input class="form-control" style="width: 500px" name="alias" type="text" value="{DATA.alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('cat', {DATA.catid});">&nbsp;</em>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.cat_sub}</th>
 					<td>
-					<select name="parentid">
+					<select class="form-control" name="parentid">
 						<!-- BEGIN: parent_loop -->
 						<option value="{pcatid_i}" {pselect}>{ptitle_i}</option>
 						<!-- END: parent_loop -->
 					</select></td>
 				</tr>
 				<tr>
-					<td align="right"  width="180px"><strong>{LANG.alias} : </strong></td>
-					<td><input style="width: 650px" name="alias" type="text" value="{DATA.alias}" maxlength="255" /></td>
+					<th class="text-right">{LANG.keywords}: </th>
+					<td><input class="form-control" style="width: 500px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td align="right"><strong>{LANG.keywords}: </strong></td>
-					<td><input style="width: 650px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
-				</tr>
-				<tr>
-					<td align="right"><strong>{LANG.description}</strong></td>
-					<td><textarea style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
-				</tr>
-				<tr>
-					<td valign="top" align="right">
-					<br />
-					<strong>{who_view}</strong></td>
+					<th class="text-right">{LANG.description}</th>
 					<td>
-					<div class="message_body">
-						<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
-							{who_view_html}
-						</select>
-						<br />
-						<div id="groups_list" style="{visibility}">
-							{groups_view}
-							<table style="margin-bottom:8px; width:250px;">
-								<col valign="top" width="150px" />
-								<tr>
-									<td> {groups_list_html} </td>
-								</tr>
-							</table>
+						<textarea style="width: 500px" name="description" id="description" cols="100" rows="5" class="form-control">{DATA.description}</textarea> <span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_homeimg}</th>
+					<td>
+						<input class="form-control" style="width: 500px" type="text" name="image" id="image" value="{DATA.image}"/>
+						<a class="btn btn-info" name="selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.file_selectfile}</a>
+					</td>
+				</tr>
+				<!-- BEGIN: cat_form -->
+				<tr>
+					<th class="text-right">{LANG.cat_form}: </th>
+					<td>
+						<select class="form-control" name="cat_form">
+							<option value=""> -- </option>
+							<!-- BEGIN: loop -->
+							<option value="{CAT_FORM.value}" {CAT_FORM.selected}>{CAT_FORM.title}</option>
+							<!-- END: loop -->
+					</select>
+					</td>
+				</tr>
+				<!-- END: cat_form -->
+				<tr>
+					<th class="text-right">{GLANG.groups_view}</th>
+					<td>
+						<!-- BEGIN: groups_view -->
+						<div class="row">
+							<label><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.value}" {GROUPS_VIEW.checked} />{GROUPS_VIEW.title}</label>
 						</div>
-					</div></td>
+						<!-- END: groups_view -->
+					</td>
 				</tr>
 			</tbody>
 		</table>
-		<br />
-		<div align="center">
-			<input name="submit1" type="submit" value="{LANG.save}"/>
+		<div class="text-center">
+			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}"/>
 		</div>
 	</form>
 </div>
+<script type="text/javascript">
+	$("#titlelength").html($("#idtitle").val().length);
+	$("#idtitle").bind("keyup paste", function() {
+		$("#titlelength").html($(this).val().length);
+	});
+
+	$("#descriptionlength").html($("#description").val().length);
+	$("#description").bind("keyup paste", function() {
+		$("#descriptionlength").html($(this).val().length);
+	});
+
+	$("a[name=selectimg]").click(function() {
+		var area = "image";
+		var path = "{UPLOAD_CURRENT}";
+		var currentpath = "{UPLOAD_CURRENT}";
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+</script>
+
+<!-- BEGIN: getalias -->
+<script type="text/javascript">
+	$("#idtitle").change(function() {
+		get_alias("cat", 0);
+	});
+</script>
+<!-- END: getalias -->
 <!-- END: main -->

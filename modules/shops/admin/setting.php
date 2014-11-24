@@ -26,13 +26,6 @@ if( ! empty( $data ) )
 	$data['homeheight'] = $temp[1];
 }
 
-$groups_list = nv_groups_list();
-$array_who = array( $lang_global['who_view0'], $lang_global['who_view1'], $lang_global['who_view2'] );
-if( ! empty( $groups_list ) )
-{
-	$array_who[] = $lang_global['who_view3'];
-}
-
 $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
@@ -45,10 +38,6 @@ if( $savesetting == 1 )
 	$data['image_size'] = $data['homewidth'] . "x" . $data['homeheight'];
 	$data['per_page'] = $nv_Request->get_int( 'per_page', 'post', 0 );
 	$data['per_row'] = $nv_Request->get_int( 'per_row', 'post', 0 );
-	$data['comment'] = $nv_Request->get_int( 'comment', 'post', 0 );
-	$data['comment_auto'] = $nv_Request->get_int( 'comment_auto', 'post', 0 );
-	$data['who_comment'] = $nv_Request->get_string( 'who_comment', 'post', 0 );
-	$data['groups_comment'] = $nv_Request->get_typed_array( 'groups_comment', 'post', 'int' );
 	$data['auto_check_order'] = $nv_Request->get_string( 'auto_check_order', 'post', 0 );
 	$data['post_auto_member'] = $nv_Request->get_string( 'post_auto_member', 'post', 0 );
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
@@ -64,12 +53,11 @@ if( $savesetting == 1 )
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
-
-	if( ! in_array( $data['who_comment'], array_keys( $array_who ) ) )
-	{
-		$data['who_comment'] = 0;
-	}
-	$data['groups_comment'] = ( ! empty( $data['groups_comment'] ) ) ? implode( ',', $data['groups_comment'] ) : '';
+	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
+	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
+	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
+	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
+	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -95,11 +83,9 @@ $array_setting_payment = array();
 
 if( $data['active_payment'] == '1' )
 {
-	$array_setting_payment = array();
-
 	$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
 	$result = $db->query( $sql );
-	$all_page = $result->rowCount();
+	$num_items = $result->rowCount();
 
 	while( $row = $result->fetch() )
 	{
@@ -107,36 +93,17 @@ if( $data['active_payment'] == '1' )
 	}
 }
 
-// Xu ly quyen binh luan
-$who_comment = $data['who_comment'];
-$data['who_comment'] = array();
-foreach( $array_who as $key => $who )
-{
-	$data['who_comment'][$key] = array(
-		'key' => $key, //
-		'title' => $who, //
-		'selected' => $key == $who_comment ? " selected=\"selected\"" : "" //
-	);
-}
-
-$groups_comment = ! empty( $data['groups_comment'] ) ? explode( ",", $data['groups_comment'] ) : array();
-$data['groups_comment'] = array();
-if( ! empty( $groups_list ) )
-{
-	foreach( $groups_list as $key => $title )
-	{
-		$data['groups_comment'][$key] = array(
-			'key' => $key, //
-			'title' => $title, //
-			'checked' => in_array( $key, $groups_comment ) ? " checked=\"checked\"" : "" //
-		);
-	}
-}
-
 $xtpl = new XTemplate( "setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
+
+// Số sản phẩm hiển thị trên một dòng
+for( $i = 3; $i <= 4; $i++ )
+{
+    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
+    $xtpl->parse( 'main.per_row' );
+}
 
 $check_view = array(
 	"view_home_all" => "",
@@ -160,11 +127,9 @@ for( $i = 5; $i <= 50; $i = $i + 5 )
 	$select .= "<option value=\"" . $i . "\"" . ( ( $i == $data['per_page'] ) ? " selected=\"selected\"" : "" ) . ">" . $i . "</option>\n";
 }
 
-$check = ( $data['comment'] == '1' ) ? "checked=\"checked\"" : "";
-$xtpl->assign( 'ck_comment', $check );
-
-$check = ( $data['comment_auto'] == '1' ) ? "checked=\"checked\"" : "";
-$xtpl->assign( 'ck_comment_auto', $check );
+$xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '' );
 
 $check = ( $data['auto_check_order'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_auto_check_order', $check );
@@ -184,6 +149,9 @@ $xtpl->assign( 'ck_active_order_number', $check );
 $check = ( $data['active_payment'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_payment', $check );
 
+$check = ( $data['active_guest_order'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_guest_order', $check );
+
 $check = ( $data['active_showhomtext'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_showhomtext', $check );
 
@@ -199,21 +167,8 @@ $xtpl->assign( 'ck_compare', $check );
 $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
 
-// Binh luan
-foreach( $data['who_comment'] as $who )
-{
-	$xtpl->assign( 'WHO_COMMENT', $who );
-	$xtpl->parse( 'main.who_comment' );
-}
-if( ! empty( $data['groups_comment'] ) )
-{
-	foreach( $data['groups_comment'] as $group )
-	{
-		$xtpl->assign( 'GROUPS_COMMENT', $group );
-		$xtpl->parse( 'main.group.groups_comment' );
-	}
-	$xtpl->parse( 'main.group' );
-}
+$check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_wishlist', $check );
 
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );
@@ -238,13 +193,13 @@ if( ! empty( $error ) )
 if( ! empty( $array_setting_payment ) )
 {
 	$a = 0;
+	$all_page = sizeof( $array_setting_payment );
 	$payment = $nv_Request->get_string( 'payment', 'get', 0 );
 
 	foreach( $array_setting_payment as $value )
 	{
 		$value['titleactive'] = ( ! empty( $value['active'] ) ) ? $lang_global['yes'] : $lang_global['no'];
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
-		$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 		$value['active'] = ( $value['active'] == '1' ) ? "checked=\"checked\"" : "";
 		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $value['images_button'] ) )
 		{
@@ -267,5 +222,3 @@ $contents .= $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

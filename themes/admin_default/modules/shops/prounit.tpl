@@ -1,12 +1,12 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
-<table class="tab1">
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
-			<td width="20px" align="center">&nbsp;</td>
+			<td width="20px" class="text-center">&nbsp;</td>
 			<td><strong>{LANG.prounit_name_unit}</strong></td>
 			<td><strong>{LANG.prounit_name_note}</strong></td>
-			<td width="120px" align="center"><strong>{LANG.comment_funcs}</strong></td>
+			<td width="120px" class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -15,13 +15,13 @@
 			<td><input type="checkbox" class="ck" value="{id}" /></td>
 			<td>{title}</td>
 			<td>{note}</td>
-			<td align="center"><span class="edit_icon"><a href="{link_edit}" title="">{LANG.edit}</a></span>&nbsp; <span class="delete_icon"><a href="{link_del}" class="delete" title="">{LANG.del}</a></span></td>
+			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{link_del}" class="delete" title="">{LANG.del}</a></td>
 		</tr>
 	<!-- END: row -->
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="5"><a href="#" id="checkall">{LANG.prounit_select}</a> | <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> | <a href="#" id="delall">{LANG.prounit_del_select}</a></td>
+			<td colspan="5"><i class="fa fa-check-square-o">&nbsp;</i><a href="#" id="checkall">{LANG.prounit_select}</a> - <i class="fa fa-square-o">&nbsp;</i> <a href="#" id="uncheckall">{LANG.prounit_unselect}</a> - <i class="fa fa-trash-o">&nbsp;</i><a href="#" id="delall">{LANG.prounit_del_select}</a></td>
 		</tr>
 	</tfoot>
 </table>
@@ -71,25 +71,25 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: data -->
-<form action="" method="post">
+<form class="form-inline" action="" method="post">
 	<input name="savecat" type="hidden" value="1" />
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<caption>{caption}</caption>
 		<tr>
 			<td align="right" width="150px"><strong>{LANG.prounit_name_unit}: </strong></td>
-			<td><input style="width: 600px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
+			<td><input class="form-control" style="width: 600px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 		</tr>
 		<tr>
 			<td valign="top" align="right"><strong>{LANG.prounit_name_note}: </strong></td>
-			<td><input style="width: 600px" name="note" type="text" value="{DATA.note}" maxlength="255" /></td>
+			<td><input class="form-control" style="width: 600px" name="note" type="text" value="{DATA.note}" maxlength="255" /></td>
 		</tr>
 	</table>
 	<br>
-	<div class="center">
-		<input name="submit" type="submit" value="{LANG.prounit_save}" />
+	<div class="text-center">
+		<input class="btn btn-primary" name="submit" type="submit" value="{LANG.prounit_save}" />
 	</div>
 </form>
 <!-- END: main -->

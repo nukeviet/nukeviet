@@ -16,12 +16,12 @@ global $op, $db;
 $result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_money\_%'" );
 $num_table = intval( $result->rowCount() );
 $array_lang_module_setup = array();
-$set_lang_data = "";
+$set_lang_data = '';
 if( $num_table > 0 )
 {
 	while( $item = $result->fetch() )
 	{
-		$array_lang_module_setup[] = str_replace( $db_config['prefix'] . "_" . $module_data . "_money_", "", $item['Name'] );
+		$array_lang_module_setup[] = str_replace( $db_config['prefix'] . "_" . $module_data . "_money_", "", $item['name'] );
 	}
 	if( $lang != $global_config['site_lang'] and in_array( $global_config['site_lang'], $array_lang_module_setup ) )
 	{
@@ -39,19 +39,24 @@ if( $num_table > 0 )
 		}
 	}
 }
+
+$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comments'" );
+$rows = $result->fetchAll();
+if( sizeof( $rows ) )
+{
+	$sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
+}
+
 if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 {
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_rows
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_alias,
-	 DROP ' . $lang . '_description,
-	 DROP ' . $lang . '_keywords,
-	 DROP ' . $lang . '_note,
 	 DROP ' . $lang . '_hometext,
 	 DROP ' . $lang . '_bodytext,
-	 DROP ' . $lang . '_address,
 	 DROP ' . $lang . '_warranty,
-	 DROP ' . $lang . '_promotional';
+	 DROP ' . $lang . '_promotional,
+	 DROP ' . $lang . '_custom';
 
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs
 	 DROP ' . $lang . '_title,
@@ -71,12 +76,18 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	 DROP ' . $lang . '_description,
 	 DROP ' . $lang . '_keywords';
 
-	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_sources
-	 DROP ' . $lang . '_title';
-
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_units
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_note';
+	 
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tags
+	 DROP ' . $lang . '_numpro,
+	 DROP ' . $lang . '_alias,
+	 DROP ' . $lang . '_image,
+	 DROP ' . $lang . '_description,
+	 DROP ' . $lang . '_keywords';
+	 
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id DROP ' . $lang . '_keyword';
 }
 elseif( $op != 'setup' )
 {
@@ -88,13 +99,15 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_payment';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_transaction';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_rows';
-	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_sources';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_units';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_items_group';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags_id';
 	$set_lang_data = '';
 }
 
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_money_' . $lang;
-$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_comments_' . $lang;
 
 $sql_create_module = $sql_drop_module;
 
@@ -102,7 +115,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  catid mediumint(8) unsigned NOT NULL auto_increment,
  parentid mediumint(8) unsigned NOT NULL default '0',
  image varchar(255) NOT NULL default '',
- thumbnail varchar(255) NOT NULL default '',
  weight smallint(4) unsigned NOT NULL default '0',
  sort mediumint(8) NOT NULL default '0',
  lev smallint(4) NOT NULL default '0',
@@ -111,10 +123,11 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  subcatid varchar(255) NOT NULL default '',
  inhome tinyint(1) unsigned NOT NULL default '0',
  numlinks tinyint(2) unsigned NOT NULL default '3',
+ newday tinyint(4) NOT NULL DEFAULT '3',
+ form varchar(50) NOT NULL DEFAULT '',
  admins mediumtext NOT NULL,
  add_time int(11) unsigned NOT NULL default '0',
  edit_time int(11) unsigned NOT NULL default '0',
- who_view tinyint(2) unsigned NOT NULL default '0',
  groups_view varchar(255) NOT NULL default '',
  PRIMARY KEY (catid),
  KEY parentid (parentid)
@@ -130,7 +143,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
  cateid int(11) NOT NULL DEFAULT '0',
  image varchar(255) NOT NULL DEFAULT '',
- thumbnail varchar(255) NOT NULL DEFAULT '',
  weight smallint(4) unsigned NOT NULL DEFAULT '0',
  sort mediumint(8) NOT NULL DEFAULT '0',
  lev smallint(4) NOT NULL DEFAULT '0',
@@ -138,13 +150,10 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  numsubgroup int(11) NOT NULL DEFAULT '0',
  subgroupid varchar(255) NOT NULL DEFAULT '',
  inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
- numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
- admins mediumtext NOT NULL,
  add_time int(11) unsigned NOT NULL DEFAULT '0',
  edit_time int(11) unsigned NOT NULL DEFAULT '0',
- who_view tinyint(2) unsigned NOT NULL DEFAULT '0',
- groups_view varchar(255) NOT NULL DEFAULT '',
  numpro int(11) unsigned NOT NULL DEFAULT '0',
+ in_order tinyint(2) NOT NULL DEFAULT '0',
  PRIMARY KEY (groupid),
  KEY parentid (parentid)
 ) ENGINE=MyISAM ";
@@ -153,12 +162,16 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD " . $lang . "_description VARCHAR( 255 ) NOT NULL DEFAULT ''";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD " . $lang . "_keywords text NOT NULL";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_items_group (
+  pro_id int(11) unsigned NOT NULL default '0',
+  group_id int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY (pro_id, group_id)
+) ENGINE=MyISAM";
+
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_rows (
  id int(11) unsigned NOT NULL AUTO_INCREMENT,
  listcatid int(11) NOT NULL DEFAULT '0',
- group_id varchar(255) NOT NULL DEFAULT '',
  user_id mediumint(8) NOT NULL DEFAULT '0',
- source_id mediumint(8) NOT NULL DEFAULT '0',
  addtime int(11) unsigned NOT NULL DEFAULT '0',
  edittime int(11) unsigned NOT NULL DEFAULT '0',
  status tinyint(4) NOT NULL DEFAULT '1',
@@ -167,10 +180,10 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  archive tinyint(1) unsigned NOT NULL DEFAULT '0',
  product_code varchar(255) NOT NULL DEFAULT '',
  product_number int(11) NOT NULL DEFAULT '0',
- product_price double NOT NULL DEFAULT '0',
- product_discounts int(11) NOT NULL DEFAULT '0',
+ product_price float NOT NULL DEFAULT '0',
  money_unit char(3) NOT NULL,
  product_unit int(11) NOT NULL,
+ discount_id smallint(6) NOT NULL DEFAULT '0',
  homeimgfile varchar(255) NOT NULL DEFAULT '',
  homeimgthumb tinyint(4) NOT NULL DEFAULT '0',
  homeimgalt varchar(255) NOT NULL,
@@ -188,6 +201,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  hitscm mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitslm mediumint(8) unsigned NOT NULL DEFAULT '0',
  showprice tinyint(2) NOT NULL DEFAULT '0',
+ custom text NOT NULL,
  PRIMARY KEY (id),
  KEY listcatid (listcatid),
  KEY user_id (user_id),
@@ -197,32 +211,16 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_rows ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT '',
  ADD " . $lang . "_alias VARCHAR( 255 ) NOT NULL DEFAULT '',
- ADD " . $lang . "_description VARCHAR( 255 ) NOT NULL DEFAULT '',
- ADD " . $lang . "_keywords text NOT NULL,
- ADD " . $lang . "_note text NOT NULL,
  ADD " . $lang . "_hometext text NOT NULL,
  ADD " . $lang . "_bodytext mediumtext NOT NULL,
- ADD " . $lang . "_address text NOT NULL,
  ADD " . $lang . "_warranty text NOT NULL,
- ADD " . $lang . "_promotional text NOT NULL";
-
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_sources (
- sourceid mediumint(8) unsigned NOT NULL auto_increment,
- link varchar(255) NOT NULL default '',
- logo varchar(255) NOT NULL default '',
- weight mediumint(8) unsigned NOT NULL default '0',
- add_time int(11) unsigned NOT NULL,
- edit_time int(11) unsigned NOT NULL,
- PRIMARY KEY (sourceid)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_sources ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT ''";
+ ADD " . $lang . "_promotional text NOT NULL,
+ ADD " . $lang . "_custom text NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block_cat (
  bid mediumint(8) unsigned NOT NULL auto_increment,
  adddefault tinyint(4) NOT NULL default '0',
  image varchar(255) NOT NULL,
- thumbnail varchar(255) NOT NULL,
  weight smallint(4) NOT NULL default '0',
  add_time int(11) NOT NULL default '0',
  edit_time int(11) NOT NULL default '0',
@@ -239,21 +237,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id int(11) unsigned NOT NULL,
  weight int(11) unsigned NOT NULL,
  UNIQUE KEY bid (bid,id)
-) ENGINE=MyISAM";
-
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_comments_" . $lang . " (
- cid mediumint(8) unsigned NOT NULL auto_increment,
- id mediumint(8) unsigned NOT NULL default '0',
- post_time int(11) unsigned NOT NULL default '0',
- post_name varchar(100) NOT NULL,
- post_id int(11) NOT NULL,
- post_email varchar(100) NOT NULL,
- post_ip varchar(15) NOT NULL,
- status tinyint(1) unsigned NOT NULL default '0',
- photo varchar(255) NOT NULL,
- title varchar(255) NOT NULL,
- content mediumtext NOT NULL,
- PRIMARY KEY (cid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_units (
@@ -275,6 +258,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  listid text NOT NULL,
  listnum text NOT NULL,
  listprice text NOT NULL,
+ listgroup text NOT NULL,
  user_id int(11) unsigned NOT NULL default '0',
  admin_id int(11) unsigned NOT NULL default '0',
  shop_id int(11) unsigned NOT NULL default '0',
@@ -315,6 +299,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  code char(3) NOT NULL,
  currency varchar(255) NOT NULL,
  exchange float NOT NULL default '0',
+ round varchar(10) NOT NULL,
  PRIMARY KEY (id),
  UNIQUE KEY code (code)
 ) ENGINE=MyISAM";
@@ -330,22 +315,61 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  PRIMARY KEY (payment)
 ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_discounts (
+  did smallint(6) NOT NULL AUTO_INCREMENT,
+  title varchar(100) NOT NULL DEFAULT '',
+  weight smallint(6) NOT NULL DEFAULT '0',
+  add_time int(11) unsigned NOT NULL DEFAULT '0',
+  edit_time int(11) unsigned NOT NULL DEFAULT '0',
+  begin_time int(11) unsigned NOT NULL DEFAULT '0',
+  end_time int(11) unsigned NOT NULL DEFAULT '0',
+  config text NOT NULL,
+  PRIMARY KEY (did),
+  KEY begin_time (begin_time,end_time)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_wishlist (
+  wid smallint(6) NOT NULL AUTO_INCREMENT,
+  user_id int(11) unsigned NOT NULL default '0',
+  listid text DEFAULT '',
+  PRIMARY KEY (wid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tags (
+	 tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	 PRIMARY KEY (tid)
+	) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tags_id (
+	 id int(11) NOT NULL,
+	 tid mediumint(9) NOT NULL,
+	 UNIQUE KEY sid (id,tid)
+	) ENGINE=MyISAM";
+
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tags ADD " . $lang . "_numpro mediumint(8) NOT NULL DEFAULT '0',
+ ADD " . $lang . "_alias varchar(255) NOT NULL DEFAULT '',
+ ADD " . $lang . "_image varchar(255) DEFAULT '',
+ ADD " . $lang . "_description text,
+ ADD " . $lang . "_keywords varchar(255) DEFAULT '',
+ ADD UNIQUE(" . $lang . "_alias)";
+ 
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tags_id ADD " . $lang . "_keyword varchar(65) NOT NULL";
+
+
 $data = array();
-$data['image_size'] = '100x500';
+$data['image_size'] = '100x100';
 $data['home_view'] = 'view_home_all';
 $data['per_page'] = 20;
-$data['per_row'] = 4;
-$data['comment'] = 1;
-$data['comment_auto'] = 1;
-$data['who_comment'] = 0;
-$data['groups_comment'] = '';
+$data['per_row'] = 3;
 $data['money_unit'] = 'VND';
 $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
 $data['format_order_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
 $data['format_code_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
+$data['active_guest_order'] = 0;
 $data['active_showhomtext'] = 1;
 $data['active_order'] = 1;
+$data['active_guest_order'] = 1;
 $data['active_price'] = 1;
 $data['active_order_number'] = 0;
 $data['active_payment'] = 1;
@@ -354,6 +378,10 @@ $data['timecheckstatus'] = 0;
 $data['show_product_code'] = 1;
 $data['show_compare'] = 0;
 $data['show_displays'] = 0;
+$data['active_wishlist'] = 1;
+$data['tags_alias'] = 0;
+$data['auto_tags'] = 1;
+$data['tags_remind'] = 0;
 
 foreach( $data as $config_name => $config_value )
 {
@@ -376,14 +404,11 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_title = " . $set_lang_data . "_title";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_alias = " . $set_lang_data . "_alias";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_description = " . $set_lang_data . "_description";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_hometext = " . $set_lang_data . "_hometext";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_bodytext = " . $set_lang_data . "_bodytext";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_address = " . $set_lang_data . "_address";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_warranty = " . $set_lang_data . "_warranty";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_promotional = " . $set_lang_data . "_promotional";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_note = " . $set_lang_data . "_note";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_custom = " . $set_lang_data . "_custom";
 	}
 
 	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_units" )->fetchColumn();
@@ -391,12 +416,6 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_units SET " . $lang . "_title = " . $set_lang_data . "_title";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_units SET " . $lang . "_note = " . $set_lang_data . "_note";
-	}
-
-	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_sources" )->fetchColumn();
-	if( $numrow )
-	{
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_sources SET " . $lang . "_title = " . $set_lang_data . "_title";
 	}
 
 	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat" )->fetchColumn();
@@ -422,15 +441,40 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . $set_lang_data;
 	}
+	
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tags" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_alias = " . $set_lang_data . "_title";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_image = " . $set_lang_data . "_alias";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_description = " . $set_lang_data . "_description";
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
+	}
+	
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tags_id" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags_id SET " . $lang . "_keyword = " . $set_lang_data . "_keyword";
+	}
+
 
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SET exchange = '1'";
 }
 
-$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange) VALUES (840, 'USD', 'US Dollar', 21000)";
-$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange) VALUES (704, 'VND', 'Vietnam Dong', 1)";
+$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round) VALUES (840, 'USD', 'US Dollar', 21000, '0.01')";
+$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round) VALUES (704, 'VND', 'Vietnam Dong', 1, '100')";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_block_cat ADD UNIQUE (" . $lang . "_alias)";
 
-?>
+// Comments
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'view_comm', '6')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'setcomm', '4')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'activecomm', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'emailcomm', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";

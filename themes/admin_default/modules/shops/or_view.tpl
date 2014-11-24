@@ -26,7 +26,7 @@
 					<td>{dateup} {LANG.order_moment} {moment}</td>
 				</tr>
 			</table></td>
-			<td width="100px" valign="top" align="center">
+			<td width="100px" valign="top" class="text-center">
 			<div class="order_code">
 				{LANG.order_code}
 				<br>
@@ -36,24 +36,35 @@
 			</div></td>
 		</tr>
 	</table>
-	<table class="tab1">
+	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<td width="30px">{LANG.order_no_products}</td>
-				<td>{LANG.order_products_name}</td>
-				<td>{LANG.content_product_code}</td>
-				<td align="center" width="60px">{LANG.order_product_numbers}</td>
-				<td>{LANG.order_product_unit}</td>
-				<td align="right">{LANG.order_product_price} ({unit})</td>
+				<th width="30px">{LANG.order_no_products}</th>
+				<th>{LANG.order_products_name}</th>
+				<th>{LANG.content_product_code}</th>
+				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
+				<th>{LANG.order_product_unit}</th>
+				<th align="right">{LANG.order_product_price} ({unit})</th>
 			</tr>
 		</thead>
 		<tbody>
 		<!-- BEGIN: loop -->
 			<tr>
-				<td align="center">{pro_no}</td>
-				<td class="prd"><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></td>
+				<td class="text-center">{pro_no}</td>
+				<td class="prd">
+					<span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span><br />
+					<!-- BEGIN: display_group -->
+					<span class="text-muted">
+						<ul style="padding: 0">
+							<!-- BEGIN: item -->
+							<li class="pull-left" style="margin-right: 10px">{group_title}</li>
+							<!-- END: item -->
+						</ul>
+					</span>
+					<!-- END: display_group -->
+				</td>
 				<td><strong>{product_code}</strong></td>
-				<td class="amount" align="center">{product_number}</td>
+				<td class="amount" class="text-center">{product_number}</td>
 				<td class="unit">{product_unit}</td>
 				<td class="money" align="right"><strong>{product_price}</strong></td>
 			</tr>
@@ -61,7 +72,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total}</strong></td>
+				<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></td>
 			</tr>
 		</tfoot>
 	</table>
@@ -78,22 +89,22 @@
 		</tr>
 	</table>
 </div>
-<div class="center">
-	<form action="" method="post" name="fpost" id="post"><input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
+<div class="text-center">
+	<form class="form-inline" action="" method="post" name="fpost" id="post"><input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
 		<!-- BEGIN: onsubmit -->
-		<input type="submit" value="{LANG.order_submit}" id="click_submit">
+		<input class="btn btn-primary" type="submit" value="{LANG.order_submit}" id="click_submit">
 		<!-- END: onsubmit -->
 		<!-- BEGIN: onpay -->
-		<input type="button" value="{LANG.order_submit_pay}" id="click_pay">
+		<input class="btn btn-primary" type="button" value="{LANG.order_submit_pay}" id="click_pay">
 		<!-- END: onpay -->
-		<input type="button" value="{LANG.order_print}" id="click_print">
+		<input class="btn btn-info" type="button" value="{LANG.order_print}" id="click_print">
 	</form>
 </div>
 <!-- BEGIN: transaction -->
-<table class="tab1">
+<table class="table table-striped table-bordered table-hover">
 	<caption>{LANG.history_transaction}</caption>
 	<thead>
-		<tr align="center">
+		<tr class="text-center">
 			<td width="30px">&nbsp;</td>
 			<td>{LANG.payment_time}</td>
 			<td>{LANG.user_payment}</td>
@@ -135,7 +146,7 @@
 		});
 		$('#click_print').click(function(event) {
 			event.preventDefault();
-			NewWindow('{LINK_PRINT}', '', '640', '300', 'yes');
+			nv_open_browse('{LINK_PRINT}', '', 640, 300, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
 			return false;
 		});
 		$('#click_pay').click(function(event) {
@@ -152,6 +163,6 @@
 				});
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

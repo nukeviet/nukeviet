@@ -9,7 +9,7 @@
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
- 
+
 $page_title = $lang_module['order_title'];
 $table_name = $db_config['prefix'] . '_' . $module_data . '_orders';
 
@@ -33,7 +33,7 @@ if( $save == 1 and intval( $data_content['transaction_status'] ) == - 1 )
 	$payment = '';
 	$userid = $admin_info['userid'];
 
-	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, UNIX_TIMESTAMP(), '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', UNIX_TIMESTAMP(), '" . $payment_amount . "', '" . $payment_data . "')" );
+	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', " . NV_CURRENTTIME . ", '" . $payment_amount . "', '" . $payment_data . "')" );
 
 	if( $transaction_id > 0 )
 	{
@@ -51,16 +51,17 @@ $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA .
 $listid = explode( '|', $data_content['listid'] );
 $listnum = explode( '|', $data_content['listnum'] );
 $listprice = explode( '|', $data_content['listprice'] );
+$listgroup = explode( '|', $data_content['listgroup'] );
 $data_pro = array();
 $i = 0;
 
 foreach( $listid as $id )
 {
-	$sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_note, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =' . $id . ' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
+	$sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =' . $id . ' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
 
 	$result = $db->query( $sql );
 
-	list( $id, $_catid, $product_code, $publtime, $title, $alias, $note, $product_price, $unit ) = $result->fetch( 3 );
+	list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
 	$data_pro[] = array(
 		'id' => $id,
 		'publtime' => $publtime,
@@ -70,7 +71,8 @@ foreach( $listid as $id )
 		'product_code' => $product_code,
 		'product_unit' => $unit,
 		'link_pro' => $link . $global_array_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
-		'product_number' => $listnum[$i]
+		'product_number' => $listnum[$i],
+		'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
 	);
 	++$i;
 }
@@ -88,12 +90,21 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'product_code', $pdata['product_code'] );
 	$xtpl->assign( 'product_name', $pdata['title'] );
 	$xtpl->assign( 'product_number', $pdata['product_number'] );
-	$xtpl->assign( 'product_price', FormatNumber( $pdata['product_price'], 2, '.', ',' ) );
+	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 	$xtpl->assign( 'pro_no', $i + 1 );
-	$bg = ( $i % 2 == 0 ) ? 'class="bg"' : '';
-	$xtpl->assign( 'bg', $bg );
+	
+	if( ! empty( $pdata['product_group'] ) )
+	{
+		$groupid = explode( ',', $pdata['product_group'] );
+		foreach( $groupid as $id )
+		{
+			$xtpl->assign( 'group_title', $global_array_group[$id]['title'] );
+			$xtpl->parse( 'main.loop.display_group.item' );
+		}
+		$xtpl->parse( 'main.loop.display_group' );
+	}
 
 	$xtpl->parse( 'main.loop' );
 	++$i;
@@ -102,7 +113,7 @@ if( ! empty( $data_content['order_note'] ) )
 {
 	$xtpl->parse( 'main.order_note' );
 }
-$xtpl->assign( 'order_total', FormatNumber( $data_content['order_total'], 2, '.', ',' ) );
+$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 $xtpl->assign( 'unit', $data_content['unit_total'] );
 
 // transaction_status: Trang thai giao dich:
@@ -210,7 +221,7 @@ if( $result->rowCount() )
 
 		if( ! empty( $row['payment_id'] ) ) $array_payment[] = $row['payment_id'];
 
-		$row['payment_amount'] = FormatNumber( $row['payment_amount'], 2, '.', ',' );
+		$row['payment_amount'] = nv_number_format( $row['payment_amount'], nv_get_decimals( $pro_config['money_unit'] ) );
 
 		if( $row['transaction_status'] == 4 )
 		{
@@ -277,5 +288,3 @@ $set_active_op = 'order';
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>

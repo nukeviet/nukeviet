@@ -49,31 +49,31 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	{
 		$templistid = implode( ",", $arrayid );
 
-		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_note, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows as t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units as t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status =1";
+		$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t2." . NV_LANG_DATA . "_title, t1.money_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows as t1 LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_units as t2 ON t1.product_unit = t2.id WHERE t1.id IN (" . $templistid . ") AND t1.status =1";
 		$result = $db->query( $sql );
 
-		while( list( $id, $listcatid, $publtime, $title, $alias, $note, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit ) = $result->fetch( 3 ) )
 		{
 			$data_pro[] = array(
 				"id" => $id,
 				"publtime" => $publtime,
 				"title" => $title,
 				"alias" => $alias,
-				"product_note" => $note,
 				"hometext" => $hometext,
 				"product_price" => $temppro[$id]['price'],
 				"product_unit" => $unit,
 				"money_unit" => $money_unit,
-				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id,
+				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
 				"product_number" => $temppro[$id]['num']
 			);
 		}
 	}
 
+    $page_title = $data['order_code'];
 	$contents = call_user_func( "print_pay", $data, $data_pro );
 
 	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
+	echo nv_site_theme( $contents, false );
 	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
@@ -81,5 +81,3 @@ else
 	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 	exit();
 }
-
-?>

@@ -14,6 +14,7 @@ if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 if( ! isset( $_SESSION[$module_data . '_cart'] ) ) $_SESSION[$module_data . '_cart'] = array();
 
 $id = $nv_Request->get_int( 'id', 'post,get', 1 );
+$group = $nv_Request->get_string( 'group', 'post,get', '' );
 $num = $nv_Request->get_int( 'num', 'post,get', 1 );
 $ac = $nv_Request->get_string( 'ac', 'post,get', 0 );
 $contents_msg = "";
@@ -31,14 +32,6 @@ else
 			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $id );
 			$data_content = $result->fetch();
 
-			$price_product_discounts = $data_content['product_price'] - ( $data_content['product_price'] * ( $data_content['product_discounts'] / 100 ) );
-			$price_product_discounts = CurrencyConversionToNumber( $price_product_discounts, $data_content['money_unit'], $pro_config['money_unit'] );
-
-			if( $pro_config['active_price'] == '0' )
-			{
-				$price_product_discounts = 0;
-			}
-
 			if( $num > $data_content['product_number'] and empty( $pro_config['active_order_number'] ) )
 			{
 				$contents_msg = 'ERR_' . $lang_module['cart_set_err_num'];
@@ -51,8 +44,11 @@ else
 					$_SESSION[$module_data . '_cart'][$id] = array(
 						'num' => $num,
 						'order' => 0,
-						'price' => $price_product_discounts,
-						'store' => $data_content['product_number']
+						'price' => $data_content['product_price'],
+						'money_unit' => $data_content['money_unit'],
+						'discount_id' => $data_content['discount_id'],
+						'store' => $data_content['product_number'],
+						'group' => $group
 					);
 				}
 				else
@@ -99,5 +95,3 @@ else
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_unhtmlspecialchars( $contents_msg );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
