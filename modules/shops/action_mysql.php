@@ -92,6 +92,9 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 elseif( $op != 'setup' )
 {
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_block';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_field';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_template';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_info';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_block_cat';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_catalogs';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group';
@@ -137,6 +140,41 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_alias VARCHAR( 255 ) NOT NULL DEFAULT ''";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_description VARCHAR( 255 ) NOT NULL DEFAULT ''";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_keywords text NOT NULL";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_template (
+  id mediumint(8) NOT NULL AUTO_INCREMENT, 
+  status tinyint(1) NOT NULL DEFAULT '1',
+  title varchar(255) NOT NULL default '',
+  alias varchar(255) NOT NULL default '',
+  PRIMARY KEY (id) ,
+  UNIQUE KEY alias (alias)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info (
+  id mediumint(8) NOT NULL AUTO_INCREMENT, 
+  shopid mediumint(8) unsigned NOT NULL default '0',  
+  status tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (id) 
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
+  `fid` mediumint(8) NOT NULL AUTO_INCREMENT,
+  `field` varchar(25) NOT NULL,
+  `listtemplate` varchar(25) NOT NULL,
+  `weight` int(10) unsigned NOT NULL DEFAULT '1',
+  `field_type` enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+  `field_choices` text NOT NULL,
+  `sql_choices` text NOT NULL,
+  `match_type` enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+  `match_regex` varchar(250) NOT NULL DEFAULT '',
+  `func_callback` varchar(75) NOT NULL DEFAULT '',
+  `min_length` int(11) NOT NULL DEFAULT '0',
+  `max_length` bigint(20) unsigned NOT NULL DEFAULT '0',  
+  `language` text NOT NULL,
+  `default_value` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`fid`),
+  UNIQUE KEY `field` (`field`)
+) ENGINE=MyISAM ";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group (
  groupid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -201,7 +239,13 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  hitscm mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitslm mediumint(8) unsigned NOT NULL DEFAULT '0',
  showprice tinyint(2) NOT NULL DEFAULT '0',
- custom text NOT NULL,
+ custom text NOT NULL,   
+ vat tinyint(1) unsigned NOT NULL DEFAULT '0',  
+ typeproduct tinyint(1) unsigned NOT NULL DEFAULT '0',
+ new_old tinyint(1) unsigned NOT NULL DEFAULT '1',
+ percentnew tinyint(2) unsigned NOT NULL DEFAULT '90',
+ adddefaul tinyint(1) unsigned NOT NULL DEFAULT '1', 
+ 
  PRIMARY KEY (id),
  KEY listcatid (listcatid),
  KEY user_id (user_id),
@@ -214,8 +258,9 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD " . $lang . "_hometext text NOT NULL,
  ADD " . $lang . "_bodytext mediumtext NOT NULL,
  ADD " . $lang . "_warranty text NOT NULL,
- ADD " . $lang . "_promotional text NOT NULL,
- ADD " . $lang . "_custom text NOT NULL";
+ ADD " . $lang . "_promotional text NOT NULL, 
+ ADD " . $lang . "_custom text NOT NULL,
+ ADD " . $lang . "_address text NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block_cat (
  bid mediumint(8) unsigned NOT NULL auto_increment,
