@@ -13,7 +13,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 $module_version = array(
 	'name' => 'Contact',
 	'modfuncs' => 'main',
-	'is_sys' => 0,
+	'is_sysmod' => 0,
 	'virtual' => 1,
 	'version' => '4.0.02',
 	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',

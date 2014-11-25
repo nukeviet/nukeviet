@@ -15,7 +15,7 @@ $module_version = array(
 	'modfuncs' => 'main,viewcat,topic,groups,detail,search,content,tag,rss', // Cac function co block
 	'change_alias' => 'topic,groups,content,rss',
 	'submenu' => 'content,rss,search',
-	'is_sys' => 0, // 1:0 => Co phai la module he thong hay khong
+	'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
 	'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
 	'version' => '4.0.00', // Phien ban cua modle
 	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT', // Ngay phat hanh phien ban

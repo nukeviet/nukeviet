@@ -267,7 +267,7 @@ foreach( $arr_module_news as $module_name_i => $arr )
 			$module_version = array(
 				'name' => $module_name_i,
 				'modfuncs' => 'main',
-				'is_sys' => 0,
+				'is_sysmod' => 0,
 				'virtual' => 0,
 				'version' => '3.5.00',
 				'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
@@ -292,7 +292,7 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		$module_version['virtual'] = ( $module_version['virtual'] == 1 ) ? 1 : 0;
 
 		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES ( 
-			\'module\', :title, ' . intval( $module_version['is_sys'] ) . ', ' . intval( $module_version['virtual'] ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
+			\'module\', :title, ' . intval( $module_version['is_sysmod'] ) . ', ' . intval( $module_version['virtual'] ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
 		);
 		
 		$sth->bindParam( ':title', $module_name_i, PDO::PARAM_STR );
