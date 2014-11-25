@@ -35,7 +35,7 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 
 	if( ! empty( $title ) and ! empty( $modfile ) and ! in_array( $title, $modules_site ) and ! in_array( $title, $modules_admin ) and preg_match( $global_config['check_module'], $title ) and preg_match( $global_config['check_module'], $modfile ) )
 	{
-		$mod_version = '';
+		$version = '';
 		$author = '';
 		$note = nv_nl2br( $note, '<br />' );
 		$module_data = preg_replace( '/(\W+)/i', '_', $title );
@@ -43,11 +43,11 @@ if( $nv_Request->get_title( 'checkss', 'post' ) == md5( session_id() . 'addmodul
 		{
 			try
 			{
-				$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_modules (title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note) VALUES ( :title, 0, 0, :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)' );
+				$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES ( \'module\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)' );
 				$sth->bindParam( ':title', $title, PDO::PARAM_STR );
-				$sth->bindParam( ':module_file', $modfile, PDO::PARAM_STR );
-				$sth->bindParam( ':module_data', $module_data, PDO::PARAM_STR );
-				$sth->bindParam( ':mod_version', $mod_version, PDO::PARAM_STR );
+				$sth->bindParam( ':basename', $modfile, PDO::PARAM_STR );
+				$sth->bindParam( ':table_prefix', $module_data, PDO::PARAM_STR );
+				$sth->bindParam( ':version', $version, PDO::PARAM_STR );
 				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
 				$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 				if( $sth->execute() )
@@ -86,8 +86,9 @@ $xtpl->assign( 'CHECKSS', md5( session_id() . 'addmodule' ) );
 $xtpl->assign( 'TITLE', $title );
 $xtpl->assign( 'NOTE', $note );
 
-$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_modules WHERE virtual=1 ORDER BY addtime ASC';
+$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE virtual=1 AND type=\'module\' ORDER BY addtime ASC';
 $result = $db->query( $sql );
+
 while( list( $modfile_i ) = $result->fetch( 3 ) )
 {
 	if( in_array( $modfile_i, $modules_site ) )

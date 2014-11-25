@@ -59,13 +59,14 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 		$userModules = array();
 
-		$result = $db->query( 'SELECT module_file, mod_version, author FROM ' . $db_config['prefix'] . '_setup_modules GROUP BY module_file ORDER BY module_file ASC' );
-		while( list( $module_file, $mod_version, $author ) = $result->fetch( 3 ) )
+		$result = $db->query( 'SELECT basename, version, author FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' GROUP BY basename ORDER BY basename ASC' );
+		
+		while( list( $module_file, $version, $author ) = $result->fetch( 3 ) )
 		{
 			$userModules[$module_file] = array();
 			$v = '';
 			$p = 0;
-			if( preg_match( '/^([^\s]+)\s+([\d]+)$/', $mod_version, $matches ) )
+			if( preg_match( '/^([^\s]+)\s+([\d]+)$/', $version, $matches ) )
 			{
 				$v = ( string )$matches[1];
 				$p = ( int )$matches[2];
@@ -77,10 +78,10 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
 				{
-					$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_setup_modules SET mod_version= :mod_version, author= :author WHERE module_file= :module_file' );
-					$sth->bindValue( ':mod_version', $v . ' ' . $onlineModules[$module_file]['pubtime'], PDO::PARAM_STR );
+					$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_setup_extensions SET version= :version, author= :author WHERE type=\'module\' AND basename= :basename' );
+					$sth->bindValue( ':version', $v . ' ' . $onlineModules[$module_file]['pubtime'], PDO::PARAM_STR );
 					$sth->bindParam( ':author', $onlineModules[$module_file]['author'], PDO::PARAM_STR );
-					$sth->bindParam( ':module_file', $module_file, PDO::PARAM_STR );
+					$sth->bindParam( ':basename', $module_file, PDO::PARAM_STR );
 					$sth->execute();
 				}
 			}

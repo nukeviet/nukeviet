@@ -28,13 +28,14 @@ if( ! empty( $setmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
-		$sth = $db->prepare( 'SELECT module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title=:title');
+		$sth = $db->prepare( 'SELECT basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
 		$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
 		$modrow = $sth->fetch();
+		
 		if( ! empty( $modrow ) )
 		{
-			if( ! empty( $array_site_cat_module ) and ! in_array( $modrow['module_file'], $array_site_cat_module ) )
+			if( ! empty( $array_site_cat_module ) and ! in_array( $modrow['basename'], $array_site_cat_module ) )
 			{
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 				die();
@@ -44,15 +45,15 @@ if( ! empty( $setmodule ) )
 			$weight = intval( $weight ) + 1;
 
 			$module_version = array();
-			$version_file = NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/version.php';
+			$version_file = NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/version.php';
 
 			if( file_exists( $version_file ) )
 			{
 				include $version_file;
 			}
 
-			$admin_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/admin.functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/admin/main.php' ) ) ? 1 : 0;
-			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['module_file'] . '/funcs/main.php' ) ) ? 1 : 0;
+			$admin_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin.functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/admin/main.php' ) ) ? 1 : 0;
+			$main_file = ( file_exists( NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/functions.php' ) and file_exists( NV_ROOTDIR . '/modules/' . $modrow['basename'] . '/funcs/main.php' ) ) ? 1 : 0;
 
 			$custom_title = preg_replace( '/(\W+)/i', ' ', $setmodule );
 
@@ -63,8 +64,8 @@ if( ! empty( $setmodule ) )
 					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
 				" );
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
-				$sth->bindParam( ':module_file', $modrow['module_file'], PDO::PARAM_STR );
-				$sth->bindParam( ':module_data', $modrow['module_data'], PDO::PARAM_STR );
+				$sth->bindParam( ':module_file', $modrow['basename'], PDO::PARAM_STR );
+				$sth->bindParam( ':module_data', $modrow['table_prefix'], PDO::PARAM_STR );
 				$sth->bindParam( ':custom_title', $custom_title, PDO::PARAM_STR );
 				$sth->execute();
 			}
@@ -112,10 +113,11 @@ if( defined( 'NV_IS_GODADMIN' ) and ! empty( $delmodule ) )
 
 		if( empty( $module_exit ) )
 		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_modules WHERE module_file= :module_file AND title!= :title' );
-			$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename AND title!= :title AND type=\'module\'' );
+			$sth->bindParam( ':basename', $delmodule, PDO::PARAM_STR );
 			$sth->bindParam( ':title', $delmodule, PDO::PARAM_STR );
 			$sth->execute();
+			
 			if( $sth->fetchColumn() )
 			{
 				$module_exit = 1;
@@ -203,22 +205,23 @@ $modules_data = array();
 $is_delCache = false;
 $module_virtual_setup = array();
 
-$sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY addtime ASC';
+$sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY addtime ASC';
 $result = $db->query( $sql_data );
+
 while( $row = $result->fetch() )
 {
-	if( array_key_exists( $row['module_file'], $modules_exit ) )
+	if( array_key_exists( $row['basename'], $modules_exit ) )
 	{
 		$modules_data[$row['title']] = $row;
 
-		if( $row['title'] != $row['module_file'] )
+		if( $row['title'] != $row['basename'] )
 		{
-			$module_virtual_setup[] = $row['module_file'];
+			$module_virtual_setup[] = $row['basename'];
 		}
 	}
 	else
 	{
-		$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :title' );
+		$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'' );
 		$sth->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 		$sth->execute();
 
@@ -264,7 +267,7 @@ foreach( $arr_module_news as $module_name_i => $arr )
 			$module_version = array(
 				'name' => $module_name_i,
 				'modfuncs' => 'main',
-				'is_sysmod' => 0,
+				'is_sys' => 0,
 				'virtual' => 0,
 				'version' => '3.5.00',
 				'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
@@ -280,22 +283,22 @@ foreach( $arr_module_news as $module_name_i => $arr )
 			$date_ver = NV_CURRENTTIME;
 		}
 
-		$mod_version = $module_version['version'] . ' ' . $date_ver;
+		$version = $module_version['version'] . ' ' . $date_ver;
 		$note = $module_version['note'];
 		$author = $module_version['author'];
 		$module_data = preg_replace( '/(\W+)/i', '_', $module_name_i );
 
 		// Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
-		$module_version['virtual'] = ( $module_version['virtual']==1 ) ? 1 : 0;
+		$module_version['virtual'] = ( $module_version['virtual'] == 1 ) ? 1 : 0;
 
-		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_modules
-			(title, is_sysmod, virtual, module_file, module_data, mod_version, addtime, author, note)	VALUES
-			( :title, ' . intval( $module_version['is_sysmod'] ) . ', ' . intval( $module_version['virtual'] ) . ', :module_file, :module_data, :mod_version, ' . NV_CURRENTTIME . ', :author, :note)'
-			);
+		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES ( 
+			\'module\', :title, ' . intval( $module_version['is_sys'] ) . ', ' . intval( $module_version['virtual'] ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
+		);
+		
 		$sth->bindParam( ':title', $module_name_i, PDO::PARAM_STR );
-		$sth->bindParam( ':module_file', $module_name_i, PDO::PARAM_STR );
-		$sth->bindParam( ':module_data', $module_data, PDO::PARAM_STR );
-		$sth->bindParam( ':mod_version', $mod_version, PDO::PARAM_STR );
+		$sth->bindParam( ':basename', $module_name_i, PDO::PARAM_STR );
+		$sth->bindParam( ':table_prefix', $module_data, PDO::PARAM_STR );
+		$sth->bindParam( ':version', $version, PDO::PARAM_STR );
 		$sth->bindParam( ':author', $author, PDO::PARAM_STR );
 		$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 		$sth->execute();
@@ -331,7 +334,7 @@ foreach( $modules_data as $row )
 {
 	if( in_array( $row['title'], $modules_exit ) )
 	{
-		if( ! empty( $array_site_cat_module ) and ! in_array( $row['module_file'], $array_site_cat_module ) )
+		if( ! empty( $array_site_cat_module ) and ! in_array( $row['basename'], $array_site_cat_module ) )
 		{
 			continue;
 		}
@@ -340,10 +343,10 @@ foreach( $modules_data as $row )
 		{
 			$mod = array();
 			$mod['title'] = $row['title'];
-			$mod['is_sysmod'] = $row['is_sysmod'];
+			$mod['is_sys'] = $row['is_sys'];
 			$mod['virtual'] = $row['virtual'];
-			$mod['module_file'] = $row['module_file'];
-			$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['mod_version'] );
+			$mod['module_file'] = $row['basename'];
+			$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version'] );
 			$mod['addtime'] = nv_date( 'H:i:s d/m/Y', $row['addtime'] );
 			$mod['author'] = $row['author'];
 			$mod['note'] = $row['note'];
@@ -355,13 +358,16 @@ foreach( $modules_data as $row )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 			}
+			
 			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
 			$mod['delete'] = '';
-			if( defined( "NV_IS_GODADMIN" ) and ! in_array( $row['module_file'], $module_virtual_setup ) )
+			
+			if( defined( "NV_IS_GODADMIN" ) and ! in_array( $row['basename'], $module_virtual_setup ) )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delmodule=' . $row['title'] . '&amp;checkss=' . md5( 'delmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 				$mod['delete'] = " <em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";
 			}
+			
 			if( $mod['module_file'] == $mod['title'] )
 			{
 				$array_modules[] = $mod;

@@ -81,8 +81,8 @@ function nv_extensions_is_installed( $type, $name, $version )
 		
 		return 1;
 		
-		//$stmt = $db->prepare( 'SELECT mod_version FROM ' . NV_PREFIXLANG . '_setup_modules WHERE module_file= :modfile AND module_file=title' );
-		//$stmt->bindParam( ':modfile', $name, PDO::PARAM_STR );
+		//$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
+		//$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
 		//$stmt->execute();
 		//$row = $stmt->fetch();	
 	}

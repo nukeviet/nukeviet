@@ -131,11 +131,11 @@ else
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', $op );
 
-	$sql = 'SELECT module_file FROM ' . $db_config['prefix'] . '_setup_modules WHERE title=module_file ORDER BY title ASC';
+	$sql = 'SELECT basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename AND type=\'module\' ORDER BY title ASC';
 	$result = $db->query( $sql );
 	while( $row = $result->fetch() )
 	{
-		$xtpl->assign( 'MODULE_FILE', $row['module_file'] );
+		$xtpl->assign( 'MODULE_FILE', $row['basename'] );
 		$xtpl->parse( 'main.module_file' );
 	}
 

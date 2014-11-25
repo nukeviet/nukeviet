@@ -68,7 +68,7 @@ function nv_show_funcs()
 		$module_version = array(
 			'name' => $mod,
 			'modfuncs' => 'main',
-			'is_sysmod' => 0,
+			'is_sys' => 0,
 			'virtual' => 0,
 			'version' => '4.0.00',
 			'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
