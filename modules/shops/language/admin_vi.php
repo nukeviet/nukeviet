@@ -513,3 +513,5 @@ $lang_module['inks'] = 'Loại mực';
 $lang_module['common_features'] = 'tính năng chung';
 
 $lang_module['address'] = 'Địa chỉ mặc định';
+$lang_module['field'] = 'Tiêu đề field1';
+$lang_module['f'] = 'tiêu đề 2';

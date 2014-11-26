@@ -731,16 +731,18 @@ function nv_show_custom_form( $form, $array_custom, $array_custom_lang )
 	//$xtpl->assign( 'CUSTOM', $array_custom );
 
 	//editor
+	/*
 	$rowcontent['bodytext1'] = htmlspecialchars( nv_editor_br2nl( $array_custom['link'] ) );
-	if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
-	{
-		$edits = nv_aleditor( 'bodytext1', '100%', '300px', $rowcontent['bodytext1'] );
-	}
-	else
-	{
-		$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext1'] . "</textarea>";
-	}
-	$xtpl->assign( 'edit_bodytext1', $edits );
+		if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+		{
+			$edits = nv_aleditor( 'bodytext1', '100%', '300px', $rowcontent['bodytext1'] );
+		}
+		else
+		{
+			$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext1'] . "</textarea>";
+		}
+		$xtpl->assign( 'edit_bodytext1', $edits );*/
+
 
 	$xtpl->assign( 'ROW', $array_custom );
 	$i = 0;
