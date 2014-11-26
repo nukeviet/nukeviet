@@ -120,7 +120,7 @@ function GetDataIn( $result, $catid )
 	global $global_array_cat, $module_name, $db, $link, $module_info, $global_config;
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -154,6 +154,7 @@ function GetDataIn( $result, $catid )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
+			'promotional'=> $promotional,
 			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -175,14 +176,14 @@ function GetDataIn( $result, $catid )
  * @param mixed $groupid
  * @return
  */
-function GetDataInGroup( $result, $groupid )
+function GetDataInGroups( $result, $array_g )
 {
 	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -216,15 +217,16 @@ function GetDataInGroup( $result, $groupid )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
+			'promotional' => $promotional,
 			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
-
-	$data_content['id'] = $groupid;
-	$data_content['title'] = $global_array_group[$groupid]['title'];
+	
+	$data_content['id'] = $array_g[0];
+	$data_content['title'] = $global_array_group[$array_g[0]]['title'];
 	$data_content['data'] = $data;
-	$data_content['alias'] = $global_array_group[$groupid]['alias'];
+	$data_content['alias'] = $global_array_group[$array_g[0]]['alias'];
 
 	return $data_content;
 }
@@ -292,3 +294,4 @@ function getgroup_selecthtml( $data_group, $pid, $listgroupid )
 	}
 	return $contents_temp;
 }
+

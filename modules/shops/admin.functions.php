@@ -10,7 +10,12 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting', 'content', 'custom_form', 'keywords', 'del_content', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax' );
+$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting','content', 'custom_form', 'keywords', 'del_content','detemplate', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax','template' );
+if( defined( 'NV_IS_SPADMIN' ) )
+{
+	$allow_func[] = 'setting';
+	$allow_func[] = 'fields';
+}
 
 $array_viewcat_full = array(
 	'view_home_cat' => $lang_module['view_home_cat'],
@@ -718,9 +723,93 @@ function nv_show_custom_form( $form, $array_custom, $array_custom_lang )
 		require_once NV_ROOTDIR . '/modules/' . $module_file . '/admin/cat_form_' . $form . '.php';
 	}
 
-	$xtpl->assign( 'CUSTOM', $array_custom );
+	if( defined( 'NV_EDITOR' ) )
+	{
+		require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+	}
+
+	//$xtpl->assign( 'CUSTOM', $array_custom );
+
+	//editor
+	$rowcontent['bodytext1'] = htmlspecialchars( nv_editor_br2nl( $array_custom['link'] ) );
+	if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+	{
+		$edits = nv_aleditor( 'bodytext1', '100%', '300px', $rowcontent['bodytext1'] );
+	}
+	else
+	{
+		$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext1'] . "</textarea>";
+	}
+	$xtpl->assign( 'edit_bodytext1', $edits );
+
+	$xtpl->assign( 'ROW', $array_custom );
+	$i = 0;
+
+	$array_cus = array( );
+
+	foreach( $array_custom as $key => $array_custom_i )
+	{
+		$i++;
+		if( $i != 1 AND $i != 2 )
+		{
+			$array_cus[$key] = explode( "may2s", $array_custom_i );
+		}
+	}
+
+	if( isset( $array_cus['title_config'] ) AND count( $array_cus['title_config'] ) > 1 )
+	{
+		foreach( $array_cus['title_config'] as $key_key => $array_cus_i )
+		{
+			$xtpl->assign( 'title_config', $array_cus_i );
+			$xtpl->assign( 'content_config', $array_cus['content_config'][$key_key] );
+			$xtpl->parse( 'main.catlinhkien' );
+		}
+	}
+
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
+}
+
+function Insertabl_catfields( $table, $array, $idshop )
+{
+
+	global $db, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
+
+	$result = $db->query( "SHOW COLUMNS FROM " . $table );
+
+	$array_column = array( );
+
+	while( $row = $result->fetch( ) )
+	{
+		$array_column[] = $row['field'];
+	}
+	$sql_insert = '';
+	array_shift( $array_column );
+	array_shift( $array_column );
+	$array_new = array( );
+
+	foreach( $array as $key => $array_a )
+	{
+		if( gettype( $array_a ) == 'array' )
+		{
+			$array_new[$key] = implode( "may2s", $array_a );
+		}
+		else
+		{
+			$array_new[$key] = $array_a;
+		}
+
+	}
+	//print_r($array);die;
+	foreach( $array_column as $array_i )
+	{
+
+		$sql_insert .= ",'" . $array_new[$array_i] . "'";
+	}
+
+	$sql = " INSERT INTO " . $table . " VALUES ( " . $idshop . ",1 " . $sql_insert . ")";
+
+	$db->query( $sql );
 }
