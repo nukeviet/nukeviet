@@ -223,6 +223,7 @@ $lang_module['order_address'] = 'Địa chỉ';
 $lang_module['order_total'] = 'Tổng tiền';
 $lang_module['unit_total'] = 'Đơn vị';
 $lang_module['view'] = 'Xem';
+$lang_module['views'] = 'Lượt xem';
 $lang_module['date_from'] = 'Từ ngày';
 $lang_module['date_to'] = 'Đến ngày';
 $lang_module['order_info'] = 'Thông tin đơn đặt hàng';
