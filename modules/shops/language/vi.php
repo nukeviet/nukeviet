@@ -232,7 +232,6 @@ $lang_module['order_email_noreply'] = 'Đây là email được gửi tự độ
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
 $lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! chúng tôi sẽ gửi hàng cho bạn sớm nhất';
 $lang_module['payment_erorr'] = 'Quá trình thanh toán có lỗi do một lý do nào đó';
-$lang_module['payment_paypal_pay'] = 'Thanh toán đơn hàng %s';
 $lang_module['cart_title'] = 'Giỏ hàng';
 $lang_module['cart_product_title'] = 'mặt hàng';
 $lang_module['cart_product_total'] = 'Tổng';
@@ -358,7 +357,9 @@ $lang_module['discount_content_text'] = "<strong>%s</strong> áp dụng chương
 $lang_module['discount_content_text_items'] = "Giảm %s&#37; khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
 
 $lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
-$lang_module['rateavg_percent'] = 'Đánh giá trung bình';
+$lang_module['dg'] = ' lượt';
+$lang_module['trong'] = ' điểm / ';
+$lang_module['rateavg_percent'] = 'Tổng số điểm bài viết là';
 $lang_module['5star'] = '5 sao';
 $lang_module['4star'] = '4 sao';
 $lang_module['3star'] = '3 sao';
@@ -368,4 +369,94 @@ $lang_module['1star'] = '1 sao';
 $lang_module['custom'] = 'Mở rộng';
 
 $lang_module['product_empty'] = 'Hết hàng';
-$lang_module['product_number'] = 'Còn lại';
+$lang_module['product_number'] = 'còn lại';
+
+//them truong tuy bien
+
+$lang_module['volume'] = 'Khối lượng ';
+$lang_module['title_cpu'] = 'Tên CPU';
+$lang_module['speed'] = 'Tốc độ';
+$lang_module['caching'] = 'Bộ nhớ đệm';
+$lang_module['chip_sep'] = 'Chip sep';
+$lang_module['bus_speed'] = 'Tốc độ Bus';
+$lang_module['ram_speed'] = 'Tối đa ram';
+$lang_module['capacity'] = 'Dung lượng';
+
+$lang_module['type_ram'] = 'Loại ram';
+$lang_module['bus_speed_ram'] = 'Tốc độ bus';
+$lang_module['type_disc'] = 'Loại đĩa';
+$lang_module['hard_drive_capacity'] = 'Dung lượng';
+$lang_module['screen_size'] = 'Cỡ màm hình';
+$lang_module['resolution'] = 'Độ phân giải';
+$lang_module['technology'] = 'Công nghệ';
+$lang_module['induction'] = 'Cảm ứng';
+$lang_module['name_card'] = 'Tên card';
+$lang_module['card_design'] = 'Thiết kế card';
+$lang_module['card_memory'] = 'Bộ nhớ card';
+$lang_module['audio'] = 'Âm thanh';
+$lang_module['audio_channels'] = 'Kênh âm thanh';
+$lang_module['audio_technology'] = 'Công nghệ';
+$lang_module['integrated'] = 'Tích hợp';
+$lang_module['optical_disc'] = 'Đĩa quang';
+$lang_module['hdmi'] = 'HDIM';
+$lang_module['usb'] = 'USB';
+$lang_module['lan'] = 'LAN';
+$lang_module['wifi'] = 'Wifi';
+$lang_module['blutooth'] = 'Blutooth';
+$lang_module['nfc'] = 'NFC';
+$lang_module['Card_reader'] = 'Card reader';
+$lang_module['camera_font'] = 'Camera Trước';
+$lang_module['camera_end'] = 'Camera sau';
+$lang_module['os'] = 'Hệ điều hành';
+$lang_module['software'] = 'Phần mềm';
+$lang_module['battery_technology'] = 'Công nghệ pin';
+$lang_module['pin_capacity'] = 'Dung lượng pin';
+$lang_module['time_pin'] = 'Thời gian dùng';
+$lang_module['size'] = 'Kích thước';
+$lang_module['motherboard'] = 'Bo mạch';
+$lang_module['hard_drive'] = 'Ổ cứng';
+$lang_module['screen'] = 'Màm hình';
+//$lang_module['audio'] = 'Kênh âm thanh';
+$lang_module['interface'] = 'Giao tiếp';
+$lang_module['os&software'] = 'OS và phầm mềm';
+$lang_module['yesvat'] = 'Đã bao gồm 10%';
+$lang_module['novat'] = 'Chưa bao gồm vat 10%';
+$lang_module['month'] = 'tháng';
+$lang_module['typeproduct'] = 'Kiểu hàng';
+$lang_module['genuine'] = 'Chính hãng';
+$lang_module['notebook'] = 'Sách tay';
+$lang_module['new_old'] = 'Tình trạng';
+$lang_module['new'] = 'Máy mới';
+$lang_module['old'] = 'Máy cũ';
+$lang_module['address'] = 'Địa chỉ bán';
+$lang_module['addressother'] = 'Xem của hàng khác';
+$lang_module['adddefaul'] = 'Sử dụng địa điểm mặc định';
+$lang_module['addaddress'] = 'Thêm địa điểm';
+$lang_module['note_add'] = 'Cách nhau bởi dấu |';
+
+$lang_module['title_config'] = 'Tiêu đề cấu hình';
+$lang_module['content_config'] = 'Nội dung cấu hình sản phẩm';
+
+$lang_module['addconfig'] = 'Thêm cấu hình';$lang_module['printer_model'] = 'Kiểu máy in';
+$lang_module['printer_speed'] = 'Tốc độ in';
+$lang_module['memory'] = 'Bộ nhớ';
+$lang_module['paper_size'] = 'Khổ giấy';
+$lang_module['inks'] = 'Loại mực';
+$lang_module['inks'] = 'Loại mực';
+$lang_module['common_features'] = 'tính năng chung';
+$lang_module['specifications'] = 'Thông số kỹ thuật';
+
+$lang_module['yesvat'] = 'Đã bao gồm 10%';
+$lang_module['novat'] = 'Chưa bao gồm vat 10%';
+$lang_module['genuine'] = 'Chính hãng';
+$lang_module['notebook'] = 'Sách tay';
+
+$lang_module['new_old'] = 'Tình trạng';
+$lang_module['new'] = 'Mới';
+$lang_module['old'] = 'Mới';
+$lang_module['danhgia'] = 'Đánh giá của bạn';
+$lang_module['xemanh'] = '<b>Xem ảnh</b> (click vào xem ảnh lớn)';
+
+$lang_module['field'] = 'Tiêu đề field1';
+$lang_module['f'] = 'tiêu đề 2';
+$lang_module['detail_newtab'] = 'Tên tab mới';

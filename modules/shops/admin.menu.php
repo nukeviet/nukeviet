@@ -23,3 +23,9 @@ $submenu['tags'] = $lang_module['tags'];
 $submenu['payport'] = $lang_module['setup_payment'];
 $submenu['docpay'] = $lang_module['document_payment'];
 $submenu['setting'] = $lang_module['setting'];
+$submenu['template'] = $lang_module['template'];
+if( defined( 'NV_IS_SPADMIN' ) )
+{
+	$submenu['setting'] = $lang_module['setting'];
+	$submenu['fields'] = 'Custom Fields';
+}
