@@ -48,10 +48,17 @@ if( $save == 1 and intval( $data_content['transaction_status'] ) == - 1 )
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
-$listid = explode( '|', $data_content['listid'] );
-$listnum = explode( '|', $data_content['listnum'] );
-$listprice = explode( '|', $data_content['listprice'] );
-$listgroup = explode( '|', $data_content['listgroup'] );
+// Thong tin chi tiet mat hang trong don hang
+$listid = $listnum = $listprice = $listgroup = array();
+$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
+while( $row = $result->fetch() )
+{
+	$listid[] = $row['id'];
+	$listnum[] = $row['num'];
+	$listprice[] = $row['price'];
+	$listgroup[] = $row['group_id'];
+}
+
 $data_pro = array();
 $i = 0;
 
@@ -94,7 +101,7 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 	$xtpl->assign( 'pro_no', $i + 1 );
-	
+
 	if( ! empty( $pdata['product_group'] ) )
 	{
 		$groupid = explode( ',', $pdata['product_group'] );

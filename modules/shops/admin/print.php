@@ -32,8 +32,15 @@ $xtpl->assign( 'dateup', date( 'd-m-Y', $data['order_time'] ) );
 $xtpl->assign( 'moment', date( 'h:i', $data['order_time'] ) );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'order_id', $data['order_id'] );
-$listid = explode( '|', $data['listid'] );
-$listnum = explode( '|', $data['listnum'] );
+
+// Thong tin chi tiet mat hang trong don hang
+$listid = $listnum = array();
+$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $data['order_id'] );
+while( $row = $result->fetch() )
+{
+	$listid[] = $row['id'];
+	$listnum[] = $row['num'];
+}
 
 $i = 0;
 foreach( $listid as $id )

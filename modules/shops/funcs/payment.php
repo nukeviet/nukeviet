@@ -18,6 +18,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 {
 	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
+	// Thong tin don hang
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
 	$data = $result->fetch();
 
@@ -27,11 +28,16 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		die();
 	}
 
-	$listid = explode( '|', $data['listid'] );
-	$listnum = explode( '|', $data['listnum'] );
-	$listprice = explode( '|', $data['listprice'] );
-	$listgroup = explode( '|', $data['listgroup'] );
-	$temppro = array();
+	// Thong tin chi tiet mat hang trong don hang
+	$listid = $listnum = $listprice = $listgroup = array();
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
+	while( $row = $result->fetch() )
+	{
+		$listid[] = $row['id'];
+		$listnum[] = $row['num'];
+		$listprice[] = $row['price'];
+		$listgroup[] = $row['group_id'];
+	}
 
 	$i = 0;
 	foreach( $listid as $proid )
