@@ -325,6 +325,16 @@ function nv_add_otherimage() {
 	file_items++;
 }
 
+
+function nv_add_title() {
+	var a = "<tr><td><input class=\"form-control\" value=\"\" name=\"custom[title_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td>";
+	a += "<td><input class=\"form-control\" value=\"\" name=\"custom[content_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td></tr>";
+	$("#othertitle").append(a);
+	file_items++;
+}
+
+
+
 function nv_getcatalog(obj) {
 	var pid = $(obj).val();
 	var url = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getcatalog&pid=' + pid;

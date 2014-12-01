@@ -8,9 +8,10 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) )
+	die( 'Stop!!!' );
 
-if( ! function_exists( 'nv_pro_group' ) )
+if( ! function_exists( 'nv_pro_groupnews' ) )
 {
 	/**
 	 * GetCatidInChild()
@@ -22,7 +23,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 	{
 		global $global_array_cat, $array_cat;
 		$array_cat[] = $catid;
-		if( ! empty( $global_array_cat[$catid]['parentid'] ) && ( $global_array_cat[$catid]['parentid'] > 0 ) )
+		if( ! empty( $global_array_cat[$catid]['parentid'] ) && ($global_array_cat[$catid]['parentid'] > 0) )
 		{
 			$array_cat[] = $global_array_cat[$catid]['parentid'];
 			$array_cat_temp = GetCatidInChild( $global_array_cat[$catid]['parentid'] );
@@ -33,6 +34,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 		}
 		return array_unique( $array_cat );
 	}
+
 	/**
 	 * getgroup_ckhtml()
 	 *
@@ -41,7 +43,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 	 * @param integer $catid
 	 * @return
 	 */
-	function getgroup_ckhtml( $data_group, $pid, $catid = 0 )
+	function getgroup_ckhtmlnews( $data_group, $pid, $catid = 0 )
 	{
 		$contents_temp = "";
 		if( ! empty( $data_group ) )
@@ -58,7 +60,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 							$xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 						}
 					}
-					$contents_temp .= "<li><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $xtitle_i . "" . $groupinfo_i['title'] . " <span class=\"badge pull-right\">" . $groupinfo_i['numpro'] . "</span>" . "</a></li>";
+					$contents_temp .= $contents_temp .= "<li><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $xtitle_i . "" . $groupinfo_i['title'] . " <span class=\"badge pull-right\">" . $groupinfo_i['numpro'] . "</span>" . "</a></li>";
 					if( $groupinfo_i['numsubgroup'] > 0 )
 					{
 						$contents_temp .= getgroup_ckhtml( $data_group, $groupid_i );
@@ -75,7 +77,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 	 * @param mixed $block_config
 	 * @return
 	 */
-	function nv_pro_group( $block_config )
+	function nv_pro_groupnews( $block_config )
 	{
 		global $site_mods, $db_config, $db, $global_array_group, $module_name, $module_info, $catid, $array_op;
 		if( $catid == 0 )
@@ -90,7 +92,11 @@ if( ! function_exists( 'nv_pro_group' ) )
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
 		$data_group = $global_array_group;
-
+		
+		$array_get = $_GET;
+		//$array_g = array();			
+				
+							
 		if( $module != $module_name )
 		{
 			$sql = "SELECT groupid, parentid, cateid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewgroup, numsubgroup, subgroupid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, groups_view, numpro FROM " . $db_config['prefix'] . "_" . $mod_data . "_group ORDER BY sort ASC";
@@ -104,7 +110,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 					"cateid" => $row['cateid'],
 					"title" => $row['title'],
 					"alias" => $row['alias'],
-					"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=group/" . $row['alias'],
+					"link" =>  NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=group/" . $row['alias'],
 					"viewgroup" => $row['viewgroup'],
 					"numsubgroup" => $row['numsubgroup'],
 					"subgroupid" => $row['subgroupid'],
@@ -119,7 +125,7 @@ if( ! function_exists( 'nv_pro_group' ) )
 			}
 		}
 
-		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $mod_file . "/block.group.tpl" ) )
+		if( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $mod_file . "/block.group_news.tpl" ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -128,45 +134,94 @@ if( ! function_exists( 'nv_pro_group' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( "block.group.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
-		$array_cat =  array();
-		
+		$xtpl = new XTemplate( "block.group_news.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
+		$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+		$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+		if ($catid ==0)
+		{
+			$catid = $array_get['catid'];
+		}
+		$xtpl->assign( 'catid', $catid );
+		$array_cat = array( );
+
 		$array_cat = GetCatidInChild( $catid );
 		$contents_temp_none = $contents_temp_chid = "";
-
+	
 		foreach( $data_group as $groupid_i => $groupinfo_i )
 		{
 			if( $groupinfo_i['parentid'] == 0 && $groupinfo_i['cateid'] == 0 )
 			{
-				$contents_temp_none .= "<ul class=\"nav nav-pills nav-stacked\">";
-				$contents_temp_none .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . "\">" . $groupinfo_i['title'] . "</a></li>";
+				$xtpl->assign( 'GROUP', $groupinfo_i );
+
+				//$contents_temp_none .= "<ul class=\"nav nav-pills nav-stacked\">";
+				//$contents_temp_none .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . "\">" . $groupinfo_i['title'] . "</a></li>";
 				if( $groupinfo_i['numsubgroup'] > 0 )
 				{
-					$contents_temp_none .= getgroup_ckhtml( $data_group, $groupid_i );
+					foreach( $data_group as $groupid_i => $groupinfo )
+					{					
+						if( $groupinfo['parentid'] == $groupinfo_i['groupid'] )
+						{
+							
+							if ( isset ($array_get[$groupinfo_i['alias']]) && $array_get[$groupinfo_i['alias']] == $groupinfo['groupid'] )
+							{
+								
+								$groupinfo['selected'] = 'selected="selected"';
+							}
+							else {
+								$groupinfo['selected'] = '';
+							}
+															
+							$xtpl->assign( 'GSUB', $groupinfo );
+							$xtpl->parse( 'main.gsub1.gsub2' );
+						}
+					}
+					$xtpl->parse( 'main.gsub1' );
+					//$contents_temp_none .= getgroup_ckhtmlnews( $data_group, $groupid_i );
 				}
-				$contents_temp_none .= "</ul>";
+				//$contents_temp_none .= "</ul>";
 			}
 			elseif( $groupinfo_i['parentid'] == 0 && in_array( $groupinfo_i['cateid'], $array_cat ) && $catid > 0 )
 			{
-				$contents_temp_chid .= "<ul class=\"nav nav-pills nav-stacked\">";
-				$contents_temp_chid .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $groupinfo_i['title'] . "</a></li>";
+				$xtpl->assign( 'GROUP', $groupinfo_i );
+				//$contents_temp_chid .= "<ul class=\"nav nav-pills nav-stacked\">";
+				//$contents_temp_chid .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . '/' . $catid . "\">" . $groupinfo_i['title'] . "</a></li>";
 				if( $groupinfo_i['numsubgroup'] > 0 )
 				{
-					$contents_temp_chid .= getgroup_ckhtml( $data_group, $groupid_i, $catid );
+					foreach( $data_group as $groupid_i => $groupinfo )
+					{					
+						if( $groupinfo['parentid'] == $groupinfo_i['groupid'] )
+						{					
+							
+							if ( isset ($array_get[$groupinfo_i['alias']]) && $array_get[$groupinfo_i['alias']] == $groupinfo['groupid'] )
+							{
+								
+								$groupinfo['selected'] = 'selected="selected"';
+							}
+							else {
+								$groupinfo['selected'] = '';
+							}
+															
+							$xtpl->assign( 'GSUB', $groupinfo );
+							$xtpl->parse( 'main.gsub1.gsub2' );
+						}
+					}
+					$xtpl->parse( 'main.gsub1' );
+					//$contents_temp_chid .= getgroup_ckhtmlnews( $data_group, $groupid_i, $catid );
 				}
-				$contents_temp_chid .= "</ul>";
+				//$contents_temp_chid .= "</ul>";
 			}
 		}
 
-		$xtpl->assign( 'content1', $contents_temp_none );
-		$xtpl->assign( 'content2', $contents_temp_chid );
+		//	$xtpl->assign( 'content1', $contents_temp_none );
+		//	$xtpl->assign( 'content2', $contents_temp_chid );
 
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_pro_group( $block_config );
+	$content = nv_pro_groupnews( $block_config );
 }

@@ -43,7 +43,8 @@ if( $savesetting == 1 )
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
 	$data['home_view'] = $nv_Request->get_string( 'home_view', 'post', '' );
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
-	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
+	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );	
+	$data['address'] = $nv_Request->get_string( 'address', 'post', '' );	
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
@@ -99,7 +100,7 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
 // Số sản phẩm hiển thị trên một dòng
-for( $i = 3; $i <= 4; $i++ )
+for( $i = 3; $i <= 5; $i++ )
 {
     $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
     $xtpl->parse( 'main.per_row' );
