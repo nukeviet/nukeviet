@@ -8,11 +8,12 @@
  * @Createdate 9-8-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 $page_title = $lang_module['content_list'];
 
-if( ! defined( 'SHADOWBOX' ) )
+if( !defined( 'SHADOWBOX' ) )
 {
 	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
@@ -21,6 +22,23 @@ if( ! defined( 'SHADOWBOX' ) )
 	$my_head .= "</script>\n";
 
 	define( 'SHADOWBOX', true );
+}
+
+// List pro_unit
+$array_unit = array();
+$sql = 'SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units';
+$result_unit = $db->query( $sql );
+if( $result_unit->rowCount( ) == 0 )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit' );
+	die( );
+}
+else
+{
+	while( $row = $result_unit->fetch() )
+	{
+		$array_unit[$row['id']] = $row;
+	}
 }
 
 $stype = $nv_Request->get_string( 'stype', 'get', '-' );
@@ -49,15 +67,25 @@ $array_search = array(
 	'author' => $lang_module['search_author'],
 	'admin_id' => $lang_module['search_admin']
 );
-$array_in_rows = array( 'title', 'bodytext' );
-$array_in_ordername = array( 'title', 'publtime', 'exptime', 'hitstotal', 'product_number' );
+$array_in_rows = array(
+	'title',
+	'bodytext'
+);
+$array_in_ordername = array(
+	'title',
+	'publtime',
+	'exptime',
+	'hitstotal',
+	'product_number',
+	'num_sell'
+);
 
-if( ! in_array( $stype, array_keys( $array_search ) ) )
+if( !in_array( $stype, array_keys( $array_search ) ) )
 {
 	$stype = '-';
 }
 
-if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
+if( !in_array( $ordername, array_keys( $array_in_ordername ) ) )
 {
 	$ordername = 'id';
 }
@@ -67,47 +95,47 @@ $from = $db_config['prefix'] . '_' . $module_data . '_rows AS a LEFT JOIN ' . NV
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 
-if( $checkss == md5( session_id() ) )
+if( $checkss == md5( session_id( ) ) )
 {
 	// Tim theo tu khoa
 	if( $stype == 'product_code' )
 	{
 		$from .= " WHERE product_code LIKE '%" . $db->dblikeescape( $q ) . "%' ";
 	}
-	elseif( in_array( $stype, $array_in_rows ) and ! empty( $q ) )
+	elseif( in_array( $stype, $array_in_rows ) and !empty( $q ) )
 	{
 		$from .= " WHERE " . NV_LANG_DATA . "_" . $stype . " LIKE '%" . $db->dblikeescape( $q ) . "%' ";
 	}
-	elseif( $stype == 'admin_id' and ! empty( $q ) )
+	elseif( $stype == 'admin_id' and !empty( $q ) )
 	{
 		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
-		$array_admin_id = array();
+		$array_admin_id = array( );
 		while( list( $admin_id ) = $result->fetch( 3 ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
 		$from .= " WHERE admin_id IN (0," . implode( ",", $array_admin_id ) . ",0)";
 	}
-	elseif( ! empty( $q ) )
+	elseif( !empty( $q ) )
 	{
 		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
 
-		$array_admin_id = array();
+		$array_admin_id = array( );
 		while( list( $admin_id ) = $result->fetch( 3 ) )
 		{
 			$array_admin_id[] = $admin_id;
 		}
 
-		$arr_from = array();
+		$arr_from = array( );
 		$arr_from[] = "(product_code LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		foreach( $array_in_rows as $val )
 		{
 			$arr_from[] = "(" . NV_LANG_DATA . "_" . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		}
 		$from .= " WHERE ( " . implode( " OR ", $arr_from );
-		if( ! empty( $array_admin_id ) )
+		if( !empty( $array_admin_id ) )
 		{
 			$from .= ' OR (admin_id IN (0,' . implode( ',', $array_admin_id ) . ',0))';
 		}
@@ -115,7 +143,7 @@ if( $checkss == md5( session_id() ) )
 	}
 
 	// Tim theo loai san pham
-	if( ! empty( $catid ) )
+	if( !empty( $catid ) )
 	{
 		if( empty( $q ) )
 		{
@@ -132,14 +160,14 @@ if( $checkss == md5( session_id() ) )
 		}
 		else
 		{
-			$array_cat = array();
+			$array_cat = array( );
 			$array_cat = GetCatidInParent( $catid );
 			$from .= ' listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 	}
 }
 
-$num_items = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn();
+$num_items = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn( );
 
 $xtpl = new XTemplate( 'items.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -168,7 +196,7 @@ foreach( $array_search as $key => $val )
 	$xtpl->assign( 'STYPE', array(
 		'key' => $key,
 		'title' => $val,
-		'selected' => ( $key == $stype ) ? ' selected="selected"' : ''
+		'selected' => ($key == $stype) ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.stype' );
 }
@@ -180,7 +208,7 @@ while( $i <= 1000 )
 	$xtpl->assign( 'PER_PAGE', array(
 		'key' => $i,
 		'title' => $i,
-		'selected' => ( $i == $per_page ) ? ' selected="selected"' : ''
+		'selected' => ($i == $per_page) ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.per_page' );
 	$i = $i + 5;
@@ -188,7 +216,7 @@ while( $i <= 1000 )
 
 if( $ordername == 'title' )
 {
-	$xtpl->parse( 'main.order_title.' . ( $order == 'desc' ? 'desc' : 'asc' ) );
+	$xtpl->parse( 'main.order_title.' . ($order == 'desc' ? 'desc' : 'asc') );
 	$xtpl->parse( 'main.order_title' );
 }
 else
@@ -198,7 +226,7 @@ else
 
 if( $ordername == 'publtime' )
 {
-	$xtpl->parse( 'main.order_publtime.' . ( $order == 'desc' ? 'desc' : 'asc' ) );
+	$xtpl->parse( 'main.order_publtime.' . ($order == 'desc' ? 'desc' : 'asc') );
 	$xtpl->parse( 'main.order_publtime' );
 }
 else
@@ -208,7 +236,7 @@ else
 
 if( $ordername == 'hitstotal' )
 {
-	$xtpl->parse( 'main.order_hitstotal.' . ( $order == 'desc' ? 'desc' : 'asc' ) );
+	$xtpl->parse( 'main.order_hitstotal.' . ($order == 'desc' ? 'desc' : 'asc') );
 	$xtpl->parse( 'main.order_hitstotal' );
 }
 else
@@ -218,7 +246,7 @@ else
 
 if( $ordername == 'product_number' )
 {
-	$xtpl->parse( 'main.order_product_number.' . ( $order == 'desc' ? 'desc' : 'asc' ) );
+	$xtpl->parse( 'main.order_product_number.' . ($order == 'desc' ? 'desc' : 'asc') );
 	$xtpl->parse( 'main.order_product_number' );
 }
 else
@@ -226,33 +254,45 @@ else
 	$xtpl->parse( 'main.no_order_product_number' );
 }
 
+if( $ordername == 'num_sell' )
+{
+	$xtpl->parse( 'main.order_num_sell.' . ($order == 'desc' ? 'desc' : 'asc') );
+	$xtpl->parse( 'main.order_num_sell' );
+}
+else
+{
+	$xtpl->parse( 'main.no_order_num_sell' );
+}
+
 // Thong tin tim kiem
 $xtpl->assign( 'Q', $q );
-$xtpl->assign( 'CHECKSESS', md5( session_id() ) );
+$xtpl->assign( 'CHECKSESS', md5( session_id( ) ) );
 $xtpl->assign( 'SEARCH_NOTE', sprintf( $lang_module['search_note'], NV_MIN_SEARCH_LENGTH, NV_MAX_SEARCH_LENGTH ) );
 $xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
 
-$order2 = ( $order == 'asc' ) ? 'desc' : 'asc';
+$order2 = ($order == 'asc') ? 'desc' : 'asc';
 $base_url_name = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&per_page=' . $per_page . '&catid=' . $catid . '&stype=' . $stype . '&q=' . $q . '&checkss=' . $checkss . '&ordername=title&order=' . $order2 . '&page=' . $page;
 $base_url_publtime = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&per_page=' . $per_page . '&catid=' . $catid . '&stype=' . $stype . '&q=' . $q . '&checkss=' . $checkss . '&ordername=publtime&order=' . $order2 . '&page=' . $page;
 $base_url_hitstotal = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&per_page=' . $per_page . '&catid=' . $catid . '&stype=' . $stype . '&q=' . $q . '&checkss=' . $checkss . '&ordername=hitstotal&order=' . $order2 . '&page=' . $page;
 $base_url_product_number = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&per_page=' . $per_page . '&catid=' . $catid . '&stype=' . $stype . '&q=' . $q . '&checkss=' . $checkss . '&ordername=product_number&order=' . $order2 . '&page=' . $page;
+$base_url_num_sell = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&per_page=' . $per_page . '&catid=' . $catid . '&stype=' . $stype . '&q=' . $q . '&checkss=' . $checkss . '&ordername=num_sell&order=' . $order2 . '&page=' . $page;
 
 // Order
 $xtpl->assign( 'BASE_URL_NAME', $base_url_name );
 $xtpl->assign( 'BASE_URL_PUBLTIME', $base_url_publtime );
 $xtpl->assign( 'BASE_URL_HITSTOTAL', $base_url_hitstotal );
 $xtpl->assign( 'BASE_URL_PNUMBER', $base_url_product_number );
+$xtpl->assign( 'BASE_URL_NUM_SELL', $base_url_num_sell );
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
-$ord_sql = ( $ordername == 'title' ? NV_LANG_DATA . '_title' : $ordername ) . ' ' . $order;
-$db->sqlreset()->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, hitstotal, status, edittime, publtime, exptime, product_number, product_price, money_unit, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
-$result = $db->query( $db->sql() );
+$ord_sql = ($ordername == 'title' ? NV_LANG_DATA . '_title' : $ordername) . ' ' . $order;
+$db->sqlreset( )->select( 'id, listcatid, user_id, homeimgfile, homeimgthumb, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, hitstotal, status, edittime, publtime, exptime, product_number, product_price, money_unit, product_unit, num_sell, username' )->from( $from )->order( $ord_sql )->limit( $per_page )->offset( ($page - 1) * $per_page );
+$result = $db->query( $db->sql( ) );
 
 $theme = $site_mods[$module_name]['theme'] ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $a = 0;
 
-while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $hitstotal, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $money_unit, $username ) = $result->fetch( 3 ) )
+while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $alias, $hitstotal, $status, $edittime, $publtime, $exptime, $product_number, $product_price, $money_unit, $product_unit, $num_sell, $username ) = $result->fetch( 3 ) )
 {
 	$publtime = nv_date( 'H:i d/m/y', $publtime );
 	$edittime = nv_date( 'H:i d/m/y', $edittime );
@@ -294,20 +334,33 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 	$xtpl->assign( 'ROW', array(
 		'id' => $id,
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+		'link_seller' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=seller&amp;pro_id=' . $id . '&amp;nv_redirect=' . nv_base64_encode( $base_url ),
 		'title' => $title,
 		'publtime' => $publtime,
 		'edittime' => $edittime,
 		'hitstotal' => $hitstotal,
+		'num_sell' => $num_sell,
+		'product_unit' => $array_unit[$product_unit][NV_LANG_INTERFACE . '_title'],
 		'status' => $lang_module['status_' . $status],
-		'admin_id' => ! empty( $username ) ? $username : '',
+		'admin_id' => !empty( $username ) ? $username : '',
 		'product_number' => $product_number,
-		'product_price' => preg_replace( '/\.00$/', '', number_format( $product_price, 2, '.', ',' ) ),
+		'product_price' => nv_number_format( $product_price, nv_get_decimals( $money_unit ) ),
 		'money_unit' => $money_unit,
 		'thumb' => $thumb,
 		'imghome' => $imghome,
 		'link_edit' => nv_link_edit_page( $id ),
 		'link_delete' => nv_link_delete_page( $id )
 	) );
+
+	if( $num_sell > 0 )
+	{
+		$xtpl->parse( 'main.loop.seller' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.loop.seller_empty' );
+	}
+
 	$xtpl->parse( 'main.loop' );
 
 	++$a;
@@ -322,14 +375,17 @@ $array_list_action = array(
 
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {
-	$xtpl->assign( 'ACTION', array( 'key' => $catid_i, 'title' => $title_i ) );
+	$xtpl->assign( 'ACTION', array(
+		'key' => $catid_i,
+		'title' => $title_i
+	) );
 	$xtpl->parse( 'main.action' );
 }
 
-$xtpl->assign( 'ACTION_CHECKSESS', md5( $global_config['sitekey'] . session_id() ) );
+$xtpl->assign( 'ACTION_CHECKSESS', md5( $global_config['sitekey'] . session_id( ) ) );
 
 $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
-if( ! empty( $generate_page ) )
+if( !empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	$xtpl->parse( 'main.generate_page' );

@@ -44,7 +44,7 @@
 				<th>{LANG.content_product_code}</th>
 				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
 				<th>{LANG.order_product_unit}</th>
-				<th align="right">{LANG.order_product_price} ({unit})</th>
+				<th class="text-right">{LANG.order_product_price} ({unit})</th>
 			</tr>
 		</thead>
 		<tbody>

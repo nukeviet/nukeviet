@@ -93,6 +93,19 @@
 						<!-- END: order_product_number -->
 						<a href="{BASE_URL_PNUMBER}">{LANG.content_product_number1}</a>
 					</th>
+					<th class="text-center">
+						<!-- BEGIN: no_order_num_sell -->
+						<em class="fa fa-sort">&nbsp;</em>
+						<!-- END: no_order_num_sell -->
+						<!-- BEGIN: order_num_sell -->
+						<!-- BEGIN: desc -->
+						<em class="fa fa-sort-numeric-desc">&nbsp;</em>
+						<!-- END: desc -->
+						<!-- BEGIN: asc -->
+						<em class="fa fa-sort-numeric-asc">&nbsp;</em>
+						<!-- END: asc -->
+						<!-- END: order_num_sell -->
+						<a href="{BASE_URL_NUM_SELL}">{LANG.num_selled}</a></th>
 					<th class="text-center">{LANG.status}</th>
 					<th>&nbsp;</th>
 				</tr>
@@ -114,6 +127,14 @@
 					<td class="text-right">{ROW.product_price} {ROW.money_unit}</td>
 					<td class="text-center">{ROW.hitstotal}</td>
 					<td class="text-center">{ROW.product_number}</td>
+					<td class="text-center">
+						<!-- BEGIN: seller -->
+						<a href="{ROW.link_seller}" title="{LANG.report_detail}">{ROW.num_sell} {ROW.product_unit}</a>
+						<!-- END: seller -->
+						<!-- BEGIN: seller_empty -->
+						{ROW.num_sell} {ROW.product_unit}
+						<!-- END: seller_empty -->
+					</td>
 					<td class="text-center">{ROW.status}</td>
 					<td class="text-center"> {ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
 				</tr>
@@ -121,7 +142,7 @@
 			</tbody>
 			<tfoot>
 				<tr align="left">
-					<td colspan="9">
+					<td colspan="10">
 					<select class="form-control" name="action" id="action">
 						<!-- BEGIN: action -->
 						<option value="{ACTION.key}">{ACTION.title}</option>

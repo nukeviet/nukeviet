@@ -134,7 +134,7 @@ $lang_module['search_product_code'] = 'Mã sản phẩm';
 $lang_module['search_bodytext'] = 'Nội dung';
 $lang_module['search_author'] = 'Tác giả sản phẩm';
 $lang_module['search_admin'] = 'Người nhập liệu';
-$lang_module['search_per_page'] = 'Số sản phẩm hiển thị';
+$lang_module['search_per_page'] = 'Hiển thị';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html';
 $lang_module['search_note_fix'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['content_edit'] = 'Sửa sản phẩm';
@@ -358,8 +358,16 @@ $lang_module['tags_no_description'] = 'Chưa có mô tả';
 $lang_module['content_tags_empty'] = 'Chú ý: Sản phẩm chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu sản phẩm này, có thể tắt tính năng tự động tạo từ khóa ở phần cấu hình module';
 
-//THEM
+$lang_module['report_detail'] = 'Thống kê chi tiết';
+$lang_module['num_selled'] = 'Đã bán';
+$lang_module['seller_list'] = 'Danh sách khách hàng mua sản phẩm "%s"';
+$lang_module['seller_num'] = 'Số lượng';
 
+$lang_module['customer_name'] = 'Tên khách hàng';
+$lang_module['customer_email'] = 'Email khách hàng';
+$lang_module['customer_report_display'] = 'Hiển thị <strong>%1$s</strong> trên tổng số <strong>%2$s</strong> khách hàng';
+
+//THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";
 $lang_module['template_name'] = "Tên template";

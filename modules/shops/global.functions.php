@@ -261,6 +261,30 @@ function product_number_order( $listid, $listnum, $type = '-' )
 }
 
 /**
+ * product_number_sell()
+ *
+ * @param mixed $listid
+ * @param mixed $listnum
+ * @param string $type
+ * @return
+ */
+function product_number_sell( $listid, $listnum, $type = '+' )
+{
+	global $db_config, $db, $module_data;
+
+	foreach( $listid as $i => $id )
+	{
+		if( $id > 0 )
+		{
+			if( empty( $listnum[$i] ) ) $listnum[$i] = 0;
+
+			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET num_sell = num_sell ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE id =' . $id;
+			$db->query( $sql );
+		}
+	}
+}
+
+/**
  * nv_fix_group_count()
  *
  * @param mixed $listid

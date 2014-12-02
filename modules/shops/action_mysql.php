@@ -239,6 +239,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  hitstotal mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitscm mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitslm mediumint(8) unsigned NOT NULL DEFAULT '0',
+ num_sell mediumint(8) unsigned NOT NULL DEFAULT '0',
  showprice tinyint(2) NOT NULL DEFAULT '0',
  custom text NOT NULL,
  vat tinyint(1) unsigned NOT NULL DEFAULT '0',

@@ -17,20 +17,37 @@ $contents = "NO_" . $order_id;
 
 if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
+	// Thong tin dat hang
 	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
 	$data_order = $result->fetch();
+
+	// Thong tin dat hang chi tiet
+	$listid = $listnum = array();
+	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
+	while( $row = $result->fetch() )
+	{
+		$listid[] = $row['id'];
+		$listnum[] = $row['num'];
+	}
 
 	// Cong lai san pham trong kho
 	if( $pro_config['active_order_number'] == '0' )
 	{
-		product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
+		product_number_order( $listid, $listnum, "+" );
 	}
 
-	$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
+	// Tru lai so san pham da ban
+	product_number_sell( $listid, $listnum, "-" );
+
+	$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 	if( $exec )
 	{
-		$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
-		$contents = "OK_" . $order_id;
+		$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
+		if( $exec )
+		{
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
+			$contents = "OK_" . $order_id;
+		}
 	}
 }
 elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
@@ -56,10 +73,17 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 				product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
 			}
 
-			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
+			// Tru lai so san pham da ban
+			product_number_sell( $data_order['listid'], $data_order['listnum'], "-" );
+
+			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 			if( $exec )
 			{
-				$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
+				$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
+				if( $exec )
+				{
+					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_transaction WHERE order_id=" . $order_id );
+				}
 			}
 		}
 	}

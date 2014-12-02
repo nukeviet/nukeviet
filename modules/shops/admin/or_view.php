@@ -74,7 +74,7 @@ foreach( $listid as $id )
 		'publtime' => $publtime,
 		'title' => $title,
 		'alias' => $alias,
-		'product_price' => $listprice[$i],
+		'product_price' => $listprice[$i] * $listnum[$i],
 		'product_code' => $product_code,
 		'product_unit' => $unit,
 		'link_pro' => $link . $global_array_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,

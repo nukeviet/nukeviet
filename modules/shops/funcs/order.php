@@ -154,11 +154,14 @@ if( $post_order == 1 )
 				}
 			}
 
-			// Neu tat chuc nang dat hang vo han thi tru so sp trong kho
+			// Neu khong tat chuc nang dat hang vo han thi tru so sp trong kho
 			if( $pro_config['active_order_number'] == '0' )
 			{
-				product_number_order( $pro_id, $info['num'] );
+				product_number_order( $listid, $listnum );
 			}
+
+			// Cong vao so luong san pham da ban
+			product_number_sell( $listid, $listnum );
 
 			// Gui email thong bao don hang
 			$data_order['id'] = $order_id;
@@ -213,7 +216,7 @@ if( $post_order == 1 )
 
 			$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
-			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $review_url );
+			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $global_config['site_url'] . $review_url );
 
 			$data_order['review_url'] = $review_url;
 
