@@ -1,4 +1,5 @@
 # Ignore some static files and directories.
+/.project
 /.htaccess
 /CJzip.php
 /config.php
@@ -45,3 +46,4 @@
 !/service_shops_nganluong.php
 !/includes/class/nusoap.php
 !/includes/class/PayPal/*
+/.gitignore

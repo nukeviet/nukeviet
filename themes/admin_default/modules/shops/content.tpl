@@ -70,6 +70,32 @@
 							<!-- END: discount -->
 						</select></td>
 					</tr>
+					<tr>
+						<th>{LANG.yesvat} &nbsp;<input value="0"{checkvat1} name="vat" type="radio" value="0"/></th>
+						<th>{LANG.novat} &nbsp;<input value="1"{checkvat2}  name="vat" type="radio" value="1"/></th>
+						<th>{LANG.content_warranty}</th>
+						<th><input type="text" name="warranty" value="{rowcontent.warranty}"/>&nbsp;{LANG.month}</th>
+					</tr>
+					<tr>
+					<th>{LANG.typeproduct}</th>
+					<th>{LANG.genuine} &nbsp;<input {checktype1} name="typeproduct" type="radio" value="0" />
+						{LANG.notebook} &nbsp;<input {checktype2} name="typeproduct" type="radio" value="1"/>
+					 </th>
+					 
+					 <th>{LANG.new_old}</th>
+					 <th>					 	
+					 	{LANG.new} &nbsp;<input {checknew} name="new_old" value="0" type="radio" />
+						{LANG.old} &nbsp;<input {checkold} name="new_old" value="1" type="radio" />
+						<input type="text" name="percentnew" value="{rowcontent.percentnew}" size="10" />&nbsp;	%
+					 </th>
+					</tr>
+					<tr>
+						<th>{LANG.address}</th>
+						<th><input type="checkbox" value="1" {checkadd} name="adddefaul"> {LANG.adddefaul}</th>
+						<th>{LANG.addaddress} <br/>{LANG.note_add}</th>	
+						<th><textarea name="address" style="width:98%" >{rowcontent.address}</textarea></th>									
+					</tr>
+					
 				</tbody>
 			</table>
 			<table class="table table-striped table-bordered table-hover">
@@ -84,7 +110,7 @@
 				<tbody id="otherimage">
 					<!-- BEGIN: otherimage -->
 					<tr>
-						<td><input class="form-control" value="{DATAOTHERIMAGE.value}" style="width:400px; margin-right: 5px" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255"><input class="btn btn-info" value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
+						<td><input value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255"><input value="{LANG.browse_image}" name="selectfile" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; " type="button"></td>
 					</tr>
 					<!-- END: otherimage -->
 					<tr>
@@ -112,12 +138,7 @@
 							{edit_bodytext}
 						</div></td>
 					</tr>
-					<tr>
-						<th>{LANG.content_warranty}</th>
-					</tr>
-					<tr>
-						<td><textarea class="form-control" name="warranty" style="width:100%; height:50px">{rowcontent.warranty}</textarea></td>
-					</tr>
+					
 					<tr>
 						<th>{LANG.content_promotional}</th>
 					</tr>
@@ -312,7 +333,6 @@
 <script type="text/javascript">
 	var file_items = '{FILE_ITEMS}';
 	var file_selectfile = '{LANG.file_selectfile}';
-	var inputnumber = '{LANG.error_inputnumber}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
 	var currentpath = "{CURRENT}";
