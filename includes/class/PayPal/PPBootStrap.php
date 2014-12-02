@@ -4,8 +4,6 @@
  * whether you used composer or the custom installer.
  */
 
-// 
-//require_once 'Configuration.php';
 /*
  * @constant PP_CONFIG_PATH required if credentoal and configuration is to be used from a file
  * Let the SDK know where the sdk_config.ini file resides.
