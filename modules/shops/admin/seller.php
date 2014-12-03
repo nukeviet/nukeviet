@@ -59,6 +59,7 @@ $array_total = array( 'price' => 0, 'num' => 0, 'pro_unit' => $pro_config['money
 while( list( $order_name, $order_email, $order_phone, $order_address, $unit_total, $order_time, $num, $price ) = $sth->fetch(3) )
 {
 	$i++;
+	$price = $price * $num;
 	$array_total['price'] += $price;
 	$array_total['num'] += $num;
 	$xtpl->assign( 'ROW', array(
