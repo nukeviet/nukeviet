@@ -747,22 +747,20 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$id_block_content_new = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content_post, $id_block_content ) : $id_block_content_post;
 			$id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff( $id_block_content, $id_block_content_post ) : array();
 
+			$array_block_fix = array();
 			foreach( $id_block_content_new as $bid_i )
 			{
-				$_sql = 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid_i;
-				$weight = $db->query( $_sql )->fetchColumn();
-				$weight = intval( $weight ) + 1;
-
-				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', ' . $weight . ')' );
+				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)' );
+				$array_block_fix[] = $bid_i;
 			}
 			foreach( $id_block_content_del as $bid_i )
 			{
 				$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid = ' . $bid_i );
-				nv_news_fix_block( $bid_i, false );
+				$array_block_fix[] = $bid_i;
 			}
 
-			$id_block_content = array_keys( $array_block_cat_module );
-			foreach( $id_block_content as $bid_i )
+			$array_block_fix = array_unique( $array_block_fix );
+			foreach( $array_block_fix as $bid_i )
 			{
 				nv_news_fix_block( $bid_i, false );
 			}
