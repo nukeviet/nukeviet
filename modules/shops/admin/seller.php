@@ -14,9 +14,15 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 $pro_id = $nv_Request->get_int( 'pro_id', 'get', 0 );
 $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
 
+if( empty( $pro_id ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items' );
+	die();
+}
+
 $per_page = 50;
 $page = $nv_Request->get_int( 'page', 'get', 1 );
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;pro_id=' . $pro_id;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;pro_id=' . $pro_id;
 
 // Product info
 $pro_info = array();
