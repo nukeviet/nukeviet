@@ -32,10 +32,6 @@ $data_order = array(
 	'order_address' => '',
 	'order_phone' => '',
 	'order_note' => '',
-	'listid' => '',
-	'listnum' => '',
-	'listprice' => '',
-	'listgroup' => '',
 	'admin_id' => 0,
 	'shop_id' => 0,
 	'who_is' => 0,
@@ -48,7 +44,7 @@ if( $post_order == 1 )
 {
 	$total = 0;
 	$i = 0;
-	$listid = $listnum = $listprice = array();
+	$listid = $listnum = $listprice = $listunit = array();
 
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
@@ -139,11 +135,12 @@ if( $post_order == 1 )
 					$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'] );
 					$info['price'] = $price['sale'];
 
-					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, id, num, price, group_id ) VALUES ( :order_id, :id, :num, :price, :group_id )' );
+					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, id, num, price, money_unit, group_id ) VALUES ( :order_id, :id, :num, :price, :money_unit, :group_id )' );
 					$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
 					$stmt->bindParam( ':id', $pro_id, PDO::PARAM_INT );
 					$stmt->bindParam( ':num', $info['num'], PDO::PARAM_INT );
 					$stmt->bindParam( ':price', $info['price'], PDO::PARAM_STR );
+					$stmt->bindParam( ':money_unit', $info['money_unit'], PDO::PARAM_STR );
 					$stmt->bindParam( ':group_id', $info['group'], PDO::PARAM_INT );
 					$stmt->execute( );
 
@@ -151,6 +148,7 @@ if( $post_order == 1 )
 					$listid[] = $pro_id;
 					$listnum[] = $info['num'];
 					$listprice[] = $info['price'];
+					$listunit[] = $info['money_unit'];
 				}
 			}
 
