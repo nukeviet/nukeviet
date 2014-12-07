@@ -150,7 +150,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 					}
 				}
 
-				//cai dat du lieu mau
+				// Cai dat du lieu mau
 				$filesavedata = '';
 				$lang_data = $keylang;
 				if( file_exists( NV_ROOTDIR . '/install/data_' . $keylang . '.php' ) )
