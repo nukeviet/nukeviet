@@ -47,8 +47,8 @@ else
 		$filename = NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 	}
 	
-	require( NV_ROOTDIR . '/' . NV_ADMINDIR . '/extensions/extensions.class.php' );
-	$NV_Extensions = new NV_Extensions( $global_config, NV_TEMP_DIR );
+	require( NV_ROOTDIR . '/includes/class/http.class.php' );
+	$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 	
 	$args = array(
 		'headers' => array(
@@ -65,11 +65,11 @@ else
 		@nv_deletefile( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename );
 	}
 	
-	$array = $NV_Extensions->post( NUKEVIET_STORE_APIURL, $args );
+	$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
 	
-	if( ! empty( $NV_Extensions::$error ) )
+	if( ! empty( $NV_Http::$error ) )
 	{
-		$contents = "ERR|" . nv_extensions_get_lang( $NV_Extensions::$error );
+		$contents = "ERR|" . nv_extensions_get_lang( $NV_Http::$error );
 	}
 	elseif( empty( $array['filename'] ) or ! file_exists( $array['filename'] ) )
 	{

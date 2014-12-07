@@ -24,8 +24,8 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $request['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 
-require( NV_ROOTDIR . '/' . NV_ADMINDIR . '/extensions/extensions.class.php' );
-$NV_Extensions = new NV_Extensions( $global_config, NV_TEMP_DIR );
+require( NV_ROOTDIR . '/includes/class/http.class.php' );
+$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 // Debug
 $args = array(
@@ -35,13 +35,13 @@ $args = array(
 	'body' => $request
 );
 
-$array = $NV_Extensions->post( NUKEVIET_STORE_APIURL, $args );
+$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
 $array = ! empty( $array['body'] ) ? @unserialize( $array['body'] ) : array();
 
 $error = '';
-if( ! empty( $NV_Extensions::$error ) )
+if( ! empty( $NV_Http::$error ) )
 {
-	$error = nv_extensions_get_lang( $NV_Extensions::$error );
+	$error = nv_extensions_get_lang( $NV_Http::$error );
 }
 elseif( ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
 {

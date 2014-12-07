@@ -27,8 +27,10 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		$values = array();
 		$values['userVersion'] = $global_config['version'];
 		$new_version = ( $i == 'sysUpd' ) ? nv_geVersion( 28800 ) : nv_geVersion( 120 );
+		
 		$values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, ( string )$new_version->name, nv_date( 'd/m/Y H:i', strtotime( $new_version->date ) ) );
 		$xtpl->assign( 'VALUE', $values );
+		
 		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
 		{
 			$xtpl->assign( 'VERSION_INFO', ( string )$new_version->message );
