@@ -80,11 +80,11 @@ $array = ! empty( $array['body'] ) ? @unserialize( $array['body'] ) : array();
 $error = '';
 if( ! empty( NV_Http::$error ) )
 {
-	$error = nv_extensions_get_lang( NV_Http::$error );
+	$error = nv_http_get_lang( NV_Http::$error );
 }
 elseif( ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
 {
-	$error = $lang_module['error_valid_response'];
+	$error = $lang_global['error_valid_response'];
 }
 elseif( ! empty( $array['error']['message'] ) )
 {

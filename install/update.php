@@ -1920,10 +1920,10 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		{
 			$version = nv_geVersion( 0 );
 			$array['current_version'] = $global_config['version'];
-			$array['newVersion'] = ( string )$version->version . ' - ' . ( string )$version->name;
+			$array['newVersion'] = ( string )$version['version'] . ' - ' . ( string )$version['name'];
 
 			$array['checkversion'] = false;
-			if( nv_version_compare( $global_config['version'], $version->version ) < 0 )
+			if( nv_version_compare( $global_config['version'], $version['version'] ) < 0 )
 			{
 				$array['checkversion'] = true;
 			}
@@ -1932,7 +1932,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		}
 		elseif( $type == 'mod' )
 		{
-			$_modules = nv_getModVersion( 0 );
+			$_modules = nv_getExtVersion( 0 );
 			$_modules = nv_object2array( $_modules );
 			$_modules = $_modules['module'];
 			$onlineModules = array();
@@ -1977,7 +1977,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		}
 		elseif( $type == 'module' )
 		{
-			$_modules = nv_getModVersion( 0 );
+			$_modules = nv_getExtVersion( 0 );
 			$_modules = nv_object2array( $_modules );
 			$_modules = $_modules['module'];
 			$onlineModules = array();

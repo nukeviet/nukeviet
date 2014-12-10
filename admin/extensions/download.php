@@ -69,7 +69,7 @@ else
 	
 	if( ! empty( NV_Http::$error ) )
 	{
-		$contents = "ERR|" . nv_extensions_get_lang( NV_Http::$error );
+		$contents = "ERR|" . nv_http_get_lang( NV_Http::$error );
 	}
 	elseif( empty( $array['filename'] ) or ! file_exists( $array['filename'] ) )
 	{
