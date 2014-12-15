@@ -336,7 +336,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  transaction_status int(11) NOT NULL,
  order_id int(11) NOT NULL DEFAULT '0',
  userid int(11) NOT NULL DEFAULT '0',
- payment varchar(22) NOT NULL DEFAULT '0',
+ payment varchar(100) NOT NULL DEFAULT '0',
  payment_id varchar(22) NOT NULL DEFAULT '0',
  payment_time int(11) NOT NULL DEFAULT '0',
  payment_amount int(11) NOT NULL DEFAULT '0',

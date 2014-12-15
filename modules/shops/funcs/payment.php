@@ -170,8 +170,26 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 	$checksum = $nv_Request->get_string( 'checksum', 'get' );
 	$payment = $nv_Request->get_string( 'payment', 'get' );
 
+	// Thong tin don hang
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
 	$data = $result->fetch();
+
+	if( empty( $data ) )
+	{
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true ) );
+		die();
+	}
+
+	// Thong tin chi tiet mat hang trong don hang
+	$listid = $listnum = $listprice = $listgroup = array();
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
+	while( $row = $result->fetch() )
+	{
+		$listid[] = $row['id'];
+		$listnum[] = $row['num'];
+		$listprice[] = $row['price'];
+		$listgroup[] = $row['group_id'];
+	}
 
 	if( isset( $data['transaction_status'] ) and intval( $data['transaction_status'] ) == 0 and preg_match( '/^[a-zA-Z0-9]+$/', $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.checkout_url.php' ) )
 	{
