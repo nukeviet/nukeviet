@@ -1,4 +1,11 @@
 <!-- BEGIN: main -->
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
 <div class="well">
 	<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
@@ -16,6 +23,8 @@
 			<option value="{CATID.catid}"{CATID.selected}>{CATID.title}</option>
 			<!-- END: catid -->
 		</select>
+		<input type="text" name="from" id="from" value="{FROM}" class="form-control" style="width: 100px" placeholder="{LANG.date_from}" readonly="readonly">
+		<input type="text" name="to" id="to" value="{TO}" class="form-control" style="width: 100px" placeholder="{LANG.date_to}" readonly="readonly">
 		<select class="form-control" name="per_page">
 			<option value="">---{LANG.search_per_page}---</option>
 			<!-- BEGIN: per_page -->
@@ -159,4 +168,17 @@
 	{GENERATE_PAGE}
 </p>
 <!-- END: generate_page -->
+<script type='text/javascript'>
+	$(function() {
+		$("#from, #to").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+	});
+</script>
 <!-- END: main -->

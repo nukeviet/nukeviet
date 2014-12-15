@@ -43,6 +43,8 @@ else
 
 $stype = $nv_Request->get_string( 'stype', 'get', '-' );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
+$from_time = $nv_Request->get_string( 'from', 'get', '' );
+$to_time = $nv_Request->get_string( 'to', 'get', '' );
 $per_page_old = $nv_Request->get_int( 'per_page', 'cookie', 50 );
 $per_page = $nv_Request->get_int( 'per_page', 'get', $per_page_old );
 
@@ -165,6 +167,52 @@ if( $checkss == md5( session_id( ) ) )
 			$from .= ' listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 	}
+
+	// Tim theo ngay thang
+	if( !empty( $from_time ) )
+	{
+		if( empty( $q ) and empty( $catid ) )
+		{
+			$from .= ' WHERE';
+		}
+		else
+		{
+			$from .= ' AND';
+		}
+
+		if( !empty( $from_time ) and preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $from_time, $m ) )
+		{
+			$time = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		}
+		else
+		{
+			$time = NV_CURRENTTIME;
+		}
+
+		$from .= ' publtime >= ' . $time . '';
+	}
+
+	if( !empty( $to_time ) )
+	{
+		if( empty( $q ) and empty( $catid ) and empty( $from_time ) )
+		{
+			$from .= ' WHERE';
+		}
+		else
+		{
+			$from .= ' AND';
+		}
+
+		if( !empty( $to_time ) and preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $to_time, $m ) )
+		{
+			$to = mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
+		}
+		else
+		{
+			$to = NV_CURRENTTIME;
+		}
+		$from .= ' publtime <= ' . $to . '';
+	}
 }
 
 $num_items = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn( );
@@ -173,8 +221,10 @@ $xtpl = new XTemplate( 'items.tpl', NV_ROOTDIR . '/themes/' . $global_config['mo
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 
@@ -266,6 +316,8 @@ else
 
 // Thong tin tim kiem
 $xtpl->assign( 'Q', $q );
+$xtpl->assign( 'FROM', $from_time );
+$xtpl->assign( 'TO', $to_time );
 $xtpl->assign( 'CHECKSESS', md5( session_id( ) ) );
 $xtpl->assign( 'SEARCH_NOTE', sprintf( $lang_module['search_note'], NV_MIN_SEARCH_LENGTH, NV_MAX_SEARCH_LENGTH ) );
 $xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
