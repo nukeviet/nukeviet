@@ -84,6 +84,11 @@ foreach( $listid as $id )
 	++$i;
 }
 
+if( $data_content['transaction_status'] == '4' )
+{
+	$lang_module['order_submit_pay_comfix'] = $lang_module['order_submit_unpay_comfix'];
+}
+
 $xtpl = new XTemplate( 'or_view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
@@ -167,10 +172,21 @@ if( $data_content['transaction_status'] == - 1 )
 	$xtpl->parse( 'main.onsubmit' );
 }
 
-if( $data_content['transaction_status'] != '4' ) $xtpl->parse( 'main.onpay' );
+$action_pay = '';
+if( $data_content['transaction_status'] != '4' )
+{
+	$action_pay = '&action=pay';
+	$xtpl->parse( 'main.onpay' );
+}
+else
+{
+	$lang_module['order_submit_pay_comfix'] = $lang_module['order_submit_unpay_comfix'];
+	$xtpl->parse( 'main.unpay' );
+	$action_pay = '&action=unpay';
+}
 
 $xtpl->assign( 'LINK_PRINT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=print&order_id=' . $data_content['order_id'] . '&checkss=' . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id() ) );
-$xtpl->assign( 'URL_ACTIVE_PAY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active_pay&order_id=' . $order_id );
+$xtpl->assign( 'URL_ACTIVE_PAY', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active_pay&order_id=' . $order_id . $action_pay );
 $xtpl->assign( 'URL_BACK', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=or_view&order_id=' . $order_id );
 
 $array_data_payment = array();
