@@ -8,11 +8,10 @@
  * @Createdate 2/3/2012, 9:10
  */
 
-if( ! defined( 'NV_IS_FILE_EXTENSIONS' ) ) die( 'Stop!!!' );
-if( ! defined( 'NV_EXTENSIONS_CLASS' ) ) define( 'NV_EXTENSIONS_CLASS', true );
+if( ! defined( 'NV_HTTP_CLASS' ) ) define( 'NV_HTTP_CLASS', true );
 
 /**
- * NV_Extensions
+ * NV_Http
  *
  * @package NukeViet
  * @author VINADES.,JSC
@@ -20,7 +19,7 @@ if( ! defined( 'NV_EXTENSIONS_CLASS' ) ) define( 'NV_EXTENSIONS_CLASS', true );
  * @version 2014
  * @access public
  */
-class NV_Extensions
+class NV_Http
 {
 	/**
 	 * Variable to set dir
@@ -45,7 +44,7 @@ class NV_Extensions
 	public static $error = array();
 	
 	/**
-	 * NV_Extensions::__construct()
+	 * NV_Http::__construct()
 	 * 
 	 * @param mixed $config
 	 * @param string $tmp_dir
@@ -100,7 +99,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::request()
+	 * NV_Http::request()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -186,7 +185,7 @@ class NV_Extensions
 		
 		if( ! is_array( $args['headers'] ) )
 		{
-			$processedHeaders = NV_Extensions::processHeaders( $args['headers'], $url );
+			$processedHeaders = NV_Http::processHeaders( $args['headers'], $url );
 			$args['headers'] = $processedHeaders['headers'];
 		}
 
@@ -220,9 +219,9 @@ class NV_Extensions
 			$args['headers']['connection'] = 'close';
 		}
 
-		NV_Extensions::buildCookieHeader( $args );
+		NV_Http::buildCookieHeader( $args );
 		
-		NV_Extensions::mbstring_binary_safe_encoding();
+		NV_Http::mbstring_binary_safe_encoding();
 		
 		if( ! isset( $args['headers']['Accept-Encoding'] ) )
 		{
@@ -257,7 +256,7 @@ class NV_Extensions
 
 		$response = $this->_dispatch_request( $url, $args );
 
-		NV_Extensions::reset_mbstring_encoding();
+		NV_Http::reset_mbstring_encoding();
 
 		if( $this->is_error( $response ) )
 		{
@@ -293,7 +292,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::get_Env()
+	 * NV_Http::get_Env()
 	 * 
 	 * @param mixed $key
 	 * @return
@@ -317,7 +316,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::parse_str()
+	 * NV_Http::parse_str()
 	 * 
 	 * @param mixed $str
 	 * @return
@@ -336,7 +335,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::set_error()
+	 * NV_Http::set_error()
 	 * 
 	 * @param mixed $code
 	 * @return
@@ -367,7 +366,7 @@ class NV_Extensions
 	}
 
 	/**
-	 * NV_Extensions::_dispatch_request()
+	 * NV_Http::_dispatch_request()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -397,7 +396,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::mbstring_binary_safe_encoding()
+	 * NV_Http::mbstring_binary_safe_encoding()
 	 * 
 	 * @param bool $reset
 	 * @return
@@ -432,17 +431,17 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::reset_mbstring_encoding()
+	 * NV_Http::reset_mbstring_encoding()
 	 * 
 	 * @return
 	 */
 	public static function reset_mbstring_encoding()
 	{
-		NV_Extensions::mbstring_binary_safe_encoding( true );
+		NV_Http::mbstring_binary_safe_encoding( true );
 	}
 		
 	/**
-	 * NV_Extensions::handle_redirects()
+	 * NV_Http::handle_redirects()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -480,7 +479,7 @@ class NV_Extensions
 			$redirect_location = array_pop( $redirect_location );
 		}
 
-		$redirect_location = NV_Extensions::make_absolute_url( $redirect_location, $url );
+		$redirect_location = NV_Http::make_absolute_url( $redirect_location, $url );
 
 		// POST requests should not POST to a redirected location
 		if( $args['method'] == 'POST' )
@@ -506,14 +505,14 @@ class NV_Extensions
 		// Create object if null
 		if( is_null( $nv_http ) )
 		{
-			$nv_http = new NV_Extensions();
+			$nv_http = new NV_Http();
 		}
 		
 		return $nv_http->request( $redirect_location, $args );
 	}
 	
 	/**
-	 * NV_Extensions::make_absolute_url()
+	 * NV_Http::make_absolute_url()
 	 * 
 	 * @param mixed $maybe_relative_path
 	 * @param mixed $url
@@ -586,7 +585,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::reset()
+	 * NV_Http::reset()
 	 * 
 	 * @return
 	 */
@@ -596,7 +595,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::is_error()
+	 * NV_Http::is_error()
 	 * 
 	 * @param mixed $resources
 	 * @return
@@ -612,7 +611,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::_get_first_available_transport()
+	 * NV_Http::_get_first_available_transport()
 	 * 
 	 * @param mixed $args
 	 * @param mixed $url
@@ -640,7 +639,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::build_args()
+	 * NV_Http::build_args()
 	 * 
 	 * @param mixed $args
 	 * @param mixed $defaults
@@ -661,7 +660,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::processResponse()
+	 * NV_Http::processResponse()
 	 * 
 	 * @param mixed $strResponse
 	 * @return
@@ -674,7 +673,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::processHeaders()
+	 * NV_Http::processHeaders()
 	 * 
 	 * @param mixed $headers
 	 * @param string $url
@@ -756,7 +755,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::buildCookieHeader()
+	 * NV_Http::buildCookieHeader()
 	 * 
 	 * @param mixed $args
 	 * @return
@@ -786,7 +785,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::is_ip_address()
+	 * NV_Http::is_ip_address()
 	 * 
 	 * @param mixed $maybe_ip
 	 * @return
@@ -807,7 +806,7 @@ class NV_Extensions
 	}
 	
 	/**
-	 * NV_Extensions::post()
+	 * NV_Http::post()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -821,7 +820,7 @@ class NV_Extensions
 	}
 
 	/**
-	 * NV_Extensions::get()
+	 * NV_Http::get()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -835,7 +834,7 @@ class NV_Extensions
 	}
 
 	/**
-	 * NV_Extensions::head()
+	 * NV_Http::head()
 	 * 
 	 * @param mixed $url
 	 * @param mixed $args
@@ -1108,7 +1107,7 @@ class NV_http_curl
 			'cookies' => array()
 		);
 
-		$args = NV_Extensions::build_args( $args, $defaults );
+		$args = NV_Http::build_args( $args, $defaults );
 
 		// Get User Agent
 		if( isset( $args['headers']['User-Agent'] ) )
@@ -1135,7 +1134,7 @@ class NV_http_curl
 		}
 
 		// Construct Cookie: header if any cookies are set.
-		NV_Extensions::buildCookieHeader( $args );
+		NV_Http::buildCookieHeader( $args );
 
 		$handle = curl_init();
 
@@ -1238,7 +1237,7 @@ class NV_http_curl
 				
 			if( ! $this->stream_handle )
 			{
-				NV_Extensions::set_error(10);
+				NV_Http::set_error(10);
 				return $this;
 			}
 		}
@@ -1277,7 +1276,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				NV_Extensions::set_error(11);
+				NV_Http::set_error(11);
 				return $this;
 			}
 			
@@ -1285,7 +1284,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				NV_Extensions::set_error(5);
+				NV_Http::set_error(5);
 				return $this;
 			}
 
@@ -1294,7 +1293,7 @@ class NV_http_curl
 		}
 
 		$theResponse = curl_exec( $handle );
-		$theHeaders = NV_Extensions::processHeaders( $this->headers, $url );
+		$theHeaders = NV_Http::processHeaders( $this->headers, $url );
 		$theBody = $this->body;
 
 		$this->headers = '';
@@ -1309,7 +1308,7 @@ class NV_http_curl
 			{
 				fclose( $this->stream_handle );
 				
-				NV_Extensions::set_error(9);
+				NV_Http::set_error(9);
 				return $this;
 			}
 			
@@ -1317,7 +1316,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				NV_Extensions::set_error(11);
+				NV_Http::set_error(11);
 				return $this;
 			}
 			
@@ -1325,7 +1324,7 @@ class NV_http_curl
 			{
 				curl_close( $handle );
 				
-				NV_Extensions::set_error(5);
+				NV_Http::set_error(5);
 				return $this;
 			}
 		}
@@ -1350,7 +1349,7 @@ class NV_http_curl
 		);
 
 		// Handle redirects
-		if( ( $redirect_response = NV_Extensions::handle_redirects( $url, $args, $response ) ) !== false )
+		if( ( $redirect_response = NV_Http::handle_redirects( $url, $args, $response ) ) !== false )
 		{
 			return $redirect_response;
 		}
@@ -1458,7 +1457,7 @@ class NV_http_streams
 			'cookies' => array()
 		);
 		
-		$args = NV_Extensions::build_args( $args, $defaults );
+		$args = NV_Http::build_args( $args, $defaults );
 		
 		// Get user agent
 		if( isset( $args['headers']['User-Agent'] ) )
@@ -1485,7 +1484,7 @@ class NV_http_streams
 		}
 
 		// Construct Cookie: header if any cookies are set
-		NV_Extensions::buildCookieHeader( $args );
+		NV_Http::buildCookieHeader( $args );
 
 		$arrURL = parse_url( $url );
 
@@ -1578,11 +1577,11 @@ class NV_http_streams
 			// SSL connection failed due to expired/invalid cert, or, OpenSSL configuration is broken
 			if( $secure_transport and $connection_error === 0 and $connection_error_str === '' )
 			{
-				NV_Extensions::set_error(6);
+				NV_Http::set_error(6);
 				return false;
 			}
 
-			NV_Extensions::set_error(7);
+			NV_Http::set_error(7);
 			return false;
 		}
 
@@ -1591,7 +1590,7 @@ class NV_http_streams
 		{
 			if( ! self::verify_ssl_certificate( $handle, $arrURL['host'] ) )
 			{
-				NV_Extensions::set_error(6);
+				NV_Http::set_error(6);
 				return false;
 			}
 		}
@@ -1684,7 +1683,7 @@ class NV_http_streams
 			
 			if( ! $stream_handle )
 			{
-				NV_Extensions::set_error(8);
+				NV_Http::set_error(8);
 				return false;
 			}
 
@@ -1699,7 +1698,7 @@ class NV_http_streams
 					
 					if( strpos( $strResponse, "\r\n\r\n" ) )
 					{
-						$process = NV_Extensions::processResponse( $strResponse );
+						$process = NV_Http::processResponse( $strResponse );
 						$bodyStarted = true;
 						$block = $process['body'];
 						unset( $strResponse );
@@ -1720,7 +1719,7 @@ class NV_http_streams
 				{
 					fclose( $handle );
 					fclose( $stream_handle );
-					NV_Extensions::set_error(9);
+					NV_Http::set_error(9);
 					return false;
 				}
 
@@ -1751,13 +1750,13 @@ class NV_http_streams
 				$keep_reading = ( ! $bodyStarted or ! isset( $args['limit_response_size'] ) or strlen( $strResponse ) < ( $header_length + $args['limit_response_size'] ) );
 			}
 
-			$process = NV_Extensions::processResponse( $strResponse );
+			$process = NV_Http::processResponse( $strResponse );
 			unset( $strResponse );
 		}
 
 		fclose( $handle );
 
-		$arrHeaders = NV_Extensions::processHeaders( $process['headers'], $url );
+		$arrHeaders = NV_Http::processHeaders( $process['headers'], $url );
 
 		$response = array(
 			'headers' => $arrHeaders['headers'],
@@ -1768,7 +1767,7 @@ class NV_http_streams
 		);
 
 		// Handle redirects
-		if( false !== ( $redirect_response = NV_Extensions::handle_redirects( $url, $args, $response ) ) )
+		if( false !== ( $redirect_response = NV_Http::handle_redirects( $url, $args, $response ) ) )
 		{
 			return $redirect_response;
 		}
@@ -1776,7 +1775,7 @@ class NV_http_streams
 		// If the body was chunk encoded, then decode it.
 		if( ! empty( $process['body'] ) and isset( $arrHeaders['headers']['transfer-encoding'] ) and 'chunked' == $arrHeaders['headers']['transfer-encoding'] )
 		{
-			$process['body'] = NV_Extensions::chunkTransferDecode( $process['body'] );
+			$process['body'] = NV_Http::chunkTransferDecode( $process['body'] );
 		}
 
 		if( $args['decompress'] === true and NV_http_encoding::should_decode( $arrHeaders['headers'] ) === true )
@@ -1817,7 +1816,7 @@ class NV_http_streams
 		}
 
 		// If the request is being made to an IP address, we'll validate against IP fields in the cert (if they exist)
-		$host_type = ( NV_Extensions::is_ip_address( $host ) ? 'ip' : 'dns' );
+		$host_type = ( NV_Http::is_ip_address( $host ) ? 'ip' : 'dns' );
 
 		$certificate_hostnames = array();
 		

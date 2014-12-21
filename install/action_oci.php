@@ -393,18 +393,24 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language 
 	primary key (lang)
 )";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_modules (
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extensions (
+	id NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	type VARCHAR2(10 CHAR) DEFAULT 'other' NOT NULL ENABLE,
 	title VARCHAR2(55 CHAR) NOT NULL ENABLE,
-	is_sysmod NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
+	is_sys NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	virtual NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
-	module_file VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
-	module_data VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
-	mod_version VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
+	basename VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
+	table_prefix VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
+	version VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
 	addtime NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	author VARCHAR2(4000 CHAR) NOT NULL ENABLE,
 	note VARCHAR2(255 CHAR) DEFAULT NULL,
-	primary key (title)
+	CONSTRAINT unv_setup_extensions_title UNIQUE (type,title)
 )";
+
+$sql_create_table[] = "CREATE INDEX inv_setup_extensions_id ON NV3_SETUP_EXTENSIONS(id) TABLESPACE USERS";
+
+$sql_create_table[] = "CREATE INDEX inv_setup_extensions_type ON NV3_SETUP_EXTENSIONS(type) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	bid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,

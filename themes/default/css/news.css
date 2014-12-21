@@ -281,7 +281,7 @@ div.news_column ul.related a:hover{
 
 .tooltip-inner {
 	width: 300px; 
-	max-width: 300px; !important;
+	max-width: 300px !important;
 	padding: 10px;
 }
 

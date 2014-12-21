@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 	<div class="panel panel-default">
-		<table class="table">			
+		<table class="table">
 			<tbody>
 				<tr>
 					<td colspan="2" class="active"><strong>{LANG.department}: {DEPARTMENT.full_name}</strong></td>
@@ -25,7 +25,7 @@
 				<!-- END: email -->
 				<!-- BEGIN: yahoo -->
 				<tr>
-					<td>{LANG.skype}</td>
+					<td>{LANG.yahoo}</td>
 					<td><a href="ymsgr:sendIM?{DEPARTMENT.yahoo}">{DEPARTMENT.yahoo}</a></td>
 				</tr>
 				<!-- END: yahoo -->

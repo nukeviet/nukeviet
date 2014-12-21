@@ -967,14 +967,14 @@ if( $nv_update_config['step'] == 1 ) // Kiem tra phien ban va tuong thich du lie
 			if( $array['module_exist'] )
 			{
 				// Lay phien ban module
-				$sth = $db->prepare( 'SELECT mod_version FROM ' . $db_config['prefix'] . '_setup_modules WHERE module_file= :module_file' );
-				$sth->bindParam( ':module_file', $nv_update_config['formodule'], PDO::PARAM_STR );
+				$sth = $db->prepare( 'SELECT version FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename' );
+				$sth->bindParam( ':basename', $nv_update_config['formodule'], PDO::PARAM_STR );
 				$sth->execute();
 				$row = $sth->fetch();
 
 				$v = '';
 				$d = 0;
-				if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['mod_version'], $matches ) )
+				if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['version'], $matches ) )
 				{
 					$v = ( string )$matches[1];
 					$d = ( int )$matches[2];
@@ -1920,10 +1920,10 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		{
 			$version = nv_geVersion( 0 );
 			$array['current_version'] = $global_config['version'];
-			$array['newVersion'] = ( string )$version->version . ' - ' . ( string )$version->name;
+			$array['newVersion'] = ( string )$version['version'] . ' - ' . ( string )$version['name'];
 
 			$array['checkversion'] = false;
-			if( nv_version_compare( $global_config['version'], $version->version ) < 0 )
+			if( nv_version_compare( $global_config['version'], $version['version'] ) < 0 )
 			{
 				$array['checkversion'] = true;
 			}
@@ -1932,7 +1932,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		}
 		elseif( $type == 'mod' )
 		{
-			$_modules = nv_getModVersion( 0 );
+			$_modules = nv_getExtVersion( 0 );
 			$_modules = nv_object2array( $_modules );
 			$_modules = $_modules['module'];
 			$onlineModules = array();
@@ -1949,24 +1949,24 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 			$lang_query = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
 			while( list( $lang ) = $lang_query->fetch( 3 ) )
 			{
-				$sql = "SELECT b.module_file, b.mod_version, b.author FROM " . $db_config['prefix'] . "_" . $lang . "_modules a INNER JOIN " . $db_config['prefix'] . "_setup_modules b ON a.title=b.title GROUP BY b.module_file ORDER BY b.module_file ASC";
+				$sql = "SELECT b.basename, b.version, b.author FROM " . $db_config['prefix'] . "_" . $lang . "_modules a INNER JOIN " . $db_config['prefix'] . "_setup_extensions b ON a.title=b.title GROUP BY b.basename ORDER BY b.basename ASC";
 				$result = $db->query( $sql );
 				while( $row = $result->fetch() )
 				{
-					if( isset( $userModules[$row['module_file']] ) ) continue;
+					if( isset( $userModules[$row['basename']] ) ) continue;
 
 					$v = '';
 					$p = 0;
-					if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['mod_version'], $matches ) )
+					if( preg_match( "/^([^\s]+)\s+([\d]+)$/", $row['version'], $matches ) )
 					{
 						$v = ( string )$matches[1];
 						$p = ( int )$matches[2];
 					}
 
-					$userModules[$row['module_file']] = array(
-						'module_file' => $row['module_file'],
-						'mod_version' => $v,
-						'mode' => isset( $onlineModules[$row['module_file']]['mode'] ) ? $onlineModules[$row['module_file']]['mode'] : false,
+					$userModules[$row['basename']] = array(
+						'basename' => $row['basename'],
+						'version' => $v,
+						'mode' => isset( $onlineModules[$row['basename']]['mode'] ) ? $onlineModules[$row['basename']]['mode'] : false,
 						'time' => $p,
 						'author' => $row['author']
 					);
@@ -1977,7 +1977,7 @@ elseif( $nv_update_config['step'] == 3 ) // Hoan tat nang cap
 		}
 		elseif( $type == 'module' )
 		{
-			$_modules = nv_getModVersion( 0 );
+			$_modules = nv_getExtVersion( 0 );
 			$_modules = nv_object2array( $_modules );
 			$_modules = $_modules['module'];
 			$onlineModules = array();

@@ -11,7 +11,6 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_FILE_EXTENSIONS', true );
-define( 'NUKEVIET_STORE_APIURL', 'http://api.nukeviet.vn/store/' );
 
 $menu_top = array(
 	'title' => $module_name,
@@ -26,35 +25,6 @@ $submenu['popular'] = $lang_module['popular'];
 $submenu['featured'] = $lang_module['featured'];
 $submenu['downloaded'] = $lang_module['downloaded'];
 $submenu['favorites'] = $lang_module['favorites'];
-
-
-/**
- * nv_extensions_get_lang()
- * 
- * @param mixed $input
- * @return
- */
-function nv_extensions_get_lang( $input )
-{
-	global $lang_module;
-	
-	if( ! isset( $input['code'] ) or ! isset( $input['message'] ) )
-	{
-		return '';
-	}
-	
-	if( ! empty( $lang_module['error_code_' . $input['code']] ) )
-	{
-		return $lang_module['error_code_' . $input['code']];
-	}
-	
-	if( ! empty( $input['message'] ) )
-	{
-		return $input['message'];
-	}
-	
-	return 'Error' . ( $input['code'] ? ': ' . $input['code'] . '.' : '.' );
-}
 
 /**
  * nv_extensions_is_installed()
@@ -81,8 +51,8 @@ function nv_extensions_is_installed( $type, $name, $version )
 		
 		return 1;
 		
-		//$stmt = $db->prepare( 'SELECT mod_version FROM ' . NV_PREFIXLANG . '_setup_modules WHERE module_file= :modfile AND module_file=title' );
-		//$stmt->bindParam( ':modfile', $name, PDO::PARAM_STR );
+		//$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
+		//$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
 		//$stmt->execute();
 		//$row = $stmt->fetch();	
 	}

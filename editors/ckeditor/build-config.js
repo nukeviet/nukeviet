@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/4a23f02fcf898f506284a2232b0b3d4d
+ * (2) http://ckeditor.com/builder/1c70381cb5ae0f56ebec052bae87a39c
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/4a23f02fcf898f506284a2232b0b3d4d
+ * (3) http://ckeditor.com/builder/download/1c70381cb5ae0f56ebec052bae87a39c
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -36,7 +36,7 @@ var CKBUILDER_CONFIG = {
 		'.DS_Store',
 		'.gitattributes',
 		'.gitignore',
-		'Gruntfile.js',
+		'gruntfile.js',
 		'.idea',
 		'.jscsrc',
 		'.jshintignore',

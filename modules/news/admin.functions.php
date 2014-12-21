@@ -196,11 +196,11 @@ function nv_news_fix_block( $bid, $repairtable = true )
 			++$weight;
 			if( $weight <= 100 )
 			{
-				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . intval( $row['id'] );
+				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_block SET weight=' . $weight . ' WHERE bid=' . $bid . ' AND id=' . $row['id'];
 			}
 			else
 			{
-				$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . intval( $row['id'] );
+				$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid . ' AND id=' . $row['id'];
 			}
 			$db->query( $sql );
 		}

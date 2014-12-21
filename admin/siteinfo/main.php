@@ -148,7 +148,7 @@ elseif( ! defined( 'NV_IS_SPADMIN' ) and ! empty( $site_mods ) )
 	die();
 }
 
-//Thong tin phien ban NukeViet
+// Thong tin phien ban NukeViet
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$field = array();

@@ -81,7 +81,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			}
 			elseif( ! empty( $show_no_image ) )//no image
 			{
-				$item['src'] = $show_no_image;
+				$item['src'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{

@@ -341,39 +341,6 @@ function nv_save_file_config_global()
 }
 
 /**
- * nv_rand_getVersion()
- *
- * @param mixed $nv_sites
- * @param mixed $getContent
- * @param bool $is_modules
- * @return
- */
-function nv_rand_getVersion( $nv_sites, $getContent, $is_modules = false )
-{
-	srand( ( float )microtime() * 10000000 );
-	$rand = array_rand( $nv_sites );
-	$nv_site = $nv_sites[$rand];
-
-	if( $is_modules )
-	{
-		$content = $getContent->get( 'http://' . $nv_site . '/nukeviet.version.xml?module=all&lang=' . NV_LANG_INTERFACE );
-	}
-	else
-	{
-		$content = $getContent->get( 'http://' . $nv_site . '/nukeviet.version.xml?lang=' . NV_LANG_INTERFACE );
-	}
-
-	unset( $nv_sites[$rand] );
-	if( empty( $content ) and ! empty( $nv_sites ) )
-	{
-		$nv_sites = array_values( $nv_sites );
-		$content = nv_rand_getVersion( $nv_sites, $getContent, $is_modules );
-	}
-
-	return $content;
-}
-
-/**
  * nv_geVersion()
  *
  * @param integer $updatetime
@@ -381,7 +348,7 @@ function nv_rand_getVersion( $nv_sites, $getContent, $is_modules = false )
  */
 function nv_geVersion( $updatetime = 3600 )
 {
-	global $global_config;
+	global $global_config, $lang_global;
 
 	$my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml';
 
@@ -395,25 +362,51 @@ function nv_geVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
-		$getContent = new UrlGetContents( $global_config, 6 );
-
-		$nv_sites = array(
-			'update.nukeviet.vn',
-			'update2.nukeviet.vn',
-			'update.nukeviet.info',
-			'update2.nukeviet.info'
+		include NV_ROOTDIR . '/includes/class/http.class.php' ;
+		$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
+		
+		$args = array(
+			'headers' => array(
+				'Referer' => NUKEVIET_STORE_APIURL,
+			),
+			'body' => array(
+				'lang' > NV_LANG_INTERFACE,
+				'basever' => $global_config['version'],
+				'mode' => 'getsysver'
+			)
 		);
+		
+		$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
+		$array = ! empty( $array['body'] ) ? @unserialize( $array['body'] ) : array();
 
-		$content = nv_rand_getVersion( $nv_sites, $getContent, false );
-
-		if( ! empty( $content ) )
+		$error = '';
+		if( ! empty( NV_Http::$error ) )
 		{
-			$xmlcontent = simplexml_load_string( $content );
-			if( $xmlcontent !== false )
-			{
-				file_put_contents( $my_file, $content );
-			}
+			$error = nv_http_get_lang( NV_Http::$error );
+		}
+		elseif( ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
+		{
+			$error = $lang_global['error_valid_response'];
+		}
+		elseif( ! empty( $array['error']['message'] ) )
+		{
+			$error = $array['error']['message'];
+		}
+		
+		if( ! empty( $error ) )
+		{
+			return $error;
+		}
+		
+		$array = $array['data'];
+		
+		$content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n\t<name><![CDATA[" . $array['name'] . "]]></name>\n\t<version><![CDATA[" . $array['version'] . "]]></version>\n\t<date><![CDATA[" . $array['date'] . "]]></date>\n\t<message><![CDATA[" . $array['message'] . "]]></message>\n\t<link><![CDATA[" . $array['link'] . "]]></link>\n</cms>";
+
+		$xmlcontent = simplexml_load_string( $content );
+		
+		if( $xmlcontent !== false )
+		{
+			file_put_contents( $my_file, $content );
 		}
 	}
 
@@ -765,16 +758,16 @@ function nv_rewrite_rule_iis7( $rewrite_rule = '' )
 }
 
 /**
- * nv_getModVersion()
+ * nv_getExtVersion()
  *
  * @param integer $updatetime
  * @return
  */
-function nv_getModVersion( $updatetime = 3600 )
+function nv_getExtVersion( $updatetime = 3600 )
 {
-	global $global_config;
+	global $global_config, $lang_global, $db, $db_config;
 
-	$my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/modules.version.' . NV_LANG_INTERFACE . '.xml';
+	$my_file = NV_ROOTDIR . '/' . NV_CACHEDIR . '/extensions.version.' . NV_LANG_INTERFACE . '.xml';
 
 	$xmlcontent = false;
 
@@ -786,21 +779,121 @@ function nv_getModVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
-		$getContent = new UrlGetContents( $global_config, 6 );
-
-		$nv_sites = array(
-			'update.nukeviet.vn',
-			'update2.nukeviet.vn',
-			'update.nukeviet.info',
-			'update2.nukeviet.info'
-		);
-
-		$content = nv_rand_getVersion( $nv_sites, $getContent, true );
-
-		if( ! empty( $content ) )
+		// Lấy các ứng dụng của hệ thống
+		$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY title ASC';
+		$result = $db->query( $sql );
+		
+		$array = $array_ext_ids = array();
+		while( $row = $result->fetch() )
 		{
+			$row['version'] = explode( ' ', $row['version'] );
+			
+			$array[$row['title']] = array(
+				'id' => $row['id'],
+				'name' => $row['title'],
+				'current_version' => trim( $row['version'][0] ),
+				'current_release' => trim( $row['version'][1] ),
+				'remote_version' => '',
+				'remote_release' => 0,
+				'updateable' => false,
+				'author' => $row['author'],
+				'license' => '',
+				'mode' => $row['is_sys'] ? 'sys' : 'other',
+				'message' => $row['note'],
+				'link' => '',
+				'support' => '',
+				'origin' => false,
+			);
+			
+			if( ! empty( $row['id'] ) )
+			{
+				$array_ext_ids[] = $row['id'];
+			}
+		}
+		
+		if( ! empty( $array_ext_ids ) )
+		{
+			include NV_ROOTDIR . '/includes/class/http.class.php' ;
+			$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
+			
+			$args = array(
+				'headers' => array(
+					'Referer' => NUKEVIET_STORE_APIURL,
+				),
+				'body' => array(
+					'lang' > NV_LANG_INTERFACE,
+					'basever' => $global_config['version'],
+					'mode' => 'checkextver',
+					'ids' => implode( ',', $array_ext_ids ),
+				)
+			);
+			
+			$apidata = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
+			$apidata = ! empty( $apidata['body'] ) ? @unserialize( $apidata['body'] ) : array();
+	
+			$error = '';
+			if( ! empty( NV_Http::$error ) )
+			{
+				$error = nv_http_get_lang( NV_Http::$error );
+			}
+			elseif( ! isset( $apidata['error'] ) or ! isset( $apidata['data'] ) or ! isset( $apidata['pagination'] ) or ! is_array( $apidata['error'] ) or ! is_array( $apidata['data'] ) or ! is_array( $apidata['pagination'] ) or ( ! empty( $apidata['error'] ) and ( ! isset( $apidata['error']['level'] ) or empty( $apidata['error']['message'] ) ) ) )
+			{
+				$error = $lang_global['error_valid_response'];
+			}
+			elseif( ! empty( $apidata['error']['message'] ) )
+			{
+				$error = $apidata['error']['message'];
+			}
+			
+			if( ! empty( $error ) )
+			{
+				return $error;
+			}
+			
+			$apidata = $apidata['data'];
+			$content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n";
+			
+			// Xử lý dữ liệu
+			foreach( $array as $row )
+			{
+				if( isset( $apidata[$row['id']] ) )
+				{
+					$row['remote_version'] = $apidata[$row['id']]['lastest_version'];
+					$row['remote_release'] = $apidata[$row['id']]['lastest_release'];
+					$row['updateable'] = $apidata[$row['id']]['updateable'];
+					
+					if( empty( $row['author'] ) )
+					{
+						$row['author'] = $apidata[$row['id']]['author'];
+					}
+					$row['license'] = $apidata[$row['id']]['license'];
+					$row['message'] = $apidata[$row['id']]['note'];
+					$row['link'] = $apidata[$row['id']]['link'];
+					$row['support'] = $apidata[$row['id']]['support'];
+					$row['origin'] = true;
+				}
+				
+				$content .= "\t<extension>\n";
+				$content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
+				$content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
+				$content .= "\t\t<date><![CDATA[" . gmdate( "D, d M Y H:i:s", $row['current_release'] ) . " GMT]]></date>\n";
+				$content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
+				$content .= "\t\t<new_date><![CDATA[" . ( $row['remote_release'] ? gmdate( "D, d M Y H:i:s", $row['current_release'] ) . " GMT" : "" ) . "]]></new_date>\n";
+				$content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
+				$content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
+				$content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
+				$content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
+				$content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
+				$content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
+				$content .= "\t\t<updateable><![CDATA[" . ( $row['updateable'] ? 'true' : 'false' ) . "]]></updateable>\n";
+				$content .= "\t\t<origin><![CDATA[" . ( $row['updateable'] ? 'true' : 'false' ) . "]]></origin>\n";
+				$content .= "\t</extension>\n";
+			}
+			
+			$content .= "</cms>";
+	
 			$xmlcontent = simplexml_load_string( $content );
+			
 			if( $xmlcontent !== false )
 			{
 				file_put_contents( $my_file, $content );
@@ -809,4 +902,32 @@ function nv_getModVersion( $updatetime = 3600 )
 	}
 
 	return $xmlcontent;
+}
+
+/**
+ * nv_http_get_lang()
+ * 
+ * @param mixed $input
+ * @return
+ */
+function nv_http_get_lang( $input )
+{
+	global $lang_global;
+	
+	if( ! isset( $input['code'] ) or ! isset( $input['message'] ) )
+	{
+		return '';
+	}
+	
+	if( ! empty( $lang_global['error_code_' . $input['code']] ) )
+	{
+		return $lang_global['error_code_' . $input['code']];
+	}
+	
+	if( ! empty( $input['message'] ) )
+	{
+		return $input['message'];
+	}
+	
+	return 'Error' . ( $input['code'] ? ': ' . $input['code'] . '.' : '.' );
 }

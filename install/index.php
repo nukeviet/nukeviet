@@ -597,8 +597,8 @@ elseif( $step == 5 )
 						// Xoa du lieu tai bang nvx_vi_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						// Xoa du lieu tai bang nvx_setup_modules
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
+						// Xoa du lieu tai bang nvx_setup_extensions
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode( "', '", $modules_exit ) . "') AND type='module'" );
 
 						// Xoa du lieu tai bang nvx_vi_blocks_groups
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
