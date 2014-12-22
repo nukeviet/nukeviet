@@ -53,7 +53,21 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			if( nv_version_compare( $global_config['version'], ( string ) $new_version->version ) < 0 )
 			{
 				$xtpl->assign( 'VERSION_INFO', ( string ) $new_version->message );
-				$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info'], ( string ) $new_version->link ) );
+				
+				// Allow auto update to newest version 
+				if( ( string ) $new_version->version == ( string ) $new_version->updateable )
+				{
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ( ( string ) $new_version->updateable ) ) );
+				}
+				elseif( ( ( string ) $new_version->updateable ) != '' )
+				{
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info2'], ( ( string ) $new_version->updateable ), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ( ( string ) $new_version->updateable ) ) );
+				}
+				else
+				{
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info3'], ( string ) $new_version->link ) );
+				}
+				
 				$xtpl->parse( 'sysUpd.inf' );
 			}
 	

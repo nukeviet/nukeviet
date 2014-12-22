@@ -31,15 +31,16 @@ $(document).ready(function(){
 		</tr>
 		<tr>
 			<td style="white-space:nowrap"> {LANG.onlineVersion} </td>
-			<td> {VALUE.onlineVersion}
-			<!-- BEGIN: inf -->
-			<div class="newVesionMess">
-				{VERSION_INFO}
-			</div>
-			<div class="newVesionInfo">
-				{VERSION_LINK}
-			</div>
-			<!-- END: inf -->
+			<td>
+				{VALUE.onlineVersion}
+				<!-- BEGIN: inf -->
+				<div class="newVesionMess">
+					{VERSION_INFO}
+				</div>
+				<div class="newVesionInfo">
+					{VERSION_LINK}
+				</div>
+				<!-- END: inf -->
 			</td>
 		</tr>
 	</tbody>
