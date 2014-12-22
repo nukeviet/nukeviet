@@ -39,6 +39,12 @@ function nv_groups_list()
 	}
 }
 
+/**
+ * nv_groups_post()
+ * 
+ * @param mixed $groups_view
+ * @return
+ */
 function nv_groups_post( $groups_view )
 {
 	if( in_array( 6, $groups_view) )
@@ -60,6 +66,12 @@ function nv_groups_post( $groups_view )
 	return array_map( 'intval', $groups_view );
 }
 
+/**
+ * nv_var_export()
+ * 
+ * @param mixed $var_array
+ * @return
+ */
 function nv_var_export( $var_array )
 {
 	$ct = preg_replace( '/[\s\t\r\n]+/', ' ', var_export( $var_array, true ) );
@@ -72,6 +84,11 @@ function nv_var_export( $var_array )
 	return $ct;
 }
 
+/**
+ * nv_save_file_config_global()
+ * 
+ * @return
+ */
 function nv_save_file_config_global()
 {
 	global $db, $sys_info, $global_config, $db_config;
@@ -413,6 +430,13 @@ function nv_geVersion( $updatetime = 3600 )
 	return $xmlcontent;
 }
 
+/**
+ * nv_version_compare()
+ * 
+ * @param mixed $version1
+ * @param mixed $version2
+ * @return
+ */
 function nv_version_compare( $version1, $version2 )
 {
 	$v1 = explode( '.', $version1 );
