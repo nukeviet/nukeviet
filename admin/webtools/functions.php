@@ -27,6 +27,7 @@ $menu_top = array(
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$allow_func[] = 'deleteupdate';
+	$allow_func[] = 'getupdate';
 }
 
 define( 'NV_IS_FILE_WEBTOOLS', true );

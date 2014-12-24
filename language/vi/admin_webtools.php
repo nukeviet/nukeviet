@@ -72,3 +72,13 @@ $lang_module['mudim_showpanel'] = 'Hiển thị bảng điều khiển Mudim';
 $lang_module['mudim_method'] = 'Kiểu gõ mặc định';
 $lang_module['mudim_displaymode'] = 'Hiển thị công cụ dưới dạng';
 $lang_module['error_unknow'] = 'Lỗi chưa xác định';
+
+$lang_module['get_update'] = 'Cập nhật hệ thống';
+$lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
+$lang_module['get_update_ok'] = 'Gói nâng cấp an toàn, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
+$lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn nếu có bất kỳ lỗi nào xảy ra, do đó bạn nên sao lưu toàn bộ website trước khi thực hiện, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
+$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục, hãy kiểm tra và tắt chế độ safe_mode';
+$lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file';
+$lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
+$lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
+$lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';
