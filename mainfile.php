@@ -304,6 +304,7 @@ define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
 define( 'NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups' );
 define( 'NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users' );
 define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+define( 'NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies' );
 define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
 
 define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );

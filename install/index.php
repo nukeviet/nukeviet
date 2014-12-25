@@ -471,6 +471,7 @@ elseif( $step == 5 )
 			define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
 			define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
 			define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+			define( 'NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies' );
 			define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 			require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';

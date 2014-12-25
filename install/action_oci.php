@@ -378,6 +378,19 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 
 $sql_create_table[] = "CREATE INDEX inv_sessions_onl_time ON NV3_SESSIONS(onl_time) TABLESPACE USERS";
 
+$sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
+	name VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
+	value CLOB NOT NULL ENABLE,
+	domain VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
+	path VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
+	expries NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	secure NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
+	UNIQUE KEY cookiename (name, domain, path),
+	CONSTRAINT cnv_sys_cookiename UNIQUE (name,domain,path)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE INDEX inv_cookies_name ON NV3_COOKIES(name) TABLESPACE USERS";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 	lang CHAR(2 CHAR) NOT NULL ENABLE,
 	module VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
