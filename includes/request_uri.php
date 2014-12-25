@@ -10,6 +10,12 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+// Fix rewrite IIS 7 with Unicode Permalinks
+if( isset( $_SERVER['UNENCODED_URL'] ) )
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
+}
+
 $base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 
 if( $base_siteurl == DIRECTORY_SEPARATOR ) $base_siteurl = '';
