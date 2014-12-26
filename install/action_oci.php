@@ -383,7 +383,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	value CLOB NOT NULL ENABLE,
 	domain VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	path VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	expries NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	expires NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	secure NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	UNIQUE KEY cookiename (name, domain, path),
 	CONSTRAINT cnv_sys_cookiename UNIQUE (name,domain,path)

@@ -92,6 +92,3 @@ $(function(){
 </script>
 <!-- END: data -->
 <!-- END: main -->
-<!-- BEGIN: dev -->
-<div class="alert alert-info">{LANG.develop_note}</div>
-<!-- END: dev -->
