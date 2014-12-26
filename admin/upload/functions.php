@@ -204,7 +204,7 @@ function nv_get_viewImage( $fileName )
 {
 	global $array_thumb_config;
 
-	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $fileName, $m ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|ico)))$/i', $fileName, $m ) )
 	{
 		$viewFile = NV_FILES_DIR . '/' . $m[1];
 
@@ -280,18 +280,31 @@ function nv_get_viewImage( $fileName )
 					$thumb_config['thumb_height'] = 0;
 				}
 			}
-			$image->resizeXY( $thumb_config['thumb_width'], $thumb_config['thumb_height'] );
-			if( $thumb_config['thumb_type'] == 4 )
+			if( $image->fileinfo['width'] > $thumb_config['thumb_width'] )
 			{
-				$image->cropFromCenter( $thumb_width, $thumb_height );
+				$image->resizeXY( $thumb_config['thumb_width'], $thumb_config['thumb_height'] );
+				if( $thumb_config['thumb_type'] == 4 )
+				{
+					$image->cropFromCenter( $thumb_width, $thumb_height );
+				}
+				$image->save( NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality'] );
+				$create_Image_info = $image->create_Image_info;
+				$error = $image->error;
+				$image->close();
+				if( empty( $error ) )
+				{
+					return array( $viewDir . '/' . basename( $create_Image_info['src'] ), $create_Image_info['width'], $create_Image_info['height'] );
+				}
 			}
-			$image->save( NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality'] );
-			$create_Image_info = $image->create_Image_info;
-			$error = $image->error;
-			$image->close();
-			if( empty( $error ) )
+			elseif( copy( NV_ROOTDIR . '/' . $fileName, NV_ROOTDIR . '/' . $viewDir . '/' . $m[3] . $m[4] ) )
 			{
-				return array( $viewDir . '/' . basename( $create_Image_info['src'] ), $create_Image_info['width'], $create_Image_info['height'] );
+				$return = array( $viewDir . '/' . $m[3] . $m[4], $image->fileinfo['width'], $image->fileinfo['height'] );
+				$image->close();
+				return $return;
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}
@@ -343,9 +356,9 @@ function nv_getFileInfo( $pathimg, $file )
 		$size = @getimagesize( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
 		$info['type'] = 'image';
 		$info['src'] = $pathimg . '/' . $file;
-		$info['srcwidth'] = $size[0];
-		$info['srcheight'] = $size[1];
-		$info['size'] = $size[0] . '|' . $size[1];
+		$info['srcwidth'] = intval( $size[0] );
+		$info['srcheight'] = intval( $size[1] );
+		$info['size'] = intval( $size[0] ) . '|' . intval( $size[1] );
 
 		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/([a-z0-9\-\_\.\/]+)$/i', $pathimg . '/' . $file, $m ) )
 		{
@@ -508,7 +521,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 $allow_upload_dir = array( 'images', SYSTEM_UPLOADS_DIR );
 $array_hidefolders = array( '.', '..', 'index.html', '.htaccess', '.tmp' );
 
-$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png' );
+$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'ico' );
 $array_flash = array( 'swf', 'swc', 'flv' );
 $array_archives = array( 'rar', 'zip', 'tar' );
 $array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );

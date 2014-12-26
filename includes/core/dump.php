@@ -218,6 +218,22 @@ function nv_dump_save( $params )
 				$result = $db->query( $db->sql() );
 				while( $row = $result->fetch() )
 				{
+					if( isset( $row['bodyhtml'] ) )
+					{
+						$row['bodyhtml'] = strtr( $row['bodyhtml'], array(
+							"\r\n" => '',
+							"\r" => '',
+							"\n" => ''
+						) );
+					}
+					elseif( isset( $row['bodytext'] ) )
+					{
+						$row['bodytext'] = strtr( $row['bodytext'], array(
+							"\r\n" => ' ',
+							"\r" => ' ',
+							"\n" => ' '
+						) );
+					}
 					$row2 = array();
 					foreach( $columns as $key => $kt )
 					{
@@ -271,17 +287,17 @@ function nv_dump_restore( $file )
 	$sql = $insert = '';
 	$query_len = 0;
 	$execute = false;
-	
+
 	foreach( $str as $stKey => $st )
 	{
 		$st = trim( str_replace( "\\\\", "", $st ) );
-		
+
 		// Remove BOM
 		if( $stKey == 0 )
 		{
 			$st = preg_replace( "/^\xEF\xBB\xBF/", "", $st );
 		}
-		
+
 		if( empty( $st ) || preg_match( '/^(#|--)/', $st ) )
 		{
 			continue;
@@ -307,7 +323,7 @@ function nv_dump_restore( $file )
 				{
 					$sql = rtrim( $insert . $sql, ';' );
 					$insert = '';
-					$execute = true;					
+					$execute = true;
 				}
 
 				if( $query_len >= 65536 and preg_match( "/,\s*$/", $st ) )
@@ -327,7 +343,7 @@ function nv_dump_restore( $file )
 					{
 						return false;
 					}
-					
+
 					$sql = '';
 					$query_len = 0;
 					$execute = false;
