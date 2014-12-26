@@ -61,8 +61,6 @@ $lang_module['file_type_1'] = 'File cài đặt';
 $lang_module['file_type_2'] = 'File hướng dẫn';
 $lang_module['file_type_3'] = 'Loại file khác';
 
-$lang_module['develop_note'] = 'Chức năng này hiện đang trong quá trình phát triển';
-
 $lang_module['search_key'] = 'Nhập từ khóa';
 $lang_module['search_go'] = 'Tìm';
 

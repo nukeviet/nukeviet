@@ -244,7 +244,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	value mediumtext NOT NULL,
 	domain varchar(100) NOT NULL DEFAULT '',
 	path varchar(100) NOT NULL DEFAULT '',
-	expries int(11) NOT NULL DEFAULT '0',
+	expires int(11) NOT NULL DEFAULT '0',
 	secure tinyint(1) NOT NULL DEFAULT '0',
 	UNIQUE KEY cookiename (name, domain, path),
 	KEY name (name)
