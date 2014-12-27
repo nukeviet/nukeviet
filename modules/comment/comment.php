@@ -189,7 +189,7 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 	{
 		$xtpl->assign( 'OPTION', array(
 			'key' => $i,
-			'title' => $lang_module['sortcomm_' . $i],
+			'title' => $lang_module_comment['sortcomm_' . $i],
 			'selected' => ( $i == $sortcomm ) ?  ' selected="selected"' : '',
 		) );
 
