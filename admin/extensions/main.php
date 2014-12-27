@@ -50,41 +50,32 @@ $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
-// Develop feature
-if( $request['mode'] == 'downloaded' or $request['mode'] == 'favorites' )
-{
-	$xtpl->parse( 'dev' );
-	$contents = $xtpl->text( 'dev' );
-	
-	include NV_ROOTDIR . '/includes/header.php';
-	echo nv_admin_theme( $contents );
-	include NV_ROOTDIR . '/includes/footer.php';
-	die();
-}
-// Develop feature end
-
-require( NV_ROOTDIR . '/' . NV_ADMINDIR . '/extensions/extensions.class.php' );
-$NV_Extensions = new NV_Extensions( $global_config, NV_TEMP_DIR );
+require( NV_ROOTDIR . '/includes/class/http.class.php' );
+$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
+$stored_cookies = nv_get_cookies();
 
 // Debug
 $args = array(
 	'headers' => array(
 		'Referer' => NUKEVIET_STORE_APIURL,
 	),
+	'cookies' => $stored_cookies,
 	'body' => $request
 );
 
-$array = $NV_Extensions->post( NUKEVIET_STORE_APIURL, $args );
-$array = ! empty( $array['body'] ) ? @unserialize( $array['body'] ) : array();
+$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
+
+$cookies = $array['cookies'];
+$array = ! empty( $array['body'] ) ? ( is_serialized_string( $array['body'] ) ? unserialize( $array['body'] ) : array() ) : array();
 
 $error = '';
-if( ! empty( $NV_Extensions::$error ) )
+if( ! empty( NV_Http::$error ) )
 {
-	$error = nv_extensions_get_lang( $NV_Extensions::$error );
+	$error = nv_http_get_lang( NV_Http::$error );
 }
 elseif( ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
 {
-	$error = $lang_module['error_valid_response'];
+	$error = $lang_global['error_valid_response'];
 }
 elseif( ! empty( $array['error']['message'] ) )
 {
@@ -103,6 +94,9 @@ elseif( empty( $array['data'] ) )
 }
 else
 {
+	// Save cookies
+	nv_store_cookies( nv_object2array( $cookies ), $stored_cookies );
+	
 	foreach( $array['data'] as $row )
 	{
 		$row['rating_avg'] = ceil( $row['rating_avg'] );

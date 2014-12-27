@@ -37,6 +37,7 @@ if( ! empty( $savesetting ) )
 	$array_config['show_no_image'] = $nv_Request->get_title( 'show_no_image', 'post', '', 0 );
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
+	$array_config['imgposition'] = $nv_Request->get_int( 'imgposition', 'post', 0 );
 	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$array_config['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$array_config['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
@@ -183,6 +184,22 @@ foreach( $array_config_source as $key => $val )
 		'selected' => $key == $module_config[$module_name]['config_source'] ? ' selected="selected"' : ''
 	) );
 	$xtpl->parse( 'main.config_source' );
+}
+
+$array_imgposition = array(
+	0 => $lang_module['imgposition_0'],
+	1 => $lang_module['imgposition_1'],
+	2 => $lang_module['imgposition_2']
+);
+
+// position images
+while( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) )
+{
+	$sl = ( $id_imgposition == $module_config[$module_name]['imgposition'] ) ? ' selected="selected"' : '';
+	$xtpl->assign( 'id_imgposition', $id_imgposition );
+	$xtpl->assign( 'title_imgposition', $title_imgposition );
+	$xtpl->assign( 'posl', $sl );
+	$xtpl->parse( 'main.looppos' );
 }
 
 $xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );

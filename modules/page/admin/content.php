@@ -61,7 +61,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['keywords'] = nv_strtolower( $nv_Request->get_title( 'keywords', 'post', '', 0 ) );
 
 	$row['socialbutton'] = $nv_Request->get_int( 'socialbutton', 'post', 0 );
-	$row['facebookappid'] = $nv_Request->get_title( 'facebookappid', 'post', '' );
 	$row['layout_func'] = $nv_Request->get_title( 'layout_func', 'post', '' );
 	$row['gid'] = $nv_Request->get_int( 'gid', 'post', 0 );
 
@@ -95,7 +94,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, facebookappid = :facebookappid, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
+			$_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
 			$publtime = $row['add_time'];
 		}
 		else
@@ -103,7 +102,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
-			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :facebookappid, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
 			$publtime = NV_CURRENTTIME;
 		}
@@ -120,7 +119,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth->bindParam( ':keywords', $row['keywords'], PDO::PARAM_STR );
 			$sth->bindParam( ':socialbutton', $row['socialbutton'], PDO::PARAM_INT );
 			$sth->bindParam( ':activecomm', $row['activecomm'], PDO::PARAM_INT );
-			$sth->bindParam( ':facebookappid', $row['facebookappid'], PDO::PARAM_STR );
 			$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
 			$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
 			$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
@@ -228,7 +226,7 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.activecomm' );
 }
 
-if( empty( $alias ) ) $xtpl->parse( 'main.get_alias' );
+if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
 
 if( $error )
 {

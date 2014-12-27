@@ -471,6 +471,7 @@ elseif( $step == 5 )
 			define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
 			define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
 			define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+			define( 'NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies' );
 			define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
 
 			require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
@@ -597,8 +598,8 @@ elseif( $step == 5 )
 						// Xoa du lieu tai bang nvx_vi_modules
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
 
-						// Xoa du lieu tai bang nvx_setup_modules
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
+						// Xoa du lieu tai bang nvx_setup_extensions
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode( "', '", $modules_exit ) . "') AND type='module'" );
 
 						// Xoa du lieu tai bang nvx_vi_blocks_groups
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );

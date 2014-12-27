@@ -92,6 +92,7 @@ $lang_module['viewcat_download_hits'] = 'down';
 $lang_module['viewcat_view_hits'] = 'Views';
 $lang_module['categories_viewall'] = 'See all';
 $lang_module['search'] = 'Search data';
+$lang_module['search_key'] = 'search key';
 $lang_module['search_option'] = 'Please select a topic';
 $lang_module['search_result'] = 'Search Results';
 $lang_module['search_noresult'] = 'No data suitable to your requirements!';

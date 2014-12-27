@@ -81,7 +81,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			}
 			elseif( ! empty( $show_no_image ) )//no image
 			{
-				$item['src'] = $show_no_image;
+				$item['src'] = NV_BASE_SITEURL . $show_no_image;
 			}
 			else
 			{
@@ -112,7 +112,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			$item_array_other[] = $item;
 		}
 
-		unset( $query, $row, $arr_listcatid );
+		unset( $query, $row );
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 

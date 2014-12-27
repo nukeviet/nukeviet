@@ -11,7 +11,6 @@
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_FILE_EXTENSIONS', true );
-define( 'NUKEVIET_STORE_APIURL', 'http://api.nukeviet.vn/store/' );
 
 $menu_top = array(
 	'title' => $module_name,
@@ -26,35 +25,6 @@ $submenu['popular'] = $lang_module['popular'];
 $submenu['featured'] = $lang_module['featured'];
 $submenu['downloaded'] = $lang_module['downloaded'];
 $submenu['favorites'] = $lang_module['favorites'];
-
-
-/**
- * nv_extensions_get_lang()
- * 
- * @param mixed $input
- * @return
- */
-function nv_extensions_get_lang( $input )
-{
-	global $lang_module;
-	
-	if( ! isset( $input['code'] ) or ! isset( $input['message'] ) )
-	{
-		return '';
-	}
-	
-	if( ! empty( $lang_module['error_code_' . $input['code']] ) )
-	{
-		return $lang_module['error_code_' . $input['code']];
-	}
-	
-	if( ! empty( $input['message'] ) )
-	{
-		return $input['message'];
-	}
-	
-	return 'Error' . ( $input['code'] ? ': ' . $input['code'] . '.' : '.' );
-}
 
 /**
  * nv_extensions_is_installed()
@@ -81,8 +51,8 @@ function nv_extensions_is_installed( $type, $name, $version )
 		
 		return 1;
 		
-		//$stmt = $db->prepare( 'SELECT mod_version FROM ' . NV_PREFIXLANG . '_setup_modules WHERE module_file= :modfile AND module_file=title' );
-		//$stmt->bindParam( ':modfile', $name, PDO::PARAM_STR );
+		//$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
+		//$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
 		//$stmt->execute();
 		//$row = $stmt->fetch();	
 	}
@@ -128,7 +98,7 @@ function is_serialized_string( $data )
 	}
 	
 	$data = trim( $data );
-	$length = strlen( $data );
+	$length = nv_strlen( $data );
 	
 	if( $length < 4 )
 	{
@@ -138,20 +108,129 @@ function is_serialized_string( $data )
 	{
 		return false;
 	}
-	elseif( $data{$length-3} !== ';' )
-	{
-		return false;
-	}
 	elseif( $data{0} !== 'a' )
-	{
-		return false;
-	}
-	elseif( $data{$length-4} !== '"' )
 	{
 		return false;
 	}
 	else
 	{
 		return true;
+	}
+}
+
+/**
+ * nv_get_cookies()
+ * 
+ * @param bool $full
+ * @return
+ */
+function nv_get_cookies( $full = false )
+{
+	global $db;
+	
+	$data = array();
+	$arrURL = parse_url( NUKEVIET_STORE_APIURL );
+		
+	$data['domain'] = '.' . $arrURL['host'];
+	$data['path'] = '/';
+	
+	$sql = 'SELECT * FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE domain=' . $db->quote( $data['domain'] ) . ' AND path=' . $db->quote( $data['path'] );
+	$result = $db->query( $sql );
+	
+	$array = array();
+	$array_expires = array();
+	
+	while( $row = $result->fetch() )
+	{
+		$row['expires'] = floatval( $row['expires'] );
+		
+		if( $row['expires'] <= NV_CURRENTTIME )
+		{
+			$array_expires[] = $db->quote( $row['name'] );
+		}
+		else
+		{
+			if( $full === false )
+			{
+				$array[$row['name']] = $row['value'];
+			}
+			else
+			{
+				$array[$row['name']] = array(
+					'value' => $row['value'],
+					'secure' => $row['secure'] ? true : false,
+				);
+			}
+		}
+	}
+	
+	// Delete expired cookies
+	if( ! empty( $array_expires ) )
+	{
+		$sql = 'DELETE FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE name IN(' . implode( $array_expires ) . ') AND domain=' . $db->quote( $data['domain'] ) . ' AND path=' . $db->quote( $data['path'] );
+		$db->query( $sql );
+	}
+	
+	return $array;
+}
+
+/**
+ * nv_store_cookies()
+ * 
+ * @param mixed $cookies
+ * @param mixed $currCookies
+ * @return void
+ */
+function nv_store_cookies( $cookies = array(), $currCookies = array() )
+{
+	global $db;
+	
+	if( ! empty( $cookies ) )
+	{
+		foreach( $cookies as $cookie )
+		{
+			if( ! empty( $cookie['expires'] ) )
+			{
+				if( ! preg_match( "/^([0-9]+)$/", $cookie['expires'] ) )
+				{
+					$cookie['expires'] = strtotime( $cookie['expires'] );
+				}
+				else
+				{
+					$cookie['expires'] = intval( $cookie['expires'] );
+				}
+				
+				// Update cookie
+				if( isset( $currCookies[$cookie['name']] ) )
+				{
+					try
+					{
+						$sth = $db->prepare( 'UPDATE ' . NV_COOKIES_GLOBALTABLE . ' SET value= :value, expires= ' . $cookie['expires'] . ' WHERE name=' . $db->quote( $cookie['name'] ) . ' AND domain=' . $db->quote( $cookie['domain'] ) . ' AND path=' . $db->quote( $cookie['path'] ) );
+						$sth->bindParam( ':value', $cookie['value'], PDO::PARAM_STR );
+						$sth->execute();
+					}
+					catch( PDOException $e )
+					{
+						trigger_error( $e->getMessage() );
+					}
+				}
+				else
+				{
+					try
+					{
+						$sth = $db->prepare( 'INSERT INTO ' . NV_COOKIES_GLOBALTABLE . ' ( name, value, domain, path, expires, secure ) VALUES( :name, :value, :domain, :path, ' . $cookie['expires'] . ', 0 )' );
+						$sth->bindParam( ':name', $cookie['name'], PDO::PARAM_STR );
+						$sth->bindParam( ':value', $cookie['value'], PDO::PARAM_STR );
+						$sth->bindParam( ':domain', $cookie['domain'], PDO::PARAM_STR );
+						$sth->bindParam( ':path', $cookie['path'], PDO::PARAM_STR );
+						$sth->execute();
+					}
+					catch( PDOException $e )
+					{
+						trigger_error( $e->getMessage() );
+					}
+				}
+			}
+		}
 	}
 }

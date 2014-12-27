@@ -12,6 +12,16 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_PAGE', true );
 
+// Cau hinh
+$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
+$list = nv_db_cache( $sql );
+$page_config = array();
+foreach( $list as $values )
+{
+	$page_config[$values['config_name']] = $values['config_value'];
+}
+
+// Hien thi noi dung
 $sql = 'SELECT id,title,alias FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight ASC';
 $rows = nv_db_cache( $sql, 'alias', $module_name );
 

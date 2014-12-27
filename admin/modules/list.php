@@ -16,17 +16,17 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . '/modules', $global_config[
 // Lay danh sach cac module co trong he thong
 $new_modules = array();
 
-$sql = 'SELECT title, module_file, is_sysmod, mod_version FROM ' . $db_config['prefix'] . '_setup_modules ORDER BY title ASC';
+$sql = 'SELECT title, basename, is_sys, version FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY title ASC';
 $result = $db->query( $sql );
 
 $is_delCache = false;
 
-while( list( $m, $mod_file, $is_sysmod, $mod_version ) = $result->fetch( 3 ) )
+while( list( $m, $mod_file, $is_sys, $version ) = $result->fetch( 3 ) )
 {
 	$new_modules[$m] = array(
 		'module_file' => $mod_file,
-		'is_sysmod' => $is_sysmod,
-		'mod_version' => $mod_version
+		'is_sys' => $is_sys,
+		'version' => $version
 	);
 
 	if( ! isset( $modules_exit[$m] ) )
@@ -73,36 +73,36 @@ while( $row = $result->fetch() )
 	if( ! isset( $new_modules[$mf] ) )
 	{
 		$row['act'] == 2;
-		$row['is_sysmod'] = '';
-		$row['mod_version'] = '';
+		$row['is_sys'] = '';
+		$row['version'] = '';
 	}
 	else
 	{
-		$row['is_sysmod'] = $new_modules[$row['module_file']]['is_sysmod'];
-		$row['mod_version'] = $new_modules[$row['module_file']]['mod_version'];
+		$row['is_sys'] = $new_modules[$row['module_file']]['is_sys'];
+		$row['version'] = $new_modules[$row['module_file']]['version'];
 	}
 
 	if( $row['title'] == $global_config['site_home_module'] )
 	{
-		$row['is_sysmod'] = 1;
+		$row['is_sys'] = 1;
 		$mod['act'][2] = 1;
 	}
 
 	$weight_list[] = $row['weight'];
 
 	$mod['title'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=show&amp;mod=' . $row['title'], $row['title'] );
-	$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['mod_version'] );
+	$mod['version'] = preg_replace_callback( '/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version'] );
 	$mod['custom_title'] = $row['custom_title'];
 	$mod['weight'] = array( $row['weight'], "nv_chang_weight('" . $row['title'] . "');" );
 	$mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
 
 	$mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit'] );
 	$mod['recreate'] = array( "nv_recreate_mod('" . $row['title'] . "');", $lang_global['recreate'] );
-	$mod['del'] = ( $row['is_sysmod'] == 0 or $row['title'] != $row['module_file'] ) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
+	$mod['del'] = ( $row['is_sys'] == 0 or $row['title'] != $row['module_file'] ) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
 
 	if( $row['title'] == $global_config['site_home_module'] )
 	{
-		$row['is_sysmod'] = 1;
+		$row['is_sys'] = 1;
 		$mod['act'][2] = 1;
 	}
 

@@ -25,6 +25,7 @@ $lang_module['part_row_title'] = 'Department';
 $lang_module['email_row_title'] = 'Email';
 $lang_module['email_row_title'] = 'Email';
 $lang_module['yahoo_row_title'] = 'Yahoo';
+$lang_module['skype_row_title'] = 'Skype';
 $lang_module['note_row_title'] = 'Note';
 $lang_module['bt_save_row_title'] = 'Save';
 $lang_module['bt_reset_row_title'] = 'Clear';

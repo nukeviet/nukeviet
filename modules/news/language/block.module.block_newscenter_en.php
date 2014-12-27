@@ -25,3 +25,5 @@ $lang_block['tooltip_position_bottom'] = 'Bottom';
 $lang_block['tooltip_position_left'] = 'Left';
 $lang_block['tooltip_position_right'] = 'Right';
 $lang_block['tooltip_length'] = 'Length character';
+$lang_block['width'] = 'Width';
+$lang_block['height'] = 'Height';

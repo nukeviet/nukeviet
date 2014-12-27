@@ -41,11 +41,17 @@ $lang_module['imagealt'] = 'Chú thích cho hình';
 $lang_module['socialbutton'] = 'Các công cụ Like';
 $lang_module['socialbuttonnote'] = 'Hiển thị các công cụ Like facebook, G+, Twitter';
 $lang_module['activecomm'] = 'Cho phép thảo luận ';
-$lang_module['facebookAppID'] = 'Facebook App ID';
-$lang_module['facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
 
 $lang_module['layout_func'] = 'Sử dụng layout';
 $lang_module['layout_default'] = 'Mặc định';
 $lang_module['googleplus'] = 'xác thực Google+ (quyền tác giả)';
 $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo cấu hình quyền tác giả của module';
+
+$lang_module['config'] = 'Cấu hình';
+$lang_module['config_view_type'] = 'Phương án hiển thị bài viết';
+$lang_module['config_view_type_0'] = 'Một bài viết chính';
+$lang_module['config_view_type_1'] = 'Danh sách các bài viết';
+$lang_module['config_facebookapi'] = 'Facebook App ID';
+$lang_module['config_facebookapi_note'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
+$lang_module['config_save'] = 'Lưu cấu hình';

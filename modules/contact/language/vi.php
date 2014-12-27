@@ -17,7 +17,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['note'] = 'Quý vị có thể gửi thư tới chúng tôi bằng cách hoàn tất biểu mẫu dưới đây. Để chúng tôi có thể trả lời thư của Quý vị, xin vui lòng khai báo đầy đủ.';
+$lang_module['note'] = 'Xin điền đầy đủ các thông tin dưới đây trước khi gửi thư để chúng tôi tiện hồi âm cho bạn.';
 $lang_module['fullname'] = 'Họ và tên';
 $lang_module['email'] = 'Địa chỉ email';
 $lang_module['yahoo'] = 'Yahoo';
@@ -26,7 +26,7 @@ $lang_module['captcha'] = 'Mã chống spam';
 $lang_module['title'] = 'Tiêu đề';
 $lang_module['part'] = 'Gửi đến bộ phận';
 $lang_module['content'] = 'Nội dung';
-$lang_module['reset'] = 'Xóa trắng';
+$lang_module['reset'] = 'Nhập lại';
 $lang_module['sendcontact'] = 'Gửi thông tin';
 $lang_module['error_fullname'] = 'bạn cần nhập họ và tên';
 $lang_module['error_captcha'] = 'Mã chống spam bạn nhập không đúng ';

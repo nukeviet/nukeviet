@@ -52,7 +52,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		{
 			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
 		}
-		$html .= '</select>';		
+		$html .= '</select>';
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
@@ -85,7 +85,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 			->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows t1' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $block_config['blockid'] . ' AND t1.status= 1' )
-			->order( 't2.weight DESC' )
+			->order( 't2.weight ASC' )
 			->limit( $block_config['numrow'] );
 		$list = nv_db_cache( $db->sql(), '', $module );
 
@@ -125,9 +125,9 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				}
 
 				$l['blockwidth'] = $blockwidth;
-				
-				$l['hometext'] = nv_clean60( $l['hometext'], $block_config['tooltip_length'] );
-				
+
+				$l['hometext'] = nv_clean60( $l['hometext'], $block_config['tooltip_length'], true );
+
 				if( ! $block_config['showtooltip'] )
 				{
 					$xtpl->assign( 'TITLE', 'title="' . $l['title'] . '"' );
@@ -137,7 +137,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				if( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
 				$xtpl->parse( 'main.loop' );
 			}
-			
+
 			if( $block_config['showtooltip'] )
 			{
 				$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );

@@ -15,12 +15,12 @@ $contents = 'NO_' . $modname;
 
 if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname ) )
 {
-	$sth = $db->prepare( 'SELECT is_sysmod, module_file, module_data FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :title' );
+	$sth = $db->prepare( 'SELECT is_sys, basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :title AND type=\'module\'' );
 	$sth->bindParam( ':title', $modname, PDO::PARAM_STR );
 	$sth->execute();
-	list( $is_sysmod, $module_file, $module_data ) = $sth->fetch( 3 );
+	list( $is_sys, $module_file, $module_data ) = $sth->fetch( 3 );
 
-	if( intval( $is_sysmod ) != 1 )
+	if( intval( $is_sys ) != 1 )
 	{
 		$contents = 'OK_' . $modname;
 		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_global['delete'] . ' module "' . $modname . '"', '', $admin_info['userid'] );
@@ -117,7 +117,7 @@ if( ! empty( $modname ) and preg_match( $global_config['check_module'], $modname
 		{
 			if( $module_file != $modname )
 			{
-				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_modules WHERE title= :module' );
+				$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title= :module AND type=\'module\'' );
 				$sth->bindParam( ':module', $modname, PDO::PARAM_STR );
 				$sth->execute();
 			}

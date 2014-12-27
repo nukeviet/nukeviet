@@ -21,7 +21,7 @@ function nv_referer_update()
 		$host = explode( '/', $host );
 		$host = reset( $host );
 		$host = strtolower( $host );
-
+		
 		$log_path = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs';
 		if( ! is_dir( $log_path ) )
 		{
@@ -87,9 +87,9 @@ function nv_referer_update()
 				last_update=' . NV_CURRENTTIME . '
 				WHERE host= :host' );
 			$sth->bindParam( ':host', $host, PDO::PARAM_STR );
-			$update = $sth->execute();
-
-			if( empty( $update ) )
+			$sth->execute();
+			
+			if( $sth->rowCount() == 0 )
 			{
 				$sth = $db->prepare( 'INSERT INTO ' . NV_REFSTAT_TABLE . '
 					(host, total, month' . date( 'm', NV_CURRENTTIME ) . ', last_update)
@@ -103,7 +103,7 @@ function nv_referer_update()
 				if( isset( $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'] ) and ! empty( $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'] ) )
 				{
 					$key = $global_config['engine_allowed'][$nv_Request->search_engine]['query_param'];
-					$key = $nv_Request->referer_queries[$key];
+					$key = ! empty( $nv_Request->referer_queries[$key] ) ? $nv_Request->referer_queries[$key] : '';
 					$key = str_replace( '+', ' ', $key );
 					$key = nv_strtolower( $key );
 					$key = nv_substr( $key, 0, 100 );

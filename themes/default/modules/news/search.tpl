@@ -18,7 +18,7 @@
 				<div class="col-md-4">{LANG.key_title}</div>
 	  			<div class="col-md-8"><input type="text" name="q" value="{KEY}" class="form-control" id="key"/></div>
 			</div>
-			
+
 			<div class="form-group">
 				<div class="col-md-4">{LANG.type_title}</div>
 	  			<div class="col-md-8">
@@ -30,7 +30,7 @@
 					</select>
 	  			</div>
 			</div>
-			
+
 			<div class="form-group">
 				<div class="col-md-4">{LANG.search_cat}</div>
 	  			<div class="col-md-8">
@@ -41,17 +41,17 @@
 					</select>
 	  			</div>
 			</div>
-			
+
 			<div class="form-group form-inline">
 				<div class="col-md-4">{LANG.from_date}</div>
 	  			<div class="col-md-8"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
 			</div>
-			
+
 			<div class="form-group form-inline">
 				<div class="col-md-4">{LANG.to_date}</div>
 	  			<div class="col-md-8"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
 			</div>
-			
+
 			<div class="form-group form-inline">
 				<div class="col-md-4 text-right">&nbsp;</div>
 	  			<div class="col-md-8"><input type="submit" class="btn btn-primary" value="{LANG.search_title}"/></div>
@@ -64,7 +64,7 @@
 $(document).ready(function() {
 	$(".datepicker").datepicker({
 		showOn : "both",
-		dateFormat : "dd/mm/yy",
+		dateFormat : "dd.mm.yy",
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
@@ -82,7 +82,7 @@ $(document).ready(function() {
 		<!-- BEGIN: noneresult -->
 		<p><em>{LANG.search_none} : <strong class="label label-info">{KEY}</strong> {LANG.search_in_module} <strong>{INMOD}</strong></em></p>
 		<!-- END: noneresult -->
-		
+
 		<!-- BEGIN: result -->
 		<h3><a href="{LINK}">{TITLEROW}</a></h3>
 		<div class="text-justify">
@@ -106,24 +106,24 @@ $(document).ready(function() {
 			{VIEW_PAGES}
 		</div>
 		<!-- END: pages_result -->
-		
+
 		<div class="alert alert-info">
 			<p><em>{LANG.search_sum_title} <strong>{NUMRECORD}</strong> {LANG.result_title}
 			<br />
 			{LANG.info_adv} </em></p>
 		</div>
-		
+
 			<h4><strong>{LANG.search_adv_internet} :</strong></h4>
 			<div align="center">
 				<form method="get" action="http://www.google.com/search" target="_top">
 					<input type="hidden" name="domains" value="{MY_DOMAIN}" />
-					
+
 					<div class="form-group">
 						<div class="col-md-4"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></div>
 						<div class="col-md-4"><input type="text" name="q" maxlength="255" value="{KEY}" id="sbi" class="form-control" /></div>
 						<div class="col-md-4"><input type="submit" name="sa" value="{LANG.search_title}" id="sbb" class="btn btn-default"></div>
 					</div>
-					
+
 					<div class="form-group">
 						<div class="col-md-4"><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet}</div>
 						<div class="col-md-4"><input type="radio" name="sitesearch" value="{MY_DOMAIN}" /> {LANG.search_on_nuke} {MY_DOMAIN}</div>

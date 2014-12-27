@@ -6,6 +6,95 @@
  * @Createdate 27/01/2011, 9:36
  */
 
+function htmlspecialchars_decode(string, quote_style) {
+    //       discuss at: http://phpjs.org/functions/htmlspecialchars_decode/
+    //      original by: Mirek Slugen
+    //      improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    //      bugfixed by: Mateusz "loonquawl" Zalega
+    //      bugfixed by: Onno Marsman
+    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+    //      bugfixed by: Brett Zamir (http://brett-zamir.me)
+    //         input by: ReverseSyntax
+    //         input by: Slawomir Kaniecki
+    //         input by: Scott Cariss
+    //         input by: Francois
+    //         input by: Ratheous
+    //         input by: Mailfaker (http://www.weedem.fr/)
+    //       revised by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // reimplemented by: Brett Zamir (http://brett-zamir.me)
+    //        example 1: htmlspecialchars_decode("<p>this -&gt; &quot;</p>", 'ENT_NOQUOTES');
+    //        returns 1: '<p>this -> &quot;</p>'
+    //        example 2: htmlspecialchars_decode("&amp;quot;");
+    //        returns 2: '&quot;'
+
+    var optTemp = 0,
+        i = 0,
+        noquotes = false;
+    if (typeof quote_style === 'undefined') {
+        quote_style = 2;
+    }
+    string = string.toString()
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+    var OPTS = {
+        'ENT_NOQUOTES': 0,
+        'ENT_HTML_QUOTE_SINGLE': 1,
+        'ENT_HTML_QUOTE_DOUBLE': 2,
+        'ENT_COMPAT': 2,
+        'ENT_QUOTES': 3,
+        'ENT_IGNORE': 4
+    };
+    if (quote_style === 0) {
+        noquotes = true;
+    }
+    if (typeof quote_style !== 'number') {
+        // Allow for a single string or an array of string flags
+        quote_style = [].concat(quote_style);
+        for (i = 0; i < quote_style.length; i++) {
+            // Resolve string input to bitwise e.g. 'PATHINFO_EXTENSION' becomes 4
+            if (OPTS[quote_style[i]] === 0) {
+                noquotes = true;
+            } else if (OPTS[quote_style[i]]) {
+                optTemp = optTemp | OPTS[quote_style[i]];
+            }
+        }
+        quote_style = optTemp;
+    }
+    if (quote_style & OPTS.ENT_HTML_QUOTE_SINGLE) {
+        string = string.replace(/&#0*39;/g, "'"); // PHP doesn't currently escape if more than one 0, but it should
+        // string = string.replace(/&apos;|&#x0*27;/g, "'"); // This would also be useful here, but not a part of PHP
+    }
+    if (!noquotes) {
+        string = string.replace(/&quot;/g, '"');
+    }
+    // Put this in last place to avoid escape being double-decoded
+    string = string.replace(/&amp;/g, '&');
+
+    return string;
+}
+
+function nv_filename_alt( fileAlt ){
+    var lastChar = fileAlt.charAt(fileAlt.length - 1);
+
+    if( lastChar === '/' || lastChar === '\\' ){
+        fileAlt = fileAlt.slice(0, -1);
+    }
+
+    fileAlt = decodeURIComponent( htmlspecialchars_decode( fileAlt.replace(/^.*[\/\\]/g, '') ) );
+    fileAlt = fileAlt.split('.');
+    
+    if( fileAlt.length > 1 ){
+    	fileAlt[fileAlt.length - 1] = '';
+    }
+    
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('_');
+    fileAlt = fileAlt.join(' ');
+    fileAlt = fileAlt.split('-');
+    fileAlt = fileAlt.join(' ');
+    return trim( fileAlt );
+}
+
 function nv_randomNum( a ){
 	for( var b = "", d = 0; d < a; d++ ){
 		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
@@ -122,15 +211,18 @@ function insertvaluetofield(){
 	var path = ( imageInfo[7] == "" ) ? $("span#foldervalue").attr("title") : imageInfo[7];
 	var fullPath = nv_siteroot + path + "/" + selFile;
 	
-	if( area != "" ){
+	if( area != '' ){
 		$("#" + area, opener.document).val( fullPath );
 		
-		var alt = $("input[name=alt]").val();
-		
-		if( alt != "" ){
-			$("#" + alt, opener.document).val( $("img[title='" + selFile + "']").attr("alt") );
+		var idalt = $("input[name=alt]").val();
+		if( idalt != '' ) {
+		    fileAlt = nv_filename_alt( selFile );
+		    alt = $("img[title='" + selFile + "']").attr("alt");
+			if( alt == fileAlt ){
+				alt = '';
+			}
+			$("#" + idalt, opener.document).val( alt );
 		}
-		
 		window.close();
 	}else{
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
@@ -1140,10 +1232,18 @@ function remoteUpload(){
 	$("div#uploadremote").dialog({
 		autoOpen : false,
 		width : 400,
-		height : 95,
+		height : nv_alt_require ? 200 : 120,
 		modal : true,
 		position : "center"
 	}).dialog("open");
+	
+	if( nv_auto_alt ){
+		$('#uploadremoteFile').keyup(function(){
+			var imageUrl = $(this).val();
+		    fileAlt = nv_filename_alt( imageUrl );
+			$('#uploadremoteFileAlt').val( fileAlt );
+		});
+	}
 	
 	return false;
 }
@@ -1154,15 +1254,16 @@ $('[name="uploadremoteFileOK"]').click(function(){
 	var currUrl = $("input[name=currentFileUrl]").val();
 	var folderPath = $("span#foldervalue").attr("title");
 	var check = fileUrl + " " + folderPath;
+	var fileAlt = $('#uploadremoteFileAlt').val();
 	
-	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check ){
+	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check && ( ( nv_alt_require && fileAlt != '' ) || ! nv_alt_require ) ){
 		$(this).attr('disabled', 'disabled');
 		$('#upload-remote-info').html('<em class="fa fa-2x fa-spinner fa-spin"></em>');
 		
 		$.ajax({
 			type : "POST",
 			url : nv_module_url + "upload&random=" + nv_randomNum(10),
-			data : "path=" + folderPath + "&fileurl=" + fileUrl,
+			data : "path=" + folderPath + "&fileurl=" + fileUrl + "&filealt=" + fileAlt,
 			success : function(k){
 				$("input[name=currentFileUrl]").val( check );
 				$('[name="uploadremoteFileOK"]').removeAttr('disabled');
@@ -1179,6 +1280,8 @@ $('[name="uploadremoteFileOK"]').click(function(){
 				}
 			}
 		});
+	}else if( nv_alt_require && fileAlt == '' && fileUrl != '' ){
+		$("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
 	}
 });
 
@@ -1472,6 +1575,7 @@ var NVUPLOAD = {
 				drop_element : 'upload-content',
 				file_data_name : 'upload',
 				filters : nv_filters,
+				multipart : true,
 				init: {
 					// Event on init uploader
 					PostInit: function(){
@@ -1488,7 +1592,24 @@ var NVUPLOAD = {
 						NVUPLOAD.updateList();
 						
 						$('#upload-start').click(function(){
-							NVUPLOAD.uploader.start();
+							// Check file before start upload
+							var allow_start = true;
+							if( nv_alt_require ){
+								$.each( $('#upload-queue-files .file-alt input'), function(){
+									if( $(this).val() == '' ){
+										allow_start = false;
+										return false;
+									}
+								});
+								
+								if( allow_start == false ){
+									$("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
+								}
+							}
+							
+							if( allow_start ){
+								NVUPLOAD.uploader.start();
+							}
 						});
 						
 						$('#upload-cancel').click(function(){
@@ -1591,6 +1712,17 @@ var NVUPLOAD = {
 						if( err.code === plupload.INIT_ERROR ){
 							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );
 						}
+					},
+					
+					// Get image alt before upload
+					BeforeUpload: function(up, file) {
+						var filealt = '';
+						
+						if( $('#' + file.id + ' .file-alt').length ){
+							filealt = $('#' + file.id + ' .file-alt input').val(); 
+						}
+						
+						NVUPLOAD.uploader.settings.multipart_params = {"filealt": filealt };
 					}
 				}
 			});
@@ -1621,7 +1753,8 @@ var NVUPLOAD = {
 			<div class="queue-header">\
 				<div class="container-fluid">\
 					<div class="row">\
-						<div class="col-sm-7">' + LANG.file_name + '</div>\
+						<div class="col-sm-' + ( nv_alt_require ? '4' : '7' ) + '">' + LANG.file_name + '</div>\
+						' + ( nv_alt_require ? '<div class="col-sm-3">' + LANG.altimage + '</div>' : '' ) + '\
 						<div class="col-sm-2">' + LANG.upload_size + '</div>\
 						<div class="col-sm-3">' + LANG.upload_status + '</div>\
 					</div>\
@@ -1635,17 +1768,39 @@ var NVUPLOAD = {
 	},
 	updateList: function(){
 		var fileList = $('#upload-queue-files').html('');
+		var fileAlt;
 
 		$.each( NVUPLOAD.uploader.files, function(i, file){
-			fileList.append(
-				'<div id="' + file.id + '" class="row file-item">' +
-					'<div class="col-sm-7 file-name"><span>' + file.name + '</span></div>' +
-					'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
-					'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
-					'<div class="col-sm-1 file-action text-right"></div>' +
-				'</div>'
-			);
+			if( ! nv_alt_require ){
+				fileList.append(
+					'<div id="' + file.id + '" class="row file-item">' +
+						'<div class="col-sm-7 file-name"><span>' + file.name + '</span></div>' +
+						'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
+						'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
+						'<div class="col-sm-1 file-action text-right"></div>' +
+					'</div>'
+				);			
+			}else{
+				fileAlt = NVLDATA.getValue(file.id);
+				
+				if( nv_auto_alt && fileAlt == '' ){
 
+				    fileAlt = nv_filename_alt( file.name );
+					
+					NVLDATA.setValue( file.id, fileAlt );					
+				}
+				
+				fileList.append(
+					'<div id="' + file.id + '" class="row file-item">' +
+						'<div class="col-sm-4 file-name"><span>' + file.name + '</span></div>' +
+						'<div class="col-sm-3 file-alt"><input type="text" value="' + fileAlt + '" onkeyup="NVLDATA.setValue( \'' + file.id + '\', this.value);" class="form-control upload-file-alt dynamic"/></div>' +
+						'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
+						'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
+						'<div class="col-sm-1 file-action text-right"></div>' +
+					'</div>'
+				);			
+			}
+			
 			NVUPLOAD.handleStatus( file, false );
 
 			$('#' + file.id + ' .file-delete').click(function(e){
@@ -1895,7 +2050,31 @@ var NVCMENU = {
 	},
 };
 
+var NVLDATA = {
+	support : false,
+	init : function(){
+		if( typeof( Storage ) !== "undefined" ){
+			NVLDATA.support = true;
+		}
+	},
+	getValue : function( key ){
+		if( ! NVLDATA.support ){
+			return '';
+		}
+		
+		if( typeof( sessionStorage[key] ) !== "undefined" && sessionStorage[key] ){
+			return sessionStorage[key];
+		}
+		
+		return '';
+	},
+	setValue : function( key, val ){
+		sessionStorage[key] = val;
+	}
+};
+
 // Init functions
 KEYPR.init();
 RRT.init();
 NVCMENU.init();
+NVLDATA.init();

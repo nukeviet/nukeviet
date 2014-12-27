@@ -27,207 +27,185 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		$values = array();
 		$values['userVersion'] = $global_config['version'];
 		$new_version = ( $i == 'sysUpd' ) ? nv_geVersion( 28800 ) : nv_geVersion( 120 );
-		$values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string )$new_version->version, ( string )$new_version->name, nv_date( 'd/m/Y H:i', strtotime( $new_version->date ) ) );
-		$xtpl->assign( 'VALUE', $values );
-		if( nv_version_compare( $global_config['version'], $new_version->version ) < 0 )
+
+		$error = '';
+		if( $new_version === false )
 		{
-			$xtpl->assign( 'VERSION_INFO', ( string )$new_version->message );
-			$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info'], ( string )$new_version->link ) );
-			$xtpl->parse( 'sysUpd.inf' );
+			$error = $lang_module['error_unknow'];
 		}
-
-		clearstatcache();
-		$sysUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
-		$xtpl->assign( 'SYSUPDDATE', nv_date( 'd/m/Y H:i', $sysUpdDate ) );
-
-		$xtpl->parse( 'sysUpd' );
-		echo $xtpl->text( 'sysUpd' );
-	}
-	elseif( $i == 'modUpd' or $i == 'modUpdRef' or $i == 'modNewUpd' or $i == 'modNewUpdRef' )
-	{
-		$_modules = ( $i == 'modUpd' or $i == 'modNewUpd' ) ? nv_getModVersion( 28800 ) : nv_getModVersion( 120 );
-		$_modules = nv_object2array( $_modules );
-		$_modules = $_modules['module'];
-		$onlineModules = array();
-		foreach( $_modules as $m )
+		elseif( is_string( $new_version ) )
 		{
-			$name = array_shift( $m );
-			$onlineModules[$name] = $m;
-			unset( $onlineModules[$name]['date'] );
-			$onlineModules[$name]['pubtime'] = strtotime( $m['date'] );
+			$error = $new_version;
 		}
-
-		$userModules = array();
-
-		$result = $db->query( 'SELECT module_file, mod_version, author FROM ' . $db_config['prefix'] . '_setup_modules GROUP BY module_file ORDER BY module_file ASC' );
-		while( list( $module_file, $mod_version, $author ) = $result->fetch( 3 ) )
+		
+		if( ! empty( $error ) )
+		{	
+			$xtpl->assign( 'ERROR', $lang_module['checkSystem'] . ': ' . $error );
+			
+			$xtpl->parse( 'error' );
+			echo $xtpl->text( 'error' );
+		}
+		else
 		{
-			$userModules[$module_file] = array();
-			$v = '';
-			$p = 0;
-			if( preg_match( '/^([^\s]+)\s+([\d]+)$/', $mod_version, $matches ) )
+			$values['onlineVersion'] = sprintf( $lang_module['newVersion_detail'], ( string ) $new_version->version, ( string ) $new_version->name, nv_date( 'd/m/Y H:i', strtotime( ( string ) $new_version->date ) ) );
+			$xtpl->assign( 'VALUE', $values );
+			
+			if( nv_version_compare( $global_config['version'], ( string ) $new_version->version ) < 0 )
 			{
-				$v = ( string )$matches[1];
-				$p = ( int )$matches[2];
-			}
-
-			if( isset( $onlineModules[$module_file] ) )
-			{
-				$userModules[$module_file] = $onlineModules[$module_file];
-
-				if( isset( $onlineModules[$module_file]['pubtime'], $onlineModules[$module_file]['version'], $onlineModules[$module_file]['author'] ) and $onlineModules[$module_file]['version'] == $v and ( $onlineModules[$module_file]['pubtime'] != $p or $onlineModules[$module_file]['author'] != $author ) )
+				$xtpl->assign( 'VERSION_INFO', ( string ) $new_version->message );
+				
+				// Allow auto update to newest version 
+				if( ( string ) $new_version->version == ( string ) $new_version->updateable )
 				{
-					$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_setup_modules SET mod_version= :mod_version, author= :author WHERE module_file= :module_file' );
-					$sth->bindValue( ':mod_version', $v . ' ' . $onlineModules[$module_file]['pubtime'], PDO::PARAM_STR );
-					$sth->bindParam( ':author', $onlineModules[$module_file]['author'], PDO::PARAM_STR );
-					$sth->bindParam( ':module_file', $module_file, PDO::PARAM_STR );
-					$sth->execute();
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ( ( string ) $new_version->updateable ) . '&amp;checksess=' . md5( ( ( string ) $new_version->updateable ) . $global_config['sitekey'] . session_id() ) ) );
 				}
-			}
-
-			$userModules[$module_file]['u_version'] = $v;
-			$userModules[$module_file]['u_pubtime'] = $p;
-		}
-
-		$newModules = array_diff_key( $onlineModules, $userModules );
-
-		clearstatcache();
-		$modUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/modules.version.' . NV_LANG_INTERFACE . '.xml' );
-
-		if( $i != 'modNewUpd' and $i != 'modNewUpdRef' )
-		{
-			$a = 1;
-			foreach( $userModules as $modname => $values )
-			{
-				if( ! isset( $values['version'] ) )
+				elseif( ( ( string ) $new_version->updateable ) != '' )
 				{
-					$note = $lang_module['moduleNote1'];
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info2'], ( ( string ) $new_version->updateable ), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ( ( string ) $new_version->updateable ) . '&amp;checksess=' . md5( ( ( string ) $new_version->updateable ) . $global_config['sitekey'] . session_id() ) ) );
+				}
+				else
+				{
+					$xtpl->assign( 'VERSION_LINK', sprintf( $lang_module['newVersion_info3'], ( string ) $new_version->link ) );
+				}
+				
+				$xtpl->parse( 'sysUpd.inf' );
+			}
+	
+			clearstatcache();
+			$sysUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/nukeviet.version.' . NV_LANG_INTERFACE . '.xml' );
+			$xtpl->assign( 'SYSUPDDATE', nv_date( 'd/m/Y H:i', $sysUpdDate ) );
+	
+			$xtpl->parse( 'sysUpd' );
+			echo $xtpl->text( 'sysUpd' );
+		}
+	}
+	elseif( $i == 'extUpd' or $i == 'extUpdRef' )
+	{
+		$exts = ( $i == 'extUpd' ) ? nv_getExtVersion( 28800 ) : nv_getExtVersion( 120 );
+		
+		$error = '';
+		if( $exts === false )
+		{
+			$error = $lang_module['error_unknow'];
+		}
+		elseif( is_string( $exts ) )
+		{
+			$error = $exts;
+		}
+		
+		if( ! empty( $error ) )
+		{	
+			$xtpl->assign( 'ERROR', $lang_module['checkExtensions'] . ': ' . $error );
+			
+			$xtpl->parse( 'error' );
+			echo $xtpl->text( 'error' );
+		}
+		else
+		{
+			clearstatcache();
+			$extUpdDate = filemtime( NV_ROOTDIR . '/' . NV_CACHEDIR . '/extensions.version.' . NV_LANG_INTERFACE . '.xml' );
+			
+			$exts = $exts->xpath('extension');
+			
+			$a = 1;
+			foreach( $exts as $extname => $values )
+			{
+				$value = array(
+					'name' => ( string ) $values->name,
+					'version' => ( string ) $values->version,
+					'date' => ( string ) $values->date,
+					'new_version' => ( string ) $values->new_version,
+					'new_date' => ( string ) $values->new_date,
+					'author' => ( string ) $values->author,
+					'license' => ( string ) $values->license,
+					'mode' => ( string ) $values->mode,
+					'message' => ( string ) $values->message,
+					'link' => ( string ) $values->link,
+					'support' => ( string ) $values->support,
+					'updateable' => ( ( string ) $values->updateable ) === 'true' ? true : false,
+					'origin' => ( ( string ) $values->origin ) === 'true' ? true : false,
+				);
+				
+				if( ! isset( $value['version'] ) )
+				{
+					$note = $lang_module['extNote1'];
 					$cl = 'Note1';
 				}
-				elseif( empty( $values['u_version'] ) )
+				elseif( empty( $value['new_version'] ) )
 				{
-					$note = sprintf( $lang_module['moduleNote3'], $values['link'] );
+					$note = sprintf( $lang_module['extNote3'], $value['link'] );
 					$cl = 'Note3';
 				}
-				elseif( nv_version_compare( $values['u_version'], $values['version'] ) < 0 )
+				elseif( nv_version_compare( $value['version'], $value['new_version'] ) < 0 )
 				{
-					$note = sprintf( $lang_module['moduleNote4'], $values['link'] );
+					$note = sprintf( $lang_module['extNote4'], $value['link'] );
 					$cl = 'Note4';
 				}
 				else
 				{
-					$note = $lang_module['moduleNote5'];
+					$note = $lang_module['extNote5'];
 					$cl = 'Note5';
 				}
 
 				$info = $lang_module['userVersion'] . ': ';
-				$info .= ! empty( $values['u_version'] ) ? $values['u_version'] : 'n/a';
+				$info .= ! empty( $value['version'] ) ? $value['version'] : 'n/a';
 				$info .= '; ' . $lang_module['onlineVersion'] . ': ';
-				$info .= ! empty( $values['version'] ) ? $values['version'] : 'n/a';
+				$info .= ! empty( $value['new_version'] ) ? $value['new_version'] : 'n/a';
 
 				$tooltip = array();
-				$tooltip[] = array( 'title' => $lang_module['userVersion'], 'content' => ( ! empty( $values['u_version'] ) ? $values['u_version'] : 'n/a' ) . ( ! empty( $values['u_pubtime'] ) ? ' (' . nv_date( 'd/m/Y H:i', $values['u_pubtime'] ) . ')' : '' ) );
-				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $values['version'] ) ? $values['version'] : 'n/a' ) . ( ! empty( $values['pubtime'] ) ? ' (' . nv_date( 'd/m/Y H:i', $values['pubtime'] ) . ')' : '' ) );
+				$tooltip[] = array( 'title' => $lang_module['userVersion'], 'content' => ( ! empty( $value['version'] ) ? $value['version'] : 'n/a' ) . ( ! empty( $value['date'] ) ? ' (' . nv_date( 'd/m/Y H:i', strtotime( $value['date'] ) ) . ')' : '' ) );
+				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $value['new_version'] ) ? $value['new_version'] : 'n/a' ) . ( ! empty( $value['new_date'] ) ? ' (' . nv_date( 'd/m/Y H:i', strtotime( $value['new_date'] ) ) . ')' : '' ) );
 
-				if( isset( $values['author'] ) and ! empty( $values['author'] ) )
+				if( ! empty( $value['author'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['moduleAuthor'], 'content' => $values['author'] );
+					$tooltip[] = array( 'title' => $lang_module['extAuthor'], 'content' => $value['author'] );
 				}
 
-				if( isset( $values['license'] ) and ! empty( $values['license'] ) )
+				if( ! empty( $value['license'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['moduleLicense'], 'content' => $values['license'] );
+					$tooltip[] = array( 'title' => $lang_module['extLicense'], 'content' => ( string ) $value['license'] );
 				}
 
-				if( isset( $values['mode'] ) and ! empty( $values['mode'] ) )
+				if( ! empty( $value['mode'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['moduleMode'], 'content' => $values['mode'] == 'sys' ? $lang_module['moduleModeSys'] : $lang_module['moduleModeOther'] );
+					$tooltip[] = array( 'title' => $lang_module['extMode'], 'content' => $value['mode'] == 'sys' ? $lang_module['extModeSys'] : $lang_module['extModeOther'] );
 				}
 
-				if( isset( $values['link'] ) and ! empty( $values['link'] ) )
+				if( ! empty( $value['link'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['moduleLink'], 'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>" );
+					$tooltip[] = array( 'title' => $lang_module['extLink'], 'content' => "<a href=\"" . $value['link'] . "\">" . $value['link'] . "</a>" );
 				}
 
-				if( isset( $values['support'] ) and ! empty( $values['support'] ) )
+				if( ! empty( $value['support'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
+					$tooltip[] = array( 'title' => $lang_module['extSupport'], 'content' => "<a href=\"" . $value['support'] . "\">" . $value['support'] . "</a>" );
 				}
 
-				$xtpl->assign( 'MODNAME', $modname );
-				$xtpl->assign( 'MODINFO', $info );
+				$xtpl->assign( 'EXTNAME', ( string ) $value['name'] );
+				$xtpl->assign( 'EXTINFO', $info );
 
 				foreach( $tooltip as $t )
 				{
-					$xtpl->assign( 'MODTOOLTIP', $t );
-					$xtpl->parse( 'modUpd.loop.li' );
+					$xtpl->assign( 'EXTTOOLTIP', $t );
+					$xtpl->parse( 'extUpd.loop.li' );
 				}
 
-				if( ! isset( $values['version'] ) )
+				if( ! isset( $value['version'] ) )
 				{
-					$xtpl->parse( 'modUpd.loop.note1' );
+					$xtpl->parse( 'extUpd.loop.note1' );
 				}
 
-				$xtpl->assign( 'MODCL', $cl );
-				$xtpl->assign( 'MODNOTE', $note );
-				$xtpl->parse( 'modUpd.loop' );
+				$xtpl->assign( 'EXTCL', $cl );
+				$xtpl->assign( 'EXTNOTE', $note );
+				$xtpl->parse( 'extUpd.loop' );
 				++$a;
 			}
 
-			$xtpl->assign( 'MODUPDDATE', nv_date( 'd/m/Y H:i', $modUpdDate ) );
+			$xtpl->assign( 'EXTUPDDATE', nv_date( 'd/m/Y H:i', $extUpdDate ) );
+			$xtpl->assign( 'LINKNEWEXT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=newest' );
 
-			if( ! empty( $newModules ) )
-			{
-				$xtpl->parse( 'modUpd.newMods' );
-			}
-
-			$xtpl->parse( 'modUpd' );
-			echo $xtpl->text( 'modUpd' );
-		}
-		else
-		{
-			$a = 1;
-			foreach( $newModules as $modname => $values )
-			{
-				$tooltip = array();
-				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $values['version'] ) ? $values['version'] : 'n/a' ) . ( ! empty( $values['pubtime'] ) ? ' (' . nv_date( 'd/m/Y H:i', $values['pubtime'] ) . ')' : '' ) );
-
-				if( isset( $values['author'] ) and ! empty( $values['author'] ) )
-				{
-					$tooltip[] = array( 'title' => $lang_module['moduleAuthor'], 'content' => $values['author'] );
-				}
-
-				if( isset( $values['license'] ) and ! empty( $values['license'] ) )
-				{
-					$tooltip[] = array( 'title' => $lang_module['moduleLicense'], 'content' => $values['license'] );
-				}
-
-				if( isset( $values['link'] ) and ! empty( $values['link'] ) )
-				{
-					$modname = "<a href=\"" . $values['link'] . "\" title=\"" . $lang_module['moduleNote2'] . "\">" . $modname . "</a>";
-					$tooltip[] = array( 'title' => $lang_module['moduleLink'], 'content' => "<a href=\"" . $values['link'] . "\">" . $values['link'] . "</a>" );
-				}
-
-				if( isset( $values['support'] ) and ! empty( $values['support'] ) )
-				{
-					$tooltip[] = array( 'title' => $lang_module['moduleSupport'], 'content' => "<a href=\"" . $values['support'] . "\">" . $values['support'] . "</a>" );
-				}
-
-				$xtpl->assign( 'MODNAME', $modname );
-				$xtpl->assign( 'MODINFO', $values['message'] );
-				$xtpl->assign( 'MODUPDDATE', nv_date( 'd/m/Y H:i', $modUpdDate ) );
-
-				foreach( $tooltip as $t )
-				{
-					$xtpl->assign( 'MODTOOLTIP', $t );
-					$xtpl->parse( 'modsNew.loop.li' );
-				}
-
-				$xtpl->parse( 'modsNew.loop' );
-				++$a;
-			}
-			$xtpl->parse( 'modsNew' );
-			echo $xtpl->text( 'modsNew' );
+			$xtpl->parse( 'extUpd' );
+			echo $xtpl->text( 'extUpd' );
 		}
 	}
 	die();

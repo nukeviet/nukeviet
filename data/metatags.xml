@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <meta>
   <meta_item>
-    <group>http-equiv</group>
-    <value>content-language</value>
-    <content>{CONTENT-LANGUAGE}</content>
-  </meta_item>
-  <meta_item>
-    <group>name</group>
-    <value>language</value>
-    <content>{LANGUAGE}</content>
-  </meta_item>
-  <meta_item>
     <group>name</group>
     <value>author</value>
     <content>{SITE_NAME}</content>

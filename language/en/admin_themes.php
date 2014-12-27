@@ -103,6 +103,7 @@ $lang_module['autoinstall_theme_error_warning_fileexist'] = 'The list is on the 
 $lang_module['autoinstall_theme_checkfile_notice'] = 'To continue the installation , click on CHECK the system will check automatically for compatibility';
 $lang_module['autoinstall_theme_checkfile'] = 'CHECK !';
 $lang_module['autoinstall_theme_installdone'] = 'Install ...';
+$lang_module['autoinstall_theme_error_downloaded'] = 'Error: Can not find downloaded files';
 $lang_module['autoinstall_theme_error_invalidfile'] = 'Error: Invalid zip file';
 $lang_module['autoinstall_theme_error_invalidfile_back'] = 'Back';
 $lang_module['autoinstall_package_processing'] = 'please wait to complete...';

@@ -13,11 +13,15 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$contents = '';
+if( isset( $array_op[0] ) )
+{
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+	exit();
+}
 
 if( ! $global_config['allowuserlogin'] )
 {
-	$contents .= user_info_exit( $lang_module['notallowuserlogin'] );
+	$contents = user_info_exit( $lang_module['notallowuserlogin'] );
 }
 else
 {
@@ -34,11 +38,11 @@ else
 		{
 			$array_login['openid_info'] .= "<br />" . $lang_module['or_activate_account'];
 		}
-		$contents .= user_login( $gfx_chk, $array_login );
+		$contents = user_login( $gfx_chk, $array_login );
 	}
 	else
 	{
-		$contents .= user_welcome();
+		$contents = user_welcome();
 	}
 }
 

@@ -239,6 +239,17 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	KEY onl_time (onl_time)
 ) ENGINE=MEMORY";
 
+$sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
+	name varchar(50) NOT NULL DEFAULT '',
+	value mediumtext NOT NULL,
+	domain varchar(100) NOT NULL DEFAULT '',
+	path varchar(100) NOT NULL DEFAULT '',
+	expires int(11) NOT NULL DEFAULT '0',
+	secure tinyint(1) NOT NULL DEFAULT '0',
+	UNIQUE KEY cookiename (name, domain, path),
+	KEY name (name)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 	lang char(2) NOT NULL,
 	module varchar(50) NOT NULL,
@@ -254,17 +265,21 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language 
 	PRIMARY KEY (lang)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_modules (
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extensions (
+	id int(11) NOT NULL DEFAULT '0',
+	type varchar(10) NOT NULL DEFAULT 'other',
 	title varchar(55) NOT NULL,
-	is_sysmod tinyint(1) NOT NULL DEFAULT '0',
+	is_sys tinyint(1) NOT NULL DEFAULT '0',
 	virtual tinyint(1) NOT NULL DEFAULT '0',
-	module_file varchar(50) NOT NULL DEFAULT '',
-	module_data varchar(55) NOT NULL DEFAULT '',
-	mod_version varchar(50) NOT NULL,
+	basename varchar(50) NOT NULL DEFAULT '',
+	table_prefix varchar(55) NOT NULL DEFAULT '',
+	version varchar(50) NOT NULL,
 	addtime int(11) NOT NULL DEFAULT '0',
 	author text NOT NULL,
 	note varchar(255) DEFAULT '',
-	PRIMARY KEY (title)
+	UNIQUE KEY title (type, title),
+	KEY id (id),
+	KEY type (type)
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (

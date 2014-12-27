@@ -40,6 +40,10 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		}
 	}
 
+	if( $sys_info['allowed_set_time_limit'] )
+	{
+		set_time_limit( 1200 );
+	}
 	foreach( $array_dir as $dir )
 	{
 		if( $ftp_check_login == 1 )

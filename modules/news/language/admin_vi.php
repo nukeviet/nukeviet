@@ -183,6 +183,7 @@ $lang_module['showtooltip_length'] = 'Số ký tự';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
 $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
+$lang_module['imgpositiondefault'] = 'Cấu hình mặc định, Trình bày hình trong bài viết khi đăng bài';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
 $lang_module['imgposition_2'] = 'Hiển thị dưới phần mở đầu';
@@ -267,7 +268,4 @@ $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo quyền tác giả của module';
 $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
-
 $lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
-
-?>

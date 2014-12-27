@@ -62,7 +62,6 @@ if( empty( $contents ) )
 
 	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' or $set_view_page )
 	{
-		$st_links = 2 * $st_links;
 		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
 
 		$db->sqlreset()

@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <!-- BEGIN: facebookjssdk -->
 <div id="fb-root"></div>
 <script type="text/javascript">
@@ -238,6 +239,8 @@
 <!-- BEGIN: commentfacebook -->
     <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="620"></div>
 <!-- END: commentfacebook -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 
 <!-- BEGIN: no_permission -->

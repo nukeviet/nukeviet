@@ -1,16 +1,18 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
+	<table class="table table-striped table-bordered table-hover form-inline">
 		<thead>
 			<tr>
-				<td colspan="7"> {LANG.block_select_module}:
-				<select name="module">
+				<td colspan="7">
+				<label class="control-label">{LANG.block_select_module}:</label>
+				<select name="module" class="form-control">
 					<option value="">{LANG.block_select_module}</option>
 					<!-- BEGIN: module -->
 					<option value="{MODULE.key}"{MODULE.selected}>{MODULE.title}</option>
 					<!-- END: module -->
-				</select> {LANG.block_func}
-				<select name="function">
+				</select>
+				<label class="control-label">{LANG.block_func}:</label>
+				<select name="function" class="form-control">
 					<option value="">{LANG.block_select_function}</option>
 					<!-- BEGIN: function -->
 					<option value="{FUNCTION.key}"{FUNCTION.selected}>{FUNCTION.title}</option>
@@ -29,20 +31,25 @@
 		</thead>
 		<tfoot>
 			<tr class="aright">
-				<td colspan="7"><em class="fa fa-plus-sign fa-lg">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a><span style="width: 100px; display: inline-block;">&nbsp;</span><span> <a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; <a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a> </span></td>
+				<td colspan="7">
+					<em class="fa fa-plus-circle fa-lg">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; 
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a>&nbsp;&nbsp; 
+					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; 
+					<em class="fa fa-square-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a>&nbsp;&nbsp; 
+				</td>
 			</tr>
 		</tfoot>
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
 				<td>
-				<select class="order" title="{ROW.bid}">
+				<select class="order form-control" title="{ROW.bid}">
 					<!-- BEGIN: order -->
 					<option value="{ORDER.key}"{ORDER.selected}>{ORDER.key}</option>
 					<!-- END: order -->
 				</select></td>
 				<td>
-				<select name="listpos" title="{ROW.bid}">
+				<select name="listpos" title="{ROW.bid}" class="form-control">
 					<!-- BEGIN: position -->
 					<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
 					<!-- END: position -->

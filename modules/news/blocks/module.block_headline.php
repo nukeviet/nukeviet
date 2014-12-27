@@ -166,7 +166,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 						$xtpl->assign( 'TITLE', 'title="' . $lastest['title'] . '"' );
 					}
 					
-					$lastest['hometext'] = nv_clean60( $lastest['hometext'], $block_config['tooltip_length'] );
+					$lastest['hometext'] = nv_clean60( $lastest['hometext'], $block_config['tooltip_length'], true );
 					$xtpl->assign( 'LASTEST', $lastest );
 					$xtpl->parse( 'main.loop_tabs_content.content.loop' );
 				}

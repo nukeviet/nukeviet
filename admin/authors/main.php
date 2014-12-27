@@ -103,7 +103,7 @@ if( $numrows )
 		{
 			if( $row['lev'] == 1 )
 			{
-				$thead['edit'] = 0;
+				$thead['edit'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? 1 : 0;
 				$thead['chg_is_suspend'] = 0;
 				$thead['del'] = 0;
 			}

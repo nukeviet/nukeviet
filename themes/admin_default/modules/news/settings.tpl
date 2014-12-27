@@ -7,7 +7,7 @@
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_view}</caption>
 			<tbody>
 				<tr>
-					<td><strong>{LANG.setting_indexfile}</strong></td>
+					<th>{LANG.setting_indexfile}</th>
 					<td>
 					<select class="form-control" name="indexfile">
 						<!-- BEGIN: indexfile -->
@@ -16,19 +16,19 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_homesite}</strong></td>
+					<th>{LANG.setting_homesite}</th>
 					<td><input class= "form-control" type="text" value="{DATA.homewidth}" name="homewidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.homeheight}" name="homeheight" /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_thumbblock}</strong></td>
+					<th>{LANG.setting_thumbblock}</th>
 					<td><input class= "form-control" type="text" value="{DATA.blockwidth}" name="blockwidth" /><span class="text-middle"> x </span><input class= "form-control" type="text" value="{DATA.blockheight}" name="blockheight" /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_imagefull}</strong></td>
+					<th>{LANG.setting_imagefull}</th>
 					<td><input class= "form-control" type="text" value="{DATA.imagefull}" name="imagefull" /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_per_page}</strong></td>
+					<th>{LANG.setting_per_page}</th>
 					<td>
 					<select class="form-control" name="per_page">
 						<!-- BEGIN: per_page -->
@@ -37,7 +37,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_st_links}</strong></td>
+					<th>{LANG.setting_st_links}</th>
 					<td>
 					<select class="form-control" name="st_links">
 						<!-- BEGIN: st_links -->
@@ -46,7 +46,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.showtooltip}</strong></td>
+					<th>{LANG.showtooltip}</th>
 					<td>
 						<input type="checkbox" value="1" name="showtooltip"{SHOWTOOLTIP}/>
 						&nbsp;&nbsp;&nbsp;<span class="text-middle">{LANG.showtooltip_position}</span>
@@ -60,28 +60,29 @@
 					</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.showhometext}</strong></td>
+					<th>{LANG.showhometext}</th>
 					<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.socialbutton}</strong></td>
+					<th>{LANG.socialbutton}</th>
 					<td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.allowed_rating_point}</strong></td>
+					<th>{LANG.allowed_rating_point}</th>
 					<td>
-					<select class="form-control" name="allowed_rating_point">
-						<!-- BEGIN: allowed_rating_point -->
-						<option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
-						<!-- END: allowed_rating_point -->
-					</select></td>
+						<select class="form-control" name="allowed_rating_point">
+							<!-- BEGIN: allowed_rating_point -->
+							<option value="{RATING_POINT.key}"{RATING_POINT.selected}>{RATING_POINT.title}</option>
+							<!-- END: allowed_rating_point -->
+						</select>
+					</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.show_no_image}</strong></td>
+					<th>{LANG.show_no_image}</th>
 					<td><input class="form-control" name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" style="width:340px;" type="text"/> <input value="{GLANG.browse_image}" name="selectimg" type="button" class="btn btn-info"/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.config_source}</strong></td>
+					<th>{LANG.config_source}</th>
 					<td>
 					<select class="form-control" name="config_source">
 						<!-- BEGIN: config_source -->
@@ -90,7 +91,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_copyright}</strong></td>
+					<th>{LANG.setting_copyright}</th>
 					<td><textarea class="form-control" style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
 				</tr>
 			</tbody>
@@ -101,15 +102,15 @@
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_post}</caption>
 			<tbody>
 				<tr>
-					<td><strong>{LANG.facebookAppID}</strong></td>
+					<th>{LANG.facebookAppID}</th>
 					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.tags_alias}</strong></td>
+					<th>{LANG.tags_alias}</th>
 					<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.structure_image_upload}</strong></td>
+					<th>{LANG.structure_image_upload}</th>
 					<td>
 					<select class="form-control" name="structure_upload">
 						<!-- BEGIN: structure_upload -->
@@ -118,11 +119,21 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_auto_tags}</strong></td>
+					<th>{LANG.imgpositiondefault}</th>
+					<td>
+						<select class="form-control" name="imgposition">
+							<!-- BEGIN: looppos -->
+							<option value="{id_imgposition}" {posl}>{title_imgposition}</option>
+							<!-- END: looppos -->
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>{LANG.setting_auto_tags}</th>
 					<td><input type="checkbox" value="1" name="auto_tags"{AUTO_TAGS}/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_tags_remind}</strong></td>
+					<th>{LANG.setting_tags_remind}</th>
 					<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
 				</tr>
 			</tbody>

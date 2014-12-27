@@ -123,7 +123,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		
 		foreach( $array_block_news as $array_news )
 		{
-			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'] );
+			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'], true );
 			$xtpl->assign( 'blocknews', $array_news );
 			if( ! empty( $array_news['imgurl'] ) )
 			{

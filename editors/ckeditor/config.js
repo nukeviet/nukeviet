@@ -6,12 +6,12 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
 	config.allowedContent = true;
-	config.extraPlugins = 'autosave,video';
+	config.extraPlugins = 'video';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
 	config.youtube_related = false;
-	config.youtube_older = true;
+	config.youtube_older = false;
 	config.youtube_privacy = false;
 	config.youtube_autoplay = true;
 	config.codeSnippet_theme = 'github';
@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
 	    { name: 'styles' },
 	    { name: 'colors' },
 	];
-	
+
 	config.toolbar_Basic =
 	[
 		{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },

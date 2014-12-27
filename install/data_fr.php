@@ -10,6 +10,9 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+// Check theme modern
+$is_exists_theme_modern = file_exists( NV_ROOTDIR . '/themes/modern/config.ini' );
+
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 $sth->execute( array('about', 'page', 'about', 'À propos', '', 1276333182, 1, 1, '', '', '', '', '6', 1, 1, '', 0, 0) );
@@ -84,76 +87,84 @@ $sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES  (?, ?, ?)' );
-$sth->execute( array(0, 'body-right', 'modern') );
 $sth->execute( array(0, 'left-body-right', 'default') );
-$sth->execute( array(2, 'body', 'modern') );
 $sth->execute( array(2, 'left-body-right', 'default') );
-$sth->execute( array(5, 'body-right', 'modern') );
 $sth->execute( array(5, 'left-body-right', 'default') );
-$sth->execute( array(6, 'body-right', 'modern') );
 $sth->execute( array(6, 'left-body-right', 'default') );
-$sth->execute( array(7, 'body-right', 'modern') );
 $sth->execute( array(7, 'left-body-right', 'default') );
-$sth->execute( array(13, 'body-right', 'modern') );
 $sth->execute( array(13, 'left-body-right', 'default') );
-$sth->execute( array(15, 'body-right', 'modern') );
 $sth->execute( array(15, 'left-body-right', 'default') );
-$sth->execute( array(16, 'body-right', 'modern') );
 $sth->execute( array(16, 'left-body-right', 'default') );
-$sth->execute( array(17, 'body-right', 'modern') );
 $sth->execute( array(17, 'left-body-right', 'default') );
-$sth->execute( array(18, 'body-right', 'modern') );
 $sth->execute( array(18, 'left-body-right', 'default') );
-$sth->execute( array(19, 'body-right', 'modern') );
-$sth->execute( array(19, 'left-body-right', 'default') );
-$sth->execute( array(20, 'body-right', 'modern') );
 $sth->execute( array(20, 'left-body-right', 'default') );
-$sth->execute( array(21, 'body-right', 'modern') );
 $sth->execute( array(21, 'left-body-right', 'default') );
-$sth->execute( array(22, 'body-right', 'modern') );
 $sth->execute( array(22, 'left-body-right', 'default') );
-$sth->execute( array(23, 'body-right', 'modern') );
 $sth->execute( array(23, 'left-body-right', 'default') );
-$sth->execute( array(24, 'body-right', 'modern') );
 $sth->execute( array(24, 'left-body-right', 'default') );
-$sth->execute( array(25, 'body-right', 'modern') );
 $sth->execute( array(25, 'left-body-right', 'default') );
-$sth->execute( array(26, 'body-right', 'modern') );
+$sth->execute( array(19, 'left-body-right', 'default') );
 $sth->execute( array(26, 'left-body-right', 'default') );
-$sth->execute( array(27, 'body-right', 'modern') );
 $sth->execute( array(27, 'left-body-right', 'default') );
-$sth->execute( array(28, 'body', 'modern') );
 $sth->execute( array(28, 'left-body', 'default') );
-$sth->execute( array(29, 'body', 'modern') );
 $sth->execute( array(29, 'left-body', 'default') );
-$sth->execute( array(30, 'body', 'modern') );
 $sth->execute( array(30, 'left-body', 'default') );
-$sth->execute( array(31, 'body', 'modern') );
 $sth->execute( array(31, 'left-body', 'default') );
-$sth->execute( array(32, 'body', 'modern') );
 $sth->execute( array(32, 'left-body', 'default') );
-$sth->execute( array(33, 'body', 'modern') );
 $sth->execute( array(33, 'left-body', 'default') );
-$sth->execute( array(34, 'body', 'modern') );
 $sth->execute( array(34, 'left-body', 'default') );
-$sth->execute( array(36, 'body-right', 'modern') );
 $sth->execute( array(36, 'left-body-right', 'default') );
-$sth->execute( array(39, 'body-right', 'modern') );
 $sth->execute( array(39, 'left-body-right', 'default') );
-$sth->execute( array(42, 'body-right', 'modern') );
 $sth->execute( array(42, 'left-body-right', 'default') );
-$sth->execute( array(43, 'body-right', 'modern') );
 $sth->execute( array(43, 'left-body-right', 'default') );
-$sth->execute( array(46, 'body-right', 'modern') );
 $sth->execute( array(46, 'left-body-right', 'default') );
-$sth->execute( array(47, 'body', 'modern') );
 $sth->execute( array(47, 'left-body-right', 'default') );
-$sth->execute( array(48, 'body-right', 'modern') );
 $sth->execute( array(48, 'left-body-right', 'default') );
-$sth->execute( array(52, 'body-right', 'modern') );
 $sth->execute( array(52, 'left-body-right', 'default') );
-$sth->execute( array(53, 'body', 'modern') );
 $sth->execute( array(53, 'body', 'default') );
+$sth->execute( array(35, 'left-body-right', 'default') );
+$sth->execute( array(50, 'left-body-right', 'default') );
+
+if( $is_exists_theme_modern )
+{
+	$sth->execute( array(0, 'body-right', 'modern') );
+	$sth->execute( array(2, 'body', 'modern') );
+	$sth->execute( array(5, 'body-right', 'modern') );
+	$sth->execute( array(6, 'body-right', 'modern') );
+	$sth->execute( array(7, 'body-right', 'modern') );
+	$sth->execute( array(13, 'body-right', 'modern') );
+	$sth->execute( array(15, 'body-right', 'modern') );
+	$sth->execute( array(16, 'body-right', 'modern') );
+	$sth->execute( array(17, 'body-right', 'modern') );
+	$sth->execute( array(18, 'body-right', 'modern') );
+	$sth->execute( array(19, 'body-right', 'modern') );
+	$sth->execute( array(20, 'body-right', 'modern') );
+	$sth->execute( array(21, 'body-right', 'modern') );
+	$sth->execute( array(22, 'body-right', 'modern') );
+	$sth->execute( array(23, 'body-right', 'modern') );
+	$sth->execute( array(24, 'body-right', 'modern') );
+	$sth->execute( array(25, 'body-right', 'modern') );
+	$sth->execute( array(26, 'body-right', 'modern') );
+	$sth->execute( array(27, 'body-right', 'modern') );
+	$sth->execute( array(28, 'body', 'modern') );
+	$sth->execute( array(29, 'body', 'modern') );
+	$sth->execute( array(30, 'body', 'modern') );
+	$sth->execute( array(31, 'body', 'modern') );
+	$sth->execute( array(32, 'body', 'modern') );
+	$sth->execute( array(33, 'body', 'modern') );
+	$sth->execute( array(34, 'body', 'modern') );
+	$sth->execute( array(36, 'body-right', 'modern') );
+	$sth->execute( array(39, 'body-right', 'modern') );
+	$sth->execute( array(42, 'body-right', 'modern') );
+	$sth->execute( array(43, 'body-right', 'modern') );
+	$sth->execute( array(46, 'body-right', 'modern') );
+	$sth->execute( array(47, 'body', 'modern') );
+	$sth->execute( array(48, 'body-right', 'modern') );
+	$sth->execute( array(52, 'body-right', 'modern') );
+	$sth->execute( array(53, 'body', 'modern') );
+	$sth->execute( array(35, 'body-right', 'modern') );
+	$sth->execute( array(50, 'body-right', 'modern') );
+}
 
 $sth->execute( array(0, 'body', 'mobile_nukeviet') );
 $sth->execute( array(2, 'body', 'mobile_nukeviet') );
@@ -188,13 +199,7 @@ $sth->execute( array(43, 'body', 'mobile_nukeviet') );
 $sth->execute( array(46, 'body', 'mobile_nukeviet') );
 $sth->execute( array(47, 'body', 'mobile_nukeviet') );
 $sth->execute( array(48, 'body', 'mobile_nukeviet') );
-
-$sth->execute( array(35, 'body-right', 'modern') );
-$sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(35, 'body', 'mobile_nukeviet') );
-
-$sth->execute( array(50, 'body-right', 'modern') );
-$sth->execute( array(50, 'left-body-right', 'default') );
 $sth->execute( array(50, 'body', 'mobile_nukeviet') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
@@ -207,19 +212,24 @@ $sth->execute( array(5, 'default', 'users', 'global.voting_random.php', 'Identif
 $sth->execute( array(6, 'default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
 $sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'À Propos', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
-$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
-$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
-$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
-$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Bannière Top', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
-$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 4. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
-$sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
+
+if( $is_exists_theme_modern )
+{
+	$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'Nouvelles', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
+	$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'À Propos', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+	$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Identification', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
+	$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Sondage', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
+	$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Statistiques', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
+	$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
+	$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Bannière Top', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
+	$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
+}
+
+$sth->execute( array(20, 'mobile_nukeviet', 'menu', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
@@ -405,17 +415,17 @@ if( $result->fetchColumn() )
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
 if( $result->fetchColumn() )
 {
-	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '', '', '', :bodytext, '', 0, 4, '', '', 0, 1, 1, 1280634933, 1280634933, 1)");
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (1, 'Qu’est ce que Nukeviet?', 'Qu-est-ce-que-Nukeviet', '', '', '', :bodytext, '', 0, 4, '', 0, 1, 1, 1280634933, 1280634933, 1)");
 	$bodytext = "<p> NukeViet est un système de gestion de contenu open source. Les utilisateurs l’appellent habituellement Portail parce qu&#039;il est capable d&#039;intégrer plusieurs applications sur le Web. Nguyễn Anh Tú, un ex-étudiant vietnamien en Russie, avec la communauté a développé NukeViet en une application purement vietnamienne en basant sur PHP-Nuke. Similaire à PHP-Nuke, NukeViet est écrit en langage PHP et utilise la base de données MySQL, permet aux utilisateurs de publier, de gérer facilement leur contenu sur Internet ou Intranet.<br />  </p><p> <strong>* Fonctionnalités de base de NukeViet: </strong></p><p> - News: Gestion d’articles: créer les articles multi-niveau, générer la page d’impression, permettre le téléchargement, les commentaires.</p><p> -&nbsp; Download: Gestion de téléchargement des fichier</p><p> - Vote: sondage</p><p> - Contact</p><p> -&nbsp; Search: Rechercher</p><p> -&nbsp; RSS</p><p> <strong>* Caractéristiques: </strong></p><p> - Supporter le multi-langage</p><p> - Permettre le changement de l’interface (theme)</p><p> - Monter le pare-feu pour limiter DDOS ...</p><p> Nukeviet est utilisé dans de nombreux sites Web, de sites personnels aux sites professionnels. Il offre de nombreux services et applications grâce à la capacité d&#039;accroître la fonctionnalité en installant des modules, blocks additionnels ... Cependant, Nukeviet est utilisé principalement pour les sites d’actualités vietnamiens par ce que son module News conforme bien aux exigences et habitudes des Vietnamiens. Il est très facile d’installer, de gérer Nukeviet, même avec les débutants, il est donc un système favorable des amateurs.</p><p> NukeViet est open source, et totalement gratuit pour tout de monde de tous les pays. Toutefois, les Vietnamiens sont les utilisateurs principales en raison des caractéristiques de la code source (provenant de PHP-Nuke) et de la politique des développeurs &quot;Système de Portail Pour les Vietnamiens&quot;.</p>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
 
-	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (2, 'Introduction de NukeViet 3', 'Introduction-de-NukeViet-3', '', '', '', :bodytext, '', 0, 4, '', '', 0, 3, 1, 1280637520, 1280637520, 1) ");
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (2, 'Introduction de NukeViet 3', 'Introduction-de-NukeViet-3', '', '', '', :bodytext, '', 0, 4, '', 0, 3, 1, 1280637520, 1280637520, 1) ");
 	$bodytext = "<p> NukeViet 3 est une nouvelle génération de Système de Gestion de Contenu développée par les Vietnamiens. Pour la première fois au Vietnam, un noyau de Open Source ouverte est investi professionnelement en financement, en ressources humaines et en temps. Le résultat est que 100% de ligne de code de NukeViet est écrit entièrement neuf. Nukeviet 3.0 utilise XHTML, CSS et jQuery avec Xtemplate permettant une application souple de Ajax, même au niveau de noyau.</p><p> Profiter les fruits de Open Source, mais chaque ligne de code de NukeViet est écrit manuellement. NukeViet 3 n&#039;utilise aucune plateforme. Cela signifie que Nukeviet 3 est complètement indépendant dans son développemnt. Il est très facile à lire, à comprendre le code de NukeViet pour programmer tout seul si vous avez les connaissances de base sur PHP et MySQL. NukeViet 3.0 est complètement ouvert et facile à apprendre pour tous ceux qui veulent étudier le code de NukeViet.</p><p> Hériter la simplicité de Nukeviet mais NukeViet 3 n&#039;oublie pas de se renouveller. Le système de Nukeviet 3 supporte le multi-noyau du module. Nous appelons cela la technologie de virtualisation de module. Cette technologie permet aux utilisateurs de créer automatiquement de milliers de modules sans toucher une seule ligne de code. Le module né de cette technologie est appelé module virtuel. Il est cloné à partir de n&#039;importe quel module du système de NukeViet si ce module-ci permet la création des modules virtuels.</p><p> NukeViet 3 prend en charge l&#039;installation automatique de modules, de blocks, de thèmes dans la section d&#039;administration, les utilisateurs peuvent installer le module sans faire de tâches complexes. NukeViet 3.0 permet également le paquetage des modules pour partager aux autres utilisateus.</p><p> Le multi-langage de NukeViet 3 est parfait avec le multi-langage de l&#039;interface et celui de données. NukeViet 3.0 supporte aux administrateurs de créer facilement de nouvelles langues pour le site. Le paquetage des fichiers de langue est également supporté pour faciliter la contribution du travai à la communauté.</p><p> L&#039;histoire de NukeViet sera encore très longue&nbsp; par ce qu’une variété de fonctionnalités avancées sont encore en cours d&#039;élaboration.</p><p> Utilisez et diffusez NukeViet 3 pour jouir les récents fruits de la technologies de web open source.</p><p> Enfin, NukeViet 3 est un cadeau que VINADES voudrait envoyer à la communauté pour remercier son soutient. NukeViet retourne maintenant à la communauté dans l’espoir à son développement continu.</p><p> Si vous intéressez à NukeViet, n’hésitez pas à nous joindre au Forum de NukeViet.Vn.</p>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
 
-	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (3, 'Ouverture de VINADES', 'Ouverture-de-VINADES', '', '', '', :bodytext, '', 0, 4, '', '', 0, 2, 1, 1280637944, 1280637944, 1)" );
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (3, 'Ouverture de VINADES', 'Ouverture-de-VINADES', '', '', '', :bodytext, '', 0, 4, '', 0, 2, 1, 1280637944, 1280637944, 1)" );
 	$bodytext = "<p> Depuis quelques années, NukeViet est devenu une application Open Source tres familière de la communauté informatique du Vietnam. Étant donnée qu&#039;il n&#039;y a pas encore les activités officielles, Nukeviet est utilisé dans presque toutes les domaines, de l&#039;actualité, de la commerce électronique, de site personnel aux site professionle.<br />  </p><p> Pour professionaliser la publication de NukeViet,&nbsp; l&#039;administration de NukeViet a décidé de créer une société spécialisant la&nbsp; gestion de NukeViet avec la raison sociale en vietnamien “Công ty cổ phần Phát triển Nguồn mở Việt Nam”, en anglais &quot;VIET NAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY&quot; et en abrégé VINADES.,JSC. Cette société est ouverte officiellement au&nbsp; 25-2-2010 avec le bureau à&nbsp; Chambre 2004 – CT2 Nang Huong building, 583 Nguyen Trai, Hanoi, Vietnam. Son but est de développer et de diffuser NukeViet au Vietnam.<br /> <br /> D&#039;après M. Nguyễn Anh Tú, président de VINADES, cette société développera le source de NukeViet sous forme open source, professionnel, et totalement gratuit selon l&#039;esprit mondial de open source.<br /> <br /> NukeViet est un système de gestion de contenu open source (Open Source Content Management System) purement vietnamien développé à la base de PHP-Nuke et base de données MySQL. Les utilisateurs l&#039;appellent habituellement Portail par ce qu&#039;ils puissent intégrer de multiples applications permettant la publication et la gestion facile de contenu sur l&#039;internet ou sur l&#039;intranet.</p><p> <br /> NukeViet peut fournir plusieurs services et appliations grace aux modules, blocks... L&#039;installation, la gestion de NukeViet 3 est très facile,&nbsp; même avec les débutants.</p><p> Pour avoir les details plus amples sur NukeViet, veuillez consulter le site http://nukeviet.vn.</p>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();

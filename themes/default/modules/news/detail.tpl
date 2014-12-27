@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <!-- BEGIN: facebookjssdk -->
 <div id="fb-root"></div>
 <script type="text/javascript">
@@ -36,7 +37,7 @@
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
 			<div class="imghome pull-left text-center" style="width:{DETAIL.image.width}px;">
-				<a href="{DETAIL.homeimgfile}" title="{DETAIL.image.note}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" /></a>
+				<a href="{DETAIL.homeimgfile}" title="{DETAIL.image.alt}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" /></a>
 				<em>{DETAIL.image.note}</em>
 			</div>
 			<!-- END: imgthumb -->
@@ -231,14 +232,16 @@
 $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 	<!-- BEGIN: tooltip -->
-	$("[data-rel='tooltip']").tooltip({
+	$("[data-rel='tooltip'][data-content!='']").tooltip({
 		placement: "{TOOLTIP_POSITION}",
 		html: true,
-		title: function(){return '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" /><p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
 	});
 	<!-- END: tooltip -->
 });
 </script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
 <div class="alert alert-info">

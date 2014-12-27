@@ -23,19 +23,6 @@ $lang_module['featured'] = 'Recommend';
 $lang_module['downloaded'] = 'Downloaded';
 $lang_module['favorites'] = 'Bookmarks';
 
-$lang_module['error_code_1'] = 'Address is invalid';
-$lang_module['error_code_2'] = 'HTTP protocol banned for this query.';
-$lang_module['error_code_3'] = 'Folder containing the file will be saved can not be written.';
-$lang_module['error_code_4'] = 'No utility that supports HTTP protocol.';
-$lang_module['error_code_5'] = 'There were too many redirect.';
-$lang_module['error_code_6'] = 'SSL certificate can not be checked.';
-$lang_module['error_code_7'] = 'HTTP request failed.';
-$lang_module['error_code_8'] = 'Could not save data to a temporary file.';
-$lang_module['error_code_9'] = 'Processing functions fopen() failed for file.';
-$lang_module['error_code_10'] = 'HTTP request failed with Curl.';
-$lang_module['error_code_11'] = 'There was an unknown error occurred.';
-
-$lang_module['error_valid_response'] = 'Data returns nonstandard.';
 $lang_module['empty_response'] = 'There is not any data in accordance with the requirements.';
 
 $lang_module['author'] = 'Author';
@@ -73,8 +60,6 @@ $lang_module['file_type_0'] = 'Unknow';
 $lang_module['file_type_1'] = 'Install file';
 $lang_module['file_type_2'] = 'Docs file';
 $lang_module['file_type_3'] = 'Others';
-
-$lang_module['develop_note'] = 'This feature is currently in development process';
 
 $lang_module['search_key'] = 'Enter keywords';
 $lang_module['search_go'] = 'Search';

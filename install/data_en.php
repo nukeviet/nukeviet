@@ -7,7 +7,11 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
+// Check theme modern
+$is_exists_theme_modern = file_exists( NV_ROOTDIR . '/themes/modern/config.ini' );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -83,76 +87,84 @@ $sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
-$sth->execute( array(0, 'body-right', 'modern') );
 $sth->execute( array(0, 'left-body-right', 'default') );
-$sth->execute( array(2, 'body', 'modern') );
 $sth->execute( array(2, 'left-body-right', 'default') );
-$sth->execute( array(5, 'body-right', 'modern') );
 $sth->execute( array(5, 'left-body-right', 'default') );
-$sth->execute( array(6, 'body-right', 'modern') );
 $sth->execute( array(6, 'left-body-right', 'default') );
-$sth->execute( array(7, 'body-right', 'modern') );
 $sth->execute( array(7, 'left-body-right', 'default') );
-$sth->execute( array(13, 'body-right', 'modern') );
 $sth->execute( array(13, 'left-body-right', 'default') );
-$sth->execute( array(15, 'body-right', 'modern') );
 $sth->execute( array(15, 'left-body-right', 'default') );
-$sth->execute( array(16, 'body-right', 'modern') );
 $sth->execute( array(16, 'left-body-right', 'default') );
-$sth->execute( array(17, 'body-right', 'modern') );
 $sth->execute( array(17, 'left-body-right', 'default') );
-$sth->execute( array(18, 'body-right', 'modern') );
 $sth->execute( array(18, 'left-body-right', 'default') );
-$sth->execute( array(19, 'body-right', 'modern') );
 $sth->execute( array(19, 'left-body-right', 'default') );
-$sth->execute( array(20, 'body-right', 'modern') );
 $sth->execute( array(20, 'left-body-right', 'default') );
-$sth->execute( array(21, 'body-right', 'modern') );
 $sth->execute( array(21, 'left-body-right', 'default') );
-$sth->execute( array(22, 'body-right', 'modern') );
 $sth->execute( array(22, 'left-body-right', 'default') );
-$sth->execute( array(23, 'body-right', 'modern') );
 $sth->execute( array(23, 'left-body-right', 'default') );
-$sth->execute( array(24, 'body-right', 'modern') );
 $sth->execute( array(24, 'left-body-right', 'default') );
-$sth->execute( array(25, 'body-right', 'modern') );
 $sth->execute( array(25, 'left-body-right', 'default') );
-$sth->execute( array(26, 'body-right', 'modern') );
 $sth->execute( array(26, 'left-body-right', 'default') );
-$sth->execute( array(27, 'body-right', 'modern') );
 $sth->execute( array(27, 'left-body-right', 'default') );
-$sth->execute( array(28, 'body', 'modern') );
 $sth->execute( array(28, 'left-body', 'default') );
-$sth->execute( array(29, 'body', 'modern') );
 $sth->execute( array(29, 'left-body', 'default') );
-$sth->execute( array(30, 'body', 'modern') );
 $sth->execute( array(30, 'left-body', 'default') );
-$sth->execute( array(31, 'body', 'modern') );
 $sth->execute( array(31, 'left-body', 'default') );
-$sth->execute( array(32, 'body', 'modern') );
 $sth->execute( array(32, 'left-body', 'default') );
-$sth->execute( array(33, 'body', 'modern') );
 $sth->execute( array(33, 'left-body', 'default') );
-$sth->execute( array(34, 'body', 'modern') );
 $sth->execute( array(34, 'left-body', 'default') );
-$sth->execute( array(36, 'body-right', 'modern') );
 $sth->execute( array(36, 'left-body-right', 'default') );
-$sth->execute( array(39, 'body-right', 'modern') );
 $sth->execute( array(39, 'left-body-right', 'default') );
-$sth->execute( array(42, 'body-right', 'modern') );
 $sth->execute( array(42, 'left-body-right', 'default') );
-$sth->execute( array(43, 'body-right', 'modern') );
 $sth->execute( array(43, 'left-body-right', 'default') );
-$sth->execute( array(46, 'body-right', 'modern') );
 $sth->execute( array(46, 'left-body-right', 'default') );
-$sth->execute( array(47, 'body', 'modern') );
 $sth->execute( array(47, 'left-body-right', 'default') );
-$sth->execute( array(48, 'body-right', 'modern') );
 $sth->execute( array(48, 'left-body-right', 'default') );
-$sth->execute( array(52, 'body-right', 'modern') );
 $sth->execute( array(52, 'left-body-right', 'default') );
-$sth->execute( array(53, 'body', 'modern') );
 $sth->execute( array(53, 'body', 'default') );
+$sth->execute( array(35, 'left-body-right', 'default') );
+$sth->execute( array(50, 'left-body-right', 'default') );
+
+if( $is_exists_theme_modern )
+{
+	$sth->execute( array(5, 'body-right', 'modern') );
+	$sth->execute( array(0, 'body-right', 'modern') );
+	$sth->execute( array(2, 'body', 'modern') );
+	$sth->execute( array(6, 'body-right', 'modern') );
+	$sth->execute( array(7, 'body-right', 'modern') );
+	$sth->execute( array(13, 'body-right', 'modern') );
+	$sth->execute( array(15, 'body-right', 'modern') );
+	$sth->execute( array(16, 'body-right', 'modern') );
+	$sth->execute( array(17, 'body-right', 'modern') );
+	$sth->execute( array(18, 'body-right', 'modern') );
+	$sth->execute( array(19, 'body-right', 'modern') );
+	$sth->execute( array(20, 'body-right', 'modern') );
+	$sth->execute( array(21, 'body-right', 'modern') );
+	$sth->execute( array(22, 'body-right', 'modern') );
+	$sth->execute( array(23, 'body-right', 'modern') );
+	$sth->execute( array(24, 'body-right', 'modern') );
+	$sth->execute( array(25, 'body-right', 'modern') );
+	$sth->execute( array(26, 'body-right', 'modern') );
+	$sth->execute( array(27, 'body-right', 'modern') );
+	$sth->execute( array(28, 'body', 'modern') );
+	$sth->execute( array(29, 'body', 'modern') );
+	$sth->execute( array(30, 'body', 'modern') );
+	$sth->execute( array(31, 'body', 'modern') );
+	$sth->execute( array(32, 'body', 'modern') );
+	$sth->execute( array(33, 'body', 'modern') );
+	$sth->execute( array(34, 'body', 'modern') );
+	$sth->execute( array(36, 'body-right', 'modern') );
+	$sth->execute( array(39, 'body-right', 'modern') );
+	$sth->execute( array(42, 'body-right', 'modern') );
+	$sth->execute( array(43, 'body-right', 'modern') );
+	$sth->execute( array(46, 'body-right', 'modern') );
+	$sth->execute( array(47, 'body', 'modern') );
+	$sth->execute( array(48, 'body-right', 'modern') );
+	$sth->execute( array(52, 'body-right', 'modern') );
+	$sth->execute( array(53, 'body', 'modern') );
+	$sth->execute( array(35, 'body-right', 'modern') );
+	$sth->execute( array(50, 'body-right', 'modern') );
+}
 
 $sth->execute( array(0, 'body', 'mobile_nukeviet') );
 $sth->execute( array(2, 'body', 'mobile_nukeviet') );
@@ -187,11 +199,7 @@ $sth->execute( array(43, 'body', 'mobile_nukeviet') );
 $sth->execute( array(46, 'body', 'mobile_nukeviet') );
 $sth->execute( array(47, 'body', 'mobile_nukeviet') );
 $sth->execute( array(48, 'body', 'mobile_nukeviet') );
-$sth->execute( array(35, 'body-right', 'modern') );
-$sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(35, 'body', 'mobile_nukeviet') );
-$sth->execute( array(50, 'body-right', 'modern') );
-$sth->execute( array(50, 'left-body-right', 'default') );
 $sth->execute( array(50, 'body', 'mobile_nukeviet') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
@@ -204,19 +212,24 @@ $sth->execute( array(5, 'default', 'users', 'global.login.php', 'Login site', ''
 $sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
 $sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'headline', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
-$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
-$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
-$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
-$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
-$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 4. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
-$sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
+
+if( $is_exists_theme_modern )
+{
+	$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
+	$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
+	$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
+	$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
+	$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
+	$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
+	$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
+	$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
+}
+
+$sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
@@ -444,12 +457,12 @@ if( $result->fetchColumn() )
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='about'" );
 if( $result->fetchColumn() )
 {
-	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (1, 'Welcome to NukeViet 3.0', 'Welcome-to-NukeViet-3-0', '', '', '', :bodytext, '', 0, 4, '', '', 0, 1, 1, 1277266815, 1277266815, 1) ");
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (1, 'Welcome to NukeViet 3.0', 'Welcome-to-NukeViet-3-0', '', '', '', :bodytext, '', 0, 4, '', 0, 1, 1, 1277266815, 1277266815, 1) ");
 	$bodytext = "<p> NukeViet developed by Vietnamese and for Vietnamese. It&#039;s the 1st opensource CMS in Vietnam. Next generation of NukeViet, version 3.0 coding ground up. Support newest web technology, include xHTML, CSS 3, XTemplate, jQuery, AJAX...<br /> <br /> NukeViet&#039;s has it own core libraries build in. So, it&#039;s doesn&#039;t depend on other exists frameworks. With basic knowledge of PHP and MySQL, you can easily using NukeViet for your purposes.<br /> <br /> NukeViet 3 core is simply but powerful. It support modules can be multiply. We called it abstract modules. It help users automatic crea-te many modules without any line of code from any exists module which support crea-te abstract modules.<br /> <br /> NukeViet 3 support automatic setup modules, blocks, themes at Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets.<br /> <br /> NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database langguages. Had features support web master to build new languages. Many advance features still developing. Let use it, distribute it and feel about opensource.<br /> <br /> At last, NukeViet 3 is a thanksgiving gift from VINADES.,JSC to community for all of your supports. And we hoping we going to be a biggest opensource CMS not only in VietNam, but also in the world. :).<br /> <br /> If you had any feedbacks and ideas for NukeViet 3 close beta. Feel free to send email to admin@nukeviet.vn. All are welcome<br /> <br /> Best regard.</p>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();
 
-	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, facebookappid, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (2, 'NukeViet&#039;s versioning schemes', 'NukeViet-s-versioning-schemes', '', '', '', :bodytext, '', 0, 4, '', '', 0, 2, 1, 1277267054, 1277693688, 1)" );
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_about (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (2, 'NukeViet&#039;s versioning schemes', 'NukeViet-s-versioning-schemes', '', '', '', :bodytext, '', 0, 4, '', 0, 2, 1, 1277267054, 1277693688, 1)" );
 	$bodytext = "<p> NukeViet using 2 versioning schemes:<br /> <br /> I. By numbers (technical purposes):<br /> Structure for numbers is:<br /> major.minor.revision<br /> <br /> 1.Major: Major up-date. Probably not backwards compatible with older version.<br /> 2.Minor: Minor change, may introduce new features, but backwards compatibility is mostly retained.<br /> 3.Revision: Minor bug fixes. Packed for testing or pre-release purposes... Closed beta, open beta, RC, Official release.<br /> <br /> II: By names (new version release management)<br /> Main milestones: Closed beta, Open beta, Release candidate, Official.<br /> 1. Closed beta: Limited testing.<br /> characteristics: New features testing. It may not include in official version if doesn&#039;t accord with community. Closed beta&#039;s name can contain unique numbers. Ex: Closed beta 1, closed beta 2,... Features of previous release may not include in it&#039;s next release. Time release is announced by development team. This milestone stop when system haven&#039;t any major changes.<br /> Purposes: Pre-release version to receive feedbacks and ideas from community. Bug fixes for release version.<br /> Release to: Programmers, expert users.<br /> Supports:<br /> &nbsp;&nbsp;&nbsp; Using: None.<br /> &nbsp;&nbsp;&nbsp; Testing: Documents, not include manual.<br /> Upgrade: None.<br /> <br /> 2. Open beta: Public testing.<br /> characteristics: Features testing, contain full features of official version. It&#039;s almost include in official version even if it doesn&#039;t accord with community. This milestone start after closed beta milestone closed and release weekly to fix bugs. Open beta&#039;s name can contain unique numbers. Ex: Open beta 1, open beta 2,... Next release include all features of it&#039;s previous release. Open beta milestone stop when system haven&#039;t any critical issue.<br /> Purposes: Bug fixed which not detect in closed beta.<br /> Release to: All users of nukeviet.vn forum.<br /> Supports:<br /> &nbsp;&nbsp;&nbsp; Using: Limited. Manual and forum supports.<br /> &nbsp;&nbsp;&nbsp; Testing: Full.<br /> Upgrade: None.<br /> <br /> 3. Release Candidate:<br /> characteristics: Most stable version and prepare for official release. Release candidate&#039;s name can contain unique numbers.<br /> Ex: RC 1, RC 2,... by released number.<br /> If detect cretical issue in this milestone. Another Release Candidate version can be release sooner than release time announced by development team.<br /> Purposes: Reduce bugs of using official version.<br /> Release to: All people.<br /> Supports: Full.<br /> Upgrade: Yes.<br /> <br /> 4. Official:<br /> characteristics: 1st stable release of new version. It only using 1 time. Next release using numbers. Release about 2 weeks after Release Candidate milestone stoped.<br /> Purposes: Stop testing and recommend users using new version.</p>";
 	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
 	$sth->execute();

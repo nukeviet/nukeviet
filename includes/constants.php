@@ -119,6 +119,9 @@ define( 'NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC (
 // Phien ban giao dien tu cao den thap - it nhat phai co hai kieu mac dinh khong duoc it hon
 define( 'NV_THEME_TYPE', 'd,t' );
 
+// Vui long khong thay doi gia tri nay
+define( 'NUKEVIET_STORE_APIURL', 'http://api.nukeviet.vn/store/' );
+
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';

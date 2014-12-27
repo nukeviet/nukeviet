@@ -119,25 +119,11 @@
 								<cite>{LANG.content_block}:</cite>
 							</p>
 							<div class="message_body" style="overflow: auto">
-								<div class="clearfix uiTokenizer uiInlineTokenizer">
-		                            <div id="bids" class="tokenarea">
-		                                <!-- BEGIN: default -->
-		                                <span class="uiToken removable" title="{BLOCKS.title}">
-		                                    {BLOCKS.title}
-		                                    <input type="hidden" autocomplete="off" name="bids[]" value="{BLOCKS.bid}" />
-		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
-		                                </span>
-		                                <!-- END: default -->
-		                            </div>
-		                            <div class="uiTypeahead">
-		                                <div class="wrap">
-		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
-		                                    <div class="innerWrap">
-		                                        <input id="bids-search" type="text" placeholder="{LANG.input_title_blocks}" class="form-control textInput" style="width: 100%;" />
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
+                                <!-- BEGIN: loop -->
+									<div class="row">
+										<label><input type="checkbox" value="{BLOCKS.bid}" name="bids[]" {BLOCKS.checked}>{BLOCKS.title}</label>
+									</div>
+                                <!-- END: loop -->
 							</div>
 						</li>
 						<!-- END:block_cat -->

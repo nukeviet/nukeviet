@@ -72,6 +72,7 @@ $lang_module['autoinstall_module_uploadedfile'] = 'File uploaded:';
 $lang_module['autoinstall_module_uploadedfilesize'] = 'Size:';
 $lang_module['autoinstall_module_uploaded_filenum'] = 'Total file & folder';
 $lang_module['autoinstall_module_error_uploadfile'] = 'Fail to upload file. Please check chmod of tmp folder';
+$lang_module['autoinstall_module_error_downloaded'] = 'Error: Can not find file to upload';
 $lang_module['autoinstall_module_error_createfile'] = 'Fail to create file. Please check chmod of tmp folder';
 $lang_module['autoinstall_module_error_invalidfile'] = 'Invalid zip file';
 $lang_module['autoinstall_module_error_warning_overwrite'] = 'Announcement: structure of the module has the file and folder wrong standard, Do you want to continue installed?';
