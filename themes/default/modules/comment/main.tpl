@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/comment/js/user.js"></script>
+<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
 <div id="idcomment" class="nv-fullbg">
 	<div class="row">
 		<hr />
@@ -69,7 +71,9 @@
 <script type="text/javascript">
 $("#sort").change(function() {
 	var key = $('#sort').val();
-	window.location='{BASE_URL_COMM}&sortcomm=' + key;
+	$.post('{BASE_URL_COMM}&nocache=' + new Date().getTime(), 'sortcomm=' + key , function(res) {
+		$('#idcomment').html(res);
+	});
 });
 </script>
 <!-- END: main -->

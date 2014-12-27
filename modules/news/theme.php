@@ -559,7 +559,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	return $xtpl->text( 'main' );
 }
 
-function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array )
+function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment )
 {
 	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
 
@@ -759,9 +759,9 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->parse( 'main.topic' );
 	}
 
-	if( defined( 'NV_COMM_URL' ) )
+	if( !empty( $content_comment ) )
 	{
-		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
 	}
 
