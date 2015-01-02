@@ -177,6 +177,6 @@
 	<div class="clear"></div>
 </div>
 <!-- BEGIN: comment -->
-<iframe src="{NV_COMM_URL}" width="100%" height="600px;"></iframe>
+{CONTENT_COMMENT}
 <!-- END: comment -->
 <!-- END: main -->

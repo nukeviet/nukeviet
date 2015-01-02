@@ -184,7 +184,7 @@ function theme_viewcat_download( $array, $download_config, $subs, $generate_page
  * @param mixed $download_config
  * @return
  */
-function view_file( $row, $download_config )
+function view_file( $row, $download_config, $content_comment )
 {
 	global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
@@ -283,10 +283,9 @@ function view_file( $row, $download_config )
 		$xtpl->parse( 'main.is_admin' );
 	}
 
-	if( defined( 'NV_COMM_URL' ) )
+	if( !empty( $content_comment ) )
 	{
-		$xtpl->parse( 'main.comment_hits' );
-		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
 	}
 
