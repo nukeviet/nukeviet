@@ -11,6 +11,8 @@
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['order'] = $lang_module['order_title'];
+$submenu['order_seller'] = $lang_module['order_seller'];
+
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];

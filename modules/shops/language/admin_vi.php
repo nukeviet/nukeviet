@@ -326,10 +326,11 @@ $lang_module['group_of'] = 'của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
-
-$lang_module['discounts'] = 'Quản lý giảm giá';
+$lang_module['product_copy'] = 'Sao';
+$lang_module['product_copy_note'] = 'Sao chép sản phẩm';
 
 //Lang for function discounts
+$lang_module['discounts'] = 'Quản lý giảm giá';
 $lang_module['delete'] = 'Xóa';
 $lang_module['number'] = 'STT';
 $lang_module['title'] = 'Tiêu đề';
@@ -369,6 +370,11 @@ $lang_module['seller_num'] = 'Số lượng';
 $lang_module['customer_name'] = 'Tên khách hàng';
 $lang_module['customer_email'] = 'Email khách hàng';
 $lang_module['customer_report_display'] = 'Hiển thị <strong>%1$s</strong> trên tổng số <strong>%2$s</strong> khách hàng';
+
+$lang_module['export_excel'] = 'Xuất ra Excel';
+$lang_module['order_seller'] = 'Thống kê lượt mua';
+$lang_module['order_count'] = 'Lượt mua';
+$lang_module['order_list'] = 'Xem danh sách đơn hàng';
 
 //THEM
 $lang_module['template']= 'Dạng template';

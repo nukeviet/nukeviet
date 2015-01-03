@@ -352,3 +352,6 @@ $lang_module['tags_alias'] = 'Filter Vietnamese diacritical marks, other charact
 $lang_module['alias_search'] = 'To show the different tags, use the search function to display more results';
 $lang_module['tags_all_link'] = 'View the description tags are not enabled, click here to see all the tags';
 $lang_module['tags_no_description'] = 'No description';
+$lang_module['order_seller'] = 'Number of customer purchases';
+$lang_module['order_count'] = 'Order count';
+$lang_module['order_list'] = 'View order list';
