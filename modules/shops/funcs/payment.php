@@ -126,6 +126,14 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	}
 	elseif( $data['transaction_status'] == 1 and $data['transaction_id'] > 0 )
 	{
+		if( $nv_Request->isset_request( 'cancel', 'get' ) )
+		{
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id = ' . $data['transaction_id'] );
+			$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET transaction_status=0, transaction_id = 0, transaction_count = 0 WHERE order_id=' . $order_id );
+			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss );
+			die();
+		}
+
 		$payment = $db->query( 'SELECT payment FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id=' . $data['transaction_id'] )->fetchColumn();
 		$config = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment = '" . $payment . "'" )->fetch();
 		$intro_pay = sprintf( $lang_module['order_by_payment'], $config['domain'], $config['paymentname'] );

@@ -116,6 +116,7 @@ $lang_module['product_unit'] = 'Đơn vị sản phẩm';
 $lang_module['product_number'] = 'Số lượng bán';
 $lang_module['product_status'] = 'Tình trạng sản phẩm';
 $lang_module['product_payment_form'] = 'Hình thức thanh toán';
+$lang_module['product_payment_cancel'] = 'Chọn hình thức thanh toán khác';
 $lang_module['product_keywords'] = 'Từ khóa';
 $lang_module['product_move_form'] = 'Vận chuyển';
 $lang_module['lang_post'] = 'Thực hiện';

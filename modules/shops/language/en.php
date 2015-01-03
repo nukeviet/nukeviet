@@ -116,6 +116,7 @@ $lang_module['product_unit'] = 'Sale unit';
 $lang_module['product_number'] = 'Sale quantity';
 $lang_module['product_status'] = 'Product status';
 $lang_module['product_payment_form'] = 'Payment method';
+$lang_module['product_payment_cancel'] = 'Payment method other';
 $lang_module['product_keywords'] = 'Keywords';
 $lang_module['product_move_form'] = 'Transport mode';
 $lang_module['lang_post'] = 'Confirm';

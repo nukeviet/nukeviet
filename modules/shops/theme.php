@@ -1623,13 +1623,15 @@ function uers_order( $data_content, $data_order, $error )
  */
 function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 {
-	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group;
+	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info;
+
 	$xtpl = new XTemplate( 'payment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
+	$xtpl->assign( 'cancel_url', $client_info['selfurl'] . '&cancel=1' );
 
 	$i = 0;
 	foreach( $data_pro as $pdata )

@@ -111,7 +111,8 @@
     <!-- BEGIN: intro_pay -->
     <div class="panel panel-default">
     	<div class="panel-body">
-        	{intro_pay}
+        {intro_pay}<br />
+        <br /><p class="text-center"><a href="{cancel_url}" title="{LANG.product_payment_cancel}">[{LANG.product_payment_cancel}]</a></p>
         </div>
     </div>
     <!-- END: intro_pay -->
