@@ -58,7 +58,10 @@ if( $per_page_old != $per_page )
 	$nv_Request->set_Cookie( 'per_page', $per_page, NV_LIVE_COOKIE_TIME );
 }
 
-$q = nv_substr( $nv_Request->get_title( 'q', 'get', '' ), 0, NV_MAX_SEARCH_LENGTH );
+$q = $nv_Request->get_title( 'q', 'get', '' );
+$q = str_replace( '+', ' ', $q );
+$q = nv_substr( $q , 0, NV_MAX_SEARCH_LENGTH );
+$qhtml = nv_htmlspecialchars( $q );
 $ordername = $nv_Request->get_string( 'ordername', 'get', 'publtime' );
 $order = $nv_Request->get_string( 'order', 'get' ) == 'asc' ? 'asc' : 'desc';
 
@@ -106,7 +109,7 @@ if( $checkss == md5( session_id( ) ) )
 	}
 	elseif( in_array( $stype, $array_in_rows ) and !empty( $q ) )
 	{
-		$from .= " WHERE " . NV_LANG_DATA . "_" . $stype . " LIKE '%" . $db->dblikeescape( $q ) . "%' ";
+		$from .= " WHERE " . NV_LANG_DATA . "_" . $stype . " LIKE '%" . $db->dblikeescape( $qhtml ) . "%' ";
 	}
 	elseif( $stype == 'admin_id' and !empty( $q ) )
 	{
@@ -131,10 +134,10 @@ if( $checkss == md5( session_id( ) ) )
 		}
 
 		$arr_from = array( );
-		$arr_from[] = "(product_code LIKE '%" . $db->dblikeescape( $q ) . "%')";
+		$arr_from[] = "(product_code LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 		foreach( $array_in_rows as $val )
 		{
-			$arr_from[] = "(" . NV_LANG_DATA . "_" . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
+			$arr_from[] = "(" . NV_LANG_DATA . "_" . $val . " LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 		}
 		$from .= " WHERE ( " . implode( " OR ", $arr_from );
 		if( !empty( $array_admin_id ) )
@@ -392,7 +395,7 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		'edittime' => $edittime,
 		'hitstotal' => $hitstotal,
 		'num_sell' => $num_sell,
-		'product_unit' => $array_unit[$product_unit][NV_LANG_INTERFACE . '_title'],
+		'product_unit' => $array_unit[$product_unit][NV_LANG_DATA . '_title'],
 		'status' => $lang_module['status_' . $status],
 		'admin_id' => !empty( $username ) ? $username : '',
 		'product_number' => $product_number,
