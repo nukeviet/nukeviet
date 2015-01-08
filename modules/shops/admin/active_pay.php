@@ -8,18 +8,20 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_orders';
 $contents = $lang_module['order_submit_pay_error'];
 
 $order_id = $nv_Request->get_int( 'order_id', 'get', 0 );
 $save = $nv_Request->get_string( 'save', 'post,get', '' );
+$action = $nv_Request->get_string( 'action', 'post,get', '' );
 
 $result = $db->query( 'SELECT * FROM ' . $table_name . ' WHERE order_id=' . $order_id );
-$data_content = $result->fetch();
+$data_content = $result->fetch( );
 
-if( empty( $data_content ) )
+if( empty( $data_content ) or empty( $action ) )
 {
 	$contents = $lang_module['order_submit_pay_error'];
 }
@@ -35,25 +37,39 @@ if( $save == 1 )
 	 4 - Giao dich da hoan thanh thanh cong (truong hop thanh toan ngay hoac thanh toan tam giu nhung nguoi mua da phe chuan)
 	 */
 
-	$transaction_status = 4;
-	$payment_id = 0;
-	$payment_amount = 0;
-	$payment_data = '';
-	$payment = '';
-	$userid = $admin_info['userid'];
-
-	$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', " . NV_CURRENTTIME . ", '" . $payment_amount . "', '" . $payment_data . "')" );
-
-	if( $transaction_id > 0 )
+	if( $action == 'unpay' )
 	{
-		$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1 WHERE order_id=" . $order_id );
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id = ' . $data_content['transaction_id'] );
+		$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=0, transaction_id=0, transaction_count=transaction_count-1 WHERE order_id=" . $order_id );
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'Log payment product', "ID: " . $id_pro, $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'Log drop payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
+
+		$contents = $lang_module['order_submit_unpay_ok'];
+
+		nv_del_moduleCache( $module_name );
 	}
+	elseif( $action == 'pay' )
+	{
+		$transaction_status = 4;
+		$payment_id = 0;
+		$payment_amount = 0;
+		$payment_data = '';
+		$payment = '';
+		$userid = $admin_info['userid'];
 
-	$contents = $lang_module['order_submit_pay_ok'];
+		$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $transaction_status . "', '" . $order_id . "', '" . $userid . "', '" . $payment . "', '" . $payment_id . "', " . NV_CURRENTTIME . ", '" . $payment_amount . "', '" . $payment_data . "')" );
 
-	nv_del_moduleCache( $module_name );
+		if( $transaction_id > 0 )
+		{
+			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1 WHERE order_id=" . $order_id );
+
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'Log payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
+		}
+
+		$contents = $lang_module['order_submit_pay_ok'];
+
+		nv_del_moduleCache( $module_name );
+	}
 }
 
 include NV_ROOTDIR . '/includes/header.php';

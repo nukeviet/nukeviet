@@ -134,7 +134,7 @@ $lang_module['search_product_code'] = 'Mã sản phẩm';
 $lang_module['search_bodytext'] = 'Nội dung';
 $lang_module['search_author'] = 'Tác giả sản phẩm';
 $lang_module['search_admin'] = 'Người nhập liệu';
-$lang_module['search_per_page'] = 'Số sản phẩm hiển thị';
+$lang_module['search_per_page'] = 'Hiển thị';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html';
 $lang_module['search_note_fix'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['content_edit'] = 'Sửa sản phẩm';
@@ -223,6 +223,7 @@ $lang_module['order_address'] = 'Địa chỉ';
 $lang_module['order_total'] = 'Tổng tiền';
 $lang_module['unit_total'] = 'Đơn vị';
 $lang_module['view'] = 'Xem';
+$lang_module['views'] = 'Lượt xem';
 $lang_module['date_from'] = 'Từ ngày';
 $lang_module['date_to'] = 'Đến ngày';
 $lang_module['order_info'] = 'Thông tin đơn đặt hàng';
@@ -237,10 +238,13 @@ $lang_module['order_product_unit'] = 'Đơn vị';
 $lang_module['order_submit'] = 'Xử lý đơn này';
 $lang_module['order_submit_comfix'] = 'Bạn chấp nhận xử lý đơn này?';
 $lang_module['order_submit_pay'] = 'Xác nhận thanh toán đơn này';
+$lang_module['order_submit_unpay'] = 'Hủy xác nhận thanh toán đơn này';
 $lang_module['order_submit_pay_comfix'] = 'Bạn chắc chắn người mua đã thanh toán?';
+$lang_module['order_submit_unpay_comfix'] = 'Bạn chắc chắn muốn chuyển giao dịch về trạng thái Chưa thanh toán?';
 $lang_module['order_admin_process'] = 'Người xử lý đơn này';
 $lang_module['order_submit_pay_error'] = 'Đơn này không xác nhận thanh toán được';
 $lang_module['order_submit_pay_ok'] = 'Đã xác nhận thanh toán xong';
+$lang_module['order_submit_unpay_ok'] = 'Đã hủy xác nhận thanh toán xong';
 $lang_module['order_payment'] = 'Trạng thái thanh toán';
 $lang_module['order_yes_payment'] = 'Đã thanh toán';
 $lang_module['order_yes_part_payment'] = 'Thanh toán tạm giữ';
@@ -322,10 +326,11 @@ $lang_module['group_of'] = 'của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
-
-$lang_module['discounts'] = 'Quản lý giảm giá';
+$lang_module['product_copy'] = 'Sao';
+$lang_module['product_copy_note'] = 'Sao chép sản phẩm';
 
 //Lang for function discounts
+$lang_module['discounts'] = 'Quản lý giảm giá';
 $lang_module['delete'] = 'Xóa';
 $lang_module['number'] = 'STT';
 $lang_module['title'] = 'Tiêu đề';
@@ -357,8 +362,48 @@ $lang_module['tags_no_description'] = 'Chưa có mô tả';
 $lang_module['content_tags_empty'] = 'Chú ý: Sản phẩm chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu sản phẩm này, có thể tắt tính năng tự động tạo từ khóa ở phần cấu hình module';
 
-//THEM
+$lang_module['report_detail'] = 'Thống kê chi tiết';
+$lang_module['num_selled'] = 'Đã bán';
+$lang_module['seller_list'] = 'Danh sách khách hàng mua sản phẩm "%s"';
+$lang_module['seller_num'] = 'Số lượng';
 
+$lang_module['customer_name'] = 'Tên khách hàng';
+$lang_module['customer_email'] = 'Email khách hàng';
+$lang_module['customer_report_display'] = 'Hiển thị <strong>%1$s</strong> trên tổng số <strong>%2$s</strong> khách hàng';
+
+$lang_module['export_excel'] = 'Xuất ra Excel';
+$lang_module['order_seller'] = 'Thống kê lượt mua';
+$lang_module['order_count'] = 'Lượt mua';
+$lang_module['order_list'] = 'Xem danh sách đơn hàng';
+
+//Lang for function coupons
+$lang_module['coupons'] = 'Mã giảm giá';
+$lang_module['coupons_add'] = 'Thêm mã giảm giá';
+$lang_module['coupons_type'] = 'Kiểu giảm giá';
+$lang_module['coupons_type_percentage'] = 'Tỉ lệ phần trăm';
+$lang_module['coupons_type_fixed_amount'] = 'Số tiền cố định';
+$lang_module['coupons_discount'] = 'Giá trị giảm';
+$lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
+$lang_module['coupons_total_amount_note'] = 'Để trống nếu không xác định giá trị đơn hàng';
+$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
+$lang_module['coupons_product'] = 'Sản phẩm áp dụng';
+$lang_module['coupons_product_note'] = 'Nếu nhập sản phẩm, giảm giá chỉ áp dụng đối với tổng giá của các sản phẩm này, không áp dụng cho tổng đơn hàng';
+$lang_module['coupons_product_custom'] = 'Sản phẩm tùy chọn';
+$lang_module['coupons_product_custom_edit'] = 'Sửa mã giảm giá để xem danh sách sản phẩm';
+$lang_module['coupons_uses_per_coupon'] = 'Số lượt sử dụng';
+$lang_module['coupons_uses_per_coupon_note'] = 'Để trống nếu không giới hạn số lượt sử dụng';
+$lang_module['coupons_end_time_note'] = 'Để trống nếu muốn mã hoạt động vô thời hạn';
+$lang_module['coupons_unlimit'] = 'Không giới hạn';
+$lang_module['coupons_info'] = 'Thông tin mã giảm giá';
+$lang_module['coupons_history'] = 'Lịch sử sử dụng';
+$lang_module['coupons_active'] = 'Đang hiệu lực';
+$lang_module['coupons_inactive'] = 'Ngưng hiệu lực';
+$lang_module['coupons_error_required_title'] = 'Lỗi: Bạn cần nhập tên mã giảm giá';
+$lang_module['coupons_error_required_code'] = 'Lỗi: Bạn cần nhập mã giảm giá';
+$lang_module['coupons_error_vail_code'] = 'Lỗi: Mã giảm giá không hợp lệ';
+$lang_module['coupons_error_required_discount'] = 'Lỗi: Bạn cần nhập giá trị giảm';
+
+//THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";
 $lang_module['template_name'] = "Tên template";
@@ -441,7 +486,6 @@ $lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
 //them truong tuy bien
-
 $lang_module['volume'] = 'Khối lượng';
 $lang_module['title_cpu'] = 'Tên CPU';
 $lang_module['speed'] = 'Tốc độ';

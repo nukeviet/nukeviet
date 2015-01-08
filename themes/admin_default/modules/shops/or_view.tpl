@@ -44,7 +44,7 @@
 				<th>{LANG.content_product_code}</th>
 				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
 				<th>{LANG.order_product_unit}</th>
-				<th align="right">{LANG.order_product_price} ({unit})</th>
+				<th class="text-right">{LANG.order_product_price} ({unit})</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -97,6 +97,9 @@
 		<!-- BEGIN: onpay -->
 		<input class="btn btn-primary" type="button" value="{LANG.order_submit_pay}" id="click_pay">
 		<!-- END: onpay -->
+		<!-- BEGIN: unpay -->
+		<input class="btn btn-danger" type="button" value="{LANG.order_submit_unpay}" id="click_pay">
+		<!-- END: unpay -->
 		<input class="btn btn-info" type="button" value="{LANG.order_print}" id="click_print">
 	</form>
 </div>

@@ -116,6 +116,7 @@ $lang_module['product_unit'] = 'Đơn vị sản phẩm';
 $lang_module['product_number'] = 'Số lượng bán';
 $lang_module['product_status'] = 'Tình trạng sản phẩm';
 $lang_module['product_payment_form'] = 'Hình thức thanh toán';
+$lang_module['product_payment_cancel'] = 'Chọn hình thức thanh toán khác';
 $lang_module['product_keywords'] = 'Từ khóa';
 $lang_module['product_move_form'] = 'Vận chuyển';
 $lang_module['lang_post'] = 'Thực hiện';
@@ -367,9 +368,25 @@ $lang_module['2star'] = '2 sao';
 $lang_module['1star'] = '1 sao';
 
 $lang_module['custom'] = 'Mở rộng';
-
 $lang_module['product_empty'] = 'Hết hàng';
 $lang_module['product_number'] = 'còn lại';
+
+$lang_module['coupon'] = 'Giảm giá';
+$lang_module['coupons'] = 'Sử dụng mã giảm giá';
+$lang_module['coupons_fill'] = 'Nhập mã giảm giá của qúy khách vào đây';
+$lang_module['coupons_check'] = 'Kiểm tra';
+$lang_module['coupons_discount'] = 'Giá trị giảm';
+$lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
+$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
+$lang_module['coupons_product'] = 'Sản phẩm áp dụng';
+$lang_module['coupons_begin_time'] = 'Ngày bắt đầu';
+$lang_module['coupons_end_time'] = 'Ngày kết thúc';
+$lang_module['coupons_end_time_ulimit'] = 'Không giới hạn';
+$lang_module['coupons_uses_per_coupon'] = 'Số lượt sử dụng';
+$lang_module['coupons_uses_per_customer'] = 'Số lượt sử dụng của mỗi khách hàng';
+$lang_module['coupons_uses'] = 'Sử dụng mã giảm giá này';
+$lang_module['coupons_empty'] = 'Vui lòng nhập mã giảm giá để kiểm tra';
+$lang_module['coupons_no_exist'] = 'Mã giảm giá không tồn tại';
 
 //them truong tuy bien
 

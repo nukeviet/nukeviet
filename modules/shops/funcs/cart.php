@@ -11,12 +11,42 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $data_content = array();
+$coupons_code = '';
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
+
+// Coupons
+if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
+{
+	$data_content = array();
+	$coupons_code = $nv_Request->get_title( 'coupons_code', 'post', '' );
+	$contents = $error = '';
+	if( empty( $coupons_code ) )
+	{
+		$error = $lang_module['coupons_empty'];
+	}
+	else
+	{
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $coupons_code ) );
+		$num = $result->rowCount();
+		$data_content = $result->fetch();
+		if( empty( $data_content ) )
+		{
+			$error = $lang_module['coupons_no_exist'];
+		}
+	}
+	$contents = call_user_func( 'coupons_info', $data_content, $error );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $contents;
+	include NV_ROOTDIR . '/includes/footer.php';
+	die();
+}
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
 {
 	// Set cart to order
 	$listproid = $nv_Request->get_array( 'listproid', 'post', '' );
+	$coupons_code = $nv_Request->get_title( 'coupons_code', 'post', '' );
 	if( ! empty( $listproid ) )
 	{
 		foreach( $listproid as $pro_id => $number )
@@ -63,7 +93,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 			{
 				$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 			}
-			
+
 			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
 
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
@@ -113,7 +143,7 @@ else
 
 $page_title = $lang_module['cart_title'];
 
-$contents = call_user_func( 'cart_product', $data_content, $array_error_product_number );
+$contents = call_user_func( 'cart_product', $data_content, $coupons_code, $array_error_product_number );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

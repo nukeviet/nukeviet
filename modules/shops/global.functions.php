@@ -16,9 +16,9 @@ if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/custom_' .
 	$lang_temp = $lang_module;
 	require NV_ROOTDIR . '/modules/' . $module_file . '/language/custom_' . NV_LANG_INTERFACE . '.php';
 	$lang_module = $lang_module + $lang_temp;
-	unset( $lang_temp ); 
+	unset( $lang_temp );
 }
-		
+
 // Cau hinh mac dinh
 $pro_config = $module_config[$module_name];
 
@@ -248,16 +248,37 @@ function product_number_order( $listid, $listnum, $type = '-' )
 {
 	global $db_config, $db, $module_data;
 
-	$arrayid = explode( '|', $listid );
-	$arraynum = explode( '|', $listnum );
-
-	foreach( $arrayid as $i => $id )
+	foreach( $listid as $i => $id )
 	{
 		if( $id > 0 )
 		{
-			if( empty( $arraynum[$i] ) ) $arraynum[$i] = 0;
+			if( empty( $listnum[$i] ) ) $listnum[$i] = 0;
 
-			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number ' . $type . ' ' . intval( $arraynum[$i] ) . ' WHERE id =' . $id;
+			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE id =' . $id;
+			$db->query( $sql );
+		}
+	}
+}
+
+/**
+ * product_number_sell()
+ *
+ * @param mixed $listid
+ * @param mixed $listnum
+ * @param string $type
+ * @return
+ */
+function product_number_sell( $listid, $listnum, $type = '+' )
+{
+	global $db_config, $db, $module_data;
+
+	foreach( $listid as $i => $id )
+	{
+		if( $id > 0 )
+		{
+			if( empty( $listnum[$i] ) ) $listnum[$i] = 0;
+
+			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET num_sell = num_sell ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE id =' . $id;
 			$db->query( $sql );
 		}
 	}

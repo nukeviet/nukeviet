@@ -27,9 +27,17 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		exit();
 	}
 
-	$listid = explode( "|", $data['listid'] );
-	$listnum = explode( "|", $data['listnum'] );
-	$listprice = explode( "|", $data['listprice'] );
+	// Thong tin chi tiet mat hang trong don hang
+	$listid = $listnum = $listprice = $listgroup = array();
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
+	while( $row = $result->fetch() )
+	{
+		$listid[] = $row['id'];
+		$listnum[] = $row['num'];
+		$listprice[] = $row['price'];
+		$listgroup[] = $row['group_id'];
+	}
+
 	$data_pro = array();
 	$temppro = array();
 	$i = 0;

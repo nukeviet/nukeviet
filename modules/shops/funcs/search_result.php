@@ -19,6 +19,8 @@ $num = $pro_config['per_page'];
 $data_content = array();
 
 $keyword = $nv_Request->get_string( 'keyword', 'get' );
+$keyword = str_replace( '+', ' ', $keyword );
+$kwhtml = nv_htmlspecialchars( $keyword );
 $price1_temp = $nv_Request->get_string( 'price1', 'get', '' );
 $price2_temp = $nv_Request->get_string( 'price2', 'get', '' );
 $typemoney = $nv_Request->get_string( 'typemoney', 'get', '' );
@@ -92,7 +94,7 @@ if( ! empty( $groupid ) )
 
 if( $keyword != "" )
 {
-	$search .= " AND (t1." . NV_LANG_DATA . "_title LIKE '%" . $db->dblikeescape( $keyword ) . "%' OR product_code LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
+	$search .= " AND (t1." . NV_LANG_DATA . "_title LIKE '%" . $db->dblikeescape( kwhtml ) . "%' OR product_code LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
 }
 
 if( ( $price1 >= 0 and $price2 > 0 ) )

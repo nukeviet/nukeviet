@@ -88,6 +88,10 @@
         </div>
         <div class="col-xs-6 text-right">
             <!-- BEGIN: price3 -->
+			<!-- BEGIN: total_coupons -->
+			<p class="pull-right">{LANG.coupon}: <strong>{order_coupons}</strong> {unit}</p>
+			<div class="clear"></div>
+			<!-- END: total_coupons -->
             {LANG.cart_total}: <strong id="total">{order_total}</strong> {unit}
             <!-- END: price3 -->
         </div>
@@ -111,7 +115,8 @@
     <!-- BEGIN: intro_pay -->
     <div class="panel panel-default">
     	<div class="panel-body">
-        	{intro_pay}
+        {intro_pay}<br />
+        <br /><p class="text-center"><a href="{cancel_url}" title="{LANG.product_payment_cancel}">[{LANG.product_payment_cancel}]</a></p>
         </div>
     </div>
     <!-- END: intro_pay -->

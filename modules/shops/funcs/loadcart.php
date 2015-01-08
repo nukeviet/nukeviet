@@ -11,14 +11,80 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
-$total = 0;
+$total = $total_coupons = 0;
+$counpons = array();
+$coupons_check = $nv_Request->get_int( 'coupons_check', 'get' );
+$coupons_code = $nv_Request->get_title( 'coupons_code', 'get', '' );
+$_SESSION[$module_data . '_coupons'] = array();
+
+if( !empty( $coupons_code ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $coupons_code ) );
+	$counpons = $result->fetch();
+	$result = $db->query( 'SELECT pid FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $counpons['id'] );
+	while( list( $pid ) = $result->fetch( 3 ) )
+	{
+		$counpons['product'][] = $pid;
+	}
+}
+
 if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 {
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
 		$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'], $info['num'] );
+		// Ap dung giam gia cho tung san pham dac biet
+		if( !empty( $counpons['product'] ) )
+		{
+			if( in_array( $pro_id, $counpons['product'] ) )
+			{
+				$total_coupons = $total_coupons + $price['sale'];
+			}
+		}
 		$total = $total + $price['sale'];
 	}
+	$total_old = $total;
+}
+
+if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] ) and NV_CURRENTTIME >= $counpons['date_start'] and ( empty( $counpons['uses_per_coupon'] ) or $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+{
+	// Ap dung giam gia cho tung san pham dac biet
+	if( $total_coupons > 0 )
+	{
+		if( $counpons['type'] == 'p' )
+		{
+			if( $coupons_check )
+			{
+				$total = $total  - ( ( $total_coupons * $counpons['discount'] ) / 100 );
+			}
+		}
+		else
+		{
+			if( $coupons_check )
+			{
+				$total = ( $total_coupons - $counpons['discount'] );
+			}
+		}
+	}
+	else // Ap dung cho don hang
+	{
+		if( $counpons['type'] == 'p' )
+		{
+			if( $coupons_check )
+			{
+				$total = $total  - ( ( $total * $counpons['discount'] ) / 100 );
+			}
+		}
+		else
+		{
+			if( $coupons_check )
+			{
+				$total = $total - $counpons['discount'];
+			}
+		}
+	}
+	$_SESSION[$module_data . '_coupons']['code'] = $coupons_check ? $coupons_code : '';
+	$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
 }
 
 if( $pro_config['active_price'] == '0' ) $total = 0;

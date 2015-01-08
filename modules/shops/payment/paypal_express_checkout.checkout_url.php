@@ -35,16 +35,16 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 	/*
 	 * GetExpressCheckout API
 	 */
-	
+
 	$token = nv_htmlspecialchars( $nv_Request->get_string( "token", "get", "" ) );
-	
+
 	$getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType( $token );
 
 	$getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
 	$getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
 	$paypalService = new PayPalAPIInterfaceServiceService( $config );
-	
+
 	try
 	{
 		$getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
@@ -53,7 +53,7 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 	{
 		redict_link( $ex->getMessage(), $lang_module['cart_back'], $cancelUrl );
 	}
-	
+
 	if( isset( $getECResponse ) )
 	{
 		if( $getECResponse->Ack == 'Success')
@@ -61,7 +61,7 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 			// Trích xuất thông tin
 			$responseDetails = $getECResponse->GetExpressCheckoutDetailsResponseDetails;
 			$payerInfo = $responseDetails->PayerInfo;
-			
+
 			$payer = $payerInfo->Payer;
 			$payerID = $payerInfo->PayerID;
 			$payer_name = $payerInfo->PayerName;
@@ -75,9 +75,9 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 			$stateOrProvince = $address->StateOrProvince;
 			$postalCode = $address->PostalCode;
 			$countryCode = $address->CountryName;
-			
+
 			$PaymentDetails = $responseDetails->PaymentDetails[0]->OrderTotal;
-			
+
 			$PayerData = array(
 				"token" => $token,
 				"id" => $payerID,
@@ -94,11 +94,11 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 				"currency" => $PaymentDetails->currencyID,
 				"order_id" => $order_id,
 			);
-			
+
 			$nv_Request->set_Session( $module_data . "_payerdata_paypal", serialize( $PayerData ) );
-			
+
 			$doExpressURL = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=complete&payment=" . $payment . "&paycomplete&token=" . $token . "&payerid=" . $payerID;
-			
+
 			header( "Location:" . $doExpressURL );
 			exit();
 		}
@@ -107,7 +107,7 @@ if( $nv_Request->isset_request( "getexpresscheckoutdetails", "get" ) )
 			redict_link( $getECResponse->Errors[0]->ShortMessage . "<br />" . $getECResponse->Errors[0]->LongMessage, $lang_module['cart_back'], $cancelUrl );
 		}
 	}
-	
+
 	redict_link( "Unknow Error!!!", $lang_module['cart_back'], $cancelUrl );
 }
 
@@ -135,8 +135,6 @@ $paymentDetails = new PaymentDetailsType();
 $itemTotalValue = 0;
 $taxTotalValue = 0;
 
-$listid = explode( '|', $data['listid'] );
-$listprice = explode( '|', $data['listprice'] );
 $temppro = array();
 
 $i = 0;
@@ -161,18 +159,18 @@ if( ! empty( $arrayid ) )
 	while( list( $id, $listcatid, $title, $money_unit ) = $result->fetch( 3 ) )
 	{
 		$itemAmount = nv_currency_conversion( $temppro[$id]['price'], $money_unit, 'USD' );
-		$itemAmount = new BasicAmountType($currencyCode, $itemAmount['sale'] );	
-		
+		$itemAmount = new BasicAmountType($currencyCode, $itemAmount['sale'] );
+
 		$itemTotalValue += $itemAmount->value;
-		
+
 		$itemDetails = new PaymentDetailsItemType();
 		$itemDetails->Name = $title;
 		$itemDetails->Amount = $itemAmount;
 		$itemDetails->Quantity = $temppro[$id]['num'];
 		$itemDetails->ItemCategory = "Digital";
-		$itemDetails->Tax = new BasicAmountType($currencyCode, 0);	
-		
-		$paymentDetails->PaymentDetailsItem[$i] = $itemDetails;	
+		$itemDetails->Tax = new BasicAmountType($currencyCode, 0);
+
+		$paymentDetails->PaymentDetailsItem[$i] = $itemDetails;
 	}
 }
 
