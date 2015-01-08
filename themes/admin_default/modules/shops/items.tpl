@@ -145,7 +145,7 @@
 						<!-- END: seller_empty -->
 					</td>
 					<td class="text-center">{ROW.status}</td>
-					<td class="text-center"> {ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
+					<td class="text-center"><em class="fa fa-copy fa-lg">&nbsp;</em><a href="{ROW.link_copy}" title="{LANG.product_copy_note}">{LANG.product_copy}</a>&nbsp;-&nbsp;{ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

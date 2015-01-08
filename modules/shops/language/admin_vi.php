@@ -376,6 +376,33 @@ $lang_module['order_seller'] = 'Thống kê lượt mua';
 $lang_module['order_count'] = 'Lượt mua';
 $lang_module['order_list'] = 'Xem danh sách đơn hàng';
 
+//Lang for function coupons
+$lang_module['coupons'] = 'Mã giảm giá';
+$lang_module['coupons_add'] = 'Thêm mã giảm giá';
+$lang_module['coupons_type'] = 'Kiểu giảm giá';
+$lang_module['coupons_type_percentage'] = 'Tỉ lệ phần trăm';
+$lang_module['coupons_type_fixed_amount'] = 'Số tiền cố định';
+$lang_module['coupons_discount'] = 'Giá trị giảm';
+$lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
+$lang_module['coupons_total_amount_note'] = 'Để trống nếu không xác định giá trị đơn hàng';
+$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
+$lang_module['coupons_product'] = 'Sản phẩm áp dụng';
+$lang_module['coupons_product_note'] = 'Nếu nhập sản phẩm, giảm giá chỉ áp dụng đối với tổng giá của các sản phẩm này, không áp dụng cho tổng đơn hàng';
+$lang_module['coupons_product_custom'] = 'Sản phẩm tùy chọn';
+$lang_module['coupons_product_custom_edit'] = 'Sửa mã giảm giá để xem danh sách sản phẩm';
+$lang_module['coupons_uses_per_coupon'] = 'Số lượt sử dụng';
+$lang_module['coupons_uses_per_coupon_note'] = 'Để trống nếu không giới hạn số lượt sử dụng';
+$lang_module['coupons_end_time_note'] = 'Để trống nếu muốn mã hoạt động vô thời hạn';
+$lang_module['coupons_unlimit'] = 'Không giới hạn';
+$lang_module['coupons_info'] = 'Thông tin mã giảm giá';
+$lang_module['coupons_history'] = 'Lịch sử sử dụng';
+$lang_module['coupons_active'] = 'Đang hiệu lực';
+$lang_module['coupons_inactive'] = 'Ngưng hiệu lực';
+$lang_module['coupons_error_required_title'] = 'Lỗi: Bạn cần nhập tên mã giảm giá';
+$lang_module['coupons_error_required_code'] = 'Lỗi: Bạn cần nhập mã giảm giá';
+$lang_module['coupons_error_vail_code'] = 'Lỗi: Mã giảm giá không hợp lệ';
+$lang_module['coupons_error_required_discount'] = 'Lỗi: Bạn cần nhập giá trị giảm';
+
 //THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";
@@ -459,7 +486,6 @@ $lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
 //them truong tuy bien
-
 $lang_module['volume'] = 'Khối lượng';
 $lang_module['title_cpu'] = 'Tên CPU';
 $lang_module['speed'] = 'Tốc độ';

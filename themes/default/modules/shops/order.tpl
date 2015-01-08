@@ -90,6 +90,10 @@
     	</div>
 
 		<!-- BEGIN: price3 -->
+		<!-- BEGIN: total_coupons -->
+		<p class="pull-right">{LANG.coupon}: <strong>{price_coupons}</strong> {unit_config}</p>
+		<div class="clear"></div>
+		<!-- END: total_coupons -->
 		<p class="pull-right">{LANG.cart_total}: <strong id="total">{price_total}</strong> {unit_config}</p>
 		<!-- END: price3 -->
 

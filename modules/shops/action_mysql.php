@@ -108,6 +108,9 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_items_group';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags_id';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_coupons';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history';
 	$set_lang_data = '';
 }
 
@@ -159,22 +162,22 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM ";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
-  `fid` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `field` varchar(25) NOT NULL,
-  `listtemplate` varchar(25) NOT NULL,
-  `weight` int(10) unsigned NOT NULL DEFAULT '1',
-  `field_type` enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
-  `field_choices` text NOT NULL,
-  `sql_choices` text NOT NULL,
-  `match_type` enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
-  `match_regex` varchar(250) NOT NULL DEFAULT '',
-  `func_callback` varchar(75) NOT NULL DEFAULT '',
-  `min_length` int(11) NOT NULL DEFAULT '0',
-  `max_length` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `language` text NOT NULL,
-  `default_value` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`fid`),
-  UNIQUE KEY `field` (`field`)
+  fid mediumint(8) NOT NULL AUTO_INCREMENT,
+  field varchar(25) NOT NULL,
+  listtemplate varchar(25) NOT NULL,
+  weight int(10) unsigned NOT NULL DEFAULT '1',
+  field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
+  field_choices text NOT NULL,
+  sql_choices text NOT NULL,
+  match_type enum('none','alphanumeric','email','url','regex','callback') NOT NULL DEFAULT 'none',
+  match_regex varchar(250) NOT NULL DEFAULT '',
+  func_callback varchar(75) NOT NULL DEFAULT '',
+  min_length int(11) NOT NULL DEFAULT '0',
+  max_length bigint(20) unsigned NOT NULL DEFAULT '0',
+  language text NOT NULL,
+  default_value varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (fid),
+  UNIQUE KEY field (field)
 ) ENGINE=MyISAM ";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group (
@@ -239,7 +242,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  hitstotal mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitscm mediumint(8) unsigned NOT NULL DEFAULT '0',
  hitslm mediumint(8) unsigned NOT NULL DEFAULT '0',
- num_sell mediumint(8) unsigned NOT NULL DEFAULT '0',
+ num_sell mediumint(8) NOT NULL DEFAULT '0',
  showprice tinyint(2) NOT NULL DEFAULT '0',
  custom text NOT NULL,
  vat tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -406,6 +409,38 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD UNIQUE(" . $lang . "_alias)";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tags_id ADD " . $lang . "_keyword varchar(65) NOT NULL";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_coupons (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  title varchar(100) NOT NULL DEFAULT '',
+  code varchar(50) NOT NULL DEFAULT '',
+  type varchar(1) NOT NULL DEFAULT 'p',
+  discount float NOT NULL DEFAULT '0',
+  total_amount float NOT NULL DEFAULT '0',
+  free_shipping tinyint(1) NOT NULL DEFAULT '0',
+  date_start int(11) unsigned NOT NULL DEFAULT '0',
+  date_end int(11) unsigned NOT NULL DEFAULT '0',
+  uses_per_coupon int(11) unsigned NOT NULL DEFAULT '0',
+  uses_per_coupon_count int(11) NOT NULL DEFAULT '0',
+  date_added int(11) unsigned NOT NULL DEFAULT '0',
+  status tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_coupons_history (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  cid int(11) NOT NULL,
+  order_id int(11) NOT NULL,
+  amount float NOT NULL DEFAULT '0',
+  date_added int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_coupons_product (
+  cid int(11) unsigned NOT NULL,
+  pid int(11) unsigned NOT NULL,
+  UNIQUE KEY cid (cid,pid)
+) ENGINE=MyISAM";
 
 
 $data = array();

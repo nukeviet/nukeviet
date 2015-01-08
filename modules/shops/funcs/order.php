@@ -40,6 +40,25 @@ $data_order = array(
 	'order_time' => NV_CURRENTTIME
 );
 
+// Ma giam gia
+$array_counpons = array( 'code' => '', 'discount' => 0 );
+$counpons = array();
+if( ! empty( $_SESSION[$module_data . '_coupons'] ) )
+{
+	$array_counpons = $_SESSION[$module_data . '_coupons'];
+}
+$total_coupons = 0;
+if( !empty( $array_counpons['code'] ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $array_counpons['code'] ) );
+	$counpons = $result->fetch();
+	$result = $db->query( 'SELECT pid FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $counpons['id'] );
+	while( list( $pid ) = $result->fetch( 3 ) )
+	{
+		$counpons['product'][] = $pid;
+	}
+}
+
 if( $post_order == 1 )
 {
 	$total = 0;
@@ -55,11 +74,22 @@ if( $post_order == 1 )
 		if( $_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 )
 		{
 			$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'] );
+
+			// Ap dung giam gia cho tung san pham dac biet
+			if( !empty( $counpons['product'] ) )
+			{
+				if( in_array( $pro_id, $counpons['product'] ) )
+				{
+					$total_coupons = $total_coupons + $price['sale'];
+				}
+			}
+
 			$info['price'] = $price['sale'];
 			$total = $total + (( int )$info['num'] * ( double )$info['price']);
 			$i++;
 		}
 	}
+	$total_old = $total;
 
 	$data_order['order_name'] = nv_substr( $nv_Request->get_title( 'order_name', 'post', '', 1 ), 0, 200 );
 	$data_order['order_email'] = nv_substr( $nv_Request->get_title( 'order_email', 'post', '', 1 ), 0, 250 );
@@ -67,6 +97,33 @@ if( $post_order == 1 )
 	$data_order['order_phone'] = nv_substr( $nv_Request->get_title( 'order_phone', 'post', '', 1 ), 0, 20 );
 	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
+
+	if( $total > $counpons['total_amount'] and NV_CURRENTTIME >= $counpons['date_start'] and $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+	{
+		// Ap dung giam gia cho tung san pham dac biet
+		if( $total_coupons > 0 )
+		{
+			if( $counpons['type'] == 'p' )
+			{
+				$total = $total  - ( ( $total_coupons * $counpons['discount'] ) / 100 );
+			}
+			else
+			{
+				$total = ( $total_coupons - $counpons['discount'] );
+			}
+		}
+		else // Ap dung cho don hang
+		{
+			if( $counpons['type'] == 'p' )
+			{
+				$total = $total  - ( ( $total * $counpons['discount'] ) / 100 );
+			}
+			else
+			{
+				$total = $total - $counpons['discount'];
+			}
+		}
+	}
 
 	$data_order['order_total'] = $total;
 
@@ -158,6 +215,19 @@ if( $post_order == 1 )
 
 			// Cong vao so luong san pham da ban
 			product_number_sell( $listid, $listnum );
+
+			// Cap nhat lich su su dung ma giam gia
+			if( ! empty( $array_counpons['code'] ) )
+			{
+				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count + 1 WHERE id = ' . $counpons['id'] );
+
+				$amount = $total_old - $total;
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history( cid, order_id, amount, date_added ) VALUES ( :cid, :order_id, :amount, ' . NV_CURRENTTIME . ' )' );
+				$stmt->bindParam( ':cid', $counpons['id'], PDO::PARAM_INT );
+				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
+				$stmt->bindParam( ':amount', $amount, PDO::PARAM_INT );
+				$stmt->execute();
+			}
 
 			// Gui email thong bao don hang
 			$data_order['id'] = $order_id;
@@ -302,7 +372,7 @@ if( $action == 0 )
 	}
 	else
 	{
-		$contents = call_user_func( 'uers_order', $data_content, $data_order, $error );
+		$contents = call_user_func( 'uers_order', $data_content, $data_order, $array_counpons['discount'], $error );
 	}
 }
 

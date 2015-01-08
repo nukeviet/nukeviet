@@ -1074,27 +1074,26 @@ function view_custom( $array_custom, $template )
 	$xtpl->assign( 'ROW', $array_custom );
 
 	/*
-	$array_cus = array( );
-		$i = 0;
-		foreach( $array_custom as $key => $array_custom_i )
-		{
-			$i++;
-			if( $i != 1 AND $i != 2 )
-			{
-				$array_cus[$key] = explode( "may2s", $array_custom_i );
-			}
-		}
+	 $array_cus = array( );
+	 $i = 0;
+	 foreach( $array_custom as $key => $array_custom_i )
+	 {
+	 $i++;
+	 if( $i != 1 AND $i != 2 )
+	 {
+	 $array_cus[$key] = explode( "may2s", $array_custom_i );
+	 }
+	 }
 
-		if( isset( $array_cus['title_config'] ) AND count( $array_cus['title_config'] ) > 1 )
-		{
-			foreach( $array_cus['title_config'] as $key_key => $array_cus_i )
-			{
-				$xtpl->assign( 'title_config', $array_cus_i );
-				$xtpl->assign( 'content_config', $array_cus['content_config'][$key_key] );
-				$xtpl->parse( 'main.catlinhkien' );
-			}
-		}*/
-
+	 if( isset( $array_cus['title_config'] ) AND count( $array_cus['title_config'] ) > 1 )
+	 {
+	 foreach( $array_cus['title_config'] as $key_key => $array_cus_i )
+	 {
+	 $xtpl->assign( 'title_config', $array_cus_i );
+	 $xtpl->assign( 'content_config', $array_cus['content_config'][$key_key] );
+	 $xtpl->parse( 'main.catlinhkien' );
+	 }
+	 }*/
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -1180,7 +1179,8 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		if( !empty( $data_content['array_custom'] ) )
 		{
 			$hmtl = view_custom( $data_content['array_custom'], $data_content['template'] );
-			$xtpl->assign( 'custom', $hmtl );//die($hmtl);
+			$xtpl->assign( 'custom', $hmtl );
+			//die($hmtl);
 			$xtpl->parse( 'main.cust' );
 		}
 
@@ -1472,10 +1472,11 @@ function print_product( $data_content, $data_unit, $page_title )
  * cart_product()
  *
  * @param mixed $data_content
+ * @param mixed $coupons_code
  * @param mixed $array_error_number
  * @return
  */
-function cart_product( $data_content, $array_error_number )
+function cart_product( $data_content, $coupons_code, $array_error_number )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $global_array_group;
 
@@ -1483,6 +1484,7 @@ function cart_product( $data_content, $array_error_number )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'C_CODE', $coupons_code );
 	$price_total = 0;
 	if( !empty( $data_content ) )
 	{
@@ -1552,10 +1554,11 @@ function cart_product( $data_content, $array_error_number )
  *
  * @param mixed $data_content
  * @param mixed $data_order
+ * @param mixed $total_coupons
  * @param mixed $error
  * @return
  */
-function uers_order( $data_content, $data_order, $error )
+function uers_order( $data_content, $data_order, $total_coupons, $error )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $global_array_group;
 
@@ -1596,7 +1599,8 @@ function uers_order( $data_content, $data_order, $error )
 			++$i;
 		}
 	}
-	$xtpl->assign( 'price_total', nv_number_format( $price_total, nv_get_decimals( $pro_config['money_unit'] ) ) );
+	$xtpl->assign( 'price_coupons', nv_number_format( $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
+	$xtpl->assign( 'price_total', nv_number_format( $price_total - $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
 	$xtpl->assign( 'DATA', $data_order );
 	$xtpl->assign( 'ERROR', $error );
@@ -1605,6 +1609,10 @@ function uers_order( $data_content, $data_order, $error )
 	if( $pro_config['active_price'] == '1' )
 	{
 		$xtpl->parse( 'main.price1' );
+		if( $total_coupons > 0 )
+		{
+			$xtpl->parse( 'main.price3.total_coupons' );
+		}
 		$xtpl->parse( 'main.price3' );
 	}
 
@@ -1665,6 +1673,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 	{
 		$xtpl->parse( 'main.order_note' );
 	}
+	$xtpl->assign( 'order_coupons', nv_number_format( $data_content['coupons']['amount'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'unit', $data_content['unit_total'] );
 	if( !empty( $url_checkout ) )
@@ -1693,6 +1702,10 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay )
 	if( $pro_config['active_price'] == '1' )
 	{
 		$xtpl->parse( 'main.price1' );
+		if( $data_content['coupons'] and $data_content['coupons']['amount'] > 0 )
+		{
+			$xtpl->parse( 'main.price3.total_coupons' );
+		}
 		$xtpl->parse( 'main.price3' );
 	}
 
@@ -2275,6 +2288,50 @@ function wishlist( $data_content, $html_pages = '' )
 			$xtpl->assign( 'generate_page', $html_pages );
 			$xtpl->parse( 'main.pages' );
 		}
+	}
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * coupons_info()
+ *
+ * @param mixed $data_content
+ * @param mixed $error
+ * @return
+ */
+function coupons_info( $data_content, $error )
+{
+	global $module_info, $lang_module, $lang_global, $module_data, $module_file, $pro_config, $op;
+
+	$xtpl = new XTemplate( 'coupons_info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'MONEY_UNIT', $pro_config['money_unit'] );
+
+	if( !empty( $data_content ) )
+	{
+		$data_content['date_start'] = ! empty( $data_content['date_start'] ) ? nv_date( 'd/m/Y', $data_content['date_start'] ) : 'N/A' ;
+		$data_content['date_end'] = ! empty( $data_content['date_end'] ) ? nv_date( 'd/m/Y', $data_content['date_end'] ) : $lang_module['coupons_end_time_ulimit'];
+		$data_content['discount_text'] = $data_content['type'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
+		$xtpl->assign( 'DATA', $data_content );
+		if( ! empty( $data_content['total_amount'] ) )
+		{
+			$xtpl->parse( 'main.content.total_amount' );
+		}
+		if( $data_content['free_shipping'] )
+		{
+			$xtpl->parse( 'main.content.free_shipping' );
+		}
+
+		$xtpl->parse( 'main.content' );
+	}
+
+	if( !empty( $error ) )
+	{
+		$xtpl->assign( 'ERROR', $error );
+		$xtpl->parse( 'main.error' );
 	}
 
 	$xtpl->parse( 'main' );

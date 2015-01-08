@@ -21,6 +21,8 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	// Thong tin don hang
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
 	$data = $result->fetch();
+	$result = $db->query( 'SELECT amount FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id=' . $data['order_id'] );
+	$data['coupons'] = $result->fetch();
 
 	if( empty( $data ) )
 	{
