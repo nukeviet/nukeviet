@@ -83,7 +83,7 @@ $array_data = $result->fetch();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $array_data['id'] );
 $array_data['product'] = $result->fetch();
 
-if( NV_CURRENTTIME >= $array_data['date_start'] and $array_data['uses_per_coupon_count'] < $array_data['uses_per_coupon'] and ( empty( $array_data['date_end'] ) or NV_CURRENTTIME < $array_data['date_end'] ) )
+if( NV_CURRENTTIME >= $view['date_start'] and ( empty( $view['uses_per_coupon'] ) or $view['uses_per_coupon_count'] < $view['uses_per_coupon'] ) and ( empty( $view['date_end'] ) or NV_CURRENTTIME < $view['date_end'] ) )
 {
 	$array_data['status'] = $lang_module['coupons_active'];
 }

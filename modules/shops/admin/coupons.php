@@ -273,6 +273,9 @@ if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 	$sth->execute( );
 }
 
+$row['uses_per_coupon'] = !empty( $row['uses_per_coupon'] ) ? $row['uses_per_coupon'] : '';
+$row['total_amount'] = !empty( $row['total_amount'] ) ? $row['total_amount'] : '';
+
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
@@ -301,7 +304,7 @@ if( $show_view )
 
 	while( $view = $sth->fetch( ) )
 	{
-		if( NV_CURRENTTIME >= $view['date_start'] and $view['uses_per_coupon_count'] < $view['uses_per_coupon'] and ( empty( $view['date_end'] ) or NV_CURRENTTIME < $view['date_end'] ) )
+		if( NV_CURRENTTIME >= $view['date_start'] and ( empty( $view['uses_per_coupon'] ) or $view['uses_per_coupon_count'] < $view['uses_per_coupon'] ) and ( empty( $view['date_end'] ) or NV_CURRENTTIME < $view['date_end'] ) )
 		{
 			$view['status'] = $lang_module['coupons_active'];
 		}

@@ -98,7 +98,7 @@ if( $post_order == 1 )
 	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
 
-	if( $total > $counpons['total_amount'] and NV_CURRENTTIME >= $counpons['date_start'] and $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+	if( ( $total > $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 	{
 		// Ap dung giam gia cho tung san pham dac biet
 		if( $total_coupons > 0 )
