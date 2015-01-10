@@ -104,7 +104,7 @@ if( defined( 'NV_IS_USER' ) and $pro_config['active_wishlist'] )
 	$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
 	if( $listid )
 	{
-		$array_wishlist_id = explode( ',', $listid );	
+		$array_wishlist_id = explode( ',', $listid );
 	}
 }
 
@@ -117,7 +117,8 @@ if( defined( 'NV_IS_USER' ) and $pro_config['active_wishlist'] )
  */
 function GetDataIn( $result, $catid )
 {
-	global $global_array_cat, $module_name, $db, $link, $module_info, $global_config;
+	global $global_array_cat, $module_name, $module_file, $db, $link, $module_info, $global_config;
+
 	$data_content = array();
 	$data = array();
 	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
@@ -136,11 +137,12 @@ function GetDataIn( $result, $catid )
 		}
 		else//no image
 		{
-			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_name . '/no-image.jpg';
+			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 		}
 
 		$data[] = array(
 			'id' => $id,
+			'listcatid' => $listcatid,
 			'publtime' => $publtime,
 			'title' => $title,
 			'alias' => $alias,
@@ -204,6 +206,7 @@ function GetDataInGroups( $result, $array_g )
 
 		$data[] = array(
 			'id' => $id,
+			'listcatid' => $listcatid,
 			'publtime' => $publtime,
 			'title' => $title,
 			'alias' => $alias,
@@ -222,7 +225,7 @@ function GetDataInGroups( $result, $array_g )
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
-	
+
 	$data_content['id'] = $array_g[0];
 	$data_content['title'] = $global_array_group[$array_g[0]]['title'];
 	$data_content['data'] = $data;

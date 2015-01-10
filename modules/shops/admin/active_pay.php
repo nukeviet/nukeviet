@@ -42,6 +42,9 @@ if( $save == 1 )
 		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_transaction WHERE transaction_id = ' . $data_content['transaction_id'] );
 		$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=0, transaction_id=0, transaction_count=transaction_count-1 WHERE order_id=" . $order_id );
 
+		// Cap nhat diem tich luy
+		UpdatePoint( $data_content, false );
+
 		nv_insert_logs( NV_LANG_DATA, $module_name, 'Log drop payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
 
 		$contents = $lang_module['order_submit_unpay_ok'];
@@ -62,6 +65,9 @@ if( $save == 1 )
 		if( $transaction_id > 0 )
 		{
 			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1 WHERE order_id=" . $order_id );
+
+			// Cap nhat diem tich luy
+			UpdatePoint( $data_content );
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'Log payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
 		}

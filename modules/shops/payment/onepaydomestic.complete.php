@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
- * @Createdate Dec 29, 2010  10:42:00 PM
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Dec 29, 2010 10:42:00 PM
  */
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -122,7 +123,7 @@ if( $order_id > 0 )
 
 		if( $transaction_id > 0 )
 		{
-			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $order_id );
+			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1, is_lock=1 WHERE order_id=" . $order_id );
 		}
 		else
 		{
@@ -131,13 +132,15 @@ if( $order_id > 0 )
 	}
 	if( ! $error_update )
 	{
-	    // begin collaborators
-        if( $nv_transaction_status == 4 and file_exists( NV_ROOTDIR . '/modules/collaborators/orders.product.php' ) )
-        {
-            require_once ( NV_ROOTDIR . '/modules/collaborators/orders.product.php' );
-            update_orders_collaborators( $order_id, $nv_transaction_status );
-        }
-		// end collaborators
+		// Cap nhat diem tich luy
+		$data_content = array();
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+		$data_content = $result->fetch( );
+		if( ! empty( $data_content ) )
+		{
+			UpdatePoint( $data_content );
+		}
+
 		$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history";
 		$contents = redict_link( $lang_module['payment_complete'], $lang_module['back_history'], $nv_redirect );
 	}
@@ -151,5 +154,3 @@ else
 {
 	$contents = $lang_module['payment_erorr'];
 }
-
-?>

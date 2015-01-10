@@ -5,7 +5,6 @@
 </div>
 
 <!-- BEGIN: errortitle -->
-
 <ul class="alert alert-danger text-center">
 	<!-- BEGIN: errorloop -->
 	<li class="clearfix">
@@ -14,6 +13,12 @@
 	<!-- END: errorloop -->
 </ul>
 <!-- END: errortitle -->
+
+<!-- BEGIN: point_note -->
+<div class="alert alert-info">
+	{point_note}
+</div>
+<!-- END: point_note -->
 
 <form action="{LINK_CART}" method="post" id="fpro">
 	<input type="hidden" value="1" name="save"/>

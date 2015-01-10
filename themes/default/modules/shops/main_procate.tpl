@@ -19,6 +19,9 @@
 		            	<!-- BEGIN: discounts -->
 		            	<span class="label label-danger">-{PRICE.discount_percent}%</span>
 		            	<!-- END: discounts -->
+		            	<!-- BEGIN: point -->
+		            	<span class="label label-info" title="{point_note}">+{point}</span>
+		            	<!-- END: point -->
 		            </div>
 					<div class="caption text-center">
     					<h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>
@@ -37,13 +40,13 @@
 		                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
 		                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
 		                    <!-- END: discounts -->
-		                    
+
 							<!-- BEGIN: no_discounts -->
 							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
 							<!-- END: no_discounts -->
 						</p>
 						<!-- END: price -->
-		
+
 		                <!-- BEGIN: contact -->
 		                <p class="price">{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span></p>
 		                <!-- END: contact -->
@@ -56,11 +59,11 @@
                             <!-- BEGIN: order -->
                             <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                             <!-- END: order -->
-                            
+
 							<!-- BEGIN: product_empty -->
 		                    <button class="btn btn-danger disabled btn-xs">{LANG.product_empty}</button>
 		                    <!-- END: product_empty -->
-                            
+
 		                    <!-- BEGIN: wishlist -->
 		                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
 		                    <!-- END: wishlist -->

@@ -62,6 +62,7 @@ if( !empty( $array_counpons['code'] ) )
 if( $post_order == 1 )
 {
 	$total = 0;
+	$total_point = 0;
 	$i = 0;
 	$listid = $listnum = $listprice = array();
 
@@ -84,11 +85,26 @@ if( $post_order == 1 )
 				}
 			}
 
+			// Tinh diem tich luy doi voi thanh vien
+			if( $pro_config['point_active'] and defined( 'NV_IS_USER' ) )
+			{
+				$result = $db->query( 'SELECT listcatid FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . $pro_id );
+				list( $listcatid ) = $result->fetch( 3 );
+				if( ! empty( $listcatid ) )
+				{
+					if( $global_array_cat[$listcatid]['cat_allow_point'] and ( $global_array_cat[$listcatid]['cat_number_product'] == 0 or $info['num'] >= $global_array_cat[$listcatid]['cat_number_product'] ) )
+					{
+						$total_point += intval( $global_array_cat[$listcatid]['cat_number_point'] );
+					}
+				}
+			}
+
 			$info['price'] = $price['sale'];
 			$total = $total + (( int )$info['num'] * ( double )$info['price']);
 			$i++;
 		}
 	}
+	$total_point += intval( $pro_config['point_new_order'] );
 	$total_old = $total;
 
 	$data_order['order_name'] = nv_substr( $nv_Request->get_title( 'order_name', 'post', '', 1 ), 0, 200 );
@@ -226,6 +242,15 @@ if( $post_order == 1 )
 				$stmt->bindParam( ':cid', $counpons['id'], PDO::PARAM_INT );
 				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
 				$stmt->bindParam( ':amount', $amount, PDO::PARAM_INT );
+				$stmt->execute();
+			}
+
+			// Ghi nhan diem tich luy khach hang
+			if( $total_point > 0 and $pro_config['point_active'] )
+			{
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_point_queue( order_id, point, status ) VALUES ( :order_id, :point, 1 )' );
+				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
+				$stmt->bindParam( ':point', $total_point, PDO::PARAM_INT );
 				$stmt->execute();
 			}
 

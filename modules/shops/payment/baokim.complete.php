@@ -53,7 +53,7 @@ if( $check )
 				$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $nv_transaction_status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $payment_id . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
 				if( $transaction_id > 0 )
 				{
-					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $order_id );
+					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1, is_lock=1 WHERE order_id=" . $order_id );
 				}
 				else
 				{
@@ -62,6 +62,15 @@ if( $check )
 			}
 			if( ! $error_update )
 			{
+				// Cap nhat diem tich luy
+				$data_content = array();
+				$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+				$data_content = $result->fetch( );
+				if( ! empty( $data_content ) )
+				{
+					UpdatePoint( $data_content );
+				}
+
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history";
 				$contents = redict_link( $lang_module['payment_complete'], $lang_module['back_history'], $nv_redirect );
 			}

@@ -231,7 +231,7 @@ $lang_module['order_email_title'] = '[%s] Thông tin đơn hàng %s';
 $lang_module['order_email_review'] = 'Bạn có thể xem lại thông tin đơn hàng tại <a href="%s">đây</a>';
 $lang_module['order_email_noreply'] = 'Đây là email được gửi tự động từ website <a href="%s">%s</a>, vui lòng không trả lời email này vì chúng tôi sẽ không nhận được email của bạn. Nếu không hiểu về nội dung email này hãy đơn giản xóa nó khỏi hòm thư của bạn.';
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
-$lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! chúng tôi sẽ gửi hàng cho bạn sớm nhất';
+$lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! Chúng tôi sẽ gửi hàng cho bạn sớm nhất';
 $lang_module['payment_erorr'] = 'Quá trình thanh toán có lỗi do một lý do nào đó';
 $lang_module['cart_title'] = 'Giỏ hàng';
 $lang_module['cart_product_title'] = 'mặt hàng';
@@ -329,6 +329,7 @@ $lang_module['displays_price_asc'] = 'Giá tăng dần';
 $lang_module['displays_price_desc'] = 'Giá giảm dần';
 $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['newday'] = "Mới";
+$lang_module['payport'] = "Cổng thanh toán";
 
 $lang_module['filter'] = "Lọc sản phẩm";
 $lang_module['filter_no_item'] = "Chọn ít nhất một thuộc tính";
@@ -387,6 +388,21 @@ $lang_module['coupons_uses_per_customer'] = 'Số lượt sử dụng của mỗ
 $lang_module['coupons_uses'] = 'Sử dụng mã giảm giá này';
 $lang_module['coupons_empty'] = 'Vui lòng nhập mã giảm giá để kiểm tra';
 $lang_module['coupons_no_exist'] = 'Mã giảm giá không tồn tại';
+
+$lang_module['point'] = 'điểm';
+$lang_module['point_empty'] = 'Không có thao tác nào được ghi nhận';
+$lang_module['point_product_note'] = 'Cộng %d điểm khi mua sản phẩm';
+$lang_module['point_cart_note_user'] = 'Quý khách được cộng <strong>%d</strong> điểm khi hoàn tất (thanh toán thành công) đơn hàng này.';
+$lang_module['point_cart_note_guest'] = 'Quý khách được cộng <strong>%1d</strong> điểm khi hoàn tất (thanh toán thành công) đơn hàng này. Chỉ áp dụng cho khách hàng đã đăng nhập tài khoản.<br />Vui lòng <a href="%2d" title="Đăng nhập">đăng nhập</a> và tiếp tục để nhận điểm.';
+$lang_module['point_cart_text'] = 'Điểm tích lũy';
+$lang_module['point_cart_convention'] = 'Giá trị quy đổi';
+$lang_module['point_cart_history'] = 'Lịch sử điểm tích lũy';
+$lang_module['point_payment'] = 'Sử dụng điểm tích lũy để thanh toán đơn hàng này!';
+$lang_module['point_order'] = 'Đơn hàng thực hiện';
+$lang_module['point_payment_info'] = 'Quý khách hiện có <strong>%1d điểm</strong> tương ứng với <strong>%2s %3s</strong>';
+$lang_module['point_payment_point'] = 'Thanh toán bằng điểm tích lũy';
+$lang_module['point_payment_point_confirm'] = 'Quý khách chắc chắn muốn dùng quỹ điểm tích lũy để thanh toán đơn hàng này?';
+$lang_module['point_payment_error_money'] = 'Quý khách không đủ điểm để thanh toán đơn hàng này!';
 
 //them truong tuy bien
 

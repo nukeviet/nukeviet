@@ -78,12 +78,12 @@
 				<td><strong>{LANG.format_code_id}</strong></td>
 				<td><input class="form-control" type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /><span class="text-middle"> {LANG.format_order_id_note} </span></td>
 			</tr>
-			
+
 			<tr>
 				<td><strong>{LANG.address}</strong></td>
 				<td><input class="form-control" type="text" value="{DATA.address}" style="width: 350px;" name="address" /></td>
 			</tr>
-			
+
 			<tr>
 				<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
 				<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
@@ -112,11 +112,34 @@
 				<td><strong>{LANG.setting_tags_remind}</strong></td>
 				<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
 			</tr>
+		</tbody>
+	</table>
+
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{LANG.setting_point}</caption>
+		<tbody>
 			<tr>
-				<td colspan="2" style="text-align: center; padding:10px"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting"></td>
+				<td width="40%"><strong>{LANG.setting_point_active}</strong></td>
+				<td>
+					<input type="checkbox" name="point_active" value="1" {ck_active_point} />
+				</td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.setting_point_conversion}</strong></td>
+				<td>
+					<input type="text" name="point_conversion" class="form-control" value="{DATA.point_conversion}" />
+					<span class="text-middle">{DATA.money_unit} / {LANG.setting_point_1}</span>
+				</td>
+			</tr>
+			<tr>
+				<td><strong>{LANG.setting_point_new_order}</strong></td>
+				<td>
+					<input type="text" name="point_new_order" class="form-control" value="{DATA.point_new_order}" />
+				</td>
 			</tr>
 		</tbody>
 	</table>
+	<div class="text-center"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting"></div>
 </form>
 <!-- BEGIN: payment -->
 <script type="text/javascript">

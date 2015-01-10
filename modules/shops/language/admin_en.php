@@ -382,3 +382,17 @@ $lang_module['coupons_error_required_title'] = 'Error: You must enter the discou
 $lang_module['coupons_error_required_code'] = 'Error: You must enter the discount code';
 $lang_module['coupons_error_vail_code'] = 'Error: Invalid Code discounts';
 $lang_module['coupons_error_required_discount'] = 'Error: You must enter values decrease';
+
+//Lang for function point
+$lang_module['point'] = 'Point';
+$lang_module['point_username'] = 'Username';
+$lang_module['point_fullname'] = 'Fullname';
+$lang_module['point_email'] = 'Email';
+$lang_module['setting_point'] = 'Point config';
+$lang_module['setting_point_active'] = 'Point active';
+$lang_module['setting_point_conversion'] = 'Rate of exchange';
+$lang_module['setting_point_new_order'] = 'Number of point when creating a new order';
+$lang_module['setting_point_1'] = '1 point';
+$lang_module['cat_allow_point'] = 'Allow keep point with this category';
+$lang_module['cat_number_point'] = 'Number point when buy product this category';
+$lang_module['cat_number_product'] = 'The number of each product at the most to gain point';

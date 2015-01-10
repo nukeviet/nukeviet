@@ -98,6 +98,7 @@ $lang_tmp['cart_check_out'] = $lang_module['cart_check_out'];
 $lang_tmp['history_title'] = $lang_module['history_title'];
 $lang_tmp['active_order_dis'] = $lang_module['active_order_dis'];
 $lang_tmp['wishlist_product'] = $lang_module['wishlist_product'];
+$lang_tmp['point_cart_text'] = $lang_module['point_cart_text'];
 
 $xtpl = new XTemplate( "block.cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_tmp );
@@ -107,22 +108,34 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'LINK_VIEW', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cart" );
 $xtpl->assign( 'WISHLIST', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=wishlist" );
 
-if( $pro_config['active_wishlist'] and ! empty( $user_info ) )
-{
-	$count = 0;
-	$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
-	if( $listid )
-	{
-		$count = count( explode( ',', $listid ) );
-	}
-	$xtpl->assign( 'NUM_ID', $count );
-	$xtpl->parse( 'main.enable.wishlist' );
-}
-
 if( defined( 'NV_IS_USER' ) )
 {
+	// Danh sach san pham yeu thich
+	if( $pro_config['active_wishlist'] )
+	{
+		$count = 0;
+		$listid = $db->query( 'SELECT listid FROM ' . $db_config['prefix'] . '_' . $module_data . '_wishlist WHERE user_id = ' . $user_info['userid'] . '' )->fetchColumn();
+		if( $listid )
+		{
+			$count = count( explode( ',', $listid ) );
+		}
+		$xtpl->assign( 'NUM_ID', $count );
+		$xtpl->parse( 'main.wishlist' );
+	}
+
+	// Lich su giao dich
 	$xtpl->assign( 'LINK_HIS', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=history" );
-	$xtpl->parse( 'main.enable.history' );
+	$xtpl->parse( 'main.history' );
+
+	// Diem tich luy
+	if( $pro_config['point_active'] )
+	{
+		$xtpl->assign( 'POINT_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=point" );
+
+		$point = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] . '' )->fetchColumn();
+		$xtpl->assign( 'POINT', $point );
+		$xtpl->parse( 'main.point' );
+	}
 }
 
 $xtpl->assign( 'money_unit', $pro_config['money_unit'] );

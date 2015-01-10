@@ -17,6 +17,10 @@ $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
 $submenu['coupons'] = $lang_module['coupons'];
+if( $module_config[$module_name]['point_active'] )
+{
+	$submenu['point'] = $lang_module['point'];
+}
 $submenu['cat'] = $lang_module['categories'];
 $submenu['group'] = $lang_module['group'];
 $submenu['blockcat'] = $lang_module['block'];

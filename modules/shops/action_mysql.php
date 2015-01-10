@@ -136,6 +136,9 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  add_time int(11) unsigned NOT NULL default '0',
  edit_time int(11) unsigned NOT NULL default '0',
  groups_view varchar(255) NOT NULL default '',
+ cat_allow_point tinyint(1) NOT NULL default '0',
+ cat_number_point tinyint(4) NOT NULL default '0',
+ cat_number_product tinyint(4) NOT NULL default '0',
  PRIMARY KEY (catid),
  KEY parentid (parentid)
 ) ENGINE=MyISAM";
@@ -442,6 +445,26 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   UNIQUE KEY cid (cid,pid)
 ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_point (
+  userid int(11) NOT NULL DEFAULT '0',
+  point_total int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (userid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_point_queue (
+  order_id int(11) NOT NULL,
+  point mediumint(11) NOT NULL DEFAULT '0',
+  status tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_point_history (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  userid int(11) NOT NULL DEFAULT '0',
+  order_id int(11) NOT NULL,
+  point int(11) NOT NULL DEFAULT '0',
+  time int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
 
 $data = array();
 $data['image_size'] = '100x100';
@@ -469,6 +492,9 @@ $data['active_wishlist'] = 1;
 $data['tags_alias'] = 0;
 $data['auto_tags'] = 1;
 $data['tags_remind'] = 0;
+$data['point_active'] = 1;
+$data['point_conversion'] = 0;
+$data['point_new_order'] = 0;
 
 foreach( $data as $config_name => $config_value )
 {

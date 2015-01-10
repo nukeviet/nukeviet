@@ -1,9 +1,11 @@
 <?php
+
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES., JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
- * @Createdate Dec 29, 2010  10:42:00 PM
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate Dec 29, 2010 10:42:00 PM
  */
 
 if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -28,7 +30,7 @@ $config = array(
 // Đường dẫn trả về nếu có lỗi
 $BackUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
-/* 
+/*
  * DoExpressCheckoutPayment API
  */
 
@@ -100,25 +102,25 @@ if( isset( $DoECResponse ) )
 	{
 		// Lấy thông tin chi tiết
 		$details = $DoECResponse->DoExpressCheckoutPaymentResponseDetails;
-		
+
 		$payment_info = $details->PaymentInfo[0];
 		$tran_ID = $payment_info->TransactionID;
-		
+
 		$amt_obj = $payment_info->GrossAmount;
 		$amt = $amt_obj->value;
 		$currency_cd = $amt_obj->currencyID;
-		
+
 		$PaymentStatus = $payment_info->PaymentStatus;
 		$PaymentDate = $payment_info->PaymentDate;
 		$PaymentDate = strtotime( $PaymentDate );
 		if( $PaymentDate < 0 ) $PaymentDate = 0;
-		
+
 		/*
 			Thông số mặc định của PayPal
 			Completed - Thanh toán hoàn thành
 			Pending - Thanh toán đang chờ
 			Failed - Thanh toán không thành công
-			Denied - Bị từ chối thanh toán 
+			Denied - Bị từ chối thanh toán
 			Refunded - Được hoàn tiền thanh toán
 			Canceled_Reversal - Thanh toán ngược bị hủy
 			Reversed - Thanh toán ngược lại (hoàn trả)
@@ -127,7 +129,7 @@ if( isset( $DoECResponse ) )
 			Voided - Bị hủy bỏ vì không được xác thực
 			Created - Đang khởi tạo
 		 */
-		 
+
 		$Status = 0;
 		switch( $PaymentStatus )
 		{
@@ -144,13 +146,13 @@ if( isset( $DoECResponse ) )
 			case 'Created': $Status = 0; break;
 			default: $Status = -1;
 		}
-		
+
 		$nv_Request->unset_request( $module_data . "_payerdata_paypal", "session" );
-		
+
 		if( $PaymentDetail['order_id'] > 0 )
 		{
 			$error_update = false;
-			
+
 			$PaymentDetail['transaction_status'] = $Status;
 			$PaymentDetail['transaction_time'] = $PaymentDate;
 			$PaymentDetail['transaction_id'] = $tran_ID;
@@ -161,9 +163,9 @@ if( isset( $DoECResponse ) )
 			$stmt = $db->prepare( $db->sql() );
 			$stmt->bindParam( ':payment_id', $tran_ID, PDO::PARAM_STR );
 			$stmt->execute();
-			
+
 			$payment_data_old = $stmt->fetchColumn();
-			
+
 			if( $payment_data != $payment_data_old )
 			{
 				$nv_transaction_status = intval( $Status );
@@ -171,19 +173,28 @@ if( isset( $DoECResponse ) )
 				$payment_time = $PaymentDate;
 
 				$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $nv_transaction_status . "', '" . $PaymentDetail['order_id'] . "', '0', '" . $payment . "', '" . $tran_ID . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
-				
+
 				if( $transaction_id > 0 )
 				{
-					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $PaymentDetail['order_id'] );
+					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1, is_lock=1 WHERE order_id=" . $PaymentDetail['order_id'] );
 				}
 				else
 				{
 					$error_update = true;
 				}
 			}
-			
+
 			if( ! $error_update )
 			{
+				// Cap nhat diem tich luy
+				$data_content = array();
+				$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+				$data_content = $result->fetch( );
+				if( ! empty( $data_content ) )
+				{
+					UpdatePoint( $data_content );
+				}
+
 				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history";
 				$contents = redict_link( $lang_module['payment_complete'], $lang_module['back_history'], $nv_redirect );
 			}
@@ -192,5 +203,3 @@ if( isset( $DoECResponse ) )
 }
 
 redict_link( "Unknow Error!!!", $lang_module['cart_back'], $BackUrl );
-
-?>

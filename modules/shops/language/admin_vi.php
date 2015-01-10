@@ -403,6 +403,21 @@ $lang_module['coupons_error_required_code'] = 'Lỗi: Bạn cần nhập mã gi�
 $lang_module['coupons_error_vail_code'] = 'Lỗi: Mã giảm giá không hợp lệ';
 $lang_module['coupons_error_required_discount'] = 'Lỗi: Bạn cần nhập giá trị giảm';
 
+//Lang for function point
+$lang_module['point'] = 'Điểm tích lũy';
+$lang_module['point_username'] = 'Tên truy cập';
+$lang_module['point_fullname'] = 'Họ tên khách hàng';
+$lang_module['point_email'] = 'Email khách hàng';
+$lang_module['setting_point'] = 'Cấu hình điểm tích lũy';
+$lang_module['setting_point_active'] = 'Kích hoạt tính năng điểm tích lũy';
+$lang_module['setting_point_conversion'] = 'Tỉ lệ quy đổi';
+$lang_module['setting_point_value_conversion'] = 'Giá trị quy đổi';
+$lang_module['setting_point_new_order'] = 'Số điểm thưởng khi tạo đơn hàng mới';
+$lang_module['setting_point_1'] = '1 điểm';
+$lang_module['cat_allow_point'] = 'Cho phép tích lũy điểm với các sản phẩm loại này';
+$lang_module['cat_number_point'] = 'Số điểm thưởng khi mua các sản phẩm loại này';
+$lang_module['cat_number_product'] = 'Số lượng mỗi sản phẩm ít nhất để đạt được điểm';
+
 //THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";
@@ -548,7 +563,8 @@ $lang_module['note_add'] = 'Cách nhau bởi dấu |';
 $lang_module['title_config'] = 'Tiêu đề cấu hình';
 $lang_module['content_config'] = 'Nội dung cấu hình sản phẩm';
 
-$lang_module['addconfig'] = 'Thêm cấu hình';$lang_module['printer_model'] = 'Kiểu máy in';
+$lang_module['addconfig'] = 'Thêm cấu hình';
+$lang_module['printer_model'] = 'Kiểu máy in';
 $lang_module['printer_speed'] = 'Tốc độ in';
 $lang_module['memory'] = 'Bộ nhớ';
 $lang_module['paper_size'] = 'Khổ giấy';

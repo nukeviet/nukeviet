@@ -18,7 +18,7 @@ $savecat = 0;
 $data = array();
 $groups_list = nv_groups_list();
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'],  $data['image'], $data['form'], $data['newday'] ) = array( 0, 0, '', '', '', '', '6', '', '', 7);
+list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['newday'] ) = array( 0, 0, '', '', '', '', '6', 0, 0, 0, '', '', 7);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -43,6 +43,9 @@ if( ! empty( $savecat ) )
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
+	$data['cat_allow_point'] = $nv_Request->get_int( 'cat_allow_point', 'post', 0 );
+	$data['cat_number_point'] = $nv_Request->get_int( 'cat_number_point', 'post', 0 );
+	$data['cat_number_product'] = $nv_Request->get_int( 'cat_number_product', 'post', 0 );
 
 	$data['alias'] = ( $data['alias'] == '' ) ? change_alias( $data['title'] ) : change_alias( $data['alias'] );
 
@@ -102,8 +105,8 @@ if( ! empty( $savecat ) )
 
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, form, admins, add_time, edit_time, groups_view " . $listfield . " )
- 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :form, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view" . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, form, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
+ 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :form, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['image'] = $data['image'];
@@ -113,6 +116,9 @@ if( ! empty( $savecat ) )
 		$data_insert['form'] = $data['form'];
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $data['groups_view'];
+		$data_insert['cat_allow_point'] = $data['cat_allow_point'];
+		$data_insert['cat_number_point'] = $data['cat_number_point'];
+		$data_insert['cat_number_product'] = $data['cat_number_product'];
 		foreach( $field_lang as $field_lang_i )
 		{
 			list( $flang, $fname ) = $field_lang_i;
@@ -137,7 +143,7 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, form = :form, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, form = :form, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
@@ -146,6 +152,9 @@ if( ! empty( $savecat ) )
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':form', $data['form'], PDO::PARAM_STR );
 			$stmt->bindParam( ':groups_view', $data['groups_view'], PDO::PARAM_STR );
+			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
+			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
+			$stmt->bindParam( ':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT );
 			if( $stmt->execute() )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid'] );
@@ -224,6 +233,23 @@ if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $modu
 	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
 }
 $data['description'] = nv_br2nl( $data['description'] );
+if( $pro_config['point_active'] )
+{
+	if( $data['cat_allow_point'] )
+	{
+		$data['cat_number_point_dis'] = '';
+		$data['cat_number_product_dis'] = '';
+		$data['cat_allow_point'] = 'checked="checked"';
+	}
+	else
+	{
+		$data['cat_number_point_dis'] = 'readonly="readonly"';
+		$data['cat_number_product_dis'] = 'readonly="readonly"';
+		$data['cat_allow_point'] = '';
+	}
+	$data['cat_number_point'] = ! empty( $data['cat_number_point'] ) ? $data['cat_number_point'] : '';
+	$data['cat_number_product'] = ! empty( $data['cat_number_product'] ) ? $data['cat_number_product'] : '';
+}
 
 $xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -262,6 +288,11 @@ foreach( $groups_list as $_group_id => $_title )
 		'title' => $_title
 	) );
 	$xtpl->parse( 'main.groups_view' );
+}
+
+if( $pro_config['point_active'] )
+{
+	$xtpl->parse( 'main.point' );
 }
 
 if( ! empty( $cat_form_exit ) )
