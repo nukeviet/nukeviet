@@ -70,10 +70,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 		{
 			while( ( $modname = readdir( $dh ) ) !== false )
 			{
-				if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
+				if( preg_match( $global_config['check_module'], $modname ) )
 				{
 					$cacheDir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
-					$files = nv_clear_files( $cacheDir, NV_CACHEDIR );
+					$files = nv_clear_files( $cacheDir, NV_CACHEDIR . '/' . $modname );
 					foreach( $files as $file )
 					{
 						$xtpl->assign( 'DELFILE', $file );

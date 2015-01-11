@@ -234,7 +234,7 @@
 </div>
 <!-- END: related -->
 <!-- BEGIN: comment -->
-	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+{CONTENT_COMMENT}
 <!-- END: comment -->
 <!-- BEGIN: commentfacebook -->
     <div class="fb-comments" data-href="{SELFURL}" data-numposts="5" data-width="620"></div>

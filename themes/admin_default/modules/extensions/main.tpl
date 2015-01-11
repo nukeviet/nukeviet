@@ -17,6 +17,11 @@
 	{LANG.empty_response}
 </div>
 <!-- END: empty -->
+<!-- BEGIN: login -->
+<div class="alert alert-info">
+	{LOGIN_NOTE}
+</div>
+<!-- END: login -->
 <!-- BEGIN: data -->
 <div class="ext-wrap clearfix">
 	<!-- BEGIN: loop -->
@@ -92,6 +97,3 @@ $(function(){
 </script>
 <!-- END: data -->
 <!-- END: main -->
-<!-- BEGIN: dev -->
-<div class="alert alert-info">{LANG.develop_note}</div>
-<!-- END: dev -->

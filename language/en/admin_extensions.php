@@ -61,8 +61,6 @@ $lang_module['file_type_1'] = 'Install file';
 $lang_module['file_type_2'] = 'Docs file';
 $lang_module['file_type_3'] = 'Others';
 
-$lang_module['develop_note'] = 'This feature is currently in development process';
-
 $lang_module['search_key'] = 'Enter keywords';
 $lang_module['search_go'] = 'Search';
 

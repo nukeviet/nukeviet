@@ -336,9 +336,21 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	// comment
 	define( 'NV_COMM_ID', $news_contents['id'] );
 	define( 'NV_COMM_ALLOWED', $news_contents['allowed_comm'] );
+	// Kiểm tra quyền đăng bình luận
+	$allowed = $module_config[$module_name]['allowed_comm'];
+	if( $allowed == '-1' )
+	{
+		// Quyền hạn đăng bình luận theo bài viết
+		$allowed = ( defined( 'NV_COMM_ALLOWED' ) ) ? NV_COMM_ALLOWED : $module_config[$module_name]['setcomm'];
+	}
+	define( 'NV_PER_PAGE_COMMENT', 5 );//per_page_comment
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
-
-	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array );
+    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
+    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
+    
+	$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+    
+	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment );
 	$id_profile_googleplus = $news_contents['gid'];
 
 	$page_title = $news_contents['title'];

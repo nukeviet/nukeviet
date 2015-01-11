@@ -61,8 +61,6 @@ $lang_module['file_type_1'] = 'File cài đặt';
 $lang_module['file_type_2'] = 'File hướng dẫn';
 $lang_module['file_type_3'] = 'Loại file khác';
 
-$lang_module['develop_note'] = 'Chức năng này hiện đang trong quá trình phát triển';
-
 $lang_module['search_key'] = 'Nhập từ khóa';
 $lang_module['search_go'] = 'Tìm';
 
@@ -91,3 +89,8 @@ $lang_module['install_check_require_fail'] = 'Để ứng dụng này có thể 
 $lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';
 $lang_module['download_error_save'] = 'Lỗi: Lưu file thất bại';
 $lang_module['download_ok'] = 'Tải file thành công, hệ thống sẽ chuyển đến trang cài đặt trong giây lát';
+
+$lang_module['login_pagetitle'] = 'Đăng nhập Merchant Site';
+$lang_module['login_require'] = 'Chức năng này yêu cầu bạn phải đăng nhập. Nhấp <a href="%s">Vào đây</a> để đăng nhập';
+$lang_module['login_creat_merchant'] = 'Nếu chưa có tài khoản, click <a href="http://nukeviet.vn/store/merchant/manager/">Vào đây</a> để tạo';
+$lang_module['login_success'] = 'Đăng nhập thành công, hệ thống sẽ chuyển trang trong giây lát';

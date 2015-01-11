@@ -167,7 +167,7 @@
 		</div>
 
 	<!-- BEGIN: comment -->
-	<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+	{CONTENT_COMMENT}
 	<!-- END: comment -->
 
 	<!-- BEGIN: topic -->

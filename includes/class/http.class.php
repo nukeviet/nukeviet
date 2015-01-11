@@ -1359,7 +1359,7 @@ class NV_http_curl
 			$theBody = NV_http_encoding::decompress( $theBody );
 		}
 
-		$response['body'] = $theBody;
+		$response['body'] = str_replace( "\xEF\xBB\xBF", "", $theBody );
 
 		return $response;
 	}
@@ -1788,7 +1788,7 @@ class NV_http_streams
 			$process['body'] = substr( $process['body'], 0, $args['limit_response_size'] );
 		}
 
-		$response['body'] = $process['body'];
+		$response['body'] = str_replace( "\xEF\xBB\xBF", "", $process['body'] );
 
 		return $response;
 	}

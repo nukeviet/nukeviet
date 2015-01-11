@@ -239,6 +239,17 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	KEY onl_time (onl_time)
 ) ENGINE=MEMORY";
 
+$sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
+	name varchar(50) NOT NULL DEFAULT '',
+	value mediumtext NOT NULL,
+	domain varchar(100) NOT NULL DEFAULT '',
+	path varchar(100) NOT NULL DEFAULT '',
+	expires int(11) NOT NULL DEFAULT '0',
+	secure tinyint(1) NOT NULL DEFAULT '0',
+	UNIQUE KEY cookiename (name, domain, path),
+	KEY name (name)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 	lang char(2) NOT NULL,
 	module varchar(50) NOT NULL,
