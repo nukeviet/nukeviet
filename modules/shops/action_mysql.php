@@ -198,6 +198,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  numsubgroup int(11) NOT NULL DEFAULT '0',
  subgroupid varchar(255) NOT NULL DEFAULT '',
  inhome tinyint(1) unsigned NOT NULL DEFAULT '0',
+ indetail tinyint(1) unsigned NOT NULL DEFAULT '0',
  add_time int(11) unsigned NOT NULL DEFAULT '0',
  edit_time int(11) unsigned NOT NULL DEFAULT '0',
  numpro int(11) unsigned NOT NULL DEFAULT '0',

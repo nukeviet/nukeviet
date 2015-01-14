@@ -51,6 +51,25 @@
 					</li>
 					<!-- END: contact -->
 
+					<!-- BEGIN: group_detail -->
+					<li>
+						<!-- BEGIN: loop -->
+							<!-- BEGIN: maintitle -->
+							<div class="pull-left"><strong>{MAINTITLE}:</strong></div>
+							<!-- END: maintitle -->
+
+							<!-- BEGIN: subtitle -->
+							<ul class="pull-left" style="padding: 0 10px 0">
+							<!-- BEGIN: loop -->
+							<li><a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a></li>
+							<!-- END: loop -->
+							</ul>
+							<div class="clear"></div>
+							<!-- END: subtitle -->
+						<!-- END: loop -->
+					</li>
+					<!-- END: group_detail -->
+
 					<!-- BEGIN: hometext -->
 					<li>
 						<p class="text-justify">

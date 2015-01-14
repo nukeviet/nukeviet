@@ -87,8 +87,8 @@ if( ! empty( $savegroup ) )
 		$viewgroup = 'viewgroup_page_list';
 		$subgroupid = '';
 
-		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, add_time, edit_time, numpro, in_order " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", " . $data['cateid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
+		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order " . $listfield . " )
+ 			VALUES (" . $data['parentid'] . ", " . $data['cateid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;

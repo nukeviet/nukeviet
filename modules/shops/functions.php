@@ -235,6 +235,70 @@ function GetDataInGroups( $result, $array_g )
 }
 
 /**
+ * GetDataInGroup()
+ *
+ * @param mixed $result
+ * @param mixed $groupid
+ * @return
+ */
+function GetDataInGroup( $result, $groupid )
+{
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
+
+	$data_content = array();
+	$data = array();
+
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+	{
+		if( $homeimgthumb == 1 )//image thumb
+		{
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+		}
+		elseif( $homeimgthumb == 2 )//image file
+		{
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+		}
+		elseif( $homeimgthumb == 3 )//image url
+		{
+			$thumb = $homeimgfile;
+		}
+		else//no image
+		{
+			$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
+		}
+
+		$data[] = array(
+			'id' => $id,
+			'listcatid' => $listcatid,
+			'publtime' => $publtime,
+			'title' => $title,
+			'alias' => $alias,
+			'hometext' => $hometext,
+			'homeimgalt' => $homeimgalt,
+			'homeimgthumb' => $thumb,
+			'product_code' => $product_code,
+			'product_number' => $product_number,
+			'product_price' => $product_price,
+			'discount_id' => $discount_id,
+			'money_unit' => $money_unit,
+			'showprice' => $showprice,
+			'newday' => $newday,
+			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_order' => $link . 'setcart&amp;id=' . $id
+		);
+	}
+
+	$data_content['id'] = $groupid;
+	$data_content['title'] = $global_array_group[$groupid]['title'];
+	$data_content['data'] = $data;
+	$data_content['alias'] = $global_array_group[$groupid]['alias'];
+	$data_content['description'] = $global_array_group[$groupid]['description'];
+	$data_content['image'] = $global_array_group[$groupid]['image'];
+
+	return $data_content;
+}
+
+/**
  * SetSessionProView()
  *
  * @param mixed $id

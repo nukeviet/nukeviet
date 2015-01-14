@@ -403,6 +403,7 @@ function GetGroupID( $pro_id )
 {
 	global $db, $db_config, $module_data;
 	$data = array();
+
 	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{

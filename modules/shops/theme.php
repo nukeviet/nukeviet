@@ -1340,6 +1340,40 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	}
 	$xtpl->parse( 'main.groups' );
 
+	// Hien thi danh sach nhom san pham
+	$i = 0;
+	foreach( $listgroupid as $gid )
+	{
+		$group = $global_array_group[$gid];
+		if( $group['parentid'] == 0 and $group['indetail'] )
+		{
+			$xtpl->assign( 'MAINTITLE', $group['title'] );
+			$xtpl->parse( 'main.group_detail.loop.maintitle' );
+
+			if( $group['numsubgroup'] > 0 )
+			{
+				$listsubgroupid = explode( ',', $group['subgroupid'] );
+				foreach( $listsubgroupid as $subgroupid )
+				{
+					$subgroup = $global_array_group[$subgroupid];
+					if( $subgroup['indetail'] and in_array( $subgroupid, $listgroupid ) )
+					{
+						$xtpl->assign( 'SUBTITLE', array( 'title' => $subgroup['title'], 'link' => $subgroup['link'] ) );
+						$xtpl->parse( 'main.group_detail.loop.subtitle.loop' );
+					}
+				}
+				$xtpl->parse( 'main.group_detail.loop.subtitle' );
+			}
+			$i++;
+		}
+
+		if( $i > 0 )
+		{
+			$xtpl->parse( 'main.group_detail.loop' );
+		}
+	}
+	if( $i > 0 )$xtpl->parse( 'main.group_detail' );
+
 	// Chi tiet giam gia
 	if( isset( $data_shop['discount'] ) and !empty( $data_shop['discount'] ) )
 	{
@@ -1556,7 +1590,7 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 
 			// Tinh diem tich luy
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and ( $global_array_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_cat[$data_row['listcatid']]['cat_number_product'] ) )
+			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_cat[$data_row['listcatid']]['cat_number_product']) )
 			{
 				$point_total += intval( $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
 			}
@@ -2415,11 +2449,11 @@ function coupons_info( $data_content, $error )
 
 	if( !empty( $data_content ) )
 	{
-		$data_content['date_start'] = ! empty( $data_content['date_start'] ) ? nv_date( 'd/m/Y', $data_content['date_start'] ) : 'N/A' ;
-		$data_content['date_end'] = ! empty( $data_content['date_end'] ) ? nv_date( 'd/m/Y', $data_content['date_end'] ) : $lang_module['coupons_end_time_ulimit'];
+		$data_content['date_start'] = !empty( $data_content['date_start'] ) ? nv_date( 'd/m/Y', $data_content['date_start'] ) : 'N/A';
+		$data_content['date_end'] = !empty( $data_content['date_end'] ) ? nv_date( 'd/m/Y', $data_content['date_end'] ) : $lang_module['coupons_end_time_ulimit'];
 		$data_content['discount_text'] = $data_content['type'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
 		$xtpl->assign( 'DATA', $data_content );
-		if( ! empty( $data_content['total_amount'] ) )
+		if( !empty( $data_content['total_amount'] ) )
 		{
 			$xtpl->parse( 'main.content.total_amount' );
 		}
@@ -2456,7 +2490,7 @@ function point_info( $data_content, $generate_page )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $data_content );
 
-	if( ! empty( $data_content['history'] ) )
+	if( !empty( $data_content['history'] ) )
 	{
 		foreach( $data_content['history'] as $history )
 		{
@@ -2465,7 +2499,7 @@ function point_info( $data_content, $generate_page )
 			$xtpl->parse( 'main.history.loop' );
 		}
 
-		if( ! empty( $generate_page ) )
+		if( !empty( $generate_page ) )
 		{
 			$xtpl->assign( 'PAGE', $generate_page );
 			$xtpl->parse( 'main.history.generate_page' );

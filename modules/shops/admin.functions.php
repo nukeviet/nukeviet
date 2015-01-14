@@ -383,7 +383,7 @@ function shops_show_group_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
+	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, indetail, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num = $result->rowCount();
 
@@ -392,7 +392,7 @@ function shops_show_group_list( $parentid = 0 )
 		$a = 0;
 		$array_yes_no = array( $lang_global['no'], $lang_global['yes'] );
 
-		while( list( $groupid, $parentid, $title, $weight, $viewgroup, $numsubgroup, $inhome, $in_order ) = $result->fetch( 3 ) )
+		while( list( $groupid, $parentid, $title, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order ) = $result->fetch( 3 ) )
 		{
 			$array_viewgroup = $array_viewcat_nosub;
 			if( ! array_key_exists( $viewgroup, $array_viewgroup ) )
@@ -429,6 +429,13 @@ function shops_show_group_list( $parentid = 0 )
 					"selected" => $key == $inhome ? " selected=\"selected\"" : ""
 				) );
 				$xtpl->parse( 'main.data.loop.inhome' );
+
+				$xtpl->assign( 'OPTION', array(
+					"key" => $key,
+					"title" => $val,
+					"selected" => $key == $indetail ? " selected=\"selected\"" : ""
+				) );
+				$xtpl->parse( 'main.data.loop.indetail' );
 
 				$xtpl->assign( 'OPTION', array(
 					"key" => $key,
