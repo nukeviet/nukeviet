@@ -386,6 +386,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   begin_time int(11) unsigned NOT NULL DEFAULT '0',
   end_time int(11) unsigned NOT NULL DEFAULT '0',
   config text NOT NULL,
+  detail tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (did),
   KEY begin_time (begin_time,end_time)
 ) ENGINE=MyISAM";

@@ -1379,25 +1379,49 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	{
 		$discount = $data_shop['discount'];
 		$discount['config'] = unserialize( $discount['config'] );
-		$discount['begin_time'] = sprintf( $lang_module['discount_content_begin'], nv_date( 'd/m/Y', $discount['begin_time'] ) );
-		if( $discount['end_time'] )
+		if( !$discount['detail'] )
 		{
-			$discount['end_time'] = sprintf( $lang_module['discount_content_end'], nv_date( 'd/m/Y', $discount['end_time'] ) );
+			$discount['begin_time'] = sprintf( $lang_module['discount_content_begin'], nv_date( 'd/m/Y', $discount['begin_time'] ) );
+			if( $discount['end_time'] )
+			{
+				$discount['end_time'] = sprintf( $lang_module['discount_content_end'], nv_date( 'd/m/Y', $discount['end_time'] ) );
+			}
+			else
+			{
+				$discount['end_time'] = '';
+			}
+
+			$discount['text'] = sprintf( $lang_module['discount_content_text'], $global_config['site_name'], $data_content[NV_LANG_DATA . '_title'] );
+
+			foreach( $discount['config'] as $items )
+			{
+				$discount_unit = $items['discount_unit'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
+				$xtpl->assign( 'ITEMS', sprintf( $lang_module['discount_content_text_items'], $items['discount_number'] . $discount_unit, $items['discount_from'], $items['discount_to'] ) );
+				$xtpl->parse( 'main.discount_content.items' );
+			}
+
+			$xtpl->parse( 'main.discount_title' );
 		}
 		else
 		{
-			$discount['end_time'] = '';
+			foreach( $discount['config'] as $items )
+			{
+				if( $items['discount_unit'] == 'p' )
+				{
+					$discount_price = $price['price'] - ($price['price'] * ($items['discount_number'] / 100));
+				}
+				else
+				{
+					$discount_price = $price['price'] - $items['discount_number'];
+				}
+				$items['discount_price'] = nv_number_format( $discount_price, nv_get_decimals( $pro_config['money_unit'] ) );
+				$xtpl->assign( 'ITEMS', $items );
+				$xtpl->parse( 'main.discount_default.items' );
+			}
+			$xtpl->assign( 'money_unit', $price['unit'] );
+			$xtpl->parse( 'main.discount_default' );
 		}
 
-		$discount['text'] = sprintf( $lang_module['discount_content_text'], $global_config['site_name'], $data_content[NV_LANG_DATA . '_title'] );
-
-		foreach( $discount['config'] as $items )
-		{
-			$xtpl->assign( 'ITEMS', sprintf( $lang_module['discount_content_text_items'], $items['discount_number'], $items['discount_from'], $items['discount_to'] ) );
-			$xtpl->parse( 'main.discount_content.items' );
-		}
-
-		$xtpl->parse( 'main.discount_title' );
 		$xtpl->assign( 'DISCOUNT', $discount );
 		$xtpl->parse( 'main.discount_content' );
 	}

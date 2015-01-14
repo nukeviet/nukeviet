@@ -351,7 +351,7 @@ $lang_module['discount_detail'] = 'Promotions';
 $lang_module['discount_content_begin'] = 'From day %s';
 $lang_module['discount_content_end'] = ' to day %s';
 $lang_module['discount_content_text'] = '<strong>%s</strong> promotions apply to product <strong class=\'text-danger\'>%1s</strong>';
-$lang_module['discount_content_text_items'] = 'Reduce %s&#37; when purchase from <strong>%1s</strong> to <strong>%2s</strong> product';
+$lang_module['discount_content_text_items'] = 'Reduce <strong>%s</strong> when purchase from <strong>%1s</strong> to <strong>%2s</strong> product';
 $lang_module['rateconfirm'] = 'Are you sure you want to evaluate';
 $lang_module['rateavg_percent'] = 'Average rate';
 $lang_module['5star'] = '5 star';

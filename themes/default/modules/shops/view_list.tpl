@@ -58,7 +58,7 @@
     				<!-- END: contact -->
 
 	          		<!-- BEGIN: discounts -->
-	            	(-{PRICE.discount_percent}%)
+	            	(-{PRICE.discount_percent}{PRICE.discount_unit})
 	            	<!-- END: discounts -->
     			</span>
     			<br />

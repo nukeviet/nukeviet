@@ -97,6 +97,7 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 	}
 	$price = $price * $number;
 
+
 	$r = $money_config[$currency_convert]['round'];
 	$decimals = nv_get_decimals( $currency_convert );
 
@@ -111,6 +112,7 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 
 	$f = 0;
 	$discount_percent = 0;
+	$discount_unit = '';
 	$discount = 0;
 
 	if( isset( $discounts_config[$discount_id] ) )
@@ -123,7 +125,16 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 				if( $_d['discount_from'] <= $number and $_d['discount_to'] >= $number )
 				{
 					$discount_percent = $_d['discount_number'];
-					$discount = ($price * ($discount_percent / 100));
+					if( $_d['discount_unit'] == 'p' )
+					{
+						$discount_unit = '%';
+						$discount = ($price * ($discount_percent / 100));
+					}
+					else
+					{
+						$discount_unit = ' ' . $pro_config['money_unit'];
+						$discount = $discount_percent * $number;
+					}
 
 					if( $r > 1 )
 					{
@@ -145,11 +156,13 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 
 	$return['discount'] = $discount;// Số tiền giảm giá sản phẩm chưa format
 	$return['discount_format'] = nv_number_format( $discount, $decimals ); // Số tiền giảm giá sản phẩm đã format
-	$return['discount_percent'] = $discount_percent;// Giảm giá theo phần trăm
+	$return['discount_percent'] = $discount_unit == '%' ? $discount_percent : nv_number_format( $discount_percent, $decimals );// Giảm giá theo phần trăm
+	$return['discount_unit'] = $discount_unit;// Đơn vị giảm giá
 
 	$return['sale'] = $price - $discount;// Giá bán thực tế của sản phẩm
 	$return['sale_format'] = nv_number_format( $return['sale'], $decimals );// Giá bán thực tế của sản phẩm đã format
 	$return['unit'] = $currency_convert;// Đơn vị của tiền tệ
+
 	return $return;
 }
 

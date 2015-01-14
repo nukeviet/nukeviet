@@ -338,6 +338,7 @@ $lang_module['number'] = 'STT';
 $lang_module['title'] = 'Tiêu đề';
 $lang_module['begin_time'] = 'Ngày bắt đầu';
 $lang_module['end_time'] = 'Ngày kết thúc';
+$lang_module['discounts_dis_detail'] = 'Hiển thị bảng giá';
 $lang_module['config_discounts'] = 'Cấu hình giảm giá';
 $lang_module['error_required_title'] = 'Lỗi: bạn cần nhập dữ liệu cho Tiêu đề';
 $lang_module['error_required_begin_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày bắt đầu';
@@ -348,7 +349,7 @@ $lang_module['discount_add'] = 'Thêm mới giảm giá';
 $lang_module['discount_edit'] = 'Sửa giảm giá';
 $lang_module['discount_from'] = 'Từ sản phẩm';
 $lang_module['discount_to'] = 'Đến sản phẩm';
-$lang_module['discount_number'] = 'Giảm giá %';
+$lang_module['discount_number'] = 'Giảm giá';
 
 $lang_module['round'] = 'Làm tròn';
 $lang_module['round1'] = 'làm tròn về';

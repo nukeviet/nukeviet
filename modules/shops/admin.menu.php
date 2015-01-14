@@ -17,7 +17,7 @@ $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
 $submenu['coupons'] = $lang_module['coupons'];
-if( $module_config[$module_name]['point_active'] )
+if( isset( $module_config[$module_name] ) and $module_config[$module_name]['point_active'] )
 {
 	$submenu['point'] = $lang_module['point'];
 }

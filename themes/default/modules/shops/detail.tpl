@@ -240,6 +240,25 @@
 			</div>
 		</div>
 		<div class="col-md-6">
+		    <!-- BEGIN: discount_default -->
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="text-right">{LANG.detail_pro_number}</th>
+						<th class="text-left">{LANG.cart_price} ({money_unit})</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- BEGIN: items -->
+					<tr>
+						<td class="text-right">{ITEMS.discount_from} -> {ITEMS.discount_to}</td>
+						<td class="text-left">{ITEMS.discount_price}</td>
+					</tr>
+					<!-- END: items -->
+				</tbody>
+			</table>
+			<!-- END: discount_default -->
+
 			<!-- BEGIN: order -->
 			<div class="pull-right" style="margin-top: 6px">
 				<span class="pull-left text-muted" style="margin: 6px 20px 0">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>

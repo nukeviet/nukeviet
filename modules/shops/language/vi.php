@@ -356,7 +356,7 @@ $lang_module['discount_detail'] = "Chương trình khuyến mãi";
 $lang_module['discount_content_begin'] = "Từ ngày %s";
 $lang_module['discount_content_end'] = " đến ngày %s";
 $lang_module['discount_content_text'] = "<strong>%s</strong> áp dụng chương trình khuyến mãi cho sản phầm <strong class='text-danger'>%1s</strong>";
-$lang_module['discount_content_text_items'] = "Giảm %s&#37; khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
+$lang_module['discount_content_text_items'] = "Giảm <strong>%s</strong> khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
 
 $lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
 $lang_module['dg'] = ' lượt';
