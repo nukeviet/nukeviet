@@ -132,7 +132,12 @@ if( defined( 'NV_IS_USER' ) )
 	{
 		$xtpl->assign( 'POINT_URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=point" );
 
-		$point = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] . '' )->fetchColumn();
+		$point = 0;
+		$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] );
+		if( $result->rowCount() )
+		{
+			$point = $result->fetchColumn();
+		}
 		$xtpl->assign( 'POINT', $point );
 		$xtpl->parse( 'main.point' );
 	}

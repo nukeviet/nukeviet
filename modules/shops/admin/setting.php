@@ -189,6 +189,18 @@ while( list( $code, $currency ) = $result->fetch( 3 ) )
 	$xtpl->parse( 'main.money_loop' );
 }
 
+// Don vi khoi luong
+$result = $db->query( "SELECT code, title FROM " . $db_config['prefix'] . "_" . $module_data . "_weight_" . NV_LANG_DATA . " ORDER BY code DESC" );
+while( list( $code, $title ) = $result->fetch( 3 ) )
+{
+	$array_temp = array();
+	$array_temp['value'] = $code;
+	$array_temp['title'] = $code . " - " . $title;
+	$array_temp['selected'] = ( $code == $data['weight_unit'] ) ? " selected=\"selected\"" : "";
+	$xtpl->assign( 'DATAWEIGHT', $array_temp );
+	$xtpl->parse( 'main.weight_loop' );
+}
+
 $xtpl->assign( 'per_page', $select );
 
 if( ! empty( $error ) )

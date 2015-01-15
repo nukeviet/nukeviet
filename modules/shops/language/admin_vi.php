@@ -92,7 +92,10 @@ $lang_module['setting_up_products'] = 'Tự động đăng sản phẩm không c
 $lang_module['setting_up_products_shop'] = 'Tự động đăng sản phẩm không cần qua kiểm duyệt (gian hàng)';
 $lang_module['setting_order_to_admin'] = 'Đặt hàng sản phẩm gửi tới Ban quản trị';
 $lang_module['setting_order_to_member'] = 'Đặt hàng sản phẩm gửi tới người đăng sản phẩm';
-$lang_module['setting_money_all'] = 'Đơn vị tiền tệ chính (cần cập nhật lại tỉ giá nếu bạn đổi đồng tiền mặc định)';
+$lang_module['setting_money_all'] = 'Đơn vị tiền tệ chính';
+$lang_module['setting_money_all_note'] = 'Cần cập nhật lại tỉ giá nếu bạn đổi đồng tiền mặc định';
+$lang_module['setting_weight_all'] = 'Đơn vị khối lượng chính';
+$lang_module['setting_weight_all_note'] = 'Cần cập nhật lại giá trị chuyển đổi nếu bạn đổi đơn vị khối lượng chính';
 $lang_module['setting_active_auto_check_order'] = 'Tự động duyệt đơn hàng khi người mua gửi ';
 $lang_module['setting_active_order'] = 'Bật chức năng đặt hàng không cần vào trang xem chi tiết';
 $lang_module['setting_active_price'] = 'Hiển thị giá sản phẩm';
@@ -420,6 +423,18 @@ $lang_module['setting_point_1'] = '1 điểm';
 $lang_module['cat_allow_point'] = 'Cho phép tích lũy điểm với các sản phẩm loại này';
 $lang_module['cat_number_point'] = 'Số điểm thưởng khi mua các sản phẩm loại này';
 $lang_module['cat_number_product'] = 'Số lượng mỗi sản phẩm ít nhất để đạt được điểm';
+
+//Lang for function point
+$lang_module['weights'] = 'Khối lượng';
+$lang_module['weight_unit'] = 'Đơn vị khối lượng';
+$lang_module['weight_sign'] = 'Ký hiệu';
+$lang_module['weight_add'] = 'Thêm đơn vị khối lượng';
+$lang_module['weight_edit'] = 'Sửa đơn vị khối lượng';
+$lang_module['weight_convention'] = 'Giá trị quy đổi';
+$lang_module['weight_convention_note'] = '1 đơn vị này so với đơn vị khối lượng mặc định';
+$lang_module['weight_error_empty_code'] = 'Lỗi: Chưa nhập ký hiệu đơn vị';
+$lang_module['weight_error_empty_title'] = 'Lỗi: Chưa nhập tên gọi đơn vị';
+$lang_module['weight_error_empty_exchange'] = 'Lỗi: Chưa nhập giá trị chuyển đổi';
 
 //THEM
 $lang_module['template']= 'Dạng template';

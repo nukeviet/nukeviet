@@ -47,6 +47,35 @@ else
 	nv_set_cache( $module_name, $cache_file, $cache );
 }
 
+// Lay don vi khoi luong
+$sql = 'SELECT code, title, exchange, round FROM ' . $db_config['prefix'] . '_' . $module_data . '_weight_' . NV_LANG_DATA;
+
+$cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
+if( ($cache = nv_get_cache( $module_name, $cache_file )) != false )
+{
+	$weight_config = unserialize( $cache );
+}
+else
+{
+	$weight_config = array();
+	$result = $db->query( $sql );
+	while( $row = $result->fetch() )
+	{
+		$weight_config[$row['code']] = array(
+			'code' => $row['code'],
+			'title' => $row['title'],
+			'exchange' => $row['exchange'],
+			'round' => $row['round'],
+			'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
+			'is_config' => ($row['code'] == $pro_config['weight_unit']) ? 1 : 0
+		);
+	}
+	$result->closeCursor();
+
+	$cache = serialize( $weight_config );
+	nv_set_cache( $module_name, $cache_file, $cache );
+}
+
 // Lay Giam Gia
 $sql = 'SELECT did, title, begin_time, end_time, config FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
 $cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';

@@ -1,14 +1,21 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
 <table class="table table-striped table-bordered table-hover">
+	<colgroup>
+		<col />
+		<col class="w150" />
+		<col />
+		<col span="2" class="w200" />
+		<col class="w150" />
+	</colgroup>
 	<thead>
 		<tr>
 			<th width="10px" class="text-center">&nbsp;</th>
-			<th>{LANG.money_name}</th>
+			<th>{LANG.weight_sign}</th>
 			<th>{LANG.currency}</th>
-			<th>{LANG.exchange}</th>
+			<th>{LANG.weight_convention} <em class="fa fa-info-circle text-info" data-toggle="tooltip" title="" data-original-title="{LANG.weight_convention_note}">&nbsp;</em></th>
 			<th>{LANG.round}</th>
-			<th width="120px" class="text-center">{LANG.function}</th>
+			<th class="text-center">{LANG.function}</th>
 		</tr>
 	</thead>
 	<tfoot>
@@ -21,8 +28,8 @@
 		<tr>
 			<td><input type="checkbox" class="ck" value="{ROW.id}" /></td>
 			<td>{ROW.code}</td>
-			<td>{ROW.currency}</td>
-			<td>1 {ROW.code} = {ROW.exchange} {MONEY_UNIT}</td>
+			<td>{ROW.title}</td>
+			<td>1 {ROW.code} = {ROW.exchange} {WEIGHT_UNIT}</td>
 			<td>{ROW.round}</td>
 			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
 		</tr>
@@ -79,26 +86,28 @@
 </script>
 <!-- END: data -->
 
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
+
 <form class="form-inline" action="" method="post"><input name="savecat" type="hidden" value="1" />
 	<table class="table table-striped table-bordered table-hover">
 		<caption>{DATA.caption}</caption>
 		<tbody>
 			<tr>
-				<td align="right" width="150px"><strong>{LANG.money_name}: </strong></td>
+				<td align="right" width="150px"><strong>{LANG.weight_sign} <span class="red">*</span></strong></td>
+				<td><input class="form-control" style="width: 500px" name="code" type="text" value="{DATA.code}" maxlength="255" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><strong>{LANG.currency} <span class="red">*</span></strong></td>
+				<td><input class="form-control" style="width: 500px" name="title" type="text" value="{DATA.title}" maxlength="255" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><strong>{LANG.weight_convention} <span class="red">*</span></strong></td>
 				<td>
-				<select class="form-control" name="code">
-					<!-- BEGIN: money -->
-					<option value="{DATAMONEY.value}"{DATAMONEY.selected}>{DATAMONEY.title}</option>
-					<!-- END: money -->
-				</select></td>
-			</tr>
-			<tr>
-				<td valign="top" align="right"><strong>{LANG.currency}: </strong></td>
-				<td><input class="form-control" style="width: 500px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
-			</tr>
-			<tr>
-				<td valign="top" align="right"><strong>{LANG.exchange}: </strong></td>
-				<td><input class="form-control" style="width: 500px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
+					<input class="form-control" style="width: 500px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" />
+					<em class="fa fa-info-circle fa-lg text-info" data-toggle="tooltip" title="" data-original-title="{LANG.weight_convention_note}">&nbsp;</em>
+				</td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.round}: </strong></td>

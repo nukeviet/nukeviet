@@ -118,6 +118,7 @@ elseif( $op != 'setup' )
 }
 
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_money_' . $lang;
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_weight_' . $lang;
 
 $sql_create_module = $sql_drop_module;
 
@@ -232,6 +233,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  product_price float NOT NULL DEFAULT '0',
  money_unit char(3) NOT NULL,
  product_unit int(11) NOT NULL,
+ product_weight float NOT NULL DEFAULT '0',
+ weight_unit tinyint(2) NOT NULL DEFAULT '0',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  homeimgfile varchar(255) NOT NULL DEFAULT '',
  homeimgthumb tinyint(4) NOT NULL DEFAULT '0',
@@ -366,6 +369,16 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  UNIQUE KEY code (code)
 ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (
+ id tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
+ code char(20) NOT NULL,
+ title varchar(50) NOT NULL,
+ exchange float NOT NULL default '0',
+ round varchar(10) NOT NULL,
+ PRIMARY KEY (id),
+ UNIQUE KEY code (code)
+) ENGINE=MyISAM";
+
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_payment (
  payment varchar(100) NOT NULL,
  paymentname varchar(255) NOT NULL,
@@ -477,6 +490,7 @@ $data['home_view'] = 'view_home_all';
 $data['per_page'] = 20;
 $data['per_row'] = 3;
 $data['money_unit'] = 'VND';
+$data['weight_unit'] = 'g';
 $data['post_auto_member'] = 0;
 $data['auto_check_order'] = 1;
 $data['format_order_id'] = strtoupper( substr( $module_name, 0, 1 ) ) . '%06s';
@@ -497,7 +511,7 @@ $data['active_wishlist'] = 1;
 $data['tags_alias'] = 0;
 $data['auto_tags'] = 1;
 $data['tags_remind'] = 0;
-$data['point_active'] = 1;
+$data['point_active'] = 0;
 $data['point_conversion'] = 0;
 $data['point_new_order'] = 0;
 
@@ -558,6 +572,7 @@ if( ! empty( $set_lang_data ) )
 	if( $numrow )
 	{
 		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . $set_lang_data;
+		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $set_lang_data;
 	}
 
 	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tags" )->fetchColumn();
@@ -575,12 +590,15 @@ if( ! empty( $set_lang_data ) )
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tags_id SET " . $lang . "_keyword = " . $set_lang_data . "_keyword";
 	}
 
-
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SET exchange = '1'";
+	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " SET exchange = '1'";
 }
 
 $sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round) VALUES (840, 'USD', 'US Dollar', 21000, '0.01')";
 $sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round) VALUES (704, 'VND', 'Vietnam Dong', 1, '100')";
+
+$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('g', 'Gram', 1, '1')";
+$sql_create_module[] = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('kg', 'Kilogam', 1000, '1')";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD UNIQUE (" . $lang . "_alias)";

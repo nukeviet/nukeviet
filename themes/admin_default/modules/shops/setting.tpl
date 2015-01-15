@@ -62,13 +62,26 @@
 				<td><input type="checkbox" value="1" name="show_displays" {ck_displays}/></td>
 			</tr>
 			<tr>
-				<td><strong>{LANG.setting_money_all}</strong></td>
+				<td>
+					<strong>{LANG.setting_money_all}</strong>
+				</td>
 				<td>
 				<select class="form-control" name="money_unit">
 					<!-- BEGIN: money_loop -->
 					<option value="{DATAMONEY.value}"{DATAMONEY.selected}>{DATAMONEY.title}</option>
 					<!-- END: money_loop -->
-				</select></td>
+				</select>&nbsp;<em class="fa fa-info-circle fa-lg text-info" data-toggle="tooltip" title="" data-original-title="{LANG.setting_money_all_note}">&nbsp;</em></td>
+			</tr>
+			<tr>
+				<td>
+					<strong>{LANG.setting_weight_all}</strong>
+				</td>
+				<td>
+				<select class="form-control" name="weight_unit">
+					<!-- BEGIN: weight_loop -->
+					<option value="{DATAWEIGHT.value}"{DATAWEIGHT.selected}>{DATAWEIGHT.title}</option>
+					<!-- END: weight_loop -->
+				</select>&nbsp;<em class="fa fa-info-circle fa-lg text-info" data-toggle="tooltip" title="" data-original-title="{LANG.setting_weight_all_note}">&nbsp;</em></td>
 			</tr>
 			<tr>
 				<td><strong>{LANG.format_order_id}</strong></td>
