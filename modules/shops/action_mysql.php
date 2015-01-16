@@ -484,6 +484,19 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_location (
+ id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+ parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
+ title varchar(255) NOT NULL,
+ weight smallint(4) unsigned NOT NULL DEFAULT '0',
+ sort mediumint(8) NOT NULL DEFAULT '0',
+ lev smallint(4) NOT NULL DEFAULT '0',
+ numsub int(11) NOT NULL DEFAULT '0',
+ subid varchar(255) NOT NULL DEFAULT '',
+ PRIMARY KEY (id),
+ KEY parentid (parentid)
+) ENGINE=MyISAM ";
+
 $data = array();
 $data['image_size'] = '100x100';
 $data['home_view'] = 'view_home_all';

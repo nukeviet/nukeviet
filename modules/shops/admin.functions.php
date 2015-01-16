@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting','content', 'custom_form', 'keywords', 'del_content','detemplate', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax','template', 'seller', 'copy_product', 'order_seller', 'coupons', 'coupons_view', 'point', 'weight', 'delweight' );
+$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting','content', 'custom_form', 'keywords', 'del_content','detemplate', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax','template', 'seller', 'copy_product', 'order_seller', 'coupons', 'coupons_view', 'point', 'weight', 'delweight', 'location', 'change_location', 'list_location', 'del_location' );
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$allow_func[] = 'setting';
@@ -467,6 +467,175 @@ function shops_show_group_list( $parentid = 0 )
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
+}
+
+/**
+ * shops_show_location_list()
+ *
+ * @param integer $parentid
+ * @return
+ */
+function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
+{
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_nosub, $module_file, $global_config;
+
+	if( empty( $parentid ) )
+	{
+		$lev = 0;
+	}
+	else
+	{
+		$result = $db->query( 'SELECT lev FROM ' . $db_config['prefix'] . '_' . $module_data . '_location WHERE id = ' . $parentid );
+		list( $lev ) = $result->fetch( 3 );
+		$lev += 1;
+		$lev = $lev > 5 ? 5 : $lev;
+	}
+
+	$xtpl = new XTemplate( "location_lists.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'OP', $op );
+	$xtpl->assign( 'CAPTION', $lang_module['location_lev_' . $lev] );
+
+	if( $parentid > 0 )
+	{
+		$parentid_i = $parentid;
+		$array_location_title = array();
+		$a = 0;
+		while( $parentid_i > 0 )
+		{
+			list( $id_i, $parentid_i, $title_i ) = $db->query( "SELECT id, parentid, title FROM " . $db_config['prefix'] . "_" . $module_data . "_location WHERE id=" . intval( $parentid_i ) )->fetch( 3 );
+
+			$array_location_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id_i . "\"><strong>" . $title_i . "</strong></a>";
+			++$a;
+		}
+
+		for( $i = $a - 1; $i >= 0; $i-- )
+		{
+			$xtpl->assign( 'LOCATION_NAV', $array_location_title[$i] . ( $i > 0 ? " &raquo; " : "" ) );
+			$xtpl->parse( 'main.locationnav.loop' );
+		}
+
+		$xtpl->parse( 'main.location' );
+	}
+
+	// Fetch Limit
+	$db->sqlreset()
+	  ->select( 'COUNT(*)' )
+	  ->from( $db_config['prefix'] . '_' . $module_data . '_location' )
+	  ->where( 'parentid = ' . $parentid );
+
+	$all_page = $db->query( $db->sql() )->fetchColumn();
+
+	$db->select( 'id, parentid, title, weight, numsub' )
+	  ->order( 'weight ASC' )
+	  ->limit( $per_page )
+	  ->offset( ($page - 1) * $per_page );
+
+	$result = $db->query( $db->sql() );
+	if( $result->rowCount())
+	{
+		while( list( $id, $parentid, $title, $weight, $numsub ) = $result->fetch( 3  ) )
+		{
+			$xtpl->assign( 'ROW', array(
+				"id" => $id,
+				"location_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id,
+				"title" => $title,
+				"numsub" => $numsub > 0 ? " <span style=\"color:#FF0101;\">(" . $numsub . ' ' . $lang_module['location_lev_' . ( $lev + 1 )] . ")</span>" : "",
+				"parentid" => $parentid
+			) );
+
+			for( $i = 1; $i <= $all_page; $i++ )
+			{
+				$xtpl->assign( 'OPTION', array(
+					"key" => $i,
+					"title" => $i,
+					"selected" => $i == $weight ? " selected=\"selected\"" : ""
+				) );
+				$xtpl->parse( 'main.data.loop.weight' );
+			}
+
+			$xtpl->parse( 'main.data.loop' );
+		}
+
+		$generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
+		if( ! empty( $generate_page ) )
+		{
+			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
+			$xtpl->parse( 'main.data.generate_page' );
+		}
+
+		$xtpl->parse( 'main.data' );
+	}
+
+	$result->closeCursor();
+	unset( $sql, $result );
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * nv_fix_location_order()
+ *
+ * @param integer $parentid
+ * @param integer $order
+ * @param integer $lev
+ * @return
+ */
+function nv_fix_location_order( $parentid = 0, $sort = 0, $lev = 0 )
+{
+	global $db, $db_config, $module_data;
+
+	$sql = 'SELECT id, parentid FROM ' . $db_config['prefix'] . '_' . $module_data . '_location WHERE parentid=' . $parentid . ' ORDER BY weight ASC';
+	$result = $db->query( $sql );
+	$array_location_order = array();
+	while( $row = $result->fetch() )
+	{
+		$array_location_order[] = $row['id'];
+	}
+	$result->closeCursor();
+	$weight = 0;
+	if( $parentid > 0 )
+	{
+		++$lev;
+	}
+	else
+	{
+		$lev = 0;
+	}
+	foreach( $array_location_order as $locationid_i )
+	{
+		++$sort;
+		++$weight;
+
+		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_location SET weight=' . $weight . ', sort=' . $sort . ', lev=' . $lev . ' WHERE id=' . $locationid_i;
+		$db->query( $sql );
+
+		$sort = nv_fix_location_order( $locationid_i, $sort, $lev );
+	}
+
+	$numsub = $weight;
+
+	if( $parentid > 0 )
+	{
+		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_location SET numsub=" . $numsub;
+		if( $numsub == 0 )
+		{
+			$sql .= ",subid=''";
+		}
+		else
+		{
+			$sql .= ",subid='" . implode( ",", $array_location_order ) . "'";
+		}
+		$sql .= " WHERE id=" . intval( $parentid );
+		$db->query( $sql );
+	}
+	return $sort;
 }
 
 /**
