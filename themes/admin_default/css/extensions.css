@@ -52,6 +52,10 @@
 	height: 110px;
 }
 
+.ext-alert-inline{
+	margin-bottom: 0;
+}
+
 /*
  * Star rating
  */
