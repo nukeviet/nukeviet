@@ -425,6 +425,23 @@ $sql_create_table[] = "CREATE INDEX inv_setup_extensions_id ON NV3_SETUP_EXTENSI
 
 $sql_create_table[] = "CREATE INDEX inv_setup_extensions_type ON NV3_SETUP_EXTENSIONS(type) TABLESPACE USERS";
 
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
+	idfile NUMBER(8,0) DEFAULT NULL,
+	type VARCHAR2(10 CHAR) DEFAULT 'other' NOT NULL ENABLE,
+	title VARCHAR2(55 CHAR) NOT NULL ENABLE,
+	path VARCHAR2(255 CHAR) NOT NULL ENABLE,
+	lastmodified NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	primary key (idfile)
+)";
+
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_EXTENSION_FILES';
+$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_EXTENSION_FILES
+  BEFORE INSERT  ON ' . $db_config['prefix'] . '_extension_files
+  FOR EACH ROW WHEN (new.idfile is null)
+	BEGIN
+	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_EXTENSION_FILES.nextval INTO :new.idfile FROM DUAL;
+	END TNV_' . strtoupper( $db_config['prefix'] ) . '_EXTENSION_FILES;';
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	bid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
 	click_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
