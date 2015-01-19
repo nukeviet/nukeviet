@@ -10,7 +10,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$per_page_comment = NV_PER_PAGE_COMMENT;
+$per_page_comment = defined( 'NV_PER_PAGE_COMMENT' ) ? NV_PER_PAGE_COMMENT : 5;
 
 /**
  * nv_comment_module()
