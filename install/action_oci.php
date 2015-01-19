@@ -431,6 +431,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files
 	title VARCHAR2(55 CHAR) NOT NULL ENABLE,
 	path VARCHAR2(255 CHAR) NOT NULL ENABLE,
 	lastmodified NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	duplicate NUMBER(5,0) DEFAULT 0 NOT NULL ENABLE,
 	primary key (idfile)
 )";
 
