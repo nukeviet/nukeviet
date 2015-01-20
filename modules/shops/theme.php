@@ -1694,12 +1694,15 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
  */
 function uers_order( $data_content, $data_order, $total_coupons, $error )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $global_array_group;
+	global $module_info, $lang_module, $lang_global, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
 
 	$xtpl = new XTemplate( 'order.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'MODULE_FILE', $module_file );
+	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
+
 	$price_total = 0;
 	$i = 1;
 	if( !empty( $data_content ) )
@@ -1736,6 +1739,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 	$xtpl->assign( 'price_coupons', nv_number_format( $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'price_total', nv_number_format( $price_total - $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
+	$xtpl->assign( 'weight_unit', $pro_config['weight_unit'] );
 	$xtpl->assign( 'DATA', $data_order );
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart' );
@@ -1748,6 +1752,55 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 			$xtpl->parse( 'main.price3.total_coupons' );
 		}
 		$xtpl->parse( 'main.price3' );
+	}
+
+	if( ! empty( $shipping_data['list_location'] ) )
+	{
+		foreach( $shipping_data['list_location'] as $rows_i )
+		{
+			$rows_i['select'] = ( $data_order['shipping']['ship_location_id'] == $rows_i['id'] ) ? ' selected="selected"' : '';
+			$xtpl->assign( 'LOCATION', $rows_i );
+			$xtpl->parse( 'main.location_loop' );
+		}
+	}
+
+	if( ! empty( $shipping_data['list_shops'] ) )
+	{
+		$i = 0;
+		foreach( $shipping_data['list_shops'] as $rows_i )
+		{
+			$rows_i['location_string'] = ( ! empty( $rows_i['address'] ) ? $rows_i['address'] . ', ' : '' ) . $shipping_data['list_location'][$rows_i['location']]['title'];
+			while( $shipping_data['list_location'][$rows_i['location']]['parentid'] > 0 )
+			{
+				$items = $shipping_data['list_location'][$shipping_data['list_location'][$rows_i['location']]['parentid']];
+				$rows_i['location_string'] .= ', ' . $items['title'];
+				$shipping_data['list_location'][$rows_i['location']]['parentid'] = $items['parentid'];
+			}
+			$rows_i['location_string'] = str_replace( '&nbsp;', '', $rows_i['location_string'] );
+			$rows_i['checked'] = ( $data_order['shipping']['ship_shops_id'] == $rows_i['id'] or $i == 0 ) ? ' checked="checked"' : '';
+			$xtpl->assign( 'SHOPS', $rows_i );
+			$xtpl->parse( 'main.shops_loop' );
+			$i++;
+		}
+	}
+
+	if( ! empty( $shipping_data['list_carrier'] ) )
+	{
+		$i = 0;
+		foreach( $shipping_data['list_carrier'] as $rows_i )
+		{
+			$rows_i['checked'] = ( $data_order['shipping']['ship_carrier_id'] == $rows_i['id'] or $i == 0 ) ? ' checked="checked"' : '';
+			$xtpl->assign( 'CARRIER', $rows_i );
+			$xtpl->parse( 'main.carrier_loop' );
+			$i++;
+		}
+	}
+
+	$array_yes_no = array( $lang_global['no'], $lang_global['yes'] );
+	foreach( $array_yes_no as $key => $value )
+	{
+		$xtpl->assign( 'IS_SHIPPING', array( 'key' => $key, 'value' => $value, 'checked' => ( $key == $data_order['order_shipping'] ) ? 'checked="checked"' : '' ) );
+		$xtpl->parse( 'main.shipping_loop' );
 	}
 
 	$xtpl->parse( 'main' );

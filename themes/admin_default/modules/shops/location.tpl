@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+{FILE "shipping_menu.tpl"}
+
 <div id="module_show_list">
 	{LOCATION_LIST}
 </div>

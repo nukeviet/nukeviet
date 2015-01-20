@@ -438,6 +438,8 @@ $lang_module['weight_error_empty_exchange'] = 'Lỗi: Chưa nhập giá trị ch
 
 //Lang for function point
 $lang_module['location'] = 'Địa điểm';
+$lang_module['location_detail'] = 'Địa chỉ chi tiết';
+$lang_module['location_chose'] = 'Chọn địa điểm';
 $lang_module['location_name'] = 'Tên địa điểm';
 $lang_module['location_in'] = 'Trực thuộc';
 $lang_module['location_not_in'] = 'Không trực thuộc';
@@ -451,6 +453,37 @@ $lang_module['location_lev_3'] = 'Xã / Phường / Ấp';
 $lang_module['location_lev_4'] = 'Thôn / Bản / Khu phố';
 $lang_module['location_lev_5'] = 'Cơ sở địa phương';
 $lang_module['location_name_empty'] = 'Lỗi: Chưa nhập tên địa điểm';
+
+//Lang for function shipping
+$lang_module['shipping'] = 'Đơn hàng vận chuyển';
+
+//Lang for function shops
+$lang_module['shops'] = 'Cửa hàng';
+$lang_module['shops_error_required_name'] = 'Lỗi: Bạn chưa nhập tên cửa hàng';
+$lang_module['shops_error_required_location'] = 'Lỗi: Bạn chưa chọn địa điểm cửa hàng';
+$lang_module['shops_error_required_all'] = 'Lỗi: Cấu hình nhà vận chuyển - vui lòng chọn đầy đủ thông tin';
+$lang_module['shops_error_exist_carrier'] = 'Lỗi: <strong>Cấu hình nhà vận chuyển</strong> không đúng - nhà vận chuyển không được trùng nhau';
+
+//Lang for function carrier
+$lang_module['carrier'] = 'Nhà vận chuyển';
+$lang_module['carrier_chose'] = 'Chọn nhà vận chuyển';
+$lang_module['carrier_config'] = 'Cấu hình nhà vận chuyển';
+$lang_module['carrier_description'] = 'Giới thiệu';
+$lang_module['carrier_active'] = 'Hoạt động';
+$lang_module['carrier_price'] = 'Phí vận chuyển';
+$lang_module['carrier_error_required_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Tên gọi';
+$lang_module['carrier_config_list'] = 'Danh sách các cấu hình vận chuyển';
+$lang_module['carrier_config_add'] = 'Thêm cấu hình';
+$lang_module['carrier_config_chose'] = 'Chọn cấu hình';
+$lang_module['carrier_config_config'] = 'Cấu hình dịch vụ nhà vận chuyển';
+$lang_module['carrier_config_name'] = 'Tên cấu hình';
+$lang_module['carrier_config_description'] = 'Mô tả';
+$lang_module['carrier_config_weight'] = 'Cấu hình khối lượng';
+$lang_module['carrier_config_value'] = 'Giá trị';
+$lang_module['carrier_config_items_edit'] = 'Sửa chi tiết cấu hình';
+$lang_module['carrier_config_items_add'] = 'Thêm chi tiết cấu hình';
+$lang_module['carrier_config_items_cg'] = 'Thuộc cấu hình';
+$lang_module['carrier_config_error_required_name'] = 'Lỗi: Bạn cần nhập tên cấu hình';
 
 //THEM
 $lang_module['template']= 'Dạng template';

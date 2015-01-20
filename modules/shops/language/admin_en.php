@@ -399,3 +399,12 @@ $lang_module['setting_point_1'] = '1 point';
 $lang_module['cat_allow_point'] = 'Allow keep point with this category';
 $lang_module['cat_number_point'] = 'Number point when buy product this category';
 $lang_module['cat_number_product'] = 'The number of each product at the most to gain point';
+
+//Lang for function carrier
+$lang_module['carrier'] = 'carrier';
+$lang_module['phone'] = 'Phone';
+$lang_module['address'] = 'Address';
+$lang_module['error_required_name'] = 'Error: Required fields enter the Product name';
+
+//Lang for function carrier
+$lang_module['search_submit'] = 'Search';

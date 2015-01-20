@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting','content', 'custom_form', 'keywords', 'del_content','detemplate', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax','template', 'seller', 'copy_product', 'order_seller', 'coupons', 'coupons_view', 'point', 'weight', 'delweight', 'location', 'change_location', 'list_location', 'del_location' );
+$allow_func = array( 'main', 'alias', 'items', 'exptime', 'publtime', 'setting','content', 'custom_form', 'keywords', 'del_content','detemplate', 'cat', 'change_cat', 'list_cat', 'del_cat', 'block', 'blockcat', 'del_block_cat', 'list_block_cat', 'chang_block_cat', 'change_block', 'list_block', 'prounit', 'delunit', 'order', 'or_del', 'or_view', 'money', 'delmoney', 'active_pay', 'payport', 'changepay', 'actpay', 'docpay', 'group', 'del_group', 'list_group', 'change_group', 'getcatalog', 'getgroup', 'discounts', 'view', 'tags', 'tagsajax','template', 'seller', 'copy_product', 'order_seller', 'coupons', 'coupons_view', 'point', 'weight', 'delweight', 'location', 'change_location', 'list_location', 'del_location', 'carrier', 'carrier_config', 'carrier_config_items', 'shipping', 'shops' );
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$allow_func[] = 'setting';

@@ -114,6 +114,14 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_point';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_point_queue';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_point_history';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_location';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_carrier';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_carrier_location';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_carrier_weight';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_shops';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_shops_carrier';
 	$set_lang_data = '';
 }
 
@@ -234,7 +242,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  money_unit char(3) NOT NULL,
  product_unit int(11) NOT NULL,
  product_weight float NOT NULL DEFAULT '0',
- weight_unit tinyint(2) NOT NULL DEFAULT '0',
+ weight_unit char(20) NOT NULL DEFAULT '',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  homeimgfile varchar(255) NOT NULL DEFAULT '',
  homeimgthumb tinyint(4) NOT NULL DEFAULT '0',
@@ -312,7 +320,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  lang char(2) NOT NULL default 'en',
  order_name varchar(255) NOT NULL,
  order_email varchar(255) NOT NULL,
- order_address text NOT NULL,
  order_phone varchar(20) NOT NULL,
  order_note text NOT NULL,
  user_id int(11) unsigned NOT NULL default '0',
@@ -495,6 +502,68 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  subid varchar(255) NOT NULL DEFAULT '',
  PRIMARY KEY (id),
  KEY parentid (parentid)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier (
+  id tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  phone varchar(15) NOT NULL,
+  address varchar(255) NOT NULL,
+  logo varchar(255) NOT NULL,
+  description text NOT NULL,
+  weight tinyint(3) unsigned NOT NULL,
+  status tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config (
+  id tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  description text NOT NULL,
+  weight tinyint(3) unsigned NOT NULL,
+  status tinyint(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_items (
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  cid tinyint(3) unsigned NOT NULL DEFAULT '0',
+  title varchar(255) NOT NULL,
+  description text NOT NULL,
+  weight smallint(4) unsigned NOT NULL,
+  add_time int(11) unsigned NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location (
+  iid smallint(4) unsigned NOT NULL,
+  lid mediumint(8) unsigned NOT NULL
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_weight (
+  iid smallint(4) unsigned NOT NULL,
+  weight float unsigned NOT NULL,
+  weight_unit varchar(20) NOT NULL,
+  carrier_price float NOT NULL,
+  carrier_price_unit char(3) NOT NULL
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_shops (
+  id tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  location mediumint(8) unsigned NOT NULL DEFAULT '0',
+  address varchar(255) NOT NULL,
+  description text NOT NULL,
+  weight tinyint(3) unsigned NOT NULL,
+  status tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_shops_carrier (
+  shops_id tinyint(3) unsigned NOT NULL,
+  carrier_id tinyint(3) unsigned NOT NULL,
+  config_id tinyint(3) unsigned NOT NULL,
+  UNIQUE KEY shops_id (shops_id, carrier_id)
 ) ENGINE=MyISAM ";
 
 $data = array();

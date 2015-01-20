@@ -404,6 +404,22 @@ $lang_module['point_payment_point'] = 'Thanh toán bằng điểm tích lũy';
 $lang_module['point_payment_point_confirm'] = 'Quý khách chắc chắn muốn dùng quỹ điểm tích lũy để thanh toán đơn hàng này?';
 $lang_module['point_payment_error_money'] = 'Quý khách không đủ điểm để thanh toán đơn hàng này!';
 
+$lang_module['shipping'] = 'Vận chuyển';
+$lang_module['shipping_price'] = 'Phí vận chuyển';
+$lang_module['shipping_copy'] = 'Lấy thông tin người mua';
+$lang_module['shipping_address'] = 'Địa chỉ';
+$lang_module['shipping_name'] = 'Họ tên người nhận';
+$lang_module['shipping_phone'] = 'Số điện thoại người nhận';
+$lang_module['shipping_services'] = 'Dịch vụ vận chuyển';
+$lang_module['shipping_info'] = 'Thông tin vận chuyển';
+$lang_module['shipping_info_weight'] = 'Tổng khối lượng';
+$lang_module['shipping_shops'] = 'Cửa hàng';
+$lang_module['shipping_shops_chose'] = 'Chọn cửa hàng';
+$lang_module['shipping_carrier_chose'] = 'Chọn dịch vụ vận chuyển';
+$lang_module['shipping_address_extend'] = 'Thông tin thêm';
+$lang_module['shipping_address_note'] = 'Để hệ thống có thể tính toán đúng chi phí vận chuyển, vui lòng chọn đơn vị địa chính gần nhất với khu vực nhận hàng của bạn ở hộp chọn bên trên.';
+$lang_module['shipping_error'] = 'Hệ thống không thể đưa ra chi phí vận chuyển. Vui lòng liên hệ với người quản lý hoặc chọn địa điểm thuộc cấp lớn hơn (nếu có) hay nhỏ hơn (nếu có) địa điểm hiện tại.';
+
 //them truong tuy bien
 
 $lang_module['volume'] = 'Khối lượng ';

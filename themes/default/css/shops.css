@@ -263,6 +263,10 @@ div.step_bar a.step_current{
     color: red;
 }
 
+.block{
+	margin-bottom: 10px
+}
+
 .block .payment_info{
     margin: 10px 0 10px 0;
 }
@@ -1191,4 +1195,14 @@ img.calendar {
 
 .tab-pane{
 	padding: 5px
+}
+.select2-selection{
+	height: 32px !important
+}
+.select2-container .select2-selection--single .select2-selection__rendered
+{
+	padding-top: 2px
+}
+.order_shipping_info li{
+	margin: 8px 0;
 }

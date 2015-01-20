@@ -41,6 +41,7 @@ if( $savesetting == 1 )
 	$data['auto_check_order'] = $nv_Request->get_string( 'auto_check_order', 'post', 0 );
 	$data['post_auto_member'] = $nv_Request->get_string( 'post_auto_member', 'post', 0 );
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
+	$data['weight_unit'] = $nv_Request->get_string( 'weight_unit', 'post', "" );
 	$data['home_view'] = $nv_Request->get_string( 'home_view', 'post', '' );
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );

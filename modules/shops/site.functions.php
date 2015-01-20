@@ -209,6 +209,13 @@ function nv_number_format( $number, $decimals = 0 )
 	return $str;
 }
 
+/**
+ * nv_get_decimals()
+ *
+ * @param mixed $currency_convert
+ * @return
+ */
+
 function nv_get_decimals( $currency_convert )
 {
 	global $money_config;
@@ -221,4 +228,125 @@ function nv_get_decimals( $currency_convert )
 		$decimals = $money_config[$currency_convert]['decimals'];
 	}
 	return $decimals;
+}
+
+/**
+ * nv_weight_conversion()
+ *
+ * @param mixed $weight
+ * @param mixed $weight_unit_curent
+ * @param mixed $weight_unit_convert
+ * @param integer $number
+ * @return
+ */
+function nv_weight_conversion( $weight, $weight_unit_curent, $weight_unit_convert, $number = 1 )
+{
+	global $pro_config, $weight_config;
+
+	if( $weight > 0 )
+	{
+		if( $weight_unit_curent == $pro_config['weight_unit'] )
+		{
+			$weight = $weight / $weight_config[$weight_unit_convert]['exchange'];
+		}
+		elseif( $weight_unit_convert == $pro_config['weight_unit'] )
+		{
+			$weight = $weight * $weight_config[$weight_unit_curent]['exchange'];
+		}
+		$weight = $weight * $number;
+
+		$r = $weight_config[$weight_unit_convert]['round'];
+		$decimals = 0;
+
+		if( $r <= 1 )
+		{
+			$decimals = $weight_config[$weight_unit_convert]['decimals'];
+		}
+
+		if( $r > 1 )
+		{
+			$weight = round( $weight / $r ) * $r;
+		}
+		else
+		{
+			$weight = round( $weight, $decimals );
+		}
+	}
+
+	return $weight;
+}
+
+/**
+ * nv_shipping_price()
+ *
+ * @param mixed $weight
+ * @param mixed $weight_unit
+ * @param mixed $location_id
+ * @param mixed $carrier_id
+ * @param mixed $config_id
+ * @return
+ */
+function nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id )
+{
+	global $db, $db_config, $module_data, $pro_config;
+
+	$array_weight_config = array();
+	$array_location_config = array();
+	$price = array();
+
+	$sql = 'SELECT config_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_shops_carrier WHERE shops_id = ' . $shops_id . ' AND carrier_id = ' . $carrier_id;
+	$result = $db->query( $sql );
+	list( $config_id ) = $result->fetch( 3 );
+
+	if( $config_id )
+	{
+		$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE cid = ' . $config_id;
+		$result = $db->query( $sql );
+		list( $id ) = $result->fetch( 3 );
+
+		if( $id )
+		{
+			// Weight config
+			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $id;
+			$result = $db->query( $sql );
+			while( $array_weight = $result->fetch() )
+			{
+				$array_weight_config[$array_weight['iid']][] = $array_weight;
+			}
+
+			// Location config
+			$sql = 'SELECT lid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE iid = ' . $id;
+			$result = $db->query( $sql );
+			while( list( $lid ) = $result->fetch( 3 ) )
+			{
+				$array_location_config[] = $lid;
+			}
+		}
+	}
+
+	if( in_array( $location_id, $array_location_config ) )
+	{
+		if( !empty( $array_weight_config ) )
+		{
+			foreach( $array_weight_config as $weight_config )
+			{
+				foreach( $weight_config as $config )
+				{
+					$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
+					if( $weight <= $config['weight'] )
+					{
+						$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
+						break;
+					}
+					else
+					{
+						// Vuot muc gia cau hinh
+
+					}
+				}
+			}
+		}
+	}
+
+	return $price;
 }

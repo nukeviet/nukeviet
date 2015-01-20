@@ -138,6 +138,11 @@ $xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'LOCATION_LIST', shops_show_location_list( $data['parentid'], $page, $per_page, $base_url ) );
 
+$xtpl->assign( 'LOCALTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=location' );
+$xtpl->assign( 'CARRIER_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=carrier' );
+$xtpl->assign( 'CONFIG_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=carrier_config' );
+$xtpl->assign( 'SHOPS_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=shops' );
+
 if( $error != '' )
 {
 	$xtpl->assign( 'error', $error );
