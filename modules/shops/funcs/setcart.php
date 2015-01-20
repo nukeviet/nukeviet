@@ -48,7 +48,9 @@ else
 						'money_unit' => $data_content['money_unit'],
 						'discount_id' => $data_content['discount_id'],
 						'store' => $data_content['product_number'],
-						'group' => $group
+						'group' => $group,
+						'weight' => $data_content['product_weight'],
+						'weight_unit' => $data_content['weight_unit']
 					);
 				}
 				else

@@ -72,8 +72,9 @@ if( $post_order == 1 )
 {
 	$total = 0;
 	$total_point = 0;
+	$total_weight = 0;
 	$i = 0;
-	$listid = $listnum = $listprice = array();
+	$listid = $listnum = $listprice = $total_weight_price = array();
 
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
@@ -110,6 +111,8 @@ if( $post_order == 1 )
 
 			$info['price'] = $price['sale'];
 			$total = $total + (( int )$info['num'] * ( double )$info['price']);
+			$total_weight = $total_weight + nv_weight_conversion( ( double )$info['weight'], $info['weight_unit'], $pro_config['weight_unit'], ( int )$info['num'] );
+
 			$i++;
 		}
 	}
@@ -130,6 +133,8 @@ if( $post_order == 1 )
 		$data_order['shipping']['ship_location_id'] = $nv_Request->get_int( 'ship_location', 'post', 0 );
 		$data_order['shipping']['ship_shops_id'] = $nv_Request->get_int( 'shops', 'post', 0 );
 		$data_order['shipping']['ship_carrier_id'] = $nv_Request->get_int( 'carrier', 'post', 0 );
+
+		$total_weight_price = nv_shipping_price( $total_weight, $pro_config['weight_unit'], $data_order['shipping']['ship_location_id'], $data_order['shipping']['ship_shops_id'], $data_order['shipping']['ship_carrier_id'] );
 	}
 
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
@@ -273,7 +278,7 @@ if( $post_order == 1 )
 			// Ghi nhan thong tin van chuyen
 			if( $data_order['order_shipping'] )
 			{
-				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping( order_id, ship_name, ship_phone, ship_location_id, ship_address_extend, ship_shops_id, ship_carrier_id, weight, weight_unit, ship_price, ship_price_unit, add_time ) VALUES ( :order_id, :ship_name, :ship_phone, :ship_location_id, :ship_address_extend, :ship_shops_id, :ship_carrier_id, "10", "g", "12000", "VND", ' . NV_CURRENTTIME . ' )' );
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping( order_id, ship_name, ship_phone, ship_location_id, ship_address_extend, ship_shops_id, ship_carrier_id, weight, weight_unit, ship_price, ship_price_unit, add_time ) VALUES ( :order_id, :ship_name, :ship_phone, :ship_location_id, :ship_address_extend, :ship_shops_id, :ship_carrier_id, :weight, :weight_unit, :ship_price, :ship_price_unit, ' . NV_CURRENTTIME . ' )' );
 				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
 				$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
 				$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
@@ -281,10 +286,10 @@ if( $post_order == 1 )
 				$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
 				$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
 				$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
-				//$stmt->bindParam( ':weight', '10', PDO::PARAM_STR );
-				//$stmt->bindParam( ':weight_unit', 'g', PDO::PARAM_STR );
-				//$stmt->bindParam( ':ship_price', '12000', PDO::PARAM_STR );
-				//$stmt->bindParam( ':ship_price_unit', 'VND', PDO::PARAM_STR );
+				$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
+				$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_price', !empty( $total_weight_price ) ? $total_weight_price['price'] : 0, PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
 				$stmt->execute();
 			}
 
