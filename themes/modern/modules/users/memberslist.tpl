@@ -12,7 +12,7 @@
 		<tr>
 			<td><a href="{USER.link}"> {USER.username}
 			<!-- BEGIN: fullname -->
-			&nbsp;( {USER.full_name} )
+			&nbsp;({USER.full_name})
 			<!-- END: fullname -->
 			</a></td>
 			<td>{USER.gender}</td>
