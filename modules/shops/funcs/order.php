@@ -51,7 +51,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0 );
-$counpons = array();
+$counpons = array( 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
 if( ! empty( $_SESSION[$module_data . '_coupons'] ) )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
@@ -73,8 +73,9 @@ if( $post_order == 1 )
 	$total = 0;
 	$total_point = 0;
 	$total_weight = 0;
+	$total_weight_price = 0;
 	$i = 0;
-	$listid = $listnum = $listprice = $total_weight_price = array();
+	$listid = $listnum = $listprice = array();
 
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
@@ -124,6 +125,7 @@ if( $post_order == 1 )
 	$data_order['order_phone'] = nv_substr( $nv_Request->get_title( 'order_phone', 'post', '', 1 ), 0, 20 );
 	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
 	$data_order['order_shipping'] = $nv_Request->get_int( 'order_shipping', 'post', 0 );
+	$check = $nv_Request->get_int( 'check', 'post', 0 );
 
 	if( $data_order['order_shipping'] )
 	{
@@ -134,10 +136,10 @@ if( $post_order == 1 )
 		$data_order['shipping']['ship_shops_id'] = $nv_Request->get_int( 'shops', 'post', 0 );
 		$data_order['shipping']['ship_carrier_id'] = $nv_Request->get_int( 'carrier', 'post', 0 );
 
-		$total_weight_price = nv_shipping_price( $total_weight, $pro_config['weight_unit'], $data_order['shipping']['ship_location_id'], $data_order['shipping']['ship_shops_id'], $data_order['shipping']['ship_carrier_id'] );
+		$price_ship = nv_shipping_price( $total_weight, $pro_config['weight_unit'], $data_order['shipping']['ship_location_id'], $data_order['shipping']['ship_shops_id'], $data_order['shipping']['ship_carrier_id'] );
+		$total_weight_price = empty( $price_ship ) ? 0 : $price_ship['price'];
 	}
-
-	$check = $nv_Request->get_int( 'check', 'post', 0 );
+	$total += $total_weight_price;
 
 	if( ( $total > $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 	{
@@ -170,11 +172,15 @@ if( $post_order == 1 )
 
 	if( empty( $data_order['order_name'] ) )
 		$error['order_name'] = $lang_module['order_name_err'];
-	elseif( nv_check_valid_email( $data_order['order_email'] ) != '' )
+	if( nv_check_valid_email( $data_order['order_email'] ) != '' )
 		$error['order_email'] = $lang_module['order_email_err'];
-	elseif( empty( $data_order['order_phone'] ) )
+	if( empty( $data_order['order_phone'] ) )
 		$error['order_phone'] = $lang_module['order_phone_err'];
-	elseif( $check == 0 )
+	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_name'] ) )
+		$error['order_shipping_name'] = $lang_module['order_shipping_name_err'];
+	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_phone'] ) )
+		$error['order_shipping_phone'] = $lang_module['order_shipping_phone_err'];
+	if( $check == 0 )
 		$error['order_check'] = $lang_module['order_check_err'];
 
 	if( empty( $error ) and $i > 0 )
@@ -288,7 +294,7 @@ if( $post_order == 1 )
 				$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
 				$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
 				$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
-				$stmt->bindParam( ':ship_price', !empty( $total_weight_price ) ? $total_weight_price['price'] : 0, PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
 				$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
 				$stmt->execute();
 			}
@@ -382,14 +388,8 @@ while( list( $id_i, $parentid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 	$xtitle_i .= $title_i;
 	$shipping_data['list_location'][$id_i] = array( 'id' => $id_i, 'parentid' => $parentid_i, 'title' => $xtitle_i );
 }
-
-// Lay nha cung cap dich vu van chuyen
-$sql = 'SELECT id, name FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier WHERE status = 1 ORDER BY weight ASC';
-$shipping_data['list_carrier'] = nv_db_cache( $sql, 'id', $module_name );
-
-// Lay cua hang
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_shops WHERE status = 1 ORDER BY weight ASC';
-$shipping_data['list_shops'] = nv_db_cache( $sql, 'id', $module_name );
+$shipping_data['list_carrier'] = $array_carrier;
+$shipping_data['list_shops'] = $array_shops;
 
 if( $action == 0 )
 {

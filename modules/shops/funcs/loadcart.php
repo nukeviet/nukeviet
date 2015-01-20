@@ -87,6 +87,21 @@ if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] )
 	$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
 }
 
+if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
+{
+	$weight = $nv_Request->get_float( 'weight', 'get', 0 );
+	$weight_unit = $nv_Request->get_string( 'weight_unit', 'get', '' );
+	$location_id = $nv_Request->get_int( 'location_id', 'get', 0 );
+	$shops_id = $nv_Request->get_int( 'shops_id', 'get', 0 );
+	$carrier_id = $nv_Request->get_int( 'carrier_id', 'get', 0 );
+
+	$ship_price = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
+	if( !empty( $ship_price ) )
+	{
+		$total += $ship_price['price'];
+	}
+}
+
 if( $pro_config['active_price'] == '0' ) $total = 0;
 
 $total = nv_number_format( $total, nv_get_decimals( $pro_config['money_unit'] ) );

@@ -485,6 +485,9 @@ $lang_module['carrier_config_items_add'] = 'Thêm chi tiết cấu hình';
 $lang_module['carrier_config_items_cg'] = 'Thuộc cấu hình';
 $lang_module['carrier_config_error_required_name'] = 'Lỗi: Bạn cần nhập tên cấu hình';
 
+$lang_module['shipping_info'] = 'Thông tin người nhận hàng';
+$lang_module['shipping_name'] = 'Họ tên';
+
 //THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";

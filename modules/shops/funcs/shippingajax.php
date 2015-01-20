@@ -39,10 +39,6 @@ if( $nv_Request->isset_request( 'get_location', 'get, post' ) )
 	$locationid = $nv_Request->get_int( 'location_id', 'get, post', 0 );
 	if( ! empty( $locationid ) )
 	{
-		// Lay nha cung cap dich vu van chuyen
-		$sql = 'SELECT id, parentid, title FROM ' . $db_config['prefix'] . '_' . $module_data . '_location ORDER BY sort ASC';
-		$array_location = nv_db_cache( $sql, 'id', $module_name );
-
 		$contents = $array_location[$locationid]['title'];
 		while( $array_location[$locationid]['parentid'] > 0 )
 		{

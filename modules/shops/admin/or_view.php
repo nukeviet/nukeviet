@@ -84,6 +84,10 @@ foreach( $listid as $id )
 	++$i;
 }
 
+// Thong tin van chuyen
+$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id );
+$data_shipping = $result->fetch();
+
 if( $data_content['transaction_status'] == '4' )
 {
 	$lang_module['order_submit_pay_comfix'] = $lang_module['order_submit_unpay_comfix'];
@@ -121,6 +125,23 @@ foreach( $data_pro as $pdata )
 	$xtpl->parse( 'main.loop' );
 	++$i;
 }
+
+// Thong tin van chuyen
+if( $data_shipping )
+{
+	$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
+	$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
+	while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+	{
+		$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
+		$data_shipping['ship_location_title'] .= ', ' . $items['title'];
+		$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+	}
+	$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
+	$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
+	$xtpl->parse( 'main.data_shipping' );
+}
+
 if( ! empty( $data_content['order_note'] ) )
 {
 	$xtpl->parse( 'main.order_note' );

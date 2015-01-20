@@ -1758,7 +1758,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 	{
 		foreach( $shipping_data['list_location'] as $rows_i )
 		{
-			$rows_i['select'] = ( $data_order['shipping']['ship_location_id'] == $rows_i['id'] ) ? ' selected="selected"' : '';
+			$rows_i['selected'] = ( $data_order['shipping']['ship_location_id'] == $rows_i['id'] ) ? ' selected="selected"' : '';
 			$xtpl->assign( 'LOCATION', $rows_i );
 			$xtpl->parse( 'main.location_loop' );
 		}

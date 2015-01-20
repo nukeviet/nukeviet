@@ -62,17 +62,19 @@
 				<p><strong>{LANG.order_address} (<a href="javascript:void(0)" title="{LANG.shipping_copy}" onclick="nv_get_customer_info()">{LANG.shipping_copy}</a>)</strong></p>
 				<div class="row">
 					<div class="col-xs-5">
-						<input type="text" name="ship_name" class="form-control" placeholder="{LANG.shipping_name}" />
+						<input type="text" name="ship_name" value="{DATA.shipping.ship_name}" class="form-control" placeholder="{LANG.shipping_name}" />
+						<span class="error">{ERROR.order_shipping_name}</span>
 					</div>
 					<div class="col-xs-7">
-						<input type="text" name="ship_phone" class="form-control" placeholder="{LANG.shipping_phone}" />
+						<input type="text" name="ship_phone" value="{DATA.shipping.ship_phone}" class="form-control" placeholder="{LANG.shipping_phone}" />
+						<span class="error">{ERROR.order_shipping_phone}</span>
 					</div>
 				</div><br />
 				<div class="row">
 					<div class="col-xs-5">
 						<select id="location" name="ship_location" class="form-control">
 							<!-- BEGIN: location_loop -->
-							<option value="{LOCATION.id}" {LOCATION.select}>{LOCATION.title}</option>
+							<option value="{LOCATION.id}" {LOCATION.selected}>{LOCATION.title}</option>
 							<!-- END: location_loop -->
 						</select>
 					</div>
@@ -176,17 +178,20 @@
         <textarea class="form-control" name="order_note">{DATA.order_note}</textarea>
 
         <div class="text-center">
-				<input type="checkbox" name="check" value="1" id="check" /><span id="idselect">{LANG.order_true_info}</span>
-				<br />
-				<span class="error">{ERROR.order_check}</span>
-				<br />
-				<a class="btn btn-primary" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a>
+        	<br />
+			<input type="checkbox" name="check" value="1" id="check" />
+			<span id="idselect">{LANG.order_true_info}</span>
+			<br /><br />
+			<span class="error">{ERROR.order_check}</span>
+			<br /><br />
+			<a class="btn btn-primary" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a>
 		</div>
 	</form>
 </div>
 
 <script type="text/javascript">
 	var url_load = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=shippingajax';
+	var urloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 	var order_shipping = '{DATA.order_shipping}';
 
 	$(document).ready(function() {
@@ -201,8 +206,7 @@
 		$('#carrier').load( url_load + '&get_carrier=1&shops_id=' + shops_id.val() );
 		$('#shipping_shops').text( shops_id.attr("title") );
 		$('#shipping_services').text( carrier_id.attr("title") );
-		$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
-		$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id.val() + '&carrier_id=' + carrier_id.val() );
+		nv_get_price();
 
 		$('input[name="shops"]').change(function(){
 			var shops_id = $('input[name="shops"]:checked');
@@ -263,6 +267,9 @@
 		var location_id = $('#location option:selected').val();
 		$('#shipping_services').text( carrier_id.attr("title") );
 		$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+		$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
+		$("#cart_" + nv_module_name).load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+		$("#total").load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
 	}
 
 	function nv_carrier_change()

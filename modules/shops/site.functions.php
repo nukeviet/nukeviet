@@ -76,6 +76,18 @@ else
 	nv_set_cache( $module_name, $cache_file, $cache );
 }
 
+// Lay dia diem
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_location ORDER BY sort ASC';
+$array_location = nv_db_cache( $sql, 'id', $module_name );
+
+// Lay nha van chuyen
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier WHERE status = 1 ORDER BY weight ASC';
+$array_carrier = nv_db_cache( $sql, 'id', $module_name );
+
+// Lay cua hang
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_shops WHERE status = 1 ORDER BY weight ASC';
+$array_shops = nv_db_cache( $sql, 'id', $module_name );
+
 // Lay Giam Gia
 $sql = 'SELECT did, title, begin_time, end_time, config FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
 $cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
