@@ -4,7 +4,7 @@
 	<thead>
 		<tr>
 			<td width="20px" class="text-center">&nbsp;</td>
-			<td><strong>{LANG.prounit_name_unit}</strong></td>
+			<td><strong>{LANG.template_name}</strong></td>
 			<td><strong>{LANG.status}</strong></td>
 			<td width="120px" class="text-center"><strong>{LANG.function}</strong></td>
 		</tr>
@@ -71,7 +71,7 @@
 				});
 			}
 		});
-		
+
 		$('a.status').click(function(event) {
 			event.preventDefault();
 			if (confirm("{LANG.status_confirm}")) {
@@ -89,6 +89,11 @@
 	});
 </script>
 <!-- END: data -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">
+	{error}
+</div>
+<!-- END: error -->
 <form class="form-inline" action="" method="post">
 	<input name="savecat" type="hidden" value="1" />
 	<table class="table table-striped table-bordered table-hover">
@@ -97,11 +102,12 @@
 			<td align="right" width="150px"><strong>{LANG.template_name}: </strong></td>
 			<td><input class="form-control" style="width: 600px" name="title" type="text" value="{DATA.title}" maxlength="255" /></td>
 		</tr>
-		
+
 	</table>
 	<br>
 	<div class="text-center">
 		<input class="btn btn-primary" name="submit" type="submit" value="{LANG.template_save}" />
 	</div>
 </form>
+
 <!-- END: main -->
