@@ -459,6 +459,7 @@ $lang_module['shipping'] = 'Đơn hàng vận chuyển';
 
 //Lang for function shops
 $lang_module['shops'] = 'Cửa hàng';
+$lang_module['shops_chose'] = 'Chọn cửa hàng';
 $lang_module['shops_error_required_name'] = 'Lỗi: Bạn chưa nhập tên cửa hàng';
 $lang_module['shops_error_required_location'] = 'Lỗi: Bạn chưa chọn địa điểm cửa hàng';
 $lang_module['shops_error_required_all'] = 'Lỗi: Cấu hình nhà vận chuyển - vui lòng chọn đầy đủ thông tin';

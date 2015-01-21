@@ -88,7 +88,7 @@
 					<th>{LANG.order_address}</th>
 					<th>{LANG.carrier}</th>
 					<th>{LANG.weights}</th>
-					<th>{LANG.carrier_price}</th>
+					<th class="text-right">{LANG.carrier_price}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -100,7 +100,7 @@
 					</td>
 					<td>{DATA_SHIPPING.ship_shops_title}</td>
 					<td>{DATA_SHIPPING.weight}{DATA_SHIPPING.weight_unit}</td>
-					<td>{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
+					<td class="text-right">{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
 				</tr>
 			</tbody>
 		</table>

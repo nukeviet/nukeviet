@@ -2,32 +2,38 @@
 {FILE "shipping_menu.tpl"}
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
-		<input type="hidden" name="{NV_LANG_VARIABLE}"  value="{NV_LANG_DATA}" />
-		<input type="hidden" name="{NV_NAME_VARIABLE}"  value="{MODULE_NAME}" />
-		<input type="hidden" name="{NV_OP_VARIABLE}"  value="{OP}" />
+		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+		<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 		<div class="row">
 			<div class="col-xs-3">
 				<div class="form-group">
-					<input type="text" class="form-control" name="keywords" placeholder="{LANG.search_key}" />
+					<input type="text" class="form-control" value="{SEARCH.keywords}" name="keywords" placeholder="{LANG.search_key}" />
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
 					<select class="form-control" name="shops_id">
-
+						<option value="">---{LANG.shops_chose}---</option>
+						<!-- BEGIN: shops_loop -->
+						<option value="{SHOPS.id}" {SHOPS.selected}>{SHOPS.name}</option>
+						<!-- END: shops_loop -->
 					</select>
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
 					<select class="form-control" name="carier_id">
-
+						<option value="">---{LANG.carrier_chose}---</option>
+						<!-- BEGIN: carrier_loop -->
+						<option value="{CARRIER.id}" {CARRIER.selected}>{CARRIER.name}</option>
+						<!-- END: carrier_loop -->
 					</select>
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="form-group">
-					<input type="submit" class="btn btn-primary" />
+					<input type="submit" class="btn btn-primary" value="{LANG.search}" />
 				</div>
 			</div>
 		</div>
