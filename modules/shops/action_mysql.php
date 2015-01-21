@@ -555,8 +555,10 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM ";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location (
+  cid tinyint(3) unsigned NOT NULL,
   iid smallint(4) unsigned NOT NULL,
-  lid mediumint(8) unsigned NOT NULL
+  lid mediumint(8) unsigned NOT NULL,
+  UNIQUE KEY cid( cid, lid)
 ) ENGINE=MyISAM ";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_weight (
