@@ -15,7 +15,7 @@ DROP `class`;
 				<th>{LANG.field_title}</th>
 				<th>{LANG.field_type}</th>
 
-				<th>&nbsp;</th>
+				<th>{LANG.function}</th>
 			</tr>
 		</thead>
 
@@ -74,14 +74,14 @@ DROP `class`;
 			<tbody>
 				<!-- BEGIN: field -->
 				<tr>
-					<td>{LANG.field_id}:</td>
+					<td>{LANG.field_id} <span class="require">(*)</span></td>
 					<td><label>
 						<input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}>
-						{LANG.field_id_note}</label></td>
+						<span style="color: #DB4156"><i class="fa fa-warning" ></i> {LANG.field_id_note}</span></label></td>
 				</tr>
 				<!-- END: field -->
 				<tr>
-					<td>{LANG.field_title}</td>
+					<td>{LANG.field_title}<span class="require"> (*)</span></td>
 					<td>
 					<input class="form-control w350 required" type="text" value="{DATAFORM.title}" name="title">
 					</td>
@@ -121,7 +121,7 @@ DROP `class`;
 								{FIELD_TYPE.value}</label>
 						</li>
 						<!-- END: loop -->
-					</ul>{LANG.field_type_note} <!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
+					</ul><span style="color: #DB4156"><i class="fa fa-warning" ></i>  {LANG.field_type_note}<!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
 				</tr>
 				<tr id="editorfields" {DATAFORM.editordisabled}>
 					<td>{LANG.field_size}</td>
@@ -534,7 +534,7 @@ DROP `class`;
 <script type="text/javascript">
 	nv_load_sqlchoice('module', '{SQL_DATA_CHOICE.0}');
 	nv_load_sqlchoice('table', '{SQL_DATA_CHOICE.1}');
-	nv_load_sqlchoice('column', '{SQL_DATA_CHOICE.2}|{SQL_DATA_CHOICE.3}'); 
+	nv_load_sqlchoice('column', '{SQL_DATA_CHOICE.2}|{SQL_DATA_CHOICE.3}');
 </script>
 <!-- END: nv_load_sqlchoice -->
 <!-- END: main -->

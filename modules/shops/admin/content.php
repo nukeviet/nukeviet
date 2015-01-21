@@ -457,9 +457,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				//denday
 				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
-					// $form = $db->query( 'SELECT form FROM '.$db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn();
+					$form = $db->query( 'SELECT form FROM '.$db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn();
 
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "cat_form_' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 
@@ -503,7 +503,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$error = $lang_module['errorsave'];
 			}
 		}
-		else
+		else // sua
 		{
 			$rowcontent_old = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch( );
 
@@ -612,33 +612,21 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					nv_fix_group_count( $group_id_old );
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
+
 				//tim va xoa du lieu tuy bien
 				if( $global_array_cat[$rowcontent_old['listcatid']]['form'] != '' )
 				{
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "cat_form_' . $global_array_cat[$rowcontent_old['listcatid']]['form'] . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent_old['listcatid']]['form'] . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-
 					$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
 				}
 				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
 					//insert lai du lieu tuy bien
-					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "cat_form_' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
+					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
 					$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
-					//print_r($rowcontent['group_id']);die;
-					/*
-					 foreach ($rowcontent['group_id'] as $key => $value) {
-					 if ($value <= 13 && $value >= 2) {
-					 $array_custom['chieudaimattien'] = $value;
-					 }
 
-					 }*/
-
-					$array_custom['link'] = $nv_Request->get_string( 'bodytext1', 'get,post', 0 );
-					//$array_custom['link']='jshjsd';
-
-					//print_r($array_custom);die(''.$rowcontent['id']);
 					Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
 				}
 
@@ -780,7 +768,7 @@ elseif( $rowcontent['id'] > 0 )
 
 	//tuybien
 
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "cat_form_' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
 
 	if( $idtemplate )
 	{
