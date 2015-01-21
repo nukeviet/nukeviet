@@ -45,6 +45,12 @@ if( $groupid > 0 )
 		$db->query( $sql );
 		$content = 'OK_' . $parentid;
 	}
+	elseif( $mod == 'indetail' and ( $new_vid == 0 or $new_vid == 1 ) )
+	{
+		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group SET indetail=' . $new_vid . ' WHERE groupid=' . $groupid;
+		$db->query( $sql );
+		$content = 'OK_' . $parentid;
+	}
 	elseif( $mod == 'numlinks' and $new_vid >= 0 and $new_vid <= 10 )
 	{
 		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group SET numlinks=' . $new_vid . ' WHERE groupid=' . $groupid;

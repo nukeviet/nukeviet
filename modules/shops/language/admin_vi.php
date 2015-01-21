@@ -38,6 +38,8 @@ $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tên sản phẩm';
 $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số sản phẩm con';
 $lang_module['inhome'] = 'Hiển thị trang chủ';
+$lang_module['indetail'] = 'Hiển thị chi tiết';
+$lang_module['indetail_note'] = 'Hiển thị nhóm của sản phẩm tại trang xem chi tiết sản phẩm';
 $lang_module['in_order'] = 'Hiển thị khi đặt hàng';
 $lang_module['numlinks'] = 'Số liên kết';
 $lang_module['description'] = 'Miêu tả';
@@ -90,7 +92,10 @@ $lang_module['setting_up_products'] = 'Tự động đăng sản phẩm không c
 $lang_module['setting_up_products_shop'] = 'Tự động đăng sản phẩm không cần qua kiểm duyệt (gian hàng)';
 $lang_module['setting_order_to_admin'] = 'Đặt hàng sản phẩm gửi tới Ban quản trị';
 $lang_module['setting_order_to_member'] = 'Đặt hàng sản phẩm gửi tới người đăng sản phẩm';
-$lang_module['setting_money_all'] = 'Đơn vị tiền tệ chính (cần cập nhật lại tỉ giá nếu bạn đổi đồng tiền mặc định)';
+$lang_module['setting_money_all'] = 'Đơn vị tiền tệ chính';
+$lang_module['setting_money_all_note'] = 'Cần cập nhật lại tỉ giá nếu bạn đổi đồng tiền mặc định';
+$lang_module['setting_weight_all'] = 'Đơn vị khối lượng chính';
+$lang_module['setting_weight_all_note'] = 'Cần cập nhật lại giá trị chuyển đổi nếu bạn đổi đơn vị khối lượng chính';
 $lang_module['setting_active_auto_check_order'] = 'Tự động duyệt đơn hàng khi người mua gửi ';
 $lang_module['setting_active_order'] = 'Bật chức năng đặt hàng không cần vào trang xem chi tiết';
 $lang_module['setting_active_price'] = 'Hiển thị giá sản phẩm';
@@ -134,7 +139,7 @@ $lang_module['search_product_code'] = 'Mã sản phẩm';
 $lang_module['search_bodytext'] = 'Nội dung';
 $lang_module['search_author'] = 'Tác giả sản phẩm';
 $lang_module['search_admin'] = 'Người nhập liệu';
-$lang_module['search_per_page'] = 'Số sản phẩm hiển thị';
+$lang_module['search_per_page'] = 'Hiển thị';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không ít hơn %d ký tự, không lớn hơn %d ký tự, không dùng các mã html';
 $lang_module['search_note_fix'] = 'Từ khóa tìm kiếm không ít hơn 2 ký tự, không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['content_edit'] = 'Sửa sản phẩm';
@@ -223,6 +228,7 @@ $lang_module['order_address'] = 'Địa chỉ';
 $lang_module['order_total'] = 'Tổng tiền';
 $lang_module['unit_total'] = 'Đơn vị';
 $lang_module['view'] = 'Xem';
+$lang_module['views'] = 'Lượt xem';
 $lang_module['date_from'] = 'Từ ngày';
 $lang_module['date_to'] = 'Đến ngày';
 $lang_module['order_info'] = 'Thông tin đơn đặt hàng';
@@ -237,10 +243,13 @@ $lang_module['order_product_unit'] = 'Đơn vị';
 $lang_module['order_submit'] = 'Xử lý đơn này';
 $lang_module['order_submit_comfix'] = 'Bạn chấp nhận xử lý đơn này?';
 $lang_module['order_submit_pay'] = 'Xác nhận thanh toán đơn này';
+$lang_module['order_submit_unpay'] = 'Hủy xác nhận thanh toán đơn này';
 $lang_module['order_submit_pay_comfix'] = 'Bạn chắc chắn người mua đã thanh toán?';
+$lang_module['order_submit_unpay_comfix'] = 'Bạn chắc chắn muốn chuyển giao dịch về trạng thái Chưa thanh toán?';
 $lang_module['order_admin_process'] = 'Người xử lý đơn này';
 $lang_module['order_submit_pay_error'] = 'Đơn này không xác nhận thanh toán được';
 $lang_module['order_submit_pay_ok'] = 'Đã xác nhận thanh toán xong';
+$lang_module['order_submit_unpay_ok'] = 'Đã hủy xác nhận thanh toán xong';
 $lang_module['order_payment'] = 'Trạng thái thanh toán';
 $lang_module['order_yes_payment'] = 'Đã thanh toán';
 $lang_module['order_yes_part_payment'] = 'Thanh toán tạm giữ';
@@ -322,15 +331,17 @@ $lang_module['group_of'] = 'của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
-
-$lang_module['discounts'] = 'Quản lý giảm giá';
+$lang_module['product_copy'] = 'Sao';
+$lang_module['product_copy_note'] = 'Sao chép sản phẩm';
 
 //Lang for function discounts
+$lang_module['discounts'] = 'Quản lý giảm giá';
 $lang_module['delete'] = 'Xóa';
 $lang_module['number'] = 'STT';
 $lang_module['title'] = 'Tiêu đề';
 $lang_module['begin_time'] = 'Ngày bắt đầu';
 $lang_module['end_time'] = 'Ngày kết thúc';
+$lang_module['discounts_dis_detail'] = 'Hiển thị bảng giá';
 $lang_module['config_discounts'] = 'Cấu hình giảm giá';
 $lang_module['error_required_title'] = 'Lỗi: bạn cần nhập dữ liệu cho Tiêu đề';
 $lang_module['error_required_begin_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày bắt đầu';
@@ -341,7 +352,7 @@ $lang_module['discount_add'] = 'Thêm mới giảm giá';
 $lang_module['discount_edit'] = 'Sửa giảm giá';
 $lang_module['discount_from'] = 'Từ sản phẩm';
 $lang_module['discount_to'] = 'Đến sản phẩm';
-$lang_module['discount_number'] = 'Giảm giá %';
+$lang_module['discount_number'] = 'Giảm giá';
 
 $lang_module['round'] = 'Làm tròn';
 $lang_module['round1'] = 'làm tròn về';
@@ -357,8 +368,127 @@ $lang_module['tags_no_description'] = 'Chưa có mô tả';
 $lang_module['content_tags_empty'] = 'Chú ý: Sản phẩm chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu sản phẩm này, có thể tắt tính năng tự động tạo từ khóa ở phần cấu hình module';
 
-//THEM
+$lang_module['report_detail'] = 'Thống kê chi tiết';
+$lang_module['num_selled'] = 'Đã bán';
+$lang_module['seller_list'] = 'Danh sách khách hàng mua sản phẩm "%s"';
+$lang_module['seller_num'] = 'Số lượng';
 
+$lang_module['customer_name'] = 'Tên khách hàng';
+$lang_module['customer_email'] = 'Email khách hàng';
+$lang_module['customer_report_display'] = 'Hiển thị <strong>%1$s</strong> trên tổng số <strong>%2$s</strong> khách hàng';
+
+$lang_module['export_excel'] = 'Xuất ra Excel';
+$lang_module['order_seller'] = 'Thống kê lượt mua';
+$lang_module['order_count'] = 'Lượt mua';
+$lang_module['order_list'] = 'Xem danh sách đơn hàng';
+
+//Lang for function coupons
+$lang_module['coupons'] = 'Mã giảm giá';
+$lang_module['coupons_add'] = 'Thêm mã giảm giá';
+$lang_module['coupons_type'] = 'Kiểu giảm giá';
+$lang_module['coupons_type_percentage'] = 'Tỉ lệ phần trăm';
+$lang_module['coupons_type_fixed_amount'] = 'Số tiền cố định';
+$lang_module['coupons_discount'] = 'Giá trị giảm';
+$lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
+$lang_module['coupons_total_amount_note'] = 'Để trống nếu không xác định giá trị đơn hàng';
+$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
+$lang_module['coupons_product'] = 'Sản phẩm áp dụng';
+$lang_module['coupons_product_note'] = 'Nếu nhập sản phẩm, giảm giá chỉ áp dụng đối với tổng giá của các sản phẩm này, không áp dụng cho tổng đơn hàng';
+$lang_module['coupons_product_custom'] = 'Sản phẩm tùy chọn';
+$lang_module['coupons_product_custom_edit'] = 'Sửa mã giảm giá để xem danh sách sản phẩm';
+$lang_module['coupons_uses_per_coupon'] = 'Số lượt sử dụng';
+$lang_module['coupons_uses_per_coupon_note'] = 'Để trống nếu không giới hạn số lượt sử dụng';
+$lang_module['coupons_end_time_note'] = 'Để trống nếu muốn mã hoạt động vô thời hạn';
+$lang_module['coupons_unlimit'] = 'Không giới hạn';
+$lang_module['coupons_info'] = 'Thông tin mã giảm giá';
+$lang_module['coupons_history'] = 'Lịch sử sử dụng';
+$lang_module['coupons_active'] = 'Đang hiệu lực';
+$lang_module['coupons_inactive'] = 'Ngưng hiệu lực';
+$lang_module['coupons_error_required_title'] = 'Lỗi: Bạn cần nhập tên mã giảm giá';
+$lang_module['coupons_error_required_code'] = 'Lỗi: Bạn cần nhập mã giảm giá';
+$lang_module['coupons_error_vail_code'] = 'Lỗi: Mã giảm giá không hợp lệ';
+$lang_module['coupons_error_required_discount'] = 'Lỗi: Bạn cần nhập giá trị giảm';
+
+//Lang for function point
+$lang_module['point'] = 'Điểm tích lũy';
+$lang_module['point_username'] = 'Tên truy cập';
+$lang_module['point_fullname'] = 'Họ tên khách hàng';
+$lang_module['point_email'] = 'Email khách hàng';
+$lang_module['setting_point'] = 'Cấu hình điểm tích lũy';
+$lang_module['setting_point_active'] = 'Kích hoạt tính năng điểm tích lũy';
+$lang_module['setting_point_conversion'] = 'Tỉ lệ quy đổi';
+$lang_module['setting_point_value_conversion'] = 'Giá trị quy đổi';
+$lang_module['setting_point_new_order'] = 'Số điểm thưởng khi tạo đơn hàng mới';
+$lang_module['setting_point_1'] = '1 điểm';
+$lang_module['cat_allow_point'] = 'Cho phép tích lũy điểm với các sản phẩm loại này';
+$lang_module['cat_number_point'] = 'Số điểm thưởng khi mua các sản phẩm loại này';
+$lang_module['cat_number_product'] = 'Số lượng mỗi sản phẩm ít nhất để đạt được điểm';
+
+//Lang for function point
+$lang_module['weights'] = 'Khối lượng';
+$lang_module['weight_unit'] = 'Đơn vị khối lượng';
+$lang_module['weight_sign'] = 'Ký hiệu';
+$lang_module['weight_add'] = 'Thêm đơn vị khối lượng';
+$lang_module['weight_edit'] = 'Sửa đơn vị khối lượng';
+$lang_module['weight_convention'] = 'Giá trị quy đổi';
+$lang_module['weight_convention_note'] = '1 đơn vị này so với đơn vị khối lượng mặc định';
+$lang_module['weight_error_empty_code'] = 'Lỗi: Chưa nhập ký hiệu đơn vị';
+$lang_module['weight_error_empty_title'] = 'Lỗi: Chưa nhập tên gọi đơn vị';
+$lang_module['weight_error_empty_exchange'] = 'Lỗi: Chưa nhập giá trị chuyển đổi';
+
+//Lang for function point
+$lang_module['location'] = 'Địa điểm';
+$lang_module['location_detail'] = 'Địa chỉ chi tiết';
+$lang_module['location_chose'] = 'Chọn địa điểm';
+$lang_module['location_name'] = 'Tên địa điểm';
+$lang_module['location_in'] = 'Trực thuộc';
+$lang_module['location_not_in'] = 'Không trực thuộc';
+$lang_module['location_edit'] = 'Sửa địa điểm';
+$lang_module['location_add'] = 'Thêm địa điểm';
+$lang_module['location_list'] = 'Danh sách các';
+$lang_module['location_lev_0'] = 'Quốc gia';
+$lang_module['location_lev_1'] = 'Tỉnh / Thành phố';
+$lang_module['location_lev_2'] = 'Quận / Huyện';
+$lang_module['location_lev_3'] = 'Xã / Phường / Ấp';
+$lang_module['location_lev_4'] = 'Thôn / Bản / Khu phố';
+$lang_module['location_lev_5'] = 'Cơ sở địa phương';
+$lang_module['location_name_empty'] = 'Lỗi: Chưa nhập tên địa điểm';
+
+//Lang for function shipping
+$lang_module['shipping'] = 'Đơn hàng vận chuyển';
+
+//Lang for function shops
+$lang_module['shops'] = 'Cửa hàng';
+$lang_module['shops_error_required_name'] = 'Lỗi: Bạn chưa nhập tên cửa hàng';
+$lang_module['shops_error_required_location'] = 'Lỗi: Bạn chưa chọn địa điểm cửa hàng';
+$lang_module['shops_error_required_all'] = 'Lỗi: Cấu hình nhà vận chuyển - vui lòng chọn đầy đủ thông tin';
+$lang_module['shops_error_exist_carrier'] = 'Lỗi: <strong>Cấu hình nhà vận chuyển</strong> không đúng - nhà vận chuyển không được trùng nhau';
+
+//Lang for function carrier
+$lang_module['carrier'] = 'Nhà vận chuyển';
+$lang_module['carrier_chose'] = 'Chọn nhà vận chuyển';
+$lang_module['carrier_config'] = 'Cấu hình nhà vận chuyển';
+$lang_module['carrier_description'] = 'Giới thiệu';
+$lang_module['carrier_active'] = 'Hoạt động';
+$lang_module['carrier_price'] = 'Phí vận chuyển';
+$lang_module['carrier_error_required_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Tên gọi';
+$lang_module['carrier_config_list'] = 'Danh sách các cấu hình vận chuyển';
+$lang_module['carrier_config_add'] = 'Thêm cấu hình';
+$lang_module['carrier_config_chose'] = 'Chọn cấu hình';
+$lang_module['carrier_config_config'] = 'Cấu hình dịch vụ nhà vận chuyển';
+$lang_module['carrier_config_name'] = 'Tên cấu hình';
+$lang_module['carrier_config_description'] = 'Mô tả';
+$lang_module['carrier_config_weight'] = 'Cấu hình khối lượng';
+$lang_module['carrier_config_value'] = 'Giá trị';
+$lang_module['carrier_config_items_edit'] = 'Sửa chi tiết cấu hình';
+$lang_module['carrier_config_items_add'] = 'Thêm chi tiết cấu hình';
+$lang_module['carrier_config_items_cg'] = 'Thuộc cấu hình';
+$lang_module['carrier_config_error_required_name'] = 'Lỗi: Bạn cần nhập tên cấu hình';
+
+$lang_module['shipping_info'] = 'Thông tin người nhận hàng';
+$lang_module['shipping_name'] = 'Họ tên';
+
+//THEM
 $lang_module['template']= 'Dạng template';
 $lang_module['template_info'] = "Thêm template";
 $lang_module['template_name'] = "Tên template";
@@ -441,7 +571,6 @@ $lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
 //them truong tuy bien
-
 $lang_module['volume'] = 'Khối lượng';
 $lang_module['title_cpu'] = 'Tên CPU';
 $lang_module['speed'] = 'Tốc độ';
@@ -504,7 +633,8 @@ $lang_module['note_add'] = 'Cách nhau bởi dấu |';
 $lang_module['title_config'] = 'Tiêu đề cấu hình';
 $lang_module['content_config'] = 'Nội dung cấu hình sản phẩm';
 
-$lang_module['addconfig'] = 'Thêm cấu hình';$lang_module['printer_model'] = 'Kiểu máy in';
+$lang_module['addconfig'] = 'Thêm cấu hình';
+$lang_module['printer_model'] = 'Kiểu máy in';
 $lang_module['printer_speed'] = 'Tốc độ in';
 $lang_module['memory'] = 'Bộ nhớ';
 $lang_module['paper_size'] = 'Khổ giấy';

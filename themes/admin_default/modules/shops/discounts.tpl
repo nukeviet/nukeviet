@@ -10,6 +10,7 @@
 					<th>{LANG.begin_time}</th>
 					<th>{LANG.end_time}</th>
 					<th>{LANG.config_discounts}</th>
+					<th class="text-center">{LANG.discounts_dis_detail}</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -39,11 +40,12 @@
 							<tr>
 								<td>{DISCOUNT.discount_from}</td>
 								<td>{DISCOUNT.discount_to}</td>
-								<td>{DISCOUNT.discount_number}</td>
+								<td>{DISCOUNT.discount_number}{DISCOUNT.discount_unit}</td>
 							</tr>
 							<!-- END: discount -->
 						</tbody>
 					</table></td>
+					<td class="text-center"><label <!-- BEGIN: detail -->class="label label-danger"<!-- END: detail -->>{VIEW.detail}</label></td>
 					<td class="text-center"><i class="fa fa-edit fa-lg">&nbsp;</i><a href="{VIEW.link_edit}">{LANG.edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{VIEW.link_delete}" onclick="return confirm(nv_is_del_confirm[0]);">{LANG.delete}</a></td>
 				</tr>
 				<!-- END: loop -->
@@ -77,6 +79,10 @@
 					<td><input class="form-control" type="text" name="end_time" value="{ROW.end_time}" id="end_time" pattern="^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{1,4}$" /></td>
 				</tr>
 				<tr>
+					<th> {LANG.discounts_dis_detail} </th>
+					<td><input type="checkbox" name="detail" value="1" {ROW.detail_ck} /></td>
+				</tr>
+				<tr>
 					<th> {LANG.config_discounts} </th>
 					<td>
 					<table class="table table-striped table-bordered table-hover">
@@ -93,7 +99,14 @@
 							<tr id="discount_{CONFIG.id}">
 								<td><input class="form-control" type="number" name="config[{CONFIG.id}][discount_from]" value="{CONFIG.discount_from}" /></td>
 								<td><input class="form-control" type="number" name="config[{CONFIG.id}][discount_to]" value="{CONFIG.discount_to}"/></td>
-								<td><input class="form-control" type="text" name="config[{CONFIG.id}][discount_number]" value="{CONFIG.discount_number}" /></td>
+								<td>
+									<input class="form-control" type="text" name="config[{CONFIG.id}][discount_number]" value="{CONFIG.discount_number}" />
+									<select name="config[{CONFIG.id}][discount_unit]" class="form-control">
+										<!-- BEGIN: discount_unit -->
+										<option value="{UNIT.key}" {UNIT.selected}>{UNIT.value}</option>
+										<!-- END: discount_unit -->
+									</select>
+								</td>
 								<td><em class="fa fa-trash-o fa-lg">&nbsp;</em><a onclick="$('#discount_{CONFIG.id}').remove();">{LANG.delete}</a></td>
 							</tr>
 							<!-- END: config -->

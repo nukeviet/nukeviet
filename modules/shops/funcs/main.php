@@ -8,7 +8,7 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' ); 
+if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
@@ -93,6 +93,7 @@ if( empty( $contents ) )
 
 			$data_content[] = array(
 				'id' => $id,
+				'listcatid' => $listcatid,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
@@ -136,7 +137,7 @@ if( empty( $contents ) )
 
 				$num_pro = $db->query( $db->sql() )->fetchColumn();
 
-				$db->select( 't1.id, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
+				$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
 					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )
 					->order( 't1.id DESC' )
 					->limit( $array_info_i['numlinks'] );
@@ -144,7 +145,7 @@ if( empty( $contents ) )
 				$result = $db->query( $db->sql() );
 				$data_pro = array();
 
-				while( list( $id, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+				while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 				{
 					if( $homeimgthumb == 1 )//image thumb
 					{
@@ -165,6 +166,7 @@ if( empty( $contents ) )
 
 					$data_pro[] = array(
 						'id' => $id,
+						'listcatid' => $listcatid,
 						'publtime' => $publtime,
 						'title' => $title,
 						'alias' => $alias,
@@ -256,6 +258,7 @@ if( empty( $contents ) )
 
 					$data_pro[] = array(
 						'id' => $id,
+						'listcatid' => $listcatid,
 						'publtime' => $publtime,
 						'title' => $title,
 						'alias' => $alias,

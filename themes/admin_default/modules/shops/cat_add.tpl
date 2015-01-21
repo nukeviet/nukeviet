@@ -73,12 +73,49 @@
 				</tr>
 			</tbody>
 		</table>
+		<!-- BEGIN: point -->
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.setting_point}</caption>
+			<colgroup>
+				<col class="w300" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.cat_allow_point}</strong></td>
+					<td><input type="checkbox" name="cat_allow_point" value="1" {DATA.cat_allow_point} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.cat_number_point}</strong></td>
+					<td><input type="text" class="form-control" name="cat_number_point" value="{DATA.cat_number_point}" {DATA.cat_number_point_dis} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.cat_number_product}</strong></td>
+					<td><input type="text"  class="form-control" name="cat_number_product" value="{DATA.cat_number_product}" {DATA.cat_number_product_dis} /></td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- END: point -->
 		<div class="text-center">
 			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}"/>
 		</div>
 	</form>
 </div>
 <script type="text/javascript">
+	$(document).ready(function() {
+		$('input[name="cat_allow_point"]').change(function() {
+			if($(this).is(":checked"))
+			{
+				$('input[name="cat_number_point"]').removeAttr('readonly');
+				$('input[name="cat_number_product"]').removeAttr('readonly');
+			}
+			else
+			{
+				$('input[name="cat_number_point"]').attr('readonly','readonly');
+				$('input[name="cat_number_product"]').attr('readonly','readonly');
+			}
+		});
+	});
+
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);
