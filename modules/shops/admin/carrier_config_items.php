@@ -255,7 +255,7 @@ if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 // Lay dia diem
 if( !empty( $row['id'] ) )
 {
-	$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location WHERE id NOT IN ( SELECT lid FROM " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location WHERE cid = " . $row['cid'] . " ) OR id IN ( SELECT lid FROM nv4_san_pham_carrier_config_location WHERE iid = " . $row['id'] . " ) ORDER BY sort ASC";
+	$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location WHERE id NOT IN ( SELECT lid FROM " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location WHERE cid = " . $row['cid'] . " ) OR id IN ( SELECT lid FROM " . $db_config['prefix'] . '_' . $module_data . "_carrier_config_location WHERE iid = " . $row['id'] . " ) ORDER BY sort ASC";
 }
 else
 {
