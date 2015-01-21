@@ -34,7 +34,7 @@ $data_content['array_custom'] = array();
 $data_content['template'] = '';
 if ($global_array_cat[$data_content['listcatid']]['form'] != '')
 {
-	$idtemplate = $db->query( 'SELECT id FROM '.$db_config['prefix'] . '_' . $module_data . '_template where title= "cat_form_'. $global_array_cat[$data_content['listcatid']]['form'].'"')->fetchColumn();
+	$idtemplate = $db->query( 'SELECT id FROM '.$db_config['prefix'] . '_' . $module_data . '_template where title= "'. $global_array_cat[$data_content['listcatid']]['form'].'"')->fetchColumn();
 
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_".$idtemplate .' WHERE shopid = ' . $id . ' AND status=1' );
 
