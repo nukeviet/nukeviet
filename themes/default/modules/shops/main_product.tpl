@@ -23,8 +23,11 @@
             	<span class="label label-success newday">{LANG.newday}</span>
             	<!-- END: new -->
             	<!-- BEGIN: discounts -->
-            	<span class="label label-danger">-{PRICE.discount_percent}%</span>
+            	<span class="label label-danger">-{PRICE.discount_percent}{PRICE.discount_unit}</span>
             	<!-- END: discounts -->
+            	<!-- BEGIN: point -->
+            	<span class="label label-info" title="{point_note}">+{point}</span>
+            	<!-- END: point -->
             </div>
             <div class="caption text-center">
                 <h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>
@@ -43,7 +46,7 @@
                     <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
                     <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
                     <!-- END: discounts -->
-                    
+
 					<!-- BEGIN: no_discounts -->
 					<span class="money">{PRICE.price_format} {PRICE.unit}</span>
 					<!-- END: no_discounts -->

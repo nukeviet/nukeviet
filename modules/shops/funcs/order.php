@@ -29,7 +29,6 @@ $data_order = array(
 	'user_id' => $user_info['userid'],
 	'order_name' => (!empty( $user_info['full_name'] )) ? $user_info['full_name'] : $user_info['username'],
 	'order_email' => $user_info['email'],
-	'order_address' => '',
 	'order_phone' => '',
 	'order_note' => '',
 	'admin_id' => 0,
@@ -37,12 +36,22 @@ $data_order = array(
 	'who_is' => 0,
 	'unit_total' => $pro_config['money_unit'],
 	'order_total' => 0,
-	'order_time' => NV_CURRENTTIME
+	'order_time' => NV_CURRENTTIME,
+	'order_shipping' => 0,
+	'shipping' => array(
+					'ship_name' => '',
+					'ship_phone' => '',
+					'ship_location_id' => 0,
+					'ship_address_extend' => '',
+					'ship_shops_id' => 0,
+					'ship_carrier_id' => 0 )
 );
+
+$shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), 'list_shops' => array() );
 
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0 );
-$counpons = array();
+$counpons = array( 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
 if( ! empty( $_SESSION[$module_data . '_coupons'] ) )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
@@ -62,6 +71,9 @@ if( !empty( $array_counpons['code'] ) )
 if( $post_order == 1 )
 {
 	$total = 0;
+	$total_point = 0;
+	$total_weight = 0;
+	$total_weight_price = 0;
 	$i = 0;
 	$listid = $listnum = $listprice = array();
 
@@ -84,19 +96,50 @@ if( $post_order == 1 )
 				}
 			}
 
+			// Tinh diem tich luy doi voi thanh vien
+			if( $pro_config['point_active'] and defined( 'NV_IS_USER' ) )
+			{
+				$result = $db->query( 'SELECT listcatid FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . $pro_id );
+				list( $listcatid ) = $result->fetch( 3 );
+				if( ! empty( $listcatid ) )
+				{
+					if( $global_array_cat[$listcatid]['cat_allow_point'] and ( $global_array_cat[$listcatid]['cat_number_product'] == 0 or $info['num'] >= $global_array_cat[$listcatid]['cat_number_product'] ) )
+					{
+						$total_point += intval( $global_array_cat[$listcatid]['cat_number_point'] );
+					}
+				}
+			}
+
 			$info['price'] = $price['sale'];
 			$total = $total + (( int )$info['num'] * ( double )$info['price']);
+			$total_weight = $total_weight + nv_weight_conversion( ( double )$info['weight'], $info['weight_unit'], $pro_config['weight_unit'], ( int )$info['num'] );
+
 			$i++;
 		}
 	}
+	$total_point += intval( $pro_config['point_new_order'] );
 	$total_old = $total;
 
 	$data_order['order_name'] = nv_substr( $nv_Request->get_title( 'order_name', 'post', '', 1 ), 0, 200 );
 	$data_order['order_email'] = nv_substr( $nv_Request->get_title( 'order_email', 'post', '', 1 ), 0, 250 );
-	$data_order['order_address'] = $nv_Request->get_title( 'order_address', 'post', '', 1 );
 	$data_order['order_phone'] = nv_substr( $nv_Request->get_title( 'order_phone', 'post', '', 1 ), 0, 20 );
 	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
+	$data_order['order_shipping'] = $nv_Request->get_int( 'order_shipping', 'post', 0 );
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
+
+	if( $data_order['order_shipping'] )
+	{
+		$data_order['shipping']['ship_name'] = $nv_Request->get_title( 'ship_name', 'post', '' );
+		$data_order['shipping']['ship_phone'] = $nv_Request->get_title( 'ship_phone', 'post', '' );
+		$data_order['shipping']['ship_address_extend'] = $nv_Request->get_title( 'ship_address_extend', 'post', '' );
+		$data_order['shipping']['ship_location_id'] = $nv_Request->get_int( 'ship_location', 'post', 0 );
+		$data_order['shipping']['ship_shops_id'] = $nv_Request->get_int( 'shops', 'post', 0 );
+		$data_order['shipping']['ship_carrier_id'] = $nv_Request->get_int( 'carrier', 'post', 0 );
+
+		$price_ship = nv_shipping_price( $total_weight, $pro_config['weight_unit'], $data_order['shipping']['ship_location_id'], $data_order['shipping']['ship_shops_id'], $data_order['shipping']['ship_carrier_id'] );
+		$total_weight_price = empty( $price_ship ) ? 0 : $price_ship['price'];
+	}
+	$total += $total_weight_price;
 
 	if( ( $total > $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 	{
@@ -129,13 +172,15 @@ if( $post_order == 1 )
 
 	if( empty( $data_order['order_name'] ) )
 		$error['order_name'] = $lang_module['order_name_err'];
-	elseif( nv_check_valid_email( $data_order['order_email'] ) != '' )
+	if( nv_check_valid_email( $data_order['order_email'] ) != '' )
 		$error['order_email'] = $lang_module['order_email_err'];
-	elseif( empty( $data_order['order_phone'] ) )
+	if( empty( $data_order['order_phone'] ) )
 		$error['order_phone'] = $lang_module['order_phone_err'];
-	elseif( empty( $data_order['order_address'] ) )
-		$error['order_address'] = $lang_module['order_address_err'];
-	elseif( $check == 0 )
+	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_name'] ) )
+		$error['order_shipping_name'] = $lang_module['order_shipping_name_err'];
+	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_phone'] ) )
+		$error['order_shipping_phone'] = $lang_module['order_shipping_phone_err'];
+	if( $check == 0 )
 		$error['order_check'] = $lang_module['order_check_err'];
 
 	if( empty( $error ) and $i > 0 )
@@ -148,12 +193,11 @@ if( $post_order == 1 )
 		$transaction_status = ( empty( $pro_config['auto_check_order'] )) ? -1 : 0;
 
 		$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
-			lang, order_code, order_name, order_email, order_address, order_phone, order_note,
+			lang, order_code, order_name, order_email, order_phone, order_note,
 			user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
 			transaction_status, transaction_id, transaction_count
 		) VALUES (
-			'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email,
-			:order_address, :order_phone, :order_note,
+			'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email, :order_phone, :order_note,
 			" . intval( $data_order['user_id'] ) . ", " . intval( $data_order['admin_id'] ) . ", " . intval( $data_order['shop_id'] ) . ",
 			" . intval( $data_order['who_is'] ) . ", :unit_total, " . doubleval( $data_order['order_total'] ) . ",
 			" . intval( $data_order['order_time'] ) . ", :ip, 0, " . $transaction_status . ", 0, 0
@@ -162,7 +206,6 @@ if( $post_order == 1 )
 		$data_insert['order_code'] = $order_code;
 		$data_insert['order_name'] = $data_order['order_name'];
 		$data_insert['order_email'] = $data_order['order_email'];
-		$data_insert['order_address'] = $data_order['order_address'];
 		$data_insert['order_phone'] = $data_order['order_phone'];
 		$data_insert['order_note'] = $data_order['order_note'];
 		$data_insert['ip'] = $client_info['ip'];
@@ -226,6 +269,33 @@ if( $post_order == 1 )
 				$stmt->bindParam( ':cid', $counpons['id'], PDO::PARAM_INT );
 				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
 				$stmt->bindParam( ':amount', $amount, PDO::PARAM_INT );
+				$stmt->execute();
+			}
+
+			// Ghi nhan diem tich luy khach hang
+			if( $total_point > 0 and $pro_config['point_active'] )
+			{
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_point_queue( order_id, point, status ) VALUES ( :order_id, :point, 1 )' );
+				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
+				$stmt->bindParam( ':point', $total_point, PDO::PARAM_INT );
+				$stmt->execute();
+			}
+
+			// Ghi nhan thong tin van chuyen
+			if( $data_order['order_shipping'] )
+			{
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping( order_id, ship_name, ship_phone, ship_location_id, ship_address_extend, ship_shops_id, ship_carrier_id, weight, weight_unit, ship_price, ship_price_unit, add_time ) VALUES ( :order_id, :ship_name, :ship_phone, :ship_location_id, :ship_address_extend, :ship_shops_id, :ship_carrier_id, :weight, :weight_unit, :ship_price, :ship_price_unit, ' . NV_CURRENTTIME . ' )' );
+				$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
+				$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_location_id', $data_order['shipping']['ship_location_id'], PDO::PARAM_INT );
+				$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
+				$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
+				$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
+				$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
+				$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
 				$stmt->execute();
 			}
 
@@ -301,6 +371,26 @@ if( $post_order == 1 )
 	}
 }
 
+// Lay dia diem
+$sql = "SELECT id, parentid, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location ORDER BY sort ASC";
+$result = $db->query( $sql );
+while( list( $id_i, $parentid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
+{
+	$xtitle_i = '';
+	if( $lev_i > 0 )
+	{
+		$xtitle_i .= '&nbsp;';
+		for( $i = 1; $i <= $lev_i; $i++ )
+		{
+			$xtitle_i .= '&nbsp;&nbsp;&nbsp;';
+		}
+	}
+	$xtitle_i .= $title_i;
+	$shipping_data['list_location'][$id_i] = array( 'id' => $id_i, 'parentid' => $parentid_i, 'title' => $xtitle_i );
+}
+$shipping_data['list_carrier'] = $array_carrier;
+$shipping_data['list_shops'] = $array_shops;
+
 if( $action == 0 )
 {
 	$page_title = $lang_module['cart_check_cart'];
@@ -316,10 +406,10 @@ if( $action == 0 )
 	{
 		$listid = implode( ',', $arrayid );
 
-		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
+		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
 		$result = $db->query( $sql );
-
-		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id ) = $result->fetch( 3 ) )
+		$weight_total = 0;
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id, $product_weight, $weight_unit ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
@@ -343,6 +433,9 @@ if( $action == 0 )
 				$discount_id = $product_price = 0;
 			}
 
+			$num = $_SESSION[$module_data . '_cart'][$id]['num'];
+			$weight_total += nv_weight_conversion( $product_weight, $weight_unit, $pro_config['weight_unit'], $num );
+
 			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
 
 			$data_content[] = array(
@@ -359,11 +452,13 @@ if( $action == 0 )
 				'money_unit' => $money_unit,
 				'group' => $group,
 				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
-				'num' => $_SESSION[$module_data . '_cart'][$id]['num']
+				'num' => $num
 			);
 			++$i;
 		}
 	}
+
+	$data_order['weight_total'] = $weight_total;
 
 	if( $i == 0 )
 	{

@@ -90,7 +90,7 @@ function cartorder_detail(a_ob) {
 	var num = $('#pnum').val();
 	var id = $(a_ob).attr("id");
 	var group = '';
-	
+
 	var i = 0;
     $('select[name=group] option:selected').each(function(){
     	var value = $(this).val();
@@ -107,7 +107,7 @@ function cartorder_detail(a_ob) {
     	}
     	i++;
 	});
-	
+
 	$.ajax({
 		type : "POST",
 		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&group=" + group + "&nocache=" + new Date().getTime(),
@@ -262,7 +262,7 @@ function wishlist(id, object) {
 			if( s[0] == 'OK' )
 			{
 				$(object).addClass('disabled');
-				$('#wishlist_num_id').text( s[1] );	
+				$('#wishlist_num_id').text( s[1] );
 			}
 			alert_msg(s[2]);
 		}
@@ -287,6 +287,29 @@ function wishlist_del_item(id) {
 					}
 				}
 				alert_msg(s[2]);
+			}
+		});
+	}
+}
+
+function payment_point( order_id, checkss, lang_confirm )
+{
+	if (confirm(lang_confirm)) {
+		$.ajax({
+			type : "GET",
+			url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=point' + '&paypoint=1&checkss='+checkss+'&order_id=' + order_id + "&nocache=" + new Date().getTime(),
+			data : '',
+			success : function(data) {
+				var s = data.split('_');
+				if( s[0] == 'OK' )
+				{
+					alert( s[1] );
+					window.location.href = window.location.href;
+				}
+				else
+				{
+					alert( s[1] );
+				}
 			}
 		});
 	}

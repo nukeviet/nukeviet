@@ -37,7 +37,9 @@ $lang_module['name'] = 'Product name';
 $lang_module['error_name'] = 'Error: You need to enter Product name';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'number of products';
-$lang_module['inhome'] = 'show on main page';
+$lang_module['inhome'] = 'Show on main page';
+$lang_module['indetail'] = 'Show on detail page';
+$lang_module['indetail_note'] = 'Display product group on detail page';
 $lang_module['in_order'] = 'Display when order';
 $lang_module['numlinks'] = 'number of links';
 $lang_module['description'] = 'Description';
@@ -324,6 +326,7 @@ $lang_module['number'] = 'Number';
 $lang_module['title'] = 'Title';
 $lang_module['begin_time'] = 'Begin time';
 $lang_module['end_time'] = 'End time';
+$lang_module['discounts_dis_detail'] = 'Display price table';
 $lang_module['config_discounts'] = 'Discounts config';
 $lang_module['error_required_title'] = 'Error: Required fields enter the Title';
 $lang_module['error_required_begin_time'] = 'Error: Required fields enter the Begin time';
@@ -333,7 +336,7 @@ $lang_module['discount_add'] = 'Add new discount';
 $lang_module['discount_edit'] = 'Edit discount';
 $lang_module['discount_from'] = 'From production';
 $lang_module['discount_to'] = 'to production';
-$lang_module['discount_number'] = 'Discount %';
+$lang_module['discount_number'] = 'Discount';
 $lang_module['round'] = 'Round';
 $lang_module['round1'] = 'round';
 $lang_module['round2'] = 'if the amount is greater than';
@@ -382,3 +385,26 @@ $lang_module['coupons_error_required_title'] = 'Error: You must enter the discou
 $lang_module['coupons_error_required_code'] = 'Error: You must enter the discount code';
 $lang_module['coupons_error_vail_code'] = 'Error: Invalid Code discounts';
 $lang_module['coupons_error_required_discount'] = 'Error: You must enter values decrease';
+
+//Lang for function point
+$lang_module['point'] = 'Point';
+$lang_module['point_username'] = 'Username';
+$lang_module['point_fullname'] = 'Fullname';
+$lang_module['point_email'] = 'Email';
+$lang_module['setting_point'] = 'Point config';
+$lang_module['setting_point_active'] = 'Point active';
+$lang_module['setting_point_conversion'] = 'Rate of exchange';
+$lang_module['setting_point_new_order'] = 'Number of point when creating a new order';
+$lang_module['setting_point_1'] = '1 point';
+$lang_module['cat_allow_point'] = 'Allow keep point with this category';
+$lang_module['cat_number_point'] = 'Number point when buy product this category';
+$lang_module['cat_number_product'] = 'The number of each product at the most to gain point';
+
+//Lang for function carrier
+$lang_module['carrier'] = 'carrier';
+$lang_module['phone'] = 'Phone';
+$lang_module['address'] = 'Address';
+$lang_module['error_required_name'] = 'Error: Required fields enter the Product name';
+
+//Lang for function carrier
+$lang_module['search_submit'] = 'Search';

@@ -41,10 +41,11 @@ if( $savesetting == 1 )
 	$data['auto_check_order'] = $nv_Request->get_string( 'auto_check_order', 'post', 0 );
 	$data['post_auto_member'] = $nv_Request->get_string( 'post_auto_member', 'post', 0 );
 	$data['money_unit'] = $nv_Request->get_string( 'money_unit', 'post', "" );
+	$data['weight_unit'] = $nv_Request->get_string( 'weight_unit', 'post', "" );
 	$data['home_view'] = $nv_Request->get_string( 'home_view', 'post', '' );
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
-	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );	
-	$data['address'] = $nv_Request->get_string( 'address', 'post', '' );	
+	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
+	$data['address'] = $nv_Request->get_string( 'address', 'post', '' );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
@@ -59,6 +60,9 @@ if( $savesetting == 1 )
 	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
+	$data['point_active'] = $nv_Request->get_int( 'point_active', 'post', 0 );
+	$data['point_conversion'] = $nv_Request->get_string( 'point_conversion', 'post', 0 );
+	$data['point_new_order'] = $nv_Request->get_string( 'point_new_order', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -171,6 +175,9 @@ $xtpl->assign( 'ck_displays', $check );
 $check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_wishlist', $check );
 
+$check = ( $data['point_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_point', $check );
+
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );
 while( list( $code, $currency ) = $result->fetch( 3 ) )
@@ -181,6 +188,18 @@ while( list( $code, $currency ) = $result->fetch( 3 ) )
 	$array_temp['selected'] = ( $code == $data['money_unit'] ) ? " selected=\"selected\"" : "";
 	$xtpl->assign( 'DATAMONEY', $array_temp );
 	$xtpl->parse( 'main.money_loop' );
+}
+
+// Don vi khoi luong
+$result = $db->query( "SELECT code, title FROM " . $db_config['prefix'] . "_" . $module_data . "_weight_" . NV_LANG_DATA . " ORDER BY code DESC" );
+while( list( $code, $title ) = $result->fetch( 3 ) )
+{
+	$array_temp = array();
+	$array_temp['value'] = $code;
+	$array_temp['title'] = $code . " - " . $title;
+	$array_temp['selected'] = ( $code == $data['weight_unit'] ) ? " selected=\"selected\"" : "";
+	$xtpl->assign( 'DATAWEIGHT', $array_temp );
+	$xtpl->parse( 'main.weight_loop' );
 }
 
 $xtpl->assign( 'per_page', $select );

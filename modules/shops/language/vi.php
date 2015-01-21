@@ -203,6 +203,8 @@ $lang_module['order_name_err'] = '<em>Bạn chưa nhập họ tên</em>';
 $lang_module['order_email_err'] = '<em>Bạn nhập email không đúng</em>';
 $lang_module['order_address_err'] = '<em>Bạn không nhập địa chỉ</em>';
 $lang_module['order_phone_err'] = '<em>Thiếu số điện thoại</em>';
+$lang_module['order_shipping_name_err'] = '<em>Thiếu họ tên người nhận</em>';
+$lang_module['order_shipping_phone_err'] = '<em>Thiếu số điện thoại người nhận</em>';
 $lang_module['order_check_err'] = '<em>Bạn cần chọn mục xác nhận thông tin</em>';
 $lang_module['order_ok'] = 'Bạn đã gửi đơn hàng thành công chúng tôi sẽ sớm phản hồi cho bạn!';
 $lang_module['order_payment'] = 'Đã thanh toán';
@@ -231,7 +233,7 @@ $lang_module['order_email_title'] = '[%s] Thông tin đơn hàng %s';
 $lang_module['order_email_review'] = 'Bạn có thể xem lại thông tin đơn hàng tại <a href="%s">đây</a>';
 $lang_module['order_email_noreply'] = 'Đây là email được gửi tự động từ website <a href="%s">%s</a>, vui lòng không trả lời email này vì chúng tôi sẽ không nhận được email của bạn. Nếu không hiểu về nội dung email này hãy đơn giản xóa nó khỏi hòm thư của bạn.';
 $lang_module['order_email_thanks'] = 'Cảm ơn bạn đã đặt hàng tại website %s,<br />Dưới đây là thông tin đơn hàng của bạn.';
-$lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! chúng tôi sẽ gửi hàng cho bạn sớm nhất';
+$lang_module['payment_complete'] = 'Bạn đã thanh toán thành công! Chúng tôi sẽ gửi hàng cho bạn sớm nhất';
 $lang_module['payment_erorr'] = 'Quá trình thanh toán có lỗi do một lý do nào đó';
 $lang_module['cart_title'] = 'Giỏ hàng';
 $lang_module['cart_product_title'] = 'mặt hàng';
@@ -329,6 +331,7 @@ $lang_module['displays_price_asc'] = 'Giá tăng dần';
 $lang_module['displays_price_desc'] = 'Giá giảm dần';
 $lang_module['displays_product'] = 'Sắp xếp theo: ';
 $lang_module['newday'] = "Mới";
+$lang_module['payport'] = "Cổng thanh toán";
 
 $lang_module['filter'] = "Lọc sản phẩm";
 $lang_module['filter_no_item'] = "Chọn ít nhất một thuộc tính";
@@ -355,7 +358,7 @@ $lang_module['discount_detail'] = "Chương trình khuyến mãi";
 $lang_module['discount_content_begin'] = "Từ ngày %s";
 $lang_module['discount_content_end'] = " đến ngày %s";
 $lang_module['discount_content_text'] = "<strong>%s</strong> áp dụng chương trình khuyến mãi cho sản phầm <strong class='text-danger'>%1s</strong>";
-$lang_module['discount_content_text_items'] = "Giảm %s&#37; khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
+$lang_module['discount_content_text_items'] = "Giảm <strong>%s</strong> khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
 
 $lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
 $lang_module['dg'] = ' lượt';
@@ -387,6 +390,37 @@ $lang_module['coupons_uses_per_customer'] = 'Số lượt sử dụng của mỗ
 $lang_module['coupons_uses'] = 'Sử dụng mã giảm giá này';
 $lang_module['coupons_empty'] = 'Vui lòng nhập mã giảm giá để kiểm tra';
 $lang_module['coupons_no_exist'] = 'Mã giảm giá không tồn tại';
+
+$lang_module['point'] = 'điểm';
+$lang_module['point_empty'] = 'Không có thao tác nào được ghi nhận';
+$lang_module['point_product_note'] = 'Cộng %d điểm khi mua sản phẩm';
+$lang_module['point_cart_note_user'] = 'Quý khách được cộng <strong>%d</strong> điểm khi hoàn tất (thanh toán thành công) đơn hàng này.';
+$lang_module['point_cart_note_guest'] = 'Quý khách được cộng <strong>%1d</strong> điểm khi hoàn tất (thanh toán thành công) đơn hàng này. Chỉ áp dụng cho khách hàng đã đăng nhập tài khoản.<br />Vui lòng <a href="%2d" title="Đăng nhập">đăng nhập</a> và tiếp tục để nhận điểm.';
+$lang_module['point_cart_text'] = 'Điểm tích lũy';
+$lang_module['point_cart_convention'] = 'Giá trị quy đổi';
+$lang_module['point_cart_history'] = 'Lịch sử điểm tích lũy';
+$lang_module['point_payment'] = 'Sử dụng điểm tích lũy để thanh toán đơn hàng này!';
+$lang_module['point_order'] = 'Đơn hàng thực hiện';
+$lang_module['point_payment_info'] = 'Quý khách hiện có <strong>%1d điểm</strong> tương ứng với <strong>%2s %3s</strong>';
+$lang_module['point_payment_point'] = 'Thanh toán bằng điểm tích lũy';
+$lang_module['point_payment_point_confirm'] = 'Quý khách chắc chắn muốn dùng quỹ điểm tích lũy để thanh toán đơn hàng này?';
+$lang_module['point_payment_error_money'] = 'Quý khách không đủ điểm để thanh toán đơn hàng này!';
+
+$lang_module['shipping'] = 'Vận chuyển';
+$lang_module['shipping_price'] = 'Phí vận chuyển';
+$lang_module['shipping_copy'] = 'Lấy thông tin người mua';
+$lang_module['shipping_address'] = 'Địa chỉ';
+$lang_module['shipping_name'] = 'Họ tên người nhận';
+$lang_module['shipping_phone'] = 'Số điện thoại người nhận';
+$lang_module['shipping_services'] = 'Dịch vụ vận chuyển';
+$lang_module['shipping_info'] = 'Thông tin vận chuyển';
+$lang_module['shipping_info_weight'] = 'Tổng khối lượng';
+$lang_module['shipping_shops'] = 'Cửa hàng';
+$lang_module['shipping_shops_chose'] = 'Chọn cửa hàng';
+$lang_module['shipping_carrier_chose'] = 'Chọn dịch vụ vận chuyển';
+$lang_module['shipping_address_extend'] = 'Thông tin thêm';
+$lang_module['shipping_address_note'] = 'Để hệ thống có thể tính toán đúng chi phí vận chuyển, vui lòng chọn đơn vị địa chính gần nhất với khu vực nhận hàng của bạn ở hộp chọn bên trên.';
+$lang_module['shipping_error'] = 'Hệ thống không thể đưa ra chi phí vận chuyển. Vui lòng liên hệ với người quản lý hoặc chọn địa điểm thuộc cấp lớn hơn (nếu có) hay nhỏ hơn (nếu có) địa điểm hiện tại.';
 
 //them truong tuy bien
 

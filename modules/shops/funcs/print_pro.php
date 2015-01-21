@@ -45,7 +45,7 @@ elseif( $data_content['homeimgthumb'] == 3 )//image url
 }
 else//no image
 {
-	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_name . "/no-image.jpg";
+	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
 }
 
 $page_title = $data_content[NV_LANG_DATA . '_title'];

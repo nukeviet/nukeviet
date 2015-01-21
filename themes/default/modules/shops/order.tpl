@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.js"></script>
+<link href="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.css" type="text/css" rel="stylesheet" />
+
 <div class="block clearfix">
 	<div class="step_bar alert alert-success clearfix">
 		<a class="step step_disable" title="{LANG.cart_check_cart}" href="{LINK_CART}"><span>1</span>{LANG.cart_check_cart}</a>
@@ -40,15 +43,89 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{LANG.order_address} <span class="error">(*)</span></label>
+                    <label class="col-sm-3 control-label">{LANG.shipping}</label>
                     <div class="col-sm-9">
-                        <p class="form-control-static"><input name="order_address" value="{DATA.order_address}" class="form-control" /></p>
-                        <span class="error">{ERROR.order_address}</span>
+                    	<!-- BEGIN: shipping_loop -->
+                    	<p class="form-control-static"><label><input type="radio" name="order_shipping" value="{IS_SHIPPING.key}" {IS_SHIPPING.checked} />{IS_SHIPPING.value}</label></p>
+                    	<!-- END: shipping_loop -->
                     </div>
                 </div>
 
             </div>
         </div>
+
+		<div class="panel panel-primary" id="shipping_form">
+			<div class="panel-heading">
+				{LANG.shipping_services}
+			</div>
+			<div class="panel-body">
+				<p><strong>{LANG.order_address} (<a href="javascript:void(0)" title="{LANG.shipping_copy}" onclick="nv_get_customer_info()">{LANG.shipping_copy}</a>)</strong></p>
+				<div class="row">
+					<div class="col-xs-5">
+						<input type="text" name="ship_name" value="{DATA.shipping.ship_name}" class="form-control" placeholder="{LANG.shipping_name}" />
+						<span class="error">{ERROR.order_shipping_name}</span>
+					</div>
+					<div class="col-xs-7">
+						<input type="text" name="ship_phone" value="{DATA.shipping.ship_phone}" class="form-control" placeholder="{LANG.shipping_phone}" />
+						<span class="error">{ERROR.order_shipping_phone}</span>
+					</div>
+				</div><br />
+				<div class="row">
+					<div class="col-xs-5">
+						<select id="location" name="ship_location" class="form-control">
+							<!-- BEGIN: location_loop -->
+							<option value="{LOCATION.id}" {LOCATION.selected}>{LOCATION.title}</option>
+							<!-- END: location_loop -->
+						</select>
+					</div>
+					<div class="col-xs-7">
+						<input type="text" name="ship_address_extend" class="form-control" placeholder="{LANG.shipping_address_extend}" />
+					</div>
+				</div>
+				<em class="help-block">{LANG.shipping_address_note}</em>
+				<div class="panel panel-danger">
+					<div class="panel-body">
+						<p><strong>{LANG.shipping_services}</strong></p>
+						<div class="row">
+							<div class="col-xs-6">
+								<p><em>{LANG.shipping_shops_chose}</em></p>
+								<!-- BEGIN: shops_loop -->
+								<label class="show">
+									<input type="radio" name="shops" value="{SHOPS.id}" {SHOPS.checked} title="{SHOPS.name}" />{SHOPS.name}
+								</label>
+								<span class="help-block">{SHOPS.location_string}</span>
+								<!-- END: shops_loop -->
+							</div>
+							<div class="col-xs-6">
+								<p><em>{LANG.shipping_carrier_chose}</em></p>
+								<div id="carrier">
+									<!-- BEGIN: carrier_loop -->
+									<label class="show"><input type="radio" name="carrier" value="{CARRIER.id}" {CARRIER.checked} title="{CARRIER.name}" />{CARRIER.name}</label>
+									<!-- END: carrier_loop -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-danger">
+					<div class="panel-body">
+						<p><strong>{LANG.shipping_info}</strong></p>
+						<ul class="order_shipping_info">
+							<li><em class="fa fa-circle-o">&nbsp;</em><strong>{LANG.shipping_info_weight}:</strong> {DATA.weight_total}{weight_unit}</li>
+							<li><em class="fa fa-circle-o">&nbsp;</em><strong>{LANG.shipping_shops}:</strong> <span id="shipping_shops">&nbsp;</span></li>
+							<li><em class="fa fa-circle-o">&nbsp;</em><strong>{LANG.shipping_services}:</strong> <span id="shipping_services">&nbsp;</span></li>
+							<li><em class="fa fa-circle-o">&nbsp;</em><strong>{LANG.shipping_price}:</strong> <span id="shipping_price">&nbsp;</span></li>
+							<li><em class="fa fa-circle-o">&nbsp;</em><strong>{LANG.order_address}:</strong>
+								<ul>
+									<li><strong>{LANG.shipping_name}:</strong> <span id="order_ship_name">N/A</span><span id="order_ship_phone">&nbsp;</span></li>
+									<li><strong>{LANG.shipping_address}:</strong> <span id="order_address_extend">&nbsp;</span><span id="order_address">&nbsp;</span></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
@@ -66,7 +143,7 @@
 
     			<tbody>
     			<!-- BEGIN: rows -->
-    			<tr {bg}>
+    			<tr>
     				<td align="center">{pro_no}</td>
     				<td>
     					<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
@@ -97,21 +174,121 @@
 		<p class="pull-right">{LANG.cart_total}: <strong id="total">{price_total}</strong> {unit_config}</p>
 		<!-- END: price3 -->
 
-        <div class="form-group">
-            <label>{LANG.order_note}</label>
-            <textarea class="form-control" name="order_note">{DATA.order_note}</textarea>
-        </div>
+        <label>{LANG.order_note}</label>
+        <textarea class="form-control" name="order_note">{DATA.order_note}</textarea>
 
         <div class="text-center">
-				<input type="checkbox" name="check" value="1" id="check" /><span id="idselect">{LANG.order_true_info}</span>
-				<br />
-				<span class="error">{ERROR.order_check}</span></td>
-				<br />
-				<a class="btn btn-primary" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a>
+        	<br />
+			<input type="checkbox" name="check" value="1" id="check" />
+			<span id="idselect">{LANG.order_true_info}</span>
+			<br /><br />
+			<span class="error">{ERROR.order_check}</span>
+			<br /><br />
+			<a class="btn btn-primary" title="{LANG.order_submit_send}" href="#" id="submit_send"><span>{LANG.order_submit_send}</span></a>
 		</div>
 	</form>
 </div>
+
 <script type="text/javascript">
+	var url_load = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=shippingajax';
+	var urloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
+	var order_shipping = '{DATA.order_shipping}';
+
+	$(document).ready(function() {
+		$("#location").select2({
+			language: "en"
+		});
+
+		var shops_id = $('input[name="shops"]:checked');
+		var carrier_id = $('input[name="carrier"]:checked');
+		var location_id = $('#location option:selected').val();
+
+		$('#carrier').load( url_load + '&get_carrier=1&shops_id=' + shops_id.val() );
+		$('#shipping_shops').text( shops_id.attr("title") );
+		$('#shipping_services').text( carrier_id.attr("title") );
+		nv_get_price();
+
+		$('input[name="shops"]').change(function(){
+			var shops_id = $('input[name="shops"]:checked');
+			$('#carrier').load( url_load + '&get_carrier=1&shops_id=' + shops_id.val() );
+			$('#shipping_shops').text( shops_id.attr("title") );
+			nv_get_price();
+		});
+
+		if( order_shipping == '0' )
+		{
+			$('#shipping_form').hide();
+		}
+		else
+		{
+			$('#shipping_form').show();
+		}
+	});
+
+	$('input[name="order_shipping"]').change(function(){
+		if( $('input[name="order_shipping"]:checked').val() == '1' )
+		{
+			$('#shipping_form').slideDown();
+		}
+		else
+		{
+			$('#shipping_form').slideUp();
+		}
+	});
+
+	$("#location").on("change", function (e) {
+		var location_id = $('#location option:selected').val();
+		$.post(url_load + '&nocache=' + new Date().getTime(), 'get_location=1&location_id=' + location_id, function(res) {
+			$('#order_address').text( res );
+		});
+		nv_get_price();
+	});
+
+	$('input[name="address_extend"]').on("keyup", function () {
+		var text = ', ';
+		if( $(this).val().length > 0 ) text = $(this).val() + text; else text = '';
+		$('#order_address_extend').html( text );
+	});
+
+	$('input[name="ship_name"]').on("keyup", function () {
+		$('#order_ship_name').html( $(this).val() );
+	});
+
+	$('input[name="ship_phone"]').on("keyup", function () {
+		var text = ' - ';
+		if( $(this).val().length > 0 ) text = text + $(this).val(); else text = '';
+		$('#order_ship_phone').html( text );
+	});
+
+	function nv_get_price()
+	{
+		var carrier_id = $('input[name="carrier"]:checked');
+		var shops_id = $('input[name="shops"]:checked').val();
+		var location_id = $('#location option:selected').val();
+		$('#shipping_services').text( carrier_id.attr("title") );
+		$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+		$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
+		$("#cart_" + nv_module_name).load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+		$("#total").load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
+	}
+
+	function nv_carrier_change()
+	{
+		var carrier_id = $('input[name="carrier"]:checked');
+		$('#shipping_services').text( carrier_id.attr("title") );
+		nv_get_price();
+	}
+
+	function nv_get_customer_info()
+	{
+		$('input[name="ship_name"]').val( $('input[name="order_name"]').val() );
+		$('input[name="ship_phone"]').val( $('input[name="order_phone"]').val() );
+		$('#order_ship_name').html( $('input[name="order_name"]').val() );
+		var text = ' - ';
+		if( $('input[name="order_phone"]').val().length > 0 ) text = text + $('input[name="order_phone"]').val(); else text = '';
+		$('#order_ship_phone').html( text );
+	}
+
 	$("#submit_send").click(function() {
 		$("#fpost").submit();
 		return false;

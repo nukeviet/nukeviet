@@ -31,7 +31,7 @@ if( preg_match( '/^page\-([0-9]+)$/', ( isset( $array_op[1] ) ? $array_op[1] : '
 }
 
 $data_content = array();
-$array_wishlist_id = implode( ',', $array_wishlist_id ); 
+$array_wishlist_id = implode( ',', $array_wishlist_id );
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( 't1.inhome=1 AND t1.status =1 AND id IN (' . $array_wishlist_id . ')' );
@@ -66,6 +66,7 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 
 	$data_content[] = array(
 		'id' => $id,
+		'listcatid' => $listcatid,
 		'publtime' => $publtime,
 		'title' => $title,
 		'alias' => $alias,

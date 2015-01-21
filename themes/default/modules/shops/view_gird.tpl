@@ -30,8 +30,11 @@
             	<span class="label label-success newday">{LANG.newday}</span>
             	<!-- END: new -->
             	<!-- BEGIN: discounts -->
-            	<span class="label label-danger">-{PRICE.discount_percent}%</span>
+            	<span class="label label-danger">-{PRICE.discount_percent}{PRICE.discount_unit}</span>
             	<!-- END: discounts -->
+            	<!-- BEGIN: point -->
+            	<span class="label label-info" title="{point_note}">+{point}</span>
+            	<!-- END: point -->
             </div>
             <div class="caption text-center">
                 <h3><a href="{LINK}" title="{title_pro}">{title_pro0}</a></h3>
@@ -43,14 +46,14 @@
                 <!-- BEGIN: adminlink -->
                 <p>{ADMINLINK}</p>
                 <!-- END: adminlink -->
-                
+
 				<!-- BEGIN: price -->
 				<p class="price">
                     <!-- BEGIN: discounts -->
                     <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
                     <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
                     <!-- END: discounts -->
-                    
+
 					<!-- BEGIN: no_discounts -->
 					<span class="money">{PRICE.price_format} {PRICE.unit}</span>
 					<!-- END: no_discounts -->
@@ -71,11 +74,11 @@
                     <!-- BEGIN: order -->
                     <a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                     <!-- END: order -->
-                    
+
 					<!-- BEGIN: product_empty -->
                     <button class="btn btn-danger disabled btn-xs">{LANG.product_empty}</button>
                     <!-- END: product_empty -->
-                    
+
 	                <!-- BEGIN: wishlist -->
 	                <a href="javascript:void(0)" title="{title_pro}" ><button type="button" onclick="wishlist({id}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
 	                <!-- END: wishlist -->

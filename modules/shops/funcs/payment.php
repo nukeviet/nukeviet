@@ -169,7 +169,15 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		$data['transaction_name'] = 'ERROR';
 	}
 
-	$contents = call_user_func( 'payment', $data, $data_pro, $url_checkout, $intro_pay );
+	// Lay so diem tich luy cua khach
+	$point = 0;
+	$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] . '' );
+	if( $result )
+	{
+		$point = $result->fetchColumn();
+	}
+
+	$contents = call_user_func( 'payment', $data, $data_pro, $url_checkout, $intro_pay, $point );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );

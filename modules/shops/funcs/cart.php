@@ -110,6 +110,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 
 			$data_content[] = array(
 				'id' => $id,
+				'listcatid' => $listcatid,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,

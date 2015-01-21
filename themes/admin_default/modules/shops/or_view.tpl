@@ -1,91 +1,120 @@
 <!-- BEGIN: main -->
 <br>
 <div class="block clearfix">
-	<table class="rows" style="margin-bottom: 2px">
-		<tr>
-			<td>
-			<table>
-				<tr>
-					<td width="130px">{LANG.order_name}:</td>
-					<td><strong> {DATA.order_name} </strong></td>
-				</tr>
-				<tr>
-					<td>{LANG.order_email}:</td>
-					<td>{DATA.order_email}</td>
-				</tr>
-				<tr>
-					<td>{LANG.order_phone}:</td>
-					<td>{DATA.order_phone}</td>
-				</tr>
-				<tr>
-					<td valign="top">{LANG.order_address}:</td>
-					<td valign="top">{DATA.order_address}</td>
-				</tr>
-				<tr>
-					<td>{LANG.order_date}:</td>
-					<td>{dateup} {LANG.order_moment} {moment}</td>
-				</tr>
-			</table></td>
-			<td width="100px" valign="top" class="text-center">
-			<div class="order_code">
-				{LANG.order_code}
-				<br>
-				<span class="text_date"><strong>{DATA.order_code}</strong></span>
-				<br>
-				<span class="payment">{payment}</span>
-			</div></td>
-		</tr>
-	</table>
-	<table class="table table-striped table-bordered table-hover">
-		<thead>
+	<div class="table-responsive">
+		<table class="rows" style="margin-bottom: 2px">
 			<tr>
-				<th width="30px">{LANG.order_no_products}</th>
-				<th>{LANG.order_products_name}</th>
-				<th>{LANG.content_product_code}</th>
-				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
-				<th>{LANG.order_product_unit}</th>
-				<th class="text-right">{LANG.order_product_price} ({unit})</th>
+				<td>
+				<table>
+					<tr>
+						<td width="130px">{LANG.order_name}:</td>
+						<td><strong> {DATA.order_name} </strong></td>
+					</tr>
+					<tr>
+						<td>{LANG.order_email}:</td>
+						<td>{DATA.order_email}</td>
+					</tr>
+					<tr>
+						<td>{LANG.order_phone}:</td>
+						<td>{DATA.order_phone}</td>
+					</tr>
+					<tr>
+						<td valign="top">{LANG.order_address}:</td>
+						<td valign="top">{DATA.order_address}</td>
+					</tr>
+					<tr>
+						<td>{LANG.order_date}:</td>
+						<td>{dateup} {LANG.order_moment} {moment}</td>
+					</tr>
+				</table></td>
+				<td width="100px" valign="top" class="text-center">
+				<div class="order_code">
+					{LANG.order_code}
+					<br>
+					<span class="text_date"><strong>{DATA.order_code}</strong></span>
+					<br>
+					<span class="payment">{payment}</span>
+				</div></td>
 			</tr>
-		</thead>
-		<tbody>
-		<!-- BEGIN: loop -->
-			<tr>
-				<td class="text-center">{pro_no}</td>
-				<td class="prd">
-					<span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span><br />
-					<!-- BEGIN: display_group -->
-					<span class="text-muted">
+		</table>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
+				{LANG.content_list}
+			</caption>
+			<thead>
+				<tr>
+					<th width="30px">{LANG.order_no_products}</th>
+					<th>{LANG.order_products_name}</th>
+					<th>{LANG.content_product_code}</th>
+					<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
+					<th>{LANG.order_product_unit}</th>
+					<th class="text-right">{LANG.order_product_price} ({unit})</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="text-center">{pro_no}</td>
+					<td class="prd"><span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span>
+					<br />
+					<!-- BEGIN: display_group --><span class="text-muted">
 						<ul style="padding: 0">
 							<!-- BEGIN: item -->
-							<li class="pull-left" style="margin-right: 10px">{group_title}</li>
+							<li class="pull-left" style="margin-right: 10px">
+								{group_title}
+							</li>
 							<!-- END: item -->
-						</ul>
-					</span>
-					<!-- END: display_group -->
-				</td>
-				<td><strong>{product_code}</strong></td>
-				<td class="amount" class="text-center">{product_number}</td>
-				<td class="unit">{product_unit}</td>
-				<td class="money" align="right"><strong>{product_price}</strong></td>
-			</tr>
-		<!-- END: loop -->
-		</tbody>
-		<tfoot>
-			<tr>
-				<td align="right" valign="top" colspan="8">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></td>
-			</tr>
-		</tfoot>
-	</table>
+						</ul> </span><!-- END: display_group --></td>
+					<td><strong>{product_code}</strong></td>
+					<td class="amount" class="text-center">{product_number}</td>
+					<td class="unit">{product_unit}</td>
+					<td class="money" align="right"><strong>{product_price}</strong></td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
+
+	<!-- BEGIN: data_shipping -->
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.shipping_info}</caption>
+			<thead>
+				<tr>
+					<th>{LANG.shipping_name}</th>
+					<th>{LANG.order_address}</th>
+					<th>{LANG.carrier}</th>
+					<th>{LANG.weights}</th>
+					<th>{LANG.carrier_price}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{DATA_SHIPPING.ship_name} - {DATA_SHIPPING.ship_phone}</td>
+					<td>
+						{DATA_SHIPPING.ship_location_title}
+						<span class="help-block">{DATA_SHIPPING.ship_address_extend}</span>
+					</td>
+					<td>{DATA_SHIPPING.ship_shops_title}</td>
+					<td>{DATA_SHIPPING.weight}{DATA_SHIPPING.weight_unit}</td>
+					<td>{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- END: data_shipping -->
+
+	<p class="text-right">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></p>
+
 	<!-- BEGIN: order_note -->
 	<span style="font-style: italic;">{LANG.order_products_note} : {DATA.order_note}</span>
 	<!-- END: order_note -->
 	<table style="margin-top: 2px">
 		<tr>
-			<td>
-			<!-- BEGIN: admin_process -->
-			- {LANG.order_admin_process} : {admin_process}
-			<!-- END: admin_process -->
-			</td>
+			<td><!-- BEGIN: admin_process --> - {LANG.order_admin_process} : {admin_process} <!-- END: admin_process --></td>
 		</tr>
 	</table>
 </div>
@@ -105,7 +134,9 @@
 </div>
 <!-- BEGIN: transaction -->
 <table class="table table-striped table-bordered table-hover">
-	<caption>{LANG.history_transaction}</caption>
+	<caption>
+		{LANG.history_transaction}
+	</caption>
 	<thead>
 		<tr class="text-center">
 			<td width="30px">&nbsp;</td>
@@ -118,7 +149,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<!-- BEGIN: looptrans -->
+		<!-- BEGIN: looptrans -->
 		<tr>
 			<td width="30px">{DATA_TRANS.a}</td>
 			<td align="right">{DATA_TRANS.payment_time}</td>
@@ -128,7 +159,7 @@
 			<td align="right">{DATA_TRANS.payment_amount}</td>
 			<td align="right">{DATA_TRANS.transaction_time}</td>
 		</tr>
-	<!-- END: looptrans -->
+		<!-- END: looptrans -->
 	</tbody>
 	<!-- BEGIN: checkpayment -->
 	<tfoot>

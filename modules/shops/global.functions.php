@@ -403,10 +403,45 @@ function GetGroupID( $pro_id )
 {
 	global $db, $db_config, $module_data;
 	$data = array();
+
 	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{
 		$data[] = $row['group_id'];
 	}
 	return $data;
+}
+
+function UpdatePoint( $data_content, $add = true )
+{
+	global $db, $db_config, $module_data;
+
+	$result = $db->query( 'SELECT point FROM ' . $db_config['prefix'] . "_" . $module_data . '_point_queue WHERE order_id=' . $data_content['order_id'] );
+	list( $point ) = $result->fetch( 3 );
+	if( ! empty( $point ) )
+	{
+		if( $add )
+		{
+			$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . '_point WHERE userid=' . $data_content['user_id'] );
+			if( $result->rowCount() == 1 )
+			{
+				$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_point SET point_total=point_total + " . $point . " WHERE userid=" . $data_content['user_id'] );
+			}
+			else
+			{
+				$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point(userid, point_total) VALUES (" . $data_content['user_id'] . ", " . $point . ")" );
+			}
+
+			// Cap nhat lich su nhan diem
+			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_point_queue SET status = 0 WHERE order_id=" . $data_content['order_id'] );
+			$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point_history(userid, order_id, point, time) VALUES (" . $data_content['user_id'] . ", " . $data_content['order_id'] . ", " . $point . ", " . NV_CURRENTTIME . ")" );
+		}
+		else
+		{
+			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_point SET point_total=point_total - " . $point . " WHERE userid=" . $data_content['user_id'] );
+			// Cap nhat lich su nhan diem
+			$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_point_queue SET status = 1 WHERE order_id=" . $data_content['order_id'] );
+			$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point_history(userid, order_id, point, time) VALUES (" . $data_content['user_id'] . ", " . $data_content['order_id'] . ", -" . $point . ", " . NV_CURRENTTIME . ")" );
+		}
+	}
 }
