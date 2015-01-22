@@ -158,8 +158,9 @@
 		return;
 	}
 
+	var num = {config_weight_count};
 	function nv_add_weight_items() {
-		var num = '{config_weight_count}';
+		alert(num);
 		var html = '';
 		html += '<tr id="weight_' + num + '">';
 		html += '	<td>';
@@ -180,6 +181,7 @@
 		html += '	</td>';
 		html += '	<td class="text-center"><em class="fa fa-trash-o fa-lg">&nbsp;</em><a onclick="nv_remove_weight_item(' + num + ')" href="javascript:void(0)">{LANG.delete}</a></td>';
 		html += '</tr>';
+		num += 1;
 		$('#table_weight tbody>tr:last').after(html);
 	}
 
