@@ -147,6 +147,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 	}
 
+	foreach( $row['config_weight'] as $config_i )
+	{
+		$sortArray['weight'][] = $config_i['weight'];
+		$sortArray['weight_unit'][] = $config_i['weight_unit'];
+		$sortArray['carrier_price'][] = floatval( $config_i['carrier_price'] );
+		$sortArray['carrier_price_unit'][] = $config_i['carrier_price_unit'];
+	}
+	array_multisort( $sortArray['weight'], SORT_ASC, $row['config_weight'] );
+
 	if( empty( $row['title'] ) )
 	{
 		$error[] = $lang_module['carrier_config_error_required_name'];
