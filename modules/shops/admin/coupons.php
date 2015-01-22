@@ -75,6 +75,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$row['total_amount'] = $nv_Request->get_title( 'total_amount', 'post', '' );
 	$row['free_shipping'] = $nv_Request->get_int( 'free_shipping', 'post', 0 );
 	$row['product'] = $nv_Request->get_array( 'product', 'post', '' );
+	$row['product'] = array_diff( $row['product'], array('') );
 	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'date_start', 'post' ), $m ) )
 	{
 		$_hour = 0;
@@ -152,7 +153,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			if( $exc or $insert_id > 0 )
 			{
 				// Them san pham vao bang product
-				if( empty( $row['id'] ) )
+				if( empty( $row['id'] ) and !empty( $row['product'] ) )
 				{
 					foreach( $row['product'] as $pid )
 					{

@@ -312,49 +312,38 @@ function nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $car
 
 	if( $config_id )
 	{
-		$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE cid = ' . $config_id;
-		$result = $db->query( $sql );
-		list( $id ) = $result->fetch( 3 );
+		$sql = 'SELECT iid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE cid = ' . $config_id . ' AND lid = ' . $location_id;
+				$result = $db->query( $sql );
+				list( $iid ) = $result->fetch( 3 );
 
-		if( $id )
+		if( $iid )
 		{
 			// Weight config
-			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $id;
+			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $iid;
 			$result = $db->query( $sql );
 			while( $array_weight = $result->fetch() )
 			{
 				$array_weight_config[$array_weight['iid']][] = $array_weight;
 			}
-
-			// Location config
-			$sql = 'SELECT lid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE iid = ' . $id;
-			$result = $db->query( $sql );
-			while( list( $lid ) = $result->fetch( 3 ) )
-			{
-				$array_location_config[] = $lid;
-			}
 		}
 	}
 
-	if( in_array( $location_id, $array_location_config ) )
+	if( !empty( $array_weight_config ) )
 	{
-		if( !empty( $array_weight_config ) )
+		foreach( $array_weight_config as $weight_config )
 		{
-			foreach( $array_weight_config as $weight_config )
+			foreach( $weight_config as $config )
 			{
-				foreach( $weight_config as $config )
+				$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
+				if( $weight <= $config['weight'] )
 				{
-					$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
-					if( $weight <= $config['weight'] )
-					{
-						$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
-						break;
-					}
-					else
-					{
-						// Vuot muc gia cau hinh
+					$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
+					break;
+				}
+				else
+				{
+					// Vuot muc gia cau hinh
 
-					}
 				}
 			}
 		}

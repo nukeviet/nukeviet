@@ -214,11 +214,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						if( empty( $row['id'] ) )
 						{
-							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( iid, lid ) VALUES (' . $insert_id . ', ' . $config_location_id . ')' );
+							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( cid, iid, lid ) VALUES ( ' . $row['cid'] .' , ' . $insert_id . ', ' . $config_location_id . ')' );
 						}
 						else
 						{
-							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( iid, lid ) VALUES (' . $row['id'] . ', ' . $config_location_id . ')' );
+							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( cid, iid, lid ) VALUES ( ' . $row['cid'] . ', ' . $row['id'] . ', ' . $config_location_id . ')' );
 						}
 					}
 				}
@@ -253,7 +253,14 @@ if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 }
 
 // Lay dia diem
-$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location ORDER BY sort ASC";
+if( !empty( $row['id'] ) )
+{
+	$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location WHERE id NOT IN ( SELECT lid FROM " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location WHERE cid = " . $row['cid'] . " ) OR id IN ( SELECT lid FROM " . $db_config['prefix'] . '_' . $module_data . "_carrier_config_location WHERE iid = " . $row['id'] . " ) ORDER BY sort ASC";
+}
+else
+{
+	$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location WHERE id NOT IN ( SELECT lid FROM " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location WHERE cid = " . $row['cid'] . " ) ORDER BY sort ASC";
+}
 $result = $db->query( $sql );
 $array_location_list = array();
 while( list( $id_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
