@@ -100,6 +100,20 @@ $xtpl->assign( 'moment', date( 'h:i', $data_content['order_time'] ) );
 $xtpl->assign( 'DATA', $data_content );
 $xtpl->assign( 'order_id', $data_content['order_id'] );
 
+$array_group_main = array( );
+if( !empty( $global_array_group ) )
+{
+	foreach( $global_array_group as $array_group )
+	{
+		if( $array_group['indetail'] and $array_group['lev'] == 0 )
+		{
+			$array_group_main[] = $array_group['groupid'];
+			$xtpl->assign( 'MAIN_GROUP', $array_group );
+			$xtpl->parse( 'main.main_group' );
+		}
+	}
+}
+
 $i = 0;
 foreach( $data_pro as $pdata )
 {
@@ -111,6 +125,28 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 	$xtpl->assign( 'pro_no', $i + 1 );
 
+	// Nhóm hiển thị cùng sản phẩm
+	foreach( $array_group_main as $group_main_id )
+	{
+		$array_sub_group = GetGroupID( $pdata['id'] );
+		for( $i = 0; $i < count( $array_group_main ); $i++ )
+		{
+			$data = array( 'title' => '', 'link' => '' );
+			foreach( $array_sub_group as $sub_group_id )
+			{
+				$item = $global_array_group[$sub_group_id];
+				if( $item['parentid'] == $group_main_id )
+				{
+					$data['title'] = $item['title'];
+					$data['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $item['alias'];
+				}
+			}
+			$xtpl->assign( 'SUB_GROUP', $data );
+		}
+		$xtpl->parse( 'main.loop.sub_group' );
+	}
+
+	// Nhóm thuộc tính sản phẩm khách hàng chọn
 	if( ! empty( $pdata['product_group'] ) )
 	{
 		$groupid = explode( ',', $pdata['product_group'] );

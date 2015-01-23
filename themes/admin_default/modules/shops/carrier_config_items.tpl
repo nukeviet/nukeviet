@@ -34,6 +34,13 @@
 				</tr>
 				<!-- END: loop -->
 			</tbody>
+			<!-- BEGIN: generate_page -->
+			<tfoot>
+				<tr class="text-center">
+					<td colspan="3">{PAGE}</td>
+				</tr>
+			</tfoot>
+			<!-- END: generate_page -->
 		</table>
 	</div>
 </form>
@@ -160,7 +167,6 @@
 
 	var num = {config_weight_count};
 	function nv_add_weight_items() {
-		alert(num);
 		var html = '';
 		html += '<tr id="weight_' + num + '">';
 		html += '	<td>';

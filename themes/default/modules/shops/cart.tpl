@@ -29,8 +29,13 @@
 					<th>{LANG.order_no_products}</th>
 					<th>{LANG.cart_images}</th>
 					<th>{LANG.cart_products}</th>
+
+					<!-- BEGIN: main_group -->
+					<th>{MAIN_GROUP.title}</th>
+					<!-- END: main_group -->
+
 					<!-- BEGIN: price1 -->
-					<th>{LANG.cart_price}</th>
+					<th class="text-right">{LANG.cart_price}</th>
 					<!-- END: price1 -->
 					<th style="width: 80px">{LANG.cart_numbers}</th>
 					<th>{LANG.cart_unit}</th>
@@ -42,12 +47,21 @@
 				<tr id="{id}">
 					<td align="center">{stt}</td>
 					<td align="center"><img src="{img_pro}" alt="{link_pro}" width="70" class="img-thumbnail" /></td>
-					<td><a title="{title_pro}" href="{link_pro}">{title_pro}</a><!-- BEGIN: display_group -->
-					<p>
-						<!-- BEGIN: group -->
-						<span style="margin-right: 10px"><span class="text-muted">{group}</span></span>
-						<!-- END: group -->
-					</p><!-- END: display_group --></td>
+					<td>
+						<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
+						<!-- BEGIN: display_group -->
+						<p>
+							<!-- BEGIN: group -->
+							<span style="margin-right: 10px"><span class="text-muted">{group}</span></span>
+							<!-- END: group -->
+						</p>
+						<!-- END: display_group -->
+					</td>
+
+					<!-- BEGIN: sub_group -->
+	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<!-- END: sub_group -->
+
 					<!-- BEGIN: price2 -->
 					<td class="money text-right"><strong>{PRICE.sale_format} {PRICE.unit}</strong></td>
 					<!-- END: price2 -->
@@ -69,7 +83,9 @@
 				<input type="text" name="coupons_code" value="{C_CODE}" id="coupons_code" placeholder="{LANG.coupons_fill}" class="form-control">
 				<span class="input-group-btn"> <input type="button" value="{LANG.coupons_check}" id="coupons_check" class="btn btn-primary"> </span>
 			</div>
-			<div id="coupons_info">&nbsp;</div>
+			<div id="coupons_info">
+				&nbsp;
+			</div>
 		</div>
 	</div>
 
@@ -99,10 +115,9 @@
 	$("#total").load(urload + '&t=2');
 
 	var coupons_code = $('input[name="coupons_code"]').val();
-	if( coupons_code != '' )
-	{
+	if (coupons_code != '') {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cart&nocache=' + new Date().getTime(), 'coupons_check=1&coupons_code=' + coupons_code, function(res) {
-			$('#coupons_info').html( res );
+			$('#coupons_info').html(res);
 		});
 	}
 
@@ -129,7 +144,7 @@
 			nv_settimeout_disable('coupons_code', 1000);
 			nv_settimeout_disable('coupons_check', 1000);
 			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cart&nocache=' + new Date().getTime(), 'coupons_check=1&coupons_code=' + coupons_code, function(res) {
-				$('#coupons_info').html( res );
+				$('#coupons_info').html(res);
 			});
 			return false;
 		});

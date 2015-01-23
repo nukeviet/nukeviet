@@ -8,9 +8,10 @@
  * @Createdate Fri, 16 Jan 2015 02:23:16 GMT
  */
 
-if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
-$config_weight = array();
+$config_weight = array( );
 $cid = $nv_Request->get_int( 'cid', 'post,get', 0 );
 
 if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
@@ -23,10 +24,11 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 		$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE id!=' . $id . ' and cid=' . $cid . ' ORDER BY weight ASC';
 		$result = $db->query( $sql );
 		$weight = 0;
-		while( $row = $result->fetch() )
+		while( $row = $result->fetch( ) )
 		{
 			++$weight;
-			if( $weight == $new_vid ) ++$weight;
+			if( $weight == $new_vid )
+				++$weight;
 			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items SET weight=' . $weight . ' WHERE id=' . $row['id'] . ' AND cid=' . $cid;
 			$db->query( $sql );
 		}
@@ -38,7 +40,7 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $content;
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
+	exit( );
 }
 
 if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_request( 'delete_checkss', 'get' ) )
@@ -72,46 +74,46 @@ if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_requ
 		}
 
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=carrier_config_items&cid=' . $cid );
-		die();
+		die( );
 	}
 }
 
-$row = array();
-$config_location_old = array();
-$error = array();
+$row = array( );
+$config_location_old = array( );
+$error = array( );
 $row['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 $row['cid'] = $nv_Request->get_int( 'cid', 'post,get', 0 );
 
 if( empty( $row['cid'] ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=carrier_config' );
-	die();
+	die( );
 }
 
 if( $row['id'] > 0 )
 {
-	$row = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE id=' . $row['id'] )->fetch();
+	$row = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE id=' . $row['id'] )->fetch( );
 	if( empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-		die();
+		die( );
 	}
 
-	$row['config_weight'] = array();
+	$row['config_weight'] = array( );
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid=' . $row['id'] );
 	if( $result )
 	{
-		while( $weight = $result->fetch() )
+		while( $weight = $result->fetch( ) )
 		{
 			$row['config_weight'][] = $weight;
 		}
 	}
 
-	$row['config_location'] = array();
+	$row['config_location'] = array( );
 	$result = $db->query( 'SELECT lid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE iid=' . $row['id'] );
 	if( $result )
 	{
-		while( $location = $result->fetch() )
+		while( $location = $result->fetch( ) )
 		{
 			$row['config_location'][] = $location['lid'];
 		}
@@ -128,7 +130,7 @@ else
 		'carrier_price' => '',
 		'carrier_price_unit' => $pro_config['money_unit']
 	);
-	$row['config_location'] = array();
+	$row['config_location'] = array( );
 }
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
@@ -136,8 +138,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$row['title'] = $nv_Request->get_title( 'title', 'post', '' );
 	$row['cid'] = $nv_Request->get_int( 'cid', 'post', 0 );
 	$row['description'] = $nv_Request->get_textarea( 'description', 'post' );
-	$row['config_location'] = $nv_Request->get_array( 'config_location', 'post', array() );
-	$row['config_weight'] = $nv_Request->get_array( 'config_weight', 'post', array() );
+	$row['config_location'] = $nv_Request->get_array( 'config_location', 'post', array( ) );
+	$row['config_weight'] = $nv_Request->get_array( 'config_weight', 'post', array( ) );
 
 	foreach( $row['config_weight'] as $key => $array )
 	{
@@ -154,7 +156,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sortArray['carrier_price'][] = floatval( $config_i['carrier_price'] );
 		$sortArray['carrier_price_unit'][] = $config_i['carrier_price_unit'];
 	}
-	array_multisort( $sortArray['weight'], SORT_ASC, $row['config_weight'] );
+	array_multisort( $sortArray['weight'], empty( $row['id'] ) ? SORT_ASC : SORT_DESC, $row['config_weight'] );
 
 	if( empty( $row['title'] ) )
 	{
@@ -169,7 +171,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items (cid, title, description, weight, add_time) VALUES (:cid, :title, :description, :weight, ' . NV_CURRENTTIME . ' )';
 
-				$weight = $db->query( 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE cid=' . $row['cid'] )->fetchColumn();
+				$weight = $db->query( 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE cid=' . $row['cid'] )->fetchColumn( );
 				$weight = intval( $weight ) + 1;
 
 				$data_insert = array( );
@@ -186,15 +188,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$stmt->bindParam( ':cid', $row['cid'], PDO::PARAM_STR );
 				$stmt->bindParam( ':description', $row['description'], PDO::PARAM_STR );
 
-				$exc = $stmt->execute();
+				$exc = $stmt->execute( );
 			}
 
 			if( $exc or $insert_id )
 			{
 				// Cap nhat cau hinh khoi luong
-				if( ! empty( $row['config_weight'] ) )
+				if( !empty( $row['config_weight'] ) )
 				{
-					if( ! empty( $row['id'] ) )
+					if( !empty( $row['id'] ) )
 					{
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid=' . $row['id'] );
 					}
@@ -215,7 +217,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				// Cap nhat dia diem
 				if( $row['config_location'] != $config_location_old )
 				{
-					if( ! empty( $row['id'] ) )
+					if( !empty( $row['id'] ) )
 					{
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE iid=' . $row['id'] );
 					}
@@ -223,7 +225,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						if( empty( $row['id'] ) )
 						{
-							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( cid, iid, lid ) VALUES ( ' . $row['cid'] .' , ' . $insert_id . ', ' . $config_location_id . ')' );
+							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location ( cid, iid, lid ) VALUES ( ' . $row['cid'] . ' , ' . $insert_id . ', ' . $config_location_id . ')' );
 						}
 						else
 						{
@@ -234,12 +236,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				nv_del_moduleCache( $module_name );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&cid=' . $row['cid'] );
-				die();
+				die( );
 			}
 		}
 		catch( PDOException $e )
 		{
-			trigger_error( $e->getMessage() );
+			trigger_error( $e->getMessage( ) );
 		}
 	}
 }
@@ -249,16 +251,16 @@ $show_view = false;
 if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 {
 	$show_view = true;
-	$per_page = 5;
+	$per_page = 15;
 	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
-	$db->sqlreset()->select( 'COUNT(*)' )->from( '' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items' )->where( 'cid=' . $row['cid'] );
-	$sth = $db->prepare( $db->sql() );
-	$sth->execute();
-	$num_items = $sth->fetchColumn();
+	$db->sqlreset( )->select( 'COUNT(*)' )->from( '' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items' )->where( 'cid=' . $row['cid'] );
+	$sth = $db->prepare( $db->sql( ) );
+	$sth->execute( );
+	$num_items = $sth->fetchColumn( );
 
 	$db->select( '*' )->order( 'weight ASC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
-	$sth = $db->prepare( $db->sql() );
-	$sth->execute();
+	$sth = $db->prepare( $db->sql( ) );
+	$sth->execute( );
 }
 
 // Lay dia diem
@@ -271,7 +273,7 @@ else
 	$sql = "SELECT id, title, lev FROM " . $db_config['prefix'] . '_' . $module_data . "_location WHERE id NOT IN ( SELECT lid FROM " . $db_config['prefix'] . "_" . $module_data . "_carrier_config_location WHERE cid = " . $row['cid'] . " ) ORDER BY sort ASC";
 }
 $result = $db->query( $sql );
-$array_location_list = array();
+$array_location_list = array( );
 while( list( $id_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 {
 	$xtitle_i = '';
@@ -284,14 +286,17 @@ while( list( $id_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 		}
 	}
 	$xtitle_i .= $title_i;
-	$array_location_list[] = array( $id_i, $xtitle_i );
+	$array_location_list[] = array(
+		$id_i,
+		$xtitle_i
+	);
 }
 
 // Lay danh sach cau hinh
 $_sql = 'SELECT id, title FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config ORDER BY id DESC';
 $_query = $db->query( $_sql );
-$array_config_list = array();
-while( $lconfig = $_query->fetch() )
+$array_config_list = array( );
+while( $lconfig = $_query->fetch( ) )
 {
 	$array_config_list[$lconfig['id']] = $lconfig;
 }
@@ -317,7 +322,7 @@ $xtpl->assign( 'SHOPS_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE .
 
 if( $show_view )
 {
-	while( $view = $sth->fetch() )
+	while( $view = $sth->fetch( ) )
 	{
 		for( $i = 1; $i <= $num_items; ++$i )
 		{
@@ -353,6 +358,16 @@ if( $show_view )
 
 		$xtpl->parse( 'main.view.loop' );
 	}
+
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&cid=' . $row['cid'];
+	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+
+	if( !empty( $generate_page ) )
+	{
+		$xtpl->assign( 'PAGE', $generate_page );
+		$xtpl->parse( 'main.view.generate_page' );
+	}
+
 	$xtpl->parse( 'main.view' );
 }
 
@@ -367,14 +382,18 @@ $i = 0;
 foreach( $row['config_weight'] as $config )
 {
 	$config['id'] = $i;
-	$config['carrier_price'] = ! empty( $config['carrier_price'] ) ? number_format( $config['carrier_price'], nv_get_decimals( $config['carrier_price_unit'] ), '.', ',' ) : '';
+	$config['carrier_price'] = !empty( $config['carrier_price'] ) ? number_format( $config['carrier_price'], nv_get_decimals( $config['carrier_price_unit'] ), '.', ',' ) : '';
 	$xtpl->assign( 'CONFIG', $config );
 
-	if( ! empty( $weight_config ) )
+	if( !empty( $weight_config ) )
 	{
 		foreach( $weight_config as $key => $unit )
 		{
-			$xtpl->assign( 'UNIT', array( 'key' => $key, 'value' => $unit, 'selected' => ($config['weight_unit'] == $key) ? 'selected="selected"' : '' ) );
+			$xtpl->assign( 'UNIT', array(
+				'key' => $key,
+				'value' => $unit,
+				'selected' => ($config['weight_unit'] == $key) ? 'selected="selected"' : ''
+			) );
 			$xtpl->parse( 'main.config.weight_unit' );
 		}
 	}
@@ -383,7 +402,7 @@ foreach( $row['config_weight'] as $config )
 	{
 		foreach( $money_config as $code => $info )
 		{
-			$info['select'] = ( $config['carrier_price_unit'] == $code ) ? "selected=\"selected\"" : "";
+			$info['select'] = ($config['carrier_price_unit'] == $code) ? "selected=\"selected\"" : "";
 			$xtpl->assign( 'MON', $info );
 			$xtpl->parse( 'main.config.money_unit' );
 		}
@@ -398,35 +417,43 @@ if( !empty( $money_config ) )
 {
 	foreach( $money_config as $code => $info )
 	{
-		$info['select'] = ( $pro_config['money_unit'] == $code ) ? "selected=\"selected\"" : "";
+		$info['select'] = ($pro_config['money_unit'] == $code) ? "selected=\"selected\"" : "";
 		$xtpl->assign( 'MON', $info );
 		$xtpl->parse( 'main.money_unit' );
 	}
 }
 
-if( ! empty( $weight_config ) )
+if( !empty( $weight_config ) )
 {
 	foreach( $weight_config as $key => $unit )
 	{
-		$xtpl->assign( 'UNIT', array( 'key' => $key, 'value' => $unit, 'selected' => ($pro_config['weight_unit'] == $key) ? 'selected="selected"' : '' ) );
+		$xtpl->assign( 'UNIT', array(
+			'key' => $key,
+			'value' => $unit,
+			'selected' => ($pro_config['weight_unit'] == $key) ? 'selected="selected"' : ''
+		) );
 		$xtpl->parse( 'main.weight_unit' );
 	}
 }
 
 foreach( $array_location_list as $rows_i )
 {
-	$sl = ( in_array( $rows_i[0], $row['config_location'] ) ) ? ' selected="selected"' : '';
+	$sl = ( in_array( $rows_i[0], $row['config_location'] )) ? ' selected="selected"' : '';
 	$xtpl->assign( 'plocal_i', $rows_i[0] );
 	$xtpl->assign( 'ptitle_i', $rows_i[1] );
 	$xtpl->assign( 'pselect', $sl );
 	$xtpl->parse( 'main.parent_loop' );
 }
 
-if( ! empty( $array_config_list ) )
+if( !empty( $array_config_list ) )
 {
 	foreach( $array_config_list as $key => $config_list )
 	{
-		$xtpl->assign( 'CONFIG', array( 'key' => $config_list['id'], 'value' => $config_list['title'], 'selected' => ( $row['cid'] == $key ) ? 'selected="selected"' : '' ) );
+		$xtpl->assign( 'CONFIG', array(
+			'key' => $config_list['id'],
+			'value' => $config_list['title'],
+			'selected' => ($row['cid'] == $key) ? 'selected="selected"' : ''
+		) );
 		$xtpl->parse( 'main.config_list' );
 	}
 }

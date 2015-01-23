@@ -38,6 +38,7 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 	include NV_ROOTDIR . '/includes/footer.php';
 	exit();
 }
+
 if( $nv_Request->isset_request( 'delete_did', 'get' ) and $nv_Request->isset_request( 'delete_checkss', 'get' ) )
 {
 	$did = $nv_Request->get_int( 'delete_did', 'get' );
