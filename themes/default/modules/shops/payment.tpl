@@ -67,6 +67,9 @@
 				<tr>
 					<th align="center" width="30px"> {LANG.order_no_products} </th>
 					<th> {LANG.cart_products} </th>
+	    			<!-- BEGIN: main_group -->
+	    			<th>{MAIN_GROUP.title}</th>
+	    			<!-- END: main_group -->
 					<!-- BEGIN: price1 -->
 					<th class="price text-right"> {LANG.cart_price} ({unit}) </th>
 					<!-- END: price1 -->
@@ -85,6 +88,9 @@
 						<span class="text-muted" style="margin-right: 10px">{group}</span>
 						<!-- END: group -->
 					</p><!-- END: display_group --></td>
+					<!-- BEGIN: sub_group -->
+	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<!-- END: sub_group -->
 					<!-- BEGIN: price2 -->
 					<td class="money text-right"><strong>{product_price}</strong></td>
 					<!-- END: price2 -->

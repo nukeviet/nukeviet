@@ -1594,6 +1594,21 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'C_CODE', $coupons_code );
+
+	$array_group_main = array( );
+	if( !empty( $global_array_group ) )
+	{
+		foreach( $global_array_group as $array_group )
+		{
+			if( $array_group['indetail'] and $array_group['lev'] == 0 )
+			{
+				$array_group_main[] = $array_group['groupid'];
+				$xtpl->assign( 'MAIN_GROUP', $array_group );
+				$xtpl->parse( 'main.main_group' );
+			}
+		}
+	}
+
 	$price_total = 0;
 	$point_total = 0;
 	if( !empty( $data_content ) )
@@ -1619,6 +1634,28 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
 				$point_total += intval( $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
 			}
 
+			// Group của sản phẩm
+			foreach( $array_group_main as $group_main_id )
+			{
+				$array_sub_group = GetGroupID( $data_row['id'] );
+				for( $i = 0; $i < count( $array_group_main ); $i++ )
+				{
+					$data = array( 'title' => '', 'link' => '' );
+					foreach( $array_sub_group as $sub_group_id )
+					{
+						$item = $global_array_group[$sub_group_id];
+						if( $item['parentid'] == $group_main_id )
+						{
+							$data['title'] = $item['title'];
+							$data['link'] = $item['link'];
+						}
+					}
+					$xtpl->assign( 'SUB_GROUP', $data );
+				}
+				$xtpl->parse( 'main.rows.sub_group' );
+			}
+
+			// Group thuộc tính khách hàng chọn khi đặt hàng
 			if( !empty( $data_row['group'] ) )
 			{
 				$data_row['group'] = explode( ',', $data_row['group'] );
@@ -1833,6 +1870,20 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 	$xtpl->assign( 'cancel_url', $client_info['selfurl'] . '&cancel=1' );
 	$xtpl->assign( 'checkss', md5( $client_info['session_id'] . $global_config['sitekey'] . $data_content['order_id'] ) );
 
+	$array_group_main = array( );
+	if( !empty( $global_array_group ) )
+	{
+		foreach( $global_array_group as $array_group )
+		{
+			if( $array_group['indetail'] and $array_group['lev'] == 0 )
+			{
+				$array_group_main[] = $array_group['groupid'];
+				$xtpl->assign( 'MAIN_GROUP', $array_group );
+				$xtpl->parse( 'main.main_group' );
+			}
+		}
+	}
+
 	$i = 0;
 	foreach( $data_pro as $pdata )
 	{
@@ -1844,6 +1895,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 		$xtpl->assign( 'pro_no', $i + 1 );
 
+		// Nhóm thuộc tính sản phẩm khách hàng chọn khi đặt hàng
 		if( !empty( $pdata['product_group'] ) )
 		{
 			$pdata['product_group'] = explode( ',', $pdata['product_group'] );
@@ -1853,6 +1905,27 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 				$xtpl->parse( 'main.loop.display_group.group' );
 			}
 			$xtpl->parse( 'main.loop.display_group' );
+		}
+
+		// Nhóm của sản phẩm
+		foreach( $array_group_main as $group_main_id )
+		{
+			$array_sub_group = GetGroupID( $pdata['id'] );
+			for( $i = 0; $i < count( $array_group_main ); $i++ )
+			{
+				$data = array( 'title' => '', 'link' => '' );
+				foreach( $array_sub_group as $sub_group_id )
+				{
+					$item = $global_array_group[$sub_group_id];
+					if( $item['parentid'] == $group_main_id )
+					{
+						$data['title'] = $item['title'];
+						$data['link'] = $item['link'];
+					}
+				}
+				$xtpl->assign( 'SUB_GROUP', $data );
+			}
+			$xtpl->parse( 'main.loop.sub_group' );
 		}
 
 		if( $pro_config['active_price'] == '1' )
@@ -1928,7 +2001,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
  */
 function print_pay( $data_content, $data_pro )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $money_config;
+	global $module_info, $lang_module, $module_file, $pro_config, $money_config, $global_array_group;
 
 	$xtpl = new XTemplate( 'print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1936,6 +2009,20 @@ function print_pay( $data_content, $data_pro )
 	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
+
+	$array_group_main = array( );
+	if( !empty( $global_array_group ) )
+	{
+		foreach( $global_array_group as $array_group )
+		{
+			if( $array_group['indetail'] and $array_group['lev'] == 0 )
+			{
+				$array_group_main[] = $array_group['groupid'];
+				$xtpl->assign( 'MAIN_GROUP', $array_group );
+				$xtpl->parse( 'main.main_group' );
+			}
+		}
+	}
 
 	$i = 0;
 	foreach( $data_pro as $pdata )
@@ -1946,6 +2033,26 @@ function print_pay( $data_content, $data_pro )
 		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 		$xtpl->assign( 'pro_no', $i + 1 );
+
+		foreach( $array_group_main as $group_main_id )
+		{
+			$array_sub_group = GetGroupID( $pdata['id'] );
+			for( $i = 0; $i < count( $array_group_main ); $i++ )
+			{
+				$title = '';
+				foreach( $array_sub_group as $sub_group_id )
+				{
+					$item = $global_array_group[$sub_group_id];
+					if( $item['parentid'] == $group_main_id )
+					{
+						$title = $item['title'];
+					}
+				}
+				$xtpl->assign( 'SUB_GROUP', $title );
+			}
+			$xtpl->parse( 'main.loop.sub_group' );
+		}
+
 		if( $pro_config['active_price'] == '1' )
 			$xtpl->parse( 'main.loop.price2' );
 		$xtpl->parse( 'main.loop' );

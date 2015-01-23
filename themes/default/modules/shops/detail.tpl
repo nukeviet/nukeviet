@@ -55,7 +55,7 @@
 					<li>
 						<!-- BEGIN: loop -->
 							<!-- BEGIN: maintitle -->
-							<div class="pull-left"><strong>{MAINTITLE}:</strong></div>
+							<div class="pull-left"><strong>{MAINTITLE}:</strong>&nbsp;</div>
 							<!-- END: maintitle -->
 
 							<!-- BEGIN: subtitle -->

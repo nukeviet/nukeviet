@@ -49,6 +49,9 @@
 					<th width="30px">{LANG.order_no_products}</th>
 					<th>{LANG.order_products_name}</th>
 					<th>{LANG.content_product_code}</th>
+	    			<!-- BEGIN: main_group -->
+	    			<th>{MAIN_GROUP.title}</th>
+	    			<!-- END: main_group -->
 					<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
 					<th>{LANG.order_product_unit}</th>
 					<th class="text-right">{LANG.order_product_price} ({unit})</th>
@@ -69,7 +72,10 @@
 							<!-- END: item -->
 						</ul> </span><!-- END: display_group --></td>
 					<td><strong>{product_code}</strong></td>
-					<td class="amount" class="text-center">{product_number}</td>
+					<!-- BEGIN: sub_group -->
+	    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<!-- END: sub_group -->
+					<td class="amount text-center">{product_number}</td>
 					<td class="unit">{product_unit}</td>
 					<td class="money" align="right"><strong>{product_price}</strong></td>
 				</tr>

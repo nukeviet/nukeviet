@@ -51,6 +51,9 @@ body {
 		<tr class="bgtop">
 			<td align="center" width="30px"> {LANG.order_no_products} </td>
 			<td> {LANG.cart_products} </td>
+			<!-- BEGIN: main_group -->
+			<td>{MAIN_GROUP.title}</td>
+			<!-- END: main_group -->
 			<!-- BEGIN: price1 -->
 			<td class="price" align="right"> {LANG.cart_price} ({unit}) </td>
 			<!-- END: price1 -->
@@ -61,6 +64,9 @@ body {
 		<tr {bg}>
 			<td align="center"> {pro_no} </td>
 			<td>{product_name}</td>
+			<!-- BEGIN: sub_group -->
+			<td>{SUB_GROUP}</td>
+			<!-- END: sub_group -->
 			<!-- BEGIN: price2 -->
 			<td class="money" align="right"><strong>{product_price}</strong></td>
 			<!-- END: price2 -->
@@ -70,7 +76,7 @@ body {
 		<!-- END: loop -->
 		</tbody>
 	</table>
-	
+
     <div class="row" style="margin-top: 10px;">
         <div class="col-xs-6">
 			<!-- BEGIN: order_note -->
