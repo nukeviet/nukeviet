@@ -228,6 +228,7 @@
 	$('input[name="order_shipping"]').change(function(){
 		if( $('input[name="order_shipping"]:checked').val() == '1' )
 		{
+			nv_get_price();
 			$('#shipping_form').slideDown();
 		}
 		else

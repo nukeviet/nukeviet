@@ -319,7 +319,7 @@ function nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $car
 		if( $iid )
 		{
 			// Weight config
-			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $iid;
+			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $iid . ' ORDER BY weight';
 			$result = $db->query( $sql );
 			while( $array_weight = $result->fetch() )
 			{
@@ -335,7 +335,7 @@ function nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $car
 			foreach( $weight_config as $config )
 			{
 				$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
-				if( $weight <= $config['weight'] )
+				if( $weight < $config['weight'] )
 				{
 					$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
 					break;
