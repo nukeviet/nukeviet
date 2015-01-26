@@ -1740,6 +1740,20 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 
+	$array_group_main = array( );
+	if( !empty( $global_array_group ) )
+	{
+		foreach( $global_array_group as $array_group )
+		{
+			if( $array_group['indetail'] and $array_group['lev'] == 0 )
+			{
+				$array_group_main[] = $array_group['groupid'];
+				$xtpl->assign( 'MAIN_GROUP', $array_group );
+				$xtpl->parse( 'main.main_group' );
+			}
+		}
+	}
+
 	$price_total = 0;
 	$i = 1;
 	if( !empty( $data_content ) )
@@ -1749,6 +1763,26 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 			$xtpl->assign( 'id', $data_row['id'] );
 			$xtpl->assign( 'title_pro', $data_row['title'] );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
+
+			foreach( $array_group_main as $group_main_id )
+			{
+				$array_sub_group = GetGroupID( $data_row['id'] );
+				for( $i = 0; $i < count( $array_group_main ); $i++ )
+				{
+					$data = array( 'title' => '', 'link' => '' );
+					foreach( $array_sub_group as $sub_group_id )
+					{
+						$item = $global_array_group[$sub_group_id];
+						if( $item['parentid'] == $group_main_id )
+						{
+							$data['title'] = $item['title'];
+							$data['link'] = $item['link'];
+						}
+					}
+					$xtpl->assign( 'SUB_GROUP', $data );
+				}
+				$xtpl->parse( 'main.rows.sub_group' );
+			}
 
 			if( !empty( $data_row['group'] ) )
 			{
