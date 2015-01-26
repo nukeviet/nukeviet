@@ -2,53 +2,53 @@
 <div class="block clearfix">
 	<div class="row panel panel-default">
 		<div class="panel-body">
-			<div class="col-xs-8">
+			<div class="col-xs-7">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<strong>{LANG.order_name}:</strong>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						{DATA.order_name}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<strong>{LANG.order_email}:</strong>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						{DATA.order_email}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<strong>{LANG.order_phone}:</strong>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						{DATA.order_phone}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<strong>{LANG.order_address}:</strong>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						{DATA.order_address}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<strong>{LANG.order_date}:</strong>
 					</div>
-					<div class="col-md-8">
+					<div class="col-md-7">
 						{dateup} {LANG.order_moment} {moment}
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-4">
+			<div class="col-xs-5">
 				<div class="text-center">
 					{LANG.order_code}
 					<br>
@@ -56,6 +56,9 @@
 					<br>
 					<span class="payment">{DATA.transaction_name}</span>
 					<a href="{url_print}" title="" id="click_print" class="btn btn-success hidden-xs" style="margin-top:5px"><em class="fa fa-print">&nbsp;&nbsp;{LANG.order_print}</em></a>
+                    <!-- BEGIN: order_action -->
+                    <a href="{url_action}" title="{LANG.order_edit}" class="btn btn-danger hidden-xs" style="margin-top:5px"><em class="fa fa-edit">&nbsp;&nbsp;{LANG.order_edit}</em></a>
+                    <!-- END: order_action -->
 				</div>
 			</div>
 		</div>

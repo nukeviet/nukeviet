@@ -330,6 +330,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  unit_total char(3) NOT NULL,
  order_total double unsigned NOT NULL default '0',
  order_time int(11) unsigned NOT NULL default '0',
+ edit_time int(11) unsigned NOT NULL default '0',
  postip varchar(100) NOT NULL,
  order_view tinyint(2) NOT NULL DEFAULT '0',
  transaction_status tinyint(4) NOT NULL,
@@ -347,6 +348,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
  price int(11) NOT NULL,
+ discount_id smallint(6) NOT NULL DEFAULT '0',
  group_id mediumint(8) NOT NULL,
  UNIQUE KEY orderid (order_id, id)
 ) ENGINE=MyISAM";
@@ -365,6 +367,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   ship_price float NOT NULL DEFAULT '0',
   ship_price_unit char(3) NOT NULL DEFAULT '',
   add_time int(11) unsigned NOT NULL,
+  edit_time int(11) unsigned NOT NULL,
   PRIMARY KEY (id),
   KEY add_time (add_time)
 ) ENGINE=MyISAM";

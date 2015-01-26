@@ -1,9 +1,3 @@
-ALTER TABLE `nv4_shops_field`
-DROP `show_register`,
-DROP `user_editable`,
-DROP `show_profile`,
-DROP `class`;
-
 <!-- BEGIN: main -->
 <!-- BEGIN: data -->
 <div class="table-responsive">
@@ -372,7 +366,7 @@ DROP `class`;
 	}
 
 	function nv_edit_field(fid) {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid;
+		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid;
 	}
 
 	function nv_load_current_date() {

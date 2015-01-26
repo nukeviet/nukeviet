@@ -1585,7 +1585,7 @@ function print_product( $data_content, $data_unit, $page_title )
  * @param mixed $array_error_number
  * @return
  */
-function cart_product( $data_content, $coupons_code, $array_error_number )
+function cart_product( $data_content, $coupons_code, $order_info, $array_error_number )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $global_array_cat;
 
@@ -1716,6 +1716,16 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
 		$xtpl->parse( 'main.price3' );
 	}
 
+	if( !empty( $order_info ) )
+	{
+		$xtpl->assign( 'EDIT_ORDER', sprintf( $lang_module['cart_edit_warning'], $order_info['order_url'], $order_info['order_code'], $order_info['order_edit'] ) );
+		$xtpl->parse( 'main.edit_order' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.coupons_code' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1729,7 +1739,7 @@ function cart_product( $data_content, $coupons_code, $array_error_number )
  * @param mixed $error
  * @return
  */
-function uers_order( $data_content, $data_order, $total_coupons, $error )
+function uers_order( $data_content, $data_order, $total_coupons, $order_info, $error )
 {
 	global $module_info, $lang_module, $lang_global, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
 
@@ -1755,7 +1765,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 	}
 
 	$price_total = 0;
-	$i = 1;
+	$j = 1;
 	if( !empty( $data_content ) )
 	{
 		foreach( $data_content as $data_row )
@@ -1797,14 +1807,14 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 
 			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'], $data_row['num'] );
 			$xtpl->assign( 'PRICE', $price );
-			$xtpl->assign( 'pro_no', $i );
+			$xtpl->assign( 'pro_no', $j );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 			if( $pro_config['active_price'] == '1' )
 				$xtpl->parse( 'main.rows.price2' );
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + $price['sale'];
-			++$i;
+			++$j;
 		}
 	}
 	$xtpl->assign( 'price_coupons', nv_number_format( $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
@@ -1874,6 +1884,12 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
 		$xtpl->parse( 'main.shipping_loop' );
 	}
 
+	if( !empty( $order_info ) )
+	{
+		$xtpl->assign( 'EDIT_ORDER', sprintf( $lang_module['cart_edit_warning'], $order_info['order_url'], $order_info['order_code'], $order_info['order_edit'] ) );
+		$xtpl->parse( 'main.edit_order' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1889,7 +1905,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $error )
  */
 function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 {
-	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info;
+	global $module_info, $lang_module, $module_data, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info;
 
 	$money = $point * $pro_config['point_conversion'];
 	$money = nv_number_format( $money, nv_get_decimals( $pro_config['money_unit'] ) );
@@ -1918,7 +1934,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		}
 	}
 
-	$i = 0;
+	$j = 0;
 	foreach( $data_pro as $pdata )
 	{
 		$xtpl->assign( 'product_name', $pdata['title'] );
@@ -1927,7 +1943,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		$xtpl->assign( 'money_unit', $pdata['money_unit'] );
 		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
-		$xtpl->assign( 'pro_no', $i + 1 );
+		$xtpl->assign( 'pro_no', $j + 1 );
 
 		// Nhóm thuộc tính sản phẩm khách hàng chọn khi đặt hàng
 		if( !empty( $pdata['product_group'] ) )
@@ -1966,7 +1982,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 			$xtpl->parse( 'main.loop.price2' );
 
 		$xtpl->parse( 'main.loop' );
-		++$i;
+		++$j;
 	}
 	if( !empty( $data_content['order_note'] ) )
 	{
@@ -1996,6 +2012,13 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 	if( $pro_config['active_payment'] == '1' and $pro_config['active_order'] == '1' and $pro_config['active_price'] == '1' and $pro_config['active_order_number'] == '0' )
 	{
 		$xtpl->parse( 'main.actpay' );
+	}
+
+	if( $data_content['transaction_status'] != 4 )
+	{
+		$action = empty( $_SESSION[$module_data . '_order_info'] ) ? 'edit' : 'unedit';
+		$xtpl->assign( 'url_action', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=payment&' . $action . '&order_id=' . $data_content['order_id'] . '&checkss=' . md5( $data_content['order_id'] . $global_config['sitekey'] . session_id( ) ) );
+		$xtpl->parse( 'main.order_action' );
 	}
 
 	$xtpl->assign( 'url_finsh', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );

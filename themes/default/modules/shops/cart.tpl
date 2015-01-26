@@ -20,6 +20,12 @@
 </div>
 <!-- END: point_note -->
 
+<!-- BEGIN: edit_order -->
+<div class="alert alert-warning">
+{EDIT_ORDER}
+</div>
+<!-- END: edit_order -->
+
 <form action="{LINK_CART}" method="post" id="fpro">
 	<input type="hidden" value="1" name="save"/>
 	<div class="table-responsive">
@@ -74,6 +80,7 @@
 		</table>
 	</div>
 
+	<!-- BEGIN: coupons_code -->
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			{LANG.coupons}
@@ -88,6 +95,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- END: coupons_code -->
 
 	<div>
 		<!-- BEGIN: price3 -->

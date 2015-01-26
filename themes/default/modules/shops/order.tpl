@@ -12,6 +12,12 @@
 		{LANG.order_info}
 	</p>
 
+	<!-- BEGIN: edit_order -->
+	<div class="alert alert-warning">
+	{EDIT_ORDER}
+	</div>
+	<!-- END: edit_order -->
+
 	<form action="" method="post" name="fpost" id="fpost" class="form-horizontal">
 		<input type="hidden" value="1" name="postorder">
 
