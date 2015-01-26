@@ -10,9 +10,65 @@
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-$data_content = array();
+$order_info = array();
 $coupons_code = '';
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
+
+// Sửa đơn hàng
+if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$module_data . '_order_info'] ) )
+{
+	$order_info = $_SESSION[$module_data . '_order_info'];
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_info['order_id'] );
+
+	if( $result->rowCount() == 0 )
+	{
+		unset( $_SESSION[$module_data . '_order_info'] );
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+		die();
+	}
+
+	if( $_SESSION[$module_data . '_order_info']['checked'] )
+	{
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_info['order_id'] );
+		while( $row = $result->fetch() )
+		{
+			$data_content = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $row['id'] )->fetch();
+			$order_old[$row['id']] = array(
+				'num' => $row['num'],
+				'order' => 1,
+				'price' => $row['price'],
+				'money_unit' => $order_info['money_unit'],
+				'discount_id' => $row['discount_id'],
+				'store' => $data_content['product_number'],
+				'group' => $row['group_id'],
+				'weight' => 0,
+				'weight_unit' => 'g'
+			);
+		}
+
+		$shipping_old = array(
+			'ship_name' => '',
+			'ship_phone' => '',
+			'ship_location_id' => 0,
+			'ship_address_extend' => '',
+			'ship_shops_id' => 0,
+			'ship_carrier_id' => 0,
+			'order_shipping' => 0
+		);
+
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id=' . $order_info['order_id'] );
+		if( $result->rowCount() )
+		{
+			$shipping_old = $result->fetch();
+			$shipping_old['order_shipping'] = 1;
+		}
+
+		$_SESSION[$module_data . '_order_info']['checked'] = 0;
+		$_SESSION[$module_data . '_order_info']['order_product'] = $order_old;
+		$_SESSION[$module_data . '_order_info']['shipping'] = $shipping_old;
+		$_SESSION[$module_data . '_cart'] = $order_old;
+	}
+}
 
 // Coupons
 if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
@@ -59,6 +115,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
 	}
 }
 
+$data_content = array();
 $array_error_product_number = array();
 
 if( ! empty( $_SESSION[$module_data . '_cart'] ) )
@@ -144,7 +201,7 @@ else
 
 $page_title = $lang_module['cart_title'];
 
-$contents = call_user_func( 'cart_product', $data_content, $coupons_code, $array_error_product_number );
+$contents = call_user_func( 'cart_product', $data_content, $coupons_code, $order_info, $array_error_product_number );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -39,7 +39,6 @@ $result = $db->query( $sql );
 $array_template = array( );
 while( $row = $result->fetch( ) )
 {
-
 	$array_template[$row['id']] = array(
 		'id' => $row['id'],
 		'title' => $row["title"],
@@ -191,6 +190,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$dataform = array( );
 	$dataform['fid'] = $nv_Request->get_int( 'fid', 'post', 0 );
+	$dataform['sql_choices'] = '';
 
 	$templateids = array_unique( $nv_Request->get_typed_array( 'templateid', 'post', 'int', array( ) ) );
 
@@ -236,7 +236,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		else
 		{
-
 			// Kiểm tra trùng trường dữ liệu
 			$stmt = $db->prepare( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE field= :field' );
 			$stmt->bindParam( ':field', $dataform['field'], PDO::PARAM_STR );
@@ -252,6 +251,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$dataform['title'],
 		$dataform['description']
 	);
+
 	if( $dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor' )
 	{
 		$text_fields = 1;
@@ -413,10 +413,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( empty( $error ) )
 	{
-
 		if( empty( $dataform['fid'] ) )// Them truong du lieu moi
 		{
-
 			if( $dataform['max_length'] <= 4294967296 and !empty( $dataform['field'] ) and !empty( $dataform['title'] ) )
 			{
 				$weight = $db->query( 'SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_field' )->fetchColumn( );
@@ -619,31 +617,27 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 						$content_2 .= "<!-- END: main -->";
 
-						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_name . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
+						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
 
 					}
 
-					$content_lang = file_get_contents( NV_ROOTDIR . '/modules/' . $module_name . '/language/admin_' . NV_LANG_DATA . '.php' );
+					$content_lang = file_get_contents( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php' );
 					$content_lang .= "\$lang_module['" . $dataform['field'] . "'] = '" . $dataform['title'] . "';\n";
 
-					file_put_contents( NV_ROOTDIR . '/modules/' . $module_name . '/language/admin_' . NV_LANG_DATA . '.php', $content_lang, LOCK_EX );
+					file_put_contents( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php', $content_lang, LOCK_EX );
 
 					$tablename = $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i;
 
 					//taofile
-
 					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
 					die( );
 				}
-
 			}
 		}
 		elseif( $dataform['max_length'] <= 4294967296 )
 		{
-
 			try
 			{
-
 				$listtem = $db->query( 'SELECT listtemplate FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $dataform['fid'] )->fetch( );
 
 				$arr_t = explode( "|", $listtem['listtemplate'] );
@@ -654,7 +648,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					{
 						$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $arr_t_i . " DROP " . $dataform['field'] );
 					}
-
 				}
 
 				$query = "UPDATE " . $db_config['prefix'] . '_' . $module_data . "_field SET";
@@ -664,6 +657,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					$query .= " match_type='" . $dataform['match_type'] . "',
 				match_regex='" . $dataform['match_regex'] . "', func_callback='" . $dataform['func_callback'] . "', ";
 				}
+
 				$query .= " max_length=" . $dataform['max_length'] . ", min_length=" . $dataform['min_length'] . ",
 				listtemplate = '" . $dataform['listtemplate'] . "',
 				field_choices='" . $dataform['field_choices'] . "',
@@ -678,7 +672,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				if( $save )
 				{
-
 					$type_date = '';
 					if( $dataform['field_type'] == 'number' or $dataform['field_type'] == 'date' )
 					{
@@ -872,7 +865,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 						$content_2 .= "<!-- END: main -->";
 
-						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_name . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
+						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
 						$content_2 = '';
 					}
 

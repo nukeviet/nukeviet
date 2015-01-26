@@ -12,6 +12,12 @@
 		{LANG.order_info}
 	</p>
 
+	<!-- BEGIN: edit_order -->
+	<div class="alert alert-warning">
+	{EDIT_ORDER}
+	</div>
+	<!-- END: edit_order -->
+
 	<form action="" method="post" name="fpost" id="fpost" class="form-horizontal">
 		<input type="hidden" value="1" name="postorder">
 
@@ -133,6 +139,9 @@
         			<tr>
         				<th align="center" width="30px">{LANG.order_no_products}</th>
         				<th>{LANG.cart_products}</th>
+	        			<!-- BEGIN: main_group -->
+	        			<th>{MAIN_GROUP.title}</th>
+	        			<!-- END: main_group -->
         				<!-- BEGIN: price1 -->
         				<th class="price text-right">{LANG.cart_price} ({unit_config})</th>
         				<!-- END: price1 -->
@@ -155,6 +164,9 @@
 							</p>
 						<!-- END: display_group -->
     				</td>
+					<!-- BEGIN: sub_group -->
+	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<!-- END: sub_group -->
     				<!-- BEGIN: price2 -->
     				<td class="money" align="right"><strong>{PRICE.sale_format}</strong></td>
     				<!-- END: price2 -->

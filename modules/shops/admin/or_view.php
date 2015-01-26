@@ -114,7 +114,7 @@ if( !empty( $global_array_group ) )
 	}
 }
 
-$i = 0;
+$j = 0;
 foreach( $data_pro as $pdata )
 {
 	$xtpl->assign( 'product_code', $pdata['product_code'] );
@@ -123,7 +123,7 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
-	$xtpl->assign( 'pro_no', $i + 1 );
+	$xtpl->assign( 'pro_no', $j + 1 );
 
 	// Nhóm hiển thị cùng sản phẩm
 	foreach( $array_group_main as $group_main_id )
@@ -159,7 +159,7 @@ foreach( $data_pro as $pdata )
 	}
 
 	$xtpl->parse( 'main.loop' );
-	++$i;
+	++$j;
 }
 
 // Thong tin van chuyen

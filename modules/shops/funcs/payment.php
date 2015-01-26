@@ -30,6 +30,50 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		die();
 	}
 
+	// Sua don hang
+	if( $nv_Request->isset_request( 'edit', 'get' ) )
+	{
+		if( $data['transaction_status'] != 4 )
+		{
+			$_SESSION[$module_data . '_order_info'] = array(
+				'order_id' => $data['order_id'],
+				'order_code' => $data['order_code'],
+				'money_unit' => $data['unit_total'],
+				'order_name' => $data['order_name'],
+				'order_email' => $data['order_email'],
+				'order_address' => $data['order_address'],
+				'order_phone' => $data['order_phone'],
+				'order_note' => $data['order_note'],
+				'unit_total' => $data['unit_total'],
+				'order_url' => $link . 'payment&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
+				'order_edit' => $link . 'payment&amp;unedit&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
+				'checked' => 1 );
+		}
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true ) );
+		die();
+	}
+
+	// Huy sua don hang
+	if( $nv_Request->isset_request( 'unedit', 'get' ) )
+	{
+		if( isset( $_SESSION[$module_data . '_cart'] ) )
+		{
+			unset( $_SESSION[$module_data . '_cart'] );
+		}
+
+		if( isset( $_SESSION[$module_data . '_order_info'] ) )
+		{
+			unset( $_SESSION[$module_data . '_order_info'] );
+		}
+		Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $data['order_id'] . '&checkss=' . $checkss );
+		die();
+	}
+
+	if( ! empty( $_SESSION[$module_data . '_order_info'] ) )
+	{
+		$lang_module['order_edit'] = $lang_module['order_unedit'];
+	}
+
 	// Thong tin chi tiet mat hang trong don hang
 	$listid = $listnum = $listprice = $listgroup = array();
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
