@@ -41,8 +41,8 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 				'discount_id' => $row['discount_id'],
 				'store' => $data_content['product_number'],
 				'group' => $row['group_id'],
-				'weight' => 0,
-				'weight_unit' => 'g'
+				'weight' => $data_content['product_weight'],
+				'weight_unit' => $data_content['weight_unit']
 			);
 		}
 
