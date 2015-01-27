@@ -127,6 +127,7 @@ if( empty( $contents ) )
 
 			$data_content[] = array(
 				'catid' => $catid_i,
+				'subcatid' => $array_info_i['subcatid'],
 				'title' => $array_info_i['title'],
 				'link' => $array_info_i['link'],
 				'data' => $data_pro,

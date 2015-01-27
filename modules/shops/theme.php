@@ -381,6 +381,21 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 					$xtpl->parse( 'main.catalogs.items' );
 					++$i;
 				}
+
+				if( !empty( $data_row['subcatid'] ) )
+				{
+					$data_row['subcatid'] = explode( ',', $data_row['subcatid'] );
+					foreach( $data_row['subcatid'] as $subcatid )
+					{
+						$items = $global_array_cat[$subcatid];
+						if( $items['inhome'] )
+						{
+							$xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid] );
+							$xtpl->parse( 'main.catalogs.subcatloop' );
+						}
+					}
+				}
+
 				if( $data_row['num_pro'] > $data_row['num_link'] )
 					$xtpl->parse( 'main.catalogs.view_next' );
 				$xtpl->parse( 'main.catalogs' );
@@ -1309,25 +1324,28 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 	// Nhom san pham
 	$listgroupid = GetGroupID( $data_content['id'] );
-	/*
-	 $i = 0;
-	 foreach( $listgroupid as $gid )
-	 {
-	 $group_content = '';
-	 $group = $global_array_group[$gid];
-	 if( $group['parentid'] == 0 and $group['in_order'] )
-	 {
-	 $group_content .= '<select name="group" class="form-control form-group input-sm">';
-	 $group_content .= '<option value="" selected="selected">' . $group['title'] . '</option>';
-	 $group_content .= getgroup_selecthtml( $global_array_group, $group['groupid'], $listgroupid );
-	 $group_content .= '</select>';
-	 $xtpl->assign( 'GROUP', $group_content );
-	 $xtpl->parse( 'main.group.items' );
-	 $i++;
-	 }
-	 }
-	 if( $i > 0 ) $xtpl->parse( 'main.group' );
-	 */
+
+	$i = 0;
+	foreach( $listgroupid as $gid )
+	{
+		$group_content = '';
+		$group = $global_array_group[$gid];
+		if( $group['parentid'] == 0 and $group['in_order'] )
+		{
+			$group_content .= '<select name="group" class="form-control form-group input-sm">';
+			$group_content .= '<option value="" selected="selected">' . $group['title'] . '</option>';
+			$group_content .= getgroup_selecthtml( $global_array_group, $group['groupid'], $listgroupid );
+			$group_content .= '</select>';
+			$xtpl->assign( 'GROUP', $group_content );
+			$xtpl->parse( 'main.group.items' );
+			$i++;
+		}
+	}
+
+	if( $i > 0 )
+	{
+		$xtpl->parse( 'main.group' );
+	}
 
 	$xtpl->assign( 'groups', $global_array_group[4]['title'] );
 	foreach( $global_array_group as $global_array_group_i )
@@ -1358,7 +1376,10 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 					$subgroup = $global_array_group[$subgroupid];
 					if( $subgroup['indetail'] and in_array( $subgroupid, $listgroupid ) )
 					{
-						$xtpl->assign( 'SUBTITLE', array( 'title' => $subgroup['title'], 'link' => $subgroup['link'] ) );
+						$xtpl->assign( 'SUBTITLE', array(
+							'title' => $subgroup['title'],
+							'link' => $subgroup['link']
+						) );
 						$xtpl->parse( 'main.group_detail.loop.subtitle.loop' );
 					}
 				}
@@ -1372,7 +1393,8 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$xtpl->parse( 'main.group_detail.loop' );
 		}
 	}
-	if( $i > 0 )$xtpl->parse( 'main.group_detail' );
+	if( $i > 0 )
+		$xtpl->parse( 'main.group_detail' );
 
 	// Chi tiet giam gia
 	if( isset( $data_shop['discount'] ) and !empty( $data_shop['discount'] ) )
@@ -1613,10 +1635,10 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 	$point_total = 0;
 	if( !empty( $data_content ) )
 	{
-		$i = 1;
+		$j = 1;
 		foreach( $data_content as $data_row )
 		{
-			$xtpl->assign( 'stt', $i );
+			$xtpl->assign( 'stt', $j );
 			$xtpl->assign( 'id', $data_row['id'] );
 			$xtpl->assign( 'title_pro', $data_row['title'] );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
@@ -1640,7 +1662,10 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 				$array_sub_group = GetGroupID( $data_row['id'] );
 				for( $i = 0; $i < count( $array_group_main ); $i++ )
 				{
-					$data = array( 'title' => '', 'link' => '' );
+					$data = array(
+						'title' => '',
+						'link' => ''
+					);
 					foreach( $array_sub_group as $sub_group_id )
 					{
 						$item = $global_array_group[$sub_group_id];
@@ -1661,7 +1686,9 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 				$data_row['group'] = explode( ',', $data_row['group'] );
 				foreach( $data_row['group'] as $groupid )
 				{
-					$xtpl->assign( 'group', $global_array_group[$groupid]['title'] );
+					$items = $global_array_group[$groupid];
+					$items['parent_title'] = $global_array_group[$items['parentid']]['title'];
+					$xtpl->assign( 'group', $items );
 					$xtpl->parse( 'main.rows.display_group.group' );
 				}
 				$xtpl->parse( 'main.rows.display_group' );
@@ -1672,7 +1699,7 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + $price['sale'];
-			$i++;
+			$j++;
 		}
 
 		// Hien thi thong bao so diem sau khi hoan tat don hang
@@ -1779,7 +1806,10 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$array_sub_group = GetGroupID( $data_row['id'] );
 				for( $i = 0; $i < count( $array_group_main ); $i++ )
 				{
-					$data = array( 'title' => '', 'link' => '' );
+					$data = array(
+						'title' => '',
+						'link' => ''
+					);
 					foreach( $array_sub_group as $sub_group_id )
 					{
 						$item = $global_array_group[$sub_group_id];
@@ -1799,7 +1829,9 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$data_row['group'] = explode( ',', $data_row['group'] );
 				foreach( $data_row['group'] as $groupid )
 				{
-					$xtpl->assign( 'group', $global_array_group[$groupid]['title'] );
+					$items = $global_array_group[$groupid];
+					$items['parent_title'] = $global_array_group[$items['parentid']]['title'];
+					$xtpl->assign( 'group', $items );
 					$xtpl->parse( 'main.rows.display_group.group' );
 				}
 				$xtpl->parse( 'main.rows.display_group' );
@@ -1835,22 +1867,22 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 		$xtpl->parse( 'main.price3' );
 	}
 
-	if( ! empty( $shipping_data['list_location'] ) )
+	if( !empty( $shipping_data['list_location'] ) )
 	{
 		foreach( $shipping_data['list_location'] as $rows_i )
 		{
-			$rows_i['selected'] = ( $data_order['shipping']['ship_location_id'] == $rows_i['id'] ) ? ' selected="selected"' : '';
+			$rows_i['selected'] = ($data_order['shipping']['ship_location_id'] == $rows_i['id']) ? ' selected="selected"' : '';
 			$xtpl->assign( 'LOCATION', $rows_i );
 			$xtpl->parse( 'main.location_loop' );
 		}
 	}
 
-	if( ! empty( $shipping_data['list_shops'] ) )
+	if( !empty( $shipping_data['list_shops'] ) )
 	{
 		$i = 0;
 		foreach( $shipping_data['list_shops'] as $rows_i )
 		{
-			$rows_i['location_string'] = ( ! empty( $rows_i['address'] ) ? $rows_i['address'] . ', ' : '' ) . $shipping_data['list_location'][$rows_i['location']]['title'];
+			$rows_i['location_string'] = (!empty( $rows_i['address'] ) ? $rows_i['address'] . ', ' : '') . $shipping_data['list_location'][$rows_i['location']]['title'];
 			while( $shipping_data['list_location'][$rows_i['location']]['parentid'] > 0 )
 			{
 				$items = $shipping_data['list_location'][$shipping_data['list_location'][$rows_i['location']]['parentid']];
@@ -1858,29 +1890,36 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$shipping_data['list_location'][$rows_i['location']]['parentid'] = $items['parentid'];
 			}
 			$rows_i['location_string'] = str_replace( '&nbsp;', '', $rows_i['location_string'] );
-			$rows_i['checked'] = ( $data_order['shipping']['ship_shops_id'] == $rows_i['id'] or $i == 0 ) ? ' checked="checked"' : '';
+			$rows_i['checked'] = ($data_order['shipping']['ship_shops_id'] == $rows_i['id'] or $i == 0) ? ' checked="checked"' : '';
 			$xtpl->assign( 'SHOPS', $rows_i );
 			$xtpl->parse( 'main.shops_loop' );
 			$i++;
 		}
 	}
 
-	if( ! empty( $shipping_data['list_carrier'] ) )
+	if( !empty( $shipping_data['list_carrier'] ) )
 	{
 		$i = 0;
 		foreach( $shipping_data['list_carrier'] as $rows_i )
 		{
-			$rows_i['checked'] = ( $data_order['shipping']['ship_carrier_id'] == $rows_i['id'] or $i == 0 ) ? ' checked="checked"' : '';
+			$rows_i['checked'] = ($data_order['shipping']['ship_carrier_id'] == $rows_i['id'] or $i == 0) ? ' checked="checked"' : '';
 			$xtpl->assign( 'CARRIER', $rows_i );
 			$xtpl->parse( 'main.carrier_loop' );
 			$i++;
 		}
 	}
 
-	$array_yes_no = array( $lang_global['no'], $lang_global['yes'] );
+	$array_yes_no = array(
+		$lang_global['no'],
+		$lang_global['yes']
+	);
 	foreach( $array_yes_no as $key => $value )
 	{
-		$xtpl->assign( 'IS_SHIPPING', array( 'key' => $key, 'value' => $value, 'checked' => ( $key == $data_order['order_shipping'] ) ? 'checked="checked"' : '' ) );
+		$xtpl->assign( 'IS_SHIPPING', array(
+			'key' => $key,
+			'value' => $value,
+			'checked' => ($key == $data_order['order_shipping']) ? 'checked="checked"' : ''
+		) );
 		$xtpl->parse( 'main.shipping_loop' );
 	}
 
@@ -1951,7 +1990,9 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 			$pdata['product_group'] = explode( ',', $pdata['product_group'] );
 			foreach( $pdata['product_group'] as $groupid )
 			{
-				$xtpl->assign( 'group', $global_array_group[$groupid]['title'] );
+				$items = $global_array_group[$groupid];
+				$items['parent_title'] = $global_array_group[$items['parentid']]['title'];
+				$xtpl->assign( 'group', $items );
 				$xtpl->parse( 'main.loop.display_group.group' );
 			}
 			$xtpl->parse( 'main.loop.display_group' );
@@ -1963,7 +2004,10 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 			$array_sub_group = GetGroupID( $pdata['id'] );
 			for( $i = 0; $i < count( $array_group_main ); $i++ )
 			{
-				$data = array( 'title' => '', 'link' => '' );
+				$data = array(
+					'title' => '',
+					'link' => ''
+				);
 				foreach( $array_sub_group as $sub_group_id )
 				{
 					$item = $global_array_group[$sub_group_id];

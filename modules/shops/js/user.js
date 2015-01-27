@@ -96,7 +96,8 @@ function cartorder_detail(a_ob) {
     	var value = $(this).val();
     	if( value != '' )
     	{
-    		if( i == 0 )
+    		i++;
+    		if( i == 1 )
     		{
     			group = group + value;
     		}
@@ -105,7 +106,6 @@ function cartorder_detail(a_ob) {
     			group = group + ',' + value;
     		}
     	}
-    	i++;
 	});
 
 	$.ajax({

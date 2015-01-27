@@ -159,7 +159,7 @@
 						<!-- BEGIN: display_group -->
 							<p>
 							<!-- BEGIN: group -->
-							<span class="text-muted" style="margin-right: 10px">{group}</span>
+							<span class="show"><span class="text-muted">{group.parent_title}: <strong>{group.title}</strong></span></span>
 							<!-- END: group -->
 							</p>
 						<!-- END: display_group -->
