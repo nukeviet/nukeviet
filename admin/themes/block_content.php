@@ -227,7 +227,10 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						}
 						else
 						{
-							$key = array_keys( $array_config );
+							$xmlkey = $xml->xpath( 'config' );
+							$language = ( array )$xmlkey[0];
+							
+							$key = array_keys( $language );
 							$lang_block = array_combine( $key, $key );
 						}
 					}

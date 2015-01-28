@@ -814,12 +814,13 @@ function nv_getExtVersion( $updatetime = 3600 )
 			
 			$array[$row['title']] = array(
 				'id' => $row['id'],
+				'type' => $row['type'],
 				'name' => $row['title'],
 				'current_version' => trim( $row['version'][0] ),
 				'current_release' => trim( $row['version'][1] ),
 				'remote_version' => '',
 				'remote_release' => 0,
-				'updateable' => false,
+				'updateable' => array(), // Thong tin cac phien ban co the update
 				'author' => $row['author'],
 				'license' => '',
 				'mode' => $row['is_sys'] ? 'sys' : 'other',
@@ -898,6 +899,8 @@ function nv_getExtVersion( $updatetime = 3600 )
 				}
 				
 				$content .= "\t<extension>\n";
+				$content .= "\t\t<id><![CDATA[" . $row['id'] . "]]></id>\n";
+				$content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
 				$content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
 				$content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
 				$content .= "\t\t<date><![CDATA[" . gmdate( "D, d M Y H:i:s", $row['current_release'] ) . " GMT]]></date>\n";
@@ -909,8 +912,27 @@ function nv_getExtVersion( $updatetime = 3600 )
 				$content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
 				$content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
 				$content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
-				$content .= "\t\t<updateable><![CDATA[" . ( $row['updateable'] ? 'true' : 'false' ) . "]]></updateable>\n";
-				$content .= "\t\t<origin><![CDATA[" . ( $row['updateable'] ? 'true' : 'false' ) . "]]></origin>\n";
+				$content .= "\t\t<updateable>\n";
+				
+				if( ! empty( $row['updateable'] ) )
+				{
+					$content .= "\t\t\t<upds>\n";
+					
+					foreach( $row['updateable'] as $updateable )
+					{
+						$content .= "\t\t\t\t<upd>\n";
+						$content .= "\t\t\t\t\t<upd_fid><![CDATA[" . $updateable['fid'] . "]]></upd_fid>\n";
+						$content .= "\t\t\t\t\t<upd_old><![CDATA[" . $updateable['old_ver'] . "]]></upd_old>\n";
+						$content .= "\t\t\t\t\t<upd_new><![CDATA[" . $updateable['new_ver'] . "]]></upd_new>\n";
+						$content .= "\t\t\t\t</upd>\n";
+					}
+					$content .= "\t\t\t</upds>\n";				
+					
+					unset( $updateable );
+				}
+				
+				$content .= "\t\t</updateable>\n";
+				$content .= "\t\t<origin><![CDATA[" . ( $row['origin'] === true ? 'true' : 'false' ) . "]]></origin>\n";
 				$content .= "\t</extension>\n";
 			}
 			

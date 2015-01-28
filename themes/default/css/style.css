@@ -50,6 +50,10 @@ ul, ol {
 	color: #fff;
 }
 
+.navbar-nav>li>a{
+	white-space: nowrap;
+}
+
 /* Fixed Jquery UI Style */
 .ui-widget {
 	font-family: 'Roboto', sans-serif !important;
@@ -240,6 +244,10 @@ header{
 }
 #footer .footer-copyright .menu li{
 	display:inline-block;
+}
+#footer .footer-copyright .menu li a{
+	display:inline-block;
+	white-space: nowrap;
 }
 #footer .footer-copyright .menu li span{
 	display:inline-block;

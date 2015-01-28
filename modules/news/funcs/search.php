@@ -198,7 +198,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 if( empty( $key ) )
 {
-	$page_title = $module_info['custom_title'];
+	$page_title = $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 else
 {

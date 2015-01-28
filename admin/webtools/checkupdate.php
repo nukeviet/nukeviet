@@ -111,6 +111,8 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			foreach( $exts as $extname => $values )
 			{
 				$value = array(
+					'id' => ( int ) $values->id,
+					'type' => ( string ) $values->type,
 					'name' => ( string ) $values->name,
 					'version' => ( string ) $values->version,
 					'date' => ( string ) $values->date,
@@ -122,39 +124,34 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					'message' => ( string ) $values->message,
 					'link' => ( string ) $values->link,
 					'support' => ( string ) $values->support,
-					'updateable' => ( ( string ) $values->updateable ) === 'true' ? true : false,
-					'origin' => ( ( string ) $values->origin ) === 'true' ? true : false,
+					'updateable' => array(),
+					'origin' => ( ( string ) $values->origin ) == 'true' ? true : false,
 				);
 				
-				if( ! isset( $value['version'] ) )
+				// Xu ly update
+				$updateables = $values->xpath('updateable/upds/upd');
+				
+				if( ! empty( $updateables ) )
 				{
-					$note = $lang_module['extNote1'];
-					$cl = 'Note1';
+					foreach( $updateables as $updateable )
+					{
+						$value['updateable'][] = array(
+							'fid' => ( string ) $updateable->upd_fid,
+							'old' => explode( ',', ( string ) $updateable->upd_old ),
+							'new' => ( string ) $updateable->upd_new,
+						);
+					}
 				}
-				elseif( empty( $value['new_version'] ) )
-				{
-					$note = sprintf( $lang_module['extNote3'], $value['link'] );
-					$cl = 'Note3';
-				}
-				elseif( nv_version_compare( $value['version'], $value['new_version'] ) < 0 )
-				{
-					$note = sprintf( $lang_module['extNote4'], $value['link'] );
-					$cl = 'Note4';
-				}
-				else
-				{
-					$note = $lang_module['extNote5'];
-					$cl = 'Note5';
-				}
+				unset( $updateables, $updateable );
 
 				$info = $lang_module['userVersion'] . ': ';
 				$info .= ! empty( $value['version'] ) ? $value['version'] : 'n/a';
 				$info .= '; ' . $lang_module['onlineVersion'] . ': ';
-				$info .= ! empty( $value['new_version'] ) ? $value['new_version'] : 'n/a';
+				$info .= ! empty( $value['new_version'] ) ? $value['new_version'] : ( ( ! empty( $value['version'] ) and $value['origin'] ) ? $value['version'] : 'n/a' );
 
 				$tooltip = array();
 				$tooltip[] = array( 'title' => $lang_module['userVersion'], 'content' => ( ! empty( $value['version'] ) ? $value['version'] : 'n/a' ) . ( ! empty( $value['date'] ) ? ' (' . nv_date( 'd/m/Y H:i', strtotime( $value['date'] ) ) . ')' : '' ) );
-				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $value['new_version'] ) ? $value['new_version'] : 'n/a' ) . ( ! empty( $value['new_date'] ) ? ' (' . nv_date( 'd/m/Y H:i', strtotime( $value['new_date'] ) ) . ')' : '' ) );
+				$tooltip[] = array( 'title' => $lang_module['onlineVersion'], 'content' => ( ! empty( $value['new_version'] ) ? $value['new_version'] : ( ( ! empty( $value['version'] ) and $value['origin'] ) ? $value['version'] : 'n/a' ) ) . ( ! empty( $value['new_date'] ) ? ' (' . nv_date( 'd/m/Y H:i', strtotime( $value['new_date'] ) ) . ')' : '' ) );
 
 				if( ! empty( $value['author'] ) )
 				{
@@ -163,7 +160,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 				if( ! empty( $value['license'] ) )
 				{
-					$tooltip[] = array( 'title' => $lang_module['extLicense'], 'content' => ( string ) $value['license'] );
+					$tooltip[] = array( 'title' => $lang_module['extLicense'], 'content' => $value['license'] );
 				}
 
 				if( ! empty( $value['mode'] ) )
@@ -180,8 +177,9 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				{
 					$tooltip[] = array( 'title' => $lang_module['extSupport'], 'content' => "<a href=\"" . $value['support'] . "\">" . $value['support'] . "</a>" );
 				}
-
-				$xtpl->assign( 'EXTNAME', ( string ) $value['name'] );
+				
+				$xtpl->assign( 'EXTNAME', $value['name'] );
+				$xtpl->assign( 'EXTTYPE', isset( $lang_module['extType_' . $value['type']] ) ? $lang_module['extType_' . $value['type']] : $value['type'] );
 				$xtpl->assign( 'EXTINFO', $info );
 
 				foreach( $tooltip as $t )
@@ -189,14 +187,63 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 					$xtpl->assign( 'EXTTOOLTIP', $t );
 					$xtpl->parse( 'extUpd.loop.li' );
 				}
-
+				
+				// Thong bao ung dung khong co phien ban (Khong hop le)
 				if( ! isset( $value['version'] ) )
 				{
 					$xtpl->parse( 'extUpd.loop.note1' );
 				}
-
-				$xtpl->assign( 'EXTCL', $cl );
+				
+				// Thong tin cap nhat
+				if( ! empty( $value['new_version'] ) and nv_version_compare( $value['version'], $value['new_version'] ) < 0 )
+				{
+					$note = $lang_module['extNote4'];
+					$icon = 'fa-bolt text-warning';
+					
+					$updateVersion = array();
+					
+					foreach( $value['updateable'] as $updateable )
+					{
+						if( in_array( $value['version'], $updateable['old'] ) )
+						{
+							if( empty( $updateVersion ) or nv_version_compare( $updateVersion['new'], $updateable['new'] ) < 0 )
+							{
+								$updateVersion = $updateable;
+							}
+						}
+					}
+					
+					if( empty( $updateVersion ) )
+					{
+						$xtpl->assign( 'UPDNOTE', sprintf( $lang_module['extUpdNote1'], $value['link'] ) );
+						$xtpl->parse( 'extUpd.loop.updateNotSuport' );
+					}
+					elseif( $updateVersion['new'] != $value['new_version'] )
+					{
+						$xtpl->assign( 'UPDNOTE', sprintf( $lang_module['extUpdNote2'], $updateVersion['new'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5( $value['id'] . $updateVersion['fid'] . $global_config['sitekey'] . session_id() ) ) );
+						$xtpl->parse( 'extUpd.loop.updateNotLastest' );
+					}
+					else
+					{
+						$xtpl->assign( 'UPDNOTE', sprintf( $lang_module['extUpdNote3'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5( $value['id'] . $updateVersion['fid'] . $global_config['sitekey'] . session_id() ) ) );
+						$xtpl->parse( 'extUpd.loop.updateLastest' );
+					}
+				}
+				elseif( ! $value['origin'] )
+				{
+					$note = $lang_module['extNote1'];
+					$icon = 'fa-exclamation-triangle text-danger';
+					
+					$xtpl->parse( 'extUpd.loop.note2' );
+				}
+				else
+				{
+					$note = $lang_module['extNote5'];
+					$icon = 'fa-check text-success';
+				}
+				
 				$xtpl->assign( 'EXTNOTE', $note );
+				$xtpl->assign( 'EXTICON', $icon );
 				$xtpl->parse( 'extUpd.loop' );
 				++$a;
 			}

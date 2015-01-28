@@ -18,7 +18,7 @@ $menu_top = array(
 	'custom_title' => $lang_global['mod_extensions']
 );
 
-$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login' );
+$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login', 'update' );
 
 $submenu['newest'] = $lang_module['newest'];
 $submenu['popular'] = $lang_module['popular'];

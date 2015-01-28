@@ -25,6 +25,7 @@ $lang_module['favorites'] = 'Ứng dụng đã đánh dấu';
 
 $lang_module['empty_response'] = 'Không có bất kỳ dữ liệu nào phù hợp với yêu cầu này.';
 
+$lang_module['extname'] = 'Tên ứng dụng';
 $lang_module['author'] = 'Tác giả';
 $lang_module['detail'] = 'Chi tiết';
 $lang_module['install'] = 'Cài đặt';
@@ -94,3 +95,25 @@ $lang_module['login_pagetitle'] = 'Đăng nhập Merchant Site';
 $lang_module['login_require'] = 'Chức năng này yêu cầu bạn phải đăng nhập. Nhấp <a href="%s">Vào đây</a> để đăng nhập';
 $lang_module['login_creat_merchant'] = 'Nếu chưa có tài khoản, click <a href="http://nukeviet.vn/store/merchant/manager/">Vào đây</a> để tạo';
 $lang_module['login_success'] = 'Đăng nhập thành công, hệ thống sẽ chuyển trang trong giây lát';
+
+$lang_module['extUpd'] = 'Nâng cấp ứng dụng';
+$lang_module['extUpdCheck'] = 'Kiểm tra gói nâng cấp';
+$lang_module['extUpdCheckSuccess'] = 'Có thể nâng cấp';
+$lang_module['extUpdCheckSuccessNote'] = 'Đang tải về gói nâng cấp, vui lòng đợi';
+$lang_module['extUpdCheckStatus'] = 'Trạng thái';
+$lang_module['extUpdNotLogin'] = 'Chưa đăng nhập';
+$lang_module['extUpdLoginRequire'] = 'Để nâng cấp ứng dụng này, trước hết hệ thống yêu cần bạn đăng nhập Merchant Site. Nhấp <strong><a href="%s">Vào đây</a></strong> để đăng nhập';
+$lang_module['extUpdPaidRequire'] = 'Gói nâng cấp ứng dụng này có phí, bạn cần mua gói nâng cấp trước khi có thể nâng cấp. Nhấp <strong><a href="%s">Vào đây</a></strong> để mua';
+$lang_module['extUpdUnpaid'] = 'Chưa thanh toán';
+$lang_module['extUpdInvalid'] = 'Không hợp lệ';
+$lang_module['extUpdInvalidNote'] = 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại';
+$lang_module['extUpdErrorDownload'] = 'Lỗi tải gói nâng cấp';
+
+$lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
+$lang_module['get_update_ok'] = 'Gói nâng cấp an toàn, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
+$lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn nếu có bất kỳ lỗi nào xảy ra, do đó bạn nên sao lưu toàn bộ website trước khi thực hiện, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
+$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục, hãy kiểm tra và tắt chế độ safe_mode';
+$lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file';
+$lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
+$lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
+$lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';

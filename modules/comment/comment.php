@@ -10,7 +10,7 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$per_page_comment = NV_PER_PAGE_COMMENT;
+$per_page_comment = defined( 'NV_PER_PAGE_COMMENT' ) ? NV_PER_PAGE_COMMENT : 5;
 
 /**
  * nv_comment_module()
@@ -80,6 +80,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 function nv_comment_module( $module, $checkss, $area, $id, $allowed_comm, $page )
 {
     global $module_config, $nv_Request, $lang_module_comment;
+	
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
@@ -107,17 +108,6 @@ function nv_comment_module( $module, $checkss, $area, $id, $allowed_comm, $page 
 			}
 
 			$array_data = array();
-
-			$page_title = $module_info['custom_title'];
-			$key_words = $module_info['keywords'];
-			if( $client_info['browser']['key'] == 'chrome' )
-			{
-				$global_config['mudim_showpanel'] = 0;
-			}
-			else
-			{
-				$global_config['mudim_active'] = 0;
-			}
 
 			$sortcomm_old = $nv_Request->get_int( 'sortcomm', 'cookie', $module_config[$module]['sortcomm'] );
 			$sortcomm = $nv_Request->get_int( 'sortcomm', 'post,get', $sortcomm_old );

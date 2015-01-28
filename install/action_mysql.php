@@ -282,6 +282,17 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	KEY type (type)
 ) ENGINE=MyISAM";
 
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
+	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	type varchar(10) NOT NULL DEFAULT 'other',
+	title varchar(55) NOT NULL DEFAULT '',
+	path varchar(255) NOT NULL DEFAULT '',
+	lastmodified int(11) unsigned NOT NULL DEFAULT '0',
+	duplicate smallint(4) unsigned NOT NULL DEFAULT '0',
+	PRIMARY KEY (idfile)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	bid mediumint(8) NOT NULL DEFAULT '0',
 	click_time int(11) unsigned NOT NULL DEFAULT '0',

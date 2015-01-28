@@ -16,30 +16,6 @@
 	cursor: pointer
 }
 
-.Note {
-	padding-left: 20px
-}
-
-.Note1 {
-	background: url('../images/icons/note1.png') no-repeat left center
-}
-
-.Note2 {
-	background: url('../images/icons/note2.png') no-repeat left center
-}
-
-.Note3 {
-	background: url('../images/icons/note3.png') no-repeat left center
-}
-
-.Note4 {
-	background: url('../images/icons/note4.png') no-repeat left center
-}
-
-.Note5 {
-	background: url('../images/icons/note5.png') no-repeat left center
-}
-
 .wttooltip {
 	cursor: pointer;
 	display: none;
