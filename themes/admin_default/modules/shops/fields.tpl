@@ -1,33 +1,60 @@
 <!-- BEGIN: main -->
+<div class="row" style="margin-bottom: 5px">
+	<div class="col-xs-12">
+		<div class="btn-group pull-right">
+			<button type="button" class="btn btn-primary btn-xs" id="template">
+				{LANG.template}
+			</button>
+			<button type="button" class="btn btn-primary  btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				<span class="caret"></span>
+				<span class="sr-only"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li>
+					<a href="{TEM_ADD}">{LANG.template_add}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$('#template').click(function() {
+		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=template';
+	});
+</script>
+
 <!-- BEGIN: data -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w100" />
+			<col span="3" />
+			<col class="w150" />
+		</colgroup>
 		<thead>
 			<tr class="text-center">
-				<th class="100">{LANG.weight}</th>
+				<th>{LANG.weight}</th>
 				<th>{LANG.field_id}</th>
 				<th>{LANG.field_title}</th>
 				<th>{LANG.field_type}</th>
-
-				<th>{LANG.function}</th>
+				<th class="text-center">{LANG.function}</th>
 			</tr>
 		</thead>
-
-		<!-- BEGIN: loop -->
-		<tr>
-			<td class="text-center">
-			<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
-				<!-- BEGIN: weight -->
-				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
-				<!-- END: weight -->
-			</select></td>
-			<td>{ROW.field}</td>
-			<td>{ROW.field_lang}</td>
-			<td>{ROW.field_type} </td>
-
-			<td><em class="fa fa-edit fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a></td>
-		</tr>
-		<!-- END: loop -->
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="text-center">
+				<select class="form-control" id="id_weight_{ROW.fid}" onchange="nv_chang_field({ROW.fid});">
+					<!-- BEGIN: weight -->
+					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
+					<!-- END: weight -->
+				</select></td>
+				<td>{ROW.field}</td>
+				<td>{ROW.field_lang}</td>
+				<td>{ROW.field_type} </td>
+				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a></td>
+			</tr>
+			<!-- END: loop -->
 		</tbody>
 		<tfoot>
 			<tr>
@@ -68,35 +95,22 @@
 			<tbody>
 				<!-- BEGIN: field -->
 				<tr>
-					<td>{LANG.field_id} <span class="require">(*)</span></td>
-					<td><label>
-						<input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}>
-						<span style="color: #DB4156"><i class="fa fa-warning" ></i> {LANG.field_id_note}</span></label></td>
+					<td>{LANG.field_id} <span class="require">*</span></td>
+					<td><label> <input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> <span style="color: #DB4156"><i class="fa fa-warning" ></i> {LANG.field_id_note}</span></label></td>
 				</tr>
 				<!-- END: field -->
 				<tr>
-					<td>{LANG.field_title}<span class="require"> (*)</span></td>
-					<td>
-					<input class="form-control w350 required" type="text" value="{DATAFORM.title}" name="title">
-					</td>
+					<td>{LANG.field_title}<span class="require"> *</span></td>
+					<td><input class="form-control w350 required" type="text" value="{DATAFORM.title}" name="title"></td>
 				</tr>
 
 				<tr>
-					<td> {LANG.template} <span class="require">(*)</span></td>
+					<td> {LANG.template} <span class="require">*</span></td>
 					<td>
-					<div class="message_body" style="height:150px; overflow: auto">
-						<table class="table table-striped table-bordered table-hover">
-							<tbody>
-								<tr>
-									<td><!-- BEGIN: catid -->
-									<div style="float: left; width: 50%">
-										<input type="checkbox" value="{CATS.id}" name="templateid[]" class="news_checkbox" {CATS.checked} {CATS.disabled}>
-										{CATS.title}
-
-									</div><!-- END: catid --></td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="message_body" style="max-height:150px; overflow: auto">
+						<!-- BEGIN: catid -->
+						<label> <input type="checkbox" value="{CATS.id}" name="templateid[]" class="news_checkbox" {CATS.checked} {CATS.disabled}> {CATS.title} </label>
+						<!-- END: catid -->
 					</div></td>
 				</tr>
 
@@ -107,23 +121,17 @@
 				<tr>
 					<td>{LANG.field_type}:</td>
 					<td><!-- BEGIN: field_type -->
-					<ul style="list-style: none">
+					<ul style="padding: 0">
 						<!-- BEGIN: loop -->
 						<li>
-							<label for="f_{FIELD_TYPE.key}">
-								<input type="radio" {FIELD_TYPE.checked} id="f_{FIELD_TYPE.key}" value="{FIELD_TYPE.key}" name="field_type">
-								{FIELD_TYPE.value}</label>
+							<label for="f_{FIELD_TYPE.key}"> <input type="radio" {FIELD_TYPE.checked} id="f_{FIELD_TYPE.key}" value="{FIELD_TYPE.key}" name="field_type"> {FIELD_TYPE.value}</label>
 						</li>
 						<!-- END: loop -->
-					</ul><span style="color: #DB4156"><i class="fa fa-warning" ></i>  {LANG.field_type_note}<!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
+					</ul><span style="color: #DB4156"><i class="fa fa-warning" ></i> {LANG.field_type_note}<!-- END: field_type --> {FIELD_TYPE_TEXT} </td>
 				</tr>
 				<tr id="editorfields" {DATAFORM.editordisabled}>
 					<td>{LANG.field_size}</td>
-					<td>width:
-					<input class="form-control" style="width:50px" type="text" value="{DATAFORM.editor_width}" name="editor_width" maxlength="5">
-					height:
-					<input class="form-control" style="width:50px" type="text" value="{DATAFORM.editor_height}" name="editor_height" maxlength="5">
-					</td>
+					<td><span class="text-middle">{LANG.field_width}</span><input class="form-control" style="width:100px" type="text" value="{DATAFORM.editor_width}" name="editor_width" maxlength="5"><span class="text-middle">{LANG.field_height}</span><input class="form-control" style="width:100px" type="text" value="{DATAFORM.editor_height}" name="editor_height" maxlength="5"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -139,32 +147,22 @@
 				<tr>
 					<td>{LANG.field_match_type}</td>
 					<td>
-					<ul style="list-style: none;">
+					<table class="table table-striped table-bordered table-hover">
 						<!-- BEGIN: match_type -->
-						<li id="li_{MATCH_TYPE.key}">
-							<label for="m_{MATCH_TYPE.key}">
-								<input type="radio" {MATCH_TYPE.checked} id="m_{MATCH_TYPE.key}" value="{MATCH_TYPE.key}" name="match_type">
-								{MATCH_TYPE.value}</label>
-							<!-- BEGIN: match_input -->
-							<input class="form-control" type="text" value="{MATCH_TYPE.match_value}" name="match_{MATCH_TYPE.key}" {MATCH_TYPE.match_disabled}>
-							<!-- END: match_input -->
-						</li>
+						<tr id="li_{MATCH_TYPE.key}">
+							<td class="w350"><label for="m_{MATCH_TYPE.key}"> <input type="radio" {MATCH_TYPE.checked} id="m_{MATCH_TYPE.key}" value="{MATCH_TYPE.key}" name="match_type"> {MATCH_TYPE.value}</label></td>
+							<td><!-- BEGIN: match_input --><input class="form-control" type="text" value="{MATCH_TYPE.match_value}" name="match_{MATCH_TYPE.key}" {MATCH_TYPE.match_disabled}><!-- END: match_input --></td>
+						</tr>
 						<!-- END: match_type -->
-					</ul></td>
+					</table></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_default_value}:</td>
-					<td>
-					<input class="form-control w300" maxlength="255" type="text" value="{DATAFORM.default_value}" name="default_value">
-					</td>
+					<td><input class="form-control w300" maxlength="255" type="text" value="{DATAFORM.default_value}" name="default_value"></td>
 				</tr>
 				<tr id="max_length">
 					<td>{LANG.field_min_length}:</td>
-					<td>
-					<input class="form-control w100 number"type="text" value="{DATAFORM.min_length}" name="min_length">
-					<span style="margin-left: 50px;">{LANG.field_max_length}:</span>
-					<input class="form-control w100 number" type="text" value="{DATAFORM.max_length}" name="max_length">
-					</td>
+					<td><input class="form-control w100 number"type="text" value="{DATAFORM.min_length}" name="min_length"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="form-control w100 number" type="text" value="{DATAFORM.max_length}" name="max_length"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -180,25 +178,15 @@
 			<tbody>
 				<tr>
 					<td>{LANG.field_number_type}:</td>
-					<td>
-					<input type="radio" value="1" name="number_type" {DATAFORM.number_type_1}>
-					{LANG.field_integer}
-					<input type="radio" value="2" name="number_type" {DATAFORM.number_type_2}>
-					{LANG.field_real} </td>
+					<td><input type="radio" value="1" name="number_type" {DATAFORM.number_type_1}> {LANG.field_integer} <input type="radio" value="2" name="number_type" {DATAFORM.number_type_2}> {LANG.field_real} </td>
 				</tr>
 				<tr>
 					<td>{LANG.field_default_value}:</td>
-					<td>
-					<input class="form-control w300 required number" maxlength="255" type="text" value="{DATAFORM.default_value_number}" name="default_value_number">
-					</td>
+					<td><input class="form-control w300 required number" maxlength="255" type="text" value="{DATAFORM.default_value_number}" name="default_value_number"></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_min_length}:</td>
-					<td>
-					<input class="form-control w100 required number" type="text" value="{DATAFORM.min_number}" name="min_number_length" maxlength="11">
-					<span style="margin-left: 50px;">{LANG.field_max_length}:</span>
-					<input class="form-control w100 required number" type="text" value="{DATAFORM.max_number}" name="max_number_length" maxlength="11">
-					</td>
+					<td><input class="form-control w100 required number" type="text" value="{DATAFORM.min_number}" name="min_number_length" maxlength="11"><span style="margin-left: 50px;">{LANG.field_max_length}:</span><input class="form-control w100 required number" type="text" value="{DATAFORM.max_number}" name="max_number_length" maxlength="11"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -214,21 +202,11 @@
 			<tbody>
 				<tr>
 					<td>{LANG.field_default_value}:</td>
-					<td><label>
-						<input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}>
-						{LANG.field_current_date}</label><label>
-						<input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}>
-						{LANG.field_default_date}</label>&nbsp;
-					<input class="form-control date" style="width:80px" type="text" value="{DATAFORM.default_date}" name="default_date">
-					</td>
+					<td><label> <input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}> {LANG.field_current_date}</label><label> <input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}> {LANG.field_default_date}</label>&nbsp; <input class="form-control date" style="width:80px" type="text" value="{DATAFORM.default_date}" name="default_date"></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_min_date}:</td>
-					<td>
-					<input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10">
-					<span style="margin-left: 50px;">{LANG.field_max_date}:</span>
-					<input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10">
-					</td>
+					<td><input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -244,9 +222,7 @@
 					<!-- BEGIN: choicetypes -->
 					<option {CHOICE_TYPES.selected} value="{CHOICE_TYPES.key}"> {CHOICE_TYPES.value}</option>
 					<!-- END: choicetypes -->
-				</select><!-- END: choicetypes_add --><!-- BEGIN: choicetypes_add_hidden --> {FIELD_TYPE_SQL}
-				<input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" />
-				<!-- END: choicetypes_add_hidden --></td>
+				</select><!-- END: choicetypes_add --><!-- BEGIN: choicetypes_add_hidden --> {FIELD_TYPE_SQL} <input type="hidden" name="choicetypes" value="{choicetypes_add_hidden}" /><!-- END: choicetypes_add_hidden --></td>
 			</tr>
 		</table>
 		<table class="table table-striped table-bordered table-hover" id="choicesql" {DATAFORM.display_choicesql} >
@@ -277,47 +253,40 @@
 				<em class="fa fa-file-text-o">&nbsp;</em>{LANG.field_options_choice}
 			</caption>
 			<colgroup>
-				<col class="w250" />
-				<col span="3"/>
+				<col class="w50" />
+				<col span="2"/>
+				<col class="w100" />
 			</colgroup>
 			<thead>
 				<tr class="text-center">
-					<th>{LANG.field_number}</th>
-					<th>{LANG.Value}</th>
+					<th class="text-center">{LANG.field_number}</th>
+					<th>{LANG.field_value}</th>
 					<th>{LANG.field_text}</th>
 					<th>{LANG.field_default_value}</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="4" >
-					<input style="margin-left: 50px;" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" />
-					</td>
+					<td colspan="4" ><input type="button" class="btn btn-primary" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<!-- BEGIN: loop_field_choice -->
 				<tr class="text-center">
-					<td>{FIELD_CHOICES.number}</td>
-					<td>
-					<input class="form-control w100 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" />
-					</td>
-					<td>
-					<input class="form-control w350" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" />
-					</td>
-					<td>
-					<input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice">
-					</td>
+					<td class="text-center">{FIELD_CHOICES.number}</td>
+					<td><input class="form-control validalphanumeric" style="width: 100%" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" /></td>
+					<td><input class="form-control" style="width: 100%" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
+					<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
 				</tr>
 				<!-- END: loop_field_choice -->
 			</tbody>
 		</table>
 	</div>
-	<div style="margin-left: 350px;">
-		<input type="hidden" value="{DATAFORM.fid}" name="fid">
-		<input type="hidden" value="{DATAFORM.field}" name="fieldid">
-		<input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">
-	</div>
+
+	<input type="hidden" value="{DATAFORM.fid}" name="fid">
+	<input type="hidden" value="{DATAFORM.field}" name="fieldid">
+	<input class="btn btn-primary" type="submit" value="{LANG.save}" name="submit">
+
 </form>
 <script type="text/javascript">
 	var items = '{FIELD_CHOICES_NUMBER}';
@@ -332,13 +301,6 @@
 		$('#choiceitems').append(newitem);
 	}
 
-	/*
-	 function nv_show_list_field() {
-	 $('#module_show_list').html('<center><img alt="" src="{NV_BASE_SITEURL}images/load_bar.gif"></center>').load('{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=fields&qlist=1&page={page}&&nocache=' + new Date().getTime());
-	 return;
-	 }
-	 */
-
 	function nv_chang_field(fid) {
 		var nv_timer = nv_settimeout_disable('id_weight_' + fid, 5000);
 		var new_vid = $('#id_weight_' + fid).val();
@@ -346,8 +308,11 @@
 			if (res != 'OK') {
 				alert(nv_is_change_act_confirm[2]);
 			}
+			else
+			{
+				window.location.href = window.location.href;
+			}
 			clearTimeout(nv_timer);
-			nv_show_list_field();
 		});
 		return;
 	}
@@ -356,7 +321,7 @@
 		if (confirm(nv_is_del_confirm[0])) {
 			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&nocache=' + new Date().getTime(), 'del=1&fid=' + fid, function(res) {
 				if (res == 'OK') {
-					window.location.href = window.location.href;
+					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields';
 				} else {
 					alert(nv_is_del_confirm[2]);
 				}
@@ -390,9 +355,6 @@
 
 
 	$(document).ready(function() {
-		if ($("input[name=fid]").val() == 0) {
-			nv_show_list_field();
-		}
 		nv_load_current_date();
 
 		$.validator.addMethod('validalphanumeric', function(str) {

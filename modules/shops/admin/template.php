@@ -11,6 +11,12 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+if( !defined( 'NV_IS_SPADMIN' ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+	die( );
+}
+
 $page_title = $lang_module['template'];
 $error = "";
 $savecat = 0;
@@ -19,26 +25,29 @@ $data = array(
 	"title" => "",
 	'alias' => ""
 );
+
 $table_name = $db_config['prefix'] . '_' . $module_data . '_template';
 $data['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
-$act = $nv_Request->get_int( 'act', 'get', 0 );
-if( !empty( $act ) )
+
+if( $nv_Request->isset_request( 'change_active', 'post' ) )
 {
-	if( $act == 1 )
-	{
+	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-		$status = $nv_Request->get_int( 'status', 'get', 0 );
-		$id = $nv_Request->get_int( 'id', 'get', 0 );
-		$new_status = ($status == 1) ? 0 : 1;
+	$sql = 'SELECT id FROM ' . $table_name . ' WHERE id=' . $id;
+	$id = $db->query( $sql )->fetchColumn( );
+	if( empty( $id ) )
+		die( 'NO_' . $id );
 
-		$sql = 'UPDATE ' . $table_name . ' SET status=' . $new_status . ' WHERE id=' . $id;
+	$new_status = $nv_Request->get_bool( 'new_status', 'post' );
+	$new_status = ( int )$new_status;
 
-		$db->query( $sql );
-		nv_del_moduleCache( $module_name );
+	$sql = 'UPDATE ' . $table_name . ' SET status=' . $new_status . ' WHERE id=' . $id;
+	$db->query( $sql );
 
-	}
+	nv_del_moduleCache( $module_name );
 
+	die( 'OK_' . $pid );
 }
 
 if( !empty( $savecat ) )
@@ -50,9 +59,13 @@ if( !empty( $savecat ) )
 
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '' ), 0, 50 );
 	$data['alias'] = strtolower( change_alias( $data['title'] ) );
-
 	$stmt = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias=' . $db->quote( $data['alias'] ) )->fetchColumn( );
-	if( !empty( $stmt ) )
+
+	if( empty( $data['title'] ) )
+	{
+		$error = $lang_module['template_error_name'];
+	}
+	elseif( !empty( $stmt ) )
 	{
 		$error = $lang_module['block_error_alias'];
 	}
@@ -120,7 +133,7 @@ else
 $xtpl = new XTemplate( "template.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
-$xtpl->assign( 'caption', $lang_module['template_info'] );
+$xtpl->assign( 'caption', empty( $data['id'] ) ? $lang_module['template_add'] : $lang_module['template_edit'] );
 
 $count = 0;
 $result = $db->query( "SELECT id, title,alias, status FROM " . $table_name . " ORDER BY id DESC" );
@@ -129,17 +142,15 @@ while( list( $id, $title, $alias, $status ) = $result->fetch( 3 ) )
 {
 	$xtpl->assign( 'title', $title );
 	$xtpl->assign( 'alias', $alias );
+	$xtpl->assign( 'active', $status ? 'checked="checked"' : '' );
 	$xtpl->assign( 'link_edit', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id );
-	$xtpl->assign( 'link_status', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&act=1&status=" . $status . "&id=" . $id );
 	$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=detemplate&id=" . $id );
-
-	$status = ($status == 1) ? $lang_module['act'] : $lang_module['inact'];
-	$xtpl->assign( 'status', $status );
 	$xtpl->assign( 'id', $id );
 	$xtpl->parse( 'main.data.row' );
 	++$count;
 }
 
+$xtpl->assign( 'FIELD_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields#ffields" );
 $xtpl->assign( 'URL_DEL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=detemplate" );
 $xtpl->assign( 'URL_DEL_BACK', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 

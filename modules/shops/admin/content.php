@@ -27,7 +27,7 @@ $month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( 'Y
 $array_block_cat_module = array( );
 $id_block_content = array( );
 $array_custom = array( );
-$array_custom_lang = array( );
+$custom = array( );
 
 $sql = 'SELECT bid, adddefault, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query( $sql );
@@ -96,15 +96,8 @@ $rowcontent = array(
 	'keywords' => '',
 	'keywords_old' => '',
 	'warranty' => '',
-	'promotional' => '',
-	'vat' => 0,
-	'typeproduct' => 0,
-	'new_old' => 0,
-	'adddefaul' => 1,
-	'percentnew' => 90
+	'promotional' => ''
 );
-
-$custom = array( );
 
 $page_title = $lang_module['content_add'];
 $error = '';
@@ -219,18 +212,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$rowcontent['keywords'] = $nv_Request->get_array( 'keywords', 'post', '' );
 	$rowcontent['keywords'] = implode( ', ', $rowcontent['keywords'] );
-	$rowcontent['new_old'] = $nv_Request->get_int( 'new_old', 'post', 0 );
-	$rowcontent['typeproduct'] = $nv_Request->get_int( 'typeproduct', 'post', 0 );
-	$rowcontent['vat'] = $nv_Request->get_int( 'vat', 'post', 0 );
-	$rowcontent['percentnew'] = $nv_Request->get_int( 'percentnew', 'post', 0 );
-	$rowcontent['adddefaul'] = $nv_Request->get_int( 'adddefaul', 'post', 0 );
 
 	$array_custom = $nv_Request->get_array( 'custom', 'post' );
-	$array_custom_lang = $nv_Request->get_array( 'custom_lang', 'post' );
-
 	$custom = $array_custom;
-	$rowcontent['custom_site'] = (!empty( $array_custom )) ? serialize( $array_custom ) : '';
-	$rowcontent['custom'] = (!empty( $array_custom_lang )) ? serialize( $array_custom_lang ) : '';
 
 	// Xu ly anh minh hoa khac
 	$otherimage = $nv_Request->get_typed_array( 'otherimage', 'post', 'string' );
@@ -299,7 +283,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_product_price'];
 	}
-	else
+
+	if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
+	{
+		require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
+	}
+
+	if( empty( $error ) )
 	{
 		// Xu ly tu khoa
 		if( $rowcontent['keywords'] == '' )
@@ -378,14 +368,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if( $rowcontent['id'] == 0 )
 		{
-
 			$rowcontent['publtime'] = ($rowcontent['publtime'] > NV_CURRENTTIME) ? $rowcontent['publtime'] : NV_CURRENTTIME;
 			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
 			{
 				$rowcontent['status'] = 2;
 			}
 
-			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice, custom,vat,typeproduct,new_old,percentnew,adddefaul " . $listfield . ")
+			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
 				 VALUES ( NULL ,
 				 :listcatid,
 				 " . intval( $rowcontent['user_id'] ) . ",
@@ -419,13 +408,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 " . intval( $rowcontent['hitstotal'] ) . ",
 				 " . intval( $rowcontent['hitscm'] ) . ",
 				 " . intval( $rowcontent['hitslm'] ) . ",
-				 " . intval( $rowcontent['showprice'] ) . ",
-				 :custom,
-				 " . intval( $rowcontent['vat'] ) . ",
-				 " . intval( $rowcontent['typeproduct'] ) . ",
-				 " . intval( $rowcontent['new_old'] ) . ",
-				 " . intval( $rowcontent['percentnew'] ) . ",
-				 " . intval( $rowcontent['adddefaul'] ) . "
+				 " . intval( $rowcontent['showprice'] ) . "
 				" . $listvalue . "
 			)";
 
@@ -442,7 +425,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$data_insert['otherimage'] = $rowcontent['otherimage'];
 			$data_insert['ratingdetail'] = $rowcontent['ratingdetail'];
 			$data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
-			$data_insert['custom'] = $rowcontent['custom_site'];
 
 			foreach( $field_lang as $field_lang_i )
 			{
@@ -454,12 +436,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $rowcontent['id'] > 0 )
 			{
-				//denday
 				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
-					$form = $db->query( 'SELECT form FROM '.$db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn();
+					$form = $db->query( 'SELECT form FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn( );
 
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 
@@ -503,7 +484,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$error = $lang_module['errorsave'];
 			}
 		}
-		else // sua
+		else
 		{
 			$rowcontent_old = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch( );
 
@@ -552,22 +533,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 allowed_print=" . intval( $rowcontent['allowed_print'] ) . ",
 			 allowed_save=" . intval( $rowcontent['allowed_save'] ) . ",
 			 showprice = " . intval( $rowcontent['showprice'] ) . ",
-
-			 vat = " . intval( $rowcontent['vat'] ) . ",
-			 typeproduct = " . intval( $rowcontent['typeproduct'] ) . ",
-			 new_old = " . intval( $rowcontent['new_old'] ) . ",
-			 percentnew = " . intval( $rowcontent['percentnew'] ) . ",
-			 adddefaul = " . intval( $rowcontent['adddefaul'] ) . ",
-
-			 custom= :custom,
 			 " . NV_LANG_DATA . "_title= :title,
 			  " . NV_LANG_DATA . "_address= :address,
 			 " . NV_LANG_DATA . "_alias= :alias,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
 			 " . NV_LANG_DATA . "_warranty= :warranty,
-			 " . NV_LANG_DATA . "_promotional= :promotional,
-			 " . NV_LANG_DATA . "_custom= :custom_lang
+			 " . NV_LANG_DATA . "_promotional= :promotional
 			 WHERE id =" . $rowcontent['id'] );
 
 			$stmt->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
@@ -588,8 +560,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
 			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
 			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
-			$stmt->bindParam( ':custom', $rowcontent['custom_site'], PDO::PARAM_STR, strlen( $rowcontent['custom_site'] ) );
-			$stmt->bindParam( ':custom_lang', $rowcontent['custom'], PDO::PARAM_STR, strlen( $rowcontent['custom'] ) );
 
 			if( $stmt->execute( ) )
 			{
@@ -613,18 +583,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 
-				//tim va xoa du lieu tuy bien
+				// Tim va xoa du lieu tuy bien
 				if( $global_array_cat[$rowcontent_old['listcatid']]['form'] != '' )
 				{
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent_old['listcatid']]['form'] . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent_old['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 					$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
 				}
+
 				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
-					//insert lai du lieu tuy bien
-					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
+					// Them lai du lieu tuy bien
+					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 					$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
 
 					Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
@@ -755,25 +726,13 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['group_id'] = $group_id_old;
 	$rowcontent['keywords'] = $keyword;
 
-	if( !empty( $rowcontent['custom'] ) )
-	{
-		$array_custom = unserialize( $rowcontent['custom'] );
-	}
-	if( !empty( $rowcontent[NV_LANG_DATA . '_custom'] ) )
-	{
-		$array_custom_lang = unserialize( $rowcontent[NV_LANG_DATA . '_custom'] );
-	}
-
 	$page_title = $lang_module['content_edit'];
 
-	//tuybien
-
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where title= "' . $global_array_cat[$rowcontent['listcatid']]['form'] . '"' )->fetchColumn( );
-
+	// Custom fields
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 	if( $idtemplate )
 	{
 		$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-
 		$custom = $db->query( "SELECT * FROM " . $table_insert . " where shopid=" . $rowcontent['id'] )->fetch( );
 	}
 
@@ -1013,24 +972,6 @@ $xtpl->assign( 'archive_checked', $archive_checked );
 $inhome_checked = ($rowcontent['inhome']) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'inhome_checked', $inhome_checked );
 
-$vat_checked1 = ($rowcontent['vat'] == 0) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checkvat1', $vat_checked1 );
-$vat_checked2 = ($rowcontent['vat'] == 1) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checkvat2', $vat_checked2 );
-
-$checktype1 = ($rowcontent['typeproduct'] == 0) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checktype1', $checktype1 );
-$checktype2 = ($rowcontent['typeproduct'] == 1) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checktype2', $checktype2 );
-
-$checknew = ($rowcontent['new_old'] == 0) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checknew', $checknew );
-$checkold = ($rowcontent['new_old'] == 1) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checkold', $checkold );
-
-$checkadd = ($rowcontent['adddefaul'] == 1) ? " checked=\"checked\"" : "";
-$xtpl->assign( 'checkadd', $checkadd );
-
 $allowed_rating_checked = ($rowcontent['allowed_rating']) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'allowed_rating_checked', $allowed_rating_checked );
 
@@ -1082,16 +1023,13 @@ if( empty( $rowcontent['alias'] ) )
 {
 	$xtpl->parse( 'main.getalias' );
 }
-//tuybien xtpl
-$xtpl->assign( 'ROW', $custom );
-//print_r($custom);die;
+
+// Custom fiels
 if( $rowcontent['listcatid'] AND !empty( $global_array_cat[$rowcontent['listcatid']]['form'] ) )
 {
-	//$datacustom_form = nv_show_custom_form( $global_array_cat[$rowcontent['listcatid']]['form'], $array_custom, $array_custom_lang );
-	$datacustom_form = nv_show_custom_form( $global_array_cat[$rowcontent['listcatid']]['form'], $custom, $array_custom_lang );
+	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
 }
-$xtpl->parse( 'main.custom_form' );
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

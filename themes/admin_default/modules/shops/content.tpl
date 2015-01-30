@@ -135,11 +135,9 @@
 					</tr>
 				</tbody>
 			</table>
-			<!-- BEGIN:custom_form -->
 			<div class="row" id="custom_form">
 				{DATACUSTOM_FORM}
 			</div>
-			<!-- END:custom_form -->
 		</div>
 		<div class="col-sm-12 col-md-3">
 			<!-- BEGIN:block_cat -->
