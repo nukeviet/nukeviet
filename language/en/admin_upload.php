@@ -70,6 +70,7 @@ $lang_module['notupload'] = 'Not allowed to upload directory';
 $lang_module['errorInfo'] = 'Announcement';
 $lang_module['selectfiletype'] = 'Display file type';
 $lang_module['refresh'] = 'refresh';
+$lang_module['author'] = 'File author';
 $lang_module['author0'] = 'of all';
 $lang_module['author1'] = 'my';
 $lang_module['uploadError1'] = 'You need to select a file on a PC or paste the file path to the URL box';

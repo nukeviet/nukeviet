@@ -5,7 +5,7 @@
 <form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<input name="save" type="hidden" value="1" />
 	<div class="row">
-		<div class="col-sm-12 col-md-9">
+		<div class="col-sm-24 col-md-18">
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered table-hover">
 					<colgroup>
@@ -44,7 +44,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3">
+		<div class="col-sm-24 col-md-6">
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>

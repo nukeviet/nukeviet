@@ -7,19 +7,19 @@
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 	<input type="hidden" name="redirect" value="{REQUEST.redirect}"/>
 	<div class="form-group">
-		<label for="username" class="col-sm-2 control-label">{GLANG.username}</label>
-		<div class="col-sm-10 col-lg-2">
+		<label for="username" class="col-sm-4 control-label">{GLANG.username}</label>
+		<div class="col-sm-20 col-lg-4">
 			<input type="text" class="form-control" id="username" name="username"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="password" class="col-sm-2 control-label">{GLANG.password}</label>
-		<div class="col-sm-10 col-lg-2">
+		<label for="password" class="col-sm-4 control-label">{GLANG.password}</label>
+		<div class="col-sm-20 col-lg-4">
 			<input type="password" class="form-control" id="password" name="password"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
+		<div class="col-sm-offset-4 col-sm-20">
 			<button type="submit" name="submit" class="btn btn-primary">{GLANG.loginsubmit}</button>
 		</div>
 	</div>
