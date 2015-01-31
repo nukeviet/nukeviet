@@ -58,13 +58,13 @@
 						<option value="file"{SFILE}>{LANG.type_file}</option>
 						<option value="image"{SIMAGE}>{LANG.type_image}</option>
 						<option value="flash"{SFLASH}>{LANG.type_flash}</option>
-					</select> 
+					</select>
 				</div>
 				<div class="col-sm-3">
 					<select name="author" class="form-control input-sm vchange">
 						<option value="0">{LANG.author0}</option>
 						<option value="1">{LANG.author1}</option>
-					</select> 
+					</select>
 				</div>
 				<div class="col-sm-3">
 					<select name="order" class="form-control input-sm vchange">
@@ -230,7 +230,7 @@
 	<input type="hidden" class="dynamic" name="rorateFile" value=""/>
 	<h4 class="text-center"><strong id="rorateimageName" class="dynamic">&nbsp;</strong></h4>
 	<div id="rorateContent" class="rorate-content">
-		
+
 	</div>
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
@@ -251,27 +251,23 @@
 </div>
 
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
+	<div class="row">
+		<label for="uploadremoteFile">{LANG.enter_url}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
+	</div>
+	<div class="dynamic text-center" id="upload-remote-info"></div>
 	<!-- BEGIN: alt_remote -->
-	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-12">
-				<label for="uploadremoteFileAlt">{LANG.altimage}</label>
-				<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
-			</div>
-		</div>
+	<div class="row">
+		<label for="uploadremoteFileAlt">{LANG.altimage}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
 	</div>
 	<!-- END: alt_remote -->
-	<div class="row">
-		<div class="col-xs-12">
-			<label for="uploadremoteFile">{LANG.enter_url}</label>
-		</div>
-		<div class="col-xs-7">
-			<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
-		</div>
-		<div class="col-xs-3">
-			<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
-		</div>
-		<div class="col-xs-2 dynamic text-center" id="upload-remote-info"></div>
+	<div class="row text-center">
+		<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
 	</div>
 </div>
 
