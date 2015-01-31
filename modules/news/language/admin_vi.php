@@ -45,6 +45,7 @@ $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['name'] = 'Tiêu đề';
+$lang_module['titlesite'] = 'Tùy chỉnh Tiêu đề site';
 $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tiêu đề';
 $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
