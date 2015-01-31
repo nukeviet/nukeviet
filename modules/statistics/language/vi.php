@@ -39,5 +39,4 @@ $lang_module['browser'] = 'Trình duyệt';
 $lang_module['os'] = 'Hệ điều hành';
 $lang_module['bot'] = 'Máy chủ tìm kiếm';
 $lang_module['referer'] = 'Đường dẫn đến site';
-$lang_module['refererbymonth'] = 'Đường dẫn đến site theo tháng';
-$lang_module['refererbymonth2'] = 'Thống kê Đường dẫn từ site %s theo các tháng của năm %d';
+$lang_module['refererbysite'] = 'Thống kê Đường dẫn từ site %s';

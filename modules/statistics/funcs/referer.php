@@ -30,11 +30,8 @@ if( empty( $row ) )
 }
 
 $contents = '';
-$current_month_num = date( 'n', NV_CURRENTTIME );
-
-$page_title = sprintf( $lang_module['refererbymonth2'], $host, date( 'Y', NV_CURRENTTIME ) );
+$mod_title = $page_title = sprintf( $lang_module['refererbysite'], $host );
 $key_words = $module_info['keywords'];
-$mod_title = $lang_module['refererbymonth'];
 
 $cts = array();
 $cts['caption'] = $page_title;
@@ -52,25 +49,21 @@ $cts['rows']['Oct'] = array( 'fullname' => $lang_global['october'], 'count' => $
 $cts['rows']['Nov'] = array( 'fullname' => $lang_global['november'], 'count' => $row['month11'] );
 $cts['rows']['Dec'] = array( 'fullname' => $lang_global['december'], 'count' => $row['month12'] );
 
-$a = 1;
 $total = 0;
+$max = 0;
 foreach( $cts['rows'] as $key => $month )
 {
-	if( $a > $current_month_num )
+	$total = $total + $month['count'];
+	if( $month['count'] > $max )
 	{
-		$cts['rows'][$key]['count'] = 0;
+		$max = $month['count'];
 	}
-	else
-	{
-		$total = $total + $month['count'];
-	}
-	++$a;
 }
 
 if( $total )
 {
 	$cts['current_month'] = date( 'M', NV_CURRENTTIME );
-	$cts['max'] = max( $month01, $month02, $month03, $month04, $month05, $month06, $month07, $month08, $month09, $month10, $month11, $month12 );
+	$cts['max'] = $max;
 	$cts['total'] = array( $lang_global['total'], number_format( $total ) );
 }
 
