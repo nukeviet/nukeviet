@@ -5,12 +5,12 @@
 	[HEADER]
 </div>
 <div class="row">
-    <div class="col-sm-16 col-md-18 col-sm-push-8 col-md-push-6">
+    <div class="col-sm-18 col-md-20 col-sm-push-6 col-md-push-4">
         [TOP]
         {MODULE_CONTENT}
         [BOTTOM]
     </div>
-	<div class="col-sm-8 col-md-6 col-sm-pull-16 col-md-pull-18">
+	<div class="col-sm-6 col-md-4 col-sm-pull-18 col-md-pull-20">
 		[LEFT]
 	</div>
 </div>
