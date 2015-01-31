@@ -70,6 +70,16 @@
 					</li>
 					<!-- END: group_detail -->
 
+					<!-- BEGIN: custom_data -->
+					<!-- BEGIN: loop -->
+					<li>
+						<p>
+							<strong>{CUSTOM_LANG}:</strong> {CUSTOM_DATA}
+						</p>
+					</li>
+					<!-- END: loop -->
+					<!-- END: custom_data -->
+
 					<!-- BEGIN: hometext -->
 					<li>
 						<p class="text-justify">
@@ -77,26 +87,6 @@
 						</p>
 					</li>
 					<!-- END: hometext -->
-
-					<!-- BEGIN: custom -->
-					<!-- BEGIN: loop -->
-					<li>
-						<p>
-							<strong>{custom.lang}:</strong> {custom.title}
-						</p>
-					</li>
-					<!-- END: loop -->
-					<!-- END: custom -->
-
-					<!-- BEGIN: custom_lang -->
-					<!-- BEGIN: loop -->
-					<li>
-						<p>
-							<strong>{custom_lang.lang}:</strong> {custom_lang.title}
-						</p>
-					</li>
-					<!-- END: loop -->
-					<!-- END: custom_lang -->
 
 					<!-- BEGIN: promotional -->
 					<li>

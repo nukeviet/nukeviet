@@ -1122,6 +1122,15 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 	return $xtpl->text( 'main' );
 }
 
+/**
+ * Insertabl_catfields()
+ *
+ * @param mixed $table
+ * @param mixed $array
+ * @param mixed $idshop
+ * @return
+ */
+
 function Insertabl_catfields( $table, $array, $idshop )
 {
 
@@ -1155,6 +1164,13 @@ function Insertabl_catfields( $table, $array, $idshop )
 
 	$db->query( $sql );
 }
+
+/**
+ * nv_create_form_file()
+ *
+ * @param mixed $array_template_id
+ * @return
+ */
 
 function nv_create_form_file( $array_template_id )
 {
@@ -1340,6 +1356,14 @@ function nv_create_form_file( $array_template_id )
 		file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
 	}
 }
+
+/**
+ * nv_get_data_type()
+ *
+ * @param mixed $dataform
+ * @return
+ */
+
 
 function nv_get_data_type( $dataform )
 {

@@ -115,7 +115,6 @@ if( !empty( $savecat ) )
 			}
 		}
 	}
-
 }
 else
 {
