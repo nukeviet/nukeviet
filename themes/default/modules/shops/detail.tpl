@@ -300,10 +300,6 @@
 					<a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a>
 				</li>
 				<!-- END: comment_tab -->
-
-				<li>
-					<a href="#section-5"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.detail_newtab}</span></a>
-				</li>
 			</ul>
 		</nav>
 		<div class="content">
@@ -345,12 +341,6 @@
 				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 			</section>
 			<!-- END: comment -->
-
-			<!-- BEGIN: cust -->
-			<section id="section-5">
-				{custom}
-			</section>
-			<!-- END: cust-->
 		</div>
 	</div>
 
