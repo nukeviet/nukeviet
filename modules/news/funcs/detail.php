@@ -242,10 +242,11 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	unset( $related, $row );
 
 	$topic_array = array();
-	$topic_a = '';
 	if( $news_contents['topicid'] > 0 )
 	{
 		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
+
+		$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
 		$db->sqlreset()
 			->select( 'id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
@@ -253,7 +254,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
-
 		$topic = $db->query( $db->sql() );
 		while( $row = $topic->fetch() )
 		{
@@ -278,8 +278,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 				$row['imghome'] = '';
 			}
 
-			$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
-			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 			$topic_array[] = array(
 				'title' => $row['title'],
 				'link' => $link,
@@ -345,9 +344,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
     $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
     $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
-    
+
 	$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
-    
+
 	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment );
 	$id_profile_googleplus = $news_contents['gid'];
 
