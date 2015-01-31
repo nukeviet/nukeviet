@@ -58,7 +58,7 @@
 						<!-- BEGIN: display_group -->
 						<p>
 							<!-- BEGIN: group -->
-							<span style="margin-right: 10px"><span class="text-muted">{group}</span></span>
+							<span class="show"><span class="text-muted">{group.parent_title}: <strong>{group.title}</strong></span></span>
 							<!-- END: group -->
 						</p>
 						<!-- END: display_group -->

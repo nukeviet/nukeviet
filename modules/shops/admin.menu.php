@@ -29,12 +29,10 @@ $submenu['prounit'] = $lang_module['prounit'];
 $submenu['money'] = $lang_module['money'];
 $submenu['weight'] = $lang_module['weight_unit'];
 $submenu['tags'] = $lang_module['tags'];
+if( defined( 'NV_IS_SPADMIN' ) )
+{
+	$submenu['template'] = $lang_module['fields'];
+}
 $submenu['payport'] = $lang_module['setup_payment'];
 $submenu['docpay'] = $lang_module['document_payment'];
 $submenu['setting'] = $lang_module['setting'];
-$submenu['template'] = $lang_module['template'];
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$submenu['setting'] = $lang_module['setting'];
-	$submenu['fields'] = 'Custom Fields';
-}

@@ -3,7 +3,13 @@
 	<!-- BEGIN: catalogs -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a href="{LINK_CATALOG}" title="{TITLE_CATALOG}">{TITLE_CATALOG} ({NUM_PRO} {LANG.title_products})</a>
+			<a class="pull-left" href="{LINK_CATALOG}" title="{TITLE_CATALOG}">{TITLE_CATALOG} ({NUM_PRO} {LANG.title_products})</a>
+			<span class="pull-right">
+			<!-- BEGIN: subcatloop -->
+			<a href="{SUBCAT.link}" title="{SUBCAT.title}">{SUBCAT.title}</a>&nbsp;&nbsp;&nbsp;
+			<!-- END: subcatloop -->
+			</span>
+			<div class="clear"></div>
 		</div>
 		<div class="panel-body">
 			<!-- BEGIN: items -->

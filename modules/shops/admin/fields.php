@@ -11,6 +11,12 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+if( !defined( 'NV_IS_SPADMIN' ) )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+	die();
+}
+
 //Ket noi ngon ngu cua module users
 if( file_exists( NV_ROOTDIR . '/modules/users/language/admin_' . NV_LANG_INTERFACE . '.php' ) )
 {
@@ -26,7 +32,6 @@ elseif( file_exists( NV_ROOTDIR . '/modules/users/language/admin_en.php' ) )
 }
 
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where status =1 ';
-
 $_rows = $db->query( $sql )->fetchAll( );
 $num = sizeof( $_rows );
 if( $num < 1 )
@@ -45,6 +50,7 @@ while( $row = $result->fetch( ) )
 		'alias' => $row["alias"],
 	);
 }
+
 // Chinh thu tu
 if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
@@ -178,7 +184,6 @@ $error = '';
 $field_choices = array( );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-
 	$validatefield = array(
 		'pattern' => '/[^a-zA-Z\_]/',
 		'replacement' => ''
@@ -191,6 +196,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$dataform = array( );
 	$dataform['fid'] = $nv_Request->get_int( 'fid', 'post', 0 );
 	$dataform['sql_choices'] = '';
+	$dataform['class'] = '';
 
 	$templateids = array_unique( $nv_Request->get_typed_array( 'templateid', 'post', 'int', array( ) ) );
 
@@ -201,6 +207,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	else
 	{
 		$dataform['listtemplate'] = '';
+	}
+
+	if( empty( $dataform['listtemplate'] ) )
+	{
+		$error = $lang_module['field_error_template'];
 	}
 
 	$dataform['title'] = $nv_Request->get_title( 'title', 'post', '' );
@@ -275,7 +286,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$dataform['editor_height'] = '300px';
 			}
+			$dataform['class'] = $dataform['editor_width'] . '@' . $dataform['editor_height'];
 		}
+
 		$dataform['min_length'] = $nv_Request->get_int( 'min_length', 'post', 255 );
 		$dataform['max_length'] = $nv_Request->get_int( 'max_length', 'post', 255 );
 		$dataform['default_value'] = $nv_Request->get_title( 'default_value', 'post', '' );
@@ -423,11 +436,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$sql = "INSERT INTO " . $db_config['prefix'] . '_' . $module_data . "_field
 					(field,listtemplate, weight, field_type, field_choices, sql_choices, match_type,
 					match_regex, func_callback, min_length, max_length,
-					 language, default_value) VALUES
+					 class, language, default_value) VALUES
 					('" . $dataform['field'] . "', '" . $dataform['listtemplate'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
-					'" . serialize( $language ) . "', :default_value)";
+					'" . $dataform['class'] . "', '" . serialize( $language ) . "', :default_value)";
 
 				$data_insert = array( );
 				$data_insert['default_value'] = $dataform['default_value'];
@@ -435,200 +448,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				if( $dataform['fid'] )
 				{
-					$type_date = '';
-					if( $dataform['field_type'] == 'number' or $dataform['field_type'] == 'date' )
-					{
-						$type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-					}
-					elseif( $dataform['max_length'] <= 255 )
-					{
-						$type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-					}
-					elseif( $dataform['max_length'] <= 65536 )//2^16 TEXT
-					{
-						$type_date = 'TEXT NOT NULL';
-					}
-					elseif( $dataform['max_length'] <= 16777216 )//2^24 MEDIUMTEXT
-					{
-						$type_date = 'MEDIUMTEXT NOT NULL';
-					}
-					elseif( $dataform['max_length'] <= 4294967296 )//2^32 LONGTEXT
-					{
-						$type_date = 'LONGTEXT NOT NULL';
-					}
+					$type_date = nv_get_data_type( $dataform );
 
 					foreach( $templateids as $templateids_i )
 					{
-						$save = $db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " ADD " . $dataform['field'] . " " . $type_date );
-						$result = $db->query( "Select field, field_type  FROM " . $db_config['prefix'] . '_' . $module_data . "_field WHERE  listtemplate IN  (" . $templateids_i . ") " );
-
-						while( $column = $result->fetch( ) )
-						{
-							$array_views[$column['field']] = $column['field_type'];
-						}
-
-						$content_2 = "<!-- BEGIN: main -->\n";
-						$content_2 .= "\t<div class=\"table-responsive\">\n\t\t<table class=\"table table-striped table-bordered table-hover\">\n";
-						$content_2 .= "\t\t\t<tbody>\n";
-
-						foreach( $array_views as $key => $input_type_i )
-						{
-							if( !isset( $array_hiddens[$key] ) or isset( $array_requireds[$key] ) )
-							{
-								$content_2 .= "\t\t\t\t<tr>\n";
-								$content_2 .= "\t\t\t\t\t<td> {LANG." . $key . "} </td>\n";
-
-								$content_2 .= "\t\t\t\t\t<td>";
-
-								if( $input_type_i == 'time' )
-								{
-									$content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_hour]\" value=\"{ROW." . $key . "_hour}\" >:";
-									$content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_min]\" value=\"{ROW." . $key . "_min}\" >&nbsp;";
-								}
-
-								if( $input_type_i == 'textarea' )
-								{
-									// Nếu là textarea
-									$content_2 .= "<textarea class=\"form-control\" style=\"width: 98%; height:100px;\" cols=\"75\" rows=\"5\" name=\"custom[" . $key . "]\">{ROW." . $key . "}</textarea>";
-								}
-								elseif( $input_type_i == 'editor' )
-								{
-									// Nếu là trình soạn thảo
-									$content_2 .= "{ROW." . $key . "}";
-								}
-								elseif( $input_type_i == 'select' )
-								{
-									$content_2 .= "<select class=\"form-control\" name=\"custom[" . $key . "]\">\n";
-									$content_2 .= "\t\t\t\t\t<option value=\"\"> --- </option>\n";
-									$content_2 .= "\t\t\t\t\t<!-- BEGIN: select_" . $key . " -->\n";
-									$content_2 .= "\t\t\t\t\t<option value=\"{OPTION.key}\" {OPTION.selected}>{OPTION.title}</option>\n";
-									$content_2 .= "\t\t\t\t\t<!-- END: select_" . $key . " -->\n";
-									$content_2 .= "\t\t\t\t</select>";
-								}
-								elseif( $input_type_i == 'radio' or $input_type_i == 'checkbox' )
-								{
-									$type_html = ($input_type_i == 'radio') ? 'radio' : 'checkbox';
-									$content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $type_html . "_" . $key . " -->\n";
-									$content_2 .= "\t\t\t\t\t<input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{OPTION.key}\" {OPTION.checked}";
-
-									if( isset( $array_requireds[$key] ) )
-									{
-										$content_2 .= 'required="required" ';
-										if( $oninvalid )
-										{
-											$content_2 .= "oninvalid=\"setCustomValidity( nv_required )\" oninput=\"setCustomValidity('')\" ";
-										}
-									}
-									$content_2 .= ">{OPTION.title} &nbsp; \n";
-									$content_2 .= "\t\t\t\t\t<!-- END: " . $type_html . "_" . $key . " -->\n";
-									$content_2 .= "\t\t\t\t";
-								}
-								elseif( $input_type_i == 'checkbox_groups' )
-								{
-									$content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $key . " -->\n";
-									$content_2 .= "\t\t\t\t\t<div class=\"row\">\n";
-									$content_2 .= "\t\t\t\t\t\t<label><input class=\"form-control\" type=\"checkbox\" name=\"custom[" . $key . "][]\" value=\"{OPTION.key}\" {OPTION.checked}>{OPTION.title}</label>\n";
-									$content_2 .= "\t\t\t\t\t</div>\n";
-									$content_2 .= "\t\t\t\t\t<!-- END: " . $key . " -->\n";
-									$content_2 .= "\t\t\t\t";
-								}
-								else
-								{
-									// Nếu là cá loại input khác
-									switch( $input_type_i )
-									{
-										case 'email':
-											$type_html = 'email';
-											break;
-										case 'url':
-											$type_html = 'url';
-											break;
-										case 'password':
-											$type_html = 'password';
-											break;
-										default:
-											$type_html = 'text';
-									}
-
-									$oninvalid = true;
-									$content_2 .= "<input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{ROW." . $key . "}\" ";
-									if( $input_type_i == 'date' or $input_type_i == 'time' )
-									{
-										$content_2 .= 'id="' . $key . '" pattern="^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{1,4}$" ';
-										$array_field_js['date'][] = '#' . $key;
-									}
-									elseif( $input_type_i == 'textfile' )
-									{
-										$content_2 .= 'id="id_' . $key . '" ';
-										$array_field_js['file'][] = $key;
-									}
-									elseif( $input_type_i == 'textalias' )
-									{
-										$content_2 .= 'id="id_' . $key . '" ';
-									}
-									elseif( $input_type_i == 'email' )
-									{
-										$content_2 .= "oninvalid=\"setCustomValidity( nv_email )\" oninput=\"setCustomValidity('')\" ";
-										$oninvalid = false;
-									}
-									elseif( $input_type_i == 'url' )
-									{
-										$content_2 .= "oninvalid=\"setCustomValidity( nv_url )\" oninput=\"setCustomValidity('')\" ";
-										$oninvalid = false;
-									}
-									elseif( $input_type_i == 'number_int' )
-									{
-										$content_2 .= "pattern=\"^[0-9]*$\"  oninvalid=\"setCustomValidity( nv_digits )\" oninput=\"setCustomValidity('')\" ";
-										$oninvalid = false;
-									}
-									elseif( $input_type_i == 'number_float' )
-									{
-										$content_2 .= "pattern=\"^([0-9]*)(\.*)([0-9]+)$\" oninvalid=\"setCustomValidity( nv_number )\" oninput=\"setCustomValidity('')\" ";
-										$oninvalid = false;
-									}
-
-									if( isset( $array_requireds[$key] ) )
-									{
-										$content_2 .= 'required="required" ';
-										if( $oninvalid )
-										{
-											$content_2 .= "oninvalid=\"setCustomValidity( nv_required )\" oninput=\"setCustomValidity('')\" ";
-										}
-									}
-
-									$content_2 .= "/>";
-									if( $input_type_i == 'textfile' )
-									{
-										$content_2 .= '&nbsp;<button type="button" class="btn btn-info" id="img_' . $key . '"><i class="fa fa-folder-open-o">&nbsp;</i> Browse server </button>';
-									}
-									if( $input_type_i == 'textalias' and $array_field_js['textalias'] == $key )
-									{
-										$content_2 .= "&nbsp;<i class=\"fa fa-refresh fa-lg icon-pointer\" onclick=\"nv_get_alias('id_" . $key . "');\">&nbsp;</i>";
-									}
-								}
-								$content_2 .= "</td>\n";
-								$content_2 .= "\t\t\t\t</tr>\n";
-							}
-						}
-
-						$content_2 .= "\t\t\t</tbody>\n";
-						$content_2 .= "\t\t</table>\n";
-						$content_2 .= "\t</div>\n";
-
-						$content_2 .= "<!-- END: main -->";
-
-						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
-
+						$db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " ADD " . $dataform['field'] . " " . $type_date );
 					}
+					nv_create_form_file( $templateids );
 
-					$content_lang = file_get_contents( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php' );
-					$content_lang .= "\$lang_module['" . $dataform['field'] . "'] = '" . $dataform['title'] . "';\n";
-
-					file_put_contents( NV_ROOTDIR . '/modules/' . $module_file . '/language/admin_' . NV_LANG_DATA . '.php', $content_lang, LOCK_EX );
-
-					$tablename = $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i;
-
-					//taofile
 					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
 					die( );
 				}
@@ -638,18 +465,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			try
 			{
-				$listtem = $db->query( 'SELECT listtemplate FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $dataform['fid'] )->fetch( );
-
-				$arr_t = explode( "|", $listtem['listtemplate'] );
-
-				foreach( $arr_t as $arr_t_i )
-				{
-					if( !empty( $arr_t_i ) )
-					{
-						$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $arr_t_i . " DROP " . $dataform['field'] );
-					}
-				}
-
 				$query = "UPDATE " . $db_config['prefix'] . '_' . $module_data . "_field SET";
 
 				if( $text_fields == 1 )
@@ -662,6 +477,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				listtemplate = '" . $dataform['listtemplate'] . "',
 				field_choices='" . $dataform['field_choices'] . "',
 				sql_choices = '" . $dataform['sql_choices'] . "',
+				class = '" . $dataform['class'] . "',
 				language='" . serialize( $language ) . "',
 				default_value= :default_value
 				WHERE fid = " . $dataform['fid'];
@@ -672,230 +488,61 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				if( $save )
 				{
-					$type_date = '';
-					if( $dataform['field_type'] == 'number' or $dataform['field_type'] == 'date' )
-					{
-						$type_date = "DOUBLE NOT NULL DEFAULT '" . $dataform['default_value'] . "'";
-					}
-					elseif( $dataform['max_length'] <= 255 )
-					{
-						$type_date = "VARCHAR( " . $dataform['max_length'] . " ) NOT NULL DEFAULT ''";
-					}
-					elseif( $dataform['max_length'] <= 65536 )//2^16 TEXT
-					{
-						$type_date = 'TEXT NOT NULL';
-					}
-					elseif( $dataform['max_length'] <= 16777216 )//2^24 MEDIUMTEXT
-					{
-						$type_date = 'MEDIUMTEXT NOT NULL';
-					}
-					elseif( $dataform['max_length'] <= 4294967296 )//2^32 LONGTEXT
-					{
-						$type_date = 'LONGTEXT NOT NULL';
-					}
+					$type_date = nv_get_data_type( $dataform );
 
-					foreach( $templateids as $templateids_i )
+					$listtemid_old = explode( '|', $dataform_old['listtemplate'] );
+					if( $listtemid_old != $templateids )
 					{
-						$save = $db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " ADD " . $dataform['field'] . " " . $type_date );
-					}
-
-					$array_t = array_merge( $templateids, $arr_t );
-					$array_t = array_unique( $array_t );
-
-					$array_views = array( );
-					foreach( $array_t as $array_t_i )
-					{
-						if( !empty( $arr_t_i ) )
+						foreach( $templateids as $template_i )
 						{
-							$result = $db->query( "Select field, field_type  FROM " . $db_config['prefix'] . '_' . $module_data . "_field WHERE  listtemplate IN  (" . $array_t_i . ") " );
-
-							while( $column = $result->fetch( ) )
+							if( !in_array( $template_i, $listtemid_old ) )
 							{
-								$array_views[$column['field']] = $column['field_type'];
-							}
-
-							$content_2 = "<!-- BEGIN: main -->\n";
-							$content_2 .= "\t<div class=\"table-responsive\">\n\t\t<table class=\"table table-striped table-bordered table-hover\">\n";
-							$content_2 .= "\t\t\t<tbody>\n";
-
-							foreach( $array_views as $key => $input_type_i )
-							{
-								if( !isset( $array_hiddens[$key] ) or isset( $array_requireds[$key] ) )
-								{
-									$content_2 .= "\t\t\t\t<tr>\n";
-									$content_2 .= "\t\t\t\t\t<td> {LANG." . $key . "} </td>\n";
-
-									$content_2 .= "\t\t\t\t\t<td>";
-
-									if( $input_type_i == 'time' )
-									{
-										$content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_hour]\" value=\"{ROW." . $key . "_hour}\" >:";
-										$content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_min]\" value=\"{ROW." . $key . "_min}\" >&nbsp;";
-									}
-
-									if( $input_type_i == 'textarea' )
-									{
-										// Nếu là textarea
-										$content_2 .= "<textarea class=\"form-control\" style=\"width: 98%; height:100px;\" cols=\"75\" rows=\"5\" name=\"custom[" . $key . "]\">{ROW." . $key . "}</textarea>";
-									}
-									elseif( $input_type_i == 'editor' )
-									{
-										// Nếu là trình soạn thảo
-										$content_2 .= "{ROW." . $key . "}";
-									}
-									elseif( $input_type_i == 'select' )
-									{
-										$content_2 .= "<select class=\"form-control\" name=\"custom[" . $key . "]\">\n";
-										$content_2 .= "\t\t\t\t\t<option value=\"\"> --- </option>\n";
-										$content_2 .= "\t\t\t\t\t<!-- BEGIN: select_" . $key . " -->\n";
-										$content_2 .= "\t\t\t\t\t<option value=\"{OPTION.key}\" {OPTION.selected}>{OPTION.title}</option>\n";
-										$content_2 .= "\t\t\t\t\t<!-- END: select_" . $key . " -->\n";
-										$content_2 .= "\t\t\t\t</select>";
-									}
-									elseif( $input_type_i == 'radio' or $input_type_i == 'checkbox' )
-									{
-										$type_html = ($input_type_i == 'radio') ? 'radio' : 'checkbox';
-										$content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $type_html . "_" . $key . " -->\n";
-										$content_2 .= "\t\t\t\t\t<input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{OPTION.key}\" {OPTION.checked}";
-
-										if( isset( $array_requireds[$key] ) )
-										{
-											$content_2 .= 'required="required" ';
-											if( $oninvalid )
-											{
-												$content_2 .= "oninvalid=\"setCustomValidity( nv_required )\" oninput=\"setCustomValidity('')\" ";
-											}
-										}
-										$content_2 .= ">{OPTION.title} &nbsp; \n";
-										$content_2 .= "\t\t\t\t\t<!-- END: " . $type_html . "_" . $key . " -->\n";
-										$content_2 .= "\t\t\t\t";
-									}
-									elseif( $input_type_i == 'checkbox_groups' )
-									{
-										$content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $key . " -->\n";
-										$content_2 .= "\t\t\t\t\t<div class=\"row\">\n";
-										$content_2 .= "\t\t\t\t\t\t<label><input class=\"form-control\" type=\"checkbox\" name=\"custom[" . $key . "][]\" value=\"{OPTION.key}\" {OPTION.checked}>{OPTION.title}</label>\n";
-										$content_2 .= "\t\t\t\t\t</div>\n";
-										$content_2 .= "\t\t\t\t\t<!-- END: " . $key . " -->\n";
-										$content_2 .= "\t\t\t\t";
-									}
-									else
-									{
-										// Nếu là cá loại input khác
-										switch( $input_type_i )
-										{
-											case 'email':
-												$type_html = 'email';
-												break;
-											case 'url':
-												$type_html = 'url';
-												break;
-											case 'password':
-												$type_html = 'password';
-												break;
-											default:
-												$type_html = 'text';
-										}
-
-										$oninvalid = true;
-										$content_2 .= "<input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{ROW." . $key . "}\" ";
-										if( $input_type_i == 'date' or $input_type_i == 'time' )
-										{
-											$content_2 .= 'id="' . $key . '" pattern="^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{1,4}$" ';
-											$array_field_js['date'][] = '#' . $key;
-										}
-										elseif( $input_type_i == 'textfile' )
-										{
-											$content_2 .= 'id="id_' . $key . '" ';
-											$array_field_js['file'][] = $key;
-										}
-										elseif( $input_type_i == 'textalias' )
-										{
-											$content_2 .= 'id="id_' . $key . '" ';
-										}
-										elseif( $input_type_i == 'email' )
-										{
-											$content_2 .= "oninvalid=\"setCustomValidity( nv_email )\" oninput=\"setCustomValidity('')\" ";
-											$oninvalid = false;
-										}
-										elseif( $input_type_i == 'url' )
-										{
-											$content_2 .= "oninvalid=\"setCustomValidity( nv_url )\" oninput=\"setCustomValidity('')\" ";
-											$oninvalid = false;
-										}
-										elseif( $input_type_i == 'number_int' )
-										{
-											$content_2 .= "pattern=\"^[0-9]*$\"  oninvalid=\"setCustomValidity( nv_digits )\" oninput=\"setCustomValidity('')\" ";
-											$oninvalid = false;
-										}
-										elseif( $input_type_i == 'number_float' )
-										{
-											$content_2 .= "pattern=\"^([0-9]*)(\.*)([0-9]+)$\" oninvalid=\"setCustomValidity( nv_number )\" oninput=\"setCustomValidity('')\" ";
-											$oninvalid = false;
-										}
-
-										if( isset( $array_requireds[$key] ) )
-										{
-											$content_2 .= 'required="required" ';
-											if( $oninvalid )
-											{
-												$content_2 .= "oninvalid=\"setCustomValidity( nv_required )\" oninput=\"setCustomValidity('')\" ";
-											}
-										}
-
-										$content_2 .= "/>";
-										if( $input_type_i == 'textfile' )
-										{
-											$content_2 .= '&nbsp;<button type="button" class="btn btn-info" id="img_' . $key . '"><i class="fa fa-folder-open-o">&nbsp;</i> Browse server </button>';
-										}
-										if( $input_type_i == 'textalias' and $array_field_js['textalias'] == $key )
-										{
-											$content_2 .= "&nbsp;<i class=\"fa fa-refresh fa-lg icon-pointer\" onclick=\"nv_get_alias('id_" . $key . "');\">&nbsp;</i>";
-										}
-									}
-									$content_2 .= "</td>\n";
-									$content_2 .= "\t\t\t\t</tr>\n";
-								}
+								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $template_i . " ADD " . $dataform['field'] . " " . $type_date );
 							}
 						}
 
-						$content_2 .= "\t\t\t</tbody>\n";
-						$content_2 .= "\t\t</table>\n";
-						$content_2 .= "\t</div>\n";
-
-						$content_2 .= "<!-- END: main -->";
-
-						file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
-						$content_2 = '';
+						foreach( $listtemid_old as $temid_old )
+						{
+							if( ! in_array( $temid_old, $templateids ) )
+							{
+								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $temid_old . " DROP IF EXISTS " . $dataform['field'] );
+							}
+						}
 					}
 
+					if( $dataform['max_length'] != $dataform_old['max_length'] )
+					{
+						foreach( $templateids as $templateids_i )
+						{
+							$save = $db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
+						}
+					}
+					nv_create_form_file( $templateids );
 				}
+				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
+				die( );
 			}
 			catch( PDOException $e )
 			{
 				die( $e->getMessage( ) );
 			}
 		}
-		if( $save )
-		{
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
-			die( );
-		}
 	}
 }
+
 // DEL
 if( $nv_Request->isset_request( 'del', 'post' ) )
 {
 	if( !defined( 'NV_IS_AJAX' ) )
 		die( 'Wrong URL' );
 
-	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
+	$fid = $nv_Request->get_int( 'fid', 'post,get', 0 );
 
 	list( $fid, $listtemplate, $field, $weight ) = $db->query( 'SELECT fid,listtemplate, field, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid )->fetch( 3 );
 	if( $listtemplate != '' )
 	{
-		$array_template = explode( "|", $listtemplate );
-		foreach( $array_template as $array_template_i )
+		$listtemplate = explode( "|", $listtemplate );
+		foreach( $listtemplate as $array_template_i )
 		{
 			$db->query( ' ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_info_' . $array_template_i . '  DROP ' . $field );
 		}
@@ -903,7 +550,6 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 
 	if( $fid and !empty( $field ) )
 	{
-
 		$query1 = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid;
 		if( $db->query( $query1 ) )
 		{
@@ -914,11 +560,14 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field SET weight=' . $weight . ' WHERE fid=' . $row['fid'] );
 				++$weight;
 			}
+			nv_create_form_file( $listtemplate );
 			die( 'OK' );
 		}
 	}
+
 	die( 'NO' );
 }
+
 $array_field_type = array(
 	'number' => $lang_module['field_type_number'],
 	'date' => $lang_module['field_type_date'],
@@ -945,6 +594,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+$xtpl->assign( 'TEM_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=template#add" );
 
 // Danh sach cau hoi
 $show_view = false;
@@ -1036,6 +686,7 @@ if( !isset( $dataform ) )
 		$dataform['match_regex'] = $dataform['func_callback'] = '';
 		$dataform['editor_width'] = '100%';
 		$dataform['editor_height'] = '100px';
+		$dataform['class'] = '';
 		$dataform['fieldid'] = '';
 		$dataform['default_value_number'] = 0;
 		$dataform['min_number'] = 0;
@@ -1144,6 +795,13 @@ if( empty( $fid ) )
 }
 else
 {
+	$f_count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_field where fid = ' . $fid )->fetchColumn( );
+	if( $f_count < 1 )
+	{
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=fields' );
+		die( );
+	}
+
 	$xtpl->assign( 'FIELD_TYPE_TEXT', $array_field_type[$dataform['field_type']] );
 	if( (!empty( $dataform['sql_choices'] )) )
 	{

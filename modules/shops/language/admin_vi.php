@@ -490,14 +490,14 @@ $lang_module['shipping_info'] = 'Thông tin người nhận hàng';
 $lang_module['shipping_name'] = 'Họ tên';
 
 //THEM
-$lang_module['template']= 'Dạng template';
-$lang_module['template_info'] = "Thêm template";
-$lang_module['template_name'] = "Tên template";
+$lang_module['template']= 'Nhóm dữ liệu';
+$lang_module['template_add'] = "Thêm nhóm dữ liệu";
+$lang_module['template_edit'] = "Sửa nhóm dữ liệu";
+$lang_module['template_name'] = "Tên nhóm dữ liệu";
 $lang_module['template_save'] = "Lưu lại";
-$lang_module['act'] = "Hoạt động";
-$lang_module['inact'] = "Ngừng hoạt động";
-$lang_module['status_confirm'] = "Bạn có muốn thay đổi trạng thái hoạt động không";
-$lang_module['listtemplate_error'] = "Chưa chọn template";
+$lang_module['template_error_name'] = "Vui lòng nhập tên nhóm dữ liệu";
+$lang_module['template_error_only'] = "Không thể xóa, trường dữ liệu \"%s\" đang sử dụng duy nhất nhóm dữ liệu \"%s\".";
+$lang_module['listtemplate_error'] = "Chưa chọn nhóm dữ liệu";
 
 //field
 $lang_module['fields'] = 'Tùy biến dữ liệu';
@@ -527,7 +527,9 @@ $lang_module['field_type_multiselect'] = 'Nhiều lựa chọn thả xuống (mu
 $lang_module['field_type_note'] = 'Giá trị sẽ không thay đổi được khi đã lưu';
 $lang_module['field_class'] = 'Thuộc tính class html';
 $lang_module['field_size'] = 'Kích thước ô nhập liệu';
-$lang_module['field_options_text'] = 'Các tùy chọn cho khác';
+$lang_module['field_width'] = 'Rộng';
+$lang_module['field_height'] = 'Cao';
+$lang_module['field_options_text'] = 'Các tùy chọn khác';
 $lang_module['field_match_type'] = 'Yêu cầu kiểm tra với giá trị:';
 $lang_module['field_match_type_none'] = 'Không kiểm tra';
 $lang_module['field_match_type_alphanumeric'] = 'Chỉ được dùng các ký tự A-Z, 0-9 và gạch dưới';
@@ -555,6 +557,7 @@ $lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơn M
 $lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơn Max Value';
 $lang_module['field_error_empty'] = 'Trường dữ liệu không được rỗng';
 $lang_module['field_error_not_allow'] = 'Trường dữ liệu không được phép sử dụng';
+$lang_module['field_error_template'] = 'Chưa chọn nhóm dữ liệu';
 $lang_module['field_error'] = 'Trường dữ liệu đã có';
 $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
@@ -570,7 +573,3 @@ $lang_module['field_options_choicesql_column'] = "Chọn cột dữ liệu";
 $lang_module['field_options_choicesql_key'] = "Chọn cột làm key";
 $lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
-
-//them truong tuy bien
-
-

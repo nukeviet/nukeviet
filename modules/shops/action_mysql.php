@@ -55,8 +55,7 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	 DROP ' . $lang . '_hometext,
 	 DROP ' . $lang . '_bodytext,
 	 DROP ' . $lang . '_warranty,
-	 DROP ' . $lang . '_promotional,
-	 DROP ' . $lang . '_custom';
+	 DROP ' . $lang . '_promotional';
 
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs
 	 DROP ' . $lang . '_title,
@@ -263,13 +262,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  hitslm mediumint(8) unsigned NOT NULL DEFAULT '0',
  num_sell mediumint(8) NOT NULL DEFAULT '0',
  showprice tinyint(2) NOT NULL DEFAULT '0',
- custom text NOT NULL,
- vat tinyint(1) unsigned NOT NULL DEFAULT '0',
- typeproduct tinyint(1) unsigned NOT NULL DEFAULT '0',
- new_old tinyint(1) unsigned NOT NULL DEFAULT '1',
- percentnew tinyint(2) unsigned NOT NULL DEFAULT '90',
- adddefaul tinyint(1) unsigned NOT NULL DEFAULT '1',
-
  PRIMARY KEY (id),
  KEY listcatid (listcatid),
  KEY user_id (user_id),
@@ -283,7 +275,6 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD " . $lang . "_bodytext mediumtext NOT NULL,
  ADD " . $lang . "_warranty text NOT NULL,
  ADD " . $lang . "_promotional text NOT NULL,
- ADD " . $lang . "_custom text NOT NULL,
  ADD " . $lang . "_address text NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block_cat (
@@ -646,7 +637,6 @@ if( ! empty( $set_lang_data ) )
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_bodytext = " . $set_lang_data . "_bodytext";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_warranty = " . $set_lang_data . "_warranty";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_promotional = " . $set_lang_data . "_promotional";
-		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_custom = " . $set_lang_data . "_custom";
 	}
 
 	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_units" )->fetchColumn();
