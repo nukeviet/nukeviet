@@ -35,12 +35,14 @@ function nv_page_main( $row, $ab_links )
 
 	if( $row['socialbutton'] )
 	{
-		if( ! defined( 'FACEBOOK_JSSDK' ) and $page_config['facebookapi'] )
+		if( ! defined( 'FACEBOOK_JSSDK' ) )
 		{
-			$meta_property['fb:app_id'] = $page_config['facebookapi'];
-
 			$xtpl->assign( 'FACEBOOK_LANG', ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US' );
-			$xtpl->assign( 'FACEBOOK_APPID', $page_config['facebookapi'] );
+			if( ! empty( $page_config['facebookapi']  ) )
+			{
+				$xtpl->assign( 'FACEBOOK_APPID', $page_config['facebookapi'] );
+				$meta_property['fb:app_id'] = $page_config['facebookapi'];
+			}
 
 			$xtpl->parse( 'main.facebookjssdk' );
 
