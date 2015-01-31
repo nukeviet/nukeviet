@@ -6,27 +6,27 @@
 	</p>
 	<div class="well">{LANG.login_info}</div>
 	<div class="form-group">
-		<label for="password_iavim" class="col-sm-3 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="password_iavim" class="col-sm-6 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="password" id="password_iavim" name="password" value="" class="required password form-control" />
 		</div>
 	</div>
 	<!-- BEGIN: captcha -->
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-6 col-sm-18">
 			<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="seccode_iavim" class="col-sm-3 control-label">{LANG.retype_captcha}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="seccode_iavim" class="col-sm-6 control-label">{LANG.retype_captcha}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="text" name="nv_seccode" id="seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
 		</div>
 	</div>
 	<!-- END: captcha -->
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-6 col-sm-18">
 			<input name="openid_active_confirm" value="1" type="hidden" />
 			<input type="submit" value="{LANG.login_submit}" class="btn btn-primary" />
 		</div>

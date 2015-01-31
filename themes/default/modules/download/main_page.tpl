@@ -26,7 +26,7 @@
 					</ul>
 				</div>
 				<!-- BEGIN: image -->
-				<div class="col-xs-6 col-md-3">
+				<div class="col-xs-12 col-md-6">
 					<a class="thumbnail" title="{itemcat.title}" href="{itemcat.more_link}"> <img src="{itemcat.imagesrc}" alt="{itemcat.title}"/> </a>
 				</div>
 				<!-- END: image -->

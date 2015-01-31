@@ -31,7 +31,7 @@
 				</div>
 
 				<!-- BEGIN: related -->
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">

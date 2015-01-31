@@ -45,7 +45,7 @@
 	<!-- END: catcontent -->
 </div>
 <!-- BEGIN: loopcat -->
-<div class="news_column two_column col-md-6">
+<div class="news_column two_column col-md-12">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
 			<h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2>
