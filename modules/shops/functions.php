@@ -67,22 +67,17 @@ if( $op == 'main' )
 	}
 	else
 	{
-		if( sizeof( $array_op ) == 2 and ! preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m ) )
+		if( sizeof( $array_op ) == 2 and preg_match( '/^([a-z0-9\-]+)\-([0-9]+)$/i', $array_op[1], $m1 ) and ! preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m2 ) )
 		{
-			$alias_url = preg_replace( '/^(.*?)\-([0-9]+)$/', '${1}', $array_op[1] );
-			$id = preg_replace( '/^(.*?)\-([0-9]+)$/', '${2}', $array_op[1] );
-
 			$op = 'detail';
+			$alias_url = $m1[1];
+			$id = $m1[2];
 		}
 		else
 		{
-			if( preg_match( '/^page\-([0-9]+)$/', ( isset( $array_op[1] ) ? $array_op[1] : '' ), $m ) )
-			{
-				$page = ( int )$m[1];
-			}
-
 			$op = 'viewcat';
 		}
+
 		$parentid = $catid;
 		while( $parentid > 0 )
 		{

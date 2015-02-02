@@ -37,6 +37,23 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 
 if( empty( $contents ) )
 {
+
+	unset( $array_op[0] );
+	$array_url_group = array( );
+	foreach( $array_op as $_inurl )
+	{
+		if( preg_match( '/^page\-([0-9]+)$/', $_inurl, $m ) )
+		{
+			$page = $m[1];
+		}
+		elseif( preg_match( '/^([a-z0-9\-]+)\_([a-z0-9\-]+)$/i', $_inurl, $m ) )
+		{
+			$array_url_group[$m[1]][] = $m[2];
+		}
+	}
+	//print_r( $array_url_group );
+	//die( );
+
 	$data_content = array();
 
 	$count = 0;
