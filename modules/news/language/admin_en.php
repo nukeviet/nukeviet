@@ -45,6 +45,7 @@ $lang_module['saveok'] = 'Update succesfully';
 $lang_module['clickgotomodule'] = 'Click here to management posts.';
 $lang_module['alias'] = 'Static Link';
 $lang_module['name'] = 'Title';
+$lang_module['titlesite'] = 'Customize the site title';
 $lang_module['error_name'] = 'Error: Please add title';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';

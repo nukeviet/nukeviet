@@ -21,17 +21,17 @@
 		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
-		<label for="userField_iavim" class="col-sm-4 control-label">{LANG.field}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+		<label for="userField_iavim" class="col-sm-8 control-label">{LANG.field}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input type="text" class="required form-control" name="userField" id="userField_iavim" value="{DATA.userField}" maxlength="100"/>
 		</div>
 	</div>	
 	<div class="form-group">
-		<label for="seccode_iavim" class="col-sm-4 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-4">
+		<label for="seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-8">
 			<input type="text" class="required form-control" name="nv_seccode" id="seccode_iavim" maxlength="{GFX_MAXLENGTH}" />
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-8">
 			<label class="control-label">
 				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</em>
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-4 col-sm-8">
+		<div class="col-sm-offset-8 col-sm-16">
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />
 			<input type="submit" value="{LANG.lostactivelink_submit}" class="btn btn-primary" />
 		</div>
@@ -57,13 +57,13 @@
 		{LANG.lostpass_question}: <strong>{QUESTION}</strong>
 	</div>
 	<div class="form-group">
-		<label for="answer" class="col-sm-4 control-label">{LANG.answer_question}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+		<label for="answer" class="col-sm-8 control-label">{LANG.answer_question}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input type="text" class="required form-control" id="answer" name="answer" value="{DATA.answer}" maxlength="255" />
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-4 col-sm-8">
+		<div class="col-sm-offset-8 col-sm-16">
 			<input type="hidden" name="userField" value="{DATA.userField}" />
 			<input type="hidden" name="nv_seccode" value="{DATA.nv_seccode}" />
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />

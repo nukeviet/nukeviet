@@ -15,13 +15,13 @@
 			<h3 class="text-center"><em class="fa fa-search">&nbsp;</em>{LANG.info_title}</h3>
 			<hr />
 			<div class="form-group">
-				<div class="col-md-4">{LANG.key_title}</div>
-	  			<div class="col-md-8"><input type="text" name="q" value="{KEY}" class="form-control" id="key"/></div>
+				<div class="col-md-8">{LANG.key_title}</div>
+	  			<div class="col-md-16"><input type="text" name="q" value="{KEY}" class="form-control" id="key"/></div>
 			</div>
 
 			<div class="form-group">
-				<div class="col-md-4">{LANG.type_title}</div>
-	  			<div class="col-md-8">
+				<div class="col-md-8">{LANG.type_title}</div>
+	  			<div class="col-md-16">
 					<select name="choose" id="choose" class ="form-control">
 						<option value="0" {CHECK1}>{LANG.find_all} </option>
 						<option value="1" {CHECK1}>{LANG.find_content} </option>
@@ -32,8 +32,8 @@
 			</div>
 
 			<div class="form-group">
-				<div class="col-md-4">{LANG.search_cat}</div>
-	  			<div class="col-md-8">
+				<div class="col-md-8">{LANG.search_cat}</div>
+	  			<div class="col-md-16">
 					<select name="catid" class ="form-control">
 						<!-- BEGIN: search_cat -->
 						<option value="{SEARCH_CAT.catid}" {SEARCH_CAT.select}>{SEARCH_CAT.title}</option>
@@ -43,18 +43,18 @@
 			</div>
 
 			<div class="form-group form-inline">
-				<div class="col-md-4">{LANG.from_date}</div>
-	  			<div class="col-md-8"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
+				<div class="col-md-8">{LANG.from_date}</div>
+	  			<div class="col-md-16"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
 			</div>
 
 			<div class="form-group form-inline">
-				<div class="col-md-4">{LANG.to_date}</div>
-	  			<div class="col-md-8"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
+				<div class="col-md-8">{LANG.to_date}</div>
+	  			<div class="col-md-16"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
 			</div>
 
 			<div class="form-group form-inline">
-				<div class="col-md-4 text-right">&nbsp;</div>
-	  			<div class="col-md-8"><input type="submit" class="btn btn-primary" value="{LANG.search_title}"/></div>
+				<div class="col-md-8 text-right">&nbsp;</div>
+	  			<div class="col-md-16"><input type="submit" class="btn btn-primary" value="{LANG.search_title}"/></div>
 			</div>
 
 		</div>
@@ -119,15 +119,15 @@ $(document).ready(function() {
 					<input type="hidden" name="domains" value="{MY_DOMAIN}" />
 
 					<div class="form-group">
-						<div class="col-md-4"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></div>
-						<div class="col-md-4"><input type="text" name="q" maxlength="255" value="{KEY}" id="sbi" class="form-control" /></div>
-						<div class="col-md-4"><input type="submit" name="sa" value="{LANG.search_title}" id="sbb" class="btn btn-default"></div>
+						<div class="col-md-8"><img src="http://www.google.com/logos/Logo_25wht.gif" border="0" alt="Google" /></div>
+						<div class="col-md-8"><input type="text" name="q" maxlength="255" value="{KEY}" id="sbi" class="form-control" /></div>
+						<div class="col-md-8"><input type="submit" name="sa" value="{LANG.search_title}" id="sbb" class="btn btn-default"></div>
 					</div>
 
 					<div class="form-group">
-						<div class="col-md-4"><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet}</div>
-						<div class="col-md-4"><input type="radio" name="sitesearch" value="{MY_DOMAIN}" /> {LANG.search_on_nuke} {MY_DOMAIN}</div>
-						<div class="col-md-4"></div>
+						<div class="col-md-8"><input type="radio" name="sitesearch" value="" checked id="ss0" /> {LANG.search_on_internet}</div>
+						<div class="col-md-8"><input type="radio" name="sitesearch" value="{MY_DOMAIN}" /> {LANG.search_on_nuke} {MY_DOMAIN}</div>
+						<div class="col-md-8"></div>
 					</div>
 				</form>
 			</div>

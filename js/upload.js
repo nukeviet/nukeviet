@@ -82,11 +82,11 @@ function nv_filename_alt( fileAlt ){
 
     fileAlt = decodeURIComponent( htmlspecialchars_decode( fileAlt.replace(/^.*[\/\\]/g, '') ) );
     fileAlt = fileAlt.split('.');
-    
+
     if( fileAlt.length > 1 ){
     	fileAlt[fileAlt.length - 1] = '';
     }
-    
+
     fileAlt = fileAlt.join(' ');
     fileAlt = fileAlt.split('_');
     fileAlt = fileAlt.join(' ');
@@ -99,7 +99,7 @@ function nv_randomNum( a ){
 	for( var b = "", d = 0; d < a; d++ ){
 		b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" . charAt( Math.floor( Math.random() * 62 ) );
 	}
-	
+
 	return b;
 }
 
@@ -119,36 +119,36 @@ function calSize( a, b, d, e ){
 		b = resize_byWidth( a, b, d );
 		a = d;
 	}
-	
+
 	if( b > e ){
 		a = resize_byHeight( a, b, e );
 		b = e
 	}
-	
+
 	return [parseInt( a ), parseInt( b )];
 }
 
 function calSizeMax( a, b, d, e ){
 	var g = d;
 	d = resize_byWidth( a, b, d );
-	
+
 	if( ! ( d <= e ) ){
 		d = e;
 		g = resize_byHeight( a, b, e );
 	}
-	
+
 	return [parseInt( g ), parseInt( d )];
 }
 
 function calSizeMin( a, b, d, e ){
 	var g = d;
 	d = resize_byWidth( a, b, d );
-	
+
 	if( ! ( d >= e ) ){
 		d = e;
 		g = resize_byHeight( a, b, e );
 	}
-	
+
 	return [parseInt( g ), parseInt( d )];
 }
 
@@ -210,10 +210,10 @@ function insertvaluetofield(){
 	var imageInfo = $("img[title='" + selFile + "']").attr("name").split("|");
 	var path = ( imageInfo[7] == "" ) ? $("span#foldervalue").attr("title") : imageInfo[7];
 	var fullPath = nv_siteroot + path + "/" + selFile;
-	
+
 	if( area != '' ){
 		$("#" + area, opener.document).val( fullPath );
-		
+
 		var idalt = $("input[name=alt]").val();
 		if( idalt != '' ) {
 		    fileAlt = nv_filename_alt( selFile );
@@ -226,13 +226,13 @@ function insertvaluetofield(){
 		window.close();
 	}else{
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
-		
+
 		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, fullPath, function(){
 			var dialog = this.getDialog();
-			
+
 			if(dialog.getName() == 'image2'){
 				var element = dialog.getContentElement('info', 'alt');
-				
+
 				if( element ){
 					element.setValue( $("img[title='" + selFile + "']").attr("alt") );
 				}
@@ -247,9 +247,9 @@ function insertvaluetofield(){
 function download(){
 	var selFile = $("input[name=selFile]").val();
 	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
-	
+
 	fullPath = (selFileData[7] == "") ? $("span#foldervalue").attr("title") : selFileData[7];
-	
+
 	$("iframe#Fdownload").attr("src", nv_module_url + "dlimg&path=" + fullPath + "&img=" + selFile);
 }
 
@@ -257,13 +257,13 @@ function download(){
 function preview(){
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
-	
+
 	var selFile = $("input[name=selFile]").val();
 	var html = LANG.upload_size + ": ";
-	
+
 	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
 	fullPath = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
-	
+
 	if( selFileData[3] == "image" || selFileData[2] == "swf" ){
 		var size = calSize( selFileData[0], selFileData[1], 360, 230 );
 		html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
@@ -278,13 +278,13 @@ function preview(){
 		html += selFileData[4] + "<br />";
 		$("div#fileView").html( $("div[title='" + selFile + "'] div").html() );
 	}
-	
+
 	html += LANG.pubdate + ": " + selFileData[6];
-	
+
 	$("#fileInfoAlt").html( $("img[title='" + selFile + "']").attr("alt") );
 	$("#fileInfoDetail").html( html );
 	$("#fileInfoName").html( selFile );
-	
+
 	$("div#imgpreview").dialog({
 		autoOpen : false,
 		width : 388,
@@ -299,28 +299,28 @@ function preview(){
 function create(){
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
-	
+
 	var selFile = $("input[name=selFile]").val();
 	selFileData = $("img[title='" + selFile + "']").attr("name");
 	selFileData = selFileData.split("|");
-	
+
 	if( selFileData[3] == "image" ){
 		path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
-		
+
 		$("input[name=origWidth]").val( selFileData[0] );
 		$("input[name=origHeight]").val( selFileData[1] );
-		
+
 		var SizeMax = calSizeMax( selFileData[0], selFileData[1], nv_max_width, nv_max_height );
 		var SizeMin = calSizeMin( selFileData[0], selFileData[1], nv_min_width, nv_min_height );
-		
+
 		$("div[title=createInfo]").html("Max: " + SizeMax[0] + " x " + SizeMax[1] + ", Min: " + SizeMin[0] + " x " + SizeMin[1] + " (pixels)");
-		
+
 		DisSize = calSize( selFileData[0], selFileData[1], 360, 230 );
-		
+
 		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile + "?" + selFileData[8] );
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
 		$("#fileInfoName2").html( selFile );
-		
+
 		$("div#imgcreate").dialog({
 			autoOpen : false,
 			width : 650,
@@ -335,16 +335,16 @@ function move(){
 	$("div.dynamic").text("");
 	$("input.dynamic").prop("checked", false);
 	$("select[name=newPath]").html("");
-	
+
 	var selected, e;
 	var currentFolder = $("span#foldervalue").attr("title");
 	var listPath = pathList("create_file", currentFolder);
-	
+
 	for( e in listPath ){
 		selected = currentFolder == listPath[e] ? ' selected="selected"' : "";
 		$("select[name=newPath]").append('<option value="' + listPath[e] + '"' + selected + ">" + listPath[e] + "</option>");
 	}
-	
+
 	var selFile = $("input[name=selFile]").val();
 
 	// Kiem tra di chuyen nhieu file hay di chuyen 1 file
@@ -357,9 +357,9 @@ function move(){
 		var selFileData = $("img[title='" + selFile[0] + "']").attr("name").split("|");
 		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
 		var moveMessage = LANG.move_multiple.replace( '%s', selFile.length ) + ".";
-		selFile = selFile.join('|');	
+		selFile = selFile.join('|');
 	}
-	
+
 	$("div[title=pathFileName]").text( moveMessage );
 	$("div#filemove").dialog({
 		autoOpen : false,
@@ -373,14 +373,14 @@ function move(){
 function filerename(){
 	$("div.dynamic, span.dynamic").text("");
 	$("input.dynamic").val("");
-	
+
 	var a = $("input[name=selFile]").val();
-	
+
 	$("div#filerenameOrigName").text(a);
 	$("input[name=filerenameNewName]").val(a.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$1"));
 	$("span[title=Ext]").text("." + a.replace(/^(.+)\.([a-zA-Z0-9]+)$/, "$2"));
 	$("input[name=filerenameAlt]").val($("img[title='" + a + "']").attr("alt"));
-	
+
 	$("div#filerename").dialog({
 		autoOpen : false,
 		width : 400,
@@ -394,9 +394,9 @@ function filedelete(){
 	var imgtype = $("select[name=imgtype]").val();
 	var author = $("select[name=author]").val() == 1 ? "&author" : "";
 	var order = $("select[name=order]").val();
-	
+
 	var selFile = $("input[name=selFile]").val();
-	
+
 	// Kiem tra xoa nhieu file hay xoa 1 file
 	if( selFile.indexOf('|') == -1 ){
 		var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
@@ -407,9 +407,9 @@ function filedelete(){
 		var selFileData = $("img[title='" + selFile[0] + "']").attr("name").split("|");
 		var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
 		var confirmMessage = LANG.upload_delimgs_confirm.replace( '%s', selFile.length ) + "?";
-		selFile = selFile.join('|');	
+		selFile = selFile.join('|');
 	}
-	
+
 	if( confirm( confirmMessage ) ){
 		$.ajax({
 			type : "POST",
@@ -417,7 +417,7 @@ function filedelete(){
 			data : "path=" + path + "&file=" + selFile,
 			success : function(e){
 				e = e.split('#');
-				
+
 				if( e[0] != 'OK' ){
 					alert( e[1] );
 				}else{
@@ -436,7 +436,7 @@ function fileMouseup( file, e ){
 		if( e.which != 3 && ! KEYPR.isShift ){
 			// Reset shift offset
 			KEYPR.shiftOffset = 0;
-	
+
 			$.each( $('.imgcontent'), function(k, v){
 				if( v == file ){
 					KEYPR.shiftOffset = k;
@@ -444,7 +444,7 @@ function fileMouseup( file, e ){
 				}
 			});
 		}
-		
+
 		// e.which: 1: Left Mouse, 2: Center Mouse, 3: Right Mouse
 		if( KEYPR.isCtrl ){
 			if( $(file).is('.imgsel') && e.which != 3 ){
@@ -455,12 +455,12 @@ function fileMouseup( file, e ){
 		}else if( KEYPR.isShift && e.which != 3 ){
 			var clickOffset = -1;
 			$('.imgcontent').removeClass('imgsel');
-			
+
 			$.each( $('.imgcontent'), function(k, v){
 				if( v == file ){
 					clickOffset = k;
 				}
-				
+
 				if( ( clickOffset == -1 && k >= KEYPR.shiftOffset ) || ( clickOffset != -1 && k <= KEYPR.shiftOffset ) || v == file ){
 					if( ! $(v).is('.imgsel') ){
 						$(v).addClass('imgsel');
@@ -473,25 +473,25 @@ function fileMouseup( file, e ){
 				$(file).addClass('imgsel');
 			}
 		}
-		
+
 		LFILE.setSelFile();
-	
+
 		if( e.which == 3 ){
 			var isMultiple = $('.imgsel').length === 1 ? false : true;
-			var fileExt = $("input[name=selFile]").val().slice(-3);	
+			var fileExt = $("input[name=selFile]").val().slice(-3);
 			var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 			var area = $("input[name=area]").val();
 			var html = "";
-			
+
 			if( ( CKEditorFuncNum > 0 || area != "" ) && ! isMultiple ){
 				html += '<li id="select"><em class="fa fa-lg ' + ICON.select + '">&nbsp;</em>' + LANG.select + '</li>';
 			}
-			
+
 			if( ! isMultiple ){
 				html += '<li id="download"><em class="fa fa-lg ' + ICON.download + '">&nbsp;</em>' + LANG.download + '</li>';
 				html += '<li id="filepreview"><em class="fa fa-lg ' + ICON.preview + '">&nbsp;</em>' + LANG.preview + '</li>';
 			}
-			
+
 			if( $.inArray( fileExt, array_images ) !== -1 ){
 				if( $("span#create_file").attr("title") == "1" && ! isMultiple ){
 					html += '<li id="fileaddlogo"><em class="fa fa-lg ' + ICON.addlogo + '">&nbsp;</em>' + LANG.addlogo + '</li>';
@@ -500,29 +500,29 @@ function fileMouseup( file, e ){
 					html += '<li id="rotatefile"><em class="fa fa-lg ' + ICON.filerotate + '">&nbsp;</em>' + LANG.rotate + '</li>';
 				}
 			}
-			
+
 			if( $("span#move_file").attr("title") == "1" ){
 				html += '<li id="move"><em class="fa fa-lg ' + ICON.move + '">&nbsp;</em>' + LANG.move + '</li>';
 			}
-			
+
 			if( $("span#rename_file").attr("title") == "1" && ! isMultiple ){
 				html += '<li id="rename"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.rename + '</li>';
 			}
-			
+
 			if( $("span#delete_file").attr("title") == "1" ){
 				html += '<li id="filedelete"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.upload_delfile + '</li>';
 			}
-			
+
 			if( html != '' ){
 				html = "<ul>" + html + "</ul>";
 			}
-	
+
 			$("div#contextMenu").html(html);
 			NVCMENU.show(e);
 		}
-		
+
 	}
-	
+
 	KEYPR.isFileSelectable = false;
 }
 
@@ -544,45 +544,45 @@ function folderMouseup( folder, e ){
 			$("span#crop_file").attr("title", $(folder).is(".crop_file") ? "1" : "0");
 			$("span#rotate_file").attr("title", $(folder).is(".rotate_file") ? "1" : "0");
 			$("span.folder").css("color", "");
-			
+
 			$(folder).css("color", "red");
-			
+
 			if( $(folder).is(".view_dir") ){
 				var imgtype = $("select[name=imgtype]").val();
 				var selFile = $("input[name=selFile]").val();
 				var author = $("select[name=author]").val() == 1 ? "&author" : "";
-				
+
 				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
 			}else{
 				$("div#imglist").text("");
 			}
-			
+
 			NVUPLOAD.init();
 		}
 	}else if( $(folder).is('.menu') ){ // Right mouse click
 		$("span.folder").attr("name", "");
 		$(folder).attr("name", "current");
-		
+
 		var html = "";
-		
+
 		if( $(folder).is(".create_dir") ){
 			html += '<li id="createfolder"><em class="fa fa-lg ' + ICON.create + '">&nbsp;</em>' + LANG.createfolder + '</li>'
 		}
-		
+
 		if( $(folder).is(".rename_dir") ){
 			html += '<li id="renamefolder"><em class="fa fa-lg ' + ICON.rename + '">&nbsp;</em>' + LANG.renamefolder + '</li>'
 		}
-		
+
 		if( $(folder).is(".delete_dir") ){
 			html += '<li id="deletefolder"><em class="fa fa-lg ' + ICON.filedelete + '">&nbsp;</em>' + LANG.deletefolder + '</li>'
 		}
-		
+
 		if( html != "" ){
 			html = "<ul>" + html + "</ul>"
 		}
-		
+
 		$("div#contextMenu").html(html);
-		NVCMENU.show(e);		
+		NVCMENU.show(e);
 	}
 }
 
@@ -644,12 +644,12 @@ function searchfile(){
 function cropfile(){
 	$("div.dynamic").html("");
 	$("input.dynamic").val("");
-	
+
 	var selFile = $("input[name=selFile]").val();
 	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
 	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
 	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
-	
+
 	selFileData[0] = parseInt( selFileData[0] );
 	selFileData[1] = parseInt( selFileData[1] );
 
@@ -669,30 +669,30 @@ function cropfile(){
 			'H:<input type="text" id="crop-h" value="" class="w50 form-control" readonly="readonly"/> ' +
 			'<input type="button" id="crop-save" value="' + LANG.save + '" class="btn btn-primary"/>'
 		);
-		
+
 		var markScale = selFileData[0] / size[0];
 		var markW = parseInt( Math.round( size[0] * 0.7 ) );
 		var markH = parseInt( Math.round( size[1] * 0.7 ) );
-		
+
 		if( markW < 10 ){
 			markW = 10;
 		}
-		
+
 		if( markH < 10 ){
 			markH = 10;
 		}
-		
+
 		var markX = size[0] - markW - 5;
 		var markY = size[1] - markH - 5;
-		
+
 		if( markX < 0 ){
 			markX = 0;
 		}
-		
+
 		if( markY < 0 ){
 			markY = 0;
 		}
-		
+
 		// Init watermark
 		$('#cropContent img.crop-image').Watermarker({
 			watermark_img : nv_siteroot + 'themes/admin_default/images/transparent.png',
@@ -709,10 +709,10 @@ function cropfile(){
 				$('#crop-h').val( parseInt( Math.floor( markScale * e.h ) ) );
 			}
 		});
-		
+
 		$('#crop-save').click(function(){
 			$(this).attr('disabled', 'disabled');
-			
+
 			$.ajax({
 				type : "POST",
 				url : nv_module_url + "cropimg&random=" + nv_randomNum(10),
@@ -720,7 +720,7 @@ function cropfile(){
 				success : function(e){
 					$('#crop-save').removeAttr('disabled');
 					e = e.split('#');
-					
+
 					if( e[0] == 'ERROR' ){
 						$("div#errorInfo").html(e[1]).dialog("open");
 					}else{
@@ -737,21 +737,21 @@ function cropfile(){
 		width : 400,
 		modal : true,
 		position : "center"
-	}).dialog("open");	
+	}).dialog("open");
 }
 
 // Them logo
 function addlogo(){
 	$("div.dynamic").html("");
 	$("input.dynamic").val("");
-	
+
 	var selFile = $("input[name=selFile]").val();
 	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
 	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
 	var size = calSize( selFileData[0], selFileData[1], 360, 360 );
 	var logo = $("input[name=upload_logo]").val();
 	var logoConfig = $("input[name=upload_logo_config]").val().split('|');
-	
+
 	selFileData[0] = parseInt( selFileData[0] );
 	selFileData[1] = parseInt( selFileData[1] );
 
@@ -773,9 +773,9 @@ function addlogo(){
 			'H:<input type="text" id="addlogo-h" value="" class="w50 form-control" readonly="readonly"/> ' +
 			'<input type="button" id="addlogo-save" value="' + LANG.save + '" class="btn btn-primary"/>'
 		);
-		
+
 		var markScale = selFileData[0] / size[0];
-		
+
 		// Set logo size
 		var markW, markH;
 
@@ -798,28 +798,28 @@ function addlogo(){
 				markW = Math.ceil( selFileData[0] * parseFloat( logoConfig[4] ) / 100 );
 			}
 		}
-		
+
 		markH = Math.ceil( markW * logoConfig[1] / logoConfig[0] );
-		
+
 		if( markH > selFileData[1] ){
 			markH = selFileData[1];
 			markW = Math.ceil( markH * logoConfig[0] / logoConfig[1] );
 		}
-		
+
 		markW = parseInt( Math.floor( markW / markScale ) );
 		markH = parseInt( Math.floor( markH / markScale ) );
-		
+
 		var markX = size[0] - markW - 5;
 		var markY = size[1] - markH - 5;
-		
+
 		if( markX < 0 ){
 			markX = 0;
 		}
-		
+
 		if( markY < 0 ){
 			markY = 0;
 		}
-		
+
 		// Init watermark
 		$('#addlogoContent img.addlogo-image').Watermarker({
 			watermark_img : logo,
@@ -836,10 +836,10 @@ function addlogo(){
 				$('#addlogo-h').val( parseInt( Math.floor( markScale * e.h ) ) );
 			}
 		});
-		
+
 		$('#addlogo-save').click(function(){
 			$(this).attr('disabled', 'disabled');
-			
+
 			$.ajax({
 				type : "POST",
 				url : nv_module_url + "addlogo&random=" + nv_randomNum(10),
@@ -847,7 +847,7 @@ function addlogo(){
 				success : function(e){
 					$('#addlogo-save').removeAttr('disabled');
 					e = e.split('#');
-					
+
 					if( e[0] == 'ERROR' ){
 						$("div#errorInfo").html(e[1]).dialog("open");
 					}else{
@@ -864,7 +864,7 @@ function addlogo(){
 		width : 400,
 		modal : true,
 		position : "center"
-	}).dialog("open");	
+	}).dialog("open");
 }
 
 // Xoay anh
@@ -872,18 +872,18 @@ function rotatefile(){
 	$("div.dynamic").text("");
 	$("input.dynamic").val("");
 	$('[name="rorateDirection"]').val('0');
-	
+
 	var selFile = $("input[name=selFile]").val();
 	var selFileData = $("img[title='" + selFile + "']").attr("name").split("|");
 	var path = ( selFileData[7] == "" ) ? $("span#foldervalue").attr("title") : selFileData[7];
 	var size = calSize( selFileData[0], selFileData[1], 360, 230 );
-	
+
 	$('#rorateimageName').html( selFile );
 	$('[name="rorateFile"]').val( selFile );
 	$('[name="roratePath"]').val( path );
-	
+
 	var contentMargin = parseInt( ( Math.sqrt( size[0] * size[0] + size[1] * size[1] ) - size[1] ) / 2 );
-	
+
 	$('#rorateContent').css({
 		'width' : size[0],
 		'height' : size[1],
@@ -897,7 +897,7 @@ function rotatefile(){
 		modal : true,
 		position : "center"
 	}).dialog("open");
-	
+
 	// Dat lai gia tri xoay
 	RRT.direction = 0;
 	RRT.currentDirection = 0;
@@ -955,10 +955,10 @@ $(".refresh em").click(function(){
 		d = $("input[name=selFile]").val(),
 		e = $("select[name=author]").val() == 1 ? "&author" : "",
 		g = $("span#path").attr("title");
-	
+
 	$("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
 	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10));
-	
+
 	return false
 });
 
@@ -1135,19 +1135,19 @@ $("input[name=newPathOK]").click(function(){
 	var newPath = $("select[name=newPath]").val();
 	var selFile = $("input[name=selFile]").val();
 	var mirrorFile = $("input[name=mirrorFile]:checked").length;
-	
+
 	if( currentFolder == newPath ){
 		$("div#filemove").dialog("close");
 	}else{
 		$(this).attr("disabled", "disabled");
-		
+
 		$.ajax({
 			type : "POST",
 			url : nv_module_url + "moveimg&num=" + nv_randomNum(10),
 			data : "path=" + currentFolder + "&newpath=" + newPath + "&file=" + selFile + "&mirror=" + mirrorFile,
 			success : function(e){
 				var e = e.split("#");
-				
+
 				if( e[0] == "ERROR" ){
 					alert( e[1] );
 					$("input[name=newPathOK]").removeAttr("disabled");
@@ -1157,11 +1157,11 @@ $("input[name=newPathOK]").click(function(){
 					var author = $("select[name=author]").val() == 1 ? "&author" : "";
 					var order = $("select[name=order]").val();
 					var imgfile = e[1];
-					
+
 					$("input[name=newPathOK]").removeAttr("disabled");
 					$("input[name=selFile]").val( imgfile );
 					$("div#filemove").dialog("close");
-					
+
 					if( goNewPath == 1 ){
 						goNewPath = $("span#path").attr("title");
 						$("#imgfolder").load(nv_module_url + "folderlist&path=" + goNewPath + "&currentpath=" + newPath + "&random=" + nv_randomNum(10));
@@ -1228,7 +1228,7 @@ $("img[name=myFile2]").dblclick(function(){
 function remoteUpload(){
 	$("div.dynamic, span.dynamic").html("");
 	$("input.dynamic").val("");
-	
+
 	$("div#uploadremote").dialog({
 		autoOpen : false,
 		width : 400,
@@ -1236,7 +1236,7 @@ function remoteUpload(){
 		modal : true,
 		position : "center"
 	}).dialog("open");
-	
+
 	if( nv_auto_alt ){
 		$('#uploadremoteFile').keyup(function(){
 			var imageUrl = $(this).val();
@@ -1244,7 +1244,7 @@ function remoteUpload(){
 			$('#uploadremoteFileAlt').val( fileAlt );
 		});
 	}
-	
+
 	return false;
 }
 
@@ -1255,11 +1255,11 @@ $('[name="uploadremoteFileOK"]').click(function(){
 	var folderPath = $("span#foldervalue").attr("title");
 	var check = fileUrl + " " + folderPath;
 	var fileAlt = $('#uploadremoteFileAlt').val();
-	
+
 	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check && ( ( nv_alt_require && fileAlt != '' ) || ! nv_alt_require ) ){
 		$(this).attr('disabled', 'disabled');
 		$('#upload-remote-info').html('<em class="fa fa-2x fa-spinner fa-spin"></em>');
-		
+
 		$.ajax({
 			type : "POST",
 			url : nv_module_url + "upload&random=" + nv_randomNum(10),
@@ -1267,7 +1267,7 @@ $('[name="uploadremoteFileOK"]').click(function(){
 			success : function(k){
 				$("input[name=currentFileUrl]").val( check );
 				$('[name="uploadremoteFileOK"]').removeAttr('disabled');
-				
+
 				var l = k.split("_");
 				if( l[0] == "ERROR" ){
 					$("div#errorInfo").html(l[1]).dialog("open");
@@ -1294,19 +1294,19 @@ var LFILE = {
 
 		// Reset shift offset
 		KEYPR.shiftOffset = 0;
-		
+
 		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10) );
 	},
 	setSelFile : function(){
 		$("input[name=selFile]").val('');
-	
+
 		if( $('.imgsel').length ){
 			fileName = new Array();
 			$.each( $('.imgsel'), function(){
 				fileName.push( $(this).attr("title") );
 			});
 			fileName = fileName.join('|');
-			
+
 			$("input[name=selFile]").val(fileName);
 		}
 	},
@@ -1330,24 +1330,24 @@ var RRT = {
 			RRT.direction = 0;
 		}else{
 			direction = parseInt( direction );
-			
+
 			if( direction >= 360 ){
 				direction = 359;
 			}else if( direction < 0 ){
 				direction = 0;
 			}
-			
+
 			RRT.direction = direction;
 		}
 	},
 	increase: function(){
 		var direction = RRT.direction;
 		direction ++;
-		
+
 		if( direction == 360 ){
 			direction = 0;
 		}
-		
+
 		RRT.setDirection( direction );
 		RRT.setVal();
 		RRT.trigger();
@@ -1355,11 +1355,11 @@ var RRT = {
 	decrease: function(){
 		var direction = RRT.direction;
 		direction --;
-		
+
 		if( direction == -1 ){
 			direction = 359;
 		}
-		
+
 		RRT.setDirection( direction );
 		RRT.setVal();
 		RRT.trigger();
@@ -1367,63 +1367,63 @@ var RRT = {
 	init: function(){
 		$('[name="rorateDirection"]').keyup(function(){
 			var direction = $(this).val();
-			
+
 			if( isNaN( direction ) ){
 				direction = direction.slice( 0, direction.length - 1 );
 			}
-			
+
 			RRT.setDirection( direction );
 			RRT.setVal();
 			RRT.trigger();
 		});
-		
+
 		$('#rorateLeft').mousedown(function(){
 			RRT.timer = setInterval( "RRT.decrease()", RRT.timeOut );
-		});	
-		
+		});
+
 		$('#rorateLeft').bind( "mouseup mouseleave", function(){
 			clearInterval( RRT.timer );
 		});
-		
+
 		$('#rorateRight').mousedown(function(){
 			RRT.timer = setInterval( "RRT.increase()", RRT.timeOut );
-		});	
-		
+		});
+
 		$('#rorateRight').bind( "mouseup mouseleave", function(){
 			clearInterval( RRT.timer );
 		});
-		
+
 		$('#rorate90Anticlockwise').click(function(){
 			RRT.currentDirection --;
-			
+
 			if( RRT.currentDirection < 0 ){
 				RRT.currentDirection = 3;
 			}
-			
+
 			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
 			RRT.setVal();
-			RRT.trigger();			
+			RRT.trigger();
 		});
-		
+
 		$('#rorate90Clockwise').click(function(){
 			RRT.currentDirection ++;
-			
+
 			if( RRT.currentDirection > 3 ){
 				RRT.currentDirection = 0;
 			}
-			
+
 			RRT.setDirection( RRT.arrayDirection[RRT.currentDirection] );
 			RRT.setVal();
-			RRT.trigger();			
+			RRT.trigger();
 		});
-		
+
 		$('#rorateimageOK').click(function(){
 			var roratePath = $('[name="roratePath"]').val();
 			var rorateFile = $('[name="rorateFile"]').val();
 			var rorateDirection = $('[name="rorateDirection"]').val();
-			
+
 			$(this).attr("disabled", "disabled");
-			
+
 			$.ajax({
 				type : "POST",
 				url : nv_module_url + "rotateimg&num=" + nv_randomNum(10),
@@ -1431,7 +1431,7 @@ var RRT = {
 				success : function(g){
 					$('#rorateimageOK').removeAttr("disabled");
 					var h = g.split("#");
-					
+
 					if( h[0] == "ERROR" ){
 						alert( h[1] );
 					}else{
@@ -1453,13 +1453,13 @@ var KEYPR = {
 	isSelectable: false,
 	isFileSelectable: false,
 	init : function(){
-		$('body').keyup(function(e){			
+		$('body').keyup(function(e){
 			if( ! $(e.target).is('.dynamic') && $.inArray( e.keyCode, KEYPR.allowKey ) == -1 ){
 				e.preventDefault();
 			}else{
 				return;
 			}
-			
+
 			// Ctrl key unpress
 			if( e.keyCode == 17 ){
 				KEYPR.isCtrl = false;
@@ -1467,14 +1467,14 @@ var KEYPR = {
 				KEYPR.isShift = false;
 			}
 		});
-		
+
 		$('body').keydown(function(e){
 			if( ! $(e.target).is('.dynamic') && $.inArray( e.keyCode, KEYPR.allowKey ) == -1 ){
 				e.preventDefault();
 			}else{
 				return;
 			}
-			
+
 			// Ctrl key press
 			if( e.keyCode == 17 /* Ctrl */ ){
 				KEYPR.isCtrl = true;
@@ -1482,17 +1482,17 @@ var KEYPR = {
 				// Unselect all file
 				$(".imgsel").removeClass("imgsel");
 				LFILE.setSelFile();
-				
+
 				// Hide contextmenu
 				NVCMENU.hide();
-				
+
 				// Reset shift offset
 				KEYPR.shiftOffset = 0;
 			}else if( e.keyCode == 65 /* A */ && e.ctrlKey === true ){
 				// Select all file
 				$(".imgcontent").addClass("imgsel");
 				LFILE.setSelFile();
-				
+
 				// Hide contextmenu
 				NVCMENU.hide();
 			}else if( e.keyCode == 16 /* Shift */ ){
@@ -1509,7 +1509,7 @@ var KEYPR = {
 				}
 			}
 		});
-		
+
 		// Unselect file when click on wrap area
 		$('#imglist').click(function(e){
 			if( KEYPR.isSelectable == false ){
@@ -1517,7 +1517,7 @@ var KEYPR = {
 					$(".imgsel").removeClass("imgsel");
 				}
 			}
-			
+
 			KEYPR.isSelectable = false;
 		});
 	},
@@ -1527,9 +1527,9 @@ var NVUPLOAD = {
 	uploader: null, // Pupload variable
 	rendered: false, // Is rendered upload container
 	started: false,
-	buttons: 
+	buttons:
 		'<div class="row">' +
-			'<div class="col-sm-7 buttons">' +
+			'<div class="col-sm-14 buttons">' +
 				'<div class="btn-group dropup browse-button">' +
 					'<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' +
 						LANG.upload_mode + ' <span class="caret"></span>' +
@@ -1540,13 +1540,13 @@ var NVUPLOAD = {
 					'</ul>' +
 				'</div>	' +
 			'</div>' +
-			'<div class="col-sm-5">' +
+			'<div class="col-sm-10">' +
 				'<div class="row" id="upload-queue-total">' +
-					'<div class="col-sm-4 total-size"></div>' +
-					'<div class="col-sm-8 total-status"></div>' +
+					'<div class="col-sm-8 total-size"></div>' +
+					'<div class="col-sm-16 total-status"></div>' +
 				'</div>' +
 			'</div>' +
-		'</div>',	
+		'</div>',
 	closeRemoteDialog : function(){
 		$("div#uploadremote").dialog('close');
 	},
@@ -1555,17 +1555,17 @@ var NVUPLOAD = {
 		if( NVUPLOAD.uploader != null ){
 			NVUPLOAD.reset();
 		}
-		
+
 		// Check folder if allow upload
 		var isUploadAllow = $("span#upload_file").attr("title") == "1" ? true : false;
-		
+
 		if( ! isUploadAllow ){
 			$('#upload-button-area').html('<span class="text-danger"><em class="fa fa-info">&nbsp;</em>' + LANG.notupload + '</span>');
 		}else{
 			$('#upload-button-area').html( NVUPLOAD.buttons );
-			
+
 			var folderPath = $("span#foldervalue").attr("title");
-			
+
 			NVUPLOAD.uploader = new plupload.Uploader({
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
@@ -1579,18 +1579,18 @@ var NVUPLOAD = {
 				init: {
 					// Event on init uploader
 					PostInit: function(){
-						
+
 					},
-			
+
 					// Event on add file (Add to queue or first add)
 					FilesAdded: function(up, files){
 						// Build upload container
 						if( ! NVUPLOAD.rendered ){
 							NVUPLOAD.renderUI();
 						}
-						
+
 						NVUPLOAD.updateList();
-						
+
 						$('#upload-start').click(function(){
 							// Check file before start upload
 							var allow_start = true;
@@ -1601,35 +1601,35 @@ var NVUPLOAD = {
 										return false;
 									}
 								});
-								
+
 								if( allow_start == false ){
 									$("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
 								}
 							}
-							
+
 							if( allow_start ){
 								NVUPLOAD.uploader.start();
 							}
 						});
-						
+
 						$('#upload-cancel').click(function(){
 							NVUPLOAD.uploadCancel();
 						});
 					},
-					
+
 					// Event on trigger a file upload status
 					UploadProgress: function( up, file ){
 						$('#' + file.id + ' .file-status').html( file.percent + '%' );
 						NVUPLOAD.handleStatus( file, false );
 						NVUPLOAD.updateTotalProgress();
 					},
-					
+
 					// Event on one file finish uploaded (Maybe success or error)
 					FileUploaded: function( up, file, response ){
 						response = response.response;
 						NVUPLOAD.handleStatus( file, response );
 					},
-					
+
 					// Event on start upload or finish upload
 					StateChanged: function(){
 						// Start upload
@@ -1638,32 +1638,32 @@ var NVUPLOAD = {
 								NVUPLOAD.started = true;
 								// Hide control button
 								$('#upload-start, #upload-cancel, #upload-button-area .browse-button').hide();
-								
+
 								// Add some button
 								$('#upload-button-area .buttons').append(
 									'<input id="upload-stop" type="button" class="btn btn-primary" value="' + LANG.upload_stop + '"/> ' +
 									'<input style="display:none" id="upload-continue" type="button" class="btn btn-primary" value="' + LANG.upload_continue + '"/>' +
 									'<div class="total-info pull-right"></div>'
 								);
-								
+
 								$('#upload-button-area .total-info').html(
 									mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
 								);
-								
+
 								// Init upload progress bar
 								$('#upload-queue-total .total-status').html(
 									'<div class="progress">' +
 										'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
 									'</div>'
 								);
-								
+
 								// Set button handle
 								$('#upload-stop').click(function(){
 									$(this).hide();
 									$('#upload-continue').show();
 									NVUPLOAD.uploader.stop();
 								});
-								
+
 								$('#upload-continue').click(function(){
 									$(this).hide();
 									$('#upload-stop').show();
@@ -1674,28 +1674,28 @@ var NVUPLOAD = {
 							NVUPLOAD.updateList();
 						}
 					},
-					
+
 					// Event on a file is uploading
 					UploadFile: function( up, file ){
 						// Not thing to do
 					},
-					
+
 					// Event on remove a file
 					FilesRemoved: function(){
 						var scrollTop = $('#upload-queue-files').scrollTop();
 						NVUPLOAD.updateList();
 						$('#upload-queue-files').scrollTop( scrollTop );
 					},
-					
+
 					// Event on all files are uploaded
 					UploadComplete: function( up, files ){
 						$('#upload-continue').hide();
 						$('#upload-stop').hide();
-						
+
 						// Show finish button if has failed file
 						if( NVUPLOAD.uploader.total.failed > 0 ){
 							$('<input type="button" class="btn btn-primary" value="' + LANG.upload_finish + '" id="upload-finish"/>').insertBefore( $('#upload-stop') );
-							
+
 							$('#upload-finish').click(function(){
 								NVUPLOAD.finish();
 							});
@@ -1704,29 +1704,29 @@ var NVUPLOAD = {
 							setTimeout( "NVUPLOAD.finish()", 1000 );
 						}
 					},
-					
+
 					// Event on error
 					Error: function(up, err){
 						$("div#errorInfo").html( "Error #" + err.code + ": " + err.message ).dialog("open");
-						
+
 						if( err.code === plupload.INIT_ERROR ){
 							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );
 						}
 					},
-					
+
 					// Get image alt before upload
 					BeforeUpload: function(up, file) {
 						var filealt = '';
-						
+
 						if( $('#' + file.id + ' .file-alt').length ){
-							filealt = $('#' + file.id + ' .file-alt input').val(); 
+							filealt = $('#' + file.id + ' .file-alt input').val();
 						}
-						
+
 						NVUPLOAD.uploader.settings.multipart_params = {"filealt": filealt };
 					}
 				}
 			});
-			
+
 			NVUPLOAD.uploader.init();
 		}
 	},
@@ -1734,35 +1734,35 @@ var NVUPLOAD = {
 		// Hide files list and show upload container
 		$('#imglist').css({'display' : 'none'});
 		$('#upload-queue').css({'display' : 'block'});
-		
+
 		// Add some button
 		$('#upload-button-area .buttons').append(
 			'<input id="upload-start" type="button" class="btn btn-primary" value="' + LANG.upload_file + '"/> ' +
 			'<input id="upload-cancel" type="button" class="btn btn-default" value="' + LANG.upload_cancel + '"/> '
 		);
-		
+
 		// Change browse_button (Change style, Method: setOption is error)
 		$('#upload-button-area .browse-button button').remove();
 		$('#upload-remote').parent().remove();
 		$('#upload-button-area .browse-button ul').removeAttr('role').removeClass('dropdown-menu').addClass('fixul');
 		$('#upload-local').addClass('btn btn-primary').text(LANG.upload_add_files);
 		$('#upload-button-area .browse-button ul li div:first').width( $('#upload-local').outerWidth() ).height( $('#upload-local').outerHeight() );
-		
+
 		// Build upload queue
 		$('#upload-queue').html('\
 			<div class="queue-header">\
 				<div class="container-fluid">\
 					<div class="row">\
-						<div class="col-sm-' + ( nv_alt_require ? '4' : '7' ) + '">' + LANG.file_name + '</div>\
-						' + ( nv_alt_require ? '<div class="col-sm-3">' + LANG.altimage + '</div>' : '' ) + '\
-						<div class="col-sm-2">' + LANG.upload_size + '</div>\
-						<div class="col-sm-3">' + LANG.upload_status + '</div>\
+						<div class="col-sm-' + ( nv_alt_require ? '8' : '14' ) + '">' + LANG.file_name + '</div>\
+						' + ( nv_alt_require ? '<div class="col-sm-6">' + LANG.altimage + '</div>' : '' ) + '\
+						<div class="col-sm-4">' + LANG.upload_size + '</div>\
+						<div class="col-sm-6">' + LANG.upload_status + '</div>\
 					</div>\
 				</div>\
 			</div>\
 			<div id="upload-queue-files" class="container-fluid"></div>\
 		');
-		
+
 		// Rendered is true
 		NVUPLOAD.rendered = true;
 	},
@@ -1774,33 +1774,33 @@ var NVUPLOAD = {
 			if( ! nv_alt_require ){
 				fileList.append(
 					'<div id="' + file.id + '" class="row file-item">' +
-						'<div class="col-sm-7 file-name"><span>' + file.name + '</span></div>' +
-						'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
-						'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
-						'<div class="col-sm-1 file-action text-right"></div>' +
+						'<div class="col-sm-14 file-name"><span>' + file.name + '</span></div>' +
+						'<div class="col-sm-4 file-size">' + plupload.formatSize(file.size) + '</div>' +
+						'<div class="col-sm-4 file-status">' + file.percent + '%</div>' +
+						'<div class="col-sm-2 file-action text-right"></div>' +
 					'</div>'
-				);			
+				);
 			}else{
 				fileAlt = NVLDATA.getValue(file.id);
-				
+
 				if( nv_auto_alt && fileAlt == '' ){
 
 				    fileAlt = nv_filename_alt( file.name );
-					
-					NVLDATA.setValue( file.id, fileAlt );					
+
+					NVLDATA.setValue( file.id, fileAlt );
 				}
-				
+
 				fileList.append(
 					'<div id="' + file.id + '" class="row file-item">' +
-						'<div class="col-sm-4 file-name"><span>' + file.name + '</span></div>' +
-						'<div class="col-sm-3 file-alt"><input type="text" value="' + fileAlt + '" onkeyup="NVLDATA.setValue( \'' + file.id + '\', this.value);" class="form-control upload-file-alt dynamic"/></div>' +
-						'<div class="col-sm-2 file-size">' + plupload.formatSize(file.size) + '</div>' +
-						'<div class="col-sm-2 file-status">' + file.percent + '%</div>' +
-						'<div class="col-sm-1 file-action text-right"></div>' +
+						'<div class="col-sm-8 file-name"><span>' + file.name + '</span></div>' +
+						'<div class="col-sm-6 file-alt"><input type="text" value="' + fileAlt + '" onkeyup="NVLDATA.setValue( \'' + file.id + '\', this.value);" class="form-control upload-file-alt dynamic"/></div>' +
+						'<div class="col-sm-4 file-size">' + plupload.formatSize(file.size) + '</div>' +
+						'<div class="col-sm-4 file-status">' + file.percent + '%</div>' +
+						'<div class="col-sm-2 file-action text-right"></div>' +
 					'</div>'
-				);			
+				);
 			}
-			
+
 			NVUPLOAD.handleStatus( file, false );
 
 			$('#' + file.id + ' .file-delete').click(function(e){
@@ -1817,7 +1817,7 @@ var NVUPLOAD = {
 		fileList[0].scrollTop = fileList[0].scrollHeight;
 
 		NVUPLOAD.updateTotalProgress();
-		
+
 		// Enable, disable start button
 		if( NVUPLOAD.uploader.files.length ){
 			$('#upload-start').removeAttr('disabled');
@@ -1829,56 +1829,56 @@ var NVUPLOAD = {
 		// Destroy current uploader
 		NVUPLOAD.uploader.destroy();
 		NVUPLOAD.started = false;
-		
+
 		// Clear uploader variable
 		NVUPLOAD.uploader = null;
-		
+
 		// Reset upload button
 		$('#upload-button-area').html( NVUPLOAD.buttons );
-		
+
 		// Clear upload container
 		$('#upload-queue-files').html('');
 	},
 	uploadCancel: function(){
 		// Reset uploader
 		NVUPLOAD.reset();
-		
+
 		// Hide upload container and show file list
 		$('#upload-queue').html('').css({'display' : 'none'});
 		$('#imglist').css({'display' : 'block'});
-		
+
 		// Rendered is false
 		NVUPLOAD.rendered = false;
-		
+
 		// Init uploader
 		NVUPLOAD.init();
 	},
 	destroyUpload: function(){
 		// Reset uploader
 		NVUPLOAD.reset();
-		
+
 		// Hide upload container and show file list
 		$('#upload-queue').html('').css({'display' : 'none'});
 		$('#imglist').css({'display' : 'block'});
-		
+
 		// Rendered is false
 		NVUPLOAD.rendered = false;
 	},
 	handleStatus: function( file, response ){
 		var actionClass;
-		
+
 		if( response != false ){
 			check = response.split('_');
-			
+
 			if( check[0] == 'ERROR' ){
 				file.status = plupload.FAILED;
 				file.hint = check[1];
 				NVUPLOAD.uploader.total.uploaded --;
-				NVUPLOAD.uploader.total.failed ++;			
+				NVUPLOAD.uploader.total.failed ++;
 			}else{
 				file.name = response;
 			}
-			
+
 			$.each( NVUPLOAD.uploader.files, function(i, f){
 				if( f.id == file.id ){
 					NVUPLOAD.uploader.files[i].status = file.status;
@@ -1887,7 +1887,7 @@ var NVUPLOAD = {
 				}
 			});
 		}
-		
+
 		if( file.status == plupload.DONE ){
 			actionClass = 'text-success fa fa-lg fa-check';
 		}else if( file.status == plupload.FAILED ){
@@ -1901,9 +1901,9 @@ var NVUPLOAD = {
 		}
 
 		$('#' + file.id + ' .file-action').html('<i class="' + actionClass + '"></i>');
-		
+
 		if( file.hint ){
-			$('#' + file.id).attr('title', file.hint);	
+			$('#' + file.id).attr('title', file.hint);
 		}
 	},
 	updateTotalProgress: function(){
@@ -1912,23 +1912,23 @@ var NVUPLOAD = {
 				'<div class="progress-bar" role="progressbar" aria-valuenow="' + NVUPLOAD.uploader.total.percent + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + NVUPLOAD.uploader.total.percent + '%;">' + NVUPLOAD.uploader.total.percent + '%</div>' +
 			'</div>'
 		);
-		
+
 		$('#upload-button-area .total-info').html(
 			mOxie.sprintf( LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize( NVUPLOAD.uploader.total.bytesPerSec ) )
 		);
 	},
 	finish: function(){
 		var folderPath = $("span#foldervalue").attr("title");
-		
+
 		if( NVUPLOAD.uploader.total.uploaded > 0 ){
 			var selFile = new Array();
-			
+
 			$.each( NVUPLOAD.uploader.files, function( k, v ){
 				if( v.status == plupload.DONE ){
 					selFile.push( v.name );
 				}
 			});
-			
+
 			selFile = selFile.join('|');
 		}else{
 			var selFile = '';
@@ -2010,16 +2010,16 @@ var NVCMENU = {
 			e.stopPropagation();
 		});
 		NVCMENU.shadow = $('<div id="nvContextMenuShadow"></div>').hide().css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499}).appendTo('body');
-		
+
 		$(document).delegate( '*', 'click', function(e){
 			if( e.which != 3 ){
 				NVCMENU.hide();
-			}	
+			}
 		});
 	},
 	show : function(e){
 		e.preventDefault();
-		
+
 		if( $('#contextMenu').html() != '' ){
 			var content = $('#contextMenu').find('ul:first').clone(true);
 		    content.css(NVCMENU.menuStyle).find('li').css(NVCMENU.itemStyle).hover(function(){
@@ -2029,9 +2029,9 @@ var NVCMENU = {
 		        $(this).css(NVCMENU.itemStyle);
 		      }
 		    ).find('img').css({verticalAlign:'middle',paddingRight:'2px'});
-		    
+
 		   	NVCMENU.menu.html(content);
-		    
+
 			$.each(NVCMENU.bindings, function(id, func){
 				$('#' + id, NVCMENU.menu).bind('click', function(e){
 					NVCMENU.hide();
@@ -2040,7 +2040,7 @@ var NVCMENU = {
 			});
 
 			NVCMENU.menu.css({ 'left' : e.pageX + 1, 'top' : e.pageY + 1 }).show();
-			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();			
+			NVCMENU.shadow.css({ 'width' : NVCMENU.menu.width(), 'height' : NVCMENU.menu.height(), 'left' : e.pageX + 3, 'top' : e.pageY + 3 }).show();
 		}
 		return false;
 	},
@@ -2061,11 +2061,11 @@ var NVLDATA = {
 		if( ! NVLDATA.support ){
 			return '';
 		}
-		
+
 		if( typeof( sessionStorage[key] ) !== "undefined" && sessionStorage[key] ){
 			return sessionStorage[key];
 		}
-		
+
 		return '';
 	},
 	setValue : function( key, val ){

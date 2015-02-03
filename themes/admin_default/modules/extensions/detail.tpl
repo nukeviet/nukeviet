@@ -82,7 +82,7 @@
 			<!-- BEGIN: demo_images -->
 			<div class="rows">
 				<!-- BEGIN: loop -->
-				<div class="col-sm-3">
+				<div class="col-sm-6">
 					<a href="{IMAGE}" target="_blank" class="thumbnail">
 						<img src="{IMAGE}" alt="{DATA.title}" style="width:100%"/>
 					</a>

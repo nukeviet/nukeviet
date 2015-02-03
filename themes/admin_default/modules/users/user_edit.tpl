@@ -98,7 +98,7 @@
 					<td>
 						<div class="row checkbox">
 							<!-- BEGIN: list -->
-							<label class="col-sm-10">
+							<label class="col-sm-20">
 								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
 							</label>
 							<!-- END: list -->

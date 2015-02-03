@@ -12,7 +12,7 @@
 <!-- END: viewdescription -->
 
 <!-- BEGIN: viewcatloop -->
-<div class="col-sm-6 col-md-4">
+<div class="col-sm-12 col-md-8">
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">

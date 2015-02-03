@@ -20,22 +20,22 @@
 				<caption><em class="fa fa-file-text-o">&nbsp;</em>{caption}</caption>
 				<tbody>
 					<tr>
-						<td class="text-right"><strong>{LANG.name}: </strong></td>
+						<th class="text-right">{LANG.name}: </th>
 						<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.alias}: </strong></td>
+						<th class="text-right">{LANG.alias}: </th>
 						<td>
 							<input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>
 							&nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em>
 						</td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>Title Site: </strong></td>
+						<th class="text-right">{LANG.titlesite}: </th>
 						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.cat_sub}: </strong></td>
+						<th class="text-right">{LANG.cat_sub}: </th>
 						<td>
 						<select class="form-control w200" name="parentid">
 							<!-- BEGIN: cat_listsub -->
@@ -44,20 +44,20 @@
 						</select></td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.keywords}: </strong></td>
+						<th class="text-right">{LANG.keywords}: </th>
 						<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
 					</tr>
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{LANG.description} </strong></td>
+						<strong>{LANG.description} </th>
 						<td >
 							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea><br />
 							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
 						</td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
+						<th class="text-right">{LANG.content_homeimg}</th>
 						<td>
 							<input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/>
 							&nbsp;<input type="button" value="Browse server" name="selectimg" class="btn btn-info" />
@@ -66,7 +66,7 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{GLANG.groups_view} </strong></td>
+						<strong>{GLANG.groups_view} </th>
 						<td>
 							<!-- BEGIN: groups_views -->
 							<div class="row">
@@ -76,11 +76,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.content_bodytext}: </strong></td>
+						<th class="text-right">{LANG.content_bodytext}: </th>
 						<td>{DESCRIPTIONHTML}</td>
 					</tr>
 					<tr>
-						<td class="text-right"><strong>{LANG.viewdescription}: </strong></td>
+						<th class="text-right">{LANG.viewdescription}: </th>
 						<td>
 						<!-- BEGIN: viewdescription -->
 						<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;

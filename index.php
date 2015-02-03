@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( NV_NAME_VARIABLE, 'get' ) || $nv_Request->isset_
 {
 	$home = 0;
 	$module_name = $nv_Request->get_string( NV_NAME_VARIABLE, 'post,get' );
-	
+
 	if( empty( $module_name ) )
 	{
 		$module_name = $global_config['rewrite_op_mod'];
@@ -62,6 +62,7 @@ else
 {
 	$home = 1;
 	$module_name = $global_config['site_home_module'];
+	$meta_property['og:title'] = $global_config['site_name'];
 }
 
 if( preg_match( $global_config['check_module'], $module_name ) )

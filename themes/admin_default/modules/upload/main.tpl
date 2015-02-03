@@ -25,14 +25,14 @@
 
 <div class="content">
 	<div class="row upload-wrap">
-		<div class="col-lg-2 col-md-2 col-sm-3 imgfolder" id="imgfolder">
+		<div class="col-lg-4 col-md-4 col-sm-6 imgfolder" id="imgfolder">
 			<p class="upload-loading">
 				<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
 				<br />
 				{LANG.waiting}...
 			</p>
 		</div>
-		<div id="upload-content" class="col-lg-10 col-md-10 col-sm-9 filebrowse">
+		<div id="upload-content" class="col-lg-20 col-md-20 col-sm-18 filebrowse">
 			<div id="imglist" class="clearfix">
 				<p class="upload-loading">
 					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
@@ -46,41 +46,41 @@
 </div>
 <div class="footer">
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<div class="row">
-				<div class="col-sm-1">
+				<div class="col-sm-2">
 					<div class="refresh text-right">
 						<em title="{LANG.refresh}" class="fa fa-refresh fa-lg fa-pointer">&nbsp;</em>
 					</div>
 				</div>
-				<div class="col-sm-3">
-					<select name="imgtype" class="form-control input-sm vchange">
+				<div class="col-sm-5">
+					<select name="imgtype" title="{LANG.selectfiletype}" class="form-control input-sm vchange">
 						<option value="file"{SFILE}>{LANG.type_file}</option>
 						<option value="image"{SIMAGE}>{LANG.type_image}</option>
 						<option value="flash"{SFLASH}>{LANG.type_flash}</option>
-					</select> 
+					</select>
 				</div>
-				<div class="col-sm-3">
-					<select name="author" class="form-control input-sm vchange">
+				<div class="col-sm-5">
+					<select name="author" title="{LANG.author}" class="form-control input-sm vchange">
 						<option value="0">{LANG.author0}</option>
 						<option value="1">{LANG.author1}</option>
-					</select> 
+					</select>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-8">
 					<select name="order" class="form-control input-sm vchange">
 						<option value="0">{LANG.order0}</option>
 						<option value="1">{LANG.order1}</option>
 						<option value="2">{LANG.order2}</option>
 					</select>
 				</div>
-				<div class="col-sm-2">
+				<div class="col-sm-4">
 					<div class="search text-left">
 						<em title="{LANG.search}" class="fa fa-search fa-lg fa-pointer">&nbsp;</em>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<div id="upload-button-area">&nbsp;</div>
 		</div>
 	</div>
@@ -104,8 +104,8 @@
 <div id="renamefolder" class="upload-hide" title="{LANG.renamefolder}">
 	<div class="form-horizontal" role="form">
 		<div class="form-group">
-			<label class="control-label col-xs-3">{LANG.rename_newname}:</label>
-			<div class="col-xs-9">
+			<label class="control-label col-xs-6">{LANG.rename_newname}:</label>
+			<div class="col-xs-18">
 				<input type="text" name="foldername" class="form-control dynamic"/>
 			</div>
 		</div>
@@ -115,8 +115,8 @@
 <div id="createfolder" class="upload-hide" title="{LANG.createfolder}">
 	<div class="form-horizontal" role="form">
 		<div class="form-group">
-			<label class="control-label col-xs-5">{LANG.foldername}:</label>
-			<div class="col-xs-7">
+			<label class="control-label col-xs-10">{LANG.foldername}:</label>
+			<div class="col-xs-14">
 				<input type="text" name="createfoldername" class="form-control dynamic"/>
 			</div>
 		</div>
@@ -134,16 +134,16 @@
 
 <div id="imgcreate" title="{LANG.upload_createimage}">
 	<div class="row">
-		<div class="col-xs-5">
+		<div class="col-xs-10">
 			<input type="hidden" name="origWidth" value="" class="dynamic" />
 			<input type="hidden" name="origHeight" value="" class="dynamic" />
 			<div class="title">{LANG.newSize}</div>
 			<div class="form-horizontal" role="form">
 				<div class="form-group">
-					<label class="col-xs-2 control-label">X:</label>
-					<div class="col-xs-4"><input type="text" name="newWidth" maxlength="4" class="dynamic form-control" /></div>
-					<label class="col-xs-2 control-label">Y:</label>
-					<div class="col-xs-4"><input type="text" name="newHeight" maxlength="4" class="dynamic form-control" /></div>
+					<label class="col-xs-4 control-label">X:</label>
+					<div class="col-xs-8"><input type="text" name="newWidth" maxlength="4" class="dynamic form-control" /></div>
+					<label class="col-xs-4 control-label">Y:</label>
+					<div class="col-xs-8"><input type="text" name="newHeight" maxlength="4" class="dynamic form-control" /></div>
 				</div>
 			</div>
 			<div class="text-center form-group">
@@ -152,7 +152,7 @@
 			</div>
 			<div title="createInfo" class="dynamic text-center text-muted"></div>
 		</div>
-		<div class="col-xs-7 text-center">
+		<div class="col-xs-14 text-center">
 			<div class="image-preview-wrap clearfix">
 				<div id="fileInfoName2" class="dynamic title"></div>
 				<div id="fileInfoDetail2" class="dynamic"></div>
@@ -205,17 +205,17 @@
 	<div id="filerenameOrigName" class="dynamic origname text-center"></div>
 	<div class="form-horizontal" role="form">
 		<div class="form-group">
-			<label class="col-xs-4 control-label">{LANG.rename_newname}:</label>
-			<div class="col-xs-7">
+			<label class="col-xs-8 control-label">{LANG.rename_newname}:</label>
+			<div class="col-xs-14">
 				<input type="text" name="filerenameNewName" maxlength="255" class="dynamic form-control" />
 			</div>
-			<div class="col-xs-1">
+			<div class="col-xs-2">
 				<span title="Ext">Ext</span>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-xs-4 control-label">{LANG.altimage}:</label>
-			<div class="col-xs-8">
+			<label class="col-xs-8 control-label">{LANG.altimage}:</label>
+			<div class="col-xs-16">
 				<input type="text" name="filerenameAlt" maxlength="255" class="dynamic form-control" />
 			</div>
 		</div>
@@ -230,7 +230,7 @@
 	<input type="hidden" class="dynamic" name="rorateFile" value=""/>
 	<h4 class="text-center"><strong id="rorateimageName" class="dynamic">&nbsp;</strong></h4>
 	<div id="rorateContent" class="rorate-content">
-		
+
 	</div>
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
@@ -251,27 +251,23 @@
 </div>
 
 <div id="uploadremote" title="{LANG.upload_mode_remote}">
+	<div class="row">
+		<label for="uploadremoteFile">{LANG.enter_url}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
+	</div>
+	<div class="dynamic text-center" id="upload-remote-info"></div>
 	<!-- BEGIN: alt_remote -->
-	<div class="form-group">
-		<div class="row">
-			<div class="col-xs-12">
-				<label for="uploadremoteFileAlt">{LANG.altimage}</label>
-				<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
-			</div>
-		</div>
+	<div class="row">
+		<label for="uploadremoteFileAlt">{LANG.altimage}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
 	</div>
 	<!-- END: alt_remote -->
-	<div class="row">
-		<div class="col-xs-12">
-			<label for="uploadremoteFile">{LANG.enter_url}</label>
-		</div>
-		<div class="col-xs-7">
-			<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
-		</div>
-		<div class="col-xs-3">
-			<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
-		</div>
-		<div class="col-xs-2 dynamic text-center" id="upload-remote-info"></div>
+	<div class="row text-center">
+		<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
 	</div>
 </div>
 

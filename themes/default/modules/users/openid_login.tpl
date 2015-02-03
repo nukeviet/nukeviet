@@ -8,24 +8,24 @@
 		{DATA.login_info}
 	</div>
 	<div class="form-group">
-		<label for="login_iavim" class="col-sm-3 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="login_iavim" class="col-sm-6 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="text" id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required form-control" maxlength="{NICK_MAXLENGTH}" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="password_iavim" class="col-sm-3 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="password_iavim" class="col-sm-6 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="password" id="password_iavim" name="nv_password" value="{DATA.nv_password}" class="required password form-control" maxlength="{PASS_MAXLENGTH}" />
 		</div>
 	</div>
 	<!-- BEGIN: captcha -->
 	<div class="form-group">
-		<label for="seccode_iavim" class="col-sm-3 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-4">
+		<label for="seccode_iavim" class="col-sm-6 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-8">
 			<input type="text" name="nv_seccode" id="seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />			
 		</div>
-		<div class="col-sm-5">
+		<div class="col-sm-10">
 			<label class="control-label">
 				<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
@@ -34,13 +34,13 @@
 	</div>
 	<!-- END: captcha -->
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-6 col-sm-18">
 			<input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" />
 			<input type="submit" value="{LANG.login_submit}" class="btn btn-primary" />
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-6 col-sm-18">
 			<a title="{LANG.register}" href="{USER_REGISTER}">{LANG.register}</a> - <a title="{LANG.lostpass}" href="{USER_LOSTPASS}">{LANG.lostpass}</a>
 		</div>
 	</div>

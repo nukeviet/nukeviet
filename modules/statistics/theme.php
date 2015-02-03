@@ -29,11 +29,9 @@ function nv_theme_statistics_referer( $cts, $total )
 		{
 			if( ! empty( $m['count'] ) )
 			{
-				$proc = ceil( ( $m['count'] / $cts['max'] ) * 100 );
-				$m['count'] = number_format( $m['count'] );
-				$xtpl->assign( 'M', $m );
+				$xtpl->assign( 'M', number_format( $m['count'] ) );
 				$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
-				$xtpl->assign( 'HEIGHT', $proc * 2 );
+				$xtpl->assign( 'HEIGHT', ceil( ( $m['count'] / $cts['max'] ) * 200 ) );
 
 				$xtpl->parse( 'main.loop.img' );
 			}

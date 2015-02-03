@@ -539,9 +539,10 @@ class upload
 		$txt = file_get_contents( $file );
 		if( $txt === false ) return false;
 
-		if( preg_match( "#&\#x([0-9a-f]+);#i", $txt ) ) return false;
-		elseif( preg_match( '#&\#([0-9]+);#i', $txt ) ) return false;
-		elseif( preg_match( "#([a-z]*)=([\`\'\"]*)script:#iU", $txt ) ) return false;
+		//if( preg_match( "#&\#x([0-9a-f]+);#i", $txt ) ) return false;
+		//elseif( preg_match( '#&\#([0-9]+);#i', $txt ) ) return false;
+		//else
+		if( preg_match( "#([a-z]*)=([\`\'\"]*)script:#iU", $txt ) ) return false;
 		elseif( preg_match( "#([a-z]*)=([\`\'\"]*)javascript:#iU", $txt ) ) return false;
 		elseif( preg_match( "#([a-z]*)=([\'\"]*)vbscript:#iU", $txt ) ) return false;
 		elseif( preg_match( "#(<[^>]+)style=([\`\'\"]*).*expression\([^>]*>#iU", $txt ) ) return false;
@@ -678,6 +679,7 @@ class upload
 			$word = strtr( $word, $utf8_lookup['romanize'] );
 		}
 
+		$word = rawurldecode( $word );
 		$word = preg_replace( '/[^a-z0-9\.\-\_ ]/i', '', $word );
 		$word = preg_replace( '/^\W+|\W+$/', '', $word );
 		$word = preg_replace( '/[ ]+/', '-', $word );

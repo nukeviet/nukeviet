@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="col-sm-3 col-md-3 category">
+<div class="col-sm-6 col-md-6 category">
 	<div class="panel-group" id="accordion">
 		<!-- BEGIN: catparent -->
 		<div class="panel panel-default">

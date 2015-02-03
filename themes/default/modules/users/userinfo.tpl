@@ -10,11 +10,11 @@
 </ul>
 <h2>{LANG.user_info}</h2>
 <div class="row m-bottom">
-	<div class="col-md-3 text-center">
+	<div class="col-md-6 text-center">
 		<img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail m-bottom"/><br />
 		{LANG.img_size_title}
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-18">
 		<ul class="nv-list-item xsm">
 			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
 			<li><em class="fa fa-chevron-right ">&nbsp;</em> {USER.current_mode}</li>

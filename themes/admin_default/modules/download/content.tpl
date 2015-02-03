@@ -4,7 +4,7 @@
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<div class="row">
-		<div class="col-sm-12 col-md-9">
+		<div class="col-sm-24 col-md-18">
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered table-hover">
 					<tbody>
@@ -60,9 +60,9 @@
 				</table>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3">
+		<div class="col-sm-24 col-md-6">
 			<div class="row">
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<label>{LANG.groups_view}</label>
 					<br />
 					<!-- BEGIN: groups_view -->
@@ -79,7 +79,7 @@
 					<!-- END: groups_download -->
 					<br />
 				</div>
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<label>{LANG.file_whocomment}</label>
 					<br />
 					<!-- BEGIN: groups_comment -->
