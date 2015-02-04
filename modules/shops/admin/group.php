@@ -16,6 +16,7 @@ $table_name = $db_config['prefix'] . '_' . $module_data . '_group';
 $error = $admins = '';
 $savegroup = 0;
 $data = array();
+$data['cateid_old'] = 0;
 list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image'] ) = array( 0, 0, '', '', '', '', 0, 0, '' );
 
 $savegroup = $nv_Request->get_int( 'savegroup', 'post', 0 );
@@ -27,7 +28,7 @@ if( ! empty( $savegroup ) )
 	$data['groupid'] = $nv_Request->get_int( 'groupid', 'post', 0 );
 	$data['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
-	$data['cateid'] = $nv_Request->get_int( 'cateid', 'post', 0 );
+	$data['cateid'] = $nv_Request->get_array( 'cateid', 'post', array() );
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$data['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
@@ -49,6 +50,19 @@ if( ! empty( $savegroup ) )
 	if( $data['title'] == '' )
 	{
 		$error = $lang_module['group_name_empty'];
+	}
+	elseif( sizeof( $data['cateid'] ) == 0 and empty( $data['parentid'] ) )
+	{
+		$error = $lang_module['group_cateid_empty'];
+	}
+
+	if( !empty( $data['cateid'] ) )
+	{
+		$data['cateid'] = implode( ',', $data['cateid'] );
+	}
+	else
+	{
+		$data['cateid'] = '';
 	}
 
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $table_name . ' WHERE groupid!=' . $data['groupid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
@@ -88,7 +102,7 @@ if( ! empty( $savegroup ) )
 		$subgroupid = '';
 
 		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", " . $data['cateid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
+ 			VALUES (" . $data['parentid'] . ", " . $db->quote( $data['cateid'] ) . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;
@@ -154,6 +168,8 @@ $data['groupid'] = $nv_Request->get_int( 'groupid', 'get', 0 );
 if( $data['groupid'] > 0 )
 {
 	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['image'] ) = $db->query( 'SELECT groupid, parentid,cateid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, image FROM ' . $table_name . ' where groupid=' . $data['groupid'] )->fetch( 3 );
+	$data['cateid_old'] = $data['cateid'];
+	$data['cateid'] = explode( ',', $data['cateid'] );
 	$caption = $lang_module['edit_group'];
 }
 else
@@ -168,17 +184,10 @@ $array_group_list[0] = array( '0', $lang_module['group_sub_sl'] );
 
 while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 {
-	$xtitle_i = '';
-	if( $lev_i > 0 )
+	if( $lev_i == 0 )
 	{
-		$xtitle_i .= '&nbsp;';
-		for( $i = 1; $i <= $lev_i; $i++ )
-		{
-			$xtitle_i .= '---';
-		}
+		$array_group_list[] = array( $groupid_i, $title_i );
 	}
-	$xtitle_i .= $title_i;
-	$array_group_list[] = array( $groupid_i, $xtitle_i );
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
@@ -195,7 +204,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
-$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . $data['cateid'] );
+$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . $data['cateid_old'] );
 $xtpl->assign( 'GROUP_LIST', shops_show_group_list( $data['parentid'] ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
 

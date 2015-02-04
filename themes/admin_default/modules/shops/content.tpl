@@ -40,6 +40,20 @@
 					</tr>
 				</tbody>
 			</table>
+
+			<!-- BEGIN:listgroup -->
+			<table class="table table-striped table-bordered table-hover">
+				<tbody>
+					<tr>
+						<th>{LANG.content_group}</th>
+					</tr>
+					<tr>
+						<td id="listgroupid">&nbsp;</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- END:listgroup -->
+
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
@@ -281,18 +295,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<!-- BEGIN:listgroup -->
-			<table class="table table-striped table-bordered table-hover">
-				<tbody>
-					<tr>
-						<th>{LANG.content_group}</th>
-					</tr>
-					<tr>
-						<td id="listgroupid">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-			<!-- END:listgroup -->
 		</div>
 	</div>
 

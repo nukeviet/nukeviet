@@ -54,18 +54,22 @@
 					<!-- BEGIN: group_detail -->
 					<li>
 						<!-- BEGIN: loop -->
-							<!-- BEGIN: maintitle -->
-							<div class="pull-left"><strong>{MAINTITLE}:</strong>&nbsp;</div>
-							<!-- END: maintitle -->
+						<!-- BEGIN: maintitle -->
+						<div class="pull-left">
+							<strong>{MAINTITLE}:</strong>&nbsp;
+						</div>
+						<!-- END: maintitle -->
 
-							<!-- BEGIN: subtitle -->
-							<ul class="pull-left" style="padding: 0 10px 0">
+						<!-- BEGIN: subtitle -->
+						<ul class="pull-left" style="padding: 0 10px 0">
 							<!-- BEGIN: loop -->
-							<li><a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a></li>
+							<li>
+								<a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a>
+							</li>
 							<!-- END: loop -->
-							</ul>
-							<div class="clear"></div>
-							<!-- END: subtitle -->
+						</ul>
+						<div class="clear"></div>
+						<!-- END: subtitle -->
 						<!-- END: loop -->
 					</li>
 					<!-- END: group_detail -->
@@ -102,15 +106,22 @@
 				</ul>
 				<hr />
 
+				<!-- BEGIN: group -->
 				<div class="row">
-					<!-- BEGIN: group -->
 					<!-- BEGIN: items -->
 					<div class="col-md-6">
-						{GROUP}
+						<select class="form-control" name="group">
+							<!-- BEGIN: header -->
+							<option value="">---{HEADER}---</option>
+							<!-- END: header -->
+							<!-- BEGIN: loop -->
+							<option value="{GROUP.groupid}">{GROUP.title}</option>
+							<!-- END: loop -->
+						</select>
 					</div>
 					<!-- END: items -->
-					<!-- END: group -->
 				</div>
+				<!-- END: group -->
 
 				<div class="clearfix">
 					&nbsp;
@@ -230,7 +241,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-		    <!-- BEGIN: discount_default -->
+			<!-- BEGIN: discount_default -->
 			<table class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
@@ -300,10 +311,6 @@
 					<a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a>
 				</li>
 				<!-- END: comment_tab -->
-
-				<li>
-					<a href="#section-5"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.detail_newtab}</span></a>
-				</li>
 			</ul>
 		</nav>
 		<div class="content">
@@ -345,12 +352,6 @@
 				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
 			</section>
 			<!-- END: comment -->
-
-			<!-- BEGIN: cust -->
-			<section id="section-5">
-				{custom}
-			</section>
-			<!-- END: cust-->
 		</div>
 	</div>
 

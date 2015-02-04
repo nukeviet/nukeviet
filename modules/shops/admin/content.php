@@ -103,6 +103,7 @@ $page_title = $lang_module['content_add'];
 $error = '';
 $groups_list = nv_groups_list( );
 
+$is_copy = $nv_Request->isset_request( 'copy', 'get' );
 $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
 
 $group_id_old = array( );
@@ -118,7 +119,6 @@ if( $rowcontent['id'] > 0 )
 	}
 	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
 	$rowcontent['keywords_old'] = $rowcontent['keywords'];
-
 }
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
@@ -366,7 +366,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$listvalue .= ', :' . $flang . '_' . $fname;
 		}
 
-		if( $rowcontent['id'] == 0 )
+		if( $rowcontent['id'] == 0 or $is_copy )
 		{
 			$rowcontent['publtime'] = ($rowcontent['publtime'] > NV_CURRENTTIME) ? $rowcontent['publtime'] : NV_CURRENTTIME;
 			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
@@ -728,6 +728,13 @@ elseif( $rowcontent['id'] > 0 )
 
 	$page_title = $lang_module['content_edit'];
 
+	if( $is_copy )
+	{
+		$rowcontent['alias'] = '';
+		$rowcontent['product_code'] = '';
+		$rowcontent['publtime'] = NV_CURRENTTIME;
+	}
+
 	// Custom fields
 	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 	if( $idtemplate )
@@ -841,7 +848,6 @@ foreach( $global_array_cat as $catid_i => $rowscat )
 }
 
 // List group
-//var_dump($rowcontent['group_id']); die;
 if( !empty( $rowcontent['group_id'] ) )
 {
 	$array_groupid_in_row = $rowcontent['group_id'];
@@ -1009,7 +1015,7 @@ if( !empty( $weight_config ) )
 
 $xtpl->assign( 'edit_bodytext', $edits );
 
-if( $rowcontent['id'] > 0 )
+if( $rowcontent['id'] > 0 and !$is_copy )
 {
 	$op = 'items';
 	$xtpl->parse( 'main.edit' );

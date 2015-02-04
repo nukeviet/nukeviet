@@ -140,7 +140,6 @@ function nv_del_location(locationid) {
 	return false;
 }
 
-
 // Xu ly block ---------------------------------------
 
 function nv_del_block_cat(bid) {
@@ -363,7 +362,6 @@ function nv_add_otherimage() {
 	file_items++;
 }
 
-
 function nv_add_title() {
 	var a = "<tr><td><input class=\"form-control\" value=\"\" name=\"custom[title_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td>";
 	a += "<td><input class=\"form-control\" value=\"\" name=\"custom[content_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td></tr>";
@@ -371,12 +369,20 @@ function nv_add_title() {
 	file_items++;
 }
 
-
-
 function nv_getcatalog(obj) {
 	var pid = $(obj).val();
 	var url = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getcatalog&pid=' + pid;
-	$('#vcatid').load(url);
+	$.get(url, function(data) {
+		if( data == '' )
+		{
+			$('#cat').hide();
+		}
+		else
+		{
+			$('#cat #vcatid').html( data );
+			$('#cat').show();
+		}
+	});
 }
 
 function nv_change_catid(obj, id) {
