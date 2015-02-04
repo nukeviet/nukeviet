@@ -30,7 +30,7 @@
 					<!-- END: weight -->
 				</select></td>
 				<td>
-					<a data-toggle="tooltip" title="" data-original-title="{ROW.description}" href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=group&amp;parentid={ROW.groupid}"><strong>{ROW.title}</strong></a>
+					<a data-toggle="tooltip" title="" data-original-title="{ROW.description}" href="{ROW.group_link}"><strong>{ROW.title}</strong></a>
 					{ROW.numsubgroup}
 				</td>
 				<td>

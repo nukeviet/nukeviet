@@ -184,17 +184,10 @@ $array_group_list[0] = array( '0', $lang_module['group_sub_sl'] );
 
 while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 {
-	$xtitle_i = '';
-	if( $lev_i > 0 )
+	if( $lev_i == 0 )
 	{
-		$xtitle_i .= '&nbsp;';
-		for( $i = 1; $i <= $lev_i; $i++ )
-		{
-			$xtitle_i .= '---';
-		}
+		$array_group_list[] = array( $groupid_i, $title_i );
 	}
-	$xtitle_i .= $title_i;
-	$array_group_list[] = array( $groupid_i, $xtitle_i );
 }
 
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );

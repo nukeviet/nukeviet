@@ -1268,24 +1268,27 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	// Nhom san pham
 	$listgroupid = GetGroupID( $data_content['id'] );
 
-	$i = 0;
-	foreach( $listgroupid as $gid )
+	if( !empty( $listgroupid ) and !empty( $global_array_group ) )
 	{
-		$group_content = '';
-		$group = $global_array_group[$gid];
-		if( $group['parentid'] == 0 and $group['in_order'] )
+		foreach( $global_array_group as $groupid => $groupinfo )
 		{
-			$group_content .= '<select name="group" class="form-control form-group input-sm">';
-			$group_content .= '<option value="" selected="selected">' . $group['title'] . '</option>';
-			$group_content .= getgroup_selecthtml( $global_array_group, $group['groupid'], $listgroupid );
-			$group_content .= '</select>';
-			$xtpl->assign( 'GROUP', $group_content );
-			$xtpl->parse( 'main.group.items' );
-			$i++;
+			if( $groupinfo['lev'] == 0 and $groupinfo['in_order'] )
+			{
+				$xtpl->assign( 'HEADER', $groupinfo['title'] );
+				$xtpl->parse( 'main.group.items.header' );
+
+				$listsub = explode( ',', $groupinfo['subgroupid'] );
+				foreach( $listsub as $subgroupid )
+				{
+					if( in_array( $subgroupid, $listsub ) )
+					{
+						$xtpl->assign( 'GROUP', $global_array_group[$subgroupid] );
+						$xtpl->parse( 'main.group.items.loop' );
+					}
+				}
+				$xtpl->parse( 'main.group.items' );
+			}
 		}
-	}
-	if( $i > 0 )
-	{
 		$xtpl->parse( 'main.group' );
 	}
 

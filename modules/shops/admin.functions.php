@@ -478,7 +478,7 @@ function shops_show_group_list( $parentid = 0 )
 
 			$xtpl->assign( 'ROW', array(
 				"groupid" => $groupid,
-				"group_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid,
+				"group_link" => empty( $parentid ) ? NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid : 'javascript:void(0)',
 				"title" => $title,
 				"description" => $description,
 				"numsubgroup" => $numsubgroup > 0 ? " <span style=\"color:#FF0101;\">(" . $numsubgroup . ")</span>" : "",
