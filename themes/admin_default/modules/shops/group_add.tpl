@@ -68,7 +68,17 @@
 	</form>
 </div>
 <script type="text/javascript">
-	$('#vcatid').load('{URL}');
+	$.get('{URL}', function(data) {
+		if( data == '' )
+		{
+			$('#cat').hide();
+		}
+		else
+		{
+			$('#vcatid').load('{URL}');
+			$('#cat').show();
+		}
+	});
 
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {

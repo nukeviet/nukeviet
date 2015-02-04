@@ -375,12 +375,12 @@ function nv_getcatalog(obj) {
 	$.get(url, function(data) {
 		if( data == '' )
 		{
-			$('#cat').slideUp();
+			$('#cat').hide();
 		}
 		else
 		{
-			$('#vcatid').load(data);
-			$('#cat').slideDown();
+			$('#cat #vcatid').html( data );
+			$('#cat').show();
 		}
 	});
 }
