@@ -453,7 +453,7 @@ function shops_show_group_list( $parentid = 0 )
 		$xtpl->parse( 'main.catnav' );
 	}
 
-	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, weight, viewgroup, numsubgroup, inhome, indetail, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
+	$sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_description, weight, viewgroup, numsubgroup, inhome, indetail, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
 	$result = $db->query( $sql );
 	$num = $result->rowCount( );
 
@@ -465,7 +465,7 @@ function shops_show_group_list( $parentid = 0 )
 			$lang_global['yes']
 		);
 
-		while( list( $groupid, $parentid, $title, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order ) = $result->fetch( 3 ) )
+		while( list( $groupid, $parentid, $title, $description, $weight, $viewgroup, $numsubgroup, $inhome, $indetail, $in_order ) = $result->fetch( 3 ) )
 		{
 			$array_viewgroup = $array_viewcat_nosub;
 			if( !array_key_exists( $viewgroup, $array_viewgroup ) )
@@ -480,6 +480,7 @@ function shops_show_group_list( $parentid = 0 )
 				"groupid" => $groupid,
 				"group_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid,
 				"title" => $title,
+				"description" => $description,
 				"numsubgroup" => $numsubgroup > 0 ? " <span style=\"color:#FF0101;\">(" . $numsubgroup . ")</span>" : "",
 				"parentid" => $parentid
 			) );

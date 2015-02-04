@@ -51,8 +51,8 @@ if( empty( $contents ) )
 			$array_url_group[$m[1]][] = $m[2];
 		}
 	}
-	//print_r( $array_url_group );
-	//die( );
+	print_r( $array_url_group );
+	die( );
 
 	$data_content = array();
 
