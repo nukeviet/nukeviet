@@ -38,6 +38,10 @@
 							<!-- END: parent_loop -->
 						</select></td>
 					</tr>
+					<tr>
+						<td align="right"><strong>{LANG.group_require} </strong></td>
+						<td><input type="checkbox" name="require" value="1" {DATA.require_ck} /></td>
+					</tr>
 					<tr id="cat">
 						<td align="right">
 							<strong>{LANG.group_of} <span class="red">*</span> <span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.group_cat_note}">&nbsp;</span></strong>
@@ -48,7 +52,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td align="right"><strong>{LANG.keywords}: </strong></td>
+						<td align="right"><strong>{LANG.keywords} </strong></td>
 						<td><input class="form-control" style="width: 500px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 					</tr>
 					<tr>

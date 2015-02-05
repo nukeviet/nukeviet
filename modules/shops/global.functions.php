@@ -358,10 +358,19 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
  * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent( $groupid, $check_inhome = 0 )
+function GetGroupidInParent( $groupid, $check_inhome = 0, $only_children = 0 )
 {
 	global $global_array_group, $array_group;
-	$array_group[] = $groupid;
+
+	if( $only_children )
+	{
+		$array_group = array();
+	}
+	else
+	{
+		$array_group[] = $groupid;
+	}
+
 	$subgroupid = explode( ',', $global_array_group[$groupid]['subgroupid'] );
 	if( ! empty( $subgroupid ) )
 	{

@@ -17,10 +17,34 @@ $error = $admins = '';
 $savegroup = 0;
 $data = array();
 $data['cateid_old'] = 0;
-list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image'] ) = array( 0, 0, '', '', '', '', 0, 0, '' );
+list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['cateid'], $data['numpro'], $data['image'] ) = array( 0, 0, '', '', '', '', array(), 0, '' );
+
+$data['parentid'] = $nv_Request->get_int( 'parentid', 'get,post', 0 );
+$data['groupid'] = $nv_Request->get_int( 'groupid', 'get', 0 );
+if( $data['groupid'] > 0 )
+{
+	list( $data['groupid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['image'], $data['require'] ) = $db->query( 'SELECT groupid, parentid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, image, is_require FROM ' . $table_name . ' where groupid=' . $data['groupid'] )->fetch( 3 );
+	$result = $db->query( 'SELECT cateid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE groupid = ' . $data['groupid'] . ' ORDER BY cateid' );
+	if( $result )
+	{
+		while( $row = $result->fetchColumn() )
+		{
+			$data['cateid'][] = $row;
+		}
+	}
+
+	$data['cateid_old'] = $data['cateid'];
+
+	$data['require_ck'] = $data['require'] ? 'checked="checked"' : '';
+
+	$caption = $lang_module['edit_group'];
+}
+else
+{
+	$caption = $lang_module['add_group'];
+}
 
 $savegroup = $nv_Request->get_int( 'savegroup', 'post', 0 );
-
 if( ! empty( $savegroup ) )
 {
 	$field_lang = nv_file_table( $table_name );
@@ -30,6 +54,7 @@ if( ! empty( $savegroup ) )
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$data['cateid'] = $nv_Request->get_array( 'cateid', 'post', array() );
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['require'] = $nv_Request->get_int( 'require', 'post' );
 	$data['keywords'] = $nv_Request->get_title( 'keywords', 'post', '', 1 );
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
@@ -54,15 +79,6 @@ if( ! empty( $savegroup ) )
 	elseif( sizeof( $data['cateid'] ) == 0 and empty( $data['parentid'] ) )
 	{
 		$error = $lang_module['group_cateid_empty'];
-	}
-
-	if( !empty( $data['cateid'] ) )
-	{
-		$data['cateid'] = implode( ',', $data['cateid'] );
-	}
-	else
-	{
-		$data['cateid'] = '';
 	}
 
 	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $table_name . ' WHERE groupid!=' . $data['groupid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
@@ -101,8 +117,8 @@ if( ! empty( $savegroup ) )
 		$viewgroup = 'viewgroup_page_list';
 		$subgroupid = '';
 
-		$sql = "INSERT INTO " . $table_name . " (parentid,cateid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", " . $db->quote( $data['cateid'] ) . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1 " . $listvalue . " )";
+		$sql = "INSERT INTO " . $table_name . " (parentid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order, is_require " . $listfield . " )
+ 			VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;
@@ -112,6 +128,12 @@ if( ! empty( $savegroup ) )
 
 		if( $newgroupid > 0 )
 		{
+			// Cap nhat cateid
+			foreach( $data['cateid'] as $cateid )
+			{
+				$db->query( 'INSERT INTO ' . $table_name . '_cateid (groupid, cateid) VALUES (' . $newgroupid .', ' . $cateid . ')' );
+			}
+
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_group', 'id ' . $newgroupid, $admin_info['userid'] );
 			nv_fix_group_order();
 			nv_del_moduleCache( $module_name );
@@ -127,8 +149,7 @@ if( ! empty( $savegroup ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( 'UPDATE ' . $table_name . ' SET parentid=' . $data['parentid'] . ', cateid = :cateid, image = :image, ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_keywords= :keywords, edit_time=' . NV_CURRENTTIME . ' WHERE groupid =' . $data['groupid'] );
-			$stmt->bindParam( ':cateid', $data['cateid'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'UPDATE ' . $table_name . ' SET parentid=' . $data['parentid'] . ', image = :image, ' . NV_LANG_DATA . '_title= :title, ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description= :description, ' . NV_LANG_DATA . '_keywords= :keywords, edit_time=' . NV_CURRENTTIME . ', is_require = ' . $data['require'] . ' WHERE groupid =' . $data['groupid'] );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
@@ -136,6 +157,27 @@ if( ! empty( $savegroup ) )
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
 			if( $stmt->execute() )
 			{
+				// Cap nhat cateid
+				$data['cateid'] = array_map( 'intval', $data['cateid']);
+				if( $data['cateid'] != $data['cateid_old'] )
+				{
+					foreach( $data['cateid'] as $cateid )
+					{
+						if( !in_array( $cateid, $data['cateid_old'] ) )
+						{
+							$db->query( 'INSERT INTO ' . $table_name . '_cateid (groupid, cateid) VALUES (' . $data['groupid'] .', ' . $cateid . ')' );
+						}
+					}
+
+					foreach( $data['cateid_old'] as $cateid_old )
+					{
+						if( !in_array( $cateid_old, $data['cateid'] ) )
+						{
+							$db->query( 'DELETE FROM ' . $table_name . '_cateid WHERE cateid = ' . $cateid_old );
+						}
+					}
+				}
+
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_group'], $data['title'], $admin_info['userid'] );
 				if( $data['parentid'] != $data['parentid_old'] )
 				{
@@ -157,24 +199,10 @@ if( ! empty( $savegroup ) )
 		}
 		catch( PDOException $e )
 		{
+			die($e->getMessage());
 			$error = $lang_module['errorsave'];
 		}
 	}
-}
-
-$data['parentid'] = $nv_Request->get_int( 'parentid', 'get,post', 0 );
-$data['groupid'] = $nv_Request->get_int( 'groupid', 'get', 0 );
-
-if( $data['groupid'] > 0 )
-{
-	list( $data['groupid'], $data['parentid'], $data['cateid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['image'] ) = $db->query( 'SELECT groupid, parentid,cateid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords, image FROM ' . $table_name . ' where groupid=' . $data['groupid'] )->fetch( 3 );
-	$data['cateid_old'] = $data['cateid'];
-	$data['cateid'] = explode( ',', $data['cateid'] );
-	$caption = $lang_module['edit_group'];
-}
-else
-{
-	$caption = $lang_module['add_group'];
 }
 
 $sql = "SELECT groupid, " . NV_LANG_DATA . "_title, lev FROM " . $table_name . " WHERE groupid !='" . $data['groupid'] . "' ORDER BY sort ASC";
@@ -204,7 +232,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
-$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . $data['cateid_old'] );
+$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . nv_base64_encode( serialize( $data['cateid_old'] ) ) );
 $xtpl->assign( 'GROUP_LIST', shops_show_group_list( $data['parentid'] ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
 

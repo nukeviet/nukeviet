@@ -15,7 +15,7 @@ $sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV
 $global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
 
 // Groups
-$sql = 'SELECT groupid, parentid, cateid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
+$sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
 $global_array_group = nv_db_cache( $sql, 'groupid', $module_name );
 
 // Lay ty gia ngoai te
