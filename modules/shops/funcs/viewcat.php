@@ -26,6 +26,26 @@ if( empty( $catid ) )
 	exit( );
 }
 
+unset( $array_op[0] );
+$array_url_group = array( );
+$array_id_group = array( );
+foreach( $array_op as $_inurl )
+{
+	if( preg_match( '/^page\-([0-9]+)$/', $_inurl, $m ) )
+	{
+		$page = $m[1];
+	}
+	elseif( preg_match( '/^([a-z0-9\-]+)\_([a-z0-9\-]+)$/i', $_inurl, $m ) )
+	{
+		$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE ' . NV_LANG_DATA . '_alias = ' . $db->quote( $m[2] ) );
+		if( $result->rowCount( ) > 0 )
+		{
+			$array_id_group[] = $result->fetchColumn( );
+		}
+		$array_url_group[$m[1]][] = $m[2];
+	}
+}
+
 $page_title = $global_array_cat[$catid]['title'];
 $key_words = $global_array_cat[$catid]['keywords'];
 $description = $global_array_cat[$catid]['description'];
@@ -48,26 +68,6 @@ if( !defined( 'NV_IS_MODADMIN' ) and $page < 5 and !$ajax )
 
 if( empty( $contents ) )
 {
-	unset( $array_op[0] );
-	$array_url_group = array( );
-	$array_id_group = array( );
-	foreach( $array_op as $_inurl )
-	{
-		if( preg_match( '/^page\-([0-9]+)$/', $_inurl, $m ) )
-		{
-			$page = $m[1];
-		}
-		elseif( preg_match( '/^([a-z0-9\-]+)\_([a-z0-9\-]+)$/i', $_inurl, $m ) )
-		{
-			$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group WHERE ' . NV_LANG_DATA . '_alias = ' . $db->quote( $m[2] ) );
-			if( $result->rowCount( ) > 0 )
-			{
-				$array_id_group[] = $result->fetchColumn( );
-			}
-			$array_url_group[$m[1]][] = $m[2];
-		}
-	}
-
 	$data_content = array( );
 
 	$count = 0;
@@ -201,7 +201,7 @@ if( empty( $contents ) )
 			$where = ' t1.listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 
-		if( $array_url_group or $ajax )
+		if( $array_url_group or !empty( $list_id_group ) )
 		{
 			$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t1.id = t3.pro_id';
 			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( $where . ' AND t1.status =1 AND t1.id = t3.pro_id ' . $list_id_group );
@@ -237,7 +237,7 @@ if( empty( $contents ) )
 		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages, $sorts );
 	}
 
-	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
+	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' and !$ajax )
 	{
 		nv_set_cache( $module_name, $cache_file, $contents );
 	}
