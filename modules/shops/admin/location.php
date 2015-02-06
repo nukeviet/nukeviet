@@ -19,7 +19,7 @@ $data = array();
 list( $data['id'], $data['parentid'], $data['title'] ) = array( 0, 0, '' );
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
-$per_page = 10;
+$per_page = 20;
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=location';
 
 $savelocation = $nv_Request->get_int( 'savelocation', 'post', 0 );

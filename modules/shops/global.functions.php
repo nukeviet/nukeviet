@@ -437,15 +437,23 @@ function GetGroupidInParent( $groupid, $check_inhome = 0, $only_children = 0 )
  * @param mixed $pro_id
  * @return
  */
-function GetGroupID( $pro_id )
+function GetGroupID( $pro_id, $group_by_parent = 0 )
 {
-	global $db, $db_config, $module_data;
-	$data = array();
+	global $db, $db_config, $module_data, $global_array_group;
 
+	$data = array();
 	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{
-		$data[] = $row['group_id'];
+		if( $group_by_parent )
+		{
+			$parentid = $global_array_group[$row['group_id']]['parentid'];
+			$data[$parentid][] = $row['group_id'];
+		}
+		else
+		{
+			$data[] = $row['group_id'];
+		}
 	}
 	return $data;
 }

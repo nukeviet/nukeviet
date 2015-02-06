@@ -566,6 +566,7 @@ function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
 	{
 		$parentid_i = $parentid;
 		$array_location_title = array( );
+
 		$a = 0;
 		while( $parentid_i > 0 )
 		{
@@ -574,14 +575,14 @@ function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
 			$array_location_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id_i . "\"><strong>" . $title_i . "</strong></a>";
 			++$a;
 		}
-
-		for( $i = $a - 1; $i >= 0; $i-- )
+		$array_location_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=location\"><strong>" . $lang_module['location'] . "</strong></a>";
+		for( $i = $a; $i >= 0; $i-- )
 		{
 			$xtpl->assign( 'LOCATION_NAV', $array_location_title[$i] . ($i > 0 ? " &raquo; " : "") );
 			$xtpl->parse( 'main.locationnav.loop' );
 		}
 
-		$xtpl->parse( 'main.location' );
+		$xtpl->parse( 'main.locationnav' );
 	}
 
 	// Fetch Limit
