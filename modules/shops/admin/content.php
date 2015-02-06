@@ -284,6 +284,43 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$error = $lang_module['error_product_price'];
 	}
 
+	// Kiem tra nhom bat buoc
+	$group_cat = array();
+	$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $rowcontent['listcatid'] );
+	while( list( $groupid ) = $result->fetch( 3 ) )
+	{
+		if( $global_array_group[$groupid]['is_require'] )
+		{
+			$group_cat[] = $groupid;
+		}
+	}
+
+	if( ! empty( $group_cat ) )
+	{
+		foreach( $group_cat as $groupid )
+		{
+			$check = 0;
+			$listsub = $global_array_group[$groupid]['subgroupid'];
+			$listsub = explode( ',', $listsub );
+			$listsub = array_map( 'intval', $listsub );
+
+			foreach( $rowcontent['group_id'] as $group_id )
+			{
+				if( in_array( $group_id, $listsub ) )
+				{
+					$check = 1;
+					break;
+				}
+			}
+
+			if( !$check )
+			{
+				$error = sprintf( $lang_module['group_require_content'], $global_array_group[$groupid]['title'] );
+				break;
+			}
+		}
+	}
+
 	if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
 	{
 		require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';

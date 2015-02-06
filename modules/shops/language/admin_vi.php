@@ -318,6 +318,7 @@ $lang_module['add_group'] = 'Thêm nhóm sản phẩm';
 $lang_module['group_name'] = 'Tên nhóm sản phẩm';
 $lang_module['group_sub'] = 'Thuộc nhóm';
 $lang_module['group_require'] = 'Bắt buộc chọn khi nhập liệu';
+$lang_module['group_require_content'] = 'Nhóm <strong>%s</strong> chưa được chọn';
 $lang_module['group_cat_note'] = 'Áp dụng cho tất cả các loại sản phẩm bên trong loại sản phẩm chính';
 $lang_module['group_cat_note1'] = 'Nhấn giữ Ctrl và click chuột để chọn nhiều loại sản phẩm';
 $lang_module['group_name_empty'] = 'Lỗi: Cần nhập tên nhóm sản phẩm';

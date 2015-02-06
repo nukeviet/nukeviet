@@ -38,7 +38,7 @@
 							<!-- END: parent_loop -->
 						</select></td>
 					</tr>
-					<tr>
+					<tr id="require">
 						<td align="right"><strong>{LANG.group_require} </strong></td>
 						<td><input type="checkbox" name="require" value="1" {DATA.require_ck} /></td>
 					</tr>
@@ -75,12 +75,12 @@
 	$.get('{URL}', function(data) {
 		if( data == '' )
 		{
-			$('#cat').hide();
+			$('#cat, #require').hide();
 		}
 		else
 		{
 			$('#vcatid').load('{URL}');
-			$('#cat').show();
+			$('#cat, #require').show();
 		}
 	});
 

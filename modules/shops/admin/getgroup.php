@@ -59,7 +59,7 @@ foreach( $arr_groupid as $groupid_i => $subgroupid_i )
 	$data_group = $global_array_group[$groupid_i];
 
 	$require = '';
-	if( $data_group[$groupid_i]['is_require'] )
+	if( $data_group['is_require'] )
 	{
 		$require = ' <span class="require">(*)</span>';
 	}
