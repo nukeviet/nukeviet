@@ -553,18 +553,6 @@ function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $array_viewcat_nosub, $module_file, $global_config;
 
-	if( empty( $parentid ) )
-	{
-		$lev = 0;
-	}
-	else
-	{
-		$result = $db->query( 'SELECT lev FROM ' . $db_config['prefix'] . '_' . $module_data . '_location WHERE id = ' . $parentid );
-		list( $lev ) = $result->fetch( 3 );
-		$lev += 1;
-		$lev = $lev > 5 ? 5 : $lev;
-	}
-
 	$xtpl = new XTemplate( "location_lists.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
@@ -573,7 +561,6 @@ function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'OP', $op );
-	$xtpl->assign( 'CAPTION', $lang_module['location_lev_' . $lev] );
 
 	if( $parentid > 0 )
 	{
@@ -613,7 +600,7 @@ function shops_show_location_list( $parentid = 0, $page, $per_page, $base_url )
 				"id" => $id,
 				"location_link" => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=location&amp;parentid=" . $id,
 				"title" => $title,
-				"numsub" => $numsub > 0 ? " <span style=\"color:#FF0101;\">(" . $numsub . ' ' . $lang_module['location_lev_' . ($lev + 1)] . ")</span>" : "",
+				"numsub" => $numsub > 0 ? " <span style=\"color:#FF0101;\">(" . $numsub . ")</span>" : "",
 				"parentid" => $parentid
 			) );
 

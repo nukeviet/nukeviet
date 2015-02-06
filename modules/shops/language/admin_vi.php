@@ -449,14 +449,6 @@ $lang_module['location_in'] = 'Trực thuộc';
 $lang_module['location_not_in'] = 'Không trực thuộc';
 $lang_module['location_edit'] = 'Sửa địa điểm';
 $lang_module['location_add'] = 'Thêm địa điểm';
-$lang_module['location_list'] = 'Danh sách các';
-$lang_module['location_lev_0'] = 'Quốc gia';
-$lang_module['location_lev_1'] = 'Tỉnh / Thành phố';
-$lang_module['location_lev_2'] = 'Quận / Huyện';
-$lang_module['location_lev_3'] = 'Xã / Phường / Ấp';
-$lang_module['location_lev_4'] = 'Thôn / Bản / Khu phố';
-$lang_module['location_lev_5'] = 'Cơ sở địa phương';
-$lang_module['location_name_empty'] = 'Lỗi: Chưa nhập tên địa điểm';
 
 //Lang for function shipping
 $lang_module['shipping'] = 'Đơn hàng vận chuyển';

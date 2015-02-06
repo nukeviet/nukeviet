@@ -27,13 +27,13 @@ function getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row )
 			}
 
 			$image = '';
-			if( ! empty( $data_group['image'] ) )
+			if( ! empty( $data_group['image'] ) and file_exists( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_group['image'] ) )
 			{
-				$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $groupinfo_i['image'];
+				$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_group['image'];
 				$image = '<img src="' . $image . '" style="margin-top: -3px; max-width: 16px; max-height: 16px" alt="' . $groupinfo_i['title'] . '" />';
-			}
 
-			$contents_temp .= '<label><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $image . $data_group['title'] . '<label>';
+			}
+			$contents_temp .= '<label style="margin-right: 15px; line-height:25px"><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $image . $data_group['title'] . '</label>';
 		}
 	}
 	return $contents_temp;
@@ -44,11 +44,7 @@ $inrow = $nv_Request->get_string( 'inrow', 'get', '' );
 $inrow = nv_base64_decode( $inrow );
 $array_groupid_in_row = unserialize( $inrow );
 
-$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cid )->fetchColumn();
-if( $count == 0 )
-{
-	$cid = $global_array_cat[$cid]['parentid'] != 0 ? $global_array_cat[$cid]['parentid'] : $cid;
-}
+$cid = GetParentGroupFilter( $cid );
 
 $arr_groupid = array();
 $result = $db->query( 'SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid );

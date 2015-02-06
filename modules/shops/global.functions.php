@@ -352,6 +352,35 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 }
 
 /**
+ * GetParentGroupFilter()
+ *
+ * @param mixed $cateid
+ * @return
+ */
+
+function GetParentGroupFilter( $cateid )
+{
+	global $db, $db_config, $global_array_cat, $module_name, $module_data;
+
+	$cid = 0;
+	while( true )
+	{
+		$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cateid )->fetchColumn();
+		if( $count == 0 )
+		{
+			$cateid = $global_array_cat[$cateid]['parentid'];
+			continue;
+		}
+		else
+		{
+			$cid = $cateid;
+			break;
+		}
+	}
+	return $cid;
+}
+
+/**
  * GetGroupidInParent()
  *
  * @param mixed $groupid

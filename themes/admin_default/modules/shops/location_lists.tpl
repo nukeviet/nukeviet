@@ -10,7 +10,6 @@
 <!-- BEGIN: data -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption>{LANG.location_list} <span class="text-danger">{CAPTION}</span></caption>
 		<thead>
 			<tr>
 				<th class="w100">{LANG.weight}</th>
