@@ -44,7 +44,7 @@ $inrow = $nv_Request->get_string( 'inrow', 'get', '' );
 $inrow = nv_base64_decode( $inrow );
 $array_groupid_in_row = unserialize( $inrow );
 
-$cid = GetParentGroupFilter( $cid );
+$cid = GetParentCatFilter( $cid );
 
 $arr_groupid = array();
 $result = $db->query( 'SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid );

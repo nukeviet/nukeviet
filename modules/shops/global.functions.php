@@ -352,13 +352,13 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 }
 
 /**
- * GetParentGroupFilter()
+ * GetParentCatFilter()
  *
  * @param mixed $cateid
  * @return
  */
 
-function GetParentGroupFilter( $cateid )
+function GetParentCatFilter( $cateid )
 {
 	global $db, $db_config, $global_array_cat, $module_name, $module_data;
 
