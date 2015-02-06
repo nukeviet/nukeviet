@@ -11,7 +11,7 @@
 		{error}
 	</div>
 	<!-- END: error -->
-	<form class="form-inline" action="" method="post">
+	<form class="form-inline" action="{FORM_ACTION}" method="post">
 		<input type="hidden" name ="groupid" value="{DATA.groupid}" />
 		<input type="hidden" name ="parentid_old" value="{DATA.parentid}" />
 		<input name="savegroup" type="hidden" value="1" />

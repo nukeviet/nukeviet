@@ -199,7 +199,6 @@ if( ! empty( $savegroup ) )
 		}
 		catch( PDOException $e )
 		{
-			die($e->getMessage());
 			$error = $lang_module['errorsave'];
 		}
 	}
@@ -231,10 +230,12 @@ $xtpl = new XTemplate( 'group_add.tpl', NV_ROOTDIR . '/themes/' . $global_config
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'CAPTION', $caption );
+
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . nv_base64_encode( serialize( $data['cateid_old'] ) ) );
 $xtpl->assign( 'GROUP_LIST', shops_show_group_list( $data['parentid'] ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;groupid=' . $data['groupid'] . '&amp;parentid=' . $data['parentid'] );
 
 if( $error != '' )
 {

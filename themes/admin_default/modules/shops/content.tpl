@@ -30,29 +30,15 @@
 					<tr>
 						<th>{LANG.content_cat} <span class="require">(*)</span></th>
 						<td>
-							<select class="form-control" name="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
-								<option value="0" > --- </option>
-								<!-- BEGIN: rowscat -->
-								<option value="{ROWSCAT.catid}" {ROWSCAT.selected} >{ROWSCAT.title}</option>
-								<!-- END: rowscat -->
-							</select>
-						</td>
+						<select class="form-control" name="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
+							<option value="0" > --- </option>
+							<!-- BEGIN: rowscat -->
+							<option value="{ROWSCAT.catid}" {ROWSCAT.selected} >{ROWSCAT.title}</option>
+							<!-- END: rowscat -->
+						</select></td>
 					</tr>
 				</tbody>
 			</table>
-
-			<!-- BEGIN:listgroup -->
-			<table class="table table-striped table-bordered table-hover">
-				<tbody>
-					<tr>
-						<th>{LANG.content_group}</th>
-					</tr>
-					<tr>
-						<td id="listgroupid">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-			<!-- END:listgroup -->
 
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
@@ -69,34 +55,29 @@
 					</tr>
 					<tr>
 						<th class="150px">{LANG.content_product_number}</th>
-						<td>
-							<!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
-							<select class="form-control" name="product_unit">
-								<!-- BEGIN: rowunit -->
-								<option value="{uid}" {uch}>{utitle}</option>
-								<!-- END: rowunit -->
-							</select>
-						</td>
+						<td><!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
+						<select class="form-control" name="product_unit">
+							<!-- BEGIN: rowunit -->
+							<option value="{uid}" {uch}>{utitle}</option>
+							<!-- END: rowunit -->
+						</select></td>
 						<th align="right">{LANG.weights}</th>
-						<td>
-							<input class="form-control" type="text" maxlength="50" value="{rowcontent.product_weight}" name="product_weight" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_weight"/>
-							<select class="form-control" name="weight_unit">
-								<!-- BEGIN: weight_unit -->
-								<option value="{WEIGHT.code}" {WEIGHT.select}>{WEIGHT.title}</option>
-								<!-- END: weight_unit -->
-							</select>
-						</td>
+						<td><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_weight}" name="product_weight" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_weight"/>
+						<select class="form-control" name="weight_unit">
+							<!-- BEGIN: weight_unit -->
+							<option value="{WEIGHT.code}" {WEIGHT.select}>{WEIGHT.title}</option>
+							<!-- END: weight_unit -->
+						</select></td>
 					</tr>
 					<tr>
 						<th align="right">{LANG.content_product_discounts}</th>
 						<td colspan="3">
-							<select class="form-control" name="discount_id" style="width:300px">
-								<option value="0"> --- </option>
-								<!-- BEGIN: discount -->
-								<option value="{DISCOUNT.did}" {DISCOUNT.selected} >{DISCOUNT.title}</option>
-								<!-- END: discount -->
-							</select>
-						</td>
+						<select class="form-control" name="discount_id" style="width:300px">
+							<option value="0"> --- </option>
+							<!-- BEGIN: discount -->
+							<option value="{DISCOUNT.did}" {DISCOUNT.selected} >{DISCOUNT.title}</option>
+							<!-- END: discount -->
+						</select></td>
 					</tr>
 				</tbody>
 			</table>
@@ -129,7 +110,7 @@
 						<th>{LANG.content_hometext} <span class="require">(*)</span> {LANG.content_notehome}</th>
 					</tr>
 					<tr>
-						<td><textarea class="form-control" rows="4" name="hometext" style="width:98%">{rowcontent.hometext}</textarea></td>
+						<td>						<textarea class="form-control" rows="4" name="hometext" style="width:98%">{rowcontent.hometext}</textarea></td>
 					</tr>
 					<tr>
 						<th>{LANG.content_bodytext} <span class="require">(*)</span> {LANG.content_bodytext_note}</th>
@@ -149,7 +130,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="row" id="custom_form">
+			<div id="custom_form">
 				{DATACUSTOM_FORM}
 			</div>
 		</div>
@@ -176,28 +157,23 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="message_body" style="overflow: auto">
-								<div class="clearfix uiTokenizer uiInlineTokenizer">
-		                            <div id="keywords" class="tokenarea">
-		                                <!-- BEGIN: keywords -->
-		                                <span class="uiToken removable" title="{KEYWORDS}">
-		                                    {KEYWORDS}
-		                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
-		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
-		                                </span>
-		                                <!-- END: keywords -->
-		                            </div>
-		                            <div class="uiTypeahead">
-		                                <div class="wrap">
-		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
-		                                    <div class="innerWrap">
-		                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                	</div>
-						</td>
+						<div class="message_body" style="overflow: auto">
+							<div class="clearfix uiTokenizer uiInlineTokenizer">
+								<div id="keywords" class="tokenarea">
+									<!-- BEGIN: keywords -->
+									<span class="uiToken removable" title="{KEYWORDS}"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+									<!-- END: keywords -->
+								</div>
+								<div class="uiTypeahead">
+									<div class="wrap">
+										<input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+										<div class="innerWrap">
+											<input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div></td>
 					</tr>
 				</tbody>
 			</table>
@@ -208,16 +184,16 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="row">
-								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text" />
-								<select class="form-control" name="phour">
-									{phour}
-								</select> :
-								<select class="form-control" name="pmin">
-									{pmin}
-								</select>
-							</div>
-						</td>
+						<div class="row">
+							<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text" />
+							<select class="form-control" name="phour">
+								{phour}
+							</select>
+							:
+							<select class="form-control" name="pmin">
+								{pmin}
+							</select>
+						</div></td>
 					</tr>
 				</tbody>
 			</table>
@@ -228,20 +204,20 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="row">
-								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text" />
-								<select class="form-control" name="ehour">
-									{ehour}
-								</select> :
-								<select class="form-control" name="emin">
-									{emin}
-								</select>
-							</div>
-							<div style="margin-top: 5px;">
-								<input type="checkbox" value="1" name="archive" {archive_checked} />
-								<label>{LANG.content_archive}</label>
-							</div>
-						</td>
+						<div class="row">
+							<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text" />
+							<select class="form-control" name="ehour">
+								{ehour}
+							</select>
+							:
+							<select class="form-control" name="emin">
+								{emin}
+							</select>
+						</div>
+						<div style="margin-top: 5px;">
+							<input type="checkbox" value="1" name="archive" {archive_checked} />
+							<label>{LANG.content_archive}</label>
+						</div></td>
 					</tr>
 				</tbody>
 			</table>
@@ -252,30 +228,29 @@
 					</tr>
 					<tr>
 						<td>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="inhome" {inhome_checked}/>
-								<label>{LANG.content_inhome}</label>
-							</div>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="allowed_rating" {allowed_rating_checked}/>
-								<label>{LANG.content_allowed_rating}</label>
-							</div>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="allowed_send" {allowed_send_checked}/>
-								<label>{LANG.content_allowed_send}</label>
-							</div>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="allowed_print" {allowed_print_checked} />
-								<label>{LANG.content_allowed_print}</label>
-							</div>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="allowed_save" {allowed_save_checked} />
-								<label>{LANG.content_allowed_save}</label>
-							</div>
-							<div style="margin-bottom: 2px;">
-								<input type="checkbox" name="showprice" value="1" {ck_showprice}/>{LANG.content_showprice}
-							</div>
-						</td>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" value="1" name="inhome" {inhome_checked}/>
+							<label>{LANG.content_inhome}</label>
+						</div>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" value="1" name="allowed_rating" {allowed_rating_checked}/>
+							<label>{LANG.content_allowed_rating}</label>
+						</div>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" value="1" name="allowed_send" {allowed_send_checked}/>
+							<label>{LANG.content_allowed_send}</label>
+						</div>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" value="1" name="allowed_print" {allowed_print_checked} />
+							<label>{LANG.content_allowed_print}</label>
+						</div>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" value="1" name="allowed_save" {allowed_save_checked} />
+							<label>{LANG.content_allowed_save}</label>
+						</div>
+						<div style="margin-bottom: 2px;">
+							<input type="checkbox" name="showprice" value="1" {ck_showprice}/>{LANG.content_showprice}
+						</div></td>
 					</tr>
 				</tbody>
 			</table>
@@ -285,18 +260,30 @@
 						<th>{LANG.content_allowed_comm}</th>
 					</tr>
 					<tr>
-						<td>
-							<!-- BEGIN: allowed_comm -->
-							<div class="row">
-								<label><input name="allowed_comm[]" type="checkbox" value="{ALLOWED_COMM.value}" {ALLOWED_COMM.checked} />{ALLOWED_COMM.title}</label>
-							</div>
-							<!-- END: allowed_comm -->
-						</td>
+						<td><!-- BEGIN: allowed_comm -->
+						<div class="row">
+							<label><input name="allowed_comm[]" type="checkbox" value="{ALLOWED_COMM.value}" {ALLOWED_COMM.checked} />{ALLOWED_COMM.title}</label>
+						</div><!-- END: allowed_comm --></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<!-- BEGIN:listgroup -->
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<tbody>
+				<tr>
+					<th>{LANG.content_group}</th>
+				</tr>
+				<tr>
+					<td id="listgroupid">&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- END:listgroup -->
 
 	<div class="text-center" style="margin-top: 10px">
 		<!-- BEGIN:status -->
@@ -334,12 +321,12 @@
 		return false;
 	});
 
-	$('[type="submit"]').hover(function(){
-		if( $('[name="keywords[]"]').length == 0 ){
-			if( $('#message-tags').length == 0 ){
+	$('[type="submit"]').hover(function() {
+		if ($('[name="keywords[]"]').length == 0) {
+			if ($('#message-tags').length == 0) {
 				$('#message').html('<div style="margin-top: 10px" id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
 			}
-		}else{
+		} else {
 			$('#message-tags').remove();
 		}
 	});
