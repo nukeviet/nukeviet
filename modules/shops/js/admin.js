@@ -388,5 +388,5 @@ function nv_getcatalog(obj) {
 function nv_change_catid(obj, id) {
 	var cid = $(obj).val();
 	$('#custom_form').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=custom_form&cid=' + cid + "&id=" + id);
-	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid + "&inrow=" + inrow);
+	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid);
 }

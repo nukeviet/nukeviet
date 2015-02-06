@@ -11,7 +11,7 @@
 		{error}
 	</div>
 	<!-- END: error -->
-	<form class="form-inline" action="" method="post">
+	<form class="form-inline" action="{FORM_ACTION}" method="post">
 		<input type="hidden" name ="groupid" value="{DATA.groupid}" />
 		<input type="hidden" name ="parentid_old" value="{DATA.parentid}" />
 		<input name="savegroup" type="hidden" value="1" />
@@ -38,6 +38,10 @@
 							<!-- END: parent_loop -->
 						</select></td>
 					</tr>
+					<tr id="require">
+						<td align="right"><strong>{LANG.group_require} </strong></td>
+						<td><input type="checkbox" name="require" value="1" {DATA.require_ck} /></td>
+					</tr>
 					<tr id="cat">
 						<td align="right">
 							<strong>{LANG.group_of} <span class="red">*</span> <span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.group_cat_note}">&nbsp;</span></strong>
@@ -48,7 +52,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td align="right"><strong>{LANG.keywords}: </strong></td>
+						<td align="right"><strong>{LANG.keywords} </strong></td>
 						<td><input class="form-control" style="width: 500px" name="keywords" type="text" value="{DATA.keywords}" maxlength="255" /></td>
 					</tr>
 					<tr>
@@ -71,12 +75,12 @@
 	$.get('{URL}', function(data) {
 		if( data == '' )
 		{
-			$('#cat').hide();
+			$('#cat, #require').hide();
 		}
 		else
 		{
 			$('#vcatid').load('{URL}');
-			$('#cat').show();
+			$('#cat, #require').show();
 		}
 	});
 

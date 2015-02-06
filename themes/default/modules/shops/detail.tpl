@@ -110,14 +110,16 @@
 				<div class="row">
 					<!-- BEGIN: items -->
 					<div class="col-md-6">
-						<select class="form-control" name="group">
-							<!-- BEGIN: header -->
-							<option value="">---{HEADER}---</option>
-							<!-- END: header -->
-							<!-- BEGIN: loop -->
-							<option value="{GROUP.groupid}">{GROUP.title}</option>
-							<!-- END: loop -->
-						</select>
+						<div class="form-group">
+							<select class="form-control" name="group">
+								<!-- BEGIN: header -->
+								<option value="">---{HEADER}---</option>
+								<!-- END: header -->
+								<!-- BEGIN: loop -->
+								<option value="{GROUP.groupid}">{GROUP.title}</option>
+								<!-- END: loop -->
+							</select>
+						</div>
 					</div>
 					<!-- END: items -->
 				</div>

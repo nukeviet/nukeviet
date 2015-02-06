@@ -352,16 +352,54 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 }
 
 /**
+ * GetParentCatFilter()
+ *
+ * @param mixed $cateid
+ * @return
+ */
+
+function GetParentCatFilter( $cateid )
+{
+	global $db, $db_config, $global_array_cat, $module_name, $module_data;
+
+	$cid = 0;
+	while( true )
+	{
+		$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cateid )->fetchColumn();
+		if( $count == 0 )
+		{
+			$cateid = $global_array_cat[$cateid]['parentid'];
+			continue;
+		}
+		else
+		{
+			$cid = $cateid;
+			break;
+		}
+	}
+	return $cid;
+}
+
+/**
  * GetGroupidInParent()
  *
  * @param mixed $groupid
  * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent( $groupid, $check_inhome = 0 )
+function GetGroupidInParent( $groupid, $check_inhome = 0, $only_children = 0 )
 {
 	global $global_array_group, $array_group;
-	$array_group[] = $groupid;
+
+	if( $only_children )
+	{
+		$array_group = array();
+	}
+	else
+	{
+		$array_group[] = $groupid;
+	}
+
 	$subgroupid = explode( ',', $global_array_group[$groupid]['subgroupid'] );
 	if( ! empty( $subgroupid ) )
 	{
@@ -399,15 +437,23 @@ function GetGroupidInParent( $groupid, $check_inhome = 0 )
  * @param mixed $pro_id
  * @return
  */
-function GetGroupID( $pro_id )
+function GetGroupID( $pro_id, $group_by_parent = 0 )
 {
-	global $db, $db_config, $module_data;
-	$data = array();
+	global $db, $db_config, $module_data, $global_array_group;
 
+	$data = array();
 	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{
-		$data[] = $row['group_id'];
+		if( $group_by_parent )
+		{
+			$parentid = $global_array_group[$row['group_id']]['parentid'];
+			$data[$parentid][] = $row['group_id'];
+		}
+		else
+		{
+			$data[] = $row['group_id'];
+		}
 	}
 	return $data;
 }

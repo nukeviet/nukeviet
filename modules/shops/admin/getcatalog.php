@@ -15,7 +15,9 @@ $pid = $nv_Request->get_int( 'pid', 'get', 0 );
 if( $pid == 0 )
 {
 	$cateid = $nv_Request->get_string( 'cid', 'get', '' );
-	$cateid = explode( ',', $cateid );
+	$cateid = nv_base64_decode( $cateid );
+	$cateid = unserialize( $cateid );
+
 	$table = $db_config['prefix'] . "_" . $module_data . "_catalogs";
 
 	$sql = "SELECT catid, parentid, " . NV_LANG_DATA . "_title, lev, numsubcat FROM " . $table . " ORDER BY sort ASC";
