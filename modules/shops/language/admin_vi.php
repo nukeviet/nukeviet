@@ -474,6 +474,7 @@ $lang_module['carrier_config_list'] = 'Danh sách các cấu hình vận chuyể
 $lang_module['carrier_config_add'] = 'Thêm cấu hình';
 $lang_module['carrier_config_chose'] = 'Chọn cấu hình';
 $lang_module['carrier_config_config'] = 'Cấu hình dịch vụ nhà vận chuyển';
+$lang_module['carrier_config_config_item'] = 'Cấu hình dịch vụ nhà vận chuyển "%s"';
 $lang_module['carrier_config_name'] = 'Tên cấu hình';
 $lang_module['carrier_config_description'] = 'Mô tả';
 $lang_module['carrier_config_weight'] = 'Cấu hình khối lượng';

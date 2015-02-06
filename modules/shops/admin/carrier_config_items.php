@@ -11,6 +11,8 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+$page_title = $lang_module['carrier_config_config'];
+
 $config_weight = array( );
 $cid = $nv_Request->get_int( 'cid', 'post,get', 0 );
 
@@ -251,7 +253,7 @@ $show_view = false;
 if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 {
 	$show_view = true;
-	$per_page = 15;
+	$per_page = 20;
 	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
 	$db->sqlreset( )->select( 'COUNT(*)' )->from( '' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items' )->where( 'cid=' . $row['cid'] );
 	$sth = $db->prepare( $db->sql( ) );
@@ -371,6 +373,11 @@ if( $show_view )
 	$xtpl->parse( 'main.view' );
 }
 
+if( !empty( $row['cid'] ) )
+{
+	$page_title = sprintf( $lang_module['carrier_config_config_item'], $array_config_list[$row['cid']]['title'] );
+}
+
 $row['config_weight'][] = array(
 	'weight' => '',
 	'weight_unit' => $pro_config['weight_unit'],
@@ -460,8 +467,6 @@ if( !empty( $array_config_list ) )
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
-
-$page_title = $lang_module['carrier_config_config'];
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
