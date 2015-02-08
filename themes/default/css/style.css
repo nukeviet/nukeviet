@@ -148,9 +148,20 @@ header{
 	float:left;
 	padding:10px;
 }
+
 #header #logo img{
 	height:80px;
+	float:left;
 }
+
+#header #logo h1{
+	float:left;
+}
+
+#header #logo object{
+	float:left;
+}
+
 #header .pull-right{
 	margin:33px 33px 0 0;
 }
