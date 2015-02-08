@@ -34,7 +34,7 @@ if( ! nv_function_exists( 'nv_news_category' ) )
 				}
 			}
 			$html_input .= '<input type="hidden" id="config_catid_' . $l['catid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . '" />';
-			$html .= '<option alt="' . $linksite . '" value="' . $l['catid'] . '" ' . ( ( $data_block['catid'] == $l['catid'] ) ? ' selected="selected"' : '' ) . '>' . $xtitle_i . $l['title'] . '</option>';
+			$html .= '<option value="' . $l['catid'] . '" ' . ( ( $data_block['catid'] == $l['catid'] ) ? ' selected="selected"' : '' ) . '>' . $xtitle_i . $l['title'] . '</option>';
 		}
 		$html .= '</select>';
 		$html .= $html_input;

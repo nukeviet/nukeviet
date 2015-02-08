@@ -215,7 +215,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					else
 					{
 						$xmllanguage = $xml->xpath( 'language' );
-						$language = ( array )$xmllanguage[0];
+						$language = ( empty( $xmllanguage ) ) ? array() : ( array )$xmllanguage[0];
 
 						if( isset( $language[NV_LANG_INTERFACE] ) )
 						{
