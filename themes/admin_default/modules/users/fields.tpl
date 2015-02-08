@@ -178,11 +178,11 @@
 			<tbody>
 				<tr>
 					<td>{LANG.field_default_value}:</td>
-					<td><label> <input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}> {LANG.field_current_date}</label><label> <input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}> {LANG.field_default_date}</label>&nbsp;<input class="form-control date" style="width:80px" type="text" value="{DATAFORM.default_date}" name="default_date"></td>
+					<td><label> <input type="radio" value="1" name="current_date" {DATAFORM.current_date_1}> {LANG.field_current_date}</label><label> <input type="radio" value="0" name="current_date" {DATAFORM.current_date_0}> {LANG.field_default_date}</label>&nbsp;<input class="form-control date" style="width:100px" type="text" value="{DATAFORM.default_date}" name="default_date"></td>
 				</tr>
 				<tr>
 					<td>{LANG.field_min_date}:</td>
-					<td><input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="form-control datepicker required date" style="width:80px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
+					<td><input class="form-control datepicker required date" style="width:100px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="form-control datepicker required date" style="width:100px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
 				</tr>
 			</tbody>
 		</table>

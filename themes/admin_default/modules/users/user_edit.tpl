@@ -82,7 +82,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -132,7 +132,7 @@
 					<input class="form-control {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 300px" />
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
-					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:100px"/>
 					<!-- END: date -->
 					<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 					<!-- END: textarea -->
