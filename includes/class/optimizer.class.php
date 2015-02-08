@@ -577,6 +577,7 @@ class optimezer
 		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
 		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
 		$content = preg_replace( '/^\s+/', '', $content );
+		$content = preg_replace( "/\n([\n\t\s]+)\n/", "\n", $content );
 
 		return $content;
 	}
