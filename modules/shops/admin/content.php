@@ -286,12 +286,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	// Kiem tra nhom bat buoc
 	$group_cat = array();
-	$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $rowcontent['listcatid'] );
-	while( list( $groupid ) = $result->fetch( 3 ) )
+	$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE catid = ' . $rowcontent['listcatid'] );
+	if( $result->rowCount() > 0 )
 	{
-		if( $global_array_group[$groupid]['is_require'] )
+		while( list( $groupid ) = $result->fetch( 3 ) )
 		{
-			$group_cat[] = $groupid;
+			if( $global_array_group[$groupid]['is_require'] )
+			{
+				$group_cat[] = $groupid;
+			}
 		}
 	}
 
