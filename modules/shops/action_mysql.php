@@ -226,7 +226,7 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_cateid (
   groupid mediumint(8) unsigned NOT NULL,
   cateid mediumint(8) unsigned NOT NULL,
-  UNIQUE KEY groupid (groupid, catid)
+  UNIQUE KEY groupid (groupid, cateid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_items_group (
