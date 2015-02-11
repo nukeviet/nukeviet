@@ -91,8 +91,8 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 			$xtpl->assign( 'LANG', $lang_block_module );
 
 			while( $row = $result->fetch() )
-			{
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=detail/" . change_alias( $row['title'] . "-" . $row['id'] );
+			{//print_r($row);die;
+				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
 				$row['link'] = $link;
 
 				if( ! empty( $block_config['title_length'] ) )
