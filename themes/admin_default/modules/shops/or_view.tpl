@@ -52,9 +52,10 @@
 	    			<!-- BEGIN: main_group -->
 	    			<th>{MAIN_GROUP.title}</th>
 	    			<!-- END: main_group -->
+	    			<th class="text-center">{LANG.order_product_price} ({unit})</th>
 					<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
 					<th>{LANG.order_product_unit}</th>
-					<th class="text-right">{LANG.order_product_price} ({unit})</th>
+					<th class="text-right">{LANG.order_product_price_total} ({unit})</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -75,9 +76,10 @@
 					<!-- BEGIN: sub_group -->
 	    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
 	    			<!-- END: sub_group -->
+	    			<td class="text-center">{product_price}</td>
 					<td class="amount text-center">{product_number}</td>
 					<td class="unit">{product_unit}</td>
-					<td class="money" align="right"><strong>{product_price}</strong></td>
+					<td class="money" align="right"><strong>{product_price_total}</strong></td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

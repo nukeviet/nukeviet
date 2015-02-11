@@ -75,6 +75,7 @@ foreach( $listid as $id )
 		'title' => $title,
 		'alias' => $alias,
 		'product_price' => $listprice[$i] * $listnum[$i],
+		'product_price_total' => $listprice[$i],
 		'product_code' => $product_code,
 		'product_unit' => $unit,
 		'link_pro' => $link . $global_array_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
@@ -121,6 +122,7 @@ foreach( $data_pro as $pdata )
 	$xtpl->assign( 'product_name', $pdata['title'] );
 	$xtpl->assign( 'product_number', $pdata['product_number'] );
 	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+	$xtpl->assign( 'product_price_total', nv_number_format( $pdata['product_price_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 	$xtpl->assign( 'pro_no', $j + 1 );
