@@ -239,6 +239,7 @@ $lang_module['order_no_payment'] = 'Chưa thanh toán';
 $lang_module['order_update'] = 'Cập nhật';
 $lang_module['order_product_number'] = 'SL';
 $lang_module['order_product_price'] = 'Giá';
+$lang_module['order_product_price_total'] = 'Thành tiền';
 $lang_module['order_product_unit'] = 'Đơn vị';
 $lang_module['order_submit'] = 'Xử lý đơn này';
 $lang_module['order_submit_comfix'] = 'Bạn chấp nhận xử lý đơn này?';
