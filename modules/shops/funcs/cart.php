@@ -35,6 +35,7 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 			$data_content = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $row['id'] )->fetch();
 			$order_old[$row['id']] = array(
 				'num' => $row['num'],
+				'num_old' => $row['num'],
 				'order' => 1,
 				'price' => $row['price'],
 				'money_unit' => $order_info['money_unit'],
@@ -152,8 +153,14 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 			}
 
 			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
-
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
+
+
+			if( !empty( $order_info ) )
+			{
+				$product_number = $product_number + $_SESSION[$module_data . '_cart'][$id]['num_old'];
+			}
+
 			if( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
 			{
 				$number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;
