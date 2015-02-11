@@ -286,7 +286,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	// Kiem tra nhom bat buoc
 	$group_cat = array();
-	$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE catid = ' . $rowcontent['listcatid'] );
+	$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $rowcontent['listcatid'] );
 	if( $result->rowCount() > 0 )
 	{
 		while( list( $groupid ) = $result->fetch( 3 ) )
