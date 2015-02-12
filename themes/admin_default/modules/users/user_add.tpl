@@ -67,7 +67,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -189,7 +189,7 @@
 			yearRange: "-99:+0"
 		});
 
-		$("#birthday").datepicker({
+		$(".datepicker").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,
@@ -197,7 +197,6 @@
 			showOtherMonths : true,
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true,
-			yearRange: "-99:+0"
 		});
 	});
 	//]]>

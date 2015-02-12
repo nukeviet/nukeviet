@@ -384,7 +384,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a > 1 )
 				{
-					$xtpl->assign( 'WCT', 'col-md-8 ' );
+					$xtpl->assign( 'WCT', 'col-md-16 ' );
 				}
 				else
 				{

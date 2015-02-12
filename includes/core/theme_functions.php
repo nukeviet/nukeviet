@@ -131,7 +131,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 	$xtpl = new XTemplate( 'info_die.tpl', $tpl_path );
-	$xtpl->assign( 'SITE_CHERSET', $global_config['site_charset'] );
+	$xtpl->assign( 'SITE_CHARSET', $global_config['site_charset'] );
 	$xtpl->assign( 'PAGE_TITLE', $page_title );
 	$xtpl->assign( 'HOME_LINK', $global_config['site_url'] );
 	$xtpl->assign( 'LANG', $lang_global );
