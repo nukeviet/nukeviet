@@ -50,7 +50,7 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 		{
 			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
 		}
-		$html .= '</select>';		
+		$html .= '</select>';
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
@@ -79,9 +79,9 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 		$blockwidth = $module_config[$module]['blockwidth'];
 
 		if( empty( $block_config['catid'] ) ) return '';
-		
+
 		$catid = implode( ',', $block_config['catid'] );
-		
+
 		$db->sqlreset()
 			->select( 'id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime' )
 			->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows' )
@@ -92,14 +92,15 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 
 		if( ! empty( $list ) )
 		{
-			if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news/block_groups.tpl' ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme']  . '/modules/news/block_groups.tpl' ) )
 			{
-				$block_theme = $module_info['template'];
+				$block_theme = $global_config['module_theme'] ;
 			}
 			else
 			{
 				$block_theme = 'default';
 			}
+
 			$xtpl = new XTemplate( 'block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news' );
 			foreach( $list as $l )
 			{
@@ -126,9 +127,9 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 				}
 
 				$l['blockwidth'] = $blockwidth;
-				
+
 				$l['hometext'] = nv_clean60( $l['hometext'], $block_config['tooltip_length'], true );
-				
+
 				if( ! $block_config['showtooltip'] )
 				{
 					$xtpl->assign( 'TITLE', 'title="' . $l['title'] . '"' );
@@ -138,7 +139,7 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 				if( ! empty( $l['thumb'] ) ) $xtpl->parse( 'main.loop.img' );
 				$xtpl->parse( 'main.loop' );
 			}
-			
+
 			if( $block_config['showtooltip'] )
 			{
 				$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
