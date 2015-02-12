@@ -1,0 +1,13 @@
+#toolbar {
+	position: absolute;
+	top: expression(eval(document.compatMode && document.compatMode == 'CSS1Compat') ? document.documentElement.scrollTop + ( document.documentElement.clientHeight-this.clientHeight )  - 1 : document.body.scrollTop + ( document.body.clientHeight-this.clientHeight ) - 1 )
+}
+
+.txt-qs {
+	line-height: 1;
+	padding: 0 2px
+}
+
+input, button {
+	overflow: visible
+}
