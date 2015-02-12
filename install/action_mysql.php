@@ -458,3 +458,16 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
 	 " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
 	 UNIQUE KEY c_type (c_type,c_val)
 ) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  send_to mediumint(8) unsigned NOT NULL,
+  send_from mediumint(8) unsigned NOT NULL DEFAULT '0',
+  area tinyint(1) unsigned NOT NULL,
+  language char(3) NOT NULL,
+  module varchar(50) NOT NULL,
+  type varchar(255) NOT NULL,
+  content text NOT NULL,
+  add_time int(11) unsigned NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";

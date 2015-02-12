@@ -303,6 +303,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 
+			nv_insert_notification( 'modules', 'auto_deactive_module', array( 'custom_title' => $site_mods[$module_name]['custom_title'] ) );
 			nv_del_moduleCache( 'modules' );
 		}
 	}
