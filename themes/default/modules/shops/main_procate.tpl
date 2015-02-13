@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div id="products">
+<div id="category">
 	<!-- BEGIN: catalogs -->
 	<div class="panel panel-default">
 		<div class="panel-heading">

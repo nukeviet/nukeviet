@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div id="category">
     <div class="page-header">
-        <h1>{CAT_NAME}</h1>
+        <h1>{CAT_NAME} ({count} {LANG.title_products})</h1>
 		<!-- BEGIN: image -->
 		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
 		<!-- END: image -->
