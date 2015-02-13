@@ -91,9 +91,9 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 
 		if( ! empty( $list ) )
 		{
-			if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news/block_groups.tpl' ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_groups.tpl' ) )
 			{
-				$block_theme = $module_info['template'];
+				$block_theme = $global_config['module_theme'];
 			}
 			else
 			{
