@@ -627,89 +627,41 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 	$server = $nv_Request->get_string( 'server', 'get', '' );
 	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
 	{
-		if( $server == 'facebook' )
+		if( file_exists(NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php') )
 		{
-			include NV_ROOTDIR . '/modules/' . $module_file . '/facebook.auth.class.php' ;
-			$FaceBookAuth = new FaceBookAuth( $global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server );
-
-			$state = $nv_Request->get_string( 'state', 'get', '' );
-			$checksess = md5( $global_config['sitekey'] . session_id() );
-
-			if( ! empty( $state ) )
+			if( $nv_Request->isset_request( 'result', 'get' ) )
 			{
-				if( $checksess == $state )
+				$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
+				$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
+
+				if( empty( $openid_attribs ) or $openid_attribs['server'] != $server )
 				{
-					$code = $nv_Request->get_string( 'code', 'get', '' );
-					$error = $nv_Request->get_string( 'error', 'get', '' );
+					$nv_Request->unset_request( 'openid_attribs', 'session' );
+					$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
+					die();
+				}
 
-					if( $error )
-					{
-						$attribs = array( 'result' => 'cancel' );
-					}
-					else
-					{
-						$data = $FaceBookAuth->GraphBase( $code );
-
-						if( ! $data->verified )
-						{
-							$attribs = array( 'result' => 'notlogin' );
-						}
-						else
-						{
-							$attribs = array(
-								'result' => 'is_res',
-								'id' => sprintf( $openid_servers[$server]['identity'], $data->id ),
-								'server' => $server
-							) + $FaceBookAuth->getAttributes( $data, $openid_servers[$server]['required'] );
-						}
-					}
-
-					$attribs = serialize( $attribs );
-					$nv_Request->set_Session( 'openid_attribs', $attribs );
-					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
-					exit();
+				if( $openid_attribs['result'] == 'cancel' )
+				{
+					$nv_Request->unset_request( 'openid_attribs', 'session' );
+					openidLogin_Res0( $lang_module['canceled_authentication'] );
+				}
+				elseif( $openid_attribs['result'] == 'notlogin' )
+				{
+					$nv_Request->unset_request( 'openid_attribs', 'session' );
+					openidLogin_Res0( $lang_module['not_logged_in'] );
 				}
 				else
 				{
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-					die();
+					openidLogin_Res1( $openid_attribs );
 				}
-			}
-
-			if( ! $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				$scope = 'email';
-				// Yeu cau them email cho phu hop voi NukeViet
-				header( 'Location: ' . $FaceBookAuth->GetOAuthDialogUrl( $checksess, $scope ) );
-				die();
-			}
-
-			$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
-			$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
-
-			if( empty( $openid_attribs ) or $openid_attribs['server'] != $server )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
-				die();
-			}
-
-			if( $openid_attribs['result'] == 'cancel' )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				openidLogin_Res0( $lang_module['canceled_authentication'] );
-			}
-			elseif( $openid_attribs['result'] == 'notlogin' )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				openidLogin_Res0( $lang_module['not_logged_in'] );
+				exit();
 			}
 			else
 			{
-				openidLogin_Res1( $openid_attribs );
+				include NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php';
 			}
-			exit();
 		}
 		else
 		{

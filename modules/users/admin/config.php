@@ -67,8 +67,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 
 	// Cau hinh cho facebook
-	$array_config['facebook_client_id'] = $nv_Request->get_title( 'facebook_client_id', 'post', '' );
+	$array_config['facebook_client_id'] = ( string ) $nv_Request->get_title( 'facebook_client_id', 'post', '' );
 	$array_config['facebook_client_secret'] = $nv_Request->get_title( 'facebook_client_secret', 'post', '' );
+
+	// Cau hinh cho google
+	$array_config['google_client_id'] = ( string ) $nv_Request->get_title( 'google_client_id', 'post', '' );
+	$array_config['google_client_secret'] = $nv_Request->get_title( 'google_client_secret', 'post', '' );
 
 	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 	foreach( $array_config as $config_name => $config_value )
@@ -77,17 +81,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 		$sth->execute();
 	}
-	
+
 	//cau hinh kich thuoc avatar
 	$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
 	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'" );
 	$stmt->bindParam( ':content', $array_config['avatar_width'], PDO::PARAM_STR );
 	$stmt->execute();
-	
+
 	$array_config['avatar_height'] = $nv_Request->get_int( 'avatar_height', 'post', 120 );
 	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'" );
 	$stmt->bindParam( ':content', $array_config['avatar_height'], PDO::PARAM_STR );
-	$stmt->execute();	
+	$stmt->execute();
 
 	$array_config['deny_email'] = $nv_Request->get_title( 'deny_email', 'post', '', 1 );
 
@@ -186,7 +190,10 @@ $array_whoview = array(
 	2 => $lang_module['whoview_admin']
 );
 
-$ignorefolders = array( "", ".", "..", "index.html", ".htaccess" );
+$lang_module['facebook_config'] = sprintf( $lang_module['oauth_config'], 'facebook' );
+$lang_module['google_config'] = sprintf( $lang_module['oauth_config'], 'google' );
+
+$ignorefolders = array( '', '.', '..', 'index.html', '.htaccess' );
 
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );

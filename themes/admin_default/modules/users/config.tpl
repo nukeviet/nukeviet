@@ -102,15 +102,34 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<td><strong>{LANG.facebook_client_id}</strong></td>
-					<td><input type="text" class="form-control" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
+					<td><strong>{LANG.oauth_client_id}</strong></td>
+					<td><input type="text" class="form-control" style="width: 500px;" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.facebook_client_secret}</strong></td>
-					<td><input type="text" class="form-control" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
+					<td><strong>{LANG.oauth_client_secret}</strong></td>
+					<td><input type="text" class="form-control" style="width: 500px;" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
 				</tr>
 			<tbody>
 		</table>
+
+		<table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.google_config}</caption>
+			<colgroup>
+				<col style="width: 320px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.oauth_client_id}</strong></td>
+					<td><input type="text" class="form-control" style="width: 500px;" name="google_client_id" value="{DATA.google_client_id}"/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.oauth_client_secret}</strong></td>
+					<td><input type="text" class="form-control" style="width: 500px;" name="google_client_secret" value="{DATA.google_client_secret}"/></td>
+				</tr>
+			<tbody>
+		</table>
+
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_other} </caption>
 			<colgroup>
