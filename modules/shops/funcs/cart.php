@@ -155,7 +155,6 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
 
-
 			if( !empty( $order_info ) )
 			{
 				$product_number = $product_number + $_SESSION[$module_data . '_cart'][$id]['num_old'];

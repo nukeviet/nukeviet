@@ -28,12 +28,14 @@
 
 <form action="{LINK_CART}" method="post" id="fpro">
 	<input type="hidden" value="1" name="save"/>
+	<!-- BEGIN: price6 -->
+	<span class="text-right help-block"><strong>{LANG.product_unit_price}:</strong> {unit_config}</span>
+	<!-- END: price6 -->
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
 					<th>{LANG.order_no_products}</th>
-					<th>{LANG.cart_images}</th>
 					<th>{LANG.cart_products}</th>
 
 					<!-- BEGIN: main_group -->
@@ -41,10 +43,16 @@
 					<!-- END: main_group -->
 
 					<!-- BEGIN: price1 -->
-					<th class="text-right">{LANG.cart_price}</th>
+					<th class="text-right">
+						{LANG.cart_price}
+						<span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.cart_price_note}">&nbsp;</span>
+					</th>
 					<!-- END: price1 -->
 					<th style="width: 80px">{LANG.cart_numbers}</th>
 					<th>{LANG.cart_unit}</th>
+					<!-- BEGIN: price4 -->
+					<th class="text-right">{LANG.cart_price_total}</th>
+					<!-- END: price4 -->
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -52,7 +60,6 @@
 				<!-- BEGIN: rows -->
 				<tr id="{id}">
 					<td align="center">{stt}</td>
-					<td align="center"><img src="{img_pro}" alt="{link_pro}" width="70" class="img-thumbnail" /></td>
 					<td>
 						<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
 						<!-- BEGIN: display_group -->
@@ -69,10 +76,13 @@
 	    			<!-- END: sub_group -->
 
 					<!-- BEGIN: price2 -->
-					<td class="money text-right"><strong>{PRICE.sale_format} {PRICE.unit}</strong></td>
+					<td class="money text-right"><strong>{PRICE.sale_format}</strong></td>
 					<!-- END: price2 -->
 					<td align="center"><input type="number" size="1" value="{pro_num}" name="listproid[{id}]" id="{id}" class="form-control"/></td>
 					<td>{product_unit}</td>
+					<!-- BEGIN: price5 -->
+					<td class="money text-right">{PRICE_TOTAL.sale_format}</td>
+					<!-- END: price5 -->
 					<td align="center"><a class="remove_cart" title="{LANG.cart_remove_pro}" href="{link_remove}"><em style="color: red" class="fa fa-times-circle">&nbsp;</em></a></td>
 				</tr>
 				<!-- END: rows -->
@@ -119,6 +129,10 @@
 	</div>
 </form>
 <script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+
 	var urload = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 	$("#total").load(urload + '&t=2');
 

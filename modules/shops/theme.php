@@ -1581,8 +1581,10 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 
-			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'], true );
 			$xtpl->assign( 'PRICE', $price );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
+			$xtpl->assign( 'PRICE_TOTAL', $price );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
@@ -1632,7 +1634,10 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 			}
 
 			if( $pro_config['active_price'] == '1' )
+			{
 				$xtpl->parse( 'main.rows.price2' );
+				$xtpl->parse( 'main.rows.price5' );
+			}
 
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + $price['sale'];
@@ -1678,6 +1683,8 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 	{
 		$xtpl->parse( 'main.price1' );
 		$xtpl->parse( 'main.price3' );
+		$xtpl->parse( 'main.price4' );
+		$xtpl->parse( 'main.price6' );
 	}
 
 	if( !empty( $order_info ) )
@@ -1774,13 +1781,18 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$xtpl->parse( 'main.rows.display_group' );
 			}
 
-			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'], true );
 			$xtpl->assign( 'PRICE', $price );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
+			$xtpl->assign( 'PRICE_TOTAL', $price );
 			$xtpl->assign( 'pro_no', $j );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 			if( $pro_config['active_price'] == '1' )
+			{
 				$xtpl->parse( 'main.rows.price2' );
+				$xtpl->parse( 'main.rows.price5' );
+			}
 			$xtpl->parse( 'main.rows' );
 			$price_total = $price_total + $price['sale'];
 			++$j;
@@ -1802,6 +1814,8 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 			$xtpl->parse( 'main.price3.total_coupons' );
 		}
 		$xtpl->parse( 'main.price3' );
+		$xtpl->parse( 'main.price4' );
+		$xtpl->parse( 'main.price6' );
 	}
 
 	if( !empty( $shipping_data['list_location'] ) )
@@ -1916,6 +1930,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		$xtpl->assign( 'product_name', $pdata['title'] );
 		$xtpl->assign( 'product_number', $pdata['product_number'] );
 		$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+		$xtpl->assign( 'product_price_total', nv_number_format( $pdata['product_price'] * $pdata['product_number'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 		$xtpl->assign( 'money_unit', $pdata['money_unit'] );
 		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
@@ -1960,7 +1975,10 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		}
 
 		if( $pro_config['active_price'] == '1' )
+		{
 			$xtpl->parse( 'main.loop.price2' );
+			$xtpl->parse( 'main.loop.price5' );
+		}
 
 		$xtpl->parse( 'main.loop' );
 		++$j;
@@ -2024,6 +2042,8 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 			$xtpl->parse( 'main.price3.total_coupons' );
 		}
 		$xtpl->parse( 'main.price3' );
+		$xtpl->parse( 'main.price4' );
+		$xtpl->parse( 'main.price6' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -2068,6 +2088,7 @@ function print_pay( $data_content, $data_pro )
 		$xtpl->assign( 'product_name', $pdata['title'] );
 		$xtpl->assign( 'product_number', $pdata['product_number'] );
 		$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+		$xtpl->assign( 'product_price_total', nv_number_format( $pdata['product_price']*$pdata['product_number'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 		$xtpl->assign( 'link_pro', $pdata['link_pro'] );
 		$xtpl->assign( 'pro_no', $i + 1 );
@@ -2092,7 +2113,11 @@ function print_pay( $data_content, $data_pro )
 		}
 
 		if( $pro_config['active_price'] == '1' )
+		{
 			$xtpl->parse( 'main.loop.price2' );
+			$xtpl->parse( 'main.loop.price5' );
+		}
+
 		$xtpl->parse( 'main.loop' );
 		++$i;
 	}
@@ -2137,6 +2162,8 @@ function print_pay( $data_content, $data_pro )
 	{
 		$xtpl->parse( 'main.price1' );
 		$xtpl->parse( 'main.price3' );
+		$xtpl->parse( 'main.price4' );
+		$xtpl->parse( 'main.price6' );
 	}
 
 	$xtpl->parse( 'main' );

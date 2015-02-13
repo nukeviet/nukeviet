@@ -1263,3 +1263,10 @@ img.calendar {
 .thumbnail .caption h3{
 	font-size: 14px
 }
+
+.info_icon:before {
+	font-family: FontAwesome;
+	color: #1E91CF;
+	font-size: 14px;
+	content: "\f05a";
+}
