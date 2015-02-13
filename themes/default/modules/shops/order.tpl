@@ -133,6 +133,9 @@
 			</div>
 		</div>
 
+		<!-- BEGIN: price6 -->
+		<span class="text-right help-block"><strong>{LANG.product_unit_price}:</strong> {unit_config}</span>
+		<!-- END: price6 -->
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
@@ -143,10 +146,16 @@
 	        			<th>{MAIN_GROUP.title}</th>
 	        			<!-- END: main_group -->
         				<!-- BEGIN: price1 -->
-        				<th class="price text-right">{LANG.cart_price} ({unit_config})</th>
+        				<th class="price text-right">
+        					{LANG.cart_price}
+        					<span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.cart_price_note}">&nbsp;</span>
+        				</th>
         				<!-- END: price1 -->
         				<th class="text-center" width="60px">{LANG.cart_numbers}</th>
         				<th>{LANG.cart_unit}</th>
+        				<!-- BEGIN: price4 -->
+        				<th class="text-right">{LANG.cart_price_total}</th>
+        				<!-- END: price4 -->
         			</tr>
     			</thead>
 
@@ -172,6 +181,9 @@
     				<!-- END: price2 -->
     				<td align="center">{pro_num}</td>
     				<td>{product_unit}</td>
+    				<!-- BEGIN: price5 -->
+    				<td class="text-right money">{PRICE_TOTAL.sale_format}</td>
+    				<!-- END: price5 -->
     			</tr>
     			<!-- END: rows -->
     			</tbody>
@@ -207,6 +219,8 @@
 	var order_shipping = '{DATA.order_shipping}';
 
 	$(document).ready(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+
 		$("#location").select2({
 			language: "en"
 		});

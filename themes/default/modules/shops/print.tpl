@@ -47,6 +47,10 @@ body {
 			</div></td>
 		</tr>
 	</table>
+
+	<!-- BEGIN: price6 -->
+	<span style="text-align: right; display: block"><strong>{LANG.product_unit_price}:</strong> {unit}</span>
+	<!-- END: price6 -->
 	<table class="rows">
 		<tr class="bgtop">
 			<td align="center" width="30px"> {LANG.order_no_products} </td>
@@ -55,10 +59,13 @@ body {
 			<td>{MAIN_GROUP.title}</td>
 			<!-- END: main_group -->
 			<!-- BEGIN: price1 -->
-			<td class="price" align="right"> {LANG.cart_price} ({unit}) </td>
+			<td class="price" align="right"> {LANG.cart_price} </td>
 			<!-- END: price1 -->
 			<td align="center" width="60px"> {LANG.cart_numbers} </td>
-			<td width="60"> {LANG.cart_unit} </td>
+			<td> {LANG.cart_unit} </td>
+			<!-- BEGIN: price4 -->
+			<td class="text-right"> {LANG.cart_price_total} </td>
+			<!-- END: price4 -->
 		</tr>
 		<!-- BEGIN: loop -->
 		<tr {bg}>
@@ -72,6 +79,9 @@ body {
 			<!-- END: price2 -->
 			<td align="center"> {product_number} </td>
 			<td> {product_unit} </td>
+			<!-- BEGIN: price5 -->
+			<td class="text-right"> {product_price_total} </td>
+			<!-- END: price5 -->
 		</tr>
 		<!-- END: loop -->
 		</tbody>

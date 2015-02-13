@@ -64,6 +64,9 @@
 		</div>
 	</div>
 
+	<!-- BEGIN: price6 -->
+	<span class="text-right help-block"><strong>{LANG.product_unit_price}:</strong> {unit}</span>
+	<!-- END: price6 -->
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
@@ -74,10 +77,16 @@
 	    			<th>{MAIN_GROUP.title}</th>
 	    			<!-- END: main_group -->
 					<!-- BEGIN: price1 -->
-					<th class="price text-right"> {LANG.cart_price} ({unit}) </th>
+					<th class="price text-right">
+						{LANG.cart_price}
+						<span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.cart_price_note}">&nbsp;</span>
+					</th>
 					<!-- END: price1 -->
-					<th class="text-right" width="60px"> {LANG.cart_numbers} </th>
-					<th class="text-right">{LANG.cart_unit}</td>
+					<th class="text-center" width="60px"> {LANG.cart_numbers} </th>
+					<th class="text-right">{LANG.cart_unit}</th>
+					<!-- BEGIN: price4 -->
+					<th class="text-right">{LANG.cart_price_total}</th>
+					<!-- END: price4 -->
 				</tr>
 			</thead>
 
@@ -97,8 +106,11 @@
 					<!-- BEGIN: price2 -->
 					<td class="money text-right"><strong>{product_price}</strong></td>
 					<!-- END: price2 -->
-					<td class="text-right" align="center"> {product_number} </td>
+					<td class="text-center" align="center"> {product_number} </td>
 					<td class="text-right">{product_unit}</td>
+					<!-- BEGIN: price5 -->
+					<td class="text-right money">{product_price_total}</td>
+					<!-- END: price5 -->
 				</tr>
 				<!-- END: loop -->
 			</tbody>
@@ -183,6 +195,8 @@
 </form>
 <script type="text/javascript">
 	$(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+
 		$('#click_print').click(function(event) {
 			var href = $(this).attr("href");
 			event.preventDefault();
