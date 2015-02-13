@@ -94,7 +94,7 @@ if( ! empty( $groupid ) )
 
 if( $keyword != "" )
 {
-	$search .= " AND (t1." . NV_LANG_DATA . "_title LIKE '%" . $db->dblikeescape( kwhtml ) . "%' OR product_code LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
+	$search .= " AND (t1." . NV_LANG_DATA . "_title LIKE '%" . $db->dblikeescape( $kwhtml ) . "%' OR product_code LIKE '%" . $db->dblikeescape( $keyword ) . "%')";
 }
 
 if( ( $price1 >= 0 and $price2 > 0 ) )

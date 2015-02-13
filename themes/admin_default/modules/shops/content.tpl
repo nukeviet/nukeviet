@@ -30,12 +30,12 @@
 					<tr>
 						<th>{LANG.content_cat} <span class="require">(*)</span></th>
 						<td>
-						<select class="form-control" name="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
-							<option value="0" > --- </option>
-							<!-- BEGIN: rowscat -->
-							<option value="{ROWSCAT.catid}" {ROWSCAT.selected} >{ROWSCAT.title}</option>
-							<!-- END: rowscat -->
-						</select></td>
+							<select class="form-control" name="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
+								<option value="0" data-label="1"> --- </option>
+								<!-- BEGIN: rowscat -->
+								<option value="{ROWSCAT.catid}" {ROWSCAT.selected} data-label="{ROWSCAT.typeprice}">{ROWSCAT.title}</option>
+								<!-- END: rowscat -->
+							</select></td>
 					</tr>
 				</tbody>
 			</table>
@@ -45,15 +45,6 @@
 					<tr>
 						<th>{LANG.content_product_code}: </th>
 						<td><input class="form-control" name="product_code" type="text" value="{rowcontent.product_code}" maxlength="255"/></td>
-						<th align="right">{LANG.content_product_product_price}</th>
-						<td><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_price}" name="product_price" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_money"/>
-						<select class="form-control" name="money_unit">
-							<!-- BEGIN: money_unit -->
-							<option value="{MON.code}" {MON.select}>{MON.currency}</option>
-							<!-- END: money_unit -->
-						</select></td>
-					</tr>
-					<tr>
 						<th class="150px">{LANG.content_product_number}</th>
 						<td><!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
 						<select class="form-control" name="product_unit">
@@ -61,23 +52,55 @@
 							<option value="{uid}" {uch}>{utitle}</option>
 							<!-- END: rowunit -->
 						</select></td>
-						<th align="right">{LANG.weights}</th>
-						<td><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_weight}" name="product_weight" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_weight"/>
-						<select class="form-control" name="weight_unit">
-							<!-- BEGIN: weight_unit -->
-							<option value="{WEIGHT.code}" {WEIGHT.select}>{WEIGHT.title}</option>
-							<!-- END: weight_unit -->
-						</select></td>
 					</tr>
-					<tr>
-						<th align="right">{LANG.content_product_discounts}</th>
-						<td colspan="3">
-						<select class="form-control" name="discount_id" style="width:300px">
-							<option value="0"> --- </option>
-							<!-- BEGIN: discount -->
-							<option value="{DISCOUNT.did}" {DISCOUNT.selected} >{DISCOUNT.title}</option>
-							<!-- END: discount -->
-						</select></td>
+					<tr id="priceproduct">
+						<!-- BEGIN: typeprice2 -->
+							<td colspan="3">
+								<table id="id_price_config" class="table table-striped table-bordered table-hover">
+									<thead>
+										<tr>
+											<th class="text-center"> {LANG.discount_to} </th>
+											<th class="text-center"> {LANG.content_product_product_price} </th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<td colspan="2">
+												<input type="button" value="{LANG.price_config_add}" onclick="nv_price_config_add_item();" class="btn btn-info" />
+											</td>
+									</tfoot>
+									<tbody>
+										<!-- BEGIN: loop -->
+										<tr>
+											<td><input class="form-control" type="number" name="price_config[{PRICE_CONFIG.id}][number_to]" value="{PRICE_CONFIG.number_to}"/></td>
+											<td><input class="form-control" type="text" name="price_config[{PRICE_CONFIG.id}][price]" value="{PRICE_CONFIG.price}" onkeyup="this.value=FormatNumber(this.value);" style="text-align: right"/></td>
+										</tr>
+										<!-- END: loop -->
+									</tbody>
+								</table>
+							</td>
+						<!-- END: typeprice2 -->
+						<!-- BEGIN: product_price -->
+						<th align="right">{LANG.content_product_product_price}</th>
+						<td><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_price}" name="product_price" onkeyup="this.value=FormatNumber(this.value);" id="f_money" style="text-align: right"/></td>
+						<!-- END: product_price -->
+						<td>
+							<select class="form-control" name="money_unit">
+								<!-- BEGIN: money_unit -->
+								<option value="{MON.code}" {MON.select}>{MON.currency}</option>
+								<!-- END: money_unit -->
+							</select>
+						</td>
+						<!-- BEGIN: typeprice1 -->
+							<th align="right" colspan="2">{LANG.content_product_discounts}
+							<select class="form-control" name="discount_id">
+								<option value="0"> --- </option>
+								<!-- BEGIN: discount -->
+								<option value="{DISCOUNT.did}" {DISCOUNT.selected} >{DISCOUNT.title}</option>
+								<!-- END: discount -->
+							</select>
+							</td>
+						<!-- END: typeprice1 -->
 					</tr>
 				</tbody>
 			</table>
@@ -309,6 +332,7 @@
 	var file_items = '{FILE_ITEMS}';
 	var file_selectfile = '{LANG.file_selectfile}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
+	var inputnumber = '{LANG.error_inputnumber}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
 	var currentpath = "{CURRENT}";
 

@@ -387,6 +387,23 @@ function nv_getcatalog(obj) {
 
 function nv_change_catid(obj, id) {
 	var cid = $(obj).val();
+	var typepriceold = $("#typepriceold").val();
+	typeprice = $(obj).find('option:selected').attr("data-label");
+	if (typeprice!=typepriceold)
+	{
+		$('#priceproduct').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getprice&cid=' + cid + "&id=" + id);
+		$("#typepriceold").val(typeprice);
+	}
 	$('#custom_form').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=custom_form&cid=' + cid + "&id=" + id);
 	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid);
+}
+
+function nv_price_config_add_item() {
+	var items =  $("input[name^=price_config]").length;
+	items = items/2 + 1;
+	var newitem = '<tr>';
+	newitem += '	<td><input class="form-control" type="number" name="price_config['+items+'][number_to]" value=""/></td>';
+	newitem += '	<td><input class="form-control" type="text" name="price_config['+items+'][price]" value="" onkeyup="this.value=FormatNumber(this.value);" style="text-align: right"/></td>';
+	newitem += '	</tr>';
+	$("#id_price_config").append(newitem);
 }

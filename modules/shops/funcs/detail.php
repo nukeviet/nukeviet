@@ -118,11 +118,11 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
 
 	// Fetch Limit
-	$db->sqlreset( )->select( ' t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext,t1.' . NV_LANG_DATA . '_promotional, t2.newday' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t1.listcatid = t2.catid' )->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )->order( 'ID DESC' )->limit( $pro_config['per_row'] * 2 );
+	$db->sqlreset( )->select( ' t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.homeimgfile, t1.homeimgthumb, t1.addtime, t1.publtime, t1.product_code, t1.product_number, t1.product_price, t1.price_config, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_hometext,t1.' . NV_LANG_DATA . '_promotional, t2.newday' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t1.listcatid = t2.catid' )->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )->order( 'ID DESC' )->limit( $pro_config['per_row'] * 2 );
 	$result = $db->query( $db->sql( ) );
 
 	$data_others = array( );
-	while( list( $_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $promotional, $newday ) = $result->fetch( 3 ) )
+	while( list( $_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $discount_id, $showprice, $hometext, $promotional, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -153,6 +153,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'product_code' => $product_code,
 			'product_number' => $product_number,
 			'product_price' => $product_price,
+			'price_config' => $price_config,
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,

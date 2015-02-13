@@ -106,7 +106,7 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.new' );
 					}
 
-					$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
+					$price = nv_get_price( $data_row_i['id'], $pro_config['money_unit'] );
 
 					if( $pro_config['active_price'] == '1' )
 					{
@@ -277,7 +277,7 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 						$xtpl->parse( 'main.catalogs.items.new' );
 					}
 
-					$price = nv_currency_conversion( $data_row_i['product_price'], $data_row_i['money_unit'], $pro_config['money_unit'], $data_row_i['discount_id'] );
+					$price = nv_get_price( $data_row_i['id'], $pro_config['money_unit'] );
 
 					if( $pro_config['active_price'] == '1' )
 					{
@@ -491,7 +491,7 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 				}
 			}
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -645,7 +645,7 @@ function view_search_all( $data_content, $html_pages = '' )
 				}
 			}
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -826,7 +826,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 				$xtpl->parse( 'main.grid_rows.new' );
 			}
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -1030,7 +1030,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 				$xtpl->parse( 'main.row.new' );
 			}
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -1137,7 +1137,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
  */
 function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info;
+	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat;
 
 	if( !defined( 'SHADOWBOX' ) )
 	{
@@ -1167,7 +1167,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . ' ' . nv_date( 'd-m-Y h:i:s A', $data_content['publtime'] ) );
 		$xtpl->assign( 'DETAIL', $data_content[NV_LANG_DATA . '_bodytext'] );
 		$xtpl->assign( 'LINK_ORDER', $link2 . 'setcart&id=' . $data_content['id'] );
-		$price = nv_currency_conversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'], $data_content['discount_id'] );
+		$price = nv_get_price( $data_content['id'], $pro_config['money_unit'] );
 		$xtpl->assign( 'PRICE', $price );
 		$xtpl->assign( 'PRODUCT_CODE', $data_content['product_code'] );
 		$xtpl->assign( 'PRODUCT_NUMBER', $data_content['product_number'] );
@@ -1382,6 +1382,26 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->parse( 'main.discount_content' );
 	}
 
+	if( $global_array_cat[$data_content['listcatid']]['typeprice'] == 2 )
+	{
+		$price_config = unserialize( $data_content['price_config'] );
+		if( !empty( $price_config ) )
+		{
+			$before = 1;
+			foreach( $price_config as $items )
+			{
+				$items['number_from'] = $before;
+				$items['price'] = nv_number_format( $items['price'], nv_get_decimals( $pro_config['money_unit'] ) );
+				$xtpl->assign( 'ITEMS', $items );
+				$xtpl->parse( 'main.typepeice.items' );
+				$before = $items['number_to'] + 1;
+			}
+
+			$xtpl->assign( 'money_unit', $price['unit'] );
+			$xtpl->parse( 'main.typepeice' );
+		}
+	}
+
 	if( !empty( $data_others ) )
 	{
 		$hmtl = view_home_all( $data_others );
@@ -1495,7 +1515,7 @@ function print_product( $data_content, $data_unit, $page_title )
 		$xtpl->assign( 'NUM_VIEW', $data_content['hitstotal'] );
 		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . date( ' d-m-Y ', $data_content['addtime'] ) . $lang_module['detail_moment'] . date( " h:i'", $data_content['addtime'] ) );
 		$xtpl->assign( 'DETAIL', $data_content[NV_LANG_DATA . '_bodytext'] );
-		$xtpl->assign( 'PRICE', nv_currency_conversion( $data_content['product_price'], $data_content['money_unit'], $pro_config['money_unit'] ) );
+		$xtpl->assign( 'PRICE', nv_get_price( $data_content['id'], $pro_config['money_unit'] ) );
 		$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 		$xtpl->assign( 'address', $data_content[NV_LANG_DATA . '_address'] );
@@ -1561,7 +1581,7 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'], $data_row['num'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
 			$xtpl->assign( 'PRICE', $price );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
@@ -1754,7 +1774,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$xtpl->parse( 'main.rows.display_group' );
 			}
 
-			$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'], $data_row['num'] );
+			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'], $data_row['num'] );
 			$xtpl->assign( 'PRICE', $price );
 			$xtpl->assign( 'pro_no', $j );
 			$xtpl->assign( 'pro_num', $data_row['num'] );
@@ -2428,7 +2448,7 @@ function compare( $data_pro )
 		}
 		$xtpl->parse( 'main.product_code' );
 
-		$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+		$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 		if( $pro_config['active_price'] == '1' )
 		{
 			if( $data_row['showprice'] == '1' )
@@ -2515,7 +2535,7 @@ function wishlist( $data_content, $html_pages = '' )
 			{
 				if( $data_row['showprice'] == '1' )
 				{
-					$price = nv_currency_conversion( $data_row['product_price'], $data_row['money_unit'], $pro_config['money_unit'], $data_row['discount_id'] );
+					$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 					$xtpl->assign( 'PRICE', $price );
 					if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
 					{

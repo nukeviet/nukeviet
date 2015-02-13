@@ -69,13 +69,14 @@ foreach( $listid as $id )
 	$result = $db->query( $sql );
 
 	list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
+	$price = nv_get_price( $id, $pro_config['money_unit'], $listnum[$i], true );
 	$data_pro[] = array(
 		'id' => $id,
 		'publtime' => $publtime,
 		'title' => $title,
 		'alias' => $alias,
-		'product_price' => $listprice[$i] * $listnum[$i],
-		'product_price_total' => $listprice[$i],
+		'product_price' => $listprice[$i],
+		'product_price_total' => $listprice[$i] * $listnum[$i],
 		'product_code' => $product_code,
 		'product_unit' => $unit,
 		'link_pro' => $link . $global_array_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,

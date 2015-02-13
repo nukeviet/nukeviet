@@ -103,17 +103,17 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		$templistid = implode( ',', $arrayid );
 
 		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
-
 		$result = $db->query( $sql );
 		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit, $discount_id ) = $result->fetch( 3 ) )
 		{
+			$price = nv_get_price( $id, $pro_config['money_unit'], $temppro[$id]['num'], true );
 			$data_pro[] = array(
 				'id' => $id,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
 				'hometext' => $hometext,
-				'product_price' => $temppro[$id]['price'],
+				'product_price' => $price['sale'],
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'discount_id' => $discount_id,
@@ -215,10 +215,13 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 
 	// Lay so diem tich luy cua khach
 	$point = 0;
-	$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] . '' );
-	if( $result )
+	if( !empty( $user_info ) )
 	{
-		$point = $result->fetchColumn();
+		$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] );
+		if( $result )
+		{
+			$point = $result->fetchColumn();
+		}
 	}
 
 	$contents = call_user_func( 'payment', $data, $data_pro, $url_checkout, $intro_pay, $point );
