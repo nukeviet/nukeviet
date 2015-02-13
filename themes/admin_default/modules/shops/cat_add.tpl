@@ -29,7 +29,16 @@
 						<!-- BEGIN: parent_loop -->
 						<option value="{pcatid_i}" {pselect}>{ptitle_i}</option>
 						<!-- END: parent_loop -->
-					</select></td>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.typeprice} </th>
+					<td>
+						<!-- BEGIN: typeprice_loop -->
+						<label><input type="radio" name="typeprice" value="{TYPEPRICE.key}" {TYPEPRICE.checked} />{TYPEPRICE.value}</label>&nbsp;&nbsp;
+						<!-- END: typeprice_loop -->
+					</td>
 				</tr>
 				<tr>
 					<th class="text-right">{LANG.keywords}: </th>

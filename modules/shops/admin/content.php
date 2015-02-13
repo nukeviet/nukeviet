@@ -196,6 +196,41 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
 
+	$typeprice = ($rowcontent['listcatid']) ? $global_array_cat[$rowcontent['listcatid']]['typeprice'] : 0;
+	if( $typeprice == 2 )
+	{
+		$price_config = $nv_Request->get_array( 'price_config', 'post' );
+		$sortArray = array( );
+		foreach( $price_config as $price_config_i )
+		{
+			$sortArray['number_to'][] = intval( $price_config_i['number_to'] );
+			$sortArray['price'][] = floatval( preg_replace( '/[^0-9\.]/', '', $price_config_i['price'] ) );
+		}
+		array_multisort( $sortArray['number_to'], SORT_ASC, $price_config );
+
+		$price_config_save = array( );
+		$i = 0;
+		foreach( $price_config as $key => $price_config_i )
+		{
+			$price_config_i['number_to'] = intval( $price_config_i['number_to'] );
+			$price_config_i['price'] = floatval( preg_replace( '/[^0-9\.]/', '', $price_config_i['price'] ) );
+			if( $price_config_i['number_to'] > 0 and $price_config_i['price'] >= 0 )
+			{
+				$price_config_i['id'] = ++$i;
+				$price_config_save[$i] = $price_config_i;
+			}
+		}
+		$rowcontent['product_price'] = isset( $price_config_save[1] ) ? $price_config_save[1]['price'] : 0;
+		$rowcontent['price_config'] = serialize( $price_config_save );
+	}
+	else
+	{
+		$rowcontent['product_price'] = $nv_Request->get_string( 'product_price', 'post', '' );
+		$rowcontent['product_price'] = floatval( preg_replace( '/[^0-9\.]/', '', $rowcontent['product_price'] ) );
+
+		$rowcontent['price_config'] = '';
+	}
+
 	$bodytext = $nv_Request->get_string( 'bodytext', 'post', '' );
 	$rowcontent['bodytext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $bodytext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $bodytext ) ), '<br />' );
 
@@ -414,7 +449,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$rowcontent['status'] = 2;
 			}
 
-			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
+			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_rows (id, listcatid, user_id, addtime, edittime, status, publtime, exptime, archive, product_code, product_number, product_price, price_config, money_unit, product_unit, product_weight, weight_unit, discount_id, homeimgfile, homeimgthumb, homeimgalt,otherimage,imgposition, copyright, inhome, allowed_comm, allowed_rating, ratingdetail, allowed_send, allowed_print, allowed_save, hitstotal, hitscm, hitslm, showprice " . $listfield . ")
 				 VALUES ( NULL ,
 				 :listcatid,
 				 " . intval( $rowcontent['user_id'] ) . ",
@@ -427,6 +462,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				 :product_code,
 				 " . intval( $rowcontent['product_number'] ) . ",
 				 :product_price,
+				 :price_config,
 				 :money_unit,
 				 " . intval( $rowcontent['product_unit'] ) . ",
 				 :product_weight,
@@ -456,6 +492,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$data_insert['listcatid'] = $rowcontent['listcatid'];
 			$data_insert['product_code'] = $rowcontent['product_code'];
 			$data_insert['product_price'] = $rowcontent['product_price'];
+			$data_insert['price_config'] = $rowcontent['price_config'];
 			$data_insert['product_weight'] = $rowcontent['product_weight'];
 			$data_insert['weight_unit'] = $rowcontent['weight_unit'];
 			$data_insert['money_unit'] = $rowcontent['money_unit'];
@@ -555,6 +592,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 product_code = :product_code,
 			 product_number = product_number + " . intval( $rowcontent['product_number'] ) . ",
 			 product_price = :product_price,
+			 price_config = :price_config,
 			 money_unit = :money_unit,
 			 product_unit = " . intval( $rowcontent['product_unit'] ) . ",
 			 product_weight = :product_weight,
@@ -586,6 +624,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':product_code', $rowcontent['product_code'], PDO::PARAM_STR );
 			$stmt->bindParam( ':money_unit', $rowcontent['money_unit'], PDO::PARAM_STR );
 			$stmt->bindParam( ':product_price', $rowcontent['product_price'], PDO::PARAM_STR );
+			$stmt->bindParam( ':price_config', $rowcontent['price_config'], PDO::PARAM_INT );
 			$stmt->bindParam( ':product_weight', $rowcontent['product_weight'], PDO::PARAM_STR );
 			$stmt->bindParam( ':weight_unit', $rowcontent['weight_unit'], PDO::PARAM_STR );
 			$stmt->bindParam( ':homeimgfile', $rowcontent['homeimgfile'], PDO::PARAM_STR );
@@ -966,6 +1005,45 @@ if( count( $array_block_cat_module ) > 0 )
 	}
 	$xtpl->assign( 'row_block', $shtm );
 	$xtpl->parse( 'main.block_cat' );
+}
+
+$typeprice = ($rowcontent['listcatid']) ? $global_array_cat[$rowcontent['listcatid']]['typeprice'] : 1;
+if( $typeprice == 1 )
+{
+	// List discount
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+	$_result = $db->query( $sql );
+	while( $_discount = $_result->fetch( ) )
+	{
+		$_discount['selected'] = ($_discount['did'] == $rowcontent['discount_id']) ? "selected=\"selected\"" : "";
+		$xtpl->assign( 'DISCOUNT', $_discount );
+		$xtpl->parse( 'main.typeprice1.discount' );
+	}
+	$xtpl->parse( 'main.typeprice1' );
+	$xtpl->parse( 'main.product_price' );
+}
+elseif( $typeprice == 2 )
+{
+	$_arr_price_config = (empty( $rowcontent['price_config'] )) ? array( ) : unserialize( $rowcontent['price_config'] );
+	$i = sizeof( $_arr_price_config );
+	++$i;
+	$_arr_price_config[$i] = array(
+		'id' => $i,
+		'number_to' => ($i == 1) ? 1 : '',
+		'price' => ($i == 1) ? $rowcontent['product_price'] : '',
+	);
+
+	foreach( $_arr_price_config as $price_config )
+	{
+		$price_config['price'] = ($price_config['price'] > 0) ? number_format( $price_config['price'], nv_get_decimals( $pro_config['money_unit'] ) ) : '';
+		$xtpl->assign( 'PRICE_CONFIG', $price_config );
+		$xtpl->parse( 'main.typeprice2.loop' );
+	}
+	$xtpl->parse( 'main.typeprice2' );
+}
+else
+{
+	$xtpl->parse( 'main.product_price' );
 }
 
 // List discount

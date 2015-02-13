@@ -73,7 +73,8 @@ $allow_func = array(
 	'carrier_config',
 	'carrier_config_items',
 	'shipping',
-	'shops'
+	'shops',
+	'getprice'
 );
 if( defined( 'NV_IS_SPADMIN' ) )
 {

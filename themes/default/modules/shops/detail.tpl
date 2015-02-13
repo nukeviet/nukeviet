@@ -35,8 +35,8 @@
 							<!-- BEGIN: discounts -->
 							<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
 							<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
-							<!-- END: discounts -->
 							<span class="money">{product_discounts} {money_unit}</span>
+							<!-- END: discounts -->
 
 							<!-- BEGIN: no_discounts -->
 							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
@@ -243,8 +243,8 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<!-- BEGIN: discount_default -->
-			<table class="table table-striped table-bordered table-hover">
+           <!-- BEGIN: typepeice -->
+			<table class="table table-striped table-bordered table-hover" style="width: 264px">
 				<thead>
 					<tr>
 						<th class="text-right">{LANG.detail_pro_number}</th>
@@ -254,13 +254,13 @@
 				<tbody>
 					<!-- BEGIN: items -->
 					<tr>
-						<td class="text-right">{ITEMS.discount_from} -> {ITEMS.discount_to}</td>
-						<td class="text-left">{ITEMS.discount_price}</td>
+						<td class="text-right">{ITEMS.number_from} -> {ITEMS.number_to}</td>
+						<td class="text-left">{ITEMS.price}</td>
 					</tr>
 					<!-- END: items -->
 				</tbody>
 			</table>
-			<!-- END: discount_default -->
+			<!-- END: typepeice -->
 
 			<!-- BEGIN: order -->
 			<div class="pull-right" style="margin-top: 6px">

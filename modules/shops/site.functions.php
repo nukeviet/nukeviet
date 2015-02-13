@@ -11,7 +11,7 @@
 if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 // Categories
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, form, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
+$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
 $global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
 
 // Groups
@@ -115,16 +115,113 @@ else
 }
 
 /**
+ * nv_get_price()
+ *
+ * @param mixed $pro_id
+ * @param mixed $currency_convert
+ * @param mixed $number
+ * @param mixed $per_pro
+ * @return
+ */
+function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false )
+{
+	global $db, $db_config, $module_data, $global_array_cat, $pro_config, $money_config, $discounts_config;
+
+	$return = array();
+	$discount_percent = 0;
+	$discount_unit = '';
+	$discount = 0;
+
+	$product = $db->query( 'SELECT listcatid, product_price, money_unit, price_config, discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $pro_id )->fetch();
+	$price = $product['product_price'];
+
+	if( !$per_pro )
+	{
+		$price = $price * $number;
+	}
+
+	$r = $money_config[$product['money_unit']]['round'];
+	$decimals = nv_get_decimals( $product['money_unit'] );
+
+	if( $r > 1 )
+	{
+		$price = round( $price / $r ) * $r;
+	}
+	else
+	{
+		$price = round( $price, $decimals );
+	}
+
+	if( $global_array_cat[$product['listcatid']]['typeprice'] == 2 )
+	{
+		$_price_config = unserialize( $product['price_config'] );
+		if( !empty( $_price_config ) )
+		{
+			foreach( $_price_config as $_p )
+			{
+				if( $number <= $_p['number_to'] )
+				{
+					$price = $_p['price'] * ( !$per_pro ? $number : 1 );
+					break;
+				}
+			}
+		}
+	}
+	elseif( $global_array_cat[$product['listcatid']]['typeprice'] == 1 )
+	{
+		if( isset( $discounts_config[$product['discount_id']] ) )
+		{
+			$_config = $discounts_config[$product['discount_id']];
+			if( $_config['begin_time'] < NV_CURRENTTIME and ($_config['end_time'] > NV_CURRENTTIME or empty( $_config['end_time'] )) )
+			{
+				foreach( $_config['config'] as $_d )
+				{
+					if( $_d['discount_from'] <= $number and $_d['discount_to'] >= $number )
+					{
+						$discount_percent = $_d['discount_number'];
+						if( $_d['discount_unit'] == 'p' )
+						{
+							$discount_unit = '%';
+							$discount = ($price * ($discount_percent / 100));
+						}
+						else
+						{
+							$discount_unit = ' ' . $pro_config['money_unit'];
+							$discount = $discount_percent * $number;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	$price = nv_currency_conversion($price, $product['money_unit'], $currency_convert );
+
+	$return['price'] = $price; // Giá sản phẩm chưa format
+	$return['price_format'] = nv_number_format( $price, $decimals ); // Giá sản phẩm đã format
+
+	$return['discount'] = $discount;// Số tiền giảm giá sản phẩm chưa format
+	$return['discount_format'] = nv_number_format( $discount, $decimals ); // Số tiền giảm giá sản phẩm đã format
+	$return['discount_percent'] = $discount_unit == '%' ? $discount_percent : nv_number_format( $discount_percent, $decimals );// Giảm giá theo phần trăm
+	$return['discount_unit'] = $discount_unit;// Đơn vị giảm giá
+
+	$return['sale'] = $price - $discount;// Giá bán thực tế của sản phẩm
+	$return['sale_format'] = nv_number_format( $return['sale'], $decimals );// Giá bán thực tế của sản phẩm đã format
+	$return['unit'] = $currency_convert;
+
+	return $return;
+}
+
+/**
  * nv_currency_conversion()
  *
  * @param mixed $price
  * @param mixed $currency_curent
  * @param mixed $currency_convert
- * @param mixed $discount_id
- * @param mixed $number
  * @return
  */
-function nv_currency_conversion( $price, $currency_curent, $currency_convert, $discount_id = 0, $number = 1 )
+function nv_currency_conversion( $price, $currency_curent, $currency_convert )
 {
 	global $pro_config, $money_config, $discounts_config;
 
@@ -136,75 +233,8 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 	{
 		$price = $price * $money_config[$currency_curent]['exchange'];
 	}
-	$price = $price * $number;
 
-
-	$r = $money_config[$currency_convert]['round'];
-	$decimals = nv_get_decimals( $currency_convert );
-
-	if( $r > 1 )
-	{
-		$price = round( $price / $r ) * $r;
-	}
-	else
-	{
-		$price = round( $price, $decimals );
-	}
-
-	$f = 0;
-	$discount_percent = 0;
-	$discount_unit = '';
-	$discount = 0;
-
-	if( isset( $discounts_config[$discount_id] ) )
-	{
-		$_config = $discounts_config[$discount_id];
-		if( $_config['begin_time'] < NV_CURRENTTIME and ($_config['end_time'] > NV_CURRENTTIME or empty( $_config['end_time'] )) )
-		{
-			foreach( $_config['config'] as $_d )
-			{
-				if( $_d['discount_from'] <= $number and $_d['discount_to'] >= $number )
-				{
-					$discount_percent = $_d['discount_number'];
-					if( $_d['discount_unit'] == 'p' )
-					{
-						$discount_unit = '%';
-						$discount = ($price * ($discount_percent / 100));
-					}
-					else
-					{
-						$discount_unit = ' ' . $pro_config['money_unit'];
-						$discount = $discount_percent * $number;
-					}
-
-					if( $r > 1 )
-					{
-						$discount = round( $discount / $r ) * $r;
-					}
-					else
-					{
-						$discount = round( $discount, $decimals );
-					}
-					break;
-				}
-			}
-		}
-	}
-
-	$return = array();
-	$return['price'] = $price; // Giá sản phẩm chưa format
-	$return['price_format'] = nv_number_format( $price, $decimals ); // Giá sản phẩm đã format
-
-	$return['discount'] = $discount;// Số tiền giảm giá sản phẩm chưa format
-	$return['discount_format'] = nv_number_format( $discount, $decimals ); // Số tiền giảm giá sản phẩm đã format
-	$return['discount_percent'] = $discount_unit == '%' ? $discount_percent : nv_number_format( $discount_percent, $decimals );// Giảm giá theo phần trăm
-	$return['discount_unit'] = $discount_unit;// Đơn vị giảm giá
-
-	$return['sale'] = $price - $discount;// Giá bán thực tế của sản phẩm
-	$return['sale_format'] = nv_number_format( $return['sale'], $decimals );// Giá bán thực tế của sản phẩm đã format
-	$return['unit'] = $currency_convert;// Đơn vị của tiền tệ
-
-	return $return;
+	return $price;
 }
 
 /**

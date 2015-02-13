@@ -103,7 +103,7 @@ if( $post_order == 1 )
 		}
 		if( $_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 )
 		{
-			$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'] );
+			$price = nv_get_price( $pro_id, $pro_config['money_unit'], ( int )$info['num'] );
 
 			// Ap dung giam gia cho tung san pham dac biet
 			if( !empty( $counpons['product'] ) )
@@ -129,7 +129,7 @@ if( $post_order == 1 )
 			}
 
 			$info['price'] = $price['sale'];
-			$total = $total + (( int )$info['num'] * ( double )$info['price']);
+			$total = $total + ( double )$info['price'];
 			$total_weight = $total_weight + nv_weight_conversion( ( double )$info['weight'], $info['weight_unit'], $pro_config['weight_unit'], ( int )$info['num'] );
 
 			$i++;
@@ -290,7 +290,7 @@ if( $post_order == 1 )
 				}
 				if( $_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 and $i > 0 )
 				{
-					$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'] );
+					$price = nv_get_price( $pro_id, $pro_config['money_unit'], $info['num'], true );
 					$info['price'] = $price['sale'];
 
 					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, id, num, price, discount_id, group_id ) VALUES ( :order_id, :id, :num, :price, :discount_id, :group_id )' );
