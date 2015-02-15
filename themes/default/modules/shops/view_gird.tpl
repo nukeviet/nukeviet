@@ -37,7 +37,7 @@
             	<!-- END: point -->
             </div>
             <div class="caption text-center">
-                <h3><a href="{LINK}" title="{title_pro}">{title_pro0}</a></h3>
+                <h3><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></h3>
 
                 <!-- BEGIN: product_code -->
                 <p class="label label-default">{PRODUCT_CODE}</p>
