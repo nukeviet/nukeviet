@@ -41,17 +41,6 @@ while( list( $bid_i, $adddefault_i, $title_i ) = $result->fetch( 3 ) )
 }
 
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
-$parentid = $nv_Request->get_int( 'parentid', 'get', 0 );
-
-$stmt = $db->prepare( 'SELECT numsubcat FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid= :parentid' );
-$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_STR );
-$stmt->execute( );
-$subcatid = $stmt->fetchColumn( );
-if( $subcatid == 0 )
-{
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items' );
-	die();
-}
 
 $rowcontent = array(
 	'id' => 0,
