@@ -146,7 +146,6 @@ function IsNumberInt(str) {
 			return str.substring(0, i);
 		}
 		if (temp == ",") {
-			alert("{LANG.thaythedaucham}");
 			return str.substring(0, i);
 		}
 	}
