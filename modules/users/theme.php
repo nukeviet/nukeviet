@@ -39,10 +39,14 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_register );
 	$xtpl->assign( 'NV_SITETERMS', $siteterms );
-	foreach( $data_questions as $array_question_i )
+	if( $global_config['allowquestion'] )
 	{
-		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
-		$xtpl->parse( 'main.frquestion' );
+		foreach( $data_questions as $array_question_i )
+		{
+			$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
+			$xtpl->parse( 'main.allowquestion.frquestion' );
+		}
+		$xtpl->parse( 'main.allowquestion' );
 	}
 
 	if( ! empty( $array_field_config ) )
@@ -949,7 +953,7 @@ function user_welcome()
 		$xtpl->parse( 'main.pass_empty_note' );
 	}
 
-	if( empty( $user_info['valid_question'] ) )
+	if( $global_config['allowquestion'] and empty( $user_info['valid_question'] ) )
 	{
 		$xtpl->parse( 'main.question_empty_note' );
 	}

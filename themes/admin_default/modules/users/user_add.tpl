@@ -40,13 +40,21 @@
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
-					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td style="width:10px"> 
+						<!-- BEGIN: question -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: question -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
-					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+					<td style="width:10px">
+						<!-- BEGIN: answer -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: answer -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.name} </td>
