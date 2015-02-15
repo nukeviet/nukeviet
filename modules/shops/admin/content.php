@@ -47,10 +47,10 @@ $stmt = $db->prepare( 'SELECT numsubcat FROM ' . $db_config['prefix'] . '_' . $m
 $stmt->bindParam( ':parentid', $parentid, PDO::PARAM_STR );
 $stmt->execute( );
 $subcatid = $stmt->fetchColumn( );
-if( $subcatid > 0 )
+if( $subcatid == 0 )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name );
-	die( );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items' );
+	die();
 }
 
 $rowcontent = array(
