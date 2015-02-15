@@ -1,0 +1,76 @@
+<?php
+
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
+ */
+
+if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
+
+if( ! $global_config['allowuserlogin'] )
+{
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+	die();
+}
+
+if( defined( 'NV_OPENID_ALLOWED' ) )
+{
+	$server = $nv_Request->get_string( 'server', 'get', '' );
+	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	{
+		if( file_exists(NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php') )
+		{
+			include NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php';
+		}
+		else
+		{
+			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
+			$openid = new LightOpenID();
+
+			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
+			{
+				$openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
+
+				if( $openid_mode == 'cancel' )
+				{
+					$attribs = array( 'result' => 'cancel' );
+				}
+				elseif( ! $openid->validate() )
+				{
+					$attribs = array( 'result' => 'notlogin' );
+				}
+				else
+				{
+					$attribs = array(
+						'result' => 'is_res',
+						'id' => $openid->identity,
+						'server' => $server
+					) + $openid->getAttributes();
+				}
+
+				$attribs = serialize( $attribs );
+				$nv_Request->set_Session( 'openid_attribs', $attribs );
+			
+				$op_redirect = ( defined( 'NV_IS_USER' ) ) ? 'openid' : 'login';
+				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
+				exit();
+			}
+
+			if( ! $nv_Request->isset_request( 'result', 'get' ) )
+			{
+				$openid->identity = $openid_servers[$server]['identity'];
+				$openid->required = array_values( $openid_servers[$server]['required'] );
+				header( 'Location: ' . $openid->authUrl() );
+				die();
+			}
+			exit();
+		}		
+	}
+}
+
+include NV_ROOTDIR . '/includes/header.php';
+echo nv_site_theme( $contents, $full );
+include NV_ROOTDIR . '/includes/footer.php';

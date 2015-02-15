@@ -253,8 +253,8 @@ function openidLogin_Res1( $attribs )
 		}
 		if( $login_allowed )
 		{
-			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :id, :opid, :email )' );
-			$stmt->bindParam( ':id', $attribs['id'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :server, :opid, :email )' );
+			$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid',$opid , PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 			$stmt->execute();
@@ -627,82 +627,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 	$server = $nv_Request->get_string( 'server', 'get', '' );
 	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
 	{
-		if( file_exists(NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php') )
+		if( $nv_Request->isset_request( 'result', 'get' ) )
 		{
-			if( $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
-				$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
-
-				if( empty( $openid_attribs ) or $openid_attribs['server'] != $server )
-				{
-					$nv_Request->unset_request( 'openid_attribs', 'session' );
-					$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-					Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
-					die();
-				}
-
-				if( $openid_attribs['result'] == 'cancel' )
-				{
-					$nv_Request->unset_request( 'openid_attribs', 'session' );
-					openidLogin_Res0( $lang_module['canceled_authentication'] );
-				}
-				elseif( $openid_attribs['result'] == 'notlogin' )
-				{
-					$nv_Request->unset_request( 'openid_attribs', 'session' );
-					openidLogin_Res0( $lang_module['not_logged_in'] );
-				}
-				else
-				{
-					openidLogin_Res1( $openid_attribs );
-				}
-				exit();
-			}
-			else
-			{
-				include NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php';
-			}
-		}
-		else
-		{
-			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
-			$openid = new LightOpenID();
-
-			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
-			{
-				$openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
-
-				if( $openid_mode == 'cancel' )
-				{
-					$attribs = array( 'result' => 'cancel' );
-				}
-				elseif( ! $openid->validate() )
-				{
-					$attribs = array( 'result' => 'notlogin' );
-				}
-				else
-				{
-					$attribs = array(
-						'result' => 'is_res',
-						'id' => $openid->identity,
-						'server' => $server
-					) + $openid->getAttributes();
-				}
-
-				$attribs = serialize( $attribs );
-				$nv_Request->set_Session( 'openid_attribs', $attribs );
-				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
-				exit();
-			}
-
-			if( ! $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				$openid->identity = $openid_servers[$server]['identity'];
-				$openid->required = array_values( $openid_servers[$server]['required'] );
-				header( 'Location: ' . $openid->authUrl() );
-				die();
-			}
-
 			$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
 			$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
 
@@ -729,6 +655,11 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 				openidLogin_Res1( $openid_attribs );
 			}
 			exit();
+		}
+		else
+		{
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+			die();
 		}
 	}
 }

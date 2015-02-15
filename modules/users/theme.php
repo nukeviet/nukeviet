@@ -242,12 +242,16 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_register );
 	$xtpl->assign( 'NV_SITETERMS', $siteterms );
-
-	foreach( $data_questions as $array_question_i )
+	
+	if( $global_config['allowquestion'] )
 	{
-		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
-		$xtpl->parse( 'main.frquestion' );
-	}
+		foreach( $data_questions as $array_question_i )
+		{
+			$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
+			$xtpl->parse( 'main.allowquestion.frquestion' );
+		}
+		$xtpl->parse( 'main.allowquestion' );
+	}	
 
 	if( $gfx_chk )
 	{
@@ -312,7 +316,7 @@ function user_login( $gfx_chk, $array_login )
 		$assigns = array();
 		foreach( $openid_servers as $server => $value )
 		{
-			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
+			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
 			$assigns['title'] = ucfirst( $server );
 			$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
 			$assigns['img_width'] = $assigns['img_height'] = 24;
@@ -1146,7 +1150,7 @@ function user_openid_administrator( $data )
 	$assigns = array();
 	foreach( $openid_servers as $server => $value )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=openid&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
 		$assigns['title'] = ucfirst( $server );
 		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
 		$assigns['img_width'] = $assigns['img_height'] = 24;

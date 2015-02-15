@@ -213,11 +213,11 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		{
 			$error = $lang_module['your_question_empty'];
 		}
-		elseif( $global_config['allowquestion'] and empty( $array_register['answer'] ) )
+		elseif( $global_config['allowquestion'] and $global_config['allowquestion'] and empty( $array_register['answer'] ) )
 		{
 			$error = $lang_module['answer_empty'];
 		}
-		elseif( empty( $array_register['agreecheck'] ) )
+		elseif( $global_config['allowquestion'] and empty( $array_register['agreecheck'] ) )
 		{
 			$error = $lang_module['agreecheck_empty'];
 		}
@@ -246,7 +246,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				'', 0, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
 
 			$data_insert = array();
-			$data_insert['username'] = $reg_attribs['username'];
+			$data_insert['username'] = $array_register['username'];
 			$data_insert['md5username'] = nv_md5safe( $array_register['username'] );
 			$data_insert['password'] = $password;
 			$data_insert['email'] = $reg_attribs['email'];
@@ -279,7 +279,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
 			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
-			$stmt->bindParam( ':openid', $reg_attribs['openid'], PDO::PARAM_STR );
+			$stmt->bindParam( ':openid', $reg_attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
 			$stmt->execute();
