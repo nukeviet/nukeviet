@@ -19,11 +19,11 @@ if( ! $global_config['allowuserlogin'] )
 if( defined( 'NV_OPENID_ALLOWED' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
-	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
-		if( file_exists(NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php') )
+		if( file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php') )
 		{
-			include NV_ROOTDIR . '/modules/users/oAuthLib/' . $server . '.php';
+			include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';
 		}
 		else
 		{
@@ -53,7 +53,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 
 				$attribs = serialize( $attribs );
 				$nv_Request->set_Session( 'openid_attribs', $attribs );
-			
+
 				$op_redirect = ( defined( 'NV_IS_USER' ) ) ? 'openid' : 'login';
 				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
 				exit();
@@ -61,13 +61,14 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 
 			if( ! $nv_Request->isset_request( 'result', 'get' ) )
 			{
-				$openid->identity = $openid_servers[$server]['identity'];
-				$openid->required = array_values( $openid_servers[$server]['required'] );
+				include_once NV_ROOTDIR . '/modules/users/login/openid-' . $server . '.php' ;
+				$openid->identity = $openid_server_config['identity'];
+				$openid->required = array_values( $openid_server_config['required'] );
 				header( 'Location: ' . $openid->authUrl() );
 				die();
 			}
 			exit();
-		}		
+		}
 	}
 }
 

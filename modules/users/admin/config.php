@@ -155,20 +155,7 @@ $array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] )
 $array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
 $array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
 $array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
-$servers = $array_config['openid_servers'];
 
-$openid_servers = array();
-include NV_ROOTDIR . '/includes/openid.php' ;
-$array_config['openid_servers'] = array();
-if( ! empty( $openid_servers ) )
-{
-	$array_keys = array_keys( $openid_servers );
-	foreach( $array_keys as $server )
-	{
-		$checked = ( ! empty( $servers ) and in_array( $server, $servers ) ) ? ' checked="checked"' : '';
-		$array_config['openid_servers'][] = array( 'name' => $server, 'checked' => $checked );
-	}
-}
 $sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
 $result = $db->query( $sql );
 while( list( $config, $content ) = $result->fetch( 3 ) )
@@ -314,14 +301,21 @@ foreach( $array_whoview as $id => $titleregister )
 	$xtpl->assign( 'WHOVIEW', $array );
 	$xtpl->parse( 'main.whoviewlistuser' );
 }
-if( ! empty( $array_config['openid_servers'] ) )
+
+$servers = $array_config['openid_servers'];
+
+$openid_files = @scandir( NV_ROOTDIR . '/modules/users/login' );
+foreach ( $openid_files as $server )
 {
-	foreach( $array_config['openid_servers'] as $server )
+	if( preg_match( '/^(cas|oauth|openid)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
 	{
+		$checked = ( ! empty( $servers ) and in_array( $m[2], $servers ) ) ? ' checked="checked"' : '';
+		$server = array( 'name' => $m[2], 'title' => $m[1] . ' ' . $m[2], 'checked' => $checked );
 		$xtpl->assign( 'OPENID', $server );
 		$xtpl->parse( 'main.openid_servers' );
 	}
 }
+
 $array_access = array(
 	array( 'id' => 1, 'title' => $lang_global['level1'] ),
 	array( 'id' => 2, 'title' => $lang_global['level2'] ),

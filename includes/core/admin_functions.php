@@ -206,11 +206,6 @@ function nv_save_file_config_global()
 	if( $config_variable['openid_mode'] )
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
-		$openid_servers = array();
-		$key_openid_servers = explode( ',', $config_variable['openid_servers'] );
-		require NV_ROOTDIR . '/includes/openid.php';
-		$openid_servers = array_intersect_key( $openid_servers, array_flip( $key_openid_servers ) );
-		$content_config .= "\$openid_servers=" . nv_var_export( $openid_servers ) . ";\n";
 	}
 
 	$my_domains = array_map( 'trim', explode( ',', $config_variable['my_domains'] ) );

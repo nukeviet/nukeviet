@@ -625,7 +625,7 @@ $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
 if( defined( 'NV_OPENID_ALLOWED' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
-	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
 		if( $nv_Request->isset_request( 'result', 'get' ) )
 		{

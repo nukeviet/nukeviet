@@ -204,7 +204,7 @@
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
-					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> {OPENID.name}
+					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> {OPENID.title}
 					<br />
 					<!-- END: openid_servers -->
 					</td>

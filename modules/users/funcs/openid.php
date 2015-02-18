@@ -40,7 +40,7 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 if( $nv_Request->isset_request( 'server', 'get' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
-	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
 		if( $nv_Request->isset_request( 'result', 'get' ) )
 		{
