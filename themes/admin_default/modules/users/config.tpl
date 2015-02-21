@@ -6,12 +6,12 @@
 			<thead>
 				<tr class="text-center">
 					<th>{LANG.access_admin}</th>
-					<th>{LANG.access_addus}</th>
-					<th>{LANG.access_waiting}</th>
-					<th>{LANG.access_editus}</th>
-					<th>{LANG.access_delus}</th>
-					<th>{LANG.access_passus}</th>
-					<th>{LANG.access_groups}</th>
+					<th class="text-center">{LANG.access_addus}</th>
+					<th class="text-center">{LANG.access_waiting}</th>
+					<th class="text-center">{LANG.access_editus}</th>
+					<th class="text-center">{LANG.access_delus}</th>
+					<th class="text-center">{LANG.access_passus}</th>
+					<th class="text-center">{LANG.access_groups}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -94,41 +94,6 @@
 				</tr>
 			</tbody>
 		</table>
-		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.facebook_config}</caption>
-			<colgroup>
-				<col style="width: 320px;" />
-				<col />
-			</colgroup>
-			<tbody>
-				<tr>
-					<td><strong>{LANG.oauth_client_id}</strong></td>
-					<td><input type="text" class="form-control" style="width: 500px;" name="facebook_client_id" value="{DATA.facebook_client_id}"/></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.oauth_client_secret}</strong></td>
-					<td><input type="text" class="form-control" style="width: 500px;" name="facebook_client_secret" value="{DATA.facebook_client_secret}"/></td>
-				</tr>
-			<tbody>
-		</table>
-
-		<table class="table table-striped table-bordered table-hover">
-			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.google_config}</caption>
-			<colgroup>
-				<col style="width: 320px;" />
-				<col />
-			</colgroup>
-			<tbody>
-				<tr>
-					<td><strong>{LANG.oauth_client_id}</strong></td>
-					<td><input type="text" class="form-control" style="width: 500px;" name="google_client_id" value="{DATA.google_client_id}"/></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.oauth_client_secret}</strong></td>
-					<td><input type="text" class="form-control" style="width: 500px;" name="google_client_secret" value="{DATA.google_client_secret}"/></td>
-				</tr>
-			<tbody>
-		</table>
 
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_other} </caption>
@@ -204,7 +169,7 @@
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
-					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> {OPENID.title}
+					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> <a href="{OPENID.link_config}" title="{OPENID.note}">{OPENID.title}</a>
 					<br />
 					<!-- END: openid_servers -->
 					</td>
