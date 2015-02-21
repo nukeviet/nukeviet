@@ -278,8 +278,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			}
 			$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
-			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
-			$stmt->bindParam( ':openid', $reg_attribs['server'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :server, :opid, :email )' );
+			$stmt->bindParam( ':server', $reg_attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
 			$stmt->execute();
@@ -289,7 +289,9 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			$row = $result->fetch();
 			$result->closeCursor();
 
-			validUserLog( $row, 1, $reg_attribs['opid'] );
+			$current_mode = isset( $reg_attribs['current_mode'] ) ? $reg_attribs['current_mode'] : 1;
+
+			validUserLog( $row, 1, $reg_attribs['opid'], $current_mode );
 
 			$subject = $lang_module['account_register'];
 			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );

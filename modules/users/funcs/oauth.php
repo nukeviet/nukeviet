@@ -18,12 +18,17 @@ if( ! $global_config['allowuserlogin'] )
 
 if( defined( 'NV_OPENID_ALLOWED' ) )
 {
+	$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
 	$server = $nv_Request->get_string( 'server', 'get', '' );
 	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
 		if( file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php') )
 		{
 			include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';
+		}
+		elseif( file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php') )
+		{
+			include NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php';
 		}
 		else
 		{

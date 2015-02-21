@@ -928,17 +928,17 @@ function user_welcome()
 	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
 	$user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
 
-	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 3 )
+	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 5 )
 	{
 		$user_info['current_mode'] = $lang_module['admin_login'];
 	}
-	elseif( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 2 )
+	elseif( isset( $user_info['current_mode'] ) and isset( $lang_module['mode_login_' . $user_info['current_mode']] ) )
 	{
-		$user_info['current_mode'] = $lang_module['openid_login'] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
+		$user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
 	}
 	else
 	{
-		$user_info['current_mode'] = $lang_module['st_login'];
+		$user_info['current_mode'] = $lang_module['mode_login_1'];
 	}
 
 	$user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo" );

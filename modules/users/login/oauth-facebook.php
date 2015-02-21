@@ -50,7 +50,8 @@ if( !empty( $_GET['code'] ) )
 			'namePerson/last' => $result['last_name'],
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
-			'server' => $server
+			'server' => $server,
+			'current_mode' => 3
 		);
 	}
 	else

@@ -144,6 +144,8 @@ function openidLogin_Res1( $attribs )
 	}
 	$opid = $crypt->hash( $attribs['id'] );
 
+	$current_mode = isset( $attribs['current_mode'] ) ? $attribs['current_mode'] : 1;
+
 	$stmt = $db->prepare( 'SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM ' . NV_USERS_GLOBALTABLE . '_openid a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.opid= :opid
 		AND a.email= :email
@@ -188,7 +190,7 @@ function openidLogin_Res1( $attribs )
 			$row = $db->query( $query )->fetch();
 			if( ! empty( $row ) )
 			{
-				validUserLog( $row, 1, $opid );
+				validUserLog( $row, 1, $opid, $current_mode );
 				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 			}
 			else
@@ -264,7 +266,7 @@ function openidLogin_Res1( $attribs )
 			}
 			else
 			{
-				validUserLog( $nv_row, 1, $opid );
+				validUserLog( $nv_row, 1, $opid, $current_mode );
 				Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			}
 			die();
@@ -351,8 +353,8 @@ function openidLogin_Res1( $attribs )
 						$stmt->bindParam( ':userid', $row['userid'], PDO::PARAM_STR );
 						$stmt->execute();
 
-						$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
-						$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
+						$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :server, :opid, :email )' );
+						$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 						$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 						$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 						$stmt->execute();
@@ -361,7 +363,7 @@ function openidLogin_Res1( $attribs )
 						$result = $db->query( $query );
 						$row = $result->fetch();
 
-						validUserLog( $row, 1, $opid );
+						validUserLog( $row, 1, $opid, $current_mode );
 
 						$info = $lang_module['account_active_ok'] . "<br /><br />\n";
 						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -459,8 +461,8 @@ function openidLogin_Res1( $attribs )
 							else
 							{
 								$error = '';
-								$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid, :email )' );
-								$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
+								$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :server, :opid, :email )' );
+								$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 								$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 								$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 								$stmt->execute();
@@ -574,13 +576,13 @@ function openidLogin_Res1( $attribs )
 			$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
 			// Luu vao bang OpenID
-			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid , :email)' );
-			$stmt->bindParam( ':openid', $reg_attribs['openid'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :server, :opid , :email)' );
+			$stmt->bindParam( ':server', $reg_attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
 			$stmt->execute();
 
-			validUserLog( $row, 1, $reg_attribs['opid'] );
+			validUserLog( $row, 1, $reg_attribs['opid'], $current_mode );
 			$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 			Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );

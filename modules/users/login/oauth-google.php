@@ -51,7 +51,8 @@ if( !empty( $_GET['code'] ) )
 			'namePerson/friendly' => $result['given_name'],
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
-			'server' => $server
+			'server' => $server,
+			'current_mode' => 3
 		);
 	}
 	else
