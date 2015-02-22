@@ -296,12 +296,6 @@
 					<a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a>
 				</li>
 
-				<!-- BEGIN: discount_title -->
-				<li>
-					<a href="#section-4"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.discount_detail}</span></a>
-				</li>
-				<!-- END: discount_title -->
-
 				<!-- BEGIN: othersimg_title -->
 				<li>
 					<a href="#section-2"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.add_otherimage}</span></a>
@@ -319,22 +313,6 @@
 			<section id="section-1">
 				{DETAIL}
 			</section>
-
-			<!-- BEGIN: discount_content -->
-			<section id="section-4">
-				<h3>{DISCOUNT.title}</h3>
-				<p>
-					{DISCOUNT.begin_time}{DISCOUNT.end_time}, {DISCOUNT.text}
-				</p>
-				<ul>
-					<!-- BEGIN: items -->
-					<li>
-						{ITEMS}
-					</li>
-					<!-- END: items -->
-				</ul>
-			</section>
-			<!-- END: discount_content -->
 
 			<!-- BEGIN: othersimg -->
 			<section id="section-2">

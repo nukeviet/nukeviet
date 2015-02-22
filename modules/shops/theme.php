@@ -1327,59 +1327,10 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$xtpl->parse( 'main.group_detail.loop' );
 		}
 	}
+
 	if( $i > 0 )
-		$xtpl->parse( 'main.group_detail' );
-
-	// Chi tiet giam gia
-	if( isset( $data_shop['discount'] ) and !empty( $data_shop['discount'] ) )
 	{
-		$discount = $data_shop['discount'];
-		$discount['config'] = unserialize( $discount['config'] );
-		if( !$discount['detail'] )
-		{
-			$discount['begin_time'] = sprintf( $lang_module['discount_content_begin'], nv_date( 'd/m/Y', $discount['begin_time'] ) );
-			if( $discount['end_time'] )
-			{
-				$discount['end_time'] = sprintf( $lang_module['discount_content_end'], nv_date( 'd/m/Y', $discount['end_time'] ) );
-			}
-			else
-			{
-				$discount['end_time'] = '';
-			}
-
-			$discount['text'] = sprintf( $lang_module['discount_content_text'], $global_config['site_name'], $data_content[NV_LANG_DATA . '_title'] );
-
-			foreach( $discount['config'] as $items )
-			{
-				$discount_unit = $items['discount_unit'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
-				$xtpl->assign( 'ITEMS', sprintf( $lang_module['discount_content_text_items'], $items['discount_number'] . $discount_unit, $items['discount_from'], $items['discount_to'] ) );
-				$xtpl->parse( 'main.discount_content.items' );
-			}
-
-			$xtpl->parse( 'main.discount_title' );
-		}
-		else
-		{
-			foreach( $discount['config'] as $items )
-			{
-				if( $items['discount_unit'] == 'p' )
-				{
-					$discount_price = $price['price'] - ($price['price'] * ($items['discount_number'] / 100));
-				}
-				else
-				{
-					$discount_price = $price['price'] - $items['discount_number'];
-				}
-				$items['discount_price'] = nv_number_format( $discount_price, nv_get_decimals( $pro_config['money_unit'] ) );
-				$xtpl->assign( 'ITEMS', $items );
-				$xtpl->parse( 'main.discount_default.items' );
-			}
-			$xtpl->assign( 'money_unit', $price['unit'] );
-			$xtpl->parse( 'main.discount_default' );
-		}
-
-		$xtpl->assign( 'DISCOUNT', $discount );
-		$xtpl->parse( 'main.discount_content' );
+		$xtpl->parse( 'main.group_detail' );
 	}
 
 	if( $global_array_cat[$data_content['listcatid']]['typeprice'] == 2 )
