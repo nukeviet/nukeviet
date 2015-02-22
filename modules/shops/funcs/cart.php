@@ -14,6 +14,13 @@ $order_info = array();
 $coupons_code = '';
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
+$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart', true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die( );
+}
+
 // Sửa đơn hàng
 if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$module_data . '_order_info'] ) )
 {
