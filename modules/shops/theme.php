@@ -1327,59 +1327,10 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$xtpl->parse( 'main.group_detail.loop' );
 		}
 	}
+
 	if( $i > 0 )
-		$xtpl->parse( 'main.group_detail' );
-
-	// Chi tiet giam gia
-	if( isset( $data_shop['discount'] ) and !empty( $data_shop['discount'] ) )
 	{
-		$discount = $data_shop['discount'];
-		$discount['config'] = unserialize( $discount['config'] );
-		if( !$discount['detail'] )
-		{
-			$discount['begin_time'] = sprintf( $lang_module['discount_content_begin'], nv_date( 'd/m/Y', $discount['begin_time'] ) );
-			if( $discount['end_time'] )
-			{
-				$discount['end_time'] = sprintf( $lang_module['discount_content_end'], nv_date( 'd/m/Y', $discount['end_time'] ) );
-			}
-			else
-			{
-				$discount['end_time'] = '';
-			}
-
-			$discount['text'] = sprintf( $lang_module['discount_content_text'], $global_config['site_name'], $data_content[NV_LANG_DATA . '_title'] );
-
-			foreach( $discount['config'] as $items )
-			{
-				$discount_unit = $items['discount_unit'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
-				$xtpl->assign( 'ITEMS', sprintf( $lang_module['discount_content_text_items'], $items['discount_number'] . $discount_unit, $items['discount_from'], $items['discount_to'] ) );
-				$xtpl->parse( 'main.discount_content.items' );
-			}
-
-			$xtpl->parse( 'main.discount_title' );
-		}
-		else
-		{
-			foreach( $discount['config'] as $items )
-			{
-				if( $items['discount_unit'] == 'p' )
-				{
-					$discount_price = $price['price'] - ($price['price'] * ($items['discount_number'] / 100));
-				}
-				else
-				{
-					$discount_price = $price['price'] - $items['discount_number'];
-				}
-				$items['discount_price'] = nv_number_format( $discount_price, nv_get_decimals( $pro_config['money_unit'] ) );
-				$xtpl->assign( 'ITEMS', $items );
-				$xtpl->parse( 'main.discount_default.items' );
-			}
-			$xtpl->assign( 'money_unit', $price['unit'] );
-			$xtpl->parse( 'main.discount_default' );
-		}
-
-		$xtpl->assign( 'DISCOUNT', $discount );
-		$xtpl->parse( 'main.discount_content' );
+		$xtpl->parse( 'main.group_detail' );
 	}
 
 	if( $global_array_cat[$data_content['listcatid']]['typeprice'] == 2 )
@@ -1712,7 +1663,7 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
  */
 function uers_order( $data_content, $data_order, $total_coupons, $order_info, $error )
 {
-	global $module_info, $lang_module, $lang_global, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
+	global $module_info, $lang_module, $lang_global, $module_data, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $shipping_data;
 
 	$xtpl = new XTemplate( 'order.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1798,6 +1749,7 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 			++$j;
 		}
 	}
+
 	$xtpl->assign( 'price_coupons', nv_number_format( $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'price_total', nv_number_format( $price_total - $total_coupons, nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'unit_config', $pro_config['money_unit'] );
@@ -1805,6 +1757,10 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 	$xtpl->assign( 'DATA', $data_order );
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->assign( 'LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart' );
+	if( isset( $_SESSION[$module_data . '_coupons']['code'] ) )
+	{
+		$xtpl->assign( 'COUPONS_CODE', $_SESSION[$module_data . '_coupons']['code'] );
+	}
 
 	if( $pro_config['active_price'] == '1' )
 	{
@@ -2651,7 +2607,7 @@ function wishlist( $data_content, $html_pages = '' )
  * @param mixed $error
  * @return
  */
-function coupons_info( $data_content, $error )
+function coupons_info( $data_content, $coupons_check, $error )
 {
 	global $module_info, $lang_module, $lang_global, $module_data, $module_file, $pro_config, $op;
 
@@ -2659,6 +2615,7 @@ function coupons_info( $data_content, $error )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'MONEY_UNIT', $pro_config['money_unit'] );
+	$xtpl->assign( 'COUPONS_CHECK', $coupons_check ? 'checked="checked"' : '' );
 
 	if( !empty( $data_content ) )
 	{

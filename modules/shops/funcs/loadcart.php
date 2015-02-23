@@ -11,11 +11,13 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
-$total = $total_coupons = 0;
+$total = 0;
+
+$total_coupons = 0;
 $counpons = array();
-$coupons_check = $nv_Request->get_int( 'coupons_check', 'get' );
+$coupons_check = $nv_Request->get_int( 'coupons_check', 'get', 0 );
+$coupons_load = $nv_Request->get_int( 'coupons_load', 'get', 0 );
 $coupons_code = $nv_Request->get_title( 'coupons_code', 'get', '' );
-$_SESSION[$module_data . '_coupons'] = array();
 
 if( !empty( $coupons_code ) )
 {
@@ -26,6 +28,11 @@ if( !empty( $coupons_code ) )
 	{
 		$counpons['product'][] = $pid;
 	}
+}
+
+if( $coupons_load )
+{
+	$_SESSION[$module_data . '_coupons']['check'] = $coupons_check;
 }
 
 if( ! empty( $_SESSION[$module_data . '_cart'] ) )
@@ -83,8 +90,11 @@ if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] )
 			}
 		}
 	}
-	$_SESSION[$module_data . '_coupons']['code'] = $coupons_check ? $coupons_code : '';
-	$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
+
+	if( $coupons_check )
+	{
+		$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
+	}
 }
 
 if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )

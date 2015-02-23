@@ -360,12 +360,6 @@ $lang_module['wishlist_del_item_confirm'] = "Bạn có chắc chắn muốn xóa
 $lang_module['wishlist_del_item_success'] = "Đã xóa sản phẩm ra khỏi danh sách yêu thích";
 $lang_module['wishlist_no_priduct'] = "Không có sản phẩm nào trong danh sách sản phảm yêu thích";
 
-$lang_module['discount_detail'] = "Chương trình khuyến mãi";
-$lang_module['discount_content_begin'] = "Từ ngày %s";
-$lang_module['discount_content_end'] = " đến ngày %s";
-$lang_module['discount_content_text'] = "<strong>%s</strong> áp dụng chương trình khuyến mãi cho sản phầm <strong class='text-danger'>%1s</strong>";
-$lang_module['discount_content_text_items'] = "Giảm <strong>%s</strong> khi mua từ <strong>%1s</strong> đến <strong>%2s</strong> sản phẩm";
-
 $lang_module['rateconfirm'] = 'Bạn có chắc muốn đánh giá';
 $lang_module['dg'] = ' lượt';
 $lang_module['trong'] = ' điểm / ';

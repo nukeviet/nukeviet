@@ -12,7 +12,61 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $order_info = array();
 $coupons_code = '';
+$coupons_check = 0;
+
+if( isset( $_SESSION[$module_data . '_coupons']['code'] ) and isset( $_SESSION[$module_data . '_coupons']['check'] ) )
+{
+	$coupons_code = $_SESSION[$module_data . '_coupons']['code'];
+	$coupons_check = $_SESSION[$module_data . '_coupons']['check'];
+}
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
+
+// Coupons
+if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
+{
+	$data_content = array();
+	$coupons_code = $nv_Request->get_title( 'coupons_code', 'post', '' );
+	$contents = $error = '';
+	if( empty( $coupons_code ) )
+	{
+		$error = $lang_module['coupons_empty'];
+	}
+	else
+	{
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $coupons_code ) );
+		$num = $result->rowCount();
+		$data_content = $result->fetch();
+		if( empty( $data_content ) )
+		{
+			$error = $lang_module['coupons_no_exist'];
+		}
+	}
+
+	if( empty( $error ) )
+	{
+		$_SESSION[$module_data . '_coupons'] = array( 'check' => $coupons_check, 'code' => $coupons_code );
+	}
+
+	$contents = call_user_func( 'coupons_info', $data_content, $coupons_check, $error );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $contents;
+	include NV_ROOTDIR . '/includes/footer.php';
+	die();
+}
+
+if( $nv_Request->isset_request( 'coupons_clear', 'post' ) )
+{
+	unset( $_SESSION[$module_data . '_coupons'] );
+	die();
+}
+
+$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart', true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die( );
+}
 
 // Sửa đơn hàng
 if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$module_data . '_order_info'] ) )
@@ -69,34 +123,6 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 		$_SESSION[$module_data . '_order_info']['shipping'] = $shipping_old;
 		$_SESSION[$module_data . '_cart'] = $order_old;
 	}
-}
-
-// Coupons
-if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
-{
-	$data_content = array();
-	$coupons_code = $nv_Request->get_title( 'coupons_code', 'post', '' );
-	$contents = $error = '';
-	if( empty( $coupons_code ) )
-	{
-		$error = $lang_module['coupons_empty'];
-	}
-	else
-	{
-		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $coupons_code ) );
-		$num = $result->rowCount();
-		$data_content = $result->fetch();
-		if( empty( $data_content ) )
-		{
-			$error = $lang_module['coupons_no_exist'];
-		}
-	}
-	$contents = call_user_func( 'coupons_info', $data_content, $error );
-
-	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
-	include NV_ROOTDIR . '/includes/footer.php';
-	die();
 }
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
