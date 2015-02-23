@@ -295,8 +295,8 @@
 		$('#shipping_services').text( carrier_id.attr("title") );
 		$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
 		$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
-		$("#cart_" + nv_module_name).load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
-		$("#total").load( urloadcart + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
+		$("#cart_" + nv_module_name).load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+		$("#total").load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
 	}
 
 	function nv_carrier_change()

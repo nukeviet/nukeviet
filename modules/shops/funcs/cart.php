@@ -12,6 +12,13 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $order_info = array();
 $coupons_code = '';
+$coupons_check = 0;
+
+if( isset( $_SESSION[$module_data . '_coupons']['code'] ) and isset( $_SESSION[$module_data . '_coupons']['check'] ) )
+{
+	$coupons_code = $_SESSION[$module_data . '_coupons']['code'];
+	$coupons_check = $_SESSION[$module_data . '_coupons']['check'];
+}
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 // Coupons
@@ -34,11 +41,23 @@ if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
 			$error = $lang_module['coupons_no_exist'];
 		}
 	}
-	$contents = call_user_func( 'coupons_info', $data_content, $error );
+
+	if( empty( $error ) )
+	{
+		$_SESSION[$module_data . '_coupons'] = array( 'check' => $coupons_check, 'code' => $coupons_code );
+	}
+
+	$contents = call_user_func( 'coupons_info', $data_content, $coupons_check, $error );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
+	die();
+}
+
+if( $nv_Request->isset_request( 'coupons_clear', 'post' ) )
+{
+	unset( $_SESSION[$module_data . '_coupons'] );
 	die();
 }
 

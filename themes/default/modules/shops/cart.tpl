@@ -98,7 +98,9 @@
 		<div class="panel-body">
 			<div class="input-group">
 				<input type="text" name="coupons_code" value="{C_CODE}" id="coupons_code" placeholder="{LANG.coupons_fill}" class="form-control">
-				<span class="input-group-btn"> <input type="button" value="{LANG.coupons_check}" id="coupons_check" class="btn btn-primary"> </span>
+				<span class="input-group-btn">
+					<input type="button" value="{LANG.coupons_check}" id="coupons_clear" class="btn btn-primary">
+				</span>
 			</div>
 			<div id="coupons_info">
 				&nbsp;

@@ -32,15 +32,6 @@
 
 				<div class="row">
 					<div class="col-md-5">
-						<strong>{LANG.order_address}:</strong>
-					</div>
-					<div class="col-md-7">
-						{DATA.order_address}
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-5">
 						<strong>{LANG.order_date}:</strong>
 					</div>
 					<div class="col-md-7">

@@ -68,14 +68,14 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), 'list_shops' => array() );
 
 // Ma giam gia
-$array_counpons = array( 'code' => '', 'discount' => 0 );
+$array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
 $counpons = array( 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
 if( ! empty( $_SESSION[$module_data . '_coupons'] ) )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
 }
 $total_coupons = 0;
-if( !empty( $array_counpons['code'] ) )
+if( !empty( $array_counpons['code'] ) and $array_counpons['check'] )
 {
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons WHERE code = ' . $db->quote( $array_counpons['code'] ) );
 	$counpons = $result->fetch();
@@ -455,6 +455,7 @@ if( $post_order == 1 )
 			// Chuyen trang xem thong tin don hang vua dat
 			unset( $_SESSION[$module_data . '_cart'] );
 			unset( $_SESSION[$module_data . '_order_info'] );
+			unset( $_SESSION[$module_data . '_coupons'] );
 			Header( 'Location: ' . $review_url );
 			$action = 1;
 		}
