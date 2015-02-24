@@ -28,8 +28,13 @@ $submenu['order_seller'] = $lang_module['order_seller'];
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
-$submenu['coupons'] = $lang_module['coupons'];
-if( $shop_module_config['point_active'] )
+
+if( $shop_module_config['use_coupons'] or defined( 'NV_IS_SPADMIN' ) )
+{
+	$submenu['coupons'] = $lang_module['coupons'];
+}
+
+if( $shop_module_config['point_active'] or defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['point'] = $lang_module['point'];
 }

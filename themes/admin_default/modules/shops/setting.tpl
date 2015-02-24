@@ -66,6 +66,10 @@
 				<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.setting_coupons}</strong></td>
+				<td><input type="checkbox" value="1" name="use_coupons" {ck_coupons}/></td>
+			</tr>
+			<tr>
 				<td>
 					<strong>{LANG.setting_money_all}</strong>
 				</td>

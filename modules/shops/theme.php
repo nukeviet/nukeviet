@@ -1497,7 +1497,7 @@ function print_product( $data_content, $data_unit, $page_title )
  */
 function cart_product( $data_content, $coupons_code, $order_info, $array_error_number )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $global_array_cat;
+	global $module_info, $lang_module, $module_config, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $global_array_cat;
 
 	$xtpl = new XTemplate( 'cart.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1645,7 +1645,11 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 	}
 	else
 	{
-		$xtpl->parse( 'main.coupons_code' );
+		if( $module_config[$module_name]['use_coupons'] )
+		{
+			$xtpl->parse( 'main.coupons_code' );
+			$xtpl->parse( 'main.coupons_javascript' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

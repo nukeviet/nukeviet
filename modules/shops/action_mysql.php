@@ -616,6 +616,7 @@ $data['show_product_code'] = 1;
 $data['show_compare'] = 0;
 $data['show_displays'] = 0;
 $data['use_shipping'] = 1;
+$data['use_coupons'] = 0;
 $data['active_wishlist'] = 1;
 $data['tags_alias'] = 0;
 $data['auto_tags'] = 1;
