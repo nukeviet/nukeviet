@@ -43,35 +43,38 @@ $cid = $nv_Request->get_int( 'cid', 'get', 0 );
 $inrow = $nv_Request->get_string( 'inrow', 'get', '' );
 $inrow = nv_base64_decode( $inrow );
 $array_groupid_in_row = unserialize( $inrow );
-
-$cid = GetParentCatFilter( $cid );
-
-$arr_groupid = array();
-$result = $db->query( 'SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid );
-while( list( $groupid ) = $result->fetch( 3 ) )
-{
-	$arr_groupid[$groupid] = GetGroupidInParent( $groupid, 0, 1 );
-}
-
 $contents_temp_cate = '';
-foreach( $arr_groupid as $groupid_i => $subgroupid_i )
-{
-	$data_group = $global_array_group[$groupid_i];
 
-	$require = '';
-	if( $data_group['is_require'] )
+if( $cid > 0 )
+{
+	$cid = GetParentCatFilter( $cid );
+
+	$arr_groupid = array();
+	$result = $db->query( 'SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid );
+	while( list( $groupid ) = $result->fetch( 3 ) )
 	{
-		$require = ' <span class="require">(*)</span>';
+		$arr_groupid[$groupid] = GetGroupidInParent( $groupid, 0, 1 );
 	}
-	$contents_temp_cate .= '<div class="row">';
-	$contents_temp_cate .= '<div class="col-sm-2 text-right"><strong>' . $data_group['title'] . $require . '</strong></div>';
-	$contents_temp_cate .= '<div class="col-sm-10">';
-	if( $data_group['numsubgroup'] > 0 )
+
+	foreach( $arr_groupid as $groupid_i => $subgroupid_i )
 	{
-		$contents_temp_cate .= getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row );
+		$data_group = $global_array_group[$groupid_i];
+
+		$require = '';
+		if( $data_group['is_require'] )
+		{
+			$require = ' <span class="require">(*)</span>';
+		}
+		$contents_temp_cate .= '<div class="row">';
+		$contents_temp_cate .= '<div class="col-sm-2 text-right"><strong>' . $data_group['title'] . $require . '</strong></div>';
+		$contents_temp_cate .= '<div class="col-sm-10">';
+		if( $data_group['numsubgroup'] > 0 )
+		{
+			$contents_temp_cate .= getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row );
+		}
+		$contents_temp_cate .= '</div>';
+		$contents_temp_cate .= '</div>';
 	}
-	$contents_temp_cate .= '</div>';
-	$contents_temp_cate .= '</div>';
 }
 
 include NV_ROOTDIR . '/includes/header.php';

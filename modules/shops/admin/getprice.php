@@ -22,7 +22,7 @@ if( $id > 0 )
 else
 {
 	$rowcontent = array(
-		'money_unit' => '',
+		'money_unit' => $pro_config['money_unit'],
 		'discount_id' => 0,
 		'price_config' => ''
 	);
