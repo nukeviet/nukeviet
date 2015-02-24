@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'paypoint', 'get' ) )
 
 			if( $transaction_id > 0 )
 			{
-				$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1, is_lock=1 WHERE order_id=" . $order_id );
+				$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1 WHERE order_id=" . $order_id );
 
 				// Cap nhat diem tich luy
 				UpdatePoint( $order_data );

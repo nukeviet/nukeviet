@@ -130,13 +130,13 @@ if( ! function_exists( 'nv_pro_group' ) )
 
 		$xtpl = new XTemplate( "block.group.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
 		$array_cat =  array();
-		
+
 		$array_cat = GetCatidInChild( $catid );
 		$contents_temp_none = $contents_temp_chid = "";
 
 		foreach( $data_group as $groupid_i => $groupinfo_i )
 		{
-			if( $groupinfo_i['parentid'] == 0 && $groupinfo_i['cateid'] == 0 )
+			if( $groupinfo_i['parentid'] == 0 )
 			{
 				$contents_temp_none .= "<ul class=\"nav nav-pills nav-stacked\">";
 				$contents_temp_none .= "<li class=\"active\"><a href=\"" . $groupinfo_i['link'] . "\">" . $groupinfo_i['title'] . "</a></li>";

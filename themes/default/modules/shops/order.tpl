@@ -48,6 +48,7 @@
                     </div>
                 </div>
 
+				<!-- BEGIN: shipping_chose -->
                 <div class="form-group">
                     <label class="col-sm-3 control-label">{LANG.shipping}</label>
                     <div class="col-sm-9">
@@ -56,10 +57,11 @@
                     	<!-- END: shipping_loop -->
                     </div>
                 </div>
-
+                <!-- END: shipping_chose -->
             </div>
         </div>
 
+		<!-- BEGIN: shipping -->
 		<div class="panel panel-primary" id="shipping_form">
 			<div class="panel-heading">
 				{LANG.shipping_services}
@@ -132,6 +134,7 @@
 				</div>
 			</div>
 		</div>
+		<!-- END: shipping -->
 
 		<!-- BEGIN: price6 -->
 		<span class="text-right help-block"><strong>{LANG.product_unit_price}:</strong> {unit_config}</span>
@@ -224,7 +227,25 @@
 		$("#location").select2({
 			language: "en"
 		});
+	});
 
+	$("#submit_send").click(function() {
+		$("#fpost").submit();
+		return false;
+	});
+	$("#idselect").click(function() {
+		if ($("#check").attr("checked")) {
+			$("#check").removeAttr("checked");
+		} else {
+			$("#check").attr("checked", "checked");
+		}
+		return false;
+	});
+</script>
+
+<!-- BEGIN: shipping_javascript -->
+<script type="text/javascript">
+	$(document).ready(function() {
 		var shops_id = $('input[name="shops"]:checked');
 		var carrier_id = $('input[name="carrier"]:checked');
 		var location_id = $('#location option:selected').val();
@@ -315,18 +336,7 @@
 		if( $('input[name="order_phone"]').val().length > 0 ) text = text + $('input[name="order_phone"]').val(); else text = '';
 		$('#order_ship_phone').html( text );
 	}
-
-	$("#submit_send").click(function() {
-		$("#fpost").submit();
-		return false;
-	});
-	$("#idselect").click(function() {
-		if ($("#check").attr("checked")) {
-			$("#check").removeAttr("checked");
-		} else {
-			$("#check").attr("checked", "checked");
-		}
-		return false;
-	});
 </script>
+<!-- END: shipping_javascript -->
+
 <!-- END: main -->

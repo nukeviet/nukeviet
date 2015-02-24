@@ -99,7 +99,7 @@
 			<div class="input-group">
 				<input type="text" name="coupons_code" value="{C_CODE}" id="coupons_code" placeholder="{LANG.coupons_fill}" class="form-control">
 				<span class="input-group-btn">
-					<input type="button" value="{LANG.coupons_check}" id="coupons_clear" class="btn btn-primary">
+					<input type="button" value="{LANG.coupons_check}" id="coupons_check" class="btn btn-primary">
 				</span>
 			</div>
 			<div id="coupons_info">
@@ -138,13 +138,6 @@
 	var urload = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 	$("#total").load(urload + '&t=2');
 
-	var coupons_code = $('input[name="coupons_code"]').val();
-	if (coupons_code != '') {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cart&nocache=' + new Date().getTime(), 'coupons_check=1&coupons_code=' + coupons_code, function(res) {
-			$('#coupons_info').html(res);
-		});
-	}
-
 	$(function() {
 		$("a.remove_cart").click(function() {
 			var href = $(this).attr("href");
@@ -162,7 +155,19 @@
 			});
 			return false;
 		});
+	});
+</script>
 
+<!-- BEGIN: coupons_javascript -->
+<script type="text/javascript">
+	var coupons_code = $('input[name="coupons_code"]').val();
+	if (coupons_code != '') {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cart&nocache=' + new Date().getTime(), 'coupons_check=1&coupons_code=' + coupons_code, function(res) {
+			$('#coupons_info').html(res);
+		});
+	}
+
+	$(function() {
 		$("#coupons_check").click(function() {
 			var coupons_code = $('input[name="coupons_code"]').val();
 			nv_settimeout_disable('coupons_code', 1000);
@@ -174,4 +179,6 @@
 		});
 	});
 </script>
+<!-- END: coupons_javascript -->
+
 <!-- END: main -->

@@ -123,15 +123,16 @@ else
  * @param mixed $per_pro
  * @return
  */
-function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false )
+function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false, $module = '' )
 {
-	global $db, $db_config, $module_data, $global_array_cat, $pro_config, $money_config, $discounts_config;
+	global $db, $db_config, $site_mods, $module_data, $global_array_cat, $pro_config, $money_config, $discounts_config;
 
 	$return = array();
 	$discount_percent = 0;
 	$discount_unit = '';
 	$discount = 0;
 
+	$module_data = !empty( $module ) ? $site_mods[$module]['module_data'] : $module_data;
 	$product = $db->query( 'SELECT listcatid, product_price, money_unit, price_config, discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $pro_id )->fetch();
 	$price = $product['product_price'];
 

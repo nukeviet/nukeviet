@@ -341,6 +341,8 @@ $lang_module['group_of'] = 'Của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
+$lang_module['setting_shipping'] = 'Sử dụng dịch vụ vận chuyển';
+$lang_module['setting_coupons'] = 'Sử dụng mã giảm giá';
 $lang_module['product_copy'] = 'Sao';
 $lang_module['product_copy_note'] = 'Sao chép sản phẩm';
 

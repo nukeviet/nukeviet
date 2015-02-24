@@ -50,7 +50,7 @@ if( ! function_exists( 'nv_product_center' ) )
 			$bid = $result->fetchColumn();
 
 			$db->sqlreset()
-				->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt" )
+				->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id" )
 				->from( $db_config['prefix'] . "_" . $module_data . "_rows t1" )
 				->join( "INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_block t2 ON t1.id = t2.id" )
 				->where( "t2.bid= " . $bid . " AND t1.status =1" )
@@ -87,6 +87,28 @@ if( ! function_exists( 'nv_product_center' ) )
 			$xtpl->assign( 'TITLE', $row['title'] );
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $src_img );
+
+			if( $pro_config['active_price'] == '1' )
+			{
+				if( $row['showprice'] == '1' )
+				{
+					$price = nv_get_price( $row['id'], $pro_config['money_unit'] );
+					$xtpl->assign( 'PRICE', $price );
+					if( $row['discount_id'] and $price['discount_percent'] > 0 )
+					{
+						$xtpl->parse( 'main.items.price.discounts' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.price.no_discounts' );
+					}
+					$xtpl->parse( 'main.items.price' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.items.contact' );
+				}
+			}
 
 			$xtpl->parse( 'main.items' );
 		}
