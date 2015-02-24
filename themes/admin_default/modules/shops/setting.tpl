@@ -62,6 +62,10 @@
 				<td><input type="checkbox" value="1" name="show_displays" {ck_displays}/></td>
 			</tr>
 			<tr>
+				<td><strong>{LANG.setting_shipping}</strong></td>
+				<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
+			</tr>
+			<tr>
 				<td>
 					<strong>{LANG.setting_money_all}</strong>
 				</td>

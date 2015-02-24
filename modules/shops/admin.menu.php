@@ -10,15 +10,26 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
-$submenu['order'] = $lang_module['order_title'];
-$submenu['shipping'] = $lang_module['shipping'];
-$submenu['order_seller'] = $lang_module['order_seller'];
+$sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' and module='" . $module_name . "'";
+$list = nv_db_cache( $sql, '', $module_name );
+foreach( $list as $row )
+{
+	$shop_module_config[$row['config_name']] = $row['config_value'];
+}
 
+$submenu['order'] = $lang_module['order_title'];
+
+if( $shop_module_config['use_shipping'] == '1' )
+{
+	$submenu['shipping'] = $lang_module['shipping'];
+}
+
+$submenu['order_seller'] = $lang_module['order_seller'];
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
 $submenu['coupons'] = $lang_module['coupons'];
-if( isset( $module_config[$module_name] ) and $module_config[$module_name]['point_active'] )
+if( $shop_module_config['point_active'] )
 {
 	$submenu['point'] = $lang_module['point'];
 }

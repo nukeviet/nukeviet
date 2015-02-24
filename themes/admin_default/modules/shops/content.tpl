@@ -42,7 +42,7 @@
 
 					<tr>
 						<th class="150px">{LANG.content_product_number}</th>
-						<td><!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
+						<td><!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> <span class="text-middle">+</span> <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
 						<select class="form-control" name="product_unit">
 							<!-- BEGIN: rowunit -->
 							<option value="{uid}" {uch}>{utitle}</option>

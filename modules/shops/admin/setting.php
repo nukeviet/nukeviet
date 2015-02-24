@@ -55,6 +55,7 @@ if( $savesetting == 1 )
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
+	$data['use_shipping'] = $nv_Request->get_int( 'use_shipping', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
 	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
@@ -171,6 +172,9 @@ $xtpl->assign( 'ck_compare', $check );
 
 $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
+
+$check = ( $data['use_shipping'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_shipping', $check );
 
 $check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_wishlist', $check );
