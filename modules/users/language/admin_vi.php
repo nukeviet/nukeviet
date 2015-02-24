@@ -364,7 +364,7 @@ $lang_module['ldap_config_PageSize_info'] = "Make sure this value is smaller tha
 
 $lang_module['rb_config'] = "Các thiết lập ràng buộc";
 $lang_module['rb_config_dn'] = "Distinguished name";
-$lang_module['rb_config_dn_info'] = "Nếu bạn muốn sử dụng ràng buộc người dùng để tìm kiếm các người dùng, chỉ ra nó ở đây. Đôi khi nó giống như 'cn=ldapuser,ou=public,o=org'";
+$lang_module['rb_config_dn_info'] = "Nếu bạn muốn sử dụng ràng buộc người dùng để tìm kiếm các người dùng, chỉ ra nó ở đây. Đôi khi nó giống như 'cn=Manager,dc=nukeviet,dc=vn'";
 $lang_module['rb_config_pw'] = "Password";
 $lang_module['rb_config_pw_info'] = "Mật khẩu đối với ràng buộc người dùng .";
 
