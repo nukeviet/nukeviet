@@ -21,11 +21,11 @@
 				<tbody>
 					<tr>
 						<th class="150px">{LANG.name} <span class="require">(*)</span></th>
-						<td><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="form-control" style="width: 400px" /></td>
+						<td colspan="3"><input type="text" maxlength="255" value="{rowcontent.title}" name="title" id="idtitle" class="form-control" style="width: 400px" /></td>
 					</tr>
 					<tr>
 						<th>{LANG.alias}: </th>
-						<td><input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" style="width: 400px" /> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
+						<td colspan="3"><input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" style="width: 400px" /> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
 					</tr>
 					<tr>
 						<th>{LANG.content_cat} <span class="require">(*)</span></th>
@@ -36,15 +36,11 @@
 								<option value="{ROWSCAT.catid}" {ROWSCAT.selected} data-label="{ROWSCAT.typeprice}">{ROWSCAT.title}</option>
 								<!-- END: rowscat -->
 							</select></td>
-					</tr>
-				</tbody>
-			</table>
-
-			<table class="table table-striped table-bordered table-hover">
-				<tbody>
-					<tr>
 						<th>{LANG.content_product_code}: </th>
 						<td><input class="form-control" name="product_code" type="text" value="{rowcontent.product_code}" maxlength="255"/></td>
+					</tr>
+
+					<tr>
 						<th class="150px">{LANG.content_product_number}</th>
 						<td><!-- BEGIN: edit --><strong>{rowcontent.product_number}</strong> + <input class="form-control" type="text" maxlength="50" value="0" name="product_number" style="width: 50px;" /><!-- END: edit --><!-- BEGIN: add --><input class="form-control" type="text" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 50px;" /><!-- END: add -->
 						<select class="form-control" name="product_unit">
@@ -52,6 +48,15 @@
 							<option value="{uid}" {uch}>{utitle}</option>
 							<!-- END: rowunit -->
 						</select></td>
+						<th align="right">{LANG.weights}</th>
+						<td>
+							<input class="form-control" type="text" maxlength="50" value="{rowcontent.product_weight}" name="product_weight" style="width: 80px;" onkeyup="this.value=FormatNumber(this.value);" id="f_weight"/>
+							<select class="form-control" name="weight_unit">
+								<!-- BEGIN: weight_unit -->
+								<option value="{WEIGHT.code}" {WEIGHT.select}>{WEIGHT.title}</option>
+								<!-- END: weight_unit -->
+							</select>
+						</td>
 					</tr>
 					<tr id="priceproduct">
 						<!-- BEGIN: typeprice2 -->
