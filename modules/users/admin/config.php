@@ -317,19 +317,20 @@ else
 			$server = array(
 				'name' => $m[2],
 				'title' => $m[1] . ' ' . $m[2],
-				'checked' => $checked
+				'checked' => $checked,
+				'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
+				'note' => sprintf( $lang_module['oauth_config'], $m[1] . ' ' . $m[2] )
 			);
+
+			$xtpl->assign( 'OPENID', $server );
 			if( file_exists( NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php' ) )
 			{
-				$server['link_config'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2];
-				$server['note'] = sprintf( $lang_module['oauth_config'], $m[1] . ' ' . $m[2] );
+				$xtpl->parse( 'main.openid_servers.config' );
 			}
 			else
 			{
-				$server['link_config'] = 'javascript:void(0)';
-				$server['note'] = '';
+				$xtpl->parse( 'main.openid_servers.noconfig' );
 			}
-			$xtpl->assign( 'OPENID', $server );
 			$xtpl->parse( 'main.openid_servers' );
 		}
 	}

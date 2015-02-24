@@ -169,7 +169,13 @@
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
-					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} /> <a href="{OPENID.link_config}" title="{OPENID.note}">{OPENID.title}</a>
+					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} />
+					<!-- BEGIN: config -->
+						<a href="{OPENID.link_config}" title="{OPENID.note}">{OPENID.title}</a>
+					<!-- END: config -->
+					<!-- BEGIN: noconfig -->
+						{OPENID.title}
+					<!-- END: noconfig -->
 					<br />
 					<!-- END: openid_servers -->
 					</td>

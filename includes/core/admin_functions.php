@@ -225,7 +225,7 @@ function nv_save_file_config_global()
 	$config_variable['error_log_fileext'] = NV_LOGS_EXT;
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
-	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_adminlangs', 'openid_servers', 'allow_request_mods' );
+	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_adminlangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
 
 	if( empty( $config_variable['openid_servers'] ) )
 	{
@@ -247,7 +247,12 @@ function nv_save_file_config_global()
 
 	foreach( $config_variable as $c_config_name => $c_config_value )
 	{
-		if( in_array( $c_config_name, $config_name_array ) )
+		if( $c_config_name == 'config_sso' )
+		{
+			$config_sso = empty( $c_config_value ) ? '' : nv_var_export( unserialize( $c_config_value ) );
+			$content_config .= "\$global_config['" . $c_config_name . "']=" . $config_sso . ";\n";
+		}
+		elseif( in_array( $c_config_name, $config_name_array ) )
 		{
 			if( ! empty( $c_config_value ) )
 			{
