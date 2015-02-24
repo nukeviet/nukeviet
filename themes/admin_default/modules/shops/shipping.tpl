@@ -6,12 +6,12 @@
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 		<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 		<div class="row">
-			<div class="col-xs-3">
+			<div class="col-xs-6">
 				<div class="form-group">
 					<input type="text" class="form-control" value="{SEARCH.keywords}" name="keywords" placeholder="{LANG.search_key}" />
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-6">
 				<div class="form-group">
 					<select class="form-control" name="shops_id">
 						<option value="">---{LANG.shops_chose}---</option>
@@ -21,7 +21,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-6">
 				<div class="form-group">
 					<select class="form-control" name="carier_id">
 						<option value="">---{LANG.carrier_chose}---</option>
@@ -31,7 +31,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-6">
 				<div class="form-group">
 					<input type="submit" class="btn btn-primary" value="{LANG.search}" />
 				</div>

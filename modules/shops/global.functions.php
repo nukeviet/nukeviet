@@ -366,7 +366,7 @@ function GetParentCatFilter( $cateid )
 	while( true )
 	{
 		$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cateid )->fetchColumn();
-		if( $count == 0 )
+		if( $count == 0 and isset( $global_array_cat[$cateid] ) )
 		{
 			$cateid = $global_array_cat[$cateid]['parentid'];
 			continue;

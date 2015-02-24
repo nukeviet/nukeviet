@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="row" style="margin-bottom: 5px">
-	<div class="col-xs-12">
+	<div class="col-xs-24">
 		<div class="btn-group pull-right">
 			<button type="button" class="btn btn-primary btn-xs" id="field">
 				{LANG.field_id}

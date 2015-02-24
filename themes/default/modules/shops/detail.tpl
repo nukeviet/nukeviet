@@ -2,7 +2,7 @@
 <div id="detail">
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<div class="col-md-3 text-center">
+			<div class="col-md-6 text-center">
 				<a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->> <img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail"> </a>
 				<br />
 				<em class="fa fa-search-plus text-primary zoom_img">&nbsp;</em><a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]">{LANG.detail_view_lage_img}</a>
@@ -13,7 +13,7 @@
 				<!-- END: adminlink -->
 			</div>
 
-			<div class="col-md-9">
+			<div class="col-md-18">
 				<ul class="product_info">
 					<li>
 						<h2>{TITLE}</h2>
@@ -109,7 +109,7 @@
 				<!-- BEGIN: group -->
 				<div class="row">
 					<!-- BEGIN: items -->
-					<div class="col-md-6">
+					<div class="col-md-12">
 						<div class="form-group">
 							<select class="form-control" name="group">
 								<!-- BEGIN: header -->
@@ -227,7 +227,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div style="margin-top: 6px">
 				<button class="btn btn-default btn-sm disabled">
 					{LANG.detail_share}:
@@ -242,7 +242,7 @@
 				<a class="btn btn-default btn-sm google-plus-one" onclick="share_google();" href="javascript:;" title="Share on Google"> <em class="fa fa-google-plus google">&nbsp;</em> <span class="google">1</span> </a>
 			</div>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-12">
            <!-- BEGIN: typepeice -->
 			<table class="table table-striped table-bordered table-hover" style="width: 264px">
 				<thead>
@@ -317,7 +317,7 @@
 			<!-- BEGIN: othersimg -->
 			<section id="section-2">
 				<!-- BEGIN: loop -->
-				<div class="col-xs-6 col-md-3">
+				<div class="col-xs-12 col-md-6">
 					<a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
 				</div>
 				<!-- END: loop -->

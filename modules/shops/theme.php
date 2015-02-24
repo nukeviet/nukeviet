@@ -85,7 +85,7 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
-				$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+				$num_row = 24 / $pro_config['per_row'];
 
 				foreach( $data_row['data'] as $data_row_i )
 				{
@@ -256,7 +256,7 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 				$xtpl->assign( 'LINK_CATALOG', $data_row['link'] );
 				$xtpl->assign( 'NUM_PRO', $data_row['num_pro'] );
 				$i = 1;
-				$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+				$num_row = 24 / $pro_config['per_row'];
 
 				foreach( $data_row['data'] as $data_row_i )
 				{
@@ -444,7 +444,7 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 	if( !empty( $data_content ) )
 	{
 		$i = 1;
-		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+		$num_row = 24 / $pro_config['per_row'];
 
 		if( $op == 'main' )
 		{
@@ -615,7 +615,7 @@ function view_search_all( $data_content, $html_pages = '' )
 	if( !empty( $data_content ) )
 	{
 		$i = 1;
-		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+		$num_row = 24 / $pro_config['per_row'];
 
 		foreach( $data_content as $data_row )
 		{
@@ -799,7 +799,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	if( !empty( $data_content['data'] ) )
 	{
 		$i = 1;
-		$num_row = $pro_config['per_row'] == 3 ? 4 : 3;
+		$num_row = 24 / $pro_config['per_row'];
 		$xtpl->assign( 'SUM', count( $data_content['data'] ) );
 
 		foreach( $data_content['data'] as $data_row )

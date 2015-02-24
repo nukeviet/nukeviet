@@ -7,34 +7,75 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="well">
-	<form class="form-inline" action="{NV_BASE_ADMINURL}index.php" method="get">
+	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name ="{NV_NAME_VARIABLE}"value="{MODULE_NAME}" />
 		<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
-		<select class="form-control" name="stype">
-			<option value="-">---{LANG.search_type}---</option>
-			<!-- BEGIN: stype -->
-			<option value="{STYPE.key}"{STYPE.selected}>{STYPE.title}</option>
-			<!-- END: stype -->
-		</select>
-		<input class="form-control" type="text" value="{Q}" maxlength="{NV_MAX_SEARCH_LENGTH}" name="q" placeholder="{LANG.search_key}">
-		<select class="form-control" style="width: 150px !important" name="catid">
-			<option value="0">---{LANG.search_cat}---</option>
-			<!-- BEGIN: catid -->
-			<option value="{CATID.catid}"{CATID.selected}>{CATID.title}</option>
-			<!-- END: catid -->
-		</select>
-		<input type="text" name="from" id="from" value="{FROM}" class="form-control" style="width: 100px" placeholder="{LANG.date_from}" readonly="readonly">
-		<input type="text" name="to" id="to" value="{TO}" class="form-control" style="width: 100px" placeholder="{LANG.date_to}" readonly="readonly">
-		<select class="form-control" name="per_page">
-			<option value="">---{LANG.search_per_page}---</option>
-			<!-- BEGIN: per_page -->
-			<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
-			<!-- END: per_page -->
-		</select>
-		<input class="btn btn-primary" type="submit" value="{LANG.search}">
-		<br>
+		<div class="row">
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<select class="form-control" name="stype">
+						<option value="-">---{LANG.search_type}---</option>
+						<!-- BEGIN: stype -->
+						<option value="{STYPE.key}"{STYPE.selected}>{STYPE.title}</option>
+						<!-- END: stype -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<input class="form-control" type="text" value="{Q}" maxlength="{NV_MAX_SEARCH_LENGTH}" name="q" placeholder="{LANG.search_key}">
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<select class="form-control" name="catid">
+						<option value="0">---{LANG.search_cat}---</option>
+						<!-- BEGIN: catid -->
+						<option value="{CATID.catid}"{CATID.selected}>{CATID.title}</option>
+						<!-- END: catid -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" name="from" id="from" value="{FROM}" readonly="readonly" placeholder="{LANG.date_from}">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="from-btn">
+								<em class="fa fa-calendar fa-fix">&nbsp;</em>
+							</button> </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" name="to" id="to" value="{TO}" readonly="readonly" placeholder="{LANG.date_to}">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="to-btn">
+								<em class="fa fa-calendar fa-fix">&nbsp;</em>
+							</button> </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<select class="form-control" name="per_page">
+						<option value="">---{LANG.search_per_page}---</option>
+						<!-- BEGIN: per_page -->
+						<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
+						<!-- END: per_page -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<input class="btn btn-primary" type="submit" value="{LANG.search}">
+				</div>
+			</div>
+		</div>
 		<input type="hidden" name ="checkss" value="{CHECKSESS}" />
-		<label class="help-block"><em class="text-danger">{SEARCH_NOTE}</em></label>
+		<em class="help-block">{SEARCH_NOTE}</em>
 	</form>
 </div>
 
@@ -45,76 +86,12 @@
 				<tr>
 					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
 					<th style="width:40px">&nbsp;</th>
-					<th>
-						<!-- BEGIN: no_order_title -->
-						<em class="fa fa-sort">&nbsp;</em>
-						<!-- END: no_order_title -->
-						<!-- BEGIN: order_title -->
-						<!-- BEGIN: desc -->
-						<em class="fa fa-sort-alpha-desc">&nbsp;</em>
-						<!-- END: desc -->
-						<!-- BEGIN: asc -->
-						<em class="fa fa-sort-alpha-asc">&nbsp;</em>
-						<!-- END: asc -->
-						<!-- END: order_title -->
-						<a href="{BASE_URL_NAME}">{LANG.name}</a>
-					</th>
-					<th class="text-center">
-						<!-- BEGIN: no_order_publtime -->
-						<em class="fa fa-sort">&nbsp;</em>
-						<!-- END: no_order_publtime -->
-						<!-- BEGIN: order_publtime -->
-						<!-- BEGIN: desc -->
-						<em class="fa fa-sort-amount-desc">&nbsp;</em>
-						<!-- END: desc -->
-						<!-- BEGIN: asc -->
-						<em class="fa fa-sort-amount-asc">&nbsp;</em>
-						<!-- END: asc -->
-						<!-- END: order_publtime -->
-						<a href="{BASE_URL_PUBLTIME}">{LANG.content_publ_date}</a>
-					</th>
+					<th><!-- BEGIN: no_order_title --><em class="fa fa-sort">&nbsp;</em><!-- END: no_order_title --><!-- BEGIN: order_title --><!-- BEGIN: desc --><em class="fa fa-sort-alpha-desc">&nbsp;</em><!-- END: desc --><!-- BEGIN: asc --><em class="fa fa-sort-alpha-asc">&nbsp;</em><!-- END: asc --><!-- END: order_title --><a href="{BASE_URL_NAME}">{LANG.name}</a></th>
+					<th class="text-center"><!-- BEGIN: no_order_publtime --><em class="fa fa-sort">&nbsp;</em><!-- END: no_order_publtime --><!-- BEGIN: order_publtime --><!-- BEGIN: desc --><em class="fa fa-sort-amount-desc">&nbsp;</em><!-- END: desc --><!-- BEGIN: asc --><em class="fa fa-sort-amount-asc">&nbsp;</em><!-- END: asc --><!-- END: order_publtime --><a href="{BASE_URL_PUBLTIME}">{LANG.content_publ_date}</a></th>
 					<th class="text-center">{LANG.order_product_price}</th>
-					<th class="text-center">
-						<!-- BEGIN: no_order_hitstotal -->
-						<em class="fa fa-sort">&nbsp;</em>
-						<!-- END: no_order_hitstotal -->
-						<!-- BEGIN: order_hitstotal -->
-						<!-- BEGIN: desc -->
-						<em class="fa fa-sort-numeric-desc">&nbsp;</em>
-						<!-- END: desc -->
-						<!-- BEGIN: asc -->
-						<em class="fa fa-sort-numeric-asc">&nbsp;</em>
-						<!-- END: asc -->
-						<!-- END: order_hitstotal -->
-						<a href="{BASE_URL_HITSTOTAL}">{LANG.views}</a>
-					</th>
-					<th class="text-center">
-						<!-- BEGIN: no_order_product_number -->
-						<em class="fa fa-sort">&nbsp;</em>
-						<!-- END: no_order_product_number -->
-						<!-- BEGIN: order_product_number -->
-						<!-- BEGIN: desc -->
-						<em class="fa fa-sort-numeric-desc">&nbsp;</em>
-						<!-- END: desc -->
-						<!-- BEGIN: asc -->
-						<em class="fa fa-sort-numeric-asc">&nbsp;</em>
-						<!-- END: asc -->
-						<!-- END: order_product_number -->
-						<a href="{BASE_URL_PNUMBER}">{LANG.content_product_number1}</a>
-					</th>
-					<th class="text-center">
-						<!-- BEGIN: no_order_num_sell -->
-						<em class="fa fa-sort">&nbsp;</em>
-						<!-- END: no_order_num_sell -->
-						<!-- BEGIN: order_num_sell -->
-						<!-- BEGIN: desc -->
-						<em class="fa fa-sort-numeric-desc">&nbsp;</em>
-						<!-- END: desc -->
-						<!-- BEGIN: asc -->
-						<em class="fa fa-sort-numeric-asc">&nbsp;</em>
-						<!-- END: asc -->
-						<!-- END: order_num_sell -->
-						<a href="{BASE_URL_NUM_SELL}">{LANG.num_selled}</a></th>
+					<th class="text-center"><!-- BEGIN: no_order_hitstotal --><em class="fa fa-sort">&nbsp;</em><!-- END: no_order_hitstotal --><!-- BEGIN: order_hitstotal --><!-- BEGIN: desc --><em class="fa fa-sort-numeric-desc">&nbsp;</em><!-- END: desc --><!-- BEGIN: asc --><em class="fa fa-sort-numeric-asc">&nbsp;</em><!-- END: asc --><!-- END: order_hitstotal --><a href="{BASE_URL_HITSTOTAL}">{LANG.views}</a></th>
+					<th class="text-center"><!-- BEGIN: no_order_product_number --><em class="fa fa-sort">&nbsp;</em><!-- END: no_order_product_number --><!-- BEGIN: order_product_number --><!-- BEGIN: desc --><em class="fa fa-sort-numeric-desc">&nbsp;</em><!-- END: desc --><!-- BEGIN: asc --><em class="fa fa-sort-numeric-asc">&nbsp;</em><!-- END: asc --><!-- END: order_product_number --><a href="{BASE_URL_PNUMBER}">{LANG.content_product_number1}</a></th>
+					<th class="text-center"><!-- BEGIN: no_order_num_sell --><em class="fa fa-sort">&nbsp;</em><!-- END: no_order_num_sell --><!-- BEGIN: order_num_sell --><!-- BEGIN: desc --><em class="fa fa-sort-numeric-desc">&nbsp;</em><!-- END: desc --><!-- BEGIN: asc --><em class="fa fa-sort-numeric-asc">&nbsp;</em><!-- END: asc --><!-- END: order_num_sell --><a href="{BASE_URL_NUM_SELL}">{LANG.num_selled}</a></th>
 					<th class="text-center">{LANG.status}</th>
 					<th>&nbsp;</th>
 				</tr>
@@ -136,14 +113,7 @@
 					<td class="text-right">{ROW.product_price} {ROW.money_unit}</td>
 					<td class="text-center">{ROW.hitstotal}</td>
 					<td class="text-center">{ROW.product_number}</td>
-					<td class="text-center">
-						<!-- BEGIN: seller -->
-						<a href="{ROW.link_seller}" title="{LANG.report_detail}">{ROW.num_sell} {ROW.product_unit}</a>
-						<!-- END: seller -->
-						<!-- BEGIN: seller_empty -->
-						{ROW.num_sell} {ROW.product_unit}
-						<!-- END: seller_empty -->
-					</td>
+					<td class="text-center"><!-- BEGIN: seller --><a href="{ROW.link_seller}" title="{LANG.report_detail}">{ROW.num_sell} {ROW.product_unit}</a><!-- END: seller --><!-- BEGIN: seller_empty --> {ROW.num_sell} {ROW.product_unit} <!-- END: seller_empty --></td>
 					<td class="text-center">{ROW.status}</td>
 					<td class="text-center"><em class="fa fa-copy fa-lg">&nbsp;</em><a href="{ROW.link_copy}" title="{LANG.product_copy_note}">{LANG.product_copy}</a>&nbsp;-&nbsp;{ROW.link_edit}&nbsp;-&nbsp;{ROW.link_delete} </td>
 				</tr>
@@ -171,13 +141,17 @@
 <script type='text/javascript'>
 	$(function() {
 		$("#from, #to").datepicker({
-			showOn : "both",
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
+			showOn : 'focus'
+		});
+		$('#to-btn').click(function(){
+			$("#to").datepicker('show');
+		});
+		$('#from-btn').click(function(){
+			$("#from").datepicker('show');
 		});
 	});
 </script>

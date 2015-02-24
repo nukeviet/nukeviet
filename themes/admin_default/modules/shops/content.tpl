@@ -16,7 +16,7 @@
 	<input type="hidden" value="1" name="save">
 	<input type="hidden" value="{rowcontent.id}" name="id">
 	<div class="row">
-		<div class="col-sm-12 col-md-9">
+		<div class="col-sm-24 col-md-18">
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
@@ -162,7 +162,7 @@
 				{DATACUSTOM_FORM}
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3">
+		<div class="col-sm-24 col-md-6">
 			<!-- BEGIN:block_cat -->
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
