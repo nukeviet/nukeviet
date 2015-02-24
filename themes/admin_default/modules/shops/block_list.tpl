@@ -1,13 +1,19 @@
 <!-- BEGIN: main -->
-<form class="form-inline" name="block_list">
+<form name="block_list">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
+			<colgroup>
+				<col class="w50" />
+				<col class="w100" />
+				<col />
+				<col class="w250" />
+			</colgroup>
 			<thead>
-				<tr class="text-center">
-					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
-					<th style="width:60px;">{LANG.weight}</th>
+				<tr>
+					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+					<th>{LANG.weight}</th>
 					<th>{LANG.name}</th>
-					<th style="width:250px;"></th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,13 +27,13 @@
 						<!-- END: weight -->
 					</select></td>
 					<td align="left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
-					<td class="text-center"><span class="edit_icon"><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a></span> &nbsp;-&nbsp;<span class="delete_icon"><a href="javascript:void(0);" onclick="nv_chang_block({BID}, {ROW.id}, 'delete')">{LANG.delete_from_block}</a></span></td>
+					<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a>&nbsp;-&nbsp;<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_chang_block({BID}, {ROW.id}, 'delete')">{LANG.delete_from_block}</a></td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
 				<tr align="left">
-					<td colspan="5"><input type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
+					<td colspan="5"><input class="btn btn-danger" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
 				</tr>
 			</tfoot>
 		</table>
