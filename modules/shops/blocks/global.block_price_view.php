@@ -14,7 +14,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 {
 	/**
 	 * nv_block_config_product_price_blocks()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -38,7 +38,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	}
 	/**
 	 * numoney_to_strmoney()
-	 * 
+	 *
 	 * @param mixed $money
 	 * @param mixed $mod_file
 	 * @return
@@ -60,7 +60,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	}
 	/**
 	 * nv_block_config_product_price_blocks_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -78,7 +78,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	}
 	/**
 	 * nv_view_product_price()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
@@ -98,7 +98,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 
 		include NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module . '/block.price_view.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $mod_file . '/block.price_view.tpl' ) )
 		{
 			$block_theme = $module_info['template'];
 		}
@@ -107,7 +107,7 @@ if( ! function_exists( 'nv_view_product_price' ) )
 			$block_theme = 'default';
 		}
 
-		$xtpl = new XTemplate( 'block.price_view.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
+		$xtpl = new XTemplate( 'block.price_view.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'TEMPLATE', $block_theme );

@@ -26,7 +26,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		$html = "<tr>";
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
-		$html .= "	<td><select name=\"config_blockid\">\n";
+		$html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
 		$sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
 		foreach( $list as $l )
@@ -39,12 +39,12 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
 		$html .= "</tr>";
 
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['cut_num'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
 		$html .= "</tr>";
 
 		return $html;
@@ -69,6 +69,25 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		return $return;
 	}
 
+	if( !nv_function_exists( 'nv_get_price_tmp' ) )
+	{
+		function nv_get_price_tmp( $module_name, $module_data, $module_file, $pro_id )
+		{
+			global $db, $db_config, $module_config, $discounts_config;
+
+			$price = array();
+			$pro_config = $module_config[$module_name];
+
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php' ) )
+			{
+				require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
+				$price = nv_get_price( $pro_id, $pro_config['money_unit'], 1, false, $module_name );
+			}
+
+			return $price;
+		}
+	}
+
 	/**
 	 * nv_relates_product()
 	 *
@@ -77,7 +96,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	 */
 	function nv_relates_product( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head, $db, $pro_config;
+		global $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head, $db, $pro_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -96,7 +115,6 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		if( $module != $module_name )
 		{
 			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
-
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
 			{
@@ -119,21 +137,35 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 			}
 			unset( $list, $row );
 
+			// Css
 			if( file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/css/' . $mod_file . '.css' ) )
 			{
 				$my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css" type="text/css" />';
 			}
+
+			// Language
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php' ) )
+			{
+				require_once NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
+			}
+
+			$shops_config = $module_config[$module];
+		}
+		else
+		{
+			$shops_config = $pro_config;
 		}
 
 		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=';
 
 		$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
-		$xtpl->assign( 'WIDTH', $pro_config['blockwidth'] );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'WIDTH', $shops_config['homewidth'] );
 
 		$db->sqlreset()
 			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice' )
-			->from( $db_config['prefix'] . '_' . $module . '_rows t1' )
-			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module . '_block t2 ON t1.id = t2.id' )
+			->from( $db_config['prefix'] . '_' . $mod_data . '_rows t1' )
+			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $block_config['blockid'] . ' AND t1.status =1' )
 			->order( 't1.addtime DESC, t2.weight ASC' )
 			->limit( $block_config['numrow'] );
@@ -167,15 +199,28 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 			$xtpl->assign( 'src_img', $src_img );
 			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $row['addtime'] ) );
 
-			if( $pro_config['active_price'] == '1' and $row['showprice'] == '1' )
+			if( $shops_config['active_price'] == '1' )
 			{
-				$price = nv_currency_conversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $row['discount_id'] );
-				$xtpl->assign( 'PRICE', $price );
-				$xtpl->parse( 'main.loop.price' );
+				if( $row['showprice'] == '1' )
+				{
+					$price = nv_get_price_tmp( $module, $mod_data, $mod_file, $row['id'] );
+					$xtpl->assign( 'PRICE', $price );
+					if( $row['discount_id'] and $price['discount_percent'] > 0 )
+					{
+						$xtpl->parse( 'main.loop.price.discounts' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.loop.price.no_discounts' );
+					}
+					$xtpl->parse( 'main.loop.price' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.loop.contact' );
+				}
 			}
 
-			$bg = ( $i % 2 == 0 ) ? 'bg' : '';
-			$xtpl->assign( 'bg', $bg );
 			$xtpl->parse( 'main.loop' );
 			++$i;
 		}
