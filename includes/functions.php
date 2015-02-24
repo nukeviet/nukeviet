@@ -1887,6 +1887,10 @@ function nv_site_mods()
 			{
 				$user_ops[] = 'memberlist';
 			}
+			if( defined( 'NV_OPENID_ALLOWED' ) )
+			{
+				$user_ops[] = 'oauth';
+			}
 			$func_us = $site_mods['users']['funcs'];
 			foreach( $func_us as $func => $row )
 			{

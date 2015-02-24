@@ -85,7 +85,7 @@ else
 							$user_info['last_openid'] = $user['last_openid'];
 							$user_info['st_login'] = ! empty( $user_info['password'] ) ? true : false;
 							$user_info['valid_question'] = ( ! empty( $user_info['question'] ) and ! empty( $user_info['answer'] ) ) ? true : false;
-							$user_info['current_mode'] = ! empty( $user_info['current_openid'] ) ? 2 : 1;
+							$user_info['current_mode'] = isset( $user['current_mode'] ) ? $user['current_mode'] : 0;
 
 							unset( $user_info['checknum'], $user_info['password'], $user_info['question'], $user_info['answer'] );
 
@@ -102,11 +102,8 @@ else
 								}
 								else
 								{
-									$user_info['openid_id'] = $row['openid'];
+									$user_info['openid_server'] = $row['openid'];
 									$user_info['openid_email'] = $row['email'];
-
-									$user_info['openid_server'] = parse_url( $user_info['openid_id'] );
-									$user_info['openid_server'] = preg_replace( '/^([w]{3})\./', '', $user_info['openid_server']['host'] );
 								}
 							}
 						}

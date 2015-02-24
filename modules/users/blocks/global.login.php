@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers, $lang_module;
+global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $lang_module;
 
 if( $module_name == 'users' ) return '';
 
@@ -88,9 +88,9 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 			$xtpl->assign( 'OPENID_IMG_HEIGHT', 24 );
 
 			$assigns = array();
-			foreach( $openid_servers as $server => $value )
+			foreach( $global_config['openid_servers'] as $server )
 			{
-				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
 				$assigns['title'] = ucfirst( $server );
 				$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
 				$assigns['img_width'] = $assigns['img_height'] = 24;

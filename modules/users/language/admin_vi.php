@@ -125,8 +125,8 @@ $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: %3$s<br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['allow_openid'] = 'Cho phép sử dụng OpenID để đăng nhập, đăng ký';
-$lang_module['openid_servers'] = 'Các nhà cung cấp OpenID được chấp nhận';
+$lang_module['allow_openid'] = 'Cho phép sử dụng Oauth, OpenID để đăng nhập, đăng ký';
+$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng thành viên của Diễn đàn';
 $lang_module['search_page_title'] = 'Kết quả tìm kiếm';
@@ -293,16 +293,16 @@ $lang_module['field_choicetypes_title'] = 'Lựu chọn dữ liệu';
 $lang_module['field_choicetypes_sql'] = 'Lấy dữ liệu từ CSDL';
 $lang_module['field_choicetypes_text'] = 'Lấy dữ liệu từ nhập liệu';
 $lang_module['field_options_choicesql'] = 'Lựa chọn module, bảng dữ liệu và trường dữ liệu';
-$lang_module['field_options_choicesql_module'] = "Chọn module";
-$lang_module['field_options_choicesql_table'] = "Chọn bảng dữ liệu";
-$lang_module['field_options_choicesql_column'] = "Chọn cột dữ liệu";
-$lang_module['field_options_choicesql_key'] = "Chọn cột làm key";
-$lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
+$lang_module['field_options_choicesql_module'] = 'Chọn module';
+$lang_module['field_options_choicesql_table'] = 'Chọn bảng dữ liệu';
+$lang_module['field_options_choicesql_column'] = 'Chọn cột dữ liệu';
+$lang_module['field_options_choicesql_key'] = 'Chọn cột làm key';
+$lang_module['field_options_choicesql_val'] = 'Chọn cột làm value';
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
-$lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
-$lang_module['facebook_client_id'] = 'App ID/API Key';
-$lang_module['facebook_client_secret'] = 'Mã Bí Mật';
+$lang_module['oauth_config'] = 'Cấu hình đăng nhập, đăng kí bằng %s';
+$lang_module['oauth_client_id'] = 'App ID/API Key';
+$lang_module['oauth_client_secret'] = 'Mã Bí Mật';
 
 $lang_module['import'] = 'Nhập dữ liệu từ file Excel';
 $lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><strong>download file dữ liệu mẫu</strong></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <strong>%2$s</strong>';
@@ -325,3 +325,7 @@ $lang_module['read_error'] = "Lỗi khi đọc file %1\$s, Hệ thống không c
 $lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần kiểm tra lại cột : %2\$s Cột này cần là : %3\$s. Vì vậy hệ thống bị dừng lại !";
 $lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
 $lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
+
+$lang_module['update_field'] = "Cập nhật site";
+$lang_module['update_field_oncreate'] = "Khi được tạo";
+$lang_module['update_field_onlogin'] = "Cập đăng site";

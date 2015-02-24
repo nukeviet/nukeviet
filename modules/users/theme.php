@@ -39,10 +39,14 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_register );
 	$xtpl->assign( 'NV_SITETERMS', $siteterms );
-	foreach( $data_questions as $array_question_i )
+	if( $global_config['allowquestion'] )
 	{
-		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
-		$xtpl->parse( 'main.frquestion' );
+		foreach( $data_questions as $array_question_i )
+		{
+			$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
+			$xtpl->parse( 'main.allowquestion.frquestion' );
+		}
+		$xtpl->parse( 'main.allowquestion' );
 	}
 
 	if( ! empty( $array_field_config ) )
@@ -239,10 +243,14 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 	$xtpl->assign( 'DATA', $array_register );
 	$xtpl->assign( 'NV_SITETERMS', $siteterms );
 
-	foreach( $data_questions as $array_question_i )
+	if( $global_config['allowquestion'] )
 	{
-		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
-		$xtpl->parse( 'main.frquestion' );
+		foreach( $data_questions as $array_question_i )
+		{
+			$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
+			$xtpl->parse( 'main.allowquestion.frquestion' );
+		}
+		$xtpl->parse( 'main.allowquestion' );
 	}
 
 	if( $gfx_chk )
@@ -269,7 +277,7 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
  */
 function user_login( $gfx_chk, $array_login )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
 	$xtpl = new XTemplate( 'login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -306,9 +314,9 @@ function user_login( $gfx_chk, $array_login )
 		$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
 		$assigns = array();
-		foreach( $openid_servers as $server => $value )
+		foreach( $global_config['openid_servers'] as $server )
 		{
-			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
+			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
 			$assigns['title'] = ucfirst( $server );
 			$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
 			$assigns['img_width'] = $assigns['img_height'] = 24;
@@ -335,7 +343,7 @@ function user_login( $gfx_chk, $array_login )
  */
 function user_openid_login( $gfx_chk, $array_login, $attribs )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
 
 	$xtpl = new XTemplate( 'openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -357,7 +365,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
 	$assigns = array();
-	foreach( $openid_servers as $server => $value )
+	foreach( $global_config['openid_servers'] as $server )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
 		$assigns['title'] = ucfirst( $server );
@@ -397,7 +405,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
  */
 function user_openid_login2( $attribs, $array_user_login )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $openid_servers, $nv_redirect;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $nv_redirect;
 
 	$xtpl = new XTemplate( 'openid_login2.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -414,7 +422,7 @@ function user_openid_login2( $attribs, $array_user_login )
 	}
 
 	$assigns = array();
-	foreach( $openid_servers as $server => $value )
+	foreach( $global_config['openid_servers'] as $server )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . $nv_redirect;
 		$assigns['title'] = ucfirst( $server );
@@ -920,17 +928,17 @@ function user_welcome()
 	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
 	$user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
 
-	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 3 )
+	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 5 )
 	{
 		$user_info['current_mode'] = $lang_module['admin_login'];
 	}
-	elseif( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 2 )
+	elseif( isset( $user_info['current_mode'] ) and isset( $lang_module['mode_login_' . $user_info['current_mode']] ) )
 	{
-		$user_info['current_mode'] = $lang_module['openid_login'] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
+		$user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
 	}
 	else
 	{
-		$user_info['current_mode'] = $lang_module['st_login'];
+		$user_info['current_mode'] = $lang_module['mode_login_1'];
 	}
 
 	$user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo" );
@@ -949,7 +957,7 @@ function user_welcome()
 		$xtpl->parse( 'main.pass_empty_note' );
 	}
 
-	if( empty( $user_info['valid_question'] ) )
+	if( $global_config['allowquestion'] and empty( $user_info['valid_question'] ) )
 	{
 		$xtpl->parse( 'main.question_empty_note' );
 	}
@@ -983,7 +991,7 @@ function user_info_exit( $info )
  */
 function openid_account_confirm( $gfx_chk, $attribs )
 {
-	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers, $nv_redirect;
+	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $nv_redirect;
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
@@ -1014,7 +1022,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register&amp;nv_redirect=' . $nv_redirect );
 
 	$assigns = array();
-	foreach( $openid_servers as $server => $value )
+	foreach( $global_config['openid_servers'] as $server )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
 		$assigns['title'] = ucfirst( $server );
@@ -1038,7 +1046,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
  */
 function openid_active_confirm( $gfx_chk, $attribs )
 {
-	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $openid_servers;
+	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name;
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
@@ -1068,7 +1076,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register' );
 
 	$assigns = array();
-	foreach( $openid_servers as $server => $value )
+	foreach( $global_config['openid_servers'] as $server )
 	{
 		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
 		$assigns['title'] = ucfirst( $server );
@@ -1091,7 +1099,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
  */
 function user_openid_administrator( $data )
 {
-	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config, $openid_servers;
+	global $my_head, $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config;
 
 	$groups_list = nv_groups_list_pub();
 
@@ -1140,9 +1148,9 @@ function user_openid_administrator( $data )
 	}
 
 	$assigns = array();
-	foreach( $openid_servers as $server => $value )
+	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=openid&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
 		$assigns['title'] = ucfirst( $server );
 		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
 		$assigns['img_width'] = $assigns['img_height'] = 24;

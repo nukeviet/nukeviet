@@ -22,7 +22,7 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  * @param mixed $opid
  * @return
  */
-function validUserLog( $array_user, $remember, $opid )
+function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 {
 	global $db, $db_config, $crypt, $nv_Request;
 
@@ -31,6 +31,7 @@ function validUserLog( $array_user, $remember, $opid )
 	$checknum = $crypt->hash( $checknum );
 	$user = array(
 		'userid' => $array_user['userid'],
+		'current_mode' => $current_mode,
 		'checknum' => $checknum,
 		'current_agent' => NV_USER_AGENT,
 		'last_agent' => $array_user['last_agent'],
