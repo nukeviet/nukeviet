@@ -390,6 +390,8 @@ $lang_module['update_LDAP_config'] = "Cập nhật dữ liệu từ LDAP xuống
 $lang_module['update_LDAP_config_name'] = "Tên đệm và tên";
 $lang_module['update_LDAP_config_lname'] = "Họ";
 
+$lang_module['default'] = "Mặc định";
+
 $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là tuỳ chọn. Bạn có thể chọn điền trước một số thông tin người dùng NukeViet với thông tin từ <b> các trường LDAP</b> được chỉ ra ở đây.<p>
 		Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
 		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>

@@ -20,7 +20,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['cas_language'] = $nv_Request->get_title( 'cas_language', 'post', '' );
 	$array_config['cas_proxy'] = (int)$nv_Request->get_bool( 'cas_proxy', 'post', '' );
 	$array_config['cas_multiauth'] = (int)$nv_Request->get_bool( 'cas_multiauth', 'post', '' );
-	$array_config['cas_certificate_select'] = (int)$nv_Request->get_bool( 'cas_certificate_select', 'post', '' );
+	$array_config['cas_certificate_select'] = (int)$nv_Request->get_bool( 'cas_certificate_check', 'post', '' );
 	$array_config['cas_certificate_path'] = $nv_Request->get_title( 'cas_certificate_path', 'post', '' );
 
 	$array_config['ldap_host_url'] = $nv_Request->get_title( 'ldap_host_url', 'post', '' );
@@ -72,7 +72,7 @@ else
 		'cas_language' => 'CAS_Languages_English',
 		'cas_proxy' => 0,
 		'cas_multiauth' => 1,
-		'cas_certificate_select' => 0,
+		'cas_certificate_check' => 0,
 		'cas_certificate_path' => '',
 		'ldap_host_url' => '119.17.253.239',
 		'ldap_version' => 3,
@@ -181,7 +181,7 @@ foreach( $language as $i )
 $usertype = array(
 	0 => array(
 		'value' => 'default',
-		'name' => 'Mặc định'
+		'name' => $lang_module['default']
 	),
 	1 => array(
 		'value' => 'edir',
@@ -239,9 +239,9 @@ foreach( $arr as $i )
 	$xtpl->assign( 'MULTIAUTH', $values );
 	$xtpl->parse( 'main.multiauth' );
 
-	$values['select'] = ($i == $array_config['cas_certificate_select']) ? 'selected="selected"' : '';
+	$values['select'] = ($i == $array_config['cas_certificate_check']) ? 'selected="selected"' : '';
 	$xtpl->assign( 'CERTIFICATE', $values );
-	$xtpl->parse( 'main.cas_certificate_select' );
+	$xtpl->parse( 'main.cas_certificate_check' );
 
 	$values['select'] = ($i == $array_config['ldap_start_tls']) ? 'selected="selected"' : '';
 	$xtpl->assign( 'START_TLS', $values );

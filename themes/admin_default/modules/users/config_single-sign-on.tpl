@@ -72,9 +72,9 @@
 					<td align="right">{LANG.cas_config_serverValidation}:</td>
 					<td>
 					<select name="cas_certificate_check">
-						<!-- BEGIN: cas_certificate_select -->
+						<!-- BEGIN: cas_certificate_check -->
 						<option {CERTIFICATE.select} value="{CERTIFICATE.value}">{CERTIFICATE.name}</option>
-						<!-- END: cas_certificate_select -->
+						<!-- END: cas_certificate_check -->
 					</select></td>
 					<td> {LANG.cas_config_serverValidation_info} </td>
 				</tr>
