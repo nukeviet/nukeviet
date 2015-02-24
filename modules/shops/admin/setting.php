@@ -106,10 +106,13 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
 // Số sản phẩm hiển thị trên một dòng
-for( $i = 3; $i <= 5; $i++ )
+for( $i = 1; $i <= 10; $i++ )
 {
-    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
-    $xtpl->parse( 'main.per_row' );
+	if( 24 % $i == 0 )
+	{
+	    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
+	    $xtpl->parse( 'main.per_row' );
+	}
 }
 
 $check_view = array(

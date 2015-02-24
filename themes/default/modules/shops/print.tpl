@@ -88,12 +88,12 @@ body {
 	</table>
 
     <div class="row" style="margin-top: 10px;">
-        <div class="col-xs-6">
+        <div class="col-xs-12">
 			<!-- BEGIN: order_note -->
 			<em>{LANG.cart_note} : {DATA.order_note}</em>
 			<!-- END: order_note -->
 		</div>
-		<div class="col-xs-6 text-right">
+		<div class="col-xs-12 text-right">
 			<!-- BEGIN: price3 -->
 			{LANG.cart_total_print}: <strong id="total">{order_total}</strong> {unit}
 			<!-- END: price3 -->

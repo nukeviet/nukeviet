@@ -25,24 +25,24 @@
 		    <div class="panel-body">
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{LANG.order_name} <span class="error">(*)</span></label>
-                    <div class="col-sm-9">
+                    <label class="col-sm-6 control-label">{LANG.order_name} <span class="error">(*)</span></label>
+                    <div class="col-sm-18">
                         <p class="form-control-static"><input name="order_name" class="form-control" value="{DATA.order_name}" /></p>
                         <span class="error">{ERROR.order_name}</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{LANG.order_email} <span class="error">(*)</span></label>
-                    <div class="col-sm-9">
+                    <label class="col-sm-6 control-label">{LANG.order_email} <span class="error">(*)</span></label>
+                    <div class="col-sm-18">
                         <p class="form-control-static"><input type="email" name="order_email" value="{DATA.order_email}" class="form-control" /></p>
                         <span class="error">{ERROR.order_email}</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{LANG.order_phone} <span class="error">(*)</span></label>
-                    <div class="col-sm-9">
+                    <label class="col-sm-6 control-label">{LANG.order_phone} <span class="error">(*)</span></label>
+                    <div class="col-sm-18">
                         <p class="form-control-static"><input name="order_phone" class="form-control" value="{DATA.order_phone}" /></p>
                         <span class="error">{ERROR.order_phone}</span>
                     </div>
@@ -50,8 +50,8 @@
 
 				<!-- BEGIN: shipping_chose -->
                 <div class="form-group">
-                    <label class="col-sm-3 control-label">{LANG.shipping}</label>
-                    <div class="col-sm-9">
+                    <label class="col-sm-6 control-label">{LANG.shipping}</label>
+                    <div class="col-sm-18">
                     	<!-- BEGIN: shipping_loop -->
                     	<p class="form-control-static"><label><input type="radio" name="order_shipping" value="{IS_SHIPPING.key}" {IS_SHIPPING.checked} />{IS_SHIPPING.value}</label></p>
                     	<!-- END: shipping_loop -->

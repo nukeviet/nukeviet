@@ -5,11 +5,11 @@
 	</div>
 	<!-- BEGIN: group -->
 	<div class="row" style="line-height: 25px; border-bottom: 1px dotted #ddd; border-top: 1px dotted #ddd; border-left: 1px dotted #ddd; border-right: 1px dotted #ddd; position: relative; <!--BEGIN: border_top --><!--END: border_top -->">
-		<div class="col-sm-2">
+		<div class="col-sm-4">
 			<strong>{MAIN_GROUP.title}</strong>
 		</div>
 		<!-- BEGIN: sub_group -->
-		<div class="col-sm-10">
+		<div class="col-sm-20">
 			<!-- BEGIN: loop -->
 				<!-- BEGIN: checkbox -->
 				<label><input type="checkbox" title="{SUB_GROUP.title}" data-alias="{MAIN_GROUP.alias}_{SUB_GROUP.alias}" name="groupid[]" value="{SUB_GROUP.groupid}" {SUB_GROUP.checked}>{SUB_GROUP.title}</label>

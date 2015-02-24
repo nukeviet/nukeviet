@@ -2,13 +2,13 @@
 <div id="formsearch">
     <form action="{NV_BASE_SITEURL}" method="get" name="frm_search" onsubmit="return onsubmitsearch1();">
         <div class="row">
-            <div class="col-xs-6 col-md-4">
+            <div class="col-xs-12 col-md-8">
                 <strong>{LANG.price1}</strong><input id="price11" type="text" value="{value_price1}" name="price1" class="form-control">
             </div>
-            <div class="col-xs-6 col-md-4">
+            <div class="col-xs-12 col-md-8">
                 <strong>{LANG.price1}</strong><input id="price21" size="20" type="text" value="{value_price2}" name="price2" class="form-control">
             </div>
-            <div class="col-xs-6 col-md-4">
+            <div class="col-xs-12 col-md-8">
                 &nbsp;
                 <select name="typemoney" id="typemoney1" class="form-control">
                     <option value="0">{LANG.moneyunit}</option>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-xs-12">
                 <select name="cata" id="cata1" class="form-control">
                     <option value="0">{LANG.allcatagories}</option>
                     <!-- BEGIN: loopcata -->
@@ -28,7 +28,7 @@
                     <!-- END: loopcata -->
                 </select>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-12">
 
             </div>
         </div>
@@ -47,7 +47,7 @@
 <!-- BEGIN: main -->
 <div id="products">
 	<!-- BEGIN: items -->
-    <div class="col-sm-6 col-md-{num}">
+    <div class="col-sm-12 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
                 <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content="{hometext}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>

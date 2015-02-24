@@ -2,44 +2,44 @@
 <div class="block clearfix">
 	<div class="row panel panel-default">
 		<div class="panel-body">
-			<div class="col-xs-7">
+			<div class="col-xs-14">
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-10">
 						<strong>{LANG.order_name}:</strong>
 					</div>
-					<div class="col-md-7">
+					<div class="col-md-14">
 						{DATA.order_name}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-10">
 						<strong>{LANG.order_email}:</strong>
 					</div>
-					<div class="col-md-7">
+					<div class="col-md-14">
 						{DATA.order_email}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-10">
 						<strong>{LANG.order_phone}:</strong>
 					</div>
-					<div class="col-md-7">
+					<div class="col-md-14">
 						{DATA.order_phone}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-10">
 						<strong>{LANG.order_date}:</strong>
 					</div>
-					<div class="col-md-7">
+					<div class="col-md-14">
 						{dateup} {LANG.order_moment} {moment}
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-5">
+			<div class="col-xs-10">
 				<div class="text-center">
 					{LANG.order_code}
 					<br>
@@ -109,12 +109,12 @@
 	</div>
 
 	<div class="row">
-		<div class="col-xs-6">
+		<div class="col-xs-12">
 			<!-- BEGIN: order_note -->
 			<em>{LANG.cart_note} : {DATA.order_note}</em>
 			<!-- END: order_note -->
 		</div>
-		<div class="col-xs-6 text-right">
+		<div class="col-xs-12 text-right">
 			<!-- BEGIN: price3 -->
 			<!-- BEGIN: total_coupons -->
 			<p class="pull-right">

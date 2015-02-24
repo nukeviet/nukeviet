@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div id="products" class="clearfix">
     <!-- BEGIN: items -->
-    <div class="col-sm-6 col-md-{num}" id="item_{ID}">
+    <div class="col-sm-12 col-md-{num}" id="item_{ID}">
         <div class="thumbnail">
             <div style="height: {height}px">
                 <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content="{hometext}" data-rel="tooltip" class="img-thumbnail" style="max-width:{width}px;"></a>

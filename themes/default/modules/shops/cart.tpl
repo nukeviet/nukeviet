@@ -120,10 +120,10 @@
 		<!-- END: price3 -->
 
 		<div class="row">
-			<div class="col-md-6 text-left" style="margin-top: 10px;">
+			<div class="col-md-12 text-left" style="margin-top: 10px;">
 				<a title="{LANG.cart_back} {LANG.cart_page_product}" href="{LINK_PRODUCTS}"><em class="fa fa-arrow-circle-left">&nbsp;</em>{LANG.cart_back} <span>{LANG.cart_page_product}</span></a>
 			</div>
-			<div class="col-md-6 text-right" style="margin: 10px 0 10px 0">
+			<div class="col-md-12 text-right" style="margin: 10px 0 10px 0">
 				<input type="submit" name="cart_update" title="{LANG.cart_update}" value="{LANG.cart_update}" class="btn btn-primary btn-sm">
 				<input type="submit" name="cart_order" title="{LANG.cart_order}" value="{LANG.cart_order}" class="btn btn-primary btn-sm">
 			</div>
