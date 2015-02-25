@@ -45,7 +45,7 @@ if( $savesetting == 1 )
 	$data['home_view'] = $nv_Request->get_string( 'home_view', 'post', '' );
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
-	$data['address'] = $nv_Request->get_string( 'address', 'post', '' );
+	$data['facebookappid'] = $nv_Request->get_string( 'facebookappid', 'post', '' );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
