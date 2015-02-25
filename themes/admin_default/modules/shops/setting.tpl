@@ -99,12 +99,10 @@
 				<td><strong>{LANG.format_code_id}</strong></td>
 				<td><input class="form-control" type="text" value="{DATA.format_code_id}" style="width: 100px;" name="format_code_id" /><span class="text-middle"> {LANG.format_order_id_note} </span></td>
 			</tr>
-
 			<tr>
-				<td><strong>{LANG.address}</strong></td>
-				<td><input class="form-control" type="text" value="{DATA.address}" style="width: 350px;" name="address" /></td>
+				<th>{LANG.setting_facebookAppID}</th>
+				<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.setting_facebookAppIDNote}</span></td>
 			</tr>
-
 			<tr>
 				<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
 				<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>

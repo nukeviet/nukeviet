@@ -1137,7 +1137,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
  */
 function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property;
+	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property, $pro_config;
 
 	if( !defined( 'SHADOWBOX' ) )
 	{
@@ -1438,7 +1438,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	if( ! defined( 'FACEBOOK_JSSDK' ) )
 	{
 		$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-		$facebookappid = $module_config[$module_name]['facebookappid'];
+		$facebookappid = $pro_config['facebookappid'];
 		$xtpl->assign( 'FACEBOOK_LANG', $lang );
 		$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
 		$xtpl->parse( 'main.facebookjssdk' );

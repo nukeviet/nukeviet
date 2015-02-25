@@ -238,9 +238,9 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-14">
 			<ul style="padding: 0; margin-top: 12px;">
-				<li class="pull-left"><div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div></li>
+				<li class="pull-left"><div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">&nbsp;</div></li>
 				<li class="pull-left"><div class="g-plusone" data-size="medium"></div></li>
 				<li class="pull-left"><a href="http://twitter.com/share" class="twitter-share-button">Tweet</a></li>
 			</ul>
@@ -254,7 +254,7 @@
 	        </script>
 	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-10">
            <!-- BEGIN: typepeice -->
 			<table class="table table-striped table-bordered table-hover" style="width: 264px">
 				<thead>

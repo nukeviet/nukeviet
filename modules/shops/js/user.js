@@ -36,30 +36,6 @@ function nv_del_content(id, checkss, base_adminurl) {
 	return false;
 }
 
-function share_twitter() {
-	u = location.href;
-	t = document.title;
-	window.open("http://twitter.com/home?status=" + encodeURIComponent(u));
-}
-
-function share_facebook() {
-	u = location.href;
-	t = document.title;
-	window.open("http://www.facebook.com/share.php?u=" + encodeURIComponent(u) + "&t=" + encodeURIComponent(t));
-}
-
-function share_google() {
-	u = location.href;
-	t = document.title;
-	window.open("http://www.google.com/bookmarks/mark?op=edit&bkmk=" + encodeURIComponent(u) + "&title=" + t + "&annotation=" + t);
-}
-
-function share_buzz() {
-	u = location.href;
-	t = document.title;
-	window.open("http://buzz.yahoo.com/buzz?publisherurn=DanTri&targetUrl=" + encodeURIComponent(u));
-}
-
 /*javascript user*/
 function cartorder(a_ob) {
 	var id = $(a_ob).attr("id");
