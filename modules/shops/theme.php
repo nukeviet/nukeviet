@@ -1135,7 +1135,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view )
+function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat;
 
@@ -1428,9 +1428,9 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->parse( 'main.adminlink' );
 	}
 
-	if( defined( 'NV_COMM_URL' ) )
+	if( !empty( $content_comment ) )
 	{
-		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
 		$xtpl->parse( 'main.comment_tab' );
 	}
