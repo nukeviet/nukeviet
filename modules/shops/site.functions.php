@@ -19,7 +19,7 @@ $sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . 
 $global_array_group = nv_db_cache( $sql, 'groupid', $module_name );
 
 // Lay ty gia ngoai te
-$sql = 'SELECT code, currency, exchange, round FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
+$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
 
 $cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
 if( ($cache = nv_get_cache( $module_name, $cache_file )) != false )
@@ -37,6 +37,7 @@ else
 			'currency' => $row['currency'],
 			'exchange' => $row['exchange'],
 			'round' => $row['round'],
+			'number_format' => $row['number_format'],
 			'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
 			'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
 		);
@@ -248,7 +249,10 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert )
 
 function nv_number_format( $number, $decimals = 0 )
 {
-	$str = number_format( $number, $decimals, ',', '.' );
+	global $money_config, $pro_config;
+
+	$number_format = explode( '||', $money_config[$pro_config['money_unit']]['number_format'] );
+	$str = number_format( $number, $decimals, $number_format[0], $number_format[1] );
 	return $str;
 }
 
