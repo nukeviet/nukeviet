@@ -329,7 +329,7 @@
 
 			<!-- BEGIN: comment -->
 			<section id="section-3">
-				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+				{CONTENT_COMMENT}
 			</section>
 			<!-- END: comment -->
 		</div>
