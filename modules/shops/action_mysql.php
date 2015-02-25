@@ -383,7 +383,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  payment varchar(100) NOT NULL DEFAULT '0',
  payment_id varchar(22) NOT NULL DEFAULT '0',
  payment_time int(11) NOT NULL DEFAULT '0',
- payment_amount int(11) NOT NULL DEFAULT '0',
+ payment_amount float NOT NULL DEFAULT '0',
  payment_data text NOT NULL,
  PRIMARY KEY (transaction_id),
  KEY order_id (order_id),
