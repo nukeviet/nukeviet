@@ -707,3 +707,7 @@ table caption{
 blockquote{
 	font-size: 13px
 }
+
+#sb-container{
+	z-index: 99999999 !important
+}
