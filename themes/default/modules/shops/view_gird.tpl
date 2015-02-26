@@ -15,6 +15,12 @@
                 <option value="{key}" {se}> {value}</option>
             <!-- END: sorts -->
         </select>
+        <label class="control-label">{LANG.title_viewnum}</label>
+        <select name="viewtype" id="viewtype" class="form-control input-sm" onchange="nv_chang_viewtype();">
+            <!-- BEGIN: viewtype -->
+                <option value="{VIEWTYPE.key}" {VIEWTYPE.selected}> {VIEWTYPE.value}</option>
+            <!-- END: viewtype -->
+        </select>
     </div>
     <div class="clear">&nbsp;</div>
     <!-- END: displays -->
@@ -89,7 +95,7 @@
 	<!-- END: grid_rows -->
 	<div class="clearfix">
 	</div>
-	<div class="pages">
+	<div class="text-center">
 		{pages}
 	</div>
 </div>

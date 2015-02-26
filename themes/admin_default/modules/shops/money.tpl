@@ -79,14 +79,15 @@
 </script>
 <!-- END: data -->
 
-<form class="form-inline" action="" method="post"><input name="savecat" type="hidden" value="1" />
+<form action="" method="post"><input name="savecat" type="hidden" value="1" />
+	<input type="hidden" value="{DATA.id}" name="id" />
 	<table class="table table-striped table-bordered table-hover">
 		<caption>{DATA.caption}</caption>
 		<tbody>
 			<tr>
-				<td align="right" width="150px"><strong>{LANG.money_name}: </strong></td>
+				<td align="right" width="230px"><strong>{LANG.money_name}: </strong></td>
 				<td>
-				<select class="form-control" name="code">
+				<select class="form-control w200" name="code">
 					<!-- BEGIN: money -->
 					<option value="{DATAMONEY.value}"{DATAMONEY.selected}>{DATAMONEY.title}</option>
 					<!-- END: money -->
@@ -94,20 +95,31 @@
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.currency}: </strong></td>
-				<td><input class="form-control" style="width: 500px" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
+				<td><input class="form-control w400" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.exchange}: </strong></td>
-				<td><input class="form-control" style="width: 500px" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
+				<td><input class="form-control w400" name="exchange" type="text" value="{DATA.exchange}" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.round}: </strong></td>
 				<td>
-					<select class="form-control" name="round">
+					<select class="form-control w400" name="round">
 						<!-- BEGIN: round -->
 						<option value="{ROUND.round1}"{ROUND.selected}>{ROUND.round2}</option>
 						<!-- END: round -->
 					</select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><strong>{LANG.money_number_format}: </strong></td>
+				<td class="form-inline text-middle">
+					<span>
+						{LANG.money_number_format_dec_point}
+						<input class="form-control" style="width: 50px" name="dec_point" type="text" value="{DATA.dec_point}" maxlength="1" />
+						{LANG.money_number_format_thousands_sep}
+						<input class="form-control" style="width: 50px" name="thousands_sep" type="text" value="{DATA.thousands_sep}" maxlength="1" />
+					</span>
 				</td>
 			</tr>
 		</tbody>

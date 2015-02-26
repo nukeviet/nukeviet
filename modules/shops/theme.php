@@ -62,7 +62,7 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
  * @param string $html_pages
  * @return
  */
-function view_home_group( $data_content, $html_pages = '', $sort = 0 )
+function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
 	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_cat;
 
@@ -107,7 +107,6 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 					}
 
 					$price = nv_get_price( $data_row_i['id'], $pro_config['money_unit'] );
-
 					if( $pro_config['active_price'] == '1' )
 					{
 						if( $data_row_i['showprice'] == '1' )
@@ -163,22 +162,11 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
 					// So sanh san pham
 					if( $pro_config['show_compare'] == 1 )
 					{
-						if( isset( $_SESSION[$module_name . '_array_id'] ) )
+						if( !empty( $compare_id ) )
 						{
-							$array_id = $_SESSION[$module_name . '_array_id'];
-							$array_id = unserialize( $array_id );
-						}
-						else
-						{
-							$array_id = array( );
-						}
-
-						if( !empty( $array_id ) )
-						{
-							$ch = ( in_array( $data_row_i['id'], $array_id )) ? ' checked="checked"' : '';
+							$ch = ( in_array( $data_row_i['id'], $compare_id )) ? ' checked="checked"' : '';
 							$xtpl->assign( 'ch', $ch );
 						}
-
 						$xtpl->parse( 'main.catalogs.items.compare' );
 					}
 
@@ -233,7 +221,7 @@ function view_home_group( $data_content, $html_pages = '', $sort = 0 )
  * @param string $html_pages
  * @return
  */
-function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
+function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_cat;
 
@@ -332,22 +320,11 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
 					// So sanh san pham
 					if( $pro_config['show_compare'] == 1 )
 					{
-						if( isset( $_SESSION[$module_name . '_array_id'] ) )
+						if( !empty( $compare_id ) )
 						{
-							$array_id = $_SESSION[$module_name . '_array_id'];
-							$array_id = unserialize( $array_id );
-						}
-						else
-						{
-							$array_id = array( );
-						}
-
-						if( !empty( $array_id ) )
-						{
-							$ch = ( in_array( $data_row_i['id'], $array_id )) ? ' checked="checked"' : '';
+							$ch = ( in_array( $data_row_i['id'], $compare_id )) ? ' checked="checked"' : '';
 							$xtpl->assign( 'ch', $ch );
 						}
-
 						$xtpl->parse( 'main.catalogs.items.compare' );
 					}
 
@@ -417,7 +394,7 @@ function view_home_cat( $data_content, $html_pages = '', $sort = 0 )
  * @param string $html_pages
  * @return
  */
-function view_home_all( $data_content, $html_pages = '', $sort = 0 )
+function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0, $viewtype = '' )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_cat;
 
@@ -425,8 +402,8 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-
 	$xtpl->assign( 'CSS_PRODUCT_CODE', !empty( $pro_config['show_product_code'] ) ? ' show-product-code' : '' );
+
 	if( (!isset( $op ) OR $op != 'detail') && $pro_config['show_displays'] == 1 )
 	{
 		foreach( $array_displays as $k => $array_displays_i )
@@ -532,22 +509,11 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
 			// So sanh san pham
 			if( $pro_config['show_compare'] == 1 )
 			{
-				if( isset( $_SESSION[$module_name . '_array_id'] ) )
+				if( !empty( $compare_id ) )
 				{
-					$array_id = $_SESSION[$module_name . '_array_id'];
-					$array_id = unserialize( $array_id );
-				}
-				else
-				{
-					$array_id = array( );
-				}
-
-				if( !empty( $array_id ) )
-				{
-					$ch = ( in_array( $data_row['id'], $array_id )) ? ' checked="checked"' : '';
+					$ch = ( in_array( $data_row['id'], $compare_id )) ? ' checked="checked"' : '';
 					$xtpl->assign( 'ch', $ch );
 				}
-
 				$xtpl->parse( 'main.items.compare' );
 			}
 
@@ -601,7 +567,7 @@ function view_home_all( $data_content, $html_pages = '', $sort = 0 )
  * @param string $html_pages
  * @return
  */
-function view_search_all( $data_content, $html_pages = '' )
+function view_search_all( $data_content, $compare_id, $html_pages = '' )
 {
 	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id, $global_array_cat;
 
@@ -681,22 +647,11 @@ function view_search_all( $data_content, $html_pages = '' )
 			// So sanh san pham
 			if( $pro_config['show_compare'] == 1 )
 			{
-				if( isset( $_SESSION[$module_name . '_array_id'] ) )
+				if( !empty( $compare_id ) )
 				{
-					$array_id = $_SESSION[$module_name . '_array_id'];
-					$array_id = unserialize( $array_id );
-				}
-				else
-				{
-					$array_id = array( );
-				}
-
-				if( !empty( $array_id ) )
-				{
-					$ch = ( in_array( $data_row['id'], $array_id )) ? ' checked="checked"' : '';
+					$ch = ( in_array( $data_row['id'], $compare_id )) ? ' checked="checked"' : '';
 					$xtpl->assign( 'ch', $ch );
 				}
-
 				$xtpl->parse( 'main.items.compare' );
 			}
 
@@ -754,7 +709,7 @@ function view_search_all( $data_content, $html_pages = '' )
  * @param mixed $pages
  * @return
  */
-function viewcat_page_gird( $data_content, $pages, $sort = 0 )
+function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_cat;
 
@@ -770,6 +725,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 	$xtpl->assign( 'catid', $data_content['id'] );
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
+
 	if( $op != 'group' )
 	{
 		$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
@@ -793,6 +749,18 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			$xtpl->assign( 'se', $se );
 			$xtpl->parse( 'main.displays.sorts' );
 		}
+
+		$array_viewtype = array(
+			'viewcat_page_list' => $lang_module['view_page_list'],
+			'viewcat_page_gird' => $lang_module['view_page_gird']
+		);
+		foreach( $array_viewtype as $k => $array_viewtype_i )
+		{
+			$se = $k == $viewtype ? 'selected="selected"' : '';
+			$xtpl->assign( 'VIEWTYPE', array( 'key' => $k, 'value' => $array_viewtype_i, 'selected' => $se ) );
+			$xtpl->parse( 'main.displays.viewtype' );
+		}
+
 		$xtpl->parse( 'main.displays' );
 	}
 
@@ -885,22 +853,11 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
 			// So sanh san pham
 			if( $pro_config['show_compare'] == 1 )
 			{
-				if( isset( $_SESSION[$module_name . '_array_id'] ) )
+				if( !empty( $compare_id ) )
 				{
-					$array_id = $_SESSION[$module_name . '_array_id'];
-					$array_id = unserialize( $array_id );
-				}
-				else
-				{
-					$array_id = array( );
-				}
-
-				if( !empty( $array_id ) )
-				{
-					$ch = ( in_array( $data_row['id'], $array_id )) ? ' checked="checked"' : '';
+					$ch = ( in_array( $data_row['id'], $compare_id )) ? ' checked="checked"' : '';
 					$xtpl->assign( 'ch', $ch );
 				}
-
 				$xtpl->parse( 'main.grid_rows.compare' );
 			}
 
@@ -949,7 +906,7 @@ function viewcat_page_gird( $data_content, $pages, $sort = 0 )
  * @param mixed $pages
  * @return
  */
-function viewcat_page_list( $data_content, $pages, $sort = 0 )
+function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_cat;
 
@@ -977,26 +934,6 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 		}
 	}
 
-	if( $pro_config['show_compare'] == 1 )
-	{
-		if( isset( $_SESSION[$module_name . '_array_id'] ) )
-		{
-			$array_id = $_SESSION[$module_name . '_array_id'];
-			$array_id = unserialize( $array_id );
-		}
-		else
-		{
-			$array_id = array( );
-		}
-
-		if( !empty( $array_id ) )
-		{
-			$ch = ( in_array( $data_content['id'], $array_id )) ? ' checked="checked"' : '';
-			$xtpl->assign( 'ch', $ch );
-		}
-		$xtpl->parse( 'main.compare' );
-	}
-
 	if( $pro_config['show_displays'] == 1 )
 	{
 		foreach( $array_displays as $k => $array_displays_i )
@@ -1008,6 +945,18 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 			$xtpl->assign( 'se', $se );
 			$xtpl->parse( 'main.displays.sorts' );
 		}
+
+		$array_viewtype = array(
+			'viewcat_page_list' => $lang_module['view_page_list'],
+			'viewcat_page_gird' => $lang_module['view_page_gird']
+		);
+		foreach( $array_viewtype as $k => $array_viewtype_i )
+		{
+			$se = $k == $viewtype ? 'selected="selected"' : '';
+			$xtpl->assign( 'VIEWTYPE', array( 'key' => $k, 'value' => $array_viewtype_i, 'selected' => $se ) );
+			$xtpl->parse( 'main.displays.viewtype' );
+		}
+
 		$xtpl->parse( 'main.displays' );
 	}
 
@@ -1098,6 +1047,11 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
 			{
 				if( $pro_config['show_compare'] == 1 )
 				{
+					if( !empty( $compare_id ) )
+					{
+						$ch = ( in_array( $data_row['id'], $compare_id )) ? ' checked="checked"' : '';
+						$xtpl->assign( 'ch', $ch );
+					}
 					$xtpl->parse( 'main.row.compare' );
 				}
 			}
@@ -1135,7 +1089,7 @@ function viewcat_page_list( $data_content, $pages, $sort = 0 )
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment )
+function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property, $pro_config;
 
@@ -1157,9 +1111,12 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
+
 	if( !empty( $data_content ) )
 	{
 		$xtpl->assign( 'proid', $data_content['id'] );
+		$xtpl->assign( 'CAT_TITLE', $global_array_cat[$data_content['listcatid']]['title'] );
+		$xtpl->assign( 'SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgfile'] );
 		$xtpl->assign( 'TITLE', $data_content[NV_LANG_DATA . '_title'] );
@@ -1175,6 +1132,14 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
 		$xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
 		$xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
+
+		if( $data_content['total_value'] > 0 )
+		{
+			$xtpl->assign( 'RATE_TOTAL', $data_content['total_rate'] );
+			$xtpl->assign( 'RATE_VALUE', $data_content['total_value'] );
+			$xtpl->parse( 'main.rate' );
+		}
+
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 
 		if( !empty( $data_content['homeimgfile'] ) )
@@ -1355,13 +1320,13 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 	if( !empty( $data_others ) )
 	{
-		$hmtl = view_home_all( $data_others );
+		$hmtl = view_home_all( $data_others, $compare_id );
 		$xtpl->assign( 'OTHER', $hmtl );
 		$xtpl->parse( 'main.other' );
 	}
 	if( !empty( $array_other_view ) )
 	{
-		$hmtl = view_home_all( $array_other_view );
+		$hmtl = view_home_all( $array_other_view, $compare_id );
 		$xtpl->assign( 'OTHER_VIEW', $hmtl );
 		$xtpl->parse( 'main.other_view' );
 	}
@@ -1378,13 +1343,13 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			if( $data_content['discount_id'] and $price['discount_percent'] > 0 )
 			{
 				$xtpl->parse( 'main.price.discounts' );
-				$xtpl->parse( 'main.price.discounts.standard' );
 			}
 			else
 			{
 				$xtpl->parse( 'main.price.no_discounts' );
 			}
 			$xtpl->parse( 'main.price' );
+			$xtpl->parse( 'main.price1' );
 		}
 		else
 		{
@@ -2419,9 +2384,10 @@ function email_new_order( $data_content, $data_pro )
  */
 function compare( $data_pro )
 {
-	global $lang_module, $module_file, $module_info, $pro_config;
+	global $lang_module, $lang_global, $module_file, $module_info, $pro_config;
 
 	$xtpl = new XTemplate( "compare.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'module_name', $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -2443,17 +2409,21 @@ function compare( $data_pro )
 		$xtpl->assign( 'bodytext', nv_clean60( $data_row['bodytext'], 400 ) );
 		$xtpl->parse( 'main.bodytext' );
 		$xtpl->assign( 'id', $data_row['id'] );
-		$xtpl->parse( 'main.delete' );
-
-		if( !empty( $pro_config['show_product_code'] ) and !empty( $data_row['product_code'] ) )
+		if( $pro_config['active_order'] == '1' )
 		{
-			$xtpl->assign( 'product_code', $data_row['product_code'] );
+			if( $data_row['showprice'] == '1' )
+			{
+				if( $data_row['product_number'] > 0 )
+				{
+					$xtpl->parse( 'main.button.order' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.button.product_empty' );
+				}
+			}
 		}
-		else
-		{
-			$xtpl->assign( 'product_code', 'N/A' );
-		}
-		$xtpl->parse( 'main.product_code' );
+		$xtpl->parse( 'main.button' );
 
 		$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 		if( $pro_config['active_price'] == '1' )
@@ -2461,16 +2431,21 @@ function compare( $data_pro )
 			if( $data_row['showprice'] == '1' )
 			{
 				$xtpl->assign( 'PRICE', $price );
-				$xtpl->parse( 'main.product_price' );
+				if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+				{
+					$xtpl->parse( 'main.price.discounts' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.price.no_discounts' );
+				}
+				$xtpl->parse( 'main.price' );
 			}
 			else
 			{
-				$xtpl->parse( 'main.contact' );
+				$xtpl->parse( 'main..contact' );
 			}
 		}
-
-		$xtpl->assign( 'PRICE', $price );
-		$xtpl->parse( 'main.discount' );
 
 		$xtpl->assign( 'promotional', $data_row['promotional'] );
 		$xtpl->parse( 'main.promotional' );
@@ -2490,7 +2465,7 @@ function compare( $data_pro )
  * @param string $html_pages
  * @return
  */
-function wishlist( $data_content, $html_pages = '' )
+function wishlist( $data_content, $compare_id, $html_pages = '' )
 {
 	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name, $global_array_cat;
 
@@ -2578,22 +2553,11 @@ function wishlist( $data_content, $html_pages = '' )
 			// So sanh san pham
 			if( $pro_config['show_compare'] == 1 )
 			{
-				if( isset( $_SESSION[$module_name . '_array_id'] ) )
+				if( !empty( $compare_id ) )
 				{
-					$array_id = $_SESSION[$module_name . '_array_id'];
-					$array_id = unserialize( $array_id );
-				}
-				else
-				{
-					$array_id = array( );
-				}
-
-				if( !empty( $array_id ) )
-				{
-					$ch = ( in_array( $data_row['id'], $array_id )) ? ' checked="checked"' : '';
+					$ch = ( in_array( $data_row['id'], $compare_id )) ? ' checked="checked"' : '';
 					$xtpl->assign( 'ch', $ch );
 				}
-
 				$xtpl->parse( 'main.items.compare' );
 			}
 

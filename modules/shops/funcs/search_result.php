@@ -30,6 +30,9 @@ $sid = $nv_Request->get_int( 'sid', 'get', 0 );
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $num_items = 0;
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 if( $price1_temp == '' ) $price1 = - 1;
 else
 	$price1 = floatval( $price1_temp );
@@ -210,7 +213,7 @@ if( count( $data_content ) == 0 )
 }
 else
 {
-	$contents .= view_search_all( $data_content, $html_pages );
+	$contents .= view_search_all( $data_content, $compare_id, $html_pages );
 }
 
 include NV_ROOTDIR . '/includes/header.php';

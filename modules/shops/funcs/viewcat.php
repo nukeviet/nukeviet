@@ -26,6 +26,9 @@ if( empty( $catid ) )
 	exit( );
 }
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 unset( $array_op[0] );
 $array_url_group = array( );
 $array_id_group = array( );
@@ -56,6 +59,15 @@ $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sort', 'post', 0 );
 $sorts_old = $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
+
+$nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', '' );
+$viewtype_old = $nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', $viewtype_old );
+if( !empty( $viewtype ) )
+{
+	$global_array_cat[$catid]['viewcat'] = $viewtype;
+}
 
 if( !defined( 'NV_IS_MODADMIN' ) and $page < 5 and !$ajax )
 {
@@ -234,7 +246,7 @@ if( empty( $contents ) )
 			exit( );
 		}
 
-		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages, $sorts );
+		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype );
 	}
 
 	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' and !$ajax )

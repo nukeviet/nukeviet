@@ -17,6 +17,9 @@ if( empty( $id ) )
 	exit( );
 }
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 // Thiet lap quyen xem chi tiet
 $contents = '';
 $publtime = 0;
@@ -254,6 +257,8 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$total_rate = $data_content['ratingdetail'][1] + ($data_content['ratingdetail'][2] * 2) + ($data_content['ratingdetail'][3] * 3) + ($data_content['ratingdetail'][4] * 4) + ($data_content['ratingdetail'][5] * 5);
 	//$data_content['ratefercent_avg'] = round( $total_rate / $total_value, 1 );
 	$data_content['ratefercent_avg'] = $total_rate . $lang_module['trong'] . $total_value . $lang_module['dg'];
+	$data_content['total_rate'] = $total_rate;
+	$data_content['total_value'] = $total_value;
 	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'], $data_content['homeimgthumb'] );
 
 	// comment
@@ -274,7 +279,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 	$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
-	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment );
+	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id );
 }
 else
 {

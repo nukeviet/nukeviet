@@ -30,12 +30,19 @@ $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( !empty( $savecat ) )
 {
+	$data['id'] = $nv_Request->get_int( 'id', 'post' );
 	$data['code'] = $nv_Request->get_title( 'code', 'post' );
 	$data['currency'] = $nv_Request->get_title( 'currency', 'post', '', 1 );
 	$data['exchange'] = $nv_Request->get_title( 'exchange', 'post,get', 0 );
 	$data['exchange'] = floatval( preg_replace( '/[^0-9\.]/', '', $data['exchange'] ) );
 	$data['round'] = $nv_Request->get_title( 'round', 'post,get', 0 );
 	$data['round'] = floatval( preg_replace( '/[^0-9\.]/', '', $data['round'] ) );
+	$data['dec_point'] = $nv_Request->get_title( 'dec_point', 'post,get', ',' );
+	$data['dec_point'] = preg_replace( '/[^\,\.]/', ',', $data['dec_point'] );
+	$data['thousands_sep'] = $nv_Request->get_title( 'thousands_sep', 'post,get', ',' );
+	$data['thousands_sep'] = preg_replace( '/[^\,\.]/', '.', $data['thousands_sep'] );
+	$data['number_format'] = $data['dec_point'] . '||' . $data['thousands_sep'];
+
 	if( isset( $currencies_array[$data['code']] ) )
 	{
 		$numeric = intval( $currencies_array[$data['code']]['numeric'] );
@@ -45,7 +52,14 @@ if( !empty( $savecat ) )
 		}
 
 		$data['currency'] = ( empty( $data['currency'] )) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
-		$sql = 'REPLACE INTO ' . $table_name . ' (id, code, currency, exchange, round) VALUES (' . $numeric . ', ' . $db->quote( $data['code'] ) . ', ' . $db->quote( $data['currency'] ) . ', ' . $db->quote( $data['exchange'] ) . ', ' . $db->quote( $data['round'] ) . ')';
+		if( empty( $data['id'] ) )
+		{
+			$sql = 'INSERT INTO ' . $table_name . ' (id, code, currency, exchange, round, number_format) VALUES (' . $numeric . ', ' . $db->quote( $data['code'] ) . ', ' . $db->quote( $data['currency'] ) . ', ' . $db->quote( $data['exchange'] ) . ', ' . $db->quote( $data['round'] ) . ', ' . $db->quote( $data['number_format'] ) . ')';
+		}
+		else
+		{
+			$sql = 'UPDATE ' . $table_name . ' SET code = ' . $db->quote( $data['code'] ) . ', currency = ' . $db->quote( $data['currency'] ) . ', exchange = ' . $db->quote( $data['exchange'] ) . ', round = ' . $db->quote( $data['round'] ) . ', number_format = ' . $db->quote( $data['number_format'] ) . ' WHERE id = ' . $data['id'];
+		}
 
 		if( $db->exec( $sql ) )
 		{
@@ -74,6 +88,7 @@ if( empty( $data ) )
 	$data['currency'] = '';
 	$data['exchange'] = 0;
 	$data['round'] = 0.01;
+	$data['number_format'] = ',||.';
 	$data['caption'] = $lang_module['money_add'];
 }
 
@@ -165,6 +180,10 @@ else
 {
 	$data['exchange'] = number_format( $data['exchange'], 11 );
 }
+
+$number_format = explode( '||', $data['number_format'] );
+$data['dec_point'] = $number_format[0];
+$data['thousands_sep'] = $number_format[1];
 
 $xtpl->assign( 'DATA', $data );
 for( $i = -5; $i < 5; $i++ )
