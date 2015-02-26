@@ -7,22 +7,24 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
+
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
-$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
+$array_id = unserialize( $nv_Request->get_string( $module_data . '_compare_id', 'session', '' ) );
 
 if( $nv_Request->isset_request( 'compare', 'post' ) )
 {
 	$idss = $nv_Request->get_int( 'id', 'post', 0 );
-	$array_id = $nv_Request->get_string( 'array_id', 'session', '' );
-	$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
+	$array_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+	$array_id = unserialize( $array_id );
 
 	if( in_array( $idss, $array_id ) )
 	{
 		unset( $array_id[$idss] );
 		$array_id = serialize( $array_id );
-		$_SESSION[$module_name . '_array_id'] = $array_id;
+		$nv_Request->set_Session( $module_data . '_compare_id', $array_id );
 		nv_del_moduleCache( $module_name );
 		die( 'OK' );
 	}
@@ -31,12 +33,12 @@ if( $nv_Request->isset_request( 'compare', 'post' ) )
 		$array_id[$idss] = $idss;
 		if( count( $array_id ) > 4 )
 		{
-			die( 'ERROR[NV3]' . $lang_module['numcompare'] . '[NV3]' . $idss );
+			die( 'ERROR[NV]' . $lang_module['compare_limit'] . '[NV]' . $idss );
 		}
 		else
 		{
 			$array_id = serialize( $array_id );
-			$_SESSION[$module_name . '_array_id'] = $array_id;
+			$nv_Request->set_Session( $module_data . '_compare_id', $array_id );
 			nv_del_moduleCache( $module_name );
 			die( 'OK' );
 		}
@@ -45,8 +47,8 @@ if( $nv_Request->isset_request( 'compare', 'post' ) )
 
 if( $nv_Request->isset_request( 'compareresult', 'post' ) )
 {
-	$array_id = $nv_Request->get_string( 'array_id', 'session', '' );
-	$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
+	$array_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+	$array_id = unserialize( $array_id );
 
 	if( count( $array_id ) < 2 )
 	{
@@ -61,19 +63,21 @@ if( $nv_Request->isset_request( 'compareresult', 'post' ) )
 if( $nv_Request->isset_request( 'compare_del', 'post' ) and $nv_Request->isset_request( 'id', 'post' ) and $nv_Request->isset_request( 'all', 'post' ) )
 {
 	$action = $nv_Request->get_int( 'all', 'post', 0 );
-	$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
-	
+
+	$array_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+	$array_id = unserialize( $array_id );
+
 	if( $action )
 	{
 		unset( $array_id );
-		unset( $_SESSION[$module_name . '_array_id'] );
+		unset_request( $module_data . '_compare_id', 'session' );
 	}
 	else
 	{
 		$rm_id = $nv_Request->get_int( 'id', 'post', 0 );
 		unset( $array_id[$rm_id] );
 		$array_id = serialize( $array_id );
-		$_SESSION[$module_name . '_array_id'] = $array_id;
+		$nv_Request->set_Session( $module_data . '_compare_id', $array_id );
 	}
 	nv_del_moduleCache( $module_name );
 	die('OK');
@@ -87,17 +91,17 @@ if( $_SERVER['REQUEST_URI'] != $compare_url_rewrite )
 	die();
 }
 
-$array_id = $nv_Request->get_string( 'array_id', 'session', '' );
-$array_id = unserialize( $_SESSION[$module_name . '_array_id'] );
+$array_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$array_id = unserialize( $array_id );
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 if( ! empty( $array_id ) )
 {
 	foreach( $array_id as $array_id_i )
 	{
-		$sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_warranty,' . NV_LANG_DATA . '_promotional as promotional, ' . NV_LANG_DATA . '_bodytext, custom, ' . NV_LANG_DATA . '_custom FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
+		$sql = 'SELECT id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile, homeimgalt, homeimgthumb, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_warranty,' . NV_LANG_DATA . '_promotional as promotional, ' . NV_LANG_DATA . '_bodytext FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $array_id_i;
 		$result = $db->query( $sql );
-		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $warranty, $promotional, $bodytext, $custom, $custom_lang ) = $result->fetch( 3 ) )
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgalt, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $warranty, $promotional, $bodytext ) = $result->fetch( 3 ) )
 		{
 			// Xac dinh anh lon
 			$homeimgfiles1 = $homeimgfile;
@@ -137,9 +141,7 @@ if( ! empty( $array_id ) )
 				'link_order' => $link . 'setcart&amp;id=' . $id,
 				'warranty' => $warranty,
 				'promotional' => $promotional,
-				'bodytext' => $bodytext,
-				'custom' => $custom,
-				NV_LANG_DATA . '_custom' => $custom_lang
+				'bodytext' => $bodytext
 			);
 		}
 	}
@@ -151,7 +153,6 @@ else
 }
 
 $contents = compare( $data_pro );
-//$_SESSION['array_id'] = '';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

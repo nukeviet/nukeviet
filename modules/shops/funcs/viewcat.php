@@ -26,6 +26,9 @@ if( empty( $catid ) )
 	exit( );
 }
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 unset( $array_op[0] );
 $array_url_group = array( );
 $array_id_group = array( );
@@ -234,7 +237,7 @@ if( empty( $contents ) )
 			exit( );
 		}
 
-		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $pages, $sorts );
+		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts );
 	}
 
 	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' and !$ajax )

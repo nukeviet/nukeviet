@@ -343,6 +343,7 @@ $lang_module['filter'] = "Lọc sản phẩm";
 $lang_module['filter_no_item'] = "Chọn ít nhất một thuộc tính";
 
 $lang_module['compare'] = 'So sánh';
+$lang_module['compare_limit'] = 'Chỉ được chọn nhiều nhất 4 sản phẩm';
 $lang_module['compare_empty_items'] = 'Không có sản phẩm nào được chọn';
 $lang_module['num0'] = "Số lượng so sánh phải lớn hơn hoặc bằng 2";
 $lang_module['compare_del_all'] = "Xóa tất cả";

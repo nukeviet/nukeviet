@@ -18,6 +18,9 @@ $sorts = $nv_Request->get_int( 'sort', 'post', 0 );
 $sorts_old = $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 $contents = '';
 $cache_file = '';
 
@@ -303,7 +306,7 @@ if( empty( $contents ) )
 		exit();
 	}
 
-	$contents = call_user_func( $pro_config['home_view'], $data_content, $html_pages, $sorts );
+	$contents = call_user_func( $pro_config['home_view'], $data_content, $compare_id, $html_pages, $sorts );
 
 	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
 	{

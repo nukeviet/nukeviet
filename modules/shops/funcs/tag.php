@@ -14,6 +14,9 @@ $alias = $nv_Request->get_title( 'alias', 'get' );
 $array_op = explode( '/', $alias );
 $alias = $array_op[0];
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 if( isset( $array_op[1] ) )
 {
 	if( sizeof( $array_op ) == 2 and preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m ) )
@@ -50,7 +53,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
-		
+
 		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
@@ -69,7 +72,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 			{
 				$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 			}
-		
+
 			$data_content[] = array(
 				'id' => $id,
 				'publtime' => $publtime,
@@ -103,8 +106,8 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';
 		$html_pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
-		
-		$contents = call_user_func( 'view_home_all', $data_content, $html_pages );
+
+		$contents = call_user_func( 'view_home_all', $data_content, $compare_id, $html_pages );
 
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );

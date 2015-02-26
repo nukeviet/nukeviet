@@ -198,7 +198,7 @@ function nv_chang_price() {
 function nv_compare(a) {
 	nv_settimeout_disable("compare_" + a, 5E3);
 	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compare=1&id=' + a, function(res) {
-		res = res.split("[NV3]");
+		res = res.split("[NV]");
 		if (res[0] != 'OK') {
 			$("#compare_" + res[2]).removeAttr("checked");
 			alert(res[1]);
