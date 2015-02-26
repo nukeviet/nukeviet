@@ -70,7 +70,7 @@ if( $nv_Request->isset_request( 'compare_del', 'post' ) and $nv_Request->isset_r
 	if( $action )
 	{
 		unset( $array_id );
-		unset_request( $module_data . '_compare_id', 'session' );
+		$nv_Request->unset_request( $module_data . '_compare_id', 'session' );
 	}
 	else
 	{

@@ -60,6 +60,15 @@ $sorts = $nv_Request->get_int( 'sort', 'post', 0 );
 $sorts_old = $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
 
+$nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', '' );
+$viewtype_old = $nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', $viewtype_old );
+if( !empty( $viewtype ) )
+{
+	$global_array_cat[$catid]['viewcat'] = $viewtype;
+}
+
 if( !defined( 'NV_IS_MODADMIN' ) and $page < 5 and !$ajax )
 {
 	$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $catid . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
@@ -237,7 +246,7 @@ if( empty( $contents ) )
 			exit( );
 		}
 
-		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts );
+		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype );
 	}
 
 	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' and !$ajax )

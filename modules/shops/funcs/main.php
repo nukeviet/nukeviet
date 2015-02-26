@@ -32,6 +32,14 @@ if( $nv_Request->isset_request( 'changesprice', 'post' ) )
 	die( 'OK' );
 }
 
+if( $nv_Request->isset_request( 'changeviewtype', 'post' ) )
+{
+	$viewtype = $nv_Request->get_string( 'viewtype', 'post', '' );
+	$nv_Request->set_Session( 'viewtype', $viewtype, NV_LIVE_SESSION_TIME );
+	nv_del_moduleCache( $module_name );
+	die( 'OK' );
+}
+
 if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
 	$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';

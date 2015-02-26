@@ -195,6 +195,17 @@ function nv_chang_price() {
 	});
 }
 
+function nv_chang_viewtype() {
+	var viewtype = $("#viewtype").val();
+	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'changeviewtype=1&viewtype=' + viewtype, function(res) {
+		if (res != 'OK') {
+			alert(res);
+		} else {
+			window.location.href = window.location.href;
+		}
+	});
+}
+
 function nv_compare(a) {
 	nv_settimeout_disable("compare_" + a, 5E3);
 	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=compare&nocache=' + new Date().getTime(), 'compare=1&id=' + a, function(res) {

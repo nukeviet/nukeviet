@@ -335,7 +335,9 @@ $lang_module['money_million'] = 'triệu';
 $lang_module['displays_new'] = 'Mới cập nhật';
 $lang_module['displays_price_asc'] = 'Giá tăng dần';
 $lang_module['displays_price_desc'] = 'Giá giảm dần';
-$lang_module['displays_product'] = 'Sắp xếp theo: ';
+$lang_module['displays_product'] = 'Sắp xếp theo';
+$lang_module['view_page_list'] = 'Theo danh sách';
+$lang_module['view_page_gird'] = 'Theo dạng lưới';
 $lang_module['newday'] = "Mới";
 $lang_module['payport'] = "Cổng thanh toán";
 

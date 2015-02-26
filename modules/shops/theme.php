@@ -394,7 +394,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
  * @param string $html_pages
  * @return
  */
-function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0 )
+function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0, $viewtype = '' )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_cat;
 
@@ -402,8 +402,8 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0 
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-
 	$xtpl->assign( 'CSS_PRODUCT_CODE', !empty( $pro_config['show_product_code'] ) ? ' show-product-code' : '' );
+
 	if( (!isset( $op ) OR $op != 'detail') && $pro_config['show_displays'] == 1 )
 	{
 		foreach( $array_displays as $k => $array_displays_i )
@@ -709,7 +709,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
  * @param mixed $pages
  * @return
  */
-function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0 )
+function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_cat;
 
@@ -725,6 +725,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0 )
 	$xtpl->assign( 'catid', $data_content['id'] );
 	$xtpl->assign( 'CAT_NAME', $data_content['title'] );
 	$xtpl->assign( 'count', $data_content['count'] );
+
 	if( $op != 'group' )
 	{
 		$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
@@ -748,6 +749,18 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0 )
 			$xtpl->assign( 'se', $se );
 			$xtpl->parse( 'main.displays.sorts' );
 		}
+
+		$array_viewtype = array(
+			'viewcat_page_list' => $lang_module['view_page_list'],
+			'viewcat_page_gird' => $lang_module['view_page_gird']
+		);
+		foreach( $array_viewtype as $k => $array_viewtype_i )
+		{
+			$se = $k == $viewtype ? 'selected="selected"' : '';
+			$xtpl->assign( 'VIEWTYPE', array( 'key' => $k, 'value' => $array_viewtype_i, 'selected' => $se ) );
+			$xtpl->parse( 'main.displays.viewtype' );
+		}
+
 		$xtpl->parse( 'main.displays' );
 	}
 
@@ -893,7 +906,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0 )
  * @param mixed $pages
  * @return
  */
-function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0 )
+function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_cat;
 
@@ -932,6 +945,18 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0 )
 			$xtpl->assign( 'se', $se );
 			$xtpl->parse( 'main.displays.sorts' );
 		}
+
+		$array_viewtype = array(
+			'viewcat_page_list' => $lang_module['view_page_list'],
+			'viewcat_page_gird' => $lang_module['view_page_gird']
+		);
+		foreach( $array_viewtype as $k => $array_viewtype_i )
+		{
+			$se = $k == $viewtype ? 'selected="selected"' : '';
+			$xtpl->assign( 'VIEWTYPE', array( 'key' => $k, 'value' => $array_viewtype_i, 'selected' => $se ) );
+			$xtpl->parse( 'main.displays.viewtype' );
+		}
+
 		$xtpl->parse( 'main.displays' );
 	}
 
