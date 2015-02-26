@@ -1111,9 +1111,12 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
+
 	if( !empty( $data_content ) )
 	{
 		$xtpl->assign( 'proid', $data_content['id'] );
+		$xtpl->assign( 'CAT_TITLE', $global_array_cat[$data_content['listcatid']]['title'] );
+		$xtpl->assign( 'SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgfile'] );
 		$xtpl->assign( 'TITLE', $data_content[NV_LANG_DATA . '_title'] );
@@ -1129,6 +1132,14 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
 		$xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
 		$xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
+
+		if( $data_content['total_value'] > 0 )
+		{
+			$xtpl->assign( 'RATE_TOTAL', $data_content['total_rate'] );
+			$xtpl->assign( 'RATE_VALUE', $data_content['total_value'] );
+			$xtpl->parse( 'main.rate' );
+		}
+
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 
 		if( !empty( $data_content['homeimgfile'] ) )
@@ -1338,6 +1349,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 				$xtpl->parse( 'main.price.no_discounts' );
 			}
 			$xtpl->parse( 'main.price' );
+			$xtpl->parse( 'main.price1' );
 		}
 		else
 		{
