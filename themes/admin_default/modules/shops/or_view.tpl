@@ -142,21 +142,21 @@
 		{LANG.history_transaction}
 	</caption>
 	<thead>
-		<tr class="text-center">
-			<td width="30px">&nbsp;</td>
-			<td>{LANG.payment_time}</td>
-			<td>{LANG.user_payment}</td>
-			<td>{LANG.payment_id}</td>
-			<td>{LANG.status}</td>
-			<td>{LANG.order_total}</td>
-			<td>{LANG.transaction_time}</td>
+		<tr>
+			<th width="30px">&nbsp;</th>
+			<th>{LANG.payment_time}</th>
+			<th>{LANG.user_payment}</th>
+			<th>{LANG.payment_id}</th>
+			<th>{LANG.status}</th>
+			<th class="text-right">{LANG.order_total}</th>
+			<th class="text-right">{LANG.transaction_time}</th>
 		</tr>
 	</thead>
 	<tbody>
 		<!-- BEGIN: looptrans -->
 		<tr>
-			<td width="30px">{DATA_TRANS.a}</td>
-			<td align="right">{DATA_TRANS.payment_time}</td>
+			<td class="text-center" width="30px">{DATA_TRANS.a}</td>
+			<td>{DATA_TRANS.payment_time}</td>
 			<td><a href="{DATA_TRANS.link_user}">{DATA_TRANS.payment}</a></td>
 			<td>{DATA_TRANS.payment_id}</td>
 			<td>{DATA_TRANS.transaction}</td>
