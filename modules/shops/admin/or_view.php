@@ -238,7 +238,7 @@ if( $data_content['transaction_status'] != '4' )
 	$action_pay = '&action=pay';
 	$xtpl->parse( 'main.onpay' );
 }
-elseif( !$data_content['is_lock'] )
+else
 {
 	$lang_module['order_submit_pay_comfix'] = $lang_module['order_submit_unpay_comfix'];
 	$xtpl->parse( 'main.unpay' );
