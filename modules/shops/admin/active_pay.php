@@ -45,7 +45,7 @@ if( $save == 1 )
 		// Cap nhat diem tich luy
 		UpdatePoint( $data_content, false );
 
-		nv_insert_logs( NV_LANG_DATA, $module_name, 'Log drop payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'Drop payment product', "Order code: " . $data_content['order_code'], $admin_info['userid'] );
 
 		$contents = $lang_module['order_submit_unpay_ok'];
 
@@ -55,7 +55,7 @@ if( $save == 1 )
 	{
 		$transaction_status = 4;
 		$payment_id = 0;
-		$payment_amount = 0;
+		$payment_amount = $data_content['order_total'];
 		$payment_data = '';
 		$payment = '';
 		$userid = $admin_info['userid'];
