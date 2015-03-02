@@ -98,7 +98,7 @@ if( $data_content['transaction_status'] == '4' )
 $xtpl = new XTemplate( 'or_view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
-$xtpl->assign( 'moment', date( 'h:i', $data_content['order_time'] ) );
+$xtpl->assign( 'moment', date( 'H:i', $data_content['order_time'] ) );
 $xtpl->assign( 'DATA', $data_content );
 $xtpl->assign( 'order_id', $data_content['order_id'] );
 

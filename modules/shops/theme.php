@@ -1443,7 +1443,7 @@ function print_product( $data_content, $data_unit, $page_title )
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'TITLE', $data_content[NV_LANG_DATA . '_title'] );
 		$xtpl->assign( 'NUM_VIEW', $data_content['hitstotal'] );
-		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . date( ' d-m-Y ', $data_content['addtime'] ) . $lang_module['detail_moment'] . date( " h:i'", $data_content['addtime'] ) );
+		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . date( ' d-m-Y ', $data_content['addtime'] ) . $lang_module['detail_moment'] . date( " H:i'", $data_content['addtime'] ) );
 		$xtpl->assign( 'DETAIL', $data_content[NV_LANG_DATA . '_bodytext'] );
 		$xtpl->assign( 'PRICE', nv_get_price( $data_content['id'], $pro_config['money_unit'] ) );
 		$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
@@ -1849,7 +1849,7 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 	$xtpl = new XTemplate( 'payment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
-	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
+	$xtpl->assign( 'moment', date( "H:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
 	$xtpl->assign( 'cancel_url', $client_info['selfurl'] . '&cancel=1' );
@@ -2009,7 +2009,7 @@ function print_pay( $data_content, $data_pro )
 	$xtpl = new XTemplate( 'print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
-	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
+	$xtpl->assign( 'moment', date( "H:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'order_id', $data_content['order_id'] );
 
@@ -2134,7 +2134,7 @@ function history_order( $data_content, $link_check_order )
 	{
 		$xtpl->assign( 'order_code', $data_row['order_code'] );
 		$xtpl->assign( 'history_date', date( 'd-m-Y', $data_row['order_time'] ) );
-		$xtpl->assign( 'history_moment', date( "h:i' ", $data_row['order_time'] ) );
+		$xtpl->assign( 'history_moment', date( "H:i' ", $data_row['order_time'] ) );
 		$xtpl->assign( 'history_total', nv_number_format( $data_row['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 		$xtpl->assign( 'unit_total', $data_row['unit_total'] );
 		$xtpl->assign( 'note', $data_row['order_note'] );
@@ -2335,7 +2335,7 @@ function email_new_order( $data_content, $data_pro )
 	$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
-	$xtpl->assign( 'moment', date( "h:i' ", $data_content['order_time'] ) );
+	$xtpl->assign( 'moment', date( "H:i' ", $data_content['order_time'] ) );
 	$xtpl->assign( 'DATA', $data_content );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'SITE_DOMAIN', $global_config['site_url'] );
