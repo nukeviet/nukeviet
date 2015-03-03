@@ -55,23 +55,23 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$title_length = ( isset( $block_config['title_length'] ) ) ? $block_config['title_length'] : 0;
 		$show_code = ( isset( $block_config['show_code'] ) ) ? $block_config['show_code'] : 1;
 
-		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $data . "_row WHERE status=1 ORDER BY addtime DESC LIMIT 0," . $numrow;
+		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $data . '_row WHERE status=1 ORDER BY addtime DESC LIMIT 0,' . $numrow;
 
 		$result = $db->query( $sql );
 		$numrow = $result->rowCount();
 
         if ( ! empty( $numrow ) )
         {
-            if ( file_exists( NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $modfile . "/block_new_law.tpl" ) )
+            if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $modfile . '/block_new_law.tpl' ) )
             {
                 $block_theme = $module_info['template'];
             }
             else
             {
-                $block_theme = "default";
+                $block_theme = 'default';
             }
 
-            $xtpl = new XTemplate( "block_new_law.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $modfile );
+            $xtpl = new XTemplate( 'block_new_law.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $modfile );
 
 			if( $module_name != $module )
 			{
@@ -91,8 +91,8 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 			$xtpl->assign( 'LANG', $lang_block_module );
 
 			while( $row = $result->fetch() )
-			{//print_r($row);die;
-				$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
+			{
+				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=detail/' . $row['alias'];
 				$row['link'] = $link;
 
 				if( ! empty( $block_config['title_length'] ) )
