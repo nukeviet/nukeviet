@@ -34,7 +34,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		{
 			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
 		}
-		$html .= '</select>';		
+		$html .= '</select>';
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
@@ -109,9 +109,9 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			);
 		}
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/news/block_news.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme']  . '/modules/news/block_news.tpl' ) )
 		{
-			$block_theme = $module_info['template'];
+			$block_theme = $global_config['module_theme'] ;
 		}
 		else
 		{

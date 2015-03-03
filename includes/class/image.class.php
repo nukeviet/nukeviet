@@ -812,10 +812,11 @@ class image
 				$newname = strtolower( preg_replace( '/\W-/', '', $newname ) );
 
 				$_array_name = explode( '.', $newname );
+				$_ext = end( $_array_name );
 				$newname = preg_replace( "/." . array_pop( $_array_name ) . "$/", '', $newname );
 
 				if( ! preg_match( "/\/$/", $path ) ) $path = $path . "/";
-				$newname = $path . $newname . '.' . $this->create_Image_info['ext'];
+				$newname = $path . $newname . '.' . $_ext;
 
 				switch( $this->create_Image_info['type'] )
 				{

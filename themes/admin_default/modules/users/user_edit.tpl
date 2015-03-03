@@ -36,13 +36,21 @@
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
-					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td>
+						<!-- BEGIN: question -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: question -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
-					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+					<td>
+						<!-- BEGIN: answer -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: answer -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.name} </td>
@@ -82,7 +90,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -132,7 +140,7 @@
 					<input class="form-control {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 300px" />
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
-					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:100px"/>
 					<!-- END: date -->
 					<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 					<!-- END: textarea -->

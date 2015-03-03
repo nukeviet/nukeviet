@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="{LANG.Content_Language}" xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns#">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset={SITE_CHERSET}" />
+		<meta http-equiv="content-type" content="text/html; charset={SITE_CHARSET}" />
 		<meta http-equiv="expires" content="0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">

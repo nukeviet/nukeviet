@@ -208,7 +208,7 @@ function nv_admin_checkdata( $adm_session_value )
 	$admin_info['current_openid'] = '';
 	$admin_info['st_login'] = ! empty( $admin_info['password'] ) ? true : false;
 	$admin_info['valid_question'] = ( ! empty( $admin_info['question'] ) and ! empty( $admin_info['answer'] ) ) ? true : false;
-	$admin_info['current_mode'] = 3;
+	$admin_info['current_mode'] = 5;
 
 	unset( $admin_info['lev'], $admin_info['files_level'], $admin_info['password'], $admin_info['question'], $admin_info['answer'], $admin_info['check_num'] );
 

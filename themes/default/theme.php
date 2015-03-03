@@ -75,6 +75,19 @@ function nv_site_theme( $contents, $full = true )
 
 	// Header variables
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
+	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+	$xtpl->assign( 'LOGO_WIDTH', $size[0] );
+	$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
+
+	if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
+	{
+		$xtpl->parse( 'main.swf' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.image' );
+	}	
+	
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 	
