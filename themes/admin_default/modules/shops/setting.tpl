@@ -57,12 +57,20 @@
 			</colgroup>
 			<tbody>
 				<tr>
+					<td><strong>{LANG.setting_active_order}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
+				</tr>
+				<tr>
 					<td><strong>{LANG.setting_guest_order}</strong></td>
 					<td><input type="checkbox" value="1" name="active_guest_order" {ck_active_guest_order} /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_active_order}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
+					<td><strong>{LANG.setting_active_order_non_detail}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order_non_detail" {ck_active_order_non_detail} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_order_popup}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order_popup" {ck_active_order_popup} /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_hometext}</strong></td>

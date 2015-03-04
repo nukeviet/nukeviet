@@ -277,6 +277,10 @@ div.step_bar a.step_current{
     display:inline-block
 }
 
+#detail{
+	margin: 5px !important;
+}
+
 #detail .zoom_img {
     margin: 10px 0 10px 0;
 }

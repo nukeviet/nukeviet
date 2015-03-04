@@ -75,16 +75,20 @@ $description = $data_content[NV_LANG_DATA . '_hometext'];
 
 if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 {
+	$popup = $nv_Request->get_int( 'popup', 'post,get', 0 );
+
 	$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
 	$db->query( $sql );
 
 	$catid = $data_content['listcatid'];
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'] . $global_config['rewrite_exturl'], true );
-	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+
+	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup )
 	{
 		Header( 'Location: ' . $base_url_rewrite );
 		die( );
 	}
+
 
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_units WHERE id = ' . $data_content['product_unit'] );
 	$data_unit = $sql->fetch( );
@@ -279,7 +283,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 	$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
-	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id );
+	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup );
 }
 else
 {
@@ -288,5 +292,5 @@ else
 }
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme( $contents, !$popup );
 include NV_ROOTDIR . '/includes/footer.php';
