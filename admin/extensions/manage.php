@@ -355,83 +355,206 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 // Xoa ung dung
 if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id ) == $request['checksess'] )
 {
-	$module_exit = array();
-
-	$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
-	while( list( $lang_i ) = $result->fetch( 3 ) )
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
+	$sth = $db->prepare( $sql );
+	$sth->bindValue( ':type', $request['type'] );
+	$sth->bindValue( ':title', $request['title'] );
+	$sth->execute();
+	$row = $sth->fetchAll();
+	
+	if( sizeof( $row ) == 1 )
 	{
-		$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
-		$sth->bindParam( ':module_file', $request['title'], PDO::PARAM_STR );
-		$sth->execute();
-		if( $sth->fetchColumn() )
-		{
-			$module_exit[] = $lang_i;
-		}
-	}
-
-	if( empty( $module_exit ) )
-	{
-		$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename AND title!= :title AND type=\'module\'' );
-		$sth->bindParam( ':basename', $request['title'], PDO::PARAM_STR );
-		$sth->bindParam( ':title', $request['title'], PDO::PARAM_STR );
-		$sth->execute();
+		$row = $row[0];
 		
-		if( $sth->fetchColumn() )
-		{
-			$module_exit = 1;
-		}
-	}
+		// Lay danh sach file
+		$sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
+		$sth = $db->prepare( $sql );
+		$sth->bindValue( ':type', $request['type'] );
+		$sth->bindValue( ':title', $request['title'] );
+		$sth->execute();
+		$files = $sth->fetchAll();
 
-	if( empty( $module_exit ) and defined( 'NV_CONFIG_DIR' ) )
-	{
-		// kiem tra cac site con
-		$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC' );
-		while( $row = $result->fetch() )
+		if( $row['type'] == 'module' )
 		{
-			$result2 = $db->query( 'SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
-			while( list( $lang_i ) = $result2->fetch( 3 ) )
+			$module_exit = array();
+		
+			$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
+			while( list( $lang_i ) = $result->fetch( 3 ) )
 			{
-				$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
+				$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
 				$sth->bindParam( ':module_file', $request['title'], PDO::PARAM_STR );
 				$sth->execute();
 				if( $sth->fetchColumn() )
 				{
-					$module_exit[] = $row['title'] . ' :' . $lang_i;
+					$module_exit[] = $lang_i;
+				}
+			}
+		
+			if( empty( $module_exit ) )
+			{
+				$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename AND title!= :title AND type=\'module\'' );
+				$sth->bindParam( ':basename', $request['title'], PDO::PARAM_STR );
+				$sth->bindParam( ':title', $request['title'], PDO::PARAM_STR );
+				$sth->execute();
+				
+				if( $sth->fetchColumn() )
+				{
+					$module_exit = 1;
+				}
+			}
+		
+			if( empty( $module_exit ) and defined( 'NV_CONFIG_DIR' ) )
+			{
+				// Kiem tra cac site con
+				$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC' );
+				while( $row = $result->fetch() )
+				{
+					$result2 = $db->query( 'SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
+					while( list( $lang_i ) = $result2->fetch( 3 ) )
+					{
+						$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
+						$sth->bindParam( ':module_file', $request['title'], PDO::PARAM_STR );
+						$sth->execute();
+						if( $sth->fetchColumn() )
+						{
+							$module_exit[] = $row['title'] . ' :' . $lang_i;
+						}
+					}
+				}
+			}
+		
+			if( empty( $module_exit ) )
+			{
+				$theme_list_site = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
+				$theme_list_mobile = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
+				$theme_list_admin = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_admin'] );
+				$theme_list = array_merge( $theme_list_site, $theme_list_mobile, $theme_list_admin );
+		
+				foreach( $theme_list as $theme )
+				{
+					if( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' ) )
+					{
+						nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' );
+					}
+		
+					if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $request['title'] ) )
+					{
+						nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $request['title'], true );
+					}
+		
+					if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $request['title'] ) )
+					{
+						nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $request['title'], true );
+					}
+				}
+		
+				if( is_dir( NV_ROOTDIR . '/modules/' . $request['title'] . '/' ) )
+				{
+					nv_deletefile( NV_ROOTDIR . '/modules/' . $request['title'] . '/', true );
 				}
 			}
 		}
-	}
-
-	if( empty( $module_exit ) )
-	{
-		$theme_list_site = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
-		$theme_list_mobile = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
-		$theme_list_admin = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_admin'] );
-		$theme_list = array_merge( $theme_list_site, $theme_list_mobile, $theme_list_admin );
-
-		foreach( $theme_list as $theme )
+		elseif( $row['type'] == 'theme' )
 		{
-			if( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' ) )
+			$check_exit_mod = false;
+			$lang_module_array = array();
+		
+			$sql_theme = ( preg_match( $global_config['check_theme_mobile'], $request['title'] ) ) ? 'mobile' : 'theme';
+		
+			$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup = 1');
+			while( list( $lang_i ) = $result->fetch( 3 ) )
 			{
-				nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' );
+				$module_array = array();
+		
+				$sth = $db->prepare( 'SELECT title, custom_title
+					FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules
+					WHERE ' . $sql_theme . ' = :theme
+					ORDER BY weight ASC' );
+				$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+				$sth->execute();
+				while( list( $title, $custom_title ) = $sth->fetch( 3 ) )
+				{
+					$module_array[] = $custom_title;
+				}
+		
+				if( ! empty( $module_array ) )
+				{
+					$lang_module_array[] = $lang_i . ': ' . implode( ', ', $module_array );
+				}
 			}
-
-			if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $request['title'] ) )
+		
+			if( ! empty( $lang_module_array ) )
 			{
-				nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $request['title'], true );
+				die( 'ERROR_' . printf( $lang_module['delele_ext_theme_note_module'], implode( '; ', $lang_module_array ) ) );
 			}
-
-			if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $request['title'] ) )
+			else
 			{
-				nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $request['title'], true );
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid'] );
+				$result = nv_deletefile( NV_ROOTDIR . '/themes/' . $request['title'], true );
+		
+				if( ! empty( $result[0] ) )
+				{
+					$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1' );
+					while( list( $_lang ) = $result->fetch( 3 ) )
+					{
+						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme' );
+						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+						$sth->execute();
+		
+						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)' );
+						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+						$sth->execute();
+		
+						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme' );
+						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+						$sth->execute();
+					}
+					nv_del_moduleCache( 'themes' );
+		
+					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
+					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
+					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
+				}
+				else
+				{
+					die( 'ERROR_' . $lang_module['delele_ext_theme_unsuccess'] );
+				}
 			}
 		}
-
-		if( is_dir( NV_ROOTDIR . '/modules/' . $request['title'] . '/' ) )
+		
+		// Delete other files
+		if( ! empty( $files ) )
 		{
-			nv_deletefile( NV_ROOTDIR . '/modules/' . $request['title'] . '/', true );
+			clearstatcache();
+			
+			foreach( $files as $file )
+			{
+				$file = NV_ROOTDIR . '/' . $file;
+				
+				if( file_exists( $file ) )
+				{
+					@nv_deletefile( $file );
+				}
+			}
 		}
+		
+		// Delete from table
+		$sql = 'DELETE FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
+		$sth = $db->prepare( $sql );
+		$sth->bindValue( ':type', $request['type'] );
+		$sth->bindValue( ':title', $request['title'] );
+		$sth->execute();
+		
+		$sql = 'DELETE FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
+		$sth = $db->prepare( $sql );
+		$sth->bindValue( ':type', $request['type'] );
+		$sth->bindValue( ':title', $request['title'] );
+		$sth->execute();
+		
+		die( 'OK_' . $lang_module['delele_ext_success'] );
 	}
+	
+	die( "ERROR_" . $lang_module['delele_ext_unsuccess'] );
 }
 
 $xtpl->assign( 'SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload' );
@@ -445,14 +568,58 @@ else
 	$xtpl->parse( 'main.upload' );
 }
 
+// Array lang setup
+$sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
+$result = $db->query( $sql );
+
+$array_langs = array();
+while( $row = $result->fetch() )
+{
+	$array_langs[$row['lang']] = $row['lang'];
+}
+
+// Array modules exists
+$array_modules_exists = array();
+
+foreach( $array_langs as $lang )
+{
+	$sql = 'SELECT module_file FROM ' . $db_config['prefix'] . '_' . $lang . '_modules';
+	$result = $db->query( $sql );
+	
+	while( $row = $result->fetch() )
+	{
+		$array_modules_exists[$row['module_file']] = $row['module_file'];
+	}
+}
+
+// Array themes exists
+
+// Array blocks exists
+
+// Array crons exists
+
 // List extensions
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY addtime DESC';
 $result = $db->query( $sql );
 
 $array = array();
 while( $row = $result->fetch() )
-{
+{	
+	$row['icon'] = $row['is_sys'] ? array( $theme_config['sys_icon'] ) : array();
+	$row['is_admin'] = false;
+	$row['delete_allowed'] = $row['is_sys'] == 0 ? true : false;
+	
+	if( $row['type'] == 'module' and isset( $array_modules_exists[$row['basename']] ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	elseif( $row['type'] == 'theme' and ( $global_config['site_theme'] == $row['basename'] or $row['basename'] == 'default' ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	
 	$row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5( 'package_' . $row['type'] . '_' . $row['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id );
+	$row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5( 'delete_' . $row['type'] . '_' . $row['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id );
 	$row['type'] = isset( $lang_module['extType_' . $row['type']] ) ? $lang_module['extType_' . $row['type']] : $lang_module['extType_other'];
 	$row['version'] = array_filter( explode( " ", $row['version'] ) );
 	
@@ -464,11 +631,7 @@ while( $row = $result->fetch() )
 	{
 		$row['version'] = 'N/A';
 	}
-	
-	$row['icon'] = $row['is_sys'] ? array( $theme_config['sys_icon'] ) : array();
-	$row['is_admin'] = false;
-	$row['delete_allowed'] = true;
-	
+
 	$array[] = $row;
 }
 

@@ -308,7 +308,27 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 				}
 				else
 				{
-					$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup' );
+					if( $extConfig['extension']['type'] == 'module' )
+					{
+						$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=modules&' . NV_OP_VARIABLE . '=setup' );
+					}
+					elseif($extConfig['extension']['type'] == 'theme' )
+					{
+						$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes' );
+					}
+					elseif( $extConfig['extension']['type'] == 'block' )
+					{
+						$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks' );
+					}
+					elseif( $extConfig['extension']['type'] == 'cronjob' )
+					{
+						$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=cronjobs_add&file=' . $extConfig['extension']['name'] );
+					}
+					else
+					{
+						$xtpl->assign( 'URL_GO', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' + $module_name + '&' . NV_OP_VARIABLE . '=' . $op );
+					}
+					
 					$xtpl->parse( 'extract.complete.ok' );
 				}
 				

@@ -96,7 +96,6 @@ $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . '/modules', $global_config[
 $modules_data = array();
 
 $is_delCache = false;
-$module_virtual_setup = array();
 
 $sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY addtime ASC';
 $result = $db->query( $sql_data );
@@ -106,11 +105,6 @@ while( $row = $result->fetch() )
 	if( array_key_exists( $row['basename'], $modules_exit ) )
 	{
 		$modules_data[$row['title']] = $row;
-
-		if( $row['title'] != $row['basename'] )
-		{
-			$module_virtual_setup[] = $row['basename'];
-		}
 	}
 	else
 	{
@@ -225,7 +219,7 @@ $array_modules = $array_virtual_modules = $mod_virtual = array();
 
 foreach( $modules_data as $row )
 {
-	if( in_array( $row['title'], $modules_exit ) )
+	if( in_array( $row['basename'], $modules_exit ) )
 	{
 		if( ! empty( $array_site_cat_module ) and ! in_array( $row['basename'], $array_site_cat_module ) )
 		{
@@ -253,13 +247,6 @@ foreach( $modules_data as $row )
 			}
 			
 			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
-			$mod['delete'] = '';
-			
-			if( defined( "NV_IS_GODADMIN" ) and ! in_array( $row['basename'], $module_virtual_setup ) )
-			{
-				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delmodule=' . $row['title'] . '&amp;checkss=' . md5( 'delmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
-				$mod['delete'] = " <em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";
-			}
 			
 			if( $mod['module_file'] == $mod['title'] )
 			{

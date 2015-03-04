@@ -61,7 +61,7 @@
 			<div class="row">
 				<div class="col-sm-2 text-center">
 					<em class="fa fa-cloud-download fa-lg package-ext" data-toggle="tooltip" data-placement="top" title="{LANG.package}" data-href="{ROW.url_package}">&nbsp;</em>
-					<!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg" data-toggle="tooltip" data-placement="top" title="{GLANG.delete}" data-href="{ROW.url_package}">&nbsp;</em><!-- END: delete -->
+					<!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg delete-ext" data-toggle="tooltip" data-placement="top" title="{GLANG.delete}" data-href="{ROW.url_delete}">&nbsp;</em><!-- END: delete -->
 				</div>
 				<div class="col-sm-1">{ROW.type}</div>
 				<div class="col-sm-3">
@@ -84,6 +84,18 @@ $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	$('.package-ext').click(function(e){
 		window.location = $(this).data('href');
+	});
+	$('.delete-ext').click(function(){
+		if( confirm('{LANG.delele_ext_confirm}') ){
+			$.post($(this).data('href') + '&nocache=' + new Date().getTime(), '', function(res) {
+				res = res.split('_');
+				alert(res[1]);
+				
+				if( res[0] == 'OK' ){
+					window.location.href = window.location.href;
+				}
+			});	
+		}
 	});
 });
 </script>
