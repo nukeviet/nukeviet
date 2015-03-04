@@ -67,7 +67,7 @@ function cartorder_detail(a_ob) {
 	var id = $(a_ob).attr("id");
 	var group = '';
 
-	var i = 0;
+	var i = 0, check = 1;
     $('select[name=group] option:selected').each(function(){
     	var value = $(this).val();
     	if( value != '' )
@@ -82,9 +82,15 @@ function cartorder_detail(a_ob) {
     			group = group + ',' + value;
     		}
     	}
+    	else
+    	{
+    		alert(detail_error_group);
+    		check = 0;
+    		return false;
+    	}
 	});
 
-	$.ajax({
+	check && $.ajax({
 		type : "POST",
 		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&group=" + group + "&nocache=" + new Date().getTime(),
 		data : 'num=' + num,

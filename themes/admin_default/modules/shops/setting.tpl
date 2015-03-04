@@ -61,12 +61,12 @@
 					<td><input type="checkbox" value="1" name="active_guest_order" {ck_active_guest_order} /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_hometext}</strong></td>
-					<td><input type="checkbox" value="1" name="active_showhomtext" {ck_active_showhomtext} /></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.setting_active_order}</strong></td>
 					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_hometext}</strong></td>
+					<td><input type="checkbox" value="1" name="active_showhomtext" {ck_active_showhomtext} /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_active_price}</strong></td>

@@ -393,8 +393,8 @@
 <div class="msgshow" id="msgshow"></div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/tabresponsive.js"></script>
 <script type="text/javascript">
-		new CBPFWTabs( document.getElementById( 'tabs' ) );
-
+	var detail_error_group = '{LANG.detail_error_group}';
+	new CBPFWTabs( document.getElementById( 'tabs' ) );
 	$(function(){
 	<!-- BEGIN: allowed_print_js -->
 	$('#click_print').click(function(event){
@@ -428,6 +428,3 @@
 	<!-- END: allowed_rating_js -->
 	});</script>
 <!-- END: main -->
-				<!-- BEGIN: allowed_print -->
-				<a rel="nofollow" href="{LINK_PRINT}" class="btn btn-default btn-sm" title="Print" id="click_print"> <em class="fa fa-print fa-lg fb">&nbsp;</em> </a>
-				<!-- END: allowed_print -->
