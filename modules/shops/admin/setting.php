@@ -47,6 +47,8 @@ if( $savesetting == 1 )
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
 	$data['facebookappid'] = $nv_Request->get_string( 'facebookappid', 'post', '' );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
+	$data['active_order_popup'] = $nv_Request->get_int( 'active_order_popup', 'post', 0 );
+	$data['active_order_non_detail'] = $nv_Request->get_int( 'active_order_non_detail', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
 	$data['active_payment'] = $nv_Request->get_int( 'active_payment', 'post', 0 );
@@ -149,6 +151,12 @@ $xtpl->assign( 'ck_post_auto_member', $check );
 
 $check = ( $data['active_order'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_order', $check );
+
+$check = ( $data['active_order_popup'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_order_popup', $check );
+
+$check = ( $data['active_order_non_detail'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_order_non_detail', $check );
 
 $check = ( $data['active_price'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_price', $check );

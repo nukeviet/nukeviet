@@ -51,7 +51,7 @@
 
                 <div class="clearfix">
                     <!-- BEGIN: order -->
-                    <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+                    <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this, {GROUP_REQUIE}, '{LINK}')"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                     <!-- END: order -->
                     <a href="javascript:void(0)" title="{LANG.wishlist_del_item}" onclick="wishlist_del_item({ID})" class="btn btn-danger btn-xs">{LANG.wishlist_del_item}</a>
                 </div>

@@ -37,37 +37,44 @@ function nv_del_content(id, checkss, base_adminurl) {
 }
 
 /*javascript user*/
-function cartorder(a_ob) {
+function cartorder(a_ob, popup, url) {
 	var id = $(a_ob).attr("id");
-	$.ajax({
-		type : "GET",
-		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&nocache=" + new Date().getTime(),
-		data : '',
-		success : function(data) {
-			var s = data.split('_');
-			var strText = s[1];
-			if (strText != null) {
-				var intIndexOfMatch = strText.indexOf('#@#');
-				while (intIndexOfMatch != -1) {
-					strText = strText.replace('#@#', '_');
-					intIndexOfMatch = strText.indexOf('#@#');
+	if( popup == '0' )
+	{
+		$.ajax({
+			type : "GET",
+			url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&nocache=" + new Date().getTime(),
+			data : '',
+			success : function(data) {
+				var s = data.split('_');
+				var strText = s[1];
+				if (strText != null) {
+					var intIndexOfMatch = strText.indexOf('#@#');
+					while (intIndexOfMatch != -1) {
+						strText = strText.replace('#@#', '_');
+						intIndexOfMatch = strText.indexOf('#@#');
+					}
+					alert_msg(strText);
+					linkloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
+					$("#cart_" + nv_module_name).load(linkloadcart);
+					//window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
 				}
-				alert_msg(strText);
-				linkloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
-				$("#cart_" + nv_module_name).load(linkloadcart);
-				//window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
 			}
-		}
-	});
+		});
+	}
+	else
+	{
+		open_popup_detail( url + '&popup=1' );
+	}
 }
 
 /**/
-function cartorder_detail(a_ob) {
+function cartorder_detail(a_ob, popup, buy_now) {
 	var num = $('#pnum').val();
-	var id = $(a_ob).attr("id");
+	var id = $(a_ob).attr("data-id");
 	var group = '';
 
-	var i = 0;
+	var i = 0, check = 1;
     $('select[name=group] option:selected').each(function(){
     	var value = $(this).val();
     	if( value != '' )
@@ -82,9 +89,15 @@ function cartorder_detail(a_ob) {
     			group = group + ',' + value;
     		}
     	}
+    	else
+    	{
+    		alert(detail_error_group);
+    		check = 0;
+    		return false;
+    	}
 	});
 
-	$.ajax({
+	check && $.ajax({
 		type : "POST",
 		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&group=" + group + "&nocache=" + new Date().getTime(),
 		data : 'num=' + num,
@@ -100,9 +113,27 @@ function cartorder_detail(a_ob) {
 				alert_msg(strText);
 				linkloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 				$("#cart_" + nv_module_name).load(linkloadcart);
-				window.location.href = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
+				if( buy_now )
+				{
+					parent.location = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=cart";
+				}
+				else if( popup )
+				{
+					parent.location = parent.location;
+				}
 			}
 		}
+	});
+}
+
+function open_popup_detail( url )
+{
+	var width = 780, height = 450;
+	Shadowbox.open({
+		content : '<iframe src="' + url + '" border="0" frameborder="0" style="width:' + width + 'px;height:' + height + 'px"></iframe>',
+		player : "html",
+		height : height,
+		width : width
 	});
 }
 

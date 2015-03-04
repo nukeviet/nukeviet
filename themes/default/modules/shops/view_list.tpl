@@ -81,7 +81,7 @@
                 <!-- END: compare -->
 
     			<!-- BEGIN: order -->
-    			<a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this)"><button class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+    			<a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this, {GROUP_REQUIE}, '{link_pro}')"><button class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
     			<!-- END: order -->
 
 				<!-- BEGIN: product_empty -->
