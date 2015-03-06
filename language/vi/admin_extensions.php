@@ -117,3 +117,55 @@ $lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file
 $lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
 $lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';
+
+$lang_module['manage'] = 'Quản lý ứng dụng';
+$lang_module['extType_module'] = 'Module';
+$lang_module['extType_block'] = 'Block';
+$lang_module['extType_theme'] = 'Giao diện';
+$lang_module['extType_cronjob'] = 'Tiến trình tự động';
+$lang_module['extType_other'] = 'Khác';
+$lang_module['extType_sys'] = 'Hệ thống';
+$lang_module['extType_admin'] = 'Phần quản trị';
+
+$lang_module['install_package'] = 'Cài đặt gói ứng dụng';
+$lang_module['install_submit'] = 'Tải lên';
+$lang_module['install_error_filetype'] = 'Lỗi: File cài đặt phải là định dạng file zip hoặc gz';
+$lang_module['install_error_nofile'] = 'Lỗi: Chưa chọn file tải lên';
+
+$lang_module['autoinstall_install'] = 'Cài đặt ứng dụng';
+$lang_module['autoinstall_nomethod'] = 'Chưa xác định phương thức thực hiện';
+$lang_module['autoinstall_uploadedfile'] = 'Thông tin ứng dụng được tải lên';
+$lang_module['autoinstall_uploadedfilename'] = 'Tên file';
+$lang_module['autoinstall_uploadedfilesize'] = 'Dung lượng';
+$lang_module['autoinstall_uploaded_filenum'] = 'Tổng số file + folder';
+$lang_module['autoinstall_uploaded_filelist'] = 'Danh sách các file';
+$lang_module['autoinstall_uploaded_num_exists'] = 'Số file trùng';
+$lang_module['autoinstall_uploaded_num_invalid'] = 'Số file cấu trúc không phù hợp';
+$lang_module['autoinstall_error_uploadfile'] = 'Lỗi: không thể upload file lên hệ thống. Hãy kiểm tra lại hoặc chmod thư mục tmp';
+$lang_module['autoinstall_error_downloaded'] = 'Lỗi: Không tìm thấy file đã upload';
+$lang_module['autoinstall_error_createfile'] = 'Lỗi: không thể lưu đệm danh sách file. Hãy kiểm tra lại hoặc chmod thư mục tmp';
+$lang_module['autoinstall_error_invalidfile'] = 'Lỗi: File zip không hợp lệ';
+$lang_module['autoinstall_error_check_fail'] = 'Lỗi: Ứng dụng này có cấu trúc không phù hợp và có thể gây nguy hại đến website. Để đảm bảo an toàn, hệ thống từ chối việc tiếp tục cài đặt ứng dụng này';
+$lang_module['autoinstall_error_check_warning'] = 'Ứng dụng này có một số tệp tin hiện đã có trên hệ thống. Tiếp tục cài đặt, những tệp tin đó sẽ bị thay thế. Nếu bạn chắc chắn điều này an toàn, nhấp <strong><a href="#">Vào đây</a></strong> để tiến hành giải nén và cài đặt.';
+$lang_module['autoinstall_error_check_success'] = 'Ứng dụng này an toàn với hệ thống của bạn. Nhấp <strong><a href="#">Vào đây</a></strong> để tiến hành giải nén và cài đặt.';
+$lang_module['autoinstall_error_warning_permission_folder'] = 'Host không thể tạo thư mục do safe mod on';
+$lang_module['autoinstall_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
+$lang_module['autoinstall_unzip_success'] = 'Quá trình cài đặt thành công. Hệ thống sẽ tự động chuyển bạn sang khu vực thích hợp ngay bây giờ.';
+$lang_module['autoinstall_unzip_setuppage'] = 'Đến trang quản lý ứng dụng.';
+$lang_module['autoinstall_unzip_filelist'] = 'Danh sách file đã giải nén';
+$lang_module['autoinstall_error_movefile'] = 'Việc cài đặt tự động không thể tiếp tục do host không hỗ trợ di chuyển các file sau khi giải nén.';
+$lang_module['autoinstall_error_missing_cfg'] = 'File tải lên không hợp lệ vui lòng kiểm tra lại cách thức đóng gói ứng dụng';
+$lang_module['autoinstall_error_cfg_content'] = 'Gói ứng dụng không đầy đủ thông tin, vui lòng kiểmt tra lại';
+$lang_module['autoinstall_error_cfg_type'] = 'Loại ứng dụng không xác định';
+$lang_module['autoinstall_error_cfg_version'] = 'Phiên bản ứng dụng không hợp lệ';
+$lang_module['autoinstall_error_cfg_name'] = 'Tên ứng dụng theo loại ứng dụng không đúng chuẩn quy định';
+$lang_module['autoinstall_note_invaild'] = 'Vị trí không được phép';
+$lang_module['autoinstall_note_exists'] = 'Tệp tin đã tồn tại';
+
+$lang_module['package'] = 'Đóng gói ứng dụng';
+
+$lang_module['delele_ext_confirm'] = 'Bạn có chắc chắn xóa ứng dụng này, việc này sẽ không thể hoàn tác?';
+$lang_module['delele_ext_theme_note_module'] = 'Bạn không thể xóa theme vì đang sử dụng cho module: %s, bạn cần cấu hình lại các module đó.';
+$lang_module['delele_ext_success'] = 'Đã xóa thành công ứng dụng ra khỏi hệ thống !';
+$lang_module['delele_ext_unsuccess'] = 'Có lỗi trong quá trình xóa !';
+$lang_module['delele_ext_theme_delete_current_theme'] = 'Bạn không thể xóa theme hiện tại hệ thống đang sử dụng !';

@@ -25,6 +25,7 @@
 			<input type="password" class="required form-control password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" maxlength="{PASS_MAXLENGTH}" />
 		</div>
 	</div>
+	<!-- BEGIN: allowquestion -->
 	<div class="form-group">
 		<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
 		<div class="col-sm-16">
@@ -47,6 +48,7 @@
 			<input type="text" class="required form-control" name="answer" id="answer" value="{DATA.answer}" />
 		</div>
 	</div>
+	<!-- END: allowquestion -->
 	<!-- BEGIN: captcha -->
 	<div class="form-group">
 		<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>

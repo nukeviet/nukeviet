@@ -305,7 +305,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #info_tab {
 	background-color: #F2F2F2;
-	padding: 7px 15px;
+	padding: 7px 2px;
 	min-height: 36px;
 }
 
@@ -328,6 +328,10 @@ h1, h2, h3, h4, h5, h6 {
 	float: right;
 	display: inline-block;
 	margin-right: 10px;
+}
+
+.nv-panel-body{
+	padding: 10px;
 }
 
 /* Left Menu
@@ -668,6 +672,29 @@ label {
 	width: 39%!important;
 }
 
+/* DIV Listing
+ -----------------------------------------------------------------------------*/
+.nv-listing .listing-title{
+	font-weight: 700;
+	border-bottom: 2px #ddd solid;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.nv-listing .listing-body .listing-item{
+	border-bottom: 1px #ddd solid;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.nv-listing .listing-body .listing-item:nth-child(odd){
+	background-color: #f9f9f9;
+}
+
+.nv-listing .listing-body .listing-item em{
+	cursor: pointer;
+}
+
 /* =====================================================
  Add more style left menu admin css
  =====================================================*/
@@ -712,4 +739,50 @@ label {
 
 .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
 	color: #fff !important;
+}
+
+.info_icon:before {
+	font-family: FontAwesome;
+	color: #1E91CF;
+	font-size: 14px;
+	content: "\f05a";
+}
+
+#notification{
+	position: absolute;
+	top: 4px;
+	right: 3px;
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #FF0040;
+	border-radius: 10px;
+	z-index: 1
+}
+
+#notification_load .notify_item{
+	border-top: 1px solid #424141;
+}
+
+#notification_load .notify_item a {
+	display: block;
+	width: 100%;
+	padding: 10px !important;
+	line-height: 20px
+}
+
+#notification_load .notify_item a:hover {
+	text-decoration: none;
+}
+
+#notification_load .notify_item a img{
+	max-width: 40px;
+	margin: 0 5px 5px 0
 }

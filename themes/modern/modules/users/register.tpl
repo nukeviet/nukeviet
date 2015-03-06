@@ -47,34 +47,36 @@
 				<input class="input required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
 			</dd>
 		</dl>
-		<dl class="clearfix">
-			<dt class="fl">
-				<label> {LANG.question} </label>
-			</dt>
-			<dd class="fr">
-				<select name="question">
-					<!-- BEGIN: frquestion -->
-					<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
-					<!-- END: frquestion -->
-				</select>
-			</dd>
-		</dl>
-		<dl class="clearfix">
-			<dt class="fl">
-				<label> {LANG.your_question} </label>
-			</dt>
-			<dd class="fr">
-				<input class="input" name="your_question" value="{DATA.your_question}" />
-			</dd>
-		</dl>
-		<dl class="clearfix">
-			<dt class="fl">
-				<label> {LANG.answer_your_question} </label>
-			</dt>
-			<dd class="fr">
-				<input class="input required" name="answer" value="{DATA.answer}" />
-			</dd>
-		</dl>
+		<!-- BEGIN: allowquestion -->
+			<dl class="clearfix">
+				<dt class="fl">
+					<label> {LANG.question} </label>
+				</dt>
+				<dd class="fr">
+					<select name="question">
+						<!-- BEGIN: frquestion -->
+						<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
+						<!-- END: frquestion -->
+					</select>
+				</dd>
+			</dl>
+			<dl class="clearfix">
+				<dt class="fl">
+					<label> {LANG.your_question} </label>
+				</dt>
+				<dd class="fr">
+					<input class="input" name="your_question" value="{DATA.your_question}" />
+				</dd>
+			</dl>
+			<dl class="clearfix">
+				<dt class="fl">
+					<label> {LANG.answer_your_question} </label>
+				</dt>
+				<dd class="fr">
+					<input class="input required" name="answer" value="{DATA.answer}" />
+				</dd>
+			</dl>
+		<!-- END: allowquestion -->			
 		<!-- BEGIN: field -->
 		<!-- BEGIN: loop -->
 		<dl class="clearfix">

@@ -18,13 +18,14 @@ $menu_top = array(
 	'custom_title' => $lang_global['mod_extensions']
 );
 
-$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login', 'update' );
+$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login', 'update', 'manage', 'upload' );
 
 $submenu['newest'] = $lang_module['newest'];
 $submenu['popular'] = $lang_module['popular'];
 $submenu['featured'] = $lang_module['featured'];
 $submenu['downloaded'] = $lang_module['downloaded'];
 $submenu['favorites'] = $lang_module['favorites'];
+$submenu['manage'] = $lang_module['manage'];
 
 /**
  * nv_extensions_is_installed()
@@ -233,4 +234,20 @@ function nv_store_cookies( $cookies = array(), $currCookies = array() )
 			}
 		}
 	}
+}
+
+/**
+ * nv_check_ext_config_filecontent()
+ * 
+ * @param mixed $extConfig
+ * @return
+ */
+function nv_check_ext_config_filecontent( $extConfig )
+{
+	if( ! isset( $extConfig['extension'] ) or ! isset( $extConfig['author'] ) or ! isset( $extConfig['note'] ) or ! isset( $extConfig['extension']['id'] ) or ! isset( $extConfig['extension']['type'] ) or ! isset( $extConfig['extension']['name'] ) or ! isset( $extConfig['extension']['version'] ) or ! isset( $extConfig['extension']['sys'] ) or ! isset( $extConfig['extension']['virtual'] ) or ! isset( $extConfig['author']['name'] ) or ! isset( $extConfig['author']['email'] ) or ! isset( $extConfig['note']['text'] ) )
+	{
+		return false;
+	}
+	
+	return true;
 }

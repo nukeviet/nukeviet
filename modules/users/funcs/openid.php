@@ -40,217 +40,79 @@ if( $nv_Request->isset_request( 'del', 'get' ) )
 if( $nv_Request->isset_request( 'server', 'get' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
-	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
-		if( $server == 'facebook' )
+		if( $nv_Request->isset_request( 'result', 'get' ) )
 		{
-			include NV_ROOTDIR . '/modules/' . $module_file . '/facebook.auth.class.php' ;
-			$FaceBookAuth = new FaceBookAuth( $global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid&server=' . $server );
+			$attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
+			$attribs = ! empty( $attribs ) ? unserialize( $attribs ) : array();
 
-			$state = $nv_Request->get_string( 'state', 'get', '' );
-			$checksess = md5( $global_config['sitekey'] . session_id() );
-
-			if( ! empty( $state ) )
+			$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : '';
+			if( empty( $email ) )
 			{
-				if( $checksess == $state )
+				$nv_Request->set_Session( 'openid_error', 3 );
+				header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
+				die();
+			}
+
+			$opid = $crypt->hash( $attribs['id'] );
+
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid ' );
+			$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
+			$stmt->execute();
+			$count = $stmt->fetchColumn();
+			if( $count )
+			{
+				$nv_Request->set_Session( 'openid_error', 4 );
+				header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
+				die();
+			}
+
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ' );
+			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
+			$stmt->execute();
+			$count = $stmt->fetchColumn();
+			if( $count )
+			{
+				$nv_Request->set_Session( 'openid_error', 5 );
+				header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
+				die();
+			}
+
+			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
+			{
+				$query = 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email ';
+				if( $global_config['allowuserreg'] == 2 )
 				{
-					$code = $nv_Request->get_string( 'code', 'get', '' );
-					$error = $nv_Request->get_string( 'error', 'get', '' );
-
-					if( $error )
-					{
-						$nv_Request->set_Session( 'openid_error', 1 );
-						header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-						die();
-					}
-					else
-					{
-						$data = $FaceBookAuth->GraphBase( $code );
-
-						if( ! $data->verified )
-						{
-							$nv_Request->set_Session( 'openid_error', 2 );
-							header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-							die();
-						}
-						else
-						{
-							$openid = sprintf( $openid_servers[$server]['identity'], $data->id );
-							$attribs = $FaceBookAuth->getAttributes( $data, $openid_servers[$server]['required'] );
-
-							$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : '';
-							if( empty( $openid ) or empty( $email ) )
-							{
-								$nv_Request->set_Session( 'openid_error', 3 );
-								header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-								die();
-							}
-
-							$opid = $crypt->hash( $openid );
-
-							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid' );
-							$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
-							$stmt->execute();
-							$count = $stmt->fetchColumn();
-							if( $count )
-							{
-								$nv_Request->set_Session( 'openid_error', 4 );
-								header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-								die();
-							}
-
-							$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email' );
-							$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-							$stmt->execute();
-							$count = $stmt->fetchColumn();
-							if( $count )
-							{
-								$nv_Request->set_Session( 'openid_error', 5 );
-								header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-								die();
-							}
-
-							if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
-							{
-								$query = 'SELECT COUNT(*) AS count FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email';
-								if( $global_config['allowuserreg'] == 2 )
-								{
-									$query .= ' AND regdate>' . ( NV_CURRENTTIME - 86400 );
-								}
-								$stmt = $db->prepare( $query ) ;
-								$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-								$stmt->execute();
-								$count = $stmt->fetchColumn();
-								if( $count )
-								{
-									$nv_Request->set_Session( 'openid_error', 6 );
-									header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-									die();
-								}
-							}
-
-							$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
-							$stmt->bindParam( ':openid', $openid, PDO::PARAM_STR );
-							$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
-							$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-							$stmt->execute();
-
-							nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . ' | ' . $client_info['ip'] . ' | ' . $opid, 0 );
-
-							header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-							die();
-						}
-					}
+					$query .= ' AND regdate>' . ( NV_CURRENTTIME - 86400 );
 				}
-				else
+				$stmt = $db->prepare( $query ) ;
+				$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
+				$stmt->execute();
+				$count = $stmt->fetchColumn();
+				if( $count )
 				{
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+					$nv_Request->set_Session( 'openid_error', 6 );
+					header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
 					die();
 				}
 			}
-			else
-			{
-				$scope = 'email';
-				// Yeu cau them email cho phu hop voi NukeViet
-				header( 'Location: ' . $FaceBookAuth->GetOAuthDialogUrl( $checksess, $scope ) );
-				die();
-			}
+
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
+			$stmt->bindParam( ':openid', $server, PDO::PARAM_STR );
+			$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
+			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
+			$stmt->execute();
+
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . ' | ' . $client_info['ip'] . ' | ' . $opid, 0 );
+
+			header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
+			die();
 		}
 		else
 		{
-			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
-			$openid_class = new LightOpenID();
-
-			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
-			{
-				$openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
-
-				if( $openid_mode == 'cancel' )
-				{
-					$nv_Request->set_Session( 'openid_error', 1 );
-					header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-					die();
-				}
-				elseif( ! $openid_class->validate() )
-				{
-					$nv_Request->set_Session( 'openid_error', 2 );
-					header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-					die();
-				}
-				else
-				{
-					$openid = $openid_class->identity;
-					$attribs = $openid_class->getAttributes();
-					$email = ( isset( $attribs['contact/email'] ) and nv_check_valid_email( $attribs['contact/email'] ) == '' ) ? $attribs['contact/email'] : '';
-					if( empty( $openid ) or empty( $email ) )
-					{
-						$nv_Request->set_Session( 'openid_error', 3 );
-						header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-						die();
-					}
-
-					$opid = $crypt->hash( $openid );
-
-					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid ' );
-					$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
-					$stmt->execute();
-					$count = $stmt->fetchColumn();
-					if( $count )
-					{
-						$nv_Request->set_Session( 'openid_error', 4 );
-						header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-						die();
-					}
-
-					$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ' );
-					$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-					$stmt->execute();
-					$count = $stmt->fetchColumn();
-					if( $count )
-					{
-						$nv_Request->set_Session( 'openid_error', 5 );
-						header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-						die();
-					}
-
-					if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
-					{
-						$query = 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email ';
-						if( $global_config['allowuserreg'] == 2 )
-						{
-							$query .= ' AND regdate>' . ( NV_CURRENTTIME - 86400 );
-						}
-						$stmt = $db->prepare( $query ) ;
-						$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-						$stmt->execute();
-						$count = $stmt->fetchColumn();
-						if( $count )
-						{
-							$nv_Request->set_Session( 'openid_error', 6 );
-							header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-							die();
-						}
-					}
-
-					$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )' );
-					$stmt->bindParam( ':openid', $openid, PDO::PARAM_STR );
-					$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
-					$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
-					$stmt->execute();
-
-					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['openid_add'], $user_info['username'] . ' | ' . $client_info['ip'] . ' | ' . $opid, 0 );
-
-					header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
-					die();
-				}
-			}
-			else
-			{
-				$openid_class->identity = $openid_servers[$server]['identity'];
-				$openid_class->required = array_values( $openid_servers[$server]['required'] );
-				header( 'Location: ' . $openid_class->authUrl() );
-				die();
-			}
+			header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=openid', true ) );
+			die();
 		}
 	}
 }
@@ -261,12 +123,9 @@ $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $user
 $query = $db->query( $sql );
 while( $row = $query->fetch() )
 {
-	$server = parse_url( $row['openid'] );
-
 	$data['openid_list'][] = array(
 		'opid' => $row['opid'],
 		'openid' => $row['openid'],
-		'server' => $server['host'],
 		'email' => $row['email'],
 		'disabled' => ( ( ! empty( $user_info['current_openid'] ) and $user_info['current_openid'] == $row['opid'] ) ? ' disabled="disabled"' : '' )
 	);

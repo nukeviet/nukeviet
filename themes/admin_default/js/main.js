@@ -50,13 +50,13 @@ var NV = {
 	fixContentHeight: function(){
 		var wrap = $('.nvwrap');
 		var vmenu = $('#left-menu');
-		
+
 		if( wrap.length > 0 ){
 			if( wrap.height() < vmenu.height() + vmenu.offset().top && vmenu.is(':visible') ){
 				wrap.css('min-height', ( vmenu.height() + vmenu.offset().top ) + 'px' )
 			}else{
 				wrap.css('min-height', '100%');
-			}		
+			}
 		}
 	},
 };
@@ -67,9 +67,9 @@ $(document).ready(function(){
 	$(window).resize(function(){
 		NV.fixContentHeight();
 	});
-	
+
 	// Show submenu
-	$('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
+	$('#menu-horizontal .dropdown, .menu .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
 		NV.openMenu(this);
 	}, function(){
 		NV.closeMenu(this);
@@ -96,12 +96,12 @@ $(document).ready(function(){
 			return nv_msgbeforeunload;
 		});
 	});
-	
+
 	// Disable confirm message on submit form
 	$('form').submit(function() {
 		$(window).unbind();
 	});
-	
-	// Header tooltip
-	$('.tip', $('#header')).tooltip();
+
+	// Bootstrap tooltip
+	$('[data-toggle="tooltip"]').tooltip();
 });

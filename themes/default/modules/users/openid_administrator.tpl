@@ -20,7 +20,7 @@
 			<!-- BEGIN: openid_list -->
 			<tr>
 				<th class="text-center"><input name="openid_del[]" type="checkbox" value="{OPENID_LIST.opid}"{OPENID_LIST.disabled} /></th>
-				<td><a href="javascript:void(0);" title="{OPENID_LIST.openid}">{OPENID_LIST.server}</a></td>
+				<td>{OPENID_LIST.openid}</td>
 				<td>{OPENID_LIST.email}</td>
 			</tr>
 			<!-- END: openid_list -->

@@ -84,6 +84,7 @@ $sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
 $sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
 $sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
 $sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
+$sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
@@ -246,7 +247,7 @@ if( $is_exists_theme_modern )
 	$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
 	$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Quảng cáo top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
 	$sth->execute( array(16, 'modern', 'menu', 'global.superfish.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
-	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:274:"© Copyright NukeViet 4. All right reserved.<br  />Xây dựng trên nền tảng <a href="http://nukeviet.vn/" title="Mã nguồn mở NukeViet">Mã nguồn mở NukeViet</a>. <a href="http://vinades.vn/" title="Thiết kế web">Thiết kế website</a> bởi VINADES.,JSC";}') );	
+	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:274:"© Copyright NukeViet 4. All right reserved.<br  />Xây dựng trên nền tảng <a href="http://nukeviet.vn/" title="Mã nguồn mở NukeViet">Mã nguồn mở NukeViet</a>. <a href="http://vinades.vn/" title="Thiết kế web">Thiết kế website</a> bởi VINADES.,JSC";}') );
 }
 
 $sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:6:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:10:"statistics";i:5;s:6:"voting";}}') );

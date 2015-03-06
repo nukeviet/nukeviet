@@ -125,8 +125,8 @@ $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: %3$s<br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['allow_openid'] = 'Cho phép sử dụng OpenID để đăng nhập, đăng ký';
-$lang_module['openid_servers'] = 'Các nhà cung cấp OpenID được chấp nhận';
+$lang_module['allow_openid'] = 'Cho phép sử dụng Oauth, OpenID để đăng nhập, đăng ký';
+$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng thành viên của Diễn đàn';
 $lang_module['search_page_title'] = 'Kết quả tìm kiếm';
@@ -293,16 +293,16 @@ $lang_module['field_choicetypes_title'] = 'Lựu chọn dữ liệu';
 $lang_module['field_choicetypes_sql'] = 'Lấy dữ liệu từ CSDL';
 $lang_module['field_choicetypes_text'] = 'Lấy dữ liệu từ nhập liệu';
 $lang_module['field_options_choicesql'] = 'Lựa chọn module, bảng dữ liệu và trường dữ liệu';
-$lang_module['field_options_choicesql_module'] = "Chọn module";
-$lang_module['field_options_choicesql_table'] = "Chọn bảng dữ liệu";
-$lang_module['field_options_choicesql_column'] = "Chọn cột dữ liệu";
-$lang_module['field_options_choicesql_key'] = "Chọn cột làm key";
-$lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
+$lang_module['field_options_choicesql_module'] = 'Chọn module';
+$lang_module['field_options_choicesql_table'] = 'Chọn bảng dữ liệu';
+$lang_module['field_options_choicesql_column'] = 'Chọn cột dữ liệu';
+$lang_module['field_options_choicesql_key'] = 'Chọn cột làm key';
+$lang_module['field_options_choicesql_val'] = 'Chọn cột làm value';
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
-$lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
-$lang_module['facebook_client_id'] = 'App ID/API Key';
-$lang_module['facebook_client_secret'] = 'Mã Bí Mật';
+$lang_module['oauth_config'] = 'Cấu hình đăng nhập, đăng kí bằng %s';
+$lang_module['oauth_client_id'] = 'App ID/API Key';
+$lang_module['oauth_client_secret'] = 'Mã Bí Mật';
 
 $lang_module['import'] = 'Nhập dữ liệu từ file Excel';
 $lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><strong>download file dữ liệu mẫu</strong></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <strong>%2$s</strong>';
@@ -325,3 +325,75 @@ $lang_module['read_error'] = "Lỗi khi đọc file %1\$s, Hệ thống không c
 $lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần kiểm tra lại cột : %2\$s Cột này cần là : %3\$s. Vì vậy hệ thống bị dừng lại !";
 $lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
 $lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
+
+$lang_module['update_field'] = "Cập nhật site";
+$lang_module['update_field_oncreate'] = "Khi được tạo";
+$lang_module['update_field_onlogin'] = "Cập đăng site";
+
+$lang_module['cas_config'] = "Thiết lập máy chủ CAS";
+$lang_module['cas_config_hostname'] = "Hostname";
+$lang_module['cas_config_hostname_info'] = "Hostname of the CAS server	<br>eg: cas.nukeviet.vn";
+$lang_module['cas_config_baseUri'] = "Base URI";
+$lang_module['cas_config_baseUri_info'] = " URI of the server (nothing if no baseUri)<br>For example, if the CAS server responds to cas.nukeviet.vn/cas/ then<br>cas_baseuri = cas/";
+$lang_module['cas_config_port'] = "Port";
+$lang_module['cas_config_port_info'] = "Port of the CAS server";
+$lang_module['cas_config_version'] = "CAS protocol version";
+$lang_module['cas_config_version_info'] = "CAS protocol version to use";
+$lang_module['cas_config_language'] = "Language";
+$lang_module['cas_config_language_info'] = "Select language for authentication pages";
+$lang_module['cas_config_proxyMode'] = "Proxy mode";
+$lang_module['cas_config_proxyMode_info'] = "Select 'yes' if you use CAS in proxy-mode";
+$lang_module['cas_config_multiAuthentication'] = "Multi-authentication";
+$lang_module['cas_config_multiAuthentication_info'] = "Select 'yes' if you want to have multi-authentication (CAS + other authentication) ";
+$lang_module['cas_config_serverValidation'] = "Server validation";
+$lang_module['cas_config_serverValidation_info'] = "Select 'yes' if you want to validate the server certificate";
+$lang_module['cas_config_certificatePath'] = "Certificate path";
+$lang_module['cas_config_certificatePath_info'] = "Path of the CA chain file (PEM Format) to validate the server certificate";
+
+$lang_module['ldap_config'] = "Các thiết lập máy chủ LDAP";
+$lang_module['ldap_config_hostURL'] = "Host URL";
+$lang_module['ldap_config_hostURL_info'] = "Chỉ ra máy chủ LDAP trong biểu mẫu URL giống như 'ldap://ldap.nukeviet.vn/' hoặc 'ldaps://ldap.nukeviet.vn/'.";
+$lang_module['ldap_config_version'] = "Version";
+$lang_module['ldap_config_version_info'] = "Phiên bản của LDAP giao thức máy chủ của bạn đang được sử dụng.";
+$lang_module['ldap_config_useTLS'] = "Use TLS";
+$lang_module['ldap_config_useTLS_info'] = "Use regular LDAP service (port 389) with TLS encryption ";
+$lang_module['ldap_config_LDAPencoding'] = "LDAP encoding";
+$lang_module['ldap_config_LDAPencoding_info'] = "Specify encoding used by LDAP server. Most probably utf-8, MS AD v2 uses default platform encoding such as cp1252, cp1250, etc. ";
+$lang_module['ldap_config_PageSize'] = "Page Size";
+$lang_module['ldap_config_PageSize_info'] = "Make sure this value is smaller than your LDAP server result set size limit (the maximum number of entries that can be returned in a single query)";
+
+$lang_module['rb_config'] = "Các thiết lập ràng buộc";
+$lang_module['rb_config_dn'] = "Distinguished name";
+$lang_module['rb_config_dn_info'] = "Nếu bạn muốn sử dụng ràng buộc người dùng để tìm kiếm các người dùng, chỉ ra nó ở đây. Đôi khi nó giống như 'cn=Manager,dc=nukeviet,dc=vn'";
+$lang_module['rb_config_pw'] = "Password";
+$lang_module['rb_config_pw_info'] = "Mật khẩu đối với ràng buộc người dùng .";
+
+$lang_module['user_config'] = "Các thiết lập tra cứu người dùng";
+$lang_module['user_config_userType'] = "User type";
+$lang_module['user_config_userType_info'] = "Chọn những người dùng thế nào được lưu trữ trong LDAP. Các thiết lập này cũng chỉ ra sự vô hiệu hoá đăng nhập như thế nào, tạo người dùng và các cuộc đăng nhập sẽ hoạt động như thế nào. ";
+$lang_module['user_config_context'] = "Contexts";
+$lang_module['user_config_context_info'] = "Danh sách các ngữ cảnh mà ở đó những người sử dụng được xác định. Ngăn cách các ngữ cảnh khác nhau bởi dấu ';'. Ví dụ : 'ou=people,dc=nukeviet,dc=vn'";
+$lang_module['user_config_searchSubcontexts'] = "Search subcontexts";
+$lang_module['user_config_searchSubcontexts_info'] = "Đặt giá trị khác 0. Nếu bạn muốn tìm kiếm người dùng từ ngữ cảnh phụ.";
+$lang_module['user_config_dereferenceAliases'] = "Dereference aliases";
+$lang_module['user_config_dereferenceAliases_info'] = "Quyết định bao nhiêu bí danh được sử dụng trong quá trình tìm kiếm. Chọn một trong số các giá trị sau: 'Không' (LDAP_DEREF_NEVER) hoặc 'Có' (LDAP_DEREF_ALWAYS) ";
+$lang_module['user_config_userAttribute'] = "User attribute";
+$lang_module['user_config_userAttribute_info'] = " Các tuỳ chọn: Ghi đè thuộc tính sử dụng để chỉ ra/tìm kiếm người dùng. Thông thường 'cn'. ";
+$lang_module['user_config_memberAttribute'] = "Member attribute";
+$lang_module['user_config_memberAttribute_info'] = " Tuỳ chọn: Ghi đè thuộc tính về người dùng, khi những người dùng có liên quan tới một nhóm. Thông thường là 'thành viên'";
+$lang_module['user_config_memberAttributeUsesDn'] = "Member attribute uses dn";
+$lang_module['user_config_memberAttributeUsesDn_info'] = "Optional: Overrides handling of member attribute values, either 0 or 1 ";
+$lang_module['user_config_objectClass'] = "Object class";
+$lang_module['user_config_objectClass_info'] = "Tuỳ chọn: Ghi đè lớp đối tượng sử dụng để chỉ định/tìm kiếm người dùng trên kiểu người dùng ldap_user_type. Thông thường bạn không cần thay đổi điều này.";
+
+$lang_module['update_LDAP_config'] = "Cập nhật dữ liệu từ LDAP xuống website";
+$lang_module['update_LDAP_config_name'] = "Tên đệm và tên";
+$lang_module['update_LDAP_config_lname'] = "Họ";
+
+$lang_module['default'] = "Mặc định";
+
+$lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là tuỳ chọn. Bạn có thể chọn điền trước một số thông tin người dùng NukeViet với thông tin từ <b> các trường LDAP</b> được chỉ ra ở đây.<p>
+		Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
+		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
+		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
+
