@@ -8,12 +8,6 @@
 	<div class="listing-body">
 		<div class="listing-item">
 			<div class="row">
-				<div class="col-lg-3 col-sm-4 text-right"><span class="listing-item-title">{LANG.autoinstall_uploadedfilename}</span></div>
-				<div class="col-lg-9 col-sm-8"><strong class="text-danger">{INFO.filename}</strong></div>
-			</div>
-		</div>
-		<div class="listing-item">
-			<div class="row">
 				<div class="col-lg-3 col-sm-4 text-right"><span class="listing-item-title">{LANG.autoinstall_uploadedfilesize}</span></div>
 				<div class="col-lg-9 col-sm-8"><strong class="text-danger">{INFO.filesize}</strong></div>
 			</div>

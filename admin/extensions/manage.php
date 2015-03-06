@@ -323,8 +323,6 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			$extension_ini .= "type=\"" . $row['type'] . "\"\n";
 			$extension_ini .= "name=\"" . $row['basename'] . "\"\n";
 			$extension_ini .= "version=\"" . $row['version'] . "\"\n";
-			$extension_ini .= "sys=\"" . ( $row['is_sys'] ? "1" : "0" ) . "\"\n";
-			$extension_ini .= "virtual=\"" . $row['virtual'] . "\"\n";
 			$extension_ini .= "\n[author]\n";
 			$extension_ini .= "name=\"" . $row['author'] . "\"\n";
 			$extension_ini .= "email=\"" . $row['email'] . "\"\n";

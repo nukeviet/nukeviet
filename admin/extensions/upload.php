@@ -50,6 +50,7 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 			$error_create_folder = array();
 			$error_move_folder = array();
 			$extConfig = array();
+			$fileConfig = array();
 			
 			if( NV_ROOTDIR . '/' . $temp_extract_dir )
 			{
@@ -129,6 +130,38 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 				{
 					$extConfig = nv_parse_ini_file( $extract_i['filename'], true );
 				}
+				
+				// Xac dinh ung dung he thong hoac module
+				if( preg_match( "/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'] ) )
+				{
+					$module_version = array();
+					include NV_ROOTDIR . '/' . $filename_i;
+					
+					if( isset( $module_version['is_sysmod'] ) )
+					{
+						$fileConfig['sys'] = $module_version['is_sysmod'];
+					}
+					
+					if( isset( $module_version['virtual'] ) )
+					{
+						$fileConfig['virtual'] = $module_version['virtual'];
+					}
+					
+					unset( $module_version );
+				}
+			}
+			
+			$extConfig['extension']['sys'] = 0;
+			$extConfig['extension']['virtual'] = 0;
+			
+			if( isset( $fileConfig['sys'] ) )
+			{
+				$extConfig['extension']['sys'] = $fileConfig['sys'];
+			}
+			
+			if( isset( $fileConfig['virtual'] ) )
+			{
+				$extConfig['extension']['virtual'] = $fileConfig['virtual'];
 			}
 
 			if( nv_check_ext_config_filecontent( $extConfig ) !== true )
@@ -350,28 +383,8 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 
 $error = "";
 
-if( ! isset( $_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'] ) )
+if( $nv_Request->isset_request( 'uploaded', 'get' ) )
 {
-	$error = $lang_module['autoinstall_error_downloaded'];
-}
-elseif( ! $sys_info['zlib_support'] )
-{
-	$error = $lang_global['error_zlib_support'];
-}
-elseif( is_uploaded_file( $_FILES['extfile']['tmp_name'] ) )
-{
-	if( file_exists( $filename ) )
-	{
-		nv_deletefile( $filename );
-	}
-		
-	if( ! move_uploaded_file( $_FILES['extfile']['tmp_name'], $filename ) )
-	{
-		$error = $lang_module['autoinstall_error_uploadfile'];
-	}
-	
-	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_install'], basename( $_FILES['extfile']['name'] ), $admin_info['userid'] );
-	
 	if( ! file_exists( $filename ) )
 	{
 		$error = $lang_module['autoinstall_error_downloaded'];
@@ -379,7 +392,37 @@ elseif( is_uploaded_file( $_FILES['extfile']['tmp_name'] ) )
 }
 else
 {
-	$error = $lang_module['autoinstall_error_downloaded'];
+	if( ! isset( $_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'] ) )
+	{
+		$error = $lang_module['autoinstall_error_downloaded'];
+	}
+	elseif( ! $sys_info['zlib_support'] )
+	{
+		$error = $lang_global['error_zlib_support'];
+	}
+	elseif( is_uploaded_file( $_FILES['extfile']['tmp_name'] ) )
+	{
+		if( file_exists( $filename ) )
+		{
+			nv_deletefile( $filename );
+		}
+			
+		if( ! move_uploaded_file( $_FILES['extfile']['tmp_name'], $filename ) )
+		{
+			$error = $lang_module['autoinstall_error_uploadfile'];
+		}
+		
+		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_install'], basename( $_FILES['extfile']['name'] ), $admin_info['userid'] );
+		
+		if( ! file_exists( $filename ) )
+		{
+			$error = $lang_module['autoinstall_error_downloaded'];
+		}
+	}
+	else
+	{
+		$error = $lang_module['autoinstall_error_downloaded'];
+	}
 }
 
 require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
@@ -490,7 +533,6 @@ if( empty( $error ) )
 			$info['extversion'] = $extConfig['extension']['version'];
 			$info['extauthor'] = $extConfig['author']['name'] . ' (' . $extConfig['author']['email'] . ')';
 			$info['filesize'] = nv_convertfromBytes( filesize( $filename ) );
-			$info['filename'] = basename( $_FILES['extfile']['name'] );
 			$info['filenum'] = $status['nb'];
 			$info['existsnum'] = 0; // So file trung lap
 			$info['invaildnum'] = 0;	// So file khong hop chuan

@@ -38,15 +38,8 @@ if( empty( $request['id'] ) or empty( $request['fid'] ) or ! isset( $array['tid'
 }
 else
 {
-	if( $array['tid'] == 2 )
-	{
-		$filename = NV_TEMPNAM_PREFIX . 'theme' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
-	}
-	else
-	{
-		$filename = NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
-	}
-	
+	$filename = NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
+
 	require( NV_ROOTDIR . '/includes/class/http.class.php' );
 	$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 	

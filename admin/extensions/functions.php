@@ -244,7 +244,7 @@ function nv_store_cookies( $cookies = array(), $currCookies = array() )
  */
 function nv_check_ext_config_filecontent( $extConfig )
 {
-	if( ! isset( $extConfig['extension'] ) or ! isset( $extConfig['author'] ) or ! isset( $extConfig['note'] ) or ! isset( $extConfig['extension']['id'] ) or ! isset( $extConfig['extension']['type'] ) or ! isset( $extConfig['extension']['name'] ) or ! isset( $extConfig['extension']['version'] ) or ! isset( $extConfig['extension']['sys'] ) or ! isset( $extConfig['extension']['virtual'] ) or ! isset( $extConfig['author']['name'] ) or ! isset( $extConfig['author']['email'] ) or ! isset( $extConfig['note']['text'] ) )
+	if( ! isset( $extConfig['extension'] ) or ! isset( $extConfig['author'] ) or ! isset( $extConfig['note'] ) or ! isset( $extConfig['extension']['id'] ) or ! isset( $extConfig['extension']['type'] ) or ! isset( $extConfig['extension']['name'] ) or ! isset( $extConfig['extension']['version'] ) or ! isset( $extConfig['author']['name'] ) or ! isset( $extConfig['author']['email'] ) or ! isset( $extConfig['note']['text'] ) )
 	{
 		return false;
 	}
