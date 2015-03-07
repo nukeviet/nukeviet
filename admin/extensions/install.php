@@ -42,6 +42,7 @@ $message = '';
 
 require( NV_ROOTDIR . '/includes/class/http.class.php' );
 $NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
+$stored_cookies = nv_get_cookies();
 
 // Find file
 if( empty( $request['fid'] ) )
@@ -61,10 +62,12 @@ if( empty( $error ) and empty( $message ) )
 		'headers' => array(
 			'Referer' => NUKEVIET_STORE_APIURL,
 		),
+		'cookies' => $stored_cookies,
 		'body' => $request
 	);	
 	
 	$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
+	$cookies = $array['cookies'];
 	$array = ! empty( $array['body'] ) ? @unserialize( $array['body'] ) : array();
 	
 	// Next step
@@ -96,6 +99,9 @@ if( ! empty( $error ) )
 }
 else
 {
+	// Save cookies
+	nv_store_cookies( nv_object2array( $cookies ), $stored_cookies );
+	
 	if( $request['mode'] == 'getfile' )
 	{		
 		$xtpl->parse( 'main.getfile_error' );
@@ -171,13 +177,32 @@ else
 					}
 					else
 					{
-						if( $installed == 2 )
+						// Da thanh toan
+						if( $array['compatible']['status'] === 'paid' )
 						{
-							$xtpl->parse( 'main.install.not_install.unsure' );
+							if( $installed == 2 )
+							{
+								$xtpl->parse( 'main.install.not_install.paid.unsure' );
+							}
+							else
+							{
+								$xtpl->parse( 'main.install.not_install.paid.startdownload' );
+							}
+							
+							$xtpl->parse( 'main.install.not_install.paid' );
 						}
-						else
+						elseif( $array['compatible']['status'] == 'await' ) // Dang thanh toan. Khong cho phep download
 						{
-							$xtpl->parse( 'main.install.not_install.startdownload' );
+							$xtpl->parse( 'main.install.not_install.await' );
+						}
+						elseif( $array['compatible']['status'] == 'notlogin' ) // Dang nhap de kiem tra
+						{
+							$xtpl->assign( 'LOGIN_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+							$xtpl->parse( 'main.install.not_install.notlogin' );
+						}
+						else // Chua thanh toan, xuat link thanh toan
+						{
+							$xtpl->parse( 'main.install.not_install.unpaid' );
 						}
 						
 						$xtpl->parse( 'main.install.not_install' );
