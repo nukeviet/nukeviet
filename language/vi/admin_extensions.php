@@ -88,6 +88,10 @@ $lang_module['install_cancel'] = 'Hủy cài đặt';
 $lang_module['install_file_download'] = 'Tải về file cài đặt';
 $lang_module['install_check_require'] = 'Kiểm tra ứng dụng bắt buộc';
 $lang_module['install_check_require_fail'] = 'Để ứng dụng này có thể hoạt động, bạn cần phải cài đặt ứng dụng <strong>&quot;%s&quot;</strong> trước. Nhấp vào đây để xem thông tin về ứng dụng bắt buộc này';
+$lang_module['install_check_paid'] = 'Kiểm tra thanh toán';
+$lang_module['install_check_paid_await'] = 'Ứng dụng này đang trong quá trình thanh toán và đang chờ được xác nhận, việc cài đặt bị chặn cho đến khi hoàn tất thanh toán';
+$lang_module['install_check_paid_nologin'] = 'Hệ thống yêu cầu bạn đăng nhập Merchant Site để kiểm tra việc thanh toán ứng dụng có phí. Nhấp vào đây để đăng nhập';
+$lang_module['install_check_paid_unpaid'] = 'Ứng dụng này có phí, bạn cần mua ứng dụng trước khi có thể cài đặt. Nhấp vào đây để mua.';
 
 $lang_module['download_error_preparam'] = 'Lỗi: Thiếu thông tin cần thiết';
 $lang_module['download_error_save'] = 'Lỗi: Lưu file thất bại';
