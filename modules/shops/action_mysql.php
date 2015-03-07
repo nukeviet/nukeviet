@@ -100,6 +100,7 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders_id';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_payment';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_transaction';
@@ -346,13 +347,19 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_orders_id (
+ id int(11) unsigned NOT NULL AUTO_INCREMENT,
  order_id int(11) NOT NULL,
- id mediumint(9) NOT NULL,
+ proid mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
  price int(11) NOT NULL,
  discount_id smallint(6) NOT NULL DEFAULT '0',
- group_id mediumint(8) NOT NULL,
  UNIQUE KEY orderid (order_id, id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group (
+ order_i int(11) NOT NULL,
+ group_id mediumint(8) NOT NULL,
+ UNIQUE KEY orderid (order_i, group_id)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_orders_shipping (

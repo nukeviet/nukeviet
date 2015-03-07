@@ -61,13 +61,10 @@
 					<td class="prd"><span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span>
 					<br />
 					<!-- BEGIN: display_group --><span class="text-muted">
-						<ul style="padding: 0">
 							<!-- BEGIN: item -->
-							<li class="pull-left" style="margin-right: 10px">
-								{group_title}
-							</li>
+							<span class="show"><span class="text-muted">{group.parent_title}: <strong>{group.title}</strong></span></span>
 							<!-- END: item -->
-						</ul> </span><!-- END: display_group --></td>
+						</span><!-- END: display_group --></td>
 					<td><strong>{product_code}</strong></td>
 					<!-- BEGIN: sub_group -->
 	    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>

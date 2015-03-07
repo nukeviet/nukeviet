@@ -35,7 +35,7 @@ list( $pro_info['product_unit'] ) = $db->query( $sql )->fetch( 3 );
 
 $page_title = sprintf( $lang_module['seller_list'], $pro_info['title'] );
 
-$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_orders_id t1' )->join( ' INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_orders t2 ON t1.order_id = t2.order_id' )->where( 't1.id = ' . $pro_id );
+$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_orders_id t1' )->join( ' INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_orders t2 ON t1.order_id = t2.order_id' )->where( 't1.proid = ' . $pro_id );
 $num_items = $db->query( $db->sql( ) )->fetchColumn( );
 if( !$num_items )
 {
