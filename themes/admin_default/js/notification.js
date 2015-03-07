@@ -9,13 +9,14 @@
  * @param timestamp
  */
 
+var page = 1;
+
 function notification_reset() {
 	$.post(script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(), 'notification_reset=1', function(res) {
 		$('#notification').hide();
 	});
 }
 
-var page = 1;
 function notification_get_more() {
 	$('#notification_load').scroll(function() {
 		if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {

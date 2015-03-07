@@ -87,21 +87,12 @@ foreach( $theme_list as $value )
 	}
 
 	$xtpl->assign( 'POSITION', implode( ' | ', $pos ) );
-	$dash = 0;
+
 	if( ! in_array( $value, $theme_mobile_list ) and $global_config['site_theme'] != $value )
 	{
 		$xtpl->parse( 'main.loop.link_active' );
-		$dash++;
 	}
-	if( defined( 'NV_IS_GODADMIN' ) )
-	{
-		$dash++;
-		$xtpl->parse( 'main.loop.link_delete' );
-	}
-	if( $dash == 2 )
-	{
-		$xtpl->parse( 'main.loop.dash' );
-	}
+
 	if( $i % 2 == 0 and $i < $number_theme )
 	{
 		$xtpl->parse( 'main.loop.endtr' );

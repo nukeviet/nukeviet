@@ -170,11 +170,7 @@ var EXT = {
 		$('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
 	},
 	redirect: function(){
-		if( EXT.tid == 2 ){
-			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=themes&' + nv_fc_variable + '=install_theme&downloaded=1';
-		}else{
-			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=modules&' + nv_fc_variable + '=install_module&downloaded=1';
-		}
+		var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
 		window.location = url;
 	},
 };
