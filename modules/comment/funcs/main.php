@@ -20,12 +20,12 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	$allowed_comm = $nv_Request->get_title( 'allowed', 'post,get', 0 );
 	$checkss = $nv_Request->get_title( 'checkss', 'post,get' );
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
-    
+    $url_comment = $nv_Request->get_title( 'url_comment', 'post,get', '' );
     define( 'NV_PER_PAGE_COMMENT', $nv_Request->get_int( 'perpage', 'get', 1 ) );//per_page_comment
 	require_once NV_ROOTDIR . '/modules/comment/comment.php';
-	$content_comment = nv_comment_module( $module, $checkss, $area, $id, $allowed_comm, $page );
+	$content_comment = nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed_comm, $page );
 	include NV_ROOTDIR . '/includes/header.php';
-	echo nv_site_theme( $content_comment, false );
+	echo $content_comment;
 	include NV_ROOTDIR . '/includes/footer.php';
 }
 
