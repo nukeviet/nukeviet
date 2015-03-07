@@ -118,9 +118,9 @@ if( $post_order == 1 )
 			if( $pro_config['point_active'] and defined( 'NV_IS_USER' ) )
 			{
 				$result = $db->query( 'SELECT listcatid FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id=' . $pro_id );
-				list( $listcatid ) = $result->fetch( 3 );
-				if( ! empty( $listcatid ) )
+				if( $result->rowCount() > 0 )
 				{
+					list( $listcatid ) = $result->fetch( 3 );
 					if( $global_array_cat[$listcatid]['cat_allow_point'] and ( $global_array_cat[$listcatid]['cat_number_product'] == 0 or $info['num'] >= $global_array_cat[$listcatid]['cat_number_product'] ) )
 					{
 						$total_point += intval( $global_array_cat[$listcatid]['cat_number_point'] );

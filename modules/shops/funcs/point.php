@@ -105,11 +105,10 @@ $all_page = $db->query( $db->sql() )->fetchColumn();
 $db->select( 't1.*, t2.order_code' )
   ->order( 'id DESC' )
   ->limit( $per_page )
-  ->offset( $page );
-
-$link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+  ->offset( ( $page - 1 ) * $per_page );
 
 $_query = $db->query( $db->sql() );
+$link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 while( $row = $_query->fetch() )
 {
 	$checkss = md5( $row['order_id'] . $global_config['sitekey'] . session_id() );
