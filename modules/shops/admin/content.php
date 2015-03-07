@@ -801,6 +801,7 @@ elseif( $rowcontent['id'] > 0 )
 		$rowcontent['alias'] = '';
 		$rowcontent['product_code'] = '';
 		$rowcontent['publtime'] = NV_CURRENTTIME;
+		$rowcontent['status'] = 0;
 	}
 
 	// Custom fields
