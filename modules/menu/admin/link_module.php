@@ -55,15 +55,16 @@ if( !empty( $array_item ) )
 		if( empty( $parentid ) )
 		{
 			$item['module'] = $mod_name;
-			
+
 			$xtpl->assign( 'item', $item );
 			$xtpl->parse( 'main.link.item' );
-			
+
 			foreach( $array_item as $subitem )
 			{
 				if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
 				{
 					$subitem['title'] = $sp . $subitem['title'];
+					$subitem['alias'] = $item['alias'].'/'.$subitem['alias'];
 					$subitem['module'] = $mod_name;
 					$xtpl->assign( 'item', $subitem );
 					$xtpl->parse( 'main.link.item' );
