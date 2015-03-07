@@ -293,14 +293,26 @@ if( $post_order == 1 )
 					$price = nv_get_price( $pro_id, $pro_config['money_unit'], $info['num'], true );
 					$info['price'] = $price['sale'];
 
-					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, id, num, price, discount_id, group_id ) VALUES ( :order_id, :id, :num, :price, :discount_id, :group_id )' );
-					$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
-					$stmt->bindParam( ':id', $pro_id, PDO::PARAM_INT );
-					$stmt->bindParam( ':num', $info['num'], PDO::PARAM_INT );
-					$stmt->bindParam( ':price', $info['price'], PDO::PARAM_STR );
-					$stmt->bindParam( ':discount_id', $info['discount_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':group_id', $info['group'], PDO::PARAM_INT );
-					$stmt->execute( );
+					$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, proid, num, price, discount_id ) VALUES ( :order_id, :proid, :num, :price, :discount_id )';
+					$data_insert = array();
+					$data_insert['order_id'] = $order_id;
+					$data_insert['proid'] = $pro_id;
+					$data_insert['num'] = $info['num'];
+					$data_insert['price'] = $info['price'];
+					$data_insert['discount_id'] = $info['discount_id'];
+					$order_i = $db->insert_id( $sql, 'id', $data_insert );
+
+					if( $order_i > 0 and !empty( $info['group'] ) )
+					{
+						$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group(order_i, group_id) VALUES( :order_i, :group_id )' );
+						$info['group'] = explode( ',', $info['group'] );
+						foreach( $info['group'] as $group_i )
+						{
+							$sth->bindParam( ':order_i', $order_i, PDO::PARAM_INT );
+							$sth->bindParam( ':group_id', $group_i, PDO::PARAM_INT );
+							$sth->execute();
+						}
+					}
 
 					// Thong tin san pham dat hang
 					$listid[] = $pro_id;

@@ -22,11 +22,12 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	$data_order = $result->fetch();
 
 	// Thong tin dat hang chi tiet
-	$listid = $listnum = array();
+	$list_order_i = $listid = $listnum = array();
 	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$list_order_i[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 	}
 
@@ -49,6 +50,13 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
 	}
 
+	if( !empty( $list_order_i ) )
+	{
+		foreach( $list_order_i as $order_i )
+		{
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_i );
+		}
+	}
 	$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 	if( $exec )
 	{
@@ -90,9 +98,17 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 			$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE order_id = ' . $order_id );
 			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
 
+			if( !empty( $list_order_i ) )
+			{
+				foreach( $list_order_i as $order_i )
+				{
+					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_i );
+				}
+			}
 			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 			if( $exec )
 			{
+				$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_id );
 				$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
 				if( $exec )
 				{

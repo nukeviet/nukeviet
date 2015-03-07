@@ -53,10 +53,17 @@ $listid = $listnum = $listprice = $listgroup = array();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 while( $row = $result->fetch() )
 {
-	$listid[] = $row['id'];
+	$listid[] = $row['proid'];
 	$listnum[] = $row['num'];
 	$listprice[] = $row['price'];
-	$listgroup[] = $row['group_id'];
+
+	$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+	$group = array();
+	while( list( $group_id ) = $result_group->fetch( 3 ) )
+	{
+		$group[] = $group_id;
+	}
+	$listgroup[] = $group;
 }
 
 $data_pro = array();
@@ -152,10 +159,11 @@ foreach( $data_pro as $pdata )
 	// Nhóm thuộc tính sản phẩm khách hàng chọn
 	if( ! empty( $pdata['product_group'] ) )
 	{
-		$groupid = explode( ',', $pdata['product_group'] );
-		foreach( $groupid as $id )
+		foreach( $pdata['product_group'] as $groupid )
 		{
-			$xtpl->assign( 'group_title', $global_array_group[$id]['title'] );
+			$items = $global_array_group[$groupid];
+			$items['parent_title'] = $global_array_group[$items['parentid']]['title'];
+			$xtpl->assign( 'group', $items );
 			$xtpl->parse( 'main.loop.display_group.item' );
 		}
 		$xtpl->parse( 'main.loop.display_group' );

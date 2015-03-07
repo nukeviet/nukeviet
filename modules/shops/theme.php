@@ -1960,7 +1960,6 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		// Nhóm thuộc tính sản phẩm khách hàng chọn khi đặt hàng
 		if( !empty( $pdata['product_group'] ) )
 		{
-			$pdata['product_group'] = explode( ',', $pdata['product_group'] );
 			foreach( $pdata['product_group'] as $groupid )
 			{
 				$items = $global_array_group[$groupid];
