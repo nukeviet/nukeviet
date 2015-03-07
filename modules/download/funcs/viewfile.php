@@ -42,10 +42,18 @@ if( ! nv_user_in_groups( $row['groups_view'] ) )
 }
 
 $base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
+{
+	$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+}
+elseif( NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
 	Header( 'Location: ' . $base_url_rewrite );
 	die();
+}
+else
+{
+	$canonicalUrl = $base_url_rewrite;
 }
 
 
