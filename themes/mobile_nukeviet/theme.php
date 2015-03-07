@@ -64,14 +64,17 @@ function nv_site_theme( $contents )
 	//Breakcolumn
 	if( $home != 1 )
 	{
-		$arr_cat_title_i = array(
-			'catid' => 0,
-			'title' => $module_info['custom_title'],
-			'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name
-		);
-
-		$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
-		$xtpl->parse( 'main.mod_title.breakcolumn' );
+		if( $global_config['rewrite_op_mod'] != $module_name )
+		{
+			$arr_cat_title_i = array(
+				'catid' => 0,
+				'title' => $module_info['custom_title'],
+				'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
+			);
+	
+			$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
+			$xtpl->parse( 'main.mod_title.breakcolumn' );
+		}
 
 		foreach( $array_mod_title as $arr_cat_title_i )
 		{
@@ -120,8 +123,8 @@ function nv_site_theme( $contents )
 		$my_footer = nv_admin_menu() . $my_footer;
 	}
 
-	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . "\\1", $sitecontent, 1 );
-	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . "\\1", $sitecontent, 1 );
+	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
+	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
 
 	return $sitecontent;
 }
