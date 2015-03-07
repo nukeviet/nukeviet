@@ -18,12 +18,19 @@ if( $id and $page_config['viewtype'] == 0 or ! empty( $alias ) )
 	$row = $db->query( $sql )->fetch();
 
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], true );
-	if( ! empty( $array_op ) and $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
 	{
-		Header( 'Location: ' . $base_url_rewrite );
-		die();
+		$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 	}
-	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
+	elseif( NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	{
+		if( ! empty( $array_op ) and $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+		{
+			Header( 'Location: ' . $base_url_rewrite );
+			die();
+		}
+		$canonicalUrl = $base_url_rewrite;
+	}	
 
 	if( ! empty( $row['image'] ) && ! nv_is_url( $row['image'] ) )
 	{

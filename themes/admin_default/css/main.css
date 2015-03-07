@@ -533,6 +533,9 @@ sup.required {
 	#left-menu {
 		display: none;
 	}
+	#left-menu-toggle{
+		display: block !important;
+	}
 
 	#left-menu-bg {
 		display: none;
