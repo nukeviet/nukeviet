@@ -98,7 +98,6 @@
 		});
 	}
 
-
 	$("input[name=data_export]").click(function() {
 		$("input[name=data_export]").attr("disabled", "disabled");
 		$('#users').html('<center>{LANG.export_note}<br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></center>');

@@ -59,8 +59,11 @@ if( defined( 'NV_IS_SPADMIN' ) and empty( $global_config['idsite'] ) )
 		$allow_func[] = 'fields';
 		$submenu['config'] = $lang_module['config'];
 		$allow_func[] = 'config';
-		$submenu['import'] = $lang_module['import'];
-		$allow_func[] = 'import';
-		$allow_func[] = 'export';
+		if( file_exists( NV_ROOTDIR . '/modules/users/admin/import.php') )
+		{
+			$submenu['import'] = $lang_module['import'];
+			$allow_func[] = 'import';
+			$allow_func[] = 'export';
+		}
 	}
 }
