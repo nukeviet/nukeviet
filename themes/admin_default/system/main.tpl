@@ -31,15 +31,6 @@
 					<img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32"/>
 				</a>
 			</li>
-			<li class="dropdown">
-				<span id="notification" style="display: none"></span>
-				<a href="javascript:void(0)"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
-				<div class="dropdown-menu" style="width: 430px">
-					<div id="notification_load">
-
-					</div>
-				</div>
-			</li>
 			<li class="tip" data-toggle="tooltip" data-placement="bottom" title="{NV_LOGOUT}">
 				<a href="javascript:void(0);" onclick="nv_admin_logout();"> <em class="fa fa-power-off fa-2x fix logout">&nbsp;</em></a>
 			</li>

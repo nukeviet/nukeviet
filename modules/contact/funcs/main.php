@@ -185,8 +185,6 @@ if( ! empty( $array_department ) )
 
 				nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
 
-				nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), 0, $sender_id, 1 );
-
 				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				$contents .= call_user_func( 'sendcontact', $url );
 
