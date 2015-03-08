@@ -135,7 +135,7 @@
 								<div class="clearfix uiTokenizer uiInlineTokenizer">
 		                            <div id="keywords" class="tokenarea">
 		                                <!-- BEGIN: keywords -->
-		                                <span class="uiToken removable" title="{KEYWORDS}">
+		                                <span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();">
 		                                    {KEYWORDS}
 		                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
 		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>

@@ -15,3 +15,4 @@ $submenu['popular'] = $lang_module['popular'];
 $submenu['featured'] = $lang_module['featured'];
 $submenu['downloaded'] = $lang_module['downloaded'];
 $submenu['favorites'] = $lang_module['favorites'];
+$submenu['manage'] = $lang_module['manage'];

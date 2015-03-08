@@ -19,7 +19,7 @@ $cache_file = '';
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $base_url_rewrite = nv_url_rewrite( $base_url, true );
 $request_uri = $_SERVER['REQUEST_URI'];
-if( ! ( $home OR $request_uri == $base_url_rewrite OR $request_uri == $base_url_rewrite . 'page-' . $page . '/' ) )
+if( ! ( $home OR $request_uri == $base_url_rewrite OR $request_uri == $base_url_rewrite . 'page-' . $page . '/' OR NV_MAIN_DOMAIN . $request_uri == $base_url_rewrite OR NV_MAIN_DOMAIN . $request_uri == $base_url_rewrite . 'page-' . $page . '/' ) )
 {
 	$redirect = '<meta http-equiv="Refresh" content="3;URL=' . $base_url_rewrite . '" />';
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );

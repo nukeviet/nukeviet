@@ -22,8 +22,6 @@
 					<td>
 					<select name="installtype" class="form-control w200">
 						<option value="0">{LANG.autoinstall_method_none}</option>
-						<option value="install_theme">{LANG.autoinstall_method_install}</option>
-						<option value="package_theme">{LANG.autoinstall_method_packet}</option>
 						<option value="package_theme_module">{LANG.autoinstall_method_packet_module}</option>
 					</select></td>
 				</tr>

@@ -694,6 +694,12 @@ div.news_column .panel-heading {
 	border-top-right-radius: 3px;
 	padding: 10px;
 }
+.panel-primary>.panel-heading>a{
+	color: #fff;
+}
+.panel-primary>.panel-heading>a:hover{
+	color: #ddd;
+}
 table caption{
 	color: #0066CC
 	text-align: left;
@@ -710,4 +716,22 @@ blockquote{
 
 #sb-container{
 	z-index: 99999999 !important
+}
+ul.listnews{
+	padding: 0;
+}
+ul.listnews li{
+	margin-bottom: 10px;
+}
+ul.listnews img{
+	margin-right: 5px;
+}
+.other_blocknews ul{
+	margin:0;padding:0
+}
+.other_blocknews ul li{
+	margin-bottom: 10px
+}
+.other_blocknews img{
+	margin-right: 5px
 }

@@ -91,119 +91,11 @@ if( ! empty( $setmodule ) )
 	die();
 }
 
-// Xoa module
-$delmodule = $nv_Request->get_title( 'delmodule', 'get', '', 1 );
-if( defined( 'NV_IS_GODADMIN' ) and ! empty( $delmodule ) )
-{
-	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'delmodule' . $delmodule . session_id() . $global_config['sitekey'] ) )
-	{
-		$module_exit = array();
-
-		$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
-		while( list( $lang_i ) = $result->fetch( 3 ) )
-		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
-			$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
-			$sth->execute();
-			if( $sth->fetchColumn() )
-			{
-				$module_exit[] = $lang_i;
-			}
-		}
-
-		if( empty( $module_exit ) )
-		{
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE basename= :basename AND title!= :title AND type=\'module\'' );
-			$sth->bindParam( ':basename', $delmodule, PDO::PARAM_STR );
-			$sth->bindParam( ':title', $delmodule, PDO::PARAM_STR );
-			$sth->execute();
-			
-			if( $sth->fetchColumn() )
-			{
-				$module_exit = 1;
-			}
-		}
-
-		if( empty( $module_exit ) and defined( 'NV_CONFIG_DIR' ) )
-		{
-			// kiem tra cac site con
-			$result = $db->query( 'SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC' );
-			while( $row = $result->fetch() )
-			{
-				$result2 = $db->query( 'SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1' );
-				while( list( $lang_i ) = $result2->fetch( 3 ) )
-				{
-					$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file' );
-					$sth->bindParam( ':module_file', $delmodule, PDO::PARAM_STR );
-					$sth->execute();
-					if( $sth->fetchColumn() )
-					{
-						$module_exit[] = $row['title'] . ' :' . $lang_i;
-					}
-				}
-			}
-		}
-
-		if( empty( $module_exit ) )
-		{
-			$theme_list_site = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
-			$theme_list_mobile = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
-			$theme_list_admin = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_admin'] );
-			$theme_list = array_merge( $theme_list_site, $theme_list_mobile, $theme_list_admin );
-
-			foreach( $theme_list as $theme )
-			{
-				if( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $delmodule . '.css' ) )
-				{
-					nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $delmodule . '.css' );
-				}
-
-				if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $delmodule ) )
-				{
-					nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/images/' . $delmodule, true );
-				}
-
-				if( is_dir( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $delmodule ) )
-				{
-					nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/modules/' . $delmodule, true );
-				}
-			}
-
-			if( is_dir( NV_ROOTDIR . '/modules/' . $delmodule . '/' ) )
-			{
-				nv_deletefile( NV_ROOTDIR . '/modules/' . $delmodule . '/', true );
-			}
-
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-			die();
-		}
-		else
-		{
-			$xtpl = new XTemplate( 'delmodule.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-			$xtpl->assign( 'LANG', $lang_module );
-
-			if( is_array( $module_exit ) )
-			{
-				$info = sprintf( $lang_module['delete_module_info1'], implode( ', ', $module_exit ) );
-			}
-			else
-			{
-				$info = sprintf( $lang_module['delete_module_info2'], $module_exit );
-			}
-
-			$xtpl->assign( 'INFO', $info );
-			$xtpl->parse( 'main' );
-			$contents .= $xtpl->text( 'main' );
-		}
-	}
-}
-
 $page_title = $lang_module['modules'];
 $modules_exit = array_flip( nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] ) );
 $modules_data = array();
 
 $is_delCache = false;
-$module_virtual_setup = array();
 
 $sql_data = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=\'module\' ORDER BY addtime ASC';
 $result = $db->query( $sql_data );
@@ -213,11 +105,6 @@ while( $row = $result->fetch() )
 	if( array_key_exists( $row['basename'], $modules_exit ) )
 	{
 		$modules_data[$row['title']] = $row;
-
-		if( $row['title'] != $row['basename'] )
-		{
-			$module_virtual_setup[] = $row['basename'];
-		}
 	}
 	else
 	{
@@ -332,7 +219,7 @@ $array_modules = $array_virtual_modules = $mod_virtual = array();
 
 foreach( $modules_data as $row )
 {
-	if( in_array( $row['title'], $modules_exit ) )
+	if( in_array( $row['basename'], $modules_exit ) )
 	{
 		if( ! empty( $array_site_cat_module ) and ! in_array( $row['basename'], $array_site_cat_module ) )
 		{
@@ -360,13 +247,6 @@ foreach( $modules_data as $row )
 			}
 			
 			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
-			$mod['delete'] = '';
-			
-			if( defined( "NV_IS_GODADMIN" ) and ! in_array( $row['basename'], $module_virtual_setup ) )
-			{
-				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delmodule=' . $row['title'] . '&amp;checkss=' . md5( 'delmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
-				$mod['delete'] = " <em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\" onclick=\"return confirm(nv_is_del_confirm[0]);\">" . $lang_global['delete'] . "</a>";
-			}
 			
 			if( $mod['module_file'] == $mod['title'] )
 			{

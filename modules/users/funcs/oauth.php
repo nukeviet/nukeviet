@@ -10,13 +10,7 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if( ! $global_config['allowuserlogin'] )
-{
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	die();
-}
-
-if( defined( 'NV_OPENID_ALLOWED' ) )
+if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 {
 	$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
 	$server = $nv_Request->get_string( 'server', 'get', '' );
@@ -77,6 +71,5 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 	}
 }
 
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents, $full );
-include NV_ROOTDIR . '/includes/footer.php';
+Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+die();

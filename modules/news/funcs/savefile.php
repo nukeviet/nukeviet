@@ -54,7 +54,7 @@ if( $id > 0 and $catid > 0 )
 		if( $content['allowed_print'] == 1 )
 		{
 			$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );
-			if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+			if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 			{
 				Header( 'Location: ' . $base_url_rewrite );
 				die();
