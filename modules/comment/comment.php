@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$per_page_comment = NV_PER_PAGE_COMMENT;
+$per_page_comment = ( defined( 'NV_PER_PAGE_COMMENT' ) ) ? NV_PER_PAGE_COMMENT : 5;
 
 /**
  * nv_comment_module()
@@ -85,6 +85,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 		return array( 'comment' => $comment_array, 'page' => $generate_page );
 	}
 }
+
 function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 {
 	global $db, $module_config;
@@ -122,15 +123,16 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	}
 	return $data_reply_comment;
 }
+
 function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed, $page )
 {
-	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info;
+	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
 		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
 		{
-			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed_comm . '&checkss=' . $checkss . '&perpage=' . NV_PER_PAGE_COMMENT . '&url_comment=' . $url_comment;
+			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment . '&url_comment=' . $url_comment;
 
 			// Kiểm tra quyền xem bình luận
 			$form_login = 0;

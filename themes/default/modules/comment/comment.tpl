@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <ul class="comment-list">
 	<!-- BEGIN: detail -->
-	<li class="media">
+	<li class="media" id="cid_{COMMENT.cid}">
 		<a class="pull-left" href="#">
 			<img class="media-object" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40"/>
 		</a>
@@ -11,10 +11,10 @@
 				<em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
 				<div class="pull-right text-right">
 					<ul class="comment-tool">
-						<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
-						<li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
-						<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-						<li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+						<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
+						<li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+						<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+						<li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
 					</ul>
 				</div>
 				<!-- BEGIN: emailcomm -->
@@ -25,7 +25,7 @@
             <!-- BEGIN: children -->
             {CHILDREN}
             <!-- END: children -->
-		</div>		
+		</div>
 	</li>
 	<!-- END: detail -->
 </ul>
@@ -44,10 +44,10 @@
 				<em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
 				<div class="pull-right text-right">
 					<ul class="comment-tool">
-						<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" onclick="nv_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
-						<li><em class="fa fa-reply">&nbsp;</em> <a href="#" onclick="nv_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
-						<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
-						<li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" onclick="nv_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
+						<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="#" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
+						<li><em class="fa fa-reply">&nbsp;</em> <a href="#" onclick="nv_commment_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
+						<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="#" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
+						<li><em class="fa fa-thumbs-o-down">&nbsp;</em> <a href="#" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '-1')">{LANG.dislike}</a> <span id="dislike{COMMENT.cid}">{COMMENT.dislikes}</span></li>
 					</ul>
 				</div>
 				<!-- BEGIN: emailcomm -->
@@ -58,7 +58,7 @@
 		</div>
         <!-- BEGIN: children -->
         {CHILDREN}
-        <!-- END: children -->	
+        <!-- END: children -->
 	</li>
 	<!-- END: detail -->
 </ul>
