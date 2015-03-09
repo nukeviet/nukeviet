@@ -50,7 +50,8 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	if( $orderregdate != 'DESC' and $orderregdate != '' ) $orderregdate = 'ASC';
 
 	$array['username'] = $nv_Request->get_title( 'username', 'get', '' );
-	$array['full_name'] = $nv_Request->get_title( 'full_name', 'get', '' );
+	$array['first_name'] = $nv_Request->get_title( 'first_name', 'get', '' );
+	$array['last_name'] = $nv_Request->get_title( 'last_name', 'get', '' );
 	$array['email'] = $nv_Request->get_title( 'email', 'get', '' );
 	$array['sig'] = $nv_Request->get_title( 'sig', 'get', '' );
 
@@ -120,10 +121,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$array_where[] = "( username LIKE '%" . $db->dblikeescape( $array['username'] ) . "%' )";
 		}
 
-		if( ! empty( $array['full_name'] ) )
+		if( ! empty( $array['first_name'] ) )
 		{
-			$base_url .= '&amp;full_name=' . rawurlencode( $array['full_name'] );
-			$array_where[] = "( full_name LIKE '%" . $db->dblikeescape( $array['full_name'] ) . "%' )";
+			$base_url .= '&amp;first_name=' . rawurlencode( $array['first_name'] );
+			$array_where[] = "( first_name LIKE '%" . $db->dblikeescape( $array['first_name'] ) . "%' )";
 		}
 
 		if( ! empty( $array['email'] ) )

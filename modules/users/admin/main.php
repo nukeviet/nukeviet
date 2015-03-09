@@ -42,11 +42,11 @@ $methods = array(
 		'value' => $lang_module['search_name'],
 		'selected' => ''
 	),
-	'last_name' => array(
+	/*'last_name' => array(
 		'key' => 'last_name',
 		'value' => $lang_module['search_name'],
 		'selected' => ''
-	),
+	),*/
 	'email' => array(
 		'key' => 'email',
 		'value' => $lang_module['search_mail'],

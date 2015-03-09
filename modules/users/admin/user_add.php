@@ -204,7 +204,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$data_insert['sig'] = $_user['sig'];
 			$data_insert['question'] = $_user['question'];
 			$data_insert['answer'] = $_user['answer'];
-
+			
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( $userid )

@@ -224,7 +224,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 	$group_id = $nv_Request->get_int( 'listUsers', 'get', 0 );
 	if( ! isset( $groupsList[$group_id] ) ) die( $lang_module['error_group_not_found'] );
 
-	$sql = 'SELECT userid, username, full_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')';
+	$sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')';
 	$_rows = $db->query( $sql )->fetchAll();
 	$numberusers = sizeof( $_rows );
 	if( $numberusers != $groupsList[$group_id]['numbers'] )

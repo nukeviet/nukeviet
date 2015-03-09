@@ -62,7 +62,7 @@
                 </tr>
                 <tr>
                     <td colspan="2"> {LANG.last_name} </td>
-                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="first_name" style="width: 300px" /></td>
+                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
                 </tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>

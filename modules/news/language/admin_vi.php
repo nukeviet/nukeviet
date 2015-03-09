@@ -237,6 +237,8 @@ $lang_module['admin_no_user'] = 'Chức năng phân quyền cho module này ch�
 $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
+$lang_module['admin_first_name'] = 'Tên';
+$lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
 
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';

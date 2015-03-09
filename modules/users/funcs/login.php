@@ -54,7 +54,8 @@ function set_reg_attribs( $attribs )
 	$reg_attribs['server'] = $attribs['server'];
 	$reg_attribs['username'] = '';
 	$reg_attribs['email'] = $attribs['contact/email'];
-	$reg_attribs['full_name'] = '';
+	$reg_attribs['first_name'] = '';
+	$reg_attribs['last_name'] = '';
 	$reg_attribs['gender'] = '';
 	$reg_attribs['yim'] = '';
 	$reg_attribs['openid'] = $attribs['id'];
@@ -94,26 +95,26 @@ function set_reg_attribs( $attribs )
 
 	if( isset( $attribs['namePerson'] ) and ! empty( $attribs['namePerson'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson'];
+		$reg_attribs['first_name'] = $attribs['namePerson'];
 	}
 	elseif( isset( $attribs['namePerson/friendly'] ) and ! empty( $attribs['namePerson/friendly'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson/friendly'];
+		$reg_attribs['first_name'] = $attribs['namePerson/friendly'];
 	}
 	elseif( isset( $attribs['namePerson/first'] ) and ! empty( $attribs['namePerson/first'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson/first'];
+		$reg_attribs['first_name'] = $attribs['namePerson/first'];
 	}
 
 	if( isset( $attribs['namePerson/last'] ) and ! empty( $attribs['namePerson/last'] ) )
 	{
-		if( ! empty( $reg_attribs['full_name'] ) )
+		if( ! empty( $reg_attribs['first_name'] ) )
 		{
-			$reg_attribs['full_name'] = $attribs['namePerson/last'] . ' ' . $reg_attribs['full_name'];
+			$reg_attribs['first_name'] = $attribs['namePerson/last'] . ' ' . $reg_attribs['first_name'];
 		}
 		else
 		{
-			$reg_attribs['full_name'] = $attribs['namePerson/last'];
+			$reg_attribs['first_name'] = $attribs['namePerson/last'];
 		}
 	}
 
@@ -314,14 +315,15 @@ function openidLogin_Res1( $attribs )
 						$reg_attribs = set_reg_attribs( $attribs );
 
 						$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
-							username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+							username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 							question, answer, passlostkey, view_mail, remember, in_groups,
 							active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
 							:username,
 							:md5username,
 							:password,
 							:email,
-							:full_name,
+							:first_name,
+							:last_name,
 							:gender,
 							'', 0,
 							:regdate,
@@ -334,7 +336,7 @@ function openidLogin_Res1( $attribs )
 						$data_insert['md5username'] = nv_md5safe( $row['username'] );
 						$data_insert['password'] = $row['password'];
 						$data_insert['email'] = $row['email'];
-						$data_insert['full_name'] = ( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] );
+						$data_insert['first_name'] = ( ! empty( $row['first_name'] ) ? $row['first_name'] : $reg_attribs['first_name'] );
 						$data_insert['gender'] = $reg_attribs['gender'];
 						$data_insert['regdate'] = $row['regdate'];
 						$data_insert['question'] = $row['question'];
@@ -529,7 +531,7 @@ function openidLogin_Res1( $attribs )
 		{
 			// Dang nhap bang mot tai khoan do he thong tao tu dong
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-				(username, md5username, password, email, full_name, gender, photo, birthday,
+				(username, md5username, password, email, first_name, last_name, gender, photo, birthday,
 				regdate, question, answer, passlostkey,
 				view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
@@ -537,7 +539,8 @@ function openidLogin_Res1( $attribs )
 				:md5username,
 				'',
 				:email,
-				:full_name,
+				:first_name
+				:last_name,
 				:gender,
 				'', 0, " . NV_CURRENTTIME . ",
 				'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
@@ -547,7 +550,8 @@ function openidLogin_Res1( $attribs )
 			$data_insert['username'] = $reg_attribs['username'];
 			$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
 			$data_insert['email'] = $reg_attribs['email'];
-			$data_insert['full_name'] = $reg_attribs['full_name'];
+			$data_insert['first_name'] = $reg_attribs['first_name'];
+			$data_insert['last_name'] = $reg_attribs['last_name'];
 			$data_insert['gender'] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' );
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 

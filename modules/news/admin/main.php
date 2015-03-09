@@ -190,7 +190,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 	}
 	elseif( $stype == 'admin_id' )
 	{
-		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
+		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 	}
 	elseif( ! empty( $q ) )
 	{
@@ -200,7 +200,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		{
 			$arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		}
-		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'\n\t\t\tOR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
+		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'\n\t\t\tOR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
 	}
 	if( $sstatus != '-' )
 	{

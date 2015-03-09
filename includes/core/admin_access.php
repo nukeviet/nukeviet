@@ -202,7 +202,7 @@ function nv_admin_checkdata( $adm_session_value )
 	$admin_info['allow_create_subdirectories'] = intval( $allow_create_subdirectories );
 	$admin_info['allow_modify_subdirectories'] = intval( $allow_modify_subdirectories );
 
-	if( empty( $admin_info['full_name'] ) ) $admin_info['full_name'] = $admin_info['username'];
+	if( empty( $admin_info['first_name'] ) ) $admin_info['first_name'] = $admin_info['username'];
 	$admin_info['in_groups'] = nv_user_groups( $admin_info['in_groups'] );
 
 	$admin_info['current_openid'] = '';
